@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<categories>
+	<category>
+		<id>scifi</id>
+		<name>Sciece-fiction</name>
+		<count>2</count>
+	</category>
+	<category>
+		<id>history</id>
+		<name>History</name>
+		<count>1</count>
+	</category>
+	<category>
+		<id>test</id>
+		<name>Test</name>
+		<count>2</count>
+	</category>
+</categories>
