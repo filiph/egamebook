@@ -5,6 +5,38 @@
 class ScripterImpl extends Scripter {
 
   // TODO: Implement "library"
+  void startCombat(name, [hp=3]) {
+    echo("You have encountered $name!");
+    vars["enemy"] = {
+      "name": name,
+      "hp": hp
+    };
+    combatTurn();
+  }
+
+  void combatTurn() {
+    var enemy = vars["enemy"];
+    echo("The ${enemy['name']} is trying to hit you!");
+    if (Math.random() > 0.5)
+      echo("And he succeeds! You took a hit!");
+    else
+      echo("And he misses!");
+
+    choice("Do nothing.", showNow:true, then:() { combatTurn(); });
+    choice("Attack!", showNow:true, then:() {
+      echo("You are trying to hit the ${vars['enemy']['name']}!.");
+      if (Math.random() > 0.33) {
+	echo("You hit him!");
+	vars["enemy"]["hp"]--;
+	if (vars["enemy"]["hp"] <= 0) {
+	  echo("The ${vars['enemy']['name']} is dead!");
+	  vars["enemy"] = null;
+	}
+      } else {
+	echo("You miss like the pussy you are.");
+	nextScript(combatTurn);
+    });
+  }
 
   ScripterImpl() : super() {
     pages = [
