@@ -36,6 +36,9 @@ class ScripterImpl extends Scripter {
       // page 1
       [ 
         "This is the second page!!",
+	() {
+          choice("Go to hell.", showNow:true, then:() { echo("Yeah"); });
+	},
         "Interesting!",
 	() { echo("vars[\"a\"] is now ${vars['a']}."); } 
       ],

@@ -53,6 +53,7 @@ class CmdlineInterface {
 	print("");
         // let player choose
 	cmdLine.lineHandler = () {
+	  print("");
 	  try {
 	    int optionNumber = Math.parseInt(cmdLine.readLine());
 	    if (optionNumber > 0 && optionNumber < choices.length)

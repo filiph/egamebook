@@ -76,7 +76,7 @@ class Message {
   Message.NoResult() : type = MSG_NO_RESULT {}
 }
 
-class UserInteraction implements Hashable { // TODO: extends Hashable?
+class UserInteraction implements Hashable {
   bool shown = false;
   bool waitForEndOfPage;
   int hash;
@@ -96,6 +96,11 @@ class Choice extends UserInteraction {
   Choice(this.string, [this.goto, Function then, bool showNow=false]) : super() {
     f = then;
     waitForEndOfPage = !showNow;
+  }
+
+  Choice then(Function _f) {
+    f = _f;
+    return this;
   }
 }
 
@@ -125,7 +130,6 @@ class Scripter extends Isolate {
 
   void callback(var message, SendPort replyTo) {
     print("SCR: Received message from interface: ${message.type}.");
-    print("SCR: currentPage = $currentPage, currentBlock = $currentBlock");
     _interfacePort = replyTo;
     if (message.type == Message.MSG_QUIT) {
       print("SCR: Closing port and quiting.");
@@ -159,16 +163,20 @@ class Scripter extends Isolate {
     if (incomingMessage.type == Message.MSG_OPTION_SELECTED) {
       print("SCR: An option has been selected. Resolving.");
       // TODO: make this more elegant by making ChoiceList class
+      Message message;
       choices.forEach((choice) {
 	if (choice.hashCode() == incomingMessage.content) {
+	  print("SCR: Found choice that was selected: ${choice.string}");
           if (choice.goto != null)
 	    nextPage = choice.goto;
 	  if (choice.f != null)
-	    return runScriptBlock(script:choice.f);
-	  else
-	    return new Message.NoResult();
+	    message = runScriptBlock(script:choice.f);
 	}
       });
+      if (message != null)
+	return message;
+      else
+        return new Message.NoResult();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -178,6 +186,8 @@ class Scripter extends Isolate {
       repeatBlockBit = false;
     else
       currentBlock++;
+
+    print("SCR: currentPage = $currentPage, currentBlock = $currentBlock");
 
     blocks = pages[currentPage];
     print("SCR: Resolving block.");
