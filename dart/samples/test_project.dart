@@ -4,7 +4,7 @@
 
 class ScripterImpl extends Scripter {
 
-  // TODO: Implement "library"
+  // TODO: Implement "library" using noSuchMethod
   void startCombat(name, [hp=3]) {
     echo("You have encountered $name!");
     vars["enemy"] = {
@@ -31,10 +31,13 @@ class ScripterImpl extends Scripter {
 	if (vars["enemy"]["hp"] <= 0) {
 	  echo("The ${vars['enemy']['name']} is dead!");
 	  vars["enemy"] = null;
+	} else {
+	  nextScript(combatTurn);
 	}
       } else {
 	echo("You miss like the pussy you are.");
 	nextScript(combatTurn);
+      }
     });
   }
 
@@ -44,6 +47,9 @@ class ScripterImpl extends Scripter {
       [ 
         "First paragraph!",
         "Second paragraph!",
+	() {
+          startCombat("ugly orc", hp:2);
+	},
 	"Still the first page.",
 	() { 
 	  echo("First script."); 

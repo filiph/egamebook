@@ -107,7 +107,7 @@ class Scripter extends Isolate {
 
   int nextPage;
   bool repeatBlockBit = false;
-  Function nextScript;
+  Function nextScriptFunction;
 
   Scripter() : super() {
     print("Scripter has been created.");
@@ -139,14 +139,14 @@ class Scripter extends Isolate {
       print("SCR: Starting from the beginning");
       currentPage = 0;
       currentBlock = null;
-      nextScript = null;
+      nextScriptFunction = null;
       initScriptEnvironment();
     }
 
     // if previous script asked for nextScript()
-    if (nextScript != null) {
-      Function script = nextScript;
-      nextScript = null;
+    if (nextScriptFunction != null) {
+      Function script = nextScriptFunction;
+      nextScriptFunction = null;
       return runScriptBlock(script:script);
     }
 
@@ -247,7 +247,7 @@ class Scripter extends Isolate {
   }
 
   void nextScript(Function f) {
-    nextScript = f;
+    nextScriptFunction = f;
   }
 
   void repeatBlock() {
