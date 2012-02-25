@@ -1,17 +1,5 @@
 #library('egb');
 
-class Instruction {
-}
-
-class PrintInstruction extends Instruction {
-  String msg;
-
-  PrintInstruction(this.msg) {
-  }
-}
-
-class ScriptInstruction extends Instruction {
-}
 
 class Message {
   final int type;
@@ -158,6 +146,7 @@ class Scripter extends Isolate {
       currentPage = nextPage;
       currentBlock = null;
       nextPage = null;
+      choices.clear();
     }
 
     if (incomingMessage.type == Message.MSG_OPTION_SELECTED) {
