@@ -4,6 +4,8 @@
 
 class ScripterImpl extends Scripter {
 
+  // TODO: Implement "library"
+
   ScripterImpl() : super() {
     pages = [
       // page 0
@@ -14,6 +16,10 @@ class ScripterImpl extends Scripter {
 	() { 
 	  echo("First script."); 
           vars["a"] = 1;
+	},
+	() {
+	  if (vars["a"] == 1)
+	    choice("Go to the next page.", goto:1);
 	},
 	"Another paragraph",
 	() {
@@ -31,13 +37,15 @@ class ScripterImpl extends Scripter {
 	  choice("Stay.", showNow:true);
 	  choice("Let me think about it.", then:() { repeatBlock(); }, showNow:true);
 	},
-	"Last paragraph."
+	"Last paragraph.",
+	new Choice("Go to the next page and increase \"a\".", goto:1, then:() { vars["a"]++; })
       ],
       // page 1
       [ 
         "This is the second page!!",
 	() {
-          choice("Go to hell.", showNow:true, then:() { echo("Yeah"); });
+          choice("Go to hell.", showNow:true, then:() { echo("Hell yeah"); });
+          choice("Go to heaven.", showNow:true).then(() { echo("Yeah"); });
 	},
         "Interesting!",
 	() { echo("vars[\"a\"] is now ${vars['a']}."); } 

@@ -46,7 +46,7 @@ class Message {
   // Choices message. A list with [0] being text prepended, then choices
   Message.ShowChoices(
       List<Choice> choices, 
-      [String prependText, 
+      [String prependText="", 
       bool endOfPage=false]
       ) : type = MSG_SHOW_CHOICES {
     List<Choice> choicesToSend;
@@ -192,15 +192,18 @@ class Scripter extends Isolate {
     blocks = pages[currentPage];
     print("SCR: Resolving block.");
     if (currentBlock >= blocks.length) {
-      // at the end of page
+      print("SCR: At the end of page.");
       if (choices.some((choice) => !choice.shown)) 
-	return new Message.ShowChoices(choices);
+	return new Message.ShowChoices(choices, endOfPage:true);
       else
 	return new Message.EndOfBook();
     } else if (blocks[currentBlock] is String) {
       // just an ordinary paragraph, no script
       Message message = new Message.TextResult(blocks[currentBlock]); 
       return message;
+    } else if (blocks[currentBlock] is Choice) {
+      choices.add(blocks[currentBlock]);
+      return new Message.NoResult();
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph
       print("SCR: Running script.");
