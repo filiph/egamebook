@@ -4,7 +4,8 @@
 
 class ScripterImpl extends Scripter {
 
-  // TODO: Implement "library" using noSuchMethod
+  /* LIBRARY */
+
   void startCombat(name, [hp=3]) {
     echo("You have encountered $name!");
     vars["enemy"] = {
@@ -43,6 +44,7 @@ class ScripterImpl extends Scripter {
 
   ScripterImpl() : super() {
     pages = [
+      /* PAGES & BLOCKS */
       // page 0
       [ 
         "First paragraph!",

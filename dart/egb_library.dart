@@ -233,6 +233,8 @@ class Scripter extends Isolate {
     } else {
       throw new NoSuchMethodException(this, invocation.memberName, invocation.arguments);
     }
+    // TODO: Implement "library" using noSuchMethod
+    // - noSuchMethod for function invocations (combat())
   }
   */
 
