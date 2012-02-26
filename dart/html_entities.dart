@@ -258,7 +258,7 @@ class HtmlEntities {
     @"♥" : "&hearts;",
     @"♦" : "&diams;"
     // CZECH
-    // TODO
+    // TODO: http://tlt.its.psu.edu/suggestions/international/bylanguage/czechslovak.html#htmlcodes
   };
 
   static String toHtml(String s) {
