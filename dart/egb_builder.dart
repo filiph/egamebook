@@ -85,12 +85,12 @@ void parse() {
     if (hr.hasMatch(line) && i < inLines.length - 1) {
       String nameCandidate = inLines[i+1].trim();
       if (validName.hasMatch(nameCandidate)) {
-	if (previousPage != null)
-	  previousPage.lineEnd = i - 1;
-	pages[nameCandidate] = new Page(nameCandidate, currentPageIndex, lineStart:i);
-	currentPageIndex++;
-	previousPage = pages[nameCandidate];
-	i++; // skip next line
+        if (previousPage != null)
+          previousPage.lineEnd = i - 1;
+        pages[nameCandidate] = new Page(nameCandidate, currentPageIndex, lineStart:i);
+        currentPageIndex++;
+        previousPage = pages[nameCandidate];
+        i++; // skip next line
       }
     }
   }
