@@ -86,6 +86,14 @@ class Choice extends UserInteraction {
     waitForEndOfPage = !showNow;
   }
 
+  Choice.fromMap(Map<String,Dynamic> map) : super() {
+    string = map["string"];
+    goto = map["goto"];
+    if (map.containsKey("showNow"))
+      showNow = map["showNow"];
+    f = map["then"];
+  }
+
   Choice then(Function _f) {
     f = _f;
     return this;
@@ -199,8 +207,8 @@ class Scripter extends Isolate {
       // just an ordinary paragraph, no script
       Message message = new Message.TextResult(blocks[currentBlock]); 
       return message;
-    } else if (blocks[currentBlock] is Choice) {
-      choices.add(blocks[currentBlock]);
+    } else if (blocks[currentBlock] is Map) {
+      choices.add(new Choice.fromMap(blocks[currentBlock]));
       return new Message.NoResult();
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph

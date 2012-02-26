@@ -1,26 +1,30 @@
---- welcome
+---
+welcome
 
 # Thin Ice
 
-A sci-fi thriller featuring a dynamic storyline, submachine guns, and vaginas.
+A sci-fi thriller featuring a dynamic storyline, swords, and gynaecology.
 Written by: Filip Hracek
 
 - Start [beforeVisit]
-- Customize your character first [customizeCharacter]
+- Customize your "character" first [customizeCharacter]
 
---- customizeCharacter
+---
+customizeCharacter
 
 <dart>
-script.input.add(“What is your first name?”, default:”Greg”, var:”name”);
+//script.input.add(“What is your first name?”, default:”Greg”, var:”name”);
+vars["name"] = "Filip";
 </dart>
 
 Congratulations, your name is now $name.
 
--- Start [beforeVisit]
+- Start [beforeVisit]
 
---- beforeVisit
+---
+beforeVisit
 
-Contrary to popular belief, being a young gynaecologist isn’t the bachelor’s dream occupation. Most women won’t be attracted to a guy when the first thing he sees of them is their vagina. But no matter how often you explain this to your friends, they will always think you’re living the life of a hip-hop star. “$name is the man!” they say. Maybe they suppose that seeing a woman’s privates keeps being exciting even after 2 years of practice? It doesn’t. In fact, sometimes you’d rather be a dentist and look into people’s throats, a rectum specialist and stare into other’s assholes, or a psychologist and dive into their horrible, filthy minds.
+Contrary to popular belief, being a young gynaecologist isn't the bachelor's dream occupation. Most women won't be attracted to a guy when the first thing he sees of them is their vagina. But no matter how often you explain this to your friends, they will always think you’re living the life of a hip-hop star. "$name is the man!" they say. Maybe they suppose that seeing a woman's privates keeps being exciting even after 2 years of practice? It doesn't. In fact, sometimes you'd rather be a dentist and look into people's throats, a rectum specialist and stare into other's assholes, or a psychologist and dive into their horrible, filthy minds.
 
 There _are_ bright moments, you must admit. Preventive examinations. Young ladies with charm and no actual pathology. You prefer when there’s no reason for spreading legs, actually -- just talk. 
 
@@ -33,7 +37,8 @@ There _are_ bright moments, you must admit. Preventive examinations. Young ladie
 - “Oh! Let her come in.” [introducingMaria]
 - “Just a few more minutes, please.” [letHerWait]
 
---- letHerWait
+---
+letHerWait
 
 Lydia nods and closes the door. You remember to look for files or receipts from other patients that may be left lying on the table. That would be unprofessional and might scare away the new business. How can they trust you to keep their records safe if they can see the records of others? But there is nothing of note on the table, and you have nothing else to do than wait. (There are administrative tasks to be taken care of, but none of them could be even started under 15 minutes.)
 
@@ -41,7 +46,8 @@ After a while, you call Lydia on the intercom.
 
 - “I’m ready, please let the patient in.” [introducingMaria]
 
---- introducingMaria
+--- 
+introducingMaria
 
 Maria Pruitt is gorgeous. Also, she says: “I’m here for a preventive examination.” There is nothing wrong with her. 
 
@@ -53,7 +59,12 @@ Little do you know that in less then 24 hours, you’ll wish you’d never let M
 
 - Next [goingHome]
 
-
---- goingHome
+--- 
+goingHome
 
 (Potka opilce “ktery to zcasti hraje” a pusti se do bitky. Ve skutecnosti jej u toho pozoruje pritel od Marie.)
+
+
+<library>
+// Nothing yet.
+</library>
