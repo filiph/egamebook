@@ -43,6 +43,7 @@ final String implStartFile = """
 class ScripterImpl extends Scripter {
 
   /* LIBRARY */
+
 """;
 
 final String implStartPages = """
@@ -185,33 +186,38 @@ void write() {
 	  page = p;
       });
       
-      file.writeStringSync("// ${page.name}\n");
-      file.writeStringSync("[\n");
+      String indent = "      ";
+
+      file.writeStringSync("$indent// ${page.name}\n");
+      file.writeStringSync("$indent[\n");
 
       page.blocks.forEach((block) {
+	indent = "        ";
 	String commaOrNot = block.index < page.blocks.length - 1 ? "," : "";
 	if (block.type == Block.BLK_TEXT) {
 	  // TODO: solve for more than one line?
-	  file.writeStringSync("\"${block.lines[0]}\"$commaOrNot\n");
+	  file.writeStringSync("$indent\"${block.lines[0]}\"$commaOrNot\n");
 	} else if (block.type == Block.BLK_CHOICE) {
-	  file.writeStringSync("{\n");
+	  file.writeStringSync("$indent{\n");
 	  block.lines.forEach((line) {
-	    file.writeStringSync("$line\n");
+	    file.writeStringSync("$indent$line\n");
 	  });
-	  file.writeStringSync("}$commaOrNot\n");
+	  file.writeStringSync("$indent}$commaOrNot\n");
 	} else if (block.type == Block.BLK_DART_SCRIPT) {
-	  file.writeStringSync("() {\n");
+	  file.writeStringSync("$indent() {\n");
 	  block.lines.forEach((line) {
-	    file.writeStringSync("$line\n");
+	    file.writeStringSync("$indent$line\n");
 	  });
-	  file.writeStringSync("}$commaOrNot\n");
+	  file.writeStringSync("$indent}$commaOrNot\n");
 	}
       });
 
+      indent = "      ";
+
       if (i < pages.length - 1)
-	file.writeStringSync("],\n");
+	file.writeStringSync("$indent],\n");
       else
-	file.writeStringSync("]\n");
+	file.writeStringSync("$indent]\n");
     }
 
     file.writeStringSync(implEndFile);
