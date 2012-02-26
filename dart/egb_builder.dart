@@ -1,6 +1,11 @@
 #import('dart:io');
 
+#import('html_entities.dart');
+
 // TODO: because of the UTF8 issue, export strings to JSON? it probably has other advantages, too (modularity, less compiling, smaller source
+// OR: convert non-ASCII characters to HTML entities (&iacute;)
+
+// TODO: $variable in text block, v_variable in dart block -> vars["variable"] (UNTIL Dart supports NoSuchMethod fully)
 
 class Page {
   int index;
@@ -228,7 +233,9 @@ void write() {
 }
 
 String escapeQuotes(String str) {
-  return str.replaceAll(@'"', @'\"').replaceAll("\n", @"\n").replaceAll(@"$",""); // TODO: check for '\"' in the original string!
+  String result = HtmlEntities.toHtml(str);
+  return result.replaceAll("\n", @"\n").replaceAll(@"$","");
+  //return str.replaceAll(@'"', @'\"').replaceAll("\n", @"\n").replaceAll(@"$",""); // TODO: check for '\"' in the original string!
   // TODO: make it work with inline $variables
 }
 
