@@ -36,6 +36,7 @@ String filename;
 List<String> inLines;
 Map<String,Page> pages;
 List<String> libraryLines;
+List<String> classesLines;
 
 List<String> outLibLines;
 List<String> outPagesLines;
@@ -44,23 +45,26 @@ final String implStartFile = """
 #library('Scripter Implementation');
 
 #import('../egb_library.dart');
+""";
+
+final String implStartClass = """
 
 class ScripterImpl extends Scripter {
 
   /* LIBRARY */
 
-""";
+  """;
 
-final String implStartPages = """
-  ScripterImpl() : super() {
-    pages = [
-      /* PAGES & BLOCKS */
-""";
+  final String implStartPages = """
+    ScripterImpl() : super() {
+      pages = [
+        /* PAGES & BLOCKS */
+        """;
 
 
-final String implEndFile = """
-    ];
-  }
+      final String implEndFile = """
+        ];
+    }
 }
 """;
 
@@ -71,11 +75,14 @@ void parse() {
   RegExp dartTagEnd = new RegExp(@"^\s*</dart>\s*$");
   RegExp libraryTagStart = new RegExp(@"^\s*<library>\s*$");
   RegExp libraryTagEnd = new RegExp(@"^\s*</library>\s*$");
+  RegExp classesTagStart = new RegExp(@"^\s*<classes>\s*$");
+  RegExp classesTagEnd = new RegExp(@"^\s*</classes>\s*$");
   RegExp choice = new RegExp(@"^\- (.+) \[([a-zA-Z_][a-zA-Z0-9_]*)\]$");
   RegExp validName = new RegExp(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
 
   pages = new Map<String,Page>();
   libraryLines = new List<String>();
+  classesLines = new List<String>();
   Page previousPage;
   int currentPageIndex = 0;
 
@@ -98,131 +105,156 @@ void parse() {
 
   // second pass - find blocks inside pages
   pages.forEach((String pageName, Page page) {
-    print("Parsing page [${page.name}] <${page.lineStart},${page.lineEnd}>");
-    page.blocks = new List<Block>();
-    int currentBlockIndex = 0;
-    for (int i = page.lineStart + 2; i < page.lineEnd; i++) {
+      print("Parsing page [${page.name}] <${page.lineStart},${page.lineEnd}>");
+      page.blocks = new List<Block>();
+      int currentBlockIndex = 0;
+      for (int i = page.lineStart + 2; i < page.lineEnd; i++) {
       if (blankLine.hasMatch(inLines[i]))
-	continue;
+      continue;
       String line = inLines[i].trim();
       if (choice.hasMatch(line)) {
-	Match choiceMatch = choice.firstMatch(line);
-	String choiceStr = escapeQuotes(choiceMatch.group(1));
-	String choiceLink = choiceMatch.group(2);
-	if (!pages.containsKey(choiceLink))
-	  throw new Exception("$choiceLink page does not exist!");
-	page.blocks.add(
-	  new Block(
-	    ["\"string\":\"${choiceStr}\",",
-	     "\"goto\":${pages[choiceLink].index}"],
-	    currentBlockIndex,
-	    Block.BLK_CHOICE
-	  )
-	);
-	print("- Found a new choice: $choiceStr [$choiceLink].");
-	currentBlockIndex++;
-	continue;
+      Match choiceMatch = choice.firstMatch(line);
+      String choiceStr = escapeQuotes(choiceMatch.group(1));
+      String choiceLink = choiceMatch.group(2);
+      if (!pages.containsKey(choiceLink))
+      throw new Exception("$choiceLink page does not exist!");
+      page.blocks.add(
+        new Block(
+          ["\"string\":\"${choiceStr}\",",
+          "\"goto\":${pages[choiceLink].index}"],
+          currentBlockIndex,
+          Block.BLK_CHOICE
+          )
+        );
+      print("- Found a new choice: $choiceStr [$choiceLink].");
+      currentBlockIndex++;
+      continue;
       } else if (dartTagStart.hasMatch(line)) {
-	int endTagIndex;
-	for (int ii = i; ii < inLines.length; ii++)
-	  if (dartTagEnd.hasMatch(inLines[ii])) {
-	    endTagIndex = ii;
-	    break;
-	  }
-	if (endTagIndex == null)
-	  throw new Exception("No end tag for opening <dart> tag at $i found.");
-	page.blocks.add(
-	  new Block(
-	    new List.from(inLines.getRange(i+1, endTagIndex-i-1)),
-	    currentBlockIndex,
-	    Block.BLK_DART_SCRIPT
-	  )
-	);
-	print("- Found new dart script.");
-	currentBlockIndex++;
-	i = endTagIndex;
-	continue;
+        int endTagIndex;
+        for (int ii = i; ii < inLines.length; ii++)
+          if (dartTagEnd.hasMatch(inLines[ii])) {
+            endTagIndex = ii;
+            break;
+          }
+        if (endTagIndex == null)
+          throw new Exception("No end tag for opening <dart> tag at $i found.");
+        page.blocks.add(
+            new Block(
+              new List.from(inLines.getRange(i+1, endTagIndex-i-1)),
+              currentBlockIndex,
+              Block.BLK_DART_SCRIPT
+              )
+            );
+        // TODO: replace v_vars to vars["vars"] ... - needs regexp search&replace
+        // page.blocks.last().lines.forEach((line) { line = line.replaceAll("..."
+        print("- Found new dart script.");
+        currentBlockIndex++;
+        i = endTagIndex;
+        continue;
+      } else if (classesTagStart.hasMatch(line)) {
+        int endTagIndex;
+        for (int ii = i; ii < inLines.length; ii++)
+          if (classesTagEnd.hasMatch(inLines[ii])) {
+            endTagIndex = ii;
+            break;
+          }
+        if (endTagIndex == null)
+          throw new Exception("No end tag for opening <classes> tag at $i found.");
+        classesLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+        print("- Found classes script.");
+        // notice: no "currentBlockIndex++". Classes are not part of current page.
+        i = endTagIndex;
+        continue;
       } else if (libraryTagStart.hasMatch(line)) {
-	int endTagIndex;
-	for (int ii = i; ii < inLines.length; ii++)
-	  if (libraryTagEnd.hasMatch(inLines[ii])) {
-	    endTagIndex = ii;
-	    break;
-	  }
-	if (endTagIndex == null)
-	  throw new Exception("No end tag for opening <library> tag at $i found.");
-	libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
-	print("- Found library script.");
-	// notice: no "currentBlockIndex++". Library is not part of current page.
-	i = endTagIndex;
-	continue;
+        int endTagIndex;
+        for (int ii = i; ii < inLines.length; ii++)
+          if (libraryTagEnd.hasMatch(inLines[ii])) {
+            endTagIndex = ii;
+            break;
+          }
+        if (endTagIndex == null)
+          throw new Exception("No end tag for opening <library> tag at $i found.");
+        libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+        print("- Found library script.");
+        // notice: no "currentBlockIndex++". Library is not part of current page.
+        i = endTagIndex;
+        continue;
       } else {
-	page.blocks.add(
-	  new Block(
-	    [escapeQuotes(inLines[i])],
-	    currentBlockIndex,
-	    Block.BLK_TEXT
-	  )
-	);
-	print("- Found paragraph: ${escapeQuotes(inLines[i]).substring(0,Math.min(15,inLines[i].length-1))}...");
-	currentBlockIndex++;
+        page.blocks.add(
+            new Block(
+              [escapeQuotes(inLines[i])],
+              currentBlockIndex,
+              Block.BLK_TEXT
+              )
+            );
+        print("- Found paragraph: ${escapeQuotes(inLines[i]).substring(0,Math.min(15,inLines[i].length-1))}...");
+        currentBlockIndex++;
       }
-    }
+      }
   });
 }
 
 void write() {
+  print("Data loaded.");
+  print("- ${classesLines.length} classes lines");
+  print("- ${libraryLines.length} library lines");
+  print("- ${pages.length} pages");
   String outFile = new File("$filename.dart");
   outFile.createSync();
 
   outFile.open(FileMode.WRITE);
 
   outFile.openHandler = (RandomAccessFile file) {
+    print("File created. Writing.");
     file.writeStringSync(implStartFile);
+    classesLines.forEach((line) {
+        file.writeStringSync("$line\n");
+        });
+    file.writeStringSync(implStartClass);
     libraryLines.forEach((line) {
-      file.writeStringSync("  $line\n");
-    });
+        file.writeStringSync("  $line\n");
+        });
     file.writeStringSync(implStartPages);
 
     for (int i = 0; i < pages.length; i++) {
       Page page;
       pages.forEach((String key, Page p) {
-	if (p.index == i)
-	  page = p;
-      });
-      
+          if (p.index == i)
+          page = p;
+          });
+
       String indent = "      ";
 
       file.writeStringSync("$indent// ${page.name}\n");
       file.writeStringSync("$indent[\n");
 
       page.blocks.forEach((block) {
-	indent = "        ";
-	String commaOrNot = block.index < page.blocks.length - 1 ? "," : "";
-	if (block.type == Block.BLK_TEXT) {
-	  // TODO: solve for more than one line?
-	  file.writeStringSync("$indent\"${block.lines[0]}\"$commaOrNot\n");
-	} else if (block.type == Block.BLK_CHOICE) {
-	  file.writeStringSync("$indent{\n");
-	  block.lines.forEach((line) {
-	    file.writeStringSync("$indent$line\n");
-	  });
-	  file.writeStringSync("$indent}$commaOrNot\n");
-	} else if (block.type == Block.BLK_DART_SCRIPT) {
-	  file.writeStringSync("$indent() {\n");
-	  block.lines.forEach((line) {
-	    file.writeStringSync("$indent$line\n");
-	  });
-	  file.writeStringSync("$indent}$commaOrNot\n");
-	}
-      });
+          indent = "        ";
+          String commaOrNot = block.index < page.blocks.length - 1 ? "," : "";
+          if (block.type == Block.BLK_TEXT) {
+          // TODO: solve for more than one line?
+          file.writeStringSync("$indent\"${block.lines[0]}\"$commaOrNot\n");
+          } else if (block.type == Block.BLK_CHOICE) {
+          file.writeStringSync("$indent{\n");
+          block.lines.forEach((line) {
+            file.writeStringSync("$indent$line\n");
+            });
+          file.writeStringSync("$indent}$commaOrNot\n");
+          } else if (block.type == Block.BLK_DART_SCRIPT) {
+          file.writeStringSync("$indent() {\n");
+          block.lines.forEach((line) {
+            file.writeStringSync("$indent$line\n");
+            });
+          file.writeStringSync("$indent}$commaOrNot\n");
+          }
+          });
 
       indent = "      ";
 
       if (i < pages.length - 1)
-	file.writeStringSync("$indent],\n");
+        file.writeStringSync("$indent],\n");
       else
-	file.writeStringSync("$indent]\n");
+        file.writeStringSync("$indent]\n");
     }
 
     file.writeStringSync(implEndFile);
@@ -253,9 +285,9 @@ void main() {
     print("File ${inFile.fullPath()} doesn't exist.");
     return null;
   }
-  InputStream inStream = inFile.openInputStream();
+  InputStream inStream = inFile.openInputStreamSync();
   StringInputStream strInStream = new StringInputStream(inStream);
-  
+
   strInStream.lineHandler = () {
     inLines = new List<String>();
     String line;
