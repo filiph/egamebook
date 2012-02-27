@@ -1,6 +1,31 @@
 #library('Scripter Implementation');
 
 #import('../egb_library.dart');
+
+class Actor {
+  List<String> names;
+
+  // current state
+  int hitpoints;
+  int stance;
+  List<CombatMove> moves;
+  List<Weapon> wieldedWeapons;
+  // limbs
+
+  // stats
+  int speed;
+  int armor;
+}
+
+class CombatMove {
+}
+
+class Weapon {
+}
+
+class Combat {
+}
+
 class Enemy {
   List<String> names;
   int speed;
