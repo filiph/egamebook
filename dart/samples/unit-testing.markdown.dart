@@ -13,8 +13,64 @@ Dynamic randomly(List choices) {
   return choices[which];
 }
 
+String capitalize(String str) {
+  String firstLetter = str[0].toUpperCase();
+  if (str.length == 1)
+    return firstLetter;
+  else 
+    return "$firstLetter${str.substring(1)}";
+}
+
+class Storyline {
+  StringBuffer strBuf;
+  List<String> strings;
+  List<Actor> abouts;
+
+  Storyline add(Actor about, String str) {
+    abouts.addLast(about);
+    strings.addLast(str);
+    strBuf = new StringBuffer();
+  }
+
+  Storyline() {
+    strings = new List<String>();
+    abouts = new List<Actor>();
+  }
+
+  void clear() {
+    strings.clear();
+    abouts.clear();
+    strBuf.clear();
+  }
+
+  String toString() {
+    for (int i=0; i < strings.length; i++) {
+      if (abouts[i] != null && !abouts[i].isPlayer) {
+        if (abouts.length > i+1 && abouts[i] == abouts[i+1]) {
+          strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}${randomly([' and',', then',', and then'])} ${strings[i+1]}. "));
+          if (abouts.length > i+2 && abouts[i] == abouts[i+2]) {
+            strBuf.add(capitalize("${abouts[i].pronoun} ${string[i]}. "));
+            i++;
+          }
+          i++;
+        } else {
+          if (i>0 && strings[i] == strings[i-1])
+            strBuf.add(randomly([capitalize("${abouts[i].randomName} does the same. "), "Same goes for ${abouts[i].randomName}. "]));
+          else
+            strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}. "));
+        }
+      } else {
+        strBuf.add("${strings[i]}. ");
+      }
+    }
+    return strBuf.toString();
+  }
+}
+
+
 class Entity {
   List <String> names;
+  String pronoun = "it";
 
   Entity() {
     names = new List();
@@ -22,27 +78,7 @@ class Entity {
 
   String get randomName() => randomly(names);
 }
-/*
-class DescriptableEntity extends Entity {  // describes what happens to actor (3rd person)
-  StringBuffer _textBuffer;
 
-  String get description() {
-    String desc = _textBuffer.toString();
-    _textBuffer.clear();
-    return desc;
-  }
-
-  DescriptableEntity() : super() {
-    _textBuffer = new StringBuffer();
-  }
-
-  void echo(String str) {  // TODO: make it create natural sounding sentences (it, and)
-    _textBuffer.add(str);
-    if (str.endsWith("."))  // automatically add a space after sentences
-      _textBuffer.add(" ");
-  }
-}
-*/
 class Actor extends Entity {
   // current state
   bool alive = true;
@@ -52,6 +88,7 @@ class Actor extends Entity {
   double _stance;  // from 0.0 = lying on the ground to 5.0 = professional combat stance
   List<CombatMove> moves;
   CombatMove currentMove;
+  CombatMove previousMove;
   int tillEndOfMove = 0;
   List<Weapon> wieldedWeapons;
   List<Function> modifiers;  // functions to be run on each update (poison, specials)
@@ -75,6 +112,7 @@ class Actor extends Entity {
   Actor() : super() {
     // init with defaults
     names = ["actor"];
+    pronoun = "he";
     _hitpoints = 3;
 
     modifiers = new List();
@@ -100,8 +138,10 @@ class Actor extends Entity {
     } else {
       // effect of finished move
       if (currentMove != null) {
-        currentMove.applyEffects(this, target);
+        if (target.alive)
+          currentMove.applyEffects(this, target);
         tillEndOfMove = currentMove.recovery / speed * 10;
+        previousMove = currentMove;
         currentMove = null;
         return;
       }
@@ -132,7 +172,7 @@ class Actor extends Entity {
 
   void die() {
     alive = false;
-    combat.storyline.add(this, randomly(['dies','ceases to breathe','is now dead']));
+    combat.storyline.add(this, randomly(['dies','ceases to breathe','perishes']));
   }
 
   // stats
@@ -165,6 +205,8 @@ class CombatMove extends Entity {
   Function computeSeverity;
   Function applicable;
 
+  Function choiceString;
+
   CombatMove() : super() {
     // init with defaults
     names.add("Hit to the stomach");
@@ -192,9 +234,13 @@ class CombatMove extends Entity {
     };
 
     applyEffects = (Actor attacker, Actor target) {
-      target.hitpoints -= 1;
       if (target.isPlayer)
         attacker.combat.storyline.add(attacker,"hits you to the stomach");
+      target.hitpoints -= 1;
+    };
+
+    choiceString = (Actor target) {
+      return "Hit ${target.randomName} to the stomach.";
     };
   }
 }
@@ -210,48 +256,6 @@ interface LoopedEvent {
   void updateUntilInteraction();
 }
 
-class Storyline {
-  StringBuffer strBuf;
-  List<String> strings;
-  List<Actor> abouts;
-
-  Storyline add(Actor about, String str) {
-    abouts.addLast(about);
-    strings.addLast(str);
-    strBuf = new StringBuffer();
-  }
-
-  Storyline() {
-    strings = new List<String>();
-    abouts = new List<Actor>();
-  }
-
-  void clear() {
-    strings.clear();
-    abouts.clear();
-    strBuf.clear();
-  }
-
-  String toString() {
-    for (int i=0; i < strings.length; i++) {
-      if (abouts[i] != null) {
-        if (abouts.length > i+1 && abouts[i] == abouts[i+1]) {
-          strBuf.add("The ${abouts[i].randomName} ${strings[i]}${randomly([' and',', then',', and then'])} ${strings[i+1]}. ");
-          i++;
-        } else {
-          if (i>0 && strings[i] == strings[i-1])
-            strBuf.add(randomly(["The ${abouts[i].randomName} does the same. ", "Same goes for ${abouts[i].randomName}. "]));
-          else
-            strBuf.add("The ${abouts[i].randomName} ${strings[i]}. ");
-        }
-      } else {
-        strBuf.add("${strings[i]}. ");
-      }
-    }
-    return strBuf.toString();
-  }
-}
-
 
 class Combat extends Entity implements LoopedEvent {
   Storyline storyline;
@@ -260,13 +264,21 @@ class Combat extends Entity implements LoopedEvent {
   bool finished = false;
   bool interactionNeeded = false;
 
+  int time = 0;
+
   void start() {
-    actors.forEach((a) { a.combat = this; });
+    actors.forEach((a) { 
+        a.combat = this; 
+        if (a.isPlayer)
+          _player = a;
+    });
+    if (_player == null)
+      throw new Exception("Cannot start combat without player.");
     _started = true;
-    storyline.add(null, "The combat has begun");
   }
 
   List<Actor> actors;
+  Actor _player;
   List<Choice> playerChoices;
 
   Combat() : super() {
@@ -275,25 +287,51 @@ class Combat extends Entity implements LoopedEvent {
     playerChoices = new List();
   }
 
+  /// The main function that gets called every single move and calls each actor to do their own stuff.
   void update() {
     actors.forEach((actor) {
       actor.update();
     });
 
-    if (actors.every((a) => !a.alive || a.isPlayer)) {
+    if (actors.every((a) => !a.alive || _player.team == a.team)) {
       finished = true;
       return;
     }
 
-    if (true) { // TODO: check if there is stuff to be done by player
-      interactionNeeded = true;
+    if (_player != null && _player.alive && _player.tillEndOfMove <= 0) { // TODO: check if there is stuff to be done by player
+      if (_player.target == null) {
+        // let player choose his target
+        List<Actor> possibleEnemies = actors.filter((o) => o.team != _player.team && o.alive);
+        possibleEnemies.forEach((enemy) {
+            playerChoices.add(new Choice("Target ${enemy.randomName}.", showNow:true, then:() { storyline.add(enemy, "is now your target"); _player.target = enemy; }));
+        });
+      } else {
+        // find out possible moves the player can perform on the target
+        List<CombatMove> possibleMoves = _player.moves.filter((m) => m.applicable(_player,_player.target));
+        if (!possibleMoves.isEmpty()) {
+          // only allow to repeat previous move when there is no other option
+          if (possibleMoves.length > 1)
+            possibleMoves = possibleMoves.filter((m) => m != _player.previousMove);
+          // sort moves by how effective they can be
+          possibleMoves.sort((a,b) => a.computeSeverity(_player,_player.target) - b.computeSeverity(_player,_player.target));
+          // only show first three
+          possibleMoves = possibleMoves.getRange(0, Math.min(3, possibleMoves.length));
+          possibleMoves.forEach((move) {
+              playerChoices.add(new Choice(move.choiceString(_player.target), showNow:true, then:() { _player.currentMove = move; }));
+          });
+        }
+        // let player target someone else
+        playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; }));
+      }
 
-      actors.filter((a) => a.alive && a.team != 1).forEach((actor) {
-          playerChoices.add(new Choice("Attack ${actor.randomName}.", showNow:true, then:() { storyline.add(actor, "got hit by you"); actor.hitpoints -= 1;}));
-      });
-      playerChoices.add(new Choice("Do nothing.", showNow:true));
       // TODO: implement moves and check what is to be done. Then start moves in the then: clause.
+      if (!playerChoices.isEmpty()) {
+        interactionNeeded = true;
+        playerChoices.add(new Choice("Do nothing.", showNow:true)); // TODO: this is for debug only..?
+      }
     }
+
+    time++;
   }
 
   void updateUntilInteraction() {
@@ -339,7 +377,8 @@ class ScripterImpl extends Scripter {
         () {
         vars["player"] = new Player();
         vars["wolf"] = new Actor();
-        vars["wolf"].names = ["wolf", "wolf", "gray wolf"];
+        vars["wolf"].names = ["the wolf", "the wolf", "the gray wolf"];
+        vars["wolf"].pronoun = "it";
         /*vars["wolf"].modifiers.add((wolf) {
             if (Math.random() < 0.01) {
               wolf.echo("The ${wolf.randomName} spits out blood.");
@@ -347,7 +386,7 @@ class ScripterImpl extends Scripter {
             }
         });*/
         vars["orc"] = new Actor();
-        vars["orc"].names = ["orc", "orc", "ugly orc"];
+        vars["orc"].names = ["the orc", "the orc", "the ugly orc"];
         /*vars["orc"].modifiers.add((orc) {
             if (Math.random() < 0.01) {
               orc.echo("The ${orc.randomName} grunts in pain from the poisoning.");
