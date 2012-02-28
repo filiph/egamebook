@@ -49,18 +49,18 @@ class Message {
     content = new List<Dynamic>();
     content.add(prependText);
     choicesToSend.forEach((choice) {
-      content.add( {
-	"string": choice.string,
-	"hash": choice.hashCode()
-      } );
-      choice.shown = true;
-    });
+        content.add( {
+          "string": choice.string,
+          "hash": choice.hashCode()
+          } );
+        choice.shown = true;
+        });
   }
 
   Message.OptionSelected(int hash) : type = MSG_OPTION_SELECTED {
     content = hash;
   }
-  
+
   Message.NoResult() : type = MSG_NO_RESULT {}
 }
 
@@ -115,10 +115,11 @@ class Scripter extends Isolate {
 
   int nextPage;
   bool repeatBlockBit = false;
-  Function nextScriptFunction;
+  List<Function> nextScriptStack;
 
   Scripter() : super() {
     print("Scripter has been created.");
+    nextScriptStack = new List<Function>();
   }
 
   void main() {
@@ -132,7 +133,7 @@ class Scripter extends Isolate {
       print("SCR: Closing port and quiting.");
       port.close();
     } else if (pages == null 
-	   || (currentPage != null && currentPage >= pages.length)) {
+        || (currentPage != null && currentPage >= pages.length)) {
       print("SCR: No more pages.");
       _interfacePort.send(new Message.EndOfBook(), port);
     } else {
@@ -147,14 +148,32 @@ class Scripter extends Isolate {
       print("SCR: Starting from the beginning");
       currentPage = 0;
       currentBlock = null;
-      nextScriptFunction = null;
+      nextScriptStack.clear();
       initScriptEnvironment();
     }
 
+    if (incomingMessage.type == Message.MSG_OPTION_SELECTED) {
+      print("SCR: An option has been selected. Resolving.");
+      // TODO: make this more elegant by making ChoiceList class
+      Message message;
+      choices.forEach((choice) {
+          if (choice.hashCode() == incomingMessage.content) {
+          print("SCR: Found choice that was selected: ${choice.string}");
+          if (choice.goto != null)
+          nextPage = choice.goto;
+          if (choice.f != null)
+          message = runScriptBlock(script:choice.f);
+          }
+          });
+      if (message != null)
+        return message;
+      else
+        return new Message.NoResult();
+    }
+
     // if previous script asked for nextScript()
-    if (nextScriptFunction != null) {
-      Function script = nextScriptFunction;
-      nextScriptFunction = null;
+    if (!nextScriptStack.isEmpty()) {
+      Function script = nextScriptStack.removeLast();
       return runScriptBlock(script:script);
     }
 
@@ -164,25 +183,6 @@ class Scripter extends Isolate {
       currentBlock = null;
       nextPage = null;
       choices.clear();
-    }
-
-    if (incomingMessage.type == Message.MSG_OPTION_SELECTED) {
-      print("SCR: An option has been selected. Resolving.");
-      // TODO: make this more elegant by making ChoiceList class
-      Message message;
-      choices.forEach((choice) {
-	if (choice.hashCode() == incomingMessage.content) {
-	  print("SCR: Found choice that was selected: ${choice.string}");
-          if (choice.goto != null)
-	    nextPage = choice.goto;
-	  if (choice.f != null)
-	    message = runScriptBlock(script:choice.f);
-	}
-      });
-      if (message != null)
-	return message;
-      else
-        return new Message.NoResult();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -200,9 +200,9 @@ class Scripter extends Isolate {
     if (currentBlock >= blocks.length) {
       print("SCR: At the end of page.");
       if (choices.some((choice) => !choice.shown)) 
-	return new Message.ShowChoices(choices, endOfPage:true);
+        return new Message.ShowChoices(choices, endOfPage:true);
       else
-	return new Message.EndOfBook();
+        return new Message.EndOfBook();
     } else if (blocks[currentBlock] is String) {
       // just an ordinary paragraph, no script
       Message message = new Message.TextResult(blocks[currentBlock]); 
@@ -233,18 +233,18 @@ class Scripter extends Isolate {
   // making sure calls like "a = 5" will work in scripts 
   // XXX: noSuchMethod not yet implemented in Dart!
   /*
-  noSuchMethod(InvocationMirror invocation) {
-    if (invocation.isGetter) {
-      invocation.invokeOn(vars[invocation.memberName]);
-    } else if (invocation.isSetter) {
-      invocation.invokeOn(vars[invocation.memberName]);
-    } else {
-      throw new NoSuchMethodException(this, invocation.memberName, invocation.arguments);
-    }
-    // TODO: Implement "library" using noSuchMethod
-    // - noSuchMethod for function invocations (combat())
+     noSuchMethod(InvocationMirror invocation) {
+     if (invocation.isGetter) {
+     invocation.invokeOn(vars[invocation.memberName]);
+     } else if (invocation.isSetter) {
+     invocation.invokeOn(vars[invocation.memberName]);
+     } else {
+     throw new NoSuchMethodException(this, invocation.memberName, invocation.arguments);
+     }
+  // TODO: Implement "library" using noSuchMethod
+  // - noSuchMethod for function invocations (combat())
   }
-  */
+   */
 
   void echo(String str) {
     if (textBuffer.length > 0)
@@ -257,7 +257,7 @@ class Scripter extends Isolate {
   }
 
   void nextScript(Function f) {
-    nextScriptFunction = f;
+    nextScriptStack.add(f);
   }
 
   void repeatBlock() {
@@ -273,21 +273,21 @@ class Scripter extends Isolate {
 
   // runs the current block or the specified block
   Message runScriptBlock([Function script]) {
-      // clean up
-      textBuffer = new StringBuffer();
-      // delete choices that have already been shown
-      choices = choices.filter((Choice choice) => !choice.shown);
-      
-      // run the actual script
-      if (script == null)
-	blocks[currentBlock]();
-      else
-	script();
+    // clean up
+    textBuffer = new StringBuffer();
+    // delete choices that have already been shown
+    choices = choices.filter((Choice choice) => !choice.shown);
 
-      // catch text and choices
-      if (choices.some((choice) => !choice.waitForEndOfPage))
-	return new Message.ShowChoices(choices, prependText:textBuffer.toString());
-      return new Message.TextResult(textBuffer.toString());
+    // run the actual script
+    if (script == null)
+      blocks[currentBlock]();
+    else
+      script();
+
+    // catch text and choices
+    if (choices.some((choice) => !choice.waitForEndOfPage))
+      return new Message.ShowChoices(choices, prependText:textBuffer.toString());
+    return new Message.TextResult(textBuffer.toString());
   }
 }
 
