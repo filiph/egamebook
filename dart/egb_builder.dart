@@ -7,7 +7,7 @@
 
 // TODO: $variable in text block, v_variable in dart block -> vars["variable"] (UNTIL Dart supports NoSuchMethod fully)
 
-// XXX: use markdown block_parser.dart for parsing the text
+// XXX: use markdown block_parser.dart for parsing the text (just line parser is fine)
 
 class Page {
   int index;
