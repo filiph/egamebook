@@ -229,8 +229,11 @@ class CombatMove extends Entity {
     };
 
     start = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        attacker.combat.storyline.add(attacker,"tries to hit you on the stomach");
+      if (target.isPlayer) {
+        attacker.combat.storyline.add(attacker,"tries to hit you to the ${randomly(['stomach','gut'])}");
+      } else if (attacker.isPlayer) {
+        attacker.combat.storyline.add(null,"You decide to punch ${target.randomName} in the ${randomly(['stomach','gut'])}");
+      }
     };
 
     applyEffects = (Actor attacker, Actor target) {
