@@ -26,7 +26,7 @@ class Storyline {
   List<String> strings;
   List<Actor> abouts;
 
-  Storyline add(Actor about, String str) {
+  Storyline add(Actor about, String str, [Entity subject, Entity object]) {
     abouts.addLast(about);
     strings.addLast(str);
     strBuf = new StringBuffer();
@@ -60,7 +60,7 @@ class Storyline {
             strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}. "));
         }
       } else {
-        strBuf.add("${strings[i]}. ");
+        strBuf.add(capitalize("${strings[i]}. "));
       }
     }
     return strBuf.toString();
@@ -85,7 +85,9 @@ class Actor extends Entity {
   bool isPlayer = false;
   int team = 2; // actors are on team 2 (Enemy) by default
   int _hitpoints;
-  double _stance;  // from 0.0 = lying on the ground to 5.0 = professional combat stance
+  // from 0.0 = lying on the ground to 5.0 = professional combat stance
+  // 0=lying, 1=on_four, 2=almost_falling, 3=shaken, 4=firm_stance, 5=pro_stance
+  double _stance;  
   List<CombatMove> moves;
   CombatMove currentMove;
   CombatMove previousMove;
@@ -113,7 +115,8 @@ class Actor extends Entity {
     // init with defaults
     names = ["actor"];
     pronoun = "he";
-    _hitpoints = 3;
+    _hitpoints = maxHitpoints;
+    _stance = maxStance;
 
     modifiers = new List();
     moves = [new CombatMove()]; // TODO
@@ -172,10 +175,15 @@ class Actor extends Entity {
 
   void die() {
     alive = false;
-    combat.storyline.add(this, randomly(['dies','ceases to breathe','perishes']));
+    if (!isPlayer)
+      combat.storyline.add(this, randomly(['dies','ceases to breathe','perishes']));
+    else
+      combat.storyline.add(null, "you die");
   }
 
   // stats
+  int maxHitpoints = 5;
+  double maxStance = 4.0;
   int speed = 10;
   int armor = 10;
   int dodging = 10;
@@ -239,6 +247,8 @@ class CombatMove extends Entity {
     applyEffects = (Actor attacker, Actor target) {
       if (target.isPlayer)
         attacker.combat.storyline.add(attacker,"hits you to the stomach");
+      else
+        attacker.combat.storyline.add(null,"you hit ${target.randomName} to the stomach");
       target.hitpoints -= 1;
     };
 
@@ -320,7 +330,7 @@ class Combat extends Entity implements LoopedEvent {
           // only show first three
           possibleMoves = possibleMoves.getRange(0, Math.min(3, possibleMoves.length));
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(move.choiceString(_player.target), showNow:true, then:() { _player.currentMove = move; }));
+              playerChoices.add(new Choice(move.choiceString(_player.target), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
           });
         }
         // let player target someone else
@@ -400,7 +410,15 @@ class ScripterImpl extends Scripter {
         vars["combat"].actors.addAll([vars["wolf"],vars["orc"],vars["player"]]);
         start(vars["combat"]);
         },
+        () {
+        if (!vars["player"].alive)
+          goto(1);
+        },
         "Congratulations! You beat your first enemies!"
+      ],
+      // die
+      [
+        "You died like the bitch you are."
       ]
         ];
     }
