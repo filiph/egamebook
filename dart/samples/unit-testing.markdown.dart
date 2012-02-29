@@ -21,6 +21,21 @@ String capitalize(String str) {
     return "$firstLetter${str.substring(1)}";
 }
 
+class Pronoun {
+  // see http://en.wikipedia.org/wiki/Latin_declension
+  final String nominative; // He (kdo? co?)
+  // vocative // not used
+  final String accusative; // Him (koho? co?)
+  final String genitive;   // His (koho? ceho?)
+  // dative // not used
+  // ablative
+  // locative
+
+  String toString() => nominative;
+
+  const Pronoun(this.nominative, this.accusative, this.genitive); 
+}
+
 class Storyline {
   StringBuffer strBuf;
   List<Map<String,Dynamic>> reports;
@@ -31,6 +46,11 @@ class Storyline {
   static final String OBJECT_PRONOUN = "<objectPronoun>";
   static final String ACTION = "<action>";
 
+  static final Pronoun YOU = const Pronoun("you", "you", "your");
+  static final Pronoun HE = const Pronoun("he", "him", "his");
+  static final Pronoun SHE = const Pronoun("she", "her", "her");
+  static final Pronoun IT = const Pronoun("it", "it", "its");
+
   Storyline add(String str, [Actor subject, Actor object]) {
     reports.add( {
         "string": str,
@@ -39,9 +59,24 @@ class Storyline {
     });
   }
 
-  String string(int i) => reports[i]["string"];
-  Actor subject(int i) => reports[i]["subject"];
-  Actor object(int i) => reports[i]["object"];
+  String string(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["string"];
+  }
+  Actor subject(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["subject"];
+  }
+  Actor object(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["object"];
+  }
 
   /// taking care of all the exceptions and rules when comparing different reports
   /// call: [: same('subject', i, i+1) ... :]
@@ -60,18 +95,15 @@ class Storyline {
 
   /// take care of the substitution
   String substitute(int i, String str) {
-    String result = str;
-    result = result.replaceAll(ACTION, string(i));
-    if (subject(i) != null) {
-      result = result.replaceAll(SUBJECT, subject(i).randomName);
-      result = result.replaceAll(SUBJECT_PRONOUN, subject(i).pronoun);
+    String result = str.replaceAll(ACTION, string(i));
+    if (same('object', i, i-1)) // if doing something to someone in succession, use pronoun
+      result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
+    // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
+    if (object(i-1) != null && subject(i) != null && subject(i-1) != null
+        && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
     }
-    if (object(i) != null) {
-      result = result.replaceAll(OBJECT, object(i).randomName);
-      result = result.replaceAll(OBJECT_PRONOUN, object(i).pronoun);
-    }
-
-    return result;
+    return getString(result, subject(i), object(i));
   }
 
   /// Takes care of substitution
@@ -79,11 +111,14 @@ class Storyline {
     String result = str;
     if (subject != null) {
       result = result.replaceAll(SUBJECT, subject.randomName);
-      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun);
+      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
     }
     if (object != null) {
-      result = result.replaceAll(OBJECT, object.randomName);
-      result = result.replaceAll(OBJECT_PRONOUN, object.pronoun);
+      if (object.isPlayer)  // don't talk like a robot: "wolf attacks player"
+        result = result.replaceAll(OBJECT, object.pronoun.accusative);
+      else
+        result = result.replaceAll(OBJECT, object.randomName);
+      result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
     }
 
     return result;
@@ -131,7 +166,7 @@ class Storyline {
 
 class Entity {
   List <String> names;
-  String pronoun = "it";
+  Pronoun pronoun = Storyline.IT;
 
   Entity() {
     names = new List();
@@ -181,7 +216,7 @@ class Actor extends Entity {
   Actor() : super() {
     // init with defaults
     names = ["actor"];
-    pronoun = "he";
+    pronoun = Storyline.HE;
     _hitpoints = maxHitpoints;
     _stance = maxStance;
 
@@ -262,7 +297,7 @@ class Player extends Actor {
     isPlayer = true;
     team = 1; // player is on team Player (1)
     names = ["player"];
-    pronoun = "you";
+    pronoun = Storyline.YOU;
   }
 }
 
@@ -318,10 +353,11 @@ class CombatMove extends Entity {
       if (target.isPlayer)
         attacker.combat.storyline.add("hits you to the stomach", subject:attacker, object:target);
       else
-        attacker.combat.storyline.add("you hit ${target.randomName} to the stomach", subject:attacker, object:target);
+        attacker.combat.storyline.add("you hit <object> to the stomach", subject:attacker, object:target);
       target.hitpoints -= 1;
     };
   }
+  // TODO Ctors for types of moves: CombatMove.Hand(), CombatMove.Kick(), CombatMove.Sword() etc.
 }
 
 class Weapon extends Entity {
@@ -496,7 +532,7 @@ class ScripterImpl extends Scripter {
         vars["player"].moves.add(vars["moveLeftHook"]);
         vars["wolf"] = new Actor();
         vars["wolf"].names = ["the wolf", "the wolf", "the gray wolf"];
-        vars["wolf"].pronoun = "it";
+        vars["wolf"].pronoun = Storyline.IT;
         /*vars["wolf"].modifiers.add((wolf) {
             if (Math.random() < 0.01) {
               wolf.echo("The ${wolf.randomName} spits out blood.");

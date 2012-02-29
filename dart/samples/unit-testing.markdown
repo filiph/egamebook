@@ -108,15 +108,17 @@ String capitalize(String str) {
 
 class Pronoun {
   // see http://en.wikipedia.org/wiki/Latin_declension
-  String nominative; // He (kdo? co?)
-  String toString() => nominative;
+  final String nominative; // He (kdo? co?)
   // vocative // not used
-  String accusative; // Him (koho? co?)
-  String genitive;   // His (koho? ceho?)
+  final String accusative; // Him (koho? co?)
+  final String genitive;   // His (koho? ceho?)
   // dative // not used
   // ablative
   // locative
-  Pronoun(this.nominative, this.accusative, this.genitive) {}
+
+  String toString() => nominative;
+
+  const Pronoun(this.nominative, this.accusative, this.genitive); 
 }
 
 class Storyline {
@@ -129,10 +131,10 @@ class Storyline {
   static final String OBJECT_PRONOUN = "<objectPronoun>";
   static final String ACTION = "<action>";
 
-  static final Pronoun YOU = new Pronoun("you", "you", "your");
-  static final Pronoun HE = new Pronoun("he", "him", "his");
-  static final Pronoun SHE = new Pronoun("she", "her", "her");
-  static final Pronoun IT = new Pronoun("it", "it", "its");
+  static final Pronoun YOU = const Pronoun("you", "you", "your");
+  static final Pronoun HE = const Pronoun("he", "him", "his");
+  static final Pronoun SHE = const Pronoun("she", "her", "her");
+  static final Pronoun IT = const Pronoun("it", "it", "its");
 
   Storyline add(String str, [Actor subject, Actor object]) {
     reports.add( {
@@ -142,9 +144,24 @@ class Storyline {
     });
   }
 
-  String string(int i) => reports[i]["string"];
-  Actor subject(int i) => reports[i]["subject"];
-  Actor object(int i) => reports[i]["object"];
+  String string(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["string"];
+  }
+  Actor subject(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["subject"];
+  }
+  Actor object(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["object"];
+  }
 
   /// taking care of all the exceptions and rules when comparing different reports
   /// call: [: same('subject', i, i+1) ... :]
@@ -163,7 +180,15 @@ class Storyline {
 
   /// take care of the substitution
   String substitute(int i, String str) {
-    return getString(str, subject(i), object(i));
+    String result = str.replaceAll(ACTION, string(i));
+    if (same('object', i, i-1)) // if doing something to someone in succession, use pronoun
+      result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
+    // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
+    if (object(i-1) != null && subject(i) != null && subject(i-1) != null
+        && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+    }
+    return getString(result, subject(i), object(i));
   }
 
   /// Takes care of substitution
@@ -171,10 +196,13 @@ class Storyline {
     String result = str;
     if (subject != null) {
       result = result.replaceAll(SUBJECT, subject.randomName);
-      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun);
+      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
     }
     if (object != null) {
-      result = result.replaceAll(OBJECT, object.randomName);
+      if (object.isPlayer)  // don't talk like a robot: "wolf attacks player"
+        result = result.replaceAll(OBJECT, object.pronoun.accusative);
+      else
+        result = result.replaceAll(OBJECT, object.randomName);
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
     }
 
@@ -410,7 +438,7 @@ class CombatMove extends Entity {
       if (target.isPlayer)
         attacker.combat.storyline.add("hits you to the stomach", subject:attacker, object:target);
       else
-        attacker.combat.storyline.add("you hit ${target.randomName} to the stomach", subject:attacker, object:target);
+        attacker.combat.storyline.add("you hit <object> to the stomach", subject:attacker, object:target);
       target.hitpoints -= 1;
     };
   }
