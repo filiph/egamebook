@@ -23,44 +23,90 @@ String capitalize(String str) {
 
 class Storyline {
   StringBuffer strBuf;
-  List<String> strings;
-  List<Actor> abouts;
+  List<Map<String,Dynamic>> reports;
 
-  Storyline add(Actor about, String str, [Entity subject, Entity object]) {
-    abouts.addLast(about);
-    strings.addLast(str);
-    strBuf = new StringBuffer();
+  static final String SUBJECT = "<subject>";
+  static final String OBJECT = "<object>";
+  static final String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static final String OBJECT_PRONOUN = "<objectPronoun>";
+  static final String ACTION = "<action>";
+
+  Storyline add(String str, [Actor subject, Actor object]) {
+    reports.add( {
+        "string": str,
+        "subject": subject,
+        "object": object
+    });
+  }
+
+  String string(int i) => reports[i]["string"];
+  Actor subject(int i) => reports[i]["subject"];
+  Actor object(int i) => reports[i]["object"];
+
+  /// taking care of all the exceptions and rules when comparing different reports
+  /// call: [: same('subject', i, i+1) ... :]
+  bool same(String key, int i, int j) {
+    if (i >= reports.length || j >= reports.length)
+      return false;
+    if (i < 0 || j < 0)
+      return false;
+    if (reports[i][key] == null || reports[j][key] == null)
+      return false;
+    if (reports[i][key] == reports[j][key])
+      return true;
+    else
+      return false;
+  }
+
+  /// take care of the substitution
+  String substitute(int i, String str) {
+    String result = str;
+    result = result.replaceAll(ACTION, string(i));
+    if (subject(i) != null) {
+      result = result.replaceAll(SUBJECT, subject(i).randomName);
+      result = result.replaceAll(SUBJECT_PRONOUN, subject(i).pronoun);
+    }
+    if (object(i) != null) {
+      result = result.replaceAll(OBJECT, object(i).randomName);
+      result = result.replaceAll(OBJECT_PRONOUN, object(i).pronoun);
+    }
+
+    return result;
   }
 
   Storyline() {
-    strings = new List<String>();
-    abouts = new List<Actor>();
+    reports = new List<Map<String,Dynamic>>();
+    strBuf = new StringBuffer();
   }
 
   void clear() {
-    strings.clear();
-    abouts.clear();
+    reports.clear();
     strBuf.clear();
   }
 
   String toString() {
-    for (int i=0; i < strings.length; i++) {
-      if (abouts[i] != null && !abouts[i].isPlayer) {
-        if (abouts.length > i+1 && abouts[i] == abouts[i+1]) {
-          strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}${randomly([' and',', then',', and then'])} ${strings[i+1]}. "));
-          if (abouts.length > i+2 && abouts[i] == abouts[i+2]) {
-            strBuf.add(capitalize("${abouts[i].pronoun} ${string[i]}. "));
-            i++;
-          }
+    int length = reports.length;
+    for (int i=0; i < length; i++) {
+      if (subject(i) != null && !subject(i).isPlayer) {
+        if (same('subject', i, i+1) && same('subject', i, i+2)) {
+          // three reports about the same guy in a row
+          strBuf.add(capitalize(substitute(i, "<subject> <action>, ")));
+          strBuf.add(substitute(i+1, "<action>, "));
+          strBuf.add(randomly(["","then ","and ", "and finally "]));
+          strBuf.add(substitute(i+2, "<action>. "));
+          i+=2;
+        } else if (same('subject', i, i+1)) {
+          strBuf.add(capitalize(substitute(i, "<subject> <action>")));
+          strBuf.add(randomly([", ",", then "," and "]));
+          strBuf.add(substitute(i+1, "<action>. "));
           i++;
+        } else if (same('string', i, i-1)) {
+          strBuf.add(capitalize(substitute(i, randomly(["<subject> does the same. ", "Same goes for <subject>. "]))));
         } else {
-          if (i>0 && strings[i] == strings[i-1])
-            strBuf.add(randomly([capitalize("${abouts[i].randomName} does the same. "), "Same goes for ${abouts[i].randomName}. "]));
-          else
-            strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}. "));
+            strBuf.add(capitalize(substitute(i, "<subject> <action>. ")));
         }
       } else {
-        strBuf.add(capitalize("${strings[i]}. "));
+        strBuf.add(capitalize(substitute(i, "<action>. ")));
       }
     }
     return strBuf.toString();
@@ -162,7 +208,7 @@ class Actor extends Entity {
 
         if (target == null || !moves.some((m) => m.applicable(this,target)) ) {
           // no target or no combat moves applicable to the target, TODO: try to change target?
-          combat.storyline.add(this, randomly(["just stands there", "doesn't do anything", "does nothing"]));
+          combat.storyline.add(randomly(["just stands there", "doesn't do anything", "does nothing"], subject:this));
         } else {
           // TODO: choice
           currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
@@ -176,9 +222,9 @@ class Actor extends Entity {
   void die() {
     alive = false;
     if (!isPlayer)
-      combat.storyline.add(this, randomly(['dies','ceases to breathe','perishes']));
+      combat.storyline.add(randomly(['dies','ceases to breathe','perishes']), subject:this);
     else
-      combat.storyline.add(null, "you die");
+      combat.storyline.add("you die", subject:this);
   }
 
   // stats
@@ -195,6 +241,7 @@ class Player extends Actor {
     isPlayer = true;
     team = 1; // player is on team Player (1)
     names = ["player"];
+    pronoun = "you";
   }
 }
 
@@ -238,17 +285,17 @@ class CombatMove extends Entity {
 
     start = (Actor attacker, Actor target) {
       if (target.isPlayer) {
-        attacker.combat.storyline.add(attacker,"tries to hit you to the ${randomly(['stomach','gut'])}");
+        attacker.combat.storyline.add("tries to hit <object> to the ${randomly(['stomach','gut'])}", subject:attacker, object:target);
       } else if (attacker.isPlayer) {
-        attacker.combat.storyline.add(null,"You decide to punch ${target.randomName} in the ${randomly(['stomach','gut'])}");
+        attacker.combat.storyline.add("you decide to punch <object> in the ${randomly(['stomach','gut'])}", subject:attacker, object:target);
       }
     };
 
     applyEffects = (Actor attacker, Actor target) {
       if (target.isPlayer)
-        attacker.combat.storyline.add(attacker,"hits you to the stomach");
+        attacker.combat.storyline.add("hits you to the stomach", subject:attacker, object:target);
       else
-        attacker.combat.storyline.add(null,"you hit ${target.randomName} to the stomach");
+        attacker.combat.storyline.add("you hit ${target.randomName} to the stomach", subject:attacker, object:target);
       target.hitpoints -= 1;
     };
 
@@ -316,7 +363,7 @@ class Combat extends Entity implements LoopedEvent {
         // let player choose his target
         List<Actor> possibleEnemies = actors.filter((o) => o.team != _player.team && o.alive);
         possibleEnemies.forEach((enemy) {
-            playerChoices.add(new Choice("Target ${enemy.randomName}.", showNow:true, then:() { storyline.add(enemy, "is now your target"); _player.target = enemy; }));
+            playerChoices.add(new Choice("Target ${enemy.randomName}.", showNow:true, then:() { storyline.add("you now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
         });
       } else {
         // find out possible moves the player can perform on the target
