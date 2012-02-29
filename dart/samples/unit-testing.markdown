@@ -6,7 +6,46 @@ welcome
 
 
 <dart>
+
+vars["moveLeftHook"] = new CombatMove();
+vars["moveLeftHook"].choiceString = "Strike <object> with your left hook";
+vars["moveLeftHook"].duration = 3;
+vars["moveLeftHook"].recovery = 1;
+vars["moveLeftHook"].dodgingMod = 0.6;
+vars["moveLeftHook"].blockingMod = 0.8;
+
+vars["moveLeftHook"].applicable = (Actor attacker, Actor target) {
+  return true;
+};
+
+vars["moveLeftHook"].computeChance = (Actor attacker, Actor target) {
+  return 0.6;
+};
+
+vars["moveLeftHook"].computeSuitability = (Actor attacker, Actor target) {
+  return 1;
+};
+
+vars["moveLeftHook"].start = (Actor attacker, Actor target) {
+  if (target.isPlayer) {
+    attacker.combat.storyline.add("is moving to ${randomly(['hit','punch','bash'])} <object> in the face", subject:attacker, object:target);
+  } else if (attacker.isPlayer) {
+    attacker.combat.storyline.add("you prepare to punch <object> in the ${randomly(['face','head'])}", subject:attacker, object:target);
+  }
+};
+
+vars["moveLeftHook"].applyEffects = (Actor attacker, Actor target) {
+  if (target.isPlayer)
+    attacker.combat.storyline.add("hits you to the face", subject:attacker, object:target);
+  else
+    attacker.combat.storyline.add("you hit <object> in the face", subject:attacker, object:target);
+  target.hitpoints -= 2;
+};
+
+
+
 vars["player"] = new Player();
+vars["player"].moves.add(vars["moveLeftHook"]);
 vars["wolf"] = new Actor();
 vars["wolf"].names = ["the wolf", "the wolf", "the gray wolf"];
 vars["wolf"].pronoun = "it";
@@ -18,6 +57,7 @@ vars["wolf"].pronoun = "it";
 });*/
 vars["orc"] = new Actor();
 vars["orc"].names = ["the orc", "the orc", "the ugly orc"];
+vars["orc"].moves.add(vars["moveLeftHook"]);
 /*vars["orc"].modifiers.add((orc) {
     if (Math.random() < 0.01) {
       orc.echo("The ${orc.randomName} grunts in pain from the poisoning.");
@@ -114,6 +154,21 @@ class Storyline {
     if (object(i) != null) {
       result = result.replaceAll(OBJECT, object(i).randomName);
       result = result.replaceAll(OBJECT_PRONOUN, object(i).pronoun);
+    }
+
+    return result;
+  }
+
+  /// Takes care of substitution
+  static String getString(String str, [Actor subject, Actor object]) {
+    String result = str;
+    if (subject != null) {
+      result = result.replaceAll(SUBJECT, subject.randomName);
+      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun);
+    }
+    if (object != null) {
+      result = result.replaceAll(OBJECT, object.randomName);
+      result = result.replaceAll(OBJECT_PRONOUN, object.pronoun);
     }
 
     return result;
@@ -291,30 +346,32 @@ class Player extends Actor {
 }
 
 class CombatMove extends Entity {
+  /// the string to be presented as a choice to the player
+  /// e.g.: "Hit <object> to the stomach"
+  String choiceString;
+
   int duration; // number of turns from start to effect (=hit)
   int recovery; // number of turns it gets to start a new move again
 
   // modifiers to move's performer
   double dodgingMod;
   double blockingMod;
-  double stanceMod;
 
   Function start;
   Function applyEffects;
   Function computeChance;
-  Function computeSeverity;
+  /// used to sort moves by immediate suitability. The top choices should be
+  /// a good combination of low-risk, low-impact, and high-risk, high-impact moves
+  Function computeSuitability;
   Function applicable;
-
-  Function choiceString;
 
   CombatMove() : super() {
     // init with defaults
-    names.add("Hit to the stomach");
+    choiceString = "Hit <object> to the stomach";
     duration = 2;
     recovery = 1;
     dodgingMod = 0.8;
     blockingMod = 0.8;
-    stanceMod = 0.8;
 
     applicable = (Actor attacker, Actor target) {
       return true;
@@ -324,7 +381,7 @@ class CombatMove extends Entity {
       return 0.6;
     };
 
-    computeSeverity = (Actor attacker, Actor target) {
+    computeSuitability = (Actor attacker, Actor target) {
       return 1;
     };
 
@@ -342,10 +399,6 @@ class CombatMove extends Entity {
       else
         attacker.combat.storyline.add("you hit ${target.randomName} to the stomach", subject:attacker, object:target);
       target.hitpoints -= 1;
-    };
-
-    choiceString = (Actor target) {
-      return "Hit ${target.randomName} to the stomach.";
     };
   }
 }
@@ -418,11 +471,11 @@ class Combat extends Entity implements LoopedEvent {
           if (possibleMoves.length > 1)
             possibleMoves = possibleMoves.filter((m) => m != _player.previousMove);
           // sort moves by how effective they can be
-          possibleMoves.sort((a,b) => a.computeSeverity(_player,_player.target) - b.computeSeverity(_player,_player.target));
+          possibleMoves.sort((a,b) => a.computeSuitability(_player,_player.target) - b.computeSuitability(_player,_player.target));
           // only show first three
           possibleMoves = possibleMoves.getRange(0, Math.min(3, possibleMoves.length));
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(move.choiceString(_player.target), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
+              playerChoices.add(new Choice(Storyline.getString(move.choiceString, subject:_player, object:_player.target), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
           });
         }
         // let player target someone else
