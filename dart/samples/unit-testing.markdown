@@ -68,41 +68,50 @@ String capitalize(String str) {
 
 class Storyline {
   StringBuffer strBuf;
-  List<String> strings;
-  List<Actor> abouts;
+  List<Map<String,Dynamic>> reports;
 
-  Storyline add(Actor about, String str, [Entity subject, Entity object]) {
-    abouts.addLast(about);
-    strings.addLast(str);
+  static final String SUBJECT = "<subject>";
+  static final String OBJECT = "<object>";
+
+  Storyline add(String str, [Entity subject, Entity object]) {
+    reports.add( {
+        "str": str,
+        "subject": subject,
+        "object": object
+    });
+  }
+
+  String get str(int i) => reports[i]["str"];
+  Entity get sub(int i) => reports[i]["subject"];
+  Entity get obj(int i) => reports[i]["object"];
+
+
+  Storyline() {
+    reports = new List<Map<String,Dynamic>>();
     strBuf = new StringBuffer();
   }
 
-  Storyline() {
-    strings = new List<String>();
-    abouts = new List<Actor>();
-  }
-
   void clear() {
-    strings.clear();
-    abouts.clear();
+    reports.clear();
     strBuf.clear();
   }
 
   String toString() {
-    for (int i=0; i < strings.length; i++) {
-      if (abouts[i] != null && !abouts[i].isPlayer) {
-        if (abouts.length > i+1 && abouts[i] == abouts[i+1]) {
-          strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}${randomly([' and',', then',', and then'])} ${strings[i+1]}. "));
-          if (abouts.length > i+2 && abouts[i] == abouts[i+2]) {
-            strBuf.add(capitalize("${abouts[i].pronoun} ${string[i]}. "));
+    int length = reports.length;
+    for (int i=0; i < length; i++) {
+      if (reports[i]["subject"] != null && !reports[i]["subject"].isPlayer) {
+        if (length > i+1 && reports[i]["subject"] == reports[i+1]["subject"]) {
+          strBuf.add(capitalize("${reports[i]["subject"].randomName} ${strings[i]}${randomly([' and',', then',', and then'])} ${strings[i+1]}. "));
+          if (length > i+2 && reports[i]["subject"] == reports[i+2]["subject"]) {
+            strBuf.add(capitalize("${reports[i]["subject"].pronoun} ${strings[i]}. "));
             i++;
           }
           i++;
         } else {
           if (i>0 && strings[i] == strings[i-1])
-            strBuf.add(randomly([capitalize("${abouts[i].randomName} does the same. "), "Same goes for ${abouts[i].randomName}. "]));
+            strBuf.add(randomly([capitalize("${reports[i]["subject"].randomName} does the same. "), "Same goes for ${reports[i]["subject"].randomName}. "]));
           else
-            strBuf.add(capitalize("${abouts[i].randomName} ${strings[i]}. "));
+            strBuf.add(capitalize("${reports[i]["subject"].randomName} ${strings[i]}. "));
         }
       } else {
         strBuf.add(capitalize("${strings[i]}. "));
