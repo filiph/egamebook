@@ -151,12 +151,12 @@ class Actor extends Entity {
   double _stance;  
   List<CombatMove> moves;
   CombatMove currentMove;
-  CombatMove previousMove;
+  CombatMove previousMove; // keeps track of previous move so that actors don't do the same thing over and over again
   int tillEndOfMove = 0;
   List<Weapon> wieldedWeapons;
   List<Function> modifiers;  // functions to be run on each update (poison, specials)
   Combat combat;
-  Actor target;
+  Actor _target;
   // TODO: limbs
 
   int get hitpoints() => _hitpoints;
@@ -170,6 +170,12 @@ class Actor extends Entity {
   int get stance() => _stance;
   void set stance(int value) {
     _stance = value;
+  }
+
+  Actor get target() => _target;
+  void set target(Actor value) {
+    _target = value;
+    previousMove = null;
   }
 
   Actor() : super() {
@@ -226,7 +232,6 @@ class Actor extends Entity {
           combat.storyline.add(randomly(["just stands there", "doesn't do anything", "does nothing"], subject:this));
         } else {
           // TODO: choice
-          print("${names[0]} has ${moves.filter((m) => m.applicable(this,target)).length} options");
           currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
           tillEndOfMove = currentMove.duration / speed * 10; // TODO: randomness?
           currentMove.start(this, target);
