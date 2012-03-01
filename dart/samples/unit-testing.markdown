@@ -49,6 +49,7 @@ vars["player"].moves.add(vars["moveLeftHook"]);
 vars["wolf"] = new Actor();
 vars["wolf"].names = ["the wolf", "the wolf", "the gray wolf"];
 vars["wolf"].pronoun = Storyline.IT;
+vars["wolf"].hitpoints = 2;
 /*vars["wolf"].modifiers.add((wolf) {
     if (Math.random() < 0.01) {
       wolf.echo("The ${wolf.randomName} spits out blood.");
@@ -141,6 +142,7 @@ class Storyline {
         "string": str,
         "subject": subject,
         "object": object
+        // TODO: store 'positive/negative' so we can decide whether to use "and" or "but"
     });
   }
 
@@ -195,7 +197,10 @@ class Storyline {
   static String getString(String str, [Actor subject, Actor object]) {
     String result = str;
     if (subject != null) {
-      result = result.replaceAll(SUBJECT, subject.randomName);
+      if (subject.isPlayer)  // don't talk like a robot: "player attack wolf"
+        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+      else
+        result = result.replaceAll(SUBJECT, subject.randomName);
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
     }
     if (object != null) {
@@ -279,17 +284,29 @@ class Actor extends Entity {
   Actor _target;
   // TODO: limbs
 
+
+  void echo(String str, [Actor subject, Actor object]) {
+    if (combat == null)
+      return;
+    if (subject == null)
+      subject = this;
+    combat.storyline.add(str, subject:subject, object:object);
+  }
+
   int get hitpoints() => _hitpoints;
   void set hitpoints(int value) {
-    _hitpoints = value;
+    _hitpoints = Math.min(value, maxHitpoints);
     if (_hitpoints <= 0) {
       die();
     }
+    if (_hitpoints == 1)
+      if (!isPlayer)
+        echo("looks like <subjectPronoun> doesn't need much more punishment to die");
   }
 
   int get stance() => _stance;
   void set stance(int value) {
-    _stance = value;
+    _stance = Math.min(value, maxStance);
   }
 
   Actor get target() => _target;
@@ -349,7 +366,7 @@ class Actor extends Entity {
 
         if (target == null || !moves.some((m) => m.applicable(this,target)) ) {
           // no target or no combat moves applicable to the target, TODO: try to change target?
-          combat.storyline.add(randomly(["just stands there", "doesn't do anything", "does nothing"], subject:this));
+          echo(randomly(["just stands there", "doesn't do anything", "does nothing"]));
         } else {
           // TODO: choice
           currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
@@ -363,18 +380,17 @@ class Actor extends Entity {
   void die() {
     alive = false;
     if (!isPlayer)
-      combat.storyline.add(randomly(['dies','ceases to breathe','perishes']), subject:this);
+      echo(randomly(['dies','ceases to breathe','perishes']));
     else
-      combat.storyline.add("you die", subject:this);
+      echo("you die");
   }
 
   // stats
   int maxHitpoints = 5;
   double maxStance = 4.0;
-  int speed = 10;
-  int armor = 10;
-  int dodging = 10;
-  int blocking = 10;
+  int speed = 10; // 10 = normal person, 5 = very slow person, 20 = unbelievably quick person
+  int fighting = 10; // 10 = normal person, 5 = office rat, 20 = boxer/swordsman
+  int armor = 10; // 10 = person in clothes, 5 = fragile person, 20 = basic armor
 }
 
 class Player extends Actor {
@@ -388,8 +404,10 @@ class Player extends Actor {
 
 class CombatMove extends Entity {
   /// the string to be presented as a choice to the player
-  /// e.g.: "Hit <object> to the stomach"
+  /// e.g.: "hit <object> to the stomach"
   String choiceString;
+  /// e.g.: "hits <object> in the stomach"
+  String thirdPartyString;
 
   int duration; // number of turns from start to effect (=hit)
   int recovery; // number of turns it gets to start a new move again
@@ -408,7 +426,8 @@ class CombatMove extends Entity {
 
   CombatMove() : super() {
     // init with defaults
-    choiceString = "Hit <object> to the stomach";
+    choiceString = "hit <object> to the stomach";
+    thirdPartyString = "hits <object> to the stomach";
     duration = 2;
     recovery = 1;
     dodgingMod = 0.8;
@@ -428,17 +447,17 @@ class CombatMove extends Entity {
 
     start = (Actor attacker, Actor target) {
       if (target.isPlayer) {
-        attacker.combat.storyline.add("tries to hit <object> to the ${randomly(['stomach','gut'])}", subject:attacker, object:target);
+        attacker.echo("tries to hit <object> to the ${randomly(['stomach','gut'])}", object:target);
       } else if (attacker.isPlayer) {
-        attacker.combat.storyline.add("you decide to punch <object> in the ${randomly(['stomach','gut'])}", subject:attacker, object:target);
+        attacker.echo("you decide to punch <object> in the ${randomly(['stomach','gut'])}", object:target);
       }
     };
 
     applyEffects = (Actor attacker, Actor target) {
       if (target.isPlayer)
-        attacker.combat.storyline.add("hits you to the stomach", subject:attacker, object:target);
+        attacker.echo("hits you to the stomach", object:target);
       else
-        attacker.combat.storyline.add("you hit <object> to the stomach", subject:attacker, object:target);
+        attacker.echo("you hit <object> to the stomach", object:target);
       target.hitpoints -= 1;
     };
   }
@@ -503,7 +522,7 @@ class Combat extends Entity implements LoopedEvent {
         // let player choose his target
         List<Actor> possibleEnemies = actors.filter((o) => o.team != _player.team && o.alive);
         possibleEnemies.forEach((enemy) {
-            playerChoices.add(new Choice("Target ${enemy.randomName}.", showNow:true, then:() { storyline.add("you now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
+            playerChoices.add(new Choice("Target ${enemy.randomName}.", showNow:true, then:() { storyline.add("<subject> now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
         });
       } else {
         // find out possible moves the player can perform on the target
@@ -517,7 +536,7 @@ class Combat extends Entity implements LoopedEvent {
           // only show first three
           possibleMoves = possibleMoves.getRange(0, Math.min(3, possibleMoves.length));
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(Storyline.getString(move.choiceString, subject:_player, object:_player.target), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
+              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
           });
         }
         // let player target someone else
