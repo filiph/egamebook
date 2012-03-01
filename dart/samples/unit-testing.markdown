@@ -20,13 +20,15 @@ vars["moveLeftHook"].fightingMod = -1;
 
 vars["player"] = new Player();
 vars["player"].moves.add(vars["moveLeftHook"]);
-vars["player"].fighting = 1;
+vars["player"].fighting = 0;
+vars["player"].hitpoints = 10;
 
 vars["wolf"] = new Actor();
 vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
 vars["wolf"].pronoun = Storyline.IT;
 vars["wolf"].hitpoints = 2;
-vars["wolf"].speed = 2;
+vars["wolf"].speed = 1;
+vars["wolf"].team = 3;
 /*vars["wolf"].modifiers.add((wolf) {
     if (Math.random() < 0.01) {
       wolf.echo("The ${wolf.randomName} spits out blood.");
@@ -36,6 +38,7 @@ vars["wolf"].speed = 2;
 vars["orc"] = new Actor();
 vars["orc"].names = ["the orc", "the big orc", "the ugly orc"];
 vars["orc"].moves.add(vars["moveLeftHook"]);
+vars["orc"].hitpoints = 10;
 /*vars["orc"].modifiers.add((orc) {
     if (Math.random() < 0.01) {
       orc.echo("The ${orc.randomName} grunts in pain from the poisoning.");
@@ -64,6 +67,11 @@ You died like the bitch you are.
 
 
 <classes>
+
+
+void DEBUG(String str) {
+  print(str);
+}
 
 Dynamic randomly(List choices) {
   num number = choices.length;
@@ -223,20 +231,20 @@ class Storyline {
       if (subject(i) != null && !subject(i).isPlayer) {
         if (same('subject', i, i+1) && same('subject', i, i+2)) {
           // three reports about the same guy in a row
-          strBuf.add(capitalize(substitute(i, "<subject> <action>, ")));
+          strBuf.add(capitalize(substitute(i, "<action>, ")));
           strBuf.add(substitute(i+1, "<action>, "));
           strBuf.add(randomly(["","then ","and ", "and finally "]));
           strBuf.add(substitute(i+2, "<action>. "));
           i+=2;
         } else if (same('subject', i, i+1)) {
-          strBuf.add(capitalize(substitute(i, "<subject> <action>")));
+          strBuf.add(capitalize(substitute(i, "<action>")));
           strBuf.add(randomly([", ",", then "," and "]));
           strBuf.add(substitute(i+1, "<action>. "));
           i++;
         } else if (same('string', i, i-1)) {
           strBuf.add(capitalize(substitute(i, randomly(["<subject> does the same. ", "Same goes for <subject>. "]))));
         } else {
-            strBuf.add(capitalize(substitute(i, "<subject> <action>. ")));
+            strBuf.add(capitalize(substitute(i, "<action>. ")));
         }
       } else {
         strBuf.add(capitalize(substitute(i, "<action>. ")));
@@ -264,13 +272,15 @@ class Actor extends Entity {
   bool isPlayer = false;
   int team = 2; // actors are on team 2 (Enemy) by default
   int _hitpoints;
-  // from 0.0 = lying on the ground to 5.0 = professional combat stance
-  // 0=lying, 1=on_four, 2=almost_falling, 3=shaken, 4=firm_stance, 5=pro_stance
-  double _stance;  
+  // from 0 = lying on the ground to 50 = professional combat stance
+  // 0=lying, 10=on_four, 20=almost_falling, 30=shaken, 40=firm_stance, 50=pro_stance
+  int _stance;  
+  List<String> stanceStrings;
   List<CombatMove> moves;
-  CombatMove currentMove;
+  CombatMove _currentMove;
   CombatMove previousMove; // keeps track of previous move so that actors don't do the same thing over and over again
   int tillEndOfMove = 0;
+  bool recoveringFromMove = false;
   List<Weapon> wieldedWeapons;
   List<Function> modifiers;  // functions to be run on each update (poison, specials)
   Combat combat;
@@ -286,6 +296,27 @@ class Actor extends Entity {
     combat.storyline.add(str, subject:subject, object:object);
   }
 
+  /// returns the fighting ability modified by current move
+  int get modifiedFighting() {
+    if (currentMove == null)
+      return fighting;
+    else
+      return fighting + currentMove.fightingMod;
+  }
+
+  CombatMove get currentMove() => _currentMove;
+  void set currentMove(CombatMove value) {
+    previousMove = _currentMove;
+    if (value == null) {
+      tillEndOfMove = _currentMove.recovery - speed;
+      if (tillEndOfMove > 0)
+        recoveringFromMove = true;
+    }
+    _currentMove = value;
+    if (_currentMove != null)
+      tillEndOfMove = _currentMove.duration - speed;
+  }
+
   int get hitpoints() => _hitpoints;
   void set hitpoints(int value) {
     _hitpoints = Math.min(value, maxHitpoints);
@@ -295,11 +326,20 @@ class Actor extends Entity {
     if (_hitpoints == 1)
       if (!isPlayer)
         echo("looks like <subject> doesn't need much more punishment to die");
+      else
+        echo("you are feeling you can't take any more hits");
   }
 
   int get stance() => _stance;
   void set stance(int value) {
+    if (!alive)
+      return;
+    int prevStance = _stance;
     _stance = Math.min(value, maxStance);
+    // only report when stance is changed between levels
+    if ((_stance / 10).toInt() != (prevStance / 10).toInt()) {
+      echo(stanceStrings[Math.min(5, (_stance / 10).toInt())]);
+    }
   }
 
   Actor get target() => _target;
@@ -316,7 +356,16 @@ class Actor extends Entity {
     _stance = maxStance;
 
     modifiers = new List();
-    moves = [new CombatMove.Hand()]; // TODO
+    moves = [new CombatMove.Hand(), new CombatMove.Defense()]; // TODO
+    stanceStrings = [
+        "<subject> now lies on the ground",
+        "<subject> is now on <subjectPronoun's> knees",
+        "<subject> is now barely standing",
+        "<subject> is shaken",
+        "<subject> is standing firmly",
+        "<subject> is now in a professional combat stance"
+      ];
+    // TODO: stanceDownStrings vs stanceUpString (falls to his knees / gets on his knees)
   }
 
   void update() {
@@ -328,13 +377,13 @@ class Actor extends Entity {
     if (!alive) // make sure actor doesn't move after being poisoned to death, for example
       return;
 
+    tillEndOfMove--; // just let the time pass
+
     if (tillEndOfMove > 0) {
-      if (target != null && !target.alive) { // don't attack already dead actors
+      if (target != null && !target.alive) { // stop attack if actor already dead 
         currentMove = null;
         target = null;
-        tillEndOfMove = 0;
       }
-      tillEndOfMove--; // just let the time pass
     } else {
       // effect of finished move
       if (currentMove != null) {
@@ -342,13 +391,13 @@ class Actor extends Entity {
           // resolve is target dodged the attack. Difference between fighting skills
           // means extra tries (throws) for the party that has the higher number
           double chance = currentMove.chanceToDodge(this, target);
-          int throws = 1 + (this.fighting - target.fighting).abs();
+          int throws = 1 + (this.fighting - target.modifiedFighting).abs();
           bool targetDodged;
           while (throws > 0) {
             targetDodged = Math.random() < chance;
-            if (targetDodged && (target.fighting >= this.fighting))
+            if (targetDodged && (target.modifiedFighting >= this.fighting))
               break;  // if target is more skillfull than attacker and he dodged once, this is it
-            if (!targetDodged && (this.fighting >= target.fighting))
+            if (!targetDodged && (this.fighting >= target.modifiedFighting))
               break;  // similar here
             throws--;
           }
@@ -357,13 +406,13 @@ class Actor extends Entity {
           } else {
             // same as above, but for blocks
             chance = currentMove.chanceToBlock(this, target);
-            throws = 1 + (this.fighting - target.fighting).abs();
+            throws = 1 + (this.fighting - target.modifiedFighting).abs();
             bool targetBlocked;
             while (throws > 0) {
               targetBlocked = Math.random() < chance;
-              if (targetBlocked && (target.fighting >= this.fighting))
+              if (targetBlocked && (target.modifiedFighting >= this.fighting))
                 break;
-              if (!targetBlocked && (this.fighting >= target.fighting))
+              if (!targetBlocked && (this.fighting >= target.modifiedFighting))
                 break;
               throws--;
             }
@@ -374,8 +423,6 @@ class Actor extends Entity {
             }
           }
         }
-        tillEndOfMove = currentMove.recovery - speed;
-        previousMove = currentMove;
         currentMove = null;
         return;
       }
@@ -393,11 +440,10 @@ class Actor extends Entity {
 
         if (target == null || !moves.some((m) => m.applicable(this,target)) ) {
           // no target or no combat moves applicable to the target, TODO: try to change target?
-          echo(randomly(["just stands there", "doesn't do anything", "does nothing"]));
+          echo('<subject> ${randomly(["just stands there", "doesn\'t do anything", "does nothing"])}');
         } else {
           // TODO: choice
           currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
-          tillEndOfMove = currentMove.duration - speed;
           currentMove.start(this, target);
         }
       }
@@ -407,16 +453,16 @@ class Actor extends Entity {
   void die() {
     alive = false;
     if (!isPlayer)
-      echo(randomly(['dies','ceases to breathe','perishes']));
+      echo("<subject> ${randomly(['passes out','loses consciousness','blacks out','goes down'])}");
     else
-      echo("you die");
+      echo("you lose consciousness");
   }
 
   // stats
   int maxHitpoints = 5;
-  double maxStance = 4.0;
+  int maxStance = 40; // the best stance this actor can muster
   int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
-  int fighting = 1; // 1 = normal person, +x = number of extra block/dodge throws per turn
+  int fighting = 0; // 1 = normal person, +x = number of extra block/dodge throws per turn
   int armor = 0; // 0 = person in clothes, +x takes points from damage taken
 }
 
@@ -441,6 +487,9 @@ class CombatMove extends Entity {
   int duration; // number of turns from start to effect (=hit)
   int recovery; // number of turns it gets to start a new move again
   int damage;
+  int stanceDamage;
+  double baseChanceToDodge;
+  double baseChanceToBlock;
 
   // modifiers to move's performer. Many moves will make it temporarily harder to block and dodge
   // defense moves will make it easier (positive number)
@@ -457,6 +506,8 @@ class CombatMove extends Entity {
   Function computeSuitability; // TODO: move this into actor AI? needs the context
   Function applicable; // returns bool, whether this move is applicable given the two actors
 
+  // TODO: see http://en.wikipedia.org/wiki/Punch_(combat) for inspiration
+  // http://www.eazycheezy.net/2010/04/how-to-throw-a-punch-by-guest-author-the-wolf.html
   CombatMove.Hand() : super() {
     // init with defaults
     string = "hit to the stomach";
@@ -465,6 +516,9 @@ class CombatMove extends Entity {
     duration = 2;
     recovery = 1;
     damage = 1;
+    stanceDamage = 2;
+    baseChanceToDodge = 0.1;
+    baseChanceToBlock = 0.4;
     fightingMod = 0;
 
     applicable = (Actor attacker, Actor target) {
@@ -474,11 +528,11 @@ class CombatMove extends Entity {
     };
 
     chanceToDodge = (Actor attacker, Actor target) {
-      return 0.1; // TODO
+      return baseChanceToDodge; // TODO
     };
 
     chanceToBlock = (Actor attacker, Actor target) {
-      return 0.4;
+      return baseChanceToBlock;
     };
 
     computeSuitability = (Actor attacker, Actor target) {
@@ -487,35 +541,93 @@ class CombatMove extends Entity {
 
     start = (Actor attacker, Actor target) {
       if (target.isPlayer) {
-        attacker.echo("tries to $choiceString", object:target);
+        attacker.echo("<subject> winds up to $choiceString", object:target);
       } else if (attacker.isPlayer) {
         attacker.echo("you decide to $choiceString", object:target);
       }
     };
 
     applyHit = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        attacker.echo("$thirdPartyString", object:target);
+      if (!attacker.isPlayer)
+        attacker.echo("<subject> $thirdPartyString", object:target);
       else
         attacker.echo("<subject> $choiceString", object:target);
-      target.hitpoints -= damage;
+      target.hitpoints -= damage - target.armor;
+      target.stance -= stanceDamage;
     };
 
     applyBlock = (Actor attacker, Actor target) {
       if (target.isPlayer)
         target.echo("<subject> block <object's> $string", object:attacker);
       else
-        target.echo("blocks <object's> $string", object:attacker);
+        target.echo("<subject> blocks <object's> $string", object:attacker);
+      target.stance -= (stanceDamage / 2).toInt();
     };
 
     applyDodge = (Actor attacker, Actor target) {
       if (target.isPlayer)
         target.echo("<subject> dodge <object's> $string", object:attacker);
       else
-        target.echo("dodges <object's> $string", object:attacker);
+        target.echo("<subject> dodges <object's> $string", object:attacker);
     };
   }
   // TODO Ctors for types of moves: CombatMove.Hand(), CombatMove.Kick(), CombatMove.Sword() etc.
+  CombatMove.Defense() : super () {
+    // init with defaults
+    string = "parry";
+    choiceString = "parry <object's> move";
+    thirdPartyString = "parries <object's> move";
+    duration = 2;
+    recovery = 0;
+    damage = 0;
+    stanceDamage = 0;
+    baseChanceToDodge = 1.0;
+    baseChanceToBlock = 1.0;
+    fightingMod = +3;
+
+    applicable = (Actor attacker, Actor target) {
+      //DEBUG("DEFENSE applicable? ATT: ${attacker.names[0]}, TAR: ${target.names[0]}");
+      if (!attacker.alive || !target.alive)
+        return false;
+      //DEBUG("DEFENSE both alive");
+      if (target.target != attacker)
+        return false; // don't parry attacks that don't target you
+      //DEBUG("DEFENSE is target of the other guy");
+      //DEBUG("DEFENSE target's move = ${target.currentMove.string}");
+      if (target.currentMove == null || target.currentMove.damage == 0)
+        return false; // don't parry no attack and don't parry someone parrying you
+      //DEBUG("DEFENSE applicable, yes.");
+      return true; 
+    };
+
+    chanceToDodge = (Actor attacker, Actor target) {
+      return baseChanceToDodge;
+    };
+
+    chanceToBlock = (Actor attacker, Actor target) {
+      return baseChanceToBlock;
+    };
+
+    computeSuitability = (Actor attacker, Actor target) {
+      return 1.0; // TODO
+    };
+
+    start = (Actor attacker, Actor target) {
+      if (target.isPlayer) {
+        attacker.echo("<subject> braces for <object's> blow", object:target);
+      } else if (attacker.isPlayer) {
+        attacker.echo("you decide to brace for <object's> blow", object:target);
+      }
+      // wait for the blow
+      attacker.tillEndOfMove = target.tillEndOfMove + 1;
+    };
+
+    applyHit = (Actor attacker, Actor target) { };
+
+    applyBlock = (Actor attacker, Actor target) { };
+
+    applyDodge = (Actor attacker, Actor target) { };
+  }
 }
 
 class Weapon extends Entity {
@@ -547,8 +659,6 @@ class Combat extends Entity implements LoopedEvent {
         if (a.isPlayer)
           _player = a;
     });
-    if (_player == null)
-      throw new Exception("Cannot start combat without player."); // TODO: allow spectator combat
     _started = true;
   }
 
@@ -571,7 +681,8 @@ class Combat extends Entity implements LoopedEvent {
       actor.update();
     });
 
-    if (actors.every((a) => !a.alive || _player.team == a.team)) {
+    // make sure the fight still needs to continue
+    if (!actors.some((a) => a.alive && actors.some((b) => b.alive && b.team != a.team))) {
       finished = true;
       return;
     }
@@ -590,7 +701,7 @@ class Combat extends Entity implements LoopedEvent {
           // only allow to repeat previous move when there is no other option
           if (possibleMoves.length > 1)
             possibleMoves = possibleMoves.filter((m) => m != _player.previousMove);
-          // sort moves by how effective they can be
+          // sort moves by how effective they can be TODO: pick at least one of each strategies (big hit, quick hit, stance hit, defense
           possibleMoves.sort((a,b) => a.computeSuitability(_player,_player.target) - b.computeSuitability(_player,_player.target));
           // only show first three
           possibleMoves = possibleMoves.getRange(0, Math.min(3, possibleMoves.length));
