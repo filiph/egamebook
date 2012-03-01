@@ -7,41 +7,14 @@ welcome
 
 <dart>
 
-vars["moveLeftHook"] = new CombatMove();
-vars["moveLeftHook"].choiceString = "Strike <object> with your left hook";
+vars["moveLeftHook"] = new CombatMove.Hand();
+vars["moveLeftHook"].string = "strike to the face";
+vars["moveLeftHook"].choiceString = "strike <object> with <subject's> left hook";
+vars["moveLeftHook"].thirdPartyString = "strikes <object> with <subject's> left hook";
 vars["moveLeftHook"].duration = 3;
 vars["moveLeftHook"].recovery = 1;
-vars["moveLeftHook"].dodgingMod = 0.6;
-vars["moveLeftHook"].blockingMod = 0.8;
-
-vars["moveLeftHook"].applicable = (Actor attacker, Actor target) {
-  return true;
-};
-
-vars["moveLeftHook"].computeChance = (Actor attacker, Actor target) {
-  return 0.6;
-};
-
-vars["moveLeftHook"].computeSuitability = (Actor attacker, Actor target) {
-  return 1;
-};
-
-vars["moveLeftHook"].start = (Actor attacker, Actor target) {
-  if (target.isPlayer) {
-    attacker.combat.storyline.add("is moving to ${randomly(['hit','punch','bash'])} <object> in the face", subject:attacker, object:target);
-  } else if (attacker.isPlayer) {
-    attacker.combat.storyline.add("you prepare to punch <object> in the ${randomly(['face','head'])}", subject:attacker, object:target);
-  }
-};
-
-vars["moveLeftHook"].applyEffects = (Actor attacker, Actor target) {
-  if (target.isPlayer)
-    attacker.combat.storyline.add("hits you to the face", subject:attacker, object:target);
-  else
-    attacker.combat.storyline.add("you hit <object> in the face", subject:attacker, object:target);
-  target.hitpoints -= 2;
-};
-
+vars["moveLeftHook"].damage = 2;
+vars["moveLeftHook"].fightingMod = 0.6;
 
 
 vars["player"] = new Player();
@@ -127,7 +100,9 @@ class Storyline {
   List<Map<String,Dynamic>> reports;
 
   static final String SUBJECT = "<subject>";
+  static final String SUBJECT_POSSESIVE = "<subject's>";
   static final String OBJECT = "<object>";
+  static final String OBJECT_POSSESIVE = "<object's>";
   static final String SUBJECT_PRONOUN = "<subjectPronoun>";
   static final String OBJECT_PRONOUN = "<objectPronoun>";
   static final String ACTION = "<action>";
@@ -183,12 +158,21 @@ class Storyline {
   /// take care of the substitution
   String substitute(int i, String str) {
     String result = str.replaceAll(ACTION, string(i));
-    if (same('object', i, i-1)) // if doing something to someone in succession, use pronoun
+    if (same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
+      result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
+    }
     // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
     if (object(i-1) != null && subject(i) != null && subject(i-1) != null
         && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
+    }
+    // same as previous, but with object-subject reversed
+    if (subject(i-1) != null && object(i) != null && subject(i-1) != null
+        && subject(i-1) == object(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      result = result.replaceAll(OBJECT, object(i).pronoun.nominative);
+      result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
     return getString(result, subject(i), object(i));
   }
@@ -197,18 +181,23 @@ class Storyline {
   static String getString(String str, [Actor subject, Actor object]) {
     String result = str;
     if (subject != null) {
-      if (subject.isPlayer)  // don't talk like a robot: "player attack wolf"
+      if (subject.isPlayer) { // don't talk like a robot: "player attack wolf"
         result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      }
       else
         result = result.replaceAll(SUBJECT, subject.randomName);
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
     }
     if (object != null) {
-      if (object.isPlayer)  // don't talk like a robot: "wolf attacks player"
+      if (object.isPlayer) { // don't talk like a robot: "wolf attacks player"
         result = result.replaceAll(OBJECT, object.pronoun.accusative);
-      else
+        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      } else
         result = result.replaceAll(OBJECT, object.randomName);
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
+      result = result.replaceAll(OBJECT_POSSESIVE, "${object.randomName}'s");
     }
 
     return result;
@@ -301,7 +290,7 @@ class Actor extends Entity {
     }
     if (_hitpoints == 1)
       if (!isPlayer)
-        echo("looks like <subjectPronoun> doesn't need much more punishment to die");
+        echo("looks like <subject> doesn't need much more punishment to die");
   }
 
   int get stance() => _stance;
@@ -323,7 +312,7 @@ class Actor extends Entity {
     _stance = maxStance;
 
     modifiers = new List();
-    moves = [new CombatMove()]; // TODO
+    moves = [new CombatMove.Hand()]; // TODO
   }
 
   void update() {
@@ -345,8 +334,14 @@ class Actor extends Entity {
     } else {
       // effect of finished move
       if (currentMove != null) {
-        if (target.alive)
-          currentMove.applyEffects(this, target);
+        if (currentMove.applicable(this, target)) {
+          if (Math.random() < currentMove.chanceToDodge(this, target))
+            currentMove.applyDodge(this, target);
+          else if (Math.random() < currentMove.chanceToBlock(this, target))
+            currentMove.applyBlock(this, target);
+          else
+            currentMove.applyHit(this, target);
+        }
         tillEndOfMove = currentMove.recovery / speed * 10;
         previousMove = currentMove;
         currentMove = null;
@@ -403,6 +398,8 @@ class Player extends Actor {
 }
 
 class CombatMove extends Entity {
+  /// the basic description of the move
+  String string;
   /// the string to be presented as a choice to the player
   /// e.g.: "hit <object> to the stomach"
   String choiceString;
@@ -411,54 +408,78 @@ class CombatMove extends Entity {
 
   int duration; // number of turns from start to effect (=hit)
   int recovery; // number of turns it gets to start a new move again
+  int damage;
 
-  // modifiers to move's performer
-  double dodgingMod;
-  double blockingMod;
+  // modifiers to move's performer. Many moves will make it temporarily harder to block and dodge
+  double fightingMod;
 
-  Function start;
-  Function applyEffects;
-  Function computeChance;
+  Function start; // reports on start of the move
+  Function applyHit; // applies and report on success
+  Function applyBlock; // applies and report on block
+  Function applyDodge; // applies and report on dodge
+  Function chanceToDodge; // returns chance (0.0-1.0) of dodging this move
+  Function chanceToBlock; // returns chance (0.0-1.0) of blocking this move
   /// used to sort moves by immediate suitability. The top choices should be
   /// a good combination of low-risk, low-impact, and high-risk, high-impact moves
-  Function computeSuitability;
-  Function applicable;
+  Function computeSuitability; // TODO: move this into actor AI? needs the context
+  Function applicable; // returns bool, whether this move is applicable given the two actors
 
-  CombatMove() : super() {
+  CombatMove.Hand() : super() {
     // init with defaults
+    string = "hit to the stomach";
     choiceString = "hit <object> to the stomach";
     thirdPartyString = "hits <object> to the stomach";
     duration = 2;
     recovery = 1;
-    dodgingMod = 0.8;
-    blockingMod = 0.8;
+    damage = 1;
+    fightingMod = 0.8;
 
     applicable = (Actor attacker, Actor target) {
-      return true;
+      if (!attacker.alive || !target.alive)
+        return false;
+      return true; // TODO
     };
 
-    computeChance = (Actor attacker, Actor target) {
-      return 0.6;
+    chanceToDodge = (Actor attacker, Actor target) {
+      return 0.3; // TODO
+    };
+
+    chanceToBlock = (Actor attacker, Actor target) {
+      return 0.4;
     };
 
     computeSuitability = (Actor attacker, Actor target) {
-      return 1;
+      return chanceToDodge(attacker, target) * chanceToDodge(attacker, target); // TODO
     };
 
     start = (Actor attacker, Actor target) {
       if (target.isPlayer) {
-        attacker.echo("tries to hit <object> to the ${randomly(['stomach','gut'])}", object:target);
+        attacker.echo("tries to $choiceString", object:target);
       } else if (attacker.isPlayer) {
-        attacker.echo("you decide to punch <object> in the ${randomly(['stomach','gut'])}", object:target);
+        attacker.echo("you decide to $choiceString", object:target);
       }
     };
 
-    applyEffects = (Actor attacker, Actor target) {
+    applyHit = (Actor attacker, Actor target) {
       if (target.isPlayer)
-        attacker.echo("hits you to the stomach", object:target);
+        attacker.echo("$thirdPartyString", object:target);
       else
-        attacker.echo("you hit <object> to the stomach", object:target);
-      target.hitpoints -= 1;
+        attacker.echo("<subject> $choiceString", object:target);
+      target.hitpoints -= damage;
+    };
+
+    applyBlock = (Actor attacker, Actor target) {
+      if (target.isPlayer)
+        target.echo("<subject> block <object's> $string", object:attacker);
+      else
+        target.echo("blocks <object's> $string", object:attacker);
+    };
+
+    applyDodge = (Actor attacker, Actor target) {
+      if (target.isPlayer)
+        target.echo("<subject> dodge <object's> $string", object:attacker);
+      else
+        target.echo("dodges <object's> $string", object:attacker);
     };
   }
   // TODO Ctors for types of moves: CombatMove.Hand(), CombatMove.Kick(), CombatMove.Sword() etc.
@@ -483,6 +504,8 @@ class Combat extends Entity implements LoopedEvent {
   bool finished = false;
   bool interactionNeeded = false;
 
+  Function specialUpdate; // allows defining novel combat situations (moving train, random events, spawning enemies...)
+
   int time = 0;
 
   void start() {
@@ -492,7 +515,7 @@ class Combat extends Entity implements LoopedEvent {
           _player = a;
     });
     if (_player == null)
-      throw new Exception("Cannot start combat without player.");
+      throw new Exception("Cannot start combat without player."); // TODO: allow spectator combat
     _started = true;
   }
 
@@ -508,6 +531,9 @@ class Combat extends Entity implements LoopedEvent {
 
   /// The main function that gets called every single move and calls each actor to do their own stuff.
   void update() {
+    if (specialUpdate != null)
+      specialUpdate();
+
     actors.forEach((actor) {
       actor.update();
     });
