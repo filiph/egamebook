@@ -10,17 +10,19 @@ You encounter two ominous-looking creatures. One of them is large. It is an orc!
 
 vars["moveLeftHook"] = new CombatMove.Hand();
 vars["moveLeftHook"].string = "strike to the face";
-vars["moveLeftHook"].choiceString = "strike <object> with <subject's> left hook";
-vars["moveLeftHook"].thirdPartyString = "strikes <object> with <subject's> left hook";
+vars["moveLeftHook"].choiceString = "strike <object> with <subjectPronoun's> left hook";
+vars["moveLeftHook"].thirdPartyString = "strikes <object> with <subjectPronoun's> left hook";
 vars["moveLeftHook"].duration = 3;
 vars["moveLeftHook"].recovery = 1;
 vars["moveLeftHook"].damage = 2;
+vars["moveLeftHook"].stanceDamage = 10;
 vars["moveLeftHook"].fightingMod = -1;
 
 
 vars["player"] = new Player();
 vars["player"].moves.add(vars["moveLeftHook"]);
-vars["player"].fighting = 0;
+vars["player"].moves.add(new CombatMove.Kick());
+vars["player"].fighting = 3;
 vars["player"].hitpoints = 10;
 
 vars["wolf"] = new Actor();
@@ -28,7 +30,7 @@ vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
 vars["wolf"].pronoun = Storyline.IT;
 vars["wolf"].hitpoints = 2;
 vars["wolf"].speed = 1;
-vars["wolf"].team = 3;
+// vars["wolf"].team = 3;
 /*vars["wolf"].modifiers.add((wolf) {
     if (Math.random() < 0.01) {
       wolf.echo("The ${wolf.randomName} spits out blood.");
@@ -116,7 +118,9 @@ class Storyline {
   static final String OBJECT = "<object>";
   static final String OBJECT_POSSESIVE = "<object's>";
   static final String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static final String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
   static final String OBJECT_PRONOUN = "<objectPronoun>";
+  static final String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static final String ACTION = "<action>";
 
   static final Pronoun YOU = const Pronoun("you", "you", "your");
@@ -130,6 +134,7 @@ class Storyline {
         "subject": subject,
         "object": object
         // TODO: store 'positive/negative' so we can decide whether to use "and" or "but"
+        // TODO: store 'endSentence' - some sentences can't be naturally stringed
     });
   }
 
@@ -168,11 +173,15 @@ class Storyline {
   }
 
   /// take care of the substitution
-  String substitute(int i, String str) {
+  String substitute(int i, String str, [bool useSubjectPronoun=false, bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
-    if (same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
+    if (useObjectPronoun || same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
+    }
+    if (useSubjectPronoun) {
+      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
     // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
     if (object(i-1) != null && subject(i) != null && subject(i-1) != null
@@ -200,7 +209,8 @@ class Storyline {
       else
         result = result.replaceAll(SUBJECT, subject.randomName);
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
-      result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      result = result.replaceAll(SUBJECT_POSSESIVE, "${subject.randomName}'s");
+      result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
     }
     if (object != null) {
       if (object.isPlayer) { // don't talk like a robot: "wolf attacks player"
@@ -210,6 +220,7 @@ class Storyline {
         result = result.replaceAll(OBJECT, object.randomName);
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, "${object.randomName}'s");
+      result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
 
     return result;
@@ -232,14 +243,14 @@ class Storyline {
         if (same('subject', i, i+1) && same('subject', i, i+2)) {
           // three reports about the same guy in a row
           strBuf.add(capitalize(substitute(i, "<action>, ")));
-          strBuf.add(substitute(i+1, "<action>, "));
+          strBuf.add(substitute(i+1, "<action>, ", useSubjectPronoun:true));
           strBuf.add(randomly(["","then ","and ", "and finally "]));
-          strBuf.add(substitute(i+2, "<action>. "));
+          strBuf.add(substitute(i+2, "<action>. ", useSubjectPronoun:true));
           i+=2;
         } else if (same('subject', i, i+1)) {
           strBuf.add(capitalize(substitute(i, "<action>")));
           strBuf.add(randomly([", ",", then "," and "]));
-          strBuf.add(substitute(i+1, "<action>. "));
+          strBuf.add(substitute(i+1, "<action>. ", useSubjectPronoun:true));
           i++;
         } else if (same('string', i, i-1)) {
           strBuf.add(capitalize(substitute(i, randomly(["<subject> does the same. ", "Same goes for <subject>. "]))));
@@ -296,12 +307,13 @@ class Actor extends Entity {
     combat.storyline.add(str, subject:subject, object:object);
   }
 
-  /// returns the fighting ability modified by current move
+  /// returns the fighting ability modified by current move and stance
   int get modifiedFighting() {
+    int stanceMod = Math.max((((19 - _stance) / 10) + 1), 0).toInt(); // stance 0-9 => -2, stance 10-19 => -1
     if (currentMove == null)
-      return fighting;
+      return fighting - stanceMod;
     else
-      return fighting + currentMove.fightingMod;
+      return fighting - stanceMod + currentMove.fightingMod;
   }
 
   CombatMove get currentMove() => _currentMove;
@@ -392,9 +404,11 @@ class Actor extends Entity {
           // means extra tries (throws) for the party that has the higher number
           double chance = currentMove.chanceToDodge(this, target);
           int throws = 1 + (this.fighting - target.modifiedFighting).abs();
+          DEBUG("CHANCE: move=${currentMove.string} target=${target.names[0]} chance=$chance, throws=$throws attacker=$fighting defender=${target.modifiedFighting}");
           bool targetDodged;
           while (throws > 0) {
             targetDodged = Math.random() < chance;
+            DEBUG("- targetDodged: $targetDodged");
             if (targetDodged && (target.modifiedFighting >= this.fighting))
               break;  // if target is more skillfull than attacker and he dodged once, this is it
             if (!targetDodged && (this.fighting >= target.modifiedFighting))
@@ -518,7 +532,7 @@ class CombatMove extends Entity {
     damage = 1;
     stanceDamage = 2;
     baseChanceToDodge = 0.1;
-    baseChanceToBlock = 0.4;
+    baseChanceToBlock = 0.3;
     fightingMod = 0;
 
     applicable = (Actor attacker, Actor target) {
@@ -572,6 +586,73 @@ class CombatMove extends Entity {
     };
   }
   // TODO Ctors for types of moves: CombatMove.Hand(), CombatMove.Kick(), CombatMove.Sword() etc.
+
+  CombatMove.Kick() : super() {
+    // init with defaults
+    string = "kick to the legs";
+    choiceString = "kick <object's> legs";
+    thirdPartyString = "kicks <object's> legs";
+    duration = 3;
+    recovery = 2;
+    damage = 1;
+    stanceDamage = 10;
+    baseChanceToDodge = 0.2;
+    baseChanceToBlock = 0.2;
+    fightingMod = -1;
+
+    applicable = (Actor attacker, Actor target) {
+      if (!attacker.alive || !target.alive)
+        return false;
+      if (attacker.stance < 30 || target.stance < 20)
+        return false;
+      return true; // TODO
+    };
+
+    chanceToDodge = (Actor attacker, Actor target) {
+      return baseChanceToDodge; // TODO
+    };
+
+    chanceToBlock = (Actor attacker, Actor target) {
+      return baseChanceToBlock;
+    };
+
+    computeSuitability = (Actor attacker, Actor target) {
+      return chanceToDodge(attacker, target) * chanceToDodge(attacker, target); // TODO
+    };
+
+    start = (Actor attacker, Actor target) {
+      if (target.isPlayer) {
+        attacker.echo("<subject> winds up to $choiceString", object:target);
+      } else if (attacker.isPlayer) {
+        attacker.echo("you decide to $choiceString", object:target);
+      }
+    };
+
+    applyHit = (Actor attacker, Actor target) {
+      if (!attacker.isPlayer)
+        attacker.echo("<subject> $thirdPartyString", object:target);
+      else
+        attacker.echo("<subject> $choiceString", object:target);
+      target.hitpoints -= damage - target.armor;
+      target.stance -= stanceDamage;
+    };
+
+    applyBlock = (Actor attacker, Actor target) {
+      if (target.isPlayer)
+        target.echo("<subject> block <object's> $string", object:attacker);
+      else
+        target.echo("<subject> blocks <object's> $string", object:attacker);
+      target.stance -= (stanceDamage / 2).toInt();
+    };
+
+    applyDodge = (Actor attacker, Actor target) {
+      if (target.isPlayer)
+        target.echo("<subject> dodge <object's> $string", object:attacker);
+      else
+        target.echo("<subject> dodges <object's> $string", object:attacker);
+    };
+  }
+
   CombatMove.Defense() : super () {
     // init with defaults
     string = "parry";
