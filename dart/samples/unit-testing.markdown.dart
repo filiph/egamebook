@@ -112,7 +112,7 @@ class Storyline {
     // same as previous, but with object-subject reversed
     if (subject(i-1) != null && object(i) != null && subject(i-1) != null
         && subject(i-1) == object(i) && subject(i-1).pronoun != subject(i).pronoun) {
-      result = result.replaceAll(OBJECT, object(i).pronoun.nominative);
+      result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
     return getString(result, subject(i), object(i));
@@ -276,14 +276,42 @@ class Actor extends Entity {
       // effect of finished move
       if (currentMove != null) {
         if (currentMove.applicable(this, target)) {
-          if (Math.random() < currentMove.chanceToDodge(this, target))
+          // resolve is target dodged the attack. Difference between fighting skills
+          // means extra tries (throws) for the party that has the higher number
+          double chance = currentMove.chanceToDodge(this, target);
+          int throws = 1 + (this.fighting - target.fighting).abs();
+          bool targetDodged;
+          while (throws > 0) {
+            targetDodged = Math.random() < chance;
+            if (targetDodged && (target.fighting >= this.fighting))
+              break;  // if target is more skillfull than attacker and he dodged once, this is it
+            if (!targetDodged && (this.fighting >= target.fighting))
+              break;  // similar here
+            throws--;
+          }
+          if (targetDodged) {
             currentMove.applyDodge(this, target);
-          else if (Math.random() < currentMove.chanceToBlock(this, target))
-            currentMove.applyBlock(this, target);
-          else
-            currentMove.applyHit(this, target);
+          } else {
+            // same as above, but for blocks
+            chance = currentMove.chanceToBlock(this, target);
+            throws = 1 + (this.fighting - target.fighting).abs();
+            bool targetBlocked;
+            while (throws > 0) {
+              targetBlocked = Math.random() < chance;
+              if (targetBlocked && (target.fighting >= this.fighting))
+                break;
+              if (!targetBlocked && (this.fighting >= target.fighting))
+                break;
+              throws--;
+            }
+            if (targetBlocked) {
+              currentMove.applyBlock(this, target);
+            } else {
+              currentMove.applyHit(this, target);
+            }
+          }
         }
-        tillEndOfMove = currentMove.recovery / speed * 10;
+        tillEndOfMove = currentMove.recovery - speed;
         previousMove = currentMove;
         currentMove = null;
         return;
@@ -306,7 +334,7 @@ class Actor extends Entity {
         } else {
           // TODO: choice
           currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
-          tillEndOfMove = currentMove.duration / speed * 10; // TODO: randomness?
+          tillEndOfMove = currentMove.duration - speed;
           currentMove.start(this, target);
         }
       }
@@ -324,9 +352,9 @@ class Actor extends Entity {
   // stats
   int maxHitpoints = 5;
   double maxStance = 4.0;
-  int speed = 10; // 10 = normal person, 5 = very slow person, 20 = unbelievably quick person
-  int fighting = 10; // 10 = normal person, 5 = office rat, 20 = boxer/swordsman
-  int armor = 10; // 10 = person in clothes, 5 = fragile person, 20 = basic armor
+  int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
+  int fighting = 1; // 1 = normal person, +x = number of extra block/dodge throws per turn
+  int armor = 0; // 0 = person in clothes, +x takes points from damage taken
 }
 
 class Player extends Actor {
@@ -352,7 +380,8 @@ class CombatMove extends Entity {
   int damage;
 
   // modifiers to move's performer. Many moves will make it temporarily harder to block and dodge
-  double fightingMod;
+  // defense moves will make it easier (positive number)
+  int fightingMod;
 
   Function start; // reports on start of the move
   Function applyHit; // applies and report on success
@@ -373,7 +402,7 @@ class CombatMove extends Entity {
     duration = 2;
     recovery = 1;
     damage = 1;
-    fightingMod = 0.8;
+    fightingMod = 0;
 
     applicable = (Actor attacker, Actor target) {
       if (!attacker.alive || !target.alive)
@@ -382,7 +411,7 @@ class CombatMove extends Entity {
     };
 
     chanceToDodge = (Actor attacker, Actor target) {
-      return 0.3; // TODO
+      return 0.1; // TODO
     };
 
     chanceToBlock = (Actor attacker, Actor target) {
@@ -560,6 +589,7 @@ class ScripterImpl extends Scripter {
               // welcome
       [
         "# Thin Ice",
+        "You encounter two ominous-looking creatures. One of them is large. It is an orc! And an ugly one at that. The other one is smaller, obviously younger. An orcling. They are bare handed and before you know it, they both attack you!",
         () {
         
         vars["moveLeftHook"] = new CombatMove.Hand();
@@ -569,15 +599,18 @@ class ScripterImpl extends Scripter {
         vars["moveLeftHook"].duration = 3;
         vars["moveLeftHook"].recovery = 1;
         vars["moveLeftHook"].damage = 2;
-        vars["moveLeftHook"].fightingMod = 0.6;
+        vars["moveLeftHook"].fightingMod = -1;
         
         
         vars["player"] = new Player();
         vars["player"].moves.add(vars["moveLeftHook"]);
+        vars["player"].fighting = 1;
+        
         vars["wolf"] = new Actor();
-        vars["wolf"].names = ["the wolf", "the wolf", "the gray wolf"];
+        vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
         vars["wolf"].pronoun = Storyline.IT;
         vars["wolf"].hitpoints = 2;
+        vars["wolf"].speed = 2;
         /*vars["wolf"].modifiers.add((wolf) {
             if (Math.random() < 0.01) {
               wolf.echo("The ${wolf.randomName} spits out blood.");
@@ -585,7 +618,7 @@ class ScripterImpl extends Scripter {
             }
         });*/
         vars["orc"] = new Actor();
-        vars["orc"].names = ["the orc", "the orc", "the ugly orc"];
+        vars["orc"].names = ["the orc", "the big orc", "the ugly orc"];
         vars["orc"].moves.add(vars["moveLeftHook"]);
         /*vars["orc"].modifiers.add((orc) {
             if (Math.random() < 0.01) {
