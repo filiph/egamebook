@@ -383,9 +383,9 @@ class Actor extends Entity {
   // stats
   int maxHitpoints = 5;
   double maxStance = 4.0;
-  int speed = 10; // 10 = normal person, 5 = very slow person, 20 = unbelievably quick person
-  int fighting = 10; // 10 = normal person, 5 = office rat, 20 = boxer/swordsman
-  int armor = 10; // 10 = person in clothes, 5 = fragile person, 20 = basic armor
+  int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
+  int fighting = 1; // 1 = normal person, +x = number of block/dodge throws per turn
+  int armor = 0; // 0 = person in clothes, +x takes points from damage taken
 }
 
 class Player extends Actor {
