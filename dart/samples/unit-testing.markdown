@@ -370,7 +370,7 @@ class Actor extends Entity {
     _stance = maxStance;
 
     modifiers = new List();
-    moves = [new CombatMove.Hand(), new CombatMove.Defense()]; // TODO
+    moves = [_defaultHandMove, _defaultDefense]; // TODO
     stanceStrings = [
         "<subject> now lies on the ground",
         "<subject> is now on <subjectPronoun's> knees",
