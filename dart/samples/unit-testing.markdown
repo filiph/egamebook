@@ -134,6 +134,7 @@ class Storyline {
         "subject": subject,
         "object": object
         // TODO: store 'positive/negative' so we can decide whether to use "and" or "but"
+        // TODO: store 'but' relationships
         // TODO: store 'endSentence' - some sentences can't be naturally stringed
     });
   }
@@ -265,7 +266,6 @@ class Storyline {
   }
 }
 
-
 class Entity {
   List <String> names;
   Pronoun pronoun = Storyline.IT;
@@ -288,6 +288,8 @@ class Actor extends Entity {
   int _stance;  
   List<String> stanceStrings;
   List<CombatMove> moves;
+  static final CombatMove _defaultHandMove = const CombatMove.Hand();
+  static final CombatMove _defaultDefense = const CombatMove.Defense();
   CombatMove _currentMove;
   CombatMove previousMove; // keeps track of previous move so that actors don't do the same thing over and over again
   int tillEndOfMove = 0;
@@ -296,9 +298,9 @@ class Actor extends Entity {
   List<Function> modifiers;  // functions to be run on each update (poison, specials)
   Combat combat;
   Actor _target;
-  // TODO: limbs
+  // TODO: limbs?
 
-
+  // an utility function that prints to the combat's storyline, pre-filling this actor as the subject
   void echo(String str, [Actor subject, Actor object]) {
     if (combat == null)
       return;
@@ -309,7 +311,7 @@ class Actor extends Entity {
 
   /// returns the fighting ability modified by current move and stance
   int get modifiedFighting() {
-    int stanceMod = Math.max((((19 - _stance) / 10) + 1), 0).toInt(); // stance 0-9 => -2, stance 10-19 => -1
+    int stanceMod = Math.max((((29 - _stance) / 10) + 1), 0).toInt(); // stance 0-9 => -3, stance 10-19 => -2, 20-29 => -1. Stance 30+ => no mod
     if (currentMove == null)
       return fighting - stanceMod;
     else
@@ -320,13 +322,13 @@ class Actor extends Entity {
   void set currentMove(CombatMove value) {
     previousMove = _currentMove;
     if (value == null) {
-      tillEndOfMove = _currentMove.recovery - speed;
+      tillEndOfMove = _currentMove.recovery; // do not substract speed from recovery - this makes speed too powerful
       if (tillEndOfMove > 0)
         recoveringFromMove = true;
     }
     _currentMove = value;
     if (_currentMove != null)
-      tillEndOfMove = _currentMove.duration - speed;
+      tillEndOfMove = _currentMove.duration - (Math.random() * 2).round().toInt(); // speed gives a chance to substract from a move's duration
   }
 
   int get hitpoints() => _hitpoints;
