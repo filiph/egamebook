@@ -218,10 +218,9 @@ class Actor extends Entity {
   // from 0 = lying on the ground to 50 = professional combat stance
   // 0=lying, 10=on_four, 20=almost_falling, 30=shaken, 40=firm_stance, 50=pro_stance
   int _stance;  
-  List<String> stanceStrings;
+  List<String> stanceUpStrings;
+  List<String> stanceDownStrings;
   List<CombatMove> moves;
-  static final CombatMove _defaultHandMove = const CombatMove.Hand();
-  static final CombatMove _defaultDefense = const CombatMove.Defense();
   CombatMove _currentMove;
   CombatMove previousMove; // keeps track of previous move so that actors don't do the same thing over and over again
   int tillEndOfMove = 0;
@@ -284,7 +283,10 @@ class Actor extends Entity {
     _stance = Math.min(value, maxStance);
     // only report when stance is changed between levels
     if ((_stance / 10).toInt() != (prevStance / 10).toInt()) {
-      echo(stanceStrings[Math.min(5, (_stance / 10).toInt())]);
+      if (_stance > prevStance)
+        echo(stanceUpStrings[Math.min(5, (_stance / 10).toInt())]);
+      else
+        echo(stanceDownStrings[Math.min(5, (_stance / 10).toInt())]);
     }
   }
 
@@ -302,15 +304,23 @@ class Actor extends Entity {
     _stance = maxStance;
 
     modifiers = new List();
-    moves = [new CombatMove.Hand(), new CombatMove.Defense()]; // TODO
-    stanceStrings = [
-        "<subject> now lies on the ground",
-        "<subject> is now on <subjectPronoun's> knees",
-        "<subject> is now barely standing",
-        "<subject> is shaken",
-        "<subject> is standing firmly",
-        "<subject> is now in a professional combat stance"
-      ];
+    moves = new List();
+    stanceUpStrings = const [
+        "",  // no need for this string - nowhere to stand up from
+        "<subject> gets to <subjectPronoun's> knees",
+        "<subject> stands up",
+        "<subject> regains some balance",
+        "<subject's> stance gets firm",
+        "<subject> goes into a perfect combat stance" 
+    ];
+    stanceDownStrings = const [
+        "<subject> falls to the ground",
+        "<subject> falls to <subjectPronoun's> knees",
+        "<subject> is almost ready to fall",
+        "<subject> gets off balance",
+        "<subject> loses <subjectPronoun's> professional stance",
+        "" // no need for this string (yet?) - nowhere to fall from
+    ];
     // TODO: stanceDownStrings vs stanceUpString (falls to his knees / gets on his knees)
   }
 
@@ -329,6 +339,8 @@ class Actor extends Entity {
       if (target != null && !target.alive) { // stop attack if actor already dead 
         currentMove = null;
         target = null;
+      } else if (currentMove != null && currentMove.update != null) {
+        currentMove.update(this, target);
       }
     } else {
       // effect of finished move
@@ -444,6 +456,7 @@ class CombatMove extends Entity {
   int fightingMod;
 
   Function start; // reports on start of the move
+  Function update; // get's called every turn
   Function applyHit; // applies and report on success
   Function applyBlock; // applies and report on block
   Function applyDodge; // applies and report on dodge
@@ -598,7 +611,7 @@ class CombatMove extends Entity {
     stanceDamage = 0;
     baseChanceToDodge = 1.0;
     baseChanceToBlock = 1.0;
-    fightingMod = +3;
+    fightingMod = +2;
 
     applicable = (Actor attacker, Actor target) {
       //DEBUG("DEFENSE applicable? ATT: ${attacker.names[0]}, TAR: ${target.names[0]}");
@@ -635,6 +648,10 @@ class CombatMove extends Entity {
       }
       // wait for the blow
       attacker.tillEndOfMove = target.tillEndOfMove + 1;
+    };
+
+    update = (Actor attacker, Actor target) {
+      attacker.stance += 1;
     };
 
     applyHit = (Actor attacker, Actor target) { };
@@ -690,7 +707,7 @@ class Combat extends Entity implements LoopedEvent {
   /// The main function that gets called every single move and calls each actor to do their own stuff.
   void update() {
     if (specialUpdate != null)
-      specialUpdate();
+      specialUpdate(this);
 
     actors.forEach((actor) {
       actor.update();
@@ -781,6 +798,9 @@ class ScripterImpl extends Scripter {
         "You encounter two ominous-looking creatures. One of them is large. It is an orc! And an ugly one at that. The other one is smaller, obviously younger. An orcling. They are bare handed and before you know it, they both attack you!",
         () {
         
+        vars["moveStomach"] = new CombatMove.Hand();
+        vars["moveKick"] = new CombatMove.Kick();
+        vars["moveDefense"] = new CombatMove.Defense();
         vars["moveLeftHook"] = new CombatMove.Hand();
         vars["moveLeftHook"].string = "strike to the face";
         vars["moveLeftHook"].choiceString = "strike <object> with <subjectPronoun's> left hook";
@@ -791,16 +811,30 @@ class ScripterImpl extends Scripter {
         vars["moveLeftHook"].stanceDamage = 10;
         vars["moveLeftHook"].fightingMod = -1;
         
+        vars["moveStandUp"] = new CombatMove.Defense();
+        vars["moveStandUp"].string = "stand up";
+        vars["moveStandUp"].choiceString = "stand up";
+        vars["moveStandUp"].thirdPartyString = "stands up";
+        vars["moveStandUp"].duration = 3;
+        vars["moveStandUp"].recovery = 0;
+        vars["moveStandUp"].fightingMod = -1;
+        vars["moveStandUp"].applicable = (performer, target) {
+          return performer.stance < 20;
+        };
+        vars["moveStandUp"].update = (performer, target) {
+          performer.stance += 5;
+        };
+        
         
         vars["player"] = new Player();
-        vars["player"].moves.add(vars["moveLeftHook"]);
-        vars["player"].moves.add(new CombatMove.Kick());
+        vars["player"].moves.addAll([ vars["moveLeftHook"], vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
         vars["player"].fighting = 3;
         vars["player"].hitpoints = 10;
         
         vars["wolf"] = new Actor();
         vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
         vars["wolf"].pronoun = Storyline.IT;
+        vars["wolf"].moves.addAll([ vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
         vars["wolf"].hitpoints = 2;
         vars["wolf"].speed = 1;
         // vars["wolf"].team = 3;
@@ -812,7 +846,7 @@ class ScripterImpl extends Scripter {
         });*/
         vars["orc"] = new Actor();
         vars["orc"].names = ["the orc", "the big orc", "the ugly orc"];
-        vars["orc"].moves.add(vars["moveLeftHook"]);
+        vars["orc"].moves.addAll([ vars["moveLeftHook"], vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
         vars["orc"].hitpoints = 10;
         /*vars["orc"].modifiers.add((orc) {
             if (Math.random() < 0.01) {
@@ -822,6 +856,10 @@ class ScripterImpl extends Scripter {
         });*/
         vars["combat"] = new Combat();
         vars["combat"].actors.addAll([vars["wolf"],vars["orc"],vars["player"]]);
+        vars["combat"].specialUpdate = (combat) {
+          if ((combat.time % 10) == 5)
+            combat.storyline.add("a lonely bird beeps in the distance");
+        };
         start(vars["combat"]);
         },
         () {
