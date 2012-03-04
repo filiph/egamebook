@@ -440,11 +440,32 @@ class Actor extends Entity {
           echo('<subject> ${randomly(["just stands there", "doesn\'t do anything", "does nothing"])}');
         } else {
           // TODO: choice
-          currentMove = randomly(moves.filter((m) => m.applicable(this,target)));
+          currentMove = chooseMove();
           currentMove.start(this, target);
         }
       }
     }
+  }
+
+  // AI chooses a move
+  CombatMove chooseMove() {
+    List<CombatMove> possibleMoves = moves.filter((m) => m.applicable(this,target));
+    possibleMoves.sort((a,b) => b.computeSuitability(this,target) - a.computeSuitability(this,target));
+
+    // randomness that gives more chance to higher (more suitable) moves
+    double random = Math.random();
+    int pos;
+    int len = possibleMoves.length; 
+    int allParts = (len*(len+1)/2).toInt(); // 1+2+3+4+..
+    double part = 0.0;
+
+    for (pos = 0; pos < len; pos++) {
+      part += len - pos;
+      if (random < part / allParts)
+        break;
+    }
+
+    return possibleMoves[pos];
   }
 
   void die() {
