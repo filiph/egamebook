@@ -451,6 +451,7 @@ class Actor extends Entity {
   CombatMove chooseMove() {
     List<CombatMove> possibleMoves = moves.filter((m) => m.applicable(this,target));
     possibleMoves.sort((a,b) => b.computeSuitability(this,target) - a.computeSuitability(this,target));
+    // TODO: bring down moves that have large countBits(type & other.type) - or even better, use countBits(type & other.type) / countBits(type) (100% => same type of move)
 
     // randomness that gives more chance to higher (more suitable) moves
     double random = Math.random();
