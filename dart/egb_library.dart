@@ -1,6 +1,8 @@
 #library('egb');
 
 
+// TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
+
 class Message {
   final int type;
   var content;

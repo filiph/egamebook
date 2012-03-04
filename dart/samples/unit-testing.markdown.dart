@@ -54,20 +54,27 @@ class Storyline {
   static final String OBJECT_PRONOUN = "<objectPronoun>";
   static final String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static final String ACTION = "<action>";
+  static final String VERB_S = "<s>";
+  static final String VERB_ES = "<es>"; // e.g. in "goes"
+  static final String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
+  static final String VERB_DO = "<does>";
+  static final String VERB_BE = "<is>";
 
   static final Pronoun YOU = const Pronoun("you", "you", "your");
   static final Pronoun HE = const Pronoun("he", "him", "his");
   static final Pronoun SHE = const Pronoun("she", "her", "her");
   static final Pronoun IT = const Pronoun("it", "it", "its");
 
-  Storyline add(String str, [Actor subject, Actor object]) {
+  Storyline add(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false]) {
     reports.add( {
         "string": str,
         "subject": subject,
-        "object": object
-        // TODO: store 'positive/negative' so we can decide whether to use "and" or "but"
-        // TODO: store 'but' relationships
-        // TODO: store 'endSentence' - some sentences can't be naturally stringed
+        "object": object,
+        "but": but,
+        "positive": positive,
+        "negative": negative,
+        "endSentence": endSentence,
+        "startSentence": startSentence
     });
   }
 
@@ -105,7 +112,7 @@ class Storyline {
       return false;
   }
 
-  /// take care of the substitution
+  /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do the rest
   String substitute(int i, String str, [bool useSubjectPronoun=false, bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
     if (useObjectPronoun || same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
@@ -131,16 +138,27 @@ class Storyline {
     return getString(result, subject(i), object(i));
   }
 
-  /// Takes care of substitution
+  /// Takes care of substitution of stopwords
   static String getString(String str, [Actor subject, Actor object]) {
     String result = str;
     if (subject != null) {
-      if (subject.isPlayer) { // don't talk like a robot: "player attack wolf"
+      if (subject.isPlayer) { // don't talk like a robot: "player attack wolf", TODO: Storyline.YOU instead?
         result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+        result = result.replaceAll(VERB_S, "");
+        result = result.replaceAll(VERB_ES, "");
+        result = result.replaceAll(VERB_IES, "y");
+        result = result.replaceAll(VERB_DO, "do");
+        result = result.replaceAll(VERB_BE, "are");
       }
-      else
+      else { // third person
         result = result.replaceAll(SUBJECT, subject.randomName);
+        result = result.replaceAll(VERB_S, "s");
+        result = result.replaceAll(VERB_ES, "es");
+        result = result.replaceAll(VERB_IES, "ies");
+        result = result.replaceAll(VERB_DO, "does");
+        result = result.replaceAll(VERB_BE, "is");
+      }
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       result = result.replaceAll(SUBJECT_POSSESIVE, "${subject.randomName}'s");
       result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
@@ -169,6 +187,7 @@ class Storyline {
     strBuf.clear();
   }
 
+  /// The main function that strings reports together into a coherent story.
   String toString() {
     int length = reports.length;
     for (int i=0; i < length; i++) {
@@ -186,7 +205,7 @@ class Storyline {
           strBuf.add(substitute(i+1, "<action>. ", useSubjectPronoun:true));
           i++;
         } else if (same('string', i, i-1)) {
-          strBuf.add(capitalize(substitute(i, randomly(["<subject> does the same. ", "Same goes for <subject>. "]))));
+          strBuf.add(capitalize(substitute(i, randomly(["<subject> <does> the same. ", "Same goes for <subject>. "]))));
         } else {
             strBuf.add(capitalize(substitute(i, "<action>. ")));
         }
@@ -229,15 +248,14 @@ class Actor extends Entity {
   List<Function> modifiers;  // functions to be run on each update (poison, specials)
   Combat combat;
   Actor _target;
-  // TODO: limbs?
 
   // an utility function that prints to the combat's storyline, pre-filling this actor as the subject
-  void echo(String str, [Actor subject, Actor object]) {
+  void echo(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false]) {
     if (combat == null)
       return;
     if (subject == null)
       subject = this;
-    combat.storyline.add(str, subject:subject, object:object);
+    combat.storyline.add(str, subject:subject, object:object, but:but, positive:positive, negative:negative, endSentence:endSentence, startSentence:startSentence);
   }
 
   /// returns the fighting ability modified by current move and stance
@@ -269,10 +287,7 @@ class Actor extends Entity {
       die();
     }
     if (_hitpoints == 1)
-      if (!isPlayer)
-        echo("looks like <subject> doesn't need much more punishment to die");
-      else
-        echo("you are feeling you can't take any more hits");
+      echo("looks like <subject> <does>n't need much more punishment to die", endSentence:true);
   }
 
   int get stance() => _stance;
@@ -307,21 +322,20 @@ class Actor extends Entity {
     moves = new List();
     stanceUpStrings = const [
         "",  // no need for this string - nowhere to stand up from
-        "<subject> gets to <subjectPronoun's> knees",
-        "<subject> stands up",
-        "<subject> regains some balance",
+        "<subject> get<s> to <subjectPronoun's> knees",
+        "<subject> stand<s> up",
+        "<subject> regain<s> some balance",
         "<subject's> stance gets firm",
-        "<subject> goes into a perfect combat stance" 
+        "<subject> go<es> into a perfect combat stance" 
     ];
     stanceDownStrings = const [
-        "<subject> falls to the ground",
-        "<subject> falls to <subjectPronoun's> knees",
-        "<subject> is almost ready to fall",
-        "<subject> gets off balance",
-        "<subject> loses <subjectPronoun's> professional stance",
+        "<subject> fall<s> to the ground",
+        "<subject> fall<s> to <subjectPronoun's> knees",
+        "<subject> <is> almost ready to fall",
+        "<subject> get<s> off balance",
+        "<subject> lose<s> <subjectPronoun's> professional stance",
         "" // no need for this string (yet?) - nowhere to fall from
     ];
-    // TODO: stanceDownStrings vs stanceUpString (falls to his knees / gets on his knees)
   }
 
   void update() {
@@ -346,41 +360,45 @@ class Actor extends Entity {
       // effect of finished move
       if (currentMove != null) {
         if (currentMove.applicable(this, target)) {
-          // resolve is target dodged the attack. Difference between fighting skills
-          // means extra tries (throws) for the party that has the higher number
-          double chance = currentMove.chanceToDodge(this, target);
-          int throws = 1 + (this.fighting - target.modifiedFighting).abs();
-          DEBUG("CHANCE: move=${currentMove.string} target=${target.names[0]} chance=$chance, throws=$throws attacker=$fighting defender=${target.modifiedFighting}");
-          bool targetDodged;
-          while (throws > 0) {
-            targetDodged = Math.random() < chance;
-            DEBUG("- targetDodged: $targetDodged");
-            if (targetDodged && (target.modifiedFighting >= this.fighting))
-              break;  // if target is more skillfull than attacker and he dodged once, this is it
-            if (!targetDodged && (this.fighting >= target.modifiedFighting))
-              break;  // similar here
-            throws--;
-          }
-          if (targetDodged) {
-            currentMove.applyDodge(this, target);
-          } else {
-            // same as above, but for blocks
-            chance = currentMove.chanceToBlock(this, target);
-            throws = 1 + (this.fighting - target.modifiedFighting).abs();
-            bool targetBlocked;
+          if (currentMove.offensive) {
+            // resolve if target dodged the attack. Difference between fighting skills
+            // means extra tries (throws) for the party that has the higher number
+            double chance = currentMove.chanceToDodge(this, target);
+            int throws = 1 + (this.fighting - target.modifiedFighting).abs();
+            DEBUG("CHANCE: move=${currentMove.string} target=${target.names[0]} chance=$chance, throws=$throws attacker=$fighting defender=${target.modifiedFighting}");
+            bool targetDodged;
             while (throws > 0) {
-              targetBlocked = Math.random() < chance;
-              if (targetBlocked && (target.modifiedFighting >= this.fighting))
-                break;
-              if (!targetBlocked && (this.fighting >= target.modifiedFighting))
-                break;
+              targetDodged = Math.random() < chance;
+              DEBUG("- targetDodged: $targetDodged");
+              if (targetDodged && (target.modifiedFighting >= this.fighting))
+                break;  // if target is more skillfull than attacker and he dodged once, this is it
+              if (!targetDodged && (this.fighting >= target.modifiedFighting))
+                break;  // similar here
               throws--;
             }
-            if (targetBlocked) {
-              currentMove.applyBlock(this, target);
+            if (targetDodged) {
+              currentMove.applyDodge(this, target);
             } else {
-              currentMove.applyHit(this, target);
+              // same as above, but for blocks
+              chance = currentMove.chanceToBlock(this, target);
+              throws = 1 + (this.fighting - target.modifiedFighting).abs();
+              bool targetBlocked;
+              while (throws > 0) {
+                targetBlocked = Math.random() < chance;
+                if (targetBlocked && (target.modifiedFighting >= this.fighting))
+                  break;
+                if (!targetBlocked && (this.fighting >= target.modifiedFighting))
+                  break;
+                throws--;
+              }
+              if (targetBlocked) {
+                currentMove.applyBlock(this, target);
+              } else {
+                currentMove.applyHit(this, target);
+              }
             }
+          } else { // non-offensive move ended
+            currentMove.applyEnd(this, target);
           }
         }
         currentMove = null;
@@ -412,14 +430,11 @@ class Actor extends Entity {
 
   void die() {
     alive = false;
-    if (!isPlayer)
-      echo("<subject> ${randomly(['passes out','loses consciousness','blacks out','goes down'])}");
-    else
-      echo("you lose consciousness");
+    echo("<subject> ${randomly(['pass<es> out','lose<s> consciousness','black<s> out','go<es> down'])}");
   }
 
   // stats
-  int maxHitpoints = 5;
+  int maxHitpoints = 10;
   int maxStance = 40; // the best stance this actor can muster
   int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
   int fighting = 0; // 1 = normal person, +x = number of extra block/dodge throws per turn
@@ -446,100 +461,207 @@ class CombatMove extends Entity {
 
   int duration; // number of turns from start to effect (=hit)
   int recovery; // number of turns it gets to start a new move again
-  int damage;
-  int stanceDamage;
-  double baseChanceToDodge;
-  double baseChanceToBlock;
+  bool offensive = true; // offensive moves need a target, non-offensive are e.g. standing up
+  int damage = 0;
+  int stanceDamage = 0;
+  double baseChanceToDodge = 1.0;
+  double baseChanceToBlock = 1.0;
 
   // modifiers to move's performer. Many moves will make it temporarily harder to block and dodge
   // defense moves will make it easier (positive number)
-  int fightingMod;
+  int fightingMod = 0;
 
-  Function start; // reports on start of the move
-  Function update; // get's called every turn
-  Function applyHit; // applies and report on success
-  Function applyBlock; // applies and report on block
-  Function applyDodge; // applies and report on dodge
-  Function chanceToDodge; // returns chance (0.0-1.0) of dodging this move
-  Function chanceToBlock; // returns chance (0.0-1.0) of blocking this move
+  /// returns bool, whether this move is applicable given the two actors
+  Function applicable;
+
+  /// reports on start of the move
+  Function start;
+
+  /// gets called every turn
+  Function update;
+
+  /// end of non-offensive move
+  Function applyEnd;
+
+  /// applies and report on success
+  Function applyHit;
+
+  /// applies and report on block
+  Function applyBlock;
+
+  /// applies and report on dodge
+  Function applyDodge;
+ 
+  /// returns chance (0.0-1.0) of dodging this move
+  Function chanceToDodge;
+
+  /// returns chance (0.0-1.0) of blocking this move
+  Function chanceToBlock;
+
   /// used to sort moves by immediate suitability. The top choices should be
   /// a good combination of low-risk, low-impact, and high-risk, high-impact moves
-  Function computeSuitability; // TODO: move this into actor AI? needs the context
-  Function applicable; // returns bool, whether this move is applicable given the two actors
+  Function computeSuitability;
+
+
+
+  // Default functions
+
+  static bool defaultApplicable (CombatMove move, Actor performer, Actor target) {
+    return target.alive; // only perform moves when target is alive (by default)
+  }
+
+  static void defaultStart (CombatMove move, Actor performer, Actor target) {
+    if (!performer.isPlayer) {
+      performer.echo("<subject> wind<s> up to ${move.choiceString}", object:target);
+    } else {
+      performer.echo("you decide to ${move.choiceString}", object:target);
+    }
+  }
+
+  static void defaultUpdate (CombatMove move, Actor performer, Actor target) {
+  }
+
+  static void defaultApplyEnd (CombatMove move, Actor performer, Actor target) {
+  }
+
+  static void defaultApplyHit (CombatMove move, Actor performer, Actor target, [String hitString="<subject> hit<s> <object>"]) {
+    performer.echo(hitString, object:target);
+    int actualDamage = Math.max(0, move.damage - target.armor);
+    if (actualDamage != 0)
+      target.hitpoints -= actualDamage;
+    else
+      performer.echo("it doesn't hurt <object>", object:target, but:true);
+    target.stance -= move.stanceDamage;
+  }
+
+  static void defaultApplyBlock (CombatMove move, Actor performer, Actor target) {
+      if (target.isPlayer)
+        target.echo("<subject> block <object's> ${move.string}", object:performer);
+      else
+        target.echo("<subject> blocks <object's> ${move.string}", object:performer);
+      int actualStanceDamage = Math.min(
+          0, 
+          (move.stanceDamage / 2).toInt() - target.fighting
+      );
+      if (actualStanceDamage > 0) {
+        target.echo("the blow was hard", but:true);
+        target.stance -= actualStanceDamage;
+      }
+  }
+
+  static void defaultApplyDodge (CombatMove move, Actor performer, Actor target) {
+    target.echo("<subject> dodge<s> <object's> ${move.string}", object:performer);
+  }
+
+  static double defaultChanceToDodge (CombatMove move, Actor performer, Actor target) {
+    return move.baseChanceToDodge; 
+  }
+
+  static double defaultChanceToBlock (CombatMove move, Actor performer, Actor target) {
+    return move.baseChanceToBlock; 
+  }
+
+  static double defaultComputeSuitability (CombatMove move, Actor performer, Actor target) {
+    return move.chanceToDodge(performer, target) * move.chanceToBlock(performer, target); // TODO
+  }
+
+  void initDefaultFunctions() { //TODO is there a more elegant way? a default super-constructor?
+    applicable = (Actor performer, Actor target) {
+      return defaultApplicable(this, performer, target);
+    };
+
+    start = (Actor performer, Actor target) {
+      defaultStart(this, performer, target);
+    };
+
+    update = (Actor performer, Actor target) {
+      defaultUpdate(this, performer, target);
+    };
+
+    applyEnd = (Actor performer, Actor target) {
+      defaultApplyEnd(this, performer, target);
+    };
+
+    applyHit = (Actor performer, Actor target) {
+      defaultApplyHit(this, performer, target);
+    };
+
+    applyBlock = (Actor performer, Actor target) {
+      defaultApplyBlock(this, performer, target);
+    };
+
+    applyDodge = (Actor performer, Actor target) {
+      defaultApplyDodge(this, performer, target);
+    };
+   
+    chanceToDodge = (Actor performer, Actor target) {
+      return defaultChanceToDodge(this, performer, target);
+    };
+
+    chanceToBlock = (Actor performer, Actor target) {
+      return defaultChanceToBlock(this, performer, target);
+    };
+
+    computeSuitability = (Actor performer, Actor target) {
+      return defaultComputeSuitability(this, performer, target);
+    };
+  }
 
   // TODO: see http://en.wikipedia.org/wiki/Punch_(combat) for inspiration
   // http://www.eazycheezy.net/2010/04/how-to-throw-a-punch-by-guest-author-the-wolf.html
   CombatMove.Hand() : super() {
     // init with defaults
+    initDefaultFunctions();
+
     string = "hit to the stomach";
     choiceString = "hit <object> to the stomach";
     thirdPartyString = "hits <object> to the stomach";
-    duration = 2;
+    duration = 4;
     recovery = 1;
     damage = 1;
     stanceDamage = 2;
     baseChanceToDodge = 0.1;
     baseChanceToBlock = 0.3;
-    fightingMod = 0;
 
-    applicable = (Actor attacker, Actor target) {
-      if (!attacker.alive || !target.alive)
+    applicable = (Actor performer, Actor target) {
+      if (performer.stance < 10)
         return false;
-      return true; // TODO
-    };
-
-    chanceToDodge = (Actor attacker, Actor target) {
-      return baseChanceToDodge; // TODO
-    };
-
-    chanceToBlock = (Actor attacker, Actor target) {
-      return baseChanceToBlock;
-    };
-
-    computeSuitability = (Actor attacker, Actor target) {
-      return chanceToDodge(attacker, target) * chanceToDodge(attacker, target); // TODO
-    };
-
-    start = (Actor attacker, Actor target) {
-      if (target.isPlayer) {
-        attacker.echo("<subject> winds up to $choiceString", object:target);
-      } else if (attacker.isPlayer) {
-        attacker.echo("you decide to $choiceString", object:target);
-      }
-    };
-
-    applyHit = (Actor attacker, Actor target) {
-      if (!attacker.isPlayer)
-        attacker.echo("<subject> $thirdPartyString", object:target);
-      else
-        attacker.echo("<subject> $choiceString", object:target);
-      target.hitpoints -= damage - target.armor;
-      target.stance -= stanceDamage;
-    };
-
-    applyBlock = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        target.echo("<subject> block <object's> $string", object:attacker);
-      else
-        target.echo("<subject> blocks <object's> $string", object:attacker);
-      target.stance -= (stanceDamage / 2).toInt();
-    };
-
-    applyDodge = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        target.echo("<subject> dodge <object's> $string", object:attacker);
-      else
-        target.echo("<subject> dodges <object's> $string", object:attacker);
+      return defaultApplicable(this, performer, target);
     };
   }
-  // TODO Ctors for types of moves: CombatMove.Hand(), CombatMove.Kick(), CombatMove.Sword() etc.
+
+  CombatMove.Haymaker() : super() {
+    // init with defaults
+    initDefaultFunctions();
+
+    string = "strike to the face";
+    choiceString = "strike <object> with <subjectPronoun's> left hook";
+    thirdPartyString = "strikes <object> with <subjectPronoun's> left hook";
+    duration = 6;
+    recovery = 1;
+    damage = 2;
+    stanceDamage = 8;
+    baseChanceToDodge = 0.2;
+    baseChanceToBlock = 0.2;
+    fightingMod = -1;
+
+    applicable = (Actor performer, Actor target) {
+      if (performer.stance < 20)
+        return false;
+      if (target.stance < 10)
+        return false;
+      return defaultApplicable(this, performer, target);
+    };
+  }
 
   CombatMove.Kick() : super() {
     // init with defaults
+    initDefaultFunctions();
+
     string = "kick to the legs";
     choiceString = "kick <object's> legs";
     thirdPartyString = "kicks <object's> legs";
-    duration = 3;
+    duration = 6;
     recovery = 2;
     damage = 1;
     stanceDamage = 10;
@@ -547,118 +669,106 @@ class CombatMove extends Entity {
     baseChanceToBlock = 0.2;
     fightingMod = -1;
 
-    applicable = (Actor attacker, Actor target) {
-      if (!attacker.alive || !target.alive)
+    applicable = (Actor performer, Actor target) {
+      if (performer.stance < 30 || target.stance < 20)
         return false;
-      if (attacker.stance < 30 || target.stance < 20)
-        return false;
-      return true; // TODO
+      return defaultApplicable(this, performer, target);
     };
 
-    chanceToDodge = (Actor attacker, Actor target) {
-      return baseChanceToDodge; // TODO
-    };
-
-    chanceToBlock = (Actor attacker, Actor target) {
-      return baseChanceToBlock;
-    };
-
-    computeSuitability = (Actor attacker, Actor target) {
-      return chanceToDodge(attacker, target) * chanceToDodge(attacker, target); // TODO
-    };
-
-    start = (Actor attacker, Actor target) {
-      if (target.isPlayer) {
-        attacker.echo("<subject> winds up to $choiceString", object:target);
-      } else if (attacker.isPlayer) {
-        attacker.echo("you decide to $choiceString", object:target);
-      }
-    };
-
-    applyHit = (Actor attacker, Actor target) {
-      if (!attacker.isPlayer)
-        attacker.echo("<subject> $thirdPartyString", object:target);
-      else
-        attacker.echo("<subject> $choiceString", object:target);
-      target.hitpoints -= damage - target.armor;
-      target.stance -= stanceDamage;
-    };
-
-    applyBlock = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        target.echo("<subject> block <object's> $string", object:attacker);
-      else
-        target.echo("<subject> blocks <object's> $string", object:attacker);
-      target.stance -= (stanceDamage / 2).toInt();
-    };
-
-    applyDodge = (Actor attacker, Actor target) {
-      if (target.isPlayer)
-        target.echo("<subject> dodge <object's> $string", object:attacker);
-      else
-        target.echo("<subject> dodges <object's> $string", object:attacker);
+    applyHit = (Actor performer, Actor target) {
+      defaultApplyHit(this, performer, target, hitString:"<subject> kick<s> <object's> legs");
     };
   }
 
   CombatMove.Defense() : super () {
     // init with defaults
+    initDefaultFunctions();
+
     string = "parry";
+    offensive = false;
     choiceString = "parry <object's> move";
     thirdPartyString = "parries <object's> move";
     duration = 2;
     recovery = 0;
-    damage = 0;
-    stanceDamage = 0;
-    baseChanceToDodge = 1.0;
-    baseChanceToBlock = 1.0;
     fightingMod = +2;
 
-    applicable = (Actor attacker, Actor target) {
-      //DEBUG("DEFENSE applicable? ATT: ${attacker.names[0]}, TAR: ${target.names[0]}");
-      if (!attacker.alive || !target.alive)
-        return false;
-      //DEBUG("DEFENSE both alive");
-      if (target.target != attacker)
+    applicable = (Actor performer, Actor target) {
+      if (target.target != performer)
         return false; // don't parry attacks that don't target you
-      //DEBUG("DEFENSE is target of the other guy");
-      //DEBUG("DEFENSE target's move = ${target.currentMove.string}");
       if (target.currentMove == null || target.currentMove.damage == 0)
         return false; // don't parry no attack and don't parry someone parrying you
-      //DEBUG("DEFENSE applicable, yes.");
+      return defaultApplicable(this, performer, target);
+    };
+
+    start = (Actor performer, Actor target) {
+      if (target.isPlayer) {
+        performer.echo("<subject> braces for <object's> blow", object:target);
+      } else if (performer.isPlayer) {
+        performer.echo("you decide to brace for <object's> blow", object:target);
+      }
+      // wait for the blow
+      performer.tillEndOfMove = target.tillEndOfMove + 1;
+    };
+
+    update = (Actor performer, Actor target) {
+      performer.stance += 1;
+    };
+  }
+
+  CombatMove.StandUp() : super () {
+    // init with defaults
+    initDefaultFunctions();
+
+    string = "stand up";
+    offensive = false;
+    choiceString = "stand up";
+    thirdPartyString = "stands up";
+    duration = 4;
+    recovery = 0;
+    fightingMod = -1;
+
+    applicable = (Actor performer, Actor target) {
+      return performer.stance < 20; // can only stand up if not standing up already
+    };
+
+    update = (Actor performer, Actor target) {
+      performer.stance += 4;
+    };
+
+    start = (Actor performer, Actor target) {
+      performer.echo(randomly(["<subject> start<s> to stand up", "<subject> begin<s> to stand up", "<subject> tr<ies> to stand up"]));
+    };
+  }
+
+  CombatMove.Withdraw() : super() {
+    // init with defaults
+    initDefaultFunctions();
+
+    string = "withdraw";
+    offensive = false;
+    choiceString = "take a step back";
+    thirdPartyString = "takes a step back";
+    duration = 2;
+    recovery = 0;
+    fightingMod = +1;
+
+    applicable = (Actor performer, Actor target) {
+      if (!performer.alive)
+        return false;
+      if (performer.stance < 20)
+        return false;
+      if (performer.stance == performer.maxStance)
+        return false;
       return true; 
     };
 
-    chanceToDodge = (Actor attacker, Actor target) {
-      return baseChanceToDodge;
+    start = (Actor performer, Actor target) {
+      performer.echo(randomly(["<subject> withdraw<s>", "<subject> back<s> away", "<subject> give<s> ground"]));
     };
 
-    chanceToBlock = (Actor attacker, Actor target) {
-      return baseChanceToBlock;
+    applyEnd = (Actor performer, Actor other) {
+      performer.stance += 10;
     };
-
-    computeSuitability = (Actor attacker, Actor target) {
-      return 1.0; // TODO
-    };
-
-    start = (Actor attacker, Actor target) {
-      if (target.isPlayer) {
-        attacker.echo("<subject> braces for <object's> blow", object:target);
-      } else if (attacker.isPlayer) {
-        attacker.echo("you decide to brace for <object's> blow", object:target);
-      }
-      // wait for the blow
-      attacker.tillEndOfMove = target.tillEndOfMove + 1;
-    };
-
-    update = (Actor attacker, Actor target) {
-      attacker.stance += 1;
-    };
-
-    applyHit = (Actor attacker, Actor target) { };
-
-    applyBlock = (Actor attacker, Actor target) { };
-
-    applyDodge = (Actor attacker, Actor target) { };
   }
 }
 
@@ -742,7 +852,7 @@ class Combat extends Entity implements LoopedEvent {
           });
         }
         // let player target someone else
-        playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; }));
+        playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; })); // TODO: target another shouldn't cost time
       }
 
       // TODO: implement moves and check what is to be done. Then start moves in the then: clause.
@@ -801,53 +911,33 @@ class ScripterImpl extends Scripter {
         vars["moveStomach"] = new CombatMove.Hand();
         vars["moveKick"] = new CombatMove.Kick();
         vars["moveDefense"] = new CombatMove.Defense();
-        vars["moveLeftHook"] = new CombatMove.Hand();
-        vars["moveLeftHook"].string = "strike to the face";
-        vars["moveLeftHook"].choiceString = "strike <object> with <subjectPronoun's> left hook";
-        vars["moveLeftHook"].thirdPartyString = "strikes <object> with <subjectPronoun's> left hook";
-        vars["moveLeftHook"].duration = 3;
-        vars["moveLeftHook"].recovery = 1;
-        vars["moveLeftHook"].damage = 2;
-        vars["moveLeftHook"].stanceDamage = 10;
-        vars["moveLeftHook"].fightingMod = -1;
+        vars["moveLeftHook"] = new CombatMove.Haymaker();
+        vars["moveStandUp"] = new CombatMove.StandUp();
+        vars["moveWithdraw"] = new CombatMove.Withdraw();
         
-        vars["moveStandUp"] = new CombatMove.Defense();
-        vars["moveStandUp"].string = "stand up";
-        vars["moveStandUp"].choiceString = "stand up";
-        vars["moveStandUp"].thirdPartyString = "stands up";
-        vars["moveStandUp"].duration = 3;
-        vars["moveStandUp"].recovery = 0;
-        vars["moveStandUp"].fightingMod = -1;
-        vars["moveStandUp"].applicable = (performer, target) {
-          return performer.stance < 20;
-        };
-        vars["moveStandUp"].update = (performer, target) {
-          performer.stance += 5;
-        };
-        
+        vars["humanMoves"] = [
+            vars["moveStomach"],
+            vars["moveKick"],
+            vars["moveDefense"],
+            vars["moveLeftHook"],
+            vars["moveWithdraw"],
+            vars["moveStandUp"]
+        ];
         
         vars["player"] = new Player();
-        vars["player"].moves.addAll([ vars["moveLeftHook"], vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
+        vars["player"].moves.addAll(vars["humanMoves"]);
         vars["player"].fighting = 3;
-        vars["player"].hitpoints = 10;
         
         vars["wolf"] = new Actor();
         vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
         vars["wolf"].pronoun = Storyline.IT;
-        vars["wolf"].moves.addAll([ vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
+        vars["wolf"].moves.addAll(vars["humanMoves"]);
         vars["wolf"].hitpoints = 2;
         vars["wolf"].speed = 1;
-        // vars["wolf"].team = 3;
-        /*vars["wolf"].modifiers.add((wolf) {
-            if (Math.random() < 0.01) {
-              wolf.echo("The ${wolf.randomName} spits out blood.");
-              wolf.hitpoints -= 1;
-            }
-        });*/
+        
         vars["orc"] = new Actor();
         vars["orc"].names = ["the orc", "the big orc", "the ugly orc"];
-        vars["orc"].moves.addAll([ vars["moveLeftHook"], vars["moveStomach"], vars["moveKick"], vars["moveDefense"], vars["moveStandUp"] ]);
-        vars["orc"].hitpoints = 10;
+        vars["orc"].moves.addAll(vars["humanMoves"]);
         /*vars["orc"].modifiers.add((orc) {
             if (Math.random() < 0.01) {
               orc.echo("The ${orc.randomName} grunts in pain from the poisoning.");
