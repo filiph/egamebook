@@ -688,7 +688,7 @@ class CombatMove extends Entity {
     offensive = false;
     choiceString = "parry <object's> move";
     thirdPartyString = "parries <object's> move";
-    duration = 2;
+    duration = 4;
     recovery = 0;
     fightingMod = +2;
 
@@ -723,7 +723,7 @@ class CombatMove extends Entity {
     offensive = false;
     choiceString = "stand up";
     thirdPartyString = "stands up";
-    duration = 4;
+    duration = 8;
     recovery = 0;
     fightingMod = -1;
 
@@ -732,7 +732,7 @@ class CombatMove extends Entity {
     };
 
     update = (Actor performer, Actor target) {
-      performer.stance += 4;
+      performer.stance += 2;
     };
 
     start = (Actor performer, Actor target) {
@@ -748,7 +748,7 @@ class CombatMove extends Entity {
     offensive = false;
     choiceString = "take a step back";
     thirdPartyString = "takes a step back";
-    duration = 2;
+    duration = 5;
     recovery = 0;
     fightingMod = +1;
 
@@ -793,6 +793,7 @@ class Combat extends Entity implements LoopedEvent {
 
   Function specialUpdate; // allows defining novel combat situations (moving train, random events, spawning enemies...)
 
+  int _prevTime = 0;
   int time = 0;
 
   void start() {
@@ -816,20 +817,26 @@ class Combat extends Entity implements LoopedEvent {
 
   /// The main function that gets called every single move and calls each actor to do their own stuff.
   void update() {
-    if (specialUpdate != null)
-      specialUpdate(this);
+    // find out if time passed since last time update() was called
+    bool timePassed = (time > _prevTime);
+    _prevTime = time;
 
-    actors.forEach((actor) {
-      actor.update();
-    });
+    if (timePassed) {
+      if (specialUpdate != null)
+        specialUpdate(this);
 
-    // make sure the fight still needs to continue
-    if (!actors.some((a) => a.alive && actors.some((b) => b.alive && b.team != a.team))) {
-      finished = true;
-      return;
+      actors.forEach((actor) {
+        actor.update();
+      });
+
+      // make sure the fight still needs to continue
+      if (!actors.some((a) => a.alive && actors.some((b) => b.alive && b.team != a.team))) {
+        finished = true;
+        return;
+      }
     }
 
-    if (_player != null && _player.alive && _player.tillEndOfMove <= 0) { // TODO: check if there is stuff to be done by player
+    if (_player != null && _player.alive && _player.tillEndOfMove <= 0) {
       if (_player.target == null) {
         // let player choose his target
         List<Actor> possibleEnemies = actors.filter((o) => o.team != _player.team && o.alive);
@@ -840,8 +847,8 @@ class Combat extends Entity implements LoopedEvent {
         // find out possible moves the player can perform on the target
         List<CombatMove> possibleMoves = _player.moves.filter((m) => m.applicable(_player,_player.target));
         if (!possibleMoves.isEmpty()) {
-          // only allow to repeat previous move when there is no other option
-          if (possibleMoves.length > 1)
+          // only allow to repeat previous move when there is no other (offensive) option
+          if (possibleMoves.filter((m) => m.offensive).length > 1)
             possibleMoves = possibleMoves.filter((m) => m != _player.previousMove);
           // sort moves by how effective they can be TODO: pick at least one of each strategies (big hit, quick hit, stance hit, defense
           possibleMoves.sort((a,b) => a.computeSuitability(_player,_player.target) - b.computeSuitability(_player,_player.target));
@@ -852,10 +859,9 @@ class Combat extends Entity implements LoopedEvent {
           });
         }
         // let player target someone else
-        playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; })); // TODO: target another shouldn't cost time
+        playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; time--; })); // TODO: target another shouldn't cost time
       }
 
-      // TODO: implement moves and check what is to be done. Then start moves in the then: clause.
       if (!playerChoices.isEmpty()) {
         interactionNeeded = true;
         playerChoices.add(new Choice("Do nothing.", showNow:true)); // TODO: this is for debug only..?
@@ -926,7 +932,7 @@ class ScripterImpl extends Scripter {
         
         vars["player"] = new Player();
         vars["player"].moves.addAll(vars["humanMoves"]);
-        vars["player"].fighting = 3;
+        vars["player"].fighting = 0;
         
         vars["wolf"] = new Actor();
         vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
@@ -945,7 +951,7 @@ class ScripterImpl extends Scripter {
             }
         });*/
         vars["combat"] = new Combat();
-        vars["combat"].actors.addAll([vars["wolf"],vars["orc"],vars["player"]]);
+        vars["combat"].actors.addAll([/*vars["wolf"],*/vars["orc"],vars["player"]]);
         vars["combat"].specialUpdate = (combat) {
           if ((combat.time % 10) == 5)
             combat.storyline.add("a lonely bird beeps in the distance");
