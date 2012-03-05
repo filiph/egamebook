@@ -440,7 +440,7 @@ class Actor extends Entity {
         if (currentMove.applicable(this, target))
           currentMove.update(this, target);
         else { // cancel move if it's no longer applicable
-          currentMove.applyCancel(this, target);
+          currentMove.applyCancel(this, target, alreadyRunning:true);
           currentMove = null;
         }
       }
@@ -690,8 +690,9 @@ class CombatMove extends Entity {
       target.currentMove = null;
   }
 
-  static void defaultApplyCancel (CombatMove move, Actor performer, Actor target) {
-    performer.echo("there's no way <subject> can ${move.choiceString} now", object:target);
+  static void defaultApplyCancel (CombatMove move, Actor performer, Actor target, [bool alreadyRunning=false]) {
+    if (!alreadyRunning)
+      performer.echo("there's no way <subject> can ${move.choiceString} now", object:target);
   }
 
   static double defaultChanceToDodge (CombatMove move, Actor performer, Actor target) {
@@ -747,8 +748,8 @@ class CombatMove extends Entity {
       defaultApplyDodge(this, performer, target);
     };
 
-    applyCancel = (Actor performer, Actor target) {
-      defaultApplyCancel(this, performer, target);
+    applyCancel = (Actor performer, Actor target, [bool alreadyRunning=false]) {
+      defaultApplyCancel(this, performer, target, alreadyRunning);
     };
    
     chanceToDodge = (Actor performer, Actor target) {
