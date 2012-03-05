@@ -440,7 +440,6 @@ class Actor extends Entity {
           // no target or no combat moves applicable to the target, TODO: try to change target?
           echo('<subject> ${randomly(["just stands there", "doesn\'t do anything", "does nothing"])}');
         } else {
-          // TODO: choice
           currentMove = chooseMove();
           currentMove.start(this, target);
         }
@@ -448,17 +447,60 @@ class Actor extends Entity {
     }
   }
 
-  // AI chooses a move
-  CombatMove chooseMove() {
+  // List moves
+  List<CombatMove> getPossibleMoves([int max=1000]) {
     List<CombatMove> possibleMoves = moves.filter((m) => m.applicable(this,target));
-    possibleMoves.sort((a,b) => b.computeSuitability(this,target) - a.computeSuitability(this,target));
-    // TODO: bring down moves that have large countBits(type & other.type) - or even better, use countBits(type & other.type) / countBits(type) (100% => same type of move)
+    if (possibleMoves.length < 2)
+      return possibleMoves;
 
-    // randomness that gives more chance to higher (more suitable) moves
+    // first, sort by suitability (computeSuitability contains logic against repeating last move)
+    possibleMoves.sort((a,b) => b.computeSuitability(this,target) - a.computeSuitability(this,target));
+    // next, bring down moves that are already mostly covered by moves above them
+    // bring down moves that have large countBits(type & previous.type) / countBits(type) (100% => same type of move)
+    final double MAX_SIMILARITY = 0.70;
+    DEBUG("PosMoves: $randomName");
+    Map<int,CombatMove> redundantMovesMap = new Map<int,CombatMove>();
+    for (int i=1; i < possibleMoves.length; i++) {
+      DEBUG("- ${possibleMoves[i].string}");
+      for (int j=0; j < i; j++) {
+        double similarity = countBits(possibleMoves[i].type & possibleMoves[j].type) / countBits(possibleMoves[i].type);
+        DEBUG("  - is ${(similarity*100).toInt()} similar to ${possibleMoves[j].string}");
+        if (similarity > MAX_SIMILARITY) {
+          DEBUG("PosMoves: $randomName - ${possibleMoves[i].string} is similar to ${possibleMoves[j].string}");
+          redundantMovesMap[i] = possibleMoves[i];
+          break;
+        }
+      }
+    }
+    // move redundant moves at the end of the list
+    List<CombatMove> finalMoves = new List<CombatMove>(possibleMoves.length);
+    int regularIndex = 0; int redundantIndex = possibleMoves.length - redundantMovesMap.length;
+    for (int i = 0; i < possibleMoves.length; i++) {
+      if (!redundantMovesMap.containsKey(i)) {
+        finalMoves[regularIndex] = possibleMoves[i];
+        regularIndex++;
+      } else {
+        finalMoves[redundantIndex] = possibleMoves[i];
+        redundantIndex++;
+      }
+    }
+
+    finalMoves.forEach((m) {
+        DEBUG("${m}");
+        });
+
+    return finalMoves.getRange(0, Math.min(finalMoves.length, max)); // return up to max moves
+  }
+
+  // AI chooses a move
+  CombatMove chooseMove([int max=1000]) {
+    List<CombatMove> possibleMoves = getPossibleMoves(max:max);
+
+    // logic that gives more chance to higher (more suitable) moves
     double random = Math.random();
     int pos;
     int len = possibleMoves.length; 
-    int allParts = (len*(len+1)/2).toInt(); // 1+2+3+4+..
+    int allParts = (len*(len+1)/2).toInt(); // 1+2+3+4+.. = allParts
     double part = 0.0;
 
     for (pos = 0; pos < len; pos++) {
@@ -529,6 +571,8 @@ class CombatMove extends Entity {
   static final int MOVE_EFF_STANCE = 1<<12;
   static final int MOVE_PRI_QUICK = 1<<13;
   static final int MOVE_PRI_DAMAGE = 1<<14;
+  static final int MOVE_DIR_OFFENSIVE = 1<<15;
+  static final int MOVE_DIR_DEFENSIVE = 1<<16;
 
 
 
@@ -576,7 +620,6 @@ class CombatMove extends Entity {
   }
 
   static void defaultStart (CombatMove move, Actor performer, Actor target) {
-    DEBUG("prev = ${performer.previousMove}, this=${move}");
     String again = (performer.previousMove == move) ? " again" : "";
     if (!performer.isPlayer) {
       performer.echo("<subject> wind<s> up to ${move.choiceString}$again", object:target);
@@ -638,15 +681,11 @@ class CombatMove extends Entity {
   }
 
   static int defaultComputeSuitability (CombatMove move, Actor performer, Actor target) {
-    DEBUG("computing suitability of ${move.string} by ${performer.randomName}");
     if (move.offensive) {
       int value = move.damage + (move.stanceDamage / 5).toInt();
-      DEBUG("- damage & stanceDamage: $value");
       value -= ((move.chanceToDodge(performer, target) + move.chanceToBlock(performer, target)) * 10).toInt();
-      DEBUG("- after dodge/block: $value");
       if (performer.previousMove != null) // similar moves as the last one get minus points
         value -= countBits(move.type & performer.previousMove.type);
-      DEBUG("- after prevMove: $value");
       return value;
     } else {
       return move.fightingMod;
@@ -705,7 +744,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_BODY|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_QUICK;
+    type = MOVE_TRG_BODY|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_QUICK|MOVE_DIR_OFFENSIVE;
     string = "hit to the stomach";
     choiceString = "hit <object> to the stomach";
     thirdPartyString = "hits <object> to the stomach";
@@ -727,7 +766,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_HEAD|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_DAMAGE;
+    type = MOVE_TRG_HEAD|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
     string = "strike to the face";
     choiceString = "strike <object> with <subjectPronoun's> left hook";
     thirdPartyString = "strikes <object> with <subjectPronoun's> left hook";
@@ -752,7 +791,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_LEGS|MOVE_FRM_RIGHT|MOVE_LMB_LEG|MOVE_EFF_STANCE|MOVE_PRI_DAMAGE;
+    type = MOVE_TRG_LEGS|MOVE_FRM_RIGHT|MOVE_LMB_LEG|MOVE_EFF_STANCE|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
     string = "kick to the legs";
     choiceString = "kick <object's> legs";
     thirdPartyString = "kicks <object's> legs";
@@ -779,6 +818,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
+    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_HAND;
     string = "parry";
     offensive = false;
     choiceString = "parry <object's> move";
@@ -814,6 +854,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
+    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
     string = "stand up";
     offensive = false;
     choiceString = "stand up";
@@ -848,6 +889,7 @@ class CombatMove extends Entity {
     // init with defaults
     initDefaultFunctions();
 
+    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
     string = "withdraw";
     offensive = false;
     choiceString = "take a step back";
@@ -950,24 +992,20 @@ class Combat extends Entity implements LoopedEvent {
         });
       } else {
         // find out possible moves the player can perform on the target
-        List<CombatMove> possibleMoves = _player.moves.filter((m) => m.applicable(_player,_player.target));
+        List<CombatMove> possibleMoves = _player.getPossibleMoves(max:10);
         if (!possibleMoves.isEmpty()) {
-          // sort moves by how effective they can be
-          possibleMoves.sort((a,b) => b.computeSuitability(_player,_player.target) - a.computeSuitability(_player,_player.target));
-          // only show first 5
-          possibleMoves = possibleMoves.getRange(0, Math.min(5, possibleMoves.length));
           possibleMoves.forEach((move) {
               playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
           });
         }
         // let player target someone else
         if (actors.some((a) => a.alive && a != _player.target && a.team != _player.team))
-          playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; time--; })); // TODO: target another shouldn't cost time
+          playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; time--; })); 
       }
 
       if (!playerChoices.isEmpty()) {
         interactionNeeded = true;
-        playerChoices.add(new Choice("Do nothing.", showNow:true)); // TODO: this is for debug only..?
+        playerChoices.add(new Choice("Do nothing.", showNow:true));
       }
     }
 
@@ -1019,8 +1057,10 @@ class ScripterImpl extends Scripter {
         
         vars["moveStomach"] = new CombatMove.Hand();
         vars["moveKick"] = new CombatMove.Kick();
-        vars["moveDefense"] = new CombatMove.Defense();
         vars["moveLeftHook"] = new CombatMove.Haymaker();
+        vars["moveRightHook"] = new CombatMove.Haymaker();
+        vars["moveRightHook"].string = "right hook";
+        vars["moveDefense"] = new CombatMove.Defense();
         vars["moveStandUp"] = new CombatMove.StandUp();
         vars["moveWithdraw"] = new CombatMove.Withdraw();
         
@@ -1029,6 +1069,7 @@ class ScripterImpl extends Scripter {
             vars["moveKick"],
             vars["moveDefense"],
             vars["moveLeftHook"],
+            vars["moveRightHook"],
             vars["moveWithdraw"],
             vars["moveStandUp"]
         ];
