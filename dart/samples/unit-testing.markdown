@@ -347,7 +347,8 @@ class Actor extends Entity {
 
   CombatMove get currentMove() => _currentMove;
   void set currentMove(CombatMove value) {
-    previousMove = _currentMove;
+    if (_currentMove != null)
+      previousMove = _currentMove;
     if (value == null) {
       tillEndOfMove = _currentMove.recovery; // do not substract speed from recovery - this makes speed too powerful
       if (tillEndOfMove > 0)
@@ -437,17 +438,17 @@ class Actor extends Entity {
         currentMove = null;
         target = null;
       } else if (currentMove != null && currentMove.update != null) {
-        if (currentMove.applicable(this, target))
+        if (currentMove.applicable(this, target, alreadyRunning:true))
           currentMove.update(this, target);
         else { // cancel move if it's no longer applicable
-          currentMove.applyCancel(this, target, alreadyRunning:true);
+          currentMove.applyCancel(this, target);
           currentMove = null;
         }
       }
     } else {
       // effect of finished move
       if (currentMove != null) {
-        if (currentMove.applicable(this, target)) {
+        if (currentMove.applicable(this, target, alreadyRunning:true)) {
           if (currentMove.offensive) {
             // resolve if target dodged the attack. Difference between fighting skills
             // means extra tries (throws) for the party that has the higher number
@@ -545,7 +546,7 @@ class Actor extends Entity {
 
   // stats
   int maxHitpoints = 10;
-  int maxStance = 40; // the best stance this actor can muster
+  int maxStance = 45; // the best stance this actor can muster
   int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
   int fighting = 0; // 1 = normal person, +x = number of extra block/dodge throws per turn
   int armor = 0; // 0 = person in clothes, +x takes points from damage taken
@@ -638,15 +639,18 @@ class CombatMove extends Entity {
 
   // Default functions
 
-  static bool defaultApplicable (CombatMove move, Actor performer, Actor target) {
+  // alreadyRunning says whether the move has already been started. There might be different rules (you can only start standing up when not standing, but you can surely continue afterwards).
+  static bool defaultApplicable (CombatMove move, Actor performer, Actor target, [bool alreadyRunning=false]) {
     return target.alive; // only perform moves when target is alive (by default)
   }
 
   static void defaultStart (CombatMove move, Actor performer, Actor target) {
+    DEBUG("prev = ${performer.previousMove}, this=${move}");
+    String again = (performer.previousMove == move) ? " again" : "";
     if (!performer.isPlayer) {
-      performer.echo("<subject> wind<s> up to ${move.choiceString}", object:target);
+      performer.echo("<subject> wind<s> up to ${move.choiceString}$again", object:target);
     } else {
-      performer.echo("you decide to ${move.choiceString}", object:target);
+      performer.echo("you decide to ${move.choiceString}$again", object:target);
     }
   }
 
@@ -690,9 +694,8 @@ class CombatMove extends Entity {
       target.currentMove = null;
   }
 
-  static void defaultApplyCancel (CombatMove move, Actor performer, Actor target, [bool alreadyRunning=false]) {
-    if (!alreadyRunning)
-      performer.echo("there's no way <subject> can ${move.choiceString} now", object:target);
+  static void defaultApplyCancel (CombatMove move, Actor performer, Actor target) {
+    performer.echo("there's no way <subject> can ${move.choiceString} now", object:target);
   }
 
   static double defaultChanceToDodge (CombatMove move, Actor performer, Actor target) {
@@ -720,8 +723,8 @@ class CombatMove extends Entity {
   }
 
   void initDefaultFunctions() { //TODO is there a more elegant way? a default super-constructor?
-    applicable = (Actor performer, Actor target) {
-      return defaultApplicable(this, performer, target);
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
+      return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
 
     start = (Actor performer, Actor target) {
@@ -748,8 +751,8 @@ class CombatMove extends Entity {
       defaultApplyDodge(this, performer, target);
     };
 
-    applyCancel = (Actor performer, Actor target, [bool alreadyRunning=false]) {
-      defaultApplyCancel(this, performer, target, alreadyRunning);
+    applyCancel = (Actor performer, Actor target) {
+      defaultApplyCancel(this, performer, target);
     };
    
     chanceToDodge = (Actor performer, Actor target) {
@@ -782,10 +785,10 @@ class CombatMove extends Entity {
     baseChanceToDodge = 0.1;
     baseChanceToBlock = 0.3;
 
-    applicable = (Actor performer, Actor target) {
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (performer.stance < 10)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
   }
 
@@ -805,12 +808,12 @@ class CombatMove extends Entity {
     baseChanceToBlock = 0.2;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (performer.stance < 20)
         return false;
       if (target.stance < 10)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
   }
 
@@ -830,10 +833,10 @@ class CombatMove extends Entity {
     baseChanceToBlock = 0.2;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (performer.stance < 30 || target.stance < 20)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
 
     applyHit = (Actor performer, Actor target) {
@@ -853,12 +856,12 @@ class CombatMove extends Entity {
     recovery = 0;
     fightingMod = +2;
 
-    applicable = (Actor performer, Actor target) {
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (target.target != performer)
         return false; // don't parry attacks that don't target you
       if (target.currentMove == null || target.currentMove.damage == 0)
         return false; // don't parry no attack and don't parry someone parrying you
-      return defaultApplicable(this, performer, target);
+      return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
 
     start = (Actor performer, Actor target) {
@@ -888,16 +891,21 @@ class CombatMove extends Entity {
     recovery = 0;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
-      return performer.stance < 20; // can only stand up if not standing up already
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
+      if (alreadyRunning)
+        return true;
+      else
+        return performer.stance < 20; // can only start standing up if not standing up already
     };
 
     update = (Actor performer, Actor target) {
-      performer.stance += 2;
+      if (performer.tillEndOfMove <= (duration / 2).toInt()) // first few timesteps the actor is gathering - his stance doesn't rise yet
+        performer.stance += 4;
     };
 
     start = (Actor performer, Actor target) {
-      performer.echo(randomly(["<subject> start<s> to stand up", "<subject> begin<s> to stand up", "<subject> tr<ies> to stand up"]));
+      String again = (performer.previousMove == this) ? " again" : "";
+      performer.echo(randomly(["<subject> gather<s> to stand up$again", "<subject> begin<s> to stand up$again", "<subject> tr<ies> to stand up$again"]));
     };
 
     computeSuitability = (Actor performer, Actor target) {
@@ -917,12 +925,12 @@ class CombatMove extends Entity {
     recovery = 0;
     fightingMod = +1;
 
-    applicable = (Actor performer, Actor target) {
+    applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (!performer.alive)
         return false;
       if (performer.stance < 20)
         return false;
-      if (performer.stance == performer.maxStance)
+      if (!alreadyRunning && performer.stance == performer.maxStance)
         return false;
       return true; 
     };
