@@ -73,7 +73,7 @@ class Storyline {
   static final Pronoun SHE = const Pronoun("she", "her", "her");
   static final Pronoun IT = const Pronoun("it", "it", "its");
 
-  Storyline add(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false]) {
+  Storyline add(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false, bool wholeSentence=false]) {
     reports.add( {
         "string": str,
         "subject": subject,
@@ -82,7 +82,8 @@ class Storyline {
         "positive": positive,
         "negative": negative,
         "endSentence": endSentence,
-        "startSentence": startSentence
+        "startSentence": startSentence,
+        "wholeSentence": wholeSentence
     });
   }
 
@@ -108,9 +109,7 @@ class Storyline {
   /// taking care of all the exceptions and rules when comparing different reports
   /// call: [: same('subject', i, i+1) ... :]
   bool same(String key, int i, int j) {
-    if (i >= reports.length || j >= reports.length)
-      return false;
-    if (i < 0 || j < 0)
+    if (!valid(i) || !valid(j))
       return false;
     if (reports[i][key] == null || reports[j][key] == null)
       return false;
@@ -120,6 +119,35 @@ class Storyline {
       return false;
   }
 
+  bool valid(int i) {
+    if (i >= reports.length || i < 0)
+      return false;
+    else
+      return true;
+  }
+
+  bool sameSentiment(int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    if (!same('subject', i, j))
+      return false;
+    if (reports[i]["positive"] && reports[j]["positive"])
+      return true;
+    if (reports[i]["negative"] && reports[j]["negative"])
+      return true;
+  }
+
+  bool oppositeSentiment(int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    if (!same('subject', i, j))
+      return false;
+    if (reports[i]["positive"] && reports[j]["negative"])
+      return true;
+    if (reports[i]["negative"] && reports[j]["positive"])
+      return true;
+  }
+
   /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do the rest
   String substitute(int i, String str, [bool useSubjectPronoun=false, bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
@@ -127,7 +155,7 @@ class Storyline {
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
-    if (useSubjectPronoun) {
+    if (useSubjectPronoun || same('subject', i, i-1)) {
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
@@ -197,30 +225,81 @@ class Storyline {
 
   /// The main function that strings reports together into a coherent story.
   String toString() {
-    int length = reports.length;
+    final int length = reports.length;
+    if (length < 1)
+      return "";
+    final int MAX_SENTENCE_LENGTH = 3;
+    int lastEndSentence = -1;
+    bool endSentence = true; // previous sentence was ended
+    bool endSentenceNeeded = false; // this sentence needs to be ended
+    bool but = false; // this next sentence needs to start with but
     for (int i=0; i < length; i++) {
-      if (subject(i) != null && !subject(i).isPlayer) {
-        if (same('subject', i, i+1) && same('subject', i, i+2)) {
-          // three reports about the same guy in a row
-          strBuf.add(capitalize(substitute(i, "<action>, ")));
-          strBuf.add(substitute(i+1, "<action>, ", useSubjectPronoun:true));
-          strBuf.add(randomly(["","then ","and ", "and finally "]));
-          strBuf.add(substitute(i+2, "<action>. ", useSubjectPronoun:true));
-          i+=2;
-        } else if (same('subject', i, i+1)) {
-          strBuf.add(capitalize(substitute(i, "<action>")));
-          strBuf.add(randomly([", ",", then "," and "]));
-          strBuf.add(substitute(i+1, "<action>. ", useSubjectPronoun:true));
-          i++;
-        } else if (same('string', i, i-1)) {
-          strBuf.add(capitalize(substitute(i, randomly(["<subject> <does> the same. ", "Same goes for <subject>. "]))));
-        } else {
-            strBuf.add(capitalize(substitute(i, "<action>. ")));
+      // TODO: look into future - make sentences like "Although __, __"
+      if (i != 0) {
+        // solve flow with previous sentence
+        bool objectSubjectSwitch = 
+                 reports[i-1]["subject"] == reports[i]["object"]
+              && reports[i-1]["object"] == reports[i]["subject"];
+        but = reports[i]["but"] || oppositeSentiment(i, i-1);
+        endSentence = 
+          (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
+          || endSentenceNeeded
+          || reports[i]["startSentence"] 
+          || reports[i-1]["endSentence"] 
+          || reports[i-1]["wholeSentence"]
+          || !(same('subject', i, i-1) || objectSubjectSwitch)
+          || (but && (i - lastEndSentence > 1));
+        endSentenceNeeded = false;
+
+        if (endSentence) {
+          if (reports[i-1]["wholeSentence"]) // don't write period after "Boom!"
+            strBuf.add(" ");
+          else
+            strBuf.add(". ");
+          if (but)
+            strBuf.add(randomly(["But ", "But ", "However, ", "Nonetheless, ", "Nevertheless, "]));
+        } else { // let's try and glue [i-1] and [i] into one sentence
+          if (but) {
+            strBuf.add(randomly([" but ", " but ", " yet ", ", but "]));
+            if (!sameSentiment(i, i+1))
+              endSentenceNeeded = true;
+          } else {
+            if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
+                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH) {
+              strBuf.add(", ");
+            } else {
+              strBuf.add(randomly([" and ", " and ", ", and "]));
+              endSentenceNeeded = true;
+            }
+          }
         }
-      } else {
-        strBuf.add(capitalize(substitute(i, "<action>. ")));
       }
+
+      String report = string(i);
+      // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
+      if (!endSentence)
+        if (same('subject', i, i-1))
+          if (string(i-1).startsWith("$SUBJECT "))
+            if (report.startsWith("$SUBJECT "))
+              report = report.replaceFirst("$SUBJECT ", "");
+
+      report = substitute(i, report);
+
+      if ((endSentence || i == 0) && !but)
+        report = capitalize(report);
+
+      // add the actual report
+      strBuf.add(report);
+
+      // set variables for next iteration
+      if (endSentence)
+        lastEndSentence = i;
     }
+
+    // add last dot
+    if (!reports[length-1]["wholeSentence"])
+      strBuf.add(".");
+
     return strBuf.toString();
   }
 }
@@ -311,9 +390,9 @@ class Actor extends Entity {
     // only report when stance is changed between levels
     if ((_stance / 10).toInt() != (prevStance / 10).toInt()) {
       if (_stance > prevStance)
-        echo(stanceUpStrings[Math.min(5, (_stance / 10).toInt())]);
+        echo(stanceUpStrings[Math.min(5, (_stance / 10).toInt())], positive:true);
       else {
-        echo(stanceDownStrings[Math.min(5, (_stance / 10).toInt())]);
+        echo(stanceDownStrings[Math.min(5, (_stance / 10).toInt())], negative:true);
         if (prevStance - _stance > 10 && _stance < 10) // damage from fall
           hitpoints -= 1;
       }
@@ -514,7 +593,7 @@ class Actor extends Entity {
 
   void die() {
     alive = false;
-    echo("<subject> ${randomly(['pass<es> out','lose<s> consciousness','black<s> out','go<es> down'])}");
+    echo("<subject> ${randomly(['pass<es> out','lose<s> consciousness','black<s> out','go<es> down'])}", negative:true);
   }
 
   // stats
@@ -622,9 +701,9 @@ class CombatMove extends Entity {
   static void defaultStart (CombatMove move, Actor performer, Actor target) {
     String again = (performer.previousMove == move) ? " again" : "";
     if (!performer.isPlayer) {
-      performer.echo("<subject> wind<s> up to ${move.choiceString}$again", object:target);
+      performer.echo("<subject> wind<s> up to ${move.choiceString}$again", endSentence:true, object:target);
     } else {
-      performer.echo("you decide to ${move.choiceString}$again", object:target);
+      performer.echo("you decide to ${move.choiceString}$again", endSentence:true, object:target);
     }
   }
 
@@ -635,7 +714,7 @@ class CombatMove extends Entity {
   }
 
   static void defaultApplyHit (CombatMove move, Actor performer, Actor target, [String hitString="<subject> hit<s> <object>"]) {
-    performer.echo(hitString, object:target);
+    performer.echo(hitString, object:target, positive:true);
     int actualDamage = Math.max(0, move.damage - target.armor);
     target.hitpoints -= actualDamage;
     if (actualDamage == 0 && move.damage != 0)
@@ -646,16 +725,13 @@ class CombatMove extends Entity {
   }
 
   static void defaultApplyBlock (CombatMove move, Actor performer, Actor target) {
-    if (target.isPlayer)
-      target.echo("<subject> block <object's> ${move.string}", object:performer);
-    else
-      target.echo("<subject> blocks <object's> ${move.string}", object:performer);
+    target.echo("<subject> block<s> <object's> ${move.string}", object:performer, positive:true);
     int actualStanceDamage = Math.max(
         0, 
         (move.stanceDamage / 2).toInt() - target.fighting
     );
     if (actualStanceDamage > 0) {
-      target.echo("the blow was hard", but:true);
+      target.echo("the blow was hard", negative:true);
       target.stance -= actualStanceDamage;
     }
     if (target.currentMove != null && !target.currentMove.offensive)
@@ -663,13 +739,13 @@ class CombatMove extends Entity {
   }
 
   static void defaultApplyDodge (CombatMove move, Actor performer, Actor target) {
-    target.echo("<subject> dodge<s> <object's> ${move.string}", object:performer);
+    target.echo("<subject> dodge<s> <object's> ${move.string}", object:performer, positive:true);
     if (target.currentMove != null && !target.currentMove.offensive)
       target.currentMove = null;
   }
 
   static void defaultApplyCancel (CombatMove move, Actor performer, Actor target) {
-    performer.echo("there's no way <subject> can ${move.choiceString} now", object:target);
+    performer.echo("there's no way <subject> can ${move.choiceString} now", object:target, negative:true);
   }
 
   static double defaultChanceToDodge (CombatMove move, Actor performer, Actor target) {
@@ -830,7 +906,8 @@ class CombatMove extends Entity {
     applicable = (Actor performer, Actor target, [bool alreadyRunning=false]) {
       if (target.target != performer)
         return false; // don't parry attacks that don't target you
-      if (target.currentMove == null || target.currentMove.damage == 0)
+      if (target.currentMove == null 
+          || (target.currentMove.damage == 0 && target.currentMove.stanceDamage == 0))
         return false; // don't parry no attack and don't parry someone parrying you
       return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
     };
@@ -839,7 +916,7 @@ class CombatMove extends Entity {
       if (target.isPlayer) {
         performer.echo("<subject> braces for <object's> blow", object:target);
       } else if (performer.isPlayer) {
-        performer.echo("you decide to brace for <object's> blow", object:target);
+        performer.echo("you decide to brace for <object's> blow", endSentence:true, object:target);
       }
       // wait for the blow
       performer.tillEndOfMove = target.tillEndOfMove + 1;
@@ -1097,8 +1174,8 @@ class ScripterImpl extends Scripter {
         vars["combat"] = new Combat();
         vars["combat"].actors.addAll([/*vars["wolf"],*/vars["orc"],vars["player"]]);
         vars["combat"].specialUpdate = (combat) {
-          if ((combat.time % 10) == 5)
-            combat.storyline.add("a lonely bird beeps in the distance");
+          //if ((combat.time % 10) == 5)
+          //  combat.storyline.add("a lonely bird beeps in the distance");
         };
         start(vars["combat"]);
         },
