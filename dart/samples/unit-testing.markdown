@@ -317,12 +317,13 @@ class Storyline {
           (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
           || endSentenceNeeded
           || reports[i]["startSentence"] 
-          || reports[i-1]["endSentence"] 
-          || reports[i-1]["wholeSentence"]
+          || reports[i]["endSentence"] 
+          || reports[i]["wholeSentence"]
           || !(same('subject', i, i-1) || objectSubjectSwitch)
           || (but && (i - lastEndSentence > 1));
         endSentenceNeeded = false;
 
+        // DEBUG("SENT: ${string(i)}\n- whole=${reports[i]["endSentence"]}
         if (endSentence) {
           if (reports[i-1]["wholeSentence"]) // don't write period after "Boom!"
             strBuf.add(" ");
@@ -337,7 +338,7 @@ class Storyline {
               endSentenceNeeded = true;
           } else {
             if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
-                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH) {
+                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
               strBuf.add(", ");
             } else {
               strBuf.add(randomly([" and ", " and ", ", and "]));
@@ -366,6 +367,8 @@ class Storyline {
       // set variables for next iteration
       if (endSentence)
         lastEndSentence = i;
+      if (reports[i]["wholeSentence"])
+        endSentenceNeeded = true;
     }
 
     // add last dot
@@ -409,12 +412,12 @@ class Actor extends Entity {
   Actor _target;
 
   // an utility function that prints to the combat's storyline, pre-filling this actor as the subject
-  void echo(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false]) {
+  void echo(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false, bool wholeSentence=false]) {
     if (combat == null)
       return;
     if (subject == null)
       subject = this;
-    combat.storyline.add(str, subject:subject, object:object, but:but, positive:positive, negative:negative, endSentence:endSentence, startSentence:startSentence);
+    combat.storyline.add(str, subject:subject, object:object, but:but, positive:positive, negative:negative, endSentence:endSentence, startSentence:startSentence, wholeSentence:wholeSentence);
   }
 
   /// returns the fighting ability modified by current move and stance
@@ -932,6 +935,11 @@ class CombatMove extends Entity {
       if (target.stance < 10)
         return false;
       return defaultApplicable(this, performer, target, alreadyRunning:alreadyRunning);
+    };
+
+    applyHit = (Actor performer, Actor target) {
+      performer.echo("Boom!", wholeSentence:true, positive:true);
+      defaultApplyHit(this, performer, target, hitString:"<subject> hit<s> <object> in the face");
     };
   }
 
