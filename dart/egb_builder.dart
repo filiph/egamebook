@@ -10,9 +10,9 @@
 
 // TODO: make it easy to package libraries and import them - importLibrary("FGBE", version:1.0);
 
-// TODO: $variable in text block, v_variable in dart block -> vars["variable"] (UNTIL Dart supports NoSuchMethod fully)
-
 // XXX: use markdown block_parser.dart for parsing the text (just line parser is fine)
+
+// XXX: make sure v_something -> vars["something"] doesn't break quotes (like in echo("something v_something");)
 
 class Page {
   int index;
@@ -152,8 +152,16 @@ void parse() {
               Block.BLK_DART_SCRIPT
               )
             );
-        // TODO: replace v_vars to vars["vars"] ... - needs regexp search&replace
-        // page.blocks.last().lines.forEach((line) { line = line.replaceAll("..."
+        // replace v_vars to vars["vars"] 
+        RegExp varsRegExp = const RegExp(@"v_([a-zA-Z_][a-zA-Z0-9_]*)");
+        List<String> lines = page.blocks.last().lines;
+        for (int ii = 0; ii < lines.length; ii++) {
+          Match m;
+          while ((m = varsRegExp.firstMatch(lines[ii])) != null) {
+            print(m.group(0));
+            lines[ii] = lines[ii].replaceAll(m.group(0), "vars[\"${m.group(1)}\"]");
+          }
+        }
         print("- Found new dart script.");
         currentBlockIndex++;
         i = endTagIndex;
@@ -198,8 +206,8 @@ void parse() {
         currentBlockIndex++;
       }
       }
-  });
-}
+      });
+  }
 
 void write() {
   print("Data loaded.");

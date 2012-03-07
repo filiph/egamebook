@@ -48,7 +48,7 @@ vars["orc"].moves.addAll(vars["humanMoves"]);
     }
 });*/
 vars["combat"] = new Combat();
-vars["combat"].actors.addAll([/*vars["wolf"],*/vars["orc"],vars["player"]]);
+vars["combat"].actors.addAll([v_wolf, vars["orc"],vars["player"]]);
 vars["combat"].specialUpdate = (combat) {
   //if ((combat.time % 10) == 5)
   //  combat.storyline.add("a lonely bird beeps in the distance");
@@ -317,7 +317,7 @@ class Storyline {
           (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
           || endSentenceNeeded
           || reports[i]["startSentence"] 
-          || reports[i]["endSentence"] 
+          || reports[i-1]["endSentence"] 
           || reports[i]["wholeSentence"]
           || !(same('subject', i, i-1) || objectSubjectSwitch)
           || (but && (i - lastEndSentence > 1));
@@ -329,7 +329,7 @@ class Storyline {
             strBuf.add(" ");
           else
             strBuf.add(". ");
-          if (but)
+          if (but && !reports[i]["wholeSentence"])
             strBuf.add(randomly(["But ", "But ", "However, ", "Nonetheless, ", "Nevertheless, "]));
         } else { // let's try and glue [i-1] and [i] into one sentence
           if (but) {
@@ -834,7 +834,7 @@ class CombatMove extends Entity {
   static int defaultComputeSuitability (CombatMove move, Actor performer, Actor target) {
     if (move.offensive) {
       int value = move.damage + (move.stanceDamage / 5).toInt();
-      value -= ((move.chanceToDodge(performer, target) + move.chanceToBlock(performer, target)) * 10).toInt();
+      value += ((1 - move.chanceToDodge(performer, target)) * (1 - move.chanceToBlock(performer, target)) * 10).toInt();
       if (performer.previousMove != null) // similar moves as the last one get minus points
         value -= countBits(move.type & performer.previousMove.type);
       return value;
@@ -1090,6 +1090,8 @@ interface LoopedEvent {
 class Combat extends Entity implements LoopedEvent {
   Storyline storyline;
 
+  static final int MAX_MOVES_PRESENTED = 5;
+
   bool _started = false;
   bool finished = false;
   bool interactionNeeded = false;
@@ -1149,8 +1151,9 @@ class Combat extends Entity implements LoopedEvent {
         });
       } else {
         // find out possible moves the player can perform on the target
-        List<CombatMove> possibleMoves = _player.getPossibleMoves(max:10);
+        List<CombatMove> possibleMoves = _player.getPossibleMoves(max:MAX_MOVES_PRESENTED);
         if (!possibleMoves.isEmpty()) {
+          possibleMoves.sort((a,b) => a.type - b.type);
           possibleMoves.forEach((move) {
               playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.start(_player, _player.target); }));
           });
@@ -1162,7 +1165,6 @@ class Combat extends Entity implements LoopedEvent {
 
       if (!playerChoices.isEmpty()) {
         interactionNeeded = true;
-        playerChoices.add(new Choice("Do nothing.", showNow:true));
       }
     }
 
