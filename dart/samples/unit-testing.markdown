@@ -448,8 +448,14 @@ class Actor extends Entity {
   void set hitpoints(int value) {
     if (value < _hitpoints && value == 1)
       echo("<subject> looks like hell", negative:true);
-    else if (_hitpoints > 3 && (value == 2 || value == 3))
+    else if (_hitpoints > 3 && (value == 2 || value == 3)) {
+      modifiers.add((Actor a) {
+          if (a.combat.time % 12 == 6)
+            if (randomly([true, false]))
+              a.echo("blood is dripping into <subject's> eyes", negative:true);
+      });
       echo("<subject> <is> badly hurt", negative:true);
+    }
     _hitpoints = Math.min(value, maxHitpoints);
     if (_hitpoints <= 0) {
       die();
@@ -938,7 +944,7 @@ class CombatMove extends Entity {
     };
 
     applyHit = (Actor performer, Actor target) {
-      performer.echo("Boom!", wholeSentence:true, positive:true);
+      performer.combat.storyline.add("Boom!", wholeSentence:true, positive:true);
       defaultApplyHit(this, performer, target, hitString:"<subject> hit<s> <object> in the face");
     };
   }

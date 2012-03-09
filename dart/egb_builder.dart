@@ -224,11 +224,11 @@ void write() {
     file.writeStringSync(implStartFile);
     classesLines.forEach((line) {
         file.writeStringSync("$line\n");
-        });
+    });
     file.writeStringSync(implStartClass);
     libraryLines.forEach((line) {
         file.writeStringSync("  $line\n");
-        });
+    });
     file.writeStringSync(implStartPages);
 
     for (int i = 0; i < pages.length; i++) {
@@ -236,7 +236,7 @@ void write() {
       pages.forEach((String key, Page p) {
           if (p.index == i)
           page = p;
-          });
+      });
 
       String indent = "      ";
 
@@ -253,13 +253,13 @@ void write() {
           file.writeStringSync("$indent{\n");
           block.lines.forEach((line) {
             file.writeStringSync("$indent$line\n");
-            });
+          });
           file.writeStringSync("$indent}$commaOrNot\n");
           } else if (block.type == Block.BLK_DART_SCRIPT) {
           file.writeStringSync("$indent() {\n");
           block.lines.forEach((line) {
             file.writeStringSync("$indent$line\n");
-            });
+          });
           file.writeStringSync("$indent}$commaOrNot\n");
           }
           });
