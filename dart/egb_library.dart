@@ -1,12 +1,17 @@
 #library('egb');
 
+#import('dart:json');
 
 // TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
 
 class Message {
-  final int type;
-  var content;
+  int type;
+
+  // different types of contents
+  List listContent;
+  String strContent;
+  int intContent;
 
   static final int MSG_QUIT = 0;
   static final int MSG_CONTINUE = 1;  // 0b0001
@@ -27,7 +32,7 @@ class Message {
   Message.Continue() : type = MSG_CONTINUE {}
 
   Message.TextResult(String str) : type = MSG_TEXT_RESULT {
-    content = str;
+    strContent = str;
   }
 
   Message.Start() : type = MSG_START {}
@@ -49,10 +54,10 @@ class Message {
 
     print("SCR: Sending choices.");
 
-    content = new List<Dynamic>();
-    content.add(prependText);
+    listContent = new List<Dynamic>();
+    listContent.add(prependText);
     choicesToSend.forEach((choice) {
-        content.add( {
+        listContent.add( {
           "string": choice.string,
           "hash": choice.hashCode()
           } );
@@ -61,10 +66,46 @@ class Message {
   }
 
   Message.OptionSelected(int hash) : type = MSG_OPTION_SELECTED {
-    content = hash;
+    intContent = hash;
   }
 
   Message.NoResult() : type = MSG_NO_RESULT {}
+
+  /**
+    Ctor that creates the Message object from a JSON string. 
+    XXX: this isn't needed in VM, but frog can't handle Object messages (yet?)
+    */
+  Message.fromJson(String json) {
+    Map<String,Dynamic> data = JSON.parse(json);
+    type = data["type"];
+
+    if (type == MSG_OPTION_SELECTED) {
+      intContent = data["intContent"];
+    } else if (type == MSG_SHOW_CHOICES) {
+      listContent = data["listContent"];
+    } else if (type == MSG_TEXT_RESULT) {
+      strContent = data["strContent"];
+    } 
+  }
+
+  /**
+    Outputs message to JSON string. Useful when sending via Port to Isolate.
+    */
+  String toJson() {
+    Map<String,Dynamic> data = new Map<String,Dynamic>();
+
+    data["type"] = type;
+
+    if (type == MSG_OPTION_SELECTED) {
+      data["intContent"] = intContent;
+    } else if (type == MSG_SHOW_CHOICES) {
+      data["listContent"] = listContent;
+    } else if (type == MSG_TEXT_RESULT) {
+      data["strContent"] = strContent;
+    }
+
+    return JSON.stringify(data);
+  }
 }
 
 class UserInteraction implements Hashable {
@@ -130,7 +171,8 @@ class Scripter extends Isolate {
     port.receive(callback);
   }
 
-  void callback(var message, SendPort replyTo) {
+  void callback(String messageJson, SendPort replyTo) {
+    Message message = new Message.fromJson(messageJson);
     print("SCR: Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
     if (message.type == Message.MSG_QUIT) {
@@ -139,9 +181,9 @@ class Scripter extends Isolate {
     } else if (pages == null 
         || (currentPage != null && currentPage >= pages.length)) {
       print("SCR: No more pages.");
-      _interfacePort.send(new Message.EndOfBook(), port);
+      _interfacePort.send(new Message.EndOfBook().toJson(), port.toSendPort());
     } else {
-      _interfacePort.send(goOneStep(message), port);
+      _interfacePort.send(goOneStep(message).toJson(), port.toSendPort());
     }
   }
 
@@ -161,7 +203,7 @@ class Scripter extends Isolate {
       // TODO: make this more elegant by making ChoiceList class
       Message message;
       choices.forEach((choice) {
-          if (choice.hashCode() == incomingMessage.content) {
+          if (choice.hashCode() == incomingMessage.intContent) {
           print("SCR: Found choice that was selected: ${choice.string}");
           if (choice.goto != null)
           nextPage = choice.goto;
@@ -295,5 +337,22 @@ class Scripter extends Isolate {
       return new Message.ShowChoices(choices, prependText:textBuffer.toString());
     return new Message.TextResult(textBuffer.toString());
   }
+}
+
+/**
+  Interface to all user interfaces interacting with the Scripter.
+  */
+interface UserInterface {
+  ReceivePort _receivePort;
+  SendPort _scripterPort;
+
+  /**
+    Connects to the Scripter isolate, attaches [receiveCallback] to the 
+    _receivePort. Returns a future to SendPort.
+
+    You can call e.g.
+    [:connect(callback).then((port) {port.send(something, _receivePort)});:].
+    */
+  Future<SendPort> connect(Function receiveCallback);
 }
 

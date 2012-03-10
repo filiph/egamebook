@@ -363,11 +363,12 @@ void write() {
 
   // we have the scripter file, now let's make the others
   outFile.fullPathHandler = (String outFilePath) {
-      print("Writing $outFilePathStub-cmdline.dart file.");
-      // create the cmd_line interface file
+
+      // create the cmd_line interface file  TODO: DRY with next file
+      print("Writing $outFilePathStub.cmdline.dart file.");
       Future<List<String>> cmdlineLines = getLines("$scriptDirPath/egb_interface_cmdline.dart");
 
-      File cmdLineFile = new File("$outFilePathStub-cmdline.dart");
+      File cmdLineFile = new File("$outFilePathStub.cmdline.dart");
       cmdLineFile.createSync();
       cmdLineFile.open(FileMode.WRITE);
       cmdLineFile.openHandler = (RandomAccessFile file) {
@@ -387,14 +388,40 @@ void write() {
           file.close();
         };
       };
+
+      // create the html interface file (as opposed to cmdline interface)
+      print("Writing $outFilePathStub.html.dart file.");
+      Future<List<String>> htmlUiLines = getLines("$scriptDirPath/egb_interface_html.dart");
+
+      File htmlUiFile = new File("$outFilePathStub.html.dart");
+      htmlUiFile.createSync();
+      htmlUiFile.open(FileMode.WRITE);
+      htmlUiFile.openHandler = (RandomAccessFile file) {
+        htmlUiLines.then((List<String> lines) {
+            for (String line in lines) {
+              if (importEgbLibrary.hasMatch(line))
+                file.writeString("#import('$scriptDirPath/egb_library.dart');\n");
+              else if (line.contains("#import('samples/unit-testing.markdown.dart');")) 
+                file.writeString("#import('$outFilePath');\n");
+              else
+                file.writeString("$line\n");
+            }
+        });
+
+        //file.onNoPendingWrites 
+        file.noPendingWriteHandler = () {
+          file.close();
+        };
+      };
+
+      // TODO: create the something.dart.html interface file (works directly with the Dart script)
+
+      // TODO: create the something.js.html interface file (works with the compiled JavaScript)
   };
 
   outFile.fullPath();
 
 
-  // create the dart.html interface file (works directly with the Dart script)
-
-  // create the js.html interface file (works with the compiled JavaScript)
 }
 
 String escapeQuotes(String str) {

@@ -1,2 +1,3 @@
-/Applications/dart/dart-sdk/bin/dart /Users/filiph/Programs/egamebook/dart/egb_builder.dart /Users/filiph/Programs/egamebook/dart/samples/unit-testing.markdown
-/Applications/dart/dart-sdk/bin/dart /Users/filiph/Programs/egamebook/dart/egb_interface_cmdline.dart
+/Applications/dart/dart-sdk/bin/dart /Users/filiph/Programs/egamebook/dart/egb_builder.dart /Users/filiph/Programs/egamebook/dart/library/tis_001.egb
+/Applications/dart/dart-sdk/bin/frogc /Users/filiph/Programs/egamebook/dart/library/tis_001.html.dart
+# /Applications/dart/dart-sdk/bin/dart /Users/filiph/Programs/egamebook/dart/library/tis-0.1-cmdline.dart
