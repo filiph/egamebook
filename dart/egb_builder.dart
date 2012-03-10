@@ -38,7 +38,10 @@ class Block {
   Block(this.lines, this.index, this.type) {}
 }
 
-String filename;
+String scriptFilePath;
+String scriptDirPath;
+String inFilePath;
+String inFileName;
 
 List<String> inLines;
 Map<String,Page> pages;
@@ -94,6 +97,10 @@ final String implEndClass = """
 final String implEndFile = """
 """;
 
+/**
+  The main workhorse. Parses the input .egb file, finding scripts, pages, etc.
+  Saves everything to gobal vars.
+  */
 void parse() {
   RegExp blankLine = new RegExp(@"^\s*$");
   RegExp hr = new RegExp(@"^\-\-\-+$"); // ----
@@ -250,7 +257,7 @@ void parse() {
   });
 }
 
-// replace v_vars to vars["vars"] 
+// replace v_vars to vars["vars"]  TODO: make sure it works in "string literals, too"
 String substituteVars(String str) {
   RegExp varsRegExp = const RegExp(@"v_([a-zA-Z_][a-zA-Z0-9_]*)");
   Match m;
@@ -267,14 +274,27 @@ void write() {
   print("- ${classesLines.length} classes lines");
   print("- ${libraryLines.length} library lines");
   print("- ${pages.length} pages");
-  String outFile = new File("$filename.dart");
+
+  RegExp importEgbLibrary = const RegExp(@"#import.*\(.*egb_library.dart.*\).*;");
+
+  int lastDotPosition = inFilePath.lastIndexOf(".");
+  int lastSlashPosition = inFilePath.lastIndexOf("/");
+
+  // get filename stubs
+  String outFilePathStub;
+  String outDirPath = inFilePath.substring(0, lastSlashPosition);
+  if (lastDotPosition < lastSlashPosition) // make sure we're actually overwriting a file extension
+    outFilePathStub = "$inFilePath";
+  else
+    outFilePathStub = "${inFilePath.substring(0, lastDotPosition)}";
+
+  // write the ScripterImplementation file
+  File outFile = new File("$outFilePathStub.dart");
   outFile.createSync();
-
   outFile.open(FileMode.WRITE);
-
   outFile.openHandler = (RandomAccessFile file) {
-    print("File created. Writing.");
-    file.writeStringSync(implStartFile);
+    print("File $outFilePathStub.dart created. Writing.");
+    file.writeStringSync(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     classesLines.forEach((line) {
         file.writeStringSync("$line\n");
     });
@@ -340,6 +360,41 @@ void write() {
     file.close();
   };
 
+
+  // we have the scripter file, now let's make the others
+  outFile.fullPathHandler = (String outFilePath) {
+      print("Writing $outFilePathStub-cmdline.dart file.");
+      // create the cmd_line interface file
+      Future<List<String>> cmdlineLines = getLines("$scriptDirPath/egb_interface_cmdline.dart");
+
+      File cmdLineFile = new File("$outFilePathStub-cmdline.dart");
+      cmdLineFile.createSync();
+      cmdLineFile.open(FileMode.WRITE);
+      cmdLineFile.openHandler = (RandomAccessFile file) {
+        cmdlineLines.then((List<String> lines) {
+            for (String line in lines) {
+              if (importEgbLibrary.hasMatch(line))
+                file.writeString("#import('$scriptDirPath/egb_library.dart');\n");
+              else if (line.contains("#import('samples/unit-testing.markdown.dart');")) 
+                file.writeString("#import('$outFilePath');\n");
+              else
+                file.writeString("$line\n");
+            }
+        });
+
+        //file.onNoPendingWrites 
+        file.noPendingWriteHandler = () {
+          file.close();
+        };
+      };
+  };
+
+  outFile.fullPath();
+
+
+  // create the dart.html interface file (works directly with the Dart script)
+
+  // create the js.html interface file (works with the compiled JavaScript)
 }
 
 String escapeQuotes(String str) {
@@ -349,16 +404,12 @@ String escapeQuotes(String str) {
   // TODO: make it work with inline $variables
 }
 
-void main() {
-  List<String> argv = (new Options()).arguments;
 
-  if (argv.length < 1) {
-    throw new Exception("Script called without argument. Please provide a file to work on.");
-  }
-
-  filename = argv[0];
-  print("Opening $filename.");
-  File inFile = new File(filename);
+Future<List<String>> getLines(String inFilePath) {
+  print("Opening $inFilePath.");
+  Completer completer = new Completer();
+  
+  File inFile = new File(inFilePath);
   if (!inFile.existsSync()) {
     print("File ${inFile.fullPath()} doesn't exist.");
     return null;
@@ -367,22 +418,42 @@ void main() {
   StringInputStream strInStream = new StringInputStream(inStream);
 
   strInStream.lineHandler = () {
-    inLines = new List<String>();
+    List<String> lines = new List<String>();
     String line;
     do {
       line = strInStream.readLine();
-      inLines.add(line);
+      lines.add(line);
     } while (line != null);
-    inLines.removeLast();  // get rid of the null at the end
+    lines.removeLast();  // get rid of the null at the end
 
     // clean up
     inStream.close();
-
-    // call the main parse function
-    parse();
-
-    // call the write function
-    write();
+    
+    completer.complete(lines);
   };
 
+  return completer.future;
+}
+
+
+void main() {
+  Options options = new Options();
+
+  if (options.arguments.length < 1) {
+    throw new Exception("Script called without argument. Please provide a file to work on.");
+  }
+  
+  // TODO: make platform agnostic
+  scriptFilePath = options.script;
+  scriptDirPath = "${scriptFilePath.substring(0, scriptFilePath.lastIndexOf('/'))}";
+
+  inFilePath = options.arguments[0];
+  inFileName = inFilePath.substring(inFilePath.lastIndexOf("/") + 1);
+
+  getLines(inFilePath).then((List<String> lines) {
+      inLines = lines;
+      parse();
+      write();
+      // TODO: call dartc/frog to create the JS file
+  });
 }

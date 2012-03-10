@@ -1,7 +1,6 @@
 #import('egb_library.dart');
 
-//#import('samples/test_project.dart');
-//#import('samples/thin-ice-dart.markdown.dart');
+// this will be rewritten with the actual file
 #import('samples/unit-testing.markdown.dart');
 
 #import('dart:io');
