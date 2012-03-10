@@ -262,7 +262,6 @@ String substituteVars(String str) {
   RegExp varsRegExp = const RegExp(@"v_([a-zA-Z_][a-zA-Z0-9_]*)");
   Match m;
   while ((m = varsRegExp.firstMatch(str)) != null) {
-    print(m.group(0));
     str = str.replaceAll(m.group(0), "vars[\"${m.group(1)}\"]");
   }
   return str;
@@ -291,8 +290,7 @@ void write() {
   // write the ScripterImplementation file
   File outFile = new File("$outFilePathStub.dart");
   outFile.createSync();
-  outFile.open(FileMode.WRITE);
-  outFile.openHandler = (RandomAccessFile file) {
+  outFile.open(FileMode.WRITE, (RandomAccessFile file) {
     print("File $outFilePathStub.dart created. Writing.");
     file.writeStringSync(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     classesLines.forEach((line) {
@@ -357,12 +355,14 @@ void write() {
     file.writeStringSync(implEndClass);
     file.writeStringSync(implEndFile);
 
-    file.close();
-  };
+    file.close(() {
+        print("Scripter file written and closed.");
+    });
+  });
 
 
   // we have the scripter file, now let's make the others
-  outFile.fullPathHandler = (String outFilePath) {
+  outFile.fullPath((String outFilePath) {
 
       // create the cmd_line interface file  TODO: DRY with next file
       print("Writing $outFilePathStub.cmdline.dart file.");
@@ -370,8 +370,7 @@ void write() {
 
       File cmdLineFile = new File("$outFilePathStub.cmdline.dart");
       cmdLineFile.createSync();
-      cmdLineFile.open(FileMode.WRITE);
-      cmdLineFile.openHandler = (RandomAccessFile file) {
+      cmdLineFile.open(FileMode.WRITE, (RandomAccessFile file) {
         cmdlineLines.then((List<String> lines) {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
@@ -381,13 +380,14 @@ void write() {
               else
                 file.writeString("$line\n");
             }
-        });
 
-        //file.onNoPendingWrites 
-        file.noPendingWriteHandler = () {
-          file.close();
-        };
-      };
+            file.onNoPendingWrites = () {
+              file.close(() {
+                print("Cmdline file written and closed.");
+              });
+            };
+        });
+      });
 
       // create the html interface file (as opposed to cmdline interface)
       print("Writing $outFilePathStub.html.dart file.");
@@ -395,8 +395,7 @@ void write() {
 
       File htmlUiFile = new File("$outFilePathStub.html.dart");
       htmlUiFile.createSync();
-      htmlUiFile.open(FileMode.WRITE);
-      htmlUiFile.openHandler = (RandomAccessFile file) {
+      htmlUiFile.open(FileMode.WRITE, (RandomAccessFile file) {
         htmlUiLines.then((List<String> lines) {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
@@ -406,22 +405,19 @@ void write() {
               else
                 file.writeString("$line\n");
             }
-        });
 
-        //file.onNoPendingWrites 
-        file.noPendingWriteHandler = () {
-          file.close();
-        };
-      };
+            file.onNoPendingWrites = () {
+              file.close(() {
+                print("Html interface file written and closed.");
+              });
+            };
+        });
+      });
 
       // TODO: create the something.dart.html interface file (works directly with the Dart script)
 
       // TODO: create the something.js.html interface file (works with the compiled JavaScript)
-  };
-
-  outFile.fullPath();
-
-
+  });
 }
 
 String escapeQuotes(String str) {
@@ -441,10 +437,10 @@ Future<List<String>> getLines(String inFilePath) {
     print("File ${inFile.fullPath()} doesn't exist.");
     return null;
   }
-  InputStream inStream = inFile.openInputStreamSync();
+  InputStream inStream = inFile.openInputStream();
   StringInputStream strInStream = new StringInputStream(inStream);
 
-  strInStream.lineHandler = () {
+  strInStream.onLine = () {
     List<String> lines = new List<String>();
     String line;
     do {

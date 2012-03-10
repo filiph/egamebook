@@ -4,6 +4,7 @@
 #import('samples/unit-testing.markdown.dart');
 
 #import('dart:html');
+#import('dart:isolate');
 
 
 class HtmlInterface implements UserInterface {

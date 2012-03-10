@@ -1,6 +1,7 @@
 #library('egb');
 
 #import('dart:json');
+#import('dart:isolate');
 
 // TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
@@ -148,6 +149,11 @@ class Choice extends UserInteraction {
 
 class Question extends UserInteraction {
 }
+
+
+/**
+  Scripter is the Isolate that runs the actual game and sends Messages to User Interface.
+  */
 
 class Scripter extends Isolate {
   SendPort _interfacePort;

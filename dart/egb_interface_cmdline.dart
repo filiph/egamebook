@@ -4,7 +4,7 @@
 #import('samples/unit-testing.markdown.dart');
 
 #import('dart:io');
-
+#import('dart:isolate');
 
 class CmdlineInterface implements UserInterface {
   ReceivePort _receivePort;
@@ -72,7 +72,7 @@ class CmdlineInterface implements UserInterface {
         }
         print("");
         // let player choose
-        cmdLine.lineHandler = () {
+        cmdLine.onLine = () {
           print("");
           try {
             int optionNumber = Math.parseInt(cmdLine.readLine());
