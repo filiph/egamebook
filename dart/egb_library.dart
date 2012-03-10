@@ -123,6 +123,7 @@ class Scripter extends Isolate {
   Scripter() : super() {
     print("Scripter has been created.");
     nextScriptStack = new List<Function>();
+    initScriptEnvironment();
   }
 
   void main() {
@@ -231,8 +232,10 @@ class Scripter extends Isolate {
   void initScriptEnvironment() {
     choices = new List<Choice>();
     vars = new Map<String, Dynamic>();
-  }
 
+    initBlock(); // run contents of <init>
+  }
+  
   // making sure calls like "a = 5" will work in scripts 
   // XXX: noSuchMethod not yet implemented in Dart!
   /*

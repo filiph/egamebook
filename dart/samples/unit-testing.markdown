@@ -8,56 +8,33 @@ You encounter two ominous-looking creatures. One of them is large. It is an orc!
 
 <dart>
 
-vars["moveStomach"] = new CombatMove.Hand();
-vars["moveKick"] = new CombatMove.Kick();
-vars["moveLeftHook"] = new CombatMove.Haymaker();
-vars["moveRightHook"] = new CombatMove.Haymaker();
-vars["moveRightHook"].string = "right hook";
-vars["moveDefense"] = new CombatMove.Defense();
-vars["moveStandUp"] = new CombatMove.StandUp();
-vars["moveWithdraw"] = new CombatMove.Withdraw();
+v_wolf = new Actor();
+v_wolf.names = ["the orcling", "the orcling", "the young orcling"];
+v_wolf.pronoun = Storyline.IT;
+v_wolf.moves.addAll(v_humanMoves);
+v_wolf.hitpoints = 2;
+v_wolf.speed = 1;
 
-vars["humanMoves"] = [
-    vars["moveStomach"],
-    vars["moveKick"],
-    vars["moveDefense"],
-    vars["moveLeftHook"],
-    vars["moveRightHook"],
-    vars["moveWithdraw"],
-    vars["moveStandUp"]
-];
-
-vars["player"] = new Player();
-vars["player"].moves.addAll(vars["humanMoves"]);
-vars["player"].fighting = 1;
-
-vars["wolf"] = new Actor();
-vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
-vars["wolf"].pronoun = Storyline.IT;
-vars["wolf"].moves.addAll(vars["humanMoves"]);
-vars["wolf"].hitpoints = 2;
-vars["wolf"].speed = 1;
-
-vars["orc"] = new Actor();
-vars["orc"].names = ["the orc", "the big orc", "the ugly orc"];
-vars["orc"].moves.addAll(vars["humanMoves"]);
-/*vars["orc"].modifiers.add((orc) {
+v_orc = new Actor();
+v_orc.names = ["the orc", "the big orc", "the ugly orc"];
+v_orc.moves.addAll(v_humanMoves);
+/*v_orc.modifiers.add((orc) {
     if (Math.random() < 0.01) {
       orc.echo("The ${orc.randomName} grunts in pain from the poisoning.");
       orc.hitpoints -= 1;
     }
 });*/
-vars["combat"] = new Combat();
-vars["combat"].actors.addAll([v_wolf, vars["orc"],vars["player"]]);
-vars["combat"].specialUpdate = (combat) {
+v_combat = new Combat();
+v_combat.actors.addAll([v_wolf, v_orc,v_player]);
+v_combat.specialUpdate = (combat) {
   //if ((combat.time % 10) == 5)
   //  combat.storyline.add("a lonely bird beeps in the distance");
 };
-start(vars["combat"]);
+start(v_combat);
 </dart>
 
 <dart>
-if (!vars["player"].alive)
+if (!v_player.alive)
   goto(1);
 </dart>
 
@@ -70,6 +47,31 @@ You died like the bitch you are.
 
 
 
+
+<init>
+v_moveStomach = new CombatMove.Hand();
+v_moveKick = new CombatMove.Kick();
+v_moveLeftHook = new CombatMove.Haymaker();
+v_moveRightHook = new CombatMove.Haymaker();
+v_moveRightHook.string = "right hook";
+v_moveDefense = new CombatMove.Defense();
+v_moveStandUp = new CombatMove.StandUp();
+v_moveWithdraw = new CombatMove.Withdraw();
+
+v_humanMoves = [
+    v_moveStomach,
+    v_moveKick,
+    v_moveDefense,
+    v_moveLeftHook,
+    v_moveRightHook,
+    v_moveWithdraw,
+    v_moveStandUp
+];
+
+v_player = new Player();
+v_player.moves.addAll(v_humanMoves);
+v_player.fighting = 1;
+</init>
 
 
 <classes>

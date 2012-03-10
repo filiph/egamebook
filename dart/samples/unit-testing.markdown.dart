@@ -1113,12 +1113,10 @@ class Combat extends Entity implements LoopedEvent {
   }
 }
 
-
 class ScripterImpl extends Scripter {
 
   /* LIBRARY */
-
-    
+  
   void start(LoopedEvent event) {
     vars["_curLoopedEvent"] = event;
     vars["_curLoopedEventChoices"] = new List<Choice>();
@@ -1139,37 +1137,14 @@ class ScripterImpl extends Scripter {
     nextScript(updateLoopedEvent);
   }
   
-    ScripterImpl() : super() {
-      pages = [
-        /* PAGES & BLOCKS */
-              // welcome
+  ScripterImpl() : super() {
+    pages = [
+      /* PAGES & BLOCKS */
+      // welcome
       [
         "# Thin Ice",
         "You encounter two ominous-looking creatures. One of them is large. It is an orc! And an ugly one at that. The other one is smaller, obviously younger. An orcling. They are bare handed and before you know it, they both attack you!",
         () {
-        
-        vars["moveStomach"] = new CombatMove.Hand();
-        vars["moveKick"] = new CombatMove.Kick();
-        vars["moveLeftHook"] = new CombatMove.Haymaker();
-        vars["moveRightHook"] = new CombatMove.Haymaker();
-        vars["moveRightHook"].string = "right hook";
-        vars["moveDefense"] = new CombatMove.Defense();
-        vars["moveStandUp"] = new CombatMove.StandUp();
-        vars["moveWithdraw"] = new CombatMove.Withdraw();
-        
-        vars["humanMoves"] = [
-            vars["moveStomach"],
-            vars["moveKick"],
-            vars["moveDefense"],
-            vars["moveLeftHook"],
-            vars["moveRightHook"],
-            vars["moveWithdraw"],
-            vars["moveStandUp"]
-        ];
-        
-        vars["player"] = new Player();
-        vars["player"].moves.addAll(vars["humanMoves"]);
-        vars["player"].fighting = 1;
         
         vars["wolf"] = new Actor();
         vars["wolf"].names = ["the orcling", "the orcling", "the young orcling"];
@@ -1205,6 +1180,31 @@ class ScripterImpl extends Scripter {
       [
         "You died like the bitch you are."
       ]
-        ];
-    }
+    ];
+  }
+  /* INIT */
+  void initBlock() {
+    vars["moveStomach"] = new CombatMove.Hand();
+    vars["moveKick"] = new CombatMove.Kick();
+    vars["moveLeftHook"] = new CombatMove.Haymaker();
+    vars["moveRightHook"] = new CombatMove.Haymaker();
+    vars["moveRightHook"].string = "right hook";
+    vars["moveDefense"] = new CombatMove.Defense();
+    vars["moveStandUp"] = new CombatMove.StandUp();
+    vars["moveWithdraw"] = new CombatMove.Withdraw();
+    
+    vars["humanMoves"] = [
+        vars["moveStomach"],
+        vars["moveKick"],
+        vars["moveDefense"],
+        vars["moveLeftHook"],
+        vars["moveRightHook"],
+        vars["moveWithdraw"],
+        vars["moveStandUp"]
+    ];
+    
+    vars["player"] = new Player();
+    vars["player"].moves.addAll(vars["humanMoves"]);
+    vars["player"].fighting = 1;
+  }
 }

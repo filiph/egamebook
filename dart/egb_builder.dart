@@ -42,6 +42,7 @@ String filename;
 
 List<String> inLines;
 Map<String,Page> pages;
+List<String> initLines;
 List<String> libraryLines;
 List<String> classesLines;
 
@@ -55,24 +56,42 @@ final String implStartFile = """
 """;
 
 final String implStartClass = """
-
 class ScripterImpl extends Scripter {
 
   /* LIBRARY */
+""";
 
-  """;
+final String implStartCtor = """
+  ScripterImpl() : super() {
+""";
 
-  final String implStartPages = """
-    ScripterImpl() : super() {
-      pages = [
-        /* PAGES & BLOCKS */
-        """;
+final String implStartPages = """
+    pages = [
+      /* PAGES & BLOCKS */
+""";
 
+final String implEndPages = """
+    ];
+""";
 
-      final String implEndFile = """
-        ];
-    }
+final String implEndCtor = """
+  }
+""";
+
+final String implStartInit = """
+  /* INIT */
+  void initBlock() {
+""";
+
+final String implEndInit = """
+  }
+""";
+
+final String implEndClass = """
 }
+""";
+
+final String implEndFile = """
 """;
 
 void parse() {
@@ -80,6 +99,8 @@ void parse() {
   RegExp hr = new RegExp(@"^\-\-\-+$"); // ----
   RegExp dartTagStart = new RegExp(@"^\s*<dart>\s*$");
   RegExp dartTagEnd = new RegExp(@"^\s*</dart>\s*$");
+  RegExp initTagStart = new RegExp(@"^\s*<init>\s*$");
+  RegExp initTagEnd = new RegExp(@"^\s*</init>\s*$");
   RegExp libraryTagStart = new RegExp(@"^\s*<library>\s*$");
   RegExp libraryTagEnd = new RegExp(@"^\s*</library>\s*$");
   RegExp classesTagStart = new RegExp(@"^\s*<classes>\s*$");
@@ -88,6 +109,7 @@ void parse() {
   RegExp validName = new RegExp(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
 
   pages = new Map<String,Page>();
+  initLines = new List<String>();
   libraryLines = new List<String>();
   classesLines = new List<String>();
   Page previousPage;
@@ -116,101 +138,132 @@ void parse() {
       page.blocks = new List<Block>();
       int currentBlockIndex = 0;
       for (int i = page.lineStart + 2; i < page.lineEnd; i++) {
-      if (blankLine.hasMatch(inLines[i]))
-      continue;
-      String line = inLines[i].trim();
-      if (choice.hasMatch(line)) {
-      Match choiceMatch = choice.firstMatch(line);
-      String choiceStr = escapeQuotes(choiceMatch.group(1));
-      String choiceLink = choiceMatch.group(2);
-      if (!pages.containsKey(choiceLink))
-      throw new Exception("$choiceLink page does not exist!");
-      page.blocks.add(
-        new Block(
-          ["\"string\":\"${choiceStr}\",",
-          "\"goto\":${pages[choiceLink].index}"],
-          currentBlockIndex,
-          Block.BLK_CHOICE
-          )
-        );
-      print("- Found a new choice: $choiceStr [$choiceLink].");
-      currentBlockIndex++;
-      continue;
-      } else if (dartTagStart.hasMatch(line)) {
-        int endTagIndex;
-        for (int ii = i; ii < inLines.length; ii++)
-          if (dartTagEnd.hasMatch(inLines[ii])) {
-            endTagIndex = ii;
-            break;
-          }
-        if (endTagIndex == null)
-          throw new Exception("No end tag for opening <dart> tag at $i found.");
-        page.blocks.add(
+        if (blankLine.hasMatch(inLines[i]))
+          continue;
+        String line = inLines[i].trim();
+
+        if (choice.hasMatch(line)) {
+          /* CHOICE */
+          Match choiceMatch = choice.firstMatch(line);
+          String choiceStr = escapeQuotes(choiceMatch.group(1));
+          String choiceLink = choiceMatch.group(2);
+          if (!pages.containsKey(choiceLink))
+            throw new Exception("$choiceLink page does not exist!");
+          page.blocks.add(
             new Block(
-              new List.from(inLines.getRange(i+1, endTagIndex-i-1)),
+              ["\"string\":\"${choiceStr}\",",
+              "\"goto\":${pages[choiceLink].index}"],
               currentBlockIndex,
-              Block.BLK_DART_SCRIPT
+              Block.BLK_CHOICE
               )
             );
-        // replace v_vars to vars["vars"] 
-        RegExp varsRegExp = const RegExp(@"v_([a-zA-Z_][a-zA-Z0-9_]*)");
-        List<String> lines = page.blocks.last().lines;
-        for (int ii = 0; ii < lines.length; ii++) {
-          Match m;
-          while ((m = varsRegExp.firstMatch(lines[ii])) != null) {
-            print(m.group(0));
-            lines[ii] = lines[ii].replaceAll(m.group(0), "vars[\"${m.group(1)}\"]");
+          print("- Found a new choice: $choiceStr [$choiceLink].");
+          currentBlockIndex++;
+          continue;
+
+        } else if (dartTagStart.hasMatch(line)) {
+          /* PAGES - DART BLOCK */
+          int endTagIndex;
+          for (int ii = i; ii < inLines.length; ii++)
+            if (dartTagEnd.hasMatch(inLines[ii])) {
+              endTagIndex = ii;
+              break;
+            }
+          if (endTagIndex == null)
+            throw new Exception("No end tag for opening <dart> tag at $i found.");
+          page.blocks.add(
+              new Block(
+                new List.from(inLines.getRange(i+1, endTagIndex-i-1).map((String line) => substituteVars(line))),
+                currentBlockIndex,
+                Block.BLK_DART_SCRIPT
+                )
+              );
+          print("- Found new dart script.");
+          currentBlockIndex++;
+          i = endTagIndex;
+          continue;
+
+        } else if (initTagStart.hasMatch(line)) {
+          /* INIT */
+          int endTagIndex;
+          for (int ii = i; ii < inLines.length; ii++) {
+            if (initTagEnd.hasMatch(inLines[ii])) {
+              endTagIndex = ii;
+              break;
+            }
           }
+          if (endTagIndex == null)
+            throw new Exception("No end tag for opening <init> tag at $i found.");
+          initLines.addAll(inLines.getRange(i+1, endTagIndex-i-1).map((String line) => substituteVars(line)));
+          print("- Found init script.");
+          // notice: no "currentBlockIndex++". Init is not part of current page.
+          i = endTagIndex;
+          continue;
+
+        } else if (classesTagStart.hasMatch(line)) {
+          /* CLASSES */
+          int endTagIndex;
+          for (int ii = i; ii < inLines.length; ii++) {
+            if (classesTagEnd.hasMatch(inLines[ii])) {
+              endTagIndex = ii;
+              break;
+            }
+          }
+          if (endTagIndex == null)
+            throw new Exception("No end tag for opening <classes> tag at $i found.");
+          classesLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+          print("- Found classes script.");
+          // notice: no "currentBlockIndex++". Classes are not part of current page.
+          i = endTagIndex;
+          continue;
+
+        } else if (libraryTagStart.hasMatch(line)) {
+          /* LIBRARY */
+          int endTagIndex;
+          for (int ii = i; ii < inLines.length; ii++) {
+            if (libraryTagEnd.hasMatch(inLines[ii])) {
+              endTagIndex = ii;
+              break;
+            }
+          }
+          if (endTagIndex == null)
+            throw new Exception("No end tag for opening <library> tag at $i found.");
+          libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+          print("- Found library script.");
+          // notice: no "currentBlockIndex++". Library is not part of current page.
+          i = endTagIndex;
+          continue;
+
+        } else {
+          /* PAGE - TEXT BLOCK */
+          page.blocks.add(
+              new Block(
+                [escapeQuotes(inLines[i])],
+                currentBlockIndex,
+                Block.BLK_TEXT
+                )
+              );
+          print("- Found paragraph: ${escapeQuotes(inLines[i]).substring(0,Math.min(15,inLines[i].length-1))}...");
+          currentBlockIndex++;
         }
-        print("- Found new dart script.");
-        currentBlockIndex++;
-        i = endTagIndex;
-        continue;
-      } else if (classesTagStart.hasMatch(line)) {
-        int endTagIndex;
-        for (int ii = i; ii < inLines.length; ii++)
-          if (classesTagEnd.hasMatch(inLines[ii])) {
-            endTagIndex = ii;
-            break;
-          }
-        if (endTagIndex == null)
-          throw new Exception("No end tag for opening <classes> tag at $i found.");
-        classesLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
-        print("- Found classes script.");
-        // notice: no "currentBlockIndex++". Classes are not part of current page.
-        i = endTagIndex;
-        continue;
-      } else if (libraryTagStart.hasMatch(line)) {
-        int endTagIndex;
-        for (int ii = i; ii < inLines.length; ii++)
-          if (libraryTagEnd.hasMatch(inLines[ii])) {
-            endTagIndex = ii;
-            break;
-          }
-        if (endTagIndex == null)
-          throw new Exception("No end tag for opening <library> tag at $i found.");
-        libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
-        print("- Found library script.");
-        // notice: no "currentBlockIndex++". Library is not part of current page.
-        i = endTagIndex;
-        continue;
-      } else {
-        page.blocks.add(
-            new Block(
-              [escapeQuotes(inLines[i])],
-              currentBlockIndex,
-              Block.BLK_TEXT
-              )
-            );
-        print("- Found paragraph: ${escapeQuotes(inLines[i]).substring(0,Math.min(15,inLines[i].length-1))}...");
-        currentBlockIndex++;
       }
-      }
-      });
+  });
+}
+
+// replace v_vars to vars["vars"] 
+String substituteVars(String str) {
+  RegExp varsRegExp = const RegExp(@"v_([a-zA-Z_][a-zA-Z0-9_]*)");
+  Match m;
+  while ((m = varsRegExp.firstMatch(str)) != null) {
+    print(m.group(0));
+    str = str.replaceAll(m.group(0), "vars[\"${m.group(1)}\"]");
   }
+  return str;
+}
 
 void write() {
   print("Data loaded.");
+  print("- ${initLines.length} init lines");
   print("- ${classesLines.length} classes lines");
   print("- ${libraryLines.length} library lines");
   print("- ${pages.length} pages");
@@ -229,6 +282,7 @@ void write() {
     libraryLines.forEach((line) {
         file.writeStringSync("  $line\n");
     });
+    file.writeStringSync(implStartCtor);
     file.writeStringSync(implStartPages);
 
     for (int i = 0; i < pages.length; i++) {
@@ -271,7 +325,16 @@ void write() {
       else
         file.writeStringSync("$indent]\n");
     }
+    file.writeStringSync(implEndPages);
+    file.writeStringSync(implEndCtor);
 
+    file.writeStringSync(implStartInit);
+    initLines.forEach((line) {
+        file.writeStringSync("    $line\n");
+    });
+    file.writeStringSync(implEndInit);
+
+    file.writeStringSync(implEndClass);
     file.writeStringSync(implEndFile);
 
     file.close();
