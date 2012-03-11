@@ -6,6 +6,10 @@
 #import('dart:io');
 #import('dart:isolate');
 
+void DEBUG_CMD(String str) {
+//  print("CMD: $str");
+}
+
 class CmdlineInterface implements UserInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
@@ -37,9 +41,9 @@ class CmdlineInterface implements UserInterface {
 
 
   CmdlineInterface() {
-    print("CMD: Command line interface starting.");
+    DEBUG_CMD("Command line interface starting.");
     connect(receiveFromScripter).then((SendPort port) {
-        print("CMD: Scripter is now ready! Sending message.");
+        DEBUG_CMD("Scripter is now ready! Sending message.");
         port.send(new Message.Start().toJson(), _receivePort);
     });
 
@@ -48,22 +52,22 @@ class CmdlineInterface implements UserInterface {
 
   void receiveFromScripter(String messageJson, SendPort replyTo) {
     Message message = new Message.fromJson(messageJson);
-    print("CMD: We have a message from Scripter: ${message.type}.");
+    DEBUG_CMD("We have a message from Scripter: ${message.type}.");
     if (message.type == Message.MSG_END_OF_BOOK) {
-      print("CMD: We are at the end of book. Closing.");
+      DEBUG_CMD("We are at the end of book. Closing.");
       stdin.close();
       _scripterPort.send(new Message.Quit().toJson());
       _receivePort.close();
     } else {
       if (message.type == Message.MSG_TEXT_RESULT) {
-        print("CMD: Showing text from scripter.");
+        DEBUG_CMD("Showing text from scripter.");
         print("\n${message.strContent}\n");
         _scripterPort.send(new Message.Continue().toJson(), _receivePort);
       } else if (message.type == Message.MSG_NO_RESULT) {
-        print("CMD: No visible result. Continuing.");
+        DEBUG_CMD("No visible result. Continuing.");
         _scripterPort.send(new Message.Continue().toJson(), _receivePort);
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
-        print("CMD: We have choices to show!");
+        DEBUG_CMD("We have choices to show!");
         if (message.listContent[0] != "")
           print("\n${message.listContent[0]}\n");
         choices = new List.from(message.listContent);

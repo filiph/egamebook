@@ -6,6 +6,11 @@
 // TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
 
+void DEBUG_SCR(String str) {
+//  print("SCR: $str");
+}
+
+
 class Message {
   int type;
 
@@ -53,7 +58,7 @@ class Message {
     else
       choicesToSend = choices.filter((choice) => !choice.shown);
 
-    print("SCR: Sending choices.");
+    DEBUG_SCR("Sending choices.");
 
     listContent = new List<Dynamic>();
     listContent.add(prependText);
@@ -168,7 +173,7 @@ class Scripter extends Isolate {
   List<Function> nextScriptStack;
 
   Scripter() : super() {
-    print("Scripter has been created.");
+    DEBUG_SCR("Scripter has been created.");
     nextScriptStack = new List<Function>();
     initScriptEnvironment();
   }
@@ -179,14 +184,14 @@ class Scripter extends Isolate {
 
   void callback(String messageJson, SendPort replyTo) {
     Message message = new Message.fromJson(messageJson);
-    print("SCR: Received message from interface: ${message.type}.");
+    DEBUG_SCR("Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
     if (message.type == Message.MSG_QUIT) {
-      print("SCR: Closing port and quiting.");
+      DEBUG_SCR("Closing port and quiting.");
       port.close();
     } else if (pages == null 
         || (currentPage != null && currentPage >= pages.length)) {
-      print("SCR: No more pages.");
+      DEBUG_SCR("No more pages.");
       _interfacePort.send(new Message.EndOfBook().toJson(), port.toSendPort());
     } else {
       _interfacePort.send(goOneStep(message).toJson(), port.toSendPort());
@@ -197,7 +202,7 @@ class Scripter extends Isolate {
   // Returns message for interface.
   Message goOneStep(Message incomingMessage) {
     if (incomingMessage.type == Message.MSG_START) {
-      print("SCR: Starting from the beginning");
+      DEBUG_SCR("Starting from the beginning");
       currentPage = 0;
       currentBlock = null;
       nextScriptStack.clear();
@@ -205,12 +210,12 @@ class Scripter extends Isolate {
     }
 
     if (incomingMessage.type == Message.MSG_OPTION_SELECTED) {
-      print("SCR: An option has been selected. Resolving.");
+      DEBUG_SCR("An option has been selected. Resolving.");
       // TODO: make this more elegant by making ChoiceList class
       Message message;
       choices.forEach((choice) {
           if (choice.hashCode() == incomingMessage.intContent) {
-          print("SCR: Found choice that was selected: ${choice.string}");
+          DEBUG_SCR("Found choice that was selected: ${choice.string}");
           if (choice.goto != null)
           nextPage = choice.goto;
           if (choice.f != null)
@@ -245,12 +250,12 @@ class Scripter extends Isolate {
     else
       currentBlock++;
 
-    print("SCR: currentPage = $currentPage, currentBlock = $currentBlock");
+    DEBUG_SCR("currentPage = $currentPage, currentBlock = $currentBlock");
 
     blocks = pages[currentPage];
-    print("SCR: Resolving block.");
+    DEBUG_SCR("Resolving block.");
     if (currentBlock >= blocks.length) {
-      print("SCR: At the end of page.");
+      DEBUG_SCR("At the end of page.");
       if (choices.some((choice) => !choice.shown)) 
         return new Message.ShowChoices(choices, endOfPage:true);
       else
@@ -264,7 +269,7 @@ class Scripter extends Isolate {
       return new Message.NoResult();
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph
-      print("SCR: Running script.");
+      DEBUG_SCR("Running script.");
       return runScriptBlock(blocks[currentBlock]);
     }
 
