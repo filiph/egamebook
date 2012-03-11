@@ -41,11 +41,13 @@ class HtmlInterface implements UserInterface {
 
   HtmlInterface() {
     print("HTML interface starting.");
+    port.receive(receiveFromScripter);
+    /*
     connect(receiveFromScripter).then((SendPort port) {
         print("Scripter is now ready! Sending message.");
         port.send(new Message.Start().toJson(), _receivePort.toSendPort());
     });
-
+*/
     // DOM
     paragraphsDiv = document.query("div#book-paragraphs");
     choicesDiv = document.query("div#book-choices");
@@ -134,6 +136,9 @@ class HtmlInterface implements UserInterface {
 }
 
 void main() {
-  new HtmlInterface();
+  startRootIsolate(main_);
 }
 
+void main_() {
+  new HtmlInterface();
+}
