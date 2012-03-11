@@ -119,13 +119,18 @@ void parse() {
   initLines = new List<String>();
   libraryLines = new List<String>();
   classesLines = new List<String>();
+
+  // Lines that can be skipped because their contents are already accounted for
+  Set<int> _processedLines = new Set<int>();
+
   Page previousPage;
   int currentPageIndex = 0;
 
-  // first pass - find pages
+  // first pass - find pages & library/init lines
   for (int i = 0; i < inLines.length; i++) {
     String line = inLines[i].trim();
     if (hr.hasMatch(line) && i < inLines.length - 1) {
+      /* PAGE START */
       String nameCandidate = inLines[i+1].trim();
       if (validName.hasMatch(nameCandidate)) {
         if (previousPage != null)
@@ -134,10 +139,62 @@ void parse() {
         currentPageIndex++;
         previousPage = pages[nameCandidate];
         i++; // skip next line
+        continue;
       }
+
+    } else if (initTagStart.hasMatch(line)) {
+      /* INIT */
+      int endTagIndex;
+      for (int ii = i; ii < inLines.length; ii++) {
+        if (initTagEnd.hasMatch(inLines[ii])) {
+          endTagIndex = ii;
+          break;
+        }
+      }
+      if (endTagIndex == null)
+        throw new Exception("No end tag for opening <init> tag at $i found.");
+      initLines.addAll(inLines.getRange(i+1, endTagIndex-i-1).map((String line) => substituteVars(line)));
+      print("- Found init script.");
+      _processedLines.addAll(range(i, endTagIndex));
+      i = endTagIndex;
+      continue;
+
+    } else if (classesTagStart.hasMatch(line)) {
+      /* CLASSES */
+      int endTagIndex;
+      for (int ii = i; ii < inLines.length; ii++) {
+        if (classesTagEnd.hasMatch(inLines[ii])) {
+          endTagIndex = ii;
+          break;
+        }
+      }
+      if (endTagIndex == null)
+        throw new Exception("No end tag for opening <classes> tag at $i found.");
+      classesLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+      print("- Found classes script.");
+      _processedLines.addAll(range(i, endTagIndex));
+      i = endTagIndex;
+      continue;
+
+    } else if (libraryTagStart.hasMatch(line)) {
+      /* LIBRARY */
+      int endTagIndex;
+      for (int ii = i; ii < inLines.length; ii++) {
+        if (libraryTagEnd.hasMatch(inLines[ii])) {
+          endTagIndex = ii;
+          break;
+        }
+      }
+      if (endTagIndex == null)
+        throw new Exception("No end tag for opening <library> tag at $i found.");
+      libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
+      print("- Found library script.");
+      _processedLines.addAll(range(i, endTagIndex));
+      i = endTagIndex;
+      continue;
     }
   }
-  previousPage.lineEnd = inLines.length - 1;
+  previousPage.lineEnd = inLines.length;
 
   // second pass - find blocks inside pages
   pages.forEach((String pageName, Page page) {
@@ -146,6 +203,8 @@ void parse() {
       int currentBlockIndex = 0;
       for (int i = page.lineStart + 2; i < page.lineEnd; i++) {
         if (blankLine.hasMatch(inLines[i]))
+          continue;
+        if (_processedLines.contains(i))
           continue;
         String line = inLines[i].trim();
 
@@ -190,57 +249,6 @@ void parse() {
           i = endTagIndex;
           continue;
 
-        } else if (initTagStart.hasMatch(line)) {
-          /* INIT */
-          int endTagIndex;
-          for (int ii = i; ii < inLines.length; ii++) {
-            if (initTagEnd.hasMatch(inLines[ii])) {
-              endTagIndex = ii;
-              break;
-            }
-          }
-          if (endTagIndex == null)
-            throw new Exception("No end tag for opening <init> tag at $i found.");
-          initLines.addAll(inLines.getRange(i+1, endTagIndex-i-1).map((String line) => substituteVars(line)));
-          print("- Found init script.");
-          // notice: no "currentBlockIndex++". Init is not part of current page.
-          i = endTagIndex;
-          continue;
-
-        } else if (classesTagStart.hasMatch(line)) {
-          /* CLASSES */
-          int endTagIndex;
-          for (int ii = i; ii < inLines.length; ii++) {
-            if (classesTagEnd.hasMatch(inLines[ii])) {
-              endTagIndex = ii;
-              break;
-            }
-          }
-          if (endTagIndex == null)
-            throw new Exception("No end tag for opening <classes> tag at $i found.");
-          classesLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
-          print("- Found classes script.");
-          // notice: no "currentBlockIndex++". Classes are not part of current page.
-          i = endTagIndex;
-          continue;
-
-        } else if (libraryTagStart.hasMatch(line)) {
-          /* LIBRARY */
-          int endTagIndex;
-          for (int ii = i; ii < inLines.length; ii++) {
-            if (libraryTagEnd.hasMatch(inLines[ii])) {
-              endTagIndex = ii;
-              break;
-            }
-          }
-          if (endTagIndex == null)
-            throw new Exception("No end tag for opening <library> tag at $i found.");
-          libraryLines.addAll(inLines.getRange(i+1, endTagIndex-i-1));
-          print("- Found library script.");
-          // notice: no "currentBlockIndex++". Library is not part of current page.
-          i = endTagIndex;
-          continue;
-
         } else {
           /* PAGE - TEXT BLOCK */
           page.blocks.add(
@@ -256,6 +264,17 @@ void parse() {
       }
   });
 }
+
+/**
+  Utility function. Returns a set of integers from [start] to [end] (inclusive).
+  */
+Set<int> range(int start, int end) {
+  Set<int> result = new Set<int>();
+  for (int i=start; i <= end; i++)
+    result.add(i);
+  return result;
+}
+
 
 // replace v_vars to vars["vars"]  TODO: make sure it works in "string literals, too"
 String substituteVars(String str) {
