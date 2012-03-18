@@ -29,6 +29,10 @@
   v_moveLeftHook = new CombatMoveType.Haymaker();
   v_moveDefense = new CombatMoveType.Defense();
   v_moveStandUp = new CombatMoveType.StandUp();
+  v_moveStandUp.on['update'].add((_this, performer, target) {
+      DEBUG("Standing up tillEndOfMove = ${performer.tillEndOfMove}.");
+      DEBUG("Stance of ${performer.name} = ${performer.stance}.");
+  });
   v_moveWithdraw = new CombatMoveType.Withdraw();
 
   v_humanMoves = [
@@ -1224,8 +1228,10 @@ class CombatMoveType extends GameEntity {
     };
 
     update = (Actor performer, Actor target) {
-      if (performer.tillEndOfMove <= (duration / 2).toInt()) // first few timesteps the actor is gathering - his stance doesn't rise yet
+      if (performer.tillEndOfMove <= (duration / 2).toInt()) { // first few timesteps the actor is gathering - his stance doesn't rise yet
+        DEBUG("Standing up!");
         performer.stance += 4;
+      }
     };
 
     start = (Actor performer, Actor target) {
