@@ -675,7 +675,7 @@ class Actor extends GameEntity {
 
     if (tillEndOfMove > 0) {
       if (target != null && !target.alive 
-          && currentMove != null && currentMove.type.isOfType(CombatMoveType.MOVE_DIR_OFFENSIVE)) { // stop attack if actor already dead 
+          && currentMove != null && currentMove.type.offensive) { // stop attack if actor already dead 
         currentMove.on["cancel"].dispatchAll(this, target);
         currentMove = null;
         target = null;
@@ -746,10 +746,12 @@ class Actor extends GameEntity {
             currentMove.type.applyEnd(this, target);
             currentMove.on["end"].dispatchAll();
           }
+        } else {
+          // cannot continue
+          currentMove.on["cancel"].dispatchAll();
+          currentMove = null;
+          return;
         }
-        currentMove.on["cancel"].dispatchAll();
-        currentMove = null;
-        return;
       }
       // AI
       if (!isPlayer) {
@@ -982,14 +984,14 @@ class CombatMoveType extends GameEntity {
       target.report("the blow was hard", negative:true);
       target.stance -= actualStanceDamage;
     }
-    if (target.currentMove != null && !target.currentMove.type.offensive)
-      target.currentMove = null;
+    //if (target.currentMove != null && !target.currentMove.type.offensive)
+    //  target.currentMove = null;
   }
 
   static void defaultApplyDodge (CombatMoveType move, Actor performer, Actor target) {
     target.report("<subject> dodge<s> <object's> ${move.string}", object:performer, positive:true);
-    if (target.currentMove != null && !target.currentMove.type.offensive)
-      target.currentMove = null;
+    //if (target.currentMove != null && !target.currentMove.type.offensive)
+    //  target.currentMove = null;
   }
 
   static void defaultApplyCancel (CombatMoveType move, Actor performer, Actor target) {
