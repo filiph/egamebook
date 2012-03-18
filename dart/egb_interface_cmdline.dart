@@ -44,7 +44,7 @@ class CmdlineInterface implements UserInterface {
     DEBUG_CMD("Command line interface starting.");
     connect(receiveFromScripter).then((SendPort port) {
         DEBUG_CMD("Scripter is now ready! Sending message.");
-        port.send(new Message.Start().toJson(), _receivePort);
+        port.send(new Message.Start().toJson(), _receivePort.toSendPort());
     });
 
     cmdLine = new StringInputStream(stdin);
@@ -62,10 +62,10 @@ class CmdlineInterface implements UserInterface {
       if (message.type == Message.MSG_TEXT_RESULT) {
         DEBUG_CMD("Showing text from scripter.");
         print("\n${message.strContent}\n");
-        _scripterPort.send(new Message.Continue().toJson(), _receivePort);
+        _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_NO_RESULT) {
         DEBUG_CMD("No visible result. Continuing.");
-        _scripterPort.send(new Message.Continue().toJson(), _receivePort);
+        _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
         DEBUG_CMD("We have choices to show!");
         if (message.listContent[0] != "")
@@ -83,7 +83,7 @@ class CmdlineInterface implements UserInterface {
             if (optionNumber > 0 && optionNumber < choices.length)
               _scripterPort.send(
                   new Message.OptionSelected(choices[optionNumber]['hash']).toJson(),
-                  _receivePort
+                  _receivePort.toSendPort()
                   );
           } catch (BadNumberFormatException e) {
             print("Input a number, please!");
