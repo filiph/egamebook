@@ -29,10 +29,6 @@
   v_moveLeftHook = new CombatMoveType.Haymaker();
   v_moveDefense = new CombatMoveType.Defense();
   v_moveStandUp = new CombatMoveType.StandUp();
-  v_moveStandUp.on['update'].add((_this, performer, target) {
-      DEBUG("Standing up tillEndOfMove = ${performer.tillEndOfMove}.");
-      DEBUG("Stance of ${performer.name} = ${performer.stance}.");
-  });
   v_moveWithdraw = new CombatMoveType.Withdraw();
 
   v_humanMoves = [
@@ -513,6 +509,9 @@ class GameEntity {
   String get name() => randomly(names);
 }
 
+/**
+  Actor class: an independent actor in the GameEvent, such as Combat.
+  */
 class Actor extends GameEntity {
   // current state
   bool alive = true;
@@ -683,10 +682,10 @@ class Actor extends GameEntity {
         currentMove.on["cancel"].dispatchAll(this, target);
         currentMove = null;
         target = null;
-      } else if (currentMove != null && currentMove.type.update != null) {
-        if (currentMove.type.canContinue(this, target))
+      } else if (currentMove != null) {
+        if (currentMove.type.canContinue(this, target)) {
           currentMove.on["update"].dispatchAll(this, target);
-        else { // cancel move if it's no longer applicable
+        } else { // cancel move if it's no longer applicable
           currentMove.on["cancel"].dispatchAll(this, target);
           currentMove = null;
         }
@@ -712,7 +711,6 @@ class Actor extends GameEntity {
             if (targetDodged) {
               // DODGE
               target.on["dodge"].dispatchAll(this, target); // dodging is mailny actor's thing
-              currentMove.type.applyDodge(this, target);
               currentMove.on["sufferDodge"].dispatchAll(this, target);
               this.on["sufferDodge"].dispatchAll(this, target);
             } else {
@@ -730,14 +728,12 @@ class Actor extends GameEntity {
               }
               if (targetBlocked) {
                 // BLOCK
-                target.on["block"].dispatchAll(this, target);
                 target.weapon.on["block"].dispatchAll(this, target); // blockin is mailny weapon's thing
-                currentMove.type.applyBlock(this, target);
+                target.on["block"].dispatchAll(this, target);
                 currentMove.on["sufferBlock"].dispatchAll(this, target);
                 this.on["sufferBlock"].dispatchAll(this, target);
               } else {
                 // HIT
-                currentMove.type.applyHit(this, target);
                 currentMove.on["hit"].dispatchAll(this, target);
                 target.armor.on["sufferHit"].dispatchAll(this, target); // being hit is mainly armor's thing
                 target.on["sufferHit"].dispatchAll(this, target);
@@ -747,7 +743,6 @@ class Actor extends GameEntity {
               }
             }
           } else { // non-offensive move ended
-            currentMove.type.applyEnd(this, target);
             currentMove.on["end"].dispatchAll();
           }
         } else {
@@ -769,12 +764,11 @@ class Actor extends GameEntity {
           }
         }
 
-        if (target == null || !moves.some((m) => m.applicable(this,target)) ) {
+        if (target == null || !moves.some((m) => m.isApplicable(this,target)) ) {
           // no target or no combat moves applicable to the target, TODO: try to change target?
           report('<subject> ${randomly(["just stands there", "doesn\'t do anything", "does nothing"])}');
         } else {
           currentMove = chooseMove();
-          currentMove.type.start(this, target);
           currentMove.on["start"].dispatchAll();
         }
       }
@@ -783,7 +777,7 @@ class Actor extends GameEntity {
 
   // List moves
   List<CombatMoveType> getPossibleMoves([int max=1000]) {
-    List<CombatMoveType> possibleMoves = moves.filter((m) => m.applicable(this,target));
+    List<CombatMoveType> possibleMoves = moves.filter((m) => m.isApplicable(this,target));
     if (possibleMoves.length < 2)
       return possibleMoves;
 
@@ -854,6 +848,10 @@ class Player extends Actor {
   }
 }
 
+/**
+  CombatMoveType defines every type of movement, from a simple punch to elaborate
+  sword-fight combos. Only one object of a type exists.
+  */
 class CombatMoveType extends GameEntity {
   /// the basic description of the move
   String string;
@@ -901,33 +899,12 @@ class CombatMoveType extends GameEntity {
   /// The events handler
   CombatEventHandler on;
 
-  /// returns bool, whether this move is applicable given the two actors
-  Function applicable;
+  /// returns bool, whether this move is isApplicable given the two actors
+  Function isApplicable;
 
   /// returns bool, whether this move can continue given the state
   Function canContinue;
 
-  /// reports on start of the move
-  Function start;
-
-  /// gets called every turn
-  Function update;
-
-  /// end of non-offensive move
-  Function applyEnd;
-
-  /// applies and report on success
-  Function applyHit;
-
-  /// applies and report on block
-  Function applyBlock;
-
-  /// applies and report on dodge
-  Function applyDodge;
- 
-  /// applies and reports on a cancelled move
-  Function applyCancel;
- 
   /// returns chance (0.0-1.0) of dodging this move
   Function chanceToDodge;
 
@@ -938,68 +915,14 @@ class CombatMoveType extends GameEntity {
   /// a good combination of low-risk, low-impact, and high-risk, high-impact moves
   Function computeSuitability;
 
+  // Default compute functions
 
-
-  // Default functions
-
-  static bool defaultApplicable (CombatMoveType move, Actor performer, Actor target) {
+  static bool defaultIsApplicable (CombatMoveType move, Actor performer, Actor target) {
     return target.alive; // only perform moves when target is alive (by default)
   }
   
   static bool defaultCanContinue(CombatMoveType move, Actor performer, Actor target) {
     return target.alive;
-  }
-
-  static void defaultStart (CombatMoveType move, Actor performer, Actor target) {
-    String again = (performer.previousMove == move) ? " again" : "";
-    if (!performer.isPlayer) {
-      performer.report("<subject> wind<s> up to ${move.choiceString}$again", endSentence:true, object:target);
-    } else {
-      performer.report("you decide to ${move.choiceString}$again", endSentence:true, object:target);
-    }
-  }
-
-  static void defaultUpdate (CombatMoveType move, Actor performer, Actor target) {
-  }
-
-  static void defaultApplyEnd (CombatMoveType move, Actor performer, Actor target) {
-  }
-
-  static void defaultApplyHit (CombatMoveType move, Actor performer, Actor target, [String hitString]) {
-    if (hitString == null)
-      hitString = move.thirdPartyString;
-    performer.report(hitString, object:target, positive:true);
-    int actualDamage = Math.max(0, move.damage);
-    target.hitpoints -= actualDamage;
-    if (actualDamage == 0 && move.damage != 0)
-      performer.report("it doesn't hurt <object>", object:target, but:true);
-    target.stance -= move.stanceDamage;
-    //if (target.currentMove != null && !target.currentMove.type.offensive)
-    //  target.currentMove = null;
-  }
-
-  static void defaultApplyBlock (CombatMoveType move, Actor performer, Actor target) {
-    target.report("<subject> block<s> <object's> ${move.string}", object:performer, positive:true);
-    int actualStanceDamage = Math.max(
-        0, 
-        (move.stanceDamage / 2).toInt() - target.fighting
-    );
-    if (actualStanceDamage > 0) {
-      target.report("the blow was hard", negative:true);
-      target.stance -= actualStanceDamage;
-    }
-    //if (target.currentMove != null && !target.currentMove.type.offensive)
-    //  target.currentMove = null;
-  }
-
-  static void defaultApplyDodge (CombatMoveType move, Actor performer, Actor target) {
-    target.report("<subject> dodge<s> <object's> ${move.string}", object:performer, positive:true);
-    //if (target.currentMove != null && !target.currentMove.type.offensive)
-    //  target.currentMove = null;
-  }
-
-  static void defaultApplyCancel (CombatMoveType move, Actor performer, Actor target) {
-    performer.report("there's no way <subject> can ${move.choiceString} now", object:target, negative:true);
   }
 
   static double defaultChanceToDodge (CombatMoveType move, Actor performer, Actor target) {
@@ -1022,45 +945,68 @@ class CombatMoveType extends GameEntity {
     }
   }
 
-  void initDefaultFunctions() { //TODO rename to init()
+  // default event handler functions
+
+  static void defaultOnStart (CombatMoveType move, Actor performer, Actor target) {
+    String again = (performer.previousMove == move) ? " again" : "";
+    if (!performer.isPlayer) {
+      performer.report("<subject> wind<s> up to ${move.choiceString}$again", endSentence:true, object:target);
+    } else {
+      performer.report("you decide to ${move.choiceString}$again", endSentence:true, object:target);
+    }
+  }
+
+  /*
+  static void defaultOnUpdate (CombatMoveType move, Actor performer, Actor target) {
+  }
+
+  static void defaultOnEnd (CombatMoveType move, Actor performer, Actor target) {
+  }
+  */
+
+  static void defaultOnHit (CombatMoveType move, Actor performer, Actor target, [String hitString]) {
+    if (hitString == null)
+      hitString = move.thirdPartyString;
+    performer.report(hitString, object:target, positive:true);
+    int actualDamage = Math.max(0, move.damage);
+    target.hitpoints -= actualDamage;
+    if (actualDamage == 0 && move.damage != 0)
+      performer.report("it doesn't hurt <object>", object:target, but:true);
+    target.stance -= move.stanceDamage;
+  }
+
+  static void defaultOnSufferBlock (CombatMoveType move, Actor performer, Actor target) {
+    target.report("<subject> block<s> <object's> ${move.string}", object:performer, positive:true);
+    int actualStanceDamage = Math.max(
+        0, 
+        (move.stanceDamage / 2).toInt() - target.fighting
+    );
+    if (actualStanceDamage > 0) {
+      target.report("the blow was hard", negative:true);
+      target.stance -= actualStanceDamage;
+    }
+  }
+
+  static void defaultOnSufferDodge (CombatMoveType move, Actor performer, Actor target) {
+    target.report("<subject> dodge<s> <object's> ${move.string}", object:performer, positive:true);
+  }
+
+  static void defaultOnCancel (CombatMoveType move, Actor performer, Actor target) {
+    performer.report("there's no way <subject> can ${move.choiceString} now", object:target, negative:true);
+  }
+
+
+  void initDefaultFunctions() {
     on = new CombatEventHandler(this);
 
-    applicable = (Actor performer, Actor target) {
-      return defaultApplicable(this, performer, target);
+    isApplicable = (Actor performer, Actor target) {
+      return defaultIsApplicable(this, performer, target);
     };
 
     canContinue = (Actor performer, Actor target) {
       return defaultCanContinue(this, performer, target);
     };
 
-    start = (Actor performer, Actor target) {
-      defaultStart(this, performer, target);
-    };
-
-    update = (Actor performer, Actor target) {
-      defaultUpdate(this, performer, target);
-    };
-
-    applyEnd = (Actor performer, Actor target) {
-      defaultApplyEnd(this, performer, target);
-    };
-
-    applyHit = (Actor performer, Actor target) {
-      defaultApplyHit(this, performer, target);
-    };
-
-    applyBlock = (Actor performer, Actor target) {
-      defaultApplyBlock(this, performer, target);
-    };
-
-    applyDodge = (Actor performer, Actor target) {
-      defaultApplyDodge(this, performer, target);
-    };
-
-    applyCancel = (Actor performer, Actor target) {
-      defaultApplyCancel(this, performer, target);
-    };
-   
     chanceToDodge = (Actor performer, Actor target) {
       return defaultChanceToDodge(this, performer, target);
     };
@@ -1072,6 +1018,14 @@ class CombatMoveType extends GameEntity {
     computeSuitability = (Actor performer, Actor target) {
       return defaultComputeSuitability(this, performer, target);
     };
+
+    on["start"].add(defaultOnStart);
+    //on["update"].add(defaultOnUpdate);
+    //on["end"].add(defaultOnEnd);
+    on["hit"].add(defaultOnHit);
+    on["sufferBlock"].add(defaultOnSufferBlock);
+    on["sufferDodge"].add(defaultOnSufferDodge);
+    on["cancel"].add(defaultOnCancel);
   }
 
 
@@ -1111,10 +1065,10 @@ class CombatMoveType extends GameEntity {
     baseChanceToDodge = 0.1;
     baseChanceToBlock = 0.3;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       if (performer.stance < 10)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultIsApplicable(this, performer, target);
     };
   }
 
@@ -1134,18 +1088,19 @@ class CombatMoveType extends GameEntity {
     baseChanceToBlock = 0.2;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       if (performer.stance < 20)
         return false;
       if (target.stance < 10)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultIsApplicable(this, performer, target);
     };
 
-    applyHit = (Actor performer, Actor target) {
+    on["hit"].clear();
+    on["hit"].add((_this, Actor performer, Actor target) {
       performer.combat.storyline.add("Boom!", wholeSentence:true, positive:true);
-      defaultApplyHit(this, performer, target, hitString:"<subject> hit<s> <object> in the face");
-    };
+      defaultOnHit(this, performer, target, hitString:"<subject> hit<s> <object> in the face");
+    });
   }
 
   CombatMoveType.Kick() : super() {
@@ -1164,15 +1119,16 @@ class CombatMoveType extends GameEntity {
     baseChanceToBlock = 0.2;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       if (performer.stance < 30 || target.stance < 20)
         return false;
-      return defaultApplicable(this, performer, target);
+      return defaultIsApplicable(this, performer, target);
     };
 
-    applyHit = (Actor performer, Actor target) {
-      defaultApplyHit(this, performer, target, hitString:"<subject> kick<s> <object's> legs");
-    };
+    on["hit"].clear();
+    on["hit"].add((_this, Actor performer, Actor target) {
+      defaultOnHit(this, performer, target, hitString:"<subject> kick<s> <object's> legs");
+    });
   }
 
   CombatMoveType.Defense() : super () {
@@ -1187,16 +1143,16 @@ class CombatMoveType extends GameEntity {
     recovery = 0;
     fightingMod = +2;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       if (target.target != performer)
         return false; // don't parry attacks that don't target you
       if (target.currentMove == null 
           || (target.currentMove.type.damage == 0 && target.currentMove.type.stanceDamage == 0))
         return false; // don't parry no attack and don't parry someone parrying you
-      return defaultApplicable(this, performer, target);
+      return defaultIsApplicable(this, performer, target);
     };
 
-    start = (Actor performer, Actor target) {
+    on["start"].add((_this, Actor performer, Actor target) {
       if (target.isPlayer) {
         performer.report("<subject> braces for <object's> blow", object:target);
       } else if (performer.isPlayer) {
@@ -1204,11 +1160,11 @@ class CombatMoveType extends GameEntity {
       }
       // wait for the blow
       performer.tillEndOfMove = target.tillEndOfMove + 1;
-    };
+    });
 
-    update = (Actor performer, Actor target) {
+    on["update"].add((_this, Actor performer, Actor target) {
       performer.stance += 1;
-    };
+    });
   }
 
   CombatMoveType.StandUp() : super () {
@@ -1223,24 +1179,23 @@ class CombatMoveType extends GameEntity {
     recovery = 0;
     fightingMod = -1;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       return performer.stance < 20; // can only start standing up if not standing up already
     };
 
-    update = (Actor performer, Actor target) {
+    on["update"].add((_this, Actor performer, Actor target) {
       if (performer.tillEndOfMove <= (duration / 2).toInt()) { // first few timesteps the actor is gathering - his stance doesn't rise yet
-        DEBUG("Standing up!");
         performer.stance += 4;
       }
-    };
+    });
 
-    start = (Actor performer, Actor target) {
+    on["start"].add((_this, Actor performer, Actor target) {
       String again = (performer.previousMove == this) ? " again" : "";
       performer.report(randomly(["<subject> gather<s> to stand up$again", "<subject> begin<s> to stand up$again", "<subject> tr<ies> to stand up$again"]));
-    };
+    });
 
     computeSuitability = (Actor performer, Actor target) {
-      return 10; // when this move is applicable, it's probably a good idea to use it
+      return 10; // when this move is isisApplicable, it's probably a good idea to use it
     };
   }
 
@@ -1256,7 +1211,7 @@ class CombatMoveType extends GameEntity {
     recovery = 0;
     fightingMod = +1;
 
-    applicable = (Actor performer, Actor target) {
+    isApplicable = (Actor performer, Actor target) {
       if (!performer.alive)
         return false;
       if (performer.stance < 20)
@@ -1264,16 +1219,22 @@ class CombatMoveType extends GameEntity {
       return true; 
     };
 
-    start = (Actor performer, Actor target) {
+    on["start"].add((_this, Actor performer, Actor target) {
       performer.report(randomly(["<subject> withdraw<s>", "<subject> back<s> away", "<subject> give<s> ground"]));
-    };
+    });
 
-    applyEnd = (Actor performer, Actor other) {
+    on["end"].add((_this, Actor performer, Actor other) {
       performer.stance += 10;
-    };
+    });
   }
 }
 
+/**
+  CurrentCombatMove stores the type of the move ([CombatMoveType]) 
+  and the actors of the move. When an [:on.___:] event is called
+  on CurrentCombatMove, it also runs that same event of the
+  CombatMoveType.
+  */
 class CurrentCombatMove extends GameEntity {
   CombatMoveType type;
   Actor performer;
@@ -1286,7 +1247,13 @@ class CurrentCombatMove extends GameEntity {
   }
 }
 
-
+/**
+  WeaponType stores information and events of all types of weapons.
+  Only one object of a weapon type exists.
+  Every Actor can have only one WeaponType. This makes it easier to manage
+  Storyline reporting. Therefore, there can be WeaponTypes such as
+  Barehanded, SwordAndShield, OneHandOnly, and such.
+  */
 class WeaponType extends GameEntity {
   int piercing;
   int hardness;
@@ -1307,6 +1274,11 @@ class WeaponType extends GameEntity {
 
 }
 
+/**
+  ArmorType holds information about the armor of the Actor. Usual 
+  AromrTypes include: Clothes, Overall, LightArmor, but also ThickSkin, 
+  Thorax, etc.
+  */
 class ArmorType extends GameEntity {
   int hardness;
   CombatEventHandler on;
@@ -1322,6 +1294,13 @@ class ArmorType extends GameEntity {
   }
 }
 
+/**
+  CombatEvent stores all callbacks assigned for a given event and given
+  GameEntity. It behaves like a Queue of Functions, but there are differences:
+  1) you can dispatchAll(), 2) the class keeps a pointer to the GameEntity,
+  3) when the GameEntity is a CurrentCombatMove, its CombatMoveType's on.___
+  event is also called.
+  */
 class CombatEvent {
   Queue<Function> functions;
 
@@ -1340,6 +1319,9 @@ class CombatEvent {
   }
   void addLast(Function f) {
     functions.addLast(f);
+  }
+  void clear() {
+    functions.clear();
   }
 
   Function get first() => functions.first();
@@ -1366,9 +1348,14 @@ class CombatEvent {
   }
 }
 
-/// Every object has "on" member of this class.
-/// It's used like this: on.hit.add((performer, target) { ... });
-/// Then fired with on.hit.dispatch();
+/** 
+  Every object can have an "on" member of class CombatEventHandler.
+  Objects can then add listeners/handlers by doing 
+  [: on["hit"].add((_this, performer, target) { ... }); :]
+
+  When an event occurs, all the listeners are called using
+  [: on["hit"].dispatchAll(); :]
+  */
 class CombatEventHandler {
 
   // reference to the caller object
@@ -1477,7 +1464,7 @@ class Combat extends GameEntity implements LoopedEvent {
         if (!possibleMoves.isEmpty()) {
           possibleMoves.sort((a,b) => a.type - b.type);
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.type.start(_player, _player.target); }));
+              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.on["start"].dispatchAll(_player, _player.target); }));
           });
         }
         // let player target someone else
