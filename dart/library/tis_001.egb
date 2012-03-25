@@ -1,30 +1,76 @@
 <init>
-  v_weaponHands = new WeaponType({
-      "piercing": 0,
-      "hardness": 0
+  // TODO: create HandsCutOff and OneHandCutOff
+  // TODO: weapons have pointer to the weapon they become when pirced
+  // create new weapon: bare hands
+  v_weaponHands = new WeaponType(
+      name: "hand",
+      piercing: 0,
+      hardness: 0
+  );
+
+  // create new weapon: sword
+  v_weaponSword = new WeaponType(
+      name: "sword",
+      piercing: 3,
+      hardness: 3
+  );
+
+  // create new armor: clothes
+  v_armorClothes = new ArmorType(
+      name: "clothes",
+      hardness: 0
+  );
+
+  v_armorHelmet = new ArmorType(
+      name: "helmet",
+      hardness: 1,
+      coveringTargets: CombatMoveType.MOVE_TRG_HEAD
+  );
+
+  // move: foot sweep
+  v_moveFootSweep = new CombatMoveType(
+      type: CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT
+            |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_STANCE
+            |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
+      string: "foot sweep",
+      choiceString: "sweep <object's> feet",
+      thirdPartyString: "<subject> undercut<s> <object's> legs",
+      duration: 6,
+      recovery: 4,
+      stanceDamage: 25,
+      baseChanceToDodge: 0.4,
+      baseChanceToBlock: 0.2,
+      fightingMod: -1
+  );
+
+  v_moveFootSweep.on["hit"].add((_this, e) {
+      // TODO: report
+      e.target.currentMove = null;
   });
 
-  v_weaponHands.on["block"].add((_this, performer, target) {
-      target.report("<subject> meet<s> <object's> move with <subject's> hands", object:performer, positive:true);
-  });
+  v_moveFootSweep.isApplicable = v_moveFootSweep.canContinue = (performer, target) {
+    return performer.stance >= 10 && target.stance >= 20;
+  };
 
-  v_moveFootSweep = new CombatMoveType({
-      "type": CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT|CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_STANCE|CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
-      "string": "foot sweep",
-      "choiceString": "sweep <object's> feet",
-      "thirdPartyString": "<subject> undercut<s> <object's> legs",
-      "duration": 6,
-      "recovery": 4,
-      "stanceDamage": 25,
-      "baseChanceToDodge": 0.2,
-      "baseChanceToBlock": 0.1,
-      "fightingMod": -1
-  });
+  // TODO: sword weapon + 2 basic moves
 
-  v_moveFootSweep.on["hit"].add((_this, performer, target) {
-      target.currentMove = null;
-  });
+  v_moveSlash = new CombatMoveType(
+      type: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_RIGHT
+            |CombatMoveType.MOVE_LMB_HAND|CombatMoveType.MOVE_EFF_HITPOINTS
+            |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
+      string: "slash",
+      choiceString: "slash <object's> body",
+      thirdPartyString: "<subject> slash<es> <object's> body",
+      duration: 5,
+      recovery: 3,
+      damage: 10,
+      stanceDamage: 5,
+      baseChanceToDodge: 0.4,
+      baseChanceToBlock: 0.7,
+      fightingMod: -1
+  );
 
+  // TODO: get rid of
   v_moveStomach = new CombatMoveType.Hand();
   v_moveLeftHook = new CombatMoveType.Haymaker();
   v_moveDefense = new CombatMoveType.Defense();
@@ -41,8 +87,10 @@
   ];
 
   v_player = new Player();
-  v_player.moves.addAll(v_humanMoves);
-  v_player.weapon = v_weaponHands;
+  v_player.moves.addAll([v_moveSlash, v_moveStandUp, v_moveWithdraw]);
+  //v_player.weapon = v_weaponHands;
+  v_player.weapon = v_weaponSword;
+
   v_player.fighting = 1;
 </init>
 
@@ -67,8 +115,9 @@ You encounter a worthy opponent: a homeless man!
   v_man.moves.addAll(v_humanMoves);
   v_man.weapon = v_weaponHands;
   v_man.fighting = 0;
-  v_man.names = ["the hobo", "the homeless man", "the man"];
-  v_man.on["sufferHit"].add((_this, performer, target) { _this.report("<subject> looks very surprised"); });
+  v_man.names = ["the drunkard", "the drunk man", "the man"];
+  v_man.on["sufferHit"].add((_this, e) { _this.report("<subject> looks very surprised"); });
+  v_man.armors.add(v_armorHelmet);
 </dart>
 
 He charges at you!
@@ -193,6 +242,8 @@ You died like the bitch you are.
 void DEBUG(String str) {
   print(str);
 }
+
+int GLOBAL_HASH_I = 0;
 
 Dynamic randomly(List choices) {
   num number = choices.length;
@@ -329,6 +380,7 @@ class Storyline {
   bool oppositeSentiment(int i, int j) {
     if (!valid(i) || !valid(j))
       return false;
+    // TODO: same subject(i) as object(j), one positive, the other negative
     if (!same('subject', i, j))
       return false;
     if (reports[i]["positive"] && reports[j]["negative"])
@@ -369,7 +421,7 @@ class Storyline {
   static String getString(String str, [Actor subject, Actor object]) {
     String result = str;
     if (subject != null) {
-      if (subject.isPlayer) { // don't talk like a robot: "player attack wolf", TODO: Storyline.YOU instead?
+      if (subject.pronoun == YOU) { // don't talk like a robot: "player attack wolf"
         result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
         result = result.replaceAll(VERB_S, "");
@@ -498,12 +550,16 @@ class Storyline {
   }
 }
 
-class GameEntity {
+class GameEntity implements Hashable {
   List <String> names;
   Pronoun pronoun = Storyline.IT;
 
   GameEntity() {
     names = new List();
+  }
+  
+  int hashCode() {
+    return GLOBAL_HASH_I++;
   }
 
   String get name() => randomly(names);
@@ -519,7 +575,7 @@ class Actor extends GameEntity {
   int team = 2; // actors are on team 2 (Enemy) by default
   int _hitpoints;
   // from 0 = lying on the ground to 50 = professional combat stance
-  // 0=lying, 10=on_four, 20=almost_falling, 30=shaken, 40=firm_stance, 50=pro_stance
+  // 0=lying, 10=on_knees, 20=almost_falling, 30=shaken, 40=firm_stance, 50=pro_stance
   int _stance;  
   List<String> stanceUpStrings;
   List<String> stanceDownStrings;
@@ -527,7 +583,7 @@ class Actor extends GameEntity {
   CurrentCombatMove _currentMove;
   CombatMoveType previousMove; // keeps track of previous move's type so that actors don't do the same thing over and over again
   WeaponType weapon;
-  ArmorType armor;
+  Set<ArmorType> armors;
 
   int tillEndOfMove = 0;
   bool recoveringFromMove = false;
@@ -535,14 +591,16 @@ class Actor extends GameEntity {
   Combat combat;
   Actor _target;
 
-  CombatEventHandler on;
+  CombatCallbackHandler on;
 
   // an utility function that prints to the combat's storyline, pre-filling this actor as the subject
-  void report(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false, bool wholeSentence=false]) {
+  void report(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false, bool wholeSentence=false, bool reportOnlyOnAlive=true]) {
     if (combat == null)
       return;
     if (subject == null)
       subject = this;
+    if (!subject.alive && reportOnlyOnAlive)
+      return;
     combat.storyline.add(str, subject:subject, object:object, but:but, positive:positive, negative:negative, endSentence:endSentence, startSentence:startSentence, wholeSentence:wholeSentence);
   }
 
@@ -554,6 +612,15 @@ class Actor extends GameEntity {
       return fighting - stanceMod - hitpointsMod;
     else
       return fighting - stanceMod - hitpointsMod + currentMove.type.fightingMod;
+  }
+
+  int get modifiedBlocking() => modifiedFighting + weapon.blockingMod;
+  int get modifiedDodging() {
+    int value = dodging;
+    for (ArmorType armor in armors) {
+      value += armor.dodgingMod;
+    }
+    return value;
   }
 
   CurrentCombatMove get currentMove() => _currentMove;
@@ -570,28 +637,19 @@ class Actor extends GameEntity {
       _currentMove = null;
     } else {
       _currentMove = new CurrentCombatMove(value, this, target);
-      tillEndOfMove = _currentMove.type.duration - (Math.random() * 2).round().toInt(); // speed gives a chance to substract from a move's duration
+      tillEndOfMove = _currentMove.type.duration - (Math.random() * 2).round().toInt(); // duration will vary slightly (TODO: TBD)
+      _currentMove.on["start"].dispatchAll(new CombatEvent.fromMove(_currentMove));
     }
   }
 
   int get hitpoints() => _hitpoints;
   void set hitpoints(int value) {
     if (value <= 0) {
-      alive = false;
       on["die"].dispatchAll();
-      report("<subject> ${randomly(['pass<es> out','lose<s> consciousness','black<s> out','go<es> down'])}", negative:true);
+      alive = false;
       return;
     }
-    if (value < _hitpoints && value == 1)
-      report("<subject> looks like hell", negative:true);
-    else if (_hitpoints > 3 && (value == 2 || value == 3)) {
-      on["update"].add((Actor a) {
-          if (a.combat.time % 12 == 6)
-            if (randomly([true, false]))
-              a.report("blood is dripping into <subject's> eyes", negative:true);
-      });
-      report("<subject> <is> badly hurt", negative:true);
-    }
+
     if (value < _hitpoints) {
       on["hitpointsDown"].dispatchAll();
       if (currentMove != null)
@@ -600,6 +658,12 @@ class Actor extends GameEntity {
       on["hitpointsUp"].dispatchAll();
       if (currentMove != null)
         currentMove.on["hitpointsUp"].dispatchAll();
+    }
+
+    int almostDyingThreshold = Math.min(3, (maxHitpoints / 3).toInt());
+    if (_hitpoints > almostDyingThreshold
+        && value < almostDyingThreshold) {
+      on["almostDying"].dispatchAll();
     }
     _hitpoints = Math.min(value, maxHitpoints);
   }
@@ -635,10 +699,25 @@ class Actor extends GameEntity {
     previousMove = null;
   }
 
+  static void defaultOnAlmostDying(Actor _this) {
+    // TODO: get rid of or make more generic
+    _this.on["update"].add((Actor a) {
+        if (a.combat.time % 12 == 6)
+          if (randomly([true, false]))
+            a.report("blood is dripping into <subject's> eyes", negative:true);
+    });
+    _this.report("<subject> <is> badly hurt", negative:true);
+  }
+
+  static void defaultOnDie(Actor _this) {
+    _this.report("<subject> ${randomly(['pass<es> out','lose<s> consciousness','black<s> out','go<es> down'])}", negative:true, reportOnlyOnAlive:false);
+  }
+
+  // Ctor.
   Actor() : super() {
-    on = new CombatEventHandler(this);
+    on = new CombatCallbackHandler(this);
     weapon = new WeaponType();
-    armor = new ArmorType();
+    armors = new Set<ArmorType>();
 
     // init with defaults
     names = ["actor"];
@@ -663,87 +742,149 @@ class Actor extends GameEntity {
         "<subject> lose<s> <subjectPronoun's> professional stance",
         "" // no need for this string (yet?) - nowhere to fall from
     ];
+
+    on["almostDying"].add(defaultOnAlmostDying);
+    on["die"].add(defaultOnDie);
   }
 
+  /// Main update function of the Actor. This is where most
+  /// of the action takes place.
   void update() {
     if (!alive)
       return;
 
     on["update"].dispatchAll();
 
-    if (!alive) // make sure actor doesn't move after being poisoned to death, for example
+    // make sure actor doesn't move after being poisoned to death 
+    // in on["update"] above, for example
+    if (!alive) 
       return;
 
     tillEndOfMove--; // just let the time pass
 
-    if (tillEndOfMove > 0) {
-      if (target != null && !target.alive 
-          && currentMove != null && currentMove.type.offensive) { // stop attack if actor already dead 
-        currentMove.on["cancel"].dispatchAll(this, target);
+    if (tillEndOfMove > 0 && currentMove != null) {
+      // move still in progress
+      CombatEvent e = new CombatEvent.fromMove(currentMove);
+      if (target != null && !target.alive && currentMove.type.isOffensive) {
+        // actor is already dead and we're doing an offensive move
+        currentMove.on["cancel"].dispatchAll(e);
         currentMove = null;
         target = null;
-      } else if (currentMove != null) {
+        return;
+      } else {
         if (currentMove.type.canContinue(this, target)) {
-          currentMove.on["update"].dispatchAll(this, target);
-        } else { // cancel move if it's no longer applicable
-          currentMove.on["cancel"].dispatchAll(this, target);
+          currentMove.on["update"].dispatchAll(e);
+        } else {
+          // move is no longer applicable
+          currentMove.on["cancel"].dispatchAll(e);
           currentMove = null;
+          return;
         }
       }
-    } else {
+    } else if (tillEndOfMove <= 0) {
       // effect of finished move
       if (currentMove != null) {
+        CombatEvent e = new CombatEvent.fromMove(currentMove);
         if (currentMove.type.canContinue(this, target)) {
-          if (currentMove.type.isOfType(CombatMoveType.MOVE_DIR_OFFENSIVE)) {
+          if (currentMove.type.isOffensive) {
             // resolve if target dodged the attack. Difference between fighting skills
             // means extra tries (throws) for the party that has the higher number
+            // TODO: make the throws into a function, or even better compute probability
+            // TODO: tbd move all chance calc (incl. modFighting) to chanceToDodge?
             double chance = currentMove.type.chanceToDodge(this, target);
-            int throws = 1 + (this.fighting - target.modifiedFighting).abs();
+            int throws = 1 + (this.modifiedFighting - target.modifiedDodging).abs();
             bool targetDodged;
             while (throws > 0) {
               targetDodged = Math.random() < chance;
-              if (targetDodged && (target.modifiedFighting >= this.fighting))
+              if (targetDodged && (target.modifiedDodging >= this.modifiedFighting))
                 break;  // if target is more skillfull than attacker and he dodged once, this is it
-              if (!targetDodged && (this.fighting >= target.modifiedFighting))
+              if (!targetDodged && (this.modifiedFighting >= target.modifiedDodging))
                 break;  // similar here
               throws--;
             }
             if (targetDodged) {
-              // DODGE
-              target.on["dodge"].dispatchAll(this, target); // dodging is mailny actor's thing
-              currentMove.on["sufferDodge"].dispatchAll(this, target);
-              this.on["sufferDodge"].dispatchAll(this, target);
+              // DODGED
+              // TODO: apply e.chance, luckUsed etc.
+              target.on["dodge"].dispatchAll(e); 
+              currentMove.on["sufferDodge"].dispatchAll(e); // main
+              this.on["sufferDodge"].dispatchAll(e);
+              currentMove = null;
+              return;
             } else {
               // same as above, but for blocks
               chance = currentMove.type.chanceToBlock(this, target);
-              throws = 1 + (this.fighting - target.modifiedFighting).abs();
+              throws = 1 + (this.modifiedFighting - target.modifiedBlocking).abs();
               bool targetBlocked;
               while (throws > 0) {
                 targetBlocked = Math.random() < chance;
-                if (targetBlocked && (target.modifiedFighting >= this.fighting))
+                if (targetBlocked && (target.modifiedBlocking >= this.modifiedFighting))
                   break;
-                if (!targetBlocked && (this.fighting >= target.modifiedFighting))
+                if (!targetBlocked && (this.modifiedFighting >= target.modifiedBlocking))
                   break;
                 throws--;
               }
               if (targetBlocked) {
-                // BLOCK
-                target.weapon.on["block"].dispatchAll(this, target); // blockin is mailny weapon's thing
-                target.on["block"].dispatchAll(this, target);
-                currentMove.on["sufferBlock"].dispatchAll(this, target);
-                this.on["sufferBlock"].dispatchAll(this, target);
+                // BLOCKED
+                // TODO: apply e.chance, luckUsed etc.
+                currentMove.on["sufferMeetWeapon"].dispatchAll(e);
+                if (target.weapon.hardness >= this.weapon.piercing) {
+                  currentMove.on["sufferBlock"].dispatchAll(e); // main
+                } else {
+                  // blocking weapon is too weak and breaks
+                  target.weapon.on["sufferPierced"].dispatchAll(e);
+                  if (target.weapon.weaponWhenPierced != null)
+                    target.weapon = target.weapon.weaponWhenPierced;
+                  else
+                    DEBUG("Warning: weapon ${target.weapon.name} doesn't have 'weaponWhenPierced' defined.");
+                }
+                target.on["block"].dispatchAll(e);
+                this.on["sufferBlock"].dispatchAll(e);
+                currentMove = null;
+                return;
               } else {
                 // HIT
-                currentMove.on["hit"].dispatchAll(this, target);
-                target.armor.on["sufferHit"].dispatchAll(this, target); // being hit is mainly armor's thing
-                target.on["sufferHit"].dispatchAll(this, target);
-                if (target.currentMove != null)
-                  target.currentMove.on["sufferHit"].dispatchAll(this, target);
-                this.on["hit"].dispatchAll(this, target);
+                bool stoppedByArmor = false;
+
+                for (ArmorType armor in target.armors) {
+                  if (!currentMove.type.isOfType(armor.coveringEffects))
+                    continue;  // armor has no effect here
+                  if (!currentMove.type.isOfType(armor.coveringTargets))
+                    continue;  // armor doesn't cover the target of this move
+                  if (!currentMove.type.isOfType(armor.coveringSides))
+                    continue;  // armor doesn't cover the side of this move
+
+                  if (move.isHitpointsDamaging) {
+                    if (armor.hardness > this.weapon.piercing) {
+                      // DEFLECT
+                      stoppedByArmor = true;
+                      e.armor = armor;
+                      currentMove.on["sufferDeflect"].dispatchAll(e); // main
+                      armor.on["deflect"].dispatchAll(e);
+                      target.on["deflect"].dispatchAll(e);
+                      this.on["sufferDeflect"].dispatchAll(e);
+                      break;
+                    }
+                  }
+                  // TODO: armor against stance damage?
+                }
+                if (!stoppedByArmor) {
+                  // HIT PROPER
+                  // TODO: apply e.chance, luckUsed etc.
+                  currentMove.on["hit"].dispatchAll(e); // main
+                  target.on["sufferHit"].dispatchAll(e);
+                  if (target.currentMove != null)
+                    target.currentMove.on["sufferHit"].dispatchAll(e);
+                  this.on["hit"].dispatchAll(e);
+                }
+                currentMove = null;
+                return;
               }
             }
-          } else { // non-offensive move ended
+          } else {
+            // non-offensive move ended
             currentMove.on["end"].dispatchAll();
+            currentMove = null;
+            return;
           }
         } else {
           // cannot continue
@@ -769,7 +910,6 @@ class Actor extends GameEntity {
           report('<subject> ${randomly(["just stands there", "doesn\'t do anything", "does nothing"])}');
         } else {
           currentMove = chooseMove();
-          currentMove.on["start"].dispatchAll();
         }
       }
     }
@@ -837,6 +977,8 @@ class Actor extends GameEntity {
   int maxStance = 45; // the best stance this actor can muster
   int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
   int fighting = 0; // 1 = normal person, +x = number of extra block/dodge throws per turn
+  int blocking = 0; // like fighting, but will be modified by weapon type
+  int dodging = 0; // like fighting, but will be modified by armor(s)
 }
 
 class Player extends Actor {
@@ -865,39 +1007,59 @@ class CombatMoveType extends GameEntity {
   int recovery; // number of turns it gets to start a new move again
   int damage = 0;
   int stanceDamage = 0;
-  double baseChanceToDodge = 1.0;
-  double baseChanceToBlock = 1.0;
+  double baseChanceToDodge = 0.0;
+  double baseChanceToBlock = 0.0;
 
   // modifiers to move's performer. Many moves will make it temporarily harder to block and dodge
   // defense moves will make it easier (positive number)
   int fightingMod = 0;
 
+  // type bits of the move
   int type = 0x0;
 
+  // target(s) of the move
   static final int MOVE_TRG_HEAD = 1<<1;
-  static final int MOVE_TRG_BODY = 1<<2;
-  static final int MOVE_TRG_WAIST = 1<<3;
-  static final int MOVE_TRG_LEGS = 1<<4;
-  static final int MOVE_FRM_FRONT = 1<<5;
-  static final int MOVE_FRM_LEFT = 1<<6;
-  static final int MOVE_FRM_RIGHT = 1<<7;
-  static final int MOVE_LMB_HAND = 1<<8;
-  static final int MOVE_LMB_LEG = 1<<9;
-  static final int MOVE_LMB_HEAD = 1<<10;
-  static final int MOVE_EFF_HITPOINTS = 1<<11;
-  static final int MOVE_EFF_STANCE = 1<<12;
-  static final int MOVE_PRI_QUICK = 1<<13;
-  static final int MOVE_PRI_DAMAGE = 1<<14;
-  static final int MOVE_DIR_OFFENSIVE = 1<<15;
-  static final int MOVE_DIR_DEFENSIVE = 1<<16;
+  static final int MOVE_TRG_NECK = 1<<2;
+  static final int MOVE_TRG_ARMS = 1<<3;
+  static final int MOVE_TRG_BODY = 1<<4;
+  static final int MOVE_TRG_LEGS = 1<<5;
+  static final int MOVE_TRG_ALL = MOVE_TRG_HEAD|MOVE_TRG_NECK|MOVE_TRG_ARMS|MOVE_TRG_BODY|MOVE_TRG_LEGS;
+
+  // directions of the move
+  static final int MOVE_FRM_FRONT = 1<<6;
+  static final int MOVE_FRM_BEHIND = 1<<7;
+  static final int MOVE_FRM_LEFT = 1<<8;
+  static final int MOVE_FRM_RIGHT = 1<<9;
+  static final int MOVE_FRM_ALL = MOVE_FRM_FRONT|MOVE_FRM_BEHIND|MOVE_FRM_LEFT|MOVE_FRM_RIGHT;
+
+  // limbs used (primarily) for the move by the performer
+  static final int MOVE_LMB_HAND = 1<<10;
+  static final int MOVE_LMB_LEG = 1<<11;
+  static final int MOVE_LMB_HEAD = 1<<12;
+  static final int MOVE_LMB_SPECIAL = 1<<13; // e.g. tail
+
+  // move damages {hitpoints|stance}?
+  static final int MOVE_EFF_HITPOINTS = 1<<14;
+  static final int MOVE_EFF_STANCE = 1<<15;
+  static final int MOVE_EFF_ALL = MOVE_EFF_HITPOINTS|MOVE_EFF_STANCE;
+
+  // priority: quicker or more damage?
+  static final int MOVE_PRI_QUICK = 1<<16;
+  static final int MOVE_PRI_DAMAGE = 1<<17;
+
+  // defensive or offensive move
+  static final int MOVE_DIR_OFFENSIVE = 1<<18;
+  static final int MOVE_DIR_DEFENSIVE = 1<<19;
 
   // utility function. Returns true if this CombatMoveType is (at least partially) of type otherType.
   bool isOfType(int otherType) => (type & otherType) != 0;
 
-  bool get offensive() => isOfType(MOVE_DIR_OFFENSIVE);
+  bool get isOffensive() => isOfType(MOVE_DIR_OFFENSIVE);
+  bool get isHitpointsDamaging() => isOfType(MOVE_EFF_HITPOINTS);
+  bool get isStanceDamaging() => isOfType(MOVE_EFF_STANCE);
 
   /// The events handler
-  CombatEventHandler on;
+  CombatCallbackHandler on;
 
   /// returns bool, whether this move is isApplicable given the two actors
   Function isApplicable;
@@ -915,89 +1077,102 @@ class CombatMoveType extends GameEntity {
   /// a good combination of low-risk, low-impact, and high-risk, high-impact moves
   Function computeSuitability;
 
-  // Default compute functions
+  /* 
+     Default compute functions
+   */
 
-  static bool defaultIsApplicable (CombatMoveType move, Actor performer, Actor target) {
-    return target.alive; // only perform moves when target is alive (by default)
+  static bool defaultIsApplicable (CombatMoveType _this, Actor performer, Actor target) {
+    return true;
   }
   
-  static bool defaultCanContinue(CombatMoveType move, Actor performer, Actor target) {
-    return target.alive;
+  static bool defaultCanContinue(CombatMoveType _this, Actor performer, Actor target) {
+    return true;
   }
 
-  static double defaultChanceToDodge (CombatMoveType move, Actor performer, Actor target) {
-    return move.baseChanceToDodge; 
+  // TODO: move all chance calucalation to here
+  static double defaultChanceToDodge (CombatMoveType _this, Actor performer, Actor target) {
+    return _this.baseChanceToDodge; 
   }
 
-  static double defaultChanceToBlock (CombatMoveType move, Actor performer, Actor target) {
-    return move.baseChanceToBlock; 
+  static double defaultChanceToBlock (CombatMoveType _this, Actor performer, Actor target) {
+    return _this.baseChanceToBlock; 
   }
 
-  static int defaultComputeSuitability (CombatMoveType move, Actor performer, Actor target) {
-    if (move.offensive) {
-      int value = move.damage + (move.stanceDamage / 5).toInt();
-      value += ((1 - move.chanceToDodge(performer, target)) * (1 - move.chanceToBlock(performer, target)) * 10).toInt();
+  static int defaultComputeSuitability (CombatMoveType _this, Actor performer, Actor target) {
+    if (_this.isOffensive) {
+      // TODO: revisit and make it better
+      int value = _this.damage + (_this.stanceDamage / 5).toInt();
+      value *= ((1 - _this.chanceToDodge(performer, target)) * (1 - _this.chanceToBlock(performer, target)) * 10).toInt();
       if (performer.previousMove != null) // similar moves as the last one get minus points
-        value -= countBits(move.type & performer.previousMove.type);
+        value -= countBits(_this.type & performer.previousMove.type);
       return value;
     } else {
-      return move.fightingMod;
+      // TODO: defensive suitability
+      return _this.fightingMod;
     }
   }
 
-  // default event handler functions
+  /* 
+     Default event handler functions
+   */
 
-  static void defaultOnStart (CombatMoveType move, Actor performer, Actor target) {
-    String again = (performer.previousMove == move) ? " again" : "";
-    if (!performer.isPlayer) {
-      performer.report("<subject> wind<s> up to ${move.choiceString}$again", endSentence:true, object:target);
+  static void defaultOnStart (CombatMoveType _this, CombatEvent e) {
+    String again = (e.performer.previousMove == _this) ? " again" : "";
+    if (!e.performer.isPlayer) {
+      e.performer.report("<subject> wind<s> up to ${_this.choiceString}$again", endSentence:true, object:e.target);
     } else {
-      performer.report("you decide to ${move.choiceString}$again", endSentence:true, object:target);
+      e.performer.report("you decide to ${_this.choiceString}$again", endSentence:true, object:e.target);
     }
   }
 
   /*
-  static void defaultOnUpdate (CombatMoveType move, Actor performer, Actor target) {
+  static void defaultOnUpdate (CombatMoveType move, CombatEvent e) {
   }
 
-  static void defaultOnEnd (CombatMoveType move, Actor performer, Actor target) {
+  static void defaultOnEnd (CombatMoveType move, CombatEvent e) {
   }
   */
 
-  static void defaultOnHit (CombatMoveType move, Actor performer, Actor target, [String hitString]) {
-    if (hitString == null)
-      hitString = move.thirdPartyString;
-    performer.report(hitString, object:target, positive:true);
-    int actualDamage = Math.max(0, move.damage);
-    target.hitpoints -= actualDamage;
-    if (actualDamage == 0 && move.damage != 0)
-      performer.report("it doesn't hurt <object>", object:target, but:true);
-    target.stance -= move.stanceDamage;
+  static void defaultOnSufferDodge (CombatMoveType _this, CombatEvent e) {
+    e.target.report("<subject> dodge<s> <object's> ${_this.string}", object:e.performer, positive:true);
   }
 
-  static void defaultOnSufferBlock (CombatMoveType move, Actor performer, Actor target) {
-    target.report("<subject> block<s> <object's> ${move.string}", object:performer, positive:true);
+  static void defaultOnSufferMeetWeapon (CombatMoveType _this, CombatEvent e) {
+    // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
+    e.target.report("<subject> meet<s> <object's> move with <subject's> ${e.performer.weapon.name}", object:e.performer, positive:true);
+  }
+
+  static void defaultOnSufferBlock (CombatMoveType _this, CombatEvent e) {
+    e.target.report("<subject> deflect<s> it", object:e.performer, positive:true);
     int actualStanceDamage = Math.max(
         0, 
-        (move.stanceDamage / 2).toInt() - target.fighting
+        (_this.stanceDamage / 2).toInt() - e.target.modifiedFighting
     );
     if (actualStanceDamage > 0) {
-      target.report("the blow was hard", negative:true);
-      target.stance -= actualStanceDamage;
+      e.target.report("the blow was hard", negative:true);
+      e.target.stance -= actualStanceDamage;
     }
   }
 
-  static void defaultOnSufferDodge (CombatMoveType move, Actor performer, Actor target) {
-    target.report("<subject> dodge<s> <object's> ${move.string}", object:performer, positive:true);
+  static void defaultOnSufferDeflect (CombatMoveType _this, CombatEvent e) {
+    e.performer("<subject's> ${e.weapon.name} bounces off <object's> ${e.armor.name}", object:e.target, but:true, negative:true);
+    e.target.stance -= _this.stanceDamage;
   }
 
-  static void defaultOnCancel (CombatMoveType move, Actor performer, Actor target) {
-    performer.report("there's no way <subject> can ${move.choiceString} now", object:target, negative:true);
+  static void defaultOnHit (CombatMoveType _this, CombatEvent e) {
+    // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
+    e.performer.report(_this.thirdPartyString, object:e.target, positive:true);
+    e.target.hitpoints -= _this.damage;
+    e.target.stance -= _this.stanceDamage;
+  }
+
+  static void defaultOnCancel (CombatMoveType _this, CombatEvent e) {
+    e.performer.report("there's no way <subject> can ${_this.choiceString} now", object:e.target, negative:true);
   }
 
 
   void initDefaultFunctions() {
-    on = new CombatEventHandler(this);
+    on = new CombatCallbackHandler(this);
 
     isApplicable = (Actor performer, Actor target) {
       return defaultIsApplicable(this, performer, target);
@@ -1023,28 +1198,29 @@ class CombatMoveType extends GameEntity {
     //on["update"].add(defaultOnUpdate);
     //on["end"].add(defaultOnEnd);
     on["hit"].add(defaultOnHit);
+    on["sufferDeflect"].add(defaultOnSufferDeflect);
     on["sufferBlock"].add(defaultOnSufferBlock);
+    on["sufferMeetWeapon"].add(defaultOnSufferMeetWeapon);
     on["sufferDodge"].add(defaultOnSufferDodge);
     on["cancel"].add(defaultOnCancel);
   }
 
 
-  CombatMoveType(Map<String,Dynamic> options) : super() {
-    initDefaultFunctions();
+  CombatMoveType([
+      this.string = "UNNAMED MOVE",
+      this.choiceString = "USE UNNAMED MOVE",
+      this.thirdPartyString = "USES UNNAMED MOVE",
+      this.type = 0x0,
+      this.duration,
+      this.recovery,
+      this.damage = 0,
+      this.stanceDamage = 0,
+      this.baseChanceToBlock = 1.0,
+      this.baseChanceToDodge = 1.0,
+      this.fightingMod = 0
+      ]) : super() {
 
-    if (options != null) {
-      type = options["type"] == null ? type : options["type"];
-      string = options["string"] == null ? string : options["string"];
-      choiceString = options["choiceString"] == null ? choiceString : options["choiceString"];
-      thirdPartyString = options["thirdPartyString"] == null ? thirdPartyString : options["thirdPartyString"];
-      duration = options["duration"] == null ? duration : options["duration"];
-      recovery = options["recovery"] == null ? recovery : options["recovery"];
-      damage = options["damage"] == null ? damage : options["damage"];
-      stanceDamage = options["stanceDamage"] == null ? stanceDamage : options["stanceDamage"];
-      baseChanceToBlock = options["baseChanceToBlock"] == null ? baseChanceToBlock : options["baseChanceToBlock"];
-      baseChanceToDodge = options["baseChanceToDodge"] == null ? baseChanceToDodge : options["baseChanceToDodge"];
-      fightingMod = options["fightingMod"] == null ? fightingMod : options["fightingMod"];
-    }
+    initDefaultFunctions();
   }
 
 
@@ -1096,10 +1272,8 @@ class CombatMoveType extends GameEntity {
       return defaultIsApplicable(this, performer, target);
     };
 
-    on["hit"].clear();
-    on["hit"].add((_this, Actor performer, Actor target) {
-      performer.combat.storyline.add("Boom!", wholeSentence:true, positive:true);
-      defaultOnHit(this, performer, target, hitString:"<subject> hit<s> <object> in the face");
+    on["hit"].add((_this, CombatEvent e) {
+      e.combat.storyline.add("Boom!", wholeSentence:true, positive:true);
     });
   }
 
@@ -1124,11 +1298,6 @@ class CombatMoveType extends GameEntity {
         return false;
       return defaultIsApplicable(this, performer, target);
     };
-
-    on["hit"].clear();
-    on["hit"].add((_this, Actor performer, Actor target) {
-      defaultOnHit(this, performer, target, hitString:"<subject> kick<s> <object's> legs");
-    });
   }
 
   CombatMoveType.Defense() : super () {
@@ -1152,18 +1321,19 @@ class CombatMoveType extends GameEntity {
       return defaultIsApplicable(this, performer, target);
     };
 
-    on["start"].add((_this, Actor performer, Actor target) {
-      if (target.isPlayer) {
-        performer.report("<subject> braces for <object's> blow", object:target);
-      } else if (performer.isPlayer) {
-        performer.report("you decide to brace for <object's> blow", endSentence:true, object:target);
+    on["start"].clear();
+    on["start"].add((_this, CombatEvent e) {
+      if (!e.performer.isPlayer) {
+        e.performer.report("<subject> braces for <object's> blow", object:e.target);
+      } else {
+        e.performer.report("you decide to brace for <object's> blow", endSentence:true, object:e.target);
       }
       // wait for the blow
-      performer.tillEndOfMove = target.tillEndOfMove + 1;
+      e.performer.tillEndOfMove = e.target.tillEndOfMove + 1;
     });
 
-    on["update"].add((_this, Actor performer, Actor target) {
-      performer.stance += 1;
+    on["update"].add((_this, CombatEvent e) {
+      e.performer.stance += 1;
     });
   }
 
@@ -1183,19 +1353,20 @@ class CombatMoveType extends GameEntity {
       return performer.stance < 20; // can only start standing up if not standing up already
     };
 
-    on["update"].add((_this, Actor performer, Actor target) {
-      if (performer.tillEndOfMove <= (duration / 2).toInt()) { // first few timesteps the actor is gathering - his stance doesn't rise yet
-        performer.stance += 4;
+    on["update"].add((_this, CombatEvent e) {
+      if (e.performer.tillEndOfMove <= (_this.duration / 2).toInt()) { // first few timesteps the actor is gathering - his stance doesn't rise yet
+        e.performer.stance += 4;
       }
     });
 
-    on["start"].add((_this, Actor performer, Actor target) {
-      String again = (performer.previousMove == this) ? " again" : "";
-      performer.report(randomly(["<subject> gather<s> to stand up$again", "<subject> begin<s> to stand up$again", "<subject> tr<ies> to stand up$again"]));
+    on["start"].clear();
+    on["start"].add((_this, CombatEvent e) {
+      String again = (e.performer.previousMove == _this) ? " again" : "";
+      e.performer.report(randomly(["<subject> gather<s> to stand up$again", "<subject> begin<s> to stand up$again", "<subject> tr<ies> to stand up$again"]));
     });
 
     computeSuitability = (Actor performer, Actor target) {
-      return 10; // when this move is isisApplicable, it's probably a good idea to use it
+      return 10; // when this move is isApplicable, it's probably a good idea to use it
     };
   }
 
@@ -1219,12 +1390,12 @@ class CombatMoveType extends GameEntity {
       return true; 
     };
 
-    on["start"].add((_this, Actor performer, Actor target) {
-      performer.report(randomly(["<subject> withdraw<s>", "<subject> back<s> away", "<subject> give<s> ground"]));
+    on["start"].replaceAllWith((_this, CombatEvent e) {
+      e.performer.report(randomly(["<subject> withdraw<s>", "<subject> back<s> away", "<subject> give<s> ground"]));
     });
 
-    on["end"].add((_this, Actor performer, Actor other) {
-      performer.stance += 10;
+    on["end"].add((_this, CombatEvent e) {
+      e.performer.stance += 10;
     });
   }
 }
@@ -1240,10 +1411,10 @@ class CurrentCombatMove extends GameEntity {
   Actor performer;
   Actor target;
 
-  CombatEventHandler on;
+  CombatCallbackHandler on;
 
   CurrentCombatMove(this.type, [this.performer, this.target]) {
-    on = new CombatEventHandler(this);
+    on = new CombatCallbackHandler(this);
   }
 }
 
@@ -1257,19 +1428,32 @@ class CurrentCombatMove extends GameEntity {
 class WeaponType extends GameEntity {
   int piercing;
   int hardness;
-  Set<CombatMoveType> moves; // moves that make sense with this weapon TODO
-  CombatEventHandler on;
+  int blockingMod;
+  WeaponType weaponWhenPierced; // the weapon this fall backs to when pierced
+  // moves that make sense with this weapon TODO
+  Set<CombatMoveType> moves;
+  // moves that only this weapon allows, e.g. "drop sword" for BrokenSword
+  Set<CombatMoveType> specialMoves; 
 
-  WeaponType([Map<String,Dynamic> options]) {
-    on = new CombatEventHandler(this);
+  CombatCallbackHandler on;
 
-    if (options == null) {
-      piercing = 0;
-      hardness = 0;
-    } else {
-      piercing = options["piercing"] == null ? 0 : options["piercing"];
-      hardness = options["hardness"] == null ? 0 : options["hardness"];
-    }
+
+  static void defaultOnSufferPierced(WeaponType _this, CombatEvent e) {
+    e.target.report("<subject's> ${_this.name} breaks", negative:true);
+    // TODO: different hlasky for hands (hardness == 0) than sword
+  }
+
+  WeaponType([
+      String name,
+      this.piercing = 0,
+      this.hardness = 0,
+      this.blockingMod = 0
+      ]) {
+
+    names = (name != null) ? [name] : ["weapon"];
+
+    on = new CombatCallbackHandler(this);
+    on["sufferPierced"].add(defaultOnSufferPierced);
   }
 
 }
@@ -1281,33 +1465,82 @@ class WeaponType extends GameEntity {
   */
 class ArmorType extends GameEntity {
   int hardness;
-  CombatEventHandler on;
+  int dodgingMod;
+  int coveringTargets; // on which types of move this is effective
+  int coveringSides; // on which sides the armor is
+  int coveringEffects; // is this effective on damage and/or stance damage?
+  CombatCallbackHandler on;
 
-  ArmorType([Map<String,Dynamic> options]) {
-    on = new CombatEventHandler(this);
+  ArmorType([
+      String name,
+      this.hardness = 0,
+      this.dodgingMod = 0,
+      this.coveringTargets = CombatMoveType.MOVE_TRG_ALL,
+      this.coveringSides = CombatMoveType.MOVE_FRM_ALL,
+      this.coveringEffects = CombatMoveType.MOVE_EFF_ALL
+      ]) {
 
-    if (options == null) {
-      hardness = 0;
-    } else {
-      hardness = options["hardness"] == null ? 0 : options["hardness"];
-    }
+    names = (name != null) ? [name] : ["armor"];
+
+    on = new CombatCallbackHandler(this);
   }
 }
 
 /**
-  CombatEvent stores all callbacks assigned for a given event and given
+  CombatEvent holds information about each event during combat.
+  It is passed to CombatCallbacks.
+  */
+class CombatEvent {
+  Actor performer;
+  Actor target;
+  CombatMoveType move;
+  WeaponType weapon;
+  ArmorType armor;
+  Combat combat;
+
+  // chance of success
+  double chance;
+  // was luck excerted?
+  bool luckUsed;
+
+  // when this is assigned true, then following callbacks shouldn't be fired
+  bool stopPropagation = false;
+
+  CombatEvent([
+      this.performer,
+      this.target,
+      this.move,
+      this.weapon,
+      this.armor,
+      this.combat,
+      this.chance,
+      this.luckUsed
+      ]);
+
+  CombatEvent.fromMove(CurrentCombatMove currentMove) {
+    performer = currentMove.performer;
+    target = currentMove.target;
+    move = currentMove.type;
+    weapon = performer.weapon;
+    assert(performer.combat == target.combat);
+    combat = performer.combat;
+  }
+}
+
+/**
+  CombatCallback stores all callbacks assigned for a given event and given
   GameEntity. It behaves like a Queue of Functions, but there are differences:
   1) you can dispatchAll(), 2) the class keeps a pointer to the GameEntity,
   3) when the GameEntity is a CurrentCombatMove, its CombatMoveType's on.___
   event is also called.
   */
-class CombatEvent {
+class CombatCallback {
   Queue<Function> functions;
 
   GameEntity _this;
   String _key;
 
-  CombatEvent(this._this, this._key) {
+  CombatCallback(this._this, this._key) {
     functions = new Queue<Function>();
   }
 
@@ -1323,62 +1556,71 @@ class CombatEvent {
   void clear() {
     functions.clear();
   }
+  void replaceAllWith(Function f) {
+    clear();
+    add(f);
+  }
 
   Function get first() => functions.first();
   Function get last() => functions.last();
 
-  void dispatchAll([Actor performer, Actor target]) {
-    // if this is called from a currentMove, then apply currentMove's performer & target
+  void dispatchAll([CombatEvent e]) {
+    // if this is called from a currentMove, 
+    // then apply currentMove's performer & target
     if (_this is CurrentCombatMove) {
-      if (performer == null && target == null) {
-        performer = _this.performer;
-        target = _this.target;
+      if (e == null) {
+        e = new CombatEvent.fromMove(_this);
       }
       // call this CurrentCombatMove's type EventHandler first
-      _this.type.on[_key].dispatchAll(performer, target);
+      _this.type.on[_key].dispatchAll(e);
     }
-    functions.forEach((func) {
-        if (performer == null && target == null)
-          func(_this);
-        else if (target == null)
-          func(_this, performer);
-        else
-          func(_this, performer, target);
-    });
+    // TODO: check if func returns 'true', if so, delete the callback afterwards (one-shot callback)
+    for (Function func in functions) { // TODO: make sure we're going in order
+      if (e == null)
+        func(_this);
+      else {
+        func(_this, e);
+        if (e.stopPropagation)
+          break;
+      }
+    }
   }
 }
 
 /** 
-  Every object can have an "on" member of class CombatEventHandler.
+  Every object can have an "on" member of class CombatCallbackHandler.
   Objects can then add listeners/handlers by doing 
   [: on["hit"].add((_this, performer, target) { ... }); :]
 
   When an event occurs, all the listeners are called using
   [: on["hit"].dispatchAll(); :]
   */
-class CombatEventHandler {
+class CombatCallbackHandler {
 
   // reference to the caller object
   GameEntity _this;
 
-  // on.___ events are called by the Combat Object
-  Map<String,CombatEvent> _events;
+  // on.___ callbacks are stored in a HashMap
+  Map<String,CombatCallback> _callbacks;
 
-  CombatEvent operator [](String key) {
-    if (_events.containsKey(key))
-      return _events[key];
+  /// When callbacks are accessed, they are either returned
+  /// or -- in case they don't exist yet -- first created and 
+  /// then returned.
+  CombatCallback operator [](String key) {
+    if (_callbacks.containsKey(key))
+      return _callbacks[key];
     else {
-      _events[key] = new CombatEvent(_this, key);
-      return _events[key];
+      _callbacks[key] = new CombatCallback(_this, key);
+      return _callbacks[key];
     }
   }
 
-  void operator []=(String key, CombatEvent value) {
-    _events[key] = value;
+  void operator []=(String key, CombatCallback value) {
+    _callbacks[key] = value;
   }
 
-  CombatEventHandler(this._this) {
-    _events = new Map<String,CombatEvent>();
+  CombatCallbackHandler(this._this) {
+    _callbacks = new Map<String,CombatCallback>();
   }
 }
 
@@ -1405,7 +1647,7 @@ class Combat extends GameEntity implements LoopedEvent {
   bool finished = false;
   bool interactionNeeded = false;
 
-  CombatEventHandler on;
+  CombatCallbackHandler on;
 
   int _prevTime = 0;
   int time = 0;
@@ -1427,7 +1669,7 @@ class Combat extends GameEntity implements LoopedEvent {
     storyline = new Storyline();
     actors = new List();
     playerChoices = new List();
-    on = new CombatEventHandler(this);
+    on = new CombatCallbackHandler(this);
   }
 
   /// The main function that gets called every single move and calls each actor to do their own stuff.
@@ -1464,7 +1706,7 @@ class Combat extends GameEntity implements LoopedEvent {
         if (!possibleMoves.isEmpty()) {
           possibleMoves.sort((a,b) => a.type - b.type);
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; _player.currentMove.on["start"].dispatchAll(_player, _player.target); }));
+              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
           });
         }
         // let player target someone else
