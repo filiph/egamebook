@@ -44,8 +44,11 @@
   );
 
   v_moveFootSweep.on["hit"].add((_this, e) {
-      // TODO: report
-      e.target.currentMove = null;
+      if (e.target.currentMove != null) {
+        // TODO: report
+        e.target.currentMove.on["cancel"].dispatchAll(new CombatEvent.fromMove(e.target.currentMove));
+        e.target.currentMove = null;
+      }
   });
 
   v_moveFootSweep.isApplicable = v_moveFootSweep.canContinue = (performer, target) {
@@ -87,11 +90,11 @@
   ];
 
   v_player = new Player();
-  v_player.moves.addAll([v_moveSlash, v_moveStandUp, v_moveWithdraw]);
-  //v_player.weapon = v_weaponHands;
-  v_player.weapon = v_weaponSword;
+  v_player.moves.addAll(v_humanMoves);
+  v_player.weapon = v_weaponHands;
+  //v_player.weapon = v_weaponSword;
 
-  v_player.fighting = 1;
+  v_player.fighting = 10;
 </init>
 
 
@@ -196,6 +199,19 @@ Asserting that more actors of the same type can take out less actors, most of th
     runTest();
   DEBUG("Swarm vs Individual: ${vars['teamOneWins']} : ${vars['teamTwoWins']}");
   assert(v_teamOneWins > v_teamTwoWins);
+
+  int countBelow = 0;
+  for (int i = 0; i < 1000; i++) {
+    double random = Math.random();
+    if (random < 0.1) {
+      countBelow++;
+      DEBUG("$random is less than 0.1");
+    } else
+      DEBUG("$random");
+  }
+  DEBUG("There were $countBelow throws that resulted with less than 0.1.");
+  assert(countBelow < 500);
+  assert(countBelow < 200);
 
 </dart>
 
@@ -616,7 +632,7 @@ class Actor extends GameEntity {
 
   int get modifiedBlocking() => modifiedFighting + weapon.blockingMod;
   int get modifiedDodging() {
-    int value = dodging;
+    int value = modifiedFighting;
     for (ArmorType armor in armors) {
       value += armor.dodgingMod;
     }
@@ -624,7 +640,7 @@ class Actor extends GameEntity {
   }
 
   CurrentCombatMove get currentMove() => _currentMove;
-  void set currentMove(CombatMoveType value) {
+  void set currentMove(CombatMoveType value) { // TODO: fix class mismatch
     if (_currentMove != null)
       previousMove = _currentMove.type;
     if (value == null) {
@@ -787,45 +803,31 @@ class Actor extends GameEntity {
         CombatEvent e = new CombatEvent.fromMove(currentMove);
         if (currentMove.type.canContinue(this, target)) {
           if (currentMove.type.isOffensive) {
-            // resolve if target dodged the attack. Difference between fighting skills
-            // means extra tries (throws) for the party that has the higher number
-            // TODO: make the throws into a function, or even better compute probability
-            // TODO: tbd move all chance calc (incl. modFighting) to chanceToDodge?
+            // throws
             double chance = currentMove.type.chanceToDodge(this, target);
-            int throws = 1 + (this.modifiedFighting - target.modifiedDodging).abs();
-            bool targetDodged;
-            while (throws > 0) {
-              targetDodged = Math.random() < chance;
-              if (targetDodged && (target.modifiedDodging >= this.modifiedFighting))
-                break;  // if target is more skillfull than attacker and he dodged once, this is it
-              if (!targetDodged && (this.modifiedFighting >= target.modifiedDodging))
-                break;  // similar here
-              throws--;
-            }
-            if (targetDodged) {
+            e.chance = chance;
+            e.chanceAll = 1 - chance;
+            if (Math.random() < chance) {
+              DEBUG("- dodge success");
               // DODGED
-              // TODO: apply e.chance, luckUsed etc.
+              e.chanceAll = 1 - e.chanceAll;
+              // TODO: implement Luck
               target.on["dodge"].dispatchAll(e); 
               currentMove.on["sufferDodge"].dispatchAll(e); // main
               this.on["sufferDodge"].dispatchAll(e);
               currentMove = null;
               return;
             } else {
+              DEBUG("- dodge fail");
               // same as above, but for blocks
               chance = currentMove.type.chanceToBlock(this, target);
-              throws = 1 + (this.modifiedFighting - target.modifiedBlocking).abs();
-              bool targetBlocked;
-              while (throws > 0) {
-                targetBlocked = Math.random() < chance;
-                if (targetBlocked && (target.modifiedBlocking >= this.modifiedFighting))
-                  break;
-                if (!targetBlocked && (this.modifiedFighting >= target.modifiedBlocking))
-                  break;
-                throws--;
-              }
-              if (targetBlocked) {
+              e.chance = chance;
+              e.chanceAll = e.chanceAll * (1 - chance);
+              if (Math.random() < chance) {
+                DEBUG("- block success");
                 // BLOCKED
-                // TODO: apply e.chance, luckUsed etc.
+                e.chanceAll = 1 - e.chanceAll;
+                // TODO: implement Luck
                 currentMove.on["sufferMeetWeapon"].dispatchAll(e);
                 if (target.weapon.hardness >= this.weapon.piercing) {
                   currentMove.on["sufferBlock"].dispatchAll(e); // main
@@ -842,9 +844,11 @@ class Actor extends GameEntity {
                 currentMove = null;
                 return;
               } else {
+                DEBUG("- block fail => hit");
                 // HIT
-                bool stoppedByArmor = false;
+                e.chance = 1 - e.chance;
 
+                bool stoppedByArmor = false;
                 for (ArmorType armor in target.armors) {
                   if (!currentMove.type.isOfType(armor.coveringEffects))
                     continue;  // armor has no effect here
@@ -853,7 +857,7 @@ class Actor extends GameEntity {
                   if (!currentMove.type.isOfType(armor.coveringSides))
                     continue;  // armor doesn't cover the side of this move
 
-                  if (move.isHitpointsDamaging) {
+                  if (currentMove.type.isHitpointsDamaging) {
                     if (armor.hardness > this.weapon.piercing) {
                       // DEFLECT
                       stoppedByArmor = true;
@@ -869,7 +873,7 @@ class Actor extends GameEntity {
                 }
                 if (!stoppedByArmor) {
                   // HIT PROPER
-                  // TODO: apply e.chance, luckUsed etc.
+                  // TODO: implement Luck
                   currentMove.on["hit"].dispatchAll(e); // main
                   target.on["sufferHit"].dispatchAll(e);
                   if (target.currentMove != null)
@@ -977,8 +981,8 @@ class Actor extends GameEntity {
   int maxStance = 45; // the best stance this actor can muster
   int speed = 0; // 0 = normal person, -x = everything takes x seconds longer, +x = dtto shorter
   int fighting = 0; // 1 = normal person, +x = number of extra block/dodge throws per turn
-  int blocking = 0; // like fighting, but will be modified by weapon type
-  int dodging = 0; // like fighting, but will be modified by armor(s)
+  //int blocking = 0; // like fighting, but will be modified by weapon type
+  //int dodging = 0; // like fighting, but will be modified by armor(s)
 }
 
 class Player extends Actor {
@@ -1015,7 +1019,7 @@ class CombatMoveType extends GameEntity {
   int fightingMod = 0;
 
   // type bits of the move
-  int type = 0x0;
+  int type = 0x0; // TODO: rename to typeBits? TBD.
 
   // target(s) of the move
   static final int MOVE_TRG_HEAD = 1<<1;
@@ -1089,13 +1093,50 @@ class CombatMoveType extends GameEntity {
     return true;
   }
 
-  // TODO: move all chance calucalation to here
   static double defaultChanceToDodge (CombatMoveType _this, Actor performer, Actor target) {
-    return _this.baseChanceToDodge; 
+    // the bigger the difference, the more/less chance
+    int fightingDiff = target.modifiedDodging - performer.modifiedFighting;
+    DEBUG("ChanceToDodge ${_this.string}: ${performer.name} -> ${target.name}");
+    DEBUG("- $fightingDiff");
+
+    if (fightingDiff >= 10)
+        return 1.0;
+    else if (fightingDiff <= -10)
+        return 0.0;
+    else if (fightingDiff == 0) {
+      return _this.baseChanceToDodge;
+    } else if (fightingDiff > 0) {
+      // target is better
+      return _this.baseChanceToDodge 
+             + (1.0 - _this.baseChanceToDodge) * fightingDiff / 10.0;
+    } else {
+      // performer is better
+      return _this.baseChanceToDodge 
+             - (_this.baseChanceToDodge) * fightingDiff.abs() / 10.0;
+    }
   }
 
   static double defaultChanceToBlock (CombatMoveType _this, Actor performer, Actor target) {
-    return _this.baseChanceToBlock; 
+    // the bigger the difference, the more/less chance
+    int fightingDiff = target.modifiedBlocking - performer.modifiedFighting;
+    DEBUG("ChanceToBlock ${_this.string}: ${performer.name} -> ${target.name}");
+    DEBUG("- $fightingDiff");
+
+    if (fightingDiff >= 10)
+        return 1.0;
+    else if (fightingDiff <= -10)
+        return 0.0;
+    else if (fightingDiff == 0) {
+      return _this.baseChanceToBlock;
+    } else if (fightingDiff > 0) {
+      // target is better
+      return _this.baseChanceToBlock 
+             + (1.0 - _this.baseChanceToBlock) * fightingDiff / 10.0;
+    } else {
+      // performer is better
+      return _this.baseChanceToBlock 
+             - (_this.baseChanceToBlock) * fightingDiff.abs() / 10.0;
+    }
   }
 
   static int defaultComputeSuitability (CombatMoveType _this, Actor performer, Actor target) {
@@ -1110,6 +1151,17 @@ class CombatMoveType extends GameEntity {
       // TODO: defensive suitability
       return _this.fightingMod;
     }
+  }
+
+  static String getLuckIntro(double chance) {
+    if (chance < 0.05)
+      return randomly(["impossibly, ", "by awesome chance, ", "by pure chance, "]);
+    if (chance < 0.2)
+      return randomly(["with luck, ", "with some luck, ","by odd chance, "]);
+    if (chance > 0.8 && chance < 0.95)
+      return randomly(["easily, ", "effortlessly, ", "without difficulty, "]);
+    if (chance >= 0.95)
+      return randomly(["without a sweat, ", "as a matter of course, "]);
   }
 
   /* 
@@ -1134,12 +1186,12 @@ class CombatMoveType extends GameEntity {
   */
 
   static void defaultOnSufferDodge (CombatMoveType _this, CombatEvent e) {
-    e.target.report("<subject> dodge<s> <object's> ${_this.string}", object:e.performer, positive:true);
+    e.target.report("${getLuckIntro(e.chance)}<subject> dodge<s> <object's> ${_this.string}", object:e.performer, positive:true);
   }
 
   static void defaultOnSufferMeetWeapon (CombatMoveType _this, CombatEvent e) {
     // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
-    e.target.report("<subject> meet<s> <object's> move with <subject's> ${e.performer.weapon.name}", object:e.performer, positive:true);
+    e.target.report("${getLuckIntro(e.chance)}<subject> meet<s> <object's> move with <subject's> ${e.target.weapon.name}", object:e.performer, positive:true);
   }
 
   static void defaultOnSufferBlock (CombatMoveType _this, CombatEvent e) {
@@ -1155,13 +1207,13 @@ class CombatMoveType extends GameEntity {
   }
 
   static void defaultOnSufferDeflect (CombatMoveType _this, CombatEvent e) {
-    e.performer("<subject's> ${e.weapon.name} bounces off <object's> ${e.armor.name}", object:e.target, but:true, negative:true);
+    e.performer.report("<subject's> ${e.weapon.name} bounces off <object's> ${e.armor.name}", object:e.target, negative:true);
     e.target.stance -= _this.stanceDamage;
   }
 
   static void defaultOnHit (CombatMoveType _this, CombatEvent e) {
     // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
-    e.performer.report(_this.thirdPartyString, object:e.target, positive:true);
+    e.performer.report("${getLuckIntro(e.chanceAll)}${_this.thirdPartyString}", object:e.target, positive:true);
     e.target.hitpoints -= _this.damage;
     e.target.stance -= _this.stanceDamage;
   }
@@ -1272,7 +1324,7 @@ class CombatMoveType extends GameEntity {
       return defaultIsApplicable(this, performer, target);
     };
 
-    on["hit"].add((_this, CombatEvent e) {
+    on["hit"].addFirst((_this, CombatEvent e) {
       e.combat.storyline.add("Boom!", wholeSentence:true, positive:true);
     });
   }
@@ -1437,10 +1489,27 @@ class WeaponType extends GameEntity {
 
   CombatCallbackHandler on;
 
+  bool get barehanded() => hardness == 0;
+  bool get blunt() => hardness > 0 && hardness < 3;
+  bool get sharp() => hardness >= 3;
 
   static void defaultOnSufferPierced(WeaponType _this, CombatEvent e) {
-    e.target.report("<subject's> ${_this.name} breaks", negative:true);
-    // TODO: different hlasky for hands (hardness == 0) than sword
+    DEBUG("Suffer Pierced: ${_this.barehanded}");
+    if (_this.barehanded) {
+      if (e.weapon.blunt) {
+        e.performer.report("<subject's> ${e.weapon.name} breaks <object's> ${_this.name}", object:e.target, positive:true);
+        e.target.report("<subject> scream<s> in pain", negative:true);
+        e.target.hitpoints = Math.max(1, e.target.hitpoints - 10);
+      } else if (e.weapon.sharp) {
+        e.performer.report("<subject's> ${e.weapon.name} goes right through <object's> ${_this.name}", object:e.target, positive:true);
+        e.target.report("<subject> scream<s> in pain", negative:true);
+        e.target.hitpoints = Math.max(1, e.target.hitpoints - 10);
+      } else {
+        throw new Exception("Weapon is not blunt nor sharp, but still is piercing barehands?");
+      }
+    } else {
+      e.target.report("<subject's> ${_this.name} breaks", negative:true);
+    }
   }
 
   WeaponType([
@@ -1498,8 +1567,20 @@ class CombatEvent {
   ArmorType armor;
   Combat combat;
 
-  // chance of success
-  double chance;
+  // chance of success of the most recent action (dodge/block/etc.)
+  double _chance;
+  double get chance() => _chance;
+  void set chance(double value) {
+    DEBUG("- chance: $value");
+    _chance = value;
+  }
+  // chance that the event ends up like this
+  double _chanceAll;
+  double get chanceAll() => _chanceAll;
+  void set chanceAll(double value) {
+    DEBUG("- chanceAll: $value");
+    _chanceAll = value;
+  }
   // was luck excerted?
   bool luckUsed;
 
