@@ -628,7 +628,7 @@ class Actor extends GameEntity {
   int _stance;  
   List<String> stanceUpStrings;
   List<String> stanceDownStrings;
-  List<CombatMoveType> moves;
+  Set<CombatMoveType> moves;
   CurrentCombatMove _currentMove;
   CombatMoveType previousMove; // keeps track of previous move's type so that actors don't do the same thing over and over again
   WeaponType weapon;
@@ -774,7 +774,7 @@ class Actor extends GameEntity {
     _hitpoints = maxHitpoints;
     _stance = maxStance;
 
-    moves = new List();
+    moves = new Set();
     stanceUpStrings = const [
         "",  // no need for this string - nowhere to stand up from
         "<subject> get<s> to <subjectPronoun's> knees",
@@ -883,11 +883,11 @@ class Actor extends GameEntity {
 
                 bool stoppedByArmor = false;
                 for (ArmorType armor in target.armors) {
-                  if (!currentMove.type.isOfType(armor.coveringEffects))
+                  if (!currentMove.type.hasFlag(armor.coveringEffects))
                     continue;  // armor has no effect here
-                  if (!currentMove.type.isOfType(armor.coveringTargets))
+                  if (!currentMove.type.hasFlag(armor.coveringTargets))
                     continue;  // armor doesn't cover the target of this move
-                  if (!currentMove.type.isOfType(armor.coveringSides))
+                  if (!currentMove.type.hasFlag(armor.coveringSides))
                     continue;  // armor doesn't cover the side of this move
 
                   if (currentMove.type.isHitpointsDamaging) {
@@ -1088,12 +1088,13 @@ class CombatMoveType extends GameEntity {
   static final int MOVE_DIR_OFFENSIVE = 1<<18;
   static final int MOVE_DIR_DEFENSIVE = 1<<19;
 
-  // utility function. Returns true if this CombatMoveType is (at least partially) of type otherType.
-  bool isOfType(int otherType) => (flags & otherType) != 0;
+  // utility function. Returns true if this CombatMoveType' flags have (at least one) 
+  // same bit as otherType
+  bool hasFlag(int otherFlags) => (flags & otherFlags) != 0;
 
-  bool get isOffensive() => isOfType(MOVE_DIR_OFFENSIVE);
-  bool get isHitpointsDamaging() => isOfType(MOVE_EFF_HITPOINTS);
-  bool get isStanceDamaging() => isOfType(MOVE_EFF_STANCE);
+  bool get isOffensive() => hasFlag(MOVE_DIR_OFFENSIVE);
+  bool get isHitpointsDamaging() => hasFlag(MOVE_EFF_HITPOINTS);
+  bool get isStanceDamaging() => hasFlag(MOVE_EFF_STANCE);
 
   /// The events handler
   CombatCallbackHandler on;
