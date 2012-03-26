@@ -94,7 +94,7 @@
   v_player.weapon = v_weaponHands;
   //v_player.weapon = v_weaponSword;
 
-  v_player.fighting = 10;
+  v_player.fighting = 1;
 </init>
 
 
@@ -148,19 +148,19 @@ Asserting that more actors of the same type can take out less actors, most of th
   Function runTest = () {
     v_swarmer1 = new Actor();
     v_swarmer1.names = ["the first swarmer"];
-    v_swarmer1.pronoun = Storyline.IT;
+    v_swarmer1.pronoun = Pronoun.IT;
     v_swarmer1.moves.addAll(v_humanMoves);
     v_swarmer1.team = 2;
 
     v_swarmer2 = new Actor();
     v_swarmer2.names = ["the second swarmer"];
-    v_swarmer2.pronoun = Storyline.IT;
+    v_swarmer2.pronoun = Pronoun.IT;
     v_swarmer2.moves.addAll(v_humanMoves);
     v_swarmer2.team = 2;
 
     v_swarmer3 = new Actor();
     v_swarmer3.names = ["the third swarmer"];
-    v_swarmer3.pronoun = Storyline.IT;
+    v_swarmer3.pronoun = Pronoun.IT;
     v_swarmer3.moves.addAll(v_humanMoves);
     v_swarmer3.team = 2;
 
@@ -203,11 +203,8 @@ Asserting that more actors of the same type can take out less actors, most of th
   int countBelow = 0;
   for (int i = 0; i < 1000; i++) {
     double random = Math.random();
-    if (random < 0.1) {
+    if (random < 0.1)
       countBelow++;
-      DEBUG("$random is less than 0.1");
-    } else
-      DEBUG("$random");
   }
   DEBUG("There were $countBelow throws that resulted with less than 0.1.");
   assert(countBelow < 500);
@@ -221,7 +218,7 @@ playable
 <dart>
   v_wolf = new Actor();
   v_wolf.names = ["the orcling", "the orcling", "the young orcling"];
-  v_wolf.pronoun = Storyline.IT;
+  v_wolf.pronoun = Pronoun.IT;
   v_wolf.moves.addAll(v_humanMoves);
   v_wolf.hitpoints = 2;
   v_wolf.speed = 1;
@@ -301,6 +298,11 @@ class Pronoun {
   String toString() => nominative;
 
   const Pronoun(this.nominative, this.accusative, this.genitive); 
+
+  static final Pronoun YOU = const Pronoun("you", "you", "your");
+  static final Pronoun HE = const Pronoun("he", "him", "his");
+  static final Pronoun SHE = const Pronoun("she", "her", "her");
+  static final Pronoun IT = const Pronoun("it", "it", "its");
 }
 
 class Storyline {
@@ -321,11 +323,6 @@ class Storyline {
   static final String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
   static final String VERB_DO = "<does>";
   static final String VERB_BE = "<is>";
-
-  static final Pronoun YOU = const Pronoun("you", "you", "your");
-  static final Pronoun HE = const Pronoun("he", "him", "his");
-  static final Pronoun SHE = const Pronoun("she", "her", "her");
-  static final Pronoun IT = const Pronoun("it", "it", "its");
 
   Storyline add(String str, [Actor subject, Actor object, bool but=false, bool positive=false, bool negative=false, bool endSentence=false, bool startSentence=false, bool wholeSentence=false]) {
     reports.add( {
@@ -373,6 +370,20 @@ class Storyline {
       return false;
   }
 
+  bool exchanged(String key1, String key2, int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    if (reports[i][key1] == null || reports[j][key1] == null)
+      return false;
+    if (reports[i][key2] == null || reports[j][key2] == null)
+      return false;
+    if (reports[i][key1] == reports[j][key2]
+     && reports[i][key2] == reports[j][key1])
+      return true;
+    else
+      return false;
+  }
+
   bool valid(int i) {
     if (i >= reports.length || i < 0)
       return false;
@@ -383,6 +394,13 @@ class Storyline {
   bool sameSentiment(int i, int j) {
     if (!valid(i) || !valid(j))
       return false;
+    // subject(i) == object(j), opposite sentiments => same sentiment
+    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+      if (reports[i]["positive"] && reports[j]["negative"])
+        return true;
+      if (reports[i]["negative"] && reports[j]["positive"])
+        return true;
+    }
     if (!same('subject', i, j))
       return false;
     if (reports[i]["positive"] && reports[j]["positive"])
@@ -396,7 +414,13 @@ class Storyline {
   bool oppositeSentiment(int i, int j) {
     if (!valid(i) || !valid(j))
       return false;
-    // TODO: same subject(i) as object(j), one positive, the other negative
+    // subject(i) == object(j), both have same sentiment => opposite sentiment
+    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+      if (reports[i]["positive"] && reports[j]["positive"])
+        return true;
+      if (reports[i]["negative"] && reports[j]["negative"])
+        return true;
+    }
     if (!same('subject', i, j))
       return false;
     if (reports[i]["positive"] && reports[j]["negative"])
@@ -407,7 +431,7 @@ class Storyline {
       return false;
   }
 
-  /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do the rest
+  /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do in-sentence substitution
   String substitute(int i, String str, [bool useSubjectPronoun=false, bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
     if (useObjectPronoun || same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
@@ -433,11 +457,11 @@ class Storyline {
     return getString(result, subject(i), object(i));
   }
 
-  /// Takes care of substitution of stopwords
+  /// Takes care of substitution of stopwords. Called by substitute().
   static String getString(String str, [Actor subject, Actor object]) {
     String result = str;
     if (subject != null) {
-      if (subject.pronoun == YOU) { // don't talk like a robot: "player attack wolf"
+      if (subject.pronoun == Pronoun.YOU) { // don't talk like a robot: "player attacks wolf"
         result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
         result = result.replaceAll(VERB_S, "");
@@ -447,7 +471,8 @@ class Storyline {
         result = result.replaceAll(VERB_BE, "are");
       }
       else { // third person
-        result = result.replaceAll(SUBJECT, subject.name);
+        result = result.replaceFirst(SUBJECT, subject.name);
+        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
         result = result.replaceAll(VERB_S, "s");
         result = result.replaceAll(VERB_ES, "es");
         result = result.replaceAll(VERB_IES, "ies");
@@ -455,7 +480,11 @@ class Storyline {
         result = result.replaceAll(VERB_BE, "is");
       }
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
-      result = result.replaceAll(SUBJECT_POSSESIVE, "${subject.name}'s");
+      if (str.indexOf(SUBJECT) < str.indexOf(SUBJECT_POSSESIVE)) { // "actor takes his weapon"
+        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      }
+      result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
     }
     if (object != null) {
@@ -465,7 +494,11 @@ class Storyline {
       } else
         result = result.replaceAll(OBJECT, object.name);
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
-      result = result.replaceAll(OBJECT_POSSESIVE, "${object.name}'s");
+      if (str.indexOf(OBJECT) < str.indexOf(OBJECT_POSSESIVE)) { // "actor takes his weapon"
+        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      }
+      result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
+      result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
 
@@ -568,7 +601,7 @@ class Storyline {
 
 class GameEntity implements Hashable {
   List <String> names;
-  Pronoun pronoun = Storyline.IT;
+  Pronoun pronoun = Pronoun.IT;
 
   GameEntity() {
     names = new List();
@@ -737,7 +770,7 @@ class Actor extends GameEntity {
 
     // init with defaults
     names = ["actor"];
-    pronoun = Storyline.HE;
+    pronoun = Pronoun.HE;
     _hitpoints = maxHitpoints;
     _stance = maxStance;
 
@@ -990,7 +1023,7 @@ class Player extends Actor {
     isPlayer = true;
     team = 1; // player is on team Player (1)
     names = ["player"];
-    pronoun = Storyline.YOU;
+    pronoun = Pronoun.YOU;
   }
 }
 
@@ -1153,9 +1186,17 @@ class CombatMoveType extends GameEntity {
     }
   }
 
-  static String getLuckIntro(double chance) {
-    if (chance < 0.05)
-      return randomly(["impossibly, ", "by awesome chance, ", "by pure chance, "]);
+  /*
+  static List<String> getLuckStrings(double chance) {
+    // result [0] is intro, result [1] is an adverb, result[2] is a modifying end of sentence
+    List<String> result = new List<String>(3);
+    if (chance < 0.05) {
+      return randomly([
+          ["impossibly, ", 
+          "by awesome chance, ", 
+          "by pure chance, ",
+          ]);
+    }
     if (chance < 0.2)
       return randomly(["with luck, ", "with some luck, ","by odd chance, "]);
     if (chance > 0.8 && chance < 0.95)
@@ -1163,6 +1204,7 @@ class CombatMoveType extends GameEntity {
     if (chance >= 0.95)
       return randomly(["without a sweat, ", "as a matter of course, "]);
   }
+  */
 
   /* 
      Default event handler functions
@@ -1186,12 +1228,12 @@ class CombatMoveType extends GameEntity {
   */
 
   static void defaultOnSufferDodge (CombatMoveType _this, CombatEvent e) {
-    e.target.report("${getLuckIntro(e.chance)}<subject> dodge<s> <object's> ${_this.string}", object:e.performer, positive:true);
+    e.target.report("<subject> dodge<s> <object's> ${_this.string} (${e.chance})", object:e.performer, positive:true);
   }
 
   static void defaultOnSufferMeetWeapon (CombatMoveType _this, CombatEvent e) {
-    // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
-    e.target.report("${getLuckIntro(e.chance)}<subject> meet<s> <object's> move with <subject's> ${e.target.weapon.name}", object:e.performer, positive:true);
+    // TODO: define citoslovce ("Thump", "Cling", Clank!") - BUT in the Weapon or move
+    e.target.report("<subject> meet<s> <object's> move with <subject's> ${e.target.weapon.name} (${e.chance})", object:e.performer, positive:true);
   }
 
   static void defaultOnSufferBlock (CombatMoveType _this, CombatEvent e) {
@@ -1207,13 +1249,14 @@ class CombatMoveType extends GameEntity {
   }
 
   static void defaultOnSufferDeflect (CombatMoveType _this, CombatEvent e) {
+    e.performer.report("<subject> hit<s> (${e.chanceAll})", object:e.target, positive:true);
     e.performer.report("<subject's> ${e.weapon.name} bounces off <object's> ${e.armor.name}", object:e.target, negative:true);
     e.target.stance -= _this.stanceDamage;
   }
 
   static void defaultOnHit (CombatMoveType _this, CombatEvent e) {
-    // TODO: find out piercing value and make a citoslovce ("Thump", "Cling", Clank!")
-    e.performer.report("${getLuckIntro(e.chanceAll)}${_this.thirdPartyString}", object:e.target, positive:true);
+    // TODO: define citoslovce ("Thump", "Cling", Clank!") - BUT in the Weapon or move
+    e.performer.report("${_this.thirdPartyString} (${e.chanceAll})", object:e.target, positive:true);
     e.target.hitpoints -= _this.damage;
     e.target.stance -= _this.stanceDamage;
   }
@@ -1778,9 +1821,13 @@ class Combat extends GameEntity implements LoopedEvent {
       if (_player.target == null) {
         // let player choose his target
         List<Actor> possibleEnemies = actors.filter((o) => o.team != _player.team && o.alive);
-        possibleEnemies.forEach((enemy) {
-            playerChoices.add(new Choice("Target ${enemy.name}.", showNow:true, then:() { storyline.add("<subject> now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
-        });
+        if (possibleEnemies.length == 1) {
+          _player.target = possibleEnemies[0];
+        } else {
+          possibleEnemies.forEach((enemy) {
+              playerChoices.add(new Choice("Target ${enemy.name}.", showNow:true, then:() { storyline.add("<subject> now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
+          });
+        }
       } else {
         // find out possible moves the player can perform on the target
         List<CombatMoveType> possibleMoves = _player.getPossibleMoves(max:MAX_MOVES_PRESENTED);
