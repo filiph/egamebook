@@ -29,7 +29,7 @@
 
   // move: foot sweep
   v_moveFootSweep = new CombatMoveType(
-      type: CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT
+      flags: CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT
             |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_STANCE
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
       string: "foot sweep",
@@ -58,7 +58,7 @@
   // TODO: sword weapon + 2 basic moves
 
   v_moveSlash = new CombatMoveType(
-      type: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_RIGHT
+      flags: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_RIGHT
             |CombatMoveType.MOVE_LMB_HAND|CombatMoveType.MOVE_EFF_HITPOINTS
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
       string: "slash",
@@ -961,12 +961,12 @@ class Actor extends GameEntity {
     // first, sort by suitability (computeSuitability contains logic against repeating last move)
     possibleMoves.sort((a,b) => b.computeSuitability(this,target) - a.computeSuitability(this,target));
     // next, bring down moves that are already mostly covered by moves above them
-    // bring down moves that have large countBits(type & previous.type) / countBits(type) (100% => same type of move)
+    // bring down moves that have large countBits(flags & previous.flags) / countBits(flags) (100% => same type of move)
     final double MAX_SIMILARITY = 0.70;
     Map<int,CombatMoveType> redundantMovesMap = new Map<int,CombatMoveType>();
     for (int i=1; i < possibleMoves.length; i++) {
       for (int j=0; j < i; j++) {
-        double similarity = countBits(possibleMoves[i].type & possibleMoves[j].type) / countBits(possibleMoves[i].type);
+        double similarity = countBits(possibleMoves[i].flags & possibleMoves[j].flags) / countBits(possibleMoves[i].flags);
         if (similarity > MAX_SIMILARITY) {
           redundantMovesMap[i] = possibleMoves[i];
           break;
@@ -1051,8 +1051,8 @@ class CombatMoveType extends GameEntity {
   // defense moves will make it easier (positive number)
   int fightingMod = 0;
 
-  // type bits of the move
-  int type = 0x0; // TODO: rename to typeBits? TBD.
+  // flags bits of the move
+  int flags = 0x0; // TODO: rename to typeBits? TBD.
 
   // target(s) of the move
   static final int MOVE_TRG_HEAD = 1<<1;
@@ -1089,7 +1089,7 @@ class CombatMoveType extends GameEntity {
   static final int MOVE_DIR_DEFENSIVE = 1<<19;
 
   // utility function. Returns true if this CombatMoveType is (at least partially) of type otherType.
-  bool isOfType(int otherType) => (type & otherType) != 0;
+  bool isOfType(int otherType) => (flags & otherType) != 0;
 
   bool get isOffensive() => isOfType(MOVE_DIR_OFFENSIVE);
   bool get isHitpointsDamaging() => isOfType(MOVE_EFF_HITPOINTS);
@@ -1178,7 +1178,7 @@ class CombatMoveType extends GameEntity {
       int value = _this.damage + (_this.stanceDamage / 5).toInt();
       value *= ((1 - _this.chanceToDodge(performer, target)) * (1 - _this.chanceToBlock(performer, target)) * 10).toInt();
       if (performer.previousMove != null) // similar moves as the last one get minus points
-        value -= countBits(_this.type & performer.previousMove.type);
+        value -= countBits(_this.flags & performer.previousMove.flags);
       return value;
     } else {
       // TODO: defensive suitability
@@ -1305,7 +1305,7 @@ class CombatMoveType extends GameEntity {
       this.string = "UNNAMED MOVE",
       this.choiceString = "USE UNNAMED MOVE",
       this.thirdPartyString = "USES UNNAMED MOVE",
-      this.type = 0x0,
+      this.flags = 0x0,
       this.duration,
       this.recovery,
       this.damage = 0,
@@ -1325,7 +1325,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_BODY|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_QUICK|MOVE_DIR_OFFENSIVE;
+    flags = MOVE_TRG_BODY|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_QUICK|MOVE_DIR_OFFENSIVE;
     string = "hit to the stomach";
     choiceString = "hit <object> to the stomach";
     thirdPartyString = "<subject> hit<s> <object> to the stomach";
@@ -1347,7 +1347,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_HEAD|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
+    flags = MOVE_TRG_HEAD|MOVE_FRM_RIGHT|MOVE_LMB_HAND|MOVE_EFF_HITPOINTS|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
     string = "strike to the face";
     choiceString = "strike <object> with <subjectPronoun's> left hook";
     thirdPartyString = "<subject> strike<s> <object> with <subjectPronoun's> left hook";
@@ -1376,7 +1376,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_TRG_LEGS|MOVE_FRM_RIGHT|MOVE_LMB_LEG|MOVE_EFF_STANCE|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
+    flags = MOVE_TRG_LEGS|MOVE_FRM_RIGHT|MOVE_LMB_LEG|MOVE_EFF_STANCE|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
     string = "kick to the legs";
     choiceString = "kick <object's> legs";
     thirdPartyString = "<subject> kick<s> <object's> legs";
@@ -1399,7 +1399,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_HAND;
+    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_HAND;
     string = "parry";
     choiceString = "parry <object's> move";
     thirdPartyString = "<subject> parr<ies> <object's> move";
@@ -1436,7 +1436,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
+    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
     string = "stand up";
     choiceString = "stand up";
     thirdPartyString = "<subject> stand<s> up";
@@ -1469,7 +1469,7 @@ class CombatMoveType extends GameEntity {
     // init with defaults
     initDefaultFunctions();
 
-    type = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
+    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
     string = "withdraw";
     choiceString = "take a step back";
     thirdPartyString = "<subject> take<s> a step back";
@@ -1578,7 +1578,7 @@ class WeaponType extends GameEntity {
 class ArmorType extends GameEntity {
   int hardness;
   int dodgingMod;
-  int coveringTargets; // on which types of move this is effective
+  int coveringTargets; // on which flagss of move this is effective
   int coveringSides; // on which sides the armor is
   int coveringEffects; // is this effective on damage and/or stance damage?
   CombatCallbackHandler on;
@@ -1832,7 +1832,7 @@ class Combat extends GameEntity implements LoopedEvent {
         // find out possible moves the player can perform on the target
         List<CombatMoveType> possibleMoves = _player.getPossibleMoves(max:MAX_MOVES_PRESENTED);
         if (!possibleMoves.isEmpty()) {
-          possibleMoves.sort((a,b) => a.type - b.type);
+          possibleMoves.sort((a,b) => a.flags - b.flags);
           possibleMoves.forEach((move) {
               playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
           });
