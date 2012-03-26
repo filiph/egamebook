@@ -9,15 +9,15 @@
       flags: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_FRONT
             |CombatMoveType.MOVE_LMB_HAND|CombatMoveType.MOVE_EFF_HITPOINTS
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
-    string: "hit to the stomach",
-    choiceString: "hit <object> to the stomach",
-    thirdPartyString: "<subject> {hit<s>|punch<es>} <object> to the stomach",
-    duration: 4,
-    recovery: 1,
-    damage: 1,
-    stanceDamage: 2,
-    baseChanceToDodge: 0.1,
-    baseChanceToBlock: 0.3
+      string: "hit to the stomach",
+      choiceString: "hit <object> to the stomach",
+      thirdPartyString: "<subject> {hit<s>|punch<es>} <object> to the stomach",
+      duration: 4,
+      recovery: 1,
+      damage: 1,
+      stanceDamage: 2,
+      baseChanceToDodge: 0.1,
+      baseChanceToBlock: 0.3
   );
 
   v_moveStomachPunch.isApplicable 
@@ -29,16 +29,16 @@
       flags: CombatMoveType.MOVE_TRG_HEAD|CombatMoveType.MOVE_FRM_RIGHT
             |CombatMoveType.MOVE_LMB_HAND|CombatMoveType.MOVE_EFF_HITPOINTS
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
-    string: "right hook",
-    choiceString: "punch <object> in the head with <subject's> right hook",
-    thirdPartyString: "<subject> {hit<s>|punch<es>} <object> in the {face|head} with <subject's> right hook",
-    duration: 6,
-    recovery: 1,
-    damage: 2,
-    stanceDamage: 8,
-    baseChanceToDodge: 0.4,
-    baseChanceToBlock: 0.4,
-    fightingMod: -1
+      string: "right hook",
+      choiceString: "punch <object> in the head with <subject's> right hook",
+      thirdPartyString: "<subject> {hit<s>|punch<es>} <object> in the {face|head} with <subject's> right hook",
+      duration: 6,
+      recovery: 1,
+      damage: 2,
+      stanceDamage: 8,
+      baseChanceToDodge: 0.4,
+      baseChanceToBlock: 0.4,
+      fightingMod: -1
   );
 
   v_moveRightHook.isApplicable 
@@ -54,15 +54,15 @@
       flags: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_FRONT
             |CombatMoveType.MOVE_LMB_HAND|CombatMoveType.MOVE_EFF_STANCE
             |CombatMoveType.MOVE_PRI_QUICK|CombatMoveType.MOVE_DIR_OFFENSIVE,
-    string: "jab at face",
-    choiceString: "quickly jab at <object's> face",
-    thirdPartyString: "<subject> {{lightly|quickly} jab<s>|throw<s> a {light|quick} jab} at <object's> {face|head}",
-    duration: 2,
-    recovery: 1,
-    damage: 0,
-    stanceDamage: 3,
-    baseChanceToDodge: 0.1,
-    baseChanceToBlock: 0.3
+      string: "jab at face",
+      choiceString: "quickly jab at <object's> face",
+      thirdPartyString: "<subject> {{lightly|quickly} jab<s>|throw<s> a {light|quick} jab} at <object's> {face|head}",
+      duration: 2,
+      recovery: 1,
+      damage: 0,
+      stanceDamage: 3,
+      baseChanceToDodge: 0.1,
+      baseChanceToBlock: 0.3
   );
 
   v_moveStomachPunch.isApplicable 
@@ -73,23 +73,29 @@
   // move: punch in groin
 
   // move: kick legs
+  v_moveKickLegs = new CombatMoveType(
+      flags: CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT
+            |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_STANCE
+            |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
+    string: "kick to the legs",
+    choiceString: "kick <object's> legs",
+    thirdPartyString: "<subject> kick<s> <object's> legs",
+    duration: 6,
+    recovery: 2,
+    damage: 0,
+    stanceDamage: 15,
+    baseChanceToDodge: 0.2,
+    baseChanceToBlock: 0.2,
+    fightingMod: -1
+  );
+
+  v_moveStomachPunch.isApplicable 
+      = v_moveStomachPunch.canContinue 
+      = (performer, target) => performer.stance >= 30 && target.stance >= 20; 
 
   // move: kick in groin
 
   // move: undercut legs
-  
-  // move: kick on ground
-
-  // move: defense
-
-  // move: counter
-
-  // move: roll over from
-
-  // move: roll under his legs
-
-
-  // move: foot sweep
   v_moveFootSweep = new CombatMoveType(
       flags: CombatMoveType.MOVE_TRG_LEGS|CombatMoveType.MOVE_FRM_RIGHT
             |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_STANCE
@@ -116,6 +122,17 @@
   v_moveFootSweep.isApplicable = v_moveFootSweep.canContinue = (performer, target) {
     return performer.stance >= 10 && target.stance >= 20;
   };
+  
+  // move: kick on ground
+
+  // move: defense
+
+  // move: counter
+
+  // move: roll over from
+
+  // move: roll under his legs
+
 
   // TODO: sword weapon + 2 basic moves
 
@@ -144,10 +161,11 @@
       v_moveStomachPunch,
       v_moveRightHook,
       v_moveJab,
+      v_moveKickLegs,
+      v_moveFootSweep,
       v_moveDefense,
       v_moveWithdraw,
       v_moveStandUp,
-      v_moveFootSweep
   ];
 
   // WEAPONS
