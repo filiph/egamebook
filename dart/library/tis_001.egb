@@ -42,7 +42,7 @@
   );
 
   v_moveRightHook.isApplicable 
-      = v_moveStomachPunch.canContinue 
+      = v_moveRightHook.canContinue 
       = (performer, target) => performer.stance >= 20 && target.stance >= 10; 
 
   v_moveRightHook.on["hit"].addFirst((_this, e) {
@@ -65,8 +65,8 @@
       baseChanceToBlock: 0.3
   );
 
-  v_moveStomachPunch.isApplicable 
-      = v_moveStomachPunch.canContinue 
+  v_moveJab.isApplicable 
+      = v_moveJab.canContinue 
       = (performer, target) => performer.stance >= 20 && target.stance >= 10; 
 
 
@@ -89,9 +89,9 @@
     fightingMod: -1
   );
 
-  v_moveStomachPunch.isApplicable 
-      = v_moveStomachPunch.canContinue 
-      = (performer, target) => performer.stance >= 30 && target.stance >= 20; 
+  v_moveKickLegs.isApplicable 
+      = v_moveKickLegs.canContinue 
+      = (performer, target) => performer.stance >= 30 && target.stance >= 20;
 
   // move: kick in groin
 
@@ -102,7 +102,7 @@
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
       string: "foot sweep",
       choiceString: "sweep <object's> feet",
-      thirdPartyString: "<subject> undercut<s> <object's> legs",
+      thirdPartyString: "<subject> {undercut<s>|sweep<s>} <object's> legs",
       duration: 6,
       recovery: 4,
       stanceDamage: 25,
@@ -124,10 +124,84 @@
   };
   
   // move: kick on ground
+  v_moveKickOnGround = new CombatMoveType(
+      flags: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_FRONT
+            |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_HITPOINTS
+            |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
+      string: "kick",
+      choiceString: "kick <object> while on the ground",
+      thirdPartyString: "<subject> kick<s> <object> {|while} on the ground",
+      duration: 4,
+      recovery: 3,
+      damage: 3,
+      stanceDamage: 10,
+      baseChanceToDodge: 0.2,
+      baseChanceToBlock: 0.4
+  );
 
-  // move: defense
+  v_moveKickOnGround.isApplicable = v_moveKickOnGround.canContinue = (performer, target) {
+    return performer.stance >= 20 && target.stance < 20;
+  };
+
+  // move: defend
+  v_moveStepBack = new CombatMoveType(
+      flags: CombatMoveType.MOVE_DIR_DEFENSIVE|CombatMoveType.MOVE_LMB_LEG
+            |CombatMoveType.MOVE_LMB_HAND,
+      string: "step back",
+      choiceString: "focus on defending yourself",
+      thirdPartyString: "<subject> {{withdraw<s>|back<s> away} {a little|a bit|a little bit}|give<s> a {|little} bit of ground}",
+      duration: 5,
+      recovery: 0,
+      fightingMod: +1
+  );
+
+  v_moveStepBack.isApplicable = v_moveStepBack.canContinue 
+      = (performer, target) => performer.stance >= 20;
+
+  v_moveStepBack.on["start"].replaceAllWith((_this, e) {
+      e.performer.report(_this.thirdPartyString);
+  });
+
+  v_moveStepBack.on["end"].replaceAllWith((_this, e) {
+      e.performer.stance += 10;
+  });
 
   // move: counter
+  // TODO: different for arms and for legs - hold leg, hold arm
+
+  // move: stand up
+  v_moveStandUp = new CombatMoveType(
+      flags: CombatMoveType.MOVE_DIR_DEFENSIVE|CombatMoveType.MOVE_LMB_LEG,
+      string: "stand up",
+      choiceString: "stand up",
+      thirdPartyString: "<subject> {stand<s> up|{rise<s>|get<s>} to <subject's> feet|get<s> up}",
+      duration: 8,
+      recovery: 0,
+      fightingMod: -1
+  );
+
+  v_moveStandUp.isApplicable 
+      = (performer, target) => performer.stance < 20;
+
+  v_moveStandUp.on["update"].add((_this, e) {
+    // first few timesteps the actor is gathering - his stance doesn't rise yet
+    if (e.performer.tillEndOfMove <= (_this.duration / 2).toInt()) { 
+      e.performer.stance += 4;
+    }
+  });
+
+  v_moveStandUp.on["start"].replaceAllWith((_this, e) {
+      String again = (e.performer.previousMove == _this) ? " again" : "";
+      e.performer.report("<subject> {gather<s>|begins<s>|tr<ies>} to stand up$again");
+  });
+
+  v_moveStandUp.on["end"].replaceAllWith((_this, e) {
+      e.performer.stance += 10;
+  });
+
+  v_moveStandUp.computeSuitability = (Actor performer, Actor target) {
+    return 100; // when this move is isApplicable, it's probably a good idea to use it
+  };
 
   // move: roll over from
 
@@ -152,20 +226,15 @@
       fightingMod: -1
   );
 
-  // TODO: get rid of
-  v_moveDefense = new CombatMoveType.Defense();
-  v_moveStandUp = new CombatMoveType.StandUp();
-  v_moveWithdraw = new CombatMoveType.Withdraw();
-
   v_humanMoves = [
       v_moveStomachPunch,
       v_moveRightHook,
       v_moveJab,
       v_moveKickLegs,
       v_moveFootSweep,
-      v_moveDefense,
-      v_moveWithdraw,
-      v_moveStandUp,
+      v_moveKickOnGround,
+      v_moveStepBack,
+      v_moveStandUp
   ];
 
   // WEAPONS
@@ -325,6 +394,13 @@ Assert Storyline string functions.
   DEBUG("There were $countBelow throws (out of 1000) that resulted with less than 0.1.");
   assert(countBelow < 500);
   assert(countBelow < 200);
+
+
+  Actor a = new Actor();
+  Actor b = new Actor();
+  b.stance = 19;
+  assert(v_moveKickLegs.canContinue(a, b) == false);
+  assert(v_moveKickLegs.isApplicable(a, b) == false);
 
 </dart>
 
@@ -766,6 +842,7 @@ class Storyline {
     for (int i=0; i < length; i++) {
       // TODO: look into future - make sentences like "Although __, __"
       // TODO: prevent two 'but's in sequence
+      // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchanged('subject', 'object', i-1, i);
@@ -1561,28 +1638,6 @@ class CombatMoveType extends GameEntity {
     initDefaultFunctions();
   }
 
-  CombatMoveType.Kick() : super() {
-    // init with defaults
-    initDefaultFunctions();
-
-    flags = MOVE_TRG_LEGS|MOVE_FRM_RIGHT|MOVE_LMB_LEG|MOVE_EFF_STANCE|MOVE_PRI_DAMAGE|MOVE_DIR_OFFENSIVE;
-    string = "kick to the legs";
-    choiceString = "kick <object's> legs";
-    thirdPartyString = "<subject> kick<s> <object's> legs";
-    duration = 6;
-    recovery = 2;
-    damage = 0;
-    stanceDamage = 15;
-    baseChanceToDodge = 0.2;
-    baseChanceToBlock = 0.2;
-    fightingMod = -1;
-
-    isApplicable = (Actor performer, Actor target) {
-      if (performer.stance < 30 || target.stance < 20)
-        return false;
-      return defaultIsApplicable(this, performer, target);
-    };
-  }
 
   CombatMoveType.Defense() : super () {
     // init with defaults
@@ -1621,67 +1676,6 @@ class CombatMoveType extends GameEntity {
     });
   }
 
-  CombatMoveType.StandUp() : super () {
-    // init with defaults
-    initDefaultFunctions();
-
-    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
-    string = "stand up";
-    choiceString = "stand up";
-    thirdPartyString = "<subject> stand<s> up";
-    duration = 8;
-    recovery = 0;
-    fightingMod = -1;
-
-    isApplicable = (Actor performer, Actor target) {
-      return performer.stance < 20; // can only start standing up if not standing up already
-    };
-
-    on["update"].add((_this, CombatEvent e) {
-      if (e.performer.tillEndOfMove <= (_this.duration / 2).toInt()) { // first few timesteps the actor is gathering - his stance doesn't rise yet
-        e.performer.stance += 4;
-      }
-    });
-
-    on["start"].clear();
-    on["start"].add((_this, CombatEvent e) {
-      String again = (e.performer.previousMove == _this) ? " again" : "";
-      e.performer.report(randomly(["<subject> gather<s> to stand up$again", "<subject> begin<s> to stand up$again", "<subject> tr<ies> to stand up$again"]));
-    });
-
-    computeSuitability = (Actor performer, Actor target) {
-      return 10; // when this move is isApplicable, it's probably a good idea to use it
-    };
-  }
-
-  CombatMoveType.Withdraw() : super() {
-    // init with defaults
-    initDefaultFunctions();
-
-    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_LEG;
-    string = "withdraw";
-    choiceString = "take a step back";
-    thirdPartyString = "<subject> take<s> a step back";
-    duration = 5;
-    recovery = 0;
-    fightingMod = +1;
-
-    isApplicable = (Actor performer, Actor target) {
-      if (!performer.alive)
-        return false;
-      if (performer.stance < 20)
-        return false;
-      return true; 
-    };
-
-    on["start"].replaceAllWith((_this, CombatEvent e) {
-      e.performer.report(randomly(["<subject> withdraw<s>", "<subject> back<s> away", "<subject> give<s> ground"]));
-    });
-
-    on["end"].add((_this, CombatEvent e) {
-      e.performer.stance += 10;
-    });
-  }
 }
 
 /**
