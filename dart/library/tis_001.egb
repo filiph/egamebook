@@ -46,7 +46,7 @@
       = (performer, target) => performer.stance >= 20 && target.stance >= 10; 
 
   v_moveRightHook.on["hit"].addFirst((_this, e) {
-      e.combat.storyline.add("Boom!", wholeSentence:true);
+      e.combat.storyline.add("{Boom|Thump}!", wholeSentence:true);
   });
 
   // move: jab
@@ -71,6 +71,24 @@
 
 
   // move: punch in groin
+  v_moveGroinPunch = new CombatMoveType(
+      flags: CombatMoveType.MOVE_TRG_BODY|CombatMoveType.MOVE_FRM_FRONT
+            |CombatMoveType.MOVE_LMB_LEG|CombatMoveType.MOVE_EFF_HITPOINTS
+            |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
+      string: "hit to the groin",
+      choiceString: "punch <object> {in the groin|between the legs|into the genitals}",
+      thirdPartyString: "<subject> {hit<s>|punch<es>} <object> {in the groin|between the legs|into the genitals}",
+      duration: 4,
+      recovery: 2,
+      damage: 3,
+      stanceDamage: 5,
+      baseChanceToDodge: 0.4,
+      baseChanceToBlock: 0.5
+  );
+
+  v_moveGroinPunch.isApplicable 
+      = v_moveGroinPunch.canContinue 
+      = (performer, target) => performer.stance >= 10 && target.stance >= 20; 
 
   // move: kick legs
   v_moveKickLegs = new CombatMoveType(
@@ -130,7 +148,7 @@
             |CombatMoveType.MOVE_PRI_DAMAGE|CombatMoveType.MOVE_DIR_OFFENSIVE,
       string: "kick",
       choiceString: "kick <object> while on the ground",
-      thirdPartyString: "<subject> kick<s> <object> {|while} on the ground",
+      thirdPartyString: "<subject> kick<s> <object> {|while }on the ground",
       duration: 4,
       recovery: 3,
       damage: 3,
@@ -139,7 +157,8 @@
       baseChanceToBlock: 0.4
   );
 
-  v_moveKickOnGround.isApplicable = v_moveKickOnGround.canContinue = (performer, target) {
+  v_moveKickOnGround.isApplicable 
+      = v_moveKickOnGround.canContinue = (performer, target) {
     return performer.stance >= 20 && target.stance < 20;
   };
 
@@ -148,7 +167,7 @@
       flags: CombatMoveType.MOVE_DIR_DEFENSIVE|CombatMoveType.MOVE_LMB_LEG
             |CombatMoveType.MOVE_LMB_HAND,
       string: "step back",
-      choiceString: "focus on defending yourself",
+      choiceString: "focus on defense",
       thirdPartyString: "<subject> {{withdraw<s>|back<s> away} {a little|a bit|a little bit}|give<s> a {|little} bit of ground}",
       duration: 5,
       recovery: 0,
@@ -167,7 +186,49 @@
   });
 
   // move: counter
-  // TODO: different for arms and for legs - hold leg, hold arm
+  v_moveBasicParryHand = new CombatMoveType(
+      flags: CombatMoveType.MOVE_DIR_DEFENSIVE|CombatMoveType.MOVE_LMB_HAND,
+      string: "parry",
+      choiceString: "parry <object's> move",
+      thirdPartyString: "<subject> {gather<s>|brace<s>} to parry <object's> {attack|move}",
+      duration: 3,
+      recovery: 1,
+      fightingMod: +1
+  );
+
+  v_moveBasicParryHand.isApplicable = (performer, target) {
+    return performer.stance >= 10 && target.currentMove != null
+            && target.tillEndOfMove > 3
+            && target.currentMove.type.isOffensive
+            && target.target == performer
+            && target.currentMove.type.hasFlag(CombatMoveType.MOVE_LMB_HAND);
+  };
+  
+  v_moveBasicParryHand.canContinue = (performer, target) {
+    return performer.stance >= 10 && target.currentMove != null;
+  };
+
+  v_moveBasicParryHand.on["end"].add((_this, e) {
+      // parrying gives one other chance to block||dodge before the blow even lands 
+      double chanceToParry = 1 - e.target.currentMove.type.computeChanceToHit(e.target, e.performer);
+      if (Math.random() < chanceToParry) {
+        // PARRIED
+        e.performer.report("<subject> {stop<s>|intercept<s>} <object's> ${e.target.currentMove.type.string} which gives ${e.performer.pronoun.accusative} a chance to counter-attack.", object:e.target, wholeSentence:true);
+        e.target.currentMove = null;
+        e.target.tillEndOfMove = 4;
+      } else {
+        // NOT PARRIED
+        e.performer.report("<subject's> {try|attempt} to parry <object's> ${e.target.currentMove.type.string} {fails|is unsuccessful|doesn't work out}", object:e.target, negative:true);
+      }
+  });
+
+  v_moveBasicParryHand.computeSuitability = (Actor performer, Actor target) {
+    return 100; // when this move is isApplicable, it's probably a good idea to use it
+  };
+
+  // TODO: ^^ different for arms and for legs - hold leg, hold arm
+  
+  // move: advanced parry (only advanced fighters can do this)
 
   // move: stand up
   v_moveStandUp = new CombatMoveType(
@@ -234,7 +295,9 @@
       v_moveFootSweep,
       v_moveKickOnGround,
       v_moveStepBack,
-      v_moveStandUp
+      v_moveStandUp,
+      v_moveBasicParryHand,
+      v_moveGroinPunch
   ];
 
   // WEAPONS
@@ -554,15 +617,16 @@ class Pronoun {
   // dative // not used
   // ablative
   // locative
+  final String self; // Himself
 
   String toString() => nominative;
 
-  const Pronoun(this.nominative, this.accusative, this.genitive); 
+  const Pronoun(this.nominative, this.accusative, this.genitive, this.self); 
 
-  static final Pronoun YOU = const Pronoun("you", "you", "your");
-  static final Pronoun HE = const Pronoun("he", "him", "his");
-  static final Pronoun SHE = const Pronoun("she", "her", "her");
-  static final Pronoun IT = const Pronoun("it", "it", "its");
+  static final Pronoun YOU = const Pronoun("you", "you", "your", "yourself");
+  static final Pronoun HE = const Pronoun("he", "him", "his", "himself");
+  static final Pronoun SHE = const Pronoun("she", "her", "her", "herself");
+  static final Pronoun IT = const Pronoun("it", "it", "its", "itself");
 }
 
 class Storyline {
@@ -595,6 +659,7 @@ class Storyline {
         "endSentence": endSentence,
         "startSentence": startSentence,
         "wholeSentence": wholeSentence
+        // TODO: add time to the report so that periods of long nothing endSentence
     });
   }
 
@@ -836,29 +901,32 @@ class Storyline {
       return "";
     final int MAX_SENTENCE_LENGTH = 3;
     int lastEndSentence = -1;
-    bool endSentence = true; // previous sentence was ended
-    bool endSentenceNeeded = false; // this sentence needs to be ended
+    bool endPreviousSentence = true; // previous sentence was ended
+    bool endThisSentence = false; // this sentence needs to be ended
     bool but = false; // this next sentence needs to start with but
     for (int i=0; i < length; i++) {
-      // TODO: look into future - make sentences like "Although __, __"
-      // TODO: prevent two 'but's in sequence
+      // TODO: look into future - make sentences like "Although __, __" 
+      // TODO: ^^ can be done by 2 for loops
       // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchanged('subject', 'object', i-1, i);
-        but = reports[i]["but"] || oppositeSentiment(i, i-1);
-        endSentence = 
+        but = (reports[i]["but"] || oppositeSentiment(i, i-1)) 
+              && !reports[i-1]["but"];
+        reports[i]["but"] = but;
+        endPreviousSentence = 
           (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
-          || endSentenceNeeded
+          || endThisSentence
           || reports[i]["startSentence"] 
           || reports[i-1]["endSentence"] 
           || reports[i]["wholeSentence"]
           || !(same('subject', i, i-1) || objectSubjectSwitch)
-          || (but && (i - lastEndSentence > 1));
-        endSentenceNeeded = false;
+          || (but && (i - lastEndSentence > 1))
+          || (but && reports[i-1]["but"]);
+        endThisSentence = false;
 
-        // DEBUG("SENT: ${string(i)}\n- whole=${reports[i]["endSentence"]}
-        if (endSentence) {
+        // DEBUG("SENT: ${string(i)}\n- whole=${reports[i]["endPreviousSentence"]}
+        if (endPreviousSentence) {
           if (reports[i-1]["wholeSentence"]) // don't write period after "Boom!"
             strBuf.add(" ");
           else
@@ -869,14 +937,14 @@ class Storyline {
           if (but) {
             strBuf.add(randomly([" but ", " but ", " yet ", ", but "]));
             if (!sameSentiment(i, i+1))
-              endSentenceNeeded = true;
+              endThisSentence = true;
           } else {
             if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
                 && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
               strBuf.add(", ");
             } else {
               strBuf.add(randomly([" and ", " and ", ", and "]));
-              endSentenceNeeded = true;
+              endThisSentence = true;
             }
           }
         }
@@ -884,7 +952,7 @@ class Storyline {
 
       String report = string(i);
       // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
-      if (!endSentence)
+      if (!endPreviousSentence)
         if (same('subject', i, i-1))
           if (string(i-1).startsWith("$SUBJECT "))
             if (report.startsWith("$SUBJECT "))
@@ -892,17 +960,17 @@ class Storyline {
 
       report = substitute(i, report);
 
-      if ((endSentence || i == 0) && !but)
+      if ((endPreviousSentence || i == 0) && !but)
         report = capitalize(report);
 
       // add the actual report
       strBuf.add(report);
 
       // set variables for next iteration
-      if (endSentence)
+      if (endPreviousSentence)
         lastEndSentence = i;
       if (reports[i]["wholeSentence"])
-        endSentenceNeeded = true;
+        endThisSentence = true;
     }
 
     // add last dot
@@ -977,6 +1045,15 @@ class Actor extends GameEntity {
       return fighting - stanceMod - hitpointsMod + currentMove.type.fightingMod;
   }
 
+  /// returns the fighting number used for purposes of attacking, where
+  /// currentMove's fightingMod isn't counted.
+  int get modifiedAttacking() {
+    if (currentMove == null)
+      return modifiedFighting;
+    else
+      return modifiedFighting - currentMove.type.fightingMod;
+  }
+
   int get modifiedBlocking() => modifiedFighting + weapon.blockingMod;
   int get modifiedDodging() {
     int value = modifiedFighting;
@@ -996,11 +1073,10 @@ class Actor extends GameEntity {
         if (tillEndOfMove > 0)
           recoveringFromMove = true;
       }
-
       _currentMove = null;
     } else {
       _currentMove = new CurrentCombatMove(value, this, target);
-      tillEndOfMove = _currentMove.type.duration - (Math.random() * 2).round().toInt(); // duration will vary slightly (TODO: TBD)
+      tillEndOfMove = _currentMove.type.duration; // duration will vary slightly (TODO: TBD)
       _currentMove.on["start"].dispatchAll(new CombatEvent.fromMove(_currentMove));
     }
   }
@@ -1124,6 +1200,7 @@ class Actor extends GameEntity {
       return;
 
     tillEndOfMove--; // just let the time pass
+    DEBUG("${this.name} tillEndOfMove: $tillEndOfMove");
 
     if (tillEndOfMove > 0 && currentMove != null) {
       // move still in progress
@@ -1151,13 +1228,12 @@ class Actor extends GameEntity {
         if (currentMove.type.canContinue(this, target)) {
           if (currentMove.type.isOffensive) {
             // throws
-            double chance = currentMove.type.chanceToDodge(this, target);
-            e.chance = chance;
-            e.chanceAll = 1 - chance;
-            if (Math.random() < chance) {
+            double chanceToDodge = currentMove.type.chanceToDodge(this, target);
+            if (Math.random() < chanceToDodge) {
               DEBUG("- dodge success");
               // DODGED
-              e.chanceAll = 1 - e.chanceAll;
+              e.chance = chanceToDodge;
+              e.chanceAll = chanceToDodge;
               // TODO: implement Luck
               target.on["dodge"].dispatchAll(e); 
               currentMove.on["sufferDodge"].dispatchAll(e); // main
@@ -1167,13 +1243,12 @@ class Actor extends GameEntity {
             } else {
               DEBUG("- dodge fail");
               // same as above, but for blocks
-              chance = currentMove.type.chanceToBlock(this, target);
-              e.chance = chance;
-              e.chanceAll = e.chanceAll * (1 - chance);
-              if (Math.random() < chance) {
+              double chanceToBlock = currentMove.type.chanceToBlock(this, target);
+              if (Math.random() < chanceToBlock) {
                 DEBUG("- block success");
                 // BLOCKED
-                e.chanceAll = 1 - e.chanceAll;
+                e.chance = chanceToBlock;
+                e.chanceAll = chanceToBlock;
                 // TODO: implement Luck
                 currentMove.on["sufferMeetWeapon"].dispatchAll(e);
                 if (target.weapon.hardness >= this.weapon.piercing) {
@@ -1193,7 +1268,8 @@ class Actor extends GameEntity {
               } else {
                 DEBUG("- block fail => hit");
                 // HIT
-                e.chance = 1 - e.chance;
+                e.chance = (1 - chanceToBlock);
+                e.chanceAll = (1 - chanceToBlock) * (1 - chanceToDodge);
 
                 bool stoppedByArmor = false;
                 for (ArmorType armor in target.armors) {
@@ -1233,13 +1309,13 @@ class Actor extends GameEntity {
             }
           } else {
             // non-offensive move ended
-            currentMove.on["end"].dispatchAll();
+            currentMove.on["end"].dispatchAll(e);
             currentMove = null;
             return;
           }
         } else {
           // cannot continue
-          currentMove.on["cancel"].dispatchAll();
+          currentMove.on["cancel"].dispatchAll(e);
           currentMove = null;
           return;
         }
@@ -1445,7 +1521,7 @@ class CombatMoveType extends GameEntity {
 
   static double defaultChanceToDodge (CombatMoveType _this, Actor performer, Actor target) {
     // the bigger the difference, the more/less chance
-    int fightingDiff = target.modifiedDodging - performer.modifiedFighting;
+    int fightingDiff = target.modifiedDodging - performer.modifiedAttacking;
     DEBUG("ChanceToDodge ${_this.string}: ${performer.name} -> ${target.name}");
     DEBUG("- $fightingDiff");
 
@@ -1468,7 +1544,7 @@ class CombatMoveType extends GameEntity {
 
   static double defaultChanceToBlock (CombatMoveType _this, Actor performer, Actor target) {
     // the bigger the difference, the more/less chance
-    int fightingDiff = target.modifiedBlocking - performer.modifiedFighting;
+    int fightingDiff = target.modifiedDodging - performer.modifiedAttacking;
     DEBUG("ChanceToBlock ${_this.string}: ${performer.name} -> ${target.name}");
     DEBUG("- $fightingDiff");
 
@@ -1489,7 +1565,13 @@ class CombatMoveType extends GameEntity {
     }
   }
 
-  // TODO: computeChanceToHit
+  /// Returns the chance _this move will succeed given current performer & target.
+  /// Does not count with possible parry and counter moves and changes in future.
+  double computeChanceToHit(Actor performer, Actor target) {
+    double chanceToDodge = chanceToDodge(performer, target);
+    double chanceToBlock = chanceToBlock(performer, target);
+    return (1 - chanceToDodge) * (1 - chanceToBlock);
+  }
 
   static int defaultComputeSuitability (CombatMoveType _this, Actor performer, Actor target) {
     if (_this.isOffensive) {
@@ -1582,7 +1664,7 @@ class CombatMoveType extends GameEntity {
   }
 
   static void defaultOnCancel (CombatMoveType _this, CombatEvent e) {
-    e.performer.report("there's no way <subject> can ${_this.choiceString} now", object:e.target, negative:true);
+    e.performer.report("{there's no way <subject> can ${_this.choiceString} now|<subject> find<s> it impossible to ${_this.choiceString} now}", object:e.target, negative:true);
   }
 
 
@@ -1636,44 +1718,6 @@ class CombatMoveType extends GameEntity {
       ]) : super() {
 
     initDefaultFunctions();
-  }
-
-
-  CombatMoveType.Defense() : super () {
-    // init with defaults
-    initDefaultFunctions();
-
-    flags = MOVE_DIR_DEFENSIVE|MOVE_LMB_HAND;
-    string = "parry";
-    choiceString = "parry <object's> move";
-    thirdPartyString = "<subject> parr<ies> <object's> move";
-    duration = 4;
-    recovery = 0;
-    fightingMod = +2;
-
-    isApplicable = (Actor performer, Actor target) {
-      if (target.target != performer)
-        return false; // don't parry attacks that don't target you
-      if (target.currentMove == null 
-          || (target.currentMove.type.damage == 0 && target.currentMove.type.stanceDamage == 0))
-        return false; // don't parry no attack and don't parry someone parrying you
-      return defaultIsApplicable(this, performer, target);
-    };
-
-    on["start"].clear();
-    on["start"].add((_this, CombatEvent e) {
-      if (!e.performer.isPlayer) {
-        e.performer.report("<subject> braces for <object's> blow", object:e.target);
-      } else {
-        e.performer.report("you decide to brace for <object's> blow", endSentence:true, object:e.target);
-      }
-      // wait for the blow
-      e.performer.tillEndOfMove = e.target.tillEndOfMove + 1;
-    });
-
-    on["update"].add((_this, CombatEvent e) {
-      e.performer.stance += 1;
-    });
   }
 
 }
@@ -2017,7 +2061,7 @@ class Combat extends GameEntity implements LoopedEvent {
         if (!possibleMoves.isEmpty()) {
           possibleMoves.sort((a,b) => a.flags - b.flags);
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(capitalize(Storyline.getString(move.choiceString, subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
+              playerChoices.add(new Choice(capitalize(Storyline.getString("${move.choiceString} (${move.computeChanceToHit(_player, _player.target)})", subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
           });
         }
         // let player target someone else
