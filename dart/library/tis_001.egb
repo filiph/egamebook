@@ -123,7 +123,7 @@
       thirdPartyString: "<subject> {undercut<s>|sweep<s>} <object's> legs",
       duration: 6,
       recovery: 4,
-      stanceDamage: 25,
+      stanceDamage: 31,
       baseChanceToDodge: 0.4,
       baseChanceToBlock: 0.2,
       fightingMod: -1
@@ -253,7 +253,7 @@
 
   v_moveStandUp.on["start"].replaceAllWith((_this, e) {
       String again = (e.performer.previousMove == _this) ? " again" : "";
-      e.performer.report("<subject> {gather<s>|begins<s>|tr<ies>} to stand up$again");
+      e.performer.report("<subject> {gather<s>|begin<s>|tr<ies>} to stand up$again");
   });
 
   v_moveStandUp.on["end"].replaceAllWith((_this, e) {
@@ -264,7 +264,33 @@
     return 100; // when this move is isApplicable, it's probably a good idea to use it
   };
 
-  // move: roll over from
+  // move: roll out
+  v_moveRollOut = new CombatMoveType(
+      flags: CombatMoveType.MOVE_DIR_DEFENSIVE,
+      string: "roll",
+      choiceString: "roll out of the way",
+      thirdPartyString: "<subject> roll<s> {out|away} of <object's> {way|reach}",
+      duration: 3,
+      recovery: 1,
+      fightingMod: -1
+  );
+
+  v_moveRollOut.isApplicable 
+      = (performer, target) => performer.stance < 10;
+
+  v_moveRollOut.on["end"].replaceAllWith((_this, e) {
+      e.performer.report("<subject> {{end<s>|finish<es>} <subject's> roll|roll<s> a bit out of the way}", positive:true);
+      if (e.target.currentMove != null 
+          && e.target.currentMove.type.duration - e.target.tillEndOfMove >= 3) {
+        e.target.currentMove.on["cancel"].dispatchAll(new CombatEvent.fromMove(e.target.currentMove));
+        e.target.currentMove = null;
+      }
+      e.performer.stance += 10;
+  });
+
+  v_moveRollOut.computeSuitability = (Actor performer, Actor target) {
+    return 100; // when this move is isApplicable, it's probably a good idea to use it
+  };
 
   // move: roll under his legs
 
@@ -297,21 +323,26 @@
       v_moveStepBack,
       v_moveStandUp,
       v_moveBasicParryHand,
-      v_moveGroinPunch
+      v_moveGroinPunch,
+      v_moveRollOut
   ];
 
   // WEAPONS
 
   // TODO: create HandsCutOff and OneHandCutOff
   // TODO: weapons have pointer to the weapon they become when pirced
-  // create new weapon: bare hands
+  // weapon: bare hands
   v_weaponHands = new WeaponType(
       name: "hand",
       piercing: 0,
       hardness: 0
   );
 
-  // create new weapon: sword
+  // weapon: stick / baseball bat
+
+  // weapon: steel rod
+
+  // weapon: sword
   v_weaponSword = new WeaponType(
       name: "sword",
       piercing: 3,
@@ -321,7 +352,7 @@
 
   // ARMORS
 
-  // create new armor: clothes
+  // armor: clothes
   v_armorClothes = new ArmorType(
       name: "clothes",
       hardness: 0
