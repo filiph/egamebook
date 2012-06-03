@@ -39,7 +39,6 @@ class CmdlineInterface implements UserInterface {
   StringInputStream cmdLine;
   List choices;
 
-
   CmdlineInterface() {
     DEBUG_CMD("Command line interface starting.");
     connect(receiveFromScripter).then((SendPort port) {
