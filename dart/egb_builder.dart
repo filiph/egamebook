@@ -309,7 +309,8 @@ void write() {
   // write the ScripterImplementation file
   File outFile = new File("$outFilePathStub.dart");
   outFile.createSync();
-  outFile.open(FileMode.WRITE, (RandomAccessFile file) {
+  outFile.open(FileMode.WRITE)
+  .then((RandomAccessFile file) {
     print("File $outFilePathStub.dart created. Writing.");
     file.writeStringSync(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     classesLines.forEach((line) {
@@ -374,14 +375,15 @@ void write() {
     file.writeStringSync(implEndClass);
     file.writeStringSync(implEndFile);
 
-    file.close(() {
+    file.close().then((_) {
         print("Scripter file written and closed.");
     });
   });
 
 
   // we have the scripter file, now let's make the others
-  outFile.fullPath((String outFilePath) {
+  outFile.fullPath()
+  .then((String outFilePath) {
 
       // create the cmd_line interface file  TODO: DRY with next file
       print("Writing $outFilePathStub.cmdline.dart file.");
@@ -389,7 +391,8 @@ void write() {
 
       File cmdLineFile = new File("$outFilePathStub.cmdline.dart");
       cmdLineFile.createSync();
-      cmdLineFile.open(FileMode.WRITE, (RandomAccessFile file) {
+      cmdLineFile.open(FileMode.WRITE)
+      .then((RandomAccessFile file) {
         cmdlineLines.then((List<String> lines) {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
@@ -400,11 +403,9 @@ void write() {
                 file.writeString("$line\n");
             }
 
-            file.onNoPendingWrites = () {
-              file.close(() {
-                print("Cmdline file written and closed.");
-              });
-            };
+            file.close().then((_) {
+              print("Cmdline file written and closed.");
+            });
         });
       });
 
@@ -414,7 +415,8 @@ void write() {
 
       File htmlUiFile = new File("$outFilePathStub.html.dart");
       htmlUiFile.createSync();
-      htmlUiFile.open(FileMode.WRITE, (RandomAccessFile file) {
+      htmlUiFile.open(FileMode.WRITE)
+      .then((RandomAccessFile file) {
         htmlUiLines.then((List<String> lines) {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
@@ -425,11 +427,9 @@ void write() {
                 file.writeString("$line\n");
             }
 
-            file.onNoPendingWrites = () {
-              file.close(() {
-                print("Html interface file written and closed.");
-              });
-            };
+            file.close().then((_) {
+              print("Html interface file written and closed.");
+            });
         });
       });
 
