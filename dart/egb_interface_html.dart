@@ -6,61 +6,47 @@
 #import('dart:html');
 #import('dart:isolate');
 
+void DEBUG_CMD(String str) {
+  print("CMD: $str");
+}
 
 class HtmlInterface implements UserInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
 
-  /**
-    Connects to the Scripter isolate, attaches [receiveCallback] to the 
-    _receivePort. Returns a future to SendPort.
-
-    You can call e.g.
-    [:connect(callback).then((port) {port.send(something, _receivePort)});:].
-  */
-  Future<SendPort> connect(Function receiveCallback) {
-    Completer completer = new Completer();
-
-    _receivePort = new ReceivePort();
-    _receivePort.receive(receiveCallback);
-
-    ScripterImpl scripter = new ScripterImpl();
-    scripter.spawn().then((SendPort port) {
-      _scripterPort = port;
-      completer.complete(port);
-    });
-
-    return completer.future;
-  }
-
-  List choices;
-
-  DivElement paragraphsDiv;
-  DivElement choicesDiv;
-  OListElement choicesOl;
-
   HtmlInterface() {
-    print("HTML interface starting.");
-    port.receive(receiveFromScripter);
-    /*
-    connect(receiveFromScripter).then((SendPort port) {
-        print("Scripter is now ready! Sending message.");
-        port.send(new Message.Start().toJson(), _receivePort.toSendPort());
-    });
-*/
+    DEBUG_CMD("HTML interface is starting.");
+
+    // create [ReceivePort] and bind it to the callback method [receiveFromScripter].
+    _receivePort = new ReceivePort();
+    _receivePort.receive(receiveFromScripter);
+
+    // create the isolate and send it the first handshake
+    _scripterPort = spawnFunction(createScripter);
+    _scripterPort.send(
+        new Message.Start().toJson(),
+        _receivePort.toSendPort()
+    );
+
     // DOM
     paragraphsDiv = document.query("div#book-paragraphs");
     choicesDiv = document.query("div#book-choices");
     choicesOl = document.query("ol#book-choices-ol");
   }
 
+  DivElement paragraphsDiv;
+  DivElement choicesDiv;
+  OListElement choicesOl;
+  List choices;
+
+
   ParagraphElement createParagraph(String innerHtml) {
     if (paragraphsDiv == null)
-      return;
+      return null;
     
     if (innerHtml == "") {
       print("Received an empty string.");
-      return;
+      return null;
     }
 
     ParagraphElement p = new Element.tag("p");
@@ -72,7 +58,7 @@ class HtmlInterface implements UserInterface {
 
   AnchorElement createChoice(String innerHtml, [int accessKey, int hash]) {
     if (choicesOl == null)
-      return;
+      return null;
 
     LIElement li = new Element.tag("li");
     AnchorElement a = new Element.tag("a");
@@ -136,9 +122,13 @@ class HtmlInterface implements UserInterface {
 }
 
 void main() {
-  startRootIsolate(main_);
+  new HtmlInterface();
 }
 
-void main_() {
-  new HtmlInterface();
+/**
+  Top-level function which is spawned by the [UserInterface] and which creates
+  the [Scripter] instance.
+  */
+void createScripter() {
+  new ScripterImpl();
 }
