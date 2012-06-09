@@ -15,6 +15,19 @@ class CmdlineInterface implements UserInterface {
   SendPort _scripterPort;
 
   /**
+    Constructor.
+    */
+  CmdlineInterface() {
+    DEBUG_CMD("Command line interface starting.");
+    connect(receiveFromScripter).then((SendPort port) {
+        DEBUG_CMD("Scripter is now ready! Sending message.");
+        port.send(new Message.Start().toJson(), _receivePort.toSendPort());
+    });
+
+    cmdLine = new StringInputStream(stdin);
+  }
+
+  /**
     Connects to the Scripter isolate, attaches [receiveCallback] to the 
     _receivePort. Returns a future to SendPort.
 
@@ -38,16 +51,6 @@ class CmdlineInterface implements UserInterface {
 
   StringInputStream cmdLine;
   List choices;
-
-  CmdlineInterface() {
-    DEBUG_CMD("Command line interface starting.");
-    connect(receiveFromScripter).then((SendPort port) {
-        DEBUG_CMD("Scripter is now ready! Sending message.");
-        port.send(new Message.Start().toJson(), _receivePort.toSendPort());
-    });
-
-    cmdLine = new StringInputStream(stdin);
-  }
 
   void receiveFromScripter(String messageJson, SendPort replyTo) {
     Message message = new Message.fromJson(messageJson);
