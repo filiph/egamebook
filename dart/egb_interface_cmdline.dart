@@ -7,7 +7,7 @@
 #import('dart:isolate');
 
 void DEBUG_CMD(String str) {
-//  print("CMD: $str");
+  // print("CMD: $str");
 }
 
 class CmdlineInterface implements UserInterface {
@@ -19,34 +19,19 @@ class CmdlineInterface implements UserInterface {
     */
   CmdlineInterface() {
     DEBUG_CMD("Command line interface starting.");
-    connect(receiveFromScripter).then((SendPort port) {
-        DEBUG_CMD("Scripter is now ready! Sending message.");
-        port.send(new Message.Start().toJson(), _receivePort.toSendPort());
-    });
+
+    // create [ReceivePort] and bind it to the callback method [receiveFromScripter].
+    _receivePort = new ReceivePort();
+    _receivePort.receive(receiveFromScripter);
+
+    // create the isolate and send it the first handshake
+    _scripterPort = spawnFunction(createScripter);
+    _scripterPort.send(
+        new Message.Start().toJson(),
+        _receivePort.toSendPort()
+    );
 
     cmdLine = new StringInputStream(stdin);
-  }
-
-  /**
-    Connects to the Scripter isolate, attaches [receiveCallback] to the 
-    _receivePort. Returns a future to SendPort.
-
-    You can call e.g.
-    [:connect(callback).then((port) {port.send(something, _receivePort)});:].
-  */
-  Future<SendPort> connect(Function receiveCallback) {
-    Completer completer = new Completer();
-
-    _receivePort = new ReceivePort();
-    _receivePort.receive(receiveCallback);
-
-    ScripterImpl scripter = new ScripterImpl();
-    scripter.spawn().then((SendPort port) {
-      _scripterPort = port;
-      completer.complete(port);
-    });
-
-    return completer.future;
   }
 
   StringInputStream cmdLine;
@@ -98,4 +83,12 @@ class CmdlineInterface implements UserInterface {
 
 void main() {
   new CmdlineInterface();
+}
+
+/**
+  Top-level function which is spawned by the [UserInterface] and which creates
+  the [Scripter] instance.
+  */
+void createScripter() {
+  new ScripterImpl();
 }

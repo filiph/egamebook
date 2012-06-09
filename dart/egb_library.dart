@@ -7,7 +7,7 @@
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
 
 void DEBUG_SCR(String str) {
-//  print("SCR: $str");
+  // print("SCR: $str");
 }
 
 
@@ -156,11 +156,12 @@ class Question extends UserInteraction {
 }
 
 
-/**
-  Scripter is the Isolate that runs the actual game and sends Messages to User Interface.
-  */
 
-class Scripter extends Isolate {
+/**
+  Scripter is the class that runs the actual game and sends Messages to UserInterface.
+  It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
+  */
+class Scripter {
   SendPort _interfacePort;
 
   List<List> pages;
@@ -170,15 +171,18 @@ class Scripter extends Isolate {
 
   int nextPage;
   bool repeatBlockBit = false;
+  /**
+    When a block/script/choice call for a script to be called afterwards, it ends
+    up on this FIFO stack.
+    */
   List<Function> nextScriptStack;
 
   Scripter() : super() {
     DEBUG_SCR("Scripter has been created.");
     nextScriptStack = new List<Function>();
     initScriptEnvironment();
-  }
 
-  void main() {
+    // start the loop
     port.receive(callback);
   }
 
@@ -356,14 +360,5 @@ class Scripter extends Isolate {
 interface UserInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
-
-  /**
-    Connects to the Scripter isolate, attaches [receiveCallback] to the 
-    _receivePort. Returns a future to SendPort.
-
-    You can call e.g.
-    [:connect(callback).then((port) {port.send(something, _receivePort)});:].
-    */
-  Future<SendPort> connect(Function receiveCallback);
 }
 
