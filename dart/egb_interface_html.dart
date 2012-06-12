@@ -56,20 +56,20 @@ class HtmlInterface implements UserInterface {
     return p;
   }
 
-  AnchorElement createChoice(String innerHtml, [int accessKey, int hash]) {
+  AnchorElement createChoice(String innerHtml, [String accessKey="", int hash]) {
     if (choicesOl == null)
       return null;
 
     LIElement li = new Element.tag("li");
     AnchorElement a = new Element.tag("a");
     a.innerHTML = innerHtml;
-    a.accessKey = accessKey.toString();
     if (hash != null)
       a.on.click.add((Event ev) {
           _scripterPort.send(
             new Message.OptionSelected(hash).toJson(),
             _receivePort.toSendPort()
           );
+          choicesOl.elements.clear();
       });
     
     li.elements.add(a);
@@ -98,7 +98,7 @@ class HtmlInterface implements UserInterface {
           createParagraph(message.listContent[0]);
         choices = new List.from(message.listContent);
         for (int i = 1; i < choices.length; i++) {
-          createChoice(choices[i]['string'], accessKey:i, hash:choices[i]['hash']);
+          createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);
         }
         // let player choose
         /*

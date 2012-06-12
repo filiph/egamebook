@@ -163,6 +163,7 @@ void parse() {
       /* CLASSES */
       int endTagIndex;
       for (int ii = i; ii < inLines.length; ii++) {
+        // print("Line: ${inLines[ii]}");
         if (classesTagEnd.hasMatch(inLines[ii])) {
           endTagIndex = ii;
           break;
@@ -492,10 +493,16 @@ void main() {
   inFilePath = options.arguments[0];
   inFileName = inFilePath.substring(inFilePath.lastIndexOf("/") + 1);
 
-  getLines(inFilePath).then((List<String> lines) {
+  /*getLines(inFilePath).then((List<String> lines) {
       inLines = lines;
       parse();
       write();
-      // TODO: call dartc/frog to create the JS file
+      // TODO: call dartc/frog to create the JS file (currently in the shell script)
+  });*/
+
+  new File(inFilePath).readAsLines().then((List<String> lines) {
+      inLines = lines;
+      parse();
+      write();
   });
 }
