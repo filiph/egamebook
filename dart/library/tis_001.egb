@@ -376,7 +376,9 @@
 --- 
 welcome
 
-# Thin Ice System (TIS) Unit Testing
+# Thin Ice System (TIS) Testing
+
+Note this is still very experimental, especially outside the command line interface. But it should work.
 
 
 
@@ -387,7 +389,7 @@ welcome
 ---
 interactiveTest
 
-You encounter a worthy opponent: a homeless man!
+You encounter a worthy opponent: a drunk man wearing a helmet!
 
 <dart>
   v_man = new Actor();
