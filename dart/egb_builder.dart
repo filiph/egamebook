@@ -488,7 +488,11 @@ void main() {
   
   // TODO: make platform agnostic
   scriptFilePath = options.script;
-  scriptDirPath = "${scriptFilePath.substring(0, scriptFilePath.lastIndexOf('/'))}";
+  int lastSlashIndex = scriptFilePath.lastIndexOf('/');
+  if (lastSlashIndex == -1)
+    scriptDirPath = ".";
+  else
+    scriptDirPath = "${scriptFilePath.substring(0, scriptFilePath.lastIndexOf('/'))}";
 
   inFilePath = options.arguments[0];
   inFileName = inFilePath.substring(inFilePath.lastIndexOf("/") + 1);
