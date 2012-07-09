@@ -35,8 +35,9 @@ features.
     Day1.WakeUp
     
     You woke up and quickly realize the house is surrounded by the
-police. "Oh Rick," you sigh. "You just can't keep your mouth shut, can
-you?" You have a minute at most before the pigs kick the door in.
+police. "Oh Rick," you sigh. "You idiot." 
+
+    You have a minute at most before the pigs kick the door in.
     
     <script>
       time = 0;
@@ -47,15 +48,17 @@ you?" You have a minute at most before the pigs kick the door in.
     ---
     Day1.wakeupDilemma
 
-    <dart>
+    <script>
       if (time >= 45) {
         goto("breakIn");
       } else if (time >= 30) {
-    </dart>
+    </script>
     You hear major commotion outside. They must be getting ready.
-    <dart>
+    <script>
       }
-    </dart>
+    </script>
+
+    It is $time seconds since you woke up.
 
     What do you do?
     - Get dressed (30 seconds) [getDressed]
