@@ -17,7 +17,8 @@ The basic egb file looks like this:
     ---
     squash
 
-    You try to squash the spiders, but you realize they are actualy rusty nails. Game over.
+    You try to squash the spiders, but there's too many of them. Oh god,
+    they're eating your face off now!
 
     ---
     run
@@ -31,11 +32,20 @@ This will create an egamebook that starts in the first room (handle _start_) and
 Let's go through some more complex examples while showing advanced
 features.
 
+    Title:      Test Gamebook #1  
+    Subtitle:   The Adventures of a Guy with a Gun  
+    Author:     Filip Hracek  
+                John Doe  
+    Web:        http://filiph.net/  
+    Email:      abc@example.com  
+    Keywords:   crimi, thriller  
+    Copyright:  Creative Commons  
+
+
     ---
     Day1.WakeUp
     
-    You woke up and quickly realize the house is surrounded by the
-police. "Oh Rick," you sigh. "You idiot." 
+    You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot." 
 
     You have a minute at most before the pigs kick the door in.
     
@@ -50,7 +60,7 @@ police. "Oh Rick," you sigh. "You idiot."
 
     <script>
       if (time >= 45) {
-        goto("breakIn");
+        goto("policeBreakIn");
       } else if (time >= 30) {
     </script>
     You hear major commotion outside. They must be getting ready.
@@ -69,9 +79,7 @@ police. "Oh Rick," you sigh. "You idiot."
     Day1.getDressed
     [[ visitOnce ]]
 
-    You quickly grab the clothes that you left on the bedside table and
-get dressed. You actually manage to do it in 20 seconds in spite of
-being nervous as hell.
+    You quickly grab the clothes that you left on the bedside table and get dressed. You actually manage to do it in 20 seconds in spite of being nervous as hell.
 
     <script>
       time += 20;
@@ -83,9 +91,7 @@ being nervous as hell.
     Day1.getGun
     [[ visitOnce ]]
 
-    You dive under the bed and your hand almost immediately finds the
-old-fashioned revolver that's been taped there for some time now. You
-check it -- it's loaded and apparently working.
+    You dive under the bed and your hand almost immediately finds the old-fashioned revolver that's been taped there for some time now. You check it -- it's loaded and apparently working.
 
     <script>
       weapon = "gun";
@@ -98,18 +104,15 @@ check it -- it's loaded and apparently working.
     Day1.warnAmy
     [[ visitOnce ]]
 
-    You grab the phone and speed-dial number one. It takes ages for her
-to pick up, and when she does, she's sleepy and slow.
+    You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow.
 
     "Wha' uppp?"
 
-    "Hey baby," you start quickly, "I have pigs outside. Rick must have
-talked. Go. Go somewhere safe. Somewhere I wouldn't know."
+    "Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know."
 
     "What?"
 
-    You hang up, hoping she got all that. You know you can't lose any
-more time now.
+    You hang up, hoping she got all that. You know you can't lose any more time now.
 
     <script>
       time += 30;
@@ -118,30 +121,20 @@ more time now.
     - [wakeupDilemma]
 
     ---
-    breakIn
+    policeBreakIn
 
-    There's a sudden, loud crash _right in the room_ and a man in black
-overall jumps into the room, through the window, like some sort of a
-freaking ninja. Everything slows down. He's holding a gun and starts
-turning it towards you.
+    There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you.
 
     <script>
       if (weapon == "gun") {
     </script>
-    You react instinctively. There's a loud gunshot and the man falls to
-the ground. You shot him in the stomach and you know he's wearing an
-armor, but the sheer shock and power of the impact will incapacitate
-this guy for some time.
+    You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.
 
     - [runOutTheWindow]
     <script>
       } else {
     </script>
-    You realize you don't have the gun yet, so you instinctively move
-towards the bed (to which it's taped from below). Though the policeman
-can't know what you're after, he acts as instinctively as you do -- he
-shoots you in the right clavicle area. You fall to the ground, screaming
-with pain.
+    You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.
 
     - [wasted]
     <script>
@@ -151,21 +144,16 @@ with pain.
     ---
     Day1.runOutTheWindow
 
-    You jump through the window, catch hold of some branches of the
-backyard tree and fall down on the grass with a thump. You hear "Shit!"
-from the side, so you send a blind shot there, and start running towards
-the white fence. The adventure begins.
+    You jump through the window, catch hold of some branches of the backyard tree and fall down on the grass with a thump. You hear "Shit!" from the side, so you send a blind shot there, and start running towards the white fence. The adventure begins.
 
     - [theAdventureBegins]
   
     ---
     wasted
 
-    For the next few hours and days, you just see blurs and colors and
-you dream nightmares of Amy and the bastard son of yours.
+    For the next few hours and days, you just see blurs and colors and you dream nightmares of Amy and the bastard son of yours.
 
-    When you finally come to your senses, you're in prison. And you
-won't be getting out alive.
+    When you finally come to your senses, you're in prison. And you won't be getting out alive.
 
 ## Advanced uses
 
@@ -203,7 +191,7 @@ Note: These three (in contrast to the script blocks) can be anywhere in the book
 
 #### Init
 
-This block is called every time the player opens the book. It should contain constants that you want to use throughout.
+This block is called every time the player opens the book. It should contain **variables** that you want to use throughout and that you want to make sure are defined from the very start of the book.
 
     <init>
     maxNumberOfSpiders = 100;
@@ -211,7 +199,7 @@ This block is called every time the player opens the book. It should contain con
 
 #### Library
 
-This block typically contains functions that you want to use throughout the book. From technical reasons, you can't define classes in this block. That's what `<classes>` is for.
+This block typically contains **functions** that you want to use throughout the book. From technical reasons, you can't define classes in this block. That's what `<classes>` is for. You also can't define saveable variables (that's what `<init>` is for).
 
     <library>
     getDiceThrow() {
@@ -221,7 +209,7 @@ This block typically contains functions that you want to use throughout the book
 
 #### Classes
 
-For technical reasons, you can't define classes in the library block. Therefore, if you want to define any classes, put them into the classes block. There's one more caveat, though: you _can't_ use the special functions (`echo`, `repeatBlock`, etc.) from the `<classes>` block (again, for technical reasons). You shouldn't _have_ to, but be aware of the limitation.
+For technical reasons, you can't define **classes** in the library block. Therefore, if you want to define any classes, put them into the classes block. There's one more caveat, though: you _can't_ use the special functions (`echo`, `repeatBlock`, etc.) from the `<classes>` block (again, for technical reasons). You shouldn't _have_ to, but be aware of the limitation.
 
 In the future, we might be able to merge classes and library into one block.
 
