@@ -1,3 +1,5 @@
+#library("egb_builder");
+
 #import('dart:io');
 
 #import('html_entities.dart');
@@ -346,13 +348,13 @@ void write() {
           file.writeStringSync("$indent{\n");
           block.lines.forEach((line) {
             file.writeStringSync("$indent$line\n");
-          });
+            });
           file.writeStringSync("$indent}$commaOrNot\n");
           } else if (block.type == Block.BLK_DART_SCRIPT) {
           file.writeStringSync("$indent() {\n");
           block.lines.forEach((line) {
             file.writeStringSync("$indent$line\n");
-          });
+            });
           file.writeStringSync("$indent}$commaOrNot\n");
           }
           });
@@ -398,7 +400,7 @@ void write() {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
                 file.writeString("#import('$scriptDirPath/egb_library.dart');\n");
-              else if (line.contains("#import('samples/unit-testing.markdown.dart');")) 
+              else if (line.contains("#import('samples/unit-testing.markdown.dart');"))
                 file.writeString("#import('$outFilePath');\n");
               else
                 file.writeString("$line\n");
@@ -422,7 +424,7 @@ void write() {
             for (String line in lines) {
               if (importEgbLibrary.hasMatch(line))
                 file.writeString("#import('$scriptDirPath/egb_library.dart');\n");
-              else if (line.contains("#import('samples/unit-testing.markdown.dart');")) 
+              else if (line.contains("#import('samples/unit-testing.markdown.dart');"))
                 file.writeString("#import('$outFilePath');\n");
               else
                 file.writeString("$line\n");
@@ -451,7 +453,7 @@ String escapeQuotes(String str) {
 Future<List<String>> getLines(String inFilePath) {
   print("Opening $inFilePath.");
   Completer completer = new Completer();
-  
+
   File inFile = new File(inFilePath);
   if (!inFile.existsSync()) {
     print("File ${inFile.fullPath()} doesn't exist.");
@@ -471,7 +473,7 @@ Future<List<String>> getLines(String inFilePath) {
 
     // clean up
     inStream.close();
-    
+
     completer.complete(lines);
   };
 
@@ -485,7 +487,7 @@ void main() {
   if (options.arguments.length < 1) {
     throw new Exception("Script called without argument. Please provide a file to work on.");
   }
-  
+
   // TODO: make platform agnostic
   scriptFilePath = options.script;
   int lastSlashIndex = scriptFilePath.lastIndexOf('/');
