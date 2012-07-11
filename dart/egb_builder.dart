@@ -61,55 +61,33 @@ class Builder {
         // iterate over all lines in input file
         print("Reading input file ${f.name}");
 
-        // These are available modes for the [mode] variable.
-        final int MODE_NORMAL = 1;
-        final int MODE_INSIDE_CLASSES = 1;
-        final int MODE_INSIDE_LIBRARY = 1;
-        final int MODE_INSIDE_INIT = 1;
-        final int MODE_INSIDE_SCRIPT = 1;
-        final int MODE_INSIDE_SCRIPT_TAG = 1;
         // This makes sure the parser remembers where it is during reading the file.
-        int mode = MODE_NORMAL;
+        _mode = _MODE_NORMAL;
 
-        int lineNumber = 0; int pageNumber = 0; int blockNumber = 0;
-        String thisLine = "";
-        String prevLine = "";
+        _lineNumber = 0;
+        _pageNumber = 0;
+        _blockNumber = 0;
 
         // Start reading
         strInputStream.onLine = () {
-          thisLine = strInputStream.readLine();
-          stdout.writeString(".");
 
-          if (mode == MODE_NORMAL) {
-            // new page?
-            if (hr.hasMatch(prevLine) && validPageName.hasMatch(thisLine)) {
-              var name = validPageName.firstMatch(thisLine).group(1);
-              pageHandles[name] = pageNumber;
-              pages.add(new BuilderPage(name, pageNumber++, lineNumber));
-            }
-
-            // page options?
-            if (!pages.isEmpty() && pages.last().lineStart == lineNumber - 1
-                && pageOptions.hasMatch(thisLine)) {
-              Match m = pageOptions.firstMatch(thisLine);
-              for (var i = 1; i <= m.groupCount(); i += 2) {
-                var opt = m.group(i);
-                if (opt != null)
-                  pages.last().options.add(opt);
-              }
-            }
-          }
-
-
-          // finished reading line
-          lineNumber++;
-          prevLine = thisLine;
+          // start finding every pattern at once, in a non-blocking way
+          Futures.wait([
+              checkNewPage(),
+              checkPageOptions()
+          ]).then((_) {
+            // finished parsing line
+            _lineNumber++;
+            _prevLine = _thisLine;
+            _thisLine = strInputStream.readLine();
+            stdout.writeString(".");
+          });
         };
 
         strInputStream.onClosed = () {
           print("\nReading input file has finished.");
-          if (mode != MODE_NORMAL)
-            throw "Corrupt file, didn't close a tag.";
+          if (_mode != _MODE_NORMAL)
+            throw "Corrupt file, didn't close a tag (_mode = ${_mode}).";
           completer.complete(this);
         };
       }
@@ -119,6 +97,38 @@ class Builder {
   }
 
 
+  Future<bool> checkNewPage() {
+    if (_mode != _MODE_NORMAL || _prevLine == null || _thisLine == null)
+      return new Future.immediate(false);
+
+    if (hr.hasMatch(_prevLine) && validPageName.hasMatch(_thisLine)) {
+      var name = validPageName.firstMatch(_thisLine).group(1);
+      pageHandles[name] = _pageNumber;
+      pages.add(new BuilderPage(name, _pageNumber++, _lineNumber));
+      return new Future.immediate(true);
+    } else {
+      return new Future.immediate(false);
+    }
+  }
+
+  Future<bool> checkPageOptions() {
+    if (_mode != _MODE_NORMAL || _prevLine == null || _thisLine == null)
+      return new Future.immediate(false);
+
+    if (!pages.isEmpty() && pages.last().lineStart == _lineNumber - 1
+        && pageOptions.hasMatch(_thisLine)) {
+      Match m = pageOptions.firstMatch(_thisLine);
+      var lastpage = pages.last();
+      for (var i = 1; i <= m.groupCount(); i += 2) {
+        var opt = m.group(i);
+        if (opt != null)
+          lastpage.options.add(opt);
+      }
+      return new Future.immediate(true);
+    } else {
+      return new Future.immediate(false);
+    }
+  }
 
 
   List<BuilderPage> pages;
@@ -186,4 +196,24 @@ class Builder {
   final String implEndFile = """
   """;
 
+
+
+
+  // These are available modes for the [mode] variable.
+  static int _MODE_NORMAL = 1;
+  static int _MODE_INSIDE_CLASSES = 2;
+  static int _MODE_INSIDE_LIBRARY = 4;
+  static int _MODE_INSIDE_INIT = 8;
+  static int _MODE_INSIDE_SCRIPT = 16;
+  static int _MODE_INSIDE_SCRIPT_TAG = 32;
+  // This makes sure the parser remembers where it is during reading the file.
+  int _mode;
+
+
+  int _lineNumber;
+  int _pageNumber;
+  int _blockNumber;
+
+  String _thisLine;
+  String _prevLine;
 }
