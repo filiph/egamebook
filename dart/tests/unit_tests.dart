@@ -37,22 +37,35 @@ void main() {
   });
 
   group('Builder', () {
-    test("new instance is empty", () {
-      var b = new Builder();
-      expect(b,
-        new isInstanceOf<Builder>("Builder"));
-      expect(b.pages,
-        allOf([isNotNull, isEmpty]));
-    });
 
-    group('simple file', () {
-      var bFinished;
-      setUp(() {
+    group('basics', () {
+
+      test("new instance is empty", () {
         var b = new Builder();
-        bFinished = b.readFile(new File(getPath("simple_3pages.egb")));
+        expect(b,
+          new isInstanceOf<Builder>("Builder"));
+        expect(b.pages,
+          allOf([isNotNull, isEmpty]));
       });
 
-      solo_test("reads pages", () {
+      test("throws on nonexistent files", () {
+        expect(new Builder().readFile(new File(getPath("./nonexistent"))),
+          throwsA(new isInstanceOf<FileIOException>("FileIOException")));
+      });
+
+    });
+
+    group('simple files', () {
+
+      test("no pages file gives no pages", () {
+        var callback = expectAsync1((var b) {
+          expect(b.pages,
+            hasLength(0));
+        });
+        new Builder().readFile(new File(getPath("no_pages.egb"))).then(callback);
+      });
+
+      test("reads pages", () {
         var callback = expectAsync1((var b) {
           expect(b.pages,
             hasLength(3));
@@ -63,37 +76,111 @@ void main() {
           expect(b.pages[b.pageHandles["run"]].options,
             orderedEquals(["visitOnce", "showOnce"]));
         });
-        bFinished.then(callback);
+        new Builder().readFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
 
-      test("reads blocks", () {
+      test("reads page at EOF", () {
+        var callback = expectAsync1((var b) {
+          expect(b.pages,
+            hasLength(4));
+          expect(b.pages[3].name,
+            equals("thisShouldStillRegister"));
+        });
+        new Builder().readFile(new File(getPath("page_at_eof.egb"))).then(callback);
+      });
+
+      test("reads text blocks", () {
         var callback = expectAsync1((var b) {
           int numBlocks = 0;
-          b.pages.forEach((page) => numBlocks += page.blocks.length);
+          b.pages.forEach((page) {
+            numBlocks += page.blocks.length;
+            //page.blocks.forEach((block) => print(block.lines));
+          });
           expect(numBlocks,
-            equals(4));
+            equals(8));
+          expect(b.pages[b.pageHandles["run"]].blocks,
+            hasLength(2));
+          expect(b.pages[b.pageHandles["exit"]].blocks,
+            hasLength(0));
+          expect(b.pages[b.pageHandles["squash"]].blocks,
+            hasLength(5));
+          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines,
+            hasLength(2));
+          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines[0],
+            startsWith("You try to squash"));
+          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines[1],
+            endsWith("face off now!"));
         });
-        bFinished.then(callback);
+        new Builder().readFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
       });
     });
 
-    /*test("detects bad files", () {*/
-      /*var b = new Builder();*/
-      /*var async = startAsync();*/
-      /*guardAsync(() {*/
+    group('advanced files', () {
 
-      /*});*/
-      /*async.complete();*/
-      /*expect(b.readFile(new File("./nonexistent")),*/
-        /*throwsA(new isInstanceOf<FileIOException>("FileIOException")));*/
-    /*});*/
+      test("throws on unclosed tag", () {
+        expect(new Builder().readFile(new File(getPath("unclosed_tag.egb"))),
+          throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));
+      });
 
-//    test("parses simple .egb file", () {
-//      var builder = new Builder.fromFile("./simple_test_file.egb");
-//      expect(builder.pages.length,
-//        equals(5));
-//      ...
-//    });
+      test("detects blocks with vars", () {
+        var callback = expectAsync1((var b) {
+          expect(b.pages[0].blocks[0].type,
+            equals(BuilderBlock.BLK_TEXT));
+          expect(b.pages[0].blocks[1].type,
+            equals(BuilderBlock.BLK_TEXT_WITH_VAR));
+          expect(b.pages[0].blocks[2].type,
+            equals(BuilderBlock.BLK_TEXT_WITH_VAR));
+          expect(b.pages[0].blocks[3].type,
+            equals(BuilderBlock.BLK_TEXT_WITH_VAR));
+          expect(b.pages[0].blocks[4].type,
+            equals(BuilderBlock.BLK_TEXT_WITH_VAR));
+        });
+        new Builder().readFile(new File(getPath("variables_in_text.egb"))).then(callback);
+      });
+
+      test("detects non-choices (illegally formated) and leaves them alone", () {
+        var callback = expectAsync1((var b) {
+          for (var i = 0; i < 11; i++) {
+            expect(b.pages[0].blocks[i].type,
+              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])));
+          }
+        });
+        new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
+      });
+
+      test("detects choices", () {
+        var callback = expectAsync1((var b) {
+          for (var i = 11; i < b.pages[0].blocks.length; i++) {
+            expect(b.pages[0].blocks[i].type,
+              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]));
+          }
+
+          expect(b.pages[1].blocks[0].options["string"],
+            equals("abcdefg 123456"));
+          expect(b.pages[1].blocks[0].options["script"],
+            isNull);
+          expect(b.pages[1].blocks[0].options["goto"],
+            equals("abc _ xyz"));
+          expect(b.pages[1].blocks[1].options["string"],
+            equals("something"));
+          expect(b.pages[1].blocks[1].options["script"],
+            equals("abcd[]1234;"));
+          expect(b.pages[1].blocks[1].options["goto"],
+            equals("xyz"));
+        });
+        new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
+      });
+
+      test("detects <classes>", () {
+        var callback = expectAsync1((var b) {
+          expect(b.classesLines,
+            hasLength(16));
+        });
+        new Builder().readFile(new File(getPath("init_blocks.egb"))).then(callback);
+      });
+
+    });
+
 
   });
 }
