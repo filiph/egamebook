@@ -47,8 +47,8 @@ class Message {
 
   // Choices message. A list with [0] being text prepended, then choices
   Message.ShowChoices(
-      List<Choice> choices, 
-      [String prependText="", 
+      List<Choice> choices,
+      [String prependText="",
       bool endOfPage=false]
       ) : type = MSG_SHOW_CHOICES {
     List<Choice> choicesToSend;
@@ -78,7 +78,7 @@ class Message {
   Message.NoResult() : type = MSG_NO_RESULT {}
 
   /**
-    Ctor that creates the Message object from a JSON string. 
+    Ctor that creates the Message object from a JSON string.
     XXX: this isn't needed in VM, but frog can't handle Object messages (yet?)
     */
   Message.fromJson(String json) {
@@ -91,7 +91,7 @@ class Message {
       listContent = data["listContent"];
     } else if (type == MSG_TEXT_RESULT) {
       strContent = data["strContent"];
-    } 
+    }
   }
 
   /**
@@ -130,6 +130,7 @@ class Choice extends UserInteraction {
   String string;
   Function f;
   int goto;
+  bool showNow;
 
   Choice(this.string, [this.goto, Function then, bool showNow=false]) : super() {
     f = then;
@@ -193,7 +194,7 @@ class Scripter {
     if (message.type == Message.MSG_QUIT) {
       DEBUG_SCR("Closing port and quiting.");
       port.close();
-    } else if (pages == null 
+    } else if (pages == null
         || (currentPage != null && currentPage >= pages.length)) {
       DEBUG_SCR("No more pages.");
       _interfacePort.send(new Message.EndOfBook().toJson(), port.toSendPort());
@@ -260,13 +261,13 @@ class Scripter {
     DEBUG_SCR("Resolving block.");
     if (currentBlock >= blocks.length) {
       DEBUG_SCR("At the end of page.");
-      if (choices.some((choice) => !choice.shown)) 
+      if (choices.some((choice) => !choice.shown))
         return new Message.ShowChoices(choices, endOfPage:true);
       else
         return new Message.EndOfBook();
     } else if (blocks[currentBlock] is String) {
       // just an ordinary paragraph, no script
-      Message message = new Message.TextResult(blocks[currentBlock]); 
+      Message message = new Message.TextResult(blocks[currentBlock]);
       return message;
     } else if (blocks[currentBlock] is Map) {
       choices.add(new Choice.fromMap(blocks[currentBlock]));
@@ -292,8 +293,8 @@ class Scripter {
 
     initBlock(); // run contents of <init>
   }
-  
-  // making sure calls like "a = 5" will work in scripts 
+
+  // making sure calls like "a = 5" will work in scripts
   // XXX: noSuchMethod not yet implemented in Dart!
   /*
      noSuchMethod(InvocationMirror invocation) {
