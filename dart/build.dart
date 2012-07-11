@@ -4,30 +4,6 @@
 
 #import('html_entities.dart');
 
-class Page {
-  int index;
-  int lineStart;
-  int lineEnd;
-  String name;
-  List<Block> blocks;
-
-  Page(this.name, this.index, [this.lineStart]) {}
-}
-
-class Block {
-  int index;
-  int lineStart;
-  int lineEnd;
-  int type;
-  List<String> lines;
-
-  static final int BLK_TEXT = 1;
-  static final int BLK_DART_SCRIPT = 2;
-  static final int BLK_CHOICE = 4;
-
-  Block(this.lines, this.index, this.type) {}
-}
-
 String scriptFilePath;
 String scriptDirPath;
 String inFilePath;
@@ -41,75 +17,11 @@ List<String> classesLines;
 
 List<String> outLibLines;
 List<String> outPagesLines;
-
-final String implStartFile = """
-#library('Scripter Implementation');
-
-#import('../egb_library.dart');
-""";
-
-final String implStartClass = """
-class ScripterImpl extends Scripter {
-
-  /* LIBRARY */
-""";
-
-final String implStartCtor = """
-  ScripterImpl() : super() {
-""";
-
-final String implStartPages = """
-    pages = [
-      /* PAGES & BLOCKS */
-""";
-
-final String implEndPages = """
-    ];
-""";
-
-final String implEndCtor = """
-  }
-""";
-
-final String implStartInit = """
-  /* INIT */
-  void initBlock() {
-""";
-
-final String implEndInit = """
-  }
-""";
-
-final String implEndClass = """
-}
-""";
-
-final String implEndFile = """
-""";
-
 /**
   The main workhorse. Parses the input .egb file, finding scripts, pages, etc.
   Saves everything to gobal vars.
   */
 void parse() {
-  RegExp blankLine = new RegExp(@"^\s*$");
-  RegExp hr = new RegExp(@"^\-\-\-+$"); // ----
-  RegExp dartTagStart = new RegExp(@"^\s*<dart>\s*$");
-  RegExp dartTagEnd = new RegExp(@"^\s*</dart>\s*$");
-  RegExp initTagStart = new RegExp(@"^\s*<init>\s*$");
-  RegExp initTagEnd = new RegExp(@"^\s*</init>\s*$");
-  RegExp libraryTagStart = new RegExp(@"^\s*<library>\s*$");
-  RegExp libraryTagEnd = new RegExp(@"^\s*</library>\s*$");
-  RegExp classesTagStart = new RegExp(@"^\s*<classes>\s*$");
-  RegExp classesTagEnd = new RegExp(@"^\s*</classes>\s*$");
-  RegExp choice = new RegExp(@"^\- (.+) \[([a-zA-Z_][a-zA-Z0-9_]*)\]$");
-  RegExp validName = new RegExp(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
-
-  pages = new Map<String,Page>();
-  initLines = new List<String>();
-  libraryLines = new List<String>();
-  classesLines = new List<String>();
-
   // Lines that can be skipped because their contents are already accounted for
   Set<int> _processedLines = new Set<int>();
 
