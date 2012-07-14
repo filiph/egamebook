@@ -178,12 +178,133 @@ void main() {
             equals(BuilderInitBlock.BLK_CLASSES));
           expect(b.initBlocks[0].lineStart,
             equals(7));
+          expect(b.initBlocks[0].lineEnd,
+            equals(12));
         });
         new Builder().readFile(new File(getPath("classes_4blocks.egb"))).then(callback);
       });
 
+      test("detects <CLASSES>", () {
+        var callback = expectAsync1((var b) {
+          expect(b.initBlocks[1].type,
+            equals(BuilderInitBlock.BLK_CLASSES));
+          expect(b.initBlocks[1].lineStart,
+            equals(31));
+          expect(b.initBlocks[1].lineEnd,
+            equals(36));
+        });
+        new Builder().readFile(new File(getPath("classes_4blocks.egb"))).then(callback);
+      });
+
+      test("detects different init blocks", () {
+        var callback = expectAsync1((var b) {
+          expect(b.initBlocks,
+            hasLength(3));
+          expect(b.initBlocks[0].type,
+            equals(BuilderInitBlock.BLK_FUNCTIONS));
+          expect(b.initBlocks[0].lineStart,
+            equals(4));
+          expect(b.initBlocks[0].lineEnd,
+            equals(9));
+          expect(b.initBlocks[1].type,
+            equals(BuilderInitBlock.BLK_CLASSES));
+          expect(b.initBlocks[1].lineStart,
+            equals(28));
+          expect(b.initBlocks[1].lineEnd,
+            equals(33));
+          expect(b.initBlocks[2].type,
+            equals(BuilderInitBlock.BLK_VARIABLES));
+          expect(b.initBlocks[2].lineStart,
+            equals(55));
+          expect(b.initBlocks[2].lineEnd,
+            equals(60));
+        });
+        new Builder().readFile(new File(getPath("initblocks_all.egb"))).then(callback);
+      });
+
+      // TODO: check throws
+      /*test("throws on nested tag", () {*/
+        /*expect(new Builder().readFile(new File(getPath("initblocks_nested.egb"))),*/
+          /*throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));*/
+      /*});*/
+
     });
 
+    group('scripts', () {
 
+      test("is detected", () {
+        var callback = expectAsync1((var b) {
+          var script1 = b.pages[0].blocks[1];
+          var script2 = b.pages[1].blocks.last();
+          var notscript = b.pages[b.pageHandles["run"]].blocks.last();
+
+          expect(script1.type,
+            equals(BuilderBlock.BLK_SCRIPT));
+          expect(script1.lineStart,
+            equals(15));
+          expect(script1.lineEnd,
+            equals(17));
+          expect(script2.type,
+            equals(BuilderBlock.BLK_SCRIPT));
+          expect(script2.lineStart,
+            equals(37));
+          expect(script2.lineEnd,
+            equals(38));
+          expect(notscript.type,
+            isNot(BuilderBlock.BLK_SCRIPT));
+          expect(notscript.lineStart,
+            equals(49));
+          expect(notscript.lineEnd,
+            equals(49));
+        });
+        new Builder().readFile(new File(getPath("script_2tags.egb"))).then(callback);
+      });
+
+      test("detects <echo>", () {
+        var callback = expectAsync1((var b) {
+          var script = b.pages[0].blocks[1];
+          var echo1 = script.subBlocks[0];
+          var echo2 = script.subBlocks[1];
+
+          expect(script.subBlocks,
+            hasLength(2));
+          expect(echo1.lineStart,
+            equals(20));
+          expect(echo1.lineEnd,
+            equals(22));
+          expect(echo2.lineStart,
+            equals(24));
+          expect(echo2.lineEnd,
+            equals(26));
+        });
+        new Builder().readFile(new File(getPath("echo_2tags.egb"))).then(callback);
+      });
+
+    });
+
+    group('metadata', () {
+
+      test("is detected", () {
+        var callback = expectAsync1((var b) {
+          var metadata = b.metadata;
+          var title = b.metadata[0];
+          var twoValues = b.metadata[2];
+
+          expect(metadata,
+            hasLength(9));
+          expect(title.key,
+            equals("Title"));
+          expect(title.values,
+            hasLength(1));
+          expect(title.values[0],
+            equals("Test Gamebook #1"));
+          expect(twoValues.values,
+            hasLength(2));
+          expect(twoValues.values[1],
+            equals("John Doe"));
+        });
+        new Builder().readFile(new File(getPath("metadata_9keys.egb"))).then(callback);
+      });
+    });
   });
 }

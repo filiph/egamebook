@@ -4,11 +4,41 @@
 
 class EgbFormatException implements Exception {
   String msg;
-  EgbFormatException([String this.msg]) {
+  int line;
+  File file;
+  EgbFormatException([String this.msg, this.line, this.file]) {
   }
 
   String toString() {
-    return msg;
+    StringBuffer strBuf = new StringBuffer();
+    strBuf.add("Format exception");
+    if (line != null)
+      strBuf.add(" on line [$line]");
+    if (file != null)
+      strBuf.add(" in file ${file.name}");
+    strBuf.add(": ");
+    strBuf.add(msg);
+    return strBuf.toString();
+  }
+}
+
+class BuilderLineSpan { // XXX: this should be super-class of the below, but Dart is broken here
+  int lineStart;
+  int lineEnd;
+
+  BuilderLineSpan([this.lineStart]);
+
+  get isClosed() => lineStart != null && lineEnd != null && lineStart <= lineEnd;
+}
+
+class BuilderMetadata {
+  String key;
+  List<String> values;
+
+  BuilderMetadata(this.key, [String firstValue]) {
+    values = new List<String>();
+    if (firstValue != null)
+      values.add(firstValue);
   }
 }
 
@@ -24,6 +54,10 @@ class BuilderPage {
     blocks = new List<BuilderBlock>();
     options = new List<String>();
   }
+
+  String toString() {
+    return "BuilderPage <$name> [$lineStart:$lineEnd]";
+  }
 }
 
 class BuilderBlock {
@@ -31,6 +65,7 @@ class BuilderBlock {
   int lineEnd;
   int type = 0;
   Map<String,Dynamic> options;
+  List<BuilderLineSpan> subBlocks;
 
   static final int BLK_TEXT = 1;
   static final int BLK_SCRIPT = 2;
@@ -41,6 +76,7 @@ class BuilderBlock {
 
   BuilderBlock([this.lineStart]) {
     options = new Map<String,Dynamic>();
+    subBlocks = new List<BuilderLineSpan>();
   }
 }
 
@@ -95,6 +131,7 @@ class BuilderInitBlock {
 class Builder {
 
   Builder() {
+    metadata = new List<BuilderMetadata>();
     pages = new List<BuilderPage>();
     pageHandles = new Map<String,int>();
     initBlocks = new List<BuilderInitBlock>();
@@ -109,6 +146,8 @@ class Builder {
   Future<Builder> readFile(File f) {
     var completer = new Completer();
 
+    inputFile = f;
+
     f.exists()
     .then((exists) {
       if (!exists)
@@ -118,8 +157,9 @@ class Builder {
 
         print("Reading input file ${f.name}");
 
-        // This makes sure the parser remembers where it is during reading the file.
-        _mode = MODE_NORMAL;
+        // The top of the file can be metadata. This will be changed to MODE_NORMAL
+        // in [_checkMetadataLine()] when there is no metadata.
+        _mode = MODE_METADATA;
 
         _lineNumber = 0;
         _pageNumber = 0;
@@ -128,7 +168,6 @@ class Builder {
         strInputStream.onLine = () {
           _check().then((_) {
             _lineNumber++;
-            _prevLine = _thisLine;
             _thisLine = strInputStream.readLine();
             //stdout.writeString(".");
           });
@@ -149,7 +188,7 @@ class Builder {
 
             if (_mode != MODE_NORMAL) {
               completer.completeException(
-                new EgbFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
+                newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
             } else {
               completer.complete(this);
             }
@@ -174,12 +213,10 @@ class Builder {
         _checkNewPage(),
         _checkPageOptions(),
         _checkChoice(),
-        _checkInitBlockTags()
-        /* TODO:
-        _checkScriptTags()
-        _checkImportTag()
+        _checkInitBlockTags(),
+        _checkScriptTags(),
         _checkMetadataLine()
-        */
+        /*_checkImportTag()*/
     ]).then((List<bool> checkValues) {
       if (checkValues.every((value) => value == false)) {
         // normal paragraph
@@ -221,11 +258,39 @@ class Builder {
     }
   }
 
-  Future<bool> _checkNewPage() {
-    if (_mode != MODE_NORMAL || _prevLine == null || _thisLine == null)
+  Future<bool> _checkMetadataLine() {
+    if (_mode != MODE_METADATA || _thisLine == null)
       return new Future.immediate(false);
 
-    if (hr.hasMatch(_prevLine) && validPageName.hasMatch(_thisLine)) {
+    Match m = metadataLine.firstMatch(_thisLine);
+
+    if (m != null) {
+      // first line of a metadata record
+      var key = m.group(1).trim();
+      var value = m.group(2).trim();
+      metadata.add(new BuilderMetadata(key, firstValue:value));
+      return new Future.immediate(true);
+    } else {
+      m = metadataLineAdd.firstMatch(_thisLine);
+
+      if (m != null && !metadata.isEmpty()) {
+        // we have a multi-value key and this is a following value
+        var value = m.group(1).trim();
+        metadata.last().values.add(value);
+        return new Future.immediate(true);
+      } else {
+        // we have hit the first non-metadata line. Quit metadata mode.
+        _mode = MODE_NORMAL;
+        return new Future.immediate(false);  // let it be checked by _checkNormalParagraph, too
+      }
+    }
+  }
+
+  Future<bool> _checkNewPage() {
+    if ((_mode != MODE_METADATA && _mode != MODE_NORMAL) || _thisLine == null)
+      return new Future.immediate(false);
+
+    if (newPageCandidate && validPageName.hasMatch(_thisLine)) {
       // discard the "---" from any previous blocks
       if (pages.isEmpty()) {
         // TODO: solve for synopsis
@@ -240,34 +305,30 @@ class Builder {
                 lastpage.blocks.removeLast();
               }
           }
-
-
-          /*
-          if (!lastblock.lines.isEmpty()) {
-            var lastline = lastblock.lines.last();
-            if (hr.hasMatch(lastline)) {  // this should always be true, but let's make sure
-              lastblock.lines.removeLast();
-              if (lastblock.lines.isEmpty())
-                lastpage.blocks.removeLast();
-              else if (lastpage.blocks.last().lineEnd == null)
-                lastpage.blocks.last().lineEnd = _lineNumber - 2;
-            }
-          }
-          */
         }
       }
       // add the new page
       var name = validPageName.firstMatch(_thisLine).group(1);
       pageHandles[name] = _pageNumber;
       pages.add(new BuilderPage(name, _pageNumber++, _lineNumber));
+      _mode = MODE_NORMAL;
+      newPageCandidate = false;
       return new Future.immediate(true);
+
     } else {
-      return new Future.immediate(false);
+      // no page, but let's check if this line isn't a "---" (next line could confirm a new page)
+      if (hr.hasMatch(_thisLine)) {
+        newPageCandidate = true;
+        return new Future.immediate(false);  // let it be checked by _checkNormalParagraph, too
+      } else {
+        newPageCandidate = false;
+        return new Future.immediate(false);
+      }
     }
   }
 
   Future<bool> _checkPageOptions() {
-    if (_mode != MODE_NORMAL || _prevLine == null || _thisLine == null)
+    if (_mode != MODE_NORMAL || _thisLine == null)
       return new Future.immediate(false);
 
     if (!pages.isEmpty() && pages.last().lineStart == _lineNumber - 1
@@ -286,7 +347,7 @@ class Builder {
   }
 
   Future<bool> _checkChoice() {
-    if (_prevLine == null || _thisLine == null || pages.isEmpty()
+    if (_thisLine == null || pages.isEmpty()
         || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO))
       return new Future.immediate(false);
 
@@ -375,9 +436,9 @@ class Builder {
           completer.complete(true);
         } else {
           completer.completeException(
-            new EgbFormatException("Invalid appearance of of an init "
+            newFormatException("Invalid appearance of of an init "
                   "opening tag `<$blocktype>`. We are already inside "
-                  "another tag (mode = $_mode). (line:$_lineNumber)"));
+                  "another tag (mode = $_mode)."));
         }
       } else {  // closing a tag
         if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_FUNCTIONS
@@ -387,9 +448,9 @@ class Builder {
           completer.complete(true);
         } else {
           completer.completeException(
-            new EgbFormatException("Invalid appearance of of an init "
+            newFormatException("Invalid appearance of of an init "
                   "closing tag `</$blocktype>`. We are not inside any "
-                  "other tag (mode = $_mode). (line:$_lineNumber)"));
+                  "other tag (mode = $_mode)."));
         }
       }
     } else {
@@ -398,6 +459,77 @@ class Builder {
 
     return completer.future;
   }
+
+  Future<bool> _checkScriptTags() {
+    if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_VARIABLES
+        || _mode == MODE_INSIDE_FUNCTIONS || _thisLine == null)
+      return new Future.immediate(false);
+
+    var completer = new Completer();
+
+    Match m = scriptOrEchoTag.firstMatch(_thisLine);
+
+    if (pages.isEmpty()) {
+      if (m != null) {
+        WARNING("No <script> or <echo> blocks will be recognized as such "
+                "in the synopsis (i.e. outside a page). Ignoring.");
+      }
+      return new Future.immediate(false);
+    }
+    var lastpage = pages.last();
+
+    if (m != null) {
+      bool closing =  m.group(1) == "/";
+      var type = m.group(2).toLowerCase();
+      var tagIsEcho = type == "echo";
+
+      if (!closing) {  // opening a new tag
+        if (_mode == MODE_NORMAL && !tagIsEcho) {
+          _mode = MODE_INSIDE_SCRIPT_TAG;
+          var block = new BuilderBlock(lineStart:_lineNumber);
+          block.type = BuilderBlock.BLK_SCRIPT;
+          lastpage.blocks.add(block);
+          completer.complete(true);
+        } else if (_mode == MODE_INSIDE_SCRIPT_TAG && tagIsEcho) {
+          _mode = MODE_INSIDE_SCRIPT_ECHO;
+          if (!lastpage.blocks.isEmpty()
+              && lastpage.blocks.last().type == BuilderBlock.BLK_SCRIPT) {
+            lastpage.blocks.last().subBlocks.add(new BuilderLineSpan(lineStart:_lineNumber));
+            completer.complete(true);
+          } else {
+            completer.completeException(
+              newFormatException("Echo tags must be inside <script> tags."));
+          }
+        } else {
+          completer.completeException(
+            newFormatException("Starting a <$type> tag outside NORMAL is illegal. "
+                  "We are now in mode=$_mode."));
+        }
+      } else {  // closing a tag
+        if (_mode == MODE_INSIDE_SCRIPT_TAG && !tagIsEcho && !lastpage.blocks.isEmpty()) {
+          _mode = MODE_NORMAL;
+          lastpage.blocks.last().lineEnd = _lineNumber;
+          completer.complete(true);
+        } else if (_mode == MODE_INSIDE_SCRIPT_ECHO && !lastpage.blocks.isEmpty()
+              && lastpage.blocks.last().type == BuilderBlock.BLK_SCRIPT
+              && !lastpage.blocks.last().subBlocks.isEmpty()) {
+          _mode = MODE_INSIDE_SCRIPT_TAG;
+          lastpage.blocks.last().subBlocks.last().lineEnd = _lineNumber;
+          completer.complete(true);
+        } else {
+          completer.completeException(
+            newFormatException("Invalid appearance of of a `</$type>` "
+                  "closing tag. We are not inside any $type tag to be"
+                  "closed (mode = $_mode)."));
+        }
+      }
+    } else {
+      completer.complete(false);
+    }
+
+    return completer.future;
+  }
+
 
   Future<bool> _checkNormalParagraph() {
     if (_mode != MODE_NORMAL || _thisLine == null)
@@ -440,6 +572,17 @@ class Builder {
     return new Future.immediate(true);
   }
 
+  EgbFormatException newFormatException(String msg) {
+    return new EgbFormatException(msg, line:_lineNumber, file:inputFile);
+  }
+
+
+  // input file given by readFile()
+  File inputFile;
+
+
+  List<BuilderMetadata> metadata;
+  bool newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
 
   List<BuilderPage> pages;
   Map<String, int> pageHandles;
@@ -449,8 +592,12 @@ class Builder {
   RegExp hr = const RegExp(@"^\s{0,3}\-\-\-+\s*$"); // ----
   RegExp validPageName = const RegExp(@"^\s{0,3}(.+)\s*$");
   RegExp pageOptions = const RegExp(@"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
-  RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");
-  RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");
+  RegExp metadataLine = const RegExp(@"^(\w.+):\s*(\w.*)\s*$");
+  RegExp metadataLineAdd = const RegExp(@"^\s+(\w.*)\s*$");
+  /*RegExp scriptTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
+  RegExp scriptOrEchoTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
+  /*RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");*/
+  /*RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");*/
   /*RegExp initTagStart = const RegExp(@"^\s{0,3}<init>\s*$");*/
   /*RegExp initTagEnd = const RegExp(@"^\s{0,3}</init>\s*$");*/
   /*RegExp libraryTagStart = const RegExp(@"^\s{0,3}<library>\s*$");*/
@@ -539,6 +686,7 @@ class Builder {
   static int MODE_INSIDE_VARIABLES = 8;
   static int MODE_INSIDE_SCRIPT_ECHO = 16;
   static int MODE_INSIDE_SCRIPT_TAG = 32;
+  static int MODE_METADATA = 64;
   // This makes sure the parser remembers where it is during reading the file.
   int _mode;
 
@@ -548,8 +696,6 @@ class Builder {
   int _blockNumber;
 
   String _thisLine;
-  String _prevLine;
-
 
   /** used to communicate problems to caller */
   List<String> warningLines;
