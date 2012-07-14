@@ -30,7 +30,6 @@ class BuilderBlock {
   int lineStart;
   int lineEnd;
   int type = 0;
-  List<String> lines;
   Map<String,Dynamic> options;
 
   static final int BLK_TEXT = 1;
@@ -40,24 +39,65 @@ class BuilderBlock {
   static final int BLK_CHOICE_QUESTION = 16;
   static final int BLK_CHOICE_IN_SCRIPT = 32;
 
-  BuilderBlock() {
-    lines = new List<String>();
+  BuilderBlock([this.lineStart]) {
     options = new Map<String,Dynamic>();
   }
-
-  void endWithLine(int lineNumber) {
-    lineEnd = lineNumber;
-  }
 }
+
+class BuilderInitBlock {
+  int lineStart;
+  int lineEnd;
+  int type;
+
+  static final int BLK_CLASSES = 1;
+  static final int BLK_FUNCTIONS = 2;
+  static final int BLK_VARIABLES = 4;
+
+  static final String BLK_CLASSES_STRING = "classes";
+  static final String BLK_FUNCTIONS_STRING = "functions";
+  static final String BLK_VARIABLES_STRING = "variables";
+
+  BuilderInitBlock([this.lineStart, this.type, String typeStr]) {
+    if (typeStr != null) {
+      type = typeFromString(typeStr);
+    }
+  }
+
+  static int typeFromString(String s) {
+    switch (s) {
+      case BLK_CLASSES_STRING:
+        return BLK_CLASSES;
+      case BLK_FUNCTIONS_STRING:
+        return BLK_FUNCTIONS;
+      case BLK_VARIABLES_STRING:
+        return BLK_VARIABLES;
+      default:
+        throw "Tag <$s> was not recognized as a valid init block tag.";
+    }
+  }
+
+  static int modeFromString(String s) {
+    if (s == BLK_CLASSES_STRING)
+      return Builder.MODE_INSIDE_CLASSES;
+    else if (s == BLK_FUNCTIONS_STRING)
+      return Builder.MODE_INSIDE_FUNCTIONS;
+    else if (s == BLK_VARIABLES_STRING)
+      return Builder.MODE_INSIDE_VARIABLES;
+    else
+      throw "Tag <$s> was not recognized as a valid init block tag.";
+  }
+
+}
+
+
+
 
 class Builder {
 
   Builder() {
     pages = new List<BuilderPage>();
     pageHandles = new Map<String,int>();
-    initLines = new List<String>();
-    libraryLines = new List<String>();
-    classesLines = new List<String>();
+    initBlocks = new List<BuilderInitBlock>();
 
     warningLines = new List<String>();
   }
@@ -79,7 +119,7 @@ class Builder {
         print("Reading input file ${f.name}");
 
         // This makes sure the parser remembers where it is during reading the file.
-        _mode = _MODE_NORMAL;
+        _mode = MODE_NORMAL;
 
         _lineNumber = 0;
         _pageNumber = 0;
@@ -107,7 +147,7 @@ class Builder {
                       "containing exclusively dashes (`-`, three or more) and "
                       "an immediately following line with the name of the page.");
 
-            if (_mode != _MODE_NORMAL) {
+            if (_mode != MODE_NORMAL) {
               completer.completeException(
                 new EgbFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
             } else {
@@ -127,13 +167,19 @@ class Builder {
   Future<bool> _check() {
     var completer = new Completer();
 
-    // start finding every pattern at once, in a non-blocking way
+    // start finding patterns in the line
+    // try every pattern at once, in a non-blocking way, using futures
     Futures.wait([
         _checkBlankLine(),
         _checkNewPage(),
         _checkPageOptions(),
         _checkChoice(),
-        _checkInitBlocks()
+        _checkInitBlockTags()
+        /* TODO:
+        _checkScriptTags()
+        _checkImportTag()
+        _checkMetadataLine()
+        */
     ]).then((List<bool> checkValues) {
       if (checkValues.every((value) => value == false)) {
         // normal paragraph
@@ -153,7 +199,7 @@ class Builder {
   */
 
   Future<bool> _checkBlankLine() {
-    if (_mode != _MODE_NORMAL)
+    if (_mode != MODE_NORMAL)
       return new Future.immediate(false);
 
     if (_thisLine == null || _thisLine == "" || blankLine.hasMatch(_thisLine)) {
@@ -165,7 +211,7 @@ class Builder {
           if (lastblock.type == BuilderBlock.BLK_TEXT
               || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
             if (lastblock.lineEnd == null)
-              lastblock.endWithLine(_lineNumber - 1);
+              lastblock.lineEnd = _lineNumber - 1;
           }
         }
       }
@@ -176,7 +222,7 @@ class Builder {
   }
 
   Future<bool> _checkNewPage() {
-    if (_mode != _MODE_NORMAL || _prevLine == null || _thisLine == null)
+    if (_mode != MODE_NORMAL || _prevLine == null || _thisLine == null)
       return new Future.immediate(false);
 
     if (hr.hasMatch(_prevLine) && validPageName.hasMatch(_thisLine)) {
@@ -187,6 +233,16 @@ class Builder {
         var lastpage = pages.last();
         if (!lastpage.blocks.isEmpty()) {
           var lastblock = lastpage.blocks.last();
+          if (lastblock.lineEnd == null) {
+              lastblock.lineEnd = _lineNumber - 2;
+              if (lastblock.lineEnd < lastblock.lineStart) {
+                // a faux text block with only "---" inside
+                lastpage.blocks.removeLast();
+              }
+          }
+
+
+          /*
           if (!lastblock.lines.isEmpty()) {
             var lastline = lastblock.lines.last();
             if (hr.hasMatch(lastline)) {  // this should always be true, but let's make sure
@@ -194,9 +250,10 @@ class Builder {
               if (lastblock.lines.isEmpty())
                 lastpage.blocks.removeLast();
               else if (lastpage.blocks.last().lineEnd == null)
-                lastpage.blocks.last().endWithLine(_lineNumber - 2);
+                lastpage.blocks.last().lineEnd = _lineNumber - 2;
             }
           }
+          */
         }
       }
       // add the new page
@@ -210,7 +267,7 @@ class Builder {
   }
 
   Future<bool> _checkPageOptions() {
-    if (_mode != _MODE_NORMAL || _prevLine == null || _thisLine == null)
+    if (_mode != MODE_NORMAL || _prevLine == null || _thisLine == null)
       return new Future.immediate(false);
 
     if (!pages.isEmpty() && pages.last().lineStart == _lineNumber - 1
@@ -230,12 +287,12 @@ class Builder {
 
   Future<bool> _checkChoice() {
     if (_prevLine == null || _thisLine == null || pages.isEmpty()
-        || (_mode != _MODE_NORMAL && _mode != _MODE_INSIDE_SCRIPT_ECHO))
+        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO))
       return new Future.immediate(false);
 
     if (choice.hasMatch(_thisLine)) {
 
-      var block = new BuilderBlock();
+      var block = new BuilderBlock(lineStart:_lineNumber);
 
       Match m = choice.firstMatch(_thisLine);
       /*for (int i = 1; i <= m.groupCount(); i++) {*/
@@ -268,17 +325,17 @@ class Builder {
         return new Future.immediate(false);
       }
 
-      if (_mode == _MODE_INSIDE_SCRIPT_ECHO) {
+      if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
         // TODO: just add a _choiceToScript(block) to the current script flow
-      } else if (_mode == _MODE_NORMAL && block.options["script"] == null && !hasVarInString) {
+      } else if (_mode == MODE_NORMAL && block.options["script"] == null && !hasVarInString) {
         // we have a simple choice (i.e. no scripts needed)
         block.type = BuilderBlock.BLK_CHOICE;
-        block.endWithLine(_lineNumber);  // choice blocks are always one-liners in egb
+        block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
         pages.last().blocks.add(block);
       } else {
         // the choice will need to be rewritten into a standalone script (closure)
         block.type = BuilderBlock.BLK_CHOICE_IN_SCRIPT;
-        block.endWithLine(_lineNumber);  // choice blocks are always one-liners in egb
+        block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
         pages.last().blocks.add(block);
       }
 
@@ -288,7 +345,7 @@ class Builder {
       if (!lastpage.blocks.isEmpty()) {
         var lastblock = lastpage.blocks.last();
         if (lastblock.lineEnd == null) {
-          lastblock.endWithLine(_lineNumber - 1);
+          lastblock.lineEnd = _lineNumber - 1;
           lastblock.type = BuilderBlock.BLK_CHOICE_QUESTION;
         }
       }
@@ -299,8 +356,8 @@ class Builder {
     }
   }
 
-  Future<bool> _checkInitBlocks() {
-    if (_mode == _MODE_INSIDE_SCRIPT_TAG || _thisLine == null)
+  Future<bool> _checkInitBlockTags() {
+    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null)
       return new Future.immediate(false);
 
     var completer = new Completer();
@@ -310,10 +367,11 @@ class Builder {
     if (m != null) {
       bool closing =  m.group(1) == "/";
       var blocktype = m.group(2).toLowerCase();
+
       if (!closing) {  // opening a new tag
-        if (_mode == _MODE_NORMAL) {
-          // TODO: case(blocktype)
-          _mode = _MODE_INSIDE_CLASSES;
+        if (_mode == MODE_NORMAL) {
+          _mode = BuilderInitBlock.modeFromString(blocktype);
+          initBlocks.add(new BuilderInitBlock(lineStart:_lineNumber, typeStr:blocktype));
           completer.complete(true);
         } else {
           completer.completeException(
@@ -322,8 +380,10 @@ class Builder {
                   "another tag (mode = $_mode). (line:$_lineNumber)"));
         }
       } else {  // closing a tag
-        if (_mode == _MODE_INSIDE_CLASSES /* TODO: and others*/) {
-          _mode = _MODE_NORMAL;
+        if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_FUNCTIONS
+            || _mode == MODE_INSIDE_VARIABLES) {
+          _mode = MODE_NORMAL;
+          initBlocks.last().lineEnd = _lineNumber;
           completer.complete(true);
         } else {
           completer.completeException(
@@ -333,19 +393,14 @@ class Builder {
         }
       }
     } else {
-      if (_mode == _MODE_INSIDE_CLASSES /*TODO add others*/) {
-        classesLines.add(_thisLine);
-        completer.complete(true);
-      } else {
-        completer.complete(false);
-      }
+      completer.complete(false);
     }
 
     return completer.future;
   }
 
   Future<bool> _checkNormalParagraph() {
-    if (_mode != _MODE_NORMAL || _thisLine == null)
+    if (_mode != MODE_NORMAL || _thisLine == null)
       return new Future.immediate(false);
 
     if (pages.isEmpty()) {
@@ -362,7 +417,7 @@ class Builder {
             || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR)) {
           // we have an unfinished text block that we can append to
           appending = true;
-          lastblock.lines.add(_thisLine);
+          //lastblock.lines.add(_thisLine);
           if (variableInText.hasMatch(_thisLine)) {
             lastblock.type = BuilderBlock.BLK_TEXT_WITH_VAR;
           }
@@ -371,13 +426,13 @@ class Builder {
 
       if (!appending) {
         // we create a new block
-        var block = new BuilderBlock();
+        var block = new BuilderBlock(lineStart:_lineNumber);
         if (variableInText.hasMatch(_thisLine)) {
           block.type = BuilderBlock.BLK_TEXT_WITH_VAR;
         } else {
           block.type = BuilderBlock.BLK_TEXT;
         }
-        block.lines.add(_thisLine);
+        //block.lines.add(_thisLine);
         lastpage.blocks.add(block);
       }
     }
@@ -388,9 +443,7 @@ class Builder {
 
   List<BuilderPage> pages;
   Map<String, int> pageHandles;
-  List<String> initLines;
-  List<String> libraryLines;
-  List<String> classesLines;
+  List<BuilderInitBlock> initBlocks;
 
   RegExp blankLine = const RegExp(@"^\s*$");
   RegExp hr = const RegExp(@"^\s{0,3}\-\-\-+\s*$"); // ----
@@ -480,12 +533,12 @@ class Builder {
 
 
   // These are available modes for the [mode] variable.
-  static int _MODE_NORMAL = 1;
-  static int _MODE_INSIDE_CLASSES = 2;
-  static int _MODE_INSIDE_LIBRARY = 4;
-  static int _MODE_INSIDE_INIT = 8;
-  static int _MODE_INSIDE_SCRIPT_ECHO = 16;
-  static int _MODE_INSIDE_SCRIPT_TAG = 32;
+  static int MODE_NORMAL = 1;
+  static int MODE_INSIDE_CLASSES = 2;
+  static int MODE_INSIDE_FUNCTIONS = 4;
+  static int MODE_INSIDE_VARIABLES = 8;
+  static int MODE_INSIDE_SCRIPT_ECHO = 16;
+  static int MODE_INSIDE_SCRIPT_TAG = 32;
   // This makes sure the parser remembers where it is during reading the file.
   int _mode;
 
