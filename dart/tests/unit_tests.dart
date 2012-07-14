@@ -104,12 +104,11 @@ void main() {
             hasLength(0));
           expect(b.pages[b.pageHandles["squash"]].blocks,
             hasLength(5));
-          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines,
-            hasLength(2));
-          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines[0],
-            startsWith("You try to squash"));
-          expect(b.pages[b.pageHandles["squash"]].blocks[0].lines[1],
-            endsWith("face off now!"));
+          var block = b.pages[b.pageHandles["squash"]].blocks[0];
+          expect(block.lineStart,
+            equals(20));
+          expect(block.lineEnd - block.lineStart,
+            equals(1));
         });
         new Builder().readFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
       });
@@ -173,10 +172,14 @@ void main() {
 
       test("detects <classes>", () {
         var callback = expectAsync1((var b) {
-          expect(b.classesLines,
-            hasLength(16));
+          expect(b.initBlocks,
+            hasLength(4));
+          expect(b.initBlocks[0].type,
+            equals(BuilderInitBlock.BLK_CLASSES));
+          expect(b.initBlocks[0].lineStart,
+            equals(7));
         });
-        new Builder().readFile(new File(getPath("init_blocks.egb"))).then(callback);
+        new Builder().readFile(new File(getPath("classes_4blocks.egb"))).then(callback);
       });
 
     });
