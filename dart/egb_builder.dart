@@ -829,7 +829,7 @@ class Builder {
     Futures.wait([
         _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
         _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
-    ]).then((bool b) => completer.complete(b));
+    ]).then((List<bool> bools) => completer.complete(bools.every((b) => b)));
 
     return completer.future;
   }
