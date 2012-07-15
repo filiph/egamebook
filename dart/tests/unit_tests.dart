@@ -306,5 +306,48 @@ void main() {
         new Builder().readFile(new File(getPath("metadata_9keys.egb"))).then(callback);
       });
     });
+
+    group('import', () {
+
+      test("is detected", () {
+        var callback = expectAsync1((var b) {
+          expect(b.importFiles,
+            hasLength(1));
+          expect(b.importFiles[0].name,
+            endsWith("library_simple_all_tags.egb"));
+        });
+        new Builder().readFile(new File(getPath("import_1tag.egb"))).then(callback);
+      });
+
+      test("is detected with redundancies covered", () {
+        var callback = expectAsync1((var b) {
+          expect(b.importFiles,
+            hasLength(2));
+          expect(b.importFiles[0].name,
+            endsWith("library_simple_all_tags.egb"));
+          expect(b.importFiles[1].name,
+            endsWith("library_simple_all_tags2.egb"));
+          expect(b.pages[1].name,
+            "squash");  // making sure we're not breaking something else
+        });
+        new Builder().readFile(new File(getPath("import_2tags_plus1redundant.egb"))).then(callback);
+      });
+    });
+
+    group('synopsis', () {
+
+      test("is detected", () {
+        var callback = expectAsync1((var b) {
+          expect(b.synopsisLineNumbers,
+            hasLength(9));
+          expect(b.synopsisLineNumbers[0],
+            3);
+          expect(b.synopsisLineNumbers.last(),
+            12);
+        });
+        new Builder().readFile(new File(getPath("synopsis.egb"))).then(callback);
+      });
+
+    });
   });
 }

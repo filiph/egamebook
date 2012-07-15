@@ -132,9 +132,12 @@ class Builder {
 
   Builder() {
     metadata = new List<BuilderMetadata>();
+    synopsisLineNumbers = new List<int>();
     pages = new List<BuilderPage>();
     pageHandles = new Map<String,int>();
     initBlocks = new List<BuilderInitBlock>();
+    importFiles = new List<File>();
+    importFilesFullPaths = new Set<String>();
 
     warningLines = new List<String>();
   }
@@ -153,47 +156,53 @@ class Builder {
       if (!exists)
         completer.completeException(new FileIOException("File ${f.name} doesn't exist."));
       else {
-        var strInputStream = new StringInputStream(f.openInputStream());
+        f.fullPath().then((String fullPath) {
+          inputFileFullPath = fullPath;
 
-        print("Reading input file ${f.name}");
+          var strInputStream = new StringInputStream(f.openInputStream());
 
-        // The top of the file can be metadata. This will be changed to MODE_NORMAL
-        // in [_checkMetadataLine()] when there is no metadata.
-        _mode = MODE_METADATA;
+          print("Reading input file ${f.name}");
 
-        _lineNumber = 0;
-        _pageNumber = 0;
-        _blockNumber = 0;
+          // The top of the file can be metadata. This will be changed to MODE_NORMAL
+          // in [_checkMetadataLine()] when there is no metadata.
+          _mode = MODE_METADATA;
 
-        strInputStream.onLine = () {
-          _check().then((_) {
-            _lineNumber++;
-            _thisLine = strInputStream.readLine();
-            //stdout.writeString(".");
-          });
-        };
+          _lineNumber = 0;
+          _pageNumber = 0;
+          _blockNumber = 0;
 
-        strInputStream.onClosed = () {
-          _check().then((_) {  // check last line
-            //print("\nReading input file has finished.");
+          strInputStream.onLine = () {
+            _check().then((_) {
+              _lineNumber++;
+              _thisLine = strInputStream.readLine();
+              //stdout.writeString(".");
+            });
+          };
 
-            _lineNumber = null;  // makes sure following warnings don't get associated with the last line
+          strInputStream.onClosed = () {
+            _check().then((_) {  // check last line
+              //print("\nReading input file has finished.");
 
+              _lineNumber = null;  // makes sure following warnings don't get associated with the last line
 
-            if (pages.isEmpty())
-              WARNING("There are no pages in this egb. If you want it to be playable, "
-                      "you will need to include page starts in the form of a line "
-                      "containing exclusively dashes (`-`, three or more) and "
-                      "an immediately following line with the name of the page.");
+              if (pages.isEmpty())
+                WARNING("There are no pages in this egb. If you want it to be playable, "
+                        "you will need to include page starts in the form of a line "
+                        "containing exclusively dashes (`-`, three or more) and "
+                        "an immediately following line with the name of the page.");
 
-            if (_mode != MODE_NORMAL) {
-              completer.completeException(
-                newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
-            } else {
-              completer.complete(this);
-            }
-          });
-        };
+              if (_mode != MODE_NORMAL) {
+                completer.completeException(
+                  newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
+              } else {
+                _checkForDoubleImports().then((bool passed) {
+                  if (passed)
+                    completer.complete(this);
+                });
+              }
+            });
+          };
+        });
       }
     });
 
@@ -215,8 +224,8 @@ class Builder {
         _checkChoice(),
         _checkInitBlockTags(),
         _checkScriptTags(),
-        _checkMetadataLine()
-        /*_checkImportTag()*/
+        _checkMetadataLine(),
+        _checkImportTag()
     ]).then((List<bool> checkValues) {
       if (checkValues.every((value) => value == false)) {
         // normal paragraph
@@ -251,6 +260,8 @@ class Builder {
               lastblock.lineEnd = _lineNumber - 1;
           }
         }
+      } else {
+        synopsisLineNumbers.add(_lineNumber);
       }
       return new Future.immediate(true);
     } else {
@@ -292,8 +303,8 @@ class Builder {
 
     if (newPageCandidate && validPageName.hasMatch(_thisLine)) {
       // discard the "---" from any previous blocks
-      if (pages.isEmpty()) {
-        // TODO: solve for synopsis
+      if (pages.isEmpty() && !synopsisLineNumbers.isEmpty()) {
+        synopsisLineNumbers.removeLast();
       } else {
         var lastpage = pages.last();
         if (!lastpage.blocks.isEmpty()) {
@@ -346,6 +357,7 @@ class Builder {
     }
   }
 
+  // TODO: allow choices in synopsis?
   Future<bool> _checkChoice() {
     if (_thisLine == null || pages.isEmpty()
         || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO))
@@ -530,13 +542,37 @@ class Builder {
     return completer.future;
   }
 
+  Future<bool> _checkImportTag() {
+    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null)
+      return new Future.immediate(false);
+
+    var completer = new Completer();
+
+    Match m = importTag.firstMatch(_thisLine);
+
+    if (m != null) {
+      var importFilePath = m.group(1);
+      importFilePath = importFilePath.substring(1, importFilePath.length - 1); //get rid of "" / ''
+
+      var inputFilePath = new Path(inputFileFullPath);
+      var pathToImport = inputFilePath.directoryPath
+            .join(new Path(importFilePath));
+
+      importFiles.add(new File.fromPath(pathToImport));
+      completer.complete(true);
+    } else {
+      completer.complete(false);
+    }
+
+    return completer.future;
+  }
 
   Future<bool> _checkNormalParagraph() {
     if (_mode != MODE_NORMAL || _thisLine == null)
       return new Future.immediate(false);
 
     if (pages.isEmpty()) {
-      // TODO: solve for synopsis
+      synopsisLineNumbers.add(_lineNumber);
     } else {
       // we have a new block inside a page!
       var lastpage = pages.last();
@@ -572,6 +608,56 @@ class Builder {
     return new Future.immediate(true);
   }
 
+
+  Future<bool> _checkForDoubleImports() {
+    var completer = new Completer();
+
+    var inputFilePath = new Path(inputFileFullPath);
+
+    List<Future<bool>> existsFutures = new List<Future<bool>>();
+    List<Future<String>> fullPathFutures = new List<Future<String>>();
+
+    for (File f in importFiles) {
+      existsFutures.add(f.exists());
+      fullPathFutures.add(f.fullPath());
+    }
+
+    Futures.wait(existsFutures)
+    .then((List<bool> existsBools) {
+      assert(existsBools.length == importFiles.length);
+
+      for (int i = 0; i < existsBools.length; i++) {
+        if (existsBools[i] == false) {
+          completer.completeException(
+              new FileIOException("Source file tries to import a file that "
+                    "doesn't exist (${importFiles[i].name})."));
+        }
+      }
+
+      Futures.wait(fullPathFutures)
+      .then((List<String> fullPaths) {
+        assert(fullPaths.length == importFiles.length);
+
+        for (int i = 0; i < fullPaths.length; i++) {
+          for (int j = 0; j < i; j++) {
+            if (fullPaths[i] == fullPaths[j]) {
+              WARNING("File '${fullPaths[i]}' has already been imported. Ignoring "
+                      "the redundant <import> tag.");
+              importFiles[i] = null;
+            }
+          }
+        }
+
+        // delete the nulls
+        importFiles = importFiles.filter((f) => f != null);
+        completer.complete(true);
+      });
+    });
+
+    return completer.future;
+
+  }
+
   EgbFormatException newFormatException(String msg) {
     return new EgbFormatException(msg, line:_lineNumber, file:inputFile);
   }
@@ -579,10 +665,14 @@ class Builder {
 
   // input file given by readFile()
   File inputFile;
-
+  String inputFileFullPath;
+  List<File> importFiles;
+  Set<String> importFilesFullPaths;
 
   List<BuilderMetadata> metadata;
   bool newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
+
+  List<int> synopsisLineNumbers;
 
   List<BuilderPage> pages;
   Map<String, int> pageHandles;
@@ -605,6 +695,7 @@ class Builder {
   /*RegExp classesTagStart = const RegExp(@"^\s{0,3}<classes>\s*$");*/
   /*RegExp classesTagEnd = const RegExp(@"^\s{0,3}</classes>\s*$");*/
   RegExp initBlockTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
+  RegExp importTag = const RegExp(@"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
   RegExp choice = const RegExp(@"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\{\s*(.+)\s*\}\})?[\s,]*([^\{][^\{].+)?\s*\]\s*$");
   RegExp variableInText = const RegExp(@"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
@@ -614,6 +705,7 @@ class Builder {
     */
   Future<bool> writeFiles() {
 
+    // TODO: open/create all necessary files
 
 
   }
