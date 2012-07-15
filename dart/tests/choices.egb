@@ -1,0 +1,44 @@
+Ignore this synopsis.
+
+- Yes, like this should not get picked up as a choice [dont]
+
+---
+startPage
+
+Normal paragraph of text [0].
+
+- 1all these don't count as choices!
+
+- e2rgergerge r
+
+- eg3ergerg [gerge] egerge
+
+- erg4e re [ergerg]r
+
+- erer5te re[ergerr]
+
+- grgeg6 [{this.new = "egerger"}, gergerg]
+
+- e7rteter []
+
+- th8ey all render as one paragraph of text
+
+- erg9ergeg [{{erge}} ergerg}}]
+
+- erg10ergeg [{{erge}} {{ergerg}}]
+
+ - e11rgerg [regerger]   
+- ert12erg er reg [regerg ergerg a e]
+- grge13g [{{this.new = "egerger" }}   ,   gergerg]  
+- g14rgeg [{{this.new = "egerger" }}   ,   gergerg ]  
+- [e15gerger]
+- esd16e [{{ergerg = "3252"}}]
+- g17eg [ {{ this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }}   ,   gergerg]  
+- gr18g [{{this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }}   ,   gergerg]  
+
+
+---
+second page
+
+- abcdefg 123456 [ abc _ xyz ]
+- something [ {{ abcd[]1234; }}, xyz]

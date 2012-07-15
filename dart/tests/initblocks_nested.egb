@@ -1,0 +1,22 @@
+Name:   Example
+Author: John Doe
+
+<functions>
+  class A {
+    A() {
+    }
+  }
+
+  <classes>
+    THIS SHOULD THROW
+  </classes>
+</functions>
+
+Same here!
+
+
+-------------
+start
+
+You are in a room full of spiders. The spiders look annoyed.
+

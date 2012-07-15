@@ -1,0 +1,29 @@
+-------------
+Řeřicha
+
+You are in a room full of spiders. The spiders look annoyed.
+
+- Squash the spiders [squash]
+- Run! [run]
+
+---     
+おはよう
+[[ visitOnce]]
+
+You try to squash the spiders, but there's too many of them. Oh god,
+they're eating your face off now!
+
+---
+
+this is _not_ a next page
+
+---- neither is this
+
+
+ ---
+run
+ [[ visitOnce, showOnce ]]  
+
+You managed to get out of the room before the spiders got to you, but now you're in a room full of giant worms.
+
+---
