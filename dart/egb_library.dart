@@ -311,9 +311,10 @@ class Scripter {
    */
 
   Dynamic noSuchMethod(String name, List args) {
-    if (name.startsWith("get:")) {
+    print("noSuchMethod: $name, $args");
+    if (name.startsWith("get:") || name.startsWith("get ")) {
       return vars[name.substring(4)];
-    } else if (name.startsWith("set:")) {
+    } else if (name.startsWith("set:") || name.startsWith("set ")) {
       vars[name.substring(4)] = args[0];
       return null;
     } else {
