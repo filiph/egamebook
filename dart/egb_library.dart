@@ -129,7 +129,7 @@ class UserInteraction implements Hashable {
 class Choice extends UserInteraction {
   String string;
   Function f;
-  int goto;
+  String goto;
   bool showNow;
 
   Choice(this.string, [this.goto, Function then, bool showNow=false]) : super() {
@@ -166,6 +166,7 @@ class Scripter {
   SendPort _interfacePort;
 
   List<List> pages;
+  Map<String,int> pageHandles;
   List blocks;
   int currentPage;  // the current position in the pages list
   int currentBlock;  // the current position in the current page's blocks list
@@ -220,13 +221,13 @@ class Scripter {
       Message message;
       choices.forEach((choice) {
           if (choice.hashCode() == incomingMessage.intContent) {
-          DEBUG_SCR("Found choice that was selected: ${choice.string}");
-          if (choice.goto != null)
-          nextPage = choice.goto;
-          if (choice.f != null)
-          message = runScriptBlock(script:choice.f);
+            DEBUG_SCR("Found choice that was selected: ${choice.string}");
+            if (choice.goto != null)
+              nextPage = pageHandles[choice.goto];
+            if (choice.f != null)
+              message = runScriptBlock(script:choice.f);
           }
-          });
+      });
       if (message != null)
         return message;
       else
@@ -294,8 +295,7 @@ class Scripter {
     initBlock(); // run contents of <init>
   }
 
-  // making sure calls like "a = 5" will work in scripts
-  // XXX: noSuchMethod not yet implemented in Dart!
+  // XXX: noSuchMethod not yet implemented in this form in Dart
   /*
      noSuchMethod(InvocationMirror invocation) {
      if (invocation.isGetter) {
@@ -310,14 +310,25 @@ class Scripter {
   }
    */
 
+  Dynamic noSuchMethod(String name, List args) {
+    if (name.startsWith("get:")) {
+      return vars[name.substring(4)];
+    } else if (name.startsWith("set:")) {
+      vars[name.substring(4)] = args[0];
+      return null;
+    } else {
+      throw new NoSuchMethodException(this, name, args);
+    }
+  }
+
   void echo(String str) {
     if (textBuffer.length > 0)
       textBuffer.add(" ");
     textBuffer.add(str);
   }
 
-  void goto(int pageNumber) {
-    nextPage = pageNumber;
+  void goto(String pageHandle) {
+    nextPage = pageHandles[pageHandle];
   }
 
   void nextScript(Function f) {
@@ -329,7 +340,7 @@ class Scripter {
   }
 
   // Utility function that creates new choice.
-  Choice choice(String string, [int goto, Function then, bool showNow=false]) {
+  Choice choice(String string, [String goto, Function then, bool showNow=false]) {
     Choice choice = new Choice(string, goto:goto, then:then, showNow:showNow);
     choices.add(choice);
     return choice;

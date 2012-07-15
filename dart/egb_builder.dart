@@ -459,7 +459,7 @@ class Builder {
       var blocktype = m.group(2).toLowerCase();
 
       if (!closing) {  // opening a new tag
-        if (_mode == MODE_NORMAL) {
+        if (_mode == MODE_NORMAL || _mode == MODE_METADATA) {
           _mode = BuilderInitBlock.modeFromString(blocktype);
           initBlocks.add(new BuilderInitBlock(lineStart:_lineNumber, typeStr:blocktype));
           _closeLastBlock();
@@ -732,19 +732,29 @@ class Builder {
     * Writer method.
     */
   Future<bool> writeFiles() {
+    var completer = new Completer();
 
+    Futures.wait([
+        writeDartFile(),
+        writeInterfaceFiles()
+    ]).then((_) {
+      completer.complete(true);
+    });
+
+    return completer.future;
+  }
+
+  Future<bool> writeDartFile() {
     var completer = new Completer();
 
     var inputFilePath = new Path(inputFileFullPath);
+    var scriptFilePath = new Path(new Options().script);
     var pathToOutputDart = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
 
+    // write the .dart file
     File dartFile = new File.fromPath(pathToOutputDart);
     OutputStream dartOutStream = dartFile.openOutputStream();
-
-
-
-
     dartOutStream.writeString(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
     .then((_) {
@@ -752,6 +762,14 @@ class Builder {
       writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_FUNCTIONS, indent:2)
       .then((_) {
         dartOutStream.writeString(implStartCtor);
+
+        dartOutStream.writeString("    pageHandles = {\n");
+        pageHandles.forEach((String k, int v) {
+          dartOutStream.writeString("      @\"\"\"$k\"\"\": $v,\n");
+          // TODO: move to writePages, handle last comma
+        });
+        dartOutStream.writeString("    };\n\n");
+
         dartOutStream.writeString(implStartPages);
         writePages(dartOutStream)
         .then((_) {
@@ -778,26 +796,79 @@ class Builder {
     });
 
     return completer.future;
-
-
-    // TODO: open/create all necessary files and streams
-    // TODO: use builder to parse libraries,
-      // NO recursive loading (that's like making new dart all over again) => throw
-    // TODO: HACK: get LINES->byte position by reading everything through StringInputStream and counting linefeeds?
-        // Check for line ends (\r, \n and \r\n).
-      /*if (charCode == LF) {*/
-        /*_recordLineBreakEnd(_charCount - 1);*/
-      /*} else if (_lastCharCode == CR) {*/
-        /*_recordLineBreakEnd(_charCount - 2);*/
-      /*}*/
-    // TODO: classes
-      // TODO: from import files
-    // TODO: functions
-    // TODO: pages & blocks
-    // TODO: variables
-
-
   }
+
+  Future<bool> writeInterfaceFiles() {
+    var completer = new Completer();
+
+    var inputFilePath = new Path(inputFileFullPath);
+    var scriptFilePath = new Path(new Options().script);
+    var pathToOutputDart = inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
+    var pathToOutputCmd = inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}.cmdline.dart"));
+    var pathToInputTemplateCmd = scriptFilePath.directoryPath
+          .join(new Path("egb_interface_cmdline.dart"));
+    var pathToOutputHtml = inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}.html.dart"));
+    var pathToInputTemplateHtml = scriptFilePath.directoryPath
+          .join(new Path("egb_interface_html.dart"));
+
+    File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
+    File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
+    File htmlOutputFile = new File.fromPath(pathToOutputHtml);
+    File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
+
+    var substitutions = {
+      "#import('egb_library.dart');" : 
+          "#import('../egb_library.dart');\n", // TODO!!
+      "#import('samples/unit-testing.markdown.dart');" : 
+          "#import('$pathToOutputDart');\n", // TODO!!
+    };
+
+    Futures.wait([
+        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
+        _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
+    ]).then((bool b) => completer.complete(b));
+
+    return completer.future;
+  }
+
+Future<List<String>> _fileFromTemplate(File inFile, File outFile,
+    [Map<String,String> substitutions]) {
+  if (substitutions == null)
+    substitutions = new Map();
+  Completer completer = new Completer();
+
+  inFile.exists()
+  .then((bool exists) {
+    if (!exists) {
+      WARNING("Cmd line template doesn't exist in current directory. Skipping.");
+      completer.complete(false);
+    } else {
+      OutputStream outStream = outFile.openOutputStream();
+      StringInputStream inStream = new StringInputStream(inFile.openInputStream());
+
+      inStream.onLine = () {
+        String line = inStream.readLine();
+        if (substitutions.containsKey(line))
+          outStream.writeString("${substitutions[line]}\n");
+        else
+          outStream.writeString("$line\n");
+      };
+      inStream.onClosed = () {
+        outStream.close();
+        completer.complete(true);
+      };
+      inStream.onError = (e) => completer.completeException(e);
+    }
+  });
+
+  return completer.future;
+}
+
+
+
 
   Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, [int indent=0]) {
     var completer = new Completer();
