@@ -79,6 +79,18 @@ void main() {
         new Builder().readFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
 
+      test("reads UTF8 pages", () {
+        var callback = expectAsync1((var b) {
+          expect(b.pages,
+            hasLength(3));
+          expect(b.pages[0].name,
+            equals("Řeřicha"));
+          expect(b.pages[1].name,
+            equals("おはよう"));
+        });
+        new Builder().readFile(new File(getPath("simple_3pages_utf8.egb"))).then(callback);
+      });
+
       test("reads page at EOF", () {
         var callback = expectAsync1((var b) {
           expect(b.pages,
@@ -222,6 +234,33 @@ void main() {
         new Builder().readFile(new File(getPath("initblocks_all.egb"))).then(callback);
       });
 
+      test("plays well around text blocks", () {
+        var callback = expectAsync1((var b) {
+          var variables = b.initBlocks[1];
+          var textblock1 = b.pages[0].blocks[0];
+          var textblock2 = b.pages[0].blocks[1];
+          expect(variables.type,
+            equals(BuilderInitBlock.BLK_VARIABLES));
+          expect(variables.lineStart,
+            equals(21));
+          expect(variables.lineEnd,
+            equals(23));
+          expect(textblock1.type,
+            equals(BuilderBlock.BLK_TEXT));
+          expect(textblock2.type,
+            equals(BuilderBlock.BLK_TEXT));
+          expect(textblock1.lineStart,
+            equals(20));
+          expect(textblock1.lineEnd,
+            equals(20));
+          expect(textblock2.lineStart,
+            equals(24));
+          expect(textblock2.lineEnd,
+            equals(24));
+        });
+        new Builder().readFile(new File(getPath("textblock_initblock_proximity.egb"))).then(callback);
+      });
+
       // TODO: check throws
       /*test("throws on nested tag", () {*/
         /*expect(new Builder().readFile(new File(getPath("initblocks_nested.egb"))),*/
@@ -347,7 +386,58 @@ void main() {
         });
         new Builder().readFile(new File(getPath("synopsis.egb"))).then(callback);
       });
+    });
+
+    group('writeFiles', () {
+
+      test("creates a file", () {
+        var callback = expectAsync1((bool exists) {
+          expect(exists,
+            equals(true));
+        });
+        new File(getPath("full_project.dart")).delete()
+        .onComplete((_) {
+          new Builder().readFile(new File(getPath("full_project.egb")))
+          .then((var b) {
+            b.writeFiles()
+            .then((_) {
+              new File(getPath("full_project.dart")).exists()
+              .then(callback);
+            });
+          });
+        });
+      });
 
     });
   });
+
+  /*
+  test("String + inputStream same as StrInputStream", () {
+    var inStreamLines = new List<String>();
+    var lineChars = new List<int>();
+
+    var f = new File(getPath("utf8.egb"));
+    var inStream = new StringInputStream(f.openInputStream());
+    inStream.onData = () {
+      String chars = inStream.read();
+
+      
+
+      
+
+      if (char[0] == 10 || char[0] == 13) { // LF CR
+        if (!lineChars.isEmpty()) {
+          inStreamLines.add(new String.fromCharCodes(lineChars));
+          lineChars.clear();
+        }
+      } else {
+        lineChars.addAll(char);
+      }
+    };
+    inStream.onClosed = () {
+      inStreamLines.forEach((line) => print(line));
+    };
+
+  });
+  */
 }

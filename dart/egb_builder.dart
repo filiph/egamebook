@@ -22,7 +22,12 @@ class EgbFormatException implements Exception {
   }
 }
 
-class BuilderLineSpan { // XXX: this should be super-class of the below, but Dart is broken here
+interface BuilderLineRange {
+  int lineStart;
+  int lineEnd;
+}
+
+class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super-class of the below, but Dart is broken here
   int lineStart;
   int lineEnd;
 
@@ -42,7 +47,7 @@ class BuilderMetadata {
   }
 }
 
-class BuilderPage {
+class BuilderPage implements BuilderLineRange {
   int index;
   int lineStart;
   int lineEnd;
@@ -60,7 +65,7 @@ class BuilderPage {
   }
 }
 
-class BuilderBlock {
+class BuilderBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
   int type = 0;
@@ -80,7 +85,7 @@ class BuilderBlock {
   }
 }
 
-class BuilderInitBlock {
+class BuilderInitBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
   int type;
@@ -183,6 +188,10 @@ class Builder {
             _check().then((_) {  // check last line
               //print("\nReading input file has finished.");
 
+              // end the last page
+              if (!pages.isEmpty())
+                pages.last().lineEnd = _lineNumber - 1;
+
               _lineNumber = null;  // makes sure following warnings don't get associated with the last line
 
               if (pages.isEmpty())
@@ -195,6 +204,8 @@ class Builder {
                 completer.completeException(
                   newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
               } else {
+                // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
+                //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
                 _checkForDoubleImports().then((bool passed) {
                   if (passed)
                     completer.complete(this);
@@ -249,7 +260,7 @@ class Builder {
       return new Future.immediate(false);
 
     if (_thisLine == null || _thisLine == "" || blankLine.hasMatch(_thisLine)) {
-      // close previous unfinished text block if any
+      // close previous unfinished _text_ block if any
       if (!pages.isEmpty()) {
         var lastpage = pages.last();
         if (!lastpage.blocks.isEmpty()) {
@@ -309,6 +320,7 @@ class Builder {
         var lastpage = pages.last();
         if (!lastpage.blocks.isEmpty()) {
           var lastblock = lastpage.blocks.last();
+          // also close block
           if (lastblock.lineEnd == null) {
               lastblock.lineEnd = _lineNumber - 2;
               if (lastblock.lineEnd < lastblock.lineStart) {
@@ -318,6 +330,11 @@ class Builder {
           }
         }
       }
+
+      // close last page
+      if (!pages.isEmpty())
+        pages.last().lineEnd = _lineNumber - 1;
+
       // add the new page
       var name = validPageName.firstMatch(_thisLine).group(1);
       pageHandles[name] = _pageNumber;
@@ -398,6 +415,17 @@ class Builder {
         return new Future.immediate(false);
       }
 
+      // if the previous line is a text block, then that textblock needs to be
+      // a BLK_CHOICE_QUESTION.
+      var lastpage = pages.last();
+      if (!lastpage.blocks.isEmpty()) {
+        var lastblock = lastpage.blocks.last();
+        if (lastblock.lineEnd == null) {
+          lastblock.lineEnd = _lineNumber - 1;
+          lastblock.type = BuilderBlock.BLK_CHOICE_QUESTION;
+        }
+      }
+
       if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
         // TODO: just add a _choiceToScript(block) to the current script flow
       } else if (_mode == MODE_NORMAL && block.options["script"] == null && !hasVarInString) {
@@ -410,17 +438,6 @@ class Builder {
         block.type = BuilderBlock.BLK_CHOICE_IN_SCRIPT;
         block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
         pages.last().blocks.add(block);
-      }
-
-      // if the previous line is a text block, then that textblock needs to be
-      // a BLK_CHOICE_QUESTION.
-      var lastpage = pages.last();
-      if (!lastpage.blocks.isEmpty()) {
-        var lastblock = lastpage.blocks.last();
-        if (lastblock.lineEnd == null) {
-          lastblock.lineEnd = _lineNumber - 1;
-          lastblock.type = BuilderBlock.BLK_CHOICE_QUESTION;
-        }
       }
 
       return new Future.immediate(true);
@@ -445,6 +462,7 @@ class Builder {
         if (_mode == MODE_NORMAL) {
           _mode = BuilderInitBlock.modeFromString(blocktype);
           initBlocks.add(new BuilderInitBlock(lineStart:_lineNumber, typeStr:blocktype));
+          _closeLastBlock();
           completer.complete(true);
         } else {
           completer.completeException(
@@ -497,6 +515,7 @@ class Builder {
 
       if (!closing) {  // opening a new tag
         if (_mode == MODE_NORMAL && !tagIsEcho) {
+          _closeLastBlock();
           _mode = MODE_INSIDE_SCRIPT_TAG;
           var block = new BuilderBlock(lineStart:_lineNumber);
           block.type = BuilderBlock.BLK_SCRIPT;
@@ -551,6 +570,7 @@ class Builder {
     Match m = importTag.firstMatch(_thisLine);
 
     if (m != null) {
+      _closeLastBlock();
       var importFilePath = m.group(1);
       importFilePath = importFilePath.substring(1, importFilePath.length - 1); //get rid of "" / ''
 
@@ -608,7 +628,6 @@ class Builder {
     return new Future.immediate(true);
   }
 
-
   Future<bool> _checkForDoubleImports() {
     var completer = new Completer();
 
@@ -655,7 +674,16 @@ class Builder {
     });
 
     return completer.future;
+  }
 
+  void _closeLastBlock([int lineEnd]) {
+    if (lineEnd == null)
+      lineEnd = _lineNumber - 1;
+    if (!pages.isEmpty() && !pages.last().blocks.isEmpty()) {
+      var lastblock = pages.last().blocks.last();
+      if (lastblock.lineEnd == null)
+        lastblock.lineEnd = lineEnd;
+    }
   }
 
   EgbFormatException newFormatException(String msg) {
@@ -705,68 +733,359 @@ class Builder {
     */
   Future<bool> writeFiles() {
 
-    // TODO: open/create all necessary files
+    var completer = new Completer();
+
+    var inputFilePath = new Path(inputFileFullPath);
+    var pathToOutputDart = inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
+
+    File dartFile = new File.fromPath(pathToOutputDart);
+    OutputStream dartOutStream = dartFile.openOutputStream();
+
+
+
+
+    dartOutStream.writeString(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+    writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
+    .then((_) {
+      dartOutStream.writeString(implStartClass);
+      writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_FUNCTIONS, indent:2)
+      .then((_) {
+        dartOutStream.writeString(implStartCtor);
+        dartOutStream.writeString(implStartPages);
+        writePages(dartOutStream)
+        .then((_) {
+          dartOutStream.writeString(implEndPages);
+          dartOutStream.writeString(implEndCtor);
+          dartOutStream.writeString(implStartInit);
+          writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_VARIABLES, indent:4)
+          .then((_) {
+            dartOutStream.writeString(implEndInit);
+            dartOutStream.writeString(implEndClass);
+            dartOutStream.writeString(implEndFile);
+
+            // Close and complete
+            dartOutStream.close();
+            dartOutStream.onClosed = () {
+              completer.complete(true);
+            };
+            dartOutStream.onError = (var e) {
+              completer.completeException(e);
+            };
+          });
+        });
+      });
+    });
+
+    return completer.future;
+
+
+    // TODO: open/create all necessary files and streams
+    // TODO: use builder to parse libraries,
+      // NO recursive loading (that's like making new dart all over again) => throw
+    // TODO: HACK: get LINES->byte position by reading everything through StringInputStream and counting linefeeds?
+        // Check for line ends (\r, \n and \r\n).
+      /*if (charCode == LF) {*/
+        /*_recordLineBreakEnd(_charCount - 1);*/
+      /*} else if (_lastCharCode == CR) {*/
+        /*_recordLineBreakEnd(_charCount - 2);*/
+      /*}*/
+    // TODO: classes
+      // TODO: from import files
+    // TODO: functions
+    // TODO: pages & blocks
+    // TODO: variables
 
 
   }
 
-  Future<bool> writeBlock(BuilderBlock block, OutputStream out) {
-        // Block is a normal BLK_CHOICE - output is a Map
-        /*
-        block.lines = [
-            "{",
-            "  \"string\": \"\"\"${string != null ? string : ''}\"\"\",",
-            "  \"goto\": \"\"\"$goto\"\"\"",
-            "}"
-        ];
-        */
+  Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, [int indent=0]) {
+    var completer = new Completer();
 
+    // TODO: copy <import> classes first
+
+    copyLineRanges(
+        initBlocks.filter((block) => block.type == initBlockType),
+        new StringInputStream(inputFile.openInputStream()),
+        dartOutStream,
+        inclusive:false, indentLength:indent)
+    .then((_) {
+      completer.complete(true);
+    });
+
+    return completer.future;
   }
+
+  Future writePages(OutputStream dartOutStream) {
+    var completer = new Completer();
+
+    if (pages.isEmpty())
+      return new Future.immediate(true);  // TODO: unit test this
+
+    String indent = "";
+    Function write = (String msg) {
+      dartOutStream.writeString("$indent$msg");
+    };
+
+    var inStream = new StringInputStream(inputFile.openInputStream());
+    int lineNumber = 0;
+    BuilderPage curPage;
+    int pageIndex = 0;
+    BuilderBlock curBlock;
+    int blockIndex;
+
+    inStream.onLine = () {
+      lineNumber++;
+      String line = inStream.readLine();
+
+      // start page
+      if (pageIndex < pages.length
+          && lineNumber == pages[pageIndex].lineStart) {
+        indent = _getIndent(6);
+        curPage = pages[pageIndex];
+        blockIndex = 0;
+        write("// ${curPage.name}\n");
+        write("[\n");
+      }
+
+      // start of block
+      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+          && lineNumber == curPage.blocks[blockIndex].lineStart) {
+        indent = _getIndent(8);
+        curBlock = curPage.blocks[blockIndex];
+        String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
+
+        if (curBlock.type == BuilderBlock.BLK_TEXT) {
+          if (curBlock.lineStart == curBlock.lineEnd)
+            write("\"\"\"$line\"\"\"$commaOrNot\n");
+          else
+            write("\"\"\"$line\n");
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+          write("() {\n");
+          if (curBlock.lineStart == curBlock.lineEnd) {
+            write("  echo(\"\"\"$line\"\"\");\n");
+            write("}$commaOrNot\n");
+          } else
+            write("  echo(\"\"\"$line\n");
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_CHOICE) {
+          var string = curBlock.options["string"];
+          var goto = curBlock.options["goto"];
+          write("{\n");
+          write("  \"string\": @\"\"\"${string != null ? string : ''}\"\"\",\n");
+          write("  \"goto\": @\"\"\"$goto\"\"\"\n");
+          write("}$commaOrNot\n");
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_IN_SCRIPT) {
+          var string = curBlock.options["string"];
+          var goto = curBlock.options["goto"];
+          var script = curBlock.options["script"];
+
+          write("() {\n");
+
+          if (string == null) {
+            // ex: "- [gotopage]"
+            if (script != null)
+              write("  $script;\n");
+            if (goto != null)
+              write("  goto(@\"\"\"$goto\"\"\");\n");
+          } else {
+            // ex: "- Go to there [{{time++}} page]"
+            write("  choices.add(new Choice(\n");
+            write("      \"\"\"$string\"\"\",\n");
+            var commaAfterGoto = ( script != null ) ? "," : "";
+            write("      goto:@\"\"\"$goto\"\"\"$commaAfterGoto\n");
+            write("      then:() { $script; }\n");
+            write("  ));\n");
+          }
+
+          write("}$commaOrNot\n");
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
+          write("() {\n");
+        }
+
+      }
+
+      // block line
+      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+          && _insideLineRange(lineNumber, curPage.blocks[blockIndex])) {
+        curBlock = curPage.blocks[blockIndex];
+
+        if ((curBlock.type == BuilderBlock.BLK_TEXT
+            || curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR)
+            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+          indent = _getIndent(0);
+          write("$line\n");
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_SCRIPT
+            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+          indent = _getIndent(0);
+          write("$line\n");
+        }
+      }
+
+
+      // end of block
+      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+          && lineNumber == curPage.blocks[blockIndex].lineEnd) {
+        String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
+
+
+        if (curBlock.type == BuilderBlock.BLK_TEXT) {
+          if (curBlock.lineStart != curBlock.lineEnd) {
+            indent = _getIndent(0);
+            write("$line\"\"\"$commaOrNot\n");
+          }
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+          if (curBlock.lineStart != curBlock.lineEnd) {
+            indent = _getIndent(0);
+            write("$line\"\"\");\n");
+            indent = _getIndent(8);
+            write("}$commaOrNot\n");
+          }
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_CHOICE) {
+        }
+
+        if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
+          indent = _getIndent(8);
+          write("}$commaOrNot\n");
+        }
+
+        blockIndex++;
+        curBlock = null;
+      }
+
+
+      // end page
+      if (pageIndex < pages.length && lineNumber == pages[pageIndex].lineEnd) {
+        indent = _getIndent(6);
+        if (pageIndex < pages.length - 1)
+          write("],\n");
+        else
+          write("]\n");
+        pageIndex++;
+        curPage = null;
+      }
+
+    };
+    inStream.onClosed = () {
+      completer.complete(true);
+    };
+    inStream.onError = (e) {
+      completer.completeException(e);
+    };
+    return completer.future;
+  }
+
+  Future copyLineRanges(List<BuilderLineRange> lineRanges,
+      StringInputStream inStream, OutputStream outStream,
+      [bool inclusive=true, int indentLength=0]) {
+    var completer = new Completer();
+    outStream.writeString("\n");
+    var indent = _getIndent(indentLength);
+
+    int lineNumber = 0;
+    inStream.onLine = () {
+      lineNumber++;
+      String line = inStream.readLine();
+
+      // if lineNumber is in one of the ranges, write
+      if (lineRanges.some((var range) => _insideLineRange(lineNumber, range, inclusive:inclusive))) {
+        outStream.writeString("$indent$line\n");
+      }
+    };
+
+    inStream.onClosed = () {
+      outStream.writeString("\n");
+      completer.complete(true);
+    };
+    inStream.onError = (e) {
+      completer.completeException(e);
+    };
+    return completer.future;
+  }
+
+
+  String _getIndent(int len) {
+    var strBuf = new StringBuffer();
+    for (int i = 0; i < len; i++)
+      strBuf.add(" ");
+    return strBuf.toString();
+  }
+
+  bool _insideLineRange(int lineNumber, BuilderLineRange range, [bool inclusive=true]) {
+    if (range.lineEnd == null)
+      print(range.lineStart);
+    if (lineNumber >= range.lineStart
+        && lineNumber <= range.lineEnd) {
+      if (inclusive)
+        return true;
+      else if (lineNumber != range.lineStart
+              && lineNumber != range.lineEnd)
+        return true;
+      else
+        return false;
+    } else {
+      return false;
+    }
+  }
+
 
   final String implStartFile = """
-  #library('Scripter Implementation');
+#library('Scripter Implementation');
 
-  #import('../egb_library.dart');
-  """;
+#import('../egb_library.dart');
+""";
 
   final String implStartClass = """
-  class ScripterImpl extends Scripter {
+class ScripterImpl extends Scripter {
 
-    /* LIBRARY */
-  """;
+  /* LIBRARY */
+""";
 
   final String implStartCtor = """
-    ScripterImpl() : super() {
-  """;
+  ScripterImpl() : super() {
+""";
 
   final String implStartPages = """
-      pages = [
-        /* PAGES & BLOCKS */
-  """;
+    pages = [
+      /* PAGES & BLOCKS */
+""";
 
   final String implEndPages = """
-      ];
-  """;
+    ];
+""";
 
   final String implEndCtor = """
-    }
-  """;
+  }
+""";
 
   final String implStartInit = """
-    /* INIT */
-    void initBlock() {
-  """;
+  /* INIT */
+  void initBlock() {
+""";
 
   final String implEndInit = """
-    }
-  """;
+  }
+""";
 
   final String implEndClass = """
-  }
-  """;
+}
+""";
 
   final String implEndFile = """
-  """;
+""";
 
 
 
