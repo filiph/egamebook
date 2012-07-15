@@ -928,7 +928,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart == curBlock.lineEnd)
-            write("\"\"\"$line\"\"\"$commaOrNot\n");
+            write("\"\"\"$line \"\"\"$commaOrNot\n");
           else
             write("\"\"\"$line\n");
         }
@@ -936,7 +936,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           write("() {\n");
           if (curBlock.lineStart == curBlock.lineEnd) {
-            write("  echo(\"\"\"$line\"\"\");\n");
+            write("  echo(\"\"\"$line \"\"\");\n");
             write("}$commaOrNot\n");
           } else
             write("  echo(\"\"\"$line\n");
@@ -946,7 +946,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
           var string = curBlock.options["string"];
           var goto = curBlock.options["goto"];
           write("{\n");
-          write("  \"string\": @\"\"\"${string != null ? string : ''}\"\"\",\n");
+          write("  \"string\": @\"\"\"${string != null ? string : ''} \"\"\",\n");
           write("  \"goto\": @\"\"\"$goto\"\"\"\n");
           write("}$commaOrNot\n");
         }
@@ -967,7 +967,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
           } else {
             // ex: "- Go to there [{{time++}} page]"
             write("  choices.add(new Choice(\n");
-            write("      \"\"\"$string\"\"\",\n");
+            write("      \"\"\"$string \"\"\",\n");
             var commaAfterGoto = ( script != null ) ? "," : "";
             write("      goto:@\"\"\"$goto\"\"\"$commaAfterGoto\n");
             write("      then:() { $script; }\n");
@@ -1012,14 +1012,14 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line\"\"\"$commaOrNot\n");
+            write("$line \"\"\"$commaOrNot\n");
           }
         }
 
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line\"\"\");\n");
+            write("$line \"\"\");\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
