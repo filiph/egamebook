@@ -25,7 +25,7 @@ The basic egb file looks like this:
 
     You managed to get out of the room before the spiders got to you, but now you're in a room full of giant worms.
 
-This will create an egamebook that starts in the first room (handle _start_) and gives the player two choices. These lead to the other two sections: _squash_ and _run_. Both these sections don't contain any choices, so they're the end of this book.
+This will create an egamebook that starts in the first room (handle _start_) and gives the player two choices. These lead to the other two sections: _squash_ and _run_. Both these sections don't contain any choices, so they're the end of this 'book'.
 
 ### A more practical example
 
@@ -62,9 +62,9 @@ features.
       if (time >= 45) {
         goto("policeBreakIn");
       } else if (time >= 30) {
-    </script>
+        <echo>
     You hear major commotion outside. They must be getting ready.
-    <script>
+        </echo>
       }
     </script>
 
@@ -127,17 +127,17 @@ features.
 
     <script>
       if (weapon == "gun") {
-    </script>
+        <echo>
     You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.
 
     - [runOutTheWindow]
-    <script>
+        </echo>
       } else {
-    </script>
+        <echo>
     You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.
 
     - [wasted]
-    <script>
+        </echo>
       }
     </script>
 
@@ -157,6 +157,54 @@ features.
 
 ## Advanced uses
 
+### Advanced choices
+
+The basic format of a choice is this:
+
+    - Go inside the house [insideHouse]
+
+But there are other things you can do.
+
+#### Questions
+
+TODO explanation
+
+    Where do you want to go now?
+    - Inside the house [insideHouse]
+    - To the backyard [backyard]
+
+#### Scripts
+
+TODO explanation
+
+    - Pick up the axe [{ weapon = "axe" }, nextpage] 
+
+#### Forwarding
+
+Sometimes, you don't really want to give the player a choice, you just
+want him to read the text and then "turn to section 46". This is
+obvious, since you can't branch the path forever, and if you look into
+any traditional (i.e. paper) gamebook, a good half of the sections there
+lead to just one other section, with no room for choice.
+
+In egamebook, this could be written as:
+
+    - Continue [nextpage]
+
+But you don't need to do that if you don't want to. You can also write:
+
+    - [nextpage]
+
+And the egamebook moves on automatically. It's give a much better flow to the player as they aren't even aware of the page turn.
+
+### Importing libraries
+
+TODO explanation
+
+    <import "../dungeons_dragons.egb" />
+
+You can put this line anywhere in your file. This will import the definitions (functions, classes and variables) of the `dungeons_dragons.egb` file into your egamebook. So if the imported file defines a handy list of monsters or a great combat-resolving function, you can use them in your book.
+ 
 ### Scripts
 
 You can use scripts inside the pages. You start them by putting `<script>` on a separate line and end them by putting `</script>` on another separate line below them. Like this:
@@ -167,51 +215,70 @@ You can use scripts inside the pages. You start them by putting `<script>` on a 
     coins += 5;
     </script>
 
-The scripts are written in the [Dart programming language](http://dartlang.org). There are a few special functions that you can always use inside a script. They are:
+The scripts are written in the [Dart programming language](http://dartlang.org). It's very similar to JavaScript, but better in many respects. 
 
-* `echo("Hello world.")` -- This will print "Hello world." in the book
-* `goto("squash")` -- This will go to the section called _squash_ after execution of this script block
-* `nextScript(() { print("Belated greetings."); })` -- This will call the provided function (which in this case prints "Belated greetings.") after execution of this script. You can string unlimited number of scripts to be executed one after another.
-* `repeatBlock()` -- This will repeat the script block after execution. This is great for iterative minigames - you repeat something until the game (puzzle, combat, ...) is resolved.
+There are a few special functions that you can always use inside any script. They are:
+
+* `echo("Hello world.")` -- This will print "Hello world." in the book.
+  With this, you can have deep, algorithmic control over what gets
+  printed.
+* `goto("squash")` -- This will go to the section called _squash_ after execution of this script block.
+* `nextScript(() { print("Belated greetings."); })` -- This will call the provided function (which in this case prints "Belated greetings.") right after execution of this script. You can string unlimited number of scripts to be executed one after another.
+* `repeatBlock()` -- This will repeat the current script after it's done, creating a loop. This is great for iterative minigames - you repeat something until the game (puzzle, combat, ...) is resolved.
 
 #### Variables
 
-Every `<script>` block is actually a function, so variables initialized in it will be lost after the block is ended. There's a trick, though: when you don't initialize, but just _use_ the variable for the first time, it will be saved. (Unless it's an instance of a user defined class, which is another story.)
+Every `<script>` block is actually a function, so variables initialized in it will be lost after the block is ended. There's a simple way around this, though: when you don't initialize, but just _use_ the variable for the first time, it will be saved.
 
     var a = "Hello.";  // this variable will disappear after this block closes
     b = "World!";  // this variable will stay
 
-Technical note: non-initialized variables are being saved into the `vars` Map. So the `b` above is accessible and assignable both through `b` as well as through `vars["b"]`.
+Technical note: non-initialized variables are being saved into the `vars__` Map. So the `b` above is accessible and assignable both through `b` as well as through `vars__["b"]`.
 
-### Init, Classes and Library
+### Functions, Classes and Variables
 
-Apart from the `<script>` block, there are currently 3 other types of blocks. The purpose of these is to allow you to initialize or define things that you want to use in many blocks throughout the book.
+Apart from the `<script>` block, there are currently 3 other types of blocks. The purpose of these is to allow you to initialize or define things that you want to use in any script throughout the book.
 
-Note: These three (in contrast to the script blocks) can be anywhere in the book. Mostly, you either put them below or above the actual content of the book. 
+Note: These three (in contrast to the script blocks) can be _anywhere_ in the book file. Mostly, you put them at the very bottom of the .egb file so they are easy to find and don't stand in the way. 
 
-#### Init
+Note 2: In the future, we might be able to merge classes and variables and functions into one block (e.g. library). But for technical reasons, that can't happen yet.
 
-This block is called every time the player opens the book. It should contain **variables** that you want to use throughout and that you want to make sure are defined from the very start of the book.
+#### Variables
 
-    <init>
+This block is called every time the player opens the book. It should contain **variables** that you want to use throughout and that you want to make sure are defined from the very start.
+
+    <variables>
     maxNumberOfSpiders = 100;
-    </init>
+    </variables>
 
-#### Library
+When the above definition is anywhere in the book, you can use the maxNumberOfSpiders variable (also anywhere in the book).
 
-This block typically contains **functions** that you want to use throughout the book. From technical reasons, you can't define classes in this block. That's what `<classes>` is for. You also can't define saveable variables (that's what `<init>` is for).
+    <script>
+    if (numberOfSpiders > maxNumberOfSpiders)
+      echo("Aaah, too many spiders!");
+    </script>
 
-    <library>
+Note: you can use defined functions and classes in this block.
+
+#### Functions
+
+This block typically contains **functions** that you want to use throughout the book. Call them from any script.
+
+    <functions>
     getDiceThrow() {
       return (Math.random() * 6).toInt() + 1;
     }
-    </library>
+    </functions>
+
+When you place the above block anywhere in the book, you can use the getDiceThrow() function anywhere.
+
+    You throw a dice and it's a ${getDiceThrow()}.
+
+Note: you can use defined classes in this block, but _can't_ use variables from the `<variables>` block.
 
 #### Classes
 
-For technical reasons, you can't define **classes** in the library block. Therefore, if you want to define any classes, put them into the classes block. There's one more caveat, though: you _can't_ use the special functions (`echo`, `repeatBlock`, etc.) from the `<classes>` block (again, for technical reasons). You shouldn't _have_ to, but be aware of the limitation.
-
-In the future, we might be able to merge classes and library into one block.
+If you want to define any **classes**, put them into the `<classes>` block. Classes are a great way to structure your code when you're really serious about the programming.
 
     <classes>
     class Spider {
@@ -224,3 +291,18 @@ In the future, we might be able to merge classes and library into one block.
       }
     }
     </classes>
+
+Now, you can do this:
+
+    <variables>
+    skippy = new Spider("Skippy");
+    </variables>
+
+    <script>
+    echo("You see your toilet friend ${skippy.name} here.");
+    if (skippy.legs != 8)
+      echo("Oh my god, someone has hurt him in your absence!");
+    </script>
+
+Note: you _can't_ use functions or variables in the `<classes>` block.
+In fact, you can't even use the special functions (`echo`, `repeatBlock`, etc.) in here. You shouldn't _have_ to, but be aware of the limitation.
