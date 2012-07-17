@@ -153,7 +153,10 @@ void main() {
         var callback = expectAsync1((var b) {
           for (var i = 0; i < 11; i++) {
             expect(b.pages[0].blocks[i].type,
-              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])));
+              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])),
+              reason:"The option '${b.pages[0].blocks[i].options['string']}' on line "
+                     "${b.pages[0].blocks[i].lineStart} "
+                     "is not actually a valid option and should be not recognized as such.");
           }
         });
         new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
@@ -178,6 +181,14 @@ void main() {
             equals("abcd[]1234;"));
           expect(b.pages[1].blocks[1].options["goto"],
             equals("xyz"));
+          expect(b.pages[1].blocks[2].options["script"],
+            equals("for (;;) { print(\"hi!\")}"));
+          expect(b.pages[1].blocks[2].options["goto"],
+            isNull);
+          expect(b.pages[1].blocks[3].options["script"],
+            equals("for (;;) { print(\"hi!\")}"));
+          expect(b.pages[1].blocks[3].options["goto"],
+            equals("start"));
         });
         new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
       });

@@ -724,7 +724,7 @@ class Builder {
   /*RegExp classesTagEnd = const RegExp(@"^\s{0,3}</classes>\s*$");*/
   RegExp initBlockTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
   RegExp importTag = const RegExp(@"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
-  RegExp choice = const RegExp(@"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\{\s*(.+)\s*\}\})?[\s,]*([^\{][^\{].+)?\s*\]\s*$");
+  RegExp choice = const RegExp(@"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
   RegExp variableInText = const RegExp(@"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
 
