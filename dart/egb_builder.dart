@@ -408,11 +408,10 @@ class Builder {
       }
 
       if (block.options["script"] != null
-          && const RegExp(@"^[^{]+}").hasMatch(block.options["script"])) {
-        WARNING("Choice can only have one script defined. Looks like you tried to write "
-              "a choice in the form of `- something [{{something}} {{something else}}]`. "
-              "Actual format used: `$_thisLine`.");
-        return new Future.immediate(false);
+          && (const RegExp(@"^[^{]*}").hasMatch(block.options["script"])
+              || const RegExp(@"{[^}]*$").hasMatch(block.options["script"]))) {
+        WARNING("Inline script `${block.options['script']}` in choice appears to have "
+              "an unmatched bracket. This could be an error. Actual format used: `$_thisLine`.");
       }
 
       // if the previous line is a text block, then that textblock needs to be

@@ -36,6 +36,10 @@ Normal paragraph of text [0].
 - g17eg [ { this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }   ,   gergerg]  
 - gr18g [{this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }   ,   gergerg]  
 - esd19e [{for (;;) { print("hi!")}}]
+- esd20e [this { might issue a warning, but is a valid choice - this all is a goto despite the bracket]
+- esd21e [{this script } should; } issue a warning, but is a valid one - the closing bracket could be in a string literal, for example]
+- esd22e [{}}, this is a valid script (thought it won't run, of course]
+- esd22e [{{}, this is a valid script (thought it won't run, of course]
 
 
 ---
@@ -45,3 +49,4 @@ second page
 - something [ { abcd[]1234; }, xyz]
 - choice with a block inside [{for (;;) { print("hi!")}}]
 - choice with a block inside and goto [{for (;;) { print("hi!")}}, start]
+- esd20e [{this script } should; } issue a warning, but is a valid one - the closing bracket could be in a string literal, for example]

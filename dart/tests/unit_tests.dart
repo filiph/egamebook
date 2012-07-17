@@ -166,7 +166,9 @@ void main() {
         var callback = expectAsync1((var b) {
           for (var i = 11; i < b.pages[0].blocks.length; i++) {
             expect(b.pages[0].blocks[i].type,
-              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]));
+              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]),
+              reason:"Line ${b.pages[0].blocks[i].lineStart} is a valid option "
+                     "but isn't recognized as such.");
           }
 
           expect(b.pages[1].blocks[0].options["string"],
@@ -189,6 +191,8 @@ void main() {
             equals("for (;;) { print(\"hi!\")}"));
           expect(b.pages[1].blocks[3].options["goto"],
             equals("start"));
+          expect(b.pages[1].blocks[4].options["script"],
+            equals("this script } should;"));
         });
         new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
       });
