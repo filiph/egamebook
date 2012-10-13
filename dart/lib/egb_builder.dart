@@ -846,7 +846,7 @@ class Builder {
     var substitutions = {
       "#import('egb_library.dart');" :
           "#import('../../lib/src/egb_library.dart');\n", // TODO!!
-      "#import('full_project.dart');" :
+      "#import('reference_scripter_impl.dart');" :
           "#import('$pathToOutputDart');\n", // TODO!!
     };
 

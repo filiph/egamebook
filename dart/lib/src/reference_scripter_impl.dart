@@ -1,4 +1,4 @@
-#library('Scripter Implementation Example');
+#library('Reference Scripter Implementation');
 
 #import('egb_library.dart');
 #import('dart:math');
@@ -34,7 +34,7 @@ class ScripterImpl extends Scripter {
         """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
         """You have a minute at most before the pigs kick the door in. """,
         () {
-  time = 0;
+          time = 0;
         },
         {
           "string": r""" """,
@@ -44,10 +44,10 @@ class ScripterImpl extends Scripter {
       // Day1.wakeupDilemma
       [
         () {
-  if (time >= 45) {
-    goto("policeBreakIn");
-  } else if (time >= 30) {
-  }
+          if (time >= 45) {
+            goto("policeBreakIn");
+          } else if (time >= 30) {
+          }
         },
         () {
           echo("""It is $time seconds since you woke up. """);
@@ -77,7 +77,7 @@ since you opened your eyes. """);
         """You quickly grab the clothes that you left on the bedside table and get dressed. You actually manage to do it in 20 seconds in spite of being nervous as hell.
 Good! """,
         () {
-  time += 20;
+          time += 20;
         },
         {
           "string": r""" """,
@@ -88,8 +88,8 @@ Good! """,
       [
         """You dive under the bed and your hand almost immediately finds the old-fashioned revolver that's been taped there for some time now. You check it -- it's loaded and apparently working. """,
         () {
-  weapon = "gun";
-  time += 15;
+          weapon = "gun";
+          time += 15;
         },
         {
           "string": r""" """,
@@ -112,13 +112,13 @@ Good! """,
       [
         """There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you. """,
         () {
-  if (weapon == "gun") {
-    echo("""You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.""");
-    goto("""runOutTheWindow""");
-  } else {
-    echo("""You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.""");
-    goto("""wasted""");
-  }
+          if (weapon == "gun") {
+            echo("""You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.""");
+            goto("""runOutTheWindow""");
+          } else {
+            echo("""You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.""");
+            goto("""wasted""");
+          }
         }
       ],
       // Day1.runOutTheWindow

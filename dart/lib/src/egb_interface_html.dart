@@ -1,7 +1,7 @@
 #import('egb_library.dart');
 
 // this will be rewritten with the actual file
-#import('full_project.dart');
+#import('reference_scripter_impl.dart');
 
 #import('dart:html');
 #import('dart:isolate');
