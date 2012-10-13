@@ -1,4 +1,4 @@
-#library('Scripter Implementation');
+#library('Scripter Implementation Example');
 
 #import('egb_library.dart');
 #import('dart:math');

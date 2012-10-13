@@ -41,9 +41,10 @@ class HtmlInterface implements UserInterface {
 
 
   ParagraphElement createParagraph(String innerHtml) {
-    if (paragraphsDiv == null)
+    if (paragraphsDiv == null) {
       return null;
-    
+    }
+
     if (innerHtml == "") {
       print("Received an empty string.");
       return null;
@@ -57,13 +58,14 @@ class HtmlInterface implements UserInterface {
   }
 
   AnchorElement createChoice(String innerHtml, [String accessKey="", int hash]) {
-    if (choicesOl == null)
+    if (choicesOl == null) {
       return null;
+    }
 
     LIElement li = new Element.tag("li");
     AnchorElement a = new Element.tag("a");
     a.innerHTML = innerHtml;
-    if (hash != null)
+    if (hash != null) {
       a.on.click.add((Event ev) {
           _scripterPort.send(
             new Message.OptionSelected(hash).toJson(),
@@ -71,7 +73,8 @@ class HtmlInterface implements UserInterface {
           );
           choicesOl.elements.clear();
       });
-    
+    }
+
     li.elements.add(a);
     choicesOl.elements.add(li);
     return a;
@@ -94,8 +97,9 @@ class HtmlInterface implements UserInterface {
         _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
         print("We have choices to show!");
-        if (message.listContent[0] != "")
+        if (message.listContent[0] != "") {
           createParagraph(message.listContent[0]);
+        }
         choices = new List.from(message.listContent);
         for (int i = 1; i < choices.length; i++) {
           createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);

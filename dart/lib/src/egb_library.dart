@@ -14,7 +14,7 @@ void DEBUG_SCR(String str) {
 
 class Message {
   int type;
-  
+
   // different types of contents
   List listContent;
   String strContent;
@@ -54,10 +54,11 @@ class Message {
       ) : type = MSG_SHOW_CHOICES {
     List<Choice> choicesToSend;
     // filter out choices we don't want to show
-    if (!endOfPage)
+    if (!endOfPage) {
       choicesToSend = choices.filter((choice) => !choice.waitForEndOfPage && !choice.shown);
-    else
+    } else {
       choicesToSend = choices.filter((choice) => !choice.shown);
+    }
 
     DEBUG_SCR("Sending choices.");
 
@@ -133,7 +134,7 @@ class Choice extends UserInteraction {
   String goto;
   bool showNow;
 
-  Choice(this.string, [this.goto, Function then, bool showNow=false]) : super() {
+  Choice(this.string, {this.goto, Function then, bool showNow: false}) : super() {
     f = then;
     waitForEndOfPage = !showNow;
   }
@@ -141,8 +142,9 @@ class Choice extends UserInteraction {
   Choice.fromMap(Map<String,Dynamic> map) : super() {
     string = map["string"];
     goto = map["goto"];
-    if (map.containsKey("showNow"))
+    if (map.containsKey("showNow")) {
       showNow = map["showNow"];
+    }
     f = map["then"];
   }
 
@@ -180,7 +182,7 @@ abstract class Scripter {
     up on this FIFO stack.
     */
   List<Function> nextScriptStack;
-  
+
   abstract void initBlock();
 
   Scripter() : super() {
@@ -227,16 +229,19 @@ abstract class Scripter {
       choices.forEach((choice) {
           if (choice.hashCode() == incomingMessage.intContent) {
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
-            if (choice.goto != null)
+            if (choice.goto != null) {
               nextPageIndex = pageHandles[choice.goto];
-            if (choice.f != null)
+            }
+            if (choice.f != null) {
               message = runScriptBlock(script:choice.f);
+            }
           }
       });
-      if (message != null)
+      if (message != null) {
         return message;
-      else
+      } else {
         return new Message.NoResult();
+      }
     }
 
     // if previous script asked for nextScript()
@@ -255,12 +260,13 @@ abstract class Scripter {
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
-    if (currentBlock == null)
+    if (currentBlock == null) {
       currentBlock = 0;
-    else if (repeatBlockBit)
+    } else if (repeatBlockBit) {
       repeatBlockBit = false;
-    else
+    } else {
       currentBlock++;
+    }
 
     DEBUG_SCR("currentPageIndex = $currentPageIndex, currentBlock = $currentBlock");
 
@@ -268,10 +274,11 @@ abstract class Scripter {
     DEBUG_SCR("Resolving block.");
     if (currentBlock >= blocks.length) {
       DEBUG_SCR("At the end of page.");
-      if (choices.some((choice) => !choice.shown))
+      if (choices.some((choice) => !choice.shown)) {
         return new Message.ShowChoices(choices, endOfPage:true);
-      else
+      } else {
         return new Message.EndOfBook();
+      }
     } else if (blocks[currentBlock] is String) {
       // just an ordinary paragraph, no script
       Message message = new Message.TextResult(blocks[currentBlock]);
@@ -329,8 +336,9 @@ abstract class Scripter {
   }
 
   void echo(String str) {
-    if (textBuffer.length > 0)
+    if (textBuffer.length > 0) {
       textBuffer.add(" ");
+    }
     textBuffer.add(str);
   }
 
@@ -362,14 +370,16 @@ abstract class Scripter {
     choices = choices.filter((Choice choice) => !choice.shown);
 
     // run the actual script
-    if (script == null)
+    if (script == null) {
       blocks[currentBlock]();
-    else
+    } else {
       script();
+    }
 
     // catch text and choices
-    if (choices.some((choice) => !choice.waitForEndOfPage))
+    if (choices.some((choice) => !choice.waitForEndOfPage)) {
       return new Message.ShowChoices(choices, prependText:textBuffer.toString());
+    }
     return new Message.TextResult(textBuffer.toString());
   }
 }
@@ -377,7 +387,7 @@ abstract class Scripter {
 /**
   Interface to all user interfaces interacting with the Scripter.
   */
-interface UserInterface {
+abstract class UserInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
 
