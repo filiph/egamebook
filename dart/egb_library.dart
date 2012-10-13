@@ -166,12 +166,13 @@ class Scripter {
   SendPort _interfacePort;
 
   List<List> pages;
-  Map<String,int> pageHandles;
+  Map<String,int> pageHandles; // TODO: make this into Map<String,PageInfo>
   List blocks;
-  int currentPage;  // the current position in the pages list
+  int currentPageIndex;  // the current position in the pages list
+  String currentPageName; // TODO: make this available to scripts
   int currentBlock;  // the current position in the current page's blocks list
 
-  int nextPage;
+  int nextPageIndex;
   bool repeatBlockBit = false;
   /**
     When a block/script/choice call for a script to be called afterwards, it ends
@@ -196,7 +197,7 @@ class Scripter {
       DEBUG_SCR("Closing port and quiting.");
       port.close();
     } else if (pages == null
-        || (currentPage != null && currentPage >= pages.length)) {
+        || (currentPageIndex != null && currentPageIndex >= pages.length)) {
       DEBUG_SCR("No more pages.");
       _interfacePort.send(new Message.EndOfBook().toJson(), port.toSendPort());
     } else {
@@ -209,7 +210,8 @@ class Scripter {
   Message goOneStep(Message incomingMessage) {
     if (incomingMessage.type == Message.MSG_START) {
       DEBUG_SCR("Starting from the beginning");
-      currentPage = 0;
+      currentPageIndex = 0;
+      // TODO: currentPageName
       currentBlock = null;
       nextScriptStack.clear();
       initScriptEnvironment();
@@ -223,7 +225,7 @@ class Scripter {
           if (choice.hashCode() == incomingMessage.intContent) {
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
             if (choice.goto != null)
-              nextPage = pageHandles[choice.goto];
+              nextPageIndex = pageHandles[choice.goto];
             if (choice.f != null)
               message = runScriptBlock(script:choice.f);
           }
@@ -241,10 +243,11 @@ class Scripter {
     }
 
     // if previous script asked to jump, then jump
-    if (nextPage != null) {
-      currentPage = nextPage;
+    if (nextPageIndex != null) {
+      currentPageIndex = nextPageIndex;
+      // TODO currentPageName
       currentBlock = null;
-      nextPage = null;
+      nextPageIndex = null;
       choices.clear();
     }
 
@@ -256,9 +259,9 @@ class Scripter {
     else
       currentBlock++;
 
-    DEBUG_SCR("currentPage = $currentPage, currentBlock = $currentBlock");
+    DEBUG_SCR("currentPageIndex = $currentPageIndex, currentBlock = $currentBlock");
 
-    blocks = pages[currentPage];
+    blocks = pages[currentPageIndex];
     DEBUG_SCR("Resolving block.");
     if (currentBlock >= blocks.length) {
       DEBUG_SCR("At the end of page.");
@@ -312,6 +315,7 @@ class Scripter {
 
   Dynamic noSuchMethod(String name, List args) {
     if (name.startsWith("get:") || name.startsWith("get ")) {
+      // TODO: throw error if not set
       return vars[name.substring(4)];
     } else if (name.startsWith("set:") || name.startsWith("set ")) {
       vars[name.substring(4)] = args[0];
@@ -328,7 +332,8 @@ class Scripter {
   }
 
   void goto(String pageHandle) {
-    nextPage = pageHandles[pageHandle];
+    // TODO: throw exception if pageHandle not found
+    nextPageIndex = pageHandles[pageHandle];
   }
 
   void nextScript(Function f) {
@@ -372,5 +377,7 @@ class Scripter {
 interface UserInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
+
+  // TODO: all interfaces should allow autopilot mode (for automated/unit testing)
 }
 

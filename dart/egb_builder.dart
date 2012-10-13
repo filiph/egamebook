@@ -308,6 +308,7 @@ class Builder {
     }
   }
 
+  // TODO: check inside echo tags, throw error if true
   Future<bool> _checkNewPage() {
     if ((_mode != MODE_METADATA && _mode != MODE_NORMAL) || _thisLine == null)
       return new Future.immediate(false);
@@ -375,6 +376,7 @@ class Builder {
   }
 
   // TODO: allow choices in synopsis?
+  // TODO: check even inside ECHO tags, add to script
   Future<bool> _checkChoice() {
     if (_thisLine == null || pages.isEmpty()
         || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO))
@@ -586,6 +588,7 @@ class Builder {
     return completer.future;
   }
 
+  // TODO: check also inside echo tags, add to script block
   Future<bool> _checkNormalParagraph() {
     if (_mode != MODE_NORMAL || _thisLine == null)
       return new Future.immediate(false);
