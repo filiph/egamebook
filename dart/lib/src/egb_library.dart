@@ -163,7 +163,7 @@ class Question extends UserInteraction {
   Scripter is the class that runs the actual game and sends Messages to UserInterface.
   It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
   */
-class Scripter {
+abstract class Scripter {
   SendPort _interfacePort;
 
   List<List> pages;
@@ -180,6 +180,8 @@ class Scripter {
     up on this FIFO stack.
     */
   List<Function> nextScriptStack;
+  
+  abstract void initBlock();
 
   Scripter() : super() {
     DEBUG_SCR("Scripter has been created.");
@@ -322,7 +324,7 @@ class Scripter {
       vars[name.substring(4)] = args[0];
       return null;
     } else {
-      throw new NoSuchMethodException(this, name, args);
+      throw new NoSuchMethodError(this, name, args);
     }
   }
 

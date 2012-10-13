@@ -24,7 +24,7 @@ class EgbFormatException implements Exception {
   }
 }
 
-interface BuilderLineRange {
+abstract class BuilderLineRange {
   int lineStart;
   int lineEnd;
 }
@@ -894,8 +894,6 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 }
 
 
-
-
   Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, {int indent: 0}) {
     var completer = new Completer();
 
@@ -1091,7 +1089,10 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
     return completer.future;
   }
 
-  Future copyLineRanges(List<BuilderLineRange> lineRanges,
+  /**
+   * Gets lines from inStream and dumps them to outStream.
+   */
+  Future copyLineRanges(Collection<BuilderLineRange> lineRanges,
       StringInputStream inStream, OutputStream outStream,
       {bool inclusive: true, int indentLength: 0}) {
     var completer = new Completer();
