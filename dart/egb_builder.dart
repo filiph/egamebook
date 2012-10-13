@@ -12,10 +12,12 @@ class EgbFormatException implements Exception {
   String toString() {
     StringBuffer strBuf = new StringBuffer();
     strBuf.add("Format exception");
-    if (line != null)
+    if (line != null) {
       strBuf.add(" on line [$line]");
-    if (file != null)
+    }
+    if (file != null) {
       strBuf.add(" in file ${file.name}");
+    }
     strBuf.add(": ");
     strBuf.add(msg);
     return strBuf.toString();
@@ -31,19 +33,20 @@ class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super
   int lineStart;
   int lineEnd;
 
-  BuilderLineSpan([this.lineStart]);
+  BuilderLineSpan({this.lineStart});
 
-  get isClosed() => lineStart != null && lineEnd != null && lineStart <= lineEnd;
+  get isClosed => lineStart != null && lineEnd != null && lineStart <= lineEnd;
 }
 
 class BuilderMetadata {
   String key;
   List<String> values;
 
-  BuilderMetadata(this.key, [String firstValue]) {
+  BuilderMetadata(this.key, {String firstValue}) {
     values = new List<String>();
-    if (firstValue != null)
+    if (firstValue != null) {
       values.add(firstValue);
+    }
   }
 }
 
@@ -79,7 +82,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_QUESTION = 16;
   static final int BLK_CHOICE_IN_SCRIPT = 32;
 
-  BuilderBlock([this.lineStart]) {
+  BuilderBlock({this.lineStart}) {
     options = new Map<String,Dynamic>();
     subBlocks = new List<BuilderLineSpan>();
   }
@@ -90,15 +93,15 @@ class BuilderInitBlock implements BuilderLineRange {
   int lineEnd;
   int type;
 
-  static final int BLK_CLASSES = 1;
-  static final int BLK_FUNCTIONS = 2;
-  static final int BLK_VARIABLES = 4;
+  static const int BLK_CLASSES = 1;
+  static const int BLK_FUNCTIONS = 2;
+  static const int BLK_VARIABLES = 4;
 
-  static final String BLK_CLASSES_STRING = "classes";
-  static final String BLK_FUNCTIONS_STRING = "functions";
-  static final String BLK_VARIABLES_STRING = "variables";
+  static const String BLK_CLASSES_STRING = "classes";
+  static const String BLK_FUNCTIONS_STRING = "functions";
+  static const String BLK_VARIABLES_STRING = "variables";
 
-  BuilderInitBlock([this.lineStart, this.type, String typeStr]) {
+  BuilderInitBlock({this.lineStart, this.type, String typeStr}) {
     if (typeStr != null) {
       type = typeFromString(typeStr);
     }
@@ -118,14 +121,15 @@ class BuilderInitBlock implements BuilderLineRange {
   }
 
   static int modeFromString(String s) {
-    if (s == BLK_CLASSES_STRING)
+    if (s == BLK_CLASSES_STRING) {
       return Builder.MODE_INSIDE_CLASSES;
-    else if (s == BLK_FUNCTIONS_STRING)
+    } else if (s == BLK_FUNCTIONS_STRING) {
       return Builder.MODE_INSIDE_FUNCTIONS;
-    else if (s == BLK_VARIABLES_STRING)
+    } else if (s == BLK_VARIABLES_STRING) {
       return Builder.MODE_INSIDE_VARIABLES;
-    else
+    } else {
       throw "Tag <$s> was not recognized as a valid init block tag.";
+    }
   }
 
 }
@@ -158,9 +162,9 @@ class Builder {
 
     f.exists()
     .then((exists) {
-      if (!exists)
+      if (!exists) {
         completer.completeException(new FileIOException("File ${f.name} doesn't exist."));
-      else {
+      } else {
         f.fullPath().then((String fullPath) {
           inputFileFullPath = fullPath;
 
@@ -189,16 +193,18 @@ class Builder {
               //print("\nReading input file has finished.");
 
               // end the last page
-              if (!pages.isEmpty())
+              if (!pages.isEmpty()) {
                 pages.last().lineEnd = _lineNumber - 1;
+              }
 
               _lineNumber = null;  // makes sure following warnings don't get associated with the last line
 
-              if (pages.isEmpty())
+              if (pages.isEmpty()) {
                 WARNING("There are no pages in this egb. If you want it to be playable, "
                         "you will need to include page starts in the form of a line "
                         "containing exclusively dashes (`-`, three or more) and "
                         "an immediately following line with the name of the page.");
+              }
 
               if (_mode != MODE_NORMAL) {
                 completer.completeException(
@@ -207,8 +213,9 @@ class Builder {
                 // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
                 //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
                 _checkForDoubleImports().then((bool passed) {
-                  if (passed)
+                  if (passed) {
                     completer.complete(this);
+                  }
                 });
               }
             });
@@ -256,8 +263,9 @@ class Builder {
   */
 
   Future<bool> _checkBlankLine() {
-    if (_mode != MODE_NORMAL)
+    if (_mode != MODE_NORMAL) {
       return new Future.immediate(false);
+    }
 
     if (_thisLine == null || _thisLine == "" || blankLine.hasMatch(_thisLine)) {
       // close previous unfinished _text_ block if any
@@ -267,8 +275,9 @@ class Builder {
           var lastblock = lastpage.blocks.last();
           if (lastblock.type == BuilderBlock.BLK_TEXT
               || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
-            if (lastblock.lineEnd == null)
+            if (lastblock.lineEnd == null) {
               lastblock.lineEnd = _lineNumber - 1;
+            }
           }
         }
       } else {
@@ -281,8 +290,9 @@ class Builder {
   }
 
   Future<bool> _checkMetadataLine() {
-    if (_mode != MODE_METADATA || _thisLine == null)
+    if (_mode != MODE_METADATA || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     Match m = metadataLine.firstMatch(_thisLine);
 
@@ -310,8 +320,9 @@ class Builder {
 
   // TODO: check inside echo tags, throw error if true
   Future<bool> _checkNewPage() {
-    if ((_mode != MODE_METADATA && _mode != MODE_NORMAL) || _thisLine == null)
+    if ((_mode != MODE_METADATA && _mode != MODE_NORMAL) || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     if (newPageCandidate && validPageName.hasMatch(_thisLine)) {
       // discard the "---" from any previous blocks
@@ -333,8 +344,9 @@ class Builder {
       }
 
       // close last page
-      if (!pages.isEmpty())
+      if (!pages.isEmpty()) {
         pages.last().lineEnd = _lineNumber - 1;
+      }
 
       // add the new page
       var name = validPageName.firstMatch(_thisLine).group(1);
@@ -357,8 +369,9 @@ class Builder {
   }
 
   Future<bool> _checkPageOptions() {
-    if (_mode != MODE_NORMAL || _thisLine == null)
+    if (_mode != MODE_NORMAL || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     if (!pages.isEmpty() && pages.last().lineStart == _lineNumber - 1
         && pageOptions.hasMatch(_thisLine)) {
@@ -366,8 +379,9 @@ class Builder {
       var lastpage = pages.last();
       for (var i = 1; i <= m.groupCount(); i += 2) {
         var opt = m.group(i);
-        if (opt != null)
+        if (opt != null) {
           lastpage.options.add(opt);
+        }
       }
       return new Future.immediate(true);
     } else {
@@ -379,8 +393,9 @@ class Builder {
   // TODO: check even inside ECHO tags, add to script
   Future<bool> _checkChoice() {
     if (_thisLine == null || pages.isEmpty()
-        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO))
+        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO)) {
       return new Future.immediate(false);
+    }
 
     if (choice.hasMatch(_thisLine)) {
 
@@ -396,8 +411,9 @@ class Builder {
 
       // trim the strings
       block.options.forEach((var k, var v) {
-        if (v != null)
+        if (v != null) {
           block.options[k] = block.options[k].trim();
+        }
       });
 
       bool hasVarInString = (block.options["string"] != null
@@ -410,8 +426,8 @@ class Builder {
       }
 
       if (block.options["script"] != null
-          && (const RegExp(@"^[^{]*}").hasMatch(block.options["script"])
-              || const RegExp(@"{[^}]*$").hasMatch(block.options["script"]))) {
+          && (const RegExp(r"^[^{]*}").hasMatch(block.options["script"])
+              || const RegExp(r"{[^}]*$").hasMatch(block.options["script"]))) {
         WARNING("Inline script `${block.options['script']}` in choice appears to have "
               "an unmatched bracket. This could be an error. Actual format used: `$_thisLine`.");
       }
@@ -448,8 +464,9 @@ class Builder {
   }
 
   Future<bool> _checkInitBlockTags() {
-    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null)
+    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     var completer = new Completer();
 
@@ -493,8 +510,9 @@ class Builder {
 
   Future<bool> _checkScriptTags() {
     if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_VARIABLES
-        || _mode == MODE_INSIDE_FUNCTIONS || _thisLine == null)
+        || _mode == MODE_INSIDE_FUNCTIONS || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     var completer = new Completer();
 
@@ -563,8 +581,9 @@ class Builder {
   }
 
   Future<bool> _checkImportTag() {
-    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null)
+    if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     var completer = new Completer();
 
@@ -590,8 +609,9 @@ class Builder {
 
   // TODO: check also inside echo tags, add to script block
   Future<bool> _checkNormalParagraph() {
-    if (_mode != MODE_NORMAL || _thisLine == null)
+    if (_mode != MODE_NORMAL || _thisLine == null) {
       return new Future.immediate(false);
+    }
 
     if (pages.isEmpty()) {
       synopsisLineNumbers.add(_lineNumber);
@@ -678,13 +698,15 @@ class Builder {
     return completer.future;
   }
 
-  void _closeLastBlock([int lineEnd]) {
-    if (lineEnd == null)
+  void _closeLastBlock({int lineEnd}) {
+    if (lineEnd == null) {
       lineEnd = _lineNumber - 1;
+    }
     if (!pages.isEmpty() && !pages.last().blocks.isEmpty()) {
       var lastblock = pages.last().blocks.last();
-      if (lastblock.lineEnd == null)
+      if (lastblock.lineEnd == null) {
         lastblock.lineEnd = lineEnd;
+      }
     }
   }
 
@@ -708,14 +730,14 @@ class Builder {
   Map<String, int> pageHandles;
   List<BuilderInitBlock> initBlocks;
 
-  RegExp blankLine = const RegExp(@"^\s*$");
-  RegExp hr = const RegExp(@"^\s{0,3}\-\-\-+\s*$"); // ----
-  RegExp validPageName = const RegExp(@"^\s{0,3}(.+)\s*$");
-  RegExp pageOptions = const RegExp(@"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
-  RegExp metadataLine = const RegExp(@"^(\w.+):\s*(\w.*)\s*$");
-  RegExp metadataLineAdd = const RegExp(@"^\s+(\w.*)\s*$");
+  RegExp blankLine = const RegExp(r"^\s*$");
+  RegExp hr = const RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
+  RegExp validPageName = const RegExp(r"^\s{0,3}(.+)\s*$");
+  RegExp pageOptions = const RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
+  RegExp metadataLine = const RegExp(r"^(\w.+):\s*(\w.*)\s*$");
+  RegExp metadataLineAdd = const RegExp(r"^\s+(\w.*)\s*$");
   /*RegExp scriptTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
-  RegExp scriptOrEchoTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
+  RegExp scriptOrEchoTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
   /*RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");*/
   /*RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");*/
   /*RegExp initTagStart = const RegExp(@"^\s{0,3}<init>\s*$");*/
@@ -724,10 +746,10 @@ class Builder {
   /*RegExp libraryTagEnd = const RegExp(@"^\s{0,3}</library>\s*$");*/
   /*RegExp classesTagStart = const RegExp(@"^\s{0,3}<classes>\s*$");*/
   /*RegExp classesTagEnd = const RegExp(@"^\s{0,3}</classes>\s*$");*/
-  RegExp initBlockTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
-  RegExp importTag = const RegExp(@"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
-  RegExp choice = const RegExp(@"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
-  RegExp variableInText = const RegExp(@"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
+  RegExp initBlockTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
+  RegExp importTag = const RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
+  RegExp choice = const RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  RegExp variableInText = const RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
 
   /**
@@ -822,9 +844,9 @@ class Builder {
     File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
 
     var substitutions = {
-      "#import('egb_library.dart');" : 
+      "#import('egb_library.dart');" :
           "#import('../egb_library.dart');\n", // TODO!!
-      "#import('samples/unit-testing.markdown.dart');" : 
+      "#import('samples/unit-testing.markdown.dart');" :
           "#import('$pathToOutputDart');\n", // TODO!!
     };
 
@@ -838,8 +860,9 @@ class Builder {
 
 Future<List<String>> _fileFromTemplate(File inFile, File outFile,
     [Map<String,String> substitutions]) {
-  if (substitutions == null)
+  if (substitutions == null) {
     substitutions = new Map();
+  }
   Completer completer = new Completer();
 
   inFile.exists()
@@ -853,10 +876,11 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
       inStream.onLine = () {
         String line = inStream.readLine();
-        if (substitutions.containsKey(line))
+        if (substitutions.containsKey(line)) {
           outStream.writeString("${substitutions[line]}\n");
-        else
+        } else {
           outStream.writeString("$line\n");
+        }
       };
       inStream.onClosed = () {
         outStream.close();
@@ -872,7 +896,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
 
 
-  Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, [int indent=0]) {
+  Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, {int indent: 0}) {
     var completer = new Completer();
 
     // TODO: copy <import> classes first
@@ -892,8 +916,9 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
   Future writePages(OutputStream dartOutStream) {
     var completer = new Completer();
 
-    if (pages.isEmpty())
-      return new Future.immediate(true);  // TODO: unit test this
+    if (pages.isEmpty()) {
+      return new Future.immediate(true);
+    }  // TODO: unit test this
 
     String indent = "";
     Function write = (String msg) {
@@ -929,10 +954,11 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
-          if (curBlock.lineStart == curBlock.lineEnd)
+          if (curBlock.lineStart == curBlock.lineEnd) {
             write("\"\"\"$line \"\"\"$commaOrNot\n");
-          else
+          } else {
             write("\"\"\"$line\n");
+          }
         }
 
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
@@ -940,8 +966,9 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
           if (curBlock.lineStart == curBlock.lineEnd) {
             write("  echo(\"\"\"$line \"\"\");\n");
             write("}$commaOrNot\n");
-          } else
+          } else {
             write("  echo(\"\"\"$line\n");
+          }
         }
 
         if (curBlock.type == BuilderBlock.BLK_CHOICE) {
@@ -962,10 +989,12 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
           if (string == null) {
             // ex: "- [gotopage]"
-            if (script != null)
+            if (script != null) {
               write("  $script;\n");
-            if (goto != null)
+            }
+            if (goto != null) {
               write("  goto(@\"\"\"$goto\"\"\");\n");
+            }
           } else {
             // ex: "- Go to there [{{time++}} page]"
             write("  choices.add(new Choice(\n");
@@ -1043,10 +1072,11 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
       // end page
       if (pageIndex < pages.length && lineNumber == pages[pageIndex].lineEnd) {
         indent = _getIndent(6);
-        if (pageIndex < pages.length - 1)
+        if (pageIndex < pages.length - 1) {
           write("],\n");
-        else
+        } else {
           write("]\n");
+        }
         pageIndex++;
         curPage = null;
       }
@@ -1063,7 +1093,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
   Future copyLineRanges(List<BuilderLineRange> lineRanges,
       StringInputStream inStream, OutputStream outStream,
-      [bool inclusive=true, int indentLength=0]) {
+      {bool inclusive: true, int indentLength: 0}) {
     var completer = new Completer();
     outStream.writeString("\n");
     var indent = _getIndent(indentLength);
@@ -1092,23 +1122,26 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
   String _getIndent(int len) {
     var strBuf = new StringBuffer();
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < len; i++) {
       strBuf.add(" ");
+    }
     return strBuf.toString();
   }
 
-  bool _insideLineRange(int lineNumber, BuilderLineRange range, [bool inclusive=true]) {
-    if (range.lineEnd == null)
+  bool _insideLineRange(int lineNumber, BuilderLineRange range, {bool inclusive: true}) {
+    if (range.lineEnd == null) {
       print(range.lineStart);
+    }
     if (lineNumber >= range.lineStart
         && lineNumber <= range.lineEnd) {
-      if (inclusive)
+      if (inclusive) {
         return true;
-      else if (lineNumber != range.lineStart
-              && lineNumber != range.lineEnd)
+      } else if (lineNumber != range.lineStart
+              && lineNumber != range.lineEnd) {
         return true;
-      else
+      } else {
         return false;
+      }
     } else {
       return false;
     }
