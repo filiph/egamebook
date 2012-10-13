@@ -2,6 +2,27 @@
 
 A system which automatically creates playable electronic gamebooks from .egb files.
 
+## Quick Start
+
+Or how to be a published interactive fiction writer in 7 easy steps!
+
+TODO: IMPLEMENT
+
+1.  Run the `quick_start.sh` script in `bin` directory.
+2.  Watch as it creates a new project for you in the `example`
+    directory.
+    - You can change the name of the directory at any time. Default is
+      `new`.
+3.  Go to `example/new` and edit the `book.egb` file in your favorite
+    plain text editor (gEdit, TextMate, Sublime, Notepad, ..).
+5.  Once you're happy with the changes, run the `compile.sh` script that
+    was conveniently placed in the `example/new` directory for you.
+6.  Test-drive your newly created egamebook either on the command line
+    (run `run.sh`) or in the browser (open `web/index.html`). 
+7.  Repeat until happy with the product.
+8.  Upload the contents of the `web` directory to a server. Your
+    egamebook is now published.
+
 ## egb file
 
 The basic egb file looks like this:
