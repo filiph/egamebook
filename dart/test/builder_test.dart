@@ -1,15 +1,16 @@
-#import('/Applications/dart/dart-sdk/lib/unittest/unittest.dart');
+#import('package:unittest/unittest.dart');
 #import('dart:io');
 
 
 // importing files to test
-#import("../html_entities.dart");
-#import("../egb_builder.dart");
+#import("../lib/html_entities.dart");
+#import("../lib/egb_builder.dart");
 
 String getPath(String filename) {
   var options = new Options();
   var pathToScript = new Path(options.script);
   var pathToFilename = pathToScript.directoryPath
+        .join(new Path("files"))
         .join(new Path(filename));
   return pathToFilename.toString();
 }

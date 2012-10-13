@@ -1,6 +1,6 @@
 #import('dart:io');
 
-#import('egb_builder.dart');
+#import('../lib/egb_builder.dart');
 
 void main() {
   Options options = new Options();

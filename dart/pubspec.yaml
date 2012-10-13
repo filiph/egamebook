@@ -1,0 +1,6 @@
+name: egamebook
+version: 0.0.1
+author: Filip Hracek <filip.hracek@gmail.com>
+dependencies:
+  unittest:
+    sdk: unittest

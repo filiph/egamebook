@@ -16,14 +16,14 @@ class ScripterImpl extends Scripter {
 
   ScripterImpl() : super() {
     pageHandles = {
-      @"""Day1.getDressed""": 2,
-      @"""Day1.getGun""": 3,
-      @"""wasted""": 7,
-      @"""Day1.WakeUp""": 0,
-      @"""Day1.warnAmy""": 4,
-      @"""Day1.runOutTheWindow""": 6,
-      @"""Day1.wakeupDilemma""": 1,
       @"""policeBreakIn""": 5,
+      @"""Day1.runOutTheWindow""": 6,
+      @"""Day1.warnAmy""": 4,
+      @"""Day1.WakeUp""": 0,
+      @"""Day1.wakeupDilemma""": 1,
+      @"""Day1.getDressed""": 2,
+      @"""wasted""": 7,
+      @"""Day1.getGun""": 3,
     };
 
     pages = [

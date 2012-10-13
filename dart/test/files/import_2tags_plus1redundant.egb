@@ -17,7 +17,7 @@ You are in a room full of spiders. The spiders look annoyed.
 <script>
   <import "this should not be picked up">
 </script>
-<import "../tests/library_simple_all_tags.egb">
+<import "../../test/files/library_simple_all_tags.egb">
 ---     
 squash
 [[ visitOnce]]
