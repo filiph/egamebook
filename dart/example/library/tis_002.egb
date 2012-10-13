@@ -211,7 +211,7 @@
   v_moveBasicParryHand.on["end"].add((_this, e) {
       // parrying gives one other chance to block||dodge before the blow even lands 
       double chanceToParry = 1 - e.target.currentMove.type.computeChanceToHit(e.target, e.performer);
-      if (Math.random() < chanceToParry) {
+      if (new Random().nextDouble() < chanceToParry) {
         // PARRIED
         e.performer.report("<subject> {stop<s>|intercept<s>} <object's> ${e.target.currentMove.type.string} which gives ${e.performer.pronoun.accusative} a chance to counter-attack.", object:e.target, wholeSentence:true);
         e.target.currentMove = null;
@@ -483,7 +483,7 @@ Assert Storyline string functions.
 
   int countBelow = 0;
   for (int i = 0; i < 1000; i++) {
-    double random = Math.random();
+    double random = new Random().nextDouble();
     if (random < 0.1)
       countBelow++;
   }
@@ -619,7 +619,7 @@ Dynamic randomly(List choices) {
   if (number == 0)
     throw new Exception("Cannot randomly choose from an empty set.");
   double portionSize = 1.0 / number;
-  double rand = Math.random();
+  double rand = new Random().nextDouble();
   int which = (rand / portionSize).floor().toInt();
 
   return choices[which];
@@ -656,10 +656,10 @@ class Pronoun {
 
   const Pronoun(this.nominative, this.accusative, this.genitive, this.self); 
 
-  static final Pronoun YOU = const Pronoun("you", "you", "your", "yourself");
-  static final Pronoun HE = const Pronoun("he", "him", "his", "himself");
-  static final Pronoun SHE = const Pronoun("she", "her", "her", "herself");
-  static final Pronoun IT = const Pronoun("it", "it", "its", "itself");
+  static const Pronoun YOU = const Pronoun("you", "you", "your", "yourself");
+  static const Pronoun HE = const Pronoun("he", "him", "his", "himself");
+  static const Pronoun SHE = const Pronoun("she", "her", "her", "herself");
+  static const Pronoun IT = const Pronoun("it", "it", "its", "itself");
 }
 
 class Storyline {
@@ -902,7 +902,7 @@ class Storyline {
 
       int numOptions = indexes.length - 1;
       if (numOptions > 1) {
-        int choice = (Math.random() * numOptions).floor().toInt();
+        int choice = (new Random().nextDouble() * numOptions).floor().toInt();
 
         StringBuffer strBuf = new StringBuffer();
         strBuf.add(str.substring(0, startTagIndex));
@@ -1036,7 +1036,7 @@ class GameEntity implements Hashable {
     return GLOBAL_HASH_I++;
   }
 
-  String get name() => randomly(names);
+  String get name => randomly(names);
 }
 
 /**
@@ -1079,9 +1079,9 @@ class Actor extends GameEntity {
   }
 
   /// returns the fighting ability modified by current move and stance
-  int get modifiedFighting() {
-    int stanceMod = Math.max((((29 - _stance) / 10) + 1), 0).toInt(); // stance 0-9 => -3, stance 10-19 => -2, 20-29 => -1. Stance 30+ => no mod
-    int hitpointsMod = Math.max(0, (((maxHitpoints - _hitpoints)/maxHitpoints - 0.7) * 10)).toInt(); // if hitpoint are below 20% of maxHitpoint => -1, below 10% => -2
+  int get modifiedFighting {
+    int stanceMod = max((((29 - _stance) / 10) + 1), 0).toInt(); // stance 0-9 => -3, stance 10-19 => -2, 20-29 => -1. Stance 30+ => no mod
+    int hitpointsMod = max(0, (((maxHitpoints - _hitpoints)/maxHitpoints - 0.7) * 10)).toInt(); // if hitpoint are below 20% of maxHitpoint => -1, below 10% => -2
     if (currentMove == null)
       return fighting - stanceMod - hitpointsMod;
     else
@@ -1090,15 +1090,15 @@ class Actor extends GameEntity {
 
   /// returns the fighting number used for purposes of attacking, where
   /// currentMove's fightingMod isn't counted.
-  int get modifiedAttacking() {
+  int get modifiedAttacking {
     if (currentMove == null)
       return modifiedFighting;
     else
       return modifiedFighting - currentMove.type.fightingMod;
   }
 
-  int get modifiedBlocking() => modifiedFighting + weapon.blockingMod;
-  int get modifiedDodging() {
+  int get modifiedBlocking => modifiedFighting + weapon.blockingMod;
+  int get modifiedDodging {
     int value = modifiedFighting;
     for (ArmorType armor in armors) {
       value += armor.dodgingMod;
@@ -1106,7 +1106,7 @@ class Actor extends GameEntity {
     return value;
   }
 
-  CurrentCombatMove get currentMove() => _currentMove;
+  CurrentCombatMove get currentMove => _currentMove;
   void set currentMove(CombatMoveType value) { // TODO: fix class mismatch
     if (_currentMove != null)
       previousMove = _currentMove.type;
@@ -1124,7 +1124,7 @@ class Actor extends GameEntity {
     }
   }
 
-  int get hitpoints() => _hitpoints;
+  int get hitpoints => _hitpoints;
   void set hitpoints(int value) {
     if (value <= 0) {
       on["die"].dispatchAll();
@@ -1143,32 +1143,32 @@ class Actor extends GameEntity {
     }
 
     // big _hitpoints - value => it hurt a lot
-    int almostDyingThreshold = Math.min(3, (maxHitpoints / 3).toInt());
+    int almostDyingThreshold = min(3, (maxHitpoints / 3).toInt());
     if (_hitpoints > almostDyingThreshold
         && value < almostDyingThreshold) {
       on["almostDying"].dispatchAll();
     }
     // else: "you can still fight"
 
-    _hitpoints = Math.min(value, maxHitpoints);
+    _hitpoints = min(value, maxHitpoints);
   }
 
-  int get stance() => _stance;
+  int get stance => _stance;
   void set stance(int value) {
     if (!alive)
       return;
     int prevStance = _stance;
-    _stance = Math.min(value, maxStance);
-    _stance = Math.max(0, _stance);
+    _stance = min(value, maxStance);
+    _stance = max(0, _stance);
     // only report when stance is changed between levels
     if ((_stance / 10).toInt() != (prevStance / 10).toInt()) {
       if (_stance > prevStance) {
-        report(stanceUpStrings[Math.min(5, (_stance / 10).toInt())], positive:true);
+        report(stanceUpStrings[min(5, (_stance / 10).toInt())], positive:true);
         on["stanceUp"].dispatchAll();
         if (currentMove != null)
           currentMove.on["stanceUp"].dispatchAll();
       } else {
-        report(stanceDownStrings[Math.min(5, (_stance / 10).toInt())], negative:true);
+        report(stanceDownStrings[min(5, (_stance / 10).toInt())], negative:true);
         on["stanceDown"].dispatchAll();
         if (currentMove != null)
           currentMove.on["stanceDown"].dispatchAll();
@@ -1178,7 +1178,7 @@ class Actor extends GameEntity {
     }
   }
 
-  Actor get target() => _target;
+  Actor get target => _target;
   void set target(Actor value) {
     _target = value;
     previousMove = null;
@@ -1301,7 +1301,7 @@ class Actor extends GameEntity {
           if (currentMove.type.isOffensive) {
             // throws
             double chanceToDodge = currentMove.type.chanceToDodge(this, target);
-            if (Math.random() < chanceToDodge) {
+            if (new Random().nextDouble() < chanceToDodge) {
               DEBUG("- dodge success");
               // DODGED
               e.chance = chanceToDodge;
@@ -1316,7 +1316,7 @@ class Actor extends GameEntity {
               DEBUG("- dodge fail");
               // same as above, but for blocks
               double chanceToBlock = currentMove.type.chanceToBlock(this, target);
-              if (Math.random() < chanceToBlock) {
+              if (new Random().nextDouble() < chanceToBlock) {
                 DEBUG("- block success");
                 // BLOCKED
                 e.chance = chanceToBlock;
@@ -1435,7 +1435,7 @@ class Actor extends GameEntity {
       }
     }
 
-    return finalMoves.getRange(0, Math.min(finalMoves.length, max)); // return up to max moves
+    return finalMoves.getRange(0, min(finalMoves.length, max)); // return up to max moves
   }
 
   // AI chooses a move
@@ -1443,7 +1443,7 @@ class Actor extends GameEntity {
     List<CombatMoveType> possibleMoves = getPossibleMoves(max:max);
 
     // logic that gives more chance to higher (more suitable) moves
-    double random = Math.random();
+    double random = new Random().nextDouble();
     int pos;
     int len = possibleMoves.length; 
     int allParts = (len*(len+1)/2).toInt(); // 1+2+3+4+.. = allParts
@@ -1504,47 +1504,47 @@ class CombatMoveType extends GameEntity {
   int flags = 0x0;
 
   // target(s) of the move
-  static final int MOVE_TRG_HEAD = 1<<1;
-  static final int MOVE_TRG_NECK = 1<<2;
-  static final int MOVE_TRG_ARMS = 1<<3;
-  static final int MOVE_TRG_BODY = 1<<4;
-  static final int MOVE_TRG_WAIST = 1<<5;
-  static final int MOVE_TRG_LEGS = 1<<6;
-  static final int MOVE_TRG_ALL = MOVE_TRG_HEAD|MOVE_TRG_NECK|MOVE_TRG_ARMS|MOVE_TRG_BODY|MOVE_TRG_WAIST|MOVE_TRG_LEGS;
+  static const int MOVE_TRG_HEAD = 1<<1;
+  static const int MOVE_TRG_NECK = 1<<2;
+  static const int MOVE_TRG_ARMS = 1<<3;
+  static const int MOVE_TRG_BODY = 1<<4;
+  static const int MOVE_TRG_WAIST = 1<<5;
+  static const int MOVE_TRG_LEGS = 1<<6;
+  static const int MOVE_TRG_ALL = MOVE_TRG_HEAD|MOVE_TRG_NECK|MOVE_TRG_ARMS|MOVE_TRG_BODY|MOVE_TRG_WAIST|MOVE_TRG_LEGS;
 
   // directions of the move
-  static final int MOVE_FRM_FRONT = 1<<7;
-  static final int MOVE_FRM_BEHIND = 1<<8;
-  static final int MOVE_FRM_LEFT = 1<<9;
-  static final int MOVE_FRM_RIGHT = 1<<10;
-  static final int MOVE_FRM_ALL = MOVE_FRM_FRONT|MOVE_FRM_BEHIND|MOVE_FRM_LEFT|MOVE_FRM_RIGHT;
+  static const int MOVE_FRM_FRONT = 1<<7;
+  static const int MOVE_FRM_BEHIND = 1<<8;
+  static const int MOVE_FRM_LEFT = 1<<9;
+  static const int MOVE_FRM_RIGHT = 1<<10;
+  static const int MOVE_FRM_ALL = MOVE_FRM_FRONT|MOVE_FRM_BEHIND|MOVE_FRM_LEFT|MOVE_FRM_RIGHT;
 
   // limbs used (primarily) for the move by the performer
-  static final int MOVE_LMB_HAND = 1<<11;
-  static final int MOVE_LMB_LEG = 1<<12;
-  static final int MOVE_LMB_HEAD = 1<<13;
-  static final int MOVE_LMB_SPECIAL = 1<<14; // e.g. tail
+  static const int MOVE_LMB_HAND = 1<<11;
+  static const int MOVE_LMB_LEG = 1<<12;
+  static const int MOVE_LMB_HEAD = 1<<13;
+  static const int MOVE_LMB_SPECIAL = 1<<14; // e.g. tail
 
   // move damages {hitpoints|stance}?
-  static final int MOVE_EFF_HITPOINTS = 1<<15;
-  static final int MOVE_EFF_STANCE = 1<<16;
-  static final int MOVE_EFF_ALL = MOVE_EFF_HITPOINTS|MOVE_EFF_STANCE;
+  static const int MOVE_EFF_HITPOINTS = 1<<15;
+  static const int MOVE_EFF_STANCE = 1<<16;
+  static const int MOVE_EFF_ALL = MOVE_EFF_HITPOINTS|MOVE_EFF_STANCE;
 
   // priority: quicker or more damage?
-  static final int MOVE_PRI_QUICK = 1<<17;
-  static final int MOVE_PRI_DAMAGE = 1<<18;
+  static const int MOVE_PRI_QUICK = 1<<17;
+  static const int MOVE_PRI_DAMAGE = 1<<18;
 
   // defensive or offensive move
-  static final int MOVE_DIR_OFFENSIVE = 1<<19;
-  static final int MOVE_DIR_DEFENSIVE = 1<<20;
+  static const int MOVE_DIR_OFFENSIVE = 1<<19;
+  static const int MOVE_DIR_DEFENSIVE = 1<<20;
 
   // utility function. Returns true if this CombatMoveType' flags have (at least one) 
   // same bit as otherType
   bool hasFlag(int otherFlags) => (flags & otherFlags) != 0;
 
-  bool get isOffensive() => hasFlag(MOVE_DIR_OFFENSIVE);
-  bool get isHitpointsDamaging() => hasFlag(MOVE_EFF_HITPOINTS);
-  bool get isStanceDamaging() => hasFlag(MOVE_EFF_STANCE);
+  bool get isOffensive => hasFlag(MOVE_DIR_OFFENSIVE);
+  bool get isHitpointsDamaging => hasFlag(MOVE_EFF_HITPOINTS);
+  bool get isStanceDamaging => hasFlag(MOVE_EFF_STANCE);
 
   /// The events handler
   CombatCallbackHandler on;
@@ -1700,7 +1700,7 @@ class CombatMoveType extends GameEntity {
 
   static void defaultOnSufferBlock (CombatMoveType _this, CombatEvent e) {
     e.target.report("<subject> deflect<s> it", object:e.performer, positive:true);
-    int actualStanceDamage = Math.max(
+    int actualStanceDamage = max(
         0, 
         (_this.stanceDamage / 2).toInt() - e.target.modifiedFighting
     );
@@ -1819,9 +1819,9 @@ class WeaponType extends GameEntity {
 
   CombatCallbackHandler on;
 
-  bool get barehanded() => hardness == 0;
-  bool get blunt() => hardness > 0 && hardness < 3;
-  bool get sharp() => hardness >= 3;
+  bool get barehanded => hardness == 0;
+  bool get blunt => hardness > 0 && hardness < 3;
+  bool get sharp => hardness >= 3;
 
   static void defaultOnSufferPierced(WeaponType _this, CombatEvent e) {
     DEBUG("Suffer Pierced: ${_this.barehanded}");
@@ -1829,11 +1829,11 @@ class WeaponType extends GameEntity {
       if (e.weapon.blunt) {
         e.performer.report("<subject's> ${e.weapon.name} breaks <object's> ${_this.name}", object:e.target, positive:true);
         e.target.report("<subject> scream<s> in pain", negative:true);
-        e.target.hitpoints = Math.max(1, e.target.hitpoints - 10);
+        e.target.hitpoints = max(1, e.target.hitpoints - 10);
       } else if (e.weapon.sharp) {
         e.performer.report("<subject's> ${e.weapon.name} goes right through <object's> ${_this.name}", object:e.target, positive:true);
         e.target.report("<subject> scream<s> in pain", negative:true);
-        e.target.hitpoints = Math.max(1, e.target.hitpoints - 10);
+        e.target.hitpoints = max(1, e.target.hitpoints - 10);
       } else {
         throw new Exception("Weapon is not blunt nor sharp, but still is piercing barehands?");
       }
@@ -1899,14 +1899,14 @@ class CombatEvent {
 
   // chance of success of the most recent action (dodge/block/etc.)
   double _chance;
-  double get chance() => _chance;
+  double get chance => _chance;
   void set chance(double value) {
     //DEBUG("- chance: $value");
     _chance = value;
   }
   // chance that the event ends up like this
   double _chanceAll;
-  double get chanceAll() => _chanceAll;
+  double get chanceAll => _chanceAll;
   void set chanceAll(double value) {
     //DEBUG("- chanceAll: $value");
     _chanceAll = value;
@@ -1924,7 +1924,7 @@ class CombatEvent {
       this.weapon,
       this.armor,
       this.combat,
-      this.chance,
+      this._chance,
       this.luckUsed
       ]);
 
@@ -1972,8 +1972,8 @@ class CombatCallback {
     add(f);
   }
 
-  Function get first() => functions.first();
-  Function get last() => functions.last();
+  Function get first => functions.first();
+  Function get last => functions.last();
 
   void dispatchAll([CombatEvent e]) {
     // if this is called from a currentMove, 
@@ -2052,7 +2052,7 @@ interface LoopedEvent {
 class Combat extends GameEntity implements LoopedEvent {
   Storyline storyline;
 
-  static final int MAX_MOVES_PRESENTED = 50;
+  static const int MAX_MOVES_PRESENTED = 50;
 
   bool _started = false;
   bool finished = false;

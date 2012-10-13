@@ -5,6 +5,7 @@
 
 #import('dart:io');
 #import('dart:isolate');
+#import('dart:math');
 
 void DEBUG_CMD(String str) {
   // print("CMD: $str");
@@ -55,8 +56,9 @@ class CmdlineInterface implements UserInterface {
         _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
         DEBUG_CMD("We have choices to show!");
-        if (message.listContent[0] != "")
+        if (message.listContent[0] != "") {
           print("\n${message.listContent[0]}\n");
+        }
         choices = new List.from(message.listContent);
         for (int i = 1; i < choices.length; i++) {
           print("$i) ${choices[i]['string']}");
@@ -66,13 +68,14 @@ class CmdlineInterface implements UserInterface {
         cmdLine.onLine = () {
           print("");
           try {
-            int optionNumber = Math.parseInt(cmdLine.readLine());
-            if (optionNumber > 0 && optionNumber < choices.length)
+            int optionNumber = int.parse(cmdLine.readLine());
+            if (optionNumber > 0 && optionNumber < choices.length) {
               _scripterPort.send(
                   new Message.OptionSelected(choices[optionNumber]['hash']).toJson(),
                   _receivePort.toSendPort()
                   );
-          } catch (BadNumberFormatException e) {
+            }
+          } on FormatException catch (e) {
             print("Input a number, please!");
           }
         };

@@ -789,7 +789,7 @@ class Builder {
 
         dartOutStream.writeString("    pageHandles = {\n");
         pageHandles.forEach((String k, int v) {
-          dartOutStream.writeString("      @\"\"\"$k\"\"\": $v,\n");
+          dartOutStream.writeString("      r\"\"\"$k\"\"\": $v,\n");
           // TODO: move to writePages, handle last comma
         });
         dartOutStream.writeString("    };\n\n");
@@ -832,11 +832,11 @@ class Builder {
     var pathToOutputCmd = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.cmdline.dart"));
     var pathToInputTemplateCmd = scriptFilePath.directoryPath
-          .join(new Path("egb_interface_cmdline.dart"));
+          .join(new Path("../lib/src/egb_interface_cmdline.dart"));
     var pathToOutputHtml = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.html.dart"));
     var pathToInputTemplateHtml = scriptFilePath.directoryPath
-          .join(new Path("egb_interface_html.dart"));
+          .join(new Path("../lib/src/egb_interface_html.dart"));
 
     File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
     File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
@@ -845,7 +845,7 @@ class Builder {
 
     var substitutions = {
       "#import('egb_library.dart');" :
-          "#import('../egb_library.dart');\n", // TODO!!
+          "#import('../../lib/src/egb_library.dart');\n", // TODO!!
       "#import('samples/unit-testing.markdown.dart');" :
           "#import('$pathToOutputDart');\n", // TODO!!
     };
@@ -868,7 +868,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
   inFile.exists()
   .then((bool exists) {
     if (!exists) {
-      WARNING("Cmd line template doesn't exist in current directory. Skipping.");
+      WARNING("Cmd line template ${inFile.name} doesn't exist in current directory. Skipping.");
       completer.complete(false);
     } else {
       OutputStream outStream = outFile.openOutputStream();
@@ -975,8 +975,8 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
           var string = curBlock.options["string"];
           var goto = curBlock.options["goto"];
           write("{\n");
-          write("  \"string\": @\"\"\"${string != null ? string : ''} \"\"\",\n");
-          write("  \"goto\": @\"\"\"$goto\"\"\"\n");
+          write("  \"string\": r\"\"\"${string != null ? string : ''} \"\"\",\n");
+          write("  \"goto\": r\"\"\"$goto\"\"\"\n");
           write("}$commaOrNot\n");
         }
 
@@ -993,14 +993,14 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
               write("  $script;\n");
             }
             if (goto != null) {
-              write("  goto(@\"\"\"$goto\"\"\");\n");
+              write("  goto(r\"\"\"$goto\"\"\");\n");
             }
           } else {
             // ex: "- Go to there [{{time++}} page]"
             write("  choices.add(new Choice(\n");
             write("      \"\"\"$string \"\"\",\n");
             var commaAfterGoto = ( script != null ) ? "," : "";
-            write("      goto:@\"\"\"$goto\"\"\"$commaAfterGoto\n");
+            write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
             write("      then:() { $script; }\n");
             write("  ));\n");
           }
@@ -1151,7 +1151,8 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
   final String implStartFile = """
 #library('Scripter Implementation');
 
-#import('../egb_library.dart');
+#import('../../lib/src/egb_library.dart');
+#import('dart:math');
 """;
 
   final String implStartClass = """

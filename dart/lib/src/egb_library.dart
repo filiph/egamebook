@@ -2,6 +2,7 @@
 
 #import('dart:json');
 #import('dart:isolate');
+#import('dart:math');
 
 // TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
@@ -13,7 +14,7 @@ void DEBUG_SCR(String str) {
 
 class Message {
   int type;
-
+  
   // different types of contents
   List listContent;
   String strContent;
@@ -120,7 +121,7 @@ class UserInteraction implements Hashable {
   int hash;
 
   UserInteraction() {
-    hash = (Math.random() * 30000).toInt();
+    hash = new Random().nextInt(30000);  // TODO: better hashing!
   }
 
   int hashCode() => hash;
