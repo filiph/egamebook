@@ -1,7 +1,7 @@
 #import('egb_library.dart');
 
 // this will be rewritten with the actual file
-#import('samples/unit-testing.markdown.dart');
+#import('full_project.dart');
 
 #import('dart:io');
 #import('dart:isolate');

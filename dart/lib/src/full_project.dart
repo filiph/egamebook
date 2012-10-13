@@ -1,6 +1,6 @@
 #library('Scripter Implementation');
 
-#import('../../lib/src/egb_library.dart');
+#import('egb_library.dart');
 #import('dart:math');
 
 class A {
@@ -47,9 +47,6 @@ class ScripterImpl extends Scripter {
   if (time >= 45) {
     goto("policeBreakIn");
   } else if (time >= 30) {
-    <echo>
-You hear major commotion outside. They must be getting ready.
-    </echo>
   }
         },
         () {
@@ -63,7 +60,7 @@ since you opened your eyes. """);
           choices.add(new Choice(
               """Get dressed (30 seconds) """,
               goto:r"""getDressed""",
-              then:() { {echo("Ladyboy!")}; }
+              then:() { {echo("Ladyboy!");;}; }
           ));
         },
         {
@@ -107,7 +104,7 @@ Good! """,
         """"What?" """,
         """You hang up, hoping she got all that. You know you can't lose any more time now. """,
         () {
-          {time+=30};
+          {time+=30;};
           goto(r"""wakeupDilemma""");
         }
       ],
@@ -116,17 +113,11 @@ Good! """,
         """There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you. """,
         () {
   if (weapon == "gun") {
-    <echo>
-You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.
-
-- [runOutTheWindow]
-    </echo>
+    echo("""You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.""");
+    goto("""runOutTheWindow""");
   } else {
-    <echo>
-You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.
-
-- [wasted]
-    </echo>
+    echo("""You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.""");
+    goto("""wasted""");
   }
         }
       ],
