@@ -23,6 +23,28 @@ TODO: IMPLEMENT
 8.  Upload the contents of the `web` directory to a server. Your
     egamebook is now published.
 
+### Graphing your egamebook
+
+TODO: IMPLEMENT
+
+Also included with the quick_start project is a GraphML file. GraphML is editable in 
+the free, cross-platform [yEd](http://www.yworks.com/en/products_yed_about.html) 
+editor. In this way, you have a much more visual way of designing the
+flow of your egamebook.
+
+IMAGE
+
+Every time you run `compile.sh`, the .graphml file is updated for you. It's also
+possible to run `update_to_graphml.sh` if you want to do just that.
+(You may want to use the *Layout > Hierarchical* function in yEd after doing so
+for a nicer looking layout. Just click OK on the modal window.)
+
+IMAGE
+
+Add new nodes and groups, link between them, change their names. When you're
+happy with the new flow, save the file in yEd and run `update_from_graphml.sh`.
+Your .egb file will be updated with the new pages and choices.
+
 ## egb file
 
 The basic egb file looks like this:
