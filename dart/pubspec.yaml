@@ -6,3 +6,5 @@ dependencies:
     sdk: unittest
   graphml:
     git: https://github.com/filiph/dart-graphml.git
+  args:
+    sdk: args
