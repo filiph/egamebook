@@ -1,0 +1,311 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>BuilderInitBlock class / egb_builder Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="egb_builder" data-type="BuilderInitBlock">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../egb_builder.html">egb_builder</a> &rsaquo; <a href="../egb_builder/BuilderInitBlock.html">BuilderInitBlock</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../egb_builder.html">egb_builder</a></h2><ul class="icon">
+<li><a href="../egb_builder/Builder.html"><div class="icon-class"></div>Builder</a></li>
+<li><a href="../egb_builder/BuilderBlock.html"><div class="icon-class"></div>BuilderBlock</a></li>
+<li><div class="icon-class"></div><strong>BuilderInitBlock</strong></li>
+<li><a href="../egb_builder/BuilderLineRange.html"><div class="icon-class"></div>BuilderLineRange</a></li>
+<li><a href="../egb_builder/BuilderLineSpan.html"><div class="icon-class"></div>BuilderLineSpan</a></li>
+<li><a href="../egb_builder/BuilderMetadata.html"><div class="icon-class"></div>BuilderMetadata</a></li>
+<li><a href="../egb_builder/BuilderPage.html"><div class="icon-class"></div>BuilderPage</a></li>
+<li><a href="../egb_builder/EgbFormatException.html"><div class="icon-exception"></div>EgbFormatException</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>BuilderInitBlock</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>BuilderInitBlock is a class that defines a "line selection" of either
+a <code>&lt;classes&gt;</code>, a <code>&lt;functions&gt;</code> or a <code>&lt;variables&gt;</code> block.</p>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../egb_builder/BuilderLineRange.html">BuilderLineRange</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="BuilderInitBlock">
+<button class="show-code">Code</button>
+new <strong>BuilderInitBlock</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> lineStart, <a href="http://api.dartlang.org/dart_core/int.html">int</a> type, <a href="http://api.dartlang.org/dart_core/String.html">String</a> typeStr]) <a class="anchor-link" href="#BuilderInitBlock"
+              title="Permalink to BuilderInitBlock.BuilderInitBlock">#</a></h4>
+<div class="doc">
+<pre class="source">
+BuilderInitBlock({this.lineStart, this.type, String typeStr}) {
+  if (typeStr != null) {
+    type = typeFromString(typeStr);
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Static Fields</h3>
+<div class="field"><h4 id="BLK_CLASSES">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>BLK_CLASSES</strong> <a class="anchor-link"
+            href="#BLK_CLASSES"
+            title="Permalink to BuilderInitBlock.BLK_CLASSES">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const int BLK_CLASSES = 1;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BLK_CLASSES_STRING">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>BLK_CLASSES_STRING</strong> <a class="anchor-link"
+            href="#BLK_CLASSES_STRING"
+            title="Permalink to BuilderInitBlock.BLK_CLASSES_STRING">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const String BLK_CLASSES_STRING = "classes";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BLK_FUNCTIONS">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>BLK_FUNCTIONS</strong> <a class="anchor-link"
+            href="#BLK_FUNCTIONS"
+            title="Permalink to BuilderInitBlock.BLK_FUNCTIONS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const int BLK_FUNCTIONS = 2;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BLK_FUNCTIONS_STRING">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>BLK_FUNCTIONS_STRING</strong> <a class="anchor-link"
+            href="#BLK_FUNCTIONS_STRING"
+            title="Permalink to BuilderInitBlock.BLK_FUNCTIONS_STRING">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const String BLK_FUNCTIONS_STRING = "functions";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BLK_VARIABLES">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>BLK_VARIABLES</strong> <a class="anchor-link"
+            href="#BLK_VARIABLES"
+            title="Permalink to BuilderInitBlock.BLK_VARIABLES">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const int BLK_VARIABLES = 4;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BLK_VARIABLES_STRING">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>BLK_VARIABLES_STRING</strong> <a class="anchor-link"
+            href="#BLK_VARIABLES_STRING"
+            title="Permalink to BuilderInitBlock.BLK_VARIABLES_STRING">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const String BLK_VARIABLES_STRING = "variables";
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="modeFromString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>modeFromString</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> s) <a class="anchor-link" href="#modeFromString"
+              title="Permalink to BuilderInitBlock.modeFromString">#</a></h4>
+<div class="doc">
+<pre class="source">
+static int modeFromString(String s) {
+  if (s == BLK_CLASSES_STRING) {
+    return Builder.MODE_INSIDE_CLASSES;
+  } else if (s == BLK_FUNCTIONS_STRING) {
+    return Builder.MODE_INSIDE_FUNCTIONS;
+  } else if (s == BLK_VARIABLES_STRING) {
+    return Builder.MODE_INSIDE_VARIABLES;
+  } else {
+    throw "Tag &lt;$s&gt; was not recognized as a valid init block tag.";
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="typeFromString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>typeFromString</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> s) <a class="anchor-link" href="#typeFromString"
+              title="Permalink to BuilderInitBlock.typeFromString">#</a></h4>
+<div class="doc">
+<pre class="source">
+static int typeFromString(String s) {
+  switch (s) {
+    case BLK_CLASSES_STRING:
+      return BLK_CLASSES;
+    case BLK_FUNCTIONS_STRING:
+      return BLK_FUNCTIONS;
+    case BLK_VARIABLES_STRING:
+      return BLK_VARIABLES;
+    default:
+      throw "Tag &lt;$s&gt; was not recognized as a valid init block tag.";
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Fields</h3>
+<div class="field"><h4 id="lineEnd">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>lineEnd</strong> <a class="anchor-link"
+            href="#lineEnd"
+            title="Permalink to BuilderInitBlock.lineEnd">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int lineEnd;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="lineStart">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>lineStart</strong> <a class="anchor-link"
+            href="#lineStart"
+            title="Permalink to BuilderInitBlock.lineStart">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int lineStart;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="type">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>type</strong> <a class="anchor-link"
+            href="#type"
+            title="Permalink to BuilderInitBlock.type">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int type;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to BuilderInitBlock.operator ==">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>The equality operator.</p>
+<p>The default behavior for all <code>Object</code>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>If a subclass overrides the equality operator it should override
+the <code>hashCode</code> method as well to maintain consistency.</p>
+<pre class="source">
+bool operator ==(other) =&gt; identical(this, other);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
+              title="Permalink to BuilderInitBlock.hashCode">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <code>hashCode</code> it should override the
+equality operator as well to maintain consistency.</p>
+<pre class="source">
+external int hashCode();
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="noSuchMethod">
+<button class="show-code">Code</button>
+<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/List.html">List</a> args) <a class="anchor-link" href="#noSuchMethod"
+              title="Permalink to BuilderInitBlock.noSuchMethod">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p><code>noSuchMethod</code> is invoked when users invoke a non-existant method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code>. If <code>noSuchMethod</code>
+returns a value, that value becomes the result of the original
+invocation.</p>
+<p>The default behavior of <code>noSuchMethod</code> is to throw a
+<code>noSuchMethodError</code>.</p>
+<pre class="source">
+external Dynamic noSuchMethod(String name, List args);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="runtimeType">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Type.html">Type</a> <strong>get runtimeType</strong>() <a class="anchor-link" href="#runtimeType"
+              title="Permalink to BuilderInitBlock.get runtimeType">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>A representation of the runtime type of the object.</p>
+<pre class="source">
+external Type get runtimeType;
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to BuilderInitBlock.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Returns a string representation of this object.</p>
+<pre class="source">
+external String toString();
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-10-14 23:22:47.997</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

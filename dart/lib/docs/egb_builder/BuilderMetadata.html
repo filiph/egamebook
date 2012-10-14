@@ -1,0 +1,179 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>BuilderMetadata class / egb_builder Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="egb_builder" data-type="BuilderMetadata">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../egb_builder.html">egb_builder</a> &rsaquo; <a href="../egb_builder/BuilderMetadata.html">BuilderMetadata</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../egb_builder.html">egb_builder</a></h2><ul class="icon">
+<li><a href="../egb_builder/Builder.html"><div class="icon-class"></div>Builder</a></li>
+<li><a href="../egb_builder/BuilderBlock.html"><div class="icon-class"></div>BuilderBlock</a></li>
+<li><a href="../egb_builder/BuilderInitBlock.html"><div class="icon-class"></div>BuilderInitBlock</a></li>
+<li><a href="../egb_builder/BuilderLineRange.html"><div class="icon-class"></div>BuilderLineRange</a></li>
+<li><a href="../egb_builder/BuilderLineSpan.html"><div class="icon-class"></div>BuilderLineSpan</a></li>
+<li><div class="icon-class"></div><strong>BuilderMetadata</strong></li>
+<li><a href="../egb_builder/BuilderPage.html"><div class="icon-class"></div>BuilderPage</a></li>
+<li><a href="../egb_builder/EgbFormatException.html"><div class="icon-exception"></div>EgbFormatException</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>BuilderMetadata</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>BuilderMetadata is a key-value pair of metadata associated with
+the gamebook.</p>
+<p>An example can be:</p><ul><li>key: authors</li><li>value: <code>"Filip Hracek", "John Doe"</code></li></ul>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="BuilderMetadata">
+<button class="show-code">Code</button>
+new <strong>BuilderMetadata</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> key, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> firstValue]) <a class="anchor-link" href="#BuilderMetadata"
+              title="Permalink to BuilderMetadata.BuilderMetadata">#</a></h4>
+<div class="doc">
+<pre class="source">
+BuilderMetadata(this.key, {String firstValue}) {
+  values = new List&lt;String&gt;();
+  if (firstValue != null) {
+    values.add(firstValue);
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Fields</h3>
+<div class="field"><h4 id="key">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>key</strong> <a class="anchor-link"
+            href="#key"
+            title="Permalink to BuilderMetadata.key">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String key;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="values">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>values</strong> <a class="anchor-link"
+            href="#values"
+            title="Permalink to BuilderMetadata.values">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;String&gt; values;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to BuilderMetadata.operator ==">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>The equality operator.</p>
+<p>The default behavior for all <code>Object</code>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>If a subclass overrides the equality operator it should override
+the <code>hashCode</code> method as well to maintain consistency.</p>
+<pre class="source">
+bool operator ==(other) =&gt; identical(this, other);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
+              title="Permalink to BuilderMetadata.hashCode">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <code>hashCode</code> it should override the
+equality operator as well to maintain consistency.</p>
+<pre class="source">
+external int hashCode();
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="noSuchMethod">
+<button class="show-code">Code</button>
+<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/List.html">List</a> args) <a class="anchor-link" href="#noSuchMethod"
+              title="Permalink to BuilderMetadata.noSuchMethod">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p><code>noSuchMethod</code> is invoked when users invoke a non-existant method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code>. If <code>noSuchMethod</code>
+returns a value, that value becomes the result of the original
+invocation.</p>
+<p>The default behavior of <code>noSuchMethod</code> is to throw a
+<code>noSuchMethodError</code>.</p>
+<pre class="source">
+external Dynamic noSuchMethod(String name, List args);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="runtimeType">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Type.html">Type</a> <strong>get runtimeType</strong>() <a class="anchor-link" href="#runtimeType"
+              title="Permalink to BuilderMetadata.get runtimeType">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>A representation of the runtime type of the object.</p>
+<pre class="source">
+external Type get runtimeType;
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to BuilderMetadata.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Returns a string representation of this object.</p>
+<pre class="source">
+external String toString();
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-10-14 23:22:47.736</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        

@@ -1,0 +1,1172 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Builder class / egb_builder Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="egb_builder" data-type="Builder">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../egb_builder.html">egb_builder</a> &rsaquo; <a href="../egb_builder/Builder.html">Builder</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+<h2><div class="icon-library"></div><a href="../egb_builder.html">egb_builder</a></h2><ul class="icon">
+<li><div class="icon-class"></div><strong>Builder</strong></li>
+<li><a href="../egb_builder/BuilderBlock.html"><div class="icon-class"></div>BuilderBlock</a></li>
+<li><a href="../egb_builder/BuilderInitBlock.html"><div class="icon-class"></div>BuilderInitBlock</a></li>
+<li><a href="../egb_builder/BuilderLineRange.html"><div class="icon-class"></div>BuilderLineRange</a></li>
+<li><a href="../egb_builder/BuilderLineSpan.html"><div class="icon-class"></div>BuilderLineSpan</a></li>
+<li><a href="../egb_builder/BuilderMetadata.html"><div class="icon-class"></div>BuilderMetadata</a></li>
+<li><a href="../egb_builder/BuilderPage.html"><div class="icon-class"></div>BuilderPage</a></li>
+<li><a href="../egb_builder/EgbFormatException.html"><div class="icon-exception"></div>EgbFormatException</a></li>
+</ul>
+</div>
+<div class="content">
+        <h2><strong>Builder</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Class that represents a full egamebook. Call <code>readEgbFile</code> to get
+data from an existing .egb file. Call <code>writeEgbFile</code> to output the data
+into a new .egb file.</p>
+<p>After it's been created, you can call <code>writeDartFiles</code> to create
+the source files (scripter implementation + 2 user interfaces).</p>
+<p>You can also export the page structure to a GraphML file using
+<code>writeGraphMLFile</code> or update existing structure by
+<code>updateFromGraphMLFile</code>.</p>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Builder">
+<button class="show-code">Code</button>
+new <strong>Builder</strong>() <a class="anchor-link" href="#Builder"
+              title="Permalink to Builder.Builder">#</a></h4>
+<div class="doc">
+<p>Default constructor. This will allocate memory for members and nothing
+else. The structure is still empty after calling this.</p>
+<pre class="source">
+Builder() {
+  metadata = new List&lt;BuilderMetadata&gt;();
+  synopsisLineNumbers = new List&lt;int&gt;();
+  pages = new List&lt;BuilderPage&gt;();
+  pageHandles = new Map&lt;String,int&gt;();
+  initBlocks = new List&lt;BuilderInitBlock&gt;();
+  importEgbFiles = new List&lt;File&gt;();
+  importEgbFilesFullPaths = new Set&lt;String&gt;();
+
+  warningLines = new List&lt;String&gt;();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Static Fields</h3>
+<div class="field"><h4 id="MODE_INSIDE_CLASSES">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_INSIDE_CLASSES</strong> <a class="anchor-link"
+            href="#MODE_INSIDE_CLASSES"
+            title="Permalink to Builder.MODE_INSIDE_CLASSES">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_INSIDE_CLASSES = 2;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_INSIDE_FUNCTIONS">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_INSIDE_FUNCTIONS</strong> <a class="anchor-link"
+            href="#MODE_INSIDE_FUNCTIONS"
+            title="Permalink to Builder.MODE_INSIDE_FUNCTIONS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_INSIDE_FUNCTIONS = 4;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_INSIDE_SCRIPT_ECHO">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_INSIDE_SCRIPT_ECHO</strong> <a class="anchor-link"
+            href="#MODE_INSIDE_SCRIPT_ECHO"
+            title="Permalink to Builder.MODE_INSIDE_SCRIPT_ECHO">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_INSIDE_SCRIPT_ECHO = 16;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_INSIDE_SCRIPT_TAG">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_INSIDE_SCRIPT_TAG</strong> <a class="anchor-link"
+            href="#MODE_INSIDE_SCRIPT_TAG"
+            title="Permalink to Builder.MODE_INSIDE_SCRIPT_TAG">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_INSIDE_SCRIPT_TAG = 32;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_INSIDE_VARIABLES">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_INSIDE_VARIABLES</strong> <a class="anchor-link"
+            href="#MODE_INSIDE_VARIABLES"
+            title="Permalink to Builder.MODE_INSIDE_VARIABLES">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_INSIDE_VARIABLES = 8;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_METADATA">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_METADATA</strong> <a class="anchor-link"
+            href="#MODE_METADATA"
+            title="Permalink to Builder.MODE_METADATA">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_METADATA = 64;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MODE_NORMAL">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>MODE_NORMAL</strong> <a class="anchor-link"
+            href="#MODE_NORMAL"
+            title="Permalink to Builder.MODE_NORMAL">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static int MODE_NORMAL = 1;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Fields</h3>
+<div class="field"><h4 id="blankLine">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>blankLine</strong> <a class="anchor-link"
+            href="#blankLine"
+            title="Permalink to Builder.blankLine">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp blankLine = const RegExp(r"^\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="choice">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>choice</strong> <a class="anchor-link"
+            href="#choice"
+            title="Permalink to Builder.choice">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp choice = const RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hr">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>hr</strong> <a class="anchor-link"
+            href="#hr"
+            title="Permalink to Builder.hr">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp hr = const RegExp(r"^\s{0,3}\-\-\-+\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implEndClass">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implEndClass</strong> <a class="anchor-link"
+            href="#implEndClass"
+            title="Permalink to Builder.implEndClass">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implEndClass = """
+}
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implEndCtor">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implEndCtor</strong> <a class="anchor-link"
+            href="#implEndCtor"
+            title="Permalink to Builder.implEndCtor">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implEndCtor = """
+}
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implEndFile">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implEndFile</strong> <a class="anchor-link"
+            href="#implEndFile"
+            title="Permalink to Builder.implEndFile">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implEndFile = """
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implEndInit">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implEndInit</strong> <a class="anchor-link"
+            href="#implEndInit"
+            title="Permalink to Builder.implEndInit">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implEndInit = """
+}
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implEndPages">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implEndPages</strong> <a class="anchor-link"
+            href="#implEndPages"
+            title="Permalink to Builder.implEndPages">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implEndPages = """
+  ];
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implStartClass">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implStartClass</strong> <a class="anchor-link"
+            href="#implStartClass"
+            title="Permalink to Builder.implStartClass">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implStartClass = """
+class ScripterImpl extends Scripter {
+
+/* LIBRARY */
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implStartCtor">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implStartCtor</strong> <a class="anchor-link"
+            href="#implStartCtor"
+            title="Permalink to Builder.implStartCtor">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implStartCtor = """
+ScripterImpl() : super() {
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implStartFile">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implStartFile</strong> <a class="anchor-link"
+            href="#implStartFile"
+            title="Permalink to Builder.implStartFile">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implStartFile = """
+#library('Scripter Implementation');
+
+#import('../../lib/src/egb_library.dart');
+#import('dart:math');
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implStartInit">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implStartInit</strong> <a class="anchor-link"
+            href="#implStartInit"
+            title="Permalink to Builder.implStartInit">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implStartInit = """
+/* INIT */
+void initBlock() {
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="implStartPages">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>implStartPages</strong> <a class="anchor-link"
+            href="#implStartPages"
+            title="Permalink to Builder.implStartPages">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String implStartPages = """
+  pages = [
+    /* PAGES &amp; BLOCKS */
+""";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="importEgbFiles">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_io/File.html">File</a>&gt;         <strong>importEgbFiles</strong> <a class="anchor-link"
+            href="#importEgbFiles"
+            title="Permalink to Builder.importEgbFiles">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;File&gt; importEgbFiles;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="importEgbFilesFullPaths">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>importEgbFilesFullPaths</strong> <a class="anchor-link"
+            href="#importEgbFilesFullPaths"
+            title="Permalink to Builder.importEgbFilesFullPaths">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Set&lt;String&gt; importEgbFilesFullPaths;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="importTag">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>importTag</strong> <a class="anchor-link"
+            href="#importTag"
+            title="Permalink to Builder.importTag">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp importTag = const RegExp(r"""^\s{0,3}&lt;\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?&gt;\s*$""", ignoreCase:true);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="initBlocks">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../egb_builder/BuilderInitBlock.html">BuilderInitBlock</a>&gt;         <strong>initBlocks</strong> <a class="anchor-link"
+            href="#initBlocks"
+            title="Permalink to Builder.initBlocks">#</a>
+        </h4>
+        <div class="doc">
+<p>List of init blocks, such as <code>&lt;classes&gt;</code> or <code>&lt;variables&gt;</code> blocks.</p>
+<pre class="source">
+List&lt;BuilderInitBlock&gt; initBlocks;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="initBlockTag">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>initBlockTag</strong> <a class="anchor-link"
+            href="#initBlockTag"
+            title="Permalink to Builder.initBlockTag">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp initBlockTag = const RegExp(r"^\s{0,3}&lt;\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*&gt;\s*$", ignoreCase:true);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="inputEgbFile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_io/File.html">File</a>         <strong>inputEgbFile</strong> <a class="anchor-link"
+            href="#inputEgbFile"
+            title="Permalink to Builder.inputEgbFile">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+File inputEgbFile;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="inputEgbFileFullPath">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>inputEgbFileFullPath</strong> <a class="anchor-link"
+            href="#inputEgbFileFullPath"
+            title="Permalink to Builder.inputEgbFileFullPath">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String inputEgbFileFullPath;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="metadata">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../egb_builder/BuilderMetadata.html">BuilderMetadata</a>&gt;         <strong>metadata</strong> <a class="anchor-link"
+            href="#metadata"
+            title="Permalink to Builder.metadata">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;BuilderMetadata&gt; metadata;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="metadataLine">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>metadataLine</strong> <a class="anchor-link"
+            href="#metadataLine"
+            title="Permalink to Builder.metadataLine">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp metadataLine = const RegExp(r"^(\w.+):\s*(\w.*)\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="metadataLineAdd">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>metadataLineAdd</strong> <a class="anchor-link"
+            href="#metadataLineAdd"
+            title="Permalink to Builder.metadataLineAdd">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp metadataLineAdd = const RegExp(r"^\s+(\w.*)\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="pageHandles">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;         <strong>pageHandles</strong> <a class="anchor-link"
+            href="#pageHandles"
+            title="Permalink to Builder.pageHandles">#</a>
+        </h4>
+        <div class="doc">
+<p>A map of pageHandles -> pageIndex. For use of the <code>goto("something")</code>
+funtion.</p>
+<pre class="source">
+Map&lt;String, int&gt; pageHandles;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="pageOptions">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>pageOptions</strong> <a class="anchor-link"
+            href="#pageOptions"
+            title="Permalink to Builder.pageOptions">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp pageOptions = const RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="pages">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../egb_builder/BuilderPage.html">BuilderPage</a>&gt;         <strong>pages</strong> <a class="anchor-link"
+            href="#pages"
+            title="Permalink to Builder.pages">#</a>
+        </h4>
+        <div class="doc">
+<p>List of pages.</p>
+<pre class="source">
+List&lt;BuilderPage&gt; pages;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="scriptOrEchoTag">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>scriptOrEchoTag</strong> <a class="anchor-link"
+            href="#scriptOrEchoTag"
+            title="Permalink to Builder.scriptOrEchoTag">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp scriptOrEchoTag = const RegExp(r"^\s{0,3}&lt;\s*(/?)\s*((?:script)|(?:echo))\s*&gt;\s*$", ignoreCase:true);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="synopsisLineNumbers">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;         <strong>synopsisLineNumbers</strong> <a class="anchor-link"
+            href="#synopsisLineNumbers"
+            title="Permalink to Builder.synopsisLineNumbers">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;int&gt; synopsisLineNumbers;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="validPageName">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>validPageName</strong> <a class="anchor-link"
+            href="#validPageName"
+            title="Permalink to Builder.validPageName">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp validPageName = const RegExp(r"^\s{0,3}(.+)\s*$");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="variableInText">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>         <strong>variableInText</strong> <a class="anchor-link"
+            href="#variableInText"
+            title="Permalink to Builder.variableInText">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+RegExp variableInText = const RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="warningLines">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>warningLines</strong> <a class="anchor-link"
+            href="#warningLines"
+            title="Permalink to Builder.warningLines">#</a>
+        </h4>
+        <div class="doc">
+<p>used to communicate problems to caller</p>
+<pre class="source">
+List&lt;String&gt; warningLines;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to Builder.operator ==">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>The equality operator.</p>
+<p>The default behavior for all <code>Object</code>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>If a subclass overrides the equality operator it should override
+the <code>hashCode</code> method as well to maintain consistency.</p>
+<pre class="source">
+bool operator ==(other) =&gt; identical(this, other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="copyLineRanges">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>copyLineRanges</strong>(<a href="http://api.dartlang.org/dart_core/Collection.html">Collection</a>&lt;<a href="../egb_builder/BuilderLineRange.html">BuilderLineRange</a>&gt; lineRanges, <a href="http://api.dartlang.org/dart_io/StringInputStream.html">StringInputStream</a> inStream, <a href="http://api.dartlang.org/dart_io/OutputStream.html">OutputStream</a> outStream, [<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> inclusive = true, <a href="http://api.dartlang.org/dart_core/int.html">int</a> indentLength = 0]) <a class="anchor-link" href="#copyLineRanges"
+              title="Permalink to Builder.copyLineRanges">#</a></h4>
+<div class="doc">
+<p>Gets lines from inStream and dumps them to outStream.</p>
+<p>@param lineRanges  A collection of line ranges that need to be copied.
+@param inStream  The input stream.
+@param outStream The output stream.
+@param inclusive Should the starting and ending lines in the lineRanges</p>
+<pre><code>             be included?
+</code></pre>
+<p>@param indentLength  Whitespace indent.
+@return  Always true.</p>
+<pre class="source">
+Future&lt;bool&gt; copyLineRanges(Collection&lt;BuilderLineRange&gt; lineRanges,
+    StringInputStream inStream, OutputStream outStream,
+    {bool inclusive: true, int indentLength: 0}) {
+  var completer = new Completer();
+  outStream.writeString("\n");
+  var indent = _getIndent(indentLength);
+
+  int lineNumber = 0;
+  inStream.onLine = () {
+    lineNumber++;
+    String line = inStream.readLine();
+
+    // if lineNumber is in one of the ranges, write
+    if (lineRanges.some((var range) =&gt; _insideLineRange(lineNumber, range, inclusive:inclusive))) {
+      outStream.writeString("$indent$line\n");
+    }
+  };
+
+  inStream.onClosed = () {
+    outStream.writeString("\n");
+    completer.complete(true);
+  };
+  inStream.onError = (e) {
+    completer.completeException(e);
+  };
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
+              title="Permalink to Builder.hashCode">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <code>hashCode</code> it should override the
+equality operator as well to maintain consistency.</p>
+<pre class="source">
+external int hashCode();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="newFormatException">
+<button class="show-code">Code</button>
+<a href="../egb_builder/EgbFormatException.html">EgbFormatException</a> <strong>newFormatException</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> msg) <a class="anchor-link" href="#newFormatException"
+              title="Permalink to Builder.newFormatException">#</a></h4>
+<div class="doc">
+<pre class="source">
+EgbFormatException newFormatException(String msg) {
+  return new EgbFormatException(msg, line:_lineNumber, file:inputEgbFile);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="noSuchMethod">
+<button class="show-code">Code</button>
+<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/List.html">List</a> args) <a class="anchor-link" href="#noSuchMethod"
+              title="Permalink to Builder.noSuchMethod">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p><code>noSuchMethod</code> is invoked when users invoke a non-existant method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code>. If <code>noSuchMethod</code>
+returns a value, that value becomes the result of the original
+invocation.</p>
+<p>The default behavior of <code>noSuchMethod</code> is to throw a
+<code>noSuchMethodError</code>.</p>
+<pre class="source">
+external Dynamic noSuchMethod(String name, List args);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="readEgbFile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="../egb_builder/Builder.html">Builder</a>&gt; <strong>readEgbFile</strong>(<a href="http://api.dartlang.org/dart_io/File.html">File</a> f) <a class="anchor-link" href="#readEgbFile"
+              title="Permalink to Builder.readEgbFile">#</a></h4>
+<div class="doc">
+<p>Main workhorse, reads and parses file to intermediary structure.
+When the returning Future is ready, use can call <code>writeDartFiles()</code>,
+for example.
+@param  f A well-formed .egb file.
+@return   A Future. On completion, the future returns <code>this</code> for</p>
+<pre><code>      convenience.
+</code></pre>
+<pre class="source">
+Future&lt;Builder&gt; readEgbFile(File f) {
+  var completer = new Completer();
+
+  inputEgbFile = f;
+
+  f.exists()
+  .then((exists) {
+    if (!exists) {
+      completer.completeException(new FileIOException("File ${f.name} doesn't exist."));
+    } else {
+      f.fullPath().then((String fullPath) {
+        inputEgbFileFullPath = fullPath;
+
+        var strInputStream = new StringInputStream(f.openInputStream());
+
+        print("Reading input file ${f.name}");
+
+        // The top of the file can be metadata. This will be changed to MODE_NORMAL
+        // in [_checkMetadataLine()] when there is no metadata.
+        _mode = MODE_METADATA;
+
+        _lineNumber = 0;
+        _pageNumber = 0;
+        _blockNumber = 0;
+
+        strInputStream.onLine = () {
+          _check().then((_) {
+            _lineNumber++;
+            _thisLine = strInputStream.readLine();
+            //stdout.writeString(".");
+          });
+        };
+
+        strInputStream.onClosed = () {
+          _check().then((_) {  // check last line
+            //print("\nReading input file has finished.");
+
+            // end the last page
+            if (!pages.isEmpty()) {
+              pages.last().lineEnd = _lineNumber - 1;
+            }
+
+            _lineNumber = null;  // makes sure following warnings don't get associated with the last line
+
+            if (pages.isEmpty()) {
+              WARNING("There are no pages in this egb. If you want it to be playable, "
+                      "you will need to include page starts in the form of a line "
+                      "containing exclusively dashes (`-`, three or more) and "
+                      "an immediately following line with the name of the page.");
+            }
+
+            if (_mode != MODE_NORMAL) {
+              completer.completeException(
+                newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
+            } else {
+              // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
+              //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
+              _checkForDoubleImports().then((bool passed) {
+                if (passed) {
+                  completer.complete(this);
+                }
+              });
+            }
+          });
+        };
+      });
+    }
+  });
+
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="runtimeType">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Type.html">Type</a> <strong>get runtimeType</strong>() <a class="anchor-link" href="#runtimeType"
+              title="Permalink to Builder.get runtimeType">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>A representation of the runtime type of the object.</p>
+<pre class="source">
+external Type get runtimeType;
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Builder.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div><div class="doc">
+<p>Returns a string representation of this object.</p>
+<pre class="source">
+external String toString();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="WARNING">
+<button class="show-code">Code</button>
+void <strong>WARNING</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> msg) <a class="anchor-link" href="#WARNING"
+              title="Permalink to Builder.WARNING">#</a></h4>
+<div class="doc">
+<pre class="source">
+void WARNING(String msg) {
+  print("$msg (line:$_lineNumber)");
+  warningLines.add("$msg (line:$_lineNumber)");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="writeDartFiles">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>writeDartFiles</strong>() <a class="anchor-link" href="#writeDartFiles"
+              title="Permalink to Builder.writeDartFiles">#</a></h4>
+<div class="doc">
+<p>Writes following Dart files to disk:</p><ul><li>xyz.dart (The Scripter implementation)</li><li>xyz.cmdline.dart (The command line interface)</li><li>xyz.html.dart (The html interface)</li></ul>
+<pre class="source">
+Future&lt;bool&gt; writeDartFiles() {
+  var completer = new Completer();
+
+  Futures.wait([
+      writeScripterFile(),
+      writeInterfaceFiles()
+  ]).then((_) {
+    completer.complete(true);
+  });
+
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="writeInitBlocks">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>writeInitBlocks</strong>(<a href="http://api.dartlang.org/dart_io/OutputStream.html">OutputStream</a> dartOutStream, <a href="http://api.dartlang.org/dart_core/int.html">int</a> initBlockType, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> indent = 0]) <a class="anchor-link" href="#writeInitBlocks"
+              title="Permalink to Builder.writeInitBlocks">#</a></h4>
+<div class="doc">
+<p>Writes the specified initBlockType from the .egb file
+(and its imports TODO) to the OutputStream.</p>
+<p>@param dartOutStream Stream to be written to.
+@param initBlockType The type of blocks whose contents we want to copy.
+@param indent  Whitespace indent.
+@return    Always true.</p>
+<pre class="source">
+Future&lt;bool&gt; writeInitBlocks(OutputStream dartOutStream, int initBlockType, 
+                       {int indent: 0}) {
+  var completer = new Completer();
+
+  // TODO: copy &lt;import&gt; classes first
+
+  copyLineRanges(
+      initBlocks.filter((block) =&gt; block.type == initBlockType),
+      new StringInputStream(inputEgbFile.openInputStream()),
+      dartOutStream,
+      inclusive:false, indentLength:indent)
+  .then((_) {
+    completer.complete(true);
+  });
+
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="writeInterfaceFiles">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>writeInterfaceFiles</strong>() <a class="anchor-link" href="#writeInterfaceFiles"
+              title="Permalink to Builder.writeInterfaceFiles">#</a></h4>
+<div class="doc">
+<p>Creates the interface files. These files are the ones that run
+the egamebook. They import the scripter file as an Isolate.</p>
+<p>There are two interfaces: the command line interface, and the HTML
+interface.</p>
+<pre class="source">
+Future&lt;bool&gt; writeInterfaceFiles() {
+  var completer = new Completer();
+
+  var inputFilePath = new Path(inputEgbFileFullPath);
+  var scriptFilePath = new Path(new Options().script);
+  var pathToOutputDart = inputFilePath.directoryPath
+        .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
+  var pathToOutputCmd = inputFilePath.directoryPath
+        .join(new Path("${inputFilePath.filenameWithoutExtension}.cmdline.dart"));
+  var pathToInputTemplateCmd = scriptFilePath.directoryPath
+        .join(new Path("../lib/src/egb_interface_cmdline.dart"));
+  var pathToOutputHtml = inputFilePath.directoryPath
+        .join(new Path("${inputFilePath.filenameWithoutExtension}.html.dart"));
+  var pathToInputTemplateHtml = scriptFilePath.directoryPath
+        .join(new Path("../lib/src/egb_interface_html.dart"));
+
+  File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
+  File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
+  File htmlOutputFile = new File.fromPath(pathToOutputHtml);
+  File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
+
+  var substitutions = {
+    "#import('egb_library.dart');" :
+        "#import('../../lib/src/egb_library.dart');\n", // TODO!!
+    "#import('reference_scripter_impl.dart');" :
+        "#import('$pathToOutputDart');\n", // TODO!!
+  };
+
+  Futures.wait([
+      _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
+      _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
+  ]).then((List&lt;bool&gt; bools) =&gt; completer.complete(bools.every((b) =&gt; b)));
+
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="writePagesToScripter">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a> <strong>writePagesToScripter</strong>(<a href="http://api.dartlang.org/dart_io/OutputStream.html">OutputStream</a> dartOutStream) <a class="anchor-link" href="#writePagesToScripter"
+              title="Permalink to Builder.writePagesToScripter">#</a></h4>
+<div class="doc">
+<p>Writes all pages from the .egb file to to the OutputStream. Iterates
+over all included blocks, taking care of the correct "conversion".
+(E.g. a choice in .egb is written differently than in the resulting
+Dart file.)</p>
+<p>@param dartOutStream Stream to be written to.
+@return    Always true.</p>
+<pre class="source">
+Future writePagesToScripter(OutputStream dartOutStream) {
+  var completer = new Completer();
+
+  if (pages.isEmpty()) {
+    return new Future.immediate(true);
+  }  // TODO: unit test this
+
+  String indent = "";
+  Function write = (String msg) {
+    dartOutStream.writeString("$indent$msg");
+  };
+
+  var inStream = new StringInputStream(inputEgbFile.openInputStream());
+  int lineNumber = 0;
+  BuilderPage curPage;
+  int pageIndex = 0;
+  BuilderBlock curBlock;
+  int blockIndex;
+
+  inStream.onLine = () {
+    lineNumber++;
+    String line = inStream.readLine();
+
+    // start page
+    if (pageIndex &lt; pages.length
+        &amp;&amp; lineNumber == pages[pageIndex].lineStart) {
+      indent = _getIndent(6);
+      curPage = pages[pageIndex];
+      blockIndex = 0;
+      write("// ${curPage.name}\n");
+      write("[\n");
+    }
+
+    // start of block
+    if (curPage != null &amp;&amp; !curPage.blocks.isEmpty() &amp;&amp; blockIndex &lt; curPage.blocks.length
+        &amp;&amp; lineNumber == curPage.blocks[blockIndex].lineStart) {
+      indent = _getIndent(8);
+      curBlock = curPage.blocks[blockIndex];
+      String commaOrNot = blockIndex &lt; curPage.blocks.length - 1 ? "," : "";
+
+      if (curBlock.type == BuilderBlock.BLK_TEXT) {
+        if (curBlock.lineStart == curBlock.lineEnd) {
+          write("\"\"\"$line \"\"\"$commaOrNot\n");
+        } else {
+          write("\"\"\"$line\n");
+        }
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+        write("() {\n");
+        if (curBlock.lineStart == curBlock.lineEnd) {
+          write("  echo(\"\"\"$line \"\"\");\n");
+          write("}$commaOrNot\n");
+        } else {
+          write("  echo(\"\"\"$line\n");
+        }
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_CHOICE) {
+        var string = curBlock.options["string"];
+        var goto = curBlock.options["goto"];
+        write("{\n");
+        write("  \"string\": r\"\"\"${string != null ? string : ''} \"\"\",\n");
+        write("  \"goto\": r\"\"\"$goto\"\"\"\n");
+        write("}$commaOrNot\n");
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_CHOICE_IN_SCRIPT) {
+        var string = curBlock.options["string"];
+        var goto = curBlock.options["goto"];
+        var script = curBlock.options["script"];
+
+        write("() {\n");
+
+        if (string == null) {
+          // ex: "- [gotopage]"
+          if (script != null) {
+            write("  $script;\n");
+          }
+          if (goto != null) {
+            write("  goto(r\"\"\"$goto\"\"\");\n");
+          }
+        } else {
+          // ex: "- Go to there [{{time++}} page]"
+          write("  choices.add(new Choice(\n");
+          write("      \"\"\"$string \"\"\",\n");
+          var commaAfterGoto = ( script != null ) ? "," : "";
+          write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
+          write("      then:() { $script; }\n");
+          write("  ));\n");
+        }
+
+        write("}$commaOrNot\n");
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
+        write("() {\n");
+      }
+
+    }
+
+    // block line
+    if (curPage != null &amp;&amp; !curPage.blocks.isEmpty() &amp;&amp; blockIndex &lt; curPage.blocks.length
+        &amp;&amp; _insideLineRange(lineNumber, curPage.blocks[blockIndex])) {
+      curBlock = curPage.blocks[blockIndex];
+
+      if ((curBlock.type == BuilderBlock.BLK_TEXT
+          || curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR)
+          &amp;&amp; _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+        indent = _getIndent(0);
+        write("$line\n");
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_SCRIPT
+          &amp;&amp; _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+        indent = _getIndent(0);
+        write("$line\n");
+      }
+    }
+
+
+    // end of block
+    if (curPage != null &amp;&amp; !curPage.blocks.isEmpty() &amp;&amp; blockIndex &lt; curPage.blocks.length
+        &amp;&amp; lineNumber == curPage.blocks[blockIndex].lineEnd) {
+      String commaOrNot = blockIndex &lt; curPage.blocks.length - 1 ? "," : "";
+
+
+      if (curBlock.type == BuilderBlock.BLK_TEXT) {
+        if (curBlock.lineStart != curBlock.lineEnd) {
+          indent = _getIndent(0);
+          write("$line \"\"\"$commaOrNot\n");
+        }
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+        if (curBlock.lineStart != curBlock.lineEnd) {
+          indent = _getIndent(0);
+          write("$line \"\"\");\n");
+          indent = _getIndent(8);
+          write("}$commaOrNot\n");
+        }
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_CHOICE) {
+      }
+
+      if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
+        indent = _getIndent(8);
+        write("}$commaOrNot\n");
+      }
+
+      blockIndex++;
+      curBlock = null;
+    }
+
+
+    // end page
+    if (pageIndex &lt; pages.length &amp;&amp; lineNumber == pages[pageIndex].lineEnd) {
+      indent = _getIndent(6);
+      if (pageIndex &lt; pages.length - 1) {
+        write("],\n");
+      } else {
+        write("]\n");
+      }
+      pageIndex++;
+      curPage = null;
+    }
+
+  };
+  inStream.onClosed = () {
+    completer.complete(true);
+  };
+  inStream.onError = (e) {
+    completer.completeException(e);
+  };
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="writeScripterFile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>writeScripterFile</strong>() <a class="anchor-link" href="#writeScripterFile"
+              title="Permalink to Builder.writeScripterFile">#</a></h4>
+<div class="doc">
+<p>Creates the scripter implementation file. This file includes the
+whole egamebooks content.</p>
+<pre class="source">
+Future&lt;bool&gt; writeScripterFile() {
+  var completer = new Completer();
+
+  var inputFilePath = new Path(inputEgbFileFullPath);
+  var scriptFilePath = new Path(new Options().script);
+  var pathToOutputDart = inputFilePath.directoryPath
+        .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
+
+  // write the .dart file
+  File dartFile = new File.fromPath(pathToOutputDart);
+  OutputStream dartOutStream = dartFile.openOutputStream();
+  dartOutStream.writeString(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+  writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
+  .then((_) {
+    dartOutStream.writeString(implStartClass);
+    writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_FUNCTIONS, indent:2)
+    .then((_) {
+      dartOutStream.writeString(implStartCtor);
+
+      dartOutStream.writeString("    pageHandles = {\n");
+      pageHandles.forEach((String k, int v) {
+        dartOutStream.writeString("      r\"\"\"$k\"\"\": $v,\n");
+        // TODO: move to writePages, handle last comma
+      });
+      dartOutStream.writeString("    };\n\n");
+
+      dartOutStream.writeString(implStartPages);
+      writePagesToScripter(dartOutStream)
+      .then((_) {
+        dartOutStream.writeString(implEndPages);
+        dartOutStream.writeString(implEndCtor);
+        dartOutStream.writeString(implStartInit);
+        writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_VARIABLES, indent:4)
+        .then((_) {
+          dartOutStream.writeString(implEndInit);
+          dartOutStream.writeString(implEndClass);
+          dartOutStream.writeString(implEndFile);
+
+          // Close and complete
+          dartOutStream.close();
+          dartOutStream.onClosed = () {
+            completer.complete(true);
+          };
+          dartOutStream.onError = (var e) {
+            completer.completeException(e);
+          };
+        });
+      });
+    });
+  });
+
+  return completer.future;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-10-14 23:22:47.918</div>
+        </div>
+        <script async src="../client-static.js"></script>
+        </body></html>
+        
