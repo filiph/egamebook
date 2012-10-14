@@ -1,19 +1,46 @@
 #import('dart:io');
+#import('package:args/args.dart');
 
 #import('../lib/egb_builder.dart');
 
 void main() {
   Options options = new Options();
+  
+  var parser = new ArgParser();
+  parser.addFlag("scaffold", defaultsTo:false, negatable:false,
+      help:"Creates a scaffold with a 'hello world' egamebook "
+           "in the example/new directory."); // TODO
+  parser.addFlag("compile", abbr:"c", defaultsTo:true,
+      help:"Compile given .egb file to .dart files.");
+  parser.addOption("graph-output", abbr:"g",
+      help:"Create a new GraphML (yEd) file from existing .egb file.");
+  parser.addOption("graph-input", abbr:"u",
+      help:"Update existing .egb file from given GraphML (yEd) file.");
+  
+  var results = parser.parse(options.arguments);
 
-  if (options.arguments.length < 1) {
-    throw new Exception("Script called without argument. Please provide a file to work on.");
+  // TODO: if scaffold==true, then make minimal .egb file in example/new.
+  
+  if (results.rest.length < 1) {
+    print("Script called without file argument. Please provide file to work on.");
+    print(parser.getUsage());
+    return;
   }
+  var filename = results.rest[0];
 
-  new Builder().readEgbFile(new File(options.arguments[0]))
+  new Builder().readEgbFile(new File(filename))
   .then((Builder b) {
-    b.writeDartFiles()
-    .then((_) {
-      print("Done.");
-    });
+    if (results["graph-input"] != null) {
+      // TODO: update Builder from GraphML
+    }    
+    if (results["graph-output"] != null) {
+      // TODO: create .graphml from Builder
+    }
+    if (results["compile"]) {
+      b.writeDartFiles()
+      .then((_) {
+        print("Done.");
+      });
+    }
   });
 }
