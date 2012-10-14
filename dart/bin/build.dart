@@ -9,7 +9,7 @@ void main() {
     throw new Exception("Script called without argument. Please provide a file to work on.");
   }
 
-  new Builder().readFile(new File(options.arguments[0]))
+  new Builder().readEgbFile(new File(options.arguments[0]))
   .then((Builder b) {
     b.writeDartFiles()
     .then((_) {

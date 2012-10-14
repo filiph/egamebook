@@ -2,10 +2,14 @@
 
 #import('dart:io');
 
+/**
+ * Exception thrown when the input .egb file is badly formatted.
+ **/
 class EgbFormatException implements Exception {
   String msg;
   int line;
   File file;
+  
   EgbFormatException([String this.msg, this.line, this.file]) {
   }
 
@@ -24,11 +28,18 @@ class EgbFormatException implements Exception {
   }
 }
 
+/**
+ * Abstract class defining a "line selection".
+ */
 abstract class BuilderLineRange {
   int lineStart;
   int lineEnd;
 }
 
+/**
+ * BuilderLineSpan is a "selection" in the input file. In a complete form
+ * (`[isClosed] == true`), it has a `lineStart` and a `lineEnd`. 
+ **/
 class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super-class of the below, but Dart is broken here
   int lineStart;
   int lineEnd;
@@ -38,6 +49,15 @@ class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super
   get isClosed => lineStart != null && lineEnd != null && lineStart <= lineEnd;
 }
 
+/**
+ * BuilderMetadata is a key-value pair of metadata associated with
+ * the gamebook.
+ * 
+ * An example can be:
+ * 
+ * - key: authors
+ * - value: ["Filip Hracek", "John Doe"]
+ **/
 class BuilderMetadata {
   String key;
   List<String> values;
@@ -50,6 +70,12 @@ class BuilderMetadata {
   }
 }
 
+/**
+ * BuilderPage defines a page as it is represented in the input .egb file.
+ * A BuilderPage has its [name] and also [BuilderBlock]s.
+ * 
+ * BuilderPage also has [options], like `visitOnce`.
+ **/
 class BuilderPage implements BuilderLineRange {
   int index;
   int lineStart;
@@ -68,6 +94,10 @@ class BuilderPage implements BuilderLineRange {
   }
 }
 
+/**
+ * BuilderBlock is a class that defines a "line selection" in the input
+ * .egb file. The selection has a type (e.g. BLK_TEXT or BLK_SCRIPT).
+ **/
 class BuilderBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
@@ -88,6 +118,10 @@ class BuilderBlock implements BuilderLineRange {
   }
 }
 
+/**
+ * BuilderInitBlock is a class that defines a "line selection" of either
+ * a `<classes>`, a `<functions>` or a `<variables>` block.
+ **/
 class BuilderInitBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
@@ -131,34 +165,49 @@ class BuilderInitBlock implements BuilderLineRange {
       throw "Tag <$s> was not recognized as a valid init block tag.";
     }
   }
-
 }
 
-
-
-
+/**
+ * Class that represents a full egamebook. Call [:readEgbFile:] to get
+ * data from an existing .egb file. Call [:writeEgbFile:] to output the data
+ * into a new .egb file.
+ * 
+ * After it's been created, you can call [:writeDartFiles:] to create
+ * the source files (scripter implementation + 2 user interfaces).
+ * 
+ * You can also export the page structure to a GraphML file using
+ * [:writeGraphMLFile:] or update existing structure by
+ * [:updateFromGraphMLFile:].
+ **/
 class Builder {
-
+  /**
+   * Default constructor. This will allocate memory for members and nothing 
+   * else. The structure is still empty after calling this.
+   **/
   Builder() {
     metadata = new List<BuilderMetadata>();
     synopsisLineNumbers = new List<int>();
     pages = new List<BuilderPage>();
     pageHandles = new Map<String,int>();
     initBlocks = new List<BuilderInitBlock>();
-    importFiles = new List<File>();
-    importFilesFullPaths = new Set<String>();
+    importEgbFiles = new List<File>();
+    importEgbFilesFullPaths = new Set<String>();
 
     warningLines = new List<String>();
   }
 
   /**
     * Main workhorse, reads and parses file to intermediary structure.
-    * When the returning Future is ready, use can call [writeFiles()].
+    * When the returning Future is ready, use can call [writeDartFiles()],
+    * for example.
+    * @param  f A well-formed .egb file.
+    * @return   A Future. On completion, the future returns `this` for 
+    *           convenience.
     */
-  Future<Builder> readFile(File f) {
+  Future<Builder> readEgbFile(File f) {
     var completer = new Completer();
 
-    inputFile = f;
+    inputEgbFile = f;
 
     f.exists()
     .then((exists) {
@@ -166,7 +215,7 @@ class Builder {
         completer.completeException(new FileIOException("File ${f.name} doesn't exist."));
       } else {
         f.fullPath().then((String fullPath) {
-          inputFileFullPath = fullPath;
+          inputEgbFileFullPath = fullPath;
 
           var strInputStream = new StringInputStream(f.openInputStream());
 
@@ -228,8 +277,11 @@ class Builder {
   }
 
   /**
-    * This method takes care of checking each new line.
-    */
+   * This method takes care of checking each new line, trying to find
+   * patterns (like a new page).
+   * 
+   * @return    Future of bool. Always true on completion.
+   **/
   Future<bool> _check() {
     var completer = new Completer();
 
@@ -262,6 +314,11 @@ class Builder {
   Checkers.
   */
 
+  /**
+   * Checks if current line is a blank line. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkBlankLine() {
     if (_mode != MODE_NORMAL) {
       return new Future.immediate(false);
@@ -289,6 +346,11 @@ class Builder {
     }
   }
 
+  /**
+   * Checks if current line is a metadata line. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkMetadataLine() {
     if (_mode != MODE_METADATA || _thisLine == null) {
       return new Future.immediate(false);
@@ -318,13 +380,18 @@ class Builder {
     }
   }
 
-  // TODO: check inside echo tags, throw error if true
+  /**
+   * Checks if current line is a beginning of a new page. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkNewPage() {
+    // TODO: check inside echo tags, throw error if true
     if ((_mode != MODE_METADATA && _mode != MODE_NORMAL) || _thisLine == null) {
       return new Future.immediate(false);
     }
 
-    if (newPageCandidate && validPageName.hasMatch(_thisLine)) {
+    if (_newPageCandidate && validPageName.hasMatch(_thisLine)) {
       // discard the "---" from any previous blocks
       if (pages.isEmpty() && !synopsisLineNumbers.isEmpty()) {
         synopsisLineNumbers.removeLast();
@@ -334,11 +401,11 @@ class Builder {
           var lastblock = lastpage.blocks.last();
           // also close block
           if (lastblock.lineEnd == null) {
-              lastblock.lineEnd = _lineNumber - 2;
-              if (lastblock.lineEnd < lastblock.lineStart) {
-                // a faux text block with only "---" inside
-                lastpage.blocks.removeLast();
-              }
+            lastblock.lineEnd = _lineNumber - 2;
+            if (lastblock.lineEnd < lastblock.lineStart) {
+              // a faux text block with only "---" inside
+              lastpage.blocks.removeLast();
+            }
           }
         }
       }
@@ -353,21 +420,27 @@ class Builder {
       pageHandles[name] = _pageNumber;
       pages.add(new BuilderPage(name, _pageNumber++, _lineNumber));
       _mode = MODE_NORMAL;
-      newPageCandidate = false;
+      _newPageCandidate = false;
       return new Future.immediate(true);
 
     } else {
       // no page, but let's check if this line isn't a "---" (next line could confirm a new page)
       if (hr.hasMatch(_thisLine)) {
-        newPageCandidate = true;
+        _newPageCandidate = true;
         return new Future.immediate(false);  // let it be checked by _checkNormalParagraph, too
       } else {
-        newPageCandidate = false;
+        _newPageCandidate = false;
         return new Future.immediate(false);
       }
     }
   }
-
+  
+  /**
+   * Checks if current line is an options line below new page line. 
+   * Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkPageOptions() {
     if (_mode != MODE_NORMAL || _thisLine == null) {
       return new Future.immediate(false);
@@ -389,9 +462,14 @@ class Builder {
     }
   }
 
-  // TODO: allow choices in synopsis?
-  // TODO: check even inside ECHO tags, add to script
+  /**
+   * Checks if current line is choice. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkChoice() {
+    // TODO: allow choices in synopsis?
+    // TODO: check even inside ECHO tags, add to script
     if (_thisLine == null || pages.isEmpty()
         || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO)) {
       return new Future.immediate(false);
@@ -463,6 +541,12 @@ class Builder {
     }
   }
 
+  /**
+   * Checks if current line is one of `<classes>`, `<functions>` or 
+   * `<variables>` (or their closing tags). Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkInitBlockTags() {
     if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null) {
       return new Future.immediate(false);
@@ -508,6 +592,12 @@ class Builder {
     return completer.future;
   }
 
+  /**
+   * Checks if current line is one of `<script>` or `</script>`. 
+   * Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkScriptTags() {
     if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_VARIABLES
         || _mode == MODE_INSIDE_FUNCTIONS || _thisLine == null) {
@@ -580,6 +670,11 @@ class Builder {
     return completer.future;
   }
 
+  /**
+   * Checks if current line is an `<import>` tag. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkImportTag() {
     if (_mode == MODE_INSIDE_SCRIPT_TAG || _thisLine == null) {
       return new Future.immediate(false);
@@ -594,11 +689,11 @@ class Builder {
       var importFilePath = m.group(1);
       importFilePath = importFilePath.substring(1, importFilePath.length - 1); //get rid of "" / ''
 
-      var inputFilePath = new Path(inputFileFullPath);
+      var inputFilePath = new Path(inputEgbFileFullPath);
       var pathToImport = inputFilePath.directoryPath
             .join(new Path(importFilePath));
 
-      importFiles.add(new File.fromPath(pathToImport));
+      importEgbFiles.add(new File.fromPath(pathToImport));
       completer.complete(true);
     } else {
       completer.complete(false);
@@ -607,8 +702,15 @@ class Builder {
     return completer.future;
   }
 
-  // TODO: check also inside echo tags, add to script block
+  /**
+   * When all above checks fails, this is probably a line in a normal paragraph. 
+   * (Unless it's above the first page, in which case it's a line
+   * in the synopsis.) 
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
   Future<bool> _checkNormalParagraph() {
+    // TODO: check also inside echo tags, add to script block
     if (_mode != MODE_NORMAL || _thisLine == null) {
       return new Future.immediate(false);
     }
@@ -650,47 +752,54 @@ class Builder {
     return new Future.immediate(true);
   }
 
+  /**
+   * Goes out and checks if the imported files exist. The method finds out
+   * if two imports are of the same file, in which case it removes the redundant
+   * [importFiles].
+   * 
+   * @return    Future of bool, always true.
+   **/
   Future<bool> _checkForDoubleImports() {
     var completer = new Completer();
 
-    var inputFilePath = new Path(inputFileFullPath);
+    var inputFilePath = new Path(inputEgbFileFullPath);
 
     List<Future<bool>> existsFutures = new List<Future<bool>>();
     List<Future<String>> fullPathFutures = new List<Future<String>>();
 
-    for (File f in importFiles) {
+    for (File f in importEgbFiles) {
       existsFutures.add(f.exists());
       fullPathFutures.add(f.fullPath());
     }
 
     Futures.wait(existsFutures)
     .then((List<bool> existsBools) {
-      assert(existsBools.length == importFiles.length);
+      assert(existsBools.length == importEgbFiles.length);
 
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           completer.completeException(
               new FileIOException("Source file tries to import a file that "
-                    "doesn't exist (${importFiles[i].name})."));
+                    "doesn't exist (${importEgbFiles[i].name})."));
         }
       }
 
       Futures.wait(fullPathFutures)
       .then((List<String> fullPaths) {
-        assert(fullPaths.length == importFiles.length);
+        assert(fullPaths.length == importEgbFiles.length);
 
         for (int i = 0; i < fullPaths.length; i++) {
           for (int j = 0; j < i; j++) {
             if (fullPaths[i] == fullPaths[j]) {
               WARNING("File '${fullPaths[i]}' has already been imported. Ignoring "
                       "the redundant <import> tag.");
-              importFiles[i] = null;
+              importEgbFiles[i] = null;
             }
           }
         }
 
         // delete the nulls
-        importFiles = importFiles.filter((f) => f != null);
+        importEgbFiles = importEgbFiles.filter((f) => f != null);
         completer.complete(true);
       });
     });
@@ -698,6 +807,10 @@ class Builder {
     return completer.future;
   }
 
+  /**
+   * Helper function. Finds the previous block and closes it with either
+   * the given [lineEnd] param, or the previous line.
+   **/
   void _closeLastBlock({int lineEnd}) {
     if (lineEnd == null) {
       lineEnd = _lineNumber - 1;
@@ -711,23 +824,34 @@ class Builder {
   }
 
   EgbFormatException newFormatException(String msg) {
-    return new EgbFormatException(msg, line:_lineNumber, file:inputFile);
+    return new EgbFormatException(msg, line:_lineNumber, file:inputEgbFile);
   }
 
-
   // input file given by readFile()
-  File inputFile;
-  String inputFileFullPath;
-  List<File> importFiles;
-  Set<String> importFilesFullPaths;
+  File inputEgbFile;
+  String inputEgbFileFullPath;
+  List<File> importEgbFiles;
+  Set<String> importEgbFilesFullPaths;
 
   List<BuilderMetadata> metadata;
-  bool newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
+  bool _newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
 
   List<int> synopsisLineNumbers;
 
+  /**
+   * List of pages.
+   */
   List<BuilderPage> pages;
+  
+  /**
+   * A map of pageHandles -> pageIndex. For use of the `goto("something")`
+   * funtion.
+   */
   Map<String, int> pageHandles;
+  
+  /**
+   * List of init blocks, such as `<classes>` or `<variables>` blocks.
+   */
   List<BuilderInitBlock> initBlocks;
 
   RegExp blankLine = const RegExp(r"^\s*$");
@@ -751,19 +875,18 @@ class Builder {
   RegExp choice = const RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
   RegExp variableInText = const RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
-
   /**
-    * Method writes Dart files to disk. 
-    * 
-    * - xyz.dart (The Scripter implementation)
-    * - xyz.cmdline.dart (The command line interface)
-    * - xyz.html.dart (The html interface)
-    */
+   * Writes following Dart files to disk:
+   * 
+   * - xyz.dart (The Scripter implementation)
+   * - xyz.cmdline.dart (The command line interface)
+   * - xyz.html.dart (The html interface)
+   **/
   Future<bool> writeDartFiles() {
     var completer = new Completer();
 
     Futures.wait([
-        writeDartFile(),
+        writeScripterFile(),
         writeInterfaceFiles()
     ]).then((_) {
       completer.complete(true);
@@ -772,10 +895,14 @@ class Builder {
     return completer.future;
   }
 
-  Future<bool> writeDartFile() {
+  /**
+   * Creates the scripter implementation file. This file includes the
+   * whole egamebooks content.
+   */
+  Future<bool> writeScripterFile() {
     var completer = new Completer();
 
-    var inputFilePath = new Path(inputFileFullPath);
+    var inputFilePath = new Path(inputEgbFileFullPath);
     var scriptFilePath = new Path(new Options().script);
     var pathToOutputDart = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
@@ -799,7 +926,7 @@ class Builder {
         dartOutStream.writeString("    };\n\n");
 
         dartOutStream.writeString(implStartPages);
-        writePages(dartOutStream)
+        writePagesToScripter(dartOutStream)
         .then((_) {
           dartOutStream.writeString(implEndPages);
           dartOutStream.writeString(implEndCtor);
@@ -826,10 +953,17 @@ class Builder {
     return completer.future;
   }
 
+  /**
+   * Creates the interface files. These files are the ones that run 
+   * the egamebook. They import the scripter file as an Isolate.
+   * 
+   * There are two interfaces: the command line interface, and the HTML
+   * interface.
+   */
   Future<bool> writeInterfaceFiles() {
     var completer = new Completer();
 
-    var inputFilePath = new Path(inputFileFullPath);
+    var inputFilePath = new Path(inputEgbFileFullPath);
     var scriptFilePath = new Path(new Options().script);
     var pathToOutputDart = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
@@ -862,50 +996,67 @@ class Builder {
     return completer.future;
   }
 
-Future<List<String>> _fileFromTemplate(File inFile, File outFile,
-    [Map<String,String> substitutions]) {
-  if (substitutions == null) {
-    substitutions = new Map();
-  }
-  Completer completer = new Completer();
-
-  inFile.exists()
-  .then((bool exists) {
-    if (!exists) {
-      WARNING("Cmd line template ${inFile.name} doesn't exist in current directory. Skipping.");
-      completer.complete(false);
-    } else {
-      OutputStream outStream = outFile.openOutputStream();
-      StringInputStream inStream = new StringInputStream(inFile.openInputStream());
-
-      inStream.onLine = () {
-        String line = inStream.readLine();
-        if (substitutions.containsKey(line)) {
-          outStream.writeString("${substitutions[line]}\n");
-        } else {
-          outStream.writeString("$line\n");
-        }
-      };
-      inStream.onClosed = () {
-        outStream.close();
-        completer.complete(true);
-      };
-      inStream.onError = (e) => completer.completeException(e);
+  /**
+   * Helper function copies contents of the template to a new file,
+   * substituting strings as specified by [substitutions].
+   * 
+   * @param inFile  The template file.
+   * @param outFile File to be created.
+   * @param substitutions A map of String->String substitutions.
+   */
+  Future<bool> _fileFromTemplate(File inFile, File outFile,
+      [Map<String,String> substitutions]) {
+    if (substitutions == null) {
+      substitutions = new Map();
     }
-  });
+    Completer completer = new Completer();
+  
+    inFile.exists()
+    .then((bool exists) {
+      if (!exists) {
+        WARNING("Cmd line template ${inFile.name} doesn't exist in current directory. Skipping.");
+        completer.complete(false);
+      } else {
+        OutputStream outStream = outFile.openOutputStream();
+        StringInputStream inStream = new StringInputStream(inFile.openInputStream());
+  
+        inStream.onLine = () {
+          String line = inStream.readLine();
+          if (substitutions.containsKey(line)) {
+            outStream.writeString("${substitutions[line]}\n");
+          } else {
+            outStream.writeString("$line\n");
+          }
+        };
+        inStream.onClosed = () {
+          outStream.close();
+          completer.complete(true);
+        };
+        inStream.onError = (e) => completer.completeException(e);
+      }
+    });
+  
+    return completer.future;
+  }
 
-  return completer.future;
-}
-
-
-  Future writeInitBlocks(OutputStream dartOutStream, int initBlockType, {int indent: 0}) {
+  /**
+   * Writes the specified initBlockType from the .egb file 
+   * (and its imports TODO) to the OutputStream.
+   * 
+   * @param dartOutStream Stream to be written to.
+   * @param initBlockType The type of blocks whose contents we want to copy.
+   * @param indent  Whitespace indent.
+   * @return    Always true.
+   */
+  Future<bool> writeInitBlocks(OutputStream dartOutStream, int initBlockType, 
+                         {int indent: 0}) {
     var completer = new Completer();
 
     // TODO: copy <import> classes first
 
     copyLineRanges(
         initBlocks.filter((block) => block.type == initBlockType),
-        new StringInputStream(inputFile.openInputStream()),
+        new StringInputStream(inputEgbFile.openInputStream()),
         dartOutStream,
         inclusive:false, indentLength:indent)
     .then((_) {
@@ -915,7 +1066,16 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
     return completer.future;
   }
 
-  Future writePages(OutputStream dartOutStream) {
+  /**
+   * Writes all pages from the .egb file to to the OutputStream. Iterates 
+   * over all included blocks, taking care of the correct "conversion".
+   * (E.g. a choice in .egb is written differently than in the resulting
+   * Dart file.)
+   * 
+   * @param dartOutStream Stream to be written to.
+   * @return    Always true.
+   */
+  Future writePagesToScripter(OutputStream dartOutStream) {
     var completer = new Completer();
 
     if (pages.isEmpty()) {
@@ -927,7 +1087,7 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
       dartOutStream.writeString("$indent$msg");
     };
 
-    var inStream = new StringInputStream(inputFile.openInputStream());
+    var inStream = new StringInputStream(inputEgbFile.openInputStream());
     int lineNumber = 0;
     BuilderPage curPage;
     int pageIndex = 0;
@@ -1095,8 +1255,16 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
 
   /**
    * Gets lines from inStream and dumps them to outStream.
+   * 
+   * @param lineRanges  A collection of line ranges that need to be copied.
+   * @param inStream  The input stream.
+   * @param outStream The output stream.
+   * @param inclusive Should the starting and ending lines in the lineRanges
+   *                  be included?
+   * @param indentLength  Whitespace indent.
+   * @return  Always true.
    */
-  Future copyLineRanges(Collection<BuilderLineRange> lineRanges,
+  Future<bool> copyLineRanges(Collection<BuilderLineRange> lineRanges,
       StringInputStream inStream, OutputStream outStream,
       {bool inclusive: true, int indentLength: 0}) {
     var completer = new Completer();
@@ -1124,7 +1292,13 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
     return completer.future;
   }
 
-
+  /**
+   * Helper function creates a string of a given number of spaces. Useful
+   * for indentation.
+   * 
+   * @param len Number of spaces to return.
+   * @return  The string, e.g. `"    "` for [_getIndent(4)].
+   */
   String _getIndent(int len) {
     var strBuf = new StringBuffer();
     for (int i = 0; i < len; i++) {
@@ -1133,7 +1307,17 @@ Future<List<String>> _fileFromTemplate(File inFile, File outFile,
     return strBuf.toString();
   }
 
-  bool _insideLineRange(int lineNumber, BuilderLineRange range, {bool inclusive: true}) {
+  /**
+   * Returns true if given [lineNumber] is in given [range] of lines.
+   * 
+   * @param lineNumber  Line number to check.
+   * @param range Range of lines in question.
+   * @param inclusive Whether or not to include the starting and ending
+   *                  lines of the range in the computation.
+   * @return True if line is inside range, false if not.
+   */
+  bool _insideLineRange(int lineNumber, BuilderLineRange range, 
+                        {bool inclusive: true}) {
     if (range.lineEnd == null) {
       print(range.lineStart);
     }
@@ -1200,8 +1384,6 @@ class ScripterImpl extends Scripter {
 """;
 
 
-
-
   // These are available modes for the [mode] variable.
   static int MODE_NORMAL = 1;
   static int MODE_INSIDE_CLASSES = 2;
@@ -1212,7 +1394,6 @@ class ScripterImpl extends Scripter {
   static int MODE_METADATA = 64;
   // This makes sure the parser remembers where it is during reading the file.
   int _mode;
-
 
   int _lineNumber;
   int _pageNumber;

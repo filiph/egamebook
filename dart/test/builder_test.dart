@@ -50,7 +50,7 @@ void main() {
       });
 
       test("throws on nonexistent files", () {
-        expect(new Builder().readFile(new File(getPath("./nonexistent"))),
+        expect(new Builder().readEgbFile(new File(getPath("./nonexistent"))),
           throwsA(new isInstanceOf<FileIOException>("FileIOException")));
       });
 
@@ -63,7 +63,7 @@ void main() {
           expect(b.pages,
             hasLength(0));
         });
-        new Builder().readFile(new File(getPath("no_pages.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("no_pages.egb"))).then(callback);
       });
 
       test("reads pages", () {
@@ -77,7 +77,7 @@ void main() {
           expect(b.pages[b.pageHandles["run"]].options,
             orderedEquals(["visitOnce", "showOnce"]));
         });
-        new Builder().readFile(new File(getPath("simple_3pages.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
 
       test("reads UTF8 pages", () {
@@ -89,7 +89,7 @@ void main() {
           expect(b.pages[1].name,
             equals("おはよう"));
         });
-        new Builder().readFile(new File(getPath("simple_3pages_utf8.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("simple_3pages_utf8.egb"))).then(callback);
       });
 
       test("reads page at EOF", () {
@@ -99,7 +99,7 @@ void main() {
           expect(b.pages[3].name,
             equals("thisShouldStillRegister"));
         });
-        new Builder().readFile(new File(getPath("page_at_eof.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("page_at_eof.egb"))).then(callback);
       });
 
       test("reads text blocks", () {
@@ -123,14 +123,14 @@ void main() {
           expect(block.lineEnd - block.lineStart,
             equals(1));
         });
-        new Builder().readFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
       });
     });
 
     group('advanced files', () {
 
       test("throws on unclosed tag", () {
-        expect(new Builder().readFile(new File(getPath("unclosed_tag.egb"))),
+        expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
           throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));
       });
 
@@ -147,7 +147,7 @@ void main() {
           expect(b.pages[0].blocks[4].type,
             equals(BuilderBlock.BLK_TEXT_WITH_VAR));
         });
-        new Builder().readFile(new File(getPath("variables_in_text.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("variables_in_text.egb"))).then(callback);
       });
 
       test("detects non-choices (illegally formated) and leaves them alone", () {
@@ -160,7 +160,7 @@ void main() {
                      "is not actually a valid option and should be not recognized as such.");
           }
         });
-        new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
       });
 
       test("detects choices", () {
@@ -195,7 +195,7 @@ void main() {
           expect(b.pages[1].blocks[4].options["script"],
             equals("this script } should;"));
         });
-        new Builder().readFile(new File(getPath("choices.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
       });
 
       test("detects <classes>", () {
@@ -209,7 +209,7 @@ void main() {
           expect(b.initBlocks[0].lineEnd,
             equals(12));
         });
-        new Builder().readFile(new File(getPath("classes_4blocks.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("classes_4blocks.egb"))).then(callback);
       });
 
       test("detects <CLASSES>", () {
@@ -221,7 +221,7 @@ void main() {
           expect(b.initBlocks[1].lineEnd,
             equals(36));
         });
-        new Builder().readFile(new File(getPath("classes_4blocks.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("classes_4blocks.egb"))).then(callback);
       });
 
       test("detects different init blocks", () {
@@ -247,7 +247,7 @@ void main() {
           expect(b.initBlocks[2].lineEnd,
             equals(60));
         });
-        new Builder().readFile(new File(getPath("initblocks_all.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("initblocks_all.egb"))).then(callback);
       });
 
       test("plays well around text blocks", () {
@@ -274,7 +274,7 @@ void main() {
           expect(textblock2.lineEnd,
             equals(24));
         });
-        new Builder().readFile(new File(getPath("textblock_initblock_proximity.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("textblock_initblock_proximity.egb"))).then(callback);
       });
 
       // TODO: check throws
@@ -312,7 +312,7 @@ void main() {
           expect(notscript.lineEnd,
             equals(49));
         });
-        new Builder().readFile(new File(getPath("script_2tags.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("script_2tags.egb"))).then(callback);
       });
 
       test("detects <echo>", () {
@@ -332,7 +332,7 @@ void main() {
           expect(echo2.lineEnd,
             equals(26));
         });
-        new Builder().readFile(new File(getPath("echo_2tags.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("echo_2tags.egb"))).then(callback);
       });
 
     });
@@ -358,7 +358,7 @@ void main() {
           expect(twoValues.values[1],
             equals("John Doe"));
         });
-        new Builder().readFile(new File(getPath("metadata_9keys.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
       });
     });
 
@@ -366,26 +366,26 @@ void main() {
 
       test("is detected", () {
         var callback = expectAsync1((var b) {
-          expect(b.importFiles,
+          expect(b.importEgbFiles,
             hasLength(1));
-          expect(b.importFiles[0].name,
+          expect(b.importEgbFiles[0].name,
             endsWith("library_simple_all_tags.egb"));
         });
-        new Builder().readFile(new File(getPath("import_1tag.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("import_1tag.egb"))).then(callback);
       });
 
       test("is detected with redundancies covered", () {
         var callback = expectAsync1((var b) {
-          expect(b.importFiles,
+          expect(b.importEgbFiles,
             hasLength(2));
-          expect(b.importFiles[0].name,
+          expect(b.importEgbFiles[0].name,
             endsWith("library_simple_all_tags.egb"));
-          expect(b.importFiles[1].name,
+          expect(b.importEgbFiles[1].name,
             endsWith("library_simple_all_tags2.egb"));
           expect(b.pages[1].name,
             "squash");  // making sure we're not breaking something else
         });
-        new Builder().readFile(new File(getPath("import_2tags_plus1redundant.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("import_2tags_plus1redundant.egb"))).then(callback);
       });
     });
 
@@ -400,7 +400,7 @@ void main() {
           expect(b.synopsisLineNumbers.last(),
             12);
         });
-        new Builder().readFile(new File(getPath("synopsis.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("synopsis.egb"))).then(callback);
       });
     });
 
@@ -413,7 +413,7 @@ void main() {
         });
         new File(getPath("full_project.dart")).delete()
         .onComplete((_) {
-          new Builder().readFile(new File(getPath("full_project.egb")))
+          new Builder().readEgbFile(new File(getPath("full_project.egb")))
           .then((var b) {
             b.writeDartFiles()
             .then((_) {
