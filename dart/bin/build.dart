@@ -11,7 +11,7 @@ void main() {
 
   new Builder().readFile(new File(options.arguments[0]))
   .then((Builder b) {
-    b.writeFiles()
+    b.writeDartFiles()
     .then((_) {
       print("Done.");
     });

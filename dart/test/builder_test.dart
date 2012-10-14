@@ -415,7 +415,7 @@ void main() {
         .onComplete((_) {
           new Builder().readFile(new File(getPath("full_project.egb")))
           .then((var b) {
-            b.writeFiles()
+            b.writeDartFiles()
             .then((_) {
               new File(getPath("full_project.dart")).exists()
               .then(callback);

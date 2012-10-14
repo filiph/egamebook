@@ -4,3 +4,5 @@ author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   unittest:
     sdk: unittest
+  graphml:
+    git: https://github.com/filiph/dart-graphml.git

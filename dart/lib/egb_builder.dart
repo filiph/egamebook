@@ -753,9 +753,13 @@ class Builder {
 
 
   /**
-    * Writer method.
+    * Method writes Dart files to disk. 
+    * 
+    * - xyz.dart (The Scripter implementation)
+    * - xyz.cmdline.dart (The command line interface)
+    * - xyz.html.dart (The html interface)
     */
-  Future<bool> writeFiles() {
+  Future<bool> writeDartFiles() {
     var completer = new Completer();
 
     Futures.wait([
