@@ -12,9 +12,9 @@ void main() {
            "in the example/new directory."); // TODO
   parser.addFlag("compile", abbr:"c", defaultsTo:true,
       help:"Compile given .egb file to .dart files.");
-  parser.addOption("graph-output", abbr:"g",
-      help:"Create a new GraphML (yEd) file from existing .egb file.");
-  parser.addOption("graph-input", abbr:"u",
+  parser.addFlag("graph-output", abbr:"g", defaultsTo:true,
+      help:"Create or update GraphML (yEd) file from existing .egb file.");
+  parser.addFlag("graph-input", abbr:"u", defaultsTo:false,
       help:"Update existing .egb file from given GraphML (yEd) file.");
   
   var results = parser.parse(options.arguments);
