@@ -1,1 +1,3 @@
 *.swp
+.project
+.children
