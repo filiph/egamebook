@@ -6,7 +6,7 @@ A system which automatically creates playable electronic gamebooks from .egb fil
 
 Or how to be a published interactive fiction writer in 7 easy steps!
 
-TODO: IMPLEMENT
+TODO: IMPLEMENT, make more visual
 
 1.  Run the `quick_start.sh` script in `bin` directory.
 2.  Watch as it creates a new project for you in the `example`
@@ -45,9 +45,9 @@ Add new nodes and groups, link between them, change their names. When you're
 happy with the new flow, save the file in yEd and run `update_from_graphml.sh`.
 Your .egb file will be updated with the new pages and choices.
 
-## egb file
+## egb file format
 
-The basic egb file looks like this:
+The .egb file is the source of your egamebook. A basic one can look like this:
 
     ---
     start
@@ -88,7 +88,7 @@ features.
     ---
     Day1.WakeUp
     
-    You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot." 
+    You wake up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You backstabbing idiot." 
 
     You have a minute at most before the pigs kick the door in.
     
@@ -166,7 +166,7 @@ features.
     ---
     policeBreakIn
 
-    There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you.
+    There's a sudden, loud crash _right in the room_ and a man in black overall jumps through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you.
 
     <script>
       if (weapon == "gun") {
