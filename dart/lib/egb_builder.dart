@@ -105,6 +105,15 @@ class BuilderPage implements BuilderLineRange {
       return null;
     }
   }
+  
+  String get nameWithoutGroup {
+    int index = name.indexOf(": ");
+    if (index > 0 && index < name.length - 2) {
+      return name.substring(index + 2);
+    } else {
+      return name;
+    }
+  }
 }
 
 /**
@@ -1370,6 +1379,50 @@ class Builder {
   
   void updateGraphML() {
     graphML = new GraphML();
+    
+    // create group nodes
+    Map<String,Node> pageGroupNodes = new Map<String,Node>();
+    for (int i = 0; i < pageGroups.length; i++) {
+      var node = new Node(pageGroups[i].name);
+      pageGroupNodes[pageGroups[i].name] = node;
+      graphML.addGroupNode(node);
+    }
+    
+    // create nodes
+    Map<String,Node> pageNodes = new Map<String,Node>();
+    for (int i = 0; i < pages.length; i++) {
+      var node = new Node(pages[i].nameWithoutGroup);
+      pageNodes[pages[i].name] = node;
+      if (pages[i].group != null) {
+        node.parent = pageGroupNodes[pages[i].groupName];
+      }
+      graphML.addNode(node);
+    }
+    
+    // create graph edges
+    for (int i = 0; i < pages.length; i++) {
+      BuilderPage page = pages[i];
+      for (int j = 0; j < page.blocks.length; j++) {
+        BuilderBlock block = page.blocks[j];
+        if (block.type == BuilderBlock.BLK_CHOICE 
+            || block.type == BuilderBlock.BLK_CHOICE_IN_SCRIPT) {
+          if (pageHandles.containsKey("${page.groupName}: ${block.options["goto"]}")) {
+            graphML.addEdge(
+                pageNodes[page.name], 
+                pageNodes["${page.groupName}: ${block.options["goto"]}"]);
+          } else if (pageHandles.containsKey(block.options["goto"])) {
+              graphML.addEdge(
+                  pageNodes[page.name], 
+                  pageNodes[block.options["goto"]]);
+          } else {
+            throw "Choice links to a non-existent page ('${block.options["goto"]}')"
+                  " on line ${block.lineStart}.";
+          }
+        }
+      }
+    }
+    
+    graphML.updateXml();
   }
   
   /**
