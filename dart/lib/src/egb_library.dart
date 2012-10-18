@@ -170,9 +170,20 @@ abstract class Scripter {
 
   List<List> pages;
   Map<String,int> pageHandles; // TODO: make this into Map<String,PageInfo>
+  
+  String get currentPageName {
+    if (currentPageIndex == null) {
+      return null;
+    }
+    pageHandles.forEach((String k, int v) {
+       if (v == currentPageIndex) {
+         return k;
+       }
+    });
+  }
+  
   List blocks;
   int currentPageIndex;  // the current position in the pages list
-  String currentPageName; // TODO: make this available to scripts
   int currentBlock;  // the current position in the current page's blocks list
 
   int nextPageIndex;
@@ -342,13 +353,13 @@ abstract class Scripter {
     textBuffer.add(str);
   }
 
-  void goto(dynamic where) {
-    if (where is String && pageHandles.containsKey(where as String)) {
-      nextPageIndex = pageHandles[(where as String)];
-    } else if (where is int && (where as int) < pages.length) {
-      nextPageIndex = where as int;
+  void goto(String dest) {
+    if (pageHandles.containsKey("$currentPageName: $dest")) {
+      nextPageIndex = pageHandles["$currentPageName: $dest"];
+    } else if (pageHandles.containsKey(dest)) {
+      nextPageIndex = pageHandles[dest];
     } else {
-      throw "Goto called with an invalid argument $where.";
+      throw "Function goto() called with an invalid argument '$dest' (no such page).";
     }
   }
 
