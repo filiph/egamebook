@@ -79,6 +79,22 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
+      
+      test("reads pageGroups", () {
+        var callback = expectAsync1((Builder b) {
+          expect(b.pageGroups,
+            hasLength(2));
+          expect(b.pageGroups[0].pages,
+            hasLength(2));
+          expect(b.pageGroups[0].name,
+            equals("Group 1"));
+          expect(b.pageGroups[1].name,
+              equals("Group 2"));
+          expect(b.pages[b.pageHandles["Single"]].group,
+              isNull);
+        });
+        new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);       
+      });
 
       test("reads UTF8 pages", () {
         var callback = expectAsync1((var b) {

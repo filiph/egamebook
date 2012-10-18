@@ -1,6 +1,7 @@
 #library("egb_builder");
 
 #import('dart:io');
+#import('package:graphml/dart_graphml.dart');
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -80,17 +81,73 @@ class BuilderPage implements BuilderLineRange {
   int index;
   int lineStart;
   int lineEnd;
-  String name;
+  final String name;
   List<String> options;
   List<BuilderBlock> blocks;
+  BuilderPageGroup group;
 
   BuilderPage(this.name, this.index, [this.lineStart]) {
     blocks = new List<BuilderBlock>();
     options = new List<String>();
+    
+    group = new BuilderPageGroup.fromPage(this);
   }
 
   String toString() {
     return "BuilderPage <$name> [$lineStart:$lineEnd]";
+  }
+  
+  String get groupName {
+    int index = name.indexOf(": ");
+    if (index > 0) {
+      return name.substring(0, index);
+    } else {
+      return null;
+    }
+  }
+}
+
+/**
+ * BuilderPageGroup is a form of grouping of the pages. Every time a page's
+ * name starts with "Something: ", then "Something" is a pageGroup.
+ * Calling goto("xyz") from a page named "Something: abc" when there is 
+ * a page named "Something: xyz" goes to that page.
+ **/
+class BuilderPageGroup {
+  String name;
+  List<BuilderPage> pages;
+  
+  static final Map<String, BuilderPageGroup> _cache 
+                  = new Map<String, BuilderPageGroup>();
+  
+  /**
+   * Creates group from page. If page has no group, returns null. If group
+   * already exists, returns existing group. Also adds the input page 
+   * to the group.
+   */
+  factory BuilderPageGroup.fromPage(BuilderPage page) {
+    String name = page.groupName;
+    if (name == null) {
+      return null;
+    } else if (_cache.containsKey(name)) {
+      _cache[name].pages.add(page);
+      return _cache[name];
+    } else {
+      final group = new BuilderPageGroup._internal(name);
+      group.pages.add(page);
+      _cache[name] = group;
+      return group;
+    }
+  }
+  
+  BuilderPageGroup._internal(this.name) {
+    pages = new List<BuilderPage>();
+  }
+  
+  static List<BuilderPageGroup> get allGroups { 
+    List<BuilderPageGroup> list = _cache.getValues();
+    list.sort((a,b) => a.pages[0].index - b.pages[0].index); // TODO: check for empty groups
+    return list;
   }
 }
 
@@ -843,6 +900,8 @@ class Builder {
    */
   List<BuilderPage> pages;
   
+  List<BuilderPageGroup> get pageGroups => BuilderPageGroup.allGroups;
+  
   /**
    * A map of pageHandles -> pageIndex. For use of the `goto("something")`
    * funtion.
@@ -853,6 +912,11 @@ class Builder {
    * List of init blocks, such as `<classes>` or `<variables>` blocks.
    */
   List<BuilderInitBlock> initBlocks;
+  
+  /**
+   * GraphML representation of the page flow.
+   **/
+  GraphML graphML;
 
   RegExp blankLine = const RegExp(r"^\s*$");
   RegExp hr = const RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
@@ -1291,7 +1355,23 @@ class Builder {
     };
     return completer.future;
   }
-
+  
+  /**
+   * Writes GraphML file from current Builder object.
+   **/
+  Future<bool> writeGraphMLFile() {
+    var inputFilePath = new Path(inputEgbFileFullPath);
+    var scriptFilePath = new Path(new Options().script);
+    var pathToOutputGraphML = inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}.graphml"));
+    
+    
+  }
+  
+  void updateGraphML() {
+    graphML = new GraphML();
+  }
+  
   /**
    * Helper function creates a string of a given number of spaces. Useful
    * for indentation.
