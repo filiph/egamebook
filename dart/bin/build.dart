@@ -35,6 +35,7 @@ void main() {
     }    
     if (results["graph-output"] != null) {
       // TODO: create .graphml from Builder
+      b.writeGraphMLFile();
     }
     if (results["compile"]) {
       b.writeDartFiles()

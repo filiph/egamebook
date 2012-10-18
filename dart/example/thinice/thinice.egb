@@ -9,7 +9,7 @@ Level Split:	.
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 --- 
-clinic.beforeVisit
+Clinic: beforeVisit
 
 ## Day 1: The End
 
@@ -44,7 +44,7 @@ But we're getting ahead of ourselves.
 - “Just a few more minutes, please.” [letHerWait]
 
 --- 
-clinic.letHerWait
+Clinic: letHerWait
 
 “Just a few more minutes, please,” you blurt out. Lydia nods and closes the door. You remember to look for files or receipts from other patients that may be left lying on the table. That would be unprofessional and might scare away the new business. How can they trust you to keep their records safe if they can see the records of others? But there is nothing of note on the table, and you have nothing else to do than wait. (Well, there are administrative tasks to be taken care of, but none of them could be even started under 15 minutes.)
 
@@ -55,7 +55,7 @@ After a while, you call Lydia on the intercom.
 - “Please let the patient in.” [introducingMaria]
 
 --- 
-clinic.introducingMaria
+Clinic: introducingMaria
 
 “Please let the patient in.”
 
@@ -70,28 +70,28 @@ TODO: slower?
 
 “O-kay,” she says, takes the patient card and starts to leave. 
 
-- Try to stop her [clinic.stopMaria]
-- Say good bye and let her leave [clinic.letMariaLeave]
+- Try to stop her [stopMaria]
+- Say good bye and let her leave [letMariaLeave]
 
 ---
-clinic.stopMaria
+Clinic: stopMaria
 
 "Stop!" you blurt out just before Maria reaches for the door knob. She freezes, then slowly turns her head towards you, eyebrows raised. 
 
-- "Sorry. Never mind. Good bye." [clinic.stopMariaGoodbye]
-- "Do you think maybe we could meet some other time and other place?" [clinic.stopMariaDate]
+- "Sorry. Never mind. Good bye." [stopMariaGoodbye]
+- "Do you think maybe we could meet some other time and other place?" [stopMariaDate]
 
 ---
-clinic.stopMariaGoodbye
+Clinic: stopMariaGoodbye
 
 "Sorry. Never mind. Good bye," you say, and feel like a 13 year old boy.
 
 "Good bye," she replies cheerfully, leaves the office and closes the door behind her.
 
-- [clinic.endMariaEncounter]
+- [endMariaEncounter]
 
 ---
-clinic.stopMariaDate
+Clinic: stopMariaDate
 
 <script>
 askedMariaForADate = true;
@@ -105,17 +105,17 @@ You're trying to come up with a good – maybe even funny – reply, but nothing
 
 "I didn't think so," she smiles and cheerfully leaves the office.
 
-- [clinic.endMariaEncounter]
+- [endMariaEncounter]
 
 ---
-clinic.letMariaLeave
+Clinic: letMariaLeave
 
 You both say good bye. Maria leaves the office and closes the door behind her.
 
-- [clinic.endMariaEncounter]
+- [endMariaEncounter]
 
 ---
-clinic.endMariaEncounter
+Clinic: endMariaEncounter
 
 There’s no rational indication she will be back sooner than in 12 months, but for some reason, you know you won't need to wait that long. As the matter of fact, in less then 12 hours, you’ll wish you’d never let Maria Pruitt in your office at all. But let's not get ahead of ourselves.
 
@@ -144,20 +144,20 @@ The suddenness of the situation has you paralyzed. It's not that you fear this p
 
 This man is clearly looking for a fight.
 
-- Stand up and fight! [drunkMan.standUpAndFight]
-- Stand up and run! [drunkMan.run]
+- Stand up and fight! [Drunkard: standUpAndFight]
+- Stand up and run! [Drunkard: run]
 
 ---
-drunkMan.run
+Drunkard: run
 
 You jump up and start running towards your home. You are quite surprised to find out the drunk man actually follows you. And he's not that slow, either.
 
-- Continue running home [drunkMan.continueRunning]
-- Change direction [drunkMan.changeDirection]
-- Turn around and fight [drunkMan.turnAround]
+- Continue running home [continueRunning]
+- Change direction [changeDirection]
+- Turn around and fight [turnAround]
 
 ---
-drunkMan.continueRunning
+Drunkard: continueRunning
 
 <script>
   leadDrunkManHome = true;
@@ -167,26 +167,26 @@ drunkMan.continueRunning
 (zadat leadDrunkManHome - Maria ho pozdeji ubezpeci, ze by si ho nasli i bez toho)
 
 ---
-drunkMan.changeDirection
+Drunkard: changeDirection
 
 (odkloni a bezi dlouhou dobu, az si je jisty, ze ho nesleduji, pak jde domu. vsimne si, ze drunkMan se chova divne)
 
 ---
-drunkMan.turnAround
+Drunkard: turnAround
 
 You stop and turn around. The drunk man seems strangely relieved that you did so, and approaches you with fists before his face. Not another word is uttered. The fight begins now.
 
-- Start fighting [drunkMan.fight]
+- Start fighting [fight]
 
 ---
-drunkMan.standUpAndFight
+Drunkard: standUpAndFight
 
 You stand up to fight the drunkard.
 
-- [drunkMan.fight]
+- [fight]
 
 ---
-drunkMan.fight
+Drunkard: fight
 
 <small>Note by author: The following combat sequence is dynamic, not scripted. …. Every choice counts. …. More complex than most action games nowadays. ….</small>
 
@@ -203,13 +203,13 @@ OR:
 
 <script>
 if (player.alive) 
-  goto("drunkMan.fightWon");
+  goto("fightWon");
 else 
-  goto("drunkMan.fightLost");
+  goto("fightLost");
 </script>
 
 ---
-drunkMan.fightWon
+Drunkard: fightWon
 
 The drunkard is now lying at your feet, unconscious. 
 
@@ -217,7 +217,7 @@ The drunkard is now lying at your feet, unconscious.
 (go home, contemplate the strange behaviour, go to bed at decent hour)
 
 ---
-drunkMan.fightLost
+Drunkard: fightLost
 
 You black out completely and only come back to your senses a few hours later. The drunk man is gone, and the street is silent. Your whole body aches as you gather to stand up. You decide never to take this route from work again.
 
@@ -236,7 +236,7 @@ It's almost 4am when you reach your home, __ your bruises, take a shower and fin
 
 
 ---
-morningDay2.start
+Morning, Day 2: start
 
 ## Day 2: Waking up
 
@@ -257,25 +257,25 @@ The men are standing on the sides of the Ford. The one closer to you is wearing 
 
 Then the Lexus starts its engine, and both men stop talking. The bigger one walks to the driver's side of the Lexus and bends towards the window, which now slides just a little bit down. The leather jacket listens and nods to someone in the car, then turns directly at you.
 
-- Keep watching [morningDay2.dontLayDown]
-- Lay down [morningDay2.layDown]
+- Keep watching [dontLayDown]
+- Lay down [layDown]
 
 ---
-morningDay2.layDown
+Morning, Day 2: layDown
 
 You quickly lay down but then realize there's no way they can see you. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You slowly sit up again and continue watching.
 
-- [morningDay2.continueWatching]
+- [continueWatching]
 
 ---
-morningDay2.dontLayDown
+Morning, Day 2: dontLayDown
 
 You realize there's no way those people can see you from outside. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You just continue watching.
 
-- [morningDay2.continueWatching]
+- [continueWatching]
 
 ---
-morningDay2.continueWatching
+Morning, Day 2: continueWatching
 
 The man in the leather jacket is now pointing at your house and talking to someone in the Lexus. After a few seconds, the window goes up again, the Lexus slowly starts pulling away, and the big guy beckons to the young one.
 
@@ -285,10 +285,10 @@ At last your brain becomes aware of the seriousness of the situation. This is *r
 time = 0;
 </script>
 
-- [morningDay2.nextAction]
+- [nextAction]
 
 ---
-morningDay2.nextAction
+Morning, Day 2: nextAction
 
 <script>
 time++;
@@ -301,18 +301,18 @@ Through the window, you can see that the two men are now nearing the house. The 
 The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
 	</echo>
 } else if (time == 4) {
-  goto("morningDay2.waitedTooLong");
+  goto("waitedTooLong");
 }
 </script>
 
 What do you do?
-- Get dressed [morningDay2.getDressed]
-- Call the police [morningDay2.callPolice]
-- Look for a weapon [morningDay2.lookForWeapon]
-- Run [morningDay2.startRunning]
+- Get dressed [getDressed]
+- Call the police [callPolice]
+- Look for a weapon [lookForWeapon]
+- Run [startRunning]
 
 ---
-morningDay2.getDressed
+Morning, Day 2: getDressed
 [[ visitOnce ]]
 
 You realize you're still in your pyjamas. You quickly hop on your feet. Yesterday's clothes are right there, by the bed, where you left them -- so you start putting them on immediately. This is obviously not the time to worry about a creased shirt.
@@ -321,10 +321,10 @@ You realize you're still in your pyjamas. You quickly hop on your feet. Yesterda
 gotDressed = true;
 </script>
 
-- [morningDay2.nextAction]
+- [nextAction]
 
 ---
-morningDay2.lookForWeapon
+Morning, Day 2: lookForWeapon
 [[ visitOnce ]]
 
 These men have *baseball bats* -- you are not going to stand a chance bare handed if they reach you. Fortunately, you keep your sporting equipment in a basket in the bedroom closet, so you quickly spring to it and start poking around in it.
@@ -337,12 +337,12 @@ The baseball bat is shorter and lighter. It will be a little more agile. The gol
 lookedForWeapon = true;
 </script>
 
-- Take the baseball bat [{player.weapon = baseballBat;}, morningDay2.nextAction]
-- Take the golf club [{player.weapon = golfClub;}, morningDay2.nextAction]
-- Don't take anything [morningDay2.nextAction]
+- Take the baseball bat [{player.weapon = baseballBat;}, nextAction]
+- Take the golf club [{player.weapon = golfClub;}, nextAction]
+- Don't take anything [nextAction]
 
 ---
-morningDay2.callPolice
+Morning, Day 2: callPolice
 [[ visitOnce ]]
 
 You find your cell phone and dial the emergency number. There's the "please hold" message, then an operator picks up.
@@ -368,7 +368,7 @@ calledPolice = true;
 - [nextAction]
 
 ---
-morningDay2.waitedTooLong
+Morning, Day 2: waitedTooLong
 
 There's a loud crash coming from the hallway. The man in the leather jacket must have made his way through the door on the first attempt. You hear no sound coming from the back of the house yet. That's not surprising, as it likely takes some time to go over the fence.
 
@@ -381,6 +381,6 @@ You can also just wait in the room and try to fend the intruders off${calledPoli
 
 
 ---
-morningDay2.startRunning
+Morning, Day 2: startRunning
 
 You dash out of the room

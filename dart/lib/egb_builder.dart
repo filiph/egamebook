@@ -1369,14 +1369,33 @@ class Builder {
    * Writes GraphML file from current Builder object.
    **/
   Future<bool> writeGraphMLFile() {
+    var completer = new Completer();
+    
     var inputFilePath = new Path(inputEgbFileFullPath);
     var scriptFilePath = new Path(new Options().script);
     var pathToOutputGraphML = inputFilePath.directoryPath
           .join(new Path("${inputFilePath.filenameWithoutExtension}.graphml"));
     
+    File graphmlOutputFile = new File.fromPath(pathToOutputGraphML);
     
+    OutputStream graphmlOutStream = graphmlOutputFile.openOutputStream();
+      
+    try {
+      updateGraphML();
+      graphmlOutStream.writeString(graphML.toString());
+    } on Exception catch (e) {
+      throw e;
+    } finally {
+      graphmlOutStream.close();
+      graphmlOutStream.onClosed = () => completer.complete(true);
+    }
+    
+    return completer.future;
   }
   
+  /**
+   * Builds the graphML structure from the current Builder instance.
+   **/
   void updateGraphML() {
     graphML = new GraphML();
     
@@ -1415,8 +1434,20 @@ class Builder {
                   pageNodes[page.name], 
                   pageNodes[block.options["goto"]]);
           } else {
-            throw "Choice links to a non-existent page ('${block.options["goto"]}')"
-                  " on line ${block.lineStart}.";
+            WARNING( "Choice links to a non-existent page ('${block.options["goto"]}')"
+                  " on line ${block.lineStart}. Creating new one.");
+            
+            var newPage = new BuilderPage(block.options["goto"], pages.length);
+            var node = new Node(newPage.nameWithoutGroup);
+            pageNodes[newPage.name] = node;
+            if (newPage.group != null) {
+              node.parent = pageGroupNodes[newPage.groupName];
+            }
+            graphML.addNode(node);
+            
+            graphML.addEdge(
+                pageNodes[page.name], 
+                pageNodes[newPage.name]);
           }
         }
       }
@@ -1452,7 +1483,7 @@ class Builder {
   bool _insideLineRange(int lineNumber, BuilderLineRange range, 
                         {bool inclusive: true}) {
     if (range.lineEnd == null) {
-      print(range.lineStart);
+      print(range.lineStart);   // TODO: throw?
     }
     if (lineNumber >= range.lineStart
         && lineNumber <= range.lineEnd) {
