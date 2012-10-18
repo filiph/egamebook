@@ -342,9 +342,14 @@ abstract class Scripter {
     textBuffer.add(str);
   }
 
-  void goto(String pageHandle) {
-    // TODO: throw exception if pageHandle not found
-    nextPageIndex = pageHandles[pageHandle];
+  void goto(dynamic where) {
+    if (where is String && pageHandles.containsKey(where as String)) {
+      nextPageIndex = pageHandles[(where as String)];
+    } else if (where is int && (where as int) < pages.length) {
+      nextPageIndex = where as int;
+    } else {
+      throw "Goto called with an invalid argument $where.";
+    }
   }
 
   void nextScript(Function f) {
