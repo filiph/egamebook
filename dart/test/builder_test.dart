@@ -213,6 +213,16 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
       });
+      
+      test("detects choices as gotoHandlers in pages", () {
+        var callback = expectAsync1((Builder b) {
+          expect(b.pages[b.pageHandles["Day1.WakeUp"]].gotoHandles,
+              ["wakeupDilemma"]);
+          expect(b.pages[b.pageHandles["Day1.wakeupDilemma"]].gotoHandles,
+              ["policeBreakIn", "getDressed", "getGun", "warnAmy"]);
+        });
+        new Builder().readEgbFile(new File(getPath("full_project.egb"))).then(callback);
+      });
 
       test("detects <classes>", () {
         var callback = expectAsync1((var b) {
@@ -300,7 +310,7 @@ void main() {
       /*});*/
 
     });
-
+    
     group('scripts', () {
 
       test("is detected", () {
@@ -354,7 +364,6 @@ void main() {
     });
 
     group('metadata', () {
-
       test("is detected", () {
         var callback = expectAsync1((var b) {
           var metadata = b.metadata;

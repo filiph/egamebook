@@ -83,12 +83,14 @@ class BuilderPage implements BuilderLineRange {
   int lineEnd;
   final String name;
   List<String> options;
+  List<String> gotoHandles;
   List<BuilderBlock> blocks;
   BuilderPageGroup group;
 
   BuilderPage(this.name, this.index, [this.lineStart]) {
     blocks = new List<BuilderBlock>();
     options = new List<String>();
+    gotoHandles = new List<String>();
     
     group = new BuilderPageGroup.fromPage(this);
   }
@@ -360,6 +362,7 @@ class Builder {
         _checkChoice(),
         _checkInitBlockTags(),
         _checkScriptTags(),
+        _checkGotoInsideScript(),
         _checkMetadataLine(),
         _checkImportTag()
     ]).then((List<bool> checkValues) {
@@ -577,7 +580,7 @@ class Builder {
       }
 
       // if the previous line is a text block, then that textblock needs to be
-      // a BLK_CHOICE_QUESTION.
+      // converted to a BLK_CHOICE_QUESTION.
       var lastpage = pages.last();
       if (!lastpage.blocks.isEmpty()) {
         var lastblock = lastpage.blocks.last();
@@ -593,12 +596,14 @@ class Builder {
         // we have a simple choice (i.e. no scripts needed)
         block.type = BuilderBlock.BLK_CHOICE;
         block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
-        pages.last().blocks.add(block);
+        lastpage.gotoHandles.add(block.options["goto"]);
+        lastpage.blocks.add(block);
       } else {
         // the choice will need to be rewritten into a standalone script (closure)
         block.type = BuilderBlock.BLK_CHOICE_IN_SCRIPT;
         block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
-        pages.last().blocks.add(block);
+        lastpage.gotoHandles.add(block.options["goto"]);
+        lastpage.blocks.add(block);
       }
 
       return new Future.immediate(true);
@@ -736,6 +741,28 @@ class Builder {
     return completer.future;
   }
 
+  /**
+   * Checks if there is a goto("") statement inside a script. Acts accordingly.
+   * 
+   * @return    Future of bool, indicating the result of the check.
+   **/
+  Future<bool> _checkGotoInsideScript() {
+    if (_thisLine == null) {
+      return new Future.immediate(false);
+    }
+    
+    if (_mode == MODE_INSIDE_SCRIPT_TAG) {
+      Match m = gotoInsideScript.firstMatch(_thisLine);
+      
+      if (m != null) {
+        pages.last().gotoHandles.add(m.group(2));
+        return new Future.immediate(true);
+      }
+    }
+    
+    return new Future.immediate(false);
+  }
+  
   /**
    * Checks if current line is an `<import>` tag. Acts accordingly.
    * 
@@ -935,6 +962,7 @@ class Builder {
   RegExp metadataLineAdd = const RegExp(r"^\s+(\w.*)\s*$");
   /*RegExp scriptTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
   RegExp scriptOrEchoTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
+  RegExp gotoInsideScript = const RegExp(r"goto\s*\(\s*(" r'"' r"|'" r'|""")(.+?)\1\s*\)\s*;');
   /*RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");*/
   /*RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");*/
   /*RegExp initTagStart = const RegExp(@"^\s{0,3}<init>\s*$");*/
@@ -1421,34 +1449,32 @@ class Builder {
     // create graph edges
     for (int i = 0; i < pages.length; i++) {
       BuilderPage page = pages[i];
-      for (int j = 0; j < page.blocks.length; j++) {
-        BuilderBlock block = page.blocks[j];
-        if (block.type == BuilderBlock.BLK_CHOICE 
-            || block.type == BuilderBlock.BLK_CHOICE_IN_SCRIPT) {
-          if (pageHandles.containsKey("${page.groupName}: ${block.options["goto"]}")) {
+      for (int j = 0; j < page.gotoHandles.length; j++) {
+        String gotoHandle = page.gotoHandles[j];
+          
+        if (pageHandles.containsKey("${page.groupName}: $gotoHandle")) {
+          graphML.addEdge(
+              pageNodes[page.name], 
+              pageNodes["${page.groupName}: $gotoHandle"]);
+        } else if (pageHandles.containsKey(gotoHandle)) {
             graphML.addEdge(
                 pageNodes[page.name], 
-                pageNodes["${page.groupName}: ${block.options["goto"]}"]);
-          } else if (pageHandles.containsKey(block.options["goto"])) {
-              graphML.addEdge(
-                  pageNodes[page.name], 
-                  pageNodes[block.options["goto"]]);
-          } else {
-            WARNING( "Choice links to a non-existent page ('${block.options["goto"]}')"
-                  " on line ${block.lineStart}. Creating new one.");
-            
-            var newPage = new BuilderPage(block.options["goto"], pages.length);
-            var node = new Node(newPage.nameWithoutGroup);
-            pageNodes[newPage.name] = node;
-            if (newPage.group != null) {
-              node.parent = pageGroupNodes[newPage.groupName];
-            }
-            graphML.addNode(node);
-            
-            graphML.addEdge(
-                pageNodes[page.name], 
-                pageNodes[newPage.name]);
+                pageNodes[gotoHandle]);
+        } else {
+          WARNING( "Choice links to a non-existent page ('$gotoHandle')"
+                " in page ${page.name}. Creating new page/node.");
+          
+          var newPage = new BuilderPage(gotoHandle, pages.length);
+          var node = new Node(newPage.nameWithoutGroup);
+          pageNodes[newPage.name] = node;
+          if (newPage.group != null) {
+            node.parent = pageGroupNodes[newPage.groupName];
           }
+          graphML.addNode(node);
+          
+          graphML.addEdge(
+              pageNodes[page.name], 
+              pageNodes[newPage.name]);
         }
       }
     }
