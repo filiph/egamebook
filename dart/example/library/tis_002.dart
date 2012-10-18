@@ -539,7 +539,7 @@ class Actor extends GameEntity {
     }
 
     // big _hitpoints - value => it hurt a lot
-    int almostDyingThreshold = min(3, (maxHitpoints / 3).toInt());
+    int almostDyingThreshold = min(3, maxHitpoints ~/ 3);
     if (_hitpoints > almostDyingThreshold
         && value < almostDyingThreshold) {
       on["almostDying"].dispatchAll();
@@ -557,14 +557,14 @@ class Actor extends GameEntity {
     _stance = min(value, maxStance);
     _stance = max(0, _stance);
     // only report when stance is changed between levels
-    if ((_stance / 10).toInt() != (prevStance / 10).toInt()) {
+    if (_stance ~/ 10 != prevStance ~/ 10) {
       if (_stance > prevStance) {
-        report(stanceUpStrings[min(5, (_stance / 10).toInt())], positive:true);
+        report(stanceUpStrings[min(5, _stance ~/ 10)], positive:true);
         on["stanceUp"].dispatchAll();
         if (currentMove != null)
           currentMove.on["stanceUp"].dispatchAll();
       } else {
-        report(stanceDownStrings[min(5, (_stance / 10).toInt())], negative:true);
+        report(stanceDownStrings[min(5, _stance ~/ 10)], negative:true);
         on["stanceDown"].dispatchAll();
         if (currentMove != null)
           currentMove.on["stanceDown"].dispatchAll();
@@ -842,7 +842,7 @@ class Actor extends GameEntity {
     double random = new Random().nextDouble();
     int pos;
     int len = possibleMoves.length; 
-    int allParts = (len*(len+1)/2).toInt(); // 1+2+3+4+.. = allParts
+    int allParts = len*(len+1)~/2; // 1+2+3+4+.. = allParts
     double part = 0.0;
 
     for (pos = 0; pos < len; pos++) {
@@ -1098,7 +1098,7 @@ class CombatMoveType extends GameEntity {
     e.target.report("<subject> deflect<s> it", object:e.performer, positive:true);
     int actualStanceDamage = max(
         0, 
-        (_this.stanceDamage / 2).toInt() - e.target.modifiedFighting
+        _this.stanceDamage ~/ 2 - e.target.modifiedFighting
     );
     if (actualStanceDamage > 0) {
       e.target.report("the blow was hard", negative:true);
@@ -1379,7 +1379,7 @@ class CombatCallback {
         e = new CombatEvent.fromMove(_this);
       }
       // call this CurrentCombatMove's type EventHandler first
-      _this.type.on[_key].dispatchAll(e);
+      (_this as CurrentCombatMove).type.on[_key].dispatchAll(e);
     }
     // TODO: check if func returns 'true', if so, delete the callback afterwards (one-shot callback)
     for (Function func in functions) { // TODO: make sure we're going in order
