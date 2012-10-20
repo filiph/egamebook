@@ -1,0 +1,386 @@
+Title:		Thin Ice
+Author:		Filip Hracek
+Level Split:	.
+
+
+# Thin Ice
+**A pre-apocalyptic story of love, hate & gynaecology.**
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+--- 
+Clinic: beforeVisit
+
+## Day 1: The End
+
+NEW:
+
+Maybe there just isn't such a thing as a happy gynaecologist. 
+
+You wouldn't be surprised. There are aspects of your life that could -- objectively -- be a reason for unhappiness, and many of these spring from the fact that you are, in fact, a gynaecologist. [Meeting women -- for instance -- is surprisingly hard. Probably because the chemistry is seldom there: you are staring into womens' privates all day long, after all.] Somehow, though, you know there's something else that drains your life energy and makes you depressed and bitter even though you have a good job, an okay home, and money to spend. 
+
+Ironically, in a week's time from now you'll have all the reasons to be miserable, but you won't. You'll start finding that one missing thing after losing all others.
+
+But we're getting ahead of ourselves here.
+
+
+OLD:
+
+There are advantages of being a gynaecologist, yes, but the job is not as glorious as you thought it would be. It's definitely _not_ great for meeting women. It turns out virtually none of them are attracted to someone whose job is to look at their vagina. 
+
+No matter how often you explain this to your male friends, though, they will always suggest you’re living the life of a hip-hop star. They know you're too shy for this to be true. But maybe they suppose that seeing women’s privates keeps being exciting even after 2 years of practice? It does not. In fact, sometimes you’d rather be a dentist and look into people’s throats, or perhaps a proctologist and stare into their assholes. At least that wouldn't get you nearly killed. 
+
+But we're getting ahead of ourselves.
+
+“Doctor?” Lydia has just opened the door to the office. Lydia is 60, dependable and almost as knowledgeable in gynecology as you are. She's your nurse. An inheritance from your father’s practice, Lydia knows you from when you were 3 or so. During office hours, though, you two keep the doctor-nurse playacting alive. “Maria Pruitt has come 15 minutes early. Can she come in?”
+
+“Maria Pruitt?” you ask. You don’t recall that name.
+
+“A new patient, doctor.”
+
+"Oh!"
+
+- “Please let the patient in.” [introducingMaria]
+- “Just a few more minutes, please.” [letHerWait]
+
+--- 
+Clinic: letHerWait
+
+“Just a few more minutes, please,” you blurt out. Lydia nods and closes the door. You remember to look for files or receipts from other patients that may be left lying on the table. That would be unprofessional and might scare away the new business. How can they trust you to keep their records safe if they can see the records of others? But there is nothing of note on the table, and you have nothing else to do than wait. (Well, there are administrative tasks to be taken care of, but none of them could be even started under 15 minutes.)
+
+TODO: mozna muze neco najit, neceho si vsimnout?
+
+After a while, you call Lydia on the intercom.
+
+- “Please let the patient in.” [introducingMaria]
+
+--- 
+Clinic: introducingMaria
+
+“Please let the patient in.”
+
+Maria Pruitt is gorgeous. Also, she says: “I’m here for a preventive examination.” 
+
+There is nothing wrong with her. 
+TODO: slower?
+
+“Your reproductive organs are in perfect shape,” you tell her when she’s putting her pants back on. “Congratulations.” Maria gives you a smile and a nod. “Thanks, doctor.” She’s blushing a little.
+
+“I’m afraid you don’t really need to came back here for a year or so.” You start putting your instruments in the "For Desinfection" tray and acting as if that's it. Because it is. The examination is over. 
+
+“O-kay,” she says, takes the patient card and starts to leave. 
+
+- Try to stop her [stopMaria]
+- Say good bye and let her leave [letMariaLeave]
+
+---
+Clinic: stopMaria
+
+"Stop!" you blurt out just before Maria reaches for the door knob. She freezes, then slowly turns her head towards you, eyebrows raised. 
+
+- "Sorry. Never mind. Good bye." [stopMariaGoodbye]
+- "Do you think maybe we could meet some other time and other place?" [stopMariaDate]
+
+---
+Clinic: stopMariaGoodbye
+
+"Sorry. Never mind. Good bye," you say, and feel like a 13 year old boy.
+
+"Good bye," she replies cheerfully, leaves the office and closes the door behind her.
+
+- [endMariaEncounter]
+
+---
+Clinic: stopMariaDate
+
+<script>
+askedMariaForADate = true;
+</script>
+
+"Do you think maybe we could meet some other time and other place? I mean, other than a clinic?" You try to smile confidently, but it turns out as awkward as that sentence. Maria lets go of the knob and studies you for a while. You can already see that it's not good. Not good at all. She looks at you in a way people look at puppies when they're leaving them home. With compassion and motherly love.
+
+"Doctor, I don't think this is a good idea. I mean, you just saw my vagina." She is clearly amused, bites her lip with a glimpse of a smile. "You know it better than my _face_." She raises her eyebrows again. "Are you really asking me for a date?"
+
+You're trying to come up with a good – maybe even funny – reply, but nothing comes to mind. You feel like a 13 year old boy.
+
+"I didn't think so," she smiles and cheerfully leaves the office.
+
+- [endMariaEncounter]
+
+---
+Clinic: letMariaLeave
+
+You both say good bye. Maria leaves the office and closes the door behind her.
+
+- [endMariaEncounter]
+
+---
+Clinic: endMariaEncounter
+
+There’s no rational indication she will be back sooner than in 12 months, but for some reason, you know you won't need to wait that long. As the matter of fact, in less then 12 hours, you’ll wish you’d never let Maria Pruitt in your office at all. But let's not get ahead of ourselves.
+
+- [goingHome]
+
+--- 
+goingHome
+
+Two hours later, it's 6pm, there are no more patients and it's time to go home. You get your coat and thank Lydia for the day.
+
+It's chilly outside, but nothing you won't survive. To get home, it's just a 15 minute walk through the downtown lanes and then some 20 more minutes through the residential area. You set out with your chin lowered to protect the neck from the cold. You'd prefer to drive today. But with the current prices of gas, you almost never use your car – and neither did you use it this morning, so it's parked at your place. No big deal, at least you'll get some exercise. 
+
+It's not that you don't miss going by car, though – the freedom of it. Your father did a lot of driving back in the day, though that was in a time when the economy was doing just fine. You still remember the trips: The whole car just for the two of you. Hours of driving, long distances covered, no reason for it whatsover.
+
+These are good memories, but the relative lack of traffic is not that bad, really. It's much less crowded on the roads, with people taking buses and vans - or carpooling - instead of driving individually. Everyone gets more exercise that way, too. And there's less of that car angst. Seen this way, it looks like society actually gained by the slightly lower living standards.
+
+A few blocks away from the clinic, you turn left to a narrower street to climb a small hill. It's a little more work for your legs, but this path is much shorter and there's almost no one here. After only a few minutes, the commotion of the city has all but faded, and you feel like you're walking through a village in the country. The path turns to the right, bent around a small park.
+
+"Hey, you!"
+
+You look around. It's already quite dark, but you make out a male figure next to a tree in the park. He walks towards you. The way he moves reveals he has had a few drinks.
+
+"Yeah, prick! You! Come 'ere!"
+
+The suddenness of the situation has you paralyzed. It's not that you fear this person so much -- as he clearly had too much to drink, and is barely standing -- but the sudden change from a pleasant stroll to a possible fight is just too much to process for your brain. Fortunately, the paralysis ends in a few seconds. By then, though, the drunk man stands before you and says: "Hey, du- dumbass! Who d'you think you're look at, huh?" He pushes you with all his force and you - unprepared - fall on your bottom.
+
+This man is clearly looking for a fight.
+
+- Stand up and fight! [Drunkard: standUpAndFight]
+- Stand up and run! [Drunkard: run]
+
+---
+Drunkard: run
+
+You jump up and start running towards your home. You are quite surprised to find out the drunk man actually follows you. And he's not that slow, either.
+
+- Continue running home [continueRunning]
+- Change direction [changeDirection]
+- Turn around and fight [turnAround]
+
+---
+Drunkard: continueRunning
+
+<script>
+  leadDrunkManHome = true;
+</script>
+
+(bezi, az domu, tam pred nim zavre dvere, jde spat)
+(zadat leadDrunkManHome - Maria ho pozdeji ubezpeci, ze by si ho nasli i bez toho)
+
+---
+Drunkard: changeDirection
+
+(odkloni a bezi dlouhou dobu, az si je jisty, ze ho nesleduji, pak jde domu. vsimne si, ze drunkMan se chova divne)
+
+---
+Drunkard: turnAround
+
+You stop and turn around. The drunk man seems strangely relieved that you did so, and approaches you with fists before his face. Not another word is uttered. The fight begins now.
+
+- Start fighting [fight]
+
+---
+Drunkard: standUpAndFight
+
+You stand up to fight the drunkard.
+
+- [fight]
+
+---
+Drunkard: fight
+
+<small>Note by author: The following combat sequence is dynamic, not scripted. …. Every choice counts. …. More complex than most action games nowadays. ….</small>
+
+OR:
+
+<p class="nonbook">This is your first fight in Thin Ice ....</p>
+
+<script>
+// --- combat
+// player has the possibility to call of the fight when enemy is almost down, but the enemy won't stop "for some reason". But: the "drunkManMerciful" flag is set to true here.
+// during combat: "You realize how absurd this is. Just moments ago, you were strolling through a calm neighbourhood, now you are fighting a man you've never met."
+// first hit: "Is this really happening?"
+</script>
+
+<script>
+if (player.alive) 
+  goto("fightWon");
+else 
+  goto("fightLost");
+</script>
+
+---
+Drunkard: fightWon
+
+The drunkard is now lying at your feet, unconscious. 
+
+(cestou domu si vzpomene, ze by mohl zavolat zachranku. pokud rekne ano, vrati se zpet ale drunk man uz tam nebude)
+(go home, contemplate the strange behaviour, go to bed at decent hour)
+
+---
+Drunkard: fightLost
+
+You black out completely and only come back to your senses a few hours later. The drunk man is gone, and the street is silent. Your whole body aches as you gather to stand up. You decide never to take this route from work again.
+
+It's almost 4am when you reach your home, __ your bruises, take a shower and finally go to bed.
+…
+
+(Potka opilce “ktery to zcasti hraje” a pusti se do bitky. Ve skutecnosti jej u toho pozoruje pritel od Marie.)
+
+
+
+
+
+
+
+
+
+
+---
+Morning, Day 2: start
+
+## Day 2: Waking up
+
+It's about 8am in the morning when you realize you're not sleeping any more. Your whole body hurts -- similarly to how you feel the day after a thorough workout, but much, much worse. Yesterday, you used and abused muscles that you haven't needed for the last several years. You slowly sit up and look out the window. It's a nice view down the street, the calming green of your neighbours' front gardens being a much better sight than the interior of your bedroom. 
+
+There's something strange going on today, though. Two cars are parked in the middle of the road, and two men with baseball bats are quietly talking to each other over the roof of one of them.
+
+<script>
+if (sawErnestsCar == true) {
+	echo("One of the cars is definitely the same you saw last night.");
+} else {
+	echo("The first car is an elegant Lexus sedan with opaque glass.");
+}
+echo("The other one is an old Ford pick-up in a horrible shape and with mud all over the lower parts.");
+</script>
+
+The men are standing on the sides of the Ford. The one closer to you is wearing a leather jacket and a cap. He's a big guy, much beefier that the other one, who seems to be just a kid.
+
+Then the Lexus starts its engine, and both men stop talking. The bigger one walks to the driver's side of the Lexus and bends towards the window, which now slides just a little bit down. The leather jacket listens and nods to someone in the car, then turns directly at you.
+
+- Keep watching [dontLayDown]
+- Lay down [layDown]
+
+---
+Morning, Day 2: layDown
+
+You quickly lay down but then realize there's no way they can see you. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You slowly sit up again and continue watching.
+
+- [continueWatching]
+
+---
+Morning, Day 2: dontLayDown
+
+You realize there's no way those people can see you from outside. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You just continue watching.
+
+- [continueWatching]
+
+---
+Morning, Day 2: continueWatching
+
+The man in the leather jacket is now pointing at your house and talking to someone in the Lexus. After a few seconds, the window goes up again, the Lexus slowly starts pulling away, and the big guy beckons to the young one.
+
+At last your brain becomes aware of the seriousness of the situation. This is *really* happening.
+
+<script>
+time = 0;
+</script>
+
+- [nextAction]
+
+---
+Morning, Day 2: nextAction
+
+<script>
+time++;
+if (time == 2) {
+	<echo>
+Through the window, you can see that the two men are now nearing the house. The big guy gestures to the other one, who responds by rushing out towards the back of the house. Apparently, they're not going to let you escape through the back door.
+	</echo>
+} else if (time == 3) {
+	<echo>
+The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
+	</echo>
+} else if (time == 4) {
+  goto("waitedTooLong");
+}
+</script>
+
+What do you do?
+- Get dressed [getDressed]
+- Call the police [callPolice]
+- Look for a weapon [lookForWeapon]
+- Run [startRunning]
+
+---
+Morning, Day 2: getDressed
+[[ visitOnce ]]
+
+You realize you're still in your pyjamas. You quickly hop on your feet. Yesterday's clothes are right there, by the bed, where you left them -- so you start putting them on immediately. This is obviously not the time to worry about a creased shirt.
+
+<script>
+gotDressed = true;
+</script>
+
+- [nextAction]
+
+---
+Morning, Day 2: lookForWeapon
+[[ visitOnce ]]
+
+These men have *baseball bats* -- you are not going to stand a chance bare handed if they reach you. Fortunately, you keep your sporting equipment in a basket in the bedroom closet, so you quickly spring to it and start poking around in it.
+
+You find two pieces of equipment that you can imagine being useful in a fight. A wooden baseball bat not unlike the one those men outside wield, and a golf club.
+
+The baseball bat is shorter and lighter. It will be a little more agile. The golf club is longer and made of steel. It will deal more damage, but will be somewhat harder to lead.
+
+<script>
+lookedForWeapon = true;
+</script>
+
+- Take the baseball bat [{player.weapon = baseballBat;}, nextAction]
+- Take the golf club [{player.weapon = golfClub;}, nextAction]
+- Don't take anything [nextAction]
+
+---
+Morning, Day 2: callPolice
+[[ visitOnce ]]
+
+You find your cell phone and dial the emergency number. There's the "please hold" message, then an operator picks up.
+
+"Please state your emergency."
+
+"There are two men with baseball bats coming into my home. I can see them from the window. They came -- eh -- they came in a blue Ford pick-up truck..."
+
+"All right, sir, what is your location?"
+
+"My location?"
+
+"Where are you right now?"
+
+"Oh, I -- eh -- 503 Hyde Road."
+
+"Okay, mister, now lock yourself in, and try to keep those men from entering. Don't risk anything. We are sending a vehicle."
+
+<script>
+calledPolice = true;
+</script>
+
+- [nextAction]
+
+---
+Morning, Day 2: waitedTooLong
+
+There's a loud crash coming from the hallway. The man in the leather jacket must have made his way through the door on the first attempt. You hear no sound coming from the back of the house yet. That's not surprising, as it likely takes some time to go over the fence.
+
+When you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
+
+You can also just wait in the room and try to fend the intruders off${calledPolice ? " until the police comes" : ""}.
+
+- Run [startRunning]
+- Barricade the room [stayInTheRoom]
+
+
+---
+Morning, Day 2: startRunning
+
+You dash out of the room
