@@ -81,16 +81,27 @@ class BuilderPage implements BuilderLineRange {
   int index;
   int lineStart;
   int lineEnd;
+  
   final String name;
+  
+  /**
+   * List of options, such as [:visitOnce:]. 
+   */
   List<String> options;
-  List<String> gotoHandles;
+  
+  /**
+   * List of linked page names. Builder makes sure they are specified in
+   * their full version (i.e. "Group 1: Something").
+   */
+  List<String> gotoPageNames;
+  
   List<BuilderBlock> blocks;
   BuilderPageGroup group;
 
   BuilderPage(this.name, this.index, [this.lineStart]) {
     blocks = new List<BuilderBlock>();
     options = new List<String>();
-    gotoHandles = new List<String>();
+    gotoPageNames = new List<String>();
     
     group = new BuilderPageGroup.fromPage(this);
   }
@@ -289,8 +300,8 @@ class Builder {
 
           print("Reading input file ${f.name}");
 
-          // The top of the file can be metadata. This will be changed to MODE_NORMAL
-          // in [_checkMetadataLine()] when there is no metadata.
+          // The top of the file can be metadata. This will be changed to 
+          // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
           _mode = MODE_METADATA;
 
           _lineNumber = 0;
@@ -308,21 +319,36 @@ class Builder {
           strInputStream.onClosed = () {
             _check().then((_) {  // check last line
               //print("\nReading input file has finished.");
-
-              // end the last page
+     
               if (!pages.isEmpty()) {
+                // end the last page
                 pages.last().lineEnd = _lineNumber - 1;
-              }
-
-              _lineNumber = null;  // makes sure following warnings don't get associated with the last line
-
-              if (pages.isEmpty()) {
+                
+                // fully specify gotoPageNames of every page
+                for (var page in pages) {
+                  for (int i = 0; i < page.gotoPageNames.length; i++) {
+                    var gotoPageName = page.gotoPageNames[i];
+                    if (pageHandles.containsKey(
+                                 "${page.groupName}: $gotoPageName")) {
+                      page.gotoPageNames[i] = 
+                          "${page.groupName}: $gotoPageName";
+                    } else if (pageHandles.containsKey(gotoPageName)) {
+                      // great, already done
+                    } else {
+                      WARNING("Page ${page.name} specifies a choice that goes "
+                              "to a non-existing page ($gotoPageName).", 
+                              line:null);
+                    }
+                  }
+                }
+              } else {
                 WARNING("There are no pages in this egb. If you want it to be playable, "
                         "you will need to include page starts in the form of a line "
                         "containing exclusively dashes (`-`, three or more) and "
-                        "an immediately following line with the name of the page.");
+                        "an immediately following line with the name of the page.",
+                        line:null);
               }
-
+              
               if (_mode != MODE_NORMAL) {
                 completer.completeException(
                   newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
@@ -596,13 +622,15 @@ class Builder {
         // we have a simple choice (i.e. no scripts needed)
         block.type = BuilderBlock.BLK_CHOICE;
         block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
-        lastpage.gotoHandles.add(block.options["goto"]);
+        lastpage.gotoPageNames.add(block.options["goto"]);
         lastpage.blocks.add(block);
       } else {
         // the choice will need to be rewritten into a standalone script (closure)
         block.type = BuilderBlock.BLK_CHOICE_IN_SCRIPT;
         block.lineEnd = _lineNumber;  // choice blocks are always one-liners in egb
-        lastpage.gotoHandles.add(block.options["goto"]);
+        if (block.options["goto"] != null) {
+          lastpage.gotoPageNames.add(block.options["goto"]);
+        }
         lastpage.blocks.add(block);
       }
 
@@ -755,7 +783,7 @@ class Builder {
       Match m = gotoInsideScript.firstMatch(_thisLine);
       
       if (m != null) {
-        pages.last().gotoHandles.add(m.group(2));
+        pages.last().gotoPageNames.add(m.group(2));
         return new Future.immediate(true);
       }
     }
@@ -1003,10 +1031,7 @@ class Builder {
   Future<bool> writeScripterFile() {
     var completer = new Completer();
 
-    var inputFilePath = new Path(inputEgbFileFullPath);
-    var scriptFilePath = new Path(new Options().script);
-    var pathToOutputDart = inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
+    var pathToOutputDart = getPathFor("dart");
 
     // write the .dart file
     File dartFile = new File.fromPath(pathToOutputDart);
@@ -1064,16 +1089,12 @@ class Builder {
   Future<bool> writeInterfaceFiles() {
     var completer = new Completer();
 
-    var inputFilePath = new Path(inputEgbFileFullPath);
     var scriptFilePath = new Path(new Options().script);
-    var pathToOutputDart = inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}.dart"));
-    var pathToOutputCmd = inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}.cmdline.dart"));
+    var pathToOutputDart = getPathFor("dart");
+    var pathToOutputCmd = getPathFor("cmdline.dart");
     var pathToInputTemplateCmd = scriptFilePath.directoryPath
           .join(new Path("../lib/src/egb_interface_cmdline.dart"));
-    var pathToOutputHtml = inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}.html.dart"));
+    var pathToOutputHtml =getPathFor("html.dart");
     var pathToInputTemplateHtml = scriptFilePath.directoryPath
           .join(new Path("../lib/src/egb_interface_html.dart"));
 
@@ -1394,18 +1415,25 @@ class Builder {
   }
   
   /**
+   * Gets path for the file with specified extension. Therefore, calling
+   * [:getPathFor('graphml'):] for [:path/to/example.egb:] will return
+   * [:path/to/example.graphml:].
+   */
+  Path getPathFor(String extension) {
+    Path inputFilePath = new Path(inputEgbFileFullPath);
+    return inputFilePath.directoryPath
+          .join(new Path("${inputFilePath.filenameWithoutExtension}"
+          ".$extension"));
+  }
+  
+  /**
    * Writes GraphML file from current Builder object.
    **/
   Future<bool> writeGraphMLFile() {
     var completer = new Completer();
     
-    var inputFilePath = new Path(inputEgbFileFullPath);
-    var scriptFilePath = new Path(new Options().script);
-    var pathToOutputGraphML = inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}.graphml"));
-    
+    var pathToOutputGraphML = getPathFor("graphml");
     File graphmlOutputFile = new File.fromPath(pathToOutputGraphML);
-    
     OutputStream graphmlOutStream = graphmlOutputFile.openOutputStream();
       
     try {
@@ -1422,7 +1450,7 @@ class Builder {
   }
   
   /**
-   * Builds the graphML structure from the current Builder instance.
+   * Builds the [graphML] structure from the current Builder instance.
    **/
   void updateGraphML() {
     graphML = new GraphML();
@@ -1449,8 +1477,8 @@ class Builder {
     // create graph edges
     for (int i = 0; i < pages.length; i++) {
       BuilderPage page = pages[i];
-      for (int j = 0; j < page.gotoHandles.length; j++) {
-        String gotoHandle = page.gotoHandles[j];
+      for (int j = 0; j < page.gotoPageNames.length; j++) {
+        String gotoHandle = page.gotoPageNames[j];
           
         if (pageHandles.containsKey("${page.groupName}: $gotoHandle")) {
           graphML.addEdge(
@@ -1480,6 +1508,90 @@ class Builder {
     }
     
     graphML.updateXml();
+  }
+  
+  /**
+   * Opens the .graphml file, updates [graphML] from it, then calls
+   * [updateFromGraphML()].
+   */
+  Future<bool> updateFromGraphMLFile() {
+//    Completer completer = new Completer();
+    
+    var pathToInputGraphML = getPathFor("graphml");
+    File graphmlInputFile = new File.fromPath(pathToInputGraphML);
+    
+    graphML = new GraphML.fromFile(graphmlInputFile); // TODO: make async!
+    
+    updateFromGraphML();
+    return new Future.immediate(true);
+  }
+  
+  /**
+   * Updates the Builder instance from the current state of [graphML].
+   */ 
+  void updateFromGraphML() {
+    // populate map of all nodes in graph
+    Map<String,Node> nodesToAdd = new Map<String,Node>();
+    for (var node in graphML.nodes) {
+      nodesToAdd[node.fullText] = node;
+    }
+    
+    // walk the existing Builder instance
+    for (int i = 0; i < pages.length; i++) {
+      BuilderPage page = pages[i];
+      bool pageStays = nodesToAdd.containsKey(page.name);
+      if (pageStays) {
+        Node node = nodesToAdd[page.name];
+        // populate map of all linked nodes
+        Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
+        Map<String,Node> linkedPageFullNamesToAdd = new Map<String,Node>();
+        for (var node in linkedNodesToAdd) {
+          linkedPageFullNamesToAdd[node.fullText] = node;
+        }
+        
+        // create set of gotoPageNames to be deleted
+        Set<String> gotoPageNamesToDelete = new Set<String>();
+        
+        // walk through goto links
+        for (var gotoPageName in page.gotoPageNames) {
+          // make sure 
+          bool linkStays = linkedPageFullNamesToAdd.containsKey(gotoPageName);
+          if (linkStays) {
+            var linkedNode = linkedPageFullNamesToAdd[gotoPageName];
+            linkedNodesToAdd.remove(linkedNode);
+          } else {
+            gotoPageNamesToDelete.add(gotoPageName);
+          }
+        }
+        
+        // delete excesive gotos
+        page.gotoPageNames = page.gotoPageNames
+                       .filter((name) => gotoPageNamesToDelete.contains(name));
+        
+        // add remaining linked nodes
+        for (var linkedNode in linkedNodesToAdd) {
+          page.gotoPageNames.add(linkedNode.fullText);
+        }
+        
+      } else {
+        // TODO: mark page as unwanted, comment out the page in .egb? 
+      }
+      
+      // remove the node from "stack" if it's there
+      nodesToAdd.remove(page.name);
+    }
+    
+    // add remaining nodes
+    nodesToAdd.forEach((String fullText, Node node) {
+      var newPage = new BuilderPage(fullText, pages.last().index++);
+      node.linkedNodes.forEach(
+          (linkedPage) => newPage.gotoPageNames.add(linkedPage.fullText)); // TODO: no need to fully qualify sometimes
+      pages.add(newPage);
+    });
+  }
+  
+  void updateEgbFile() {
+    throw "not implemented"; // TODO
   }
   
   /**
@@ -1594,8 +1706,13 @@ class ScripterImpl extends Scripter {
   /** used to communicate problems to caller */
   List<String> warningLines;
 
-  void WARNING(String msg) {
-    print("$msg (line:$_lineNumber)");
-    warningLines.add("$msg (line:$_lineNumber)");
+  void WARNING(String msg, {int line}) {
+    if (!?line) {
+      line = _lineNumber;
+    }
+    String str = (line == null) ? msg : "$msg (line:$line)";
+    
+    print(str);
+    warningLines.add(str);
   }
 }

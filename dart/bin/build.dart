@@ -30,11 +30,11 @@ void main() {
 
   new Builder().readEgbFile(new File(filename))
   .then((Builder b) {
-    if (results["graph-input"] != null) {
-      // TODO: update Builder from GraphML
+    if (results["graph-input"]) {
+      b.updateFromGraphMLFile();
+      b.updateEgbFile();
     }    
-    if (results["graph-output"] != null) {
-      // TODO: create .graphml from Builder
+    if (results["graph-output"]) {
       b.writeGraphMLFile();
     }
     if (results["compile"]) {
