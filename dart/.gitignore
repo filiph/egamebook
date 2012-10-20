@@ -1,3 +1,7 @@
 *.swp
 .project
 .children
+example/library/*.js
+example/library/*.js.map
+example/library/*.html
+example/library/*.graphml
