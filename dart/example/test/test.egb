@@ -205,7 +205,7 @@ OR:
 </script>
 
 <script>
-if (player.alive) 
+if (true/*player.alive*/) 
   goto("fightWon");
 else 
   goto("fightLost");
@@ -221,6 +221,8 @@ The drunkard is now lying at your feet, unconscious.
 
 (cestou domu si vzpomene, ze by mohl zavolat zachranku. pokud rekne ano, vrati se zpet ale drunk man uz tam nebude)
 (go home, contemplate the strange behaviour, go to bed at decent hour)
+
+- [Morning, Day 2: start]
 
 ---
 Drunkard: fightLost
@@ -396,14 +398,12 @@ You dash out of the room
 ---
 Clinic: Don't pay the bill
 
-- Clinic: letHerWait (AUTO) [Clinic: letHerWait]
 - Clinic: introducingMaria (AUTO) [Clinic: introducingMaria]
 
 ---
 Clinic: Pay the bill
 
 - Clinic: introducingMaria (AUTO) [Clinic: introducingMaria]
-- Clinic: letHerWait (AUTO) [Clinic: letHerWait]
 
 ---
 stayInTheRoom
