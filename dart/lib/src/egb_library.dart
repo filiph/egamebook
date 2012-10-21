@@ -8,7 +8,7 @@
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
 
 void DEBUG_SCR(String str) {
-  // print("SCR: $str");
+  print("SCR: $str");
 }
 
 
@@ -169,17 +169,28 @@ abstract class Scripter {
   SendPort _interfacePort;
 
   List<List> pages;
-  Map<String,int> pageHandles; // TODO: make this into Map<String,PageInfo>
+  Map<String,int> pageHandles; // TODO: make this into Map<String,Page>
   
   String get currentPageName {
     if (currentPageIndex == null) {
       return null;
     }
-    pageHandles.forEach((String k, int v) {
-       if (v == currentPageIndex) {
-         return k;
-       }
-    });
+    for (var key in pageHandles.getKeys()) {
+      if (pageHandles[key] == currentPageIndex) {
+        return key;
+      }
+    }
+    throw "Current page index ($currentPageIndex) is not among pageHandles.";
+  }
+  
+  String get currentGroupName {
+    var currentPage = currentPageName;
+    int index = currentPage.indexOf(": ");
+    if (index > 0) {
+      return currentPage.substring(0, index);
+    } else {
+      return null;
+    }
   }
   
   List blocks;
@@ -241,7 +252,7 @@ abstract class Scripter {
           if (choice.hashCode() == incomingMessage.intContent) {
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
             if (choice.goto != null) {
-              nextPageIndex = pageHandles[choice.goto];
+              goto(choice.goto);
             }
             if (choice.f != null) {
               message = runScriptBlock(script:choice.f);
@@ -354,8 +365,9 @@ abstract class Scripter {
   }
 
   void goto(String dest) {
-    if (pageHandles.containsKey("$currentPageName: $dest")) {
-      nextPageIndex = pageHandles["$currentPageName: $dest"];
+    if (currentGroupName != null
+        && pageHandles.containsKey("$currentGroupName: $dest")) {
+      nextPageIndex = pageHandles["$currentGroupName: $dest"];
     } else if (pageHandles.containsKey(dest)) {
       nextPageIndex = pageHandles[dest];
     } else {
