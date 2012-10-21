@@ -1,6 +1,5 @@
 Title:		Thin Ice
 Author:		Filip Hracek
-Level Split:	.
 
 
 # Thin Ice
@@ -40,8 +39,9 @@ But we're getting ahead of ourselves.
 
 "Oh!"
 
-- “Please let the patient in.” [introducingMaria]
-- “Just a few more minutes, please.” [letHerWait]
+
+- Clinic: Don't pay the bill (AUTO) [Clinic: Don't pay the bill]
+- Clinic: Pay the bill (AUTO) [Clinic: Pay the bill]
 
 --- 
 Clinic: letHerWait
@@ -208,6 +208,9 @@ else
   goto("fightLost");
 </script>
 
+- Drunkard: fightWon (AUTO) [Drunkard: fightWon]
+- Drunkard: fightLost (AUTO) [Drunkard: fightLost]
+
 ---
 Drunkard: fightWon
 
@@ -311,6 +314,8 @@ What do you do?
 - Look for a weapon [lookForWeapon]
 - Run [startRunning]
 
+- Morning, Day 2: waitedTooLong (AUTO) [Morning, Day 2: waitedTooLong]
+
 ---
 Morning, Day 2: getDressed
 [[ visitOnce ]]
@@ -384,3 +389,19 @@ You can also just wait in the room and try to fend the intruders off${calledPoli
 Morning, Day 2: startRunning
 
 You dash out of the room
+
+---
+Clinic: Don't pay the bill
+
+- Clinic: letHerWait (AUTO) [Clinic: letHerWait]
+- Clinic: introducingMaria (AUTO) [Clinic: introducingMaria]
+
+---
+Clinic: Pay the bill
+
+- Clinic: introducingMaria (AUTO) [Clinic: introducingMaria]
+- Clinic: letHerWait (AUTO) [Clinic: letHerWait]
+
+---
+stayInTheRoom
+

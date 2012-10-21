@@ -5,3 +5,7 @@ example/library/*.js
 example/library/*.js.map
 example/library/*.html
 example/library/*.graphml
+example/test/*.js
+example/test/*.js.map
+example/test/*.html
+example/test/*.graphml

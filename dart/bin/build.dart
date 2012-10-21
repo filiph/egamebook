@@ -12,12 +12,15 @@ void main() {
            "in the example/new directory."); // TODO
   parser.addFlag("compile", abbr:"c", defaultsTo:true,
       help:"Compile given .egb file to .dart files.");
-  parser.addFlag("graph-output", abbr:"g", defaultsTo:true,
+  parser.addFlag("graph-output", abbr:"g", defaultsTo:false,
       help:"Create or update GraphML (yEd) file from existing .egb file.");
   parser.addFlag("graph-input", abbr:"u", defaultsTo:false,
       help:"Update existing .egb file from given GraphML (yEd) file.");
   
   var results = parser.parse(options.arguments);
+  bool graphInput = results["graph-input"];
+  bool graphOutput = results["graph-output"];
+  bool compile = results["compile"];
 
   // TODO: if scaffold==true, then make minimal .egb file in example/new.
   
@@ -28,20 +31,24 @@ void main() {
   }
   var filename = results.rest[0];
 
-  new Builder().readEgbFile(new File(filename))
-  .then((Builder b) {
-    if (results["graph-input"]) {
+  var builderReadyCallback = builderReadyCallback(Builder b) {
+    if (graphInput) {
       b.updateFromGraphMLFile();
-      b.updateEgbFile();
+      b.updateEgbFile().then(builderReadyCallback);
+      graphInput = false;
+      return;
     }    
-    if (results["graph-output"]) {
+    if (graphOutput) {
       b.writeGraphMLFile();
     }
-    if (results["compile"]) {
+    if (compile) {
       b.writeDartFiles()
       .then((_) {
         print("Done.");
       });
     }
-  });
+  };
+  
+  new Builder().readEgbFile(new File(filename))
+  .then(builderReadyCallback);
 }
