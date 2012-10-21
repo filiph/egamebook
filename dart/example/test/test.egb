@@ -94,7 +94,10 @@ Clinic: stopMariaGoodbye
 Clinic: stopMariaDate
 
 <script>
-askedMariaForADate = true;
+  askedMariaForADate = true;
+  <echo>
+    ergepok!
+  </echo>
 </script>
 
 "Do you think maybe we could meet some other time and other place? I mean, other than a clinic?" You try to smile confidently, but it turns out as awkward as that sentence. Maria lets go of the knob and studies you for a while. You can already see that it's not good. Not good at all. She looks at you in a way people look at puppies when they're leaving them home. With compassion and motherly love.
