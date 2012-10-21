@@ -195,6 +195,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_TEXT_WITH_VAR = 8;
   static final int BLK_CHOICE_QUESTION = 16;
   static final int BLK_CHOICE_IN_SCRIPT = 32;
+  static final int BLK_SCRIPT_ECHO = 64;
 
   BuilderBlock({int this.lineStart}) {
     options = new Map<String,Dynamic>();
@@ -724,10 +725,11 @@ class Builder {
     if (m != null) {
       bool closing =  m.group(1) == "/";
       var type = m.group(2).toLowerCase();
-      var tagIsEcho = type == "echo";
+      bool tagIsEcho = type == "echo";
+      bool tagIsScript = type == "script";
 
       if (!closing) {  // opening a new tag
-        if (_mode == MODE_NORMAL && !tagIsEcho) {
+        if (_mode == MODE_NORMAL && tagIsScript) {
           _closeLastBlock();
           _mode = MODE_INSIDE_SCRIPT_TAG;
           var block = new BuilderBlock(lineStart:_lineNumber);
@@ -1038,6 +1040,8 @@ class Builder {
 
     var pathToOutputDart = getPathFor("dart");
 
+    // TODO: use .chain instead of .then
+    
     // write the .dart file
     File dartFile = new File.fromPath(pathToOutputDart);
     OutputStream dartOutStream = dartFile.openOutputStream();
@@ -1220,6 +1224,8 @@ class Builder {
     int pageIndex = 0;
     BuilderBlock curBlock;
     int blockIndex;
+    int subBlockIndex;
+    int subBlockIndent;  // echo block indent
 
     inStream.onLine = () {
       lineNumber++;
@@ -1240,6 +1246,7 @@ class Builder {
           && lineNumber == curPage.blocks[blockIndex].lineStart) {
         indent = _getIndent(8);
         curBlock = curPage.blocks[blockIndex];
+        subBlockIndex = 0;
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
@@ -1318,7 +1325,35 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_SCRIPT
             && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
           indent = _getIndent(0);
-          write("$line\n");
+          
+          bool needsToBeHandled = true;
+          // check for <echo>
+          if (subBlockIndex < curBlock.subBlocks.length) {
+            var curSubBlock = curBlock.subBlocks[subBlockIndex];
+            if (_insideLineRange(lineNumber, curSubBlock, inclusive:true)) {
+              if (lineNumber == curSubBlock.lineStart) {
+                // ignore the <echo> line, but get indenting
+                subBlockIndent = line.indexOf("<");
+                write("echo(\"\"\"");
+              } else if (lineNumber < curSubBlock.lineEnd) {
+                if (line.startsWith(_getIndent(subBlockIndent + 2))) {
+                  // get rid of indenting
+                  write("${line.substring(subBlockIndent + 3)}\n");
+                } else {
+                  write("$line\n");
+                }
+              } else {
+                write("\"\"\");\n");
+                subBlockIndex++;
+              }
+              needsToBeHandled = false;
+            }
+          }
+          
+          // script line, copy
+          if (needsToBeHandled) {
+            write("$line\n");  
+          }
         }
       }
 

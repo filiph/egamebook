@@ -297,11 +297,11 @@ Morning, Day 2: nextAction
 time++;
 if (time == 2) {
 	<echo>
-Through the window, you can see that the two men are now nearing the house. The big guy gestures to the other one, who responds by rushing out towards the back of the house. Apparently, they're not going to let you escape through the back door.
+    Through the window, you can see that the two men are now nearing the house. The big guy gestures to the other one, who responds by rushing out towards the back of the house. Apparently, they're not going to let you escape through the back door.
 	</echo>
 } else if (time == 3) {
 	<echo>
-The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
+    The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
 	</echo>
 } else if (time == 4) {
   goto("waitedTooLong");
