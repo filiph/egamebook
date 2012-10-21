@@ -9,3 +9,4 @@ example/test/*.js
 example/test/*.js.map
 example/test/*.html
 example/test/*.graphml
+example/test/*.dart
