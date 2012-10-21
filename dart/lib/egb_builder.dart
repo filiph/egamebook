@@ -127,6 +127,11 @@ class BuilderPage implements BuilderLineRange {
       return name;
     }
   }
+  
+  /**
+   * To be commented out – for example when the page is deleted in yEd.
+   */
+  bool commentOut = false;
 }
 
 /**
@@ -191,7 +196,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_QUESTION = 16;
   static final int BLK_CHOICE_IN_SCRIPT = 32;
 
-  BuilderBlock({this.lineStart}) {
+  BuilderBlock({int this.lineStart}) {
     options = new Map<String,Dynamic>();
     subBlocks = new List<BuilderLineSpan>();
   }
@@ -507,7 +512,7 @@ class Builder {
 
       // close last page
       if (!pages.isEmpty()) {
-        pages.last().lineEnd = _lineNumber - 1;
+        pages.last().lineEnd = _lineNumber - 2;
       }
 
       // add the new page
@@ -1572,9 +1577,8 @@ class Builder {
         for (var linkedNode in linkedNodesToAdd) {
           page.gotoPageNames.add(linkedNode.fullText);
         }
-        
       } else {
-        // TODO: mark page as unwanted, comment out the page in .egb? 
+        page.commentOut = true;
       }
       
       // remove the node from "stack" if it's there
@@ -1585,6 +1589,7 @@ class Builder {
     
     // add remaining nodes
     nodesToAdd.forEach((String fullText, Node node) {
+      
       int newIndex = pages.last().index + 1;
       var newPage = new BuilderPage(fullText, newIndex);
       pageHandles[fullText] = newIndex;
@@ -1594,8 +1599,128 @@ class Builder {
     });
   }
   
-  void updateEgbFile() {
-    throw "not implemented"; // TODO
+  /**
+   * Updates the .egb file according to the current state of the Builder 
+   * instance. 
+   */
+  Future<Builder> updateEgbFile() {
+    var completer = new Completer();
+    
+    var tempFile = new File.fromPath(getPathFor("egb~"));
+    File outputEgbFile;
+    
+    var tempInStream = inputEgbFile.openInputStream();
+    tempInStream.pipe(tempFile.openOutputStream(FileMode.WRITE));
+    tempInStream.onClosed = () {
+      outputEgbFile = inputEgbFile;
+      inputEgbFile = tempFile;
+      var rawInputStream = inputEgbFile.openInputStream();
+      var outStream = outputEgbFile.openOutputStream(FileMode.WRITE);
+      
+      if (pages.length == 0) {
+        // right now, we can only update pages, so a file without pages stays the same
+        rawInputStream.pipe(outStream);
+      } else {
+        var inStream = new StringInputStream(rawInputStream);
+        
+        // TODO: rewrite based on logical structure (i.e. insert new pages where they belong)
+        
+        int lineNumber = 0;
+        BuilderPage page;
+        Set<BuilderPage> pagesToAdd = new Set.from(pages);
+        Set<String> gotoPageNamesToAdd;
+        inStream.onLine = () {
+          lineNumber++;
+          String line = inStream.readLine();
+
+          if (page != null && page.lineEnd < lineNumber) {
+            // add remaining gotos
+            bool addingPages = !gotoPageNamesToAdd.isEmpty();
+            for (var gotoPageName in gotoPageNamesToAdd) {
+              outStream.writeString(
+                  "- $gotoPageName (AUTO) [$gotoPageName]\n");
+            }
+            if (addingPages) outStream.writeString("\n");
+            page = null;
+            gotoPageNamesToAdd = null;
+          }
+          
+          if (page == null) {
+            for (var candidate in pages) {
+              if (_insideLineRange(lineNumber, candidate)) {
+                page = candidate;
+                pagesToAdd.remove(page);
+                gotoPageNamesToAdd = new Set.from(page.gotoPageNames);
+                break;
+              }
+            }
+          }
+          
+          if (page != null) {
+            BuilderBlock choiceBlock;
+            for (var candidate in page.blocks.filter(
+                (block) => block.type == BuilderBlock.BLK_CHOICE)) {
+              if (_insideLineRange(lineNumber, candidate)) {
+                choiceBlock = candidate;
+                break;
+              }
+            }
+            if (choiceBlock != null) {
+              if (page.gotoPageNames.some((goto) => goto == choiceBlock.options["goto"])
+                  || page.gotoPageNames.some((goto) => goto == "${page.groupName}: ${choiceBlock.options['goto']}")) {
+                outStream
+                  ..writeString(line)
+                  ..writeString("\n");
+                gotoPageNamesToAdd.remove(choiceBlock.options["goto"]);
+                gotoPageNamesToAdd.remove("${page.groupName}: ${choiceBlock.options['goto']}");
+              } else {
+                // choiceBlock shouldn't be here, to be deleted -- do nothing
+              }
+            } else {
+              // normal line, just copy
+              outStream
+                ..writeString(line)
+                ..writeString("\n");
+            }
+          } else {
+            // outside any page - just copy
+            outStream
+              ..writeString(line)
+              ..writeString("\n");
+          }
+        
+        };
+
+        inStream.onClosed = () {
+          for (var page in pagesToAdd) {
+            outStream
+              ..writeString("\n---\n")
+              ..writeString(page.name)
+              ..writeString("\n\n");
+            
+            for (var gotoPageName in page.gotoPageNames) {
+              outStream.writeString(
+                  "- $gotoPageName (AUTO) [$gotoPageName]\n");
+            }
+          }
+          
+          outStream.close();
+          
+          // TODO: delete egb~
+          inputEgbFile.delete();
+          inputEgbFile = outputEgbFile;
+          
+          new Builder().readEgbFile(inputEgbFile).then((Builder b) {
+            completer.complete(b);;
+          });
+        };
+        inStream.onError = (e) {
+          completer.completeException(e);
+        };
+      }
+    };
+    
+    return completer.future;
   }
   
   /**
@@ -1620,12 +1745,16 @@ class Builder {
    * @param range Range of lines in question.
    * @param inclusive Whether or not to include the starting and ending
    *                  lines of the range in the computation.
-   * @return True if line is inside range, false if not.
+   * @return True if line is inside range or if range has no lineStart and
+   *                  lineEnd. 
    */
   bool _insideLineRange(int lineNumber, BuilderLineRange range, 
                         {bool inclusive: true}) {
+    if (range.lineStart == null && range.lineEnd == null) {
+      return false;
+    }
     if (range.lineEnd == null) {
-      print(range.lineStart);   // TODO: throw?
+      throw "Range with lineStart == ${range.lineStart} has lineEnd == null.";
     }
     if (lineNumber >= range.lineStart
         && lineNumber <= range.lineEnd) {

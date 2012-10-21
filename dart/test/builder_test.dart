@@ -489,7 +489,33 @@ void main() {
           callback(b);
         });
       });
+    });
+    
+    group('egb writer', () {
       
+      test("updates egb file from builder instance", () {
+        File orig = new File(getPath("update_egb_file_original.egb"));
+        File egb = new File(getPath("update_egb_file.egb"));
+        
+        var inputStream = orig.openInputStream();
+        inputStream.pipe(egb.openOutputStream(FileMode.WRITE));
+        inputStream.onClosed = expectAsync0(() {
+          new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
+          .chain((Builder b) {
+            b.pages.add(new BuilderPage("Programatically added page", 
+                b.pages.last().index + 1));
+            b.pageHandles["Programatically added page"] = b.pages.last().index;
+            b.pages[3].gotoPageNames.add("Programatically added page");
+            return b.updateEgbFile();
+          })
+          .then(expectAsync1((Builder b) {
+            expect(b.pages.last().name, 
+            "Programatically added page");
+            expect(b.pages[3].gotoPageNames,
+                contains("Programatically added page"));
+          }));
+        });
+      });
     });
   });
 
