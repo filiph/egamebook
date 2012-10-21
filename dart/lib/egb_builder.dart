@@ -1566,7 +1566,7 @@ class Builder {
         
         // delete excesive gotos
         page.gotoPageNames = page.gotoPageNames
-                       .filter((name) => gotoPageNamesToDelete.contains(name));
+                       .filter((name) => !gotoPageNamesToDelete.contains(name));
         
         // add remaining linked nodes
         for (var linkedNode in linkedNodesToAdd) {
@@ -1581,9 +1581,13 @@ class Builder {
       nodesToAdd.remove(page.name);
     }
     
+    // TODO: add new groupNodes
+    
     // add remaining nodes
     nodesToAdd.forEach((String fullText, Node node) {
-      var newPage = new BuilderPage(fullText, pages.last().index++);
+      int newIndex = pages.last().index + 1;
+      var newPage = new BuilderPage(fullText, newIndex);
+      pageHandles[fullText] = newIndex;
       node.linkedNodes.forEach(
           (linkedPage) => newPage.gotoPageNames.add(linkedPage.fullText)); // TODO: no need to fully qualify sometimes
       pages.add(newPage);

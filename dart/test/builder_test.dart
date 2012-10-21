@@ -473,13 +473,16 @@ void main() {
         new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
       });
 
-      solo_test("updates builder instance from XML", () {
+      test("updates builder instance from XML", () {
         var callback = expectAsync1((Builder b) {
           expect(b.pages.length,
               7);
-          print(b.pages[b.pageHandles["Group 1: Start"]].gotoPageNames);
           expect(b.pages[b.pageHandles["Group 1: Start"]].gotoPageNames,
               unorderedEquals(["Group 1: New node", "Group 1: End", "Group 2: Start"]));
+          expect(b.pageHandles["New single node"],
+              isNotNull);
+          expect(b.pages[b.pageHandles["Group 2: End"]].gotoPageNames,
+              contains("New single node"));
         });
         new Builder().readEgbFile(new File(getPath("update_from_graph.egb")))
         .then((b) {
@@ -500,10 +503,6 @@ void main() {
     var inStream = new StringInputStream(f.openInputStream());
     inStream.onData = () {
       String chars = inStream.read();
-
-      
-
-      
 
       if (char[0] == 10 || char[0] == 13) { // LF CR
         if (!lineChars.isEmpty()) {
