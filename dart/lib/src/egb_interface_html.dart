@@ -101,8 +101,18 @@ class HtmlInterface implements UserInterface {
           createParagraph(message.listContent[0]);
         }
         choices = new List.from(message.listContent);
-        for (int i = 1; i < choices.length; i++) {
-          createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);
+        
+        if (choices.length == 2 && choices[1]['string'].trim() == "") {
+          // An auto-choice (without a string) means we should pick it silently
+          _scripterPort.send(
+              new Message.OptionSelected(choices[1]['hash']).toJson(),
+              _receivePort.toSendPort()
+          );
+        } else {
+          // let player choose
+          for (int i = 1; i < choices.length; i++) {
+            createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);
+          }
         }
         // let player choose
         /*

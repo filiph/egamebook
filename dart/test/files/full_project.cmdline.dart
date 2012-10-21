@@ -62,25 +62,35 @@ class CmdlineInterface implements UserInterface {
           print("\n${message.listContent[0]}\n");
         }
         choices = new List.from(message.listContent);
-        for (int i = 1; i < choices.length; i++) {
-          print("$i) ${choices[i]['string']}");
-        }
-        print("");
-        // let player choose
-        cmdLine.onLine = () {
-          print("");
-          try {
-            int optionNumber = int.parse(cmdLine.readLine());
-            if (optionNumber > 0 && optionNumber < choices.length) {
-              _scripterPort.send(
-                  new Message.OptionSelected(choices[optionNumber]['hash']).toJson(),
-                  _receivePort.toSendPort()
-                  );
-            }
-          } on FormatException catch (e) {
-            print("Input a number, please!");
+        
+        if (choices.length == 2 && choices[1]['string'].trim() == "") {
+          // An auto-choice (without a string) means we should pick it silently
+          _scripterPort.send(
+              new Message.OptionSelected(choices[1]['hash']).toJson(),
+              _receivePort.toSendPort()
+          );
+        } else {
+          // let player choose
+          for (int i = 1; i < choices.length; i++) {
+            print("$i) '${choices[i]['string']}'");
           }
-        };
+          print("");
+          
+          cmdLine.onLine = () {
+            print("");
+            try {
+              int optionNumber = int.parse(cmdLine.readLine());
+              if (optionNumber > 0 && optionNumber < choices.length) {
+                _scripterPort.send(
+                    new Message.OptionSelected(choices[optionNumber]['hash']).toJson(),
+                    _receivePort.toSendPort()
+                    );
+              }
+            } on FormatException catch (e) {
+              print("Input a number, please!");
+            }
+          };
+        }
       }
     }
   }
