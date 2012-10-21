@@ -119,13 +119,6 @@ class Message {
 class UserInteraction implements Hashable {
   bool shown = false;
   bool waitForEndOfPage;
-  int hash;
-
-  UserInteraction() {
-    hash = new Random().nextInt(30000);  // TODO: better hashing!
-  }
-
-  int hashCode() => hash;
 }
 
 class Choice extends UserInteraction {
