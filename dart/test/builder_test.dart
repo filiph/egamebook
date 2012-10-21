@@ -1,7 +1,6 @@
 #import('package:unittest/unittest.dart');
 #import('dart:io');
 
-
 // importing files to test
 #import("../lib/html_entities.dart");
 #import("../lib/egb_builder.dart");
@@ -494,29 +493,4 @@ void main() {
     });
   });
 
-  /*
-  test("String + inputStream same as StrInputStream", () {
-    var inStreamLines = new List<String>();
-    var lineChars = new List<int>();
-
-    var f = new File(getPath("utf8.egb"));
-    var inStream = new StringInputStream(f.openInputStream());
-    inStream.onData = () {
-      String chars = inStream.read();
-
-      if (char[0] == 10 || char[0] == 13) { // LF CR
-        if (!lineChars.isEmpty()) {
-          inStreamLines.add(new String.fromCharCodes(lineChars));
-          lineChars.clear();
-        }
-      } else {
-        lineChars.addAll(char);
-      }
-    };
-    inStream.onClosed = () {
-      inStreamLines.forEach((line) => print(line));
-    };
-
-  });
-  */
 }
