@@ -1338,7 +1338,7 @@ class Builder {
               } else if (lineNumber < curSubBlock.lineEnd) {
                 if (line.startsWith(_getIndent(subBlockIndent + 2))) {
                   // get rid of indenting
-                  write("${line.substring(subBlockIndent + 3)}\n");
+                  write("${line.substring(subBlockIndent + 2)}\n");
                 } else {
                   write("$line\n");
                 }
