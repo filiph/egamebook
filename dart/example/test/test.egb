@@ -14,7 +14,7 @@ Clinic: Before visit
 
 Maybe there just isn't such a thing as a happy gynaecologist.
 
-You are staring at the repair bill on the computer screen, realizing it is almost double of what you have earned this month. The clinic hasn't been very busy lately. Fewer and fewer people have the money to pay for a *dentist*, let alone a private gynaecologist. You had to sell your car recently – not that you had the cash for gas, anyway. There's never any cash for anything anymore. This month, there might not be any cash for paying Lydia, even.
+You are studying the repair bill on the computer screen, realizing it is almost double of what you have earned so far this month. The clinic hasn't been very busy lately. Fewer and fewer people have the money to pay for a *dentist*, let alone a private gynaecologist. You had to sell your car recently – not that you had the cash for gas, anyway. There's never any cash for anything anymore. This month, there might not be any cash for paying Lydia, even.
 
 Lydia is the lady that brought you up. She has been a nurse in the clinic for ages, originally working with your father, and after he died, with you. You owe her for all that you know about the business side of things, and much more. Still, she has been working practically for free recently.
 
@@ -90,10 +90,13 @@ Clinic: introducingMaria
 
 “Please let the patient in.”
 
+TODO: slower, better
+
 Maria Pruitt is gorgeous. Also, she says: “I’m here for a preventive examination.”
 
 There is nothing wrong with her.
-TODO: slower?
+
+...
 
 “Your reproductive organs are in perfect shape,” you tell her when she’s putting her pants back on. “Congratulations.” Maria gives you a smile and a nod. “Thanks, doctor.” She’s blushing a little.
 
@@ -130,7 +133,7 @@ Clinic: stopMariaDate
 
 "Do you think maybe we could meet some other time and other place? I mean, other than a clinic?" You try to smile confidently, but it turns out as awkward as that sentence. Maria lets go of the knob and studies you for a while. You can already see that it's not good. Not good at all. She looks at you in a way people look at puppies when they're leaving them home. With compassion and motherly love.
 
-"Doctor, I don't think this is a good idea. I mean, you just saw my vagina." She is clearly amused, bites her lip with a glimpse of a smile. "You know it better than my _face_." She raises her eyebrows again. "Are you really asking me for a date?"
+"Doctor," she says. "I don't think this is a good idea. I mean, you just saw my vagina." She is clearly amused, bites her lip with a glimpse of a smile. "You know it better than my _face_." She raises her eyebrows again. "Are you really asking me for a date?"
 
 You're trying to come up with a good – maybe even funny – reply, but nothing comes to mind. You feel like a 13 year old boy.
 
@@ -148,12 +151,14 @@ You both say good bye. Maria leaves the office and closes the door behind her.
 ---
 Clinic: endMariaEncounter
 
-There’s no rational indication she will be back sooner than in 12 months, but for some reason, you know you won't need to wait that long. As the matter of fact, in less then 12 hours, you’ll wish you’d never let Maria Pruitt in your office at all. But let's not get ahead of ourselves.
+There’s no rational indication she will be back sooner than in 12 months, but for some reason, you know you won't need to wait that long. As the matter of fact, in less then 12 hours, you’ll wish you’d never let Maria Pruitt in your office in the first place.
 
 - [goingHome]
 
 ---
 goingHome
+
+## Unexpected encounter
 
 Two hours later, it's 6pm, there is nothing more to do, and it's time to go home. You get your coat and thank Lydia for the day.
 
@@ -227,7 +232,7 @@ OR:
 
 <script>
 // --- combat
-// player has the possibility to call of the fight when enemy is almost down, but the enemy won't stop "for some reason". But: the "drunkManMerciful" flag is set to true here.
+// player has the possibility to call of the fight when enemy is almost down, but the enemy won't stop "for some reason". But: the "drunkManMerciful" flag is set to true here (+ points!).
 // during combat: "You realize how absurd this is. Just moments ago, you were strolling through a calm neighbourhood, now you are fighting a man you've never met."
 // first hit: "Is this really happening?"
 </script>
@@ -430,7 +435,7 @@ You dash out of the room
 ---
 Maria Car: comingTo
 
-You run through a couple of suburbian backyards until you hit a street. It looks very similar to yours, as all streets tend to do in neighbourhoods like this. It's quiet. A long line of uniform houses on each side. Lamps. Garages. You rest for a while, listening. There are no signs of henchmen with baseball bats here. Your heart rate is still extremely high, but it's coming down.
+You run through a couple of suburban backyards until you hit a street. It looks very similar to yours, as all streets tend to do in neighbourhoods like this. It's quiet. A long line of uniform houses on each side. Lamps. Garages. You rest for a while, listening. There are no signs of henchmen with baseball bats here. Your heart rate is still extremely high, but it's coming down.
 
 There's only one car parked on the whole street. Since your breathing has calmed down a little, you can now hear the motor is running. You start sweating again. The car is a red Mazda, one that you don't remember seeing today, or yesterday. You swipe the sweat off your eyes and look if someone's at the driver's seat.
 
@@ -448,19 +453,23 @@ You decide to jump over a fence into someone's front yard, but that's when your 
 
 As the red Mazda slowly pulls over at your side, you manage to persuade your mind to calm down a bit, and you consciously slow down your breath. By the time Maria Pruitt slides her side window down, you are able to stand up, breathe normally, and talk.
 
-- Maria Car: sideWindow
+- [Maria Car: sideWindow]
 
 ---
 Maria Car: approach
 
 Maria watches you walk towards the car with her eyes wide open. She slides the side window down.
 
-- Maria Car: sideWindow
+- [Maria Car: sideWindow]
 
 ---
 Maria Car: sideWindow
 
 Before you can say anything, Maria reaches out the side window, grabs your hand, and says, "I am so, so sorry." She looks at your bruises${(gotDressed ? "" : " and your very informal attire")}. "It's all my fault." She looks around the silent street. "Please get in," she says. "We must go now."
+
+
+
+
 
 <classes>
   class PlayerMock {
