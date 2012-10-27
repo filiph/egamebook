@@ -244,9 +244,6 @@ else
  goto("Drunk man: fightLost");
 </script>
 
-- Drunk man: fightWon (AUTO) [Drunk man: fightWon]
-- Drunk man: fightLost (AUTO) [Drunk man: fightLost]
-
 ---
 Drunk man: fightWon
 
@@ -349,7 +346,6 @@ What do you do?
 - Look for a weapon [Morning, Day 2: lookForWeapon]
 - Run [Morning, Day 2: startRunning]
 
-- Morning, Day 2: waitedTooLong (AUTO) [Morning, Day 2: waitedTooLong]
 
 ---
 Morning, Day 2: getDressed
@@ -389,7 +385,7 @@ You find your cell phone and dial the emergency number. There's the "please hold
 
 "Please state your emergency."
 
-"There are two men with baseball bats coming into my home. I can see them from the window. They came -- eh -- they came in a blue Ford pick-up truck..."
+You tell him there are two men with baseball bats coming into your home. You say you can see them through the window. You try to describe the pickup truck. "It has mud all over it," you say. 
 
 "All right, sir, what is your location?"
 
@@ -412,7 +408,7 @@ Morning, Day 2: waitedTooLong
 
 There's a loud crash coming from the hallway. The man in the leather jacket must have made his way through the door on the first attempt. You hear no sound coming from the back of the house yet. That's not surprising, as it likely takes some time to go over the fence.
 
-When you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
+If you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
 
 You can also just wait in the room and try to fend the intruders off${calledPolice ? " until the police comes" : ""}.
 
@@ -422,12 +418,13 @@ You can also just wait in the room and try to fend the intruders off${calledPoli
 ---
 Morning, Day 2: stayInTheRoom
 
+TODO
 
 
 ---
 Morning, Day 2: startRunning
 
-You dash out of the room
+You dash out of the room, make a sharp right and run down the hall towards the stairs. 
 
 
 
