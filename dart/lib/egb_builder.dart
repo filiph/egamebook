@@ -997,7 +997,7 @@ class Builder {
   RegExp metadataLineAdd = const RegExp(r"^\s+(\w.*)\s*$");
   /*RegExp scriptTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
   RegExp scriptOrEchoTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
-  RegExp gotoInsideScript = const RegExp(r"goto\s*\(\s*(" r'"' r"|'" r'|""")(.+?)\1\s*\)\s*;');
+  RegExp gotoInsideScript = const RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
   /*RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");*/
   /*RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");*/
   /*RegExp initTagStart = const RegExp(@"^\s{0,3}<init>\s*$");*/
@@ -1582,7 +1582,8 @@ class Builder {
       bool pageStays = nodesToAdd.containsKey(page.name);
       if (pageStays) {
         Node node = nodesToAdd[page.name];
-        // populate map of all linked nodes
+        
+        // populate map of all linked nodes in graphml
         Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
         Map<String,Node> linkedPageFullNamesToAdd = new Map<String,Node>();
         for (var node in linkedNodesToAdd) {
@@ -1592,7 +1593,7 @@ class Builder {
         // create set of gotoPageNames to be deleted
         Set<String> gotoPageNamesToDelete = new Set<String>();
         
-        // walk through goto links
+        // walk through goto links in egb
         for (var gotoPageName in page.gotoPageNames) {
           // make sure 
           bool linkStays = linkedPageFullNamesToAdd.containsKey(gotoPageName);
@@ -1692,24 +1693,27 @@ class Builder {
           }
           
           if (page != null) {
-            BuilderBlock choiceBlock;
-            for (var candidate in page.blocks.filter(
-                (block) => block.type == BuilderBlock.BLK_CHOICE)) {
-              if (_insideLineRange(lineNumber, candidate)) {
-                choiceBlock = candidate;
-                break;
+            // find out if this line has a goto, if so, remove from pageNamesToAdd
+            String goto;
+            Match m = choice.firstMatch(line);
+            if (m != null) {
+              goto = m.group(3); // TODO: make this into a function, DRY
+            } else {
+              m = gotoInsideScript.firstMatch(line);
+              if (m != null) {
+                goto = m.group(2);
               }
             }
-            if (choiceBlock != null) {
-              if (page.gotoPageNames.some((goto) => goto == choiceBlock.options["goto"])
-                  || page.gotoPageNames.some((goto) => goto == "${page.groupName}: ${choiceBlock.options['goto']}")) {
+            if (goto != null) {
+              if (page.gotoPageNames.some((gotoPageName) => gotoPageName == goto)
+                  || page.gotoPageNames.some((gotoPageName) => gotoPageName == "${page.groupName}: $goto")) {
                 outStream
                   ..writeString(line)
                   ..writeString("\n");
-                gotoPageNamesToAdd.remove(choiceBlock.options["goto"]);
-                gotoPageNamesToAdd.remove("${page.groupName}: ${choiceBlock.options['goto']}");
+                gotoPageNamesToAdd.remove(goto);
+                gotoPageNamesToAdd.remove("${page.groupName}: $goto");
               } else {
-                // choiceBlock shouldn't be here, to be deleted -- do nothing
+                // choiceBlock shouldn't be here, to be deleted => do not copy
               }
             } else {
               // normal line, just copy
