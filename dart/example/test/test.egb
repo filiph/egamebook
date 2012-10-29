@@ -32,17 +32,17 @@ You are studying the repair bill on the computer screen, realizing it is almost 
 
 Lydia is the lady that brought you up. She has been a nurse in the clinic for ages, originally working with your father, and after he died, with you. You owe her for all that you know about the business side of things, and much more. Still, she has been working practically for free recently.
 
-"Things are falling apart," Lydia told you yesterday. You thought she's talking figuratively, but then she pointed to the cabinet. It was leaning towards a side, one of the legs broken, the paint blistered, top drawer stuck open. She reminded you about the state of the toilet, too, and used the word "disgusting" twice. Other things were falling apart in the waiting room and in your office. That day, you called the cheapest repair service in town. They arrived in under an hour, eyes wide open, smiling, and they quickly took care of everything. Now here's their bill.
+"Things are falling apart," Lydia told you yesterday. You thought she's talking figuratively, but then she pointed to the cabinet. It was leaning towards a side, one of the legs broken, the paint blistered, top drawer stuck open. She reminded you about the state of the toilet, too, and used the word "disgusting" twice. Other things were falling apart in the waiting room and in your office. That day, you called the cheapest repair service in town. They arrived in under an hour, eyes wide open, smiling, pleasant, and they quickly took care of everything. Now here's the bill.
 
-Just a couple of years ago, that bill would be worth a portion of your hourly fee. That was when people had the money to pay for things like labiaplasties and 3D ultrasounds. Now, you only see a couple of patients a day, and they are all as broke as you are.
+Just a couple of years ago, that bill would be worth a portion of your _hourly_ fee. That was when people had the money to pay for things like labiaplasties and 3D ultrasounds. Now, you only see a couple of patients a day, and they are all as broke as you are.
 
-Today, though, is an all-time low. Just one appointment. At least it's a new patient. A young lady called Maria Pruitt.
+Today, though, is an all-time low. Just one appointment. A young lady called Maria Pruitt. At least it's a new patient. 
 
-"A new patient is a good sign," Lydia says when she reminds you about the appointment in the morning. "We haven't had a _new_ patient in, let me see, six months? This could be a turning point. I hope it's a turning point. A new beginning."
+"A new patient is a good sign," Lydia says when she reminds you about the appointment in the morning. "We haven't had a _new_ patient in, let me see, six months? This could be a turning point," she says. "I hope it's a turning point. A new beginning."
 
 What it really is, though, is the beginning of the end. And a spectacular end at that.
 
-But let's not get ahead of ourselves.
+But let's not get ahead of ourselves. Your mind drifts back to the matter at hand – the repair bill.
 
 What about the repair bill?
 - Pay it [Pay the bill]
@@ -77,9 +77,9 @@ TODO
 ---
 Clinic: Maria is introduced
 
-“Doctor?” Lydia has just opened the door to the office. She knows you from when you were 3 or so, but during office hours you two keep the doctor-nurse roleplay alive. “Maria Pruitt has come 15 minutes early. Can she come in?”
+“Doctor?” Lydia has just opened the door to the office. Although she knows you from when you were 3, you two keep the doctor-nurse roleplay alive during office hours. “Maria Pruitt has come 15 minutes early. Can she come in?”
 
-“Maria Pruitt?” you ask. You don’t recall that name.
+Your brain takes some time to switch from being an accountant to being a doctor. "Huh?"
 
 “The new patient, doctor.”
 
@@ -478,10 +478,12 @@ Maria Car: sideWindow
 
 Before you can say anything, Maria reaches out the side window, grabs your hand, and says, "I am so, so sorry." She looks at your bruises${(gotDressed ? "" : " and your very informal attire")}. "It's all my fault." She looks around the silent street. "Please get in," she says. "We must go now."
 
-- Maria Car: The Talk (AUTO) [Maria Car: The Talk]
+- Get in the car [{echo("You get in the car.");}, Maria Car: The Talk]
 
 ---
 Maria Car: The Talk
+
+
 
 - Maria Car: Invitation (AUTO) [Maria Car: Invitation]
 
