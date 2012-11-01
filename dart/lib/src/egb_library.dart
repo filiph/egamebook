@@ -48,11 +48,11 @@ class Message {
 
   // Choices message. A list with [0] being text prepended, then choices
   Message.ShowChoices(
-      List<Choice> choices,
+      ChoiceList choices,
       {String prependText: "",
       bool endOfPage: false}
       ) : type = MSG_SHOW_CHOICES {
-    List<Choice> choicesToSend;
+    ChoiceList choicesToSend;
     // filter out choices we don't want to show
     if (!endOfPage) {
       choicesToSend = choices.filter((choice) => !choice.waitForEndOfPage && !choice.shown);
@@ -121,7 +121,7 @@ class UserInteraction implements Hashable {
   bool waitForEndOfPage;
 }
 
-class Choice extends UserInteraction {
+class Choice extends UserInteraction implements Comparable {
   String string;
   Function f;
   String goto;
@@ -145,9 +145,142 @@ class Choice extends UserInteraction {
     f = _f;
     return this;
   }
+  
+  int compareTo(Choice other) => this.string.compareTo(other.string);
 }
 
-// TODO: class ChoiceList implements List
+class ChoiceList implements List<Choice> {
+  final List<Choice> _choices;
+  String question;  // TODO: implement
+  
+  ChoiceList() : _choices = new List<Choice>() {
+  }
+  
+  ChoiceList._from(Collection<Choice> list)
+  :
+    _choices = new List<Choice>()
+  {
+    _choices.addAll(list);
+  }
+  
+  /**
+   * Check whether the collection contains an element equal to [element].
+   */
+  bool contains(Choice element) => _choices.contains(element);
+
+  /**
+   * Returns the last element of the [ChoiceList], or throws an out of bounds
+   * exception if the [ChoiceList] is empty.
+   */
+  Choice get last => _choices.last;
+
+  /**
+   * Returns the first index of [element] in this [ChoiceList].
+   * Searches this [ChoiceList] from index [start] to the length of the
+   * [ChoiceList]. Returns -1 if [element] is not found.
+   */
+  int indexOf(Choice element, [int start = 0]) => _choices.indexOf(element, start);
+  int lastIndexOf(Choice element, [int start]) => _choices.lastIndexOf(element, start);
+
+  /**
+   * Reduce a collection to a single value by iteratively combining each element
+   * of the collection with an existing value using the provided function.
+   * Use [initialValue] as the initial value, and the function [combine] to
+   * create a new value from the previous one and an element.
+   *
+   * Example of calculating the sum of a collection:
+   *
+   *   collection.reduce(0, (prev, element) => prev + element);
+   */
+  dynamic reduce(dynamic initialValue,
+                 dynamic combine(dynamic previousValue, Choice element))
+  => _choices.reduce(initialValue, combine);
+
+  /**
+   * Returns the element at the given [index] in the [ChoiceList] or throws
+   * an [IndexOutOfRangeException] if [index] is out of bounds.
+   */
+  Choice operator [](int index) => _choices[index];
+  
+  void operator []=(int index, Choice element) {
+    _choices[index] = element;
+  }
+
+  void add(Choice element) => _choices.add(element);
+  void addLast(Choice element) => _choices.addLast(element);
+  void addAll(Collection<Choice> collection) => _choices.addAll(collection);
+
+  List<Choice> getRange(int start, int length) => _choices.getRange(start, length);
+  void removeRange(int start, int length) =>
+      _choices.removeRange(start, length);
+  void setRange(int start, int length, List<Choice> from, [int startFrom]) =>
+      _choices.setRange(start, length, from, startFrom);
+  void insertRange(int start, int length, [Choice initialValue]) =>
+      _choices.insertRange(start, length, initialValue);
+
+  /**
+   * Applies the function [f] to each element of this collection.
+   */
+  void forEach(void f(Choice element)) => _choices.forEach(f);
+
+  /**
+   * Returns a new [ChoiceList] with the elements [: f(e) :]
+   * for each element [e] of this collection.
+   *
+   * Note on typing: the return type of f() could be an arbitrary
+   * type and consequently the returned collection's
+   * typeis Collection.
+   */
+  ChoiceList map(f(Choice element)) =>
+      new ChoiceList._from(_choices.map(f));
+
+  /**
+   * Returns a new [ChoiceList] with the elements of this collection
+   * that satisfy the predicate [f].
+   *
+   * An element satisfies the predicate [f] if [:f(element):]
+   * returns true.
+   */
+  ChoiceList filter(bool f(Choice element))
+  => new ChoiceList._from(_choices.filter(f));
+
+  /**
+   * Returns true if every elements of this collection satisify the
+   * predicate [f]. Returns false otherwise.
+   */
+  bool every(bool f(Choice element)) => _choices.every(f);
+
+  /**
+   * Returns true if one element of this collection satisfies the
+   * predicate [f]. Returns false otherwise.
+   */
+  bool some(bool f(Choice element)) => _choices.some(f);
+  
+  void sort([Comparator<Choice> compare = Comparable.compare]) => _choices.sort(compare);
+
+  /**
+   * Returns true if there is no element in this collection.
+   */
+  bool get isEmpty => _choices.isEmpty;
+
+  /**
+   * Returns the number of elements in this collection.
+   */
+  int get length => _choices.length;
+  set length(int value) => _choices.length = value;
+  
+  void clear() => _choices.clear();
+  
+  Choice removeAt(int index) => _choices.removeAt(index);
+  Choice removeLast() => _choices.removeLast();
+
+  /**
+   * Returns an [Iterator] that iterates over this [Iterable] object.
+   */
+  Iterator<Choice> iterator() => _choices.iterator();
+
+  
+}
 
 class Question extends UserInteraction {
 }
@@ -312,12 +445,12 @@ abstract class Scripter {
 
   // TODO: TBD if we want to build a class (ScriptEnvironment) for the below
 
-  List<Choice> choices;
+  ChoiceList choices;
   Map<String, dynamic> vars;
   StringBuffer textBuffer;
 
   void initScriptEnvironment() {
-    choices = new List<Choice>();
+    choices = new ChoiceList();
     vars = new Map<String, dynamic>();
 
     initBlock(); // run contents of <init>
