@@ -46,7 +46,10 @@ class Message {
 
   Message.EndOfBook() : type = MSG_END_OF_BOOK {}
 
-  // Choices message. A list with [0] being text prepended, then choices
+  /**
+   *  Choices message. Creates a list with [0] being text prepended,
+   *  [1] being the question asked, and the rest being the choices themselves.
+   */
   Message.ShowChoices(
       ChoiceList choices,
       {String prependText: "",
@@ -64,6 +67,7 @@ class Message {
 
     listContent = new List<dynamic>();
     listContent.add(prependText);
+    listContent.add(choices.question);
     choicesToSend.forEach((choice) {
         listContent.add( {
           "string": choice.string,
@@ -157,8 +161,7 @@ class ChoiceList implements List<Choice> {
   }
   
   ChoiceList._from(Collection<Choice> list)
-  :
-    _choices = new List<Choice>()
+    : _choices = new List<Choice>()
   {
     _choices.addAll(list);
   }
@@ -279,7 +282,32 @@ class ChoiceList implements List<Choice> {
    */
   Iterator<Choice> iterator() => _choices.iterator();
 
+  Message toMessage({String prependText: null, bool endOfPage: false}) {
+    List<Choice> choicesToSend;
+    // filter out choices we don't want to show
+    if (!endOfPage) {
+      choicesToSend = this.filter((choice) => !choice.waitForEndOfPage && !choice.shown);
+    } else {
+      choicesToSend = this.filter((choice) => !choice.shown);
+    }
   
+    DEBUG_SCR("Sending choices.");
+  
+    Message m = new Message(Message.MSG_SHOW_CHOICES);
+    
+    m.listContent = new List<dynamic>();
+    m.listContent.add(prependText);
+    m.listContent.add(question);
+    choicesToSend.forEach((choice) {
+      m.listContent.add( {
+        "string": choice.string,
+        "hash": choice.hashCode
+      } );
+      choice.shown = true;
+    });
+    
+    return m;
+  }
 }
 
 class Question extends UserInteraction {
@@ -423,7 +451,7 @@ abstract class Scripter {
     if (currentBlock >= blocks.length) {
       DEBUG_SCR("At the end of page.");
       if (choices.some((choice) => !choice.shown)) {
-        return new Message.ShowChoices(choices, endOfPage:true);
+        return choices.toMessage(endOfPage:true); //new Message.ShowChoices(choices, endOfPage:true);
       } else {
         return new Message.EndOfBook();
       }
@@ -432,7 +460,14 @@ abstract class Scripter {
       Message message = new Message.TextResult(blocks[currentBlock]);
       return message;
     } else if (blocks[currentBlock] is Map) {
-      choices.add(new Choice.fromMap(blocks[currentBlock]));
+      Map map = blocks[currentBlock] as Map<String,dynamic>;
+      if (map.containsKey("question")) {
+        // we have a question
+        choices.question = map["question"];
+      } else {
+        // not a question, so it must be a choice, TODO: check
+        choices.add(new Choice.fromMap(blocks[currentBlock]));
+      }
       return new Message.NoResult();
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph
@@ -532,7 +567,7 @@ abstract class Scripter {
 
     // catch text and choices
     if (choices.some((choice) => !choice.waitForEndOfPage)) {
-      return new Message.ShowChoices(choices, prependText:textBuffer.toString());
+      return choices.toMessage(prependText:textBuffer.toString()); // new Message.ShowChoices(choices, prependText:textBuffer.toString());
     }
     return new Message.TextResult(textBuffer.toString());
   }

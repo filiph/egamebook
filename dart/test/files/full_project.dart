@@ -59,6 +59,10 @@ You hear major commotion outside. They must be getting ready.
           echo("""This means $time seconds have passed
 since you opened your eyes. """);
         },
+        {
+          "question": r""""What do you do?"""
+        },
+        """What do you do? """,
         () {
           choices.add(new Choice(
               """Get dressed (30 seconds) """,

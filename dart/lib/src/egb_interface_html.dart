@@ -32,10 +32,12 @@ class HtmlInterface implements UserInterface {
     paragraphsDiv = document.query("div#book-paragraphs");
     choicesDiv = document.query("div#book-choices");
     choicesOl = document.query("ol#book-choices-ol");
+    choicesQuestionP = document.query("p#book-choices-question");
   }
 
   DivElement paragraphsDiv;
   DivElement choicesDiv;
+  ParagraphElement choicesQuestionP;
   OListElement choicesOl;
   List choices;
 
@@ -56,6 +58,13 @@ class HtmlInterface implements UserInterface {
     paragraphsDiv.elements.add(p);
     return p;
   }
+  
+  void showQuestion(String question) {
+    if (question != null) {
+      choicesQuestionP.innerHTML = question;
+      choicesQuestionP.style.display = "block";
+    }
+  }
 
   AnchorElement createChoice(String innerHtml, {String accessKey: "", int hash}) {
     if (choicesOl == null) {
@@ -72,6 +81,7 @@ class HtmlInterface implements UserInterface {
             _receivePort.toSendPort()
           );
           choicesOl.elements.clear();
+          choicesQuestionP.style.display = "none";
       });
     }
 
@@ -97,20 +107,27 @@ class HtmlInterface implements UserInterface {
         _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
         print("We have choices to show!");
-        if (message.listContent[0] != "") {
+        if (message.listContent[0] != null) {
+          // prepend text
           createParagraph(message.listContent[0]);
         }
+        
         choices = new List.from(message.listContent);
         
-        if (choices.length == 2 && choices[1]['string'].trim() == "") {
+        if (choices.length == 3 && choices[2]['string'].trim() == "") {
           // An auto-choice (without a string) means we should pick it silently
           _scripterPort.send(
-              new Message.OptionSelected(choices[1]['hash']).toJson(),
+              new Message.OptionSelected(choices[2]['hash']).toJson(),
               _receivePort.toSendPort()
           );
         } else {
+          if (message.listContent[1] != null) {
+            // question
+            showQuestion(message.listContent[1]);
+          }
+          
           // let player choose
-          for (int i = 1; i < choices.length; i++) {
+          for (int i = 2; i < choices.length; i++) {
             createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);
           }
         }

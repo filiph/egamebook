@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
-import 'egb_library.dart';
+import '../../lib/src/egb_library.dart';
+
 
 // this will be rewritten with the actual file
-import 'reference_scripter_impl.dart';
+import '/Users/filiph/Programs/egamebook/dart/test/files/full_project.dart';
+
 
 
 void DEBUG_CMD(String str) {

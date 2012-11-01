@@ -1266,6 +1266,18 @@ class Builder {
             write("  echo(\"\"\"$line\n");
           }
         }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
+          var question = curBlock.options["question"];
+          if (curBlock.lineStart == curBlock.lineEnd) {
+            write("{\n");
+            write("  \"question\": r\"\"\"$line\"\"\"\n");
+            write("}$commaOrNot\n");
+          } else {
+            write("{\n");
+            write("  \"question\": r\"\"\"\"$line\n");
+          }
+        }
 
         if (curBlock.type == BuilderBlock.BLK_CHOICE) {
           var string = curBlock.options["string"];
@@ -1317,6 +1329,12 @@ class Builder {
 
         if ((curBlock.type == BuilderBlock.BLK_TEXT
             || curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR)
+            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+          indent = _getIndent(0);
+          write("$line\n");
+        }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION
             && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
           indent = _getIndent(0);
           write("$line\n");
@@ -1375,6 +1393,15 @@ class Builder {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
             write("$line \"\"\");\n");
+            indent = _getIndent(8);
+            write("}$commaOrNot\n");
+          }
+        }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
+          if (curBlock.lineStart != curBlock.lineEnd) {
+            indent = _getIndent(0);
+            write("$line \"\"\"\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }

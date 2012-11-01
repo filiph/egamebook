@@ -56,21 +56,28 @@ class CmdlineInterface implements UserInterface {
         _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
       } else if (message.type == Message.MSG_SHOW_CHOICES) {
         DEBUG_CMD("We have choices to show!");
-        if (message.listContent[0] != "") {
+        if (message.listContent[0] != null) {
+          // prepend text
           print("\n${message.listContent[0]}\n");
         }
+        
         choices = new List.from(message.listContent);
         
-        if (choices.length == 2 && choices[1]['string'].trim() == "") {
+        if (choices.length == 3 && choices[2]['string'].trim() == "") {
           // An auto-choice (without a string) means we should pick it silently
           _scripterPort.send(
-              new Message.OptionSelected(choices[1]['hash']).toJson(),
+              new Message.OptionSelected(choices[2]['hash']).toJson(),
               _receivePort.toSendPort()
           );
         } else {
+          if (message.listContent[1] != null) {
+            // question
+            print("\n${message.listContent[1]}");
+          }
+          
           // let player choose
-          for (int i = 1; i < choices.length; i++) {
-            print("$i) '${choices[i]['string']}'");
+          for (int i = 1; i < choices.length - 1; i++) {
+            print("$i) '${choices[i + 1]['string']}'");
           }
           print("");
           
@@ -78,9 +85,9 @@ class CmdlineInterface implements UserInterface {
             print("");
             try {
               int optionNumber = int.parse(cmdLine.readLine());
-              if (optionNumber > 0 && optionNumber < choices.length) {
+              if (optionNumber > 0 && optionNumber + 1 < choices.length) {
                 _scripterPort.send(
-                    new Message.OptionSelected(choices[optionNumber]['hash']).toJson(),
+                    new Message.OptionSelected(choices[optionNumber + 1]['hash']).toJson(),
                     _receivePort.toSendPort()
                     );
               }
