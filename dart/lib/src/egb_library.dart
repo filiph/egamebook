@@ -1,8 +1,8 @@
-#library('egb');
+library egb;
 
-#import('dart:json');
-#import('dart:isolate');
-#import('dart:math');
+import 'dart:isolate';
+import 'dart:json';
+import 'dart:math';
 
 // TODO: if too big JS/Dart files, have a JSON file/server somewhere and instead of feeding Interface with paragraphs, just feed it with URIs.
 // TODO: make save/load - interface Saveable for game objects. Objects need to implement "serialize()" and "loadFromSerialized()" or some such. Each object can choose which of it's parts it wants to serialize. Plain objects like int, List or Map are automatically Saveable. All Saveable objects (in vars) should be saved automatically on each new page. There should be a rotating history of ~10 pages.
@@ -49,8 +49,8 @@ class Message {
   // Choices message. A list with [0] being text prepended, then choices
   Message.ShowChoices(
       List<Choice> choices,
-      [String prependText="",
-      bool endOfPage=false]
+      {String prependText: "",
+      bool endOfPage: false}
       ) : type = MSG_SHOW_CHOICES {
     List<Choice> choicesToSend;
     // filter out choices we don't want to show
@@ -62,12 +62,12 @@ class Message {
 
     DEBUG_SCR("Sending choices.");
 
-    listContent = new List<Dynamic>();
+    listContent = new List<dynamic>();
     listContent.add(prependText);
     choicesToSend.forEach((choice) {
         listContent.add( {
           "string": choice.string,
-          "hash": choice.hashCode()
+          "hash": choice.hashCode
           } );
         choice.shown = true;
         });
@@ -84,7 +84,7 @@ class Message {
     XXX: this isn't needed in VM, but frog can't handle Object messages (yet?)
     */
   Message.fromJson(String json) {
-    Map<String,Dynamic> data = JSON.parse(json);
+    Map<String,dynamic> data = JSON.parse(json);
     type = data["type"];
 
     if (type == MSG_OPTION_SELECTED) {
@@ -100,7 +100,7 @@ class Message {
     Outputs message to JSON string. Useful when sending via Port to Isolate.
     */
   String toJson() {
-    Map<String,Dynamic> data = new Map<String,Dynamic>();
+    Map<String,dynamic> data = new Map<String,dynamic>();
 
     data["type"] = type;
 
@@ -132,7 +132,7 @@ class Choice extends UserInteraction {
     waitForEndOfPage = !showNow;
   }
 
-  Choice.fromMap(Map<String,Dynamic> map) : super() {
+  Choice.fromMap(Map<String,dynamic> map) : super() {
     string = map["string"];
     goto = map["goto"];
     if (map.containsKey("showNow")) {
@@ -168,7 +168,7 @@ abstract class Scripter {
     if (currentPageIndex == null) {
       return null;
     }
-    for (var key in pageHandles.getKeys()) {
+    for (var key in pageHandles.keys) {
       if (pageHandles[key] == currentPageIndex) {
         return key;
       }
@@ -242,7 +242,7 @@ abstract class Scripter {
       // TODO: make this more elegant by making ChoiceList class
       Message message;
       choices.forEach((choice) {
-          if (choice.hashCode() == incomingMessage.intContent) {
+          if (choice.hashCode == incomingMessage.intContent) {
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
             if (choice.goto != null) {
               goto(choice.goto);
@@ -260,7 +260,7 @@ abstract class Scripter {
     }
 
     // if previous script asked for nextScript()
-    if (!nextScriptStack.isEmpty()) {
+    if (!nextScriptStack.isEmpty) {
       Function script = nextScriptStack.removeLast();
       return runScriptBlock(script:script);
     }
@@ -313,12 +313,12 @@ abstract class Scripter {
   // TODO: TBD if we want to build a class (ScriptEnvironment) for the below
 
   List<Choice> choices;
-  Map<String, Dynamic> vars;
+  Map<String, dynamic> vars;
   StringBuffer textBuffer;
 
   void initScriptEnvironment() {
     choices = new List<Choice>();
-    vars = new Map<String, Dynamic>();
+    vars = new Map<String, dynamic>();
 
     initBlock(); // run contents of <init>
   }
@@ -338,7 +338,7 @@ abstract class Scripter {
   }
    */
 
-  Dynamic noSuchMethod(String name, List args) {
+  dynamic noSuchMethod(String name, List args) {
     if (name.startsWith("get:") || name.startsWith("get ")) {
       // TODO: throw error if not set
       return vars[name.substring(4)];

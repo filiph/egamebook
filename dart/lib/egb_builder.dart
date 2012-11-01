@@ -1,7 +1,7 @@
-#library("egb_builder");
+library egb_builder;
 
-#import('dart:io');
-#import('package:graphml/dart_graphml.dart');
+import 'dart:io';
+import 'package:graphml/dart_graphml.dart';
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -11,7 +11,7 @@ class EgbFormatException implements Exception {
   int line;
   File file;
   
-  EgbFormatException([String this.msg, this.line, this.file]) {
+  EgbFormatException(String this.msg, {this.line, this.file}) {
   }
 
   String toString() {
@@ -172,7 +172,7 @@ class BuilderPageGroup {
   }
   
   static List<BuilderPageGroup> get allGroups { 
-    List<BuilderPageGroup> list = _cache.getValues();
+    List<BuilderPageGroup> list = _cache.values;
     list.sort((a,b) => a.pages[0].index - b.pages[0].index); // TODO: check for empty groups
     return list;
   }
@@ -186,7 +186,7 @@ class BuilderBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
   int type = 0;
-  Map<String,Dynamic> options;
+  Map<String,dynamic> options;
   List<BuilderLineSpan> subBlocks;
 
   static final int BLK_TEXT = 1;
@@ -198,7 +198,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_SCRIPT_ECHO = 64;
 
   BuilderBlock({int this.lineStart}) {
-    options = new Map<String,Dynamic>();
+    options = new Map<String,dynamic>();
     subBlocks = new List<BuilderLineSpan>();
   }
 }
@@ -326,9 +326,9 @@ class Builder {
             _check().then((_) {  // check last line
               //print("\nReading input file has finished.");
      
-              if (!pages.isEmpty()) {
+              if (!pages.isEmpty) {
                 // end the last page
-                pages.last().lineEnd = _lineNumber - 1;
+                pages.last.lineEnd = _lineNumber - 1;
                 
                 // fully specify gotoPageNames of every page
                 for (var page in pages) {
@@ -427,10 +427,10 @@ class Builder {
 
     if (_thisLine == null || _thisLine == "" || blankLine.hasMatch(_thisLine)) {
       // close previous unfinished _text_ block if any
-      if (!pages.isEmpty()) {
-        var lastpage = pages.last();
-        if (!lastpage.blocks.isEmpty()) {
-          var lastblock = lastpage.blocks.last();
+      if (!pages.isEmpty) {
+        var lastpage = pages.last;
+        if (!lastpage.blocks.isEmpty) {
+          var lastblock = lastpage.blocks.last;
           if (lastblock.type == BuilderBlock.BLK_TEXT
               || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
             if (lastblock.lineEnd == null) {
@@ -468,10 +468,10 @@ class Builder {
     } else {
       m = metadataLineAdd.firstMatch(_thisLine);
 
-      if (m != null && !metadata.isEmpty()) {
+      if (m != null && !metadata.isEmpty) {
         // we have a multi-value key and this is a following value
         var value = m.group(1).trim();
-        metadata.last().values.add(value);
+        metadata.last.values.add(value);
         return new Future.immediate(true);
       } else {
         // we have hit the first non-metadata line. Quit metadata mode.
@@ -494,12 +494,12 @@ class Builder {
 
     if (_newPageCandidate && validPageName.hasMatch(_thisLine)) {
       // discard the "---" from any previous blocks
-      if (pages.isEmpty() && !synopsisLineNumbers.isEmpty()) {
+      if (pages.isEmpty && !synopsisLineNumbers.isEmpty) {
         synopsisLineNumbers.removeLast();
       } else {
-        var lastpage = pages.last();
-        if (!lastpage.blocks.isEmpty()) {
-          var lastblock = lastpage.blocks.last();
+        var lastpage = pages.last;
+        if (!lastpage.blocks.isEmpty) {
+          var lastblock = lastpage.blocks.last;
           // also close block
           if (lastblock.lineEnd == null) {
             lastblock.lineEnd = _lineNumber - 2;
@@ -512,8 +512,8 @@ class Builder {
       }
 
       // close last page
-      if (!pages.isEmpty()) {
-        pages.last().lineEnd = _lineNumber - 2;
+      if (!pages.isEmpty) {
+        pages.last.lineEnd = _lineNumber - 2;
       }
 
       // add the new page
@@ -547,11 +547,11 @@ class Builder {
       return new Future.immediate(false);
     }
 
-    if (!pages.isEmpty() && pages.last().lineStart == _lineNumber - 1
+    if (!pages.isEmpty && pages.last.lineStart == _lineNumber - 1
         && pageOptions.hasMatch(_thisLine)) {
       Match m = pageOptions.firstMatch(_thisLine);
-      var lastpage = pages.last();
-      for (var i = 1; i <= m.groupCount(); i += 2) {
+      var lastpage = pages.last;
+      for (var i = 1; i <= m.groupCount; i += 2) {
         var opt = m.group(i);
         if (opt != null) {
           lastpage.options.add(opt);
@@ -571,7 +571,7 @@ class Builder {
   Future<bool> _checkChoice() {
     // TODO: allow choices in synopsis?
     // TODO: check even inside ECHO tags, add to script
-    if (_thisLine == null || pages.isEmpty()
+    if (_thisLine == null || pages.isEmpty
         || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO)) {
       return new Future.immediate(false);
     }
@@ -581,7 +581,7 @@ class Builder {
       var block = new BuilderBlock(lineStart:_lineNumber);
 
       Match m = choice.firstMatch(_thisLine);
-      /*for (int i = 1; i <= m.groupCount(); i++) {*/
+      /*for (int i = 1; i <= m.groupCount; i++) {*/
         /*print("$i - \"${m.group(i)}\"");*/
       /*}*/
       block.options["string"] = m.group(1);
@@ -613,9 +613,9 @@ class Builder {
 
       // if the previous line is a text block, then that textblock needs to be
       // converted to a BLK_CHOICE_QUESTION.
-      var lastpage = pages.last();
-      if (!lastpage.blocks.isEmpty()) {
-        var lastblock = lastpage.blocks.last();
+      var lastpage = pages.last;
+      if (!lastpage.blocks.isEmpty) {
+        var lastblock = lastpage.blocks.last;
         if (lastblock.lineEnd == null) {
           lastblock.lineEnd = _lineNumber - 1;
           lastblock.type = BuilderBlock.BLK_CHOICE_QUESTION;
@@ -681,7 +681,7 @@ class Builder {
         if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_FUNCTIONS
             || _mode == MODE_INSIDE_VARIABLES) {
           _mode = MODE_NORMAL;
-          initBlocks.last().lineEnd = _lineNumber;
+          initBlocks.last.lineEnd = _lineNumber;
           completer.complete(true);
         } else {
           completer.completeException(
@@ -713,14 +713,14 @@ class Builder {
 
     Match m = scriptOrEchoTag.firstMatch(_thisLine);
 
-    if (pages.isEmpty()) {
+    if (pages.isEmpty) {
       if (m != null) {
         WARNING("No <script> or <echo> blocks will be recognized as such "
                 "in the synopsis (i.e. outside a page). Ignoring.");
       }
       return new Future.immediate(false);
     }
-    var lastpage = pages.last();
+    var lastpage = pages.last;
 
     if (m != null) {
       bool closing =  m.group(1) == "/";
@@ -738,9 +738,9 @@ class Builder {
           completer.complete(true);
         } else if (_mode == MODE_INSIDE_SCRIPT_TAG && tagIsEcho) {
           _mode = MODE_INSIDE_SCRIPT_ECHO;
-          if (!lastpage.blocks.isEmpty()
-              && lastpage.blocks.last().type == BuilderBlock.BLK_SCRIPT) {
-            lastpage.blocks.last().subBlocks.add(new BuilderLineSpan(lineStart:_lineNumber));
+          if (!lastpage.blocks.isEmpty
+              && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT) {
+            lastpage.blocks.last.subBlocks.add(new BuilderLineSpan(lineStart:_lineNumber));
             completer.complete(true);
           } else {
             completer.completeException(
@@ -752,15 +752,15 @@ class Builder {
                   "We are now in mode=$_mode."));
         }
       } else {  // closing a tag
-        if (_mode == MODE_INSIDE_SCRIPT_TAG && !tagIsEcho && !lastpage.blocks.isEmpty()) {
+        if (_mode == MODE_INSIDE_SCRIPT_TAG && !tagIsEcho && !lastpage.blocks.isEmpty) {
           _mode = MODE_NORMAL;
-          lastpage.blocks.last().lineEnd = _lineNumber;
+          lastpage.blocks.last.lineEnd = _lineNumber;
           completer.complete(true);
-        } else if (_mode == MODE_INSIDE_SCRIPT_ECHO && !lastpage.blocks.isEmpty()
-              && lastpage.blocks.last().type == BuilderBlock.BLK_SCRIPT
-              && !lastpage.blocks.last().subBlocks.isEmpty()) {
+        } else if (_mode == MODE_INSIDE_SCRIPT_ECHO && !lastpage.blocks.isEmpty
+              && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT
+              && !lastpage.blocks.last.subBlocks.isEmpty) {
           _mode = MODE_INSIDE_SCRIPT_TAG;
-          lastpage.blocks.last().subBlocks.last().lineEnd = _lineNumber;
+          lastpage.blocks.last.subBlocks.last.lineEnd = _lineNumber;
           completer.complete(true);
         } else {
           completer.completeException(
@@ -790,7 +790,7 @@ class Builder {
       Match m = gotoInsideScript.firstMatch(_thisLine);
       
       if (m != null) {
-        pages.last().gotoPageNames.add(m.group(2));
+        pages.last.gotoPageNames.add(m.group(2));
         return new Future.immediate(true);
       }
     }
@@ -843,15 +843,15 @@ class Builder {
       return new Future.immediate(false);
     }
 
-    if (pages.isEmpty()) {
+    if (pages.isEmpty) {
       synopsisLineNumbers.add(_lineNumber);
     } else {
       // we have a new block inside a page!
-      var lastpage = pages.last();
+      var lastpage = pages.last;
       bool appending = false;
 
-      if (!lastpage.blocks.isEmpty()) {
-        var lastblock = lastpage.blocks.last();
+      if (!lastpage.blocks.isEmpty) {
+        var lastblock = lastpage.blocks.last;
         if (lastblock.lineEnd == null
             && (lastblock.type == BuilderBlock.BLK_TEXT
             || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR)) {
@@ -943,8 +943,8 @@ class Builder {
     if (lineEnd == null) {
       lineEnd = _lineNumber - 1;
     }
-    if (!pages.isEmpty() && !pages.last().blocks.isEmpty()) {
-      var lastblock = pages.last().blocks.last();
+    if (!pages.isEmpty && !pages.last.blocks.isEmpty) {
+      var lastblock = pages.last.blocks.last;
       if (lastblock.lineEnd == null) {
         lastblock.lineEnd = lineEnd;
       }
@@ -1209,7 +1209,7 @@ class Builder {
   Future writePagesToScripter(OutputStream dartOutStream) {
     var completer = new Completer();
 
-    if (pages.isEmpty()) {
+    if (pages.isEmpty) {
       return new Future.immediate(true);
     }  // TODO: unit test this
 
@@ -1242,7 +1242,7 @@ class Builder {
       }
 
       // start of block
-      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
           && lineNumber == curPage.blocks[blockIndex].lineStart) {
         indent = _getIndent(8);
         curBlock = curPage.blocks[blockIndex];
@@ -1311,7 +1311,7 @@ class Builder {
       }
 
       // block line
-      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
           && _insideLineRange(lineNumber, curPage.blocks[blockIndex])) {
         curBlock = curPage.blocks[blockIndex];
 
@@ -1359,7 +1359,7 @@ class Builder {
 
 
       // end of block
-      if (curPage != null && !curPage.blocks.isEmpty() && blockIndex < curPage.blocks.length
+      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
           && lineNumber == curPage.blocks[blockIndex].lineEnd) {
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
 
@@ -1626,7 +1626,7 @@ class Builder {
     // add remaining nodes
     nodesToAdd.forEach((String fullText, Node node) {
       
-      int newIndex = pages.last().index + 1;
+      int newIndex = pages.last.index + 1;
       var newPage = new BuilderPage(fullText, newIndex);
       pageHandles[fullText] = newIndex;
       node.linkedNodes.forEach(
@@ -1671,7 +1671,7 @@ class Builder {
 
           if (page != null && page.lineEnd < lineNumber) {
             // add remaining gotos
-            bool addingPages = !gotoPageNamesToAdd.isEmpty();
+            bool addingPages = !gotoPageNamesToAdd.isEmpty;
             for (var gotoPageName in gotoPageNamesToAdd) {
               outStream.writeString(
                   "- $gotoPageName (AUTO) [$gotoPageName]\n");

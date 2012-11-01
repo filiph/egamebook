@@ -1,9 +1,9 @@
-#import('package:unittest/unittest.dart');
-#import('dart:io');
+import 'package:unittest/unittest.dart';
+import 'dart:io';
 
 // importing files to test
-#import("../lib/html_entities.dart");
-#import("../lib/egb_builder.dart");
+import "../lib/html_entities.dart";
+import "../lib/egb_builder.dart";
 
 String getPath(String filename) {
   var options = new Options();
@@ -169,10 +169,10 @@ void main() {
         var callback = expectAsync1((var b) {
           for (var i = 0; i < 11; i++) {
             expect(b.pages[0].blocks[i].type,
-              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])),
+              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]))/*,
               reason:"The option '${b.pages[0].blocks[i].options['string']}' on line "
                      "${b.pages[0].blocks[i].lineStart} "
-                     "is not actually a valid option and should be not recognized as such.");
+                     "is not actually a valid option and should be not recognized as such."*/);
           }
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
@@ -182,9 +182,9 @@ void main() {
         var callback = expectAsync1((var b) {
           for (var i = 11; i < b.pages[0].blocks.length; i++) {
             expect(b.pages[0].blocks[i].type,
-              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]),
+              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])/*,
               reason:"Line ${b.pages[0].blocks[i].lineStart} is a valid option "
-                     "but isn't recognized as such.");
+                     "but isn't recognized as such."*/);
           }
 
           expect(b.pages[1].blocks[0].options["string"],
@@ -315,8 +315,8 @@ void main() {
       test("is detected", () {
         var callback = expectAsync1((var b) {
           var script1 = b.pages[0].blocks[1];
-          var script2 = b.pages[1].blocks.last();
-          var notscript = b.pages[b.pageHandles["run"]].blocks.last();
+          var script2 = b.pages[1].blocks.last;
+          var notscript = b.pages[b.pageHandles["run"]].blocks.last;
 
           expect(script1.type,
             equals(BuilderBlock.BLK_SCRIPT));
@@ -421,7 +421,7 @@ void main() {
             hasLength(9));
           expect(b.synopsisLineNumbers[0],
             3);
-          expect(b.synopsisLineNumbers.last(),
+          expect(b.synopsisLineNumbers.last,
             12);
         });
         new Builder().readEgbFile(new File(getPath("synopsis.egb"))).then(callback);
@@ -461,7 +461,7 @@ void main() {
               5);
           expect(b.graphML.groupNodes[0].text,
               "Group 1");
-          expect(b.graphML.nodes.last().text,
+          expect(b.graphML.nodes.last.text,
               "Single");
           expect(b.graphML.nodes[0].text,
               "Start");
@@ -503,13 +503,13 @@ void main() {
           new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
           .chain((Builder b) {
             b.pages.add(new BuilderPage("Programatically added page", 
-                b.pages.last().index + 1));
-            b.pageHandles["Programatically added page"] = b.pages.last().index;
+                b.pages.last.index + 1));
+            b.pageHandles["Programatically added page"] = b.pages.last.index;
             b.pages[3].gotoPageNames.add("Programatically added page");
             return b.updateEgbFile();
           })
           .then(expectAsync1((Builder b) {
-            expect(b.pages.last().name, 
+            expect(b.pages.last.name, 
             "Programatically added page");
             expect(b.pages[3].gotoPageNames,
                 contains("Programatically added page"));
