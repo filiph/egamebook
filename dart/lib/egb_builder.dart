@@ -1113,10 +1113,10 @@ class Builder {
     File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
 
     var substitutions = {
-      "#import('egb_library.dart');" :
-          "#import('../../lib/src/egb_library.dart');\n", // TODO!!
-      "#import('reference_scripter_impl.dart');" :
-          "#import('$pathToOutputDart');\n", // TODO!!
+      "import 'egb_library.dart';" :
+          "import '../../lib/src/egb_library.dart';\n", // TODO!!
+      "import 'reference_scripter_impl.dart';" :
+          "import '$pathToOutputDart';\n", // TODO!!
     };
 
     Futures.wait([
