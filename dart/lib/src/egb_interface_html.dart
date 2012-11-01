@@ -1,10 +1,10 @@
-#import('egb_library.dart');
+import 'dart:html';
+import 'dart:isolate';
+import 'egb_library.dart';
 
 // this will be rewritten with the actual file
-#import('reference_scripter_impl.dart');
+import 'reference_scripter_impl.dart';
 
-#import('dart:html');
-#import('dart:isolate');
 
 void DEBUG_CMD(String str) {
   print("CMD: $str");
@@ -57,7 +57,7 @@ class HtmlInterface implements UserInterface {
     return p;
   }
 
-  AnchorElement createChoice(String innerHtml, [String accessKey="", int hash]) {
+  AnchorElement createChoice(String innerHtml, {String accessKey: "", int hash}) {
     if (choicesOl == null) {
       return null;
     }

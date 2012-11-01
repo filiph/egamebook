@@ -1,4 +1,4 @@
-#library('HTML Entities');
+library HTML_Entities;
 
 class HtmlEntities {
 

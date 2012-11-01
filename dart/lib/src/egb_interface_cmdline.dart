@@ -1,11 +1,11 @@
-#import('egb_library.dart');
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:math';
+import 'egb_library.dart';
 
 // this will be rewritten with the actual file
-#import('reference_scripter_impl.dart');
+import 'reference_scripter_impl.dart';
 
-#import('dart:io');
-#import('dart:isolate');
-#import('dart:math');
 
 void DEBUG_CMD(String str) {
   // print("CMD: $str");

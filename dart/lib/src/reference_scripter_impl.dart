@@ -1,7 +1,7 @@
-#library('Reference Scripter Implementation');
+library Reference_Scripter_Implementation;
 
-#import('egb_library.dart');
-#import('dart:math');
+import 'dart:math';
+import 'egb_library.dart';
 
 class A {
   int i;
