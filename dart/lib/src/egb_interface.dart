@@ -22,6 +22,8 @@ abstract class EgbInterface {
    * 
    * This also displays the HTML-formated question, if it is set in ChoiceList. 
    * The question hould disappear after one of the choices is picked.
+   * 
+   * Completes with null when user wants to quit.
    */
   Future<int> showChoices(ChoiceList choices);
 }

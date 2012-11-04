@@ -33,6 +33,13 @@ class EgbRunner {
     started = true;
   }
   
+  void stop() {
+    _interface.close();
+    _scripterPort.send(new Message.Quit().toJson());
+    _receivePort.close();
+    ended = true;
+  }
+  
   /**
    * Main loop function. Receives a message from scripter, and either
    * responds immediately, or asks for input via [interface].
@@ -42,10 +49,7 @@ class EgbRunner {
     DEBUG_CMD("We have a message from Scripter: ${message.type}.");
     if (message.type == Message.MSG_END_OF_BOOK) {
       DEBUG_CMD("We are at the end of book. Closing.");
-      _interface.close();
-      _scripterPort.send(new Message.Quit().toJson());
-      _receivePort.close();
-      ended = true;
+      stop();
     } else {
       if (message.type == Message.MSG_TEXT_RESULT) {
         DEBUG_CMD("Showing text from scripter.");
@@ -76,10 +80,15 @@ class EgbRunner {
           // let player choose
           _interface.showChoices(choices)
           .then((int hash) {
-            _scripterPort.send(
-                new Message.OptionSelected(hash).toJson(),
-                _receivePort.toSendPort()
-            );
+            if (hash != null) {
+              _scripterPort.send(
+                  new Message.OptionSelected(hash).toJson(),
+                  _receivePort.toSendPort()
+              );
+            } else {
+              // user wants to quit
+              stop();
+            }
           });
         }
       }

@@ -14,6 +14,7 @@ class ScripterImpl extends Scripter {
 
   ScripterImpl() : super() {
     pageHandles = {
+      r"""ggg""": 7,
       r"""bbb""": 1,
       r"""xxx""": 2,
       r"""fff""": 6,
@@ -92,6 +93,17 @@ time++;
         }
       ],
       // fff
+      [
+        {
+          "string": r"""back """,
+          "goto": r"""dddeee"""
+        },
+        {
+          "string": r"""end """,
+          "goto": r"""ggg"""
+        }
+      ],
+      // ggg
       [
         """End of book."""
       ]
