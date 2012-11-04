@@ -60,9 +60,8 @@ You hear major commotion outside. They must be getting ready.
 since you opened your eyes. """);
         },
         {
-          "question": r""""What do you do?"""
+          "question": r"""What do you do?"""
         },
-        """What do you do? """,
         () {
           choices.add(new Choice(
               """Get dressed (30 seconds) """,
