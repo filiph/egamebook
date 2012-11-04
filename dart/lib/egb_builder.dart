@@ -1102,10 +1102,10 @@ class Builder {
     var pathToOutputDart = getPathFor("dart");
     var pathToOutputCmd = getPathFor("cmdline.dart");
     var pathToInputTemplateCmd = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_interface_cmdline.dart"));
+          .join(new Path("../lib/src/egb_cmdline.dart"));
     var pathToOutputHtml =getPathFor("html.dart");
     var pathToInputTemplateHtml = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_interface_html.dart"));
+          .join(new Path("../lib/src/egb_html.dart"));
 
     File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
     File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
@@ -1113,8 +1113,17 @@ class Builder {
     File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
 
     var substitutions = {
+      // TODO: make this directory independent
       "import 'egb_library.dart';" :
-          "import '../../lib/src/egb_library.dart';\n", // TODO!!
+          "import '../../lib/src/egb_library.dart';\n",
+      "import 'egb_runner.dart';" :
+          "import '../../lib/src/egb_runner.dart';\n",
+      "import 'egb_interface.dart';" :
+          "import '../../lib/src/egb_interface.dart';\n",
+      "import 'egb_interface_cmdline.dart';" :
+          "import '../../lib/src/egb_interface_cmdline.dart';\n",
+      "import 'egb_interface_html.dart';" :
+          "import '../../lib/src/egb_interface_html.dart';\n",
       "import 'reference_scripter_impl.dart';" :
           "import '$pathToOutputDart';\n", // TODO!!
     };

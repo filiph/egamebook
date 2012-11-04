@@ -145,6 +145,12 @@ class Choice extends UserInteraction implements Comparable {
     } else {
       hash = string.hashCode;
     }
+    
+    // solve bug in javascript which return hashCode=0 for every string
+    if (hash == 0) {
+      hash = new Random().nextInt(1000000);
+    }
+    
     goto = map["goto"];
     if (map.containsKey("showNow")) {
       showNow = map["showNow"];

@@ -1,165 +1,67 @@
+library egb_interface_html;
+
 import 'dart:html';
-import 'dart:isolate';
+import 'egb_interface.dart';
 import 'egb_library.dart';
 
-// this will be rewritten with the actual file
-import 'reference_scripter_impl.dart';
+class HtmlInterface implements EgbInterface {
 
-
-void DEBUG_CMD(String str) {
-  print("CMD: $str");
-}
-
-class HtmlInterface implements UserInterface {
-  ReceivePort _receivePort;
-  SendPort _scripterPort;
-
-  HtmlInterface() {
-    DEBUG_CMD("HTML interface is starting.");
-
-    // create [ReceivePort] and bind it to the callback method [receiveFromScripter].
-    _receivePort = new ReceivePort();
-    _receivePort.receive(receiveFromScripter);
-
-    // create the isolate and send it the first handshake
-    _scripterPort = spawnFunction(createScripter);
-    _scripterPort.send(
-        new Message.Start().toJson(),
-        _receivePort.toSendPort()
-    );
-
+  DivElement paragraphsDiv;
+  DivElement choicesDiv;
+  ParagraphElement choicesQuestionP;
+  OListElement choicesOl;
+  
+  /**
+    Constructor.
+    */
+  HtmlInterface();
+  
+  void setup() {
     // DOM
     paragraphsDiv = document.query("div#book-paragraphs");
     choicesDiv = document.query("div#book-choices");
     choicesOl = document.query("ol#book-choices-ol");
     choicesQuestionP = document.query("p#book-choices-question");
   }
-
-  DivElement paragraphsDiv;
-  DivElement choicesDiv;
-  ParagraphElement choicesQuestionP;
-  OListElement choicesOl;
-  List choices;
-
-
-  ParagraphElement createParagraph(String innerHtml) {
-    if (paragraphsDiv == null) {
-      return null;
-    }
-
-    if (innerHtml == "") {
-      print("Received an empty string.");
-      return null;
-    }
-
-    ParagraphElement p = new Element.tag("p");
-    p.innerHTML = innerHtml;
-
-    paragraphsDiv.elements.add(p);
-    return p;
+  
+  void close() {
+    choicesOl.elements.clear();
+    choicesQuestionP.style.display = "none";
   }
   
-  void showQuestion(String question) {
-    if (question != null) {
-      choicesQuestionP.innerHTML = question;
-      choicesQuestionP.style.display = "block";
-    }
+  Future<bool> showText(String s) {
+    ParagraphElement p = new Element.tag("p");
+    p.innerHTML = s;
+    paragraphsDiv.elements.add(p);
+    return new Future.immediate(true);
   }
 
-  AnchorElement createChoice(String innerHtml, {String accessKey: "", int hash}) {
-    if (choicesOl == null) {
-      return null;
+  Future<int> showChoices(ChoiceList choiceList) {
+    var completer = new Completer();
+    
+    if (choiceList.question != null) {
+      choicesQuestionP.innerHTML = choiceList.question;
+      choicesQuestionP.style.display = "block";
     }
+    
+    // let player choose
+    for (int i = 0; i < choiceList.length; i++) {
+      Choice choice = choiceList[i];
+      LIElement li = new Element.tag("li");
+      AnchorElement a = new Element.tag("a");
+      a.innerHTML = choice.string;
 
-    LIElement li = new Element.tag("li");
-    AnchorElement a = new Element.tag("a");
-    a.innerHTML = innerHtml;
-    if (hash != null) {
       a.on.click.add((Event ev) {
-          _scripterPort.send(
-            new Message.OptionSelected(hash).toJson(),
-            _receivePort.toSendPort()
-          );
+        print("User clicked on choice $i with hash ${choice.hash}");
+          completer.complete(choice.hash);
           choicesOl.elements.clear();
           choicesQuestionP.style.display = "none";
       });
+      
+      li.elements.add(a);
+      choicesOl.elements.add(li);
     }
-
-    li.elements.add(a);
-    choicesOl.elements.add(li);
-    return a;
+    
+    return completer.future;
   }
-
-  void receiveFromScripter(String messageJson, SendPort replyTo) {
-    Message message = new Message.fromJson(messageJson);
-    print("CMD: We have a message from Scripter: ${message.type}.");
-    if (message.type == Message.MSG_END_OF_BOOK) {
-      print("CMD: We are at the end of book. Closing.");
-      _scripterPort.send(new Message.Quit().toJson());
-      _receivePort.close();
-    } else {
-      if (message.type == Message.MSG_TEXT_RESULT) {
-        print("Showing text from scripter.");
-        createParagraph(message.strContent);
-        _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
-      } else if (message.type == Message.MSG_NO_RESULT) {
-        print("No visible result. Continuing.");
-        _scripterPort.send(new Message.Continue().toJson(), _receivePort.toSendPort());
-      } else if (message.type == Message.MSG_SHOW_CHOICES) {
-        print("We have choices to show!");
-        if (message.listContent[0] != null) {
-          // prepend text
-          createParagraph(message.listContent[0]);
-        }
-        
-        choices = new List.from(message.listContent);
-        
-        if (choices.length == 3 && choices[2]['string'].trim() == "") {
-          // An auto-choice (without a string) means we should pick it silently
-          _scripterPort.send(
-              new Message.OptionSelected(choices[2]['hash']).toJson(),
-              _receivePort.toSendPort()
-          );
-        } else {
-          if (message.listContent[1] != null) {
-            // question
-            showQuestion(message.listContent[1]);
-          }
-          
-          // let player choose
-          for (int i = 2; i < choices.length; i++) {
-            createChoice(choices[i]['string'], accessKey:"$i", hash:choices[i]['hash']);
-          }
-        }
-        // let player choose
-        /*
-        cmdLine.lineHandler = () {
-          print("");
-          try {
-            int optionNumber = Math.parseInt(cmdLine.readLine());
-            if (optionNumber > 0 && optionNumber < choices.length)
-              _scripterPort.send(
-                  new Message.OptionSelected(choices[optionNumber]['hash']),
-                  _receivePort
-                  );
-          } catch (BadNumberFormatException e) {
-            print("Input a number, please!");
-          }
-        };
-        */
-      }
-    }
-  }
-}
-
-void main() {
-  new HtmlInterface();
-}
-
-/**
-  Top-level function which is spawned by the [UserInterface] and which creates
-  the [Scripter] instance.
-  */
-void createScripter() {
-  new ScripterImpl();
 }
