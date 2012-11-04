@@ -50,7 +50,7 @@ class Message {
    *  Choices message. Creates a list with [0] being text prepended,
    *  [1] being the question asked, and the rest being the choices themselves.
    */
-  Message.ShowChoices(
+  /*Message.ShowChoices(
       ChoiceList choices,
       {String prependText: "",
       bool endOfPage: false}
@@ -71,11 +71,11 @@ class Message {
     choicesToSend.forEach((choice) {
         listContent.add( {
           "string": choice.string,
-          "hash": choice.hashCode
+          "hash": choice.hash
           } );
         choice.shown = true;
         });
-  }
+  }*/
 
   Message.OptionSelected(int hash) : type = MSG_OPTION_SELECTED {
     intContent = hash;
@@ -120,9 +120,10 @@ class Message {
   }
 }
 
-class UserInteraction implements Hashable {
+class UserInteraction {
   bool shown = false;
   bool waitForEndOfPage;
+  int hash;
 }
 
 class Choice extends UserInteraction implements Comparable {
@@ -132,12 +133,18 @@ class Choice extends UserInteraction implements Comparable {
   bool showNow;
 
   Choice(this.string, {this.goto, Function then, bool showNow: false}) : super() {
+    hash = string.hashCode;
     f = then;
     waitForEndOfPage = !showNow;
   }
 
   Choice.fromMap(Map<String,dynamic> map) : super() {
     string = map["string"];
+    if (map.containsKey("hash")) {
+      hash = map["hash"];
+    } else {
+      hash = string.hashCode;
+    }
     goto = map["goto"];
     if (map.containsKey("showNow")) {
       showNow = map["showNow"];
@@ -161,9 +168,20 @@ class ChoiceList implements List<Choice> {
   }
   
   ChoiceList._from(Collection<Choice> list)
-    : _choices = new List<Choice>()
-  {
+      : _choices = new List<Choice>() {
     _choices.addAll(list);
+  }
+  
+  ChoiceList.fromMessage(Message m) 
+      : _choices = new List<Choice>() {
+    if (m.listContent.length < 3) {
+      throw "Message with choices doesn't have enough data: $m.";
+    } else {
+      question = m.listContent[1];
+      for (int i = 2; i < m.listContent.length; i++) {
+        _choices.add(new Choice.fromMap(m.listContent[i]));
+      }
+    }
   }
   
   /**
@@ -301,7 +319,7 @@ class ChoiceList implements List<Choice> {
     choicesToSend.forEach((choice) {
       m.listContent.add( {
         "string": choice.string,
-        "hash": choice.hashCode
+        "hash": choice.hash
       } );
       choice.shown = true;
     });
@@ -403,7 +421,7 @@ abstract class Scripter {
       // TODO: make this more elegant by making ChoiceList class
       Message message;
       choices.forEach((choice) {
-          if (choice.hashCode == incomingMessage.intContent) {
+          if (choice.hash == incomingMessage.intContent) {
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
             if (choice.goto != null) {
               goto(choice.goto);
