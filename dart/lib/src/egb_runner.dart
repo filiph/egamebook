@@ -17,6 +17,9 @@ class EgbRunner {
   SendPort _scripterPort;
   EgbInterface _interface;
   
+  bool started = false;
+  bool ended = false;
+  
   EgbRunner(this._receivePort, this._scripterPort, this._interface) {
     _receivePort.receive(receiveFromScripter);
   }
@@ -27,6 +30,7 @@ class EgbRunner {
         new Message.Start().toJson(),
         _receivePort.toSendPort()
     );
+    started = true;
   }
   
   /**
@@ -41,6 +45,7 @@ class EgbRunner {
       _interface.close();
       _scripterPort.send(new Message.Quit().toJson());
       _receivePort.close();
+      ended = true;
     } else {
       if (message.type == Message.MSG_TEXT_RESULT) {
         DEBUG_CMD("Showing text from scripter.");

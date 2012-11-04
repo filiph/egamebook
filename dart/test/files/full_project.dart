@@ -31,8 +31,8 @@ class ScripterImpl extends Scripter {
       /* PAGES & BLOCKS */
       // Day1.WakeUp
       [
-        """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
-        """You have a minute at most before the pigs kick the door in. """,
+        """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot." """,
+        """You have a minute at most before the pigs kick the door in.""",
         () {
   time = 0;
         },
@@ -53,11 +53,11 @@ You hear major commotion outside. They must be getting ready.
   }
         },
         () {
-          echo("""It is $time seconds since you woke up. """);
+          echo("""It is $time seconds since you woke up.""");
         },
         () {
           echo("""This means $time seconds have passed
-since you opened your eyes. """);
+since you opened your eyes.""");
         },
         {
           "question": r"""What do you do?"""
@@ -81,7 +81,7 @@ since you opened your eyes. """);
       // Day1.getDressed
       [
         """You quickly grab the clothes that you left on the bedside table and get dressed. You actually manage to do it in 20 seconds in spite of being nervous as hell.
-Good! """,
+Good!""",
         () {
   time += 20;
         },
@@ -92,7 +92,7 @@ Good! """,
       ],
       // Day1.getGun
       [
-        """You dive under the bed and your hand almost immediately finds the old-fashioned revolver that's been taped there for some time now. You check it -- it's loaded and apparently working. """,
+        """You dive under the bed and your hand almost immediately finds the old-fashioned revolver that's been taped there for some time now. You check it -- it's loaded and apparently working.""",
         () {
   weapon = "gun";
   time += 15;
@@ -104,11 +104,11 @@ Good! """,
       ],
       // Day1.warnAmy
       [
-        """You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow. """,
-        """"Wha' uppp?" """,
-        """"Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know." """,
-        """"What?" """,
-        """You hang up, hoping she got all that. You know you can't lose any more time now. """,
+        """You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow.""",
+        """"Wha' uppp?"""",
+        """"Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know."""",
+        """"What?"""",
+        """You hang up, hoping she got all that. You know you can't lose any more time now.""",
         () {
           {time+=30};
           goto(r"""wakeupDilemma""");
@@ -116,7 +116,7 @@ Good! """,
       ],
       // policeBreakIn
       [
-        """There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you. """,
+        """There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you.""",
         () {
   if (weapon == "gun") {
     <echo>
@@ -135,7 +135,7 @@ You realize you don't have the gun yet, so you instinctively move towards the be
       ],
       // Day1.runOutTheWindow
       [
-        """You jump through the window, catch hold of some branches of the backyard tree and fall down on the grass with a thump. You hear "Shit!" from the side, so you send a blind shot there, and start running towards the white fence. The adventure begins. """,
+        """You jump through the window, catch hold of some branches of the backyard tree and fall down on the grass with a thump. You hear "Shit!" from the side, so you send a blind shot there, and start running towards the white fence. The adventure begins.""",
         {
           "string": r""" """,
           "goto": r"""theAdventureBegins"""
@@ -143,8 +143,8 @@ You realize you don't have the gun yet, so you instinctively move towards the be
       ],
       // wasted
       [
-        """For the next few hours and days, you just see blurs and colors and you dream nightmares of Amy and the bastard son of yours. """,
-        """When you finally come to your senses, you're in prison. And you won't be getting out alive. """
+        """For the next few hours and days, you just see blurs and colors and you dream nightmares of Amy and the bastard son of yours.""",
+        """When you finally come to your senses, you're in prison. And you won't be getting out alive."""
       ]
     ];
   }

@@ -140,6 +140,36 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
       });
+      
+      test("reads text block at end of file", () {
+        var callback = (var b) {
+          var lastpage = b.pages.last;
+          expect(lastpage.blocks.length,
+            equals(1));
+          expect(lastpage.blocks[0].type,
+            BuilderBlock.BLK_TEXT);
+          expect(lastpage.blocks[0].lineStart,
+              43);
+          expect(lastpage.blocks[0].lineEnd,
+              43);
+        };
+        new Builder().readEgbFile(new File(getPath("simple_textblock_eof.egb"))).then(expectAsync1(callback));
+      });
+      
+      test("reads last text block at end of bigger file", () {
+        var callback = (var b) {
+          var lastpage = b.pages.last;
+          expect(lastpage.blocks.length,
+            equals(2));
+          expect(lastpage.blocks[1].type,
+            BuilderBlock.BLK_TEXT);
+          expect(lastpage.blocks[1].lineStart,
+              140);
+          expect(lastpage.blocks[1].lineEnd,
+              140);
+        };
+        new Builder().readEgbFile(new File(getPath("full_project.egb"))).then(expectAsync1(callback));
+      });
     });
 
     group('advanced files', () {

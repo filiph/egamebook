@@ -328,7 +328,11 @@ class Builder {
      
               if (!pages.isEmpty) {
                 // end the last page
-                pages.last.lineEnd = _lineNumber - 1;
+                pages.last.lineEnd = _lineNumber;
+                if (pages.last.blocks != null && !pages.last.blocks.isEmpty
+                    && pages.last.blocks.last.lineEnd == null) {
+                  pages.last.blocks.last.lineEnd = _lineNumber;
+                }
                 
                 // fully specify gotoPageNames of every page
                 for (var page in pages) {
@@ -1236,10 +1240,8 @@ class Builder {
     int subBlockIndex;
     int subBlockIndent;  // echo block indent
 
-    inStream.onLine = () {
-      lineNumber++;
-      String line = inStream.readLine();
-
+    // this is the main looping function
+    Function handleLine = (String line) {
       // start page
       if (pageIndex < pages.length
           && lineNumber == pages[pageIndex].lineStart) {
@@ -1260,7 +1262,7 @@ class Builder {
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart == curBlock.lineEnd) {
-            write("\"\"\"$line \"\"\"$commaOrNot\n");
+            write("\"\"\"$line\"\"\"$commaOrNot\n");
           } else {
             write("\"\"\"$line\n");
           }
@@ -1269,7 +1271,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           write("() {\n");
           if (curBlock.lineStart == curBlock.lineEnd) {
-            write("  echo(\"\"\"$line \"\"\");\n");
+            write("  echo(\"\"\"$line\"\"\");\n");
             write("}$commaOrNot\n");
           } else {
             write("  echo(\"\"\"$line\n");
@@ -1394,14 +1396,14 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line \"\"\"$commaOrNot\n");
+            write("$line\"\"\"$commaOrNot\n");
           }
         }
 
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line \"\"\");\n");
+            write("$line\"\"\");\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
@@ -1410,7 +1412,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line \"\"\"\n");
+            write("$line\"\"\"\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
@@ -1442,9 +1444,17 @@ class Builder {
       }
 
     };
+    
+    inStream.onLine = () {
+      lineNumber++;
+      var line = inStream.readLine();
+      handleLine(line);
+    };
+    
     inStream.onClosed = () {
       completer.complete(true);
     };
+    
     inStream.onError = (e) {
       completer.completeException(e);
     };

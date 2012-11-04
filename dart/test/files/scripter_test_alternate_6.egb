@@ -1,0 +1,69 @@
+Title:      Test Gamebook #1  
+Subtitle:   The Adventures of a Guy with a Gun  
+Author:     Filip Hracek  
+            John Doe  
+Web:        http://filiph.net/  
+Email:      abc@example.com  
+Keywords:   crimi, thriller  
+Copyright:  Creative Commons  
+
+<classes>
+class A {
+  int i;
+}
+</classes>
+
+---
+aaa
+
+Starting. Setting time to 0.
+
+<script>
+  time = 0;
+</script>
+
+- ABC [bbb]
+- CDE [xxx]
+
+---
+bbb
+
+Blah.
+
+- efger [zzz]
+- gegreg [ccc]
+
+---
+xxx
+
+Shouldn't reach this!
+
+---
+zzz
+
+Shouldn't reach this, neither!
+
+---
+ccc
+
+Increasing time by 1 to ${time++}.
+
+- egreger [dddeee]
+- ervfvcx [zzz]
+
+---
+dddeee
+
+Welcome (back?) to dddeee. Time is now $time. Increasing by 1.
+
+<script>
+time++;
+</script>
+
+- evdfvdv [fff]
+- loop [dddeee]
+
+---
+fff
+
+End of book.
