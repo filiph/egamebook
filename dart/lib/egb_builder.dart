@@ -1262,7 +1262,7 @@ class Builder {
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart == curBlock.lineEnd) {
-            write("\"\"\"$line\"\"\"$commaOrNot\n");
+            write("\"\"\"${handleTrailingQuotes(line)}\"\"\"$commaOrNot\n");
           } else {
             write("\"\"\"$line\n");
           }
@@ -1271,7 +1271,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           write("() {\n");
           if (curBlock.lineStart == curBlock.lineEnd) {
-            write("  echo(\"\"\"$line\"\"\");\n");
+            write("  echo(\"\"\"${handleTrailingQuotes(line)}\"\"\");\n");
             write("}$commaOrNot\n");
           } else {
             write("  echo(\"\"\"$line\n");
@@ -1282,7 +1282,7 @@ class Builder {
           var question = curBlock.options["question"];
           if (curBlock.lineStart == curBlock.lineEnd) {
             write("{\n");
-            write("  \"question\": r\"\"\"$line\"\"\"\n");
+            write("  \"question\": r\"\"\"${handleTrailingQuotes(line)}\"\"\"\n");
             write("}$commaOrNot\n");
           } else {
             write("{\n");
@@ -1396,14 +1396,14 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line\"\"\"$commaOrNot\n");
+            write("${handleTrailingQuotes(line)}\"\"\"$commaOrNot\n");
           }
         }
 
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line\"\"\");\n");
+            write("${handleTrailingQuotes(line)}\"\"\");\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
@@ -1412,7 +1412,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
-            write("$line\"\"\"\n");
+            write("${handleTrailingQuotes(line)}\"\"\"\n");
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
@@ -1459,6 +1459,23 @@ class Builder {
       completer.completeException(e);
     };
     return completer.future;
+  }
+  
+  /**
+   * Checks if string has a trailing [:":] char. If so, it is appended with
+   * a space.
+   * 
+   * The reason for this is that the Builder will surround the string with
+   * triple quotes ([:""":]). A trailing quote in the (already) quoted string
+   * will mean a quadruple quote ([:"""":]) which is interpreted by Dart
+   * as the ending triple quote plus a hanging single quote.
+   */
+  String handleTrailingQuotes(String string) {
+    if (string.endsWith('"')) {
+      return "$string ";
+    } else {
+      return string;
+    }
   }
 
   /**

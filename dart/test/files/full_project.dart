@@ -105,9 +105,9 @@ Good!""",
       // Day1.warnAmy
       [
         """You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow.""",
-        """"Wha' uppp?"""",
-        """"Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know."""",
-        """"What?"""",
+        """"Wha' uppp?" """,
+        """"Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know." """,
+        """"What?" """,
         """You hang up, hoping she got all that. You know you can't lose any more time now.""",
         () {
           {time+=30};

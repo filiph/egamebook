@@ -39,7 +39,7 @@ class Message {
   Message.Continue() : type = MSG_CONTINUE {}
 
   Message.TextResult(String str) : type = MSG_TEXT_RESULT {
-    strContent = str;
+    strContent = str.trim();
   }
 
   Message.Start() : type = MSG_START {}
