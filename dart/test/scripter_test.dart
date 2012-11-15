@@ -58,8 +58,6 @@ String getPath(String filename) {
 void main() {
   // create [ReceivePort] for this isolate
   ReceivePort receivePort;
-  // create the isolate
-  //SendPort scripterPort = spawnFunction(createScripter);
   
   new Builder().readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
   .chain((Builder b) => b.writeDartFiles())
