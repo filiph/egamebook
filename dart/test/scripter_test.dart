@@ -39,8 +39,8 @@ class MockInterface implements EgbInterface {
                                 "-> ${choiceList[choiceNumber].hash}");
       return new Future.immediate(choiceList[choiceNumber].hash);
     } else {
-      print("MockInterface pick: QUIT");
-      return new Future.immediate(null);
+      print("MockInterface pick: NONE, waiting");
+      return new Completer().future;
     }
   }
 }
@@ -119,11 +119,12 @@ void main() {
 
           var callback = (Timer) {
             expect(interface.closed,
-                true);
+                false);
             expect(runner.ended,
-                true);
+                false);
             expect(interface.latestOutput,
                 startsWith("Welcome (back?) to dddeee."));
+            runner.stop();
           };
           
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
