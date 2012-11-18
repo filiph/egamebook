@@ -1,6 +1,7 @@
 *.swp
 .project
 .children
+pubspec.lock
 example/library/*.js
 example/library/*.js.map
 example/library/*.html
@@ -10,3 +11,4 @@ example/test/*.js.map
 example/test/*.html
 example/test/*.graphml
 example/test/*.dart
+test/files/*.dart
