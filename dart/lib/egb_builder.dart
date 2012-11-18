@@ -1875,10 +1875,10 @@ class Builder {
 
 
   final String implStartFile = """
-#library('Scripter Implementation');
+library Scripter_Implementation;
 
-#import('../../lib/src/egb_library.dart');
-#import('dart:math');
+import '../../lib/src/egb_library.dart';
+import 'dart:math';
 """;
 
   final String implStartClass = """

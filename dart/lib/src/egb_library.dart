@@ -515,30 +515,37 @@ abstract class Scripter {
     initBlock(); // run contents of <init>
   }
 
-  // XXX: noSuchMethod not yet implemented in this form in Dart
+  // XXX: invokeOn not yet implemented in Dart
   /*
-     noSuchMethod(InvocationMirror invocation) {
-     if (invocation.isGetter) {
-     invocation.invokeOn(vars[invocation.memberName]);
-     } else if (invocation.isSetter) {
-     invocation.invokeOn(vars[invocation.memberName]);
-     } else {
-     throw new NoSuchMethodException(this, invocation.memberName, invocation.arguments);
-     }
-  // TODO: Implement "library" using noSuchMethod
-  // - noSuchMethod for function invocations (combat())
-  }
-   */
+  noSuchMethod(InvocationMirror invocation) => 
+      invocation.invokeOn(vars[invocation.memberName]);
+  */
 
-  dynamic noSuchMethod(String name, List args) {
+  // XXX: this doesn't work either, membername is with "set:" and is always method
+  /*
+  dynamic noSuchMethod(InvocationMirror invocation) {
+    if (invocation.isGetter) {
+      return vars[invocation.memberName];
+    } else if (invocation.isSetter) {
+      vars[invocation.memberName] = invocation.positionalArguments[0];
+    } else {
+      throw new NoSuchMethodError(this, invocation.memberName, 
+          invocation.positionalArguments, invocation.namedArguments);
+    }
+  }
+  */
+
+  dynamic noSuchMethod(InvocationMirror invocation) {
+    var name = invocation.memberName;
     if (name.startsWith("get:") || name.startsWith("get ")) {
       // TODO: throw error if not set
       return vars[name.substring(4)];
     } else if (name.startsWith("set:") || name.startsWith("set ")) {
-      vars[name.substring(4)] = args[0];
+      vars[name.substring(4)] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, name, args);
+      throw new NoSuchMethodError(this, name, invocation.positionalArguments, 
+          invocation.namedArguments);
     }
   }
 
