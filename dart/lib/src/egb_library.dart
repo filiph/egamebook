@@ -383,7 +383,7 @@ abstract class Scripter {
     */
   List<Function> nextScriptStack;
 
-  abstract void initBlock();
+  void initBlock();
 
   Scripter() : super() {
     DEBUG_SCR("Scripter has been created.");
@@ -496,7 +496,7 @@ abstract class Scripter {
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph
       DEBUG_SCR("Running script.");
-      return runScriptBlock(blocks[currentBlock]);
+      return runScriptBlock(script:blocks[currentBlock]);
     }
 
   }
@@ -583,7 +583,7 @@ abstract class Scripter {
   }
 
   // runs the current block or the specified block
-  Message runScriptBlock([Function script]) {
+  Message runScriptBlock({Function script}) {
     // clean up
     textBuffer = new StringBuffer();
     // delete choices that have already been shown
