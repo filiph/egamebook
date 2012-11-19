@@ -60,12 +60,14 @@ class EgbMessage {
     Map<String,dynamic> data = JSON.parse(json);
     type = data["type"];
 
-    if (type == MSG_OPTION_SELECTED) {
-      intContent = data["intContent"];
-    } else if (type == MSG_SHOW_CHOICES) {
-      listContent = data["listContent"];
-    } else if (type == MSG_TEXT_RESULT) {
+    if (data.containsKey("strContent")) {
       strContent = data["strContent"];
+    }
+    if (data.containsKey("listContent")) {
+      listContent = data["listContent"];
+    }
+    if (data.containsKey("intContent")) {
+      intContent = data["intContent"];
     }
   }
 
@@ -77,12 +79,14 @@ class EgbMessage {
 
     data["type"] = type;
 
-    if (type == MSG_OPTION_SELECTED) {
-      data["intContent"] = intContent;
-    } else if (type == MSG_SHOW_CHOICES) {
-      data["listContent"] = listContent;
-    } else if (type == MSG_TEXT_RESULT) {
+    if (strContent != null) {
       data["strContent"] = strContent;
+    }
+    if (listContent != null) {
+      data["listContent"] = listContent;
+    }
+    if (intContent != null) {
+      data["intContent"] = intContent;
     }
 
     return JSON.stringify(data);

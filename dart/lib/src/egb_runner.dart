@@ -6,6 +6,7 @@ import 'egb_utils.dart';
 
 import 'egb_interface.dart';
 import 'egb_library.dart';
+import 'egb_savegame.dart';
 
 /**
  * EgbRunner manages communication between the Scripter and the Interface.
@@ -50,7 +51,12 @@ class EgbRunner {
       DEBUG_CMD("We are at the end of book. Closing.");
       stop();
     } else {
-      if (message.type == EgbMessage.MSG_TEXT_RESULT) {
+      if (message.type == EgbMessage.MSG_SAVE_GAME) {
+        print("SAVEGAME RECEIVED");
+        EgbSavegame savegame = new EgbSavegame.fromMessage(message);
+        _scripterPort.send(new EgbMessage.Continue().toJson(), 
+            _receivePort.toSendPort());
+      } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {
         DEBUG_CMD("Showing text from scripter.");
         _interface.showText(message.strContent);
         _scripterPort.send(new EgbMessage.Continue().toJson(), 

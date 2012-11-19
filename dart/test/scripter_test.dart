@@ -62,7 +62,7 @@ void main() {
   new Builder().readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
   .chain((Builder b) => b.writeDartFiles())
   .then((_) {
-    group("Scripter", () {
+    group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
         expect(interface.started,
@@ -165,4 +165,40 @@ void main() {
       });
     });
   });
+  
+  new Builder().readEgbFile(new File(getPath("scripter_test_save.egb")))
+  .chain((Builder b) => b.writeDartFiles())
+  .then((_) {
+    group("Scripter saving", () {
+      setUp(() {
+        receivePort = new ReceivePort();
+      });
+      
+      test("saveables versus non-saveables", () {
+        var interface;
+        var runner;
+
+        var callback = (Timer) {
+          expect(interface.closed,
+              true);
+          expect(runner.ended,
+              true);
+          expect(interface.latestOutput,
+              contains("Scripter should still have all variables"));
+          runner.stop();
+        };
+        
+        SendPort scripterPort = spawnUri("files/scripter_test_save_main.dart");
+        interface = new MockInterface();
+        interface.choicesToBeTaken = new Queue<int>.from(
+            [0]
+        );
+        runner = new EgbRunner(receivePort, scripterPort, interface);
+        runner.run();
+        
+        new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+      });
+    });
+  });
+
 }

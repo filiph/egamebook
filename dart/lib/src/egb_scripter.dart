@@ -1,11 +1,13 @@
 library egb_scripter;
 
 import 'dart:isolate';
+import 'dart:json';
 
 import 'egb_utils.dart';
 
 import 'egb_message.dart';
 import 'egb_user_interaction.dart';
+import 'egb_savegame.dart';
 
 
 /**
@@ -160,13 +162,13 @@ abstract class EgbScripter {
       return _runScriptBlock(script:script);
     }
 
-    // if previous script asked to jump, then jump
+    // if previous script asked to jump to a new page, then jump
     if (_nextPageIndex != null) {
       currentPageIndex = _nextPageIndex;
-      // TODO currentPageName
       currentBlock = null;
       _nextPageIndex = null;
       choices.clear();
+      return _createSaveGame();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -271,5 +273,10 @@ abstract class EgbScripter {
       return choices.toMessage(prependText:textBuffer.toString()); // new Message.ShowChoices(choices, prependText:textBuffer.toString());
     }
     return new EgbMessage.TextResult(textBuffer.toString());
+  }
+  
+  EgbMessage _createSaveGame() {
+    EgbSavegame savegame = new EgbSavegame(currentPageName, vars);
+    return savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
   }
 }
