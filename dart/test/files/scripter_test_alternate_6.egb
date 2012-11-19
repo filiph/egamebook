@@ -46,7 +46,7 @@ Shouldn't reach this, neither!
 ---
 ccc
 
-Increasing time by 1 to ${time++}.
+Increasing time by 1 to ${++time}.
 
 - egreger [dddeee]
 - ervfvcx [zzz]

@@ -137,6 +137,31 @@ void main() {
           
           new Timer(1000, expectAsync1(callback)); // TODO: more elegant
         });
+        
+        test("simple counting works", () {
+          var interface;
+          var runner;
+
+          var callback = (Timer) {
+            expect(interface.closed,
+                false);
+            expect(runner.ended,
+                false);
+            expect(interface.latestOutput,
+                contains("Time is now 10."));
+            runner.stop();
+          };
+          
+          SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+          interface = new MockInterface();
+          interface.choicesToBeTaken = new Queue<int>.from(
+              [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+          );
+          runner = new EgbRunner(receivePort, scripterPort, interface);
+          runner.run();
+          
+          new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+        });
       });
     });
   });
