@@ -13,7 +13,7 @@ import 'egb_user_interaction.dart';
   It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
   */
 abstract class EgbScripter {
-  SendPort _interfacePort;
+  // exposed members (to be used by ScripterImpl)
 
   List<List> pages;
   Map<String,int> pageHandles; // TODO: make this into Map<String,Page>
@@ -40,30 +40,71 @@ abstract class EgbScripter {
     }
   }
   
+  void initBlock();
+  
   List blocks;
   int currentPageIndex;  // the current position in the pages list
   int currentBlock;  // the current position in the current page's blocks list
+  
+  EgbChoiceList choices;
+  Map<String, dynamic> vars;
+  StringBuffer textBuffer;
 
-  int nextPageIndex;
-  bool repeatBlockBit = false;
+  void echo(String str) {
+    if (textBuffer.length > 0) {
+      textBuffer.add(" ");
+    }
+    textBuffer.add(str);
+  }
+
+  void goto(String dest) {
+    if (currentGroupName != null
+        && pageHandles.containsKey("$currentGroupName: $dest")) {
+      _nextPageIndex = pageHandles["$currentGroupName: $dest"];
+    } else if (pageHandles.containsKey(dest)) {
+      _nextPageIndex = pageHandles[dest];
+    } else {
+      throw "Function goto() called with an invalid argument '$dest' (no such page).";
+    }
+  }
+
+  void nextScript(Function f) {
+    _nextScriptStack.add(f);
+  }
+
+  void repeatBlock() {
+    _repeatBlockBit = true;
+  }
+
+  // Utility function that creates new choice.
+  EgbChoice choice(String string, [String goto, Function then, bool showNow=false]) {
+    EgbChoice choice = new EgbChoice(string, goto:goto, then:then, showNow:showNow);
+    choices.add(choice);
+    return choice;
+  }
+
+  // -- private members below
+
+  SendPort _interfacePort;
+  
+  int _nextPageIndex;
+  bool _repeatBlockBit = false;
   /**
     When a block/script/choice call for a script to be called afterwards, it ends
     up on this FIFO stack.
     */
-  List<Function> nextScriptStack;
-
-  void initBlock();
-
+  List<Function> _nextScriptStack;
+  
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
-    nextScriptStack = new List<Function>();
-    initScriptEnvironment();
+    _nextScriptStack = new List<Function>();
+    _initScriptEnvironment();
 
     // start the loop
-    port.receive(callback);
+    port.receive(_messageReceiveCallback);
   }
 
-  void callback(String messageJson, SendPort replyTo) {
+  void _messageReceiveCallback(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
     DEBUG_SCR("Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
@@ -75,20 +116,20 @@ abstract class EgbScripter {
       DEBUG_SCR("No more pages.");
       _interfacePort.send(new EgbMessage.EndOfBook().toJson(), port.toSendPort());
     } else {
-      _interfacePort.send(goOneStep(message).toJson(), port.toSendPort());
+      _interfacePort.send(_goOneStep(message).toJson(), port.toSendPort());
     }
   }
 
   // Walks through the instructions, one block at a time.
   // Returns message for interface.
-  EgbMessage goOneStep(EgbMessage incomingMessage) {
+  EgbMessage _goOneStep(EgbMessage incomingMessage) {
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting from the beginning");
       currentPageIndex = 0;
       // TODO: currentPageName
       currentBlock = null;
-      nextScriptStack.clear();
-      initScriptEnvironment();
+      _nextScriptStack.clear();
+      _initScriptEnvironment();
     }
 
     if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
@@ -102,7 +143,7 @@ abstract class EgbScripter {
               goto(choice.goto);
             }
             if (choice.f != null) {
-              message = runScriptBlock(script:choice.f);
+              message = _runScriptBlock(script:choice.f);
             }
           }
       });
@@ -114,25 +155,25 @@ abstract class EgbScripter {
     }
 
     // if previous script asked for nextScript()
-    if (!nextScriptStack.isEmpty) {
-      Function script = nextScriptStack.removeLast();
-      return runScriptBlock(script:script);
+    if (!_nextScriptStack.isEmpty) {
+      Function script = _nextScriptStack.removeLast();
+      return _runScriptBlock(script:script);
     }
 
     // if previous script asked to jump, then jump
-    if (nextPageIndex != null) {
-      currentPageIndex = nextPageIndex;
+    if (_nextPageIndex != null) {
+      currentPageIndex = _nextPageIndex;
       // TODO currentPageName
       currentBlock = null;
-      nextPageIndex = null;
+      _nextPageIndex = null;
       choices.clear();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
     if (currentBlock == null) {
       currentBlock = 0;
-    } else if (repeatBlockBit) {
-      repeatBlockBit = false;
+    } else if (_repeatBlockBit) {
+      _repeatBlockBit = false;
     } else {
       currentBlock++;
     }
@@ -165,19 +206,12 @@ abstract class EgbScripter {
     } else if (blocks[currentBlock] is Function) {
       // a script paragraph
       DEBUG_SCR("Running script.");
-      return runScriptBlock(script:blocks[currentBlock]);
+      return _runScriptBlock(script:blocks[currentBlock]);
     }
 
   }
 
-
-  // TODO: TBD if we want to build a class (ScriptEnvironment) for the below
-
-  EgbChoiceList choices;
-  Map<String, dynamic> vars;
-  StringBuffer textBuffer;
-
-  void initScriptEnvironment() {
+  void _initScriptEnvironment() {
     choices = new EgbChoiceList();
     vars = new Map<String, dynamic>();
 
@@ -218,41 +252,8 @@ abstract class EgbScripter {
     }
   }
 
-  void echo(String str) {
-    if (textBuffer.length > 0) {
-      textBuffer.add(" ");
-    }
-    textBuffer.add(str);
-  }
-
-  void goto(String dest) {
-    if (currentGroupName != null
-        && pageHandles.containsKey("$currentGroupName: $dest")) {
-      nextPageIndex = pageHandles["$currentGroupName: $dest"];
-    } else if (pageHandles.containsKey(dest)) {
-      nextPageIndex = pageHandles[dest];
-    } else {
-      throw "Function goto() called with an invalid argument '$dest' (no such page).";
-    }
-  }
-
-  void nextScript(Function f) {
-    nextScriptStack.add(f);
-  }
-
-  void repeatBlock() {
-    repeatBlockBit = true;
-  }
-
-  // Utility function that creates new choice.
-  EgbChoice choice(String string, [String goto, Function then, bool showNow=false]) {
-    EgbChoice choice = new EgbChoice(string, goto:goto, then:then, showNow:showNow);
-    choices.add(choice);
-    return choice;
-  }
-
   // runs the current block or the specified block
-  EgbMessage runScriptBlock({Function script}) {
+  EgbMessage _runScriptBlock({Function script}) {
     // clean up
     textBuffer = new StringBuffer();
     // delete choices that have already been shown
