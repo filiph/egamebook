@@ -20,6 +20,8 @@ class EgbMessage {
   static final int MSG_SHOW_CHOICES = 64;
   static final int MSG_OPTION_SELECTED = 128;
   static final int MSG_NO_RESULT = 256;
+  static final int MSG_SAVE_GAME = 512;
+  static final int MSG_LOAD_GAME = 1024;
 
   EgbMessage(this.type) {
   }
@@ -41,6 +43,14 @@ class EgbMessage {
   }
 
   EgbMessage.NoResult() : type = MSG_NO_RESULT {}
+  
+  EgbMessage.SaveGame(String json) : type = MSG_SAVE_GAME {
+    strContent = json;
+  }
+  
+  EgbMessage.LoadGame(String json) : type = MSG_LOAD_GAME {
+    strContent = json;
+  }
 
   /**
     Ctor that creates the Message object from a JSON string.
