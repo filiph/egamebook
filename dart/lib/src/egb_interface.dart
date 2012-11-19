@@ -25,5 +25,5 @@ abstract class EgbInterface {
    * 
    * Completes with null when user wants to quit.
    */
-  Future<int> showChoices(ChoiceList choices);
+  Future<int> showChoices(EgbChoiceList choices);
 }

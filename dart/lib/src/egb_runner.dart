@@ -1,12 +1,11 @@
 library egb_runner;
 
 import 'dart:isolate';
+
+import 'egb_utils.dart';
+
 import 'egb_interface.dart';
 import 'egb_library.dart';
-
-void DEBUG_CMD(String str) {
-  // print("CMD: $str");
-}
 
 /**
  * EgbRunner manages communication between the Scripter and the Interface.
@@ -27,7 +26,7 @@ class EgbRunner {
   void run() {
     _interface.setup();
     _scripterPort.send(
-        new Message.Start().toJson(),
+        new EgbMessage.Start().toJson(),
         _receivePort.toSendPort()
     );
     started = true;
@@ -35,7 +34,7 @@ class EgbRunner {
   
   void stop() {
     _interface.close();
-    _scripterPort.send(new Message.Quit().toJson());
+    _scripterPort.send(new EgbMessage.Quit().toJson());
     _receivePort.close();
     ended = true;
   }
@@ -45,22 +44,22 @@ class EgbRunner {
    * responds immediately, or asks for input via [interface].
    */
   void receiveFromScripter(String messageJson, SendPort replyTo) {
-    Message message = new Message.fromJson(messageJson);
+    EgbMessage message = new EgbMessage.fromJson(messageJson);
     DEBUG_CMD("We have a message from Scripter: ${message.type}.");
-    if (message.type == Message.MSG_END_OF_BOOK) {
+    if (message.type == EgbMessage.MSG_END_OF_BOOK) {
       DEBUG_CMD("We are at the end of book. Closing.");
       stop();
     } else {
-      if (message.type == Message.MSG_TEXT_RESULT) {
+      if (message.type == EgbMessage.MSG_TEXT_RESULT) {
         DEBUG_CMD("Showing text from scripter.");
         _interface.showText(message.strContent);
-        _scripterPort.send(new Message.Continue().toJson(), 
+        _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
-      } else if (message.type == Message.MSG_NO_RESULT) {
+      } else if (message.type == EgbMessage.MSG_NO_RESULT) {
         DEBUG_CMD("No visible result. Continuing.");
-        _scripterPort.send(new Message.Continue().toJson(), 
+        _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
-      } else if (message.type == Message.MSG_SHOW_CHOICES) {
+      } else if (message.type == EgbMessage.MSG_SHOW_CHOICES) {
         DEBUG_CMD("We have choices to show!");
         
         if (message.listContent[0] != null) {
@@ -68,12 +67,12 @@ class EgbRunner {
           _interface.showText(message.listContent[0]);
         }
         
-        ChoiceList choices = new ChoiceList.fromMessage(message);
+        EgbChoiceList choices = new EgbChoiceList.fromMessage(message);
         
         if (choices.length == 1 && choices[0].string.trim() == "") {
           // An auto-choice (without a string) means we should pick it silently
           _scripterPort.send(
-              new Message.OptionSelected(choices[0].hash).toJson(),
+              new EgbMessage.OptionSelected(choices[0].hash).toJson(),
               _receivePort.toSendPort()
           );
         } else {
@@ -82,7 +81,7 @@ class EgbRunner {
           .then((int hash) {
             if (hash != null) {
               _scripterPort.send(
-                  new Message.OptionSelected(hash).toJson(),
+                  new EgbMessage.OptionSelected(hash).toJson(),
                   _receivePort.toSendPort()
               );
             } else {

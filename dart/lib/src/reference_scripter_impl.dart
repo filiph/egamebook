@@ -7,7 +7,7 @@ class A {
   int i;
 }
 
-class ScripterImpl extends Scripter {
+class ScripterImpl extends EgbScripter {
 
   /* LIBRARY */
 
@@ -57,7 +57,7 @@ class ScripterImpl extends Scripter {
 since you opened your eyes. """);
         },
         () {
-          choices.add(new Choice(
+          choices.add(new EgbChoice(
               """Get dressed (30 seconds) """,
               goto:r"""getDressed""",
               then:() { {echo("Ladyboy!");;}; }

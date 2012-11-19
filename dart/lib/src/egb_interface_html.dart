@@ -36,7 +36,7 @@ class HtmlInterface implements EgbInterface {
     return new Future.immediate(true);
   }
 
-  Future<int> showChoices(ChoiceList choiceList) {
+  Future<int> showChoices(EgbChoiceList choiceList) {
     var completer = new Completer();
     
     if (choiceList.question != null) {
@@ -46,7 +46,7 @@ class HtmlInterface implements EgbInterface {
     
     // let player choose
     for (int i = 0; i < choiceList.length; i++) {
-      Choice choice = choiceList[i];
+      EgbChoice choice = choiceList[i];
       LIElement li = new Element.tag("li");
       AnchorElement a = new Element.tag("a");
       a.innerHTML = choice.string;

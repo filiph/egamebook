@@ -1106,10 +1106,10 @@ class Builder {
     var pathToOutputDart = getPathFor("dart");
     var pathToOutputCmd = getPathFor("cmdline.dart");
     var pathToInputTemplateCmd = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_cmdline.dart"));
+          .join(new Path("../lib/src/egb_cmdline_template.dart"));
     var pathToOutputHtml =getPathFor("html.dart");
     var pathToInputTemplateHtml = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_html.dart"));
+          .join(new Path("../lib/src/egb_html_template.dart"));
 
     File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
     File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
@@ -1882,7 +1882,7 @@ import 'dart:math';
 """;
 
   final String implStartClass = """
-class ScripterImpl extends Scripter {
+class ScripterImpl extends EgbScripter {
 
   /* LIBRARY */
 """;

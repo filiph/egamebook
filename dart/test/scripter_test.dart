@@ -32,7 +32,7 @@ class MockInterface implements EgbInterface {
     }
   }
   
-  Future<int> showChoices(ChoiceList choiceList) {
+  Future<int> showChoices(EgbChoiceList choiceList) {
     if (choicesToBeTaken.length > 0) {
       int choiceNumber = choicesToBeTaken.removeFirst();
       print("MockInterface pick: $choiceNumber) '${choiceList[choiceNumber].string}' "

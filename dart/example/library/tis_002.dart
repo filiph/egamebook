@@ -1440,7 +1440,7 @@ interface LoopedEvent {
   void start();
   void update();
   void updateUntilInteraction();
-  List<Choice> playerChoices;
+  List<EgbChoice> playerChoices;
   Storyline storyline;
 }
 
@@ -1470,7 +1470,7 @@ class Combat extends GameEntity implements LoopedEvent {
 
   List<Actor> actors;
   Actor _player;
-  List<Choice> playerChoices;
+  List<EgbChoice> playerChoices;
 
   Combat() : super() {
     storyline = new Storyline();
@@ -1508,7 +1508,7 @@ class Combat extends GameEntity implements LoopedEvent {
           _player.target = possibleEnemies[0];
         } else {
           possibleEnemies.forEach((enemy) {
-              playerChoices.add(new Choice("Target ${enemy.name}.", showNow:true, then:() { storyline.add("<subject> now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
+              playerChoices.add(new EgbChoice("Target ${enemy.name}.", showNow:true, then:() { storyline.add("<subject> now lock on to <object>", subject:_player, object:enemy); _player.target = enemy; }));
           });
         }
       } else {
@@ -1517,12 +1517,12 @@ class Combat extends GameEntity implements LoopedEvent {
         if (!possibleMoves.isEmpty()) {
           //possibleMoves.sort((a,b) => a.flags - b.flags);
           possibleMoves.forEach((move) {
-              playerChoices.add(new Choice(capitalize(Storyline.getString("${move.choiceString} (${move.computeSuitability(_player, _player.target)}) (${move.computeChanceToHit(_player, _player.target)})", subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
+              playerChoices.add(new EgbChoice(capitalize(Storyline.getString("${move.choiceString} (${move.computeSuitability(_player, _player.target)}) (${move.computeChanceToHit(_player, _player.target)})", subject:_player, object:_player.target)), showNow:true, then:() { _player.currentMove = move; }));
           });
         }
         // let player target someone else
         if (actors.some((a) => a.alive && a != _player.target && a.team != _player.team))
-          playerChoices.add(new Choice("Target another enemy.", showNow:true, then:() { _player.target = null; time--; })); 
+          playerChoices.add(new EgbChoice("Target another enemy.", showNow:true, then:() { _player.target = null; time--; })); 
       }
 
       if (!playerChoices.isEmpty()) {
@@ -1542,14 +1542,14 @@ class Combat extends GameEntity implements LoopedEvent {
 }
 
 
-class ScripterImpl extends Scripter {
+class ScripterImpl extends EgbScripter {
 
   /* LIBRARY */
 
   
   void start(LoopedEvent event) {
     vars["_curLoopedEvent"] = event;
-    vars["_curLoopedEventChoices"] = new List<Choice>();
+    vars["_curLoopedEventChoices"] = new List<EgbChoice>();
     event.playerChoices = vars["_curLoopedEventChoices"];
     event.start();
     updateLoopedEvent();

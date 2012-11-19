@@ -1,6 +1,7 @@
 library egb_interface_cmdline;
 
 import 'dart:io';
+
 import 'egb_interface.dart';
 import 'egb_library.dart';
 
@@ -27,7 +28,7 @@ class CmdlineInterface implements EgbInterface {
   }
   
 
-  Future<int> showChoices(ChoiceList choiceList) {
+  Future<int> showChoices(EgbChoiceList choiceList) {
     var completer = new Completer();
     
     if (choiceList.question != null) {
