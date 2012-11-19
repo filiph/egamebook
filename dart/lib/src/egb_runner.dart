@@ -52,8 +52,8 @@ class EgbRunner {
       stop();
     } else {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
-        print("SAVEGAME RECEIVED");
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
+        // TODO: storage.save(savegame) // optionaly prepend text
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {
