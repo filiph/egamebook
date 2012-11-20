@@ -609,8 +609,8 @@ class Builder {
       }
 
       if (block.options["script"] != null
-          && (const RegExp(r"^[^{]*}").hasMatch(block.options["script"])
-              || const RegExp(r"{[^}]*$").hasMatch(block.options["script"]))) {
+          && (new RegExp(r"^[^{]*}").hasMatch(block.options["script"])
+              || new RegExp(r"{[^}]*$").hasMatch(block.options["script"]))) {
         WARNING("Inline script `${block.options['script']}` in choice appears to have "
               "an unmatched bracket. This could be an error. Actual format used: `$_thisLine`.");
       }
@@ -993,27 +993,27 @@ class Builder {
    **/
   GraphML graphML;
 
-  RegExp blankLine = const RegExp(r"^\s*$");
-  RegExp hr = const RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
-  RegExp validPageName = const RegExp(r"^\s{0,3}(.+)\s*$");
-  RegExp pageOptions = const RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
-  RegExp metadataLine = const RegExp(r"^(\w.+):\s*(\w.*)\s*$");
-  RegExp metadataLineAdd = const RegExp(r"^\s+(\w.*)\s*$");
-  /*RegExp scriptTag = const RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
-  RegExp scriptOrEchoTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
-  RegExp gotoInsideScript = const RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
-  /*RegExp scriptTagStart = const RegExp(@"^\s{0,3}<script>\s*$");*/
-  /*RegExp scriptTagEnd = const RegExp(@"^\s{0,3}</script>\s*$");*/
-  /*RegExp initTagStart = const RegExp(@"^\s{0,3}<init>\s*$");*/
-  /*RegExp initTagEnd = const RegExp(@"^\s{0,3}</init>\s*$");*/
-  /*RegExp libraryTagStart = const RegExp(@"^\s{0,3}<library>\s*$");*/
-  /*RegExp libraryTagEnd = const RegExp(@"^\s{0,3}</library>\s*$");*/
-  /*RegExp classesTagStart = const RegExp(@"^\s{0,3}<classes>\s*$");*/
-  /*RegExp classesTagEnd = const RegExp(@"^\s{0,3}</classes>\s*$");*/
-  RegExp initBlockTag = const RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
-  RegExp importTag = const RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
-  RegExp choice = const RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
-  RegExp variableInText = const RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
+  RegExp blankLine = new RegExp(r"^\s*$");
+  RegExp hr = new RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
+  RegExp validPageName = new RegExp(r"^\s{0,3}(.+)\s*$");
+  RegExp pageOptions = new RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
+  RegExp metadataLine = new RegExp(r"^(\w.+):\s*(\w.*)\s*$");
+  RegExp metadataLineAdd = new RegExp(r"^\s+(\w.*)\s*$");
+  /*RegExp scriptTag = new RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
+  RegExp scriptOrEchoTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", ignoreCase:true);
+  RegExp gotoInsideScript = new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
+  /*RegExp scriptTagStart = new RegExp(@"^\s{0,3}<script>\s*$");*/
+  /*RegExp scriptTagEnd = new RegExp(@"^\s{0,3}</script>\s*$");*/
+  /*RegExp initTagStart = new RegExp(@"^\s{0,3}<init>\s*$");*/
+  /*RegExp initTagEnd = new RegExp(@"^\s{0,3}</init>\s*$");*/
+  /*RegExp libraryTagStart = new RegExp(@"^\s{0,3}<library>\s*$");*/
+  /*RegExp libraryTagEnd = new RegExp(@"^\s{0,3}</library>\s*$");*/
+  /*RegExp classesTagStart = new RegExp(@"^\s{0,3}<classes>\s*$");*/
+  /*RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
+  RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", ignoreCase:true);
+  RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", ignoreCase:true);
+  RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
   /**
    * Writes following Dart files to disk:
