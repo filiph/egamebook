@@ -59,9 +59,15 @@ void main() {
   // create [ReceivePort] for this isolate
   ReceivePort receivePort;
   
-  new Builder().readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
-  .chain((Builder b) => b.writeDartFiles())
-  .then((_) {
+  // build files
+  Future a = new Builder()
+      .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
+      .chain((Builder b) => b.writeDartFiles());
+  Future b = new Builder()
+      .readEgbFile(new File(getPath("scripter_test_save.egb")))
+      .chain((Builder b) => b.writeDartFiles());
+  
+  Futures.wait([a, b]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
@@ -164,11 +170,7 @@ void main() {
         });
       });
     });
-  });
   
-  new Builder().readEgbFile(new File(getPath("scripter_test_save.egb")))
-  .chain((Builder b) => b.writeDartFiles())
-  .then((_) {
     group("Scripter saving", () {
       setUp(() {
         receivePort = new ReceivePort();
