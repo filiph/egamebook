@@ -12,3 +12,8 @@ example/test/*.html
 example/test/*.graphml
 example/test/*.dart
 test/files/*.dart
+packages
+*/packages
+*/packages/*
+*/*/packages
+*/*/packages/*
