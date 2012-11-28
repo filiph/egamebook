@@ -60,14 +60,14 @@ void main() {
   ReceivePort receivePort;
   
   // build files
-  Future a = new Builder()
+  Future aFuture = new Builder()
       .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
       .chain((Builder b) => b.writeDartFiles());
-  Future b = new Builder()
+  Future bFuture = new Builder()
       .readEgbFile(new File(getPath("scripter_test_save.egb")))
       .chain((Builder b) => b.writeDartFiles());
   
-  Futures.wait([a, b]).then((_) {
+  Futures.wait([aFuture, bFuture]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();

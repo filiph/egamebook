@@ -31,10 +31,10 @@ void main() {
   }
   var filename = results.rest[0];
 
-  var builderReadyCallback = builderReadyCallback(Builder b) {
+  var builderReadyCallback = builderReadyCallbackFunc(Builder b) {
     if (graphInput) {
       b.updateFromGraphMLFile();
-      b.updateEgbFile().then(builderReadyCallback);
+      b.updateEgbFile().then(builderReadyCallbackFunc);
       graphInput = false;
       return;
     }    
