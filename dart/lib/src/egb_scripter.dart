@@ -227,19 +227,22 @@ abstract class EgbScripter {
   */
 
   // XXX: this doesn't work either, membername is with "set:" and is always method
-  /*
+  
   dynamic noSuchMethod(InvocationMirror invocation) {
     if (invocation.isGetter) {
       return vars[invocation.memberName];
     } else if (invocation.isSetter) {
-      vars[invocation.memberName] = invocation.positionalArguments[0];
+      var memberName = invocation.memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      vars[memberName] = invocation.positionalArguments[0];
+      return null;
     } else {
       throw new NoSuchMethodError(this, invocation.memberName, 
           invocation.positionalArguments, invocation.namedArguments);
     }
   }
-  */
+  
 
+  /*
   dynamic noSuchMethod(InvocationMirror invocation) {
     var name = invocation.memberName;
     if (name.startsWith("get:") || name.startsWith("get ")) {
@@ -253,6 +256,7 @@ abstract class EgbScripter {
           invocation.namedArguments);
     }
   }
+  */
 
   // runs the current block or the specified block
   EgbMessage _runScriptBlock({Function script}) {
