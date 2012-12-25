@@ -424,7 +424,7 @@ There's a loud crash coming from the hallway. The man in the leather jacket must
 
 If you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
 
-You can also just wait in the room and try to fend the intruders off${calledPolice ? " until the police comes" : ""}.
+You can also just wait in the room and try to fend the intruders off${calledPolice == true ? " until the police comes" : ""}.
 
 - Run [startRunning]
 - Barricade the room [stayInTheRoom]
