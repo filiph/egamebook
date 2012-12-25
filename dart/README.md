@@ -349,3 +349,14 @@ Now, you can do this:
 
 Note: you _can't_ use functions or variables in the `<classes>` block.
 In fact, you can't even use the special functions (`echo`, `repeatBlock`, etc.) in here. You shouldn't _have_ to, but be aware of the limitation.
+
+## Development
+
+Run unit tests:
+
+    bin/unit_tests.sh
+
+The full-blown testing egamebook is in `examples/test`. You can run:
+
+    examples/test/run_test.sh  # to compile and run the CL version
+    examples/test/html_run_test.sh  # to compile and run in browser
