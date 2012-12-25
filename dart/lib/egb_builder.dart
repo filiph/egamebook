@@ -1316,7 +1316,7 @@ class Builder {
             }
           } else {
             // ex: "- Go to there [{{time++}} page]"
-            write("  choices.add(new Choice(\n");
+            write("  choices.add(new EgbChoice(\n");
             write("      \"\"\"$string \"\"\",\n");
             var commaAfterGoto = ( script != null ) ? "," : "";
             write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
