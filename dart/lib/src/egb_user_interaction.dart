@@ -87,6 +87,12 @@ class EgbChoiceList implements List<EgbChoice> {
   EgbChoice get last => _choices.last;
 
   /**
+   * Returns the first element of the [EgbChoiceList], or throws an out of bounds
+   * exception if the [EgbChoiceList] is empty.
+   */
+  EgbChoice get first => _choices.first;
+  
+  /**
    * Returns the first index of [element] in this [EgbChoiceList].
    * Searches this [EgbChoiceList] from index [start] to the length of the
    * [EgbChoiceList]. Returns -1 if [element] is not found.
