@@ -225,7 +225,7 @@ class EgbChoiceList implements List<EgbChoice> {
   }
 }
 
-class EgbQuestion extends EgbUserInteraction {
+class EgbTextInput extends EgbUserInteraction {
   // TODO: implement
   // Question can be answered with text. Example: "What is your name?"
 }
