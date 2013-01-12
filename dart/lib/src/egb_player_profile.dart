@@ -25,6 +25,10 @@ class EgbPlayerProfile {
     _loadPreferences();
   }
   
+  void close() {
+    // TODO: save data to storage?
+  }
+  
   String playerUid;
   String currentEgamebookUid;
   

@@ -44,6 +44,7 @@ class EgbRunner {
   }
   
   void stop() {
+    _playerProfile.close();
     _interface.close();
     _scripterPort.send(new EgbMessage.Quit().toJson());
     _receivePort.close();
