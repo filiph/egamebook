@@ -25,14 +25,14 @@ class HtmlInterface implements EgbInterface {
   }
   
   void close() {
-    choicesOl.elements.clear();
+    choicesOl.children.clear();
     choicesQuestionP.style.display = "none";
   }
   
   Future<bool> showText(String s) {
     ParagraphElement p = new Element.tag("p");
-    p.innerHTML = s;
-    paragraphsDiv.elements.add(p);
+    p.innerHtml = s;
+    paragraphsDiv.children.add(p);
     return new Future.immediate(true);
   }
 
@@ -40,7 +40,7 @@ class HtmlInterface implements EgbInterface {
     var completer = new Completer();
     
     if (choiceList.question != null) {
-      choicesQuestionP.innerHTML = choiceList.question;
+      choicesQuestionP.innerHtml = choiceList.question;
       choicesQuestionP.style.display = "block";
     }
     
@@ -49,17 +49,17 @@ class HtmlInterface implements EgbInterface {
       EgbChoice choice = choiceList[i];
       LIElement li = new Element.tag("li");
       AnchorElement a = new Element.tag("a");
-      a.innerHTML = choice.string;
+      a.innerHtml = choice.string;
 
       a.on.click.add((Event ev) {
         print("User clicked on choice $i with hash ${choice.hash}");
           completer.complete(choice.hash);
-          choicesOl.elements.clear();
+          choicesOl.children.clear();
           choicesQuestionP.style.display = "none";
       });
       
-      li.elements.add(a);
-      choicesOl.elements.add(li);
+      li.children.add(a);
+      choicesOl.children.add(li);
     }
     
     return completer.future;
