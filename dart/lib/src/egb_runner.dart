@@ -6,7 +6,10 @@ import 'egb_utils.dart';
 
 import 'egb_interface.dart';
 import 'egb_library.dart';
+
+import 'egb_storage.dart';
 import 'egb_savegame.dart';
+import 'egb_player_profile.dart';
 
 /**
  * EgbRunner manages communication between the Scripter and the Interface.
@@ -17,10 +20,17 @@ class EgbRunner {
   SendPort _scripterPort;
   EgbInterface _interface;
   
+  EgbPlayerProfile _playerProfile;
+  
   bool started = false;
   bool ended = false;
   
-  EgbRunner(this._receivePort, this._scripterPort, this._interface) {
+  EgbRunner(this._receivePort, this._scripterPort, 
+      this._interface, this._playerProfile) {
+    
+    // get bookUid from scripter
+    // load latest saved state for the bookUid from playerProfile
+    
     _receivePort.receive(receiveFromScripter);
   }
   
@@ -53,7 +63,7 @@ class EgbRunner {
     } else {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
-        // TODO: storage.save(savegame) // optionaly prepend text
+        // TODO: _playerProfile.save(savegame) // optionaly prepend text
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {

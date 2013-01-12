@@ -1128,6 +1128,10 @@ class Builder {
           "import '../../lib/src/egb_interface_cmdline.dart';\n",
       "import 'egb_interface_html.dart';" :
           "import '../../lib/src/egb_interface_html.dart';\n",
+      "import 'egb_storage.dart';" :
+        "import '../../lib/src/egb_storage.dart';\n",
+      "import 'egb_player_profile.dart';" :
+        "import '../../lib/src/egb_player_profile.dart';\n",
       "import 'reference_scripter_impl.dart';" :
           "import '$pathToOutputDart';\n", // TODO!!
     };

@@ -9,9 +9,15 @@ class EgbSavegame {
   Map vars;
   
   /**
+   * Every savegame can define the text history that should prepend it.
    * 
+   * When a savegame is opened, [textHistory] is printed so that player is
+   * reminded about the context.
+   * 
+   * Normally, [textHistory] is the rendered contents of the (chronologically)
+   * previous page.
    */
-  String previousText;
+  String textHistory;
   
   EgbSavegame(String this.currentPageName, Map _vars) {
     vars = _filterSaveable(_vars);
@@ -27,7 +33,7 @@ class EgbSavegame {
     currentPageName = saveMap["currentPageName"];
     vars = saveMap["vars"];
     if (saveMap.containsKey("previousText")) {
-      previousText = saveMap["previousText"];
+      textHistory = saveMap["previousText"];
     }
   }
   
@@ -50,11 +56,13 @@ class EgbSavegame {
     Map<String,dynamic> saveMap = new Map<String,dynamic>();
     saveMap["currentPageName"] = currentPageName;
     saveMap["vars"] = vars;
-    if (previousText != null) {
-      saveMap["previousText"] = previousText;
+    if (textHistory != null) {
+      saveMap["previousText"] = textHistory;
     }
     return JSON.stringify(saveMap);
   }
+  
+  String toString() => toJson();
   
   /**
    * Returns true if variable is Saveable or a primitive type.

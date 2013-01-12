@@ -1,40 +1,47 @@
 library egb_storage;
 
 import 'egb_savegame.dart';
+import 'egb_player_profile.dart';
 
 /**
- * Allows the Runner to save and load games from/to a storage. This can be
- * memory, a file, a database, or – more specifically – HTML5 localStorage. 
+ * Storage is the abstract class that can be implemented via any kind of 
+ * actual storage mechanism (file i/o, HTML5 localStorage, cloud).
+ * 
+ * Storage is used to save and load player profile and savegames.
  */
 abstract class EgbStorage {
+  static const String DEFAULT_PLAYER_UID = "default";
   
-  String egbUid;
-  String playerUid;
+  Future<bool> save(String key, String value);
+  Future<String> load(String key);
+
+  EgbPlayerProfile getDefaultPlayerProfile();
+}
+
+/**
+ * The most primitive, mock-level storage. Only stores into memory (RAM),
+ * no persistence.
+ */
+class MemoryStorage implements EgbStorage {
+  Map<String,String> memory;
   
-  /**
-   * Number of savegames to keep in storage per given egamebook and player.
-   */
-  int _maxSaves = 10;
-  get maxSaves;
-  set maxSaves(int value);
-  
-  Queue<String> savegameUids;
-  
-  EgbStorage(String this.egbUid, String this.playerUid) {
+  MemoryStorage() {
+    memory = new Map();
   }
   
-  /**
-   * Saves the savegame data and files it under the given egamebook UID and 
-   * player UID.
-   * 
-   * Gets rid of old savegames if there is more than [maxSaves] present in 
-   * the storage.
-   * 
-   * Returns UID of the saved resource (for later manipulation).
-   */
-  Future<String> save(EgbSavegame savegame);
+  Future<bool> save(String key, String value) {
+    memory[key] = value;
+    return new Future.immediate(true);
+  }
   
-  Future<EgbSavegame> load(String savegameUid);
+  Future<String> load(String key) {
+    var result = memory[key];
+    return new Future.immediate(result);
+  }
   
-  Future<EgbSavegame> loadMostRecent();
+  EgbPlayerProfile getDefaultPlayerProfile() {
+    var playerProfile = new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
+                                             this);
+  }
+  
 }

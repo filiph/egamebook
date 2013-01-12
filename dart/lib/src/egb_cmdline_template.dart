@@ -2,6 +2,8 @@ import 'dart:isolate';
 import 'egb_runner.dart';
 import 'egb_interface.dart';
 import 'egb_interface_cmdline.dart';
+import 'egb_storage.dart';
+import 'egb_player_profile.dart';
 
 // this will be rewritten with the actual file
 import 'reference_scripter_impl.dart';
@@ -13,8 +15,13 @@ void main() {
   SendPort scripterPort = spawnFunction(createScripter);
   // create the interface
   EgbInterface interface = new CmdlineInterface();
+  // open storage
+  EgbStorage storage = new MemoryStorage(); // TODO: other storage?
+  // get player profile
+  EgbPlayerProfile playerProfile = storage.getDefaultPlayerProfile();
   
-  new EgbRunner(receivePort, scripterPort, interface).run();
+  new EgbRunner(receivePort, scripterPort, 
+      interface, playerProfile).run();
 }
 
 /**

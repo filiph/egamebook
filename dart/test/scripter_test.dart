@@ -5,6 +5,7 @@ import 'dart:isolate';
 import '../lib/src/egb_interface.dart';
 import '../lib/src/egb_library.dart';
 import '../lib/src/egb_runner.dart';
+import '../lib/src/egb_storage.dart';
 import '../lib/egb_builder.dart';
 
 // the scripter file to be tested
@@ -85,7 +86,9 @@ void main() {
         test("runner initial values correct", () {
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
           var interface = new MockInterface();
-          var runner = new EgbRunner(receivePort, scripterPort, interface);
+          var storage = new MemoryStorage();
+          var runner = new EgbRunner(receivePort, scripterPort, 
+              interface, storage.getDefaultPlayerProfile());
           expect(runner.started,
               false);
           expect(runner.ended,
@@ -113,7 +116,9 @@ void main() {
           interface.choicesToBeTaken.addAll(
               [0, 1, 0, 1, 0, 1]
           );
-          runner = new EgbRunner(receivePort, scripterPort, interface);
+          var storage = new MemoryStorage();
+          runner = new EgbRunner(receivePort, scripterPort, 
+              interface, storage.getDefaultPlayerProfile());
           runner.run();
           
           new Timer(1000, expectAsync1(callback)); // TODO: more elegant
@@ -138,7 +143,9 @@ void main() {
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 0, 0]
           );
-          runner = new EgbRunner(receivePort, scripterPort, interface);
+          var storage = new MemoryStorage();
+          runner = new EgbRunner(receivePort, scripterPort, 
+              interface, storage.getDefaultPlayerProfile());
           runner.run();
           
           new Timer(1000, expectAsync1(callback)); // TODO: more elegant
@@ -163,7 +170,9 @@ void main() {
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
           );
-          runner = new EgbRunner(receivePort, scripterPort, interface);
+          var storage = new MemoryStorage();
+          runner = new EgbRunner(receivePort, scripterPort, 
+              interface, storage.getDefaultPlayerProfile());
           runner.run();
           
           new Timer(1000, expectAsync1(callback)); // TODO: more elegant
@@ -195,7 +204,9 @@ void main() {
         interface.choicesToBeTaken = new Queue<int>.from(
             [0]
         );
-        runner = new EgbRunner(receivePort, scripterPort, interface);
+        var storage = new MemoryStorage();
+        runner = new EgbRunner(receivePort, scripterPort, 
+            interface, storage.getDefaultPlayerProfile());
         runner.run();
         
         new Timer(1000, expectAsync1(callback)); // TODO: more elegant
