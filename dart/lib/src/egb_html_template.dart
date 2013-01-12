@@ -1,5 +1,4 @@
 import 'dart:isolate';
-import 'egb_library.dart';
 import 'egb_runner.dart';
 import 'egb_interface.dart';
 import 'egb_interface_html.dart';
