@@ -2,6 +2,25 @@ import 'dart:io';
 import 'package:args/args.dart';
 import '../lib/egb_builder.dart';
 
+bool graphInput, graphOutput, compile;
+
+builderReadyHandler(Builder b) {
+  if (graphInput) {
+    b.updateFromGraphMLFile();
+    b.updateEgbFile().then(builderReadyHandler);
+    graphInput = false;
+    return;
+  }    
+  if (graphOutput) {
+    b.writeGraphMLFile();
+  }
+  if (compile) {
+    b.writeDartFiles()
+    .then((_) {
+      print("Done.");
+    });
+  }
+}
 
 void main() {
   Options options = new Options();
@@ -18,9 +37,9 @@ void main() {
       help:"Update existing .egb file from given GraphML (yEd) file.");
   
   var results = parser.parse(options.arguments);
-  bool graphInput = results["graph-input"];
-  bool graphOutput = results["graph-output"];
-  bool compile = results["compile"];
+  graphInput = results["graph-input"];
+  graphOutput = results["graph-output"];
+  compile = results["compile"];
 
   // TODO: if scaffold==true, then make minimal .egb file in example/new.
   
@@ -30,25 +49,7 @@ void main() {
     return;
   }
   var filename = results.rest[0];
-
-  var builderReadyCallback = builderReadyCallbackFunc(Builder b) {
-    if (graphInput) {
-      b.updateFromGraphMLFile();
-      b.updateEgbFile().then(builderReadyCallbackFunc);
-      graphInput = false;
-      return;
-    }    
-    if (graphOutput) {
-      b.writeGraphMLFile();
-    }
-    if (compile) {
-      b.writeDartFiles()
-      .then((_) {
-        print("Done.");
-      });
-    }
-  };
   
   new Builder().readEgbFile(new File(filename))
-  .then(builderReadyCallback);
+  .then(builderReadyHandler);
 }
