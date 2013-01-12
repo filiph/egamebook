@@ -8,6 +8,7 @@ example/library/*.html
 example/library/*.graphml
 example/test/*.js
 example/test/*.js.map
+example/test/*.js.deps
 example/test/*.html
 example/test/*.graphml
 example/test/*.dart
