@@ -20,8 +20,10 @@ void main() {
   // get player profile
   EgbPlayerProfile playerProfile = storage.getDefaultPlayerProfile();
   
-  new EgbRunner(receivePort, scripterPort, 
-      interface, playerProfile).run();
+  var runner = new EgbRunner(receivePort, scripterPort, 
+      interface, playerProfile);
+  interface.userQuit.then((_) => runner.stop());
+  runner.run();
 }
 
 /**

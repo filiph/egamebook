@@ -11,10 +11,16 @@ class HtmlInterface implements EgbInterface {
   ParagraphElement choicesQuestionP;
   OListElement choicesOl;
   
+  Future<bool> userQuit;
+  Completer _userQuitCompleter;
+  
   /**
     Constructor.
     */
-  HtmlInterface();
+  HtmlInterface() {
+    _userQuitCompleter = new Completer();
+    userQuit = _userQuitCompleter.future;
+  }
   
   void setup() {
     // DOM

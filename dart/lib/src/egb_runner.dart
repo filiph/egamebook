@@ -25,11 +25,13 @@ class EgbRunner {
   bool started = false;
   bool ended = false;
   
+  Future<bool> endOfBookReached;
+  Completer<bool> _endOfBookCompleter;
+  
   EgbRunner(this._receivePort, this._scripterPort, 
       this._interface, this._playerProfile) {
-    
-    // get bookUid from scripter
-    // load latest saved state for the bookUid from playerProfile
+    _endOfBookCompleter = new Completer();
+    endOfBookReached = _endOfBookCompleter.future;
     
     _receivePort.receive(receiveFromScripter);
   }
@@ -37,7 +39,7 @@ class EgbRunner {
   void run() {
     _interface.setup();
     _scripterPort.send(
-        new EgbMessage.Start().toJson(),
+        new EgbMessage.GetBookUid().toJson(),
         _receivePort.toSendPort()
     );
     started = true;
@@ -60,11 +62,27 @@ class EgbRunner {
     DEBUG_CMD("We have a message from Scripter: ${message.type}.");
     if (message.type == EgbMessage.MSG_END_OF_BOOK) {
       DEBUG_CMD("We are at the end of book. Closing.");
+      _endOfBookCompleter.complete(true);
       stop();
+    } else if (message.type == EgbMessage.MSG_SEND_BOOK_UID) {
+      // get bookUid from scripter
+      _playerProfile.currentEgamebookUid = message.strContent;
+      // load latest saved state for the bookUid from playerProfile
+      _playerProfile.loadMostRecent()
+      .then((EgbSavegame savegame) {
+        if (savegame == null) {
+          // no savegames for this egamebook
+          _scripterPort.send(new EgbMessage.Start().toJson(), 
+              _receivePort.toSendPort());
+        } else {
+          _scripterPort.send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME).toJson(), 
+              _receivePort.toSendPort());
+        }
+      });
     } else {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
-        // TODO: _playerProfile.save(savegame) // optionaly prepend text
+        _playerProfile.save(savegame);
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {

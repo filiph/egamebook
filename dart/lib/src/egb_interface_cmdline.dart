@@ -9,10 +9,16 @@ class CmdlineInterface implements EgbInterface {
 
   StringInputStream cmdLine;
   
+  Future<bool> userQuit;
+  Completer<bool> _userQuitCompleter;
+  
   /**
     Constructor.
     */
-  CmdlineInterface();
+  CmdlineInterface() {
+    _userQuitCompleter = new Completer();
+    userQuit = _userQuitCompleter.future;
+  }
   
   void setup() {
     cmdLine = new StringInputStream(stdin);
@@ -43,8 +49,15 @@ class CmdlineInterface implements EgbInterface {
     
     cmdLine.onLine = () {
       print("");
+      var line = cmdLine.readLine();
+      
+      if (line.trim().toLowerCase() == "quit") {
+        _userQuitCompleter.complete(true);
+        return new Completer().future;
+      }
+      
       try {
-        int optionNumber = int.parse(cmdLine.readLine());
+        int optionNumber = int.parse(line);
         if (optionNumber >= 1 && optionNumber <= choiceList.length) {
           completer.complete(choiceList[optionNumber - 1].hash);
         } else {

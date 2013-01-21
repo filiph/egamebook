@@ -6,6 +6,7 @@ import '../lib/src/egb_interface.dart';
 import '../lib/src/egb_library.dart';
 import '../lib/src/egb_runner.dart';
 import '../lib/src/egb_storage.dart';
+import '../lib/src/egb_savegame.dart';
 import '../lib/egb_builder.dart';
 
 // the scripter file to be tested
@@ -17,7 +18,13 @@ class MockInterface implements EgbInterface {
   bool started = false;
   bool closed = false;
   
-  MockInterface() : choicesToBeTaken = new Queue<int>();
+  Future<bool> userQuit;
+  Completer _userQuitCompleter;
+  
+  MockInterface() : choicesToBeTaken = new Queue<int>() {
+    _userQuitCompleter = new Completer();
+    userQuit = _userQuitCompleter.future;
+  }
   
   void setup() {
     started = true;
@@ -40,7 +47,9 @@ class MockInterface implements EgbInterface {
                                 "-> ${choiceList[choiceNumber].hash}");
       return new Future.immediate(choiceList[choiceNumber].hash);
     } else {
-      print("MockInterface pick: NONE, waiting");
+      print("MockInterface pick: NONE, Quitting");
+      close();
+      _userQuitCompleter.complete(true);
       return new Completer().future;
     }
   }
@@ -76,6 +85,8 @@ void main() {
             false);
         expect(interface.closed,
             false);
+        expect(interface.userQuit.isComplete,
+            isFalse);
       });
       
       group("alternate_6", () {
@@ -99,17 +110,6 @@ void main() {
         test("walks through when it should", () {
           var interface;
           var runner;
-
-          var callback = (Timer) {
-            expect(interface.closed,
-                true);
-            expect(runner.ended,
-                true);
-            expect(interface.latestOutput,
-            "End of book.");
-            expect(interface.choicesToBeTaken.length,
-                0);
-          };
           
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
           interface = new MockInterface();
@@ -119,25 +119,23 @@ void main() {
           var storage = new MemoryStorage();
           runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
-          runner.run();
           
-          new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+          runner.endOfBookReached.then(expectAsync1((_) {
+            expect(interface.latestOutput,
+            "End of book.");
+            expect(interface.choicesToBeTaken.length,
+                0);
+            
+            runner.stop();
+          }));
+          
+          runner.run();
         });
         
         test("doesn't walk through when it shouldn't", () {
           var interface;
           var runner;
 
-          var callback = (Timer) {
-            expect(interface.closed,
-                false);
-            expect(runner.ended,
-                false);
-            expect(interface.latestOutput,
-                startsWith("Welcome (back?) to dddeee."));
-            runner.stop();
-          };
-          
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
           interface = new MockInterface();
           interface.choicesToBeTaken = new Queue<int>.from(
@@ -146,24 +144,24 @@ void main() {
           var storage = new MemoryStorage();
           runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
-          runner.run();
           
-          new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+          interface.userQuit.then(expectAsync1((_) {
+            expect(interface.closed,
+                true);
+            expect(runner.ended,
+                false);
+            expect(interface.latestOutput,
+                startsWith("Welcome (back?) to dddeee."));
+            
+            runner.stop();
+          }));
+          
+          runner.run();
         });
         
         test("simple counting works", () {
           var interface;
           var runner;
-
-          var callback = (Timer) {
-            expect(interface.closed,
-                false);
-            expect(runner.ended,
-                false);
-            expect(interface.latestOutput,
-                contains("Time is now 10."));
-            runner.stop();
-          };
           
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
           interface = new MockInterface();
@@ -173,9 +171,19 @@ void main() {
           var storage = new MemoryStorage();
           runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
-          runner.run();
           
-          new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+          interface.userQuit.then(expectAsync1((_) {
+            expect(interface.closed,
+                true);
+            expect(runner.ended,
+                false);
+            expect(interface.latestOutput,
+                contains("Time is now 10."));
+            
+            runner.stop();
+          }));
+          
+          runner.run();
         });
       });
     });
@@ -186,30 +194,49 @@ void main() {
       });
       
       test("saveables versus non-saveables", () {
-        var interface;
-        var runner;
-
-        var callback = (Timer) {
-          expect(interface.closed,
-              true);
-          expect(runner.ended,
-              true);
-          expect(interface.latestOutput,
-              contains("Scripter should still have all variables"));
-          runner.stop();
-        };
-        
         SendPort scripterPort = spawnUri("files/scripter_test_save_main.dart");
-        interface = new MockInterface();
+        var interface = new MockInterface();
         interface.choicesToBeTaken = new Queue<int>.from(
             [0]
         );
         var storage = new MemoryStorage();
-        runner = new EgbRunner(receivePort, scripterPort, 
-            interface, storage.getDefaultPlayerProfile());
-        runner.run();
+        var playerProfile = storage.getDefaultPlayerProfile();
+        var runner = new EgbRunner(receivePort, scripterPort, 
+            interface, playerProfile);
         
-        new Timer(1000, expectAsync1(callback)); // TODO: more elegant
+        runner.endOfBookReached.then(expectAsync1((_) {
+          expect(interface.latestOutput,
+              contains("Scripter should still have all variables"));
+          
+          runner.stop();
+          
+          playerProfile.loadMostRecent()
+          .then(expectAsync1((EgbSavegame savegame) {
+            expect(savegame.vars.length,
+                isNonZero);
+            expect(savegame.vars["nullified"],
+                isNull);
+            expect(savegame.vars["integer"],
+                0);
+            expect(savegame.vars["numeric"],
+                3.14);
+            expect(savegame.vars["string"],
+                "Řeřicha UTF-8 String");
+            expect(savegame.vars.containsKey("nonSaveable"),
+                false);
+            expect(savegame.vars["list1"],
+                ["a", "b", "ř"]);
+            expect(savegame.vars["list2"],
+                   [0, 3.14, ["a", "b", "ř"]]);
+            expect(savegame.vars["map1"],
+                {"c": null, "a": 0, "b": 3.14});
+            expect(savegame.vars["map2"] as Map,
+                hasLength(2));
+          }));
+          
+        }));
+        
+        runner.run();
       });
     });
   });

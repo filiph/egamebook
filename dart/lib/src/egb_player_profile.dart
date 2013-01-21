@@ -111,12 +111,27 @@ class EgbPlayerProfile {
     
     _load("savegames")
     .then((json) {
-      List<EgbSavegame> savegameList = JSON.parse(json);
-      if (savegameList.isEmpty) {
+      if (json == null) {
+        savegames = new Queue<EgbSavegame>();
         completer.complete(null);
       } else {
-        savegames = new Queue<EgbSavegame>.from(savegameList);
-        completer.complete(savegames.last);
+        
+        // extract savegames from JSON
+        List<Map> jsonList = JSON.parse(json);
+        var savegameList = new List<EgbSavegame>();
+        for (int i = 0; i < jsonList.length; i++) {
+          savegameList.add(new EgbSavegame(
+              jsonList[i]["currentPageName"], 
+              jsonList[i]["vars"]));
+        }
+        
+        if (savegameList.isEmpty) {
+          savegames = new Queue<EgbSavegame>();
+          completer.complete(null);
+        } else {
+          savegames = new Queue<EgbSavegame>.from(savegameList);
+          completer.complete(savegames.last);
+        }
       }
     });
     

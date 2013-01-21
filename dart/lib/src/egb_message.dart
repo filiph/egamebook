@@ -22,6 +22,8 @@ class EgbMessage {
   static final int MSG_NO_RESULT = 256;
   static final int MSG_SAVE_GAME = 512;
   static final int MSG_LOAD_GAME = 1024;
+  static final int MSG_GET_BOOK_UID = 2048;
+  static final int MSG_SEND_BOOK_UID = 4096;
 
   EgbMessage(this.type) {
   }
@@ -35,6 +37,10 @@ class EgbMessage {
   }
 
   EgbMessage.Start() : type = MSG_START {}
+  
+  EgbMessage.BookUid(this.strContent) : type = MSG_SEND_BOOK_UID;
+  
+  EgbMessage.GetBookUid() : type = MSG_GET_BOOK_UID;
 
   EgbMessage.EndOfBook() : type = MSG_END_OF_BOOK {}
 

@@ -106,13 +106,25 @@ abstract class EgbScripter {
     port.receive(_messageReceiveCallback);
   }
 
+
   void _messageReceiveCallback(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
     DEBUG_SCR("Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
+
+    // TODO: make into switch 
     if (message.type == EgbMessage.MSG_QUIT) {
       DEBUG_SCR("Closing port and quiting.");
       port.close();
+    } else if (message.type == EgbMessage.MSG_GET_BOOK_UID) {
+      DEBUG_SCR("First contact from Runner. Reply with uid of this book.");
+      _interfacePort.send(
+          new EgbMessage.BookUid("DEFAULT_BOOK_UID").toJson(), // TODO: get UID from meta information
+          port.toSendPort());
+    } else if (message.type == EgbMessage.MSG_LOAD_GAME) {
+      _loadFromSaveGameMessage(message);
+      // TODO handle errors
+      _interfacePort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
     } else if (pages == null
         || (currentPageIndex != null && currentPageIndex >= pages.length)) {
       DEBUG_SCR("No more pages.");
@@ -280,7 +292,15 @@ abstract class EgbScripter {
   }
   
   EgbMessage _createSaveGame() {
-    EgbSavegame savegame = new EgbSavegame(currentPageName, vars);
+    var savegame = new EgbSavegame(currentPageName, vars);
     return savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
+  }
+  
+  void _loadFromSaveGameMessage(EgbMessage message) {
+    var savegame = new EgbSavegame.fromMessage(message);
+    
+    savegame.vars.forEach((key, value) {
+      vars[key] = value;
+    });
   }
 }
