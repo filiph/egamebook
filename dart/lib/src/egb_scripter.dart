@@ -140,7 +140,6 @@ abstract class EgbScripter {
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting from the beginning");
       currentPageIndex = 0;
-      // TODO: currentPageName
       currentBlock = null;
       _nextScriptStack.clear();
       _initScriptEnvironment();
@@ -299,8 +298,22 @@ abstract class EgbScripter {
   void _loadFromSaveGameMessage(EgbMessage message) {
     var savegame = new EgbSavegame.fromMessage(message);
     
+    if (!pageHandles.containsKey(savegame.currentPageName)) {
+      throw "Trying to load page '${savegame.currentPageName}' which doesn't "
+            "exist in current egamebook.";
+    }
+    
+    // TODO: DRY with MSG_START
+    DEBUG_SCR("Starting from a savegame");
+    currentPageIndex = pageHandles[savegame.currentPageName];
+    currentBlock = null;
+    _nextScriptStack.clear();
+    _initScriptEnvironment();
+    
+    // copy saved variables over vars
     savegame.vars.forEach((key, value) {
       vars[key] = value;
     });
+    
   }
 }

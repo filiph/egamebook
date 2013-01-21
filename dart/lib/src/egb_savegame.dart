@@ -7,6 +7,7 @@ import 'egb_message.dart';
 class EgbSavegame {
   String currentPageName;
   Map vars;
+  // TODO: points
   
   /**
    * Every savegame can define the text history that should prepend it.

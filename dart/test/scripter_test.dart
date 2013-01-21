@@ -108,16 +108,13 @@ void main() {
         });
         
         test("walks through when it should", () {
-          var interface;
-          var runner;
-          
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
-          interface = new MockInterface();
+          var interface = new MockInterface();
           interface.choicesToBeTaken.addAll(
               [0, 1, 0, 1, 0, 1]
           );
           var storage = new MemoryStorage();
-          runner = new EgbRunner(receivePort, scripterPort, 
+          var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
           runner.endOfBookReached.then(expectAsync1((_) {
@@ -133,16 +130,13 @@ void main() {
         });
         
         test("doesn't walk through when it shouldn't", () {
-          var interface;
-          var runner;
-
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
-          interface = new MockInterface();
+          var interface = new MockInterface();
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 0, 0]
           );
           var storage = new MemoryStorage();
-          runner = new EgbRunner(receivePort, scripterPort, 
+          var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
           interface.userQuit.then(expectAsync1((_) {
@@ -160,16 +154,13 @@ void main() {
         });
         
         test("simple counting works", () {
-          var interface;
-          var runner;
-          
           SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
-          interface = new MockInterface();
+          var interface = new MockInterface();
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
           );
           var storage = new MemoryStorage();
-          runner = new EgbRunner(receivePort, scripterPort, 
+          var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
           interface.userQuit.then(expectAsync1((_) {
@@ -188,12 +179,12 @@ void main() {
       });
     });
   
-    group("Scripter saving", () {
+    group("Persistence", () {
       setUp(() {
         receivePort = new ReceivePort();
       });
       
-      test("saveables versus non-saveables", () {
+      test("works for saveables and doesn't for non-saveables", () {
         SendPort scripterPort = spawnUri("files/scripter_test_save_main.dart");
         var interface = new MockInterface();
         interface.choicesToBeTaken = new Queue<int>.from(
@@ -237,6 +228,51 @@ void main() {
         }));
         
         runner.run();
+      });
+      
+      test("works between 2 independent runs", () {
+        SendPort scripterPort1 = spawnUri("files/scripter_test_alternate_6_main.dart");
+        
+        var interface1 = new MockInterface();
+        interface1.choicesToBeTaken = new Queue<int>.from(
+            [0, 1, 0, 1, 1]
+        );
+        
+        var interface2 = new MockInterface();
+        interface2.choicesToBeTaken = new Queue<int>.from(
+            [1, 1, 1, 1, 1, 1, 1]
+        );
+        
+        var storage = new MemoryStorage();
+        var runner1 = new EgbRunner(receivePort, scripterPort1, 
+            interface1, storage.getDefaultPlayerProfile());
+        
+        interface1.userQuit.then(expectAsync1((_) {
+          runner1.stop();
+          
+          receivePort = new ReceivePort();
+          SendPort scripterPort2 = spawnUri("files/scripter_test_alternate_6_main.dart");
+          
+          var runner2 = new EgbRunner(receivePort, scripterPort2, 
+              interface2, storage.getDefaultPlayerProfile());
+          
+          interface2.userQuit.then(expectAsync1((_) {
+            expect(interface2.closed,
+                true);
+            expect(runner2.ended,
+                false);
+            expect(interface2.latestOutput,
+                contains("Time is now 10."));
+            
+            runner2.stop();
+          }));
+          
+          // run second part
+          runner2.run();
+        }));
+        
+        // run first part
+        runner1.run();
       });
     });
   });
