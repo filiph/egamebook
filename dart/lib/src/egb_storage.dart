@@ -40,7 +40,7 @@ class MemoryStorage implements EgbStorage {
   }
   
   EgbPlayerProfile getDefaultPlayerProfile() {
-    var playerProfile = new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
+    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
                                              this);
   }
   
