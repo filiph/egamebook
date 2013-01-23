@@ -466,7 +466,7 @@ void main() {
             equals(true));
         });
         new File(getPath("full_project.dart")).delete()
-        .onComplete((_) {
+        .whenComplete(() {
           new Builder().readEgbFile(new File(getPath("full_project.egb")))
           .then((var b) {
             b.writeDartFiles()
@@ -531,7 +531,7 @@ void main() {
         inputStream.pipe(egb.openOutputStream(FileMode.WRITE));
         inputStream.onClosed = expectAsync0(() {
           new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
-          .chain((Builder b) {
+          .then((Builder b) {
             b.pages.add(new BuilderPage("Programatically added page", 
                 b.pages.last.index + 1));
             b.pageHandles["Programatically added page"] = b.pages.last.index;

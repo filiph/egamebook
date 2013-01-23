@@ -1,5 +1,6 @@
 library egb_interface_html;
 
+import 'dart:async';
 import 'dart:html';
 import 'egb_interface.dart';
 import 'egb_library.dart';

@@ -1,6 +1,7 @@
 import 'package:unittest/unittest.dart';
 import 'dart:io';
 
+import 'dart:async';
 import 'dart:isolate';
 import '../lib/src/egb_interface.dart';
 import '../lib/src/egb_library.dart';
@@ -72,12 +73,12 @@ void main() {
   // build files
   Future aFuture = new Builder()
       .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
-      .chain((Builder b) => b.writeDartFiles());
+      .then((Builder b) => b.writeDartFiles());
   Future bFuture = new Builder()
       .readEgbFile(new File(getPath("scripter_test_save.egb")))
-      .chain((Builder b) => b.writeDartFiles());
+      .then((Builder b) => b.writeDartFiles());
   
-  Futures.wait([aFuture, bFuture]).then((_) {
+  Future.wait([aFuture, bFuture]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
@@ -85,8 +86,6 @@ void main() {
             false);
         expect(interface.closed,
             false);
-        expect(interface.userQuit.isComplete,
-            isFalse);
       });
       
       group("alternate_6", () {

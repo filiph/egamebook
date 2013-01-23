@@ -25,7 +25,7 @@ class EgbSavegame {
   }
   
   EgbSavegame.fromJson(String json) {
-    Map<String,dynamic> saveMap = JSON.parse(json);
+    Map<String,dynamic> saveMap = parse(json);
     if (!saveMap.containsKey("currentPageName") 
         || !saveMap.containsKey("vars")) {
       throw "Invalid JSON for EgbSavegame. Doesn't contain required fields "
@@ -60,7 +60,7 @@ class EgbSavegame {
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
     }
-    return JSON.stringify(saveMap);
+    return stringify(saveMap);
   }
   
   String toString() => toJson();

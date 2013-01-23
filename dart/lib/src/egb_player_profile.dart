@@ -1,5 +1,6 @@
 library egb_player_profile;
 
+import 'dart:async';
 import 'dart:json';
 
 import 'egb_savegame.dart';
@@ -36,7 +37,7 @@ class EgbPlayerProfile {
   
   Future<bool> _savePreferences() {
     return _storage.save("$playerUid::$PREFERENCES_KEY", 
-                         JSON.stringify(preferences));
+                         stringify(preferences));
   }
   
   Future<bool> _loadPreferences() {
@@ -46,7 +47,7 @@ class EgbPlayerProfile {
       if (json == null || json == "") {
         preferences = new Map();
       } else {
-        preferences = JSON.parse(json);
+        preferences = parse(json);
       }
       completer.complete(true);
     });
@@ -117,7 +118,7 @@ class EgbPlayerProfile {
       } else {
         
         // extract savegames from JSON
-        List<Map> jsonList = JSON.parse(json);
+        List<Map> jsonList = parse(json);
         var savegameList = new List<EgbSavegame>();
         for (int i = 0; i < jsonList.length; i++) {
           savegameList.add(new EgbSavegame(

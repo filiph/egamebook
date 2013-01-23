@@ -63,7 +63,7 @@ class EgbMessage {
     XXX: this isn't needed in VM, but frog can't handle Object messages (yet?)
     */
   EgbMessage.fromJson(String json) {
-    Map<String,dynamic> data = JSON.parse(json);
+    Map<String,dynamic> data = parse(json);
     type = data["type"];
 
     if (data.containsKey("strContent")) {
@@ -95,6 +95,6 @@ class EgbMessage {
       data["intContent"] = intContent;
     }
 
-    return JSON.stringify(data);
+    return stringify(data);
   }
 }

@@ -1,5 +1,6 @@
 library egb_interface_cmdline;
 
+import 'dart:async';
 import 'dart:io';
 
 import 'egb_interface.dart';

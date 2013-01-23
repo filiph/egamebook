@@ -1,5 +1,6 @@
 library egb_interface;
 
+import 'dart:async';
 import 'dart:isolate';
 import 'egb_library.dart';
 

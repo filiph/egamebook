@@ -197,7 +197,7 @@ abstract class EgbScripter {
     DEBUG_SCR("Resolving block.");
     if (currentBlock >= blocks.length) {
       DEBUG_SCR("At the end of page.");
-      if (choices.some((choice) => !choice.shown)) {
+      if (choices.any((choice) => !choice.shown)) {
         return choices.toMessage(endOfPage:true); //new Message.ShowChoices(choices, endOfPage:true);
       } else {
         return new EgbMessage.EndOfBook();
@@ -274,7 +274,9 @@ abstract class EgbScripter {
     // clean up
     textBuffer = new StringBuffer();
     // delete choices that have already been shown
-    choices = choices.filter((EgbChoice choice) => !choice.shown);
+    choices = new EgbChoiceList.from(
+        choices.where((choice) => !choice.shown)
+        );  // TODO: choices.removeMatching((choice) => choice.shown);
 
     // run the actual script
     if (script == null) {
@@ -284,7 +286,7 @@ abstract class EgbScripter {
     }
 
     // catch text and choices
-    if (choices.some((choice) => !choice.waitForEndOfPage)) {
+    if (choices.any((choice) => !choice.waitForEndOfPage)) {
       return choices.toMessage(prependText:textBuffer.toString()); // new Message.ShowChoices(choices, prependText:textBuffer.toString());
     }
     return new EgbMessage.TextResult(textBuffer.toString());
