@@ -15,14 +15,17 @@ import '../lib/egb_builder.dart';
 
 class MockInterface implements EgbInterface {
   Queue<int> choicesToBeTaken;
+  Queue<String> choicesToBeTakenByString;
   String latestOutput;
+  EgbChoiceList latestChoices;
   bool started = false;
   bool closed = false;
   
   Future<bool> userQuit;
   Completer _userQuitCompleter;
   
-  MockInterface() : choicesToBeTaken = new Queue<int>() {
+  MockInterface() : choicesToBeTaken = new Queue<int>(),
+      choicesToBeTakenByString = new Queue<String>() {
     _userQuitCompleter = new Completer();
     userQuit = _userQuitCompleter.future;
   }
@@ -42,8 +45,23 @@ class MockInterface implements EgbInterface {
   }
   
   Future<int> showChoices(EgbChoiceList choiceList) {
+    choiceList.forEach((choice) => print("MockInterface choice: '${choice.string}'"));
+    latestChoices = choiceList;
     if (choicesToBeTaken.length > 0) {
       int choiceNumber = choicesToBeTaken.removeFirst();
+      print("MockInterface pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
+                                "-> ${choiceList[choiceNumber].hash}");
+      return new Future.immediate(choiceList[choiceNumber].hash);
+    } else if (choicesToBeTakenByString.length > 0) {
+      String choiceString = choicesToBeTakenByString.removeFirst();
+      int choiceNumber = null;
+      for (int i = 0; i < choiceList.length; i++) {
+        if (choiceList[i].string == choiceString) {
+          choiceNumber = i;
+          break;
+        }
+      }
+      if (choiceNumber == null) throw "Choice $choiceString not available.";
       print("MockInterface pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
                                 "-> ${choiceList[choiceNumber].hash}");
       return new Future.immediate(choiceList[choiceNumber].hash);
@@ -77,8 +95,11 @@ void main() {
   Future bFuture = new Builder()
       .readEgbFile(new File(getPath("scripter_test_save.egb")))
       .then((Builder b) => b.writeDartFiles());
+  Future cFuture = new Builder()
+      .readEgbFile(new File(getPath("scripter_page_visitonce.egb")))
+      .then((Builder b) => b.writeDartFiles());
   
-  Future.wait([aFuture, bFuture]).then((_) {
+  Future.wait([aFuture, bFuture, cFuture]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
@@ -273,6 +294,38 @@ void main() {
         // run first part
         runner1.run();
       });
+    });
+    
+    group("Page options", () {
+      setUp(() {
+        receivePort = new ReceivePort();
+      });
+      
+      test("prevents user to visit visitOnce page twice", () {
+        SendPort scripterPort = spawnUri("files/scripter_page_visitonce_main.dart");
+        var interface = new MockInterface();
+        interface.choicesToBeTakenByString = new Queue<String>.from(
+            ["Get dressed"]
+        );
+        var storage = new MemoryStorage();
+        var playerProfile = storage.getDefaultPlayerProfile();
+        var runner = new EgbRunner(receivePort, scripterPort, 
+            interface, playerProfile);
+        
+        interface.userQuit.then(expectAsync1((_) {
+          expect(interface.latestChoices,
+              hasLength(3));
+          expect(interface.latestChoices[0].string,
+              isNot("Get dressed"));
+          expect(interface.latestChoices[0].string,
+              "Call the police");
+          
+          runner.stop();
+        }));
+        
+        runner.run();
+      });
+      
     });
   });
 

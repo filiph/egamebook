@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:graphml/dart_graphml.dart';
 
+import 'src/egb_page.dart';
+
 /**
  * Exception thrown when the input .egb file is badly formatted.
  **/
@@ -78,17 +80,18 @@ class BuilderMetadata {
  * 
  * BuilderPage also has [options], like `visitOnce`.
  **/
-class BuilderPage implements BuilderLineRange {
+class BuilderPage extends EgbPage implements BuilderLineRange {
   int index;
   int lineStart;
   int lineEnd;
   
-  final String name;
-  
   /**
    * List of options, such as [:visitOnce:]. 
    */
-  List<String> options;
+  Set<String> options;
+  
+  bool get visitOnce => options.contains("visitOnce");
+  bool get showOnce => options.contains("showOnce");
   
   /**
    * List of linked page names. Builder makes sure they are specified in
@@ -99,9 +102,10 @@ class BuilderPage implements BuilderLineRange {
   List<BuilderBlock> blocks;
   BuilderPageGroup group;
 
-  BuilderPage(this.name, this.index, [this.lineStart]) {
+  BuilderPage(String name, this.index, [this.lineStart]) :
+      super(name: name) {
     blocks = new List<BuilderBlock>();
-    options = new List<String>();
+    options = new Set<String>();
     gotoPageNames = new List<String>();
     
     group = new BuilderPageGroup.fromPage(this);
@@ -109,24 +113,6 @@ class BuilderPage implements BuilderLineRange {
 
   String toString() {
     return "BuilderPage <$name> [$lineStart:$lineEnd]";
-  }
-  
-  String get groupName {
-    int index = name.indexOf(": ");
-    if (index > 0) {
-      return name.substring(0, index);
-    } else {
-      return null;
-    }
-  }
-  
-  String get nameWithoutGroup {
-    int index = name.indexOf(": ");
-    if (index > 0 && index < name.length - 2) {
-      return name.substring(index + 2);
-    } else {
-      return name;
-    }
   }
   
   /**
@@ -1053,14 +1039,6 @@ class Builder {
       writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_FUNCTIONS, indent:2)
       .then((_) {
         dartOutStream.writeString(implStartCtor);
-
-        dartOutStream.writeString("    pageHandles = {\n");
-        pageHandles.forEach((String k, int v) {
-          dartOutStream.writeString("      r\"\"\"$k\"\"\": $v,\n");
-          // TODO: move to writePages, handle last comma
-        });
-        dartOutStream.writeString("    };\n\n");
-
         dartOutStream.writeString(implStartPages);
         writePagesToScripter(dartOutStream)
         .then((_) {
@@ -1246,17 +1224,17 @@ class Builder {
       // start page
       if (pageIndex < pages.length
           && lineNumber == pages[pageIndex].lineStart) {
-        indent = _getIndent(6);
+        indent = _getIndent(4);
         curPage = pages[pageIndex];
         blockIndex = 0;
-        write("// ${curPage.name}\n");
-        write("[\n");
+        write("pageMap[r\"\"\"${curPage.name}\"\"\"] = new EgbScripterPage(\n");
+        write("  [\n");
       }
 
       // start of block
       if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
           && lineNumber == curPage.blocks[blockIndex].lineStart) {
-        indent = _getIndent(8);
+        indent = _getIndent(10);
         curBlock = curPage.blocks[blockIndex];
         subBlockIndex = 0;
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
@@ -1387,12 +1365,10 @@ class Builder {
         }
       }
 
-
       // end of block
       if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
           && lineNumber == curPage.blocks[blockIndex].lineEnd) {
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
-
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
           if (curBlock.lineStart != curBlock.lineEnd) {
@@ -1434,12 +1410,25 @@ class Builder {
 
       // end page
       if (pageIndex < pages.length && lineNumber == pages[pageIndex].lineEnd) {
-        indent = _getIndent(6);
-        if (pageIndex < pages.length - 1) {
-          write("],\n");
-        } else {
+        // end blocks
+        if (curPage.options.isEmpty) {
           write("]\n");
+        } else {
+          write("],\n");
+          write(
+              curPage.options.mappedBy((optName) => "$optName: true")
+              .join(", ")
+          );
         }
+        indent = _getIndent(4);
+        write(");\n");
+        
+        if (pageIndex == pages.length - 1) {
+          // that was all of pageMap, now add firstPage and we're done here 
+          write("");
+          write("firstPage = pageMap[r\"\"\"${pages[0].name}\"\"\"];");
+        }
+
         pageIndex++;
         curPage = null;
       }
@@ -1893,12 +1882,12 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implStartPages = """
-    pages = [
-      /* PAGES & BLOCKS */
+    /* PAGES & BLOCKS */
+    pageMap = new EgbScripterPageMap();
 """;
 
   final String implEndPages = """
-    ];
+    
 """;
 
   final String implEndCtor = """

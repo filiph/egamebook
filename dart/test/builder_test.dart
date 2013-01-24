@@ -72,9 +72,9 @@ void main() {
           expect(b.pages[0].name,
             equals("start"));
           expect(b.pages[b.pageHandles["squash"]].options,
-            orderedEquals(["visitOnce"]));
+            unorderedEquals(["visitOnce"]));
           expect(b.pages[b.pageHandles["run"]].options,
-            orderedEquals(["visitOnce", "showOnce"]));
+            unorderedEquals(["visitOnce", "showOnce"]));
         });
         new Builder().readEgbFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });

@@ -16,16 +16,21 @@ class ScripterImpl extends EgbScripter {
   }
 
   ScripterImpl() : super() {
-    pageHandles = {
-      r"""policeBreakIn""": 5,
-      r"""Day1.runOutTheWindow""": 6,
-      r"""Day1.warnAmy""": 4,
-      r"""Day1.WakeUp""": 0,
-      r"""Day1.wakeupDilemma""": 1,
-      r"""Day1.getDressed""": 2,
-      r"""wasted""": 7,
-      r"""Day1.getGun""": 3,
-    };
+    pageMap = EgbScripterPageMap();
+    pageMap[r"""handle"""] = new EgbScripterPage(
+        [
+         """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
+         """You have a minute at most before the pigs kick the door in. """,
+         () {
+           time = 0;
+         },
+         {
+           "string": r""" """,
+           "goto": r"""wakeupDilemma"""
+         }
+        ],   
+        visitOnce: true
+    );
 
     pages = [
       /* PAGES & BLOCKS */

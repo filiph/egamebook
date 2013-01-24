@@ -1,0 +1,115 @@
+---
+Morning, Day 2: continueWatching
+
+The man in the leather jacket is now pointing at your house and talking to someone in the Lexus. After a few seconds, the window goes up again, the Lexus slowly starts pulling away, and the big guy beckons to the young one.
+
+At last your brain becomes aware of the seriousness of the situation. This is *really* happening.
+
+<script>
+  time = 0;
+</script>
+
+- [Morning, Day 2: nextAction]
+
+---
+Morning, Day 2: nextAction
+
+<script>
+  time++;
+  if (time == 2) {
+  	<echo>
+      Through the window, you can see that the two men are now nearing the house. The big guy gestures to the other one, who responds by rushing out towards the back of the house. Apparently, they're not going to let you escape through the back door.
+  	</echo>
+  } else if (time == 3) {
+  	<echo>
+      The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
+  	</echo>
+  } else if (time == 4) {
+   goto("Morning, Day 2: waitedTooLong");
+  }
+</script>
+
+What do you do?
+- Get dressed [Morning, Day 2: getDressed]
+- Call the police [Morning, Day 2: callPolice]
+- Look for a weapon [Morning, Day 2: lookForWeapon]
+- Run [Morning, Day 2: startRunning]
+
+---
+Morning, Day 2: getDressed
+[[ visitOnce ]]
+
+You realize you're still in your pyjamas. You quickly hop on your feet. Yesterday's clothes are right there, by the bed, where you left them -- so you start putting them on immediately. This is obviously not the time to worry about a creased shirt.
+
+<script>
+  gotDressed = true;
+</script>
+
+- [Morning, Day 2: nextAction]
+
+---
+Morning, Day 2: lookForWeapon
+[[ visitOnce ]]
+
+These men have *baseball bats* -- you are not going to stand a chance bare handed if they reach you. Fortunately, you keep your sporting equipment in a basket in the bedroom closet, so you quickly spring to it and start poking around in it.
+
+You find two pieces of equipment that you can imagine being useful in a fight. A wooden baseball bat not unlike the one those men outside wield, and a golf club.
+
+The baseball bat is shorter and lighter. It will be a little more agile. The golf club is longer and made of steel. It will deal more damage, but will be somewhat harder to lead.
+
+<script>
+  lookedForWeapon = true;
+</script>
+
+- Take the baseball bat [{player.weapon = baseballBat;}, Morning, Day 2: nextAction]
+- Take the golf club [{player.weapon = golfClub;}, Morning, Day 2: nextAction]
+- Don't take anything [Morning, Day 2: nextAction]
+
+---
+Morning, Day 2: callPolice
+[[ visitOnce ]]
+
+You find your cell phone and dial the emergency number. There's the "please hold" message, then an operator picks up.
+
+"Please state your emergency."
+
+"There are two men with baseball bats coming into my home. I can see them from the window. They came -- eh -- they came in a blue Ford pick-up truck..."
+
+"All right, sir, what is your location?"
+
+"My location?"
+
+"Where are you right now?"
+
+"Oh, I -- eh -- 503 Hyde Road."
+
+"Okay, mister, now lock yourself in, and try to keep those men from entering. Don't risk anything. We are sending a vehicle."
+
+<script>
+  calledPolice = true;
+</script>
+
+- [nextAction]
+
+---
+Morning, Day 2: waitedTooLong
+
+There's a loud crash coming from the hallway. The man in the leather jacket must have made his way through the door on the first attempt. You hear no sound coming from the back of the house yet. That's not surprising, as it likely takes some time to go over the fence.
+
+When you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
+
+You can also just wait in the room and try to fend the intruders off${calledPolice ? " until the police comes" : ""}.
+
+- Run [startRunning]
+- Barricade the room [stayInTheRoom]
+
+---
+Morning, Day 2: stayInTheRoom
+
+
+
+---
+Morning, Day 2: startRunning
+
+You dash out of the room
+

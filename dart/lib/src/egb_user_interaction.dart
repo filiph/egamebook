@@ -18,14 +18,16 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   String goto;
   bool showNow;
 
-  EgbChoice(this.string, {this.goto, Function then, bool showNow: false}) : super() {
+  EgbChoice(String rawString, {this.goto, Function then, bool showNow: false}) : 
+      super() {
+    string = rawString.trim();  // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
     f = then;
     waitForEndOfPage = !showNow;
   }
 
   EgbChoice.fromMap(Map<String,dynamic> map) : super() {
-    string = map["string"];
+    string = map["string"].trim();
     if (map.containsKey("hash")) {
       hash = map["hash"];
     } else {
@@ -90,19 +92,29 @@ class EgbChoiceList implements List<EgbChoice> {
     _choices.forEach(f);
   }
   void clear() => _choices.clear();
+  get iterator => _choices.iterator;
  
-
-  EgbMessage toMessage({String prependText: null, bool endOfPage: false}) {
+  /**
+   * Takes care of converting the current [EgbChoiceList] to a Message. 
+   * 
+   * By providing [filterOut()], one can force to not show choices that 
+   * satisfy [:filterOut(choice) == true:].
+   */
+  EgbMessage toMessage({
+      String prependText: null, 
+      bool endOfPage: false,
+      bool filterOut(EgbChoice choice)}) {
     List<EgbChoice> choicesToSend;
+    
     // filter out choices we don't want to show
-    if (!endOfPage) {
-      choicesToSend = _choices.where((choice) => !choice.waitForEndOfPage && !choice.shown).toList();
-    } else {
-      choicesToSend = _choices.where((choice) => !choice.shown).toList();
-    }
-  
+    choicesToSend = _choices.where((choice) {
+      if (choice.shown) return false;  // choice shown before
+      if (!endOfPage && choice.waitForEndOfPage) return false;
+      if (filterOut != null && filterOut(choice)) return false;
+      return true;
+    }).toList();
+    
     DEBUG_SCR("Sending choices.");
-  
     EgbMessage m = new EgbMessage(EgbMessage.MSG_SHOW_CHOICES);
     
     m.listContent = new List<dynamic>();

@@ -8,6 +8,72 @@ import 'egb_utils.dart';
 import 'egb_message.dart';
 import 'egb_user_interaction.dart';
 import 'egb_savegame.dart';
+import 'egb_page.dart';
+
+/**
+ * In the context of [EgbScripter], we also have the actual data + logic of
+ * the page in the [blocks] list.
+ */
+class EgbScripterPage extends EgbPage {
+  /// The text and/or logic of each block inside this page. 
+  final List<dynamic> blocks;
+  
+  /// Number of times this page has been visited by player.
+  int visitedCount = 0;
+  
+  /// Whether or not this page has been visited by player.
+  bool get visited => visitedCount > 0;
+  
+  /**
+   * Default constructor only takes blocks List, and optionally page options.
+   * Name is copied from Map key when added to [EgbScripterPageMap].
+   */
+  EgbScripterPage(
+      List<dynamic> this.blocks,
+      {bool visitOnce: false, bool showOnce: false}) : 
+        super(visitOnce: visitOnce, showOnce: showOnce);
+}
+
+/**
+ * [EgbScripterPageList] is the container for the whole of the text and logic
+ * content of each book.
+ */
+class EgbScripterPageMap {
+  /// A map of page name -> page object.
+  Map<String, EgbScripterPage> pages;
+  
+  EgbScripterPageMap() {
+    pages = new Map<String, EgbScripterPage>();
+  }
+  
+  /// Returns page of exactly the name [key].
+  EgbScripterPage operator [](String key) => pages[key];
+  
+  /**
+   * Returns page with name [name]. If [groupName] is given, then the function
+   * will first search for key in the format [:groupName: name:]. 
+   * 
+   * Returns [:null:] if there is no page of any compatible name.
+   */
+  EgbScripterPage getPage(String name, {String currentGroupName: null}) {
+    if (currentGroupName != null && 
+        pages.containsKey("$currentGroupName: $name")) {
+      return pages["$currentGroupName: $name"];
+    } else if (pages.containsKey(name)) {
+      return pages[name];
+    } else {
+      return null;
+    }
+  }
+  
+  operator []=(String key, EgbScripterPage newPage) {
+    pages[key] = newPage;
+    // Copy the "key" to the name of the page.
+    newPage.name = key;
+  }
+  
+
+}
 
 
 /**
@@ -15,38 +81,20 @@ import 'egb_savegame.dart';
   It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
   */
 abstract class EgbScripter {
-  // exposed members (to be used by ScripterImpl)
-
-  List<List> pages;
-  Map<String,int> pageHandles; // TODO: make this into Map<String,Page>
+  //List<List> pages;
+  //Map<String,int> pageHandles; // TODO: make this into Map<String,Page>
   
-  String get currentPageName {
-    if (currentPageIndex == null) {
-      return null;
-    }
-    for (var key in pageHandles.keys) {
-      if (pageHandles[key] == currentPageIndex) {
-        return key;
-      }
-    }
-    throw "Current page index ($currentPageIndex) is not among pageHandles.";
-  }
+  /// The unique id of this particular gamebook. Used for saving.
+  String gamebookUid;
   
-  String get currentGroupName {
-    var currentPage = currentPageName;
-    int index = currentPage.indexOf(": ");
-    if (index > 0) {
-      return currentPage.substring(0, index);
-    } else {
-      return null;
-    }
-  }
+  EgbScripterPageMap pageMap;
+  EgbScripterPage firstPage;
+  EgbScripterPage currentPage;
+  EgbScripterPage _nextPage;
   
   void initBlock();
   
-  List blocks;
-  int currentPageIndex;  // the current position in the pages list
-  int currentBlock;  // the current position in the current page's blocks list
+  int currentBlockIndex;  // the current position in the current page's blocks list
   
   EgbChoiceList choices;
   Map<String, dynamic> vars;
@@ -54,22 +102,27 @@ abstract class EgbScripter {
 
   void echo(String str) {
     if (textBuffer.length > 0) {
-      textBuffer.add(" ");
+      textBuffer.add(" ");  // Implicitly add space between each echo().
     }
     textBuffer.add(str);
   }
 
+  /**
+   * By calling [goto()], you're saying you want to change page to [dest].
+   * You can specify the page name in full (i.e. including the group name)
+   * or in short (i.e. without group name).
+   * 
+   * Function throws when requested page doesn't exist. 
+   */
   void goto(String dest) {
-    if (currentGroupName != null
-        && pageHandles.containsKey("$currentGroupName: $dest")) {
-      _nextPageIndex = pageHandles["$currentGroupName: $dest"];
-    } else if (pageHandles.containsKey(dest)) {
-      _nextPageIndex = pageHandles[dest];
-    } else {
-      throw "Function goto() called with an invalid argument '$dest' (no such page).";
+    _nextPage = pageMap.getPage(dest, currentGroupName: currentPage.groupName);
+    if (_nextPage == null) {
+      throw "Function goto() called with an invalid argument '$dest'. "
+            "No such page.";
     }
   }
 
+  /// Adds a script to the stack of scripts.
   void nextScript(Function f) {
     _nextScriptStack.add(f);
   }
@@ -89,11 +142,10 @@ abstract class EgbScripter {
 
   SendPort _interfacePort;
   
-  int _nextPageIndex;
   bool _repeatBlockBit = false;
   /**
-    When a block/script/choice call for a script to be called afterwards, it ends
-    up on this FIFO stack.
+    When a block/script/choice call for a script to be called afterwards, 
+    it ends up on this FIFO stack.
     */
   List<Function> _nextScriptStack;
   
@@ -101,7 +153,7 @@ abstract class EgbScripter {
     DEBUG_SCR("Scripter has been created.");
     _nextScriptStack = new List<Function>();
     _initScriptEnvironment();
-
+    
     // start the loop
     port.receive(_messageReceiveCallback);
   }
@@ -125,10 +177,6 @@ abstract class EgbScripter {
       _loadFromSaveGameMessage(message);
       // TODO handle errors
       _interfacePort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
-    } else if (pages == null
-        || (currentPageIndex != null && currentPageIndex >= pages.length)) {
-      DEBUG_SCR("No more pages.");
-      _interfacePort.send(new EgbMessage.EndOfBook().toJson(), port.toSendPort());
     } else {
       _interfacePort.send(_goOneStep(message).toJson(), port.toSendPort());
     }
@@ -139,15 +187,14 @@ abstract class EgbScripter {
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting from the beginning");
-      currentPageIndex = 0;
-      currentBlock = null;
+      currentPage = firstPage;
+      currentBlockIndex = null;
       _nextScriptStack.clear();
       _initScriptEnvironment();
     }
 
     if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
       DEBUG_SCR("An option has been selected. Resolving.");
-      // TODO: make this more elegant by making ChoiceList class
       EgbMessage message;
       choices.forEach((choice) {
           if (choice.hash == incomingMessage.intContent) {
@@ -174,52 +221,54 @@ abstract class EgbScripter {
     }
 
     // if previous script asked to jump to a new page, then jump
-    if (_nextPageIndex != null) {
-      currentPageIndex = _nextPageIndex;
-      currentBlock = null;
-      _nextPageIndex = null;
+    if (_nextPage != null) {
+      currentPage = _nextPage;
+      currentBlockIndex = null;
+      _nextPage = null;
       choices.clear();
       return _createSaveGame();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
-    if (currentBlock == null) {
-      currentBlock = 0;
+    if (currentBlockIndex == null) {
+      // we just came to this page
+      currentBlockIndex = 0;
+      currentPage.visitedCount += 1;
     } else if (_repeatBlockBit) {
       _repeatBlockBit = false;
     } else {
-      currentBlock++;
+      currentBlockIndex++;
     }
 
-    DEBUG_SCR("currentPageIndex = $currentPageIndex, currentBlock = $currentBlock");
+    DEBUG_SCR("currentPage = $currentPage, currentBlock = $currentBlockIndex");
 
-    blocks = pages[currentPageIndex];
     DEBUG_SCR("Resolving block.");
-    if (currentBlock >= blocks.length) {
+    if (currentBlockIndex >= currentPage.blocks.length) {
       DEBUG_SCR("At the end of page.");
       if (choices.any((choice) => !choice.shown)) {
-        return choices.toMessage(endOfPage:true); //new Message.ShowChoices(choices, endOfPage:true);
+        return choices.toMessage(
+            endOfPage: true,
+            filterOut: _leadsToIllegalPage);
       } else {
         return new EgbMessage.EndOfBook();
       }
-    } else if (blocks[currentBlock] is String) {
+    } else if (currentPage.blocks[currentBlockIndex] is String) {
       // just an ordinary paragraph, no script
-      EgbMessage message = new EgbMessage.TextResult(blocks[currentBlock]);
-      return message;
-    } else if (blocks[currentBlock] is Map) {
-      Map map = blocks[currentBlock] as Map<String,dynamic>;
+      return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
+    } else if (currentPage.blocks[currentBlockIndex] is Map) {
+      var map = currentPage.blocks[currentBlockIndex] as Map<String,dynamic>;
       if (map.containsKey("question")) {
         // we have a question
         choices.question = map["question"];
       } else {
         // not a question, so it must be a choice, TODO: check
-        choices.add(new EgbChoice.fromMap(blocks[currentBlock]));
+        choices.add(
+            new EgbChoice.fromMap(currentPage.blocks[currentBlockIndex]));
       }
       return new EgbMessage.NoResult();
-    } else if (blocks[currentBlock] is Function) {
+    } else if (currentPage.blocks[currentBlockIndex] is Function) {
       // a script paragraph
-      DEBUG_SCR("Running script.");
-      return _runScriptBlock(script:blocks[currentBlock]);
+      return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
     }
 
   }
@@ -230,14 +279,6 @@ abstract class EgbScripter {
 
     initBlock(); // run contents of <init>
   }
-
-  // XXX: invokeOn not yet implemented in Dart
-  /*
-  noSuchMethod(InvocationMirror invocation) => 
-      invocation.invokeOn(vars[invocation.memberName]);
-  */
-
-  // XXX: this doesn't work either, membername is with "set:" and is always method
   
   dynamic noSuchMethod(InvocationMirror invocation) {
     if (invocation.isGetter) {
@@ -252,6 +293,13 @@ abstract class EgbScripter {
     }
   }
   
+  // XXX: invokeOn not yet implemented in Dart
+  /*
+  noSuchMethod(InvocationMirror invocation) => 
+      invocation.invokeOn(vars[invocation.memberName]);
+  */
+
+  // XXX: this doesn't work either, membername is with "set:" and is always method
 
   /*
   dynamic noSuchMethod(InvocationMirror invocation) {
@@ -280,35 +328,54 @@ abstract class EgbScripter {
 
     // run the actual script
     if (script == null) {
-      blocks[currentBlock]();
+      currentPage.blocks[currentBlockIndex]();
     } else {
       script();
     }
 
     // catch text and choices
     if (choices.any((choice) => !choice.waitForEndOfPage)) {
-      return choices.toMessage(prependText:textBuffer.toString()); // new Message.ShowChoices(choices, prependText:textBuffer.toString());
+      return choices.toMessage(
+          prependText: textBuffer.toString(),
+          filterOut: _leadsToIllegalPage);
     }
     return new EgbMessage.TextResult(textBuffer.toString());
   }
   
+  /**
+   * When a page is only visitable once ([:visitOnce:] option) and has been
+   * visited, then it's an illegal page to visit. This helper function
+   * checks for this.
+   */
+  bool _leadsToIllegalPage(EgbChoice choice) {
+    if (choice.goto == null) return false;
+    var targetPage = 
+        pageMap.getPage(choice.goto, currentGroupName: currentPage.groupName);
+    if (targetPage == null) return true;
+    if (targetPage.visitOnce && targetPage.visited) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   EgbMessage _createSaveGame() {
-    var savegame = new EgbSavegame(currentPageName, vars);
+    var savegame = new EgbSavegame(currentPage.name, vars); // TODO: save also counts in pageMap
     return savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
   }
   
   void _loadFromSaveGameMessage(EgbMessage message) {
     var savegame = new EgbSavegame.fromMessage(message);
     
-    if (!pageHandles.containsKey(savegame.currentPageName)) {
+    if (pageMap[savegame.currentPageName] == null) {
       throw "Trying to load page '${savegame.currentPageName}' which doesn't "
             "exist in current egamebook.";
     }
     
     // TODO: DRY with MSG_START
     DEBUG_SCR("Starting from a savegame");
-    currentPageIndex = pageHandles[savegame.currentPageName];
-    currentBlock = null;
+    currentPage = pageMap[savegame.currentPageName];
+    currentBlockIndex = null;
     _nextScriptStack.clear();
     _initScriptEnvironment();
     
