@@ -200,7 +200,7 @@ void main() {
 //        var callback = expectAsync1((var b) {
 //          for (var i = 0; i < 11; i++) {
 //            expect(b.pages[0].blocks[i].type,
-//              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT]))/*,
+//              isNot(anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_WITH_SCRIPT]))/*,
 //              reason:"The option '${b.pages[0].blocks[i].options['string']}' on line "
 //                     "${b.pages[0].blocks[i].lineStart} "
 //                     "is not actually a valid option and should be not recognized as such."*/);
@@ -209,42 +209,70 @@ void main() {
 //        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
 //      });
       
-      test("detects individual choices", () {
+      test("detects individual choiceBlocks", () {
         var b = new Builder();
-        b.mode = Builder.MODE_NORMAL;
-//        expect(b.);
+        expect(b.parseChoiceBlock(""),
+            isNull);
+        expect(b.parseChoiceBlock("- Simple choice [goto]"),
+            isNotNull);
+        var messy = b.parseChoiceBlock("  -   A more meesy choice [ goto  ]  ");
+        expect(messy, isNotNull);
+        expect(messy.type, BuilderBlock.BLK_CHOICE);
+        expect(messy.options["string"], "A more meesy choice");
+        expect(messy.options["goto"], "goto");
+        var auto = b.parseChoiceBlock("- [automaticGoto]"); 
+        expect(auto, isNotNull);
+        expect(auto.type, BuilderBlock.BLK_CHOICE);
+        expect(auto.options["string"], isNull);
+        expect(auto.options["goto"], "automaticGoto");
+        var withscript = b.parseChoiceBlock("- Script [{blick++}]");
+        expect(withscript, isNotNull);
+        expect(withscript.type, BuilderBlock.BLK_CHOICE_WITH_SCRIPT);
+        expect(withscript.options["string"], "Script");
+        expect(withscript.options["goto"], null);
+        expect(withscript.options["script"], "blick++");
       });
 
       test("detects choices", () {
         var callback = expectAsync1((var b) {
-          for (var i = 11; i < b.pages[0].blocks.length; i++) {
+          // first page, first part (no valid choices)
+          for (var i = 0; i <= 10; i++) {
             expect(b.pages[0].blocks[i].type,
-              anyOf([BuilderBlock.BLK_CHOICE, BuilderBlock.BLK_CHOICE_IN_SCRIPT])/*,
-              reason:"Line ${b.pages[0].blocks[i].lineStart} is a valid option "
-                     "but isn't recognized as such."*/);
+              isNot(
+                anyOf([BuilderBlock.BLK_CHOICE, 
+                       BuilderBlock.BLK_CHOICE_WITH_SCRIPT,
+                       BuilderBlock.BLK_CHOICE_LIST])));
           }
+          
+          // first page, second part (valid choices in one choiceList)
+          var choiceList = b.pages[0].blocks[11];
+          expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
+          expect(choiceList.subBlocks.length, 13);
 
-          expect(b.pages[1].blocks[0].options["string"],
+          // second page
+          expect(b.pages[1].blocks[0].type, BuilderBlock.BLK_CHOICE_LIST);
+          expect(b.pages[1].blocks[0].subBlocks, hasLength(5));
+          expect(b.pages[1].blocks[0].subBlocks[0].options["string"],
             equals("abcdefg 123456"));
-          expect(b.pages[1].blocks[0].options["script"],
+          expect(b.pages[1].blocks[0].subBlocks[0].options["script"],
             isNull);
-          expect(b.pages[1].blocks[0].options["goto"],
+          expect(b.pages[1].blocks[0].subBlocks[0].options["goto"],
             equals("abc _ xyz"));
-          expect(b.pages[1].blocks[1].options["string"],
+          expect(b.pages[1].blocks[0].subBlocks[1].options["string"],
             equals("something"));
-          expect(b.pages[1].blocks[1].options["script"],
+          expect(b.pages[1].blocks[0].subBlocks[1].options["script"],
             equals("abcd[]1234;"));
-          expect(b.pages[1].blocks[1].options["goto"],
+          expect(b.pages[1].blocks[0].subBlocks[1].options["goto"],
             equals("xyz"));
-          expect(b.pages[1].blocks[2].options["script"],
+          expect(b.pages[1].blocks[0].subBlocks[2].options["script"],
             equals("for (;;) { print(\"hi!\")}"));
-          expect(b.pages[1].blocks[2].options["goto"],
+          expect(b.pages[1].blocks[0].subBlocks[2].options["goto"],
             isNull);
-          expect(b.pages[1].blocks[3].options["script"],
+          expect(b.pages[1].blocks[0].subBlocks[3].options["script"],
             equals("for (;;) { print(\"hi!\")}"));
-          expect(b.pages[1].blocks[3].options["goto"],
+          expect(b.pages[1].blocks[0].subBlocks[3].options["goto"],
             equals("start"));
-          expect(b.pages[1].blocks[4].options["script"],
+          expect(b.pages[1].blocks[0].subBlocks[4].options["script"],
             equals("this script } should;"));
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);

@@ -247,25 +247,20 @@ abstract class EgbScripter {
       DEBUG_SCR("At the end of page.");
       if (choices.any((choice) => !choice.shown)) {
         return choices.toMessage(
-            endOfPage: true,
-            filterOut: _leadsToIllegalPage);
+                  endOfPage: true,
+                  filterOut: _leadsToIllegalPage);
       } else {
         return new EgbMessage.EndOfBook();
       }
     } else if (currentPage.blocks[currentBlockIndex] is String) {
       // just an ordinary paragraph, no script
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
-    } else if (currentPage.blocks[currentBlockIndex] is Map) {
-      var map = currentPage.blocks[currentBlockIndex] as Map<String,dynamic>;
-      if (map.containsKey("question")) {
-        // we have a question
-        choices.question = map["question"];
-      } else {
-        // not a question, so it must be a choice, TODO: check
-        choices.add(
-            new EgbChoice.fromMap(currentPage.blocks[currentBlockIndex]));
-      }
-      return new EgbMessage.NoResult();
+    } else if (currentPage.blocks[currentBlockIndex] is List) {
+      // choiceList
+      choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
+      return choices.toMessage(
+                endOfPage: currentBlockIndex == currentPage.blocks.length - 1,
+                filterOut: _leadsToIllegalPage);
     } else if (currentPage.blocks[currentBlockIndex] is Function) {
       // a script paragraph
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);

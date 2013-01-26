@@ -68,6 +68,18 @@ since you opened your eyes. """);
               then:() { {echo("Ladyboy!");;}; }
           ));
         },
+        [
+          "What do you do now?",
+          {
+            "string": r"""Get the gun (15 seconds) """,
+            "goto": r"""getGun"""
+          },
+          {
+            "string": () => """Wait another second, even though it's $time""",
+            "goto": r"""getGun""",
+            "script": () { time++ }
+          }  
+        ],
         {
           "string": r"""Get the gun (15 seconds) """,
           "goto": r"""getGun"""

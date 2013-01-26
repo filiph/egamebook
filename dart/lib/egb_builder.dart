@@ -178,13 +178,18 @@ class BuilderBlock implements BuilderLineRange {
 
   static final int BLK_TEXT = 1;
   static final int BLK_TEXT_WITH_VAR = 8;
+  
+  /// Returns [:true:] if block is a text block (no matter if with variable
+  /// or without.
+  bool get isTextBlock => type == BLK_TEXT || type == BLK_TEXT_WITH_VAR;
+  
   static final int BLK_SCRIPT = 2;
   static final int BLK_SCRIPT_ECHO = 64;
 
   static final int BLK_CHOICE_LIST = 128;
   static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
   static final int BLK_CHOICE = 4;
-  static final int BLK_CHOICE_IN_SCRIPT = 32;
+  static final int BLK_CHOICE_WITH_SCRIPT = 32;
 
   BuilderBlock({this.lineStart, this.type: 0}) {
     options = new Map<String,dynamic>();
@@ -424,13 +429,14 @@ class Builder {
     }
 
     if (line == null || line == "" || blankLine.hasMatch(line)) {
-      // close previous unfinished _text_ block if any
+      // close previous unfinished block or choiceList if any
       if (!pages.isEmpty) {
         var lastpage = pages.last;
         if (!lastpage.blocks.isEmpty) {
           var lastblock = lastpage.blocks.last;
-          if (lastblock.type == BuilderBlock.BLK_TEXT
-              || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+          if (lastblock.type == BuilderBlock.BLK_TEXT ||
+              lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR ||
+              lastblock.type == BuilderBlock.BLK_CHOICE_LIST) {
             if (lastblock.lineEnd == null) {
               lastblock.lineEnd = number - 1;
             }
@@ -561,6 +567,52 @@ class Builder {
     }
   }
   
+  /**
+   * Checks if line is a valid choice. If not, returns [:null:].
+   * If it is a valid choice, returns the corresponding [BuilderBlock] (without
+   * the lineStart or lineEnd).
+   */
+  BuilderBlock parseChoiceBlock(String line) {
+    if (!choice.hasMatch(line)) return null;
+    
+    var choiceBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
+
+    Match m = choice.firstMatch(line);
+    /*for (int i = 1; i <= m.groupCount; i++) {*/
+      /*print("$i - \"${m.group(i)}\"");*/
+    /*}*/
+    choiceBlock.options["string"] = m.group(1);
+    choiceBlock.options["script"] = m.group(2);
+    choiceBlock.options["goto"] = m.group(3);
+    
+    if (choiceBlock.options["script"] != null) {
+      choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT; 
+    }
+
+    // trim the strings
+    choiceBlock.options.forEach((var k, var v) {
+      if (v != null) {
+        choiceBlock.options[k] = choiceBlock.options[k].trim();
+      }
+    });
+
+
+    if (choiceBlock.options["script"] == null && choiceBlock.options["goto"] == null) {
+      WARNING("Choice in the form of `- something []` is illegal. There must be "
+            "a script and/or a goto specified.");
+      return null;
+    }
+
+    if (choiceBlock.options["script"] != null
+        && (new RegExp(r"^[^{]*}").hasMatch(choiceBlock.options["script"])
+            || new RegExp(r"{[^}]*$").hasMatch(choiceBlock.options["script"]))) {
+      WARNING("Inline script `${choiceBlock.options['script']}` in choice appears to have "
+            "an unmatched bracket. This could be an error. Actual format used: `$line`.");
+    }
+
+    return choiceBlock;
+  }
+  
   
 
   /**
@@ -576,74 +628,61 @@ class Builder {
       return new Future.immediate(false);
     }
 
-    if (choice.hasMatch(line)) {
+    var choiceBlock = parseChoiceBlock(line);
+    if (choiceBlock == null) return new Future.immediate(false);
+    choiceBlock.lineStart = number;
 
-      var block = new BuilderBlock(lineStart:number);
-
-      Match m = choice.firstMatch(line);
-      /*for (int i = 1; i <= m.groupCount; i++) {*/
-        /*print("$i - \"${m.group(i)}\"");*/
-      /*}*/
-      block.options["string"] = m.group(1);
-      block.options["script"] = m.group(2);
-      block.options["goto"] = m.group(3);
-
-      // trim the strings
-      block.options.forEach((var k, var v) {
-        if (v != null) {
-          block.options[k] = block.options[k].trim();
-        }
-      });
-
-      bool hasVarInString = (block.options["string"] != null
-          && variableInText.hasMatch(block.options["string"]));
-
-      if (block.options["script"] == null && block.options["goto"] == null) {
-        WARNING("Choice in the form of `- something []` is illegal. There must be "
-              "a script and/or a goto specified.");
-        return new Future.immediate(false);
-      }
-
-      if (block.options["script"] != null
-          && (new RegExp(r"^[^{]*}").hasMatch(block.options["script"])
-              || new RegExp(r"{[^}]*$").hasMatch(block.options["script"]))) {
-        WARNING("Inline script `${block.options['script']}` in choice appears to have "
-              "an unmatched bracket. This could be an error. Actual format used: `$line`.");
-      }
-
-      // if the previous line is a text block, then that textblock needs to be
-      // converted to a BLK_CHOICE_QUESTION.
-      var lastpage = pages.last;
-      if (!lastpage.blocks.isEmpty) {
-        var lastblock = lastpage.blocks.last;
-        if (lastblock.lineEnd == null) {
-          lastblock.lineEnd = number - 1;
-          lastblock.type = BuilderBlock.BLK_CHOICE_QUESTION;
-        }
-      }
-
-      if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
-        // TODO: just add a _choiceToScript(block) to the current script flow
-      } else if (_mode == MODE_NORMAL && block.options["script"] == null && !hasVarInString) {
-        // we have a simple choice (i.e. no scripts needed)
-        block.type = BuilderBlock.BLK_CHOICE;
-        block.lineEnd = number;  // choice blocks are always one-liners in egb
-        lastpage.gotoPageNames.add(block.options["goto"]);
-        lastpage.blocks.add(block);
+    BuilderBlock choiceList; 
+    var lastpage = pages.last;
+    if (!lastpage.blocks.isEmpty) {
+      var lastblock = lastpage.blocks.last;
+    
+      // If there was a choiceList preceding this one, just continue
+      // with the preceding choiceList. 
+      if (lastblock.type == BuilderBlock.BLK_CHOICE_LIST) {
+        choiceList = lastblock;
+        // Even if there was a space after the choiceList and therefore 
+        // lineEnd was added. Just join the two lists. TODO: is that clever?
+        choiceList.lineEnd = null;
       } else {
-        // the choice will need to be rewritten into a standalone script (closure)
-        block.type = BuilderBlock.BLK_CHOICE_IN_SCRIPT;
-        block.lineEnd = number;  // choice blocks are always one-liners in egb
-        if (block.options["goto"] != null) {
-          lastpage.gotoPageNames.add(block.options["goto"]);
+        choiceList = new BuilderBlock(
+            lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
+        
+        // If the previous line is a text block, then that textblock needs to be
+        // added to this choiceList.
+        if (lastblock.isTextBlock && lastblock.lineEnd == null) {
+          choiceList.lineStart = lastblock.lineStart;
+          lastpage.blocks.removeLast();
         }
-        lastpage.blocks.add(block);
       }
-
-      return new Future.immediate(true);
     } else {
-      return new Future.immediate(false);
+      choiceList = new BuilderBlock(
+          lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
     }
+    
+    lastpage.blocks.add(choiceList);
+    
+    bool hasVarInString = (choiceBlock.options["string"] != null
+        && variableInText.hasMatch(choiceBlock.options["string"]));
+
+    if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
+      // TODO: just add a _choiceToScript(block) to the current script flow
+    } else if (_mode == MODE_NORMAL && choiceBlock.options["script"] == null && 
+               !hasVarInString) {
+      // we have a simple choice (i.e. no scripts needed)
+      choiceBlock.type = BuilderBlock.BLK_CHOICE;
+    } else {
+      // the choice will need to be rewritten into a standalone script (closure)
+      choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
+    }
+    
+    choiceBlock.lineEnd = number;  // TODO: fix for multiline choices (indented lines)
+    if (choiceBlock.options["goto"] != null) {
+      lastpage.gotoPageNames.add(choiceBlock.options["goto"]);
+    }
+    choiceList.subBlocks.add(choiceBlock);
+    
+    return new Future.immediate(true);
   }
 
   /**
@@ -988,27 +1027,27 @@ class Builder {
    **/
   GraphML graphML;
 
-  RegExp blankLine = new RegExp(r"^\s*$");
-  RegExp hr = new RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
-  RegExp validPageName = new RegExp(r"^\s{0,3}(.+)\s*$");
-  RegExp pageOptions = new RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
-  RegExp metadataLine = new RegExp(r"^(\w.+):\s*(\w.*)\s*$");
-  RegExp metadataLineAdd = new RegExp(r"^\s+(\w.*)\s*$");
-  /*RegExp scriptTag = new RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
-  RegExp scriptOrEchoTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", caseSensitive: false);
-  RegExp gotoInsideScript = new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
-  /*RegExp scriptTagStart = new RegExp(@"^\s{0,3}<script>\s*$");*/
-  /*RegExp scriptTagEnd = new RegExp(@"^\s{0,3}</script>\s*$");*/
-  /*RegExp initTagStart = new RegExp(@"^\s{0,3}<init>\s*$");*/
-  /*RegExp initTagEnd = new RegExp(@"^\s{0,3}</init>\s*$");*/
-  /*RegExp libraryTagStart = new RegExp(@"^\s{0,3}<library>\s*$");*/
-  /*RegExp libraryTagEnd = new RegExp(@"^\s{0,3}</library>\s*$");*/
-  /*RegExp classesTagStart = new RegExp(@"^\s{0,3}<classes>\s*$");*/
-  /*RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
-  RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", caseSensitive: false);
-  RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
-  RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
-  RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
+  static final RegExp blankLine = new RegExp(r"^\s*$");
+  static final RegExp hr = new RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
+  static final RegExp validPageName = new RegExp(r"^\s{0,3}(.+)\s*$");
+  static final RegExp pageOptions = new RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
+  static final RegExp metadataLine = new RegExp(r"^(\w.+):\s*(\w.*)\s*$");
+  static final RegExp metadataLineAdd = new RegExp(r"^\s+(\w.*)\s*$");
+  /*static final RegExp scriptTag = new RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
+  static final RegExp scriptOrEchoTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", caseSensitive: false);
+  static final RegExp gotoInsideScript = new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
+  /*static final RegExp scriptTagStart = new RegExp(@"^\s{0,3}<script>\s*$");*/
+  /*static final RegExp scriptTagEnd = new RegExp(@"^\s{0,3}</script>\s*$");*/
+  /*static final RegExp initTagStart = new RegExp(@"^\s{0,3}<init>\s*$");*/
+  /*static final RegExp initTagEnd = new RegExp(@"^\s{0,3}</init>\s*$");*/
+  /*static final RegExp libraryTagStart = new RegExp(@"^\s{0,3}<library>\s*$");*/
+  /*static final RegExp libraryTagEnd = new RegExp(@"^\s{0,3}</library>\s*$");*/
+  /*static final RegExp classesTagStart = new RegExp(@"^\s{0,3}<classes>\s*$");*/
+  /*static final RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
+  static final RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", caseSensitive: false);
+  static final RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
+  static final RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  static final RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
   /**
    * Writes following Dart files to disk:
@@ -1236,9 +1275,9 @@ class Builder {
       // start page
       if (pageIndex < pages.length
           && lineNumber == pages[pageIndex].lineStart) {
-        indent = _getIndent(4);
         curPage = pages[pageIndex];
         blockIndex = 0;
+        indent = _getIndent(4);
         write("pageMap[r\"\"\"${curPage.name}\"\"\"] = new EgbScripterPage(\n");
         write("  [\n");
       }
@@ -1280,48 +1319,63 @@ class Builder {
             write("  \"question\": r\"\"\"\"$line\n");
           }
         }
-
-        if (curBlock.type == BuilderBlock.BLK_CHOICE) {
-          var string = curBlock.options["string"];
-          var goto = curBlock.options["goto"];
-          write("{\n");
-          write("  \"string\": r\"\"\"${string != null ? string : ''} \"\"\",\n");
-          write("  \"goto\": r\"\"\"$goto\"\"\"\n");
-          write("}$commaOrNot\n");
-        }
-
-        if (curBlock.type == BuilderBlock.BLK_CHOICE_IN_SCRIPT) {
-          var string = curBlock.options["string"];
-          var goto = curBlock.options["goto"];
-          var script = curBlock.options["script"];
-
-          write("() {\n");
-
-          if (string == null) {
-            // ex: "- [gotopage]"
-            if (script != null) {
-              write("  $script;\n");
-            }
-            if (goto != null) {
-              write("  goto(r\"\"\"$goto\"\"\");\n");
-            }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST) {
+          write("[\n");
+          
+          var questionLineCount = 
+              curBlock.subBlocks.first.lineStart - curBlock.lineStart;
+          
+          if (questionLineCount == 0) {
+            write("  null,\n");
+          } else if (questionLineCount == 1) {
+            write("  () => \"\"\"${handleTrailingQuotes(line)}\"\"\",\n");
           } else {
-            // ex: "- Go to there [{{time++}} page]"
-            write("  choices.add(new EgbChoice(\n");
-            write("      \"\"\"$string \"\"\",\n");
-            var commaAfterGoto = ( script != null ) ? "," : "";
-            write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
-            write("      then:() { $script; }\n");
-            write("  ));\n");
+            write("  () => \"\"\"$line\n");
           }
-
-          write("}$commaOrNot\n");
         }
+
+//        if (curBlock.type == BuilderBlock.BLK_CHOICE) {
+//          var string = curBlock.options["string"];
+//          var goto = curBlock.options["goto"];
+//          write("{\n");
+//          write("  \"string\": r\"\"\"${string != null ? string : ''} \"\"\",\n");
+//          write("  \"goto\": r\"\"\"$goto\"\"\"\n");
+//          write("}$commaOrNot\n");
+//        }
+
+//        if (curBlock.type == BuilderBlock.BLK_CHOICE_WITH_SCRIPT) {
+//          var string = curBlock.options["string"];
+//          var goto = curBlock.options["goto"];
+//          var script = curBlock.options["script"];
+//
+//          write("() {\n");
+//
+//          if (string == null) {
+//            // ex: "- [gotopage]"
+//            if (script != null) {
+//              write("  $script;\n");
+//            }
+//            if (goto != null) {
+//              write("  goto(r\"\"\"$goto\"\"\");\n");
+//            }
+//          } else {
+//            // ex: "- Go to there [{{time++}} page]"
+//            write("  choices.add(new EgbChoice(\n");
+//            write("      \"\"\"$string \"\"\",\n");
+//            var commaAfterGoto = ( script != null ) ? "," : "";
+//            write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
+//            write("      then:() { $script; }\n");
+//            write("  ));\n");
+//          }
+//
+//          write("}$commaOrNot\n");
+//        }
 
         if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
           write("() {\n");
         }
-
+        
       }
 
       // block line
@@ -1335,6 +1389,43 @@ class Builder {
           indent = _getIndent(0);
           write("$line\n");
         }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST &&
+            _insideLineRange(lineNumber, curBlock, inclusive: true)) {
+          
+          if (lineNumber < curBlock.subBlocks.first.lineStart) {
+            // we are still in Question territory
+            if (lineNumber > curBlock.lineStart) {
+              write("$line\n");
+              if (lineNumber == curBlock.subBlocks.first.lineStart - 1) {
+                write("\"\"\",\n");  // end multiline question
+              }
+            }
+          } else {
+            var choiceBlock = curBlock.subBlocks.firstMatching((block) =>
+                  _insideLineRange(lineNumber, block, inclusive: true), 
+                  orElse: () => null);
+            
+            if (choiceBlock != null) {
+              write("{\n");
+              var lines = new List<String>();
+              if (choiceBlock.options["string"] != null) {
+                // TODO: don't use when not needed (no variable)
+                lines.add("  \"string\": () => \"\"\"${handleTrailingQuotes(choiceBlock.options["string"])}\"\"\"");
+              }
+              if (choiceBlock.options["goto"] != null) {
+                lines.add("  \"goto\": r\"\"\"${handleTrailingQuotes(choiceBlock.options["goto"])}\"\"\"");
+              }
+              if (choiceBlock.options["script"] != null) {
+                lines.add("  \"script\": () {${choiceBlock.options["script"]};}");
+              }
+              write(lines.join(",\n"));
+              write("}${lineNumber != curBlock.lineEnd ? "," : ""}\n");
+            }
+          }
+        }
+          
+        
         
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION
             && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
@@ -1396,6 +1487,11 @@ class Builder {
             indent = _getIndent(8);
             write("}$commaOrNot\n");
           }
+        }
+        
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST) {
+          indent = _getIndent(8);
+          write("]\n$commaOrNot");
         }
         
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
@@ -1858,7 +1954,8 @@ class Builder {
       return false;
     }
     if (range.lineEnd == null) {
-      throw "Range with lineStart == ${range.lineStart} has lineEnd == null.";
+      throw "Range with lineStart == ${range.lineStart} has lineEnd == null "
+            "in file $inputEgbFileFullPath.";
     }
     if (lineNumber >= range.lineStart
         && lineNumber <= range.lineEnd) {
