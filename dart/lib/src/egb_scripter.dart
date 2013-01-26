@@ -173,26 +173,34 @@ abstract class EgbScripter {
       _interfacePort.send(
           new EgbMessage.BookUid("DEFAULT_BOOK_UID").toJson(), // TODO: get UID from meta information
           port.toSendPort());
-    } else if (message.type == EgbMessage.MSG_LOAD_GAME) {
-      _loadFromSaveGameMessage(message);
-      // TODO handle errors
-      _interfacePort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
+//    } else if (message.type == EgbMessage.MSG_LOAD_GAME) {
+//      _loadFromSaveGameMessage(message);
+//      // TODO handle errors
+//      _interfacePort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
     } else {
-      _interfacePort.send(_goOneStep(message).toJson(), port.toSendPort());
+      _interfacePort.send(
+          _goOneStep(message).toJson(), port.toSendPort());
     }
   }
 
   // Walks through the instructions, one block at a time.
   // Returns message for interface.
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    if (incomingMessage.type == EgbMessage.MSG_START) {
-      DEBUG_SCR("Starting from the beginning");
-      currentPage = firstPage;
+    if (incomingMessage.type == EgbMessage.MSG_START ||
+        incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
       currentBlockIndex = null;
       _nextScriptStack.clear();
       _initScriptEnvironment();
     }
-
+    if (incomingMessage.type == EgbMessage.MSG_START) {
+      DEBUG_SCR("Starting new game.");
+      currentPage = firstPage;
+    }
+    if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
+      DEBUG_SCR("Starting new game.");
+      _loadFromSaveGameMessage(incomingMessage);
+    }
+    
     if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
       DEBUG_SCR("An option has been selected. Resolving.");
       EgbMessage message;
@@ -226,13 +234,19 @@ abstract class EgbScripter {
       currentBlockIndex = null;
       _nextPage = null;
       choices.clear();
-      return _createSaveGame();
+      return new EgbMessage.NoResult();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
     if (currentBlockIndex == null) {
       // we just came to this page
-      currentBlockIndex = 0;
+      if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
+        // SaveGames are always made just before the page's last block 
+        // (choiceList).
+        currentBlockIndex = currentPage.blocks.length - 1;
+      } else {
+        currentBlockIndex = 0;
+      }
       currentPage.visitedCount += 1;
     } else if (_repeatBlockBit) {
       _repeatBlockBit = false;
@@ -258,9 +272,14 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // choiceList
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      return choices.toMessage(
-                endOfPage: currentBlockIndex == currentPage.blocks.length - 1,
-                filterOut: _leadsToIllegalPage);
+      if (currentBlockIndex == currentPage.blocks.length - 1) {
+        // Last block on page. Save the game.
+        return _createSaveGame();
+      } else {
+        return choices.toMessage(
+                  endOfPage: false,
+                  filterOut: _leadsToIllegalPage);
+      }
     } else if (currentPage.blocks[currentBlockIndex] is Function) {
       // a script paragraph
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
@@ -367,12 +386,8 @@ abstract class EgbScripter {
             "exist in current egamebook.";
     }
     
-    // TODO: DRY with MSG_START
     DEBUG_SCR("Starting from a savegame");
     currentPage = pageMap[savegame.currentPageName];
-    currentBlockIndex = null;
-    _nextScriptStack.clear();
-    _initScriptEnvironment();
     
     // copy saved variables over vars
     savegame.vars.forEach((key, value) {
