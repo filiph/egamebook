@@ -18,9 +18,9 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   String goto;
   bool showNow;
 
-  EgbChoice(String rawString, {this.goto, Function then, bool showNow: false}) : 
+  EgbChoice(String string, {this.goto, Function then, bool showNow: false}) : 
       super() {
-    string = rawString.trim();  // string is defined with a trailing space because of quadruple quotes problem
+    this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
     f = then;
     waitForEndOfPage = !showNow;
@@ -32,11 +32,6 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
       hash = map["hash"];
     } else {
       hash = string.hashCode;
-    }
-    
-    // solve bug in javascript which return hashCode=0 for every string
-    if (hash == 0) {
-      hash = new Random().nextInt(1000000);
     }
     
     goto = map["goto"];
@@ -52,6 +47,10 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   }
   
   int compareTo(EgbChoice other) => this.string.compareTo(other.string);
+  
+  toString() {
+    return "Choice: $string [$goto]";
+  }
 }
 
 class EgbChoiceList implements List<EgbChoice> {
@@ -73,12 +72,38 @@ class EgbChoiceList implements List<EgbChoice> {
   
   EgbChoiceList.fromMessage(EgbMessage m) : _choices = new List<EgbChoice>() {
     if (m.listContent.length < 3) {
-      throw "Message with choices doesn't have enough data: $m.";
+      throw "Message with choices doesn't have enough data: ${m.listContent}.";
     } else {
       question = m.listContent[1];
       for (int i = 2; i < m.listContent.length; i++) {
         _choices.add(new EgbChoice.fromMap(m.listContent[i]));
       }
+    }
+  }
+  
+  /**
+   * Takes list from Scripter page data and adds the contents to this.
+   */
+  void addFromScripterList(List list) {
+    if (list[0] != null && list[0] is Function) {
+      question = list[0]();
+    } else {
+      question = null;
+    }
+    for (var i = 1; i < list.length; i++) {
+      Map map = list[i];
+      var string;
+      if (map["string"] != null && map["string"] is Function) {
+        string = map["string"]();
+      } else {
+        string = "";
+      }
+      var choice = new EgbChoice(
+                            string,
+                            goto: map["goto"],
+                            then: map["script"],
+                            showNow: true);
+      _choices.add(choice);
     }
   }
   
