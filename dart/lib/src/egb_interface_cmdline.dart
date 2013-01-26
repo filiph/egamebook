@@ -65,7 +65,7 @@ class CmdlineInterface implements EgbInterface {
           throw new FormatException("Number outside the choiceList range.");
         }
       } on FormatException catch (e) {
-        print("Input a number between 1 and ${choiceList.length - 1}, please.");
+        print("Input a number between 1 and ${choiceList.length}, please.");
       }
     };
     
