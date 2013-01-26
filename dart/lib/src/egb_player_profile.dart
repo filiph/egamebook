@@ -123,7 +123,8 @@ class EgbPlayerProfile {
         for (int i = 0; i < jsonList.length; i++) {
           savegameList.add(new EgbSavegame(
               jsonList[i]["currentPageName"], 
-              jsonList[i]["vars"]));
+              jsonList[i]["vars"],
+              jsonList[i]["pageMapState"]));
         }
         
         if (savegameList.isEmpty) {

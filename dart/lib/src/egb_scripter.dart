@@ -19,10 +19,9 @@ class EgbScripterPage extends EgbPage {
   final List<dynamic> blocks;
   
   /// Number of times this page has been visited by player.
-  int visitedCount = 0;
-  
+  int visitCount = 0;
   /// Whether or not this page has been visited by player.
-  bool get visited => visitedCount > 0;
+  bool get visited => visitCount > 0;
   
   /**
    * Default constructor only takes blocks List, and optionally page options.
@@ -68,11 +67,30 @@ class EgbScripterPageMap {
   
   operator []=(String key, EgbScripterPage newPage) {
     pages[key] = newPage;
-    // Copy the "key" to the name of the page.
+    // Copy the "key" to the name of the page. This is here so that we don't
+    // need to duplicate the page name in the scripter data.
     newPage.name = key;
   }
   
-
+  Map<String,dynamic> exportState() {
+    var pageMapState = new Map<String,dynamic>();
+    
+    pages.forEach((name, page) {
+      pageMapState[name] = {
+          "visitCount": page.visitCount                    
+      };
+    });
+    
+    return pageMapState;
+  }
+  
+  void importState(Map<String,dynamic> pageMapState) {
+    pageMapState.forEach((name, map) {
+      if (pages.containsKey(name)) {
+        pages[name].visitCount = map["visitCount"];
+      }
+    });
+  }
 }
 
 
@@ -198,6 +216,7 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
       DEBUG_SCR("Starting new game.");
+      print("load message: ${incomingMessage.strContent}");
       _loadFromSaveGameMessage(incomingMessage);
     }
     
@@ -247,7 +266,7 @@ abstract class EgbScripter {
       } else {
         currentBlockIndex = 0;
       }
-      currentPage.visitedCount += 1;
+      currentPage.visitCount += 1;
     } else if (_repeatBlockBit) {
       _repeatBlockBit = false;
     } else {
@@ -374,8 +393,10 @@ abstract class EgbScripter {
   }
   
   EgbMessage _createSaveGame() {
-    var savegame = new EgbSavegame(currentPage.name, vars); // TODO: save also counts in pageMap
-    return savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
+    var savegame = new EgbSavegame(currentPage.name, vars, 
+        pageMap.exportState());
+    var message = savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
+    return message;
   }
   
   void _loadFromSaveGameMessage(EgbMessage message) {
@@ -388,6 +409,8 @@ abstract class EgbScripter {
     
     DEBUG_SCR("Starting from a savegame");
     currentPage = pageMap[savegame.currentPageName];
+    
+    pageMap.importState(savegame.pageMapState);
     
     // copy saved variables over vars
     savegame.vars.forEach((key, value) {

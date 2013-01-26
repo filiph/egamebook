@@ -5,7 +5,13 @@ import 'dart:json';
 import 'egb_message.dart';
 
 class EgbSavegame {
+  /// The page on which this savegame was created. Savegames are always created
+  /// at the very end of the page, just before the player is presented with
+  /// choices.
   String currentPageName;
+  /// Holds information about visited pages and potentially other info.
+  Map<String,dynamic> pageMapState;
+  /// The serializable part of the [:vars:] map.
   Map vars;
   // TODO: points
   
@@ -15,12 +21,12 @@ class EgbSavegame {
    * When a savegame is opened, [textHistory] is printed so that player is
    * reminded about the context.
    * 
-   * Normally, [textHistory] is the rendered contents of the (chronologically)
-   * previous page.
+   * Normally, [textHistory] is the rendered contents of the current
+   * page.
    */
   String textHistory;
   
-  EgbSavegame(String this.currentPageName, Map _vars) {
+  EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _filterSaveable(_vars);
   }
   
@@ -32,6 +38,7 @@ class EgbSavegame {
             "'currentPageName' or 'vars'. JSON='$json'.";
     }
     currentPageName = saveMap["currentPageName"];
+    pageMapState = saveMap["pageMapState"];
     vars = saveMap["vars"];
     if (saveMap.containsKey("previousText")) {
       textHistory = saveMap["previousText"];
@@ -56,6 +63,7 @@ class EgbSavegame {
   String toJson() {
     Map<String,dynamic> saveMap = new Map<String,dynamic>();
     saveMap["currentPageName"] = currentPageName;
+    saveMap["pageMapState"] = pageMapState;
     saveMap["vars"] = vars;
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
