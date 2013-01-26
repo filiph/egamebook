@@ -273,8 +273,9 @@ void main() {
           receivePort = new ReceivePort();
           SendPort scripterPort2 = spawnUri("files/scripter_test_alternate_6_main.dart");
           
+          var playerProfile = storage.getDefaultPlayerProfile();
           var runner2 = new EgbRunner(receivePort, scripterPort2, 
-              interface2, storage.getDefaultPlayerProfile());
+              interface2, playerProfile);
           
           interface2.userQuit.then(expectAsync1((_) {
             expect(interface2.closed,
@@ -283,6 +284,12 @@ void main() {
                 false);
             expect(interface2.latestOutput,
                 contains("Time is now 10."));
+            
+            playerProfile.loadMostRecent()
+            .then(expectAsync1((EgbSavegame savegame) {
+              expect(savegame.pageMapState["dddeee"]["visitCount"],
+                  greaterThan(1));
+            }));
             
             runner2.stop();
           }));
