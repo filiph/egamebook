@@ -288,81 +288,89 @@ class Builder {
       } else {
         f.fullPath().then((String fullPath) {
           inputEgbFileFullPath = fullPath;
+          print("Reading input file ${f.name}.");
 
-          var strInputStream = new StringInputStream(f.openInputStream());
-
-          print("Reading input file ${f.name}");
-
-          // The top of the file can be metadata. This will be changed to 
-          // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
-          _mode = MODE_METADATA;
-
-          _lineNumber = 0;
-          _pageNumber = 0;
-          _blockNumber = 0;
-
-          strInputStream.onLine = () {
-            _lineNumber++; 
-            var line = strInputStream.readLine();
-            
-            _check(_lineNumber, line).then((_) {
-              //stdout.writeString(".");
-            });
-          };
-
-          strInputStream.onClosed = () {
-            //print("\nReading input file has finished.");
-   
-            if (!pages.isEmpty) {
-              // end the last page
-              pages.last.lineEnd = _lineNumber;
-              if (pages.last.blocks != null && !pages.last.blocks.isEmpty
-                  && pages.last.blocks.last.lineEnd == null) {
-                pages.last.blocks.last.lineEnd = _lineNumber;
-              }
-              
-              // fully specify gotoPageNames of every page
-              for (var page in pages) {
-                for (int i = 0; i < page.gotoPageNames.length; i++) {
-                  var gotoPageName = page.gotoPageNames[i];
-                  if (pageHandles.containsKey(
-                               "${page.groupName}: $gotoPageName")) {
-                    page.gotoPageNames[i] = 
-                        "${page.groupName}: $gotoPageName";
-                  } else if (pageHandles.containsKey(gotoPageName)) {
-                    // great, already done
-                  } else {
-                    WARNING("Page ${page.name} specifies a choice that goes "
-                            "to a non-existing page ($gotoPageName).", 
-                            line:null);
-                  }
-                }
-              }
-            } else {
-              WARNING("There are no pages in this egb. If you want it to be playable, "
-                      "you will need to include page starts in the form of a line "
-                      "containing exclusively dashes (`-`, three or more) and "
-                      "an immediately following line with the name of the page.",
-                      line:null);
-            }
-            
-            if (_mode != MODE_NORMAL) {
-              completer.completeError(
-                newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
-            } else {
-              // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
-              //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
-              _checkForDoubleImports().then((bool passed) {
-                if (passed) {
-                  completer.complete(this);
-                }
-              });
-            }
-          };
+          var inputStream = f.openInputStream();
+          readInputStream(inputStream).then((b) => completer.complete(b));
         });
       }
     });
 
+    return completer.future;
+  }
+  
+  Future<Builder> readInputStream(InputStream inputStream) {
+    var completer = new Completer();
+    
+    var strInputStream = new StringInputStream(inputStream);
+    
+    // The top of the file can be metadata. This will be changed to 
+    // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
+    _mode = MODE_METADATA;
+
+    _lineNumber = 0;
+    _pageNumber = 0;
+    _blockNumber = 0;
+
+    strInputStream.onLine = () {
+      _lineNumber++; 
+      var line = strInputStream.readLine();
+      
+      _check(_lineNumber, line).then((_) {
+        //stdout.writeString(".");
+      });
+    };
+
+    strInputStream.onClosed = () {
+      //print("\nReading input file has finished.");
+      
+      if (!pages.isEmpty) {
+        // end the last page
+        pages.last.lineEnd = _lineNumber;
+        if (pages.last.blocks != null && !pages.last.blocks.isEmpty
+            && pages.last.blocks.last.lineEnd == null) {
+          pages.last.blocks.last.lineEnd = _lineNumber;
+        }
+        
+        // fully specify gotoPageNames of every page
+        for (var page in pages) {
+          for (int i = 0; i < page.gotoPageNames.length; i++) {
+            var gotoPageName = page.gotoPageNames[i];
+            if (pageHandles.containsKey(
+                                        "${page.groupName}: $gotoPageName")) {
+              page.gotoPageNames[i] = 
+                  "${page.groupName}: $gotoPageName";
+            } else if (pageHandles.containsKey(gotoPageName)) {
+              // great, already done
+            } else {
+              WARNING("Page ${page.name} specifies a choice that goes "
+              "to a non-existing page ($gotoPageName).", 
+              line:null);
+            }
+          }
+        }
+      } else {
+        WARNING("There are no pages in this egb. If you want it to be playable, "
+            "you will need to include page starts in the form of a line "
+            "containing exclusively dashes (`-`, three or more) and "
+            "an immediately following line with the name of the page.",
+            line:null);
+      }
+      
+      if (_mode != MODE_NORMAL) {
+        completer.completeError(
+            newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
+      } else {
+        // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
+        //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
+        _checkForDoubleImports().then((bool passed) {
+          if (passed) {
+            completer.complete(this);
+          }
+        });
+      }
+    };
+    
     return completer.future;
   }
 
@@ -1919,8 +1927,13 @@ class ScripterImpl extends EgbScripter {
   static int MODE_INSIDE_SCRIPT_ECHO = 16;
   static int MODE_INSIDE_SCRIPT_TAG = 32;
   static int MODE_METADATA = 64;
-  // This makes sure the parser remembers where it is during reading the file.
+  /// This makes sure the parser remembers where it is during reading the file.
   int _mode;
+  
+  /// Public getter for _mode.
+  int get mode => _mode;
+  /// Public setter for _mode. This is here for unit testing only.
+  set mode(int value) => _mode = value;
 
   int _lineNumber;  // TODO: Because checking is async right now, this
                     // is only an _unreliable_ way of getting actual line number
