@@ -174,19 +174,21 @@ class BuilderBlock implements BuilderLineRange {
   int lineEnd;
   int type = 0;
   Map<String,dynamic> options;
-  List<BuilderLineSpan> subBlocks;
+  List<BuilderBlock> subBlocks;
 
   static final int BLK_TEXT = 1;
-  static final int BLK_SCRIPT = 2;
-  static final int BLK_CHOICE = 4;
   static final int BLK_TEXT_WITH_VAR = 8;
-  static final int BLK_CHOICE_QUESTION = 16;
-  static final int BLK_CHOICE_IN_SCRIPT = 32;
+  static final int BLK_SCRIPT = 2;
   static final int BLK_SCRIPT_ECHO = 64;
 
-  BuilderBlock({int this.lineStart}) {
+  static final int BLK_CHOICE_LIST = 128;
+  static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
+  static final int BLK_CHOICE = 4;
+  static final int BLK_CHOICE_IN_SCRIPT = 32;
+
+  BuilderBlock({this.lineStart, this.type: 0}) {
     options = new Map<String,dynamic>();
-    subBlocks = new List<BuilderLineSpan>();
+    subBlocks = new List<BuilderBlock>();
   }
 }
 
@@ -361,8 +363,6 @@ class Builder {
         completer.completeError(
             newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
       } else {
-        // TODO: if a BLK_CHOICE goto leads to a page with an [[ visitOnce ]] option
-        //       or similar, rewrite to BLK_CHOICE_IN_SCRIPT!
         _checkForDoubleImports().then((bool passed) {
           if (passed) {
             completer.complete(this);
@@ -389,7 +389,7 @@ class Builder {
         _checkBlankLine(number, line),
         _checkNewPage(number, line),
         _checkPageOptions(number, line),
-        _checkChoice(number, line),
+        _checkChoiceList(number, line),
         _checkInitBlockTags(number, line),
         _checkScriptTags(number, line),
         _checkGotoInsideScript(number, line),
@@ -560,13 +560,15 @@ class Builder {
       return new Future.immediate(false);
     }
   }
+  
+  
 
   /**
    * Checks if current line is choice. Acts accordingly.
    * 
    * @return    Future of bool, indicating the result of the check.
    **/
-  Future<bool> _checkChoice(int number, String line) {
+  Future<bool> _checkChoiceList(int number, String line) {
     // TODO: allow choices in synopsis?
     // TODO: check even inside ECHO tags, add to script
     if (line == null || pages.isEmpty
@@ -738,7 +740,9 @@ class Builder {
           _mode = MODE_INSIDE_SCRIPT_ECHO;
           if (!lastpage.blocks.isEmpty
               && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT) {
-            lastpage.blocks.last.subBlocks.add(new BuilderLineSpan(lineStart:number));
+            lastpage.blocks.last.subBlocks.add(
+                new BuilderBlock(lineStart: number, 
+                                 type: BuilderBlock.BLK_SCRIPT_ECHO));
             completer.complete(true);
           } else {
             completer.completeError(
