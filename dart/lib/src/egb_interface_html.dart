@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:html';
 import 'egb_interface.dart';
 import 'egb_library.dart';
+import 'egb_storage.dart';
+import 'egb_player_profile.dart';
 
 class HtmlInterface implements EgbInterface {
 
@@ -71,4 +73,29 @@ class HtmlInterface implements EgbInterface {
     
     return completer.future;
   }
+}
+
+class LocalStorage implements EgbStorage {
+//  Map<String,String> memory;
+//  
+//  MemoryStorage() {
+//    memory = new Map();
+//  }
+  
+  Future<bool> save(String key, String value) {
+    window.localStorage[key] = value;
+    return new Future.immediate(true);
+  }
+  
+  Future<String> load(String key) {
+    var result = window.localStorage[key];
+    return new Future.immediate(result);
+  }
+  
+  EgbPlayerProfile getDefaultPlayerProfile() {
+    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
+        this);
+  }
+  
+  
 }

@@ -16,7 +16,7 @@ void main() {
   // create the interface
   EgbInterface interface = new HtmlInterface();
   // open storage
-  EgbStorage storage = new MemoryStorage(); // TODO: localStorage?
+  EgbStorage storage = new LocalStorage();
   // get player profile
   EgbPlayerProfile playerProfile = storage.getDefaultPlayerProfile();
   
