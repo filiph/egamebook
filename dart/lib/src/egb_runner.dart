@@ -26,19 +26,20 @@ class EgbRunner {
   bool started = false;
   bool ended = false;
   
-  Future<bool> endOfBookReached;
-  Completer<bool> _endOfBookCompleter;
+  StreamController<String> _streamController;
+  Stream<String> get stream => _streamController.stream;
+  Stream<String> get endOfBookReached => stream.where((value) => value == "END");
   
   EgbRunner(this._receivePort, this._scripterPort, 
       this._interface, this._playerProfile) {
-    _endOfBookCompleter = new Completer();
-    endOfBookReached = _endOfBookCompleter.future;
+    _streamController = new StreamController();
     
     _interface.stream.listen((playerIntent) {
       switch (playerIntent.type) {
         case (PlayerIntent.RESTART):
           _scripterPort.send(new EgbMessage.Start().toJson(), 
               _receivePort.toSendPort());
+          started = true;
           break;
         case (PlayerIntent.QUIT):
           stop();
@@ -57,6 +58,7 @@ class EgbRunner {
                   _receivePort.toSendPort());
             }
           });
+          started = true;
           break;
       }
     });
@@ -70,7 +72,6 @@ class EgbRunner {
         new EgbMessage.GetBookUid().toJson(),
         _receivePort.toSendPort()
     );
-    started = true;
   }
   
   void stop() {
@@ -89,7 +90,7 @@ class EgbRunner {
     DEBUG_CMD("We have a message from Scripter: ${message.type}.");
     if (message.type == EgbMessage.MSG_END_OF_BOOK) {
       DEBUG_CMD("We are at the end of book. Closing.");
-      _endOfBookCompleter.complete(true);
+      _streamController.sink.add("END");
       ended = true;
       // stop();
     } else if (message.type == EgbMessage.MSG_SEND_BOOK_UID) {
@@ -107,6 +108,7 @@ class EgbRunner {
               _receivePort.toSendPort());
         }
       });
+      started = true;
     } else {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);

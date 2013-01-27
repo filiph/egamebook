@@ -142,7 +142,7 @@ void main() {
           var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
-          runner.endOfBookReached.then(expectAsync1((_) {
+          runner.endOfBookReached.listen(expectAsync1((_) {
             expect(interface.latestOutput,
             "End of book.");
             expect(interface.choicesToBeTaken.length,
@@ -222,7 +222,7 @@ void main() {
         var runner = new EgbRunner(receivePort, scripterPort, 
             interface, playerProfile);
         
-        runner.endOfBookReached.then(expectAsync1((_) {
+        runner.endOfBookReached.listen(expectAsync1((_) {
           expect(interface.latestOutput,
               contains("Scripter should still have all variables"));
           
