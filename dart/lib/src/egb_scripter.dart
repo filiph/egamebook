@@ -208,6 +208,7 @@ abstract class EgbScripter {
         incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
       currentBlockIndex = null;
       _nextScriptStack.clear();
+      choices.clear();
       _initScriptEnvironment();
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {

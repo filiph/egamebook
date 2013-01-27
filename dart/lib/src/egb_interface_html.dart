@@ -9,6 +9,7 @@ import 'egb_player_profile.dart';
 
 class HtmlInterface implements EgbInterface {
 
+  AnchorElement restartAnchor;
   DivElement paragraphsDiv;
   DivElement choicesDiv;
   ParagraphElement choicesQuestionP;
@@ -26,6 +27,13 @@ class HtmlInterface implements EgbInterface {
   
   void setup() {
     // DOM
+    restartAnchor = document.query("nav a#book-restart");
+    restartAnchor.onClick.listen((_) {
+        _streamController.sink.add(
+            new PlayerInteraction(PlayerInteraction.RESTART));
+        choicesOl.children.clear();
+    });
+    
     paragraphsDiv = document.query("div#book-paragraphs");
     choicesDiv = document.query("div#book-choices");
     choicesOl = document.query("ol#book-choices-ol");
