@@ -15,6 +15,7 @@ abstract class EgbStorage {
   
   Future<bool> save(String key, String value);
   Future<String> load(String key);
+  Future<bool> delete(String key);
 
   EgbPlayerProfile getDefaultPlayerProfile();
 }
@@ -38,6 +39,11 @@ class MemoryStorage implements EgbStorage {
   Future<String> load(String key) {
     var result = memory[key];
     return new Future.immediate(result);
+  }
+  
+  Future<bool> delete(String key) {
+    memory.remove(key);
+    return new Future.immediate(true);
   }
   
   EgbPlayerProfile getDefaultPlayerProfile() {

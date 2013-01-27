@@ -27,12 +27,18 @@ class EgbPlayerProfile {
   }
   
   void close() {
-    // TODO: save data to storage?
+    if (savegamesChronology != null) _saveChronology();
+    _savePreferences();
   }
   
+  /// Uid of the player this profile is associated with.
   String playerUid;
+  /// Uid of current gamebook. *Must* be set for saving and loading to work. 
   String currentEgamebookUid;
   
+  /**
+   * Global (non-gamebook-specific) preferences of the player.
+   */
   Map<String,dynamic> preferences;
   
   Future<bool> _savePreferences() {
@@ -54,10 +60,12 @@ class EgbPlayerProfile {
     return completer.future;
   }
   
-  /// Curent egamebook's savegames for the current player profile.
-  /// There is up to [maxSaves] of them.
-  Queue<EgbSavegame> savegames;
+  /// A queue of [savegame] [:uid:] fields. Make it easier to find the oldest 
+  /// or newest savegame, as well as sorting them. (Without resorting to sort
+  /// by timestamp each time.)
+  Queue<String> savegamesChronology;
   
+  /// Instance of Storage to use.
   EgbStorage _storage;
   
   /**
@@ -83,6 +91,34 @@ class EgbPlayerProfile {
     return _storage.load("$playerUid::$currentEgamebookUid::$key");
   }
   
+  /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
+  /// the key, then removes the key-value paid from the storage.
+  /// Throws if [currentEgamebookUid] is not set.
+  Future<bool> _delete(String key) {
+    if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
+    return _storage.delete("$playerUid::$currentEgamebookUid::$key");
+  }
+  
+  Future<bool> _saveChronology() {
+    return _save("_chronology", stringify(savegamesChronology.toList()));
+  }
+  
+  Future<bool> _loadChronology() {
+    return _load("_chronology").then((json) {
+      if (json != null) {
+        List<String> list = parse(json);
+        savegamesChronology = new Queue<String>.from(list);
+      } else {
+        savegamesChronology = new Queue<String>();
+      }
+      return true;
+    });
+  }
+  
+  Future<bool> _updateChronology() {
+    
+  }
+  
   /**
    * Adds the savegame to the existing [savegames] Queue, then saves to
    * storage. Files it under the [currentEgamebookUid] and [playerUid].
@@ -91,49 +127,40 @@ class EgbPlayerProfile {
    * the storage.
    */
   Future<bool> save(EgbSavegame savegame) {
-    savegames.addLast(savegame);
-    if (savegames.length > maxSaves) savegames.removeFirst();
+    if (savegamesChronology == null) {
+      // We haven't retrieved savegamesChronology from the _storage yet.
+      // This code goes fetch it, re-runs the save() method, then forwards the
+      // result to the caller of this function.
+      var completer = new Completer();
+      _loadChronology()
+      .then((_) => save(savegame)
+        .then((value) {completer.complete(value);}));
+      return completer.future;
+    }
     
-    var savegameList = new List<EgbSavegame>.from(savegames);
-    return _save("savegames", savegameList.toString());
+    if (savegamesChronology.length > maxSaves) {
+      var hashToRemove = savegamesChronology.removeFirst();
+      _delete(hashToRemove);
+    }
+    
+    savegamesChronology.addLast(savegame.uid);
+    _saveChronology();
+    return _save(savegame.uid, savegame.toJson());
   }
   
-  /// Loads the [offset]th latest savegame. Returns [:null:] when there are 
-  /// no savegames.
-  Future<EgbSavegame> load([int offset=0]) {
-    if (offset >= maxSaves) throw "Offset must be lower than maxSaves.";
-    if (offset != 0) throw "Loading games older than the most recent is not "
-                           "implemented yet";
-
+  /// Loads the savegame by [:uid:]. Returns [:null:] when there is 
+  /// no savegame with that [uid] in memory.
+  Future<EgbSavegame> load(String uid) {
     var completer = new Completer<EgbSavegame>();
     
-    // TODO: do we need to go to the storage all the time? we have the savegames
-    // in memory...
-    
-    _load("savegames")
+    _load(uid)
     .then((json) {
       if (json == null) {
-        savegames = new Queue<EgbSavegame>();
         completer.complete(null);
       } else {
-        
-        // extract savegames from JSON
-        List<Map> jsonList = parse(json);
-        var savegameList = new List<EgbSavegame>();
-        for (int i = 0; i < jsonList.length; i++) {
-          savegameList.add(new EgbSavegame(
-              jsonList[i]["currentPageName"], 
-              jsonList[i]["vars"],
-              jsonList[i]["pageMapState"]));
-        }
-        
-        if (savegameList.isEmpty) {
-          savegames = new Queue<EgbSavegame>();
-          completer.complete(null);
-        } else {
-          savegames = new Queue<EgbSavegame>.from(savegameList);
-          completer.complete(savegames.last);
-        }
+        // extract savegame from JSON
+        var savegame = new EgbSavegame.fromJson(json);
+        completer.complete(savegame);
       }
     });
     
@@ -142,5 +169,20 @@ class EgbPlayerProfile {
   
   /// Loads the latest savegame. Returns [:null:] when there are 
   /// no savegames.
-  Future<EgbSavegame> loadMostRecent() => load(0);
+  Future<EgbSavegame> loadMostRecent() {
+    if (savegamesChronology == null) {
+      // We haven't retrieved savegamesChronology from the _storage yet.
+      // This code goes fetch it, re-runs the loadMostRecent() method, then 
+      // forwards the result to the caller of this function.
+      // TODO: dry with save() ?
+      var completer = new Completer();
+      _loadChronology()
+      .then((_) => loadMostRecent()
+        .then((value) {completer.complete(value);}));
+      return completer.future;
+    }
+    
+    if (savegamesChronology.isEmpty) return new Future.immediate(null);
+    return load(savegamesChronology.last);
+  }
 }

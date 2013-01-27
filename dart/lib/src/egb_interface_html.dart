@@ -94,6 +94,11 @@ class LocalStorage implements EgbStorage {
     return new Future.immediate(result);
   }
   
+  Future<bool> delete(String key) {
+    window.localStorage.remove(key);
+    return new Future.immediate(true);
+  }
+  
   EgbPlayerProfile getDefaultPlayerProfile() {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
         this);

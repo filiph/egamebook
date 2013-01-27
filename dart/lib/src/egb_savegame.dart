@@ -4,6 +4,11 @@ import 'dart:json';
 
 import 'egb_message.dart';
 
+/**
+ * Savegame stores information of one point in time of the gameplay. This
+ * includes the [currentPageName], information about visited pages
+ * ([pageMapState] and [vars] defined by author. 
+ */
 class EgbSavegame {
   /// The page on which this savegame was created. Savegames are always created
   /// at the very end of the page, just before the player is presented with
@@ -26,8 +31,17 @@ class EgbSavegame {
    */
   String textHistory;
   
+  /// The [uid] uniquely defines this savegame for later retrieval.
+  String uid;
+  
+  /// Timestamp of the moment when this savegame was created, in milliseconds
+  /// since Epoch.
+  int timestamp;
+  
   EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _filterSaveable(_vars);
+    timestamp = new Date.now().millisecondsSinceEpoch;
+    uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
   
   EgbSavegame.fromJson(String json) {
@@ -38,6 +52,7 @@ class EgbSavegame {
             "'currentPageName' or 'vars'. JSON='$json'.";
     }
     currentPageName = saveMap["currentPageName"];
+    timestamp = saveMap["timestamp"];
     pageMapState = saveMap["pageMapState"];
     vars = saveMap["vars"];
     if (saveMap.containsKey("previousText")) {
@@ -65,6 +80,7 @@ class EgbSavegame {
     saveMap["currentPageName"] = currentPageName;
     saveMap["pageMapState"] = pageMapState;
     saveMap["vars"] = vars;
+    saveMap["timestamp"] = timestamp;
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
     }

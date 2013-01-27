@@ -112,6 +112,7 @@ class EgbRunner {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
         _playerProfile.save(savegame);
+        // TODO: add savegame marker to the _interface
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {
