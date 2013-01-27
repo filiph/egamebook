@@ -22,7 +22,6 @@ void main() {
   
   var runner = new EgbRunner(receivePort, scripterPort, 
       interface, playerProfile);
-  interface.userQuit.then((_) => runner.stop());
   runner.run();
   
 }

@@ -10,15 +10,14 @@ class CmdlineInterface implements EgbInterface {
 
   StringInputStream cmdLine;
   
-  Future<bool> userQuit;
-  Completer<bool> _userQuitCompleter;
+  StreamController<PlayerInteraction> _streamController;
+  Stream get stream => _streamController.stream;
   
   /**
     Constructor.
     */
   CmdlineInterface() {
-    _userQuitCompleter = new Completer();
-    userQuit = _userQuitCompleter.future;
+    _streamController = new StreamController();
   }
   
   void setup() {
@@ -26,6 +25,7 @@ class CmdlineInterface implements EgbInterface {
   }
   
   void close() {
+    _streamController.close();
     stdin.close();
   }
   
@@ -53,7 +53,8 @@ class CmdlineInterface implements EgbInterface {
       var line = cmdLine.readLine();
       
       if (line.trim().toLowerCase() == "quit") {
-        _userQuitCompleter.complete(true);
+        _streamController.sink.add(
+            new PlayerInteraction(PlayerInteraction.QUIT));
         return new Completer().future;
       }
       

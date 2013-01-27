@@ -34,6 +34,34 @@ class EgbRunner {
     _endOfBookCompleter = new Completer();
     endOfBookReached = _endOfBookCompleter.future;
     
+    _interface.stream.listen((playerInteraction) {
+      switch (playerInteraction.type) {
+        case (PlayerInteraction.RESTART):
+          _scripterPort.send(new EgbMessage.Start().toJson(), 
+              _receivePort.toSendPort());
+          break;
+        case (PlayerInteraction.QUIT):
+          stop();
+          break;
+        case (PlayerInteraction.LOAD):
+          // load latest saved state for the bookUid from playerProfile
+          // TODO: dry with below
+          // TODO: not only most Recent
+          _playerProfile.loadMostRecent()
+          .then((EgbSavegame savegame) {
+            if (savegame == null) {
+              // no savegames for this egamebook
+              _scripterPort.send(new EgbMessage.Start().toJson(), 
+                  _receivePort.toSendPort());
+            } else {
+              _scripterPort.send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME).toJson(), 
+                  _receivePort.toSendPort());
+            }
+          });
+          break;
+      }
+    });
+    
     _receivePort.receive(receiveFromScripter);
   }
   

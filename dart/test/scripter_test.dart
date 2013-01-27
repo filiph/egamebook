@@ -21,18 +21,18 @@ class MockInterface implements EgbInterface {
   bool started = false;
   bool closed = false;
   
-  Future<bool> userQuit;
-  Completer _userQuitCompleter;
+  StreamController _streamController;
+  Stream get stream => _streamController.stream;
   
   MockInterface() : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>() {
-    _userQuitCompleter = new Completer();
-    userQuit = _userQuitCompleter.future;
+    _streamController = new StreamController.multiSubscription();
   }
   
   void setup() {
     started = true;
   }
+  
   void close() {
     closed = true;
   }
@@ -67,8 +67,9 @@ class MockInterface implements EgbInterface {
       return new Future.immediate(choiceList[choiceNumber].hash);
     } else {
       print("MockInterface pick: NONE, Quitting");
-      close();
-      _userQuitCompleter.complete(true);
+      _streamController.sink.add(
+          new PlayerInteraction(PlayerInteraction.QUIT));
+      _streamController.close();
       return new Completer().future;
     }
   }
@@ -159,11 +160,12 @@ void main() {
           var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
-          interface.userQuit.then(expectAsync1((_) {
+          interface.stream.listen(expectAsync1((interaction) {
+            expect(interaction.type, PlayerInteraction.QUIT);
             expect(interface.closed,
                 true);
             expect(runner.ended,
-                false);
+                true);
             expect(interface.latestOutput,
                 startsWith("Welcome (back?) to dddeee."));
             
@@ -183,11 +185,12 @@ void main() {
           var runner = new EgbRunner(receivePort, scripterPort, 
               interface, storage.getDefaultPlayerProfile());
           
-          interface.userQuit.then(expectAsync1((_) {
+          interface.stream.listen(expectAsync1((interaction) {
+            expect(interaction.type, PlayerInteraction.QUIT);
             expect(interface.closed,
                 true);
             expect(runner.ended,
-                false);
+                true);
             expect(interface.latestOutput,
                 contains("Time is now 10."));
             
@@ -267,7 +270,9 @@ void main() {
         var runner1 = new EgbRunner(receivePort, scripterPort1, 
             interface1, storage.getDefaultPlayerProfile());
         
-        interface1.userQuit.then(expectAsync1((_) {
+        interface1.stream.firstMatching(
+            (interaction) => interaction.type == PlayerInteraction.QUIT)
+        .then(expectAsync1((_) {
           runner1.stop();
           
           receivePort = new ReceivePort();
@@ -277,11 +282,13 @@ void main() {
           var runner2 = new EgbRunner(receivePort, scripterPort2, 
               interface2, playerProfile);
           
-          interface2.userQuit.then(expectAsync1((_) {
+          interface2.stream.firstMatching(
+              (interaction) => interaction.type == PlayerInteraction.QUIT)
+          .then(expectAsync1((_) {
             expect(interface2.closed,
                 true);
             expect(runner2.ended,
-                false);
+                true);
             expect(interface2.latestOutput,
                 contains("Time is now 10."));
             
@@ -319,7 +326,9 @@ void main() {
         var runner = new EgbRunner(receivePort, scripterPort, 
             interface, playerProfile);
         
-        interface.userQuit.then(expectAsync1((_) {
+        interface.stream.firstMatching(
+            (interaction) => interaction.type == PlayerInteraction.QUIT)
+        .then(expectAsync1((_) {
           expect(interface.latestChoices,
               hasLength(3));
           expect(interface.latestChoices[0].string,

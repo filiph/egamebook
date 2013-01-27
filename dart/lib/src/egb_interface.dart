@@ -28,5 +28,8 @@ abstract class EgbInterface {
    */
   Future<int> showChoices(EgbChoiceList choices);
   
-  Future<bool> userQuit;
+  /// Stream that sends player's interactions (apart from choice selection).
+  /// These interactions include loading game states, starting a gamebook
+  /// from scratch, etc.
+  Stream<PlayerInteraction> stream;
 }

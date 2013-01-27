@@ -161,3 +161,14 @@ class EgbTextInput extends EgbUserInteraction {
   // TODO: implement
   // Question can be answered with text. Example: "What is your name?"
 }
+
+class PlayerInteraction {
+  
+  PlayerInteraction(type) : this.type = type; 
+  
+  final int type;
+  
+  static const int QUIT = 2;
+  static const int LOAD = 4;
+  static const int RESTART = 8;
+}

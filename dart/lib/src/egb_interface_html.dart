@@ -14,15 +14,14 @@ class HtmlInterface implements EgbInterface {
   ParagraphElement choicesQuestionP;
   OListElement choicesOl;
   
-  Future<bool> userQuit;
-  Completer _userQuitCompleter;
+  StreamController<PlayerInteraction> _streamController;
+  Stream get stream => _streamController.stream;
   
   /**
     Constructor.
     */
   HtmlInterface() {
-    _userQuitCompleter = new Completer();
-    userQuit = _userQuitCompleter.future;
+    _streamController = new StreamController();
   }
   
   void setup() {
@@ -34,6 +33,7 @@ class HtmlInterface implements EgbInterface {
   }
   
   void close() {
+    _streamController.close();
     choicesOl.children.clear();
     choicesQuestionP.style.display = "none";
   }
@@ -76,12 +76,6 @@ class HtmlInterface implements EgbInterface {
 }
 
 class LocalStorage implements EgbStorage {
-//  Map<String,String> memory;
-//  
-//  MemoryStorage() {
-//    memory = new Map();
-//  }
-  
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;
     return new Future.immediate(true);
@@ -96,6 +90,4 @@ class LocalStorage implements EgbStorage {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
         this);
   }
-  
-  
 }
