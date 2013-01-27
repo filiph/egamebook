@@ -91,6 +91,16 @@ class EgbScripterPageMap {
       }
     });
   }
+  
+  /**
+   * Clears play state of the page map. Useful when restarting an egamebook
+   * from scratch.
+   */
+  void clearState() {
+    pages.forEach((name, page) {
+      page.visitCount = 0;                    
+    });
+  }
 }
 
 
@@ -99,9 +109,6 @@ class EgbScripterPageMap {
   It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
   */
 abstract class EgbScripter {
-  //List<List> pages;
-  //Map<String,int> pageHandles; // TODO: make this into Map<String,Page>
-  
   /// The unique id of this particular gamebook. Used for saving.
   String gamebookUid;
   
@@ -191,10 +198,6 @@ abstract class EgbScripter {
       _interfacePort.send(
           new EgbMessage.BookUid("DEFAULT_BOOK_UID").toJson(), // TODO: get UID from meta information
           port.toSendPort());
-//    } else if (message.type == EgbMessage.MSG_LOAD_GAME) {
-//      _loadFromSaveGameMessage(message);
-//      // TODO handle errors
-//      _interfacePort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
     } else {
       _interfacePort.send(
           _goOneStep(message).toJson(), port.toSendPort());
@@ -210,9 +213,10 @@ abstract class EgbScripter {
       _nextScriptStack.clear();
       choices.clear();
       _initScriptEnvironment();
+      pageMap.clearState();
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
-      DEBUG_SCR("Starting new game.");
+      DEBUG_SCR("Starting new game from scratch.");
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
