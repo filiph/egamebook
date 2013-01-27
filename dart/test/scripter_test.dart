@@ -169,7 +169,7 @@ void main() {
             expect(interface.closed,
                 true);
             expect(runner.ended,
-                true);
+                false);
             expect(interface.latestOutput,
                 startsWith("Welcome (back?) to dddeee."));
             
@@ -194,7 +194,7 @@ void main() {
             expect(interface.closed,
                 true);
             expect(runner.ended,
-                true);
+                false);
             expect(interface.latestOutput,
                 contains("Time is now 10."));
             
@@ -292,7 +292,7 @@ void main() {
             expect(interface2.closed,
                 true);
             expect(runner2.ended,
-                true);
+                false);
             expect(interface2.latestOutput,
                 contains("Time is now 10."));
             

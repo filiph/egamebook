@@ -78,7 +78,6 @@ class EgbRunner {
     _interface.close();
     _scripterPort.send(new EgbMessage.Quit().toJson());
     _receivePort.close();
-    ended = true;
   }
   
   /**
@@ -91,7 +90,8 @@ class EgbRunner {
     if (message.type == EgbMessage.MSG_END_OF_BOOK) {
       DEBUG_CMD("We are at the end of book. Closing.");
       _endOfBookCompleter.complete(true);
-      stop();
+      ended = true;
+      // stop();
     } else if (message.type == EgbMessage.MSG_SEND_BOOK_UID) {
       // get bookUid from scripter
       _playerProfile.currentEgamebookUid = message.strContent;
