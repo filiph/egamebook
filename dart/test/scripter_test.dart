@@ -68,10 +68,14 @@ class MockInterface implements EgbInterface {
     } else {
       print("MockInterface pick: NONE, Quitting");
       _streamController.sink.add(
-          new PlayerInteraction(PlayerInteraction.QUIT));
+          new PlayerIntent(PlayerIntent.QUIT));
       _streamController.close();
       return new Completer().future;
     }
+  }
+  
+  Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+    print("==> savegame created (${savegame.uid})");
   }
 }
 
@@ -161,7 +165,7 @@ void main() {
               interface, storage.getDefaultPlayerProfile());
           
           interface.stream.listen(expectAsync1((interaction) {
-            expect(interaction.type, PlayerInteraction.QUIT);
+            expect(interaction.type, PlayerIntent.QUIT);
             expect(interface.closed,
                 true);
             expect(runner.ended,
@@ -186,7 +190,7 @@ void main() {
               interface, storage.getDefaultPlayerProfile());
           
           interface.stream.listen(expectAsync1((interaction) {
-            expect(interaction.type, PlayerInteraction.QUIT);
+            expect(interaction.type, PlayerIntent.QUIT);
             expect(interface.closed,
                 true);
             expect(runner.ended,
@@ -271,7 +275,7 @@ void main() {
             interface1, storage.getDefaultPlayerProfile());
         
         interface1.stream.firstMatching(
-            (interaction) => interaction.type == PlayerInteraction.QUIT)
+            (interaction) => interaction.type == PlayerIntent.QUIT)
         .then(expectAsync1((_) {
           runner1.stop();
           
@@ -283,7 +287,7 @@ void main() {
               interface2, playerProfile);
           
           interface2.stream.firstMatching(
-              (interaction) => interaction.type == PlayerInteraction.QUIT)
+              (interaction) => interaction.type == PlayerIntent.QUIT)
           .then(expectAsync1((_) {
             expect(interface2.closed,
                 true);
@@ -327,7 +331,7 @@ void main() {
             interface, playerProfile);
         
         interface.stream.firstMatching(
-            (interaction) => interaction.type == PlayerInteraction.QUIT)
+            (interaction) => interaction.type == PlayerIntent.QUIT)
         .then(expectAsync1((_) {
           expect(interface.latestChoices,
               hasLength(3));

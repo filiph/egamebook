@@ -5,17 +5,18 @@ import 'dart:html';
 import 'egb_interface.dart';
 import 'egb_library.dart';
 import 'egb_storage.dart';
+import 'egb_savegame.dart';
 import 'egb_player_profile.dart';
 
 class HtmlInterface implements EgbInterface {
 
   AnchorElement restartAnchor;
-  DivElement paragraphsDiv;
-  DivElement choicesDiv;
-  ParagraphElement choicesQuestionP;
-  OListElement choicesOl;
   
-  StreamController<PlayerInteraction> _streamController;
+  
+  DivElement bookDiv;
+  DivElement currentChoicesDiv;
+  
+  StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
   
   /**
@@ -30,35 +31,47 @@ class HtmlInterface implements EgbInterface {
     restartAnchor = document.query("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
         _streamController.sink.add(
-            new PlayerInteraction(PlayerInteraction.RESTART));
-        choicesOl.children.clear();
+            new RestartIntent());
+        _currentSavegame = null;
+        // Clear text and choices
+        bookDiv.children.clear();
     });
     
-    paragraphsDiv = document.query("div#book-paragraphs");
-    choicesDiv = document.query("div#book-choices");
-    choicesOl = document.query("ol#book-choices-ol");
-    choicesQuestionP = document.query("p#book-choices-question");
+    bookDiv = document.query("div#book-wrapper");
   }
   
   void close() {
     _streamController.close();
-    choicesOl.children.clear();
-    choicesQuestionP.style.display = "none";
+    if (currentChoicesDiv != null) currentChoicesDiv.remove();
   }
   
   Future<bool> showText(String s) {
-    ParagraphElement p = new Element.tag("p");
+    var p = new ParagraphElement();
     p.innerHtml = s;
-    paragraphsDiv.children.add(p);
+    bookDiv.append(p);  // TODO: one by one, wait for transition end
     return new Future.immediate(true);
+  }
+  
+  DivElement _buildChoicesDiv(EgbChoiceList choiceList) {
+    
   }
 
   Future<int> showChoices(EgbChoiceList choiceList) {
     var completer = new Completer();
     
     if (choiceList.question != null) {
+      var choicesQuestionP = new ParagraphElement();
       choicesQuestionP.innerHtml = choiceList.question;
-      choicesQuestionP.style.display = "block";
+      choicesQuestionP.classes.add("choices-question");
+      bookDiv.children.add(choicesQuestionP);
+    }
+    
+    OListElement choicesOl = new OListElement();
+    choicesOl.classes.add("choices");
+    if (_currentSavegame != null) {
+      choicesOl.dataAttributes["savegame-uid"] = _currentSavegame.uid;
+      _currentSavegame = null;
+      choicesOl.classes.add("savegame");
     }
     
     // let player choose
@@ -68,18 +81,73 @@ class HtmlInterface implements EgbInterface {
       AnchorElement a = new Element.tag("a");
       a.innerHtml = choice.string;
 
-      a.on.click.add((Event ev) {
-        print("User clicked on choice $i with hash ${choice.hash}");
+      a.onClick.listen((Event ev) {
+          // Send choice hash back to Scripter.
           completer.complete(choice.hash);
-          choicesOl.children.clear();
-          choicesQuestionP.style.display = "none";
+          // Mark this element as chosen.
+          li.classes.add("chosen");
+          
+          _makeIntoBookmark(choicesOl);
+          ev.stopPropagation();  // Prevent event from immediately propagating
+                                 // to the enclosing choicesOl (thus trying to
+                                 // fire a LoadIntent).
       });
       
-      li.children.add(a);
-      choicesOl.children.add(li);
+      li.append(a);
+      choicesOl.append(li);
     }
     
+    bookDiv.append(choicesOl);
+    
     return completer.future;
+  }
+  
+  /**
+   * Makes choices in ordered list [choicesOl] unclickable (removes <a> tags).
+   * When the element has [:savegame-uid:] data attribute set, then the list
+   * becomes a "bookmark" - saved state can be loaded by clicking on it.
+   */
+  void _makeIntoBookmark(OListElement choicesOl) {
+    choicesOl.classes.add("past");
+    // Remove <a> tags from all choices.
+    choicesOl.children.forEach((LIElement el) {
+      var string = el.query("a").innerHtml;
+      el.children.clear();
+      el.innerHtml = string;
+    });
+    if (choicesOl.dataAttributes.containsKey("savegame-uid")) {
+      String uid = choicesOl.dataAttributes["savegame-uid"];
+      // Make possible to come back to the associated savegame.
+      choicesOl.onClick
+      //.skip(1)  // The first fired event is actually the click on the <a> tag.
+      .listen((Event ev) {
+        // TODO: make more elegant, with confirmation appearing on page
+        var confirm = window.confirm("Are you sure you want to come back to "
+                        "this decision ($uid) and lose your progress since?");
+        if (confirm) {
+          var prevEl = choicesOl.previousElementSibling;
+          if (prevEl != null && prevEl.classes.contains("choices-question")) {
+            prevEl.remove();
+          }
+          while (choicesOl.nextElementSibling != null) {
+            choicesOl.nextElementSibling.remove();
+          }
+          choicesOl.remove();
+         
+          _streamController.sink.add(
+                        new LoadIntent(uid));
+        }
+      });
+    }
+  }
+  
+  EgbSavegame _currentSavegame;
+  
+  Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+    _currentSavegame = savegame;
+//    var p = new ParagraphElement();
+//    p.text = "==> Savegame for '${savegame.currentPageName}', hash ${savegame.uid}";
+//    bookDiv.append(p);
   }
 }
 

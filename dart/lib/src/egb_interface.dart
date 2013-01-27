@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:isolate';
 import 'egb_library.dart';
 
+import 'egb_savegame.dart';
+
 abstract class EgbInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
@@ -28,8 +30,15 @@ abstract class EgbInterface {
    */
   Future<int> showChoices(EgbChoiceList choices);
   
+  /**
+   * Marks the point at which the gameplay is saved. Interface should relay
+   * the information to the player and make it possible to reload the position
+   * later. (Communicated to the Runner via [stream].)
+   */
+  Future<bool> addSavegameBookmark(EgbSavegame savegame);
+  
   /// Stream that sends player's interactions (apart from choice selection).
   /// These interactions include loading game states, starting a gamebook
   /// from scratch, etc.
-  Stream<PlayerInteraction> stream;
+  Stream<PlayerIntent> stream;
 }

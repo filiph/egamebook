@@ -34,20 +34,19 @@ class EgbRunner {
     _endOfBookCompleter = new Completer();
     endOfBookReached = _endOfBookCompleter.future;
     
-    _interface.stream.listen((playerInteraction) {
-      switch (playerInteraction.type) {
-        case (PlayerInteraction.RESTART):
+    _interface.stream.listen((playerIntent) {
+      switch (playerIntent.type) {
+        case (PlayerIntent.RESTART):
           _scripterPort.send(new EgbMessage.Start().toJson(), 
               _receivePort.toSendPort());
           break;
-        case (PlayerInteraction.QUIT):
+        case (PlayerIntent.QUIT):
           stop();
           break;
-        case (PlayerInteraction.LOAD):
+        case (PlayerIntent.LOAD):
           // load latest saved state for the bookUid from playerProfile
           // TODO: dry with below
-          // TODO: not only most Recent
-          _playerProfile.loadMostRecent()
+          _playerProfile.load((playerIntent as LoadIntent).uid)
           .then((EgbSavegame savegame) {
             if (savegame == null) {
               // no savegames for this egamebook
@@ -112,7 +111,7 @@ class EgbRunner {
       if (message.type == EgbMessage.MSG_SAVE_GAME) {
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
         _playerProfile.save(savegame);
-        // TODO: add savegame marker to the _interface
+        _interface.addSavegameBookmark(savegame);
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {

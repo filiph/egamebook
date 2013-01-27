@@ -13,10 +13,18 @@ class EgbUserInteraction {
 }
 
 class EgbChoice extends EgbUserInteraction implements Comparable {
+  /// The text of the choice (what user clicks on when picking it). It is always
+  /// defined. When [string] is an empty string ([:"":]), the choice is
+  /// automatic (nothing is shown to the player and the scripter automatically
+  /// selects the choice.
   String string;
   Function f;
   String goto;
   bool showNow;
+  
+  /// Returns [:true:] when the choice is automatic (scripter picks it 
+  /// silently).
+  bool get isAutomatic => string.isEmpty;
 
   EgbChoice(String string, {this.goto, Function then, bool showNow: false}) : 
       super() {
@@ -119,6 +127,11 @@ class EgbChoiceList implements List<EgbChoice> {
   void clear() => _choices.clear();
   get iterator => _choices.iterator;
  
+  /// Returns true only if the choices are actionable, i.e. not automatic,
+  /// and yet to be shown.
+  bool get areActionable =>
+    _choices.any((choice) => !choice.shown && !choice.isAutomatic);
+  
   /**
    * Takes care of converting the current [EgbChoiceList] to a Message. 
    * 
@@ -162,13 +175,20 @@ class EgbTextInput extends EgbUserInteraction {
   // Question can be answered with text. Example: "What is your name?"
 }
 
-class PlayerInteraction {
-  
-  PlayerInteraction(type) : this.type = type; 
+class PlayerIntent {
+  PlayerIntent(type) : this.type = type; 
   
   final int type;
-  
   static const int QUIT = 2;
   static const int LOAD = 4;
   static const int RESTART = 8;
+}
+
+class RestartIntent extends PlayerIntent {
+  RestartIntent() : super(PlayerIntent.RESTART);
+}
+
+class LoadIntent extends PlayerIntent {
+  String uid;
+  LoadIntent(this.uid) : super(PlayerIntent.LOAD); 
 }

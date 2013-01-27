@@ -51,6 +51,7 @@ class EgbSavegame {
       throw "Invalid JSON for EgbSavegame. Doesn't contain required fields "
             "'currentPageName' or 'vars'. JSON='$json'.";
     }
+    uid = saveMap["uid"];
     currentPageName = saveMap["currentPageName"];
     timestamp = saveMap["timestamp"];
     pageMapState = saveMap["pageMapState"];
@@ -77,6 +78,7 @@ class EgbSavegame {
   
   String toJson() {
     Map<String,dynamic> saveMap = new Map<String,dynamic>();
+    saveMap["uid"] = uid;
     saveMap["currentPageName"] = currentPageName;
     saveMap["pageMapState"] = pageMapState;
     saveMap["vars"] = vars;

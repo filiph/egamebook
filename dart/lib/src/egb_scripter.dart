@@ -292,7 +292,8 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // choiceList
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      if (currentBlockIndex == currentPage.blocks.length - 1) {
+      if (currentBlockIndex == currentPage.blocks.length - 1 &&
+          choices.areActionable) {
         // Last block on page. Save the game.
         return _createSaveGame();
       } else {

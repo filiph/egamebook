@@ -4,13 +4,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'egb_interface.dart';
+import 'egb_savegame.dart';
 import 'egb_library.dart';
 
 class CmdlineInterface implements EgbInterface {
 
   StringInputStream cmdLine;
   
-  StreamController<PlayerInteraction> _streamController;
+  StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
   
   /**
@@ -54,7 +55,7 @@ class CmdlineInterface implements EgbInterface {
       
       if (line.trim().toLowerCase() == "quit") {
         _streamController.sink.add(
-            new PlayerInteraction(PlayerInteraction.QUIT));
+            new PlayerIntent(PlayerIntent.QUIT));
         return new Completer().future;
       }
       
@@ -71,5 +72,9 @@ class CmdlineInterface implements EgbInterface {
     };
     
     return completer.future;
+  }
+  
+  Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+    print("==> savegame created (${savegame.uid})");
   }
 }
