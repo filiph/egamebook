@@ -11,6 +11,29 @@ Copyright:  Creative Commons
 class A {
   int i;
 }
+
+// for custom class persistence testing
+class ClassWithMapMethods {
+  int i;
+  String s;
+  Map m = const {
+    "a": 1,
+    "b": 2
+  };
+  
+  toMap() => {"_class": "ClassWithMapMethods", "i": i, "s": s, "m": m};
+  
+  ClassWithMapMethods();
+  
+  ClassWithMapMethods.fromMap(map) {
+    updateFromMap(map);
+  }
+  
+  updateFromMap(map) {
+    i = map["i"];
+    s = map["s"];
+  }
+}
 </classes>
 
 ---
@@ -30,6 +53,12 @@ bbb
 
 Blah.
 
+<variables>
+customInstance = new ClassWithMapMethods();
+customInstance.i = 10;
+customInstance.s = "Hello World";
+</variables>
+
 - efger [zzz]
 - gegreg [ccc]
 
@@ -48,16 +77,23 @@ ccc
 
 Increasing time by 1 to ${++time}.
 
+Also increasing customInstance.i by one.
+
+<script>
+customInstance.i++;
+</script>
+
 - egreger [dddeee]
 - ervfvcx [zzz]
 
 ---
 dddeee
 
-Welcome (back?) to dddeee. Time is now $time. Increasing by 1.
+Welcome (back?) to dddeee. Time is now $time. customInstance.i is now ${customInstance.i}. Increasing both by 1.
 
 <script>
 time++;
+customInstance.i++;
 </script>
 
 - evdfvdv [fff]

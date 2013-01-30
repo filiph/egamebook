@@ -11,6 +11,30 @@ Copyright:  Creative Commons
 class A {
   int i;
 }
+
+// for Persistence testing
+class ClassWithMapMethods {
+  int i;
+  String s;
+  Map m = const {
+    "a": 1,
+    "b": 2
+  };
+  
+  toMap() => {"_class": "ClassWithMapMethods", "i": i, "s": s, "m": m};
+  
+  ClassWithMapMethods();
+  
+  ClassWithMapMethods.fromMap(map) {
+    updateFromMap(map);
+  }
+  
+  updateFromMap(map) {
+    i = map["i"];
+    s = map["s"];
+  }
+}
+
 </classes>
 
 ---
@@ -28,6 +52,9 @@ Starting and setting variables.
   list2 = [integer, numeric, list1, nonSaveable];
   map1 = {"a":integer,"b":numeric,"c":nullified};
   map2 = {"x":map1,"y":list2,"z":nonSaveable};
+  saveable = new ClassWithMapMethods();
+  saveable.i = 42;
+  saveable.s = "Řeřicha";
 </script>
 
 - Jump [bbb]

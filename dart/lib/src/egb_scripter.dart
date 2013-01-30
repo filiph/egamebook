@@ -121,9 +121,39 @@ abstract class EgbScripter {
 
   int currentBlockIndex;  // the current position in the current page's blocks list
 
+  /**
+   * List of choices to be shown to the player.
+   */
   EgbChoiceList choices;
-  Map<String, dynamic> vars;
+  /**
+   * The StringBuffer which collects all echo()'d strings to put them all
+   * together at the end of a block and send them to the Runner (and therefore,
+   * the player).
+   */
   StringBuffer textBuffer;
+  
+  /**
+   * The map holding all author-defined variables. This is accessed either
+   * by [:var["name"]:], but thanks to noSuchMethod override, 
+   * also by just [:name:].
+   */
+  Map<String, dynamic> vars;
+  /**
+   * This Map is filled in ScripterImpl automatically by the Builder. 
+   * The purpose of [_constructors] is to make it possible to assemble
+   * [vars] variables of custom types (by [Class.fromMap()] constructors) 
+   * without the need of full scale reflection.
+   * 
+   * See https://www.pivotaltracker.com/story/show/43483599 for more context.
+   * 
+   * An example definition of [_constructors]:
+   * 
+   *     _constructors = {
+   *       "ClassA": (map) => new ClassA.fromMap(map),
+   *       "ClassB": (map) => new ClassB.fromMap(map)
+   *     };
+   */
+  Map<String,Function> _constructors;
 
   void echo(String str) {
     if (textBuffer.length > 0) {
@@ -419,9 +449,8 @@ abstract class EgbScripter {
     pageMap.importState(savegame.pageMapState);
 
     // copy saved variables over vars
-    savegame.vars.forEach((key, value) {
-      vars[key] = value;
-    });
-
+    var _constructors = {};
+    EgbSavegame.importSavegameToVars(savegame, vars, 
+                                     constructors: _constructors); // TODO
   }
 }

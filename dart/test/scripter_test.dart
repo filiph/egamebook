@@ -89,6 +89,37 @@ String getPath(String filename) {
   return pathToFilename.toString();
 }
 
+// for Persistence testing
+class ClassWithMapMethods {
+  int i;
+  String s;
+  Map m = const {
+    "a": 1,
+    "b": 2
+  };
+  
+  toMap() => {"_class": "ClassWithMapMethods", "i": i, "s": s, "m": m};
+  
+  ClassWithMapMethods();
+  
+  ClassWithMapMethods.fromMap(map) {
+    updateFromMap(map);
+  }
+  
+  updateFromMap(map) {
+    i = map["i"];
+    s = map["s"];
+  }
+}
+
+class ClassWithoutMapMethods {
+  int i;
+  String s;
+
+  ClassWithoutMapMethods();
+}
+
+
 
 void main() {
   // create [ReceivePort] for this isolate
@@ -251,11 +282,32 @@ void main() {
                 {"c": null, "a": 0, "b": 3.14});
             expect(savegame.vars["map2"] as Map,
                 hasLength(2));
+            expect(savegame.vars["saveable"] as Map,
+                hasLength(4));
+            expect(savegame.vars["saveable"]["s"],
+                "Řeřicha");
+            expect(savegame.vars["saveable"]["m"],
+                hasLength(2));
           }));
 
         }));
 
         runner.run();
+      });
+      
+      test("works on classes with toMap and fromMap", () {
+        receivePort.close();
+        var saveableInstance = new ClassWithMapMethods();
+        saveableInstance.s = "Universal truth";
+        saveableInstance.i = 42;
+        var vars1 = {
+          "saveable": saveableInstance,
+          "primitive": 8
+        };
+        var s1 = new EgbSavegame("blah", vars1, {"blah": null});
+        print(s1.vars);
+        expect(s1.vars, contains("saveable"));
+        expect(s1.vars["saveable"], contains("m"));
       });
 
       test("works between 2 independent runs", () {
@@ -296,6 +348,8 @@ void main() {
                 false);
             expect(interface2.latestOutput,
                 contains("Time is now 10."));
+            expect(interface2.latestOutput,
+                contains("customInstance.i is now 20."));
 
             playerProfile.loadMostRecent()
             .then(expectAsync1((EgbSavegame savegame) {
