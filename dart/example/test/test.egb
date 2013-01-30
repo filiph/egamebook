@@ -1,644 +1,437 @@
-Title:		Thin Ice
+Title:		The Bodega Incident
 Author:		Filip Hracek
 
-
-# Thin Ice
-**A pre-apocalyptic thriller.**
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
 <classes>
-  class PlayerMock {
-    bool alive = true;
-    var weapon;
+// Just a mock before this gets implemented
+class Points {
+  int points = 0;
+  void add(int value, [String text]) {
+    points += value;
   }
-</classes>
+}
 
+</classes>
 <variables>
-  player = new PlayerMock();
-  baseballBat = "b";
-  golfClub = "g";
-  points = 0;
+points = new Points();
 </variables>
 
----
-Clinic: Before visit
 
-## Day 1: The End
+# The Bodega Incident
 
-Maybe there just isn't such a thing as a happy gynaecologist.
+--- 
+Start: Funeral
 
-You are studying the repair bill on the computer screen, realizing it is almost double of what you have earned so far this month. The clinic hasn't been very busy lately. Fewer and fewer people have the money to pay for a *dentist*, let alone a private gynaecologist. You had to sell your car recently – not that you had the cash for gas, anyway. There's never any cash for anything anymore. This month, there might not be any cash for paying Lydia, even.
+## The Funeral
 
-Lydia is the lady that brought you up. She has been a nurse in the clinic for ages, originally working with your father, and after he died, with you. You owe her for all that you know about the business side of things, and much more. Still, she has been working practically for free recently.
+This story starts and ends with a death, on a spaceship. 
 
-"Things are falling apart," Lydia told you yesterday. You thought she's talking figuratively, but then she pointed to the cabinet. It was leaning towards a side, one of the legs broken, the paint blistered, top drawer stuck open. She reminded you about the state of the toilet, too, and used the word "disgusting" twice. Other things were falling apart in the waiting room and in your office. That day, you called the cheapest repair service in town. They arrived in under an hour, eyes wide open, smiling, pleasant, and they quickly took care of everything. Now here's the bill.
+The first death is that of Captain Kay. He was the second last surviving crew member on The Bodega. The ship used to carry twelve people. Now, it's only you. (Well, almost. But we'll get to that later.) 
 
-Just a couple of years ago, that bill would be worth a portion of your _hourly_ fee. That was when people had the money to pay for things like labiaplasties and 3D ultrasounds. Now, you only see a couple of patients a day, and they are all as broke as you are.
+The funeral looks like this: You are standing in front of the airlock. Through the porthole, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, Captain Kay will be sucked out into space. This is how funerals work here on The Bodega. 
 
-Today, though, is an all-time low. Just one appointment. A young lady called Maria Pruitt. At least it's a new patient. 
+The inner door, through which you're watching, is safely closed and sealed. The only thing that remains is to pull the lever.
 
-"A new patient is a good sign," Lydia says when she reminds you about the appointment in the morning. "We haven't had a _new_ patient in, let me see, six months? This could be a turning point," she says. "I hope it's a turning point. A new beginning."
-
-What it really is, though, is the beginning of the end. And a spectacular end at that.
-
-But let's not get ahead of ourselves. Your mind drifts back to the matter at hand – the repair bill.
-
-What about the repair bill?
-- Pay it [Pay the bill]
-- Ignore it [Don't pay the bill]
+- Pull the lever [Start: Pull]
+- Leave the body there [Start: Leave body]
 
 ---
-Clinic: Pay the bill
+Start: Pull
 
-You slowly scroll down the screen and place your cursor over the button that will take away a large portion of your financial reserve. You inspect the room, checking all the places where the handymen did their work. Everything looks repaired and clean.
-
-You click. 
+You pull the lever, there's a loud hiss, and the body is immediately pulled out through the hatch. It starts receding into space while slowly rotating along all three axes.
 
 <script>
-  paidTheRepairBill = true;
-  points += 2;
+points.add(5, "playing by the book");  // prints out "+5 points for _playing by the book_"
+pulledLever = true;
 </script>
 
-- [Maria is introduced]
+- [Recollections]
 
 ---
-Clinic: Don't pay the bill
+Start: Leave body
 
-TODO
+You withdraw your hand from the lever.
 
 <script>
-  paidTheRepairBill = false;
-  points += 1;
+points.add(2, "humanity");
+pulledLever = false;
 </script>
 
-- [Maria is introduced]
+- [Recollections]
 
 ---
-Clinic: Maria is introduced
+Start: Recollections
 
-“Doctor?” Lydia has just opened the door to the office. Although she knows you from when you were 3, you two keep the doctor-nurse roleplay alive during office hours. “Maria Pruitt has come 15 minutes early. Can she come in?”
+Captain Kay was a great man. He was confident and direct – important traits in a captain. He also had a knack for hands-on engineering, which made him especially dear to you. You enjoyed spending a time with him in the engine room, poking into machinery together and setting up circuits in ingenious and clever ways. It always worked in the end, largely thanks to him.
 
-Your brain takes some time to switch from being an accountant to being a doctor. "Huh?"
+While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.
 
-“The new patient, doctor.”
+- Ignore it [Ignore]
+- Pick it up [Pick it up]
+
+---
+Start: Ignore
+
+You decide to ignore 
+
+TODO: ship computer speaks over speakers
+
+- [Ship says]
+
+---
+Start: Pick it up
+
+The intercom, in this case, is an old school handset wired to the wall with a spiral cable. It's easier to maintain, less faulty, and it only picks up one person's voice, so it's easier to understand the other end. It also makes it possible to have conversations that are meant for a limited audience, as opposed to everyone in the room. Sometimes, it's needed to break news that are not intended for the whole crew.
+
+The cable is there mostly so that the handset stays put where it belongs (but it does conduct the audio signal to and from the handset).
+
+You pick the handset up. It's the ship computer.
+
+- [Ship says]
+
+---
+Start: Ship says
+
+"To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge."
+
+What do you reply?
+- "I'm coming." [Coming]
+- "Can't this wait? There is a funeral going on, you know." [Can't this wait?]
+
+---
+Start: Can't this wait?
+
+"Oh, I'm sorry," the ship says. "I didn't want to ruin the moment by, you know, _trying to stop another disaster from happening!_ The bridge, you might recall, is a place with lots of electronics and, interestingly, also the control panel to _the whole goddamned ship._ In summary, this is no place for a stupid gorilla."
+
+- "Okay, okay, I'm coming." [Coming]
+
+---
+Start: Coming
+
+You give Captain Kay's ${pulledLever ? "receding" : ""} body the last glance, and run off in the direction of the bridge.
+
+- [Bridge: Gorilla incident]
+
+---
+Bridge: Gorilla incident
+
+## The Gorilla
+
+There really is a gorilla on the bridge. But it isn't touching any of the electronics, let alone the control panel. It just sits there on the floor, full of melancholy, looking out the window on the stars. When you enter, it slowly turns to you and pushes out its huge lower lip. 
+
+It's your Enhanced Gorilla. They are used throughout the system for hard manual labor. Their intelligence is improved artificially -- they can understand basic spoken commands and they even have the ability to communicate back via sign language. A very limited kind of sign language, of course, with their vocabulary consisting mainly of the words "food", "sleep" and "want". But people don't need Enhanced Gorillas to be eloquent. They need them to lift and push and sometimes smash. _Your_ gorilla mostly carries extremely heavy fuel cells back and forth. 
+
+Your gorilla doesn't have a name. You call it 'Gorilla', as is common with these creatures. They die a lot. Nobody wants to get too attached to them, and naming the animal is the surest way to do just that.
+
+Gorilla raises its arms to sign. First, it makes the sign for "me" and then it makes the sign for "sleep". It probably doesn't want to say that it is sleeping. More likely, it is trying to use its limited vocabulary to communicate that it is sad. But you can never say for sure.
+
+"The gorilla stays," you say to the ship computer. "It just sits there. And it definitely won't touch anything while I'm here."
+
+The ship is silent for a while. Then she chooses to ignore the topic entirely and moves on.
+
+TODO: instead of move to space station, initiate engine power on sequence
+
+"I don't want to unnerve you, but considering that you are likely contaminated with the same illness as everyone else, and that we have no data on the incubation period, I assume you want to make it to the nearest dock as soon as possible. The engine is now back online, and Station Unity is twenty to fourty hours from here. All available energy to the engines?"
+
+<script>
+// persistence for the ship
+// TODO: ship class, persistence with http://www.dartlang.org/articles/reflection-with-mirrors/ 
+// or http://api.dartlang.org/docs/releases/latest/serialization.html 
+bodega = {
+  "hp": 100
+};
+</script>
+
+- "Yes. Full steam ahead!" [20 hours] [Full speed]
+- "No. Keep the shields and the radar on." [40 hours] [Shields on]
+
+---
+Bridge: Full speed
+
+Usually, the ship would remark on the cliché, but not today. Without words, she immediately shuts off the radar and the shields, then powers on the engine at 100%. You are accelerating at at full capacity in a matter of minutes.
+
+<script>
+eta = 20;
+shieldsUp = false;
+radarUp = false;
+</script>
+
+- [A nap]
+
+---
+Bridge: Shields on
+
+"That is... considerate," the ship replies. "I will be using the radar just to periodically check for objects on collision course with us. In between, I'll divert the energy to the engine. That should shave two or three hours off the travel time." You hear and feel the engines accelerating.
+
+<script>
+points.add(5, "upholding interplanetary travel safety standards");
+points.add(10, "being genre savvy");
+eta = 38;
+shieldsUp = true;
+radarUp = true;
+</script>
+
+- [A nap]
+
+---
+Bridge: A nap
+
+Station Unity is around $eta hours away and you are dog-tired. You spent the last couple of days slaving away – together with Gorilla and Captain Kay – to repair the engine. It had broken down in the middle of nowhere.
+
+Meanwhile, the rest of the crew were busy dying. One by one.
+
+You slouch into the captain's chair and, almost immediately, your eye lids get heavy. You try to stay up, but there is no way you can fight this. Soon, the most comfortable embrace of sleep puts you under.
+
+-----------------
+
+## The Encounter
+
+<script>
+if (radarUp) {
+  goto("Dogfight: Radar reading");
+} else {
+  goto("Dogfight: Wake up");
+}
+</script>
+
+---
+Dogfight: Radar reading
+
+<script>
+eta -= 15;
+</script>
+
+You wake up to regular bleeps of the radar. 
+
+"I repeat," the ship says, quite urgently. "We have a radar contact."
+
+You look at the radar screen. It seems some smaller vessel is matching your course and speed, and is nearing rapidly. It doesn't seem like a pirate (those tend to fire before they show up on the radar, especially when they're this small and alone), but the behaviour is highly unusual. Who would want to get this close to another ship while travelling in deep space, without any previous communication?
+
+The good news is that because of the radar, you know about them in advance. You check your shields: they're up. You also start charging the laser cannon mounted on the front side of the ship. Better safe than sorry, you think.
+
+<script>
+bodega["timeToFire"] = 0;
+</script>
+
+In 20 minutes, the vessel is in visual range. It's a Messenger class ship, a fast clipper about tenth of the size of The Bodega. If it's hostile, it could still pose a serious threat, but would probably run a big risk itself.
+
+The ship glides to a halt in front of the bridge, face to face with The Bodega. After a while, the communications panel lights up. There is an incoming call from the Messenger. 
+
+- [Encounter]
+
+---
+Dogfight: Wake up
+
+<script>
+eta -= 16;
+</script>
+
+You open your eyes, look out the window, and immediately jump up. There is a small -- though potentially dangerous -- ship right in front of the window, facing the Bodega. It's armed, but likely not a pirate, judging from the class of the ship (a Messenger, ten times smaller than the Bodega) and by the fact you're still alive.
+
+Before you can act, the communications panel lights up. There is an incoming call from the Messenger. Before you take it, you can either command the ship to raise the shields or to power up the laser gun on the nose of the Bodega. Doing both would take too much time to have any effect.
+
+<script>
+bodega["timeToFire"] = 1;
+</script>
+
+- Raise the shields [{shieldsUp = true}]
+- Power up the gun [{bodega["timeToFire"] = 0}]
+- Do neither [{nothing=null}]
+
+- [Encounter]
+
+---
+Dogfight: Encounter
+
+The screen fills with a large, bored face of a pilot with a large jaw and short hair. He's not even looking at the console, being busy with some controls to his lower left. 
+
+"Calling crew of the Bodega," he starts reciting, absently. "This is..."
+
+Then he looks up, sees you on the screen, and stops abruptly.
 
 "Oh!"
 
-- “Please let the patient in.” [introducingMaria]
-- “Just a few more minutes, please.” [letHerWait]
-
----
-Clinic: letHerWait
-
-“Just a few more minutes, please,” you blurt out. Lydia nods and closes the door. You remember to look for files or receipts from other patients that may be left lying on the table. That would be unprofessional and might scare away the new business. How can they trust you to keep their records safe if they can see the records of others? But there is nothing of note on the table, and you have nothing else to do than wait. (Well, there are administrative tasks to be taken care of, but none of them could be even started under 15 minutes.)
-
-TODO: mozna muze neco najit, neceho si vsimnout?
-
-After a while, you call Lydia on the intercom.
-
-- “Please let the patient in.” [introducingMaria]
-
----
-Clinic: introducingMaria
-
-“Please let the patient in.”
-
-TODO: slower, better
-
-Maria Pruitt is gorgeous. Also, she says: “I’m here for a preventive examination.”
-
-There is nothing wrong with her.
-
-...
-
-“Your reproductive organs are in perfect shape,” you tell her when she’s putting her pants back on. “Congratulations.” Maria gives you a smile and a nod. “Thanks, doctor.” She’s blushing a little.
-
-“I’m afraid you don’t really need to came back here for a year or so.” You start putting your instruments in the "For Desinfection" tray and acting as if that's it. Because it is. The examination is over.
-
-“O-kay,” she says, takes the patient card and starts to leave.
-
-- Try to stop her [Clinic: stopMaria]
-- Say good bye and let her leave [Clinic: letMariaLeave]
-
----
-Clinic: stopMaria
-
-"Stop!" you blurt out just before Maria reaches for the door knob. She freezes, then slowly turns her head towards you, eyebrows raised.
-
-- "Sorry. Never mind. Good bye." [Clinic: stopMariaGoodbye]
-- "Do you think maybe we could meet some other time and other place?" [Clinic: stopMariaDate]
-
----
-Clinic: stopMariaGoodbye
-
-"Sorry. Never mind. Good bye," you say, and feel like a 13 year old boy.
-
-"Good bye," she replies cheerfully, leaves the office and closes the door behind her.
-
-- [Clinic: endMariaEncounter]
-
----
-Clinic: stopMariaDate
-
-<script>
-  askedMariaForADate = true;
-</script>
-
-"Do you think maybe we could meet some other time and other place? I mean, other than a clinic?" You try to smile confidently, but it turns out as awkward as that sentence. Maria lets go of the knob and studies you for a while. You can already see that it's not good. Not good at all. She looks at you in a way people look at puppies when they're leaving them home. With compassion and motherly love.
-
-"Doctor," she says. "I don't think this is a good idea. I mean, you just saw my vagina." She is clearly amused, bites her lip with a glimpse of a smile. "You know it better than my _face_." She raises her eyebrows again. "Are you really asking me for a date?"
-
-You're trying to come up with a good – maybe even funny – reply, but nothing comes to mind. You feel like a 13 year old boy.
-
-"I didn't think so," she smiles and cheerfully leaves the office.
-
-- [Clinic: endMariaEncounter]
-
----
-Clinic: letMariaLeave
-
-You both say good bye. Maria leaves the office and closes the door behind her.
-
-- [Clinic: endMariaEncounter]
-
----
-Clinic: endMariaEncounter
-
-There’s no rational indication she will be back sooner than in 12 months, but for some reason, you know you won't need to wait that long. As the matter of fact, in less then 12 hours, you’ll wish you’d never let Maria Pruitt in your office in the first place.
-
-- [goingHome]
-
----
-goingHome
-
-## Unexpected encounter
-
-Two hours later, it's 6pm, there is nothing more to do, and it's time to go home. You get your coat and thank Lydia for the day.
-
-It's chilly outside, but nothing you won't survive. To get home, it's just a 15 minute walk via the downtown lanes and then some 20 more minutes through the residential area. You set out with your chin lowered to protect the neck from the cold. You'd prefer to drive today.
-
-Your father did a lot of driving back in the day, though that was in a time when the economy was doing just fine. You still remember the trips: The whole car just for the two of you. Hours of driving, long distances covered, no reason for it whatsover.
-
-These are good memories, but the relative lack of traffic is not that bad, really. It's much less crowded on the roads, with people taking buses and vans - or carpooling - instead of driving individually. Everyone gets more exercise that way, too. And there's less of that car angst.
-
-A few blocks away from the clinic, you turn left to a narrower street to climb a small hill. It's a little more work for your legs, but this path is much shorter and very quiet. After only a few minutes, the commotion of the city has all but faded, and you feel like you're walking through a village in the country. The path turns to the right, bent around a small park.
-
-"Hey, you!"
-
-You look around. It's already quite dark, but you make out a male figure next to a tree in the park. He walks towards you. The way he moves reveals he has had a few drinks.
-
-"Yeah, prick! You! Come here!"
-
-The suddenness of the situation has you paralyzed. It's not that you fear this person so much -- as he clearly had too much to drink, and is barely standing -- but the sudden change from a pleasant stroll to a possible argument is just too much to process for your brain. Fortunately, the paralysis ends in a few seconds. By then, though, the drunk man stands before you and says: "Hey, du- dumbass! Who d'you think you're look at, huh?" He pushes you with all his force and you - unprepared - fall on your bottom.
-
-This man is clearly looking for a fight.
-
-- Stand up and fight! [Drunk man: standUpAndFight]
-- Stand up and run! [Drunk man: run]
-
----
-Drunk man: run
-
-You jump up and start running towards your home. You are quite surprised to find out the drunk man actually follows you. And he's not that slow, either.
-
-- Continue running home [Drunk man: continueRunning]
-- Change direction [Drunk man: changeDirection]
-- Turn around and fight [Drunk man: turnAround]
-
----
-Drunk man: continueRunning
-
-<script>
- leadDrunkManHome = true;
-</script>
-
-(bezi, az domu, tam pred nim zavre dvere, jde spat)
-(zadat leadDrunkManHome - Maria ho pozdeji ubezpeci, ze by si ho nasli i bez toho)
-
----
-Drunk man: changeDirection
-
-(odkloni a bezi dlouhou dobu, az si je jisty, ze ho nesleduji, pak jde domu. vsimne si, ze drunkMan se chova divne)
-
----
-Drunk man: turnAround
-
-You stop and turn around. The drunk man seems strangely relieved that you did so, and approaches you with fists before his face. Not another word is uttered. The fight begins now.
-
-- Start fighting [Drunk man: fight]
-
----
-Drunk man: standUpAndFight
-
-You stand up to fight the drunkard.
-
-- [Drunk man: fight]
-
----
-Drunk man: fight
-
-<small>Note by author: The following combat sequence is dynamic, not scripted. …. Every choice counts. …. More complex than most action games nowadays. ….</small>
-
-OR:
-
-<p class="nonbook">This is your first fight in Thin Ice ....</p>
-
-<script>
-// --- combat
-// player has the possibility to call of the fight when enemy is almost down, but the enemy won't stop "for some reason". But: the "drunkManMerciful" flag is set to true here (+ points!).
-// during combat: "You realize how absurd this is. Just moments ago, you were strolling through a calm neighbourhood, now you are fighting a man you've never met."
-// first hit: "Is this really happening?"
-</script>
-
-<script>
-if (player.alive)
- goto("Drunk man: fightWon");
-else
- goto("Drunk man: fightLost");
-</script>
-
----
-Drunk man: fightWon
-
-The drunkard is now lying at your feet, unconscious.
-
-(cestou domu si vzpomene, ze by mohl zavolat zachranku. pokud rekne ano, vrati se zpet ale drunk man uz tam nebude)
-(go home, contemplate the strange behaviour, go to bed at decent hour)
-
-- Morning, Day 2: start (AUTO) [Morning, Day 2: start]
-
----
-Drunk man: fightLost
-
-You black out completely and only come back to your senses a few hours later. The drunk man is gone, and the street is silent. Your whole body aches as you gather to stand up. You decide never to take this route from work again.
-
-It's almost 4am when you reach your home, __ your bruises, take a shower and finally go to bed.
-…
-
-
-- Morning, Day 2: start (AUTO) [Morning, Day 2: start]
-
-
-
-
-
-
----
-Morning, Day 2: start
-
-## Day 2: Waking up
-
-It's about 8am in the morning when you realize you're not sleeping any more. Your whole body hurts. Yesterday, you used and abused muscles that you haven't needed for the last several years. You slowly sit up and look out the window. It's a nice view down the street, the calming green of your neighbours' front gardens being a much better sight than the bedroom's interior.
-
-There's something strange going on outside today, though. Two cars are parked in the middle of the road, and two men with baseball bats are quietly talking to each other over the roof of one of them.
-
-<script>
-  if (sawErnestsCar == true) {
-  	echo("One of the cars is definitely the same you saw last night.");
-  } else {
-  	echo("The first car is an elegant Lexus sedan with opaque glass.");
+Gorilla, which has been silently sitting on the ground to your left until now, starts hissing through clenched teeth, eyes wide open. It rocks back and forth, visibly disturbed. The pilot begins to frantically push some buttons on the panel in front of him.
+
+<classes>
+// TODO Timeline class
+
+class TimedEvent {
+  int time;
+  int priority = 0;
+  Function f;
+  TimedEvent(this.time, this.f);
+}
+
+class Timeline {
+  int time = 0;
+  Function mainLoop = () {};
+  bool _mainLoopRanThisTick = false;
+  Function afterEachEvent = () {};
+  Set<TimedEvent> events;
+  bool finished = false;
+
+  void update() {
+    // TODO: go through mainLoop, then all events (by priority) for given time
+    // TODO: when that is done, go to next time
+    // TODO: caller should check for finished after each closure run - if not finished, run again 
   }
-  echo("The other one is an old Ford pick-up in a horrible shape and with mud all over the lower parts.");
-</script>
+}
+</classes>
 
-The men are standing on the sides of the Ford. The one closer to you is wearing a leather jacket and a cap. He's a big guy, much beefier that the other one, who seems to be just a college kid.
-
-Then the Lexus starts its engine, and both men stop talking. The bigger one walks to the driver's side of the Lexus and bends towards the window, which now slides just a little bit down. The leather jacket listens and nods to someone in the car, then turns directly at you.
-
-- Keep watching [Morning, Day 2: dontLayDown]
-- Lay down [Morning, Day 2: layDown]
-
----
-Morning, Day 2: layDown
-
-You quickly lay down but then realize there's no way they can see you. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You slowly sit up again and continue watching.
-
-- [Morning, Day 2: continueWatching]
-
----
-Morning, Day 2: dontLayDown
-
-You realize there's no way those people can see you from outside. It's a bright day outside, while you're in a dark room behind a window and a sheer curtain. You just continue watching.
-
-- [Morning, Day 2: continueWatching]
-
----
-Morning, Day 2: continueWatching
-
-The man in the leather jacket is now pointing at your house and talking to someone in the Lexus. After a few seconds, the window goes up again, the Lexus slowly starts pulling away, and the big guy beckons to the young one.
-
-At last your brain becomes aware of the seriousness of the situation. This is *really* happening.
+<functions>
+bool randomWithProbability(num p) => (new Random()).nextDouble() < p;
+String percentage(num x) => (x * 100).toStringAsFixed(0);  // TODO: better
+</functions>
 
 <script>
-  time = 0;
+time = 0;
+messenger = {
+  "hp": 15,
+  "shields": 0,
+  "timeToFire": 1
+};
+bodega["shields"] = (shieldsUp ? 10 : 0);
+bodega["evasive"] = false;
 </script>
 
-- [Morning, Day 2: nextAction]
+<script>
+choices.add("\"What are you doing? What is happening here?\"", 
+    script: () => echo("He doesn't respond."));
+choices.add("Watch what he's doing with the controls",
+    script: () => echo("It takes a while, but you realize he's putting his ship into combat mode."));
+if (shieldsUp != true) {
+  choices.add("Shields up", script: () {
+    shieldsUp = true;
+    bodega["shields"] = 5;
+  });
+}
+if (bodega["timeToFire"] <= 0) {
+  choices.add("Fire", script: () {
+    <echo>
+      You take the laser gun controls, quickly aim at the Messanger and fire. 
+    </echo>
+    if (randomWithProbability(0.6)) {
+      messenger["hp"] -= 3;
+      <echo>
+        Boom! It's a hit! The stream of energy hits the Messenger, right in the middle of its belly, and leaves a sizeable hole there. It looks like some serious damage has been dealt.
+      </echo>
+      points.add(7, "hitting early and hard");
+    } else {
+      <echo>
+        The stream of energy misses the Messenger by a couple of meters. That was unlucky.
+      </echo>
+      points.add(5, "not wasting any time");
+    }
+  });
+}
+</script>
+
+The communications panel goes blank as the pilot closes the connection. The Messenger starts moving to the side while raising shields.
+
+- [Fire loop]
 
 ---
-Morning, Day 2: nextAction
+Dogfight: Fire loop
 
 <script>
-  time++;
-  if (time == 2) {
-  	<echo>
-      Through the window, you can see that the two men are now nearing the house. The big guy gestures to the other one, who responds by rushing out towards the back of the house. Apparently, they're not going to let you escape through the back door.
-  	</echo>
-  } else if (time == 3) {
-  	<echo>
-      The big guy is now at your front door, presumably getting ready to kick it open or swing the bat at the handle. His accomplice must now be somewhere behind the house, though he still needs to climb over the wooden fence to get to the garden and the back door.
-  	</echo>
-  } else if (time == 4) {
-   goto("Morning, Day 2: waitedTooLong");
+time += 1;
+bodega["timeToFire"] -= 1;
+messenger["timeToFire"] -= 1;
+
+// Messenger turn
+if (messenger["shields"] < 5) {
+  messenger["shields"] += 1;
+  if (messenger["shields"] > 2) {
+    echo("The Messenger's shields are about half up.");
   }
+} else {
+  echo("The Messenger's shields are now fully up.");
+}
+
+if (time == 2 && pulledLever == false) {
+  <echo>
+    The Messenger manages to position itself to the right of the 
+
+  </echo>
+  bodega["hp"] -= 7;
+} else {
+
+
+}
+
+if (bodega["hp"] <= 0) {
+  goto("Lose");
+}
+
+// Bodega turn
+if (bodega["timeToFire"] <= 0) {
+  choices.add("Fire at hull [~80% chance]", () {
+    
+  });
+  choices.add("Fire at engines [~40% chance]", () {
+    
+  });
+}
+choices.add("Evasive maneuvre [harder to get hit]", () {
+
+    bodega["evasive"] = true;
+  });
+if (time == 3) {
+  choices.add("Direct all halogen headlights on the Messenger and switch them on at once", () {
+
+    messenger["timeToFire"] += 2;
+  });
+}
+
+if (messenger["hp"] <= 0) {
+  goto("Win"); // TODO: will this override the choices or not? should it?
+} else {
+  repeatBlock();
+}
 </script>
 
-What do you do?
-- Get dressed [Morning, Day 2: getDressed]
-- Call the police [Morning, Day 2: callPolice]
-- Look for a weapon [Morning, Day 2: lookForWeapon]
-- Run [Morning, Day 2: startRunning]
 
+
+- [Specials]
 
 ---
-Morning, Day 2: getDressed
-[[ visitOnce ]]
-
-You realize you're still in your pyjamas. You quickly hop on your feet. Yesterday's clothes are right there, by the bed, where you left them -- so you start putting them on immediately. This is obviously not the time to worry about a creased shirt.
+Dogfight: Specials
 
 <script>
-  gotDressed = true;
+
+
+
 </script>
 
-- [Morning, Day 2: nextAction]
+- [Resolve win/lose]
 
 ---
-Morning, Day 2: lookForWeapon
-[[ visitOnce ]]
-
-These men have *baseball bats* -- you are not going to stand a chance bare handed if they reach you. Fortunately, you keep your sporting equipment in a basket in the bedroom closet, so you quickly spring to it and start poking around in it.
-
-You find two pieces of equipment that you can imagine being useful in a fight. A wooden baseball bat not unlike the one those men outside wield, and a golf club.
-
-The baseball bat is shorter and lighter. It will be a little more agile. The golf club is longer and made of steel. It will deal more damage, but will be somewhat harder to lead.
+Dogfight: Resolve win/lose
 
 <script>
-  lookedForWeapon = true;
+if (bodega["hp"] <= 0) {
+  goto("Lose");
+} else if (messenger["hp"] <= 0) {
+  goto("Win");
+}
 </script>
 
-- Take the baseball bat [{player.weapon = baseballBat;}, Morning, Day 2: nextAction]
-- Take the golf club [{player.weapon = golfClub;}, Morning, Day 2: nextAction]
-- Don't take anything [Morning, Day 2: nextAction]
+- [Fire loop]
 
 ---
-Morning, Day 2: callPolice
-[[ visitOnce ]]
+Dogfight: Lose
 
-You find your cell phone and dial the emergency number. There's the "please hold" message, then an operator picks up.
+---
+Dogfight: Win
 
-"Please state your emergency."
-
-You tell him there are two men with baseball bats coming into your home. You say you can see them through the window. You try to describe the pickup truck. "It has mud all over it," you say. 
-
-"All right, sir, what is your location?"
-
-"My location?"
-
-"Where are you right now?"
-
-"Oh, I -- eh -- 503 Hyde Road."
-
-"Okay, mister, now lock yourself in, and try to keep those men from entering. Don't risk anything. We are sending a vehicle."
+This time, your laser must have drilled through to the core, because there is a violent explosion on the Messenger. Only the skeleton of the ship stays put, the rest is blown away from the inside, in all directions.
 
 <script>
-  calledPolice = true;
+points.add(10, "space combat");
 </script>
 
-- [nextAction]
+One of those outward flying parts is different from the others, though. It steers itself. Apparently, the Messenger's pilot (or the ship computer) managed to launch a small robotic probe just before the spectacular explosion. The thing beelines through the flying debris and hits hard somewhere into the Bodega's cargo bay. 
 
----
-Morning, Day 2: waitedTooLong
+"Hull breach," the ship says, laconically. 
 
-There's a loud crash coming from the hallway. The man in the leather jacket must have made his way through the door on the first attempt. You hear no sound coming from the back of the house yet. That's not surprising, as it likely takes some time to go over the fence.
-
-If you run down the stairs and towards the back door, you might still evade the big guy. He'll need some time to find his bearings around the house first, while you'll ideally just slip through towards either of the doors.
-
-You can also just wait in the room and try to fend the intruders off${calledPolice == true ? " until the police comes" : ""}.
-
-- Run [startRunning]
-- Barricade the room [stayInTheRoom]
-
----
-Morning, Day 2: stayInTheRoom
-
-TODO
-
-
----
-Morning, Day 2: startRunning
-
-You dash out of the room, make a sharp right and run down the hall towards the stairs. 
-
-
-
-
----
-Maria Car: comingTo
-
-You run through a couple of suburban backyards until you hit a street. It looks very similar to yours, as all streets tend to do in neighbourhoods like this. It's quiet. A long line of uniform houses on each side. Lamps. Garages. You rest for a while, listening. There are no signs of henchmen with baseball bats here. Your heart rate is still extremely high, but it's coming down.
-
-There's only one car parked on the whole street. Since your breathing has calmed down a little, you can now hear the motor is running. You start sweating again. The car is a red Mazda, one that you don't remember seeing today, or yesterday. You swipe the sweat off your eyes and look if someone's at the driver's seat.
-
-There is someone there, looking at you, and your mind goes blank for a second after you realize it's Maria Pruitt. Maria Pruitt, the new patient. Maria Pruitt, the pale bringer of new beginnings. "Maria fucking Pruitt," you find yourself saying almost audibly.
-
-- Run [Maria Car: run]
-- Approach the car [Maria Car: approach]
-
----
-Maria Car: run
-
-You are too confused and tired to think about the best possible route of escape, so you pick a side randomly and start running along the road. You quickly realize how stupid this is, running from a car along a road, and you can also hear the Mazda rolling on idle a few paces behind you.
-
-You decide to jump over a fence into someone's front yard, but that's when your legs give in and you land on your knees, breathing in and out so quickly it hurts. Hyperventilation. That's the scientific term for it. There are many causes of hyperventilation, you have been taught, including strokes and various lung diseases, but mostly it's caused by something much less glorious. A panic attack.
-
-As the red Mazda slowly pulls over at your side, you manage to persuade your mind to calm down a bit, and you consciously slow down your breath. By the time Maria Pruitt slides her side window down, you are able to stand up, breathe normally, and talk.
-
-- [Maria Car: sideWindow]
-
----
-Maria Car: approach
-
-Maria watches you walk towards the car with her eyes wide open. She slides the side window down.
-
-- [Maria Car: sideWindow]
-
----
-Maria Car: sideWindow
-
-Before you can say anything, Maria reaches out the side window, grabs your hand, and says, "I am so, so sorry." She looks at your bruises${(gotDressed ? "" : " and your very informal attire")}. "It's all my fault." She looks around the silent street. "Please get in," she says. "We must go now."
-
-- Get in the car [{echo("You get in the car.");}, Maria Car: The Talk]
-
----
-Maria Car: The Talk
-
-
-
-- Maria Car: Invitation (AUTO) [Maria Car: Invitation]
-
----
-Maria Car: Invitation
-
-- Maria Car: Not interested (AUTO) [Maria Car: Not interested]
-- Maria Car: I will go (AUTO) [Maria Car: I will go]
-
-
----
-Maria Car: Keep at it
-
-
----
-Maria Car: Driving to the compound
-
-- Compound Arrival: Dropped on the driveway (AUTO) [Compound Arrival: Dropped on the driveway]
-
-
-
----
-Compound Arrival: Yolk's harassment
-
-- Compound Arrival: Ignore Yolk (AUTO) [Compound Arrival: Ignore Yolk]
-- Compound Arrival: Fight with Yolk (AUTO) [Compound Arrival: Fight with Yolk]
-
----
-Maria Car: Not interested
-
-- Maria Car: Live the boring life for a while (AUTO) [Maria Car: Live the boring life for a while]
-- Maria Car: I will go (AUTO) [Maria Car: I will go]
-
----
-Maria Car: I will go
-
-- Maria Car: Driving to the compound (AUTO) [Maria Car: Driving to the compound]
-
----
-Compound Arrival: Sightseeing
-
-- Eric's visit: Eric's coming (AUTO) [Eric's visit: Eric's coming]
-
----
-Eric's visit: The barracks
-
-- Eric's visit: The plaza (AUTO) [Eric's visit: The plaza]
-- Eric's visit: Fence (AUTO) [Eric's visit: Fence]
-- Eric's visit: The gym (AUTO) [Eric's visit: The gym]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Eric's visit: The gym
-
-- Eric's visit: The barracks (AUTO) [Eric's visit: The barracks]
-- Eric's visit: The barn (AUTO) [Eric's visit: The barn]
-- Eric's visit: The field (AUTO) [Eric's visit: The field]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Maria Car: Live the boring life for a while
-
-- Maria Car: Keep at it (AUTO) [Maria Car: Keep at it]
-- Maria Car: Let Maria drive you to the compound (AUTO) [Maria Car: Let Maria drive you to the compound]
-
----
-Eric's visit: Succesfully evaded
-
-
----
-Eric's visit: Eric's coming
-
-- Eric's visit: The plaza (AUTO) [Eric's visit: The plaza]
-
-
-
----
-Maria Car: Let Maria drive you to the compound
-
-- Compound Arrival: Dropped on the driveway (AUTO) [Compound Arrival: Dropped on the driveway]
-
----
-Eric's visit: The field
-
-- Eric's visit: The barn (AUTO) [Eric's visit: The barn]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Eric's visit: The gate
-
-- Eric's visit: The plaza (AUTO) [Eric's visit: The plaza]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Eric's visit: The barn
-
-- Eric's visit: The gym (AUTO) [Eric's visit: The gym]
-- Eric's visit: The plaza (AUTO) [Eric's visit: The plaza]
-- Eric's visit: The field (AUTO) [Eric's visit: The field]
-- Eric's visit: The armoury (AUTO) [Eric's visit: The armoury]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Compound Arrival: Fight with Yolk
-
-- Compound Arrival: Sol (AUTO) [Compound Arrival: Sol]
-
----
-Eric's visit: The plaza
-
-- Eric's visit: The gate (AUTO) [Eric's visit: The gate]
-- Eric's visit: The armoury (AUTO) [Eric's visit: The armoury]
-- Eric's visit: The barracks (AUTO) [Eric's visit: The barracks]
-- Eric's visit: The barn (AUTO) [Eric's visit: The barn]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Eric's visit: Fence
-
-- Eric's visit: The barracks (AUTO) [Eric's visit: The barracks]
-- Eric's visit: Found by Eric (AUTO) [Eric's visit: Found by Eric]
-- Eric's visit: Succesfully evaded (AUTO) [Eric's visit: Succesfully evaded]
-
----
-Eric's visit: The armoury
-
-- Eric's visit: The plaza (AUTO) [Eric's visit: The plaza]
-
----
-Compound Arrival: Sol
-
-- Compound Arrival: Sightseeing (AUTO) [Compound Arrival: Sightseeing]
-
----
-Compound Arrival: The gate &amp; the gorilla
-
-- Compound Arrival: Yolk's harassment (AUTO) [Compound Arrival: Yolk's harassment]
-
----
-Compound Arrival: Ignore Yolk
-
-- Compound Arrival: Sol (AUTO) [Compound Arrival: Sol]
-
----
-Compound Arrival: Dropped on the driveway
-
-- Compound Arrival: The gate &amp; the gorilla (AUTO) [Compound Arrival: The gate &amp; the gorilla]
-
----
-Eric's visit: Found by Eric
-
-You are Found by Eric!
+You look at the readings around you. The shields at ${percentage(bodega["shields"]/10)}% and stable. The hull took ...
