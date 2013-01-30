@@ -410,9 +410,10 @@ void main() {
           var script = b.pages[0].blocks[1];
           var echo1 = script.subBlocks[0];
           var echo2 = script.subBlocks[1];
+          var echo3 = script.subBlocks[2];
 
           expect(script.subBlocks,
-            hasLength(2));
+            hasLength(3));
           expect(echo1.lineStart,
             equals(20));
           expect(echo1.lineEnd,
@@ -421,6 +422,10 @@ void main() {
             equals(24));
           expect(echo2.lineEnd,
             equals(26));
+          expect(echo3.lineStart,
+            equals(28));
+          expect(echo3.lineEnd,
+            equals(36));
         });
         new Builder().readEgbFile(new File(getPath("echo_2tags.egb"))).then(callback);
       });

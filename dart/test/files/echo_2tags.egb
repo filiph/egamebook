@@ -24,4 +24,14 @@ You are standing very, very still.
   <echo>
 What kind of _magic_ is this? How can true not be true?
   </echo>
+  
+     <echo>
+     
+       This is normal paragraph.
+       
+       This is a second one.
+     
+     	- And this is a choice [start]
+     
+     </echo>
 </script>
