@@ -585,6 +585,10 @@ class Builder {
     choiceBlock.options["script"] = m.group(2);
     choiceBlock.options["goto"] = m.group(3);
 
+    if (choiceBlock.options["script"] == "") {
+      choiceBlock.options["script"] = null;
+    }
+    
     if (choiceBlock.options["script"] != null) {
       choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
     }
@@ -596,12 +600,11 @@ class Builder {
       }
     });
 
-
-    if (choiceBlock.options["script"] == null && choiceBlock.options["goto"] == null) {
-      WARNING("Choice in the form of `- something []` is illegal. There must be "
-            "a script and/or a goto specified.");
-      return null;
-    }
+//    if (choiceBlock.options["script"] == null && choiceBlock.options["goto"] == null) {
+//      WARNING("Choice in the form of `- something []` is illegal. There must be "
+//            "a script and/or a goto specified.");
+//      return null;
+//    }
 
     if (choiceBlock.options["script"] != null
         && (new RegExp(r"^[^{]*}").hasMatch(choiceBlock.options["script"])
@@ -1046,7 +1049,7 @@ class Builder {
   /*static final RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
   static final RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", caseSensitive: false);
   static final RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
-  static final RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.+)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  static final RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
   static final RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
   /**

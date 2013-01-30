@@ -231,6 +231,12 @@ void main() {
         expect(withscript.options["string"], "Script");
         expect(withscript.options["goto"], null);
         expect(withscript.options["script"], "blick++");
+        var empty = b.parseChoiceBlock("- Empty [{}]");
+        expect(empty, isNotNull);
+        expect(empty.type, BuilderBlock.BLK_CHOICE);
+        expect(empty.options["string"], "Empty");
+        expect(empty.options["goto"], null);
+        expect(empty.options["script"], null);
       });
 
       test("detects choices", () {
@@ -274,6 +280,16 @@ void main() {
             equals("start"));
           expect(b.pages[1].blocks[0].subBlocks[4].options["script"],
             equals("this script } should;"));
+          
+          // third page
+          expect(b.pages[2].blocks[0].type, BuilderBlock.BLK_CHOICE_LIST);
+          expect(b.pages[2].blocks[0].subBlocks, hasLength(2));
+          expect(b.pages[2].blocks[0].subBlocks[1].options["string"],
+            equals("Empty choice"));
+          expect(b.pages[2].blocks[0].subBlocks[1].options["script"],
+            isNull);
+          expect(b.pages[2].blocks[0].subBlocks[1].options["goto"],
+            isNull);
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
       });
