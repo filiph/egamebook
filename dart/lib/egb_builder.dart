@@ -621,7 +621,6 @@ class Builder {
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkChoiceList(int number, String line) {
-    // TODO: allow choices in synopsis?
     // TODO: check even inside ECHO tags, add to script
     if (line == null || pages.isEmpty
         || (_mode != MODE_NORMAL
@@ -640,11 +639,9 @@ class Builder {
 
       // If there was a choiceList preceding this one, just continue
       // with the preceding choiceList.
-      if (lastblock.type == BuilderBlock.BLK_CHOICE_LIST) {
+      if (lastblock.type == BuilderBlock.BLK_CHOICE_LIST &&
+          lastblock.lineEnd == null) {
         choiceList = lastblock;
-        // Even if there was a space after the choiceList and therefore
-        // lineEnd was added. Just join the two lists. TODO: is that clever?
-        choiceList.lineEnd = null;
       } else {
         choiceList = new BuilderBlock(
             lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
@@ -655,13 +652,15 @@ class Builder {
           choiceList.lineStart = lastblock.lineStart;
           lastpage.blocks.removeLast();
         }
+
+        lastpage.blocks.add(choiceList);
       }
     } else {
       choiceList = new BuilderBlock(
           lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
-    }
 
-    lastpage.blocks.add(choiceList);
+      lastpage.blocks.add(choiceList);
+    }
 
     bool hasVarInString = (choiceBlock.options["string"] != null
         && variableInText.hasMatch(choiceBlock.options["string"]));
