@@ -295,18 +295,20 @@ bodega["evasive"] = false;
 </script>
 
 <script>
-choices.add("\"What are you doing? What is happening here?\"", 
-    script: () => echo("He doesn't respond."));
-choices.add("Watch what he's doing with the controls",
-    script: () => echo("It takes a while, but you realize he's putting his ship into combat mode."));
+choice("\"What are you doing? What is happening here?\"")
+.then(() => echo("He doesn't respond."));
+choice("Watch what he's doing with the controls")
+.then(() => echo("It takes a while, but you realize he's putting his ship into combat mode."));
 if (shieldsUp != true) {
-  choices.add("Shields up", script: () {
+  choice("Shields up")
+  .then(() {
     shieldsUp = true;
     bodega["shields"] = 5;
   });
 }
 if (bodega["timeToFire"] <= 0) {
-  choices.add("Fire", script: () {
+  choice("Fire")
+  .then(() {
     <echo>
       You take the laser gun controls, quickly aim at the Messanger and fire. 
     </echo>
