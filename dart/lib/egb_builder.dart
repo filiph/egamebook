@@ -624,7 +624,8 @@ class Builder {
     // TODO: allow choices in synopsis?
     // TODO: check even inside ECHO tags, add to script
     if (line == null || pages.isEmpty
-        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_SCRIPT_ECHO)) {
+        || (_mode != MODE_NORMAL
+        /* && _mode != MODE_INSIDE_SCRIPT_ECHO // TODO: implement */)) {
       return new Future.immediate(false);
     }
 

@@ -114,13 +114,13 @@ There's a sudden, loud crash _right in the room_ and a man in black overall jump
     <echo>
 You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.
 
-- [runOutTheWindow]
+Choice: - [runOutTheWindow]
     </echo>
   } else {
     <echo>
 You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.
 
-- [wasted]
+Choice: - [wasted]
     </echo>
   }
 </script>
