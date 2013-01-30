@@ -21,16 +21,16 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   Function f;
   String goto;
   bool showNow;
-  
-  /// Returns [:true:] when the choice is automatic (scripter picks it 
+
+  /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently).
   bool get isAutomatic => string.isEmpty;
 
-  EgbChoice(String string, {this.goto, Function then, bool showNow: false}) : 
+  EgbChoice(String string, {this.goto, Function script, bool showNow: false}) :
       super() {
     this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
-    f = then;
+    f = script;
     waitForEndOfPage = !showNow;
   }
 
@@ -41,7 +41,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     } else {
       hash = string.hashCode;
     }
-    
+
     goto = map["goto"];
     if (map.containsKey("showNow")) {
       showNow = map["showNow"];
@@ -53,9 +53,9 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     f = _f;
     return this;
   }
-  
+
   int compareTo(EgbChoice other) => this.string.compareTo(other.string);
-  
+
   toString() {
     return "Choice: $string [$goto]";
   }
@@ -64,20 +64,20 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 class EgbChoiceList implements List<EgbChoice> {
   final List<EgbChoice> _choices;
   String question;  // TODO: implement
-  
+
 //  EgbChoiceList() : _choices = new List<EgbChoice>() {
 //  }
-  
+
 //  EgbChoiceList._from(Collection<EgbChoice> list)
 //      : _choices = new List<EgbChoice>() {
 //    _choices.addAll(list);
 //  }
-  
+
   EgbChoiceList() : _choices = new List<EgbChoice>();
-  
-  EgbChoiceList.from(Iterable iterable) : 
+
+  EgbChoiceList.from(Iterable iterable) :
       _choices = new List<EgbChoice>.from(iterable);
-  
+
   EgbChoiceList.fromMessage(EgbMessage m) : _choices = new List<EgbChoice>() {
     if (m.listContent.length < 3) {
       throw "Message with choices doesn't have enough data: ${m.listContent}.";
@@ -88,7 +88,7 @@ class EgbChoiceList implements List<EgbChoice> {
       }
     }
   }
-  
+
   /**
    * Takes list from Scripter page data and adds the contents to this.
    */
@@ -109,16 +109,27 @@ class EgbChoiceList implements List<EgbChoice> {
       var choice = new EgbChoice(
                             string,
                             goto: map["goto"],
-                            then: map["script"],
+                            script: map["script"],
                             showNow: true);
       _choices.add(choice);
     }
   }
-  
+
+  add(element, {Function script, String goto}) {
+    if (element is EgbChoice) {
+      _choices.add(element);
+    } else if (element is String) {
+      var choice = new EgbChoice(element, goto: goto, script: script);
+    } else {
+      throw new ArgumentError("To add a choice to choices, one must provide "
+                              "either a new EgbChoice element or a String.");
+    }
+
+  }
+
   where(f) => _choices.where(f);
   removeMatching(f) => _choices.removeMatching(f);
   any(f) => _choices.any(f);
-  add(element) => _choices.add(element);
   get length => _choices.length;
   operator [](int index) => _choices[index];
   void forEach(void f(EgbChoice element)) {
@@ -126,24 +137,24 @@ class EgbChoiceList implements List<EgbChoice> {
   }
   void clear() => _choices.clear();
   get iterator => _choices.iterator;
- 
+
   /// Returns true only if the choices are actionable, i.e. not automatic,
   /// and yet to be shown.
   bool get areActionable =>
     _choices.any((choice) => !choice.shown && !choice.isAutomatic);
-  
+
   /**
-   * Takes care of converting the current [EgbChoiceList] to a Message. 
-   * 
-   * By providing [filterOut()], one can force to not show choices that 
+   * Takes care of converting the current [EgbChoiceList] to a Message.
+   *
+   * By providing [filterOut()], one can force to not show choices that
    * satisfy [:filterOut(choice) == true:].
    */
   EgbMessage toMessage({
-      String prependText: null, 
+      String prependText: null,
       bool endOfPage: false,
       bool filterOut(EgbChoice choice)}) {
     List<EgbChoice> choicesToSend;
-    
+
     // filter out choices we don't want to show
     choicesToSend = _choices.where((choice) {
       if (choice.shown) return false;  // choice shown before
@@ -151,10 +162,10 @@ class EgbChoiceList implements List<EgbChoice> {
       if (filterOut != null && filterOut(choice)) return false;
       return true;
     }).toList();
-    
+
     DEBUG_SCR("Sending choices.");
     EgbMessage m = new EgbMessage(EgbMessage.MSG_SHOW_CHOICES);
-    
+
     m.listContent = new List<dynamic>();
     m.listContent.add(prependText);
     m.listContent.add(question);
@@ -165,7 +176,7 @@ class EgbChoiceList implements List<EgbChoice> {
       } );
       choice.shown = true;
     });
-    
+
     return m;
   }
 }
@@ -176,8 +187,8 @@ class EgbTextInput extends EgbUserInteraction {
 }
 
 class PlayerIntent {
-  PlayerIntent(type) : this.type = type; 
-  
+  PlayerIntent(type) : this.type = type;
+
   final int type;
   static const int QUIT = 2;
   static const int LOAD = 4;
@@ -190,5 +201,5 @@ class RestartIntent extends PlayerIntent {
 
 class LoadIntent extends PlayerIntent {
   String uid;
-  LoadIntent(this.uid) : super(PlayerIntent.LOAD); 
+  LoadIntent(this.uid) : super(PlayerIntent.LOAD);
 }

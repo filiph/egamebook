@@ -15,21 +15,21 @@ import 'egb_page.dart';
  * the page in the [blocks] list.
  */
 class EgbScripterPage extends EgbPage {
-  /// The text and/or logic of each block inside this page. 
+  /// The text and/or logic of each block inside this page.
   final List<dynamic> blocks;
-  
+
   /// Number of times this page has been visited by player.
   int visitCount = 0;
   /// Whether or not this page has been visited by player.
   bool get visited => visitCount > 0;
-  
+
   /**
    * Default constructor only takes blocks List, and optionally page options.
    * Name is copied from Map key when added to [EgbScripterPageMap].
    */
   EgbScripterPage(
       List<dynamic> this.blocks,
-      {bool visitOnce: false, bool showOnce: false}) : 
+      {bool visitOnce: false, bool showOnce: false}) :
         super(visitOnce: visitOnce, showOnce: showOnce);
 }
 
@@ -40,22 +40,22 @@ class EgbScripterPage extends EgbPage {
 class EgbScripterPageMap {
   /// A map of page name -> page object.
   Map<String, EgbScripterPage> pages;
-  
+
   EgbScripterPageMap() {
     pages = new Map<String, EgbScripterPage>();
   }
-  
+
   /// Returns page of exactly the name [key].
   EgbScripterPage operator [](String key) => pages[key];
-  
+
   /**
    * Returns page with name [name]. If [groupName] is given, then the function
-   * will first search for key in the format [:groupName: name:]. 
-   * 
+   * will first search for key in the format [:groupName: name:].
+   *
    * Returns [:null:] if there is no page of any compatible name.
    */
   EgbScripterPage getPage(String name, {String currentGroupName: null}) {
-    if (currentGroupName != null && 
+    if (currentGroupName != null &&
         pages.containsKey("$currentGroupName: $name")) {
       return pages["$currentGroupName: $name"];
     } else if (pages.containsKey(name)) {
@@ -64,26 +64,26 @@ class EgbScripterPageMap {
       return null;
     }
   }
-  
+
   operator []=(String key, EgbScripterPage newPage) {
     pages[key] = newPage;
     // Copy the "key" to the name of the page. This is here so that we don't
     // need to duplicate the page name in the scripter data.
     newPage.name = key;
   }
-  
+
   Map<String,dynamic> exportState() {
     var pageMapState = new Map<String,dynamic>();
-    
+
     pages.forEach((name, page) {
       pageMapState[name] = {
-          "visitCount": page.visitCount                    
+          "visitCount": page.visitCount
       };
     });
-    
+
     return pageMapState;
   }
-  
+
   void importState(Map<String,dynamic> pageMapState) {
     pageMapState.forEach((name, map) {
       if (pages.containsKey(name)) {
@@ -91,14 +91,14 @@ class EgbScripterPageMap {
       }
     });
   }
-  
+
   /**
    * Clears play state of the page map. Useful when restarting an egamebook
    * from scratch.
    */
   void clearState() {
     pages.forEach((name, page) {
-      page.visitCount = 0;                    
+      page.visitCount = 0;
     });
   }
 }
@@ -111,16 +111,16 @@ class EgbScripterPageMap {
 abstract class EgbScripter {
   /// The unique id of this particular gamebook. Used for saving.
   String gamebookUid;
-  
+
   EgbScripterPageMap pageMap;
   EgbScripterPage firstPage;
   EgbScripterPage currentPage;
   EgbScripterPage _nextPage;
-  
+
   void initBlock();
-  
+
   int currentBlockIndex;  // the current position in the current page's blocks list
-  
+
   EgbChoiceList choices;
   Map<String, dynamic> vars;
   StringBuffer textBuffer;
@@ -136,8 +136,8 @@ abstract class EgbScripter {
    * By calling [goto()], you're saying you want to change page to [dest].
    * You can specify the page name in full (i.e. including the group name)
    * or in short (i.e. without group name).
-   * 
-   * Function throws when requested page doesn't exist. 
+   *
+   * Function throws when requested page doesn't exist.
    */
   void goto(String dest) {
     _nextPage = pageMap.getPage(dest, currentGroupName: currentPage.groupName);
@@ -157,8 +157,8 @@ abstract class EgbScripter {
   }
 
   // Utility function that creates new choice.
-  EgbChoice choice(String string, [String goto, Function then, bool showNow=false]) {
-    EgbChoice choice = new EgbChoice(string, goto:goto, then:then, showNow:showNow);
+  EgbChoice choice(String string, [String goto, Function script, bool showNow=true]) {
+    EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:showNow);
     choices.add(choice);
     return choice;
   }
@@ -166,19 +166,19 @@ abstract class EgbScripter {
   // -- private members below
 
   SendPort _interfacePort;
-  
+
   bool _repeatBlockBit = false;
   /**
-    When a block/script/choice call for a script to be called afterwards, 
+    When a block/script/choice call for a script to be called afterwards,
     it ends up on this FIFO stack.
     */
   List<Function> _nextScriptStack;
-  
+
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
     _nextScriptStack = new List<Function>();
     _initScriptEnvironment();
-    
+
     // start the loop
     port.receive(_messageReceiveCallback);
   }
@@ -189,7 +189,7 @@ abstract class EgbScripter {
     DEBUG_SCR("Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
 
-    // TODO: make into switch 
+    // TODO: make into switch
     if (message.type == EgbMessage.MSG_QUIT) {
       DEBUG_SCR("Closing port and quiting.");
       port.close();
@@ -224,7 +224,7 @@ abstract class EgbScripter {
       print("load message: ${incomingMessage.strContent}");
       _loadFromSaveGameMessage(incomingMessage);
     }
-    
+
     if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
       DEBUG_SCR("An option has been selected. Resolving.");
       EgbMessage message;
@@ -265,7 +265,7 @@ abstract class EgbScripter {
     if (currentBlockIndex == null) {
       // we just came to this page
       if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
-        // SaveGames are always made just before the page's last block 
+        // SaveGames are always made just before the page's last block
         // (choiceList).
         currentBlockIndex = currentPage.blocks.length - 1;
       } else {
@@ -318,7 +318,7 @@ abstract class EgbScripter {
 
     initBlock(); // run contents of <init>
   }
-  
+
   dynamic noSuchMethod(InvocationMirror invocation) {
     if (invocation.isGetter) {
       return vars[invocation.memberName];
@@ -327,14 +327,14 @@ abstract class EgbScripter {
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, invocation.memberName, 
+      throw new NoSuchMethodError(this, invocation.memberName,
           invocation.positionalArguments, invocation.namedArguments);
     }
   }
-  
+
   // XXX: invokeOn not yet implemented in Dart
   /*
-  noSuchMethod(InvocationMirror invocation) => 
+  noSuchMethod(InvocationMirror invocation) =>
       invocation.invokeOn(vars[invocation.memberName]);
   */
 
@@ -350,7 +350,7 @@ abstract class EgbScripter {
       vars[name.substring(4)] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, name, invocation.positionalArguments, 
+      throw new NoSuchMethodError(this, name, invocation.positionalArguments,
           invocation.namedArguments);
     }
   }
@@ -380,7 +380,7 @@ abstract class EgbScripter {
     }
     return new EgbMessage.TextResult(textBuffer.toString());
   }
-  
+
   /**
    * When a page is only visitable once ([:visitOnce:] option) and has been
    * visited, then it's an illegal page to visit. This helper function
@@ -388,7 +388,7 @@ abstract class EgbScripter {
    */
   bool _leadsToIllegalPage(EgbChoice choice) {
     if (choice.goto == null) return false;
-    var targetPage = 
+    var targetPage =
         pageMap.getPage(choice.goto, currentGroupName: currentPage.groupName);
     if (targetPage == null) return true;
     if (targetPage.visitOnce && targetPage.visited) {
@@ -397,31 +397,31 @@ abstract class EgbScripter {
       return false;
     }
   }
-  
+
   EgbMessage _createSaveGame() {
-    var savegame = new EgbSavegame(currentPage.name, vars, 
+    var savegame = new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
     var message = savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
     return message;
   }
-  
+
   void _loadFromSaveGameMessage(EgbMessage message) {
     var savegame = new EgbSavegame.fromMessage(message);
-    
+
     if (pageMap[savegame.currentPageName] == null) {
       throw "Trying to load page '${savegame.currentPageName}' which doesn't "
             "exist in current egamebook.";
     }
-    
+
     DEBUG_SCR("Starting from a savegame");
     currentPage = pageMap[savegame.currentPageName];
-    
+
     pageMap.importState(savegame.pageMapState);
-    
+
     // copy saved variables over vars
     savegame.vars.forEach((key, value) {
       vars[key] = value;
     });
-    
+
   }
 }
