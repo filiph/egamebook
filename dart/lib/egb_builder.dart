@@ -13,7 +13,7 @@ class EgbFormatException implements Exception {
   String msg;
   int line;
   File file;
-  
+
   EgbFormatException(String this.msg, {this.line, this.file}) {
   }
 
@@ -42,7 +42,7 @@ abstract class BuilderLineRange {
 
 /**
  * BuilderLineSpan is a "selection" in the input file. In a complete form
- * (`[isClosed] == true`), it has a `lineStart` and a `lineEnd`. 
+ * (`[isClosed] == true`), it has a `lineStart` and a `lineEnd`.
  **/
 class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super-class of the below, but Dart is broken here
   int lineStart;
@@ -56,9 +56,9 @@ class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super
 /**
  * BuilderMetadata is a key-value pair of metadata associated with
  * the gamebook.
- * 
+ *
  * An example can be:
- * 
+ *
  * - key: authors
  * - value: ["Filip Hracek", "John Doe"]
  **/
@@ -77,28 +77,28 @@ class BuilderMetadata {
 /**
  * BuilderPage defines a page as it is represented in the input .egb file.
  * A BuilderPage has its [name] and also [BuilderBlock]s.
- * 
+ *
  * BuilderPage also has [options], like `visitOnce`.
  **/
 class BuilderPage extends EgbPage implements BuilderLineRange {
   int index;
   int lineStart;
   int lineEnd;
-  
+
   /**
-   * List of options, such as [:visitOnce:]. 
+   * List of options, such as [:visitOnce:].
    */
   Set<String> options;
-  
+
   bool get visitOnce => options.contains("visitOnce");
   bool get showOnce => options.contains("showOnce");
-  
+
   /**
    * List of linked page names. Builder makes sure they are specified in
    * their full version (i.e. "Group 1: Something").
    */
   List<String> gotoPageNames;
-  
+
   List<BuilderBlock> blocks;
   BuilderPageGroup group;
 
@@ -107,14 +107,14 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
     blocks = new List<BuilderBlock>();
     options = new Set<String>();
     gotoPageNames = new List<String>();
-    
+
     group = new BuilderPageGroup.fromPage(this);
   }
 
   String toString() {
     return "BuilderPage <$name> [$lineStart:$lineEnd]";
   }
-  
+
   /**
    * To be commented out – for example when the page is deleted in yEd.
    */
@@ -124,19 +124,19 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
 /**
  * BuilderPageGroup is a form of grouping of the pages. Every time a page's
  * name starts with "Something: ", then "Something" is a pageGroup.
- * Calling goto("xyz") from a page named "Something: abc" when there is 
+ * Calling goto("xyz") from a page named "Something: abc" when there is
  * a page named "Something: xyz" goes to that page.
  **/
 class BuilderPageGroup {
   String name;
   List<BuilderPage> pages;
-  
-  static final Map<String, BuilderPageGroup> _cache 
+
+  static final Map<String, BuilderPageGroup> _cache
                   = new Map<String, BuilderPageGroup>();
-  
+
   /**
    * Creates group from page. If page has no group, returns null. If group
-   * already exists, returns existing group. Also adds the input page 
+   * already exists, returns existing group. Also adds the input page
    * to the group.
    */
   factory BuilderPageGroup.fromPage(BuilderPage page) {
@@ -153,12 +153,12 @@ class BuilderPageGroup {
       return group;
     }
   }
-  
+
   BuilderPageGroup._internal(this.name) {
     pages = new List<BuilderPage>();
   }
-  
-  static List<BuilderPageGroup> get allGroups { 
+
+  static List<BuilderPageGroup> get allGroups {
     List<BuilderPageGroup> list = _cache.values.toList();
     list.sort((a,b) => a.pages[0].index - b.pages[0].index); // TODO: check for empty groups
     return list;
@@ -178,11 +178,11 @@ class BuilderBlock implements BuilderLineRange {
 
   static final int BLK_TEXT = 1;
   static final int BLK_TEXT_WITH_VAR = 8;
-  
+
   /// Returns [:true:] if block is a text block (no matter if with variable
   /// or without.
   bool get isTextBlock => type == BLK_TEXT || type == BLK_TEXT_WITH_VAR;
-  
+
   static final int BLK_SCRIPT = 2;
   static final int BLK_SCRIPT_ECHO = 64;
 
@@ -250,17 +250,17 @@ class BuilderInitBlock implements BuilderLineRange {
  * Class that represents a full egamebook. Call [:readEgbFile:] to get
  * data from an existing .egb file. Call [:writeEgbFile:] to output the data
  * into a new .egb file.
- * 
+ *
  * After it's been created, you can call [:writeDartFiles:] to create
  * the source files (scripter implementation + 2 user interfaces).
- * 
+ *
  * You can also export the page structure to a GraphML file using
  * [:writeGraphMLFile:] or update existing structure by
  * [:updateFromGraphMLFile:].
  **/
 class Builder {
   /**
-   * Default constructor. This will allocate memory for members and nothing 
+   * Default constructor. This will allocate memory for members and nothing
    * else. The structure is still empty after calling this.
    **/
   Builder() {
@@ -280,7 +280,7 @@ class Builder {
     * When the returning Future is ready, use can call [writeDartFiles()],
     * for example.
     * @param  f A well-formed .egb file.
-    * @return   A Future. On completion, the future returns `this` for 
+    * @return   A Future. On completion, the future returns `this` for
     *           convenience.
     */
   Future<Builder> readEgbFile(File f) {
@@ -305,13 +305,13 @@ class Builder {
 
     return completer.future;
   }
-  
+
   Future<Builder> readInputStream(InputStream inputStream) {
     var completer = new Completer();
-    
+
     var strInputStream = new StringInputStream(inputStream);
-    
-    // The top of the file can be metadata. This will be changed to 
+
+    // The top of the file can be metadata. This will be changed to
     // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
     _mode = MODE_METADATA;
 
@@ -320,9 +320,9 @@ class Builder {
     _blockNumber = 0;
 
     strInputStream.onLine = () {
-      _lineNumber++; 
+      _lineNumber++;
       var line = strInputStream.readLine();
-      
+
       _check(_lineNumber, line).then((_) {
         //stdout.writeString(".");
       });
@@ -330,7 +330,7 @@ class Builder {
 
     strInputStream.onClosed = () {
       //print("\nReading input file has finished.");
-      
+
       if (!pages.isEmpty) {
         // end the last page
         pages.last.lineEnd = _lineNumber;
@@ -338,20 +338,20 @@ class Builder {
             && pages.last.blocks.last.lineEnd == null) {
           pages.last.blocks.last.lineEnd = _lineNumber;
         }
-        
+
         // fully specify gotoPageNames of every page
         for (var page in pages) {
           for (int i = 0; i < page.gotoPageNames.length; i++) {
             var gotoPageName = page.gotoPageNames[i];
             if (pageHandles.containsKey(
                                         "${page.groupName}: $gotoPageName")) {
-              page.gotoPageNames[i] = 
+              page.gotoPageNames[i] =
                   "${page.groupName}: $gotoPageName";
             } else if (pageHandles.containsKey(gotoPageName)) {
               // great, already done
             } else {
               WARNING("Page ${page.name} specifies a choice that goes "
-              "to a non-existing page ($gotoPageName).", 
+              "to a non-existing page ($gotoPageName).",
               line:null);
             }
           }
@@ -363,7 +363,7 @@ class Builder {
             "an immediately following line with the name of the page.",
             line:null);
       }
-      
+
       if (_mode != MODE_NORMAL) {
         completer.completeError(
             newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
@@ -375,14 +375,14 @@ class Builder {
         });
       }
     };
-    
+
     return completer.future;
   }
 
   /**
    * This method takes care of checking each new line, trying to find
    * patterns (like a new page).
-   * 
+   *
    * @return    Future of bool. Always true on completion.
    **/
   Future<bool> _check(int number, String line) {
@@ -420,7 +420,7 @@ class Builder {
 
   /**
    * Checks if current line is a blank line. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkBlankLine(int number, String line) {
@@ -453,7 +453,7 @@ class Builder {
 
   /**
    * Checks if current line is a metadata line. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkMetadataLine(int number, String line) {
@@ -487,7 +487,7 @@ class Builder {
 
   /**
    * Checks if current line is a beginning of a new page. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkNewPage(int number, String line) {
@@ -539,11 +539,11 @@ class Builder {
       }
     }
   }
-  
+
   /**
-   * Checks if current line is an options line below new page line. 
+   * Checks if current line is an options line below new page line.
    * Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkPageOptions(int number, String line) {
@@ -566,7 +566,7 @@ class Builder {
       return new Future.immediate(false);
     }
   }
-  
+
   /**
    * Checks if line is a valid choice. If not, returns [:null:].
    * If it is a valid choice, returns the corresponding [BuilderBlock] (without
@@ -574,7 +574,7 @@ class Builder {
    */
   BuilderBlock parseChoiceBlock(String line) {
     if (!choice.hasMatch(line)) return null;
-    
+
     var choiceBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
 
     Match m = choice.firstMatch(line);
@@ -584,9 +584,9 @@ class Builder {
     choiceBlock.options["string"] = m.group(1);
     choiceBlock.options["script"] = m.group(2);
     choiceBlock.options["goto"] = m.group(3);
-    
+
     if (choiceBlock.options["script"] != null) {
-      choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT; 
+      choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
     }
 
     // trim the strings
@@ -612,12 +612,12 @@ class Builder {
 
     return choiceBlock;
   }
-  
-  
+
+
 
   /**
    * Checks if current line is choice. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkChoiceList(int number, String line) {
@@ -632,22 +632,22 @@ class Builder {
     if (choiceBlock == null) return new Future.immediate(false);
     choiceBlock.lineStart = number;
 
-    BuilderBlock choiceList; 
+    BuilderBlock choiceList;
     var lastpage = pages.last;
     if (!lastpage.blocks.isEmpty) {
       var lastblock = lastpage.blocks.last;
-    
+
       // If there was a choiceList preceding this one, just continue
-      // with the preceding choiceList. 
+      // with the preceding choiceList.
       if (lastblock.type == BuilderBlock.BLK_CHOICE_LIST) {
         choiceList = lastblock;
-        // Even if there was a space after the choiceList and therefore 
+        // Even if there was a space after the choiceList and therefore
         // lineEnd was added. Just join the two lists. TODO: is that clever?
         choiceList.lineEnd = null;
       } else {
         choiceList = new BuilderBlock(
             lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
-        
+
         // If the previous line is a text block, then that textblock needs to be
         // added to this choiceList.
         if (lastblock.isTextBlock && lastblock.lineEnd == null) {
@@ -659,15 +659,15 @@ class Builder {
       choiceList = new BuilderBlock(
           lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
     }
-    
+
     lastpage.blocks.add(choiceList);
-    
+
     bool hasVarInString = (choiceBlock.options["string"] != null
         && variableInText.hasMatch(choiceBlock.options["string"]));
 
     if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
       // TODO: just add a _choiceToScript(block) to the current script flow
-    } else if (_mode == MODE_NORMAL && choiceBlock.options["script"] == null && 
+    } else if (_mode == MODE_NORMAL && choiceBlock.options["script"] == null &&
                !hasVarInString) {
       // we have a simple choice (i.e. no scripts needed)
       choiceBlock.type = BuilderBlock.BLK_CHOICE;
@@ -675,20 +675,20 @@ class Builder {
       // the choice will need to be rewritten into a standalone script (closure)
       choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
     }
-    
+
     choiceBlock.lineEnd = number;  // TODO: fix for multiline choices (indented lines)
     if (choiceBlock.options["goto"] != null) {
       lastpage.gotoPageNames.add(choiceBlock.options["goto"]);
     }
     choiceList.subBlocks.add(choiceBlock);
-    
+
     return new Future.immediate(true);
   }
 
   /**
-   * Checks if current line is one of `<classes>`, `<functions>` or 
+   * Checks if current line is one of `<classes>`, `<functions>` or
    * `<variables>` (or their closing tags). Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkInitBlockTags(int number, String line) {
@@ -737,9 +737,9 @@ class Builder {
   }
 
   /**
-   * Checks if current line is one of `<script>` or `</script>`. 
+   * Checks if current line is one of `<script>` or `</script>`.
    * Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkScriptTags(int number, String line) {
@@ -780,7 +780,7 @@ class Builder {
           if (!lastpage.blocks.isEmpty
               && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT) {
             lastpage.blocks.last.subBlocks.add(
-                new BuilderBlock(lineStart: number, 
+                new BuilderBlock(lineStart: number,
                                  type: BuilderBlock.BLK_SCRIPT_ECHO));
             completer.complete(true);
           } else {
@@ -819,29 +819,29 @@ class Builder {
 
   /**
    * Checks if there is a goto("") statement inside a script. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkGotoInsideScript(int number, String line) {
     if (line == null) {
       return new Future.immediate(false);
     }
-    
+
     if (_mode == MODE_INSIDE_SCRIPT_TAG) {
       Match m = gotoInsideScript.firstMatch(line);
-      
+
       if (m != null) {
         pages.last.gotoPageNames.add(m.group(2));
         return new Future.immediate(true);
       }
     }
-    
+
     return new Future.immediate(false);
   }
-  
+
   /**
    * Checks if current line is an `<import>` tag. Acts accordingly.
-   * 
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkImportTag(int number, String line) {
@@ -872,10 +872,10 @@ class Builder {
   }
 
   /**
-   * When all above checks fails, this is probably a line in a normal paragraph. 
+   * When all above checks fails, this is probably a line in a normal paragraph.
    * (Unless it's above the first page, in which case it's a line
-   * in the synopsis.) 
-   * 
+   * in the synopsis.)
+   *
    * @return    Future of bool, indicating the result of the check.
    **/
   Future<bool> _checkNormalParagraph(int number, String line) {
@@ -925,7 +925,7 @@ class Builder {
    * Goes out and checks if the imported files exist. The method finds out
    * if two imports are of the same file, in which case it removes the redundant
    * [importFiles].
-   * 
+   *
    * @return    Future of bool, always true.
    **/
   Future<bool> _checkForDoubleImports() {
@@ -1008,20 +1008,20 @@ class Builder {
    * List of pages.
    */
   List<BuilderPage> pages;
-  
+
   List<BuilderPageGroup> get pageGroups => BuilderPageGroup.allGroups;
-  
+
   /**
    * A map of pageHandles -> pageIndex. For use of the `goto("something")`
    * funtion.
    */
   Map<String, int> pageHandles;
-  
+
   /**
    * List of init blocks, such as `<classes>` or `<variables>` blocks.
    */
   List<BuilderInitBlock> initBlocks;
-  
+
   /**
    * GraphML representation of the page flow.
    **/
@@ -1034,7 +1034,7 @@ class Builder {
   static final RegExp metadataLine = new RegExp(r"^(\w.+):\s*(\w.*)\s*$");
   static final RegExp metadataLineAdd = new RegExp(r"^\s+(\w.*)\s*$");
   /*static final RegExp scriptTag = new RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
-  static final RegExp scriptOrEchoTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", caseSensitive: false);
+  static final RegExp scriptOrEchoTag = new RegExp(r"^\s{0,}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", caseSensitive: false);
   static final RegExp gotoInsideScript = new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
   /*static final RegExp scriptTagStart = new RegExp(@"^\s{0,3}<script>\s*$");*/
   /*static final RegExp scriptTagEnd = new RegExp(@"^\s{0,3}</script>\s*$");*/
@@ -1051,7 +1051,7 @@ class Builder {
 
   /**
    * Writes following Dart files to disk:
-   * 
+   *
    * - xyz.dart (The Scripter implementation)
    * - xyz.cmdline.dart (The command line interface)
    * - xyz.html.dart (The html interface)
@@ -1079,7 +1079,7 @@ class Builder {
     var pathToOutputDart = getPathFor("dart");
 
     // TODO: use .chain instead of .then
-    
+
     // write the .dart file
     File dartFile = new File.fromPath(pathToOutputDart);
     OutputStream dartOutStream = dartFile.openOutputStream();
@@ -1119,9 +1119,9 @@ class Builder {
   }
 
   /**
-   * Creates the interface files. These files are the ones that run 
+   * Creates the interface files. These files are the ones that run
    * the egamebook. They import the scripter file as an Isolate.
-   * 
+   *
    * There are two interfaces: the command line interface, and the HTML
    * interface.
    */
@@ -1173,7 +1173,7 @@ class Builder {
   /**
    * Helper function copies contents of the template to a new file,
    * substituting strings as specified by [substitutions].
-   * 
+   *
    * @param inFile  The template file.
    * @param outFile File to be created.
    * @param substitutions A map of String->String substitutions.
@@ -1184,7 +1184,7 @@ class Builder {
       substitutions = new Map();
     }
     Completer completer = new Completer();
-  
+
     inFile.exists()
     .then((bool exists) {
       if (!exists) {
@@ -1193,7 +1193,7 @@ class Builder {
       } else {
         OutputStream outStream = outFile.openOutputStream();
         StringInputStream inStream = new StringInputStream(inFile.openInputStream());
-  
+
         inStream.onLine = () {
           String line = inStream.readLine();
           if (substitutions.containsKey(line)) {
@@ -1209,20 +1209,20 @@ class Builder {
         inStream.onError = (e) => completer.completeError(e);
       }
     });
-  
+
     return completer.future;
   }
 
   /**
-   * Writes the specified initBlockType from the .egb file 
+   * Writes the specified initBlockType from the .egb file
    * (and its imports TODO) to the OutputStream.
-   * 
+   *
    * @param dartOutStream Stream to be written to.
    * @param initBlockType The type of blocks whose contents we want to copy.
    * @param indent  Whitespace indent.
    * @return    Always true.
    */
-  Future<bool> writeInitBlocks(OutputStream dartOutStream, int initBlockType, 
+  Future<bool> writeInitBlocks(OutputStream dartOutStream, int initBlockType,
                          {int indent: 0}) {
     var completer = new Completer();
 
@@ -1241,11 +1241,11 @@ class Builder {
   }
 
   /**
-   * Writes all pages from the .egb file to to the OutputStream. Iterates 
+   * Writes all pages from the .egb file to to the OutputStream. Iterates
    * over all included blocks, taking care of the correct "conversion".
    * (E.g. a choice in .egb is written differently than in the resulting
    * Dart file.)
-   * 
+   *
    * @param dartOutStream Stream to be written to.
    * @return    Always true.
    */
@@ -1307,7 +1307,7 @@ class Builder {
             write("  echo(\"\"\"$line\n");
           }
         }
-        
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
           var question = curBlock.options["question"];
           if (curBlock.lineStart == curBlock.lineEnd) {
@@ -1319,13 +1319,13 @@ class Builder {
             write("  \"question\": r\"\"\"\"$line\n");
           }
         }
-        
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST) {
           write("[\n");
-          
-          var questionLineCount = 
+
+          var questionLineCount =
               curBlock.subBlocks.first.lineStart - curBlock.lineStart;
-          
+
           if (questionLineCount == 0) {
             write("  null,\n");
           } else if (questionLineCount == 1) {
@@ -1375,7 +1375,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
           write("() {\n");
         }
-        
+
       }
 
       // block line
@@ -1389,10 +1389,10 @@ class Builder {
           indent = _getIndent(0);
           write("$line\n");
         }
-        
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST &&
             _insideLineRange(lineNumber, curBlock, inclusive: true)) {
-          
+
           if (lineNumber < curBlock.subBlocks.first.lineStart) {
             // we are still in Question territory
             if (lineNumber > curBlock.lineStart) {
@@ -1403,9 +1403,9 @@ class Builder {
             }
           } else {
             var choiceBlock = curBlock.subBlocks.firstMatching((block) =>
-                  _insideLineRange(lineNumber, block, inclusive: true), 
+                  _insideLineRange(lineNumber, block, inclusive: true),
                   orElse: () => null);
-            
+
             if (choiceBlock != null) {
               write("{\n");
               var lines = new List<String>();
@@ -1424,9 +1424,9 @@ class Builder {
             }
           }
         }
-          
-        
-        
+
+
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION
             && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
           indent = _getIndent(0);
@@ -1436,7 +1436,7 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_SCRIPT
             && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
           indent = _getIndent(0);
-          
+
           bool needsToBeHandled = true;
           // check for <echo>
           if (subBlockIndex < curBlock.subBlocks.length) {
@@ -1460,10 +1460,10 @@ class Builder {
               needsToBeHandled = false;
             }
           }
-          
+
           // script line, copy
           if (needsToBeHandled) {
-            write("$line\n");  
+            write("$line\n");
           }
         }
       }
@@ -1488,12 +1488,12 @@ class Builder {
             write("}$commaOrNot\n");
           }
         }
-        
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST) {
           indent = _getIndent(8);
           write("]\n$commaOrNot");
         }
-        
+
         if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION) {
           if (curBlock.lineStart != curBlock.lineEnd) {
             indent = _getIndent(0);
@@ -1530,9 +1530,9 @@ class Builder {
         }
         indent = _getIndent(4);
         write(");\n");
-        
+
         if (pageIndex == pages.length - 1) {
-          // that was all of pageMap, now add firstPage and we're done here 
+          // that was all of pageMap, now add firstPage and we're done here
           write("");
           write("firstPage = pageMap[r\"\"\"${pages[0].name}\"\"\"];");
         }
@@ -1542,27 +1542,27 @@ class Builder {
       }
 
     };
-    
+
     inStream.onLine = () {
       lineNumber++;
       var line = inStream.readLine();
       handleLine(line);
     };
-    
+
     inStream.onClosed = () {
       completer.complete(true);
     };
-    
+
     inStream.onError = (e) {
       completer.completeError(e);
     };
     return completer.future;
   }
-  
+
   /**
    * Checks if string has a trailing [:":] char. If so, it is appended with
    * a space.
-   * 
+   *
    * The reason for this is that the Builder will surround the string with
    * triple quotes ([:""":]). A trailing quote in the (already) quoted string
    * will mean a quadruple quote ([:"""":]) which is interpreted by Dart
@@ -1578,7 +1578,7 @@ class Builder {
 
   /**
    * Gets lines from inStream and dumps them to outStream.
-   * 
+   *
    * @param lineRanges  A collection of line ranges that need to be copied.
    * @param inStream  The input stream.
    * @param outStream The output stream.
@@ -1614,7 +1614,7 @@ class Builder {
     };
     return completer.future;
   }
-  
+
   /**
    * Gets path for the file with specified extension. Therefore, calling
    * [:getPathFor('graphml'):] for [:path/to/example.egb:] will return
@@ -1626,17 +1626,17 @@ class Builder {
           .join(new Path("${inputFilePath.filenameWithoutExtension}"
           ".$extension"));
   }
-  
+
   /**
    * Writes GraphML file from current Builder object.
    **/
   Future<bool> writeGraphMLFile() {
     var completer = new Completer();
-    
+
     var pathToOutputGraphML = getPathFor("graphml");
     File graphmlOutputFile = new File.fromPath(pathToOutputGraphML);
     OutputStream graphmlOutStream = graphmlOutputFile.openOutputStream();
-      
+
     try {
       updateGraphML();
       graphmlOutStream.writeString(graphML.toString());
@@ -1646,16 +1646,16 @@ class Builder {
       graphmlOutStream.close();
       graphmlOutStream.onClosed = () => completer.complete(true);
     }
-    
+
     return completer.future;
   }
-  
+
   /**
    * Builds the [graphML] structure from the current Builder instance.
    **/
   void updateGraphML() {
     graphML = new GraphML();
-    
+
     // create group nodes
     Map<String,Node> pageGroupNodes = new Map<String,Node>();
     for (int i = 0; i < pageGroups.length; i++) {
@@ -1663,7 +1663,7 @@ class Builder {
       pageGroupNodes[pageGroups[i].name] = node;
       graphML.addGroupNode(node);
     }
-    
+
     // create nodes
     Map<String,Node> pageNodes = new Map<String,Node>();
     for (int i = 0; i < pages.length; i++) {
@@ -1674,25 +1674,25 @@ class Builder {
       }
       graphML.addNode(node);
     }
-    
+
     // create graph edges
     for (int i = 0; i < pages.length; i++) {
       BuilderPage page = pages[i];
       for (int j = 0; j < page.gotoPageNames.length; j++) {
         String gotoHandle = page.gotoPageNames[j];
-          
+
         if (pageHandles.containsKey("${page.groupName}: $gotoHandle")) {
           graphML.addEdge(
-              pageNodes[page.name], 
+              pageNodes[page.name],
               pageNodes["${page.groupName}: $gotoHandle"]);
         } else if (pageHandles.containsKey(gotoHandle)) {
             graphML.addEdge(
-                pageNodes[page.name], 
+                pageNodes[page.name],
                 pageNodes[gotoHandle]);
         } else {
           WARNING( "Choice links to a non-existent page ('$gotoHandle')"
                 " in page ${page.name}. Creating new page/node.");
-          
+
           var newPage = new BuilderPage(gotoHandle, pages.length);
           var node = new Node(newPage.nameWithoutGroup);
           pageNodes[newPage.name] = node;
@@ -1700,63 +1700,63 @@ class Builder {
             node.parent = pageGroupNodes[newPage.groupName];
           }
           graphML.addNode(node);
-          
+
           graphML.addEdge(
-              pageNodes[page.name], 
+              pageNodes[page.name],
               pageNodes[newPage.name]);
         }
       }
     }
-    
+
     graphML.updateXml();
   }
-  
+
   /**
    * Opens the .graphml file, updates [graphML] from it, then calls
    * [updateFromGraphML()].
    */
   Future<bool> updateFromGraphMLFile() {
 //    Completer completer = new Completer();
-    
+
     var pathToInputGraphML = getPathFor("graphml");
     File graphmlInputFile = new File.fromPath(pathToInputGraphML);
-    
+
     graphML = new GraphML.fromFile(graphmlInputFile); // TODO: make async!
-    
+
     updateFromGraphML();
     return new Future.immediate(true);
   }
-  
+
   /**
    * Updates the Builder instance from the current state of [graphML].
-   */ 
+   */
   void updateFromGraphML() {
     // populate map of all nodes in graph
     Map<String,Node> nodesToAdd = new Map<String,Node>();
     for (var node in graphML.nodes) {
       nodesToAdd[node.fullText] = node;
     }
-    
+
     // walk the existing Builder instance
     for (int i = 0; i < pages.length; i++) {
       BuilderPage page = pages[i];
       bool pageStays = nodesToAdd.containsKey(page.name);
       if (pageStays) {
         Node node = nodesToAdd[page.name];
-        
+
         // populate map of all linked nodes in graphml
         Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
         Map<String,Node> linkedPageFullNamesToAdd = new Map<String,Node>();
         for (var node in linkedNodesToAdd) {
           linkedPageFullNamesToAdd[node.fullText] = node;
         }
-        
+
         // create set of gotoPageNames to be deleted
         Set<String> gotoPageNamesToDelete = new Set<String>();
-        
+
         // walk through goto links in egb
         for (var gotoPageName in page.gotoPageNames) {
-          // make sure 
+          // make sure
           bool linkStays = linkedPageFullNamesToAdd.containsKey(gotoPageName);
           if (linkStays) {
             var linkedNode = linkedPageFullNamesToAdd[gotoPageName];
@@ -1765,11 +1765,11 @@ class Builder {
             gotoPageNamesToDelete.add(gotoPageName);
           }
         }
-        
+
         // delete excesive gotos
         page.gotoPageNames = page.gotoPageNames
                        .where((name) => !gotoPageNamesToDelete.contains(name)).toList();
-        
+
         // add remaining linked nodes
         for (var linkedNode in linkedNodesToAdd) {
           page.gotoPageNames.add(linkedNode.fullText);
@@ -1777,16 +1777,16 @@ class Builder {
       } else {
         page.commentOut = true;
       }
-      
+
       // remove the node from "stack" if it's there
       nodesToAdd.remove(page.name);
     }
-    
+
     // TODO: add new groupNodes
-    
+
     // add remaining nodes
     nodesToAdd.forEach((String fullText, Node node) {
-      
+
       int newIndex = pages.last.index + 1;
       var newPage = new BuilderPage(fullText, newIndex);
       pageHandles[fullText] = newIndex;
@@ -1795,17 +1795,17 @@ class Builder {
       pages.add(newPage);
     });
   }
-  
+
   /**
-   * Updates the .egb file according to the current state of the Builder 
-   * instance. 
+   * Updates the .egb file according to the current state of the Builder
+   * instance.
    */
   Future<Builder> updateEgbFile() {
     var completer = new Completer();
-    
+
     var tempFile = new File.fromPath(getPathFor("egb~"));
     File outputEgbFile;
-    
+
     var tempInStream = inputEgbFile.openInputStream();
     tempInStream.pipe(tempFile.openOutputStream(FileMode.WRITE));
     tempInStream.onClosed = () {
@@ -1813,15 +1813,15 @@ class Builder {
       inputEgbFile = tempFile;
       var rawInputStream = inputEgbFile.openInputStream();
       var outStream = outputEgbFile.openOutputStream(FileMode.WRITE);
-      
+
       if (pages.length == 0) {
         // right now, we can only update pages, so a file without pages stays the same
         rawInputStream.pipe(outStream);
       } else {
         var inStream = new StringInputStream(rawInputStream);
-        
+
         // TODO: rewrite based on logical structure (i.e. insert new pages where they belong)
-        
+
         int lineNumber = 0;
         BuilderPage page;
         Set<BuilderPage> pagesToAdd = new Set.from(pages);
@@ -1841,7 +1841,7 @@ class Builder {
             page = null;
             gotoPageNamesToAdd = null;
           }
-          
+
           if (page == null) {
             for (var candidate in pages) {
               if (_insideLineRange(lineNumber, candidate)) {
@@ -1852,7 +1852,7 @@ class Builder {
               }
             }
           }
-          
+
           if (page != null) {
             // find out if this line has a goto, if so, remove from pageNamesToAdd
             String goto;
@@ -1888,7 +1888,7 @@ class Builder {
               ..writeString(line)
               ..writeString("\n");
           }
-        
+
         };
 
         inStream.onClosed = () {
@@ -1897,19 +1897,19 @@ class Builder {
               ..writeString("\n---\n")
               ..writeString(page.name)
               ..writeString("\n\n");
-            
+
             for (var gotoPageName in page.gotoPageNames) {
               outStream.writeString(
                   "- $gotoPageName (AUTO) [$gotoPageName]\n");
             }
           }
-          
+
           outStream.close();
-          
+
           // TODO: delete egb~
           inputEgbFile.delete();
           inputEgbFile = outputEgbFile;
-          
+
           new Builder().readEgbFile(inputEgbFile).then((Builder b) {
             completer.complete(b);;
           });
@@ -1919,14 +1919,14 @@ class Builder {
         };
       }
     };
-    
+
     return completer.future;
   }
-  
+
   /**
    * Helper function creates a string of a given number of spaces. Useful
    * for indentation.
-   * 
+   *
    * @param len Number of spaces to return.
    * @return  The string, e.g. `"    "` for [_getIndent(4)].
    */
@@ -1940,15 +1940,15 @@ class Builder {
 
   /**
    * Returns true if given [lineNumber] is in given [range] of lines.
-   * 
+   *
    * @param lineNumber  Line number to check.
    * @param range Range of lines in question.
    * @param inclusive Whether or not to include the starting and ending
    *                  lines of the range in the computation.
    * @return True if line is inside range or if range has no lineStart and
-   *                  lineEnd. 
+   *                  lineEnd.
    */
-  bool _insideLineRange(int lineNumber, BuilderLineRange range, 
+  bool _insideLineRange(int lineNumber, BuilderLineRange range,
                         {bool inclusive: true}) {
     if (range.lineStart == null && range.lineEnd == null) {
       return false;
@@ -2030,7 +2030,7 @@ class ScripterImpl extends EgbScripter {
   static int MODE_METADATA = 64;
   /// This makes sure the parser remembers where it is during reading the file.
   int _mode;
-  
+
   /// Public getter for _mode.
   int get mode => _mode;
   /// Public setter for _mode. This is here for unit testing only.
@@ -2051,7 +2051,7 @@ class ScripterImpl extends EgbScripter {
       line = _lineNumber;
     }
     String str = (line == null) ? msg : "$msg (line:$line)";
-    
+
     print(str);
     warningLines.add(str);
   }
