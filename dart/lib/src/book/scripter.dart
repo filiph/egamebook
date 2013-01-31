@@ -1,106 +1,69 @@
 library egb_scripter;
 
+
 import 'dart:isolate';
 import 'dart:json';
 
 import '../shared/utils.dart';
-
 import '../shared/message.dart';
 import '../shared/user_interaction.dart';
 import '../shared/savegame.dart';
 import '../shared/page.dart';
 
+part 'scripter_page.dart';
+
+
 /**
- * In the context of [EgbScripter], we also have the actual data + logic of
- * the page in the [blocks] list.
+ * The StringBuffer which collects all echo()'d strings to put them all
+ * together at the end of a block and send them to the Runner (and therefore,
+ * the player).
  */
-class EgbScripterPage extends EgbPage {
-  /// The text and/or logic of each block inside this page.
-  final List<dynamic> blocks;
+StringBuffer _textBuffer;
 
-  /// Number of times this page has been visited by player.
-  int visitCount = 0;
-  /// Whether or not this page has been visited by player.
-  bool get visited => visitCount > 0;
-
-  /**
-   * Default constructor only takes blocks List, and optionally page options.
-   * Name is copied from Map key when added to [EgbScripterPageMap].
-   */
-  EgbScripterPage(
-      List<dynamic> this.blocks,
-      {bool visitOnce: false, bool showOnce: false}) :
-        super(visitOnce: visitOnce, showOnce: showOnce);
+/**
+ * The top level function that can be called from script blocks or library
+ * functions.
+ */
+void echo(String str) {
+  if (_textBuffer.length > 0) {
+    _textBuffer.add(" ");  // Implicitly add space between each echo().
+  }
+  _textBuffer.add(str);
 }
 
 /**
- * [EgbScripterPageList] is the container for the whole of the text and logic
- * content of each book.
+ * List of choices to be shown to the player.
  */
-class EgbScripterPageMap {
-  /// A map of page name -> page object.
-  Map<String, EgbScripterPage> pages;
+EgbChoiceList choices;
 
-  EgbScripterPageMap() {
-    pages = new Map<String, EgbScripterPage>();
-  }
+/**
+ * Utility shortcut for creating new choices.
+ */
+EgbChoice choice(String string, [String goto, Function script, bool showNow=true]) {
+  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:showNow);
+  choices.add(choice);
+  return choice;
+}
 
-  /// Returns page of exactly the name [key].
-  EgbScripterPage operator [](String key) => pages[key];
+/**
+ * The map holding all author-defined variables. This is accessed either
+ * by [:var["name"]:], but thanks to noSuchMethod override, 
+ * also by just [:name:] (not in libraries, though).
+ */
+Map<String, dynamic> vars;
 
-  /**
-   * Returns page with name [name]. If [groupName] is given, then the function
-   * will first search for key in the format [:groupName: name:].
-   *
-   * Returns [:null:] if there is no page of any compatible name.
-   */
-  EgbScripterPage getPage(String name, {String currentGroupName: null}) {
-    if (currentGroupName != null &&
-        pages.containsKey("$currentGroupName: $name")) {
-      return pages["$currentGroupName: $name"];
-    } else if (pages.containsKey(name)) {
-      return pages[name];
-    } else {
-      return null;
-    }
-  }
+/**
+ * The current block should be repeated after its execution.
+ */
+bool _repeatBlockBit = false;
 
-  operator []=(String key, EgbScripterPage newPage) {
-    pages[key] = newPage;
-    // Copy the "key" to the name of the page. This is here so that we don't
-    // need to duplicate the page name in the scripter data.
-    newPage.name = key;
-  }
-
-  Map<String,dynamic> exportState() {
-    var pageMapState = new Map<String,dynamic>();
-
-    pages.forEach((name, page) {
-      pageMapState[name] = {
-          "visitCount": page.visitCount
-      };
-    });
-
-    return pageMapState;
-  }
-
-  void importState(Map<String,dynamic> pageMapState) {
-    pageMapState.forEach((name, map) {
-      if (pages.containsKey(name)) {
-        pages[name].visitCount = map["visitCount"];
-      }
-    });
-  }
-
-  /**
-   * Clears play state of the page map. Useful when restarting an egamebook
-   * from scratch.
-   */
-  void clearState() {
-    pages.forEach((name, page) {
-      page.visitCount = 0;
-    });
-  }
+/**
+ * Call this function when you want the current script block to be repeated
+ * after execution. Useful for looping a script block until something (fight,
+ * minigame, etc.) is resolved.
+ */
+void repeatBlock() {
+  _repeatBlockBit = true;
 }
 
 
@@ -122,23 +85,6 @@ abstract class EgbScripter {
   int currentBlockIndex;  // the current position in the current page's blocks list
 
   /**
-   * List of choices to be shown to the player.
-   */
-  EgbChoiceList choices;
-  /**
-   * The StringBuffer which collects all echo()'d strings to put them all
-   * together at the end of a block and send them to the Runner (and therefore,
-   * the player).
-   */
-  StringBuffer textBuffer;
-  
-  /**
-   * The map holding all author-defined variables. This is accessed either
-   * by [:var["name"]:], but thanks to noSuchMethod override, 
-   * also by just [:name:].
-   */
-  Map<String, dynamic> vars;
-  /**
    * This Map is filled in ScripterImpl automatically by the Builder. 
    * The purpose of [_constructors] is to make it possible to assemble
    * [vars] variables of custom types (by [Class.fromMap()] constructors) 
@@ -154,13 +100,6 @@ abstract class EgbScripter {
    *     };
    */
   Map<String,Function> _constructors;
-
-  void echo(String str) {
-    if (textBuffer.length > 0) {
-      textBuffer.add(" ");  // Implicitly add space between each echo().
-    }
-    textBuffer.add(str);
-  }
 
   /**
    * By calling [goto()], you're saying you want to change page to [dest].
@@ -182,22 +121,10 @@ abstract class EgbScripter {
     _nextScriptStack.add(f);
   }
 
-  void repeatBlock() {
-    _repeatBlockBit = true;
-  }
-
-  // Utility function that creates new choice.
-  EgbChoice choice(String string, [String goto, Function script, bool showNow=true]) {
-    EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:showNow);
-    choices.add(choice);
-    return choice;
-  }
-
   // -- private members below
 
   SendPort _interfacePort;
 
-  bool _repeatBlockBit = false;
   /**
     When a block/script/choice call for a script to be called afterwards,
     it ends up on this FIFO stack.
@@ -212,7 +139,6 @@ abstract class EgbScripter {
     // start the loop
     port.receive(_messageReceiveCallback);
   }
-
 
   void _messageReceiveCallback(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
@@ -389,7 +315,7 @@ abstract class EgbScripter {
   // runs the current block or the specified block
   EgbMessage _runScriptBlock({Function script}) {
     // clean up
-    textBuffer = new StringBuffer();
+    _textBuffer = new StringBuffer();
     // delete choices that have already been shown
     choices = new EgbChoiceList.from(
         choices.where((choice) => !choice.shown)
@@ -405,10 +331,10 @@ abstract class EgbScripter {
     // catch text and choices
     if (choices.any((choice) => !choice.waitForEndOfPage)) {
       return choices.toMessage(
-          prependText: textBuffer.toString(),
+          prependText: _textBuffer.toString(),
           filterOut: _leadsToIllegalPage);
     }
-    return new EgbMessage.TextResult(textBuffer.toString());
+    return new EgbMessage.TextResult(_textBuffer.toString());
   }
 
   /**
