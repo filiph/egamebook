@@ -3,12 +3,12 @@ library egb_scripter;
 import 'dart:isolate';
 import 'dart:json';
 
-import 'egb_utils.dart';
+import '../shared/utils.dart';
 
-import 'egb_message.dart';
-import 'egb_user_interaction.dart';
-import 'egb_savegame.dart';
-import 'egb_page.dart';
+import '../shared/message.dart';
+import '../shared/user_interaction.dart';
+import '../shared/savegame.dart';
+import '../shared/page.dart';
 
 /**
  * In the context of [EgbScripter], we also have the actual data + logic of

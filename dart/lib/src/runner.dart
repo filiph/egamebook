@@ -3,17 +3,17 @@ library egb_runner;
 import 'dart:async';
 import 'dart:isolate';
 
-import 'egb_utils.dart';
+import 'shared/utils.dart';
 
-import 'egb_interface.dart';
-import 'egb_library.dart';
-
-import 'egb_storage.dart';
-import 'egb_savegame.dart';
-import 'egb_player_profile.dart';
+import 'interface/interface.dart';
+import 'persistence/storage.dart';
+import 'shared/savegame.dart';
+import 'persistence/player_profile.dart';
+import 'shared/user_interaction.dart';
+import 'shared/message.dart';
 
 /**
- * EgbRunner manages communication between the Scripter and the Interface.
+ * EgbRunner manages communication between the Book and the Interface.
  * It is interface-agnostic.
  */
 class EgbRunner {

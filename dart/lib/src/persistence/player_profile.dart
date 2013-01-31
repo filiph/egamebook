@@ -4,8 +4,8 @@ import 'dart:collection';
 import 'dart:async';
 import 'dart:json';
 
-import 'egb_savegame.dart';
-import 'egb_storage.dart';
+import '../shared/savegame.dart';
+import 'storage.dart';
 
 /**
  * Encapsulates info about a unique player of current egamebook.

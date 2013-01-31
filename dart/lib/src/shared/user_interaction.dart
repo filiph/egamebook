@@ -3,8 +3,8 @@ library egb_user_interaction;
 import 'dart:math';
 import 'dart:collection';
 
-import 'egb_utils.dart';
-import 'egb_message.dart';
+import 'utils.dart';
+import 'message.dart';
 
 class EgbUserInteraction {
   bool shown = false;

@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:graphml/dart_graphml.dart';
 
-import 'src/egb_page.dart';
+import 'src/shared/page.dart';
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -1135,10 +1135,10 @@ class Builder {
     var pathToOutputDart = getPathFor("dart");
     var pathToOutputCmd = getPathFor("cmdline.dart");
     var pathToInputTemplateCmd = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_cmdline_template.dart"));
+          .join(new Path("../lib/src/cmdline_template.dart"));
     var pathToOutputHtml =getPathFor("html.dart");
     var pathToInputTemplateHtml = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/egb_html_template.dart"));
+          .join(new Path("../lib/src/html_template.dart"));
 
     File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
     File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
@@ -1147,21 +1147,19 @@ class Builder {
 
     var substitutions = {
       // TODO: make this directory independent
-      "import 'egb_library.dart';" :
-          "import '../../lib/src/egb_library.dart';\n",
-      "import 'egb_runner.dart';" :
-          "import '../../lib/src/egb_runner.dart';\n",
-      "import 'egb_interface.dart';" :
-          "import '../../lib/src/egb_interface.dart';\n",
-      "import 'egb_interface_cmdline.dart';" :
-          "import '../../lib/src/egb_interface_cmdline.dart';\n",
-      "import 'egb_interface_html.dart';" :
-          "import '../../lib/src/egb_interface_html.dart';\n",
-      "import 'egb_storage.dart';" :
-        "import '../../lib/src/egb_storage.dart';\n",
-      "import 'egb_player_profile.dart';" :
-        "import '../../lib/src/egb_player_profile.dart';\n",
-      "import 'reference_scripter_impl.dart';" :
+      "import 'runner.dart';" :
+          "import '../../lib/src/runner.dart';\n",
+      "import 'interface/interface.dart';" :
+          "import '../../lib/src/interface/interface.dart';\n",
+      "import 'interface/interface_cmdline.dart';" :
+          "import '../../lib/src/interface/interface_cmdline.dart';\n",
+      "import 'interface/interface_html.dart';" :
+          "import '../../lib/src/interface/interface_html.dart';\n",
+      "import 'persistence/storage.dart';" :
+        "import '../../lib/src/persistence/storage.dart';\n",
+      "import 'persistence/player_profile.dart';" :
+        "import '../../lib/src/persistence/player_profile.dart';\n",
+      "import 'book/reference_scripter_impl.dart';" :
           "import '$pathToOutputDart';\n", // TODO!!
     };
 
@@ -1979,7 +1977,7 @@ class Builder {
   final String implStartFile = """
 library Scripter_Implementation;
 
-import '../../lib/src/egb_library.dart';
+import '../../lib/src/book/scripter.dart';
 import 'dart:math';
 """;
 

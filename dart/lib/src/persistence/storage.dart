@@ -1,8 +1,8 @@
 library egb_storage;
 
 import 'dart:async';
-import 'egb_savegame.dart';
-import 'egb_player_profile.dart';
+import '../shared/savegame.dart';
+import 'player_profile.dart';
 
 /**
  * Storage is the abstract class that can be implemented via any kind of 

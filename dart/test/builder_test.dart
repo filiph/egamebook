@@ -2,8 +2,8 @@ import 'package:unittest/unittest.dart';
 import 'dart:io';
 
 // importing files to test
-import "../lib/html_entities.dart";
-import "../lib/egb_builder.dart";
+import "../lib/src/shared/html_entities.dart";
+import "../lib/builder.dart";
 
 String getPath(String filename) {
   var options = new Options();

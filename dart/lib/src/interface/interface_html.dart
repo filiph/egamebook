@@ -2,11 +2,14 @@ library egb_interface_html;
 
 import 'dart:async';
 import 'dart:html';
-import 'egb_interface.dart';
-import 'egb_library.dart';
-import 'egb_storage.dart';
-import 'egb_savegame.dart';
-import 'egb_player_profile.dart';
+
+import 'interface.dart';
+import '../shared/savegame.dart';
+import '../shared/user_interaction.dart';
+
+// because we're defining localStorage here
+import '../persistence/storage.dart';
+import '../persistence/player_profile.dart';
 
 class HtmlInterface implements EgbInterface {
 

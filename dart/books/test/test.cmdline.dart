@@ -1,12 +1,18 @@
 import 'dart:isolate';
-import 'egb_runner.dart';
-import 'egb_interface.dart';
-import 'egb_interface_cmdline.dart';
-import 'egb_storage.dart';
-import 'egb_player_profile.dart';
+import '../../lib/src/runner.dart';
+
+import '../../lib/src/interface/interface.dart';
+
+import '../../lib/src/interface/interface_cmdline.dart';
+
+import '../../lib/src/persistence/storage.dart';
+
+import '../../lib/src/persistence/player_profile.dart';
+
 
 // this will be rewritten with the actual file
-import 'reference_scripter_impl.dart';
+import '/Users/filiph/Programs/egamebook/dart/books/test/test.dart';
+
 
 void main() {
   // create [ReceivePort] for this isolate
@@ -23,7 +29,6 @@ void main() {
   var runner = new EgbRunner(receivePort, scripterPort, 
       interface, playerProfile);
   runner.run();
-  
 }
 
 /**

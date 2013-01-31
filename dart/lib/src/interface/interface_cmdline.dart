@@ -3,9 +3,9 @@ library egb_interface_cmdline;
 import 'dart:async';
 import 'dart:io';
 
-import 'egb_interface.dart';
-import 'egb_savegame.dart';
-import 'egb_library.dart';
+import 'interface.dart';
+import '../shared/savegame.dart';
+import '../shared/user_interaction.dart';
 
 class CmdlineInterface implements EgbInterface {
 

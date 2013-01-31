@@ -28,7 +28,7 @@ void main() {
   var parser = new ArgParser();
   parser.addFlag("scaffold", defaultsTo:false, negatable:false,
       help:"Creates a scaffold with a 'hello world' egamebook "
-           "in the example/new directory."); // TODO
+           "in the books/ directory."); // TODO
   parser.addFlag("compile", abbr:"c", defaultsTo:true,
       help:"Compile given .egb file to .dart files.");
   parser.addFlag("graph-output", abbr:"g", defaultsTo:false,

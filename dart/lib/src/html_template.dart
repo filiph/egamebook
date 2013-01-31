@@ -1,12 +1,12 @@
 import 'dart:isolate';
-import 'egb_runner.dart';
-import 'egb_interface.dart';
-import 'egb_interface_html.dart';
-import 'egb_storage.dart';
-import 'egb_player_profile.dart';
+import 'runner.dart';
+import 'interface/interface.dart';
+import 'interface/interface_html.dart';
+import 'persistence/storage.dart';
+import 'persistence/player_profile.dart';
 
 // this will be rewritten with the actual file
-import 'reference_scripter_impl.dart';
+import 'book/reference_scripter_impl.dart';
 
 void main() {
   // create [ReceivePort] for this isolate

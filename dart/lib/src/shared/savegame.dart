@@ -2,7 +2,7 @@ library egb_savegame;
 
 import 'dart:json';
 
-import 'egb_message.dart';
+import 'message.dart';
 
 /**
  * Savegame stores information of one point in time of the gameplay. This

@@ -4,15 +4,13 @@ import 'dart:io';
 import 'dart:collection';
 import 'dart:async';
 import 'dart:isolate';
-import '../lib/src/egb_interface.dart';
-import '../lib/src/egb_library.dart';
-import '../lib/src/egb_runner.dart';
-import '../lib/src/egb_storage.dart';
-import '../lib/src/egb_savegame.dart';
-import '../lib/egb_builder.dart';
 
-// the scripter file to be tested
-//import 'files/scripter_test_10x_alternate_first_second.dart';
+import '../lib/src/interface/interface.dart';
+import '../lib/src/runner.dart';
+import '../lib/src/persistence/storage.dart';
+import '../lib/src/shared/savegame.dart';
+import '../lib/src/shared/user_interaction.dart';
+import '../lib/builder.dart';
 
 class MockInterface implements EgbInterface {
   Queue<int> choicesToBeTaken;

@@ -1,7 +1,7 @@
 library Reference_Scripter_Implementation;
 
 import 'dart:math';
-import 'egb_library.dart';
+import 'egb_scripter.dart';
 
 class A {
   int i;
@@ -16,7 +16,7 @@ class ScripterImpl extends EgbScripter {
   }
 
   ScripterImpl() : super() {
-    pageMap = EgbScripterPageMap();
+    pageMap = new EgbScripterPageMap();
     pageMap[r"""handle"""] = new EgbScripterPage(
         [
          """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
@@ -77,7 +77,7 @@ since you opened your eyes. """);
           {
             "string": () => """Wait another second, even though it's $time""",
             "goto": r"""getGun""",
-            "script": () { time++ }
+            "script": () { time++; }
           }  
         ],
         {

@@ -2,9 +2,9 @@ library egb_interface;
 
 import 'dart:async';
 import 'dart:isolate';
-import 'egb_library.dart';
 
-import 'egb_savegame.dart';
+import '../shared/user_interaction.dart';
+import '../shared/savegame.dart';
 
 abstract class EgbInterface {
   ReceivePort _receivePort;
