@@ -2,10 +2,10 @@
 .project
 .children
 pubspec.lock
-books/library/*.js
-books/library/*.js.map
-books/library/*.html
-books/library/*.graphml
+books/tis/*.js
+books/tis/*.js.map
+books/tis/*.html
+books/tis/*.graphml
 books/test/*.js
 books/test/*.js.map
 books/test/*.js.deps

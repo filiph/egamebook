@@ -10,6 +10,9 @@ import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
 import '../shared/page.dart';
 
+import '../persistence/saveable.dart';
+export '../persistence/saveable.dart';
+
 part 'scripter_page.dart';
 
 
@@ -18,23 +21,23 @@ part 'scripter_page.dart';
  * together at the end of a block and send them to the Runner (and therefore,
  * the player).
  */
-StringBuffer _textBuffer;
+StringBuffer textBuffer = new StringBuffer();
 
 /**
  * The top level function that can be called from script blocks or library
  * functions.
  */
 void echo(String str) {
-  if (_textBuffer.length > 0) {
-    _textBuffer.add(" ");  // Implicitly add space between each echo().
+  if (textBuffer.length > 0) {
+    textBuffer.add(" ");  // Implicitly add space between each echo().
   }
-  _textBuffer.add(str);
+  textBuffer.add(str);
 }
 
 /**
  * List of choices to be shown to the player.
  */
-EgbChoiceList choices;
+EgbChoiceList choices= new EgbChoiceList();
 
 /**
  * Utility shortcut for creating new choices.
@@ -50,7 +53,7 @@ EgbChoice choice(String string, [String goto, Function script, bool showNow=true
  * by [:var["name"]:], but thanks to noSuchMethod override, 
  * also by just [:name:] (not in libraries, though).
  */
-Map<String, dynamic> vars;
+Map<String, dynamic> vars = new Map<String, dynamic>();
 
 /**
  * The current block should be repeated after its execution.
@@ -269,8 +272,8 @@ abstract class EgbScripter {
   }
 
   void _initScriptEnvironment() {
-    choices = new EgbChoiceList();
-    vars = new Map<String, dynamic>();
+    choices.clear();
+    vars.clear();
 
     initBlock(); // run contents of <init>
   }
@@ -315,7 +318,7 @@ abstract class EgbScripter {
   // runs the current block or the specified block
   EgbMessage _runScriptBlock({Function script}) {
     // clean up
-    _textBuffer = new StringBuffer();
+    textBuffer.clear();
     // delete choices that have already been shown
     choices = new EgbChoiceList.from(
         choices.where((choice) => !choice.shown)
@@ -331,10 +334,10 @@ abstract class EgbScripter {
     // catch text and choices
     if (choices.any((choice) => !choice.waitForEndOfPage)) {
       return choices.toMessage(
-          prependText: _textBuffer.toString(),
+          prependText: textBuffer.toString(),
           filterOut: _leadsToIllegalPage);
     }
-    return new EgbMessage.TextResult(_textBuffer.toString());
+    return new EgbMessage.TextResult(textBuffer.toString());
   }
 
   /**
