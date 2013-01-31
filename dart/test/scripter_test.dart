@@ -8,7 +8,7 @@ import 'dart:isolate';
 import '../lib/src/interface/interface.dart';
 import '../lib/src/runner.dart';
 import '../lib/src/persistence/storage.dart';
-import '../lib/src/shared/savegame.dart';
+import '../lib/src/persistence/savegame.dart';
 import '../lib/src/shared/user_interaction.dart';
 import '../lib/builder.dart';
 

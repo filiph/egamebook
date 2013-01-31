@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'interface.dart';
-import '../shared/savegame.dart';
+import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 
 // because we're defining localStorage here

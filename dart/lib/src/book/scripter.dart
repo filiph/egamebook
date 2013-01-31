@@ -7,7 +7,7 @@ import 'dart:json';
 import '../shared/utils.dart';
 import '../shared/message.dart';
 import '../shared/user_interaction.dart';
-import '../shared/savegame.dart';
+import '../persistence/savegame.dart';
 import '../shared/page.dart';
 
 part 'scripter_page.dart';

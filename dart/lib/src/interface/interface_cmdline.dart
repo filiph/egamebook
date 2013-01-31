@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'interface.dart';
-import '../shared/savegame.dart';
+import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 
 class CmdlineInterface implements EgbInterface {

@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import '../shared/user_interaction.dart';
-import '../shared/savegame.dart';
+import '../persistence/savegame.dart';
 
 abstract class EgbInterface {
   ReceivePort _receivePort;

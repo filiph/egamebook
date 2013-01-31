@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'dart:async';
 import 'dart:json';
 
-import '../shared/savegame.dart';
+import 'savegame.dart';
 import 'storage.dart';
 
 /**
