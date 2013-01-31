@@ -3,6 +3,8 @@ library Scripter_Implementation;
 import '../../lib/src/book/scripter.dart';
 import 'dart:math';
 
+import '../libraries/timeline.dart';
+
 // Just a mock before this gets implemented
 class Points {
   int points = 0;
@@ -11,29 +13,6 @@ class Points {
   }
 }
 
-// TODO Timeline class
-
-class TimedEvent {
-  int time;
-  int priority = 0;
-  Function f;
-  TimedEvent(this.time, this.f);
-}
-
-class Timeline {
-  int time = 0;
-  Function mainLoop = () {};
-  bool _mainLoopRanThisTick = false;
-  Function afterEachEvent = () {};
-  Set<TimedEvent> events;
-  bool finished = false;
-
-  void update() {
-    // TODO: go through mainLoop, then all events (by priority) for given time
-    // TODO: when that is done, go to next time
-    // TODO: caller should check for finished after each closure run - if not finished, run again 
-  }
-}
 
 class ScripterImpl extends EgbScripter {
 
@@ -52,6 +31,10 @@ class ScripterImpl extends EgbScripter {
           """The first death is that of Captain Kay. He was the second last surviving crew member on The Bodega. The ship used to carry twelve people. Now, it's only you. (Well, almost. But we'll get to that later.) """,
           """The funeral looks like this: You are standing in front of the airlock. Through the porthole, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, Captain Kay will be sucked out into space. This is how funerals work here on The Bodega. """,
           """The inner door, through which you're watching, is safely closed and sealed. The only thing that remains is to pull the lever.""",
+          () {
+echo("Hi.");
+outerspace.elapse();
+        },
           [
             null,
           {
@@ -95,6 +78,9 @@ pulledLever = false;
       [
           """Captain Kay was a great man. He was confident and direct – important traits in a captain. He also had a knack for hands-on engineering, which made him especially dear to you. You enjoyed spending a time with him in the engine room, poking into machinery together and setting up circuits in ingenious and clever ways. It always worked in the end, largely thanks to him.""",
           """While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.""",
+          () {
+outerspace.elapse();
+        },
           [
             null,
           {
@@ -132,6 +118,9 @@ pulledLever = false;
     pageMap[r"""Start: Ship says"""] = new EgbScripterPage(
       [
           """"To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge." """,
+          () {
+outerspace.elapse();
+        },
           [
             () => """What do you reply?""",
           {
@@ -168,6 +157,9 @@ pulledLever = false;
     );
     pageMap[r"""Bridge: Gorilla incident"""] = new EgbScripterPage(
       [
+          () {
+outerspace.elapse();
+        },
           """## The Gorilla""",
           """There really is a gorilla on the bridge. But it isn't touching any of the electronics, let alone the control panel. It just sits there on the floor, full of melancholy, looking out the window on the stars. When you enter, it slowly turns to you and pushes out its huge lower lip. """,
           """It's your Enhanced Gorilla. They are used throughout the system for hard manual labor. Their intelligence is improved artificially -- they can understand basic spoken commands and they even have the ability to communicate back via sign language. A very limited kind of sign language, of course, with their vocabulary consisting mainly of the words "food", "sleep" and "want". But people don't need Enhanced Gorillas to be eloquent. They need them to lift and push and sometimes smash. _Your_ gorilla mostly carries extremely heavy fuel cells back and forth. """,
@@ -468,6 +460,10 @@ points.add(10, "space combat");
   void initBlock() {
 
     points = new Points();
+    outerspace = new Timeline();
+    outerspace.mainLoop = (_) => echo("The space is silent.");
+    outerspace.events.add(new TimedEvent(2, "A huge supernova just exploded somewhere."));
+    
 
   }
 }

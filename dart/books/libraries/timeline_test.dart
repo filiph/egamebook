@@ -35,4 +35,6 @@ void main() {
     expect(str, contains("Closure event."));
     expect(str, contains("Bim. Bam."));
   });
+  
+  // TODO: persistence
 }

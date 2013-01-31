@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:args/args.dart';
-import '../lib/egb_builder.dart';
+import '../lib/builder.dart';
 
 bool graphInput, graphOutput, compile;
 

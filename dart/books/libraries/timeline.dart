@@ -58,7 +58,7 @@ class Timeline implements Saveable {
     events = new Set<TimedEvent>();
   }
 
-  toMap() => {"time": time};
+  toMap() => {"time": time, "_class": "Timeline"};
   updateFromMap(map) => time = map["time"];
   
   bool goOneTick() {

@@ -2,6 +2,8 @@ Title:		The Bodega Incident
 Author:		Filip Hracek
 
 <classes>
+import '../libraries/timeline.dart';
+
 // Just a mock before this gets implemented
 class Points {
   int points = 0;
@@ -15,6 +17,12 @@ class Points {
 points = new Points();
 </variables>
 
+<variables>
+outerspace = new Timeline();
+outerspace.mainLoop = (_) => echo("The space is silent.");
+outerspace.events.add(new TimedEvent(2, "A huge supernova just exploded somewhere."));
+
+</variables>
 
 # The Bodega Incident
 
@@ -30,6 +38,11 @@ The first death is that of Captain Kay. He was the second last surviving crew me
 The funeral looks like this: You are standing in front of the airlock. Through the porthole, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, Captain Kay will be sucked out into space. This is how funerals work here on The Bodega. 
 
 The inner door, through which you're watching, is safely closed and sealed. The only thing that remains is to pull the lever.
+
+<script>
+echo("Hi.");
+outerspace.elapse();
+</script>
 
 - Pull the lever [Start: Pull]
 - Leave the body there [Start: Leave body]
@@ -65,6 +78,10 @@ Captain Kay was a great man. He was confident and direct – important traits in
 
 While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.
 
+<script>
+outerspace.elapse();
+</script>
+
 - Ignore it [Ignore]
 - Pick it up [Pick it up]
 
@@ -93,6 +110,10 @@ Start: Ship says
 
 "To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge."
 
+<script>
+outerspace.elapse();
+</script>
+
 What do you reply?
 - "I'm coming." [Coming]
 - "Can't this wait? There is a funeral going on, you know." [Can't this wait?]
@@ -113,6 +134,10 @@ You give Captain Kay's ${pulledLever ? "receding" : ""} body the last glance, an
 
 ---
 Bridge: Gorilla incident
+
+<script>
+outerspace.elapse();
+</script>
 
 ## The Gorilla
 
@@ -251,32 +276,6 @@ Then he looks up, sees you on the screen, and stops abruptly.
 "Oh!"
 
 Gorilla, which has been silently sitting on the ground to your left until now, starts hissing through clenched teeth, eyes wide open. It rocks back and forth, visibly disturbed. The pilot begins to frantically push some buttons on the panel in front of him.
-
-<classes>
-// TODO Timeline class
-
-class TimedEvent {
-  int time;
-  int priority = 0;
-  Function f;
-  TimedEvent(this.time, this.f);
-}
-
-class Timeline {
-  int time = 0;
-  Function mainLoop = () {};
-  bool _mainLoopRanThisTick = false;
-  Function afterEachEvent = () {};
-  Set<TimedEvent> events;
-  bool finished = false;
-
-  void update() {
-    // TODO: go through mainLoop, then all events (by priority) for given time
-    // TODO: when that is done, go to next time
-    // TODO: caller should check for finished after each closure run - if not finished, run again 
-  }
-}
-</classes>
 
 <functions>
 bool randomWithProbability(num p) => (new Random()).nextDouble() < p;
