@@ -3,6 +3,7 @@ library egb_savegame;
 import 'dart:json';
 
 import '../shared/message.dart';
+import 'saveable.dart';
 
 /**
  * Savegame stores information of one point in time of the gameplay. This
@@ -103,6 +104,8 @@ class EgbSavegame {
   }
   
   static bool _isCustomSaveableClass(dynamic variable) {
+    // return variable is Saveable; // <- this doesn't work
+    
     // The below is an ugly way to check for saveable-ness without
     // the need of full scale mirroring.
     bool customClassSaveable;
