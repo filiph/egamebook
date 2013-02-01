@@ -12,6 +12,8 @@ class TimedEvent {
   final int priority;
   EventClosure f;
   String text;
+  
+  // TODO named constructors for closure vs mainloop vs string
   TimedEvent(this.time, dynamic action, {this.priority: 0}) {
     if (time == null || action == null || priority == null) {
       throw new ArgumentError("Timed event needs to have time, closure "
@@ -60,6 +62,9 @@ class Timeline implements Saveable {
 
   toMap() => {"time": time, "_class": "Timeline"};
   updateFromMap(map) => time = map["time"];
+  
+  // TODO add event
+  // TODO mainLoop = just another event, but with null time => priority!
   
   bool goOneTick() {
     var canContinue;

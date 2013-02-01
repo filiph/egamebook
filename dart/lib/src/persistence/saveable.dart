@@ -5,6 +5,9 @@ abstract class Saveable {
    * When serializing a custom class and when it's Saveable, the Scripter
    * will call this method to get a Map describing this instance. The class
    * should be able to recreate its state from this Map.
+   * 
+   * The Map **needs** to include the key [:_class:] with a String value
+   * of the name of the class. 
    */
   Map<String,dynamic> toMap();
   
