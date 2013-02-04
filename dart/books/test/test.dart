@@ -33,7 +33,7 @@ class ScripterImpl extends EgbScripter {
           """The inner door, through which you're watching, is safely closed and sealed. The only thing that remains is to pull the lever.""",
           () {
 echo("Hi.");
-outerspace.elapse();
+outerspace.time++;
         },
           [
             null,
@@ -79,7 +79,7 @@ pulledLever = false;
           """Captain Kay was a great man. He was confident and direct – important traits in a captain. He also had a knack for hands-on engineering, which made him especially dear to you. You enjoyed spending a time with him in the engine room, poking into machinery together and setting up circuits in ingenious and clever ways. It always worked in the end, largely thanks to him.""",
           """While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.""",
           () {
-outerspace.elapse();
+outerspace.time++;
         },
           [
             null,
@@ -119,7 +119,7 @@ outerspace.elapse();
       [
           """"To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge." """,
           () {
-outerspace.elapse();
+outerspace.time++;
         },
           [
             () => """What do you reply?""",
@@ -460,6 +460,7 @@ points.add(10, "space combat");
   void initBlock() {
 
     points = new Points();
+    print("Vars");
     outerspace = new Timeline();
     outerspace.mainLoop = (_) => echo("The space is silent.");
     outerspace.events.add(new TimedEvent(2, "A huge supernova just exploded somewhere."));

@@ -18,6 +18,7 @@ points = new Points();
 </variables>
 
 <variables>
+print("Vars");
 outerspace = new Timeline();
 outerspace.mainLoop = (_) => echo("The space is silent.");
 outerspace.events.add(new TimedEvent(2, "A huge supernova just exploded somewhere."));
@@ -41,7 +42,7 @@ The inner door, through which you're watching, is safely closed and sealed. The 
 
 <script>
 echo("Hi.");
-outerspace.elapse();
+outerspace.time++;
 </script>
 
 - Pull the lever [Start: Pull]
@@ -79,7 +80,7 @@ Captain Kay was a great man. He was confident and direct – important traits in
 While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.
 
 <script>
-outerspace.elapse();
+outerspace.time++;
 </script>
 
 - Ignore it [Ignore]
@@ -111,7 +112,7 @@ Start: Ship says
 "To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge."
 
 <script>
-outerspace.elapse();
+outerspace.time++;
 </script>
 
 What do you reply?

@@ -49,7 +49,14 @@ class TimedEvent {
  * defined in the [:<variables>:] block. 
  */
 class Timeline implements Saveable {
-  int time;
+  int _time = -1;
+  
+  int get time => _time;
+  set time(value) {
+    if (_time == null) _time = -1;
+    if (value < _time) throw new ArgumentError("Cannot go back in time.");
+    elapse(value - _time);
+  }
   
   EventClosure mainLoop;
   Set<TimedEvent> events;
@@ -60,20 +67,20 @@ class Timeline implements Saveable {
     events = new Set<TimedEvent>();
   }
 
-  toMap() => {"time": time, "_class": "Timeline"};
-  updateFromMap(map) => time = map["time"];
+  toMap() => {"time": _time, "_class": "Timeline"};
+  updateFromMap(map) => _time = map["time"];
   
   // TODO add event
   // TODO mainLoop = just another event, but with null time => priority!
   
-  bool goOneTick() {
+  bool _goOneTick() {
     var canContinue;
     if (mainLoop != null) {
       canContinue = mainLoop(this);
     }
     if (canContinue != null && !canContinue) return false;
     
-    List<TimedEvent> currentEvents = events.where((ev) => ev.time == time)
+    List<TimedEvent> currentEvents = events.where((ev) => ev.time == _time)
                                       .toList();
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
@@ -88,10 +95,10 @@ class Timeline implements Saveable {
    */
   void elapse([int t = 1]) {
     if (finished) return;
-    if (time == null) time = -1;
+    if (_time == null) _time = -1;
     for (int i = 0; i < t; i++) {
-      time += 1;
-      var canContinue = goOneTick();
+      _time += 1;
+      var canContinue = _goOneTick();
       if (!canContinue) {
         finished = true;
         break;
