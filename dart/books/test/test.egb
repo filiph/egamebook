@@ -1,9 +1,9 @@
 Title:		The Bodega Incident
 Author:		Filip Hracek
 
-<classes>
-import '../libraries/timeline.dart';
+<import '../libraries/timeline.dart'/>
 
+<classes>
 // Just a mock before this gets implemented
 class Points {
   int points = 0;

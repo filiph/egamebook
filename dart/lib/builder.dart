@@ -269,8 +269,8 @@ class Builder {
     pages = new List<BuilderPage>();
     pageHandles = new Map<String,int>();
     initBlocks = new List<BuilderInitBlock>();
-    importEgbFiles = new List<File>();
-    importEgbFilesFullPaths = new Set<String>();
+    importLibFiles = new List<File>();
+    importLibFilesFullPaths = new Set<String>();
 
     warningLines = new List<String>();
   }
@@ -859,13 +859,14 @@ class Builder {
     if (m != null) {
       _closeLastBlock(number - 1);
       var importFilePath = m.group(1);
-      importFilePath = importFilePath.substring(1, importFilePath.length - 1); //get rid of "" / ''
+      // Get rid of enclosing "" / ''.
+      importFilePath = importFilePath.substring(1, importFilePath.length - 1); 
 
       var inputFilePath = new Path(inputEgbFileFullPath);
       var pathToImport = inputFilePath.directoryPath
             .join(new Path(importFilePath));
 
-      importEgbFiles.add(new File.fromPath(pathToImport));
+      importLibFiles.add(new File.fromPath(pathToImport));
       completer.complete(true);
     } else {
       completer.complete(false);
@@ -939,39 +940,40 @@ class Builder {
     List<Future<bool>> existsFutures = new List<Future<bool>>();
     List<Future<String>> fullPathFutures = new List<Future<String>>();
 
-    for (File f in importEgbFiles) {
+    for (File f in importLibFiles) {
       existsFutures.add(f.exists());
       fullPathFutures.add(f.fullPath());
     }
 
     Future.wait(existsFutures)
     .then((List<bool> existsBools) {
-      assert(existsBools.length == importEgbFiles.length);
+      assert(existsBools.length == importLibFiles.length);
 
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           completer.completeError(
               new FileIOException("Source file tries to import a file that "
-                    "doesn't exist (${importEgbFiles[i].name})."));
+                    "doesn't exist (${importLibFiles[i].name})."));
         }
       }
 
       Future.wait(fullPathFutures)
       .then((List<String> fullPaths) {
-        assert(fullPaths.length == importEgbFiles.length);
+        assert(fullPaths.length == importLibFiles.length);
 
+        importLibFilesFullPaths = new Set.from(fullPaths);
         for (int i = 0; i < fullPaths.length; i++) {
           for (int j = 0; j < i; j++) {
             if (fullPaths[i] == fullPaths[j]) {
-              WARNING("File '${fullPaths[i]}' has already been imported. Ignoring "
-                      "the redundant <import> tag.");
-              importEgbFiles[i] = null;
+              WARNING("File '${fullPaths[i]}' has already been imported. "
+                      "Ignoring the redundant <import> tag.");
+              importLibFiles[i] = null;
             }
           }
         }
 
         // delete the nulls
-        importEgbFiles = importEgbFiles.where((f) => f != null).toList();
+        importLibFiles = importLibFiles.where((f) => f != null).toList();
         completer.complete(true);
       });
     });
@@ -999,8 +1001,8 @@ class Builder {
   // input file given by readFile()
   File inputEgbFile;
   String inputEgbFileFullPath;
-  List<File> importEgbFiles;
-  Set<String> importEgbFilesFullPaths;
+  List<File> importLibFiles;
+  Set<String> importLibFilesFullPaths;
 
   List<BuilderMetadata> metadata;
   bool _newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
@@ -1087,6 +1089,7 @@ class Builder {
     File dartFile = new File.fromPath(pathToOutputDart);
     OutputStream dartOutStream = dartFile.openOutputStream();
     dartOutStream.writeString(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+    _writeLibImports(dartOutStream);
     writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
     .then((_) {
       dartOutStream.writeString(implStartClass);
@@ -1119,6 +1122,15 @@ class Builder {
     });
 
     return completer.future;
+  }
+
+  _writeLibImports(OutputStream dartOutStream) {
+    if (importLibFilesFullPaths == null) throw "importLibFilesFullPaths cannot "
+                                               "be null.";
+    dartOutStream.writeString("\n");
+    for (var path in importLibFilesFullPaths) {
+      dartOutStream.writeString("import '$path';\n");
+    }
   }
 
   /**
@@ -1226,8 +1238,6 @@ class Builder {
   Future<bool> writeInitBlocks(OutputStream dartOutStream, int initBlockType,
                          {int indent: 0}) {
     var completer = new Completer();
-
-    // TODO: copy <import> classes first
 
     copyLineRanges(
         initBlocks.where((block) => block.type == initBlockType).toList(),

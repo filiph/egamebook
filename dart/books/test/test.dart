@@ -2,8 +2,7 @@ library Scripter_Implementation;
 
 import '../../lib/src/book/scripter.dart';
 import 'dart:math';
-
-import '../libraries/timeline.dart';
+import '/Users/filiph/Programs/egamebook/dart/books/libraries/timeline.dart';
 
 // Just a mock before this gets implemented
 class Points {

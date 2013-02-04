@@ -473,12 +473,12 @@ void main() {
     });
 
     group('import', () {
-
+      // TODO: proper unit testing of new import 'something.dart'
       test("is detected", () {
         var callback = expectAsync1((var b) {
-          expect(b.importEgbFiles,
+          expect(b.importLibFiles,
             hasLength(1));
-          expect(b.importEgbFiles[0].name,
+          expect(b.importLibFiles[0].name,
             endsWith("library_simple_all_tags.egb"));
         });
         new Builder().readEgbFile(new File(getPath("import_1tag.egb"))).then(callback);
@@ -486,11 +486,11 @@ void main() {
 
       test("is detected with redundancies covered", () {
         var callback = expectAsync1((var b) {
-          expect(b.importEgbFiles,
+          expect(b.importLibFiles,
             hasLength(2));
-          expect(b.importEgbFiles[0].name,
+          expect(b.importLibFiles[0].name,
             endsWith("library_simple_all_tags.egb"));
-          expect(b.importEgbFiles[1].name,
+          expect(b.importLibFiles[1].name,
             endsWith("library_simple_all_tags2.egb"));
           expect(b.pages[1].name,
             "squash");  // making sure we're not breaking something else
