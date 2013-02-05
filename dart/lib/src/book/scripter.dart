@@ -3,6 +3,7 @@ library egb_scripter;
 
 import 'dart:isolate';
 import 'dart:json';
+import 'dart:collection';
 
 import '../shared/utils.dart';
 import '../shared/message.dart';
@@ -197,6 +198,8 @@ abstract class EgbScripter {
   // Walks through the instructions, one block at a time.
   // Returns message for interface.
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
+    
+    // TODO move this part to _messageRecieveCallback
     if (incomingMessage.type == EgbMessage.MSG_START ||
         incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
       currentBlockIndex = null;
@@ -207,7 +210,6 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting new game from scratch.");
-      _points.clear();
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
@@ -216,6 +218,11 @@ abstract class EgbScripter {
       _loadFromSaveGameMessage(incomingMessage);
     }
 
+    if (!_points.pointsAwards.isEmpty) {
+      var award = _points.pointsAwards.removeFirst();
+      return new EgbMessage.PointsAward(award.points, award.justification);
+    }
+    
     if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
       DEBUG_SCR("An option has been selected. Resolving.");
       EgbMessage message;
@@ -315,9 +322,8 @@ abstract class EgbScripter {
       // a script paragraph
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
     }
-
   }
-
+  
   void _initScriptEnvironment() {
     choices.clear();
     vars.clear();

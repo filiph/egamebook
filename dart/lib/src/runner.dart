@@ -125,6 +125,16 @@ class EgbRunner {
         DEBUG_CMD("No visible result. Continuing.");
         _scripterPort.send(new EgbMessage.Continue().toJson(), 
             _receivePort.toSendPort());
+      } else if (message.type == EgbMessage.MSG_POINTS_AWARD) {
+        var text;
+        if (message.strContent != null) {
+          text = "+${message.intContent} points for ${message.strContent}";
+        } else {
+          text = "+${message.intContent} points";
+        }
+        _interface.showText(text);
+        _scripterPort.send(new EgbMessage.Continue().toJson(), 
+            _receivePort.toSendPort());
       } else if (message.type == EgbMessage.MSG_SHOW_CHOICES) {
         DEBUG_CMD("We have choices to show!");
         

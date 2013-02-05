@@ -24,6 +24,7 @@ class EgbMessage {
   static final int MSG_LOAD_GAME = 1024;
   static final int MSG_GET_BOOK_UID = 2048;
   static final int MSG_SEND_BOOK_UID = 4096;
+  static final int MSG_POINTS_AWARD = 8192;
 
   EgbMessage(this.type) {
   }
@@ -56,6 +57,13 @@ class EgbMessage {
   
   EgbMessage.LoadGame(String json) : type = MSG_LOAD_GAME {
     strContent = json;
+  }
+  
+  EgbMessage.PointsAward(int points, String justification) 
+      : type = MSG_POINTS_AWARD {
+    if (points == null) throw new ArgumentError("points cannot be null.");
+    intContent = points;
+    strContent = justification;
   }
 
   /**
