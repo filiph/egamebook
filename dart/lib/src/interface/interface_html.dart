@@ -62,20 +62,23 @@ class HtmlInterface implements EgbInterface {
   Future<int> showChoices(EgbChoiceList choiceList) {
     var completer = new Completer();
     
+    var choicesDiv = new DivElement();
+    choicesDiv.classes.add("choices-div");
+    if (_currentSavegame != null) {
+      choicesDiv.dataAttributes["savegame-uid"] = _currentSavegame.uid;
+      _currentSavegame = null;
+      choicesDiv.classes.add("savegame");
+    }
+    
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
       choicesQuestionP.innerHtml = choiceList.question;
       choicesQuestionP.classes.add("choices-question");
-      bookDiv.children.add(choicesQuestionP);
+      choicesDiv.children.add(choicesQuestionP);
     }
     
     OListElement choicesOl = new OListElement();
-    choicesOl.classes.add("choices");
-    if (_currentSavegame != null) {
-      choicesOl.dataAttributes["savegame-uid"] = _currentSavegame.uid;
-      _currentSavegame = null;
-      choicesOl.classes.add("savegame");
-    }
+    choicesOl.classes.add("choices-ol");
     
     // let player choose
     for (int i = 0; i < choiceList.length; i++) {
@@ -90,7 +93,7 @@ class HtmlInterface implements EgbInterface {
           // Mark this element as chosen.
           li.classes.add("chosen");
           
-          _makeIntoBookmark(choicesOl);
+          _makeIntoBookmark(choicesDiv);
           ev.stopPropagation();  // Prevent event from immediately propagating
                                  // to the enclosing choicesOl (thus trying to
                                  // fire a LoadIntent).
@@ -100,42 +103,39 @@ class HtmlInterface implements EgbInterface {
       choicesOl.append(li);
     }
     
-    bookDiv.append(choicesOl);
+    choicesDiv.append(choicesOl);
+    
+    bookDiv.append(choicesDiv);
     
     return completer.future;
   }
   
   /**
-   * Makes choices in ordered list [choicesOl] unclickable (removes <a> tags).
+   * Makes choices in ordered list [choicesDiv] unclickable (removes <a> tags).
    * When the element has [:savegame-uid:] data attribute set, then the list
    * becomes a "bookmark" - saved state can be loaded by clicking on it.
    */
-  void _makeIntoBookmark(OListElement choicesOl) {
-    choicesOl.classes.add("past");
+  void _makeIntoBookmark(DivElement choicesDiv) {
+    choicesDiv.classes.add("past");
     // Remove <a> tags from all choices.
-    choicesOl.children.forEach((LIElement el) {
+    choicesDiv.query("ol.choices-ol").children.forEach((LIElement el) {
       var string = el.query("a").innerHtml;
       el.children.clear();
       el.innerHtml = string;
     });
-    if (choicesOl.dataAttributes.containsKey("savegame-uid")) {
-      String uid = choicesOl.dataAttributes["savegame-uid"];
+    if (choicesDiv.dataAttributes.containsKey("savegame-uid")) {
+      String uid = choicesDiv.dataAttributes["savegame-uid"];
       // Make possible to come back to the associated savegame.
-      choicesOl.onClick
-      //.skip(1)  // The first fired event is actually the click on the <a> tag.
+      choicesDiv.onClick
       .listen((Event ev) {
         // TODO: make more elegant, with confirmation appearing on page
         var confirm = window.confirm("Are you sure you want to come back to "
                         "this decision ($uid) and lose your progress since?");
         if (confirm) {
-          var prevEl = choicesOl.previousElementSibling;
-          if (prevEl != null && prevEl.classes.contains("choices-question")) {
-            prevEl.remove();
+          while (choicesDiv.nextElementSibling != null) {
+            choicesDiv.nextElementSibling.remove();
           }
-          while (choicesOl.nextElementSibling != null) {
-            choicesOl.nextElementSibling.remove();
-          }
-          choicesOl.remove();
+          choicesDiv.remove();
          
           _streamController.sink.add(
                         new LoadIntent(uid));
