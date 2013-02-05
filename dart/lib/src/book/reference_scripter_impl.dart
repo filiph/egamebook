@@ -1,7 +1,7 @@
 library Reference_Scripter_Implementation;
 
 import 'dart:math';
-import 'egb_scripter.dart';
+import 'scripter.dart';
 
 class A {
   int i;
