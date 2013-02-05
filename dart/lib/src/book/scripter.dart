@@ -14,7 +14,7 @@ import '../persistence/saveable.dart';
 export '../persistence/saveable.dart';
 
 part 'scripter_page.dart';
-
+part 'points.dart';
 
 /**
  * The StringBuffer which collects all echo()'d strings to put them all
@@ -42,9 +42,16 @@ void echo(String str) {
 bool _pointsEmbargo = false;
 
 /**
+ * The interface with which the author can award player with points. Author
+ * can either use [:points += 6:] or [:points.add(6):] or - in case he
+ * wants to add a justification - [:points.add(6, "clever use of resources"):].
+ */
+PointsCounter _points = new PointsCounter();
+
+/**
  * List of choices to be shown to the player.
  */
-EgbChoiceList choices= new EgbChoiceList();
+EgbChoiceList choices = new EgbChoiceList();
 
 /**
  * Utility shortcut for creating new choices.
@@ -200,6 +207,7 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting new game from scratch.");
+      _points.clear();
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
@@ -313,6 +321,8 @@ abstract class EgbScripter {
   void _initScriptEnvironment() {
     choices.clear();
     vars.clear();
+    vars["points"] = _points;
+    _points.clear();
 
     initBlock(); // run contents of <init>
   }
