@@ -3,19 +3,7 @@ Author:		Filip Hracek
 
 <import '../libraries/timeline.dart'/>
 
-<classes>
-// Just a mock before this gets implemented
-class Points {
-  int points = 0;
-  void add(int value, [String text]) {
-    points += value;
-  }
-}
 
-</classes>
-<variables>
-points = new Points();
-</variables>
 
 <variables>
 print("Vars");
@@ -42,7 +30,7 @@ The inner door, through which you're watching, is safely closed and sealed. The 
 
 <script>
 echo("Hi.");
-outerspace.time++;
+points += 6;
 </script>
 
 - Pull the lever [Start: Pull]
