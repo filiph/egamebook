@@ -35,6 +35,13 @@ void echo(String str) {
 }
 
 /**
+ * While set to true, no points will actually be added. This is set (and unset)
+ * automatically when player picks a choice that he has previously seen
+ * but didn't pick. (No points for second guessing.)
+ */
+bool _pointsEmbargo = false;
+
+/**
  * List of choices to be shown to the player.
  */
 EgbChoiceList choices= new EgbChoiceList();
@@ -82,6 +89,22 @@ abstract class EgbScripter {
   EgbScripterPage firstPage;
   EgbScripterPage currentPage;
   EgbScripterPage _nextPage;
+  
+  /// Goto links (page1 -> page 2) that have been shown to the player, but
+  /// not picked. Links are represented by hashes created by
+  /// [_createLinkHash].
+  /// This is important for the  "No points for second guessing" rule.
+  Set<String> gotoLinksNotPicked;
+  
+  /// Create a unique hash that identifies a path from one page to another.
+  String _createLinkHash(EgbScripterPage from, EgbScripterPage to) =>
+      "${from.name}>>${to.name}";  // TODO: make this better
+      
+  /// Checks whether this choice has already been presented to the player
+  /// but wasn't picked. This means we shouldn't add any points on this
+  /// page. (No points for second guessing.)
+  bool _wasNotPickedBefore(EgbScripterPage from, EgbScripterPage to) =>
+      gotoLinksNotPicked.contains(_createLinkHash(from, to));
 
   void initBlock();
 
@@ -137,6 +160,7 @@ abstract class EgbScripter {
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
     _nextScriptStack = new List<Function>();
+    gotoLinksNotPicked = new Set<String>();
     _initScriptEnvironment();
 
     // start the loop
@@ -189,12 +213,22 @@ abstract class EgbScripter {
       EgbMessage message;
       choices.forEach((choice) {
           if (choice.hash == incomingMessage.intContent) {
+            // This choice was taken.
             DEBUG_SCR("Found choice that was selected: ${choice.string}");
             if (choice.goto != null) {
               goto(choice.goto);
             }
             if (choice.f != null) {
               message = _runScriptBlock(script:choice.f);
+            }
+          } else {
+            // This choice was offered but not taken.
+            if (choice.goto != null) {
+              gotoLinksNotPicked.add(
+                  _createLinkHash(currentPage, 
+                      pageMap.getPage(
+                          choice.goto, 
+                          currentGroupName: currentPage.groupName)));
             }
           }
       });
@@ -213,6 +247,11 @@ abstract class EgbScripter {
 
     // if previous script asked to jump to a new page, then jump
     if (_nextPage != null) {
+      if (_wasNotPickedBefore(currentPage, _nextPage)) {
+        _pointsEmbargo = true;
+      } else {
+        _pointsEmbargo = false;
+      }
       currentPage = _nextPage;
       currentBlockIndex = null;
       _nextPage = null;

@@ -64,6 +64,7 @@ class EgbPlayerProfile {
   /// A queue of [savegame] [:uid:] fields. Make it easier to find the oldest
   /// or newest savegame, as well as sorting them. (Without resorting to sort
   /// by timestamp each time.)
+  /// Updated automatically on each save.
   Queue<String> savegamesChronology;
 
   /// Instance of Storage to use.
