@@ -210,6 +210,7 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting new game from scratch.");
+      gotoLinksNotPicked.clear();
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
