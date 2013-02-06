@@ -84,8 +84,11 @@ class EgbScripterPageMap {
   }
 
   /**
-   * Clears play state of the page map. Useful when restarting an egamebook
-   * from scratch.
+   * Clears play state of the page map. (Play state is the data that change
+   * while the egamebook is played by the player, e.g. the [visitCount]
+   * of every page. The actual texts and scripts stay.)
+   * 
+   * Useful when restarting an egamebook from scratch.
    */
   void clearState() {
     pages.forEach((name, page) {

@@ -95,6 +95,7 @@ abstract class EgbScripter {
 
   EgbScripterPageMap pageMap;
   EgbScripterPage firstPage;
+  EgbScripterPage previousPage;
   EgbScripterPage currentPage;
   EgbScripterPage _nextPage;
   
@@ -102,7 +103,7 @@ abstract class EgbScripter {
   /// not picked. Links are represented by hashes created by
   /// [_createLinkHash].
   /// This is important for the  "No points for second guessing" rule.
-  Set<String> gotoLinksNotPicked;
+  Set<String> _gotoLinksAlreadyOfferedDidNotVisit;
   
   /// Create a unique hash that identifies a path from one page to another.
   String _createLinkHash(EgbScripterPage from, EgbScripterPage to) =>
@@ -111,8 +112,8 @@ abstract class EgbScripter {
   /// Checks whether this choice has already been presented to the player
   /// but wasn't picked. This means we shouldn't add any points on this
   /// page. (No points for second guessing.)
-  bool _wasNotPickedBefore(EgbScripterPage from, EgbScripterPage to) =>
-      gotoLinksNotPicked.contains(_createLinkHash(from, to));
+  bool _alreadyOfferedDidNotVisit(EgbScripterPage from, EgbScripterPage to) =>
+      _gotoLinksAlreadyOfferedDidNotVisit.contains(_createLinkHash(from, to));
 
   void initBlock();
 
@@ -168,7 +169,7 @@ abstract class EgbScripter {
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
     _nextScriptStack = new List<Function>();
-    gotoLinksNotPicked = new Set<String>();
+    _gotoLinksAlreadyOfferedDidNotVisit = new Set<String>();
     _initScriptEnvironment();
 
     // start the loop
@@ -210,7 +211,7 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting new game from scratch.");
-      gotoLinksNotPicked.clear();
+      _gotoLinksAlreadyOfferedDidNotVisit.clear();
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
@@ -220,6 +221,7 @@ abstract class EgbScripter {
     }
 
     if (!_points.pointsAwards.isEmpty) {
+      // Send awarded points before continuing.
       var award = _points.pointsAwards.removeFirst();
       return new EgbMessage.PointsAward(award.points, award.justification);
     }
@@ -238,9 +240,12 @@ abstract class EgbScripter {
               message = _runScriptBlock(script:choice.f);
             }
           } else {
-            // This choice was offered but not taken.
+            // This choice was offered but not taken. Put into the
+            // _gotoLinksAlreadyOffered set. The selected choice will
+            // be put there after the player walked through the page till
+            // the end (otherwise, no points would ever be awarded).
             if (choice.goto != null) {
-              gotoLinksNotPicked.add(
+              _gotoLinksAlreadyOfferedDidNotVisit.add(
                   _createLinkHash(currentPage, 
                       pageMap.getPage(
                           choice.goto, 
@@ -263,11 +268,12 @@ abstract class EgbScripter {
 
     // if previous script asked to jump to a new page, then jump
     if (_nextPage != null) {
-      if (_wasNotPickedBefore(currentPage, _nextPage)) {
-        _pointsEmbargo = true;
-      } else {
-        _pointsEmbargo = false;
-      }
+      // Raise or lower the points embargo (no points for second-guessing,
+      // and no points for visiting for the second time). 
+      _pointsEmbargo = _alreadyOfferedDidNotVisit(currentPage, _nextPage) ||
+          _nextPage.visited;
+      
+      previousPage = currentPage;
       currentPage = _nextPage;
       currentBlockIndex = null;
       _nextPage = null;
