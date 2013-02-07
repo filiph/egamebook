@@ -103,7 +103,7 @@ abstract class EgbScripter {
   /// not picked. Links are represented by hashes created by
   /// [_createLinkHash].
   /// This is important for the  "No points for second guessing" rule.
-  Set<String> _gotoLinksAlreadyOfferedDidNotVisit;
+  Set<String> _gotoLinksAlreadyOffered;
   
   /// Create a unique hash that identifies a path from one page to another.
   String _createLinkHash(EgbScripterPage from, EgbScripterPage to) =>
@@ -112,8 +112,8 @@ abstract class EgbScripter {
   /// Checks whether this choice has already been presented to the player
   /// but wasn't picked. This means we shouldn't add any points on this
   /// page. (No points for second guessing.)
-  bool _alreadyOfferedDidNotVisit(EgbScripterPage from, EgbScripterPage to) =>
-      _gotoLinksAlreadyOfferedDidNotVisit.contains(_createLinkHash(from, to));
+  bool _alreadyOffered(EgbScripterPage from, EgbScripterPage to) =>
+      _gotoLinksAlreadyOffered.contains(_createLinkHash(from, to));
 
   void initBlock();
 
@@ -169,7 +169,7 @@ abstract class EgbScripter {
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
     _nextScriptStack = new List<Function>();
-    _gotoLinksAlreadyOfferedDidNotVisit = new Set<String>();
+    _gotoLinksAlreadyOffered = new Set<String>();
     _initScriptEnvironment();
 
     // start the loop
@@ -211,7 +211,7 @@ abstract class EgbScripter {
     }
     if (incomingMessage.type == EgbMessage.MSG_START) {
       DEBUG_SCR("Starting new game from scratch.");
-      _gotoLinksAlreadyOfferedDidNotVisit.clear();
+      _gotoLinksAlreadyOffered.clear();
       currentPage = firstPage;
     }
     if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
@@ -245,7 +245,7 @@ abstract class EgbScripter {
             // be put there after the player walked through the page till
             // the end (otherwise, no points would ever be awarded).
             if (choice.goto != null) {
-              _gotoLinksAlreadyOfferedDidNotVisit.add(
+              _gotoLinksAlreadyOffered.add(
                   _createLinkHash(currentPage, 
                       pageMap.getPage(
                           choice.goto, 
@@ -268,9 +268,27 @@ abstract class EgbScripter {
 
     // if previous script asked to jump to a new page, then jump
     if (_nextPage != null) {
+      if (previousPage != null) {
+        // Now that we're through this page, we should add the link that
+        // lead the player here. This will prevent the player from getting
+        // points twice (even from the PlayerChronology perspective).
+        // This is an acceptable punishment for loading.
+        // If this wasn't here:
+        //   - going back and choosing the same path would award the same points
+        //     (okay)
+        //   - going back and choosing different path would not award anything
+        //     (okay)
+        //   - going back again and choosing the old path would suddenly _not_
+        //     award any points (because the link is now among
+        //     _gotoLinksAlreadyOffered) (confusing)
+        _gotoLinksAlreadyOffered.add(
+            _createLinkHash(previousPage, currentPage));
+        // TODO: save previousPage in savegame!
+      }
+      
       // Raise or lower the points embargo (no points for second-guessing,
       // and no points for visiting for the second time). 
-      _pointsEmbargo = _alreadyOfferedDidNotVisit(currentPage, _nextPage) ||
+      _pointsEmbargo = _alreadyOffered(currentPage, _nextPage) ||
           _nextPage.visited;
       
       previousPage = currentPage;
