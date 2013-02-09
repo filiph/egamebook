@@ -10,21 +10,22 @@ class EgbMessage {
   String strContent;
   int intContent;
 
-  static const int QUIT = 0;
-  static const int CONTINUE = 1;  // 0b0001
-  static const int RESULT = 2;  // 0b0010
-  static const int TEXT_RESULT = 4;  // 0b0100
-  static const int INPUT_NEEDED = 8;
-  static const int START = 16;
-  static const int END_OF_BOOK = 32;
-  static const int SHOW_CHOICES = 64;
-  static const int OPTION_SELECTED = 128;
-  static const int NO_RESULT = 256;
-  static const int SAVE_GAME = 512;
-  static const int LOAD_GAME = 1024;
-  static const int GET_BOOK_UID = 2048;
-  static const int SEND_BOOK_UID = 4096;
-  static const int POINTS_AWARD = 8192;
+  // Messages from Scripter to Runner.
+  static const int SEND_BOOK_UID = 1;
+  static const int NO_RESULT = 2;
+  static const int TEXT_RESULT = 3;
+  static const int SHOW_CHOICES = 4;
+  static const int SAVE_GAME = 5;
+  static const int POINTS_AWARD = 6;
+  static const int END_OF_BOOK = 7;
+
+  // Messages from Runner to Scripter.
+  static const int GET_BOOK_UID = 64;
+  static const int START = 65;
+  static const int LOAD_GAME = 66;
+  static const int CONTINUE = 67;
+  static const int OPTION_SELECTED = 68;
+  static const int QUIT = 69;
 
   EgbMessage(this.type) {
   }
