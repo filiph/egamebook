@@ -10,21 +10,21 @@ class EgbMessage {
   String strContent;
   int intContent;
 
-  static final int MSG_QUIT = 0;
-  static final int MSG_CONTINUE = 1;  // 0b0001
-  static final int MSG_RESULT = 2;  // 0b0010
-  static final int MSG_TEXT_RESULT = 4;  // 0b0100
-  static final int MSG_INPUT_NEEDED = 8;
-  static final int MSG_START = 16;
-  static final int MSG_END_OF_BOOK = 32;
-  static final int MSG_SHOW_CHOICES = 64;
-  static final int MSG_OPTION_SELECTED = 128;
-  static final int MSG_NO_RESULT = 256;
-  static final int MSG_SAVE_GAME = 512;
-  static final int MSG_LOAD_GAME = 1024;
-  static final int MSG_GET_BOOK_UID = 2048;
-  static final int MSG_SEND_BOOK_UID = 4096;
-  static final int MSG_POINTS_AWARD = 8192;
+  static const int MSG_QUIT = 0;
+  static const int MSG_CONTINUE = 1;  // 0b0001
+  static const int MSG_RESULT = 2;  // 0b0010
+  static const int MSG_TEXT_RESULT = 4;  // 0b0100
+  static const int MSG_INPUT_NEEDED = 8;
+  static const int MSG_START = 16;
+  static const int MSG_END_OF_BOOK = 32;
+  static const int MSG_SHOW_CHOICES = 64;
+  static const int MSG_OPTION_SELECTED = 128;
+  static const int MSG_NO_RESULT = 256;
+  static const int MSG_SAVE_GAME = 512;
+  static const int MSG_LOAD_GAME = 1024;
+  static const int MSG_GET_BOOK_UID = 2048;
+  static const int MSG_SEND_BOOK_UID = 4096;
+  static const int MSG_POINTS_AWARD = 8192;
 
   EgbMessage(this.type) {
   }

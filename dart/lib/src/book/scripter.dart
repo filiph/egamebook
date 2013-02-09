@@ -175,89 +175,107 @@ abstract class EgbScripter {
     // start the loop
     port.receive(_messageReceiveCallback);
   }
+  
+  /**
+   * Utilify function [_send] sends message through the [_interfacePort] to the
+   * Runner.
+   */
+  _send(EgbMessage message) {
+    if (_interfacePort == null) throw new StateError("Cannot send message "
+                                             "when _interfacePort is null.");
+    _interfacePort.send(message.toJson(), port.toSendPort());
+  }
 
+  /**
+   * Called on receiving a message from Runner. Handles the message and replies
+   * when needed.
+   */
   void _messageReceiveCallback(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
     DEBUG_SCR("Received message from interface: ${message.type}.");
     _interfacePort = replyTo;
 
-    // TODO: make into switch
-    if (message.type == EgbMessage.MSG_QUIT) {
-      DEBUG_SCR("Closing port and quiting.");
-      port.close();
-    } else if (message.type == EgbMessage.MSG_GET_BOOK_UID) {
-      DEBUG_SCR("First contact from Runner. Reply with uid of this book.");
-      _interfacePort.send(
-          new EgbMessage.BookUid("DEFAULT_BOOK_UID").toJson(), // TODO: get UID from meta information
-          port.toSendPort());
+    switch (message.type) {
+      case EgbMessage.MSG_QUIT:
+        // Just close the book, no need to answer.
+        port.close();
+        return;
+      case EgbMessage.MSG_GET_BOOK_UID:
+        // Identify this egamebook by UID.
+        // TODO: get UID from meta information
+        _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID")); 
+        return;
+      case EgbMessage.MSG_OPTION_SELECTED:
+        _send(_handleOptionSelected(message));
+        return;
+      case EgbMessage.MSG_START:
+        currentBlockIndex = null;
+        _nextScriptStack.clear();
+        choices.clear();
+        _initScriptEnvironment();
+        pageMap.clearState();
+        _playerChronology.clear();
+        currentPage = firstPage;
+        break;
+      case EgbMessage.MSG_LOAD_GAME:
+        currentBlockIndex = null;
+        _nextScriptStack.clear();
+        choices.clear();
+        _initScriptEnvironment();
+        pageMap.clearState();
+        _loadFromSaveGameMessage(message);
+        break;
+    }
+    _send(_goOneStep(message));
+  }
+  
+  /**
+   * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
+   * Returns either EgbMessage.NoResult or an EgbMessage with the text that 
+   * the selected choice's inline script returned.
+   */
+  EgbMessage _handleOptionSelected(EgbMessage message) {
+    EgbMessage returnMessage;
+    choices.forEach((choice) {
+      if (choice.hash == message.intContent) {
+        // This choice was taken.
+        DEBUG_SCR("Found choice that was selected: ${choice.string}");
+        if (choice.goto != null) {
+          goto(choice.goto);
+        }
+        if (choice.f != null) {
+          returnMessage = _runScriptBlock(script:choice.f);
+        }
+      } else {
+        // This choice was offered but not taken. Put into the
+        // _gotoLinksAlreadyOffered set. The selected choice will
+        // be put there after the player walked through the page till
+        // the end (otherwise, no points would ever be awarded).
+        if (choice.goto != null) {
+          _playerChronology.add(
+              _createLinkHash(currentPage, 
+                  pageMap.getPage(
+                      choice.goto, 
+                      currentGroupName: currentPage.groupName)));
+        }
+      }
+    });
+    if (returnMessage != null) {
+      return returnMessage;
     } else {
-      _interfacePort.send(
-          _goOneStep(message).toJson(), port.toSendPort());
+      return new EgbMessage.NoResult();
     }
   }
 
-  // Walks through the instructions, one block at a time.
-  // Returns message for interface.
+  /** 
+   * Walks through the instructions, one block at a time.
+   * Returns message for Runner.
+   */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    
-    // TODO move this part to _messageRecieveCallback
-    if (incomingMessage.type == EgbMessage.MSG_START ||
-        incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
-      currentBlockIndex = null;
-      _nextScriptStack.clear();
-      choices.clear();
-      _initScriptEnvironment();
-      pageMap.clearState();
-    }
-    if (incomingMessage.type == EgbMessage.MSG_START) {
-      DEBUG_SCR("Starting new game from scratch.");
-      _playerChronology.clear();
-      currentPage = firstPage;
-    }
-    if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
-      DEBUG_SCR("Starting new game.");
-      print("load message: ${incomingMessage.strContent}");
-      _loadFromSaveGameMessage(incomingMessage);
-    }
-
     if (!_points.pointsAwards.isEmpty) {
       // Send awarded points before continuing.
       var award = _points.pointsAwards.removeFirst();
       return new EgbMessage.PointsAward(award.points, award.justification);
-    }
-    
-    if (incomingMessage.type == EgbMessage.MSG_OPTION_SELECTED) {
-      DEBUG_SCR("An option has been selected. Resolving.");
-      EgbMessage message;
-      choices.forEach((choice) {
-          if (choice.hash == incomingMessage.intContent) {
-            // This choice was taken.
-            DEBUG_SCR("Found choice that was selected: ${choice.string}");
-            if (choice.goto != null) {
-              goto(choice.goto);
-            }
-            if (choice.f != null) {
-              message = _runScriptBlock(script:choice.f);
-            }
-          } else {
-            // This choice was offered but not taken. Put into the
-            // _gotoLinksAlreadyOffered set. The selected choice will
-            // be put there after the player walked through the page till
-            // the end (otherwise, no points would ever be awarded).
-            if (choice.goto != null) {
-              _playerChronology.add(
-                  _createLinkHash(currentPage, 
-                      pageMap.getPage(
-                          choice.goto, 
-                          currentGroupName: currentPage.groupName)));
-            }
-          }
-      });
-      if (message != null) {
-        return message;
-      } else {
-        return new EgbMessage.NoResult();
-      }
     }
 
     // if previous script asked for nextScript()
@@ -304,7 +322,7 @@ abstract class EgbScripter {
       // we just came to this page
       if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
         // SaveGames are always made just before the page's last block
-        // (choiceList).
+        // (choiceList). Jump there.
         currentBlockIndex = currentPage.blocks.length - 1;
       } else {
         currentBlockIndex = 0;
@@ -316,11 +334,9 @@ abstract class EgbScripter {
       currentBlockIndex++;
     }
 
-    DEBUG_SCR("currentPage = $currentPage, currentBlock = $currentBlockIndex");
-
-    DEBUG_SCR("Resolving block.");
+    // Resolve current block.
     if (currentBlockIndex >= currentPage.blocks.length) {
-      DEBUG_SCR("At the end of page.");
+      // At the end of page.
       if (choices.any((choice) => !choice.shown)) {
         return choices.toMessage(
                   endOfPage: true,
@@ -329,10 +345,10 @@ abstract class EgbScripter {
         return new EgbMessage.EndOfBook();
       }
     } else if (currentPage.blocks[currentBlockIndex] is String) {
-      // just an ordinary paragraph, no script
+      // Just an ordinary paragraph, no script.
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
     } else if (currentPage.blocks[currentBlockIndex] is List) {
-      // choiceList
+      // ChoiceList.
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
       if (currentBlockIndex == currentPage.blocks.length - 1 &&
           choices.areActionable) {
@@ -344,7 +360,7 @@ abstract class EgbScripter {
                   filterOut: _leadsToIllegalPage);
       }
     } else if (currentPage.blocks[currentBlockIndex] is Function) {
-      // a script paragraph
+      // A script paragraph.
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
     }
   }
@@ -355,7 +371,7 @@ abstract class EgbScripter {
     vars["points"] = _points;
     _points.clear();
 
-    initBlock(); // run contents of <init>
+    initBlock();  // run contents of <variables>
   }
 
   dynamic noSuchMethod(InvocationMirror invocation) {
