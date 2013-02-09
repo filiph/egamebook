@@ -54,7 +54,7 @@ class EgbRunner {
               _scripterPort.send(new EgbMessage.Start().toJson(), 
                   _receivePort.toSendPort());
             } else {
-              _scripterPort.send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME).toJson(), 
+              _scripterPort.send(savegame.toMessage(EgbMessage.LOAD_GAME).toJson(), 
                   _receivePort.toSendPort());
             }
           });
@@ -100,28 +100,28 @@ class EgbRunner {
     _scripterPort = replyTo;
     
     switch (message.type) {
-      case EgbMessage.MSG_END_OF_BOOK:
+      case EgbMessage.END_OF_BOOK:
         _streamController.sink.add("END");  // send the info to interface
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
         return;
-      case EgbMessage.MSG_SEND_BOOK_UID:
+      case EgbMessage.SEND_BOOK_UID:
         _handleLoadSession(message);
         return;
-      case EgbMessage.MSG_SAVE_GAME:
+      case EgbMessage.SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
         _playerProfile.save(savegame);
         _interface.addSavegameBookmark(savegame);
         _send(new EgbMessage.Continue());
         return;
-      case EgbMessage.MSG_TEXT_RESULT:
+      case EgbMessage.TEXT_RESULT:
         _interface.showText(message.strContent);
         _send(new EgbMessage.Continue());
         return;
-      case EgbMessage.MSG_NO_RESULT:
+      case EgbMessage.NO_RESULT:
         // No visible result. Continuing.
         _send(new EgbMessage.Continue());
         return;
-      case EgbMessage.MSG_POINTS_AWARD:
+      case EgbMessage.POINTS_AWARD:
         // TODO: make into stream event, show toast, update points...
         var text;
         if (message.strContent != null) {
@@ -132,7 +132,7 @@ class EgbRunner {
         _interface.showText(text);
         _send(new EgbMessage.Continue());
         return;
-      case EgbMessage.MSG_SHOW_CHOICES:
+      case EgbMessage.SHOW_CHOICES:
         _showChoices(message);
         return;
     }
@@ -183,7 +183,7 @@ class EgbRunner {
         // No savegames for this egamebook.
         _send(new EgbMessage.Start());
       } else {
-        _send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME));
+        _send(savegame.toMessage(EgbMessage.LOAD_GAME));
       }
     });
     started = true;

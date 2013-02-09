@@ -164,7 +164,7 @@ class EgbChoiceList implements List<EgbChoice> {
     }).toList();
 
     DEBUG_SCR("Sending choices.");
-    EgbMessage m = new EgbMessage(EgbMessage.MSG_SHOW_CHOICES);
+    EgbMessage m = new EgbMessage(EgbMessage.SHOW_CHOICES);
 
     m.listContent = new List<dynamic>();
     m.listContent.add(prependText);

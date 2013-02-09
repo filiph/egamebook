@@ -67,10 +67,10 @@ class EgbSavegame {
   }
   
   EgbMessage toMessage(int type) {
-    if (type != EgbMessage.MSG_SAVE_GAME && type != EgbMessage.MSG_LOAD_GAME) {
+    if (type != EgbMessage.SAVE_GAME && type != EgbMessage.LOAD_GAME) {
       throw "Cannot create EgbMessage of type $type. Can only be MSG_SAVE_GAME "
-            "(${EgbMessage.MSG_SAVE_GAME}) or MSG_LOAD_GAME "
-            "(${EgbMessage.MSG_LOAD_GAME}).";
+            "(${EgbMessage.SAVE_GAME}) or MSG_LOAD_GAME "
+            "(${EgbMessage.LOAD_GAME}).";
     }
     EgbMessage message = new EgbMessage(type);
     message.strContent = toJson();

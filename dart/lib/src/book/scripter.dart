@@ -195,19 +195,19 @@ abstract class EgbScripter {
     _runnerPort = replyTo;
 
     switch (message.type) {
-      case EgbMessage.MSG_QUIT:
+      case EgbMessage.QUIT:
         // Just close the book, no need to answer.
         port.close();
         return;
-      case EgbMessage.MSG_GET_BOOK_UID:
+      case EgbMessage.GET_BOOK_UID:
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
         _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID")); 
         return;
-      case EgbMessage.MSG_OPTION_SELECTED:
+      case EgbMessage.OPTION_SELECTED:
         _send(_handleOptionSelected(message));
         return;
-      case EgbMessage.MSG_START:
+      case EgbMessage.START:
         currentBlockIndex = null;
         _nextScriptStack.clear();
         choices.clear();
@@ -216,7 +216,7 @@ abstract class EgbScripter {
         _playerChronology.clear();
         currentPage = firstPage;
         break;
-      case EgbMessage.MSG_LOAD_GAME:
+      case EgbMessage.LOAD_GAME:
         currentBlockIndex = null;
         _nextScriptStack.clear();
         choices.clear();
@@ -319,7 +319,7 @@ abstract class EgbScripter {
     // increase currentBlock, but not if previous script called "repeatBlock();"
     if (currentBlockIndex == null) {
       // we just came to this page
-      if (incomingMessage.type == EgbMessage.MSG_LOAD_GAME) {
+      if (incomingMessage.type == EgbMessage.LOAD_GAME) {
         // SaveGames are always made just before the page's last block
         // (choiceList). Jump there.
         currentBlockIndex = currentPage.blocks.length - 1;
@@ -455,7 +455,7 @@ abstract class EgbScripter {
   EgbMessage _createSaveGame() {
     var savegame = new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
-    var message = savegame.toMessage(EgbMessage.MSG_SAVE_GAME);
+    var message = savegame.toMessage(EgbMessage.SAVE_GAME);
     return message;
   }
 
