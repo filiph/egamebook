@@ -158,7 +158,7 @@ abstract class EgbScripter {
 
   // -- private members below
 
-  SendPort _interfacePort;
+  SendPort _runnerPort;
 
   /**
     When a block/script/choice call for a script to be called afterwards,
@@ -177,13 +177,13 @@ abstract class EgbScripter {
   }
   
   /**
-   * Utilify function [_send] sends message through the [_interfacePort] to the
+   * Utilify function [_send] sends message through the [_runnerPort] to the
    * Runner.
    */
-  _send(EgbMessage message) {
-    if (_interfacePort == null) throw new StateError("Cannot send message "
-                                             "when _interfacePort is null.");
-    _interfacePort.send(message.toJson(), port.toSendPort());
+  void _send(EgbMessage message) {
+    if (_runnerPort == null) throw new StateError("Cannot send message "
+                                             "when _runnerPort is null.");
+    _runnerPort.send(message.toJson(), port.toSendPort());
   }
 
   /**
@@ -192,8 +192,7 @@ abstract class EgbScripter {
    */
   void _messageReceiveCallback(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
-    DEBUG_SCR("Received message from interface: ${message.type}.");
-    _interfacePort = replyTo;
+    _runnerPort = replyTo;
 
     switch (message.type) {
       case EgbMessage.MSG_QUIT:

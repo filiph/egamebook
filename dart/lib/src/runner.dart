@@ -82,50 +82,47 @@ class EgbRunner {
   }
   
   /**
+   * Utilify function [_send] sends message through the [_runnerPort] to the
+   * Runner.
+   */
+  void _send(EgbMessage message) {
+    if (_scripterPort == null) throw new StateError("Cannot send message "
+                                             "when _scripterPort is null.");
+    _scripterPort.send(message.toJson(), _receivePort.toSendPort());
+  }
+  
+  /**
    * Main loop function. Receives a message from scripter, and either
-   * responds immediately, or asks for input via [interface].
+   * responds immediately, or asks for input via [interface], then responds.
    */
   void receiveFromScripter(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
-    DEBUG_CMD("We have a message from Scripter: ${message.type}.");
-    if (message.type == EgbMessage.MSG_END_OF_BOOK) {
-      DEBUG_CMD("We are at the end of book. Closing.");
-      _streamController.sink.add("END");
-      ended = true;
-      // stop();
-    } else if (message.type == EgbMessage.MSG_SEND_BOOK_UID) {
-      // get bookUid from scripter
-      _playerProfile.currentEgamebookUid = message.strContent;
-      // load latest saved state for the bookUid from playerProfile
-      _playerProfile.loadMostRecent()
-      .then((EgbSavegame savegame) {
-        if (savegame == null) {
-          // no savegames for this egamebook
-          _scripterPort.send(new EgbMessage.Start().toJson(), 
-              _receivePort.toSendPort());
-        } else {
-          _scripterPort.send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME).toJson(), 
-              _receivePort.toSendPort());
-        }
-      });
-      started = true;
-    } else {
-      if (message.type == EgbMessage.MSG_SAVE_GAME) {
+    _scripterPort = replyTo;
+    
+    switch (message.type) {
+      case EgbMessage.MSG_END_OF_BOOK:
+        _streamController.sink.add("END");  // send the info to interface
+        ended = true;  // TODO: not needed, Runner is not ended, Scripter is
+        return;
+      case EgbMessage.MSG_SEND_BOOK_UID:
+        _handleLoadSession(message);
+        return;
+      case EgbMessage.MSG_SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
         _playerProfile.save(savegame);
         _interface.addSavegameBookmark(savegame);
-        _scripterPort.send(new EgbMessage.Continue().toJson(), 
-            _receivePort.toSendPort());
-      } else if (message.type == EgbMessage.MSG_TEXT_RESULT) {
-        DEBUG_CMD("Showing text from scripter.");
+        _send(new EgbMessage.Continue());
+        return;
+      case EgbMessage.MSG_TEXT_RESULT:
         _interface.showText(message.strContent);
-        _scripterPort.send(new EgbMessage.Continue().toJson(), 
-            _receivePort.toSendPort());
-      } else if (message.type == EgbMessage.MSG_NO_RESULT) {
-        DEBUG_CMD("No visible result. Continuing.");
-        _scripterPort.send(new EgbMessage.Continue().toJson(), 
-            _receivePort.toSendPort());
-      } else if (message.type == EgbMessage.MSG_POINTS_AWARD) {
+        _send(new EgbMessage.Continue());
+        return;
+      case EgbMessage.MSG_NO_RESULT:
+        // No visible result. Continuing.
+        _send(new EgbMessage.Continue());
+        return;
+      case EgbMessage.MSG_POINTS_AWARD:
+        // TODO: make into stream event, show toast, update points...
         var text;
         if (message.strContent != null) {
           text = "+${message.intContent} points for ${message.strContent}";
@@ -133,40 +130,63 @@ class EgbRunner {
           text = "+${message.intContent} points";
         }
         _interface.showText(text);
-        _scripterPort.send(new EgbMessage.Continue().toJson(), 
-            _receivePort.toSendPort());
-      } else if (message.type == EgbMessage.MSG_SHOW_CHOICES) {
-        DEBUG_CMD("We have choices to show!");
-        
-        if (message.listContent[0] != null) {
-          // prepend text
-          _interface.showText(message.listContent[0]);
-        }
-        
-        EgbChoiceList choices = new EgbChoiceList.fromMessage(message);
-        
-        if (choices.length == 1 && choices[0].string.trim() == "") {
-          // An auto-choice (without a string) means we should pick it silently
-          _scripterPort.send(
-              new EgbMessage.OptionSelected(choices[0].hash).toJson(),
-              _receivePort.toSendPort()
-          );
-        } else {
-          // let player choose
-          _interface.showChoices(choices)
-          .then((int hash) {
-            if (hash != null) {
-              _scripterPort.send(
-                  new EgbMessage.OptionSelected(hash).toJson(),
-                  _receivePort.toSendPort()
-              );
-            } else {
-              // user wants to quit
-              stop();
-            }
-          });
-        }
-      }
+        _send(new EgbMessage.Continue());
+        return;
+      case EgbMessage.MSG_SHOW_CHOICES:
+        _showChoices(message);
+        return;
     }
   }
+
+  /**
+   * Shows choices, waits for the interface and player to pick one of them,
+   * then sends the result back to Scripter.
+   */
+  void _showChoices(EgbMessage message) {
+    if (message.listContent[0] != null) {
+      // Show question text if available.
+      _interface.showText(message.listContent[0]);
+    }
+    
+    EgbChoiceList choices = new EgbChoiceList.fromMessage(message);
+    
+    if (choices.length == 1 && choices[0].string.trim() == "") {
+      // An auto-choice (without a string) means we should pick it silently.
+      _send(new EgbMessage.OptionSelected(choices[0].hash));
+    } else {
+      // Let player choose.
+      _interface.showChoices(choices)
+      .then((int hash) {
+        if (hash != null) {
+          _send(new EgbMessage.OptionSelected(hash));
+        } else {
+          // User wants to quit (hash == null).
+          stop();
+        }
+      });
+    }
+  }
+  
+  /**
+   * Runner receives gamebook UID from Scripter, typically just after opening
+   * the session with this particular book. If [playerProfile] has any saves
+   * for this particular book, Runner will automatically load the most recent.
+   * If not, Runner will just start the book from start.
+   */
+  EgbMessage _handleLoadSession(EgbMessage message) {
+    // Get bookUid from Scripter.
+    _playerProfile.currentEgamebookUid = message.strContent;
+    // Load latest saved state for the bookUid from playerProfile.
+    _playerProfile.loadMostRecent()
+    .then((EgbSavegame savegame) {
+      if (savegame == null) {
+        // No savegames for this egamebook.
+        _send(new EgbMessage.Start());
+      } else {
+        _send(savegame.toMessage(EgbMessage.MSG_LOAD_GAME));
+      }
+    });
+    started = true;
+  }
+  
 }
