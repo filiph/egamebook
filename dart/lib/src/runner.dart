@@ -34,6 +34,8 @@ class EgbRunner {
       this._interface, this._playerProfile) {
     _streamController = new StreamController();
     
+    // Handling player intents (actions) that are 'out of order' - i.e. scripter
+    // is not asking for them at the moment.
     _interface.stream.listen((playerIntent) {
       switch (playerIntent.type) {
         case (PlayerIntent.RESTART):
@@ -45,7 +47,7 @@ class EgbRunner {
           stop();
           break;
         case (PlayerIntent.LOAD):
-          // load latest saved state for the bookUid from playerProfile
+          // load saved state for the bookUid from playerProfile
           // TODO: dry with below
           _playerProfile.load((playerIntent as LoadIntent).uid)
           .then((EgbSavegame savegame) {
