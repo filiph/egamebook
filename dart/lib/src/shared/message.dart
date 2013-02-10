@@ -11,21 +11,33 @@ class EgbMessage {
   int intContent;
 
   // Messages from Scripter to Runner.
-  static const int SEND_BOOK_UID = 1;
-  static const int NO_RESULT = 2;
-  static const int TEXT_RESULT = 3;
-  static const int SHOW_CHOICES = 4;
-  static const int SAVE_GAME = 5;
-  static const int POINTS_AWARD = 6;
-  static const int END_OF_BOOK = 7;
+  static const int SEND_BOOK_UID = 10;
+  static const int NO_RESULT = 20;
+  static const int TEXT_RESULT = 30;
+  static const int SHOW_CHOICES = 40;
+  static const int SAVE_GAME = 50;
+  static const int SAVE_PLAYER_CHRONOLOGY = 60;
+  static const int POINTS_AWARD = 70;
+  static const int END_OF_BOOK = 80;
 
   // Messages from Runner to Scripter.
-  static const int GET_BOOK_UID = 64;
-  static const int START = 65;
-  static const int LOAD_GAME = 66;
-  static const int CONTINUE = 67;
-  static const int OPTION_SELECTED = 68;
-  static const int QUIT = 69;
+  static const int GET_BOOK_UID = 1000;
+  static const int START = 1010;
+  static const int LOAD_GAME = 1020;
+  static const int CONTINUE = 1040;
+  static const int OPTION_SELECTED = 1050;
+  static const int QUIT = 1060;
+  
+  /*
+   * The correct handshake looks like this:
+   * 
+   * Runner                 Scripter
+   * GET_BOOK_UID
+   *                        SEND_BOOK_UID
+   * LOAD_GAME/START (incl. player chronology)
+   *                        NO_RESULT/TEST_RESULT/SHOW_CHOICES
+   * 
+   */
 
   EgbMessage(this.type) {
   }
@@ -66,10 +78,14 @@ class EgbMessage {
     intContent = points;
     strContent = justification;
   }
-
+  
+  EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
+      : type = SAVE_PLAYER_CHRONOLOGY {
+    listContent = playerChronology.toList();
+  }
+  
   /**
     Ctor that creates the Message object from a JSON string.
-    XXX: this isn't needed in VM, but frog can't handle Object messages (yet?)
     */
   EgbMessage.fromJson(String json) {
     Map<String,dynamic> data = parse(json);

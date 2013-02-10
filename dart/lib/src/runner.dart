@@ -105,7 +105,7 @@ class EgbRunner {
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
         return;
       case EgbMessage.SEND_BOOK_UID:
-        _handleLoadSession(message);
+        _startNewSession(message);
         return;
       case EgbMessage.SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
@@ -113,12 +113,16 @@ class EgbRunner {
         _interface.addSavegameBookmark(savegame);
         _send(new EgbMessage.Continue());
         return;
+      case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
+        _playerProfile.savePlayerChronology(message.listContent);
+        _send(new EgbMessage.Continue());
+        return;
       case EgbMessage.TEXT_RESULT:
         _interface.showText(message.strContent);
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.NO_RESULT:
-        // No visible result. Continuing.
+        // No visible result from Scripter. Continuing.
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.POINTS_AWARD:
@@ -173,7 +177,7 @@ class EgbRunner {
    * for this particular book, Runner will automatically load the most recent.
    * If not, Runner will just start the book from start.
    */
-  EgbMessage _handleLoadSession(EgbMessage message) {
+  EgbMessage _startNewSession(EgbMessage message) {
     // Get bookUid from Scripter.
     _playerProfile.currentEgamebookUid = message.strContent;
     // Load latest saved state for the bookUid from playerProfile.
@@ -183,7 +187,15 @@ class EgbRunner {
         // No savegames for this egamebook.
         _send(new EgbMessage.Start());
       } else {
-        _send(savegame.toMessage(EgbMessage.LOAD_GAME));
+        _playerProfile.loadPlayerChronology()
+        .then((List<String> playerChronology) {
+          // Create LOAD_GAME message with scripter state in strContent (json).
+          var loadgameMsg = savegame.toMessage(EgbMessage.LOAD_GAME);
+          // Add playerChronology as listContent.
+          loadgameMsg.listContent = playerChronology;
+          _send(loadgameMsg);
+        });
+        
       }
     });
     started = true;

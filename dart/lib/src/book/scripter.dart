@@ -105,6 +105,9 @@ abstract class EgbScripter {
   /// This is important for the  "No points for second guessing" rule.
   Set<String> _playerChronology;
   
+  /// [_playerChronlogy] has changed and needs to be sent to Runner.
+  bool _playerChronologyChanged = false;
+  
   /// Create a unique hash that identifies a path from one page to another.
   String _createLinkHash(EgbScripterPage from, EgbScripterPage to) =>
       "${from.name}>>${to.name}";  // TODO: make this better
@@ -214,6 +217,7 @@ abstract class EgbScripter {
         _initScriptEnvironment();
         pageMap.clearState();
         _playerChronology.clear();
+        _playerChronologyChanged = true;
         currentPage = firstPage;
         break;
       case EgbMessage.LOAD_GAME:
@@ -225,6 +229,20 @@ abstract class EgbScripter {
         _loadFromSaveGameMessage(message);
         break;
     }
+    
+    if (!_points.pointsAwards.isEmpty) {
+      var award = _points.pointsAwards.removeFirst();
+      _send(new EgbMessage.PointsAward(award.points, award.justification));
+      return;
+    }
+    
+    if (_playerChronologyChanged) {
+      _playerChronologyChanged = false;
+      _send(new EgbMessage.SavePlayerChronology(_playerChronology));
+      return;
+    }
+    
+    // We can now handle the next block on the page.
     _send(_goOneStep(message));
   }
   
@@ -256,6 +274,7 @@ abstract class EgbScripter {
                   pageMap.getPage(
                       choice.goto, 
                       currentGroupName: currentPage.groupName)));
+          _playerChronologyChanged = true;
         }
       }
     });
@@ -271,12 +290,6 @@ abstract class EgbScripter {
    * Returns message for Runner.
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    if (!_points.pointsAwards.isEmpty) {
-      // Send awarded points before continuing.
-      var award = _points.pointsAwards.removeFirst();
-      return new EgbMessage.PointsAward(award.points, award.justification);
-    }
-
     // if previous script asked for nextScript()
     if (!_nextScriptStack.isEmpty) {
       Function script = _nextScriptStack.removeLast();
@@ -300,6 +313,7 @@ abstract class EgbScripter {
         //     _gotoLinksAlreadyOffered) (confusing)
         _playerChronology.add(
             _createLinkHash(previousPage, currentPage));
+        _playerChronologyChanged = true;
         // TODO: save previousPage in savegame!
       }
       
@@ -459,21 +473,33 @@ abstract class EgbScripter {
     return message;
   }
 
+  /**
+   * Tak EgbMessage of type LOAD_GAME and populate the current game
+   * state with its contents. This includes both the Story Chronology (where
+   * the story is right now) and the Player Chronology (what the player has
+   * seen already, including blind alleys and consecutive reloads).
+   */
   void _loadFromSaveGameMessage(EgbMessage message) {
+    if (message.type != EgbMessage.LOAD_GAME) throw new ArgumentError("Invalid "
+                                             "message type (${message.type}).");
     var savegame = new EgbSavegame.fromMessage(message);
 
     if (pageMap[savegame.currentPageName] == null) {
       throw "Trying to load page '${savegame.currentPageName}' which doesn't "
             "exist in current egamebook.";
     }
-
-    DEBUG_SCR("Starting from a savegame");
     currentPage = pageMap[savegame.currentPageName];
 
     pageMap.importState(savegame.pageMapState);
+    
+    if (message.listContent != null) {
+      // This happens only at each new game session start. Normal LOAD_GAME
+      // messages have listContent == null.
+      _playerChronology.addAll(message.listContent);
+    }
 
-    // copy saved variables over vars
     var _constructors = {};
+    // copy saved variables over vars
     EgbSavegame.importSavegameToVars(savegame, vars, 
                                      constructors: _constructors); // TODO
   }
