@@ -104,18 +104,18 @@ class EgbSavegame {
   }
   
   static bool _isCustomSaveableClass(dynamic variable) {
-    // return variable is Saveable; // <- this doesn't work
+    return variable is Saveable; // TODO cease to use if this really works
     
     // The below is an ugly way to check for saveable-ness without
     // the need of full scale mirroring.
-    bool customClassSaveable;
-    try {
-      variable.toMap();
-      customClassSaveable = true;
-    } on NoSuchMethodError catch (e) {
-      customClassSaveable = false;
-    }
-    return customClassSaveable == true;
+//    bool customClassSaveable;
+//    try {
+//      variable.toMap();
+//      customClassSaveable = true;
+//    } on NoSuchMethodError catch (e) {
+//      customClassSaveable = false;
+//    }
+//    return customClassSaveable == true;
   }
   
   /**
@@ -149,7 +149,10 @@ class EgbSavegame {
       });
       return outputMap;
     } else if (_isCustomSaveableClass(input)) {
-      return _dissolveToPrimitives(input.toMap());
+      print("$input -> ${input.toMap()}");
+      Map saveableMap = (input as Saveable).toMap();
+      saveableMap["_class"] = (input as Saveable).className;
+      return _dissolveToPrimitives(saveableMap);
     } else {
       throw "Function _dissolveToPrimitivess called with a non-saveable " 
             "argument type.";

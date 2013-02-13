@@ -67,7 +67,8 @@ class Timeline implements Saveable {
     events = new Set<TimedEvent>();
   }
 
-  toMap() => {"time": _time, "_class": "Timeline"};
+  toMap() => {"time": _time};
+  String className = "Timeline";
   updateFromMap(map) => _time = map["time"];
   
   // TODO add event

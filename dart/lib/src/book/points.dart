@@ -43,7 +43,8 @@ class PointsCounter implements Saveable {
     return this;
   }
   
-  toMap() => {"points": _points, "_class": "PointsCounter"};
+  String className = "PointsCounter";
+  toMap() => {"points": _points};
   updateFromMap(Map map) {
     _points = map["points"];
     pointsAwards.clear();

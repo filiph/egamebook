@@ -97,7 +97,8 @@ class ClassWithMapMethods implements Saveable {
     "b": 2
   };
   
-  toMap() => {"_class": "ClassWithMapMethods", "i": i, "s": s, "m": m};
+  String className = "ClassWithMapMethods";
+  toMap() => {"i": i, "s": s, "m": m};
   
   ClassWithMapMethods();
   

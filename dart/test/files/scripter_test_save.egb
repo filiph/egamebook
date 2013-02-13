@@ -13,7 +13,7 @@ class A {
 }
 
 // for Persistence testing
-class ClassWithMapMethods {
+class ClassWithMapMethods implements Saveable {
   int i;
   String s;
   Map m = const {
@@ -21,7 +21,8 @@ class ClassWithMapMethods {
     "b": 2
   };
   
-  toMap() => {"_class": "ClassWithMapMethods", "i": i, "s": s, "m": m};
+  String className = "ClassWithMapMethods";
+  toMap() => {"i": i, "s": s, "m": m};
   
   ClassWithMapMethods();
   
