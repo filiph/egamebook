@@ -45,7 +45,7 @@ This means $time seconds have passed
 since you opened your eyes.
 
 What do you do?
-- Get dressed (30 seconds) [{{echo("Ladyboy!")}} getDressed]
+- Get dressed (30 seconds) [{echo("Ladyboy!")} getDressed]
 - Get the gun (15 seconds) [getGun]
 - Warn Amy by phone (30 seconds) [warnAmy]
 
@@ -102,7 +102,7 @@ surname="Hracek";
 
 You hang up, hoping she got all that. You know you can't lose any more time now.
 
-- [{{time+=30}} wakeupDilemma]
+- [{time+=30} wakeupDilemma]
 
 ---
 policeBreakIn
