@@ -1,0 +1,401 @@
+library storyline;
+
+import 'randomly.dart';
+
+/**
+ * Minimal class to store information about the actor in the [Storyline].
+ */
+class Actor {
+  Actor({this.name, this.team: DEFAULT_ENEMY, this.isPlayer: false,
+         this.pronoun: Pronoun.IT});
+  
+  String name;
+  
+  static const int FRIEND = 1;
+  static const int DEFAULT_ENEMY = 2;
+  int team;
+  bool isPlayer;
+
+  Pronoun pronoun;
+}
+
+class Player extends Actor {
+  Player() : super(name: "player", pronoun: Pronoun.YOU,
+                   team: Actor.FRIEND, isPlayer: true) {
+  }
+}
+
+/**
+ * The pronouns and their different forms.
+ */
+class Pronoun {
+  // see http://en.wikipedia.org/wiki/Latin_declension
+  final String nominative; // He (kdo? co?)
+  // vocative // not used
+  final String accusative; // Him (koho? co?)
+  final String genitive;   // His (koho? ceho?)
+  // dative // not used
+  // ablative
+  // locative
+  final String self; // Himself
+
+  String toString() => nominative;
+
+  const Pronoun(this.nominative, this.accusative, this.genitive, this.self); 
+
+  static const Pronoun YOU = const Pronoun("you", "you", "your", "yourself");
+  static const Pronoun HE = const Pronoun("he", "him", "his", "himself");
+  static const Pronoun SHE = const Pronoun("she", "her", "her", "herself");
+  static const Pronoun IT = const Pronoun("it", "it", "its", "itself");
+}
+
+/**
+ * A single report about an event, atomic part of a story. It can be "John
+ * picks up a shovel", "John approaches Jack" or "Jack is dead".
+ * 
+ * These events are stringed together by [Storyline] to create a coherent,
+ * naturally sounding narrative.
+ */
+class Report {
+  Report(this.string, 
+      {this.subject, this.object, this.but, this.positive, this.negative,
+       this.endSentence, this.startSentence, this.wholeSentence, this.time});
+  
+  String string;
+  Actor subject;
+  Actor object;
+  bool but;
+  bool positive;
+  bool negative;
+  bool endSentence;
+  bool startSentence;
+  bool wholeSentence;
+  int time;
+}
+
+/**
+ * Class for reporting a sequence of events in 'natural' language.
+ */
+class Storyline {
+  StringBuffer strBuf;
+  List<Map<String,dynamic>> reports;
+
+  static final String SUBJECT = "<subject>";
+  static final String SUBJECT_POSSESIVE = "<subject's>";
+  static final String OBJECT = "<object>";
+  static final String OBJECT_POSSESIVE = "<object's>";
+  static final String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static final String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
+  static final String OBJECT_PRONOUN = "<objectPronoun>";
+  static final String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
+  static final String ACTION = "<action>";
+  static final String VERB_S = "<s>";
+  static final String VERB_ES = "<es>"; // e.g. in "goes"
+  static final String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
+  static final String VERB_DO = "<does>";
+  static final String VERB_BE = "<is>";
+
+  /**
+   * Add another event to the story. 
+   */
+  Storyline add(String str, {Actor subject, Actor object, bool but: false, 
+      bool positive: false, bool negative: false, bool endSentence: false, 
+      bool startSentence: false, bool wholeSentence: false, int time}) {
+    reports.add( {
+        "string": str,
+        "subject": subject,
+        "object": object,
+        "but": but,
+        "positive": positive,
+        "negative": negative,
+        "endSentence": endSentence,
+        "startSentence": startSentence,
+        "wholeSentence": wholeSentence,
+        "time": time
+    });
+  }
+
+  String capitalize(String str) {
+    String firstLetter = str[0].toUpperCase();
+    if (str.length == 1)
+      return firstLetter;
+    else 
+      return "$firstLetter${str.substring(1)}";
+  }
+  
+  String string(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["string"];
+  }
+  
+  Actor subject(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["subject"];
+  }
+  
+  Actor object(int i) {
+    if (i < 0 || i >= reports.length)
+      return null;
+    else
+      return reports[i]["object"];
+  }
+
+  static const int SHORT_TIME = 4;
+  static const int VERY_LONG_TIME = 1000;
+  int timeSincePrevious(int i) {
+    if (reports[i]["time"] == null || !valid(i-1) || reports[i-1]["time"] == null)
+      return VERY_LONG_TIME;
+    else
+      return reports[i]["time"] - reports[i-1]["time"];
+  }
+
+  /// taking care of all the exceptions and rules when comparing different reports
+  /// call: [: same('subject', i, i+1) ... :]
+  bool same(String key, int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    if (reports[i][key] == null || reports[j][key] == null)
+      return false;
+    if (reports[i][key] == reports[j][key])
+      return true;
+    else
+      return false;
+  }
+
+  bool exchanged(String key1, String key2, int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    if (reports[i][key1] == null || reports[j][key1] == null)
+      return false;
+    if (reports[i][key2] == null || reports[j][key2] == null)
+      return false;
+    if (reports[i][key1] == reports[j][key2]
+     && reports[i][key2] == reports[j][key1])
+      return true;
+    else
+      return false;
+  }
+
+  bool valid(int i) {
+    if (i >= reports.length || i < 0)
+      return false;
+    else
+      return true;
+  }
+
+  bool sameSentiment(int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    // subject(i) == object(j), opposite sentiments => same sentiment
+    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+      if (reports[i]["positive"] && reports[j]["negative"])
+        return true;
+      if (reports[i]["negative"] && reports[j]["positive"])
+        return true;
+    }
+    if (!same('subject', i, j))
+      return false;
+    if (reports[i]["positive"] && reports[j]["positive"])
+      return true;
+    if (reports[i]["negative"] && reports[j]["negative"])
+      return true;
+    else
+      return false;
+  }
+
+  bool oppositeSentiment(int i, int j) {
+    if (!valid(i) || !valid(j))
+      return false;
+    // subject(i) == object(j), both have same sentiment => opposite sentiment
+    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+      if (reports[i]["positive"] && reports[j]["positive"])
+        return true;
+      if (reports[i]["negative"] && reports[j]["negative"])
+        return true;
+    }
+    if (!same('subject', i, j))
+      return false;
+    if (reports[i]["positive"] && reports[j]["negative"])
+      return true;
+    if (reports[i]["negative"] && reports[j]["positive"])
+      return true;
+    else
+      return false;
+  }
+
+  /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do in-sentence substitution
+  String substitute(int i, String str, [bool useSubjectPronoun=false, bool useObjectPronoun=false]) {
+    String result = str.replaceAll(ACTION, string(i));
+    if (useObjectPronoun || same('object', i, i-1)) {// if doing something to someone in succession, use pronoun
+      result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
+      result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
+    }
+    if (useSubjectPronoun || same('subject', i, i-1)) {
+      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
+    }
+    // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
+    if (object(i-1) != null && subject(i) != null && subject(i-1) != null
+        && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
+    }
+    // same as previous, but with object-subject reversed
+    if (subject(i-1) != null && object(i) != null && subject(i-1) != null
+        && subject(i-1) == object(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
+      result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
+    }
+    return getString(result, subject(i), object(i));
+  }
+
+  /// Takes care of substitution of stopwords. Called by substitute().
+  static String getString(String str, [Actor subject, Actor object]) {
+    String result = str;
+    if (subject != null) {
+      if (subject.pronoun == Pronoun.YOU) { // don't talk like a robot: "player attacks wolf"
+        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+        result = result.replaceAll(VERB_S, "");
+        result = result.replaceAll(VERB_ES, "");
+        result = result.replaceAll(VERB_IES, "y");
+        result = result.replaceAll(VERB_DO, "do");
+        result = result.replaceAll(VERB_BE, "are");
+      }
+      else { // third person
+        result = result.replaceFirst(SUBJECT, subject.name);
+        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+        result = result.replaceAll(VERB_S, "s");
+        result = result.replaceAll(VERB_ES, "es");
+        result = result.replaceAll(VERB_IES, "ies");
+        result = result.replaceAll(VERB_DO, "does");
+        result = result.replaceAll(VERB_BE, "is");
+      }
+      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
+      if (str.indexOf(SUBJECT) < str.indexOf(SUBJECT_POSSESIVE)) { // "actor takes his weapon"
+        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      }
+      result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
+      result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
+    }
+    if (object != null) {
+      if (object.isPlayer) { // don't talk like a robot: "wolf attacks player"
+        result = result.replaceAll(OBJECT, object.pronoun.accusative);
+        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      } else
+        result = result.replaceAll(OBJECT, object.name);
+      result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
+      if (str.indexOf(OBJECT) < str.indexOf(OBJECT_POSSESIVE)) { // "actor takes his weapon"
+        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      }
+      result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
+      result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
+    }
+
+    return randomlyParse(result);
+  }
+
+  Storyline() {
+    reports = new List<Map<String,dynamic>>();
+    strBuf = new StringBuffer();
+  }
+
+  void clear() {
+    reports.clear();
+    strBuf.clear();
+  }
+
+  /// The main function that strings reports together into a coherent story.
+  String toString() {
+    final int length = reports.length;
+    if (length < 1)
+      return "";
+    final int MAX_SENTENCE_LENGTH = 3;
+    int lastEndSentence = -1;
+    bool endPreviousSentence = true; // previous sentence was ended
+    bool endThisSentence = false; // this sentence needs to be ended
+    bool but = false; // this next sentence needs to start with but
+    for (int i=0; i < length; i++) {
+      // TODO: look into future - make sentences like "Although __, __" 
+      // TODO: ^^ can be done by 2 for loops
+      // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
+      if (i != 0) {
+        // solve flow with previous sentence
+        bool objectSubjectSwitch = exchanged('subject', 'object', i-1, i);
+        but = (reports[i]["but"] || oppositeSentiment(i, i-1)) 
+              && !reports[i-1]["but"];
+        reports[i]["but"] = but;
+        endPreviousSentence = 
+          (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
+          || endThisSentence
+          || reports[i]["startSentence"] 
+          || reports[i-1]["endSentence"] 
+          || reports[i]["wholeSentence"]
+          || !(same('subject', i, i-1) || objectSubjectSwitch)
+          || (but && (i - lastEndSentence > 1))
+          || (but && reports[i-1]["but"])
+          || (timeSincePrevious(i) > SHORT_TIME);
+        endThisSentence = false;
+
+        // DEBUG("SENT: ${string(i)}\n- whole=${reports[i]["endPreviousSentence"]}
+        if (endPreviousSentence) {
+          if (reports[i-1]["wholeSentence"]) // don't write period after "Boom!"
+            strBuf.add(" ");
+          else
+            strBuf.add(". ");
+          if (but && !reports[i]["wholeSentence"])
+            strBuf.add(randomlyChoose(["But ", "But ", "However, ", 
+                                       "Nonetheless, ", "Nevertheless, "]));
+        } else { // let's try and glue [i-1] and [i] into one sentence
+          if (but) {
+            strBuf.add(randomlyChoose([" but ", " but ", " yet ", ", but "]));
+            if (!sameSentiment(i, i+1))
+              endThisSentence = true;
+          } else {
+            if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
+                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
+              strBuf.add(", ");
+            } else {
+              strBuf.add(randomlyChoose([" and ", " and ", ", and "]));
+              endThisSentence = true;
+            }
+          }
+        }
+      }
+
+      String report = string(i);
+      // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
+      if (!endPreviousSentence)
+        if (same('subject', i, i-1))
+          if (string(i-1).startsWith("$SUBJECT "))
+            if (report.startsWith("$SUBJECT "))
+              report = report.replaceFirst("$SUBJECT ", "");
+
+      report = substitute(i, report);
+
+      if ((endPreviousSentence || i == 0) && !but)
+        report = capitalize(report);
+
+      // add the actual report
+      strBuf.add(report);
+
+      // set variables for next iteration
+      if (endPreviousSentence)
+        lastEndSentence = i;
+      if (reports[i]["wholeSentence"])
+        endThisSentence = true;
+    }
+
+    // add last dot
+    if (!reports[length-1]["wholeSentence"])
+      strBuf.add(".");
+
+    return strBuf.toString();
+  }
+}
