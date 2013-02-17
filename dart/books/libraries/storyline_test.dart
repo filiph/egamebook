@@ -18,10 +18,9 @@ void main() {
     storyline.add("<subject> run<s> towards the engine room",
         subject: gorilla, time: 3);
     expect(storyline.toString(), 
-        startsWith("The ship trembles. There is something wrong with the "
-                   "engines. You gesture to your Gorilla"));
-    expect(storyline.toString(),
-        endsWith("uns towards the engine room."));
+        matches("The ship trembles. There is something wrong with the "
+                "engines. You gesture to your Gorilla.+"
+                "uns towards the engine room\."));
   });
   
   test("exchange", () {
