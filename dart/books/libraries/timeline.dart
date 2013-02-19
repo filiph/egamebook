@@ -1,10 +1,11 @@
 library timeline;
 
 import '../../lib/src/book/scripter.dart';
+import 'storyline.dart';
 
 /// Type for the closure to be called at specified time(s). Returns [:true:]
 /// when Timeline should continue, [:false:] if it's finished.
-typedef bool EventClosure(Timeline timeline);
+typedef String EventClosure();
 
 /// A singular event on the timeline.
 class TimedEvent {
@@ -13,7 +14,6 @@ class TimedEvent {
   EventClosure f;
   String text;
   
-  // TODO named constructors for closure vs mainloop vs string
   TimedEvent(this.time, dynamic action, {this.priority: 0}) {
     if (time == null || action == null || priority == null) {
       throw new ArgumentError("Timed event needs to have time, closure "
@@ -29,12 +29,15 @@ class TimedEvent {
     }
   }
   
-  bool run(Timeline timeline) {
+  TimedEvent.string(this.time, this.text, {this.priority: 0});
+  
+  TimedEvent.function(this.time, this.f, {this.priority: 0});
+  
+  String run() {
     if (f != null) {
-      return f(timeline);
+      return f();
     } else if (text != null) {
-      echo(text);
-      return true;
+      return text;
     } else {
       throw "Invalid state of TimedEvent: both text and f are null.";
     }
@@ -62,33 +65,42 @@ class Timeline implements Saveable {
   Set<TimedEvent> events;
   bool finished;
   
-  Timeline() {
+  Storyline storyline;
+  
+  Timeline({this.storyline}) {
     finished = false;
     events = new Set<TimedEvent>();
   }
 
-  toMap() => {"time": _time};
   String className = "Timeline";
+  toMap() => {"time": _time};
   updateFromMap(map) => _time = map["time"];
   
   // TODO add event
   // TODO mainLoop = just another event, but with null time => priority!
   
-  bool _goOneTick() {
-    var canContinue;
-    if (mainLoop != null) {
-      canContinue = mainLoop(this);
+  void _handleEventOutput(String s) {
+    if (this.storyline != null) {
+      storyline.add(s, time: _time);
+    } else {
+      // call top-level scripter function echo
+      echo(s);
     }
-    if (canContinue != null && !canContinue) return false;
+  }
+  
+  void _goOneTick() {
+    if (mainLoop != null) {
+      _handleEventOutput(mainLoop());
+    }
+    if (finished) return;
     
     List<TimedEvent> currentEvents = events.where((ev) => ev.time == _time)
                                       .toList();
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
-      canContinue = event.run(this);
-      if (canContinue != null && !canContinue) return false;
+      _handleEventOutput(event.run());
+      if (finished) return;
     }
-    return true;
   }
   
   /**
@@ -99,11 +111,8 @@ class Timeline implements Saveable {
     if (_time == null) _time = -1;
     for (int i = 0; i < t; i++) {
       _time += 1;
-      var canContinue = _goOneTick();
-      if (!canContinue) {
-        finished = true;
-        break;
-      }
+      _goOneTick();
+      if (finished) break;
     }
   }
 }

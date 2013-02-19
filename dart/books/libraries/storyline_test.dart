@@ -1,6 +1,7 @@
 
 import 'package:unittest/unittest.dart';
 import '../../lib/src/book/scripter.dart';
+import 'actor.dart';
 import 'storyline.dart';
 
 void main() {

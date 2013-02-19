@@ -1,29 +1,14 @@
 library storyline;
 
 import 'randomly.dart';
+import 'actor.dart';
 
 /**
- * Minimal class to store information about the actor in the [Storyline].
+ * The global instance of storyline which can be used for reporting. The 
+ * contents are output to Scripter's [textBuffer] either manualy or 
+ * automatically by LoopedEvent (before each player interaction).
  */
-class Actor {
-  Actor({this.name, this.team: DEFAULT_ENEMY, this.isPlayer: false,
-         this.pronoun: Pronoun.IT});
-  
-  String name;
-  
-  static const int FRIEND = 1;
-  static const int DEFAULT_ENEMY = 2;
-  int team;
-  bool isPlayer;
-
-  Pronoun pronoun;
-}
-
-class Player extends Actor {
-  Player() : super(name: "player", pronoun: Pronoun.YOU,
-                   team: Actor.FRIEND, isPlayer: true) {
-  }
-}
+Storyline storyline = new Storyline();
 
 /**
  * The pronouns and their different forms.
@@ -47,6 +32,7 @@ class Pronoun {
   static const Pronoun HE = const Pronoun("he", "him", "his", "himself");
   static const Pronoun SHE = const Pronoun("she", "her", "her", "herself");
   static const Pronoun IT = const Pronoun("it", "it", "its", "itself");
+  static const Pronoun THEY = const Pronoun("they", "them", "their", "themselves");
 }
 
 /**
@@ -71,6 +57,9 @@ class Report {
   bool startSentence;
   bool wholeSentence;
   int time;
+  // TODO: startOfAction - if there is no report before startOfAction and
+  // endOfAction, don't report startOfAction.
+  // Prevents: "You set up the laser. The laser is now set up to fire at target."
 }
 
 /**
@@ -79,6 +68,7 @@ class Report {
 class Storyline {
   StringBuffer strBuf;
   List<Map<String,dynamic>> reports;
+  int time = 0;
 
   static final String SUBJECT = "<subject>";
   static final String SUBJECT_POSSESIVE = "<subject's>";
@@ -101,6 +91,11 @@ class Storyline {
   Storyline add(String str, {Actor subject, Actor object, bool but: false, 
       bool positive: false, bool negative: false, bool endSentence: false, 
       bool startSentence: false, bool wholeSentence: false, int time}) {
+    
+    if (time != null) {
+      this.time = time;
+    }
+    
     reports.add( {
         "string": str,
         "subject": subject,
@@ -111,7 +106,7 @@ class Storyline {
         "endSentence": endSentence,
         "startSentence": startSentence,
         "wholeSentence": wholeSentence,
-        "time": time
+        "time": this.time
     });
   }
 
@@ -298,7 +293,7 @@ class Storyline {
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
 
-    return randomlyParse(result);
+    return Randomly.parse(result);
   }
 
   Storyline() {
@@ -350,11 +345,11 @@ class Storyline {
           else
             strBuf.add(". ");
           if (but && !reports[i]["wholeSentence"])
-            strBuf.add(randomlyChoose(["But ", "But ", "However, ", 
+            strBuf.add(Randomly.choose(["But ", "But ", "However, ", 
                                        "Nonetheless, ", "Nevertheless, "]));
         } else { // let's try and glue [i-1] and [i] into one sentence
           if (but) {
-            strBuf.add(randomlyChoose([" but ", " but ", " yet ", ", but "]));
+            strBuf.add(Randomly.choose([" but ", " but ", " yet ", ", but "]));
             if (!sameSentiment(i, i+1))
               endThisSentence = true;
           } else {
@@ -362,7 +357,7 @@ class Storyline {
                 && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
               strBuf.add(", ");
             } else {
-              strBuf.add(randomlyChoose([" and ", " and ", ", and "]));
+              strBuf.add(Randomly.choose([" and ", " and ", ", and "]));
               endThisSentence = true;
             }
           }

@@ -35,6 +35,12 @@ void echo(String str) {
   textBuffer.add(str);
 }
 
+String _gotoPageName;
+
+void goto(String pageName) {
+  _gotoPageName = pageName;
+}
+
 /**
  * While set to true, no points will actually be added. This is set (and unset)
  * automatically when player picks a choice that he has previously seen
@@ -82,6 +88,17 @@ bool _repeatBlockBit = false;
  */
 void repeatBlock() {
   _repeatBlockBit = true;
+}
+
+/**
+When a block/script/choice call for a script to be called afterwards,
+it ends up on this FIFO stack.
+ */
+List<Function> _nextScriptStack;
+
+/// Adds a script to the stack of scripts.
+void nextScript(Function f) {
+  _nextScriptStack.add(f);
 }
 
 
@@ -146,7 +163,7 @@ abstract class EgbScripter {
    *
    * Function throws when requested page doesn't exist.
    */
-  void goto(String dest) {
+  void _goto(String dest) {
     _nextPage = pageMap.getPage(dest, currentGroupName: currentPage.groupName);
     if (_nextPage == null) {
       throw "Function goto() called with an invalid argument '$dest'. "
@@ -154,20 +171,8 @@ abstract class EgbScripter {
     }
   }
 
-  /// Adds a script to the stack of scripts.
-  void nextScript(Function f) {
-    _nextScriptStack.add(f);
-  }
-
   // -- private members below
-
   SendPort _runnerPort;
-
-  /**
-    When a block/script/choice call for a script to be called afterwards,
-    it ends up on this FIFO stack.
-    */
-  List<Function> _nextScriptStack;
 
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
@@ -258,7 +263,7 @@ abstract class EgbScripter {
         // This choice was taken.
         DEBUG_SCR("Found choice that was selected: ${choice.string}");
         if (choice.goto != null) {
-          goto(choice.goto);
+          _goto(choice.goto);
         }
         if (choice.f != null) {
           returnMessage = _runScriptBlock(script:choice.f);
@@ -294,6 +299,12 @@ abstract class EgbScripter {
     if (!_nextScriptStack.isEmpty) {
       Function script = _nextScriptStack.removeLast();
       return _runScriptBlock(script:script);
+    }
+    
+    // someone called the top level function [goto]
+    if (_gotoPageName != null) {
+      _goto(_gotoPageName);
+      _gotoPageName = null;
     }
 
     // if previous script asked to jump to a new page, then jump

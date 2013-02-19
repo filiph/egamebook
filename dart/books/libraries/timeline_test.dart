@@ -7,8 +7,8 @@ void main() {
   test("mainLoop works", () {
     textBuffer.clear();
     var timeline = new Timeline();
-    timeline.mainLoop = (t) {
-      echo("The hand on the clock moves to ${t.time} past the hour.");
+    timeline.mainLoop = () {
+      echo("The hand on the clock moves to ${timeline.time} past the hour.");
     };
     timeline.elapse(10);
     var str = textBuffer.toString();
@@ -18,11 +18,11 @@ void main() {
   test("custom event at given time works", () {
     textBuffer.clear();
     var timeline = new Timeline();
-    timeline.mainLoop = (t) {
-      echo("The hand on the clock moves to ${t.time} past the hour.");
+    timeline.mainLoop = () {
+      echo("The hand on the clock moves to ${timeline.time} past the hour.");
     };
     timeline.events.add(new TimedEvent(5, "String event."));
-    timeline.events.add(new TimedEvent(6, (_) => echo("Closure event.")));
+    timeline.events.add(new TimedEvent(6, () => echo("Closure event.")));
     
     timeline.events.add(new TimedEvent(7, "Bam."));
     timeline.events.add(new TimedEvent(7, "Bim.", priority: 10));
@@ -39,11 +39,11 @@ void main() {
   test("time++ works", () {
     textBuffer.clear();
     var timeline = new Timeline();
-    timeline.mainLoop = (t) {
-      echo("The hand on the clock moves to ${t.time} past the hour.");
+    timeline.mainLoop = () {
+      echo("The hand on the clock moves to ${timeline.time} past the hour.");
     };
     timeline.events.add(new TimedEvent(5, "String event."));
-    timeline.events.add(new TimedEvent(6, (_) => echo("Closure event.")));
+    timeline.events.add(new TimedEvent(6, () => echo("Closure event.")));
     
     timeline.events.add(new TimedEvent(7, "Bam."));
     timeline.events.add(new TimedEvent(7, "Bim.", priority: 10));
