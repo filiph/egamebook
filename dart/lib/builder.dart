@@ -1535,7 +1535,7 @@ class Builder {
         } else {
           write("],\n");
           write(
-              curPage.options.mappedBy((optName) => "$optName: true")
+              curPage.options.map((optName) => "$optName: true")
               .join(", ")
           );
         }

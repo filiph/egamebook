@@ -41,7 +41,7 @@ class EgbSavegame {
   
   EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
-    timestamp = new Date.now().millisecondsSinceEpoch;
+    timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
   

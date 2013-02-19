@@ -20,22 +20,10 @@ class Actor {
   bool isAlive = true;
 
   Pronoun pronoun;
-//  LoopedEvent loopedEvent;
   
   void report(String text, {Actor object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff
   }
-  
-//  void participateIn(LoopedEvent loopedEvent) {
-//    if (this.loopedEvent != null) throw new StateError("Cannot participate in "
-//                                              "more than one event at once.");
-//    this.loopedEvent = loopedEvent;
-//  }
-//  void stopParticipatingIn(LoopedEvent loopedEvent) {
-//    if (this.loopedEvent == loopedEvent) {
-//      this.loopedEvent = null;
-//    }
-//  }
 }
 
 class Player extends Actor {
