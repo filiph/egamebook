@@ -57,5 +57,24 @@ void main() {
     expect(str, contains("Bim. Bam."));
   });
   
+  test("length works", () {
+    textBuffer.clear();
+    var timeline = new Timeline();
+    timeline.length = 9;
+    timeline.mainLoop = () {
+      echo("The hand on the clock moves to ${timeline.time} past the hour.");
+    };
+    timeline.events.add(new TimedEvent(5, "String event."));
+    timeline.events.add(new TimedEvent(6, () => echo("Closure event.")));
+    timeline.events.add(new TimedEvent(7, "Bam."));
+    timeline.events.add(new TimedEvent(7, "Bim.", priority: 10));
+    timeline.time += 10;
+    var str = textBuffer.toString();
+    
+    textBuffer.clear();
+    timeline.time += 10;
+    expect(textBuffer.toString(), "");
+  });
+  
   // TODO: persistence
 }

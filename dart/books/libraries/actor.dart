@@ -10,16 +10,16 @@ class Actor {
   Actor({this.name, this.team: DEFAULT_ENEMY, this.isPlayer: false,
          this.pronoun: Pronoun.IT});
   
-  String name;
+  final String name;
   
   static const int FRIEND = 1;
   static const int DEFAULT_ENEMY = 2;
   int team;
-  bool isPlayer;
+  final bool isPlayer;
   
   bool isAlive = true;
 
-  Pronoun pronoun;
+  final Pronoun pronoun;
   
   void report(String text, {Actor object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff

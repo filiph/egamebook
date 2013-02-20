@@ -53,11 +53,13 @@ class TimedEvent {
  */
 class Timeline implements Saveable {
   int _time = -1;
+  int length;
   
   int get time => _time;
   set time(value) {
     if (_time == null) _time = -1;
     if (value < _time) throw new ArgumentError("Cannot go back in time.");
+    if (length != null && value > length) value = length;
     elapse(value - _time);
   }
   
@@ -84,7 +86,7 @@ class Timeline implements Saveable {
       storyline.add(s, time: _time);
     } else {
       // call top-level scripter function echo
-      echo(s);
+      if (s != null) echo(s);
     }
   }
   
@@ -112,6 +114,7 @@ class Timeline implements Saveable {
     for (int i = 0; i < t; i++) {
       _time += 1;
       _goOneTick();
+      if (length != null && _time == length) finished = true;
       if (finished) break;
     }
   }
