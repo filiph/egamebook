@@ -38,9 +38,16 @@ class NumScale implements Saveable {
   final num min;
   final num max;
   
-  num get percentage => (_value - min) / (max - min);
+  num get range => (max - min).abs();
+  
+  num get percentage {
+    if (max - min == 0) return 1.0;
+    return (_value - min) / (max - min);
+  }
   set percentage(num percentage) =>
         value = min + percentage * (max - min);
+  
+  bool get isNonZero => _value != 0;
   
   StreamController _streamController;
   Stream<num> _stream;
@@ -60,6 +67,14 @@ class NumScale implements Saveable {
       _stream.where((v) => v <= passValue && passValue < _lastValue);
   Stream onPassUpwards(num passValue) =>
       _stream.where((v) => _lastValue < passValue && passValue <= v);
+  
+  Stream onChangeBy(num percentage) {
+    return _stream.where((v) => (v - _lastValue).abs() / range > percentage);
+  }
+  Stream onDownwardsChangeBy(num percentage) =>
+      onChangeBy(percentage).where((v) => v < _lastValue);
+  Stream onUpwardsChangeBy(num percentage) =>
+      onChangeBy(percentage).where((v) => v > _lastValue);
   
   final className = "NumScale";
   toMap() => {"min": min, "max": max, "value": _value};
