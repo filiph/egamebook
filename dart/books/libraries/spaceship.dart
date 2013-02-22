@@ -1,0 +1,604 @@
+library spaceship;
+
+import '../../lib/src/book/scripter.dart';
+import '../../lib/src/shared/user_interaction.dart';
+import 'numscale.dart';
+import 'actor.dart';
+import 'storyline.dart';
+import 'timeline.dart';
+import 'randomly.dart';
+
+
+class Spaceship extends Actor /*TODO: implements Saveable*/ {
+  Spaceship(name, {this.shield, this.engine, this.hull,
+             this.thrusters: const [], this.weapons: const[],
+             this.systems: const []}) : super() {
+    // Assing this as all of this ship's system's spaceship. 
+    allSystems.forEach((system) {
+      system.spaceship = this;
+      system.team = team;
+    });
+  }
+  
+  String name; // needs to be unique for given combat situation
+  
+  bool get isAlive => hull.hp.value > 0;
+  
+  Actor pilot;
+  
+  /// The ship that this spaceship is focused on. Doesn't prevent a weapon 
+  /// from targeting a different ship.
+  Spaceship targetShip;
+  
+  final Hull hull;
+  final Shield shield;
+  final Engine engine;
+  
+  final List<Thruster> thrusters;
+  final List<Weapon> weapons;
+  
+  /// Life support, mining equipment, hyperdrive ...
+  final List<SpecialSystems> systems;
+  
+  /// Return the list of all the ship's systems, including engine, weapons, etc.
+  List<ShipSystem> get allSystems => new Iterable.generate(
+      systems.length + weapons.length + thrusters.length + 3, /* shield + engine + hull */
+      (int i) {
+        if (i < systems.length) {
+          return systems[i];
+        }
+        if (i < systems.length + weapons.length) {
+          return weapons[i - systems.length];
+        }
+        if (i < systems.length + weapons.length + thrusters.length) {
+          return thrusters[i - systems.length - weapons.length];
+        }
+        if (i == systems.length + weapons.length + thrusters.length) {
+          return shield;
+        }
+        if (i == systems.length + weapons.length + thrusters.length + 1) {
+          return engine;
+        }
+        if (i == systems.length + weapons.length + thrusters.length + 2) {
+          return hull;
+        }
+      }
+  ).where((system) => system != null);
+  
+  /// The current combined maneuverability of the ship's thrusters.
+  int get maneuverability =>
+    thrusters.reduce(0, 
+        (num prevValue, thruster) => prevValue + thruster.maneuverability)
+        .toInt();
+  
+  void update() {
+    allSystems.forEach((system) => system.update());
+  }
+  
+  EgbChoiceList getAllChoices() {
+    List<EgbChoice> choices = [];
+    allSystems.forEach((system) {
+      system.availableMoves.forEach((move) {
+        if (move.isEligible(targetShip: targetShip)) {
+          choices.add(move.createChoice(targetShip: targetShip));
+        }
+      });
+    });
+    choices.sort((a, b) => Comparable.compare(a.string, b.string));  // TODO better sorting
+    return new EgbChoiceList.from(choices);
+  }
+  
+  /*
+   * TODO: saveable only primitives, rest should be remembered by Combat
+   */
+}
+
+/**
+ * [CombatMove] defines a possibility (choice) for the player / AI to perform
+ * with a specified system. E.g. fire a gun, redistribute energy from an engine,
+ * use the tractor beam. 
+ * 
+ * The most general characteristics of a move are defined by static variables
+ * ([name], [needsTarget]) and methods ([update]). But specific variants of the
+ * move (i.e. firing from a concrete gun on a concrete ship) are implemented
+ * by creating a new instance and adding it to the [ShipSystem]'s 
+ * [availableMoves] list. When a [CombatMove] is started, it is referenced 
+ * by the [ShipSystem]'s [currentMove] variable and updated on each turn.
+ * 
+ * When finished, the CombatMove can either [autoRepeat], or it stops (the
+ * [currentMove] variable is set to [:null:]).
+ * 
+ * Class [CombatMove] can be extended (e.g. by [FireGun] or [RepairSystem])
+ * for more readable code.
+ */
+abstract class CombatMove {
+  CombatMove(this.system) {
+  }
+  
+  /// The system that performs this move. Ex.: the laser gun performing this
+  /// laser shot.
+  final ShipSystem system;
+  /// The (optional) target ship.
+  Spaceship targetShip;
+  /// The (optional) exact target system.
+  ShipSystem targetSystem;
+  
+  /// Whether this move is currently available to the actor. Use this to
+  /// hide options from the player and then add them as a form of progression.
+  // @saveable
+  static bool available = true; // TODO: saveable!!!?
+  
+  /// The unique name of this particular type of move.
+  static final String name = "undefined move";
+  
+  /// The text of the choice presented to player.
+  String get commandText;  // fire weapon at <object>
+  
+  /// Only reported for player (TODO: or other people on same ship) when he
+  /// starts programming the ship computer to do something.
+  void reportSettingUp() {
+    var pilot = system.spaceship.pilot;
+    if (pilot == null || !pilot.isPlayer) {
+      throw new StateError("reportSettingUp should not have been called since "
+          "this spaceship's pilot is null or is not player");
+      //return new Report.empty();
+    }
+    storyline.add(stringSettingUp, subject: pilot, object: targetShip);
+  }
+  String get stringSettingUp => "<subject> start<s> programming the "
+                                "${system.name} to $commandText";
+  
+  /// Reported when the computer/system starts the sequence.
+  void reportStarting() => _report(stringStarting); 
+  String stringStarting = "<subject> {initiate|start}<s> the $name";
+  
+  /// Ex.: <subject> <is> firing at <object> 
+  // YAGNI?
+  //String gerundString;
+  
+  /// Reported when an already started CombatMove ceases to be eligible to
+  /// continue (e.g. targetShip disappears, goes out of range, etc.).
+  void reportCannotContinue() => _report(stringCannotContinue);  
+  String stringCannotContinue = ""; // <subject> is no longer able to fire at <object>
+  
+  /// Reported when the move is successfully finished.
+  void reportSuccess() => _report(stringSuccess);
+  String stringSuccess = "<subject> successfully finish<es> $name";
+  void onSuccess() {}
+  
+  /// Reported when the move finished with failure.
+  void reportFailure() => _report(stringFailure); 
+  String stringFailure = "<subject> failed to perform $name";
+  void onFailure() {}
+
+  /// Reported when the move is going for another round.
+  void reportAutoRepeat() => _report(stringAutoRepeat); 
+  String stringAutoRepeat = "";   // <subject> goes for another round of
+  
+  void _report(String str) {
+    storyline.add(str, subject: system.spaceship, object: targetShip);
+  }
+  
+  /// Whether this combat move needs a target ship that is alive.
+  static final bool needsTargetShip = true;
+  /// Whether this combat move needs a target system that is alive.
+  static final bool needsTargetSystem = true;
+  
+  /// Whether the move is supposed to automatically renew itself after each
+  /// run.
+  bool autoRepeat = false;
+  
+  /// Is the move currently eligible to be carried out?
+  bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
+    if (needsTargetShip) {
+      if (targetShip == null && this.targetShip != null) {
+        targetShip = this.targetShip;
+      }
+      if (targetShip == null || !targetShip.isAliveAndActive) return false;
+    }
+    if (needsTargetSystem) {
+      if (targetSystem == null && this.targetSystem != null) {
+        targetSystem = this.targetSystem;
+      }
+      if (targetSystem == null || !targetSystem.isAliveAndActive) return false;
+    }
+    if (!available) return false;
+    if (!system.isAlive) return false;
+    if (!system.spaceship.isAliveAndActive) return false;
+    return true;
+  }
+  
+  /// Can the move continue?
+  bool canContinue() => isEligible();
+  
+  /// Can be overridden with more involved mathemathics (incl. things like
+  /// maneuverability of targetShip, etc.).
+  num calculateSuccessChance({Spaceship targetShip, ShipSystem targetSystem}) => 
+        defaultSuccessChance;
+  final num defaultSuccessChance = 1.0;
+  
+  EgbChoice createChoice({Spaceship targetShip}) {
+    return new EgbChoice("$commandText [${timeToSetup}s]", // TODO: add probability range
+        showNow: true, script: () {
+          this.targetShip = targetShip;
+          system.currentMove = this;
+          currentTimeToSetup = timeToSetup;
+          start();
+    });
+    // TODO: add preferability (optional to EgbChoice, then set here)
+  }
+  
+  /**
+   * Runs just after the CombatMove gets picked by the player. Can just update
+   * some variable, or can create a list of choices.
+   */
+  void start() {}
+  
+  /// The time it takes for a pilot to setup the combat move on the console.
+  int timeToSetup;
+  int currentTimeToSetup;
+  
+  /// The time it takes for the combat to finish (e.g. for a laser gun to fire).
+  int timeToFinish;
+  int currentTimeToFinish;
+  
+  /// The timeline from start of performing to finish (e.g. charging to fire).
+  // Timeline timeline <-- YAGNI
+  
+  /**
+   * Goes one tick in the lifetime of the CombatMove. Decreases 
+   * [currentTimeToSetup] or [currentTimeToFinish], depending on state of the
+   * move (setup phase or perform phase).
+   */
+  void update() {
+    if ((currentTimeToSetup != null || currentTimeToFinish != null) &&
+        !canContinue()) {
+      reportCannotContinue();
+      currentTimeToSetup = currentTimeToFinish = null;
+    }
+    
+    if (currentTimeToSetup != null) {
+      if (currentTimeToSetup == timeToSetup && system.spaceship.pilot != null
+          && system.spaceship.pilot.isPlayer) {
+        // only report setting up for player (TODO: + other people on same ship)
+        reportSettingUp();
+      }
+      --currentTimeToSetup;
+      if (currentTimeToSetup <= 0) {
+        currentTimeToSetup = null;
+        currentTimeToFinish = timeToFinish;
+      }
+      return;
+    }
+    
+    if (currentTimeToFinish == null) return;
+    if (currentTimeToFinish == timeToFinish) reportStarting();
+    // delay if system is underpowered proportionally to the power input
+    if (Randomly.saveAgainst(system.powerInput.percentage)) {
+      currentTimeToFinish -= 1;
+    }
+    if (currentTimeToFinish == 0) {
+      if (Randomly.saveAgainst(calculateSuccessChance())) {
+        reportSuccess();
+        onSuccess();
+      } else {
+        reportFailure();
+        onFailure();
+      }
+      if (autoRepeat) {
+        reportAutoRepeat();
+        currentTimeToFinish = timeToFinish;
+      } else {
+        currentTimeToFinish = null;
+      }
+    }
+  }
+}
+
+/**
+ * Lets player/AI fire at a given [ShipSystem] (hull by default).
+ */
+class FireGun extends CombatMove {
+  FireGun(ShipSystem system) : super(system) {
+    // it is safe to assume the [system] is a weapon in this subclass
+    weapon = system as Weapon;
+  }
+
+  /// Copy of [system], but because this is [FireGun], its safe to cast it
+  /// as a weapon
+  Weapon weapon;
+  
+  static final bool needsTargetShip = true;
+  static final bool needsTargetSystem = true;
+  
+  bool autoRepeat = true;
+  
+  static final String name = "fire gun";
+  String get commandText => 
+      "{fire|shoot} ${system.name} at ${targetShip.name}";
+      
+  String get stringStarting => "<subject's> ${system.name} {begins|starts} "
+                               "charging";
+                               
+  void reportSuccess() {
+    storyline.add("<subject's> ${system.name} fires at <object>",
+                  subject: system.spaceship, object: targetShip);
+  }
+  
+  void onSuccess() {
+    _hit(targetSystem);
+  }
+  
+  void _hit(ShipSystem targetSystem) {
+    var damage = weapon.damage;
+    if (damage == 0) return;
+    var shield = targetSystem.spaceship.shield;
+    if (shield != null && shield.isAliveAndActive && shield.sp.isNonZero) {
+      if (!Randomly.saveAgainst(weapon.shieldPenetration)) {
+        storyline.add("the ${weapon.projectileName} "
+            "{drills into|hits} <object's> shield",
+            subject: system.spaceship, object: targetSystem.spaceship,
+            positive: true);
+        if (damage > shield.sp.value) {
+          // Rest of energy goes to hp damage
+          damage -= shield.sp.value;
+          shield.sp.value = 0;
+          // TODO: report?
+        } else {
+          shield.sp.value -= weapon.damage;
+          damage = 0;
+        }
+      } else {
+        storyline.add("the ${weapon.projectileName} "
+            "goes {right|} through <object's> shield",
+            subject: system.spaceship, object: targetSystem.spaceship, 
+            positive: true);
+      }
+    }
+    if (damage > 0) {
+      storyline.add("the ${(system as Weapon).projectileName} "
+          "{hits|succeeds to hit|successfully hits} <object>",
+          subject: system.spaceship, object: targetSystem, positive: true);
+      targetSystem.hp.value -= damage;
+    }
+  }
+  
+  void reportFailure() {
+    storyline.add("<subject's> ${system.name} " 
+                  "{fails to hit|misses|goes wide of} <object>",
+                  subject: system.spaceship, object: targetSystem, 
+                  negative: true);
+  }
+  
+  void onFailure() {
+    if (!(targetSystem is Hull)) {
+      // when targetting a specific system, it's possible to miss that one
+      // but still hit the hull (but with half the probability)
+      if (Randomly.saveAgainst(
+              calculateSuccessChance(targetSystem: targetShip.hull) / 2.0)) {
+        _hit(targetShip.hull);
+      }
+    }
+  }
+  
+  bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
+    if (!super.isEligible(targetShip: targetShip, targetSystem: targetSystem)) {
+      return false;
+    }
+    if (system.powerInput.value != system.powerInput.max) return false;
+    if (!targetSystem.isOutsideHull) return false;
+    return true;
+  }
+  
+  num calculateSuccessChance({Spaceship targetShip, ShipSystem targetSystem}) {
+    if (targetSystem == null) targetSystem = this.targetSystem;
+    var chance = defaultSuccessChance * targetSystem.exposedFactor *
+                 weapon.accuracyModifier;
+    chance -= targetSystem.spaceship.maneuverability / 100;
+    if (chance < 0) return 0.0;
+    return chance;
+  }
+  num defaultSuccessChance = 0.6;
+  
+  void start() {
+    choices.question = 
+        "Which part of ${targetShip.name} do you want to target?";
+    _createChoiceForTargetSystem(targetShip.hull);  // first one is hull
+    targetShip.allSystems.where((system) {
+      if (system is Hull) return false;
+      return system.isOutsideHull;
+    }).forEach((system) {
+      _createChoiceForTargetSystem(system);
+    });
+  }
+  
+  EgbChoice _createChoiceForTargetSystem(ShipSystem targetSystem) {
+    String probability = Randomly.humanStringify(
+        calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 5);
+    choices.add("Target ${targetSystem.name} [$probability]", script: () {
+      this.targetSystem = targetSystem;
+    });
+    
+  }
+}
+
+//class RedistributeEnergy extends CombatMove {
+//  RedistributeEnergy() : super("<subject> redistribute<s> energy", 
+//      timeToSetup: 1, timeToFinish: 1, needsTarget: false);
+//  
+//  
+//}
+
+
+
+typedef void EventCallback();
+
+
+class ShipSystem extends Actor /* TODO: implements Saveable*/ {
+  ShipSystem(this.name, {maxHp: 10, IntScale hp, maxPowerInput: 1.0}) {
+    if (hp == null) hp = new IntScale(max: maxHp);
+    this.hp = hp;
+    hp.onMax().listen((_) {
+      reportFullRepair();
+    });
+    hp.onMin().listen((_) {
+      reportDestroy();
+      onDestroy();
+    });
+    hp.onDownwardsChangeBy(0.5).listen((_) {
+      reportMajorDamage();
+    });
+    
+    powerInput = new NumScale(max: maxPowerInput);
+  }
+
+  String name;
+  /// Which spaceship is this system part of.
+  Spaceship spaceship;
+  
+  IntScale hp;
+  NumScale powerInput;
+  
+  bool isOutsideHull = false;
+  
+  bool get isAlive => hp.value > 0;
+  
+  List<CombatMove> availableMoves = [];
+  CombatMove currentMove;
+  
+  num get weight => hp.max * 1000; 
+  
+  /// How much of a target this system is on the outside of the craft.
+  /// By default, this is proportion of this hp.max to the hull.hp.max.
+  num get exposedFactor {
+    if (!isOutsideHull) {
+      return 0;
+    } else {
+      return hp.max / spaceship.hull.hp.max;
+    }
+  }
+  
+  void reportFullRepair() => _report(stringDestroy, positive: true);
+  String stringFullRepair = "<subject> <is> now {{fully|} repaired|fully operational}";
+  
+  void reportDestroy() => _report(stringDestroy, negative: true);
+  String stringDestroy = "<subject> {blow<s> up|<is> destroyed}";
+  void onDestroy() {}
+  
+  void reportMajorDamage() => _report(stringMajorDamage, negative: true);
+  String stringMajorDamage = 
+      "<subject> {is damaged heavily|receives major damage}";
+  
+  void _report(String str, {bool negative: false, bool positive: false}) {
+    storyline.add(str, subject: this, negative: negative, positive: positive);
+  }
+  
+  void update() {
+    if (currentMove != null) {
+      currentMove.update();
+      if (currentMove.currentTimeToFinish == 0 && currentMove.autoRepeat) {
+        currentMove.currentTimeToFinish = currentMove.timeToFinish;
+      } else {
+        currentMove = null;
+      }
+    }
+  }
+}
+
+//class Projectile extends Actor {
+//  Projectile(name, {this.shieldDamage: 0, this.shieldPenetration: 0.0, 
+//                    this.hpDamage: 0, team: null}) 
+//      : super(name: name, team: team, isPlayer: false, pronoun: Pronoun.IT) {
+//    
+//  }
+//  
+//}
+
+class Weapon extends ShipSystem {
+  Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1}) 
+      : super(name, maxHp: maxHp) {
+    if (ammo == null) ammo = new IntScale(max: maxAmmo);
+    ammo.onMin().listen((_) {
+      _report("<subject> is out of ammo", negative: true);
+    });
+        
+    var defaultCombatMove = new FireGun(this);
+    availableMoves.add(defaultCombatMove);
+  }
+  
+  IntScale ammo;
+  String projectileName;
+  
+  num accuracyModifier = 1.0;
+  num shieldPenetration;
+  int damage;
+}
+
+class Engine extends ShipSystem {
+  Engine({String name: "engine", maxHp: 10, this.maxPowerOutput}) 
+      : super(name, maxHp: maxHp) {
+  }
+  
+  // TODO: priority list of ship systems for power input 
+  
+  // TODO: CombatMove: reroute energy
+  
+  num maxPowerOutput;
+  num get powerOutput => (hp.percentage * maxPowerOutput).toInt();
+}
+
+class Thruster extends ShipSystem {
+  Thruster(String name, {int maxHp: 10, hp, num maxPowerInput: 1.0, 
+           this.maxForwardlyForce: 0, this.maxManeuverability: 0}) 
+           : super(name, maxHp: maxHp, hp: hp, 
+                   maxPowerInput: maxPowerInput);
+  
+  bool isOutsideHull = true;
+  
+  /// The amount of force this thruster can bring to the speed of the ship
+  /// when on max power input.
+  int maxForwardlyForce;
+  int get forwardlyForce => (hp.percentage * maxForwardlyForce).toInt();
+  
+  /// The amount of maneverability this thruster brings for the ship when on
+  /// max power input. Each maneuverability point takes one percent from
+  /// chance to hit.
+  int maxManeuverability;
+  int get maneuverability => (hp.percentage * maxManeuverability).toInt();
+}
+
+class Hull extends ShipSystem {
+  Hull({String name: "hull", maxHp: 10}) 
+      : super(name, maxHp: maxHp) {
+  }
+  
+  bool isOutsideHull = true;
+}
+
+class Shield extends ShipSystem {
+  Shield({String name: "shields", maxHp: 5, maxSp: 10, NumScale sp, 
+          maxPowerInput: 1.0}) 
+      : super(name, maxHp: maxHp, maxPowerInput: maxPowerInput) {
+    if (sp == null) sp = new NumScale(max: maxSp);
+    this.sp = sp;
+  }
+  
+  Pronoun pronoun = Pronoun.THEY;
+  num regenerationSpeed;
+  
+  // TODO: combatmove regenerate
+  
+  /// Shield Points - like hit points, but for shields. ([Shield]'s [hp] is the
+  /// mechanical health of the shield system. The shields can be depleted, but
+  /// the system can be still functioning and regenerating.)
+  NumScale sp;
+}
+
+class SpecialSystems extends ShipSystem {
+  SpecialSystems(String name, {maxHp: 2, IntScale hp, maxPowerInput: 1.0}) 
+    : super(name, maxHp: maxHp, hp: hp, 
+        maxPowerInput: maxPowerInput);
+    
+  bool isOutsideHull = false;
+}
+
