@@ -44,4 +44,47 @@ void main() {
       expect(Randomly.parse(s), equals(s));
     });
   });
+  
+  group("Randomly.humanStringify", () {
+    var p0 = 0.0;
+    var p15 = 0.15;
+    var p51 = 0.51;
+    var p68 = 0.68;
+    var p99 = 0.99;
+    var p100 = 1.00;
+    var p112 = 1.12;
+    
+    test("solves for precision step of 10", () {
+      humanize(num n) => Randomly.humanStringify(n, precisionSteps: 10);
+      expect(humanize(p0), "0%");
+      expect(humanize(p15), "20%");
+      expect(humanize(p51), "50%");
+      expect(humanize(p68), "70%");
+      expect(humanize(p99), "100%");
+      expect(humanize(p100), "100%");
+      expect(humanize(p112), "110%");
+    });
+    
+    test("solves for precision step of 5", () {
+      humanize(num n) => Randomly.humanStringify(n, precisionSteps: 5);
+      expect(humanize(p0), "0%");
+      expect(humanize(p15), "15%");
+      expect(humanize(p51), "50%");
+      expect(humanize(p68), "70%");
+      expect(humanize(p99), "100%");
+      expect(humanize(p100), "100%");
+      expect(humanize(p112), "110%");
+    });
+    
+    test("solves for precision step of 2", () {
+      humanize(num n) => Randomly.humanStringify(n, precisionSteps: 2);
+      expect(humanize(p0), "0%");
+      expect(humanize(p15), "16%");
+      expect(humanize(p51), "52%");
+      expect(humanize(p68), "68%");
+      expect(humanize(p99), "100%");
+      expect(humanize(p100), "100%");
+      expect(humanize(p112), "112%");
+    });
+  });
 }

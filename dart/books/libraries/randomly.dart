@@ -92,5 +92,14 @@ class Randomly {
       return str;
     }
   }
+  
+  static String humanStringify(num probability, 
+                   {int precisionSteps: 10, 
+                    String prefix: "", String postfix: "%"}) {
+    probability *= 100 / precisionSteps;    // ex. 6.4
+    probability = probability.round();  // ex. 6.0
+    probability *= precisionSteps;  // ex. 60
+    return "$prefix${probability.toStringAsFixed(0)}$postfix";
+  }
 
 }
