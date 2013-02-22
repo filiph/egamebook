@@ -82,11 +82,12 @@ class Timeline implements Saveable {
   // TODO mainLoop = just another event, but with null time => priority!
   
   void _handleEventOutput(String s) {
+    if (s == null) return;
     if (this.storyline != null) {
       storyline.add(s, time: _time);
     } else {
       // call top-level scripter function echo
-      if (s != null) echo(s);
+      echo(s);
     }
   }
   
