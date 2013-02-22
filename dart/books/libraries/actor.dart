@@ -17,7 +17,13 @@ class Actor {
   int team;
   final bool isPlayer;
   
-  bool isAlive = true;
+  /// True if Actor is alive, i.e. not destroyed or dead.
+  bool get isAlive => true;
+  /// True if Actor is actively participating. This is meant to be directly set
+  /// by author.
+  bool isActive = true;
+  
+  bool get isAliveAndActive => isAlive && isActive;
 
   final Pronoun pronoun;
   
