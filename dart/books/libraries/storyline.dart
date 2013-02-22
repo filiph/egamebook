@@ -47,6 +47,8 @@ class Report {
       {this.subject, this.object, this.but, this.positive, this.negative,
        this.endSentence, this.startSentence, this.wholeSentence, this.time});
   
+  Report.empty() : string = "";
+  
   String string;
   Actor subject;
   Actor object;
@@ -84,6 +86,8 @@ class Storyline {
   static final String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
   static final String VERB_DO = "<does>";
   static final String VERB_BE = "<is>";
+  
+  // TODO: add <owner's>
 
   /**
    * Add another event to the story. 
