@@ -22,6 +22,7 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   void update() {
     actors.forEach((Spaceship ship) {
       ship.update();  // this trickles down to ship components and CombatMoves
+                      // and pilots
     });
     
     // make sure the fight still needs to continue
@@ -35,15 +36,6 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
       finished = true;
       return;
     }
-    
-    if (timeToNextInteraction < 0) {
-      _createChoices();
-      timeToNextInteraction += 5; // TODO class Pilot
-    }
-  }
-  
-  void _createChoices() {
-    
   }
   
   /*
