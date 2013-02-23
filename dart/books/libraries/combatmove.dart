@@ -83,6 +83,13 @@ abstract class CombatMove {
   void reportAutoRepeat() => _report(stringAutoRepeat); 
   String stringAutoRepeat = "";   // <subject> goes for another round of
   
+  void reportStop() => _report(stringStop);
+  String get stringStop => "<subject> stop<s> to $commandText";
+  void stop() {
+    reportStop();
+    system.currentMove = null;
+  }
+  
   void _report(String str) {
     storyline.add(str, subject: system.spaceship, object: targetShip);
   }
@@ -126,14 +133,17 @@ abstract class CombatMove {
   final num defaultSuccessChance = 1.0;
   
   EgbChoice createChoice({Spaceship targetShip}) {
+    if (needsTargetShip && targetShip == null) {
+      throw new ArgumentError("Move $name needs targetShip to be non-null.");
+    }
     return new EgbChoice("$commandText [${timeToSetup}s]", // TODO: add probability range
         showNow: true, script: () {
           this.targetShip = targetShip;
           system.currentMove = this;
           currentTimeToSetup = timeToSetup;
           start();
+          system.spaceship.pilot.timeToNextInteraction = timeToSetup;
     });
-    // TODO: add preferability (optional to EgbChoice, then set here)
   }
   
   /**
