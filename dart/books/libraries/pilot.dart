@@ -1,7 +1,7 @@
 part of spaceship;
 
 class Pilot extends Actor {
-  Pilot({name: "pilot", team: DEFAULT_ENEMY, isPlayer: false, 
+  Pilot({name: "pilot", team: Actor.DEFAULT_ENEMY, isPlayer: false, 
     pronoun: Pronoun.HE})
       : super(name: name, team: team, isPlayer: isPlayer,
               pronoun: pronoun) {
@@ -11,7 +11,7 @@ class Pilot extends Actor {
   Pilot.player() : super(name: "player", pronoun: Pronoun.YOU,
       team: Actor.FRIEND, isPlayer: true);
     
-  Pilot.ai(this.spaceship) : super(name: "pilot", team: DEFAULT_ENEMY, 
+  Pilot.ai(this.spaceship) : super(name: "pilot", team: Actor.DEFAULT_ENEMY, 
                     isPlayer: false, pronoun: Pronoun.HE);
   
   Spaceship spaceship;

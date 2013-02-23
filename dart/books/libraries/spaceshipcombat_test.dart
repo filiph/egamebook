@@ -3,6 +3,7 @@ import '../../lib/src/book/scripter.dart';
 import 'spaceship.dart';
 import 'spaceshipcombat.dart';
 import 'actor.dart';
+import 'storyline.dart';
 
 void main() {
   var player = new Pilot.player();
@@ -10,6 +11,7 @@ void main() {
   // setup ships
   var ship1 = new Spaceship(
         "Bodega",
+        pilot: player,
         hull: new Hull(maxHp: 100),
         shield: new Shield(maxHp: 20, maxPowerInput: 2.0),
         engine: new Engine(maxHp: 10, maxPowerOutput: 10.0),
@@ -25,8 +27,6 @@ void main() {
             new Weapon("Front Utility Laser")
           ]
   );
-  ship1.pilot = player; // TODO better
-  player.spaceship = ship1;
   ship1.hull.hp.onPassDownwards(50).take(1).listen((_) => ship1.report("<subject's> hull has taken some major damage"));
   
   var ship2 = new Spaceship(
@@ -46,7 +46,8 @@ void main() {
                  ]
   );
   
-  
+  ship1.targetShip = ship2;
+  ship2.targetShip = ship1;
   
   // setup combat
   var combat = new SpaceshipCombat(ships: [ship1, ship2]);
@@ -56,9 +57,13 @@ void main() {
   
   combat.onFinishedGoto = "something";
   
+  player.timeToNextInteraction = 1;
+  
   // ---
   // combatloop
   combat.run();
+  
+  choices.forEach((ch) => print(ch));
   
   // - [combatloop]
   

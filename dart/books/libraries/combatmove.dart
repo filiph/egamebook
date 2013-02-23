@@ -111,7 +111,7 @@ abstract class CombatMove {
       }
       if (targetShip == null || !targetShip.isAliveAndActive) return false;
     }
-    if (needsTargetSystem) {
+    if (!needsTargetShip && needsTargetSystem) {
       if (targetSystem == null && this.targetSystem != null) {
         targetSystem = this.targetSystem;
       }
@@ -231,9 +231,12 @@ class FireGun extends CombatMove {
   
   bool autoRepeat = true;
   
+  int timeToSetup = 4;
+  int timeToFinish = 3;
+  
   static final String name = "fire gun";
   String get commandText => 
-      "{fire|shoot} ${system.name} at ${targetShip.name}";
+      "{fire|shoot} ${system.name}";
       
   String get stringStarting => "<subject's> ${system.name} {begins|starts} "
                                "charging";
@@ -304,7 +307,7 @@ class FireGun extends CombatMove {
       return false;
     }
     if (system.powerInput.value != system.powerInput.max) return false;
-    if (!targetSystem.isOutsideHull) return false;
+    if (targetSystem != null && !targetSystem.isOutsideHull) return false;
     return true;
   }
   

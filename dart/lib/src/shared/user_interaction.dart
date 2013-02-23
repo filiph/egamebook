@@ -138,6 +138,9 @@ class EgbChoiceList implements List<EgbChoice> {
   void clear() => _choices.clear();
   get iterator => _choices.iterator;
 
+  bool get isEmpty => _choices.isEmpty;
+  void addAll(Iterable<EgbChoice> iterable) => _choices.addAll(iterable);
+  
   /// Returns true only if the choices are actionable, i.e. not automatic,
   /// and yet to be shown.
   bool get areActionable =>

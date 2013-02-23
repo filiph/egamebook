@@ -14,10 +14,12 @@ part 'pilot.dart';
 
 
 class Spaceship extends Actor /*TODO: implements Saveable*/ {
-  Spaceship(name, {this.shield, this.engine, this.hull,
+  Spaceship(String name, {this.shield, this.engine, this.hull,
              this.thrusters: const [], this.weapons: const[],
-             this.systems: const [], this.pilot}) : super() {
+             this.systems: const [], this.pilot}) : super(name: name) {
     if (pilot == null) pilot = new Pilot.ai(this);
+    pilot.spaceship = this;
+    team = pilot.team;
     // Assing this as all of this ship's system's spaceship. 
     allSystems.forEach((system) {
       system.spaceship = this;
@@ -25,10 +27,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     });
   }
   
-  String name; // needs to be unique for given combat situation
-  
   bool get isAlive => hull.hp.value > 0;
-  
   Pilot pilot;
   
   /// The ship that this spaceship is focused on. Doesn't prevent a weapon 
@@ -46,7 +45,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   final List<SpecialSystems> systems;
   
   /// Return the list of all the ship's systems, including engine, weapons, etc.
-  List<ShipSystem> get allSystems => new Iterable.generate(
+  Iterable<ShipSystem> get allSystems => new Iterable.generate(
       systems.length + weapons.length + thrusters.length + 3, /* shield + engine + hull */
       (int i) {
         if (i < systems.length) {

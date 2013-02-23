@@ -26,10 +26,10 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   
   void update() {
     timeline.time++;
-    actors.forEach((Spaceship ship) {
+    for (Spaceship ship in actors) { //actors.forEach((Spaceship ship) {
       ship.update();  // this trickles down to ship components and CombatMoves
                       // and pilots
-    });
+    }
     
     // make sure the fight still needs to continue
     if (playerSpaceship != null && !playerSpaceship.isAlive) {
@@ -37,7 +37,8 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
       return;
     }
     if (!actors.any(
-        (a) => a.isAlive && actors.any((b) => b.isAlive && b.team != a.team))) {
+        (a) => a.isAliveAndActive && 
+               actors.any((b) => b.isAliveAndActive && b.team != a.team))) {
       // there are no opposing forces left
       finished = true;
       return;

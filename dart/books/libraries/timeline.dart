@@ -11,7 +11,7 @@ typedef String EventClosure();
 class TimedEvent {
   final int time;
   final int priority;
-  EventClosure f;
+  Function f;
   String text;
   
   TimedEvent(this.time, dynamic action, {this.priority: 0}) {
@@ -21,7 +21,7 @@ class TimedEvent {
     }
     if (action is String) {
       text = action;
-    } else if (action is EventClosure) {
+    } else if (action is Function) {
       f = action;
     } else {
       throw new ArgumentError("Second parameter in TimedEvent() constructor "
