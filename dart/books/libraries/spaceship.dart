@@ -16,7 +16,8 @@ part 'pilot.dart';
 class Spaceship extends Actor /*TODO: implements Saveable*/ {
   Spaceship(name, {this.shield, this.engine, this.hull,
              this.thrusters: const [], this.weapons: const[],
-             this.systems: const []}) : super() {
+             this.systems: const [], this.pilot}) : super() {
+    if (pilot == null) pilot = new Pilot.ai(this);
     // Assing this as all of this ship's system's spaceship. 
     allSystems.forEach((system) {
       system.spaceship = this;
@@ -28,7 +29,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   
   bool get isAlive => hull.hp.value > 0;
   
-  Actor pilot;
+  Pilot pilot;
   
   /// The ship that this spaceship is focused on. Doesn't prevent a weapon 
   /// from targeting a different ship.
@@ -77,26 +78,24 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   
   void update() {
     allSystems.forEach((system) => system.update());
+    pilot.update();
   }
   
-  EgbChoiceList getAllChoices() {
-    List<EgbChoice> choices = [];
+  List<CombatMove> getAvailableMoves() {
+    List<CombatMove> moves = [];
     allSystems.forEach((system) {
       if (system.currentMove == null) {
         system.availableMoves.forEach((move) {
           if (move.isEligible(targetShip: targetShip)) {
-            choices.add(move.createChoice(targetShip: targetShip));
+            moves.add(move);
           }
         });
       } else if (system.currentMove.autoRepeat) {
-        choices.add(new EgbChoice("Stop ${system.currentMove.instanceName}",
-            script: () {
-              system.currentMove = null;
-            }));
+        // add autoRepeating currentMoves so pilot can choose to stop them
+        moves.add(system.currentMove);   
       }
     });
-    choices.sort((a, b) => Comparable.compare(a.string, b.string));  // TODO better sorting
-    return new EgbChoiceList.from(choices);
+    return moves;
   }
   
   /*
