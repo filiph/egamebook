@@ -5,7 +5,7 @@ import 'spaceshipcombat.dart';
 import 'actor.dart';
 
 void main() {
-  var player = new Player();
+  var player = new Pilot.player();
   
   // setup ships
   var ship1 = new Spaceship(
@@ -25,7 +25,8 @@ void main() {
             new Weapon("Front Utility Laser")
           ]
   );
-  ship1.pilot = player;
+  ship1.pilot = player; // TODO better
+  player.spaceship = ship1;
   ship1.hull.hp.onPassDownwards(50).take(1).listen((_) => ship1.report("<subject's> hull has taken some major damage"));
   
   var ship2 = new Spaceship(
@@ -50,7 +51,7 @@ void main() {
   // setup combat
   var combat = new SpaceshipCombat(ships: [ship1, ship2]);
   combat.addEvent(5, "String event.");
-  combat.addEvent(6, (_) => ship1.engine.hp--);
+  combat.addEvent(6, (_) => ship1.engine.hp.value--);
   combat.addEvent(7, (_) => ship2.report("<subject> is starting to circle <object>", object: ship1));
   
   combat.onFinishedGoto = "something";

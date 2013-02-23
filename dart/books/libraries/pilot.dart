@@ -8,6 +8,9 @@ class Pilot extends Actor {
       
   }
     
+  Pilot.player() : super(name: "player", pronoun: Pronoun.YOU,
+      team: Actor.FRIEND, isPlayer: true);
+    
   Pilot.ai(this.spaceship) : super(name: "pilot", team: DEFAULT_ENEMY, 
                     isPlayer: false, pronoun: Pronoun.HE);
   

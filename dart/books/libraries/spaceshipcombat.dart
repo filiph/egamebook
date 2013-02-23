@@ -4,6 +4,7 @@ import '../../lib/src/book/scripter.dart';
 import 'actor.dart';
 import 'loopedevent.dart';
 import 'storyline.dart';
+import 'timeline.dart';
 import 'spaceship.dart';
 
 
@@ -19,7 +20,12 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   Spaceship playerSpaceship;
   int timeToNextInteraction = 0;
   
+  void addEvent(int t, dynamic action) {
+    timeline.events.add(new TimedEvent(t, action));
+  }
+  
   void update() {
+    timeline.time++;
     actors.forEach((Spaceship ship) {
       ship.update();  // this trickles down to ship components and CombatMoves
                       // and pilots
