@@ -372,7 +372,7 @@ The communications panel goes blank as the pilot closes the connection. The Mess
   firstCombat.addEvent(6, () => ship1.engine.hp.value--);
   firstCombat.addEvent(7, () => ship2.report("<subject> is starting to circle <object>", object: ship1));
   
-  firstCombat.onFinishedGoto = "something";
+  firstCombat.onFinishedGoto = "Resolution";
   
   player.timeToNextInteraction = 1;
 </variables>
