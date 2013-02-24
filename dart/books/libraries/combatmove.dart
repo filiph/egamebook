@@ -322,7 +322,7 @@ class FireGun extends CombatMove {
     if (chance < 0) return 0.0;
     return chance;
   }
-  num defaultSuccessChance = 0.6;
+  num defaultSuccessChance = 0.8;
   
   void start() {
     choices.question = 
@@ -338,7 +338,7 @@ class FireGun extends CombatMove {
   
   EgbChoice _createChoiceForTargetSystem(ShipSystem targetSystem) {
     String probability = Randomly.humanStringify(
-        calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 5);
+        calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 2);
     choices.add("Target ${targetSystem.name} [$probability]", showNow: true, 
         script: () {
       this.targetSystem = targetSystem;

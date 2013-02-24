@@ -83,7 +83,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 //}
 
 class Weapon extends ShipSystem {
-  Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1}) 
+  Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
+                       this.damage: 1.0, this.shieldPenetration: 0.0,
+                       this.accuracyModifier: 1.0}) 
       : super(name, maxHp: maxHp) {
     if (ammo == null) ammo = new IntScale(max: maxAmmo);
     ammo.onMin().listen((_) {
@@ -101,6 +103,8 @@ class Weapon extends ShipSystem {
   num shieldPenetration = 0.0;
   num damage = 1;
 }
+
+// TODO: laser gun
 
 class Engine extends ShipSystem {
   Engine({String name: "engine", maxHp: 10, this.maxPowerOutput}) 
