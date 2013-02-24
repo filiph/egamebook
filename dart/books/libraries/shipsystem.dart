@@ -62,10 +62,12 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   void update() {
     if (currentMove != null) {
       currentMove.update();
-      if (currentMove.currentTimeToFinish == 0 && currentMove.autoRepeat) {
-        currentMove.currentTimeToFinish = currentMove.timeToFinish;
-      } else {
-        currentMove = null;
+      if (currentMove.currentTimeToFinish == 0) {
+        if (currentMove.autoRepeat) {
+          currentMove.currentTimeToFinish = currentMove.timeToFinish;
+        } else {
+          currentMove = null;
+        }
       }
     }
   }
@@ -93,11 +95,11 @@ class Weapon extends ShipSystem {
   }
   
   IntScale ammo;
-  String projectileName;
+  String projectileName = "projectile";
   
   num accuracyModifier = 1.0;
-  num shieldPenetration;
-  int damage;
+  num shieldPenetration = 0.0;
+  num damage = 1;
 }
 
 class Engine extends ShipSystem {
