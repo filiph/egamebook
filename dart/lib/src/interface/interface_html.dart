@@ -65,7 +65,7 @@ class HtmlInterface implements EgbInterface {
     var choicesDiv = new DivElement();
     choicesDiv.classes.add("choices-div");
     if (_currentSavegame != null) {
-      choicesDiv.dataAttributes["savegame-uid"] = _currentSavegame.uid;
+      choicesDiv.dataset["savegame-uid"] = _currentSavegame.uid;
       _currentSavegame = null;
       choicesDiv.classes.add("savegame");
     }
@@ -123,8 +123,8 @@ class HtmlInterface implements EgbInterface {
       el.children.clear();
       el.innerHtml = string;
     });
-    if (choicesDiv.dataAttributes.containsKey("savegame-uid")) {
-      String uid = choicesDiv.dataAttributes["savegame-uid"];
+    if (choicesDiv.dataset.containsKey("savegame-uid")) {
+      String uid = choicesDiv.dataset["savegame-uid"];
       // Make possible to come back to the associated savegame.
       choicesDiv.onClick
       .listen((Event ev) {
