@@ -3,10 +3,6 @@ library timeline;
 import '../../lib/src/book/scripter.dart';
 import 'storyline.dart';
 
-/// Type for the closure to be called at specified time(s). Returns [:true:]
-/// when Timeline should continue, [:false:] if it's finished.
-typedef String EventClosure();
-
 /// A singular event on the timeline.
 class TimedEvent {
   final int time;
@@ -35,7 +31,12 @@ class TimedEvent {
   
   String run() {
     if (f != null) {
-      return f();
+      var returnValue = f();
+      if (returnValue != null && returnValue is String) {
+        return returnValue;
+      } else {
+        return null;
+      }
     } else if (text != null) {
       return text;
     } else {
@@ -63,7 +64,7 @@ class Timeline implements Saveable {
     elapse(value - _time);
   }
   
-  EventClosure mainLoop;
+  Function mainLoop;
   Set<TimedEvent> events;
   bool finished;
   
