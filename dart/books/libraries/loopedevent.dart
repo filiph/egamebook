@@ -38,6 +38,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
     if (onFinishedGoto == null) throw new StateError("Cannot run a LoopedEvent "
                                   "before onFinishedGoto is defined.");
     if (finished) {
+      choices.clear();
       goto(onFinishedGoto);
       return;
     }
