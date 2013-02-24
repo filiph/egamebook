@@ -96,6 +96,8 @@ class Storyline {
       bool positive: false, bool negative: false, bool endSentence: false, 
       bool startSentence: false, bool wholeSentence: false, int time}) {
     
+    if (str == null || str == "") throw new ArgumentError("Cannot create empty report.");
+    
     if (time != null) {
       this.time = time;
     }
@@ -115,6 +117,7 @@ class Storyline {
   }
 
   String capitalize(String str) {
+    if (str.isEmpty) return str;
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1)
       return firstLetter;
