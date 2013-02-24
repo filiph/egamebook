@@ -115,16 +115,17 @@ class EgbChoiceList implements List<EgbChoice> {
     }
   }
 
-  add(element, {Function script, String goto}) {
+  add(element, {Function script, String goto, showNow: false}) {
     if (element is EgbChoice) {
       _choices.add(element);
     } else if (element is String) {
-      var choice = new EgbChoice(element, goto: goto, script: script);
+      var choice = new EgbChoice(element, goto: goto, script: script, 
+                                 showNow: showNow);
+      _choices.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
                               "either a new EgbChoice element or a String.");
     }
-
   }
 
   where(f) => _choices.where(f);
