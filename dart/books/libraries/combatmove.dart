@@ -87,10 +87,13 @@ abstract class CombatMove {
   String get stringStop => "<subject> stop<s> to $commandText";
   void stop() {
     reportStop();
+    currentTimeToFinish = null;
+    currentTimeToSetup = null;
     system.currentMove = null;
   }
   
   void _report(String str) {
+    if (str == null || str == "") return;
     storyline.add(str, subject: system.spaceship, object: targetShip);
   }
   
@@ -336,10 +339,10 @@ class FireGun extends CombatMove {
   EgbChoice _createChoiceForTargetSystem(ShipSystem targetSystem) {
     String probability = Randomly.humanStringify(
         calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 5);
-    choices.add("Target ${targetSystem.name} [$probability]", script: () {
+    choices.add("Target ${targetSystem.name} [$probability]", showNow: true, 
+        script: () {
       this.targetSystem = targetSystem;
     });
-    
   }
 }
 
