@@ -257,7 +257,6 @@ abstract class EgbScripter {
    * the selected choice's inline script returned.
    */
   EgbMessage _handleOptionSelected(EgbMessage message) {
-    EgbMessage returnMessage;
     choices.forEach((choice) {
       if (choice.hash == message.intContent) {
         // This choice was taken.
@@ -266,7 +265,7 @@ abstract class EgbScripter {
           _goto(choice.goto);
         }
         if (choice.f != null) {
-          returnMessage = _runScriptBlock(script:choice.f);
+          nextScript(choice.f);
         }
       } else {
         // This choice was offered but not taken. Put into the
@@ -283,11 +282,7 @@ abstract class EgbScripter {
         }
       }
     });
-    if (returnMessage != null) {
-      return returnMessage;
-    } else {
-      return new EgbMessage.NoResult();
-    }
+    return new EgbMessage.NoResult();
   }
 
   /** 
