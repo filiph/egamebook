@@ -1087,7 +1087,9 @@ class Builder {
 
             // Close and complete
             dartOutStream.close();
-            completer.complete(true);
+            dartOutStream.done.then((_) {
+              completer.complete(true);
+            });
           });
         });
       });
@@ -1188,7 +1190,9 @@ class Builder {
                 }
               }, onDone: () {
                 outStream.close();
-                completer.complete(true);
+                outStream.done.then((_) {
+                  completer.complete(true);
+                });
               }, onError: (e) {
                 completer.completeError(e);
               });
@@ -1625,7 +1629,9 @@ class Builder {
       throw e;
     } finally {
       graphmlOutStream.close();
-      completer.complete(true);
+      graphmlOutStream.done.then((_) {
+        completer.complete(true);
+      });
     }
 
     return completer.future;
