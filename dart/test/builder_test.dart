@@ -120,10 +120,9 @@ void main() {
       test("reads text blocks", () {
         var callback = expectAsync1((var b) {
           int numBlocks = 0;
-          b.pages.forEach((page) {
+          for (var page in b.pages) {
             numBlocks += page.blocks.length;
-            //page.blocks.forEach((block) => print(block.lines));
-          });
+          };
           expect(numBlocks,
             equals(8));
           expect(b.pages[b.pageHandles["run"]].blocks,
@@ -478,8 +477,8 @@ void main() {
         var callback = expectAsync1((var b) {
           expect(b.importLibFiles,
             hasLength(1));
-          expect(b.importLibFiles[0].name,
-            endsWith("library_simple_all_tags.egb"));
+          expect(b.importLibFiles[0].toString(),
+            contains("library_simple_all_tags.egb"));
         });
         new Builder().readEgbFile(new File(getPath("import_1tag.egb"))).then(callback);
       });
@@ -488,10 +487,10 @@ void main() {
         var callback = expectAsync1((var b) {
           expect(b.importLibFiles,
             hasLength(2));
-          expect(b.importLibFiles[0].name,
-            endsWith("library_simple_all_tags.egb"));
-          expect(b.importLibFiles[1].name,
-            endsWith("library_simple_all_tags2.egb"));
+          expect(b.importLibFiles[0].toString(),
+            contains("library_simple_all_tags.egb"));
+          expect(b.importLibFiles[1].toString(),
+            contains("library_simple_all_tags2.egb"));
           expect(b.pages[1].name,
             "squash");  // making sure we're not breaking something else
         });
@@ -583,9 +582,10 @@ void main() {
         File orig = new File(getPath("update_egb_file_original.egb"));
         File egb = new File(getPath("update_egb_file.egb"));
         
-        var inputStream = orig.openInputStream();
-        inputStream.pipe(egb.openOutputStream(FileMode.WRITE));
-        inputStream.onClosed = expectAsync0(() {
+        var inputStream = orig.openRead();
+        var ioSink = egb.openWrite();
+        inputStream.pipe(ioSink)
+        .then(expectAsync1((_) {
           new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
           .then((Builder b) {
             b.pages.add(new BuilderPage("Programatically added page", 
@@ -600,7 +600,7 @@ void main() {
             expect(b.pages[3].gotoPageNames,
                 contains("Programatically added page"));
           }));
-        });
+        }));
       });
     });
   });
