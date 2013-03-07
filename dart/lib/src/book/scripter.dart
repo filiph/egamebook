@@ -30,9 +30,9 @@ StringBuffer textBuffer = new StringBuffer();
  */
 void echo(String str) {
   if (textBuffer.length > 0) {
-    textBuffer.add(" ");  // Implicitly add space between each echo().
+    textBuffer.write(" ");  // Implicitly add space between each echo().
   }
-  textBuffer.add(str);
+  textBuffer.write(str);
 }
 
 String _gotoPageName;
@@ -433,7 +433,7 @@ abstract class EgbScripter {
   // runs the current block or the specified block
   EgbMessage _runScriptBlock({Function script}) {
     // clean up
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     // delete choices that have already been shown
     choices = new EgbChoiceList.from(
         choices.where((choice) => !choice.shown)
