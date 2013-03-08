@@ -310,7 +310,7 @@ class Storyline {
 
   void clear() {
     reports.clear();
-    strBuf.clear();
+    strBuf = new StringBuffer();
   }
 
   /// The main function that strings reports together into a coherent story.
@@ -348,23 +348,23 @@ class Storyline {
         // DEBUG("SENT: ${string(i)}\n- whole=${reports[i]["endPreviousSentence"]}
         if (endPreviousSentence) {
           if (reports[i-1]["wholeSentence"]) // don't write period after "Boom!"
-            strBuf.add(" ");
+            strBuf.write(" ");
           else
-            strBuf.add(". ");
+            strBuf.write(". ");
           if (but && !reports[i]["wholeSentence"])
-            strBuf.add(Randomly.choose(["But ", "But ", "However, ", 
+            strBuf.write(Randomly.choose(["But ", "But ", "However, ", 
                                        "Nonetheless, ", "Nevertheless, "]));
         } else { // let's try and glue [i-1] and [i] into one sentence
           if (but) {
-            strBuf.add(Randomly.choose([" but ", " but ", " yet ", ", but "]));
+            strBuf.write(Randomly.choose([" but ", " but ", " yet ", ", but "]));
             if (!sameSentiment(i, i+1))
               endThisSentence = true;
           } else {
             if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
                 && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
-              strBuf.add(", ");
+              strBuf.write(", ");
             } else {
-              strBuf.add(Randomly.choose([" and ", " and ", ", and "]));
+              strBuf.write(Randomly.choose([" and ", " and ", ", and "]));
               endThisSentence = true;
             }
           }
@@ -385,7 +385,7 @@ class Storyline {
         report = capitalize(report);
 
       // add the actual report
-      strBuf.add(report);
+      strBuf.write(report);
 
       // set variables for next iteration
       if (endPreviousSentence)
@@ -396,7 +396,7 @@ class Storyline {
 
     // add last dot
     if (!reports[length-1]["wholeSentence"])
-      strBuf.add(".");
+      strBuf.write(".");
 
     return strBuf.toString();
   }

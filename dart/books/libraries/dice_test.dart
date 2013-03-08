@@ -11,11 +11,11 @@ void main() {
     }
   });
   test("reportDiceSave reports correctly", () {
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     reportDiceSave(6, 4);
     expect(textBuffer.toString(), 
         "You threw a 6 and made the throw against 4.");
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     reportDiceSave(1, 4);
     expect(textBuffer.toString(), 
         "You threw a 1 and so your save against 4 was unsuccessful.");

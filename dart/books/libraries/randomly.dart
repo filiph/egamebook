@@ -68,11 +68,11 @@ class Randomly {
         int choice = _random.nextInt(numOptions);
   
         StringBuffer strBuf = new StringBuffer();
-        strBuf.add(str.substring(0, startTagIndex));
+        strBuf.write(str.substring(0, startTagIndex));
         String choiceString = 
             str.substring(indexes[choice] + 1, indexes[choice + 1]);
-        strBuf.add(parse(choiceString));
-        strBuf.add(str.substring(endTagIndex + 1, str.length));
+        strBuf.write(parse(choiceString));
+        strBuf.write(str.substring(endTagIndex + 1, str.length));
         if (lastIndex == str.length - 1) {
           return strBuf.toString();
         } else {

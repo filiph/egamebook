@@ -5,7 +5,7 @@ import 'timeline.dart';
 
 void main() {
   test("mainLoop works", () {
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -16,7 +16,7 @@ void main() {
   });
   
   test("custom event at given time works", () {
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -37,7 +37,7 @@ void main() {
   });
   
   test("time++ works", () {
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -58,7 +58,7 @@ void main() {
   });
   
   test("length works", () {
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     var timeline = new Timeline();
     timeline.length = 9;
     timeline.mainLoop = () {
@@ -71,7 +71,7 @@ void main() {
     timeline.time += 10;
     var str = textBuffer.toString();
     
-    textBuffer.clear();
+    textBuffer = new StringBuffer();
     timeline.time += 10;
     expect(textBuffer.toString(), "");
   });
