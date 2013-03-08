@@ -9,7 +9,8 @@ import '../shared/user_interaction.dart';
 
 class CmdlineInterface implements EgbInterface {
 
-  StringInputStream cmdLine;
+  Stream<String> _cmdLine;
+  StreamSubscription<String> _cmdLineSubscription;
   
   StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
@@ -22,12 +23,17 @@ class CmdlineInterface implements EgbInterface {
   }
   
   void setup() {
-    cmdLine = new StringInputStream(stdin);
+    _cmdLine = stdin
+              .transform(new StringDecoder())
+              .transform(new LineTransformer());
+    _cmdLineSubscription = _cmdLine.listen(_handleCmdLine);
+    _cmdLineSubscription.pause();
   }
   
   void close() {
     _streamController.close();
-    stdin.close();
+    print("Closing cmdline");
+    _cmdLineSubscription.cancel();
   }
   
   Future<bool> showText(String s) {
@@ -35,10 +41,38 @@ class CmdlineInterface implements EgbInterface {
     return new Future.immediate(true);
   }
   
+  void _handleCmdLine(String line) {
+    if (_currentChoiceList == null || _choiceCompleter == null) {
+      print("Ignoring user input when not asked for.");
+    }
+    
+    print("[got: '$line']");
+    
+    if (line.trim().toLowerCase() == "quit") {
+      _streamController.sink.add(
+          new PlayerIntent(PlayerIntent.QUIT));
+      return;
+    }
+    
+    try {
+      int optionNumber = int.parse(line);
+      if (optionNumber >= 1 && optionNumber <= _currentChoiceList.length) {
+        _cmdLineSubscription.pause();
+        _choiceCompleter.complete(_currentChoiceList[optionNumber - 1].hash);
+        _choiceCompleter = null;
+        _currentChoiceList = null;
+      } else {
+        throw new FormatException("Number outside the choiceList range.");
+      }
+    } on FormatException catch (e) {
+      print("Input a number between 1 and ${_currentChoiceList.length}, please.");
+    }
+  }
+  
+  EgbChoiceList _currentChoiceList;
+  Completer _choiceCompleter;
 
   Future<int> showChoices(EgbChoiceList choiceList) {
-    var completer = new Completer();
-    
     if (choiceList.question != null) {
       print(choiceList.question);
     }
@@ -49,29 +83,13 @@ class CmdlineInterface implements EgbInterface {
     }
     print("");
     
-    cmdLine.onLine = () {
-      print("");
-      var line = cmdLine.readLine();
-      
-      if (line.trim().toLowerCase() == "quit") {
-        _streamController.sink.add(
-            new PlayerIntent(PlayerIntent.QUIT));
-        return new Completer().future;
-      }
-      
-      try {
-        int optionNumber = int.parse(line);
-        if (optionNumber >= 1 && optionNumber <= choiceList.length) {
-          completer.complete(choiceList[optionNumber - 1].hash);
-        } else {
-          throw new FormatException("Number outside the choiceList range.");
-        }
-      } on FormatException catch (e) {
-        print("Input a number between 1 and ${choiceList.length}, please.");
-      }
-    };
+    assert(_choiceCompleter == null);
     
-    return completer.future;
+    _choiceCompleter = new Completer();
+    _currentChoiceList = choiceList;
+    _cmdLineSubscription.resume();
+    
+    return _choiceCompleter.future;
   }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
