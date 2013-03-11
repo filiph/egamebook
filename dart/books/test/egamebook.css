@@ -51,8 +51,9 @@ nav {
 	linear,
 	left top,
 	left bottom,
-    color-stop(1, rgba(255, 255, 255, 0)),
-    color-stop(0.6, rgba(255, 255, 255, 1))
+	color-stop(0, rgba(253, 253, 253, 1)),
+	color-stop(0.6, rgba(255, 255, 255, 1)),
+    color-stop(1, rgba(256, 256, 256, 0))
   );
 
   padding: 0.5em 1em 2em;
