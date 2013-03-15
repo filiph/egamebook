@@ -1,5 +1,6 @@
 *.swp
 .project
+.settings
 .children
 pubspec.lock
 books/tis/*.js
