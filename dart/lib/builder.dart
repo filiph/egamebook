@@ -1065,25 +1065,25 @@ class Builder {
     // write the .dart file
     File dartFile = new File.fromPath(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
-    dartOutStream.addString(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+    dartOutStream.write(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     _writeLibImports(dartOutStream);
     writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
     .then((_) {
-      dartOutStream.addString(implStartClass);
+      dartOutStream.write(implStartClass);
       writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_FUNCTIONS, indent:2)
       .then((_) {
-        dartOutStream.addString(implStartCtor);
-        dartOutStream.addString(implStartPages);
+        dartOutStream.write(implStartCtor);
+        dartOutStream.write(implStartPages);
         writePagesToScripter(dartOutStream)
         .then((_) {
-          dartOutStream.addString(implEndPages);
-          dartOutStream.addString(implEndCtor);
-          dartOutStream.addString(implStartInit);
+          dartOutStream.write(implEndPages);
+          dartOutStream.write(implEndCtor);
+          dartOutStream.write(implStartInit);
           writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_VARIABLES, indent:4)
           .then((_) {
-            dartOutStream.addString(implEndInit);
-            dartOutStream.addString(implEndClass);
-            dartOutStream.addString(implEndFile);
+            dartOutStream.write(implEndInit);
+            dartOutStream.write(implEndClass);
+            dartOutStream.write(implEndFile);
 
             // Close and complete
             dartOutStream.close();
@@ -1101,9 +1101,9 @@ class Builder {
   _writeLibImports(IOSink dartOutStream) {
     if (importLibFilesFullPaths == null) throw "importLibFilesFullPaths cannot "
                                                "be null.";
-    dartOutStream.addString("\n");
+    dartOutStream.write("\n");
     for (var path in importLibFilesFullPaths) {
-      dartOutStream.addString("import '$path';\n");
+      dartOutStream.write("import '$path';\n");
     }
   }
 
@@ -1184,9 +1184,9 @@ class Builder {
               .transform(new LineTransformer())
               .listen((line) {
                 if (substitutions.containsKey(line)) {
-                  outStream.addString("${substitutions[line]}\n");
+                  outStream.write("${substitutions[line]}\n");
                 } else {
-                  outStream.addString("$line\n");
+                  outStream.write("$line\n");
                 }
               }, onDone: () {
                 outStream.close();
@@ -1245,7 +1245,7 @@ class Builder {
 
     String indent = "";
     Function write = (String msg) {
-      dartOutStream.addString("$indent$msg");
+      dartOutStream.write("$indent$msg");
     };
 
     var inStream = inputEgbFile.openRead();
@@ -1389,7 +1389,7 @@ class Builder {
               }
             }
           } else {
-            var choiceBlock = curBlock.subBlocks.firstMatching((block) =>
+            var choiceBlock = curBlock.subBlocks.firstWhere((block) =>
                   _insideLineRange(lineNumber, block, inclusive: true),
                   orElse: () => null);
 
@@ -1576,7 +1576,7 @@ class Builder {
       Stream<List<int>> inStream, IOSink outStream,
       {bool inclusive: true, int indentLength: 0}) {
     var completer = new Completer();
-    outStream.addString("\n");
+    outStream.write("\n");
     var indent = _getIndent(indentLength);
 
     int lineNumber = 0;
@@ -1588,10 +1588,10 @@ class Builder {
           
           // if lineNumber is in one of the ranges, write
           if (lineRanges.any((var range) => _insideLineRange(lineNumber, range, inclusive:inclusive))) {
-            outStream.addString("$indent$line\n");
+            outStream.write("$indent$line\n");
           }
         }, onDone: () {
-          outStream.addString("\n");
+          outStream.write("\n");
           completer.complete(true);
         }, onError: (e) {
           completer.completeError(e);
@@ -1624,7 +1624,7 @@ class Builder {
 
     try {
       updateGraphML();
-      graphmlOutStream.addString(graphML.toString());
+      graphmlOutStream.write(graphML.toString());
     } on Exception catch (e) {
       throw e;
     } finally {
@@ -1822,10 +1822,10 @@ class Builder {
             // add remaining gotos
             bool addingPages = !gotoPageNamesToAdd.isEmpty;
             for (var gotoPageName in gotoPageNamesToAdd) {
-              outStream.addString(
+              outStream.write(
                   "- $gotoPageName (AUTO) [$gotoPageName]\n");
             }
-            if (addingPages) outStream.addString("\n");
+            if (addingPages) outStream.write("\n");
             page = null;
             gotoPageNamesToAdd = null;
           }
@@ -1857,8 +1857,8 @@ class Builder {
               if (page.gotoPageNames.any((gotoPageName) => gotoPageName == goto)
                   || page.gotoPageNames.any((gotoPageName) => gotoPageName == "${page.groupName}: $goto")) {
                 outStream
-                  ..addString(line)
-                  ..addString("\n");
+                  ..write(line)
+                  ..write("\n");
                 gotoPageNamesToAdd.remove(goto);
                 gotoPageNamesToAdd.remove("${page.groupName}: $goto");
               } else {
@@ -1867,25 +1867,25 @@ class Builder {
             } else {
               // normal line, just copy
               outStream
-                ..addString(line)
-                ..addString("\n");
+                ..write(line)
+                ..write("\n");
             }
           } else {
             // outside any page - just copy
             outStream
-              ..addString(line)
-              ..addString("\n");
+              ..write(line)
+              ..write("\n");
           }
 
         }, onDone: () {
           for (var page in pagesToAdd) {
             outStream
-            ..addString("\n---\n")
-            ..addString(page.name)
-            ..addString("\n\n");
+            ..write("\n---\n")
+            ..write(page.name)
+            ..write("\n\n");
             
             for (var gotoPageName in page.gotoPageNames) {
-              outStream.addString(
+              outStream.write(
                   "- $gotoPageName (AUTO) [$gotoPageName]\n");
             }
           }
