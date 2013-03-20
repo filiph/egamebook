@@ -3,7 +3,7 @@ version: 0.0.1
 author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   browser: any
-  unittest: any
+  unittest: 0.4.2
   args: any
   graphml:
     git: https://github.com/filiph/dart-graphml.git
