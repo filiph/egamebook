@@ -327,7 +327,7 @@ void main() {
         var runner1 = new EgbRunner(receivePort, scripterPort1,
             interface1, storage.getDefaultPlayerProfile());
 
-        interface1.stream.firstMatching(
+        interface1.stream.firstWhere(
             (interaction) => interaction.type == PlayerIntent.QUIT)
         .then(expectAsync1((_) {
           runner1.stop();
@@ -339,7 +339,7 @@ void main() {
           var runner2 = new EgbRunner(receivePort, scripterPort2,
               interface2, playerProfile);
 
-          interface2.stream.firstMatching(
+          interface2.stream.firstWhere(
               (interaction) => interaction.type == PlayerIntent.QUIT)
           .then(expectAsync1((_) {
             expect(interface2.closed,
@@ -385,7 +385,7 @@ void main() {
         var runner = new EgbRunner(receivePort, scripterPort,
             interface, playerProfile);
 
-        interface.stream.firstMatching(
+        interface.stream.firstWhere(
             (interaction) => interaction.type == PlayerIntent.QUIT)
         .then(expectAsync1((_) {
           expect(interface.latestChoices,
