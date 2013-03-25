@@ -2,6 +2,7 @@
 .project
 .settings
 .children
+.buildlog
 pubspec.lock
 books/tis/*.js
 books/tis/*.js.map
