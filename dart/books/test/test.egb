@@ -5,15 +5,14 @@ Author:		Filip Hracek
 <import '../libraries/timeline.dart'/>
 <import '../libraries/spaceship.dart'/>
 <import '../libraries/spaceshipcombat.dart'/>
-
-
+<import '../libraries/mockinstance.dart'/>
 
 <variables>
-outerspace = new Timeline();
-outerspace.mainLoop = () => echo("The space is silent.");
-outerspace.events.add(new TimedEvent(2, "A huge supernova just exploded somewhere."));
+
+bodega = new MockInstance();
 
 </variables>
+
 
 # The Bodega Incident
 
@@ -24,24 +23,19 @@ Start: Funeral
 
 This story starts and ends with a death, on a spaceship. 
 
-The first death is that of Captain Kay. He was the second last surviving crew member on The Bodega. The ship used to carry twelve people. Now, it's only you. (Well, almost. But we'll get to that later.) 
+We'll begin with the death of captain Kay. He was the second last survivor on the Bodega, a huge cargo ship of X tons usually operated by twelve men. Now, it's only you. Well, almost. But we'll get to that later.
 
-The funeral looks like this: You are standing in front of the airlock. Through the porthole, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, Captain Kay will be sucked out into space. This is how funerals work here on The Bodega. 
+The funeral looks like this: You are standing in front of the airlock. Through the porthole, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, Captain Kay will be sucked out into outer space, hitting the doorsill on his way out. This is how funerals work here on The Bodega. 
 
 The inner door, through which you're watching, is safely closed and sealed. The only thing that remains is to pull the lever.
 
-<script>
-echo("Hi.");
-points += 6;
-</script>
-
 - Pull the lever [Start: Pull]
-- Leave the body there [Start: Leave body]
+- Leave the body in the airlock [Start: Leave body]
 
 ---
 Start: Pull
 
-You pull the lever, there's a loud hiss, and the body is immediately pulled out through the hatch. It starts receding into space while slowly rotating along all three axes.
+You pull the lever, there's a loud hiss, and the body is immediately pulled out through the hatch. It recedes into space, slowly rotating.
 
 <script>
 points.add(5, "playing by the book");  // prints out "+5 points for _playing by the book_"
@@ -65,13 +59,11 @@ pulledLever = false;
 ---
 Start: Recollections
 
-Captain Kay was a great man. He was confident and direct – important traits in a captain. He also had a knack for hands-on engineering, which made him especially dear to you. You enjoyed spending a time with him in the engine room, poking into machinery together and setting up circuits in ingenious and clever ways. It always worked in the end, largely thanks to him.
+There is no reason why you should outlive the captain during a contagion. Or why you should outlive any other crew member for that matter. You were always the weakest, thinniest person on board. Then again, there was absolutely no sense in the order in which the crew died. It was random. Fortunately, the captain survived this long, because without him, the Bodega would likely go into total chaos several days ago.
+
+Captain Kay was a great man. Confident and direct. Strong. He had a knack for hands-on engineering, which often brought him to your station – the engine room. You enjoyed spending time with him, poking into machinery together, swapping circuits, trying out different setups.
 
 While you reminisce the good times, the intercom on the wall starts ringing loudly and blinking with a red light. The ringtone and the color-coding means "to all crew" -- in other words, everyone in their ability should pick it up.
-
-<script>
-outerspace.time++;
-</script>
 
 - Ignore it [Ignore]
 - Pick it up [Pick it up]
@@ -82,6 +74,8 @@ Start: Ignore
 You decide to ignore 
 
 TODO: ship computer speaks over speakers
+
+// Ship: "Just my luck. The stupidest member of the crew is the last one standing."
 
 - [Ship says]
 
@@ -101,10 +95,6 @@ Start: Ship says
 
 "To all whom it may concern," she says. "There is a gorilla on the bridge. I repeat, a gorilla. On the bridge."
 
-<script>
-outerspace.time++;
-</script>
-
 What do you reply?
 - "I'm coming." [Coming]
 - "Can't this wait? There is a funeral going on, you know." [Can't this wait?]
@@ -119,90 +109,101 @@ Start: Can't this wait?
 ---
 Start: Coming
 
-You give Captain Kay's ${pulledLever ? "receding" : ""} body the last glance, and run off in the direction of the bridge.
+You give captain Kay's ${pulledLever ? "receding" : ""} body the last glance${pulledLever ? ", put the airlock lever back to the close position" : ""}, and set off in the direction of the bridge. 
+
+You follow Corridor Right – a badly lit tube of dusty cables and fluorescent lamps running along the right side of the Bodega, from the bridge all the way back to the huge cargo area. The stark white light of the lamps is not the only light source. There are also the red bulbs of the ship alarm which have been pulsing since the beginning of the contagion 14 days ago.
 
 - [Bridge: Gorilla incident]
 
 ---
 Bridge: Gorilla incident
 
-<script>
-outerspace.elapse();
-</script>
-
 ## The Gorilla
 
-There really is a gorilla on the bridge. But it isn't touching any of the electronics, let alone the control panel. It just sits there on the floor, full of melancholy, looking out the window on the stars. When you enter, it slowly turns to you and pushes out its huge lower lip. 
+There really is a gorilla on the bridge. But it isn't touching any of the electronics, let alone the control panel. It just sits there on the floor, full of melancholy, looking out the window at the stars. When you enter, it slowly turns to you and pushes out its huge lower lip. 
 
-It's your Enhanced Gorilla. They are used throughout the system for hard manual labor. Their intelligence is improved artificially -- they can understand basic spoken commands and they even have the ability to communicate back via sign language. A very limited kind of sign language, of course, with their vocabulary consisting mainly of the words "food", "sleep" and "want". But people don't need Enhanced Gorillas to be eloquent. They need them to lift and push and sometimes smash. _Your_ gorilla mostly carries extremely heavy fuel cells back and forth. 
+It's your Enhanced Gorilla. They are used throughout the system for hard manual labor in construction, in the military, and on big tankers and cargo ships like the Bodega. Their intelligence is somewhat improved -- they can understand basic spoken commands and they have the ability to communicate back via sign language. The vocabulary  consists mainly of the words "food", "sleep" and "want", and only a few others. But people don't need Enhanced Gorillas to be eloquent or nuanced. They need them to lift and push and sometimes smash. _Your_ gorilla mostly carries extremely heavy fuel cells from the storage to the socket. 
 
-Your gorilla doesn't have a name. You call it 'Gorilla', as is common with these creatures. They die a lot. Nobody wants to get too attached to them, and naming the animal is the surest way to do just that.
+Your gorilla doesn't have a name. You call it 'Gorilla', as is common with these creatures. Nobody wants to get too attached to them. They die a lot.
 
-Gorilla raises its arms to sign. First, it makes the sign for "me" and then it makes the sign for "sleep". It probably doesn't want to say that it is sleeping. More likely, it is trying to use its limited vocabulary to communicate that it is sad. But you can never say for sure.
+Gorilla raises its arms to sign. First, it makes the sign for "me" and then it makes the sign for "sleep". It probably doesn't want to say that it is sleeping. More likely, it is trying to use its limited vocabulary to communicate that it is sad. But you can never be sure.
 
 "The gorilla stays," you say to the ship computer. "It just sits there. And it definitely won't touch anything while I'm here."
 
-The ship is silent for a while. Then she chooses to ignore the topic entirely and moves on.
+The ship is silent for a while. Then she chooses to ignore the topic entirely.
 
-TODO: instead of move to space station, initiate engine power on sequence
+"I would just _hate_ to unnerve you, but considering that you are likely contaminated with the same illness as everyone else, and that we have no data on the incubation period, I propose we make the jump as soon as possible. The closest hub with a major medical facility is Space Station Unity. The hyperdrive is being charged now. It will be ready in ten to fifteen hours, depending on energy input. All available energy to the hyperdrive, I assume?"
 
-"I don't want to unnerve you, but considering that you are likely contaminated with the same illness as everyone else, and that we have no data on the incubation period, I assume you want to make it to the nearest dock as soon as possible. The engine is now back online, and Station Unity is twenty to fourty hours from here. All available energy to the engines?"
-
-<script>
-// persistence for the ship
-// TODO: ship class, persistence with http://www.dartlang.org/articles/reflection-with-mirrors/ 
-// or http://api.dartlang.org/docs/releases/latest/serialization.html 
-bodega = {
-  "hp": 100
-};
-</script>
-
-- "Yes. Full steam ahead!" [20 hours] [Full speed]
-- "No. Keep the shields and the radar on." [40 hours] [Shields on]
+- "Yes. Full power to the hyperdrive!" [10 hours] [Full speed]
+- "No. Keep the shields and the radar on." [15 hours] [Shields on]
 
 ---
 Bridge: Full speed
 
-Usually, the ship would remark on the cliché, but not today. Without words, she immediately shuts off the radar and the shields, then powers on the engine at 100%. You are accelerating at at full capacity in a matter of minutes.
+Usually, the ship would remark on the cliché, but not today. Without words, she immediately shuts off the radar and the shields, then directs all energy to the hyperdrive power up sequence. You hear and feel the hum rising from the engine room.
 
 <script>
-eta = 20;
-shieldsUp = false;
-radarUp = false;
+eta = 10;
+bodega.shields.active = false;
+// TODO: shieldsUp = false;
+bodega.radar.active = false;
+// radarUp = false;
 </script>
 
-- [A nap]
+- [Repairs]
 
 ---
 Bridge: Shields on
 
-"That is... considerate," the ship replies. "I will be using the radar just to periodically check for objects on collision course with us. In between, I'll divert the energy to the engine. That should shave two or three hours off the travel time." You hear and feel the engines accelerating.
+"That is... considerate," the ship replies. "I will be using the radar only to periodically check for objects on collision course with me. In between, I'll divert the energy to the drive. That should shave one or two hours off the charge up time." You hear and feel the hum rising from the engine room.
 
 <script>
-points.add(5, "upholding interplanetary travel safety standards");
+points.add(5, "upholding interplanetary safety standards");
 points.add(10, "being genre savvy");
-eta = 38;
-shieldsUp = true;
-radarUp = true;
+eta = 14;
+bodega.shields.active = true;
+// TODO: shieldsUp = false;
+bodega.radar.active = true;
+// radarUp = false;
 </script>
+
+- [Repairs]
+
+---
+Bridge: Repairs
+
+Station Unity is around $eta hours away and you are dog-tired. You spent the last couple of days slaving away – together with Gorilla and Captain Kay – to repair the engine. It had broken down in the middle of nowhere.
+
+Meanwhile, the rest of the crew were busy dying. One by one.
+
+TODO: let player repair one of { turret | maneuvre jets | scanner | + 3 irrelevant interior things }
+
+
+
+
 
 - [A nap]
 
 ---
 Bridge: A nap
 
-Station Unity is around $eta hours away and you are dog-tired. You spent the last couple of days slaving away – together with Gorilla and Captain Kay – to repair the engine. It had broken down in the middle of nowhere.
-
-Meanwhile, the rest of the crew were busy dying. One by one.
+Satisfied, you look at the control panel
 
 You slouch into the captain's chair and, almost immediately, your eye lids get heavy. You try to stay up, but there is no way you can fight this. Soon, the most comfortable embrace of sleep puts you under.
 
------------------
+// TODO: nightmare: flashback to a defining moment in the past, driver for later actions - e.g. "she walks away from you. She walks away because you're not good enough. She thinks that, like everyone else. Your father, who wanted to be "
+
+- [Dogfight: Start]
+
+
+
+---------------
+Dogfight: Start
 
 ## The Encounter
 
 <script>
-if (radarUp) {
+if (bodega.radar.active) {
   goto("Dogfight: Radar reading");
 } else {
   goto("Dogfight: Wake up");
@@ -225,7 +226,8 @@ You look at the radar screen. It seems some smaller vessel is matching your cour
 The good news is that because of the radar, you know about them in advance. You check your shields: they're up. You also start charging the laser cannon mounted on the front side of the ship. Better safe than sorry, you think.
 
 <script>
-bodega["timeToFire"] = 0;
+bodega.timeToFire = 0;
+//bodega["timeToFire"] = 0;
 </script>
 
 In 20 minutes, the vessel is in visual range. It's a Messenger class ship, a fast clipper about tenth of the size of The Bodega. If it's hostile, it could still pose a serious threat, but would probably run a big risk itself.
@@ -246,12 +248,12 @@ You open your eyes, look out the window, and immediately jump up. There is a sma
 Before you can act, the communications panel lights up. There is an incoming call from the Messenger. Before you take it, you can either command the ship to raise the shields or to power up the laser gun on the nose of the Bodega. Doing both would take too much time to have any effect.
 
 <script>
-bodega["timeToFire"] = 1;
+bodega.weapons.all.timeToFire = 1;
 </script>
 
 - Raise the shields [{shieldsUp = true}]
-- Power up the gun [{bodega["timeToFire"] = 0}]
-- Do neither [{nothing=null}]
+- Power up the gun [{bodega.timeToFire = 0}]
+- Do neither []
 
 - [Encounter]
 
@@ -268,22 +270,6 @@ Then he looks up, sees you on the screen, and stops abruptly.
 
 Gorilla, which has been silently sitting on the ground to your left until now, starts hissing through clenched teeth, eyes wide open. It rocks back and forth, visibly disturbed. The pilot begins to frantically push some buttons on the panel in front of him.
 
-<functions>
-bool randomWithProbability(num p) => (new Random()).nextDouble() < p;
-String percentage(num x) => (x * 100).toStringAsFixed(0);  // TODO: better
-</functions>
-
-<script>
-time = 0;
-messenger = {
-  "hp": 15,
-  "shields": 0,
-  "timeToFire": 1
-};
-bodega["shields"] = (shieldsUp ? 10 : 0);
-bodega["evasive"] = false;
-</script>
-
 <script>
 choice("\"What are you doing? What is happening here?\"")
 .then(() => echo("He doesn't respond."));
@@ -293,17 +279,17 @@ if (shieldsUp != true) {
   choice("Shields up")
   .then(() {
     shieldsUp = true;
-    bodega["shields"] = 5;
+    bodega.shields = 5;
   });
 }
-if (bodega["timeToFire"] <= 0) {
+if (bodega.timeToFire <= 0) {
   choice("Fire")
   .then(() {
     <echo>
       You take the laser gun controls, quickly aim at the Messanger and fire. 
     </echo>
     if (randomWithProbability(0.6)) {
-      messenger["hp"] -= 3;
+      messenger.hp -= 3;
       <echo>
         Boom! It's a hit! The stream of energy hits the Messenger, right in the middle of its belly, and leaves a sizeable hole there. It looks like some serious damage has been dealt.
       </echo>
@@ -318,92 +304,782 @@ if (bodega["timeToFire"] <= 0) {
 }
 </script>
 
-The communications panel goes blank as the pilot closes the connection. The Messenger starts moving to the side while raising shields.
+The communications panel goes blank as the pilot closes the connection. The Messenger starts moving to the side while raising shields. He knows that his best bet is to be moving all over the place.
 
-- [Combatloop]
+You try to remember something about spaceship combat, but there's not much you ever knew about the topic in the first place. You never had any ambition to go the the military, not even as a teenager, and you spent the last ten years of your life on cargo ships like the Bodega. Those normally don't get into combat, and if they do, it tends to be over quickly. Only those on the bridge get involved, whereas you practically live in the engine room.
 
-<variables>
-  player = new Pilot.player();
-  
-  // setup ships
-  ship1 = new Spaceship(
-        "Bodega",
-        pilot: player,
-        hull: new Hull(maxHp: 100),
-        shield: new Shield(maxHp: 20, maxPowerInput: 2.0),
-        engine: new Engine(maxHp: 10, maxPowerOutput: 10.0),
-        thrusters: [
-            new Thruster("Main Jet", maxHp: 5, maxPowerInput: 5.0,
-                        maxForwardlyForce: 100),
-            new Thruster("Left Side Thrusters", maxHp: 1, maxPowerInput: 1.0,
-                        maxManeuverability: 5),
-            new Thruster("Right Side Thrusters", maxHp: 1, maxPowerInput: 1.0,
-                        maxManeuverability: 5)            
-          ],
-        weapons: [
-            new Weapon("Front Utility Laser", damage: 3)
-          ]
-  );
-  ship1.hull.hp.onPassDownwards(50).take(1).listen((_) => ship1.report("<subject's> hull has taken some major damage"));
-  
-  ship2 = new Spaceship(
-        "Messenger",
-        hull: new Hull(maxHp: 15),
-        shield: new Shield(maxHp: 10, maxPowerInput: 1.0),
-        engine: new Engine(maxHp: 10, maxPowerOutput: 2.0),
-        thrusters: [
-                    new Thruster("Main Jet", maxHp: 3, maxPowerInput: 1.0,
-                        maxForwardlyForce: 10),
-                    new Thruster("Rotation Thrusters", maxHp: 1, maxPowerInput: 0.5,
-                        maxManeuverability: 10),
-                    ],
-        weapons: [
-                  new Weapon("Left Blaster"),
-                  new Weapon("Right Blaster")
-                 ]
-  );
-  
-  ship1.targetShip = ship2;
-  ship2.targetShip = ship1;
-  
-  // setup combat
-  firstCombat = new SpaceshipCombat(ships: [ship1, ship2]);
-  firstCombat.addEvent(5, "String event.");
-  firstCombat.addEvent(6, () => ship1.engine.hp.value--);
-  firstCombat.addEvent(7, () => ship2.report("<subject> is starting to circle <object>", object: ship1));
-  firstCombat.addEvent(7, () => ship1.report("<subject> tries to keep facing <object> as well as it can", object: ship2));
-  
-  firstCombat.onFinishedGoto = "Resolution";
-  
-  player.timeToNextInteraction = 1;
-</variables>
-  
+You do have some reasons to feel lucky, though. The Messenger is clearly not a combat vessel. You can only see 2 parallel beam guns in the front that seem pretty weak. The hull is slender. Moreover, according to the markings on the side, the ship is a Sentaco corporate runner. Sentaco – although one of the biggest corporations out there – is not one of the militarized ones. It deals in food and consumer goods. 
+
+The frail Messenger clearly wasn't sent here to fight the huge pile of steel that is the Bodega. But it _is_ fighting it now, for whatever reason.
+
+- [Fire loop]
+
 ---
-Dogfight: Combatloop
+Dogfight: Fire loop
+
+TODO: choice between critical hits, harassing, main engine hits, secondary jets hits, gun hits, contacting
+TODO: choice to do nothing - and get slowly obliterated
+TODO: when hit in the right places, the Messenger gets penalties (easier to hit, longer to reload, 
+TODO: ? messenger can get to a blind spot behind the Bodega - 1 turn to turn in his direction 
+TODO: if scannerUp => more info about Messenger
+TODO: if messanger's guns are gone - release probe, try to withdraw
+TODO: if messanger is too damaged - release probe, try to withdraw
+TODO: messenger can hit left or right side of the hull critically. Later, that corridor will be inaccessible (need to go around)
+TODO: "Direct all halogen headlights on the Messenger and switch them on at once"
+TODO: player needs to keep track of resources (energy cells, ammo?)
+
+<p class="meta">This is where a space combat simulation will happen. Choices made by player will not only affect the combat, but also the state of the ship afterwards. Right now, we skip this.</p>
 
 <script>
-  firstCombat.run();
+bodega.isAlive = true;
 </script>
-  
-- [Combatloop]
 
-  
+- Win [Resolution]
+
+
 ---
 Dogfight: Resolution
 
-RESOLUTION
+<script>
+  if (bodega.isAlive) {
+    goto("Win");
+  } else {
+    goto("Lose");
+  }
+</script>
+
+
+---
+Dogfight: Lose
+
+// TODO: boom
 
 ---
 Dogfight: Win
 
-This time, your laser must have drilled through to the core, because there is a violent explosion on the Messenger. Only the skeleton of the ship stays put, the rest is blown away from the inside, in all directions.
+This time, the beam must have drilled through to the core, because there is a violent explosion on the Messenger. Only the skeleton of the ship stays put, the rest is blown away from the inside, in all directions.
 
 <script>
-points.add(10, "space combat");
+points.add(10, "winning your first spaceship battle");
 </script>
 
-One of those outward flying parts is different from the others, though. It steers itself. Apparently, the Messenger's pilot (or the ship computer) managed to launch a small robotic probe just before the spectacular explosion. The thing beelines through the flying debris and hits hard somewhere into the Bodega's cargo bay. 
+TODO: only if messenger hasn't done it during fight
+One of those outward flying parts is different from the others, though. It steers itself. Apparently, the Messenger's pilot (or the ship computer) managed to launch a small robotic probe just before the spectacular explosion. The thing beelines through the flying debris and hits hard somewhere near the Bodega's cargo bay. 
 
-"Hull breach," the ship says, laconically. 
+"Hull breach," the ship says, laconically. "Initiating sealing process."
 
-You look at the readings around you. The shields at ${percentage(bodega["shields"]/10)}% and stable. The hull took ...
+You look at the readings around you. The shields are at TODO % and stable. The hull took … damage. 
+
+TODO: if !pulledLever = Airlock smashed into pieces TODO(if). 
+
+Captain Kay was always saying: "When shit happens, it happens in swarms."
+
+On the plus side, though, you _are_ still alive. And the other ship is in a much worse shape than yours.
+
+- [Why?]
+
+---
+Dogfight: Why?
+
+You try to imagine why the Messenger came here and why the pilot acted the way he acted. Was he just so stupid to try to pick a fight with a much sturdier ship? Was he expecting to find something else here? Or someone else? Did he know about the contagion? Was he acting on his own, or was this an official Sentaco run? Is Sentaco a pirate company now? Why would it be interested in the Bodega, of all ships?
+
+- [Explore: Start]
+
+---
+Explore: Start
+
+TODO: segue?
+
+<variables>
+
+exploration = new Timeline();
+exploration.mainLoop = () {
+  // TODO: gorilla - "is here" / "is with you" / nothing + options
+  // TODO: player health down
+};
+
+// TODO: addEvents - periodically say time
+// TODO: addEvent - hull breach has been sealed repair
+
+
+</variables>
+
+- Look around the bridge [Explore: Bridge Lookaround]
+
+---
+Explore: Bridge Lookaround
+[[ visitOnce ]]
+
+You are at the bridge. 
+
+- [Bridge]
+
+---
+Explore: Bridge
+
+<script>
+  if (currentPage.visited) {
+    <echo>
+      You are back at the bridge.
+    </echo>
+  }
+
+  exploration.time++;
+</script>
+
+{if (currentPage.visited)} You are back at the bridge. // TODO: implement
+
+- Look at the hull breach [Look at hull breach]
+
+
+---
+Explore: Look at hull breach
+[[ visitOnce ]]
+
+TODO: explain the sealing process
+TODO: show current state
+
+
+---
+Explore: Engine room
+
+/ TODO: steel rod
+// TODO: reminisce the 'good old times' (as in Pixar's "Every day he ____")
+
+---
+Explore: Captain's cabin
+
+// TODO: read the log entry
+
+---
+Explore: Airlock
+
+// TODO recollections
+
+---
+Explore: Computer room
+
+// just look around
+
+---
+Explore: Medical bay
+
+TODO: precision chainsaw (??)
+// recollections about how the contagion started
+// living tissue on petri dish
+
+
+---
+Explore: Cargo Right
+
+TODO/ steel rod
+// damaged Sentaco container - NOT YET!
+
+---
+Explore: Cargo Left
+
+You arrive to the left wing of the huge cargo area. 
+
+<script>
+  if (!currentPage.visited) {
+    <echo>
+      Long parallel lines of containers
+      
+      The artificial gravity here is at 10% right now. TODO: why
+      
+      Nearby, one section of the bay has been isolated by hermetic steel curtain because of the hull breach.
+    </echo>
+  }
+  
+  exploration.time++;
+</script>
+
+- Open the steel curtain around the hull breach [Open curtain]
+
+---
+Explore: Open curtain
+[[ visitOnce ]]
+
+/ TODO: if not healed yet => death by suck out to space
+
+---
+Explore: Cargo Center
+
+TODO: change gravity to 0 - possible to catch the tracked probe
+
+
+
+
+---
+Jump to Station
+
+TODO: jump 'fx'
+
+// TODO: keep track of 'fuel' cells and/or energy cells count
+
+
+
+
+---
+Explore 2: Start
+
+// TODO: only after taken outside the space station
+// Leads right up to finding out about Ellen
+
+
+---
+Explore 2: Engine room
+
+TODO: heal - "somehow feels safer here"
+
+
+
+---
+End: Password
+
+You put the password in and the computer accepts it. The last log entry appears again.
+
+- Check other entries [Other log entries]
+- Search delivery database [Search database]
+
+---
+End: Other log entries
+[[ visitOnce ]]
+
+"Something in one of the containers in E4 exploded. The shockwave damaged a shitload of neigbouring cargo. Larry says there was nothing fragile around, and that it's no big deal, but Larry is a lazy fucktard. I glanced at the manifest and saw that there is fragile stuff all over E4. I still haven't gotten to inspect the damages and mark it into the database, though. I hate to think how much money we lost because of some idiot not disclosing volatile chemicals."
+
+// TODO lead up to "I want to be dying forever. I never had any idea! It's so ecstatic! So focused and discrete and full of beautiful beautiful hope it makes me laugh at my own previous foolish fear of this moment and my insistence and clinging on something as worthless and selfish as life. Why did I never allow myself to die before? What was I afraid of?"
+
+- Switch to the delivery database [Search database]
+
+---
+End: Search database
+
+<script>
+  if (!currentPage.visited) {
+    <echo>
+      You open the database program. It's a list of _tens of thousands_ of orders that the Bodega has delivered during its lifetime, with dates, prices, origins, destinations, measurements, and lots of other data. You quickly scan the topmost couple of deliveries, but that translates to just a fraction of one single container. You'll have to search.
+    </echo>
+  }
+</script>
+
+
+- [Choose search]
+
+---
+End: Choose search
+
+You are looking at the list of $numEntries entries.
+
+- Only show cargo of _state: in transit_
+- Only show cargo of _type: biological_ // TODO: no current Sentaco cargo
+- Only show cargo of _client: Sentaco_ // the real cargo is not there
+- Only show cargo of _destination: *Sentaco*_
+// TODO: couple of other stuff that kind of makes sense
+- Only show cargo stored in bay E4
+- Go through all $numEntries entries
+- Switch to the log and read the rest of the captain's recent entries [Other log entries]
+
+// TODO: iterate and let player filter out, each search costs time (worse health)
+
+---
+End: Found order
+
+And then, there it is. Even before you open the order, you already know this is the one. The description says: _Research equipment_. The Bodega loaded it at the Ithaka Logistics Orbital Depo a month ago. Its point of origin was at Ithaka's surface, at the Sentaco-Exaport R&D Facility. Its final destination: Sentaco XI Space Station, Solar system. Quite a distance. 
+
+The client is not Sentaco, though. It's a company called Ithaka Leasing Services (TODO: put ILS on the exploded container). It might be a Sentaco subsidiary, or a contractor. TODO make less obvious
+
+There is a delivery note attached to the order. These are conveyed to the recipient upon delivery. This one says:
+
+    Dr. Eleanor Wells' lab equipment from Ithaka. Notify Dr. Pruitt, mention: "wolfberry". Not sterilized.
+
+A surge of rage overcomes your brain. You hear loud pulse in your ears and the world gets muffled and distant. "Not sterilized." God knows what sick shit was still living inside that equipment. It's required by law to sterilize anything that could – even with the remotest of possibilites – be contaminated. Someone's _laziness_ just killed eleven people. The twelfth one is on his way.
+
+At least you have someone to ask about this now. Dr. Wells or Dr. Pruitt ought to have the answers. They might know what exactly got out. And if you're lucky, one of them might even know how to fight it.
+
+- Go call one of them from the bridge [Go to bridge]
+
+---
+End: Go to bridge
+
+# Death
+
+You leave the captain's cabin and head to the bridge, when suddenly you fall to your knees. At first, it's just like your legs temporarily gave out, but then comes the pain. Immense, excruciating pain, coming from the marrow to the skin. You fall on the side and open your mouth to scream, but only a squawk comes out.
+
+- Wait if it fades // doesn't work [Wait if it fades]
+- Try to call Gorilla [Call gorilla]
+- Try to crawl towards the bridge // works [Crawl towards the bridge]
+
+- Crawl to the right (away from bridge, towards the engine room) // cures for a while
+
+
+---
+End: Wait if it fades
+[[ visitOnce ]]
+
+
+---
+End: Call gorilla
+[[ visitOnce ]]
+
+You crawl to the nearest intercom handset and, sorely, you reach up to it and set it to broadcast. You take a few seconds to subdue the pain, then speak.
+
+"Gorilla." You cringe. "Go. To. Master."
+
+// gorilla tries to help, but falls with similar seizure
+
+---
+End: Crawl towards the bridge
+
+
+You crawl along Corridor Left. Every single movement is pure pain, and your whole body perspires with cold sweat. The bright white light and the buzzing of the lamps is unbearable.
+
+After what feels like hours of hell itself, you look back, and the captain's cabin is just there, a couple of strides behind your feet. You're not even in one tenth of the way.
+
+
+// player needs to crawl to engine room, get 'cured', then go to bridge
+// player manages to get to bridge
+
+---
+End: Arrive bridge
+
+// TODO: start a new timeline with last symptoms
+
+Still a bit shaken, you arrive at the bridge. The view of outside /* TODO: what is outside? */ is nauseating, so you try to keep it out of your field of vision by bowing your head.
+
+"I need to make a call," you say. "I need to get to a comms beacon."
+
+The Bodega puts up a map on the main monitor, but you can't bear to look at it, it makes you retch. It's too bright and it moves constantly.
+
+"The closest FTL beacon is Station Unity. There's also one farther away, at the Belt III Shipyard. We should be able to get there, but it will take a at least one more hour."
+
+"Is there nothing else around here?"
+
+"Well, there's the abandoned Station Shannon. They obviously had FTL comms, but that doesn't mean the beacon is still there. I mean, it's still in the directory, but it doesn't seem anyone has made any calls from there lately."
+
+- Jump to Station Unity
+- Jump to Station Shannon // not working, probably plundered, chance to describe this place
+- Jump to Belt III Shipyard
+
+
+
+
+<variables>
+  lastSymptoms = new MockInstance();
+  // TODO: pain in marrow
+</variables>
+
+---
+End: Making the call
+
+The Bodega starts linking itself to the comms beacon. It takes ages.
+
+<script>
+  lastSymptoms.time++;
+</script>
+
+Finally, the comms panel goes green. You can make your call.
+
+- Call Dr. ___ Pruitt
+- Call Dr. Eleanor Wells
+
+---
+End: Call Pruitt
+
+
+// TODO: call Dr. Pruit: watches. calls Sentaco ship.
+
+- [Call Wells]
+
+---
+End: Call Wells
+
+You tell Bodega to call Eleanor Wells and the monitor starts filling with information about the connection being established. The handle 'ewells' shows up all over the place. It's hers.
+
+<script>
+  lastSymptoms.time++;
+</script>
+
+A chime sounds and Dr. Eleanor Wells is on the main screen. She looks tired and angry. The room at the other end is dim.
+
+"Look, it's 4am and I wake up in 2 hours from now. I'm too old for this." She pauses for a moment. "Who the hell are you?"
+
+- Tell her your name [{points.add(1, "honesty")}]
+- Tell her a made up name []
+- "It doesn't matter." []
+
+Before you can reply, another seizure strikes.
+
+<script>
+  lastSymptoms.time++;
+</script>
+
+Dr. Wells eyes are now wide open. She looks around herself, checking that no one else is present, then she comes closer to her comms panel.
+
+"Are you... have you taken Rescin?"
+
+- "I haven't 'taken' anything. There was an accident." [It was accident]
+- "What the fuck is Rescin?" [Wtf is Rescin]
+
+// TODO: keep track of 'attitude' => if too harsh, will later be harsh back
+
+---
+End: Wtf is Rescin
+
+"You don't _know?_ But how... You're obviously in the last stage. Someone had to contaminate you. Was it Pruitt?"
+
+You say: "I have no idea who it was, if anyone. There was an explosion on the ship."
+
+- [It was accident]
+
+---
+End: It was accident
+
+"What happened?"
+
+"A container exploded in the cargo bay. It damaged some research equipment from Ithaka, among other things. Then people started dying."
+
+<script>
+  lastSymptoms.time++;
+</script>
+
+Dr. Wells watches you in horror. "Dying? People started _dying?_ How many?"
+
+"Eleven."
+
+All color leaves Dr. Wells' face. "Eleven," she repeats. Her face is torn in a terrified grimace. "How. How did they die?"
+
+"Like I'm dying now. They got sicker and sicker, and then they just stopped breathing."
+
+"And then?"
+
+"What do you mean, 'then'?" Every word you say, every breath you take, hurts. "They. Fucking. Died!" // TODO: choice
+
+"But what did you do with the bodies? Where are they now?"
+
+"Don't worry," you lower your voice. "We're not that stupid. We airlock'd them. But even without the bodies, others got sick."
+
+"Airlock'd?"
+
+"We let them out. To outer space."
+
+"Jesus Christ," Dr. Wells says. Her mouth stays open, her eyes absently roam over her room. "Jesus Christ." She thinks for a minute, then suddenly springs into action and starts writing something on a keyboard that's out of view. 
+
+"I am sending you some of the research we did on Rescin. You'll need it later. Now, listen," she looks back at the camera. "Do not fight it. I know it hurts, but do _not_ fight it."
+
+<script>
+  lastSymptoms.time++;
+</script>
+
+"This is normal," Dr. Wells says. "We were not able to make these side effects disappear. That's why the research was scrapped. We knew we would never be able to pass the regulations for human testing, and without that, we could never hope for Rescin to help people."
+
+- "How does it help?"
+- "You call this help? Are you retarded? I'm _dying_."
+
+"We developed Rescin "
+
+
+- How does Rescin work?
+- Why does it hurt so bad?
+
+// TODO: do NOT let the player know that he will be ressurected - only disclose about the nanobots
+
+
+---
+End: Nice Death
+
+This time, it's different. Your are losing your peripheral vision. The only thing you see now is the blindingly bright face of Dr. Eleanor Wells. She's saying something to you, but you don't hear it. The only thing you hear is something you've never heard before in your life – your body. Not just the blood in your veins, but everything. The complex, moist, organic machine that is your physical body. It is slowing down.
+
+// TODO: make it frightful experience when attitude is too strong (?) (or some other player driven thing)
+
+All the pain, all the weight is gone. It's beautiful. There's just you, your body, and the shining eyes of Eleanor Wells, who is now also your mother, and she's still talking to you, and you still don't hear, but that doesn't matter, it's so pleasant and charming you just want to snug in the warmth and bathe in the light.
+
+- Snug in the warmth and bathe in the light
+- Try to stay up
+
+---
+End: Snug
+
+You let the wave of warmth and light that was your mother's eyes just a moment ago come to you and cuddle you and, finally, merge with you. You are the light now.
+
+And then, peacefully, you fade out.
+
+- [Death]
+
+---
+End: Death
+
+
+This is the end.
+
+You die.
+
+..
+
+..
+
+..
+
+Cold floor.
+
+No other sensation.
+
+Then, once again, you hear the blood humming in your veins. 
+
+The pain is back, too, but this time, it's not entirely unpleasant. It's like the pain is driving the death away, so you welcome it.
+
+- Open eyes [Ressurection: Open eyes]
+
+- TODO: something else, like Try to move, Get more rest
+
+---
+Ressurection: Open eyes
+
+Your eyes open, shakily. 
+
+You haven't moved since you ... died. You lie on the floor, next to the communications panel, and your eyes are still fixed on the main monitor. 
+
+Dr. Eleanor Wells is there. She's no longer in a dim lit room, it's day at wherever she is right now. She raises her eyebrows${attitude < 1 ? " and smiles" : ""}.
+
+"You're back," she says. "Good. We don't have much time."
+
+- "Why?"
+- Stand up
+// both fail
+// TODO: monitor "inquisitive" - the more inquisitive, the more Eleanor will like player
+
+"You're still weak${attitude < 1 ? "" : ". At least I'll be spared of your brash language for once."}, but that will pass soon enough. You are through the rebuild phase now."
+
+- Raise eyebrows []
+
+Dr. Wells detects your question. "What the nanobots do – after they've gathered data about your body – is they pretty much rebuild it all, cell by cell. Some of the nanos will merge with a cell, effectively making a cyborg microorganism. Most will use your body's own mechanisms and resources to augment its function. Striking the right balance between the two approaches – it was pure alchemy. Well, it was all alchemy, mostly." 
+
+- Raise eyebrows [{echo(""" "We had no data that would be indicative of what would happen. Nobody attempted anything close to this before. There were experiments with single cells or primitive organisms, but never with something as complex as a mouse, let alone a human. We spent almost a year trying to create a working model with some predictive accuracy. We never got there. Not even close. In the end, we had to get to the results experimentally. We were like the alchemists in the middle ages, but instead of the philosopher's stone, we were searching for something much more important." """)}]
+- Do nothing []
+
+Dr. Wells draws closer to the camera. "Are you familiar with the Verge?"
+
+- Nod [No need to explain Verge]
+- Shake head [Explain Verge]
+
+---
+Ressurection: Explain Verge
+[[ visitOnce ]]
+
+// TODO painful to shake
+
+
+
+---
+Ressurection: No need to explain Verge
+
+"Of course, you're pretty much in it right now. But let me tell you, life on a starship in the Verge is _nothing_ like life on the moons and the planets of the Verge."
+
+- [Reminiscing Verge]
+
+---
+Ressurection: Reminiscing Verge
+
+Dr. Wells leans back and narrows her eyes. "I was raised on one of the Verge's poorer star systems, Avesta. We lived on a hot, seizmic power-plant of a planet, Avesta II. See, nobody even cared enough to give it a proper name." She scoffs. "The population was fifty thousand. Together, they provided the 'colonization effort' with more energy than the _whole_ Sol system combined." 
+
+She scoffs again. "And for those fifty thousand people – who worked twelve hour shifts in artificially lit, hell-hot underground tunnels on a volcanic planet – there was just one real doctor. My father. And so I lived among broken people. No matter how hard my father tried, there was always screaming and people with dripping burns and with missing limbs."
+
+- "Who cares?" [{echo("""Something akin to "huh hrrrs" comes from inside of your throat. Dr. Wells waits for a second to see if you're going to continue, then she gets back to speaking.""")}]
+- Do nothing []
+
+"I eventually got out of Avesta, out of the Verge, to study medicine with some of the most intelligent people I will ever know. Most of them from central systems, of course. And, see, I learnt that these people – coming from where they do – these people think it's 'not natural' to help people who are beyond some 'level of damage'. When a worker somewhere in the Verge gets his legs caught in machinery, they say it's 'natural' that he loses the whole lower part of his body, because that would have happened a hundred years ago. Is it possible to help him now? Maybe, but they think it would be crossing a line. Of course, most of them have never even _seen_ anyone lose their legs."
+
+"Fortunately, not everyone was so arrogant. We put together a working group and started looking into technologies that were 'beyond the line'. The most promising one turned out to be nanorobotics. We got funded by Sentaco and set up the lab on Ithaka."
+
+The Bodega jumps in. "There's a new signal on the radar. A medium sized ship. I just thought you two might want to know."
+
+"I'm sure you'll learn that the ship was sent by Pruitt. I told you we don't have much time. How do you feel?"
+
+You don't feel so great, but definitely better than a minute ago.
+
+- "Not so great."
+- "Better."
+- "I almost died, that's how I feel." // "No, you actually died."
+- "Why do you care?" 
+
+// TODO: I can see your vocal cords are getting better.
+
+"Look – Pruitt's men are coming for you. I'm not entirely sure if this all is an accident or not, but even if it was, Pruitt will definitely want to have you for research. You're the only human in the universe with Rescin treatment. And unless I am mistaken, you'll be the only one for some time to come."
+
+- Try to get up [Try to get up]
+
+---
+Ressurection: Try to get up
+
+You try hard to rise up, but even just moving your arms underneath the body, so that you can push up, turns out to be impossible. You give up and immediately, a tingling sensation overcomes all the muscles you just stressed.
+
+Dr. Wells nods. "You're not ready yet, but don't worry, you'll be in a few minutes."
+
+- [Questions]
+
+---
+Ressurection: Questions
+
+- "What exactly happened to me?" // Rescin works to counter any breakages - - "Why 'Rescin'?"
+- "Why did no one else survive?" // outer space
+- "Why are you helping me?" // Pruitt will make a project out of you. I feel responsible
+- Try to stand up again [Stand up again]
+
+---
+Ressurection: Stand up again
+
+// TODO: first 2 attempts in vain (unless all questions have been answered)
+// TODO: one of the attempts: Bodega says how far the incoming ship is
+
+This time, it works. You push your hands towards the floor and your upper body lifts as easily as if the gravity was turned down. The tingling sensation is all but gone. You stand up and look around. The bridge is as empty as when you got here a few hours back. You notice the radar screen and the highlighted ship that is slowly moving towards the center of it. Amazingly, you can read the distance measurement, although the characters are small and the screen is a few meters away. The ship is 11 kilometers away and approaching the Bodega with an ETA of 5 minutes.
+
+- "The ship's here in 5 minutes. All energy to shields and weapons."
+- "Give me a reading of the ship."
+
+TODO: reading of the ship
+TODO: Dr. Wells disapproves
+
+---
+Ressurection: Eleanor advice
+
+"I'm pretty sure the Bodega is no match for that ship."
+
+"Excuse me?" the Bodega says. 
+
+"Look, ship, I know about the Messenger. Good job. But they won't make the same mistake again. That incoming ship is military class. She's smaller than you, I'm sure, but you have absolutely zero chance of beating her in your current setup. You're better off playing dead."
+
+The Bodega runs through some schematics on the scanner panel for a fraction of a second, then says: "I'm afraid she's right. That ship appears to be a military-grade vessel. A gunship."
+
+"Play to your strengths," Dr. Wells says. "They want you alive."
+
+- "So?" [{echo(""" "They'll board the Bodega. They'll expect trouble, but I don't think they fully appreciate the effects  Rescin can have on a healthy body." """)}]
+- "Whatever." []
+
+The ship is now 4 minutes away.
+
+"Look, I need to disconnect. They traced our call. It's best for me to move and stay hidden now. After this litter encounter is over, you do the same. I'll contact you later." Dr. Wells smiles. "I think I'll have something the Bodega will enjoy. Until then, good luck." Dr. Wells nods and the main screen goes blank.
+
+What do you do?
+- Contact the ship and surrender to them // end
+- Raise shields and prepare for battle // very short battle, incapacitates bodega's weapons, continues with boarding
+- Let the ship approach
+
+---
+Boarding: Start
+
+The gunship slowly approaches, all weapons scanning the surface of the Bodega. It seems to be aiming for the right side of the ship, where the airlock ${pulledLever ? "is" : "was"}. Meanwhile, the Bodega is completely still. 
+
+// TODO: again possible to go around the whole ship
+// TODO: lose most of strength around the engine
+// take weapons 
+// find gorilla, still stiff, possibility to move out of the corridor
+// make noise ?
+// hide (some places better than others)
+// mercenaries with masks
+// they go in 2 pairs, clockwise and ccw
+// player can hear them in adjanced rooms
+// walking in to room where they are = even fight
+// hiding in place where they're going = can wait various amounts of time, with more time = more chance of being detected, but also better advantage if not detected and possibility to let them through
+
+// fight itself is primitive, as they are much weaker - problem would be near engine room or with all 4 of them at once
+// the better the setup, the quicker fight, the better points
+
+---
+Boarding: Fight 2 men
+
+
+
+---
+Boarding: All men down
+
+The four men are down. You carefully go through the breach and explore the inside of the gunship. There is no one else there, but you find some food and some energy cells. 
+
+Your current supplies are: TODO.
+
+- Take everything (15 energy cells, food for 70 days)
+- Leave just enough for them to survive, take the rest (14 energy cells, food for 65 days)
+- Leave everything [Get rid of the men]
+
+You bring the supplies over to the Bodega. The extremely heavy fuel cells don't seem that way anymore. 
+
+There are now TODO energy cells and food for TODO days on the Bodega. You also scavenge some turret ammunition (TODO?).
+
+- [Get rid of the men]
+
+---
+Boarding: Get rid of the men
+
+You carry all the four men over to the gunship and come back to the bridge. The Bodega then pushes the gunship off while sealing the breach. In twenty minutes, the hull is sealed again, and the gunship slowly drifts away a few hundred meters to the right of the Bodega.
+
+---
+Finale: Start
+
+"We probably shouldn't stay here too much longer," the Bodega says. "The good news is, since you don't need to chat with your doctor girlfriend anymore, we can go pretty much anywhere. Places without comms beacons and outside main official routes seem like a great idea to me right now. We have a few options. Just note that we only have TODO fuel cells right now."
+
+The Bodega highlights the options on a map on the main screen.
+
+- A (distance, fuel cells)
+- Outer space just outside effective radar ranges
+- C
+- D
+
+The Bodega puts in the coordinates for TODO and immediately starts rotating and charging the warp at the same time.
+
+- Watch
+- Go find Gorilla
+
+---
+Finale: Find Gorilla
+
+You go looking for Gorilla to where you last saw him, in TODO, but when you arrive, he's not there. The rebuild phase took longer in his case, for whatever reason (you can assume it's because of the proximity to the engine room and also the sheer mass of his body), but it has clearly passed.
+
+- Look for him in ___
+- Look for him in ___
+- Look for him in ___
+
+---
+Finale: Gorilla in captain's cabin
+
+You enter the captain's cabin and lay your eyes on the most amazing thing you've seen since TODO.
+
+Gorilla – the massive monument of muscle and fur – is slouching on a chair in front of captain's computer. He's not just sitting there, though. He _actively uses the computer_, apparently reading some long article. When he sees you, he turns around and smiles.
+
+"I went ahead and read most of what Dr. Wells sent to us," Gorilla says with perfect pronounciation and in a pleasant voice. "It's fascinating."
+
+- "How?" [How?]
+
+
+---
+Finale: How?
+[[ visitOnce ]]
+
+"Oh, in many ways," says Gorilla. ""
+
+- [Questions for Gorilla]
+
+
+---
+Finale: Questions for Gorilla
+
+- "No, I mean, how are you able to talk this well?" TODO change when not shown for the first time
+- "How did you get the password?" // saw captain put in the password countless times.
+
+
+
+
+---
+Finale: End
+
+Your jaw is still down in amazement when the Bodega starts talking through the PA. She doesn't bother to use the intercom anymore. 
+
+"We just left the detection range of TODO and are on our way to TODO. In other words, you and your pet monkey are safe. You are welcome."
+
+Gorilla raises his browridge. "Actually, I am not a monkey. I am an ape. If I was a macaque, or similar, you could refer to me as a monkey. Am I a macaque, though? No. I am a gorilla."
+
+At that moment, you realize: _this is how it's going to be here from now on._
+
+And the Bodega says: "Great, thanks for the lecture." And then, after a couple of seconds, she says with a different voice: "I suggest both of you apes come to the bridge. You might want to see this."
+
+
+
+
