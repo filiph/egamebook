@@ -230,7 +230,7 @@ void main() {
         expect(withscript.options["string"], "Script");
         expect(withscript.options["goto"], null);
         expect(withscript.options["script"], "blick++");
-        var empty = b.parseChoiceBlock("- Empty [{}]");
+        var empty = b.parseChoiceBlock("- Empty []");
         expect(empty, isNotNull);
         expect(empty.type, BuilderBlock.BLK_CHOICE);
         expect(empty.options["string"], "Empty");
