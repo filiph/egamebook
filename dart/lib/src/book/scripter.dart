@@ -322,7 +322,7 @@ abstract class EgbScripter {
       // someone called the top level function [goto]
       _performGoto(_gotoPageName);
       _gotoPageName = null;
-      return new EgbMessage.NoResult();;
+      return new EgbMessage.NoResult();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
