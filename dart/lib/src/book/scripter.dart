@@ -313,38 +313,7 @@ abstract class EgbScripter {
 
     // if previous script asked to jump to a new page, then jump
     if (_nextPage != null) {
-      if (previousPage != null) {
-        // Now that we're through this page, we should add the link that
-        // lead the player here. This will prevent the player from getting
-        // points twice (even from the PlayerChronology perspective).
-        // This is an acceptable punishment for loading.
-        // If this wasn't here:
-        //   - going back and choosing the same path would award the same points
-        //     (okay)
-        //   - going back and choosing different path would not award anything
-        //     (okay)
-        //   - going back again and choosing the old path would suddenly _not_
-        //     award any points (because the link is now among
-        //     _gotoLinksAlreadyOffered) (confusing)
-        _playerChronology.add(
-            _createLinkHash(previousPage, currentPage));
-        _playerChronologyChanged = true;
-        // TODO: save previousPage in savegame!
-      }
-      
-      // Raise or lower the points embargo (no points for second-guessing,
-      // and no points for visiting for the second time). 
-      _pointsEmbargo = _alreadyOffered(currentPage, _nextPage) ||
-          _nextPage.visited;
-      
-      _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
-          currentBlockIndex);
-      currentPage = _nextPage;
-      currentBlockIndex = null;
-      _nextPage = null;
-      choices.clear();
-      previousPage.visitCount += 1;
-      return new EgbMessage.NoResult();
+      return _performGoto();
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -392,6 +361,41 @@ abstract class EgbScripter {
       // A script paragraph.
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
     }
+  }
+
+  EgbMessage _performGoto() {
+    if (previousPage != null) {
+      // Now that we're through this page, we should add the link that
+      // lead the player here. This will prevent the player from getting
+      // points twice (even from the PlayerChronology perspective).
+      // This is an acceptable punishment for loading.
+      // If this wasn't here:
+      //   - going back and choosing the same path would award the same points
+      //     (okay)
+      //   - going back and choosing different path would not award anything
+      //     (okay)
+      //   - going back again and choosing the old path would suddenly _not_
+      //     award any points (because the link is now among
+      //     _gotoLinksAlreadyOffered) (confusing)
+      _playerChronology.add(
+          _createLinkHash(previousPage, currentPage));
+      _playerChronologyChanged = true;
+      // TODO: save previousPage in savegame!
+    }
+    
+    // Raise or lower the points embargo (no points for second-guessing,
+    // and no points for visiting for the second time). 
+    _pointsEmbargo = _alreadyOffered(currentPage, _nextPage) ||
+        _nextPage.visited;
+    
+    _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
+        currentBlockIndex);
+    currentPage = _nextPage;
+    currentBlockIndex = null;
+    _nextPage = null;
+    choices.clear();
+    previousPage.visitCount += 1;
+    return new EgbMessage.NoResult();
   }
   
   void _initScriptEnvironment() {
