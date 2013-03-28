@@ -110,9 +110,18 @@ abstract class EgbScripter {
   /// The unique id of this particular gamebook. Used for saving.
   String gamebookUid;
 
+  /// Information about all pages, their visit counts, and more.
   EgbScripterPageMap pageMap;
+  /// The starting page of the book.
   EgbScripterPage firstPage;
-  EgbScripterPage previousPage;
+  /// The page and block that called goto() that resulted in jumping to
+  /// currentPage.
+  EgbScripterBlockPointer _preGotoPosition;
+  /// The page visited previously.
+  EgbScripterPage get previousPage => _preGotoPosition == null
+      ? null
+      : _preGotoPosition.page;
+  /// Page that is currently being read.
   EgbScripterPage currentPage;
   EgbScripterPage _nextPage;
   
@@ -328,7 +337,8 @@ abstract class EgbScripter {
       _pointsEmbargo = _alreadyOffered(currentPage, _nextPage) ||
           _nextPage.visited;
       
-      previousPage = currentPage;
+      _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
+          currentBlockIndex);
       currentPage = _nextPage;
       currentBlockIndex = null;
       _nextPage = null;

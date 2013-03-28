@@ -25,6 +25,17 @@ class EgbScripterPage extends EgbPage {
 }
 
 /**
+ * Used to store information about an exact point in the book -- page and
+ * block. 
+ */
+class EgbScripterBlockPointer {
+  EgbScripterBlockPointer(this.page, this.blockIndex);
+  
+  final EgbScripterPage page;
+  final int blockIndex;
+}
+
+/**
  * [EgbScripterPageList] is the container for the whole of the text and logic
  * content of each book.
  */
