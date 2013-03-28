@@ -103,10 +103,9 @@ class EgbRunner {
     
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
-        stop();
+        // _scripterPort.send(new EgbMessage.Quit().toJson());
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
         _streamController.sink.add("END");  // send the info to anyone listening
-        _streamController.close();
         return;
       case EgbMessage.SEND_BOOK_UID:
         _startNewSession(message);

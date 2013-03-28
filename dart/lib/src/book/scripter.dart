@@ -348,6 +348,7 @@ abstract class EgbScripter {
       // At the end of page.
       assert(!choices.any((choice) => !choice.shown));
       DEBUG_SCR("End of book.");
+      // TODO: Make the saving, then ending a little less hacky.
       if (currentBlockIndex == currentPage.blocks.length) {
         return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
       }
