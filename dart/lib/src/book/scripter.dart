@@ -479,10 +479,14 @@ abstract class EgbScripter {
     textBuffer = new StringBuffer();
 
     // run the actual script
-    if (script == null) {
-      currentPage.blocks[currentBlockIndex]();
-    } else {
-      script();
+    try {
+      if (script == null) {
+        currentPage.blocks[currentBlockIndex]();
+      } else {
+        script();
+      }
+    } catch (e, stacktrace) {
+      textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
     }
 
     return new EgbMessage.TextResult(textBuffer.toString());
