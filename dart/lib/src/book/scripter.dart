@@ -333,6 +333,7 @@ abstract class EgbScripter {
       currentBlockIndex = null;
       _nextPage = null;
       choices.clear();
+      previousPage.visitCount += 1;
       return new EgbMessage.NoResult();
     }
 
@@ -346,7 +347,6 @@ abstract class EgbScripter {
       } else {
         currentBlockIndex = 0;
       }
-      currentPage.visitCount += 1;
     } else if (_repeatBlockBit) {
       _repeatBlockBit = false;
     } else {
