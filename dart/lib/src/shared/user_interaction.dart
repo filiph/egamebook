@@ -25,6 +25,26 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently).
   bool get isAutomatic => string.isEmpty;
+  
+  /**
+   * Returns true if this choice is currently actionable (ie. should be 
+   * actively shown to the player). That means that it hasn't been shown, 
+   * is not automatic, is not waiting for end of page.
+   * 
+   * Caller can supply two arguments. [endOfPage] signifies whether or not
+   * the scripter is currently at end of a page. With [filterOut], caller
+   * can provide a function that will filter out the choice [:ch:] if
+   * [:filterOut(ch) == true:].  
+   */
+  bool isActionable({bool endOfPage, bool filterOut(EgbChoice choice)}) {
+    if (shown) return false;  // choice shown before
+    if (isAutomatic) return false;
+    if (endOfPage != null && !endOfPage && waitForEndOfPage) {
+      return false;
+    }
+    if (filterOut != null && filterOut(this)) return false;
+    return true;
+  }
 
   EgbChoice(String string, {this.goto, Function script, bool showNow: false}) :
       super() {
@@ -140,7 +160,7 @@ class EgbChoiceList implements List<EgbChoice> {
   singleWhere(f) => _choices.singleWhere(f);
   firstWhere(test, {orElse}) => _choices.firstWhere(test, orElse: orElse);
   removeWhere(f) => _choices.removeWhere(f);
-  any(f) => _choices.any(f);
+  any(bool f(EgbChoice)) => _choices.any(f);
   get length => _choices.length;
   operator [](int index) => _choices[index];
   void forEach(void f(EgbChoice element)) {
@@ -152,11 +172,6 @@ class EgbChoiceList implements List<EgbChoice> {
   bool get isEmpty => _choices.isEmpty;
   void addAll(Iterable<EgbChoice> iterable) => _choices.addAll(iterable);
   
-  /// Returns true only if the choices are actionable, i.e. not automatic,
-  /// and yet to be shown.
-  bool get areActionable =>
-    _choices.any((choice) => !choice.shown && !choice.isAutomatic);
-
   /**
    * Takes care of converting the current [EgbChoiceList] to a Message.
    *
@@ -165,18 +180,19 @@ class EgbChoiceList implements List<EgbChoice> {
    */
   EgbMessage toMessage({
       String prependText: null,
-      bool endOfPage: false,
+      bool endOfPage: null,
       bool filterOut(EgbChoice choice)}) {
     List<EgbChoice> choicesToSend;
 
     // filter out choices we don't want to show
-    choicesToSend = _choices.where((choice) {
-      DEBUG_SCR("- $choice");
-      if (choice.shown) return false;  // choice shown before
-      if (!endOfPage && choice.waitForEndOfPage) return false;
-      if (filterOut != null && filterOut(choice)) return false;
-      return true;
-    }).toList();
+    choicesToSend = _choices.where(
+        (choice) => choice.isActionable(endOfPage: endOfPage, 
+            filterOut: filterOut)
+    ).toList();
+    
+    if (choicesToSend.isEmpty) {
+      throw "Choices is empty, but still choices.toMessage was called.";
+    }
 
     DEBUG_SCR("Sending choices.");
     EgbMessage m = new EgbMessage(EgbMessage.SHOW_CHOICES);
@@ -195,6 +211,8 @@ class EgbChoiceList implements List<EgbChoice> {
 
     return m;
   }
+  
+  toString() => "EgbChoiceList: $_choices";
 }
 
 class EgbTextInput extends EgbUserInteraction {

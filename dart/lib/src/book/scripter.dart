@@ -301,12 +301,14 @@ abstract class EgbScripter {
    * Returns message for Runner.
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    choices.removeWhere((choice) => choice.shown);
+    bool endOfPage = currentBlockIndex == currentPage.blocks.length - 1;
+    
+    choices.removeWhere((choice) => choice.shown || 
+        _leadsToIllegalPage(choice));
     if (!choices.isEmpty) {
-      if (choices.areActionable) {
-        return choices.toMessage(
-            endOfPage: currentBlockIndex == currentPage.blocks.length - 1,
-            filterOut: _leadsToIllegalPage);
+      DEBUG_SCR("$choices");
+      if (choices.any((choice) => choice.isActionable(endOfPage: endOfPage))) {
+        return choices.toMessage(endOfPage: endOfPage);
       } else {
         _pickChoice(choices.firstWhere((choice) => choice.isAutomatic));
       }
@@ -356,7 +358,8 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      if (choices.areActionable && 
+      if (choices.any((choice) => choice.isActionable(endOfPage: endOfPage,
+            filterOut: _leadsToIllegalPage)) && 
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
           return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
@@ -492,14 +495,11 @@ abstract class EgbScripter {
    */
   bool _leadsToIllegalPage(EgbChoice choice) {
     if (choice.goto == null) return false;
+    if (EgbChoice.GO_BACK.hasMatch(choice.goto)) return false;
     var targetPage =
         pageMap.getPage(choice.goto, currentGroupName: currentPage.groupName);
     if (targetPage == null) return true;
-    if (targetPage.visitOnce && targetPage.visited) {
-      return true;
-    } else {
-      return false;
-    }
+    return targetPage.visitOnce && targetPage.visited;
   }
 
   EgbSavegame _createSaveGame() {
