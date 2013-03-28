@@ -37,6 +37,15 @@ void echo(String str) {
 
 String _gotoPageName;
 
+/**
+ * By calling [goto()], you're saying you want to change page to [dest].
+ * You can specify the page name in full (i.e. including the group name)
+ * or in short (i.e. without group name).
+ * 
+ * This is a global, author-facing function. It will store
+ * the name of the page in a variable that is later used to get the actual
+ * page inside [Scripter]. 
+ */
 void goto(String pageName) {
   _gotoPageName = pageName;
 }
@@ -63,7 +72,8 @@ EgbChoiceList choices = new EgbChoiceList();
 /**
  * Utility shortcut for creating new choices.
  */
-EgbChoice choice(String string, [String goto, Function script, bool showNow=true]) {
+EgbChoice choice(String string, [String goto, ScriptBlock script, 
+                                 bool showNow=true]) {
   EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:showNow);
   choices.add(choice);
   return choice;
@@ -94,10 +104,10 @@ void repeatBlock() {
 When a block/script/choice call for a script to be called afterwards,
 it ends up on this FIFO stack.
  */
-List<Function> _nextScriptStack;
+List<ScriptBlock> _nextScriptStack;
 
 /// Adds a script to the stack of scripts.
-void nextScript(Function f) {
+void nextScript(ScriptBlock f) {
   _nextScriptStack.add(f);
 }
 
@@ -123,7 +133,9 @@ abstract class EgbScripter {
       : _preGotoPosition.page;
   /// Page that is currently being read.
   EgbScripterPage currentPage;
-  EgbScripterPage _nextPage;
+  
+  /// The ChoiceList to be shown on next occasion.
+  EgbSavegame _choicesToShow;
   
   /// Goto links (page1 -> page 2) that have been shown to the player, but
   /// not picked. Links are represented by hashes created by
@@ -165,27 +177,12 @@ abstract class EgbScripter {
    */
   Map<String,Function> _constructors;
 
-  /**
-   * By calling [goto()], you're saying you want to change page to [dest].
-   * You can specify the page name in full (i.e. including the group name)
-   * or in short (i.e. without group name).
-   *
-   * Function throws when requested page doesn't exist.
-   */
-  void _goto(String dest) {
-    _nextPage = pageMap.getPage(dest, currentGroupName: currentPage.groupName);
-    if (_nextPage == null) {
-      throw "Function goto() called with an invalid argument '$dest'. "
-            "No such page.";
-    }
-  }
-
   // -- private members below
   SendPort _runnerPort;
 
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
-    _nextScriptStack = new List<Function>();
+    _nextScriptStack = new List<ScriptBlock>();
     _playerChronology = new Set<String>();
     _initScriptEnvironment();
 
@@ -270,12 +267,7 @@ abstract class EgbScripter {
       if (choice.hash == message.intContent) {
         // This choice was taken.
         DEBUG_SCR("Found choice that was selected: ${choice.string}");
-        if (choice.goto != null) {
-          _goto(choice.goto);
-        }
-        if (choice.f != null) {
-          nextScript(choice.f);
-        }
+        _pickChoice(choice);
       } else {
         // This choice was offered but not taken. Put into the
         // _gotoLinksAlreadyOffered set. The selected choice will
@@ -294,26 +286,43 @@ abstract class EgbScripter {
     return new EgbMessage.NoResult();
   }
 
+  void _pickChoice(EgbChoice choice) {
+    if (choice.f != null) {
+      nextScript(choice.f);
+    }
+    if (choice.goto != null) {
+      _performGoto(choice.goto);
+    }
+    choice.shown = true;  // Mark as shown even if it was picked automatically.
+  }
+
   /** 
    * Walks through the instructions, one block at a time.
    * Returns message for Runner.
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    // if previous script asked for nextScript()
+    choices.removeWhere((choice) => choice.shown);
+    if (!choices.isEmpty) {
+      if (choices.areActionable) {
+        return choices.toMessage(
+            endOfPage: currentBlockIndex == currentPage.blocks.length - 1,
+            filterOut: _leadsToIllegalPage);
+      } else {
+        _pickChoice(choices.firstWhere((choice) => choice.isAutomatic));
+      }
+    }
+    
     if (!_nextScriptStack.isEmpty) {
-      Function script = _nextScriptStack.removeLast();
+      // previous script asked for nextScript()
+      ScriptBlock script = _nextScriptStack.removeLast();
       return _runScriptBlock(script:script);
     }
     
-    // someone called the top level function [goto]
     if (_gotoPageName != null) {
-      _goto(_gotoPageName);
+      // someone called the top level function [goto]
+      _performGoto(_gotoPageName);
       _gotoPageName = null;
-    }
-
-    // if previous script asked to jump to a new page, then jump
-    if (_nextPage != null) {
-      return _performGoto();
+      return new EgbMessage.NoResult();;
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -335,35 +344,55 @@ abstract class EgbScripter {
     // Resolve current block.
     if (currentBlockIndex >= currentPage.blocks.length) {
       // At the end of page.
-      if (choices.any((choice) => !choice.shown)) {
-        return choices.toMessage(
-                  endOfPage: true,
-                  filterOut: _leadsToIllegalPage);
-      } else {
-        return new EgbMessage.EndOfBook();
+      assert(!choices.any((choice) => !choice.shown));
+      DEBUG_SCR("End of book.");
+      if (currentBlockIndex == currentPage.blocks.length) {
+        return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
       }
+      return new EgbMessage.EndOfBook();
     } else if (currentPage.blocks[currentBlockIndex] is String) {
       // Just an ordinary paragraph, no script.
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
     } else if (currentPage.blocks[currentBlockIndex] is List) {
-      // ChoiceList.
+      // A ChoiceList block.
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      if (currentBlockIndex == currentPage.blocks.length - 1 &&
-          choices.areActionable) {
-        // Last block on page. Save the game.
-        return _createSaveGame();
-      } else {
-        return choices.toMessage(
-                  endOfPage: false,
-                  filterOut: _leadsToIllegalPage);
+      if (choices.areActionable && 
+          currentBlockIndex == currentPage.blocks.length - 1) {
+          // Last block on page. Save the game.
+          return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
       }
-    } else if (currentPage.blocks[currentBlockIndex] is Function) {
-      // A script paragraph.
+      return new EgbMessage.NoResult();
+    } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
+      // A script block.
       return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
     }
   }
 
-  EgbMessage _performGoto() {
+  void _performGoto(String dest) {
+    EgbScripterPage _gotoPage;
+    int _gotoBlockIndex;
+    
+    if (EgbChoice.GO_BACK.hasMatch(dest)) {
+      // A [<<<] goto.
+      if (_preGotoPosition == null) {
+        throw new StateError("Cannot use [${EgbChoice.GO_BACK}] when there is "
+            "no _preGotoPosition.");
+      }
+      _gotoPage = _preGotoPosition.page;
+      // Decresing block index by one because it will be automatically increased
+      // in _goOneStep.
+      _gotoBlockIndex = _preGotoPosition.blockIndex - 1;
+    } else {
+      // Normal goto.
+      _gotoPage = pageMap.getPage(
+          dest, currentGroupName: currentPage.groupName);
+      _gotoBlockIndex = null;
+      if (_gotoPage == null) {
+        throw "Function goto() called with an invalid argument '$dest'. "
+            "No such page.";
+      }
+    }
+    
     if (previousPage != null) {
       // Now that we're through this page, we should add the link that
       // lead the player here. This will prevent the player from getting
@@ -380,22 +409,20 @@ abstract class EgbScripter {
       _playerChronology.add(
           _createLinkHash(previousPage, currentPage));
       _playerChronologyChanged = true;
-      // TODO: save previousPage in savegame!
+      // TODO: save _preGotoPosition in savegame!
     }
     
     // Raise or lower the points embargo (no points for second-guessing,
     // and no points for visiting for the second time). 
-    _pointsEmbargo = _alreadyOffered(currentPage, _nextPage) ||
-        _nextPage.visited;
+    _pointsEmbargo = _alreadyOffered(currentPage, _gotoPage) ||
+        _gotoPage.visited;
     
     _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
         currentBlockIndex);
-    currentPage = _nextPage;
-    currentBlockIndex = null;
-    _nextPage = null;
+    currentPage = _gotoPage;
+    currentBlockIndex = _gotoBlockIndex;
     choices.clear();
     previousPage.visitCount += 1;
-    return new EgbMessage.NoResult();
   }
   
   void _initScriptEnvironment() {
@@ -445,13 +472,9 @@ abstract class EgbScripter {
   */
 
   // runs the current block or the specified block
-  EgbMessage _runScriptBlock({Function script}) {
+  EgbMessage _runScriptBlock({ScriptBlock script}) {
     // clean up
     textBuffer = new StringBuffer();
-    // delete choices that have already been shown
-    choices = new EgbChoiceList.from(
-        choices.where((choice) => !choice.shown)
-        );  // TODO: choices.removeMatching((choice) => choice.shown);
 
     // run the actual script
     if (script == null) {
@@ -460,12 +483,6 @@ abstract class EgbScripter {
       script();
     }
 
-    // catch text and choices
-    if (choices.any((choice) => !choice.waitForEndOfPage)) {
-      return choices.toMessage(
-          prependText: textBuffer.toString(),
-          filterOut: _leadsToIllegalPage);
-    }
     return new EgbMessage.TextResult(textBuffer.toString());
   }
 
@@ -486,11 +503,9 @@ abstract class EgbScripter {
     }
   }
 
-  EgbMessage _createSaveGame() {
-    var savegame = new EgbSavegame(currentPage.name, vars,
+  EgbSavegame _createSaveGame() {
+    return new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
-    var message = savegame.toMessage(EgbMessage.SAVE_GAME);
-    return message;
   }
 
   /**
@@ -524,3 +539,5 @@ abstract class EgbScripter {
                                      constructors: _constructors); // TODO
   }
 }
+
+typedef void ScriptBlock();

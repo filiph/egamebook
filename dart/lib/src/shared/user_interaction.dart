@@ -59,6 +59,14 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   toString() {
     return "Choice: $string [$goto]";
   }
+  
+  /**
+   * The string the author can use when he wants a choice to go back to
+   * a previous choice. Like so:
+   * 
+   *     - [<<<]
+   */
+  static final RegExp GO_BACK = new RegExp(r"^\s*<<<\s*$"); 
 }
 
 class EgbChoiceList implements List<EgbChoice> {
@@ -129,7 +137,9 @@ class EgbChoiceList implements List<EgbChoice> {
   }
 
   where(f) => _choices.where(f);
-  removeMatching(f) => _choices.removeMatching(f);
+  singleWhere(f) => _choices.singleWhere(f);
+  firstWhere(test, {orElse}) => _choices.firstWhere(test, orElse: orElse);
+  removeWhere(f) => _choices.removeWhere(f);
   any(f) => _choices.any(f);
   get length => _choices.length;
   operator [](int index) => _choices[index];
@@ -161,6 +171,7 @@ class EgbChoiceList implements List<EgbChoice> {
 
     // filter out choices we don't want to show
     choicesToSend = _choices.where((choice) {
+      DEBUG_SCR("- $choice");
       if (choice.shown) return false;  // choice shown before
       if (!endOfPage && choice.waitForEndOfPage) return false;
       if (filterOut != null && filterOut(choice)) return false;
@@ -174,6 +185,7 @@ class EgbChoiceList implements List<EgbChoice> {
     m.listContent.add(prependText);
     m.listContent.add(question);
     choicesToSend.forEach((choice) {
+      DEBUG_SCR("- $choice");
       m.listContent.add( {
         "string": choice.string,
         "hash": choice.hash
