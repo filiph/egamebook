@@ -421,7 +421,6 @@ abstract class EgbScripter {
         currentBlockIndex);
     currentPage = _gotoPage;
     currentBlockIndex = _gotoBlockIndex;
-    choices.clear();
     previousPage.visitCount += 1;
   }
   
