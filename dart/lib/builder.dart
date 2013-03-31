@@ -631,7 +631,7 @@ class Builder {
 
     var choiceBlock = parseChoiceBlock(line);
     if (choiceBlock == null) return false;
-    choiceBlock.lineStart = number;
+    choiceBlock.lineStart = choiceBlock.lineEnd = number;
 
     BuilderBlock choiceList;
     var lastpage = pages.last;
@@ -877,14 +877,18 @@ class Builder {
 
       if (!lastpage.blocks.isEmpty) {
         var lastblock = lastpage.blocks.last;
-        if (lastblock.lineEnd == null
-            && (lastblock.type == BuilderBlock.BLK_TEXT
-            || lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR)) {
-          // we have an unfinished text block that we can append to
-          appending = true;
-          //lastblock.lines.add(_thisLine);
-          if (variableInText.hasMatch(line)) {
-            lastblock.type = BuilderBlock.BLK_TEXT_WITH_VAR;
+        if (lastblock.lineEnd == null) {
+          if (lastblock.type == BuilderBlock.BLK_TEXT || 
+              lastblock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
+            // we have an unfinished text block that we can append to
+            appending = true;
+            //lastblock.lines.add(_thisLine);
+            if (variableInText.hasMatch(line)) {
+              lastblock.type = BuilderBlock.BLK_TEXT_WITH_VAR;
+            }
+          } else {
+            // the previous block is of different type
+            _closeLastBlock(number - 1);
           }
         }
       }
