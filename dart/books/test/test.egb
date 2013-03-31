@@ -3,8 +3,7 @@ Author:		Filip Hracek
 
 <import '../libraries/storyline.dart'/>
 <import '../libraries/timeline.dart'/>
-<import '../libraries/spaceship.dart'/>
-<import '../libraries/spaceshipcombat.dart'/>
+<import '../libraries/randomly.dart'/>
 <import '../libraries/mockinstance.dart'/>
 
 
@@ -62,7 +61,7 @@ You end up with saying: "Captain Kay was a great captain." And that is definitel
 ---
 Start: Pull
 
-You pull the lever, and as the outer door opens, all the air in the airlock shoots out Ð with a loud hiss Ð into the vacuum of space. The body is now moving in that direction, too, though much slower. It's no longer pulled towards the floor with artificial gravity - that was automatically turned off when you pulled that lever. The body kind of tumbles towards the door.
+You pull the lever, and as the outer door opens, all the air in the airlock shoots out â€“ with a loud hiss â€“ into the vacuum of space. The body is now moving in that direction, too, though much slower. It's no longer pulled towards the floor with artificial gravity - that was automatically turned off when you pulled that lever. The body kind of tumbles towards the door.
 
 <script>
   if (Randomly.tossCoin()) {
@@ -176,7 +175,7 @@ You give captain Kay's ${pulledLever ? "receding" : ""} body the last glance${pu
 
 [IMG]
 
-You follow Corridor Right Ð a badly lit tube of dusty cables and fluorescent lamps running along the right side of the Bodega, from the bridge all the way to the huge cargo area in the back. The stark white light of the lamps is not the only light source. There are also the red bulbs of the ship alarm which have been pulsing since the beginning of the contagion 14 days ago.
+You follow Corridor Right â€“ a badly lit tube of dusty cables and fluorescent lamps running along the right side of the Bodega, from the bridge all the way to the huge cargo area in the back. The stark white light of the lamps is not the only light source. There are also the red bulbs of the ship alarm which have been pulsing since the beginning of the contagion 14 days ago.
 
 - [Bridge: Gorilla incident]
 
@@ -248,7 +247,7 @@ Bridge: Repairs
 
 ## Repairs
 
-You are dog-tired. You spent the last couple of days slaving away Ð together with Gorilla and captain Kay -- to repair the hyperdrive. It had broken down in the middle of nowhere after one of the containers in the cargo bay exploded. Apparently, the explosion was due to some inapt handling by none other than your Gorilla. It wasn't a particularly big blast, but the vibrations rippled through the whole ship, and -- among other things -- put the hyperdrive into invalid state. As it turned out, though, the malfunctioning drive was to be the lesser of your worries.
+You are dog-tired. You spent the last couple of days slaving away â€“ together with Gorilla and captain Kay -- to repair the hyperdrive. It had broken down in the middle of nowhere after one of the containers in the cargo bay exploded. Apparently, the explosion was due to some inapt handling by none other than your Gorilla. It wasn't a particularly big blast, but the vibrations rippled through the whole ship, and -- among other things -- put the hyperdrive into invalid state. As it turned out, though, the malfunctioning drive was to be the lesser of your worries.
 
 While you were patching up, the rest of the crew was busy dying. One by one. The ship's medic was one of the first to go, but he didn't appear to have any idea about what was going on anyway. He was as scared and angry as anyone else. 
 
@@ -418,7 +417,7 @@ The communications panel goes blank as the pilot closes the connection. The Mess
 
 You try to remember something about spaceship combat, but there's not much you ever knew about the topic in the first place. You never had any ambition to go the the military, not even as a teenager, and you spent the last ten years of your life on cargo ships like the Bodega. Those normally don't get into combat, and if they do, it tends to be over quickly. Only those on the bridge get involved, whereas you practically live in the engine room.
 
-You do have some reasons to feel lucky, though. The Messenger is clearly not a combat vessel. You can only see 2 parallel beam guns in the front that seem pretty weak. The hull is slender. Moreover, according to the markings on the side, the ship is a Sentaco corporate runner. Sentaco Ð although one of the biggest corporations out there Ð is not one of the militarized ones. It deals in food and consumer goods. 
+You do have some reasons to feel lucky, though. The Messenger is clearly not a combat vessel. You can only see 2 parallel beam guns in the front that seem pretty weak. The hull is slender. Moreover, according to the markings on the side, the ship is a Sentaco corporate runner. Sentaco â€“ although one of the biggest corporations out there â€“ is not one of the militarized ones. It deals in food and consumer goods. 
 
 The frail Messenger clearly wasn't sent here to fight the huge pile of steel that is the Bodega. But it _is_ fighting it now, for whatever reason.
 
@@ -474,7 +473,7 @@ One of those outward flying parts is different from the others, though. It steer
 
 "Hull breach," the ship says, laconically. "Initiating sealing process."
 
-You look at the readings around you. The shields are at TODO % and stable. The hull took É damage. 
+You look at the readings around you. The shields are at TODO % and stable. The hull took â€¦ damage. 
 
 TODO: if !pulledLever = Airlock smashed into pieces TODO(if). 
 
@@ -699,7 +698,7 @@ There is a delivery note attached to the order. These are conveyed to the recipi
 
     Dr. Eleanor Wells' lab equipment from Ithaka. Notify Dr. Pruitt, mention: "wolfberry". Not sterilized.
 
-A surge of rage overcomes your brain. You hear loud pulse in your ears and the world gets muffled and distant. "Not sterilized." God knows what sick shit was still living inside that equipment. It's required by law to sterilize anything that could Ð even with the remotest of possibilites Ð be contaminated. Someone's _laziness_ just killed eleven people. The twelfth one is on his way.
+A surge of rage overcomes your brain. You hear loud pulse in your ears and the world gets muffled and distant. "Not sterilized." God knows what sick shit was still living inside that equipment. It's required by law to sterilize anything that could â€“ even with the remotest of possibilites â€“ be contaminated. Someone's _laziness_ just killed eleven people. The twelfth one is on his way.
 
 At least you have someone to ask about this now. Dr. Wells or Dr. Pruitt ought to have the answers. They might know what exactly got out. And if you're lucky, one of them might even know how to fight it.
 
@@ -888,7 +887,7 @@ All color leaves Dr. Wells' face. "Eleven," she repeats. Her face is torn in a t
 ---
 End: Nice Death
 
-This time, it's different. Your are losing your peripheral vision. The only thing you see now is the blindingly bright face of Dr. Eleanor Wells. She's saying something to you, but you don't hear it. The only thing you hear is something you've never heard before in your life Ð your body. Not just the blood in your veins, but everything. The complex, moist, organic machine that is your physical body. It is slowing down.
+This time, it's different. Your are losing your peripheral vision. The only thing you see now is the blindingly bright face of Dr. Eleanor Wells. She's saying something to you, but you don't hear it. The only thing you hear is something you've never heard before in your life â€“ your body. Not just the blood in your veins, but everything. The complex, moist, organic machine that is your physical body. It is slowing down.
 
 // TODO: make it frightful experience when attitude is too strong (?) (or some other player driven thing)
 
@@ -951,7 +950,7 @@ Dr. Eleanor Wells is there. She's no longer in a dim lit room, it's day at where
 
 - Raise eyebrows []
 
-Dr. Wells detects your question. "What the nanobots do Ð after they've gathered data about your body Ð is they pretty much rebuild it all, cell by cell. Some of the nanos will merge with a cell, effectively making a cyborg microorganism. Most will use your body's own mechanisms and resources to augment its function. Striking the right balance between the two approaches Ð it was pure alchemy. Well, it was all alchemy, mostly." 
+Dr. Wells detects your question. "What the nanobots do â€“ after they've gathered data about your body â€“ is they pretty much rebuild it all, cell by cell. Some of the nanos will merge with a cell, effectively making a cyborg microorganism. Most will use your body's own mechanisms and resources to augment its function. Striking the right balance between the two approaches â€“ it was pure alchemy. Well, it was all alchemy, mostly." 
 
 - Raise eyebrows [{echo(""" "We had no data that would be indicative of what would happen. Nobody attempted anything close to this before. There were experiments with single cells or primitive organisms, but never with something as complex as a mouse, let alone a human. We spent almost a year trying to create a working model with some predictive accuracy. We never got there. Not even close. In the end, we had to get to the results experimentally. We were like the alchemists in the middle ages, but instead of the philosopher's stone, we were searching for something much more important." """)}]
 - Do nothing []
@@ -981,12 +980,12 @@ Ressurection: Reminiscing Verge
 
 Dr. Wells leans back and narrows her eyes. "I was raised on one of the Verge's poorer star systems, Avesta. We lived on a hot, seizmic power-plant of a planet, Avesta II. See, nobody even cared enough to give it a proper name." She scoffs. "The population was fifty thousand. Together, they provided the 'colonization effort' with more energy than the _whole_ Sol system combined." 
 
-She scoffs again. "And for those fifty thousand people Ð who worked twelve hour shifts in artificially lit, hell-hot underground tunnels on a volcanic planet Ð there was just one real doctor. My father. And so I lived among broken people. No matter how hard my father tried, there was always screaming and people with dripping burns and with missing limbs."
+She scoffs again. "And for those fifty thousand people â€“ who worked twelve hour shifts in artificially lit, hell-hot underground tunnels on a volcanic planet â€“ there was just one real doctor. My father. And so I lived among broken people. No matter how hard my father tried, there was always screaming and people with dripping burns and with missing limbs."
 
 - "Who cares?" [{echo("""Something akin to "huh hrrrs" comes from inside of your throat. Dr. Wells waits for a second to see if you're going to continue, then she gets back to speaking.""")}]
 - Do nothing []
 
-"I eventually got out of Avesta, out of the Verge, to study medicine with some of the most intelligent people I will ever know. Most of them from central systems, of course. And, see, I learnt that these people Ð coming from where they do Ð these people think it's 'not natural' to help people who are beyond some 'level of damage'. When a worker somewhere in the Verge gets his legs caught in machinery, they say it's 'natural' that he loses the whole lower part of his body, because that would have happened a hundred years ago. Is it possible to help him now? Maybe, but they think it would be crossing a line. Of course, most of them have never even _seen_ anyone lose their legs."
+"I eventually got out of Avesta, out of the Verge, to study medicine with some of the most intelligent people I will ever know. Most of them from central systems, of course. And, see, I learnt that these people â€“ coming from where they do â€“ these people think it's 'not natural' to help people who are beyond some 'level of damage'. When a worker somewhere in the Verge gets his legs caught in machinery, they say it's 'natural' that he loses the whole lower part of his body, because that would have happened a hundred years ago. Is it possible to help him now? Maybe, but they think it would be crossing a line. Of course, most of them have never even _seen_ anyone lose their legs."
 
 "Fortunately, not everyone was so arrogant. We put together a working group and started looking into technologies that were 'beyond the line'. The most promising one turned out to be nanorobotics. We got funded by Sentaco and set up the lab on Ithaka."
 
@@ -1003,7 +1002,7 @@ You don't feel so great, but definitely better than a minute ago.
 
 // TODO: I can see your vocal cords are getting better.
 
-"Look Ð Pruitt's men are coming for you. I'm not entirely sure if this all is an accident or not, but even if it was, Pruitt will definitely want to have you for research. You're the only human in the universe with Rescin treatment. And unless I am mistaken, you'll be the only one for some time to come."
+"Look â€“ Pruitt's men are coming for you. I'm not entirely sure if this all is an accident or not, but even if it was, Pruitt will definitely want to have you for research. You're the only human in the universe with Rescin treatment. And unless I am mistaken, you'll be the only one for some time to come."
 
 - Try to get up [Try to get up]
 
@@ -1141,7 +1140,7 @@ Finale: Gorilla in captain's cabin
 
 You enter the captain's cabin and lay your eyes on the most amazing thing you've seen since TODO.
 
-Gorilla Ð the massive monument of muscle and fur Ð is slouching on a chair in front of captain's computer. He's not just sitting there, though. He _actively uses the computer_, apparently reading some long article. When he sees you, he turns around and smiles.
+Gorilla â€“ the massive monument of muscle and fur â€“ is slouching on a chair in front of captain's computer. He's not just sitting there, though. He _actively uses the computer_, apparently reading some long article. When he sees you, he turns around and smiles.
 
 "I went ahead and read most of what Dr. Wells sent to us," Gorilla says with perfect pronounciation and in a pleasant voice. "It's fascinating."
 
