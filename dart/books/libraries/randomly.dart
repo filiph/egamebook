@@ -17,6 +17,8 @@ class Randomly {
     return _random.nextDouble() < probability;
   }
   
+  static bool tossCoin() => saveAgainst(0.5);
+  
   /**
    * Function gets a list of choices, picks one of them randomly.
    */

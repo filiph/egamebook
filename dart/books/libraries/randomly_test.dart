@@ -4,6 +4,18 @@ import 'randomly.dart';
 
 void main() {
   
+  group("Save Against", () {
+    test("tossCoin returns as expected", () {
+      expect(Randomly.tossCoin(), new isInstanceOf<bool>("bool"));
+      final int n = 10000;
+      int result = 0;
+      for (int i = 0; i < n; i++) {
+        result += (Randomly.tossCoin()) ? +1 : -1;
+      }
+      expect(result, closeTo(0, n / 10));
+    });
+  });
+  
   group("Randomly.parse", () {
     test("parses simple stuff", () {
       expect(Randomly.parse("you {hit|punch} him in the face"),
