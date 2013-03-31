@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:graphml/dart_graphml.dart';
 
 import 'src/shared/page.dart';
+import 'src/shared/user_interaction.dart';
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -348,6 +349,8 @@ class Builder {
                   "${page.groupName}: $gotoPageName";
             } else if (pageHandles.containsKey(gotoPageName)) {
               // great, already done
+            } else if (EgbChoice.GO_BACK.hasMatch(gotoPageName)) {
+              // great, it's just going back
             } else {
               WARNING("Page ${page.name} specifies a choice that goes "
               "to a non-existing page ($gotoPageName).",
