@@ -55,6 +55,16 @@ void main() {
       expect(a.x.z.q, "string");
       expect(a.x.z.r, true);
     });
+    test("allow for [] accessor", () {
+      var a = new MockInstance();
+      a["something"] = 1;
+      expect(a["something"], 1);
+    });
+    test("allow for [] accessor down the chain", () {
+      var a = new MockInstance();
+      a.x.y["something"] = 1;
+      expect(a.x.y["something"], 1);
+    });
   });
 }
 

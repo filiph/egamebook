@@ -30,6 +30,12 @@ class MockInstance {
       var memberName = invocation.memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
+    } else if (invocation.memberName == "[]=") {
+      vars[invocation.positionalArguments[0]] = 
+          invocation.positionalArguments[1];
+      return null;
+    } else if (invocation.memberName == "[]") {
+      return vars[invocation.positionalArguments[0]];
     } else {
       throw new NoSuchMethodError(this, invocation.memberName,
           invocation.positionalArguments, invocation.namedArguments);
