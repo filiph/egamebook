@@ -35,6 +35,9 @@ class MockInstance {
           invocation.positionalArguments[1];
       return null;
     } else if (invocation.memberName == "[]") {
+      if (vars[invocation.positionalArguments[0]] == null) {
+        vars[invocation.positionalArguments[0]] = new MockInstance();
+      }
       return vars[invocation.positionalArguments[0]];
     } else {
       throw new NoSuchMethodError(this, invocation.memberName,

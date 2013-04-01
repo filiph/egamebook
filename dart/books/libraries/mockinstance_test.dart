@@ -65,6 +65,11 @@ void main() {
       a.x.y["something"] = 1;
       expect(a.x.y["something"], 1);
     });
+    test("the [] accessor doesn't break the chain", () {
+      var a = new MockInstance();
+      a.x["something"].y = 1;
+      expect(a.x["something"].y, 1);
+    });
   });
 }
 
