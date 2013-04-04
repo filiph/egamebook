@@ -81,8 +81,8 @@ EgbChoice choice(String string, [String goto, ScriptBlock script,
 
 /**
  * The map holding all author-defined variables. This is accessed either
- * by [:var["name"]:], but thanks to noSuchMethod override, 
- * also by just [:name:] (not in libraries, though).
+ * by [:vars["name"]:], but thanks to noSuchMethod override, 
+ * also by just [:name:].
  */
 Map<String, dynamic> vars = new Map<String, dynamic>();
 
@@ -113,9 +113,10 @@ void nextScript(ScriptBlock f) {
 
 
 /**
-  Scripter is the class that runs the actual game and sends Messages to UserInterface.
-  It is subclassed by ScripterImpl, which is built from .egb the file by egb_builder.
-  */
+ * Scripter is the class that runs the actual game and sends Messages to
+ * UserInterface. It is subclassed by ScripterImpl, which is built from .egb 
+ * file by egb_builder.
+ */
 abstract class EgbScripter {
   /// The unique id of this particular gamebook. Used for saving.
   String gamebookUid;
