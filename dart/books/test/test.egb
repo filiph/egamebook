@@ -8,9 +8,7 @@ Author:		Filip Hracek
 
 
 <variables>
-
-bodega = new MockInstance();
-
+  bodega = new MockInstance();
 </variables>
 
 
@@ -24,13 +22,13 @@ Start: Funeral
 
 ## The Funeral
 
-This story begins and ends with a death, on a spaceship. 
+This story both begins and ends with a death, on a spaceship. 
 
-The first one is the death of captain Kay. He was the person who found you in a godforsaken joint on Station Trust and brought you onto this ship, the Bodega. Apparently, he had been putting the whole crew together in this way, finding all eleven of them in different bars and pubs throughout colonized space. 
+The first death is that of captain Kay. When he died a couple of minutes ago, he left you as the last surviver on board of the Bodega, the 25 thousand ton cargo ship that is now stuck pretty much powerless in the middle of nowhere. The ship and the crew of twelve were just fine only two weeks ago. 
 
-Now they're all dead. In the last 14 days, they all gradually fell with agonizing pain and uncanny stiffness. The captain held a memorial service for every one of them, each funeral a little shorter and more modest than the previous.
+Now, they're all dead. The last two weeks, the twelve men had seemed to be taking turns in screaming in pain, then getting uncanilly stiff, then dying. The captain held a memorial service for every one of them, each funeral a little shorter and simpler than the previous.
 
-Now, it's your turn to hold the memorial service for the captain. You've never done it before, but that doesn't matter. There's no one else to do it. You're the last one alive. (Well, almost. But we'll get to that later.)
+Now, it's your turn to hold the memorial service, for the captain. You've never done it before, but that doesn't really matter. There's no one else to do it, and there's no one else to _see_ you do it. You're the last one alive. (Well, almost. But we'll get to that later.)
 
 The funeral looks like this: You are standing in front of the airlock. Through the porthole window, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, the captain's body will be sucked out into outer space. This is how funerals work here on The Bodega. 
 
@@ -48,9 +46,9 @@ Start: Say something nice
 
 You clear your throat. "Captain Kay was ..." 
 
-For some reason, the only things that come to mind right now are _far_ from nice. Your head is full of images of the captain being drunk to the point he couldn't stand up. Let's just say this is not the first time you see him lying on the floor naked and reddish. Yes, he was a great drinking buddy of yours, but that doesn't strike you as something to say at a funeral.
+For some reason, the only things that come to mind right now are _far_ from nice. Your head is full of images of the captain being drunk to the point he couldn't stand up. Let's just say this is not the first time you see him lying on the floor naked and reddish and stiff. Sure, he was a great drinking buddy of yours, but that doesn't strike you as something to say at a funeral.
 
-You end up with saying: "Captain Kay was a great captain." And that is definitely true.
+You end up saying: "Captain Kay was a great captain." And that is definitely true.
 
 <script>
   points.add(1, "trying");
@@ -61,7 +59,7 @@ You end up with saying: "Captain Kay was a great captain." And that is definitel
 ---
 Start: Pull
 
-You pull the lever, and as the outer door opens, all the air in the airlock shoots out – with a loud hiss – into the vacuum of space. The body is now moving in that direction, too, though much slower. It's no longer pulled towards the floor with artificial gravity - that was automatically turned off when you pulled that lever. The body kind of tumbles towards the door.
+You pull the lever, and as the outer door opens, all the air in the airlock shoots out – with a loud hiss – into the vacuum of space. The body is now moving in that direction, too, though much slower. It's no longer pulled towards the floor with artificial gravity – that was automatically turned off when you pulled that lever – so the body kind of tumbles towards the door.
 
 <script>
   if (Randomly.tossCoin()) {
@@ -97,15 +95,17 @@ pulledLever = false;
 ---
 Start: Recollections
 
-You remember the first time you saw the captain in that joint on Station Trust. You were both drunk beyond belief, both for different reasons. Come to think of it, everybody in that bar was drunk beyond belief, _and_ for different reasons. In a way, it was like a group therapy session. Of course, it didn't take long before someone started a fight. You don't really remember who it was, but it wasn't captain Kay, and it definitely wasn't you. You both got dragged into it pretty quickly, though, and because you were both sitting close to one end of the bar, according to bar fight customs, you were on the same side. You noticed the captain because he was laughing his head off in the midst of all the craziness. 
+You remember the first time you saw the captain in that joint on Space Station Trust. You were both drunk beyond belief, both for different reasons. Come to think of it, _everybody_ in that bar was drunk beyond belief, _and_ for different reasons. In a way, it was like a group therapy session, only with less weeping and more yelling at each other from close up. 
 
-You remember trying to slip through the crowd to get out, as you had no intention of getting the hell beaten out of you for no reason whatsoever, and when you were next to the laughing captain, a huge furry with arms the size of your thighs leaped in front of you two, said: "What's so funny?", grabbed both of your heads, and smashed them together.
+Of course, it didn't take long before someone started a fight. You don't really remember who it was, but it wasn't captain Kay, and it definitely wasn't you. You both got dragged into it pretty quickly, though, and because you were both sitting close to one end of the bar, according to bar fight customs, you were on the same side. It was impossible to _not_ notice the captain because he was laughing his head off in the midst of all the violence and craziness. 
 
-The next thing you know, the bar is empty and captain Kay helps you on your feet. There's dry blood in his hair. He's still laughing.
+You remember trying to slip through the crowd to get out, as you had no intention of getting the hell beaten out of you for no reason whatsoever, and when you were next to the laughing captain, a huge furry with arms the size of your thighs leaped in front of you two, said: "What's so funny, shitface?", grabbed both of your heads, and smashed them together.
 
-Now, you watch his dead body ${pulledLever ? "recede into darkness" : "lie on the floor"}.
+The next thing you knew, the bar was empty and captain Kay helped you on your feet. There was dry blood in his hair. He was still laughing.
 
-There is no reason why you should outlive the captain. Or why you should outlive _any other_ crew member for that matter. You were always the weakest, thinniest person on board. The contagion, or whatever it is, should have killed you long before everyone else. Then again, there was absolutely no sense in the order in which the crew died. It was random.
+Now, you watch his dead body ${pulledLever ? "recede into darkness" : "lie on the floor in front of you"}.
+
+There is no reason why _you_ should outlive the captain. Or why you should outlive _any other_ crew member for that matter. You were always the weakest, thinniest person on board. The contagion, or whatever it is, should have killed you long before everyone else. Then again, there was absolutely no sense in the order in which the crew died. It was random.
 
 [IMG]
 
@@ -161,7 +161,7 @@ Start: Can't this wait?
     <echo>
       The speakers turn off, then turn on again.
       
-      "And by the way," the ship adds, "I know you're not very clever and all, but by now you should be familiar with the intercom system. A hint: when the red light goes blink, you pick it up."
+      "And by the way," the ship adds, "I know you're not very clever and all, but by now you should be familiar with the intercom system. A hint: when the red light goes blink, you pick it up." The speakers turn off again.
     </echo>
   }
 </script>
@@ -175,7 +175,7 @@ You give captain Kay's ${pulledLever ? "receding" : ""} body the last glance${pu
 
 [IMG]
 
-You follow Corridor Right – a badly lit tube of dusty cables and fluorescent lamps running along the right side of the Bodega, from the bridge all the way to the huge cargo area in the back. The stark white light of the lamps is not the only light source. There are also the red bulbs of the ship alarm which have been pulsing since the beginning of the contagion 14 days ago.
+You follow Corridor Right – a badly lit tube of dusty cables and fluorescent lamps running along the right side of the Bodega, from the bridge all the way to the huge cargo area in the back. The stark white light of the lamps is not the only light source. There are also the red bulbs of the ship alarm which have been pulsing since the beginning of the disease 14 days ago.
 
 - [Bridge: Gorilla incident]
 
@@ -196,19 +196,29 @@ Gorilla raises his arms to sign. First, he makes the sign for "me" and then he m
 
 // TODO choose gorilla - send somewhere or stay
 
+<variables>
+  gorillaAttitude = 0;
+</variables>
+
+What do you say to him?
+- "It's okay." [{gorillaAttitude += 1; echo("Gorilla slowly turns his head back to the stars, visibly alleviated.")}]
+- "What the hell are you doing here, Gorilla?" [{gorillaAttitude -= 1; echo("Gorilla doesn't answer, he only looks at you in terror. One of the enhancements they did on the Enhanced Gorillas is fear of people. Of course it's completely irrational – Gorilla could squash you any time – but the gorillas can't help it. It's in their DNA.\n\nYou smile at the gorilla like it's not as a big deal as it thinks. He's a bit alleviated, but still a bit stressed. He slowly turns his head back to the stars.")}]
+
 "The gorilla stays," you say to the ship computer. "He just sits there. And he definitely won't touch anything while I'm here."
 
 The ship is silent for a while. Then she chooses to ignore the topic entirely.
 
 "I would just _hate_ to unnerve you," she says, "but considering that there is no reason to believe you are _not_ contaminated with the same illness as everyone else, and that we have no reliable data on the incubation period, I propose we make the jump to Space Station Unity as soon as possible. The hyperdrive seems to be operational now."
 
-- "Space Station Unity?" [{echo(""" The Bodega pulls off the kind of a synthetic-sounding sigh that she likes to do whenever something annoys her. Which is very often. She says: "For fuck's sake, I know you're just a drunk wannabe engineer, but this is _basic_ astronomy. Space Station Unity is one of the big five. It also happens to be the closest hub with a major medical facility."\n\nYou do remember the captain talking about 'Uni' the last few days, but that wasn't something you'd try to process. You focused solely on repairing the drive and not thinking too much about death.""")}]
-- "Good." []
+- "Space Station Unity?" [{echo(""" The Bodega pulls off the kind of a synthetic-sounding sigh that she likes to do whenever something annoys her. Which is very often. She says: "For fuck's sake, I know you're just a drunk wannabe engineer, but this is _basic_ astronomy. Space Station Unity is one of the big five. It also happens to be the closest hub with a major medical facility."\n\nYou do remember the captain talking about 'Uni' the last few days, but that wasn't something you'd try to process. You focused solely on repairing the drive and not thinking too much about anything else.""")}]
+- "Good." [{echo(""" "Good," the ship replies. """)}]
 
-The Bodega takes some time to go over a quick succession of data and schematics on the main screen. Then, she says: "The drive is being charged now. It will be ready in ten to fifteen hours, depending on energy input."
+The Bodega takes some time to go over a quick succession of data tables and schematics on the main screen. Then, she says: "The drive is being charged now. It will be ready in ten to fifteen hours, depending on energy input."
 
 - "Give it full power." [10 hours to charge] [Full speed]
 - "Keep the shields and the radar on." [15 hours to charge] [Shields on]
+
+// TODO: more options here: let player on/off shields, radar, independently
 
 ---
 Bridge: Full speed
@@ -247,11 +257,11 @@ Bridge: Repairs
 
 ## Repairs
 
-You are dog-tired. You spent the last couple of days slaving away – together with Gorilla and captain Kay -- to repair the hyperdrive. It had broken down in the middle of nowhere after one of the containers in the cargo bay exploded. Apparently, the explosion was due to some inapt handling by none other than your Gorilla. It wasn't a particularly big blast, but the vibrations rippled through the whole ship, and -- among other things -- put the hyperdrive into invalid state. As it turned out, though, the malfunctioning drive was to be the lesser of your worries.
+You are dog-tired. You spent the last couple of weeks slaving away – together with Gorilla and captain Kay -- to repair the hyperdrive. It had broken down in the middle of nowhere after one of the containers in the cargo bay exploded. Apparently, the explosion was due to some inapt handling by none other than your Gorilla. It wasn't a particularly big blast, but the vibrations rippled through the whole ship, and -- among other things -- put the hyperdrive into an invalid state. As it turned out, though, the malfunctioning drive was to be the lesser of your worries.
 
-While you were patching up, the rest of the crew was busy dying. One by one. The ship's medic was one of the first to go, but he didn't appear to have any idea about what was going on anyway. He was as scared and angry as anyone else. 
+While you were patching up the drive, the rest of the crew were busy dying. One by one. The ship's medic was one of the first to go, but he didn't appear to have any idea about what was going on anyway. He was as scared and angry and clueless as anyone else. 
 
-"It's not like I wasn't expecting to die out in the space one day," he said to you from behind a window (back then, the captain still tried to mantain some kind of quarantine), "but I sure as hell didn't expect it to come _this_ soon." He was forty-five, one of the oldest crew members.
+"It's not like I wasn't expecting to die out in the space one day," he said to you from behind a window (back then, the captain still tried to mantain some kind of quarantine), "but I sure as hell didn't expect it to come _this_ soon." He was forty-five, one of the oldest crew members. He died the next day.
 
 [IMG]
 
@@ -259,21 +269,30 @@ The only thing that has kept you from worrying about death so far was work. Anyt
 
 This time, though, you are so unbelievably tired you will probably fall asleep the minute you close your eyes. On the other hand, there is still work to do -- small things that also broke down because of the explosion, but weren't a priority.
 
-What do you do?
+<variables>
+  bodega.systems["corridor right door"].hp.value = 0;
+  bodega.systems["scanner"].hp.value = 0;
+  bodega.engine.hp.percentage = 0.92;
+  bodega.jets.maneuvering.hp.percentage = 0.75;
+  bodega.systems["cargo bay structure"].hp.percentage = 0.9;
+</variables>
+
+The jump to Station Unity is ${eta - timeFromStart} hours away. What do you do?
 - Take the nap [A nap]
 - Take a look at the door in Corridor Right that never closes [~1 hour] [Door repair]
 - Take a look at the malfunctioning scanner [~2 hours] [Scanner repair]
 - Take a look at the engine, try to bring output from 92% back to 100% [~3 hours] [Engine repair]
-- Take a look at one of the maneuvering jets that went offline [~4 hours] [Jets repair]
+- Take a look at one of the four maneuvering jets that went offline [~4 hours] [Jets repair]
 - Repair the structural damage of the cargo bay explosion [~6 hours] [Cargo bay repair]
 
 ---
 Bridge: Door repair
 [[ visitOnce ]]
 
-You go to Corridor Right and find the malfunctioning door. ...
+You go to Corridor Right and find the malfunctioning door. ... // TODO
 
 <script>
+  bodega.systems["corridor right door"].hp.value.percentage = 1.0;
   timeFromStart += 1;
   points.add(1, "repairing the door");
   if (timeFromStart >= 5) {
@@ -286,24 +305,18 @@ You go to Corridor Right and find the malfunctioning door. ...
 ---
 Bridge: Overcome by sleepiness
 
-
+You come back to the bridge, determined to do some more work, but at that exact time, your body just refuses to continue. You can't imagine _walking_ somewhere, let alone trying to _work_.
 
 - [A nap]
-
 
 ---
 Bridge: A nap
 
-Satisfied, you look at the control panel
+You slouch into the captain's chair and check the time. You should be ready for the jump in ${eta - timeFromStart} hours. Your eye lids get heavy and you realize there is no way you can fight this. Soon, the most comfortable embrace of sleep puts you under.
 
-// TODO Station Unity is around $eta hours away
-
-You slouch into the captain's chair and, almost immediately, your eye lids get heavy. You try to stay up, but there is no way you can fight this. Soon, the most comfortable embrace of sleep puts you under.
-
-// TODO: nightmare: flashback to a defining moment in the past, driver for later actions - e.g. "she walks away from you. She walks away because you're not good enough. She thinks that, like everyone else. Your father, who wanted to be "
+You have a dream about how you wake up and you're already on Station Unity and a person in a white lab coat tells you that you're just _fine_ – healthier than ever, actually – and now that same person is a captain of a very nice ship and he is on the bridge – in that lab coat, but for some reason it's not weird at all – and you have a job on this new ship, too, and it's clear that you're comfortable and happy, and you're actually _laughing_, laughing while working, because the feeling of not needing to worry about stuff is just so uplifting and downright _euphoric_ right now. It's a very nice dream and when you feel you're starting to wake up from it, you genuinely don't want to.
 
 - [Dogfight: Start]
-
 
 
 ---------------
@@ -312,36 +325,43 @@ Dogfight: Start
 ## The Encounter
 
 <script>
-if (bodega.systems["radar"].active) {
-  goto("Dogfight: Radar reading");
-} else {
-  goto("Dogfight: Wake up");
-}
+  if (bodega.radar.active) {
+    goto("Dogfight: Radar reading");
+  } else {
+    goto("Dogfight: Wake up");
+  }
 </script>
 
 ---
 Dogfight: Radar reading
 
 <script>
-eta -= 15;
+  timeFromStart += 4;
 </script>
 
 You wake up to regular bleeps of the radar. 
 
 "I repeat," the ship says, quite urgently. "We have a radar contact."
 
-You look at the radar screen. It seems some smaller vessel is matching your course and speed, and is nearing rapidly. It doesn't seem like a pirate (those tend to fire before they show up on the radar, especially when they're this small and alone), but the behaviour is highly unusual. Who would want to get this close to another ship while travelling in deep space, without any previous communication?
+You look at the radar screen. It seems some smaller vessel is nearing rapidly. It doesn't seem like a pirate (those tend to bigger or more numerous), but the behaviour is highly unusual. Who would want to get this close to another ship in deep space, without any previous communication?
 
-The good news is that because of the radar, you know about them in advance. You check your shields: they're up. You also start charging the laser cannon mounted on the front side of the ship. Better safe than sorry, you think.
+The good news is that because of the radar, you know about them in advance. You check your shields: ${bodega.shields.active ? "they are up" : "they are down, so you raise them"}. You also start charging the utility laser mounted on the front side of the ship. Better safe than sorry.
 
 <script>
-bodega.weapons.all.timeToFire = 0;
-//bodega["timeToFire"] = 0;
+  bodega.weapons.all.timeToFire = 0;
+  bodega.shields.active = true;
 </script>
 
-In 20 minutes, the vessel is in visual range. It's a Messenger class ship, a fast clipper about tenth of the size of The Bodega. If it's hostile, it could still pose a serious threat, but would probably run a big risk itself.
+Shortly afterwards, the vessel is in visual range. It's a Messenger class ship, a fast clipper about tenth of the size of The Bodega. If it's hostile, it could still pose a serious threat, but would probably run a big risk itself.
+
+[IMG: Bodega and Messenger face-to-face]
 
 The ship glides to a halt in front of the bridge, face to face with The Bodega. After a while, the communications panel lights up. There is an incoming call from the Messenger. 
+
+<variables>
+  messenger = new MockInstance();
+  // TODO
+</variables>
 
 - [Encounter]
 
@@ -349,75 +369,79 @@ The ship glides to a halt in front of the bridge, face to face with The Bodega. 
 Dogfight: Wake up
 
 <script>
-eta -= 16;
+  timeFromStart += 4;
 </script>
 
-You open your eyes, look out the window, and immediately jump up. There is a small -- though potentially dangerous -- ship right in front of the window, facing the Bodega. It's armed, but likely not a pirate, judging from the class of the ship (a Messenger, ten times smaller than the Bodega) and by the fact you're still alive.
+You open your eyes, look out the window, and immediately jump up. There is a small -- though potentially dangerous -- ship right in front of the window, facing the Bodega. It's armed, but likely not a pirate, judging from the class of the ship (a Messenger, much smaller than the Bodega), by the fact it appears to be alone, and by the fact you're still alive.
 
-Before you can act, the communications panel lights up. There is an incoming call from the Messenger. Before you take it, you can either command the ship to raise the shields or to power up the laser gun on the nose of the Bodega. Doing both would take too much time to have any effect.
+[IMG: Bodega and Messenger face-to-face]
+
+Before you can act, the communications panel lights up. There is an incoming call from the Messenger. Before you take it, you can either command the ship to raise the shields or to power up the utility laser on the nose of the Bodega. Doing both would take too much time to have any effect.
+
+// TODO: possibility radar is down but shield is up
 
 <script>
-bodega.weapons.all.timeToFire = 1;
+  bodega.weapons.all.timeToFire = 1;
 </script>
 
-- Raise the shields [{shieldsUp = true}]
-- Power up the gun [{bodega["timeToFire"] = 0}]
-- Do neither [{nothing=null}]
+- Raise the shields [{bodega.shields.active = true}]
+- Power up the gun [{bodega.weapons.all.timeToFire = 0}]
+- Do neither []
 
 - [Encounter]
 
 ---
 Dogfight: Encounter
 
-The screen fills with a large, bored face of a pilot with a large jaw and short hair. He's not even looking at the console, being busy with some controls to his lower left. 
+The main screen fills with a large, bored face of a pilot with a large jaw and short hair. He's not even looking at the console, being busy with some controls to his lower left. 
 
-"Calling crew of the Bodega," he starts reciting, absently. "This is..."
+"Calling the crew of the Bodega," he starts reciting, absently. "This is..."
 
 Then he looks up, sees you on the screen, and stops abruptly.
 
-"Oh!"
+"Oh!" he says. "Oh _fuck!_"
 
-Gorilla, which has been silently sitting on the ground to your left until now, starts hissing through clenched teeth, eyes wide open. It rocks back and forth, visibly disturbed. The pilot begins to frantically push some buttons on the panel in front of him.
+Gorilla, which has been silently sitting on the ground to your left until now, starts hissing through clenched teeth, eyes wide open. It rocks back and forth, visibly disturbed. The pilot begins to frantically push some buttons on the panel in front of him. "Oh fuck oh fuck oh _fuck!_" he keeps repeating.
 
 <script>
 choice("\"What are you doing? What is happening here?\"")
-.then(() => echo("He doesn't respond."));
-choice("Watch what he's doing with the controls")
-.then(() => echo("It takes a while, but you realize he's putting his ship into combat mode."));
-if (shieldsUp != true) {
-  choice("Shields up")
-  .then(() {
-    shieldsUp = true;
-    bodega["shields"] = 5;
-  });
-}
-if (bodega["timeToFire"] <= 0) {
-  choice("Fire")
-  .then(() {
-    <echo>
-      You take the laser gun controls, quickly aim at the Messanger and fire. 
-    </echo>
-    if (randomWithProbability(0.6)) {
-      messenger["hp"] -= 3;
+  .then(() => echo("He doesn't respond."));
+  choice("Watch what he's doing with the controls")
+  .then(() => echo("It takes a while, but you realize he's putting his ship into combat mode."));
+  if (bodega.shields.active != true) {
+    choice("Shields up")
+    .then(() {
+      bodega.shields.active = true;
+      bodega.shields.sp.percentage = 0.5;
+    });
+  }
+  if (bodega.weapons.all.timeToFire <= 0) {
+    choice("Fire")
+    .then(() {
       <echo>
-        Boom! It's a hit! The stream of energy hits the Messenger, right in the middle of its belly, and leaves a sizeable hole there. It looks like some serious damage has been dealt.
+        You take the laser controls, quickly aim at the Messanger and fire. 
       </echo>
-      points.add(7, "hitting early and hard");
-    } else {
-      <echo>
-        The stream of energy misses the Messenger by a couple of meters. That was unlucky.
-      </echo>
-      points.add(5, "not wasting any time");
-    }
-  });
-}
+      if (Randomly.throwAgainst(0.6)) {
+        messenger.hull.hp -= 3;
+        <echo>
+          Boom! It's a hit! The stream of energy hits the Messenger, right in the middle of its belly, and leaves a sizeable hole there. It looks like some serious damage has been dealt.
+        </echo>
+        points.add(7, "hitting early and hard");
+      } else {
+        <echo>
+          The stream of energy misses the Messenger by a couple of meters. That was unlucky.
+        </echo>
+        points.add(5, "not wasting any time");
+      }
+    });
+  }
 </script>
 
 The communications panel goes blank as the pilot closes the connection. The Messenger starts moving to the side while raising shields. He knows that his best bet is to be moving all over the place.
 
-You try to remember something about spaceship combat, but there's not much you ever knew about the topic in the first place. You never had any ambition to go the the military, not even as a teenager, and you spent the last ten years of your life on cargo ships like the Bodega. Those normally don't get into combat, and if they do, it tends to be over quickly. Only those on the bridge get involved, whereas you practically live in the engine room.
+You try to remember something about spaceship combat, but there's not much you ever knew about the topic in the first place. You never had any ambition to go the the military, not even as a teenager, and you spent the last ten years of your life on cargo ships like the Bodega. Those normally don't get into combat, and if they do, it tends to be over quickly, and not in the cargo ship's favor. Plus, only those on the bridge get involved, whereas you practically live in the engine room.
 
-You do have some reasons to feel lucky, though. The Messenger is clearly not a combat vessel. You can only see 2 parallel beam guns in the front that seem pretty weak. The hull is slender. Moreover, according to the markings on the side, the ship is a Sentaco corporate runner. Sentaco – although one of the biggest corporations out there – is not one of the militarized ones. It deals in food and consumer goods. 
+It's not _all_ bad, though. The Messenger is clearly not a combat vessel. You can only see 2 parallel beam guns in the front, and those seem pretty weak. The hull is slender. Moreover, according to the markings on the side, the ship is a Sentaco corporate runner. Sentaco – although one of the biggest corporations out there – is not one of the militarized ones. It deals in food and consumer goods. 
 
 The frail Messenger clearly wasn't sent here to fight the huge pile of steel that is the Bodega. But it _is_ fighting it now, for whatever reason.
 
@@ -438,6 +462,12 @@ TODO: "Direct all halogen headlights on the Messenger and switch them on at once
 TODO: player needs to keep track of resources (energy cells, ammo?)
 
 <p class="meta">This is where a space combat simulation will happen. Choices made by player will not only affect the combat, but also the state of the ship afterwards. Right now, we skip this.</p>
+
+TODO // meta // This is your first spaceship combat. This box will explain the machanics of a fight in space.
+
+TODO // meta // There are a couple of things to keep in mind. First, there's the **structural integrity** (STR) of your ship. The more you get hit, the worse it gets. (If you're at 0% SI, the ship falls apart.). Second, there's **shields** (SHD). They are an semi-transparent forcefield that a ship can raise in the direction of incoming fire. (If they're up, most projectiles won't get through to the ship hull, so the ship's structural integrity is protected.) Third, there's **positioning** (POS), which is an index of how well your ship is located in three-dimensional space, towards others. (If your opponent outmaneuvers you and is facing the most vurnerable side of your ship, for example, your POS will be very low.) Fourth, there's **aim** (AIM). It's how well a ship is able to hit its target. (The higher the AIM, the higher probability there will be of hitting the target, and, moreover, of hitting a vital part of the target.) And fifth, there's **accumulated energy** (ENR), which is the excess energy your engine produces but doesn't spend on the essential – like jets, shields, or life support. (That energy can then be used for special combat moves and abilities.)
+
+TODO // meta // There is no single strategy that will always work. For example, if you focus solely on your shields, your opponent can outmaneuvre you and make those shields – at least temporarily – irrelevant (remember, shields are directional, they can't be around your whole ship). If you focus solely on positioning, your opponent can focus on aiming, and – unless he gets into a really bad position – he can still blow you up. You should always play your cards according to situation.
 
 - Win [Win]
 
@@ -465,28 +495,26 @@ Dogfight: Win
 This time, the beam must have drilled through to the core, because there is a violent explosion on the Messenger. Only the skeleton of the ship stays put, the rest is blown away from the inside, in all directions.
 
 <script>
-points.add(10, "winning your first spaceship battle");
+  points.add(10, "winning your first spaceship battle");
 </script>
 
 TODO: only if messenger hasn't done it during fight
-One of those outward flying parts is different from the others, though. It steers itself. Apparently, the Messenger's pilot (or the ship computer) managed to launch a small robotic probe just before the spectacular explosion. The thing beelines through the flying debris and hits hard somewhere near the Bodega's cargo bay. 
+One of those outward flying parts is different from the others, though. It steers itself. Apparently, the Messenger's pilot (or his ship's computer) managed to launch a small robotic probe just before the spectacular explosion. The thing beelines through the flying debris and hits hard somewhere near the Bodega's cargo bay. 
 
-"Hull breach," the ship says, laconically. "Initiating sealing process."
+"Hull breach," the ship says, laconically. "Initiating sealing process." TODO: explain sealing process
 
 You look at the readings around you. The shields are at TODO % and stable. The hull took … damage. 
 
-TODO: if !pulledLever = Airlock smashed into pieces TODO(if). 
+Captain Kay was always saying: "When shit happens, it happens all over the place."
 
-Captain Kay was always saying: "When shit happens, it happens in swarms."
-
-On the plus side, though, you _are_ still alive. And the other ship is in a much worse shape than yours.
+On the plus side, though, you _are_ still alive.
 
 - [Why?]
 
 ---
 Dogfight: Why?
 
-You try to imagine why the Messenger came here and why the pilot acted the way he acted. Was he just so stupid to try to pick a fight with a much sturdier ship? Was he expecting to find something else here? Or someone else? Did he know about the contagion? Was he acting on his own, or was this an official Sentaco run? Is Sentaco a pirate company now? Why would it be interested in the Bodega, of all ships?
+You try to imagine why the Messenger came here and why the pilot acted the way he acted. Was he just so stupid to try to pick a fight with a much sturdier ship? Was he expecting to find something else here? Or someone else? Did he know about the disease? Was he acting on his own, or was this an official Sentaco run? Is Sentaco a pirate company now? Why would it be interested in the Bodega, of all ships?
 
 - [Explore: Start]
 
@@ -496,17 +524,14 @@ Explore: Start
 TODO: segue?
 
 <variables>
+  exploration = new Timeline();
+  exploration.mainLoop = () {
+    // TODO: gorilla - "is here" / "is with you" / nothing + options
+    // TODO: player health down
+  };
 
-exploration = new Timeline();
-exploration.mainLoop = () {
-  // TODO: gorilla - "is here" / "is with you" / nothing + options
-  // TODO: player health down
-};
-
-// TODO: addEvents - periodically say time
-// TODO: addEvent - hull breach has been sealed repair
-
-
+  // TODO: addEvents - periodically say time
+  // TODO: addEvent - hull breach has been sealed repair
 </variables>
 
 - Look around the bridge [Explore: Bridge Lookaround]
