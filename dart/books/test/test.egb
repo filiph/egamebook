@@ -421,7 +421,7 @@ choice("\"What are you doing? What is happening here?\"")
       <echo>
         You take the laser controls, quickly aim at the Messanger and fire. 
       </echo>
-      if (Randomly.throwAgainst(0.6)) {
+      if (Randomly.saveAgainst(0.6)) {
         messenger.hull.hp -= 3;
         <echo>
           Boom! It's a hit! The stream of energy hits the Messenger, right in the middle of its belly, and leaves a sizeable hole there. It looks like some serious damage has been dealt.
