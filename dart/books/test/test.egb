@@ -20,17 +20,17 @@ Author:		Filip Hracek
 --- 
 Start: Funeral
 
-## The Funeral
+## The Funerals
 
 This story both begins and ends with a death, on a spaceship. 
 
-The first death is that of captain Kay. When he died a couple of minutes ago, he left you as the last surviver on board of the Bodega, the 25 thousand ton cargo ship that is now stuck pretty much powerless in the middle of nowhere. The ship and the crew of twelve were just fine only two weeks ago. 
+The first death is that of captain Kay. When he died a couple of minutes ago, he left you as the last survivor on board of the Bodega, the 25 thousand ton cargo ship that is now stuck pretty much helpless in the middle of nowhere. The ship and the crew of twelve were just fine only two weeks ago. 
 
-Now, they're all dead. The last two weeks, the twelve men had seemed to be taking turns in screaming in pain, then getting uncanilly stiff, then dying. The captain held a memorial service for every one of them, each funeral a little shorter and simpler than the previous.
+Now, they're all dead. For the last two weeks, the twelve men had been taking turns in screaming in pain, then getting uncanilly stiff, then dying. The captain held a memorial service for every one of them, each funeral – of course – a little shorter and simpler than the previous.
 
-Now, it's your turn to hold the memorial service, for the captain. You've never done it before, but that doesn't really matter. There's no one else to do it, and there's no one else to _see_ you do it. You're the last one alive. (Well, almost. But we'll get to that later.)
+Now, it's your turn to hold the memorial service. You've never done it before, but that doesn't really matter. There's no one else to do it, and there's no one else to _see_ you do it. You're the last one alive. (Well, almost. But we'll get to that later.)
 
-The funeral looks like this: You are standing in front of the airlock. Through the porthole window, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, the captain's body will be sucked out into outer space. This is how funerals work here on The Bodega. 
+The funeral looks like this: You are standing in front of the ship's only functional airlock. Through the porthole window, you can see the captain's body lying on the floor, naked and reddish and stiff. Just like all the others before him. Your hand is on the lever that will open the airlock's outside door. Through that door, once open, the captain's body will be sucked out into outer space. This is how funerals work here on the Bodega. 
 
 [IMG]
 
@@ -46,7 +46,7 @@ Start: Say something nice
 
 You clear your throat. "Captain Kay was ..." 
 
-For some reason, the only things that come to mind right now are _far_ from nice. Your head is full of images of the captain being drunk to the point he couldn't stand up. Let's just say this is not the first time you see him lying on the floor naked and reddish and stiff. Sure, he was a great drinking buddy of yours, but that doesn't strike you as something to say at a funeral.
+For some reason, the only things that come to mind right now are _far_ from nice. Your head is full of images of the captain being drunk to the point he couldn't stand up. Let's just say this is not the first time you see him lying on the floor, naked and reddish and stiff. Sure, he was a great drinking buddy of yours, but that doesn't strike you as something to say at a funeral.
 
 You end up saying: "Captain Kay was a great captain." And that is definitely true.
 
@@ -194,15 +194,13 @@ Your gorilla doesn't have a name. You call him 'Gorilla', as is common with thes
 
 Gorilla raises his arms to sign. First, he makes the sign for "me" and then he makes the sign for "sleep". He obviously doesn't want to say that he is sleeping. More likely, he's trying to use his limited vocabulary to communicate that he is sad. But you can never be sure.
 
-// TODO choose gorilla - send somewhere or stay
-
 <variables>
   gorillaAttitude = 0;
 </variables>
 
 What do you say to him?
 - "It's okay." [{gorillaAttitude += 1; echo("Gorilla slowly turns his head back to the stars, visibly alleviated.")}]
-- "What the hell are you doing here, Gorilla?" [{gorillaAttitude -= 1; echo("Gorilla doesn't answer, he only looks at you in terror. One of the enhancements they did on the Enhanced Gorillas is fear of people. Of course it's completely irrational – Gorilla could squash you any time – but the gorillas can't help it. It's in their DNA.\n\nYou smile at the gorilla like it's not as a big deal as it thinks. He's a bit alleviated, but still a bit stressed. He slowly turns his head back to the stars.")}]
+- "What the hell do you think you are doing here, Gorilla?" [{gorillaAttitude -= 1; echo("Gorilla doesn't answer, he only looks at you in terror. One of the enhancements they did on the Enhanced Gorillas is fear of people. Of course it's completely irrational – Gorilla could squash you any time – but the gorillas can't help it. It's in their DNA.\n\nYou smile at the gorilla like it's not as a big deal as it thinks. He's a bit alleviated, but still a bit stressed. He slowly turns his head back to the stars.")}]
 
 "The gorilla stays," you say to the ship computer. "He just sits there. And he definitely won't touch anything while I'm here."
 
@@ -215,10 +213,10 @@ The ship is silent for a while. Then she chooses to ignore the topic entirely.
 
 The Bodega takes some time to go over a quick succession of data tables and schematics on the main screen. Then, she says: "The drive is being charged now. It will be ready in ten to fifteen hours, depending on energy input."
 
-- "Give it full power." [10 hours to charge] [Full speed]
+- "Give it all available power." [10 hours to charge] [Full speed]
 - "Keep the shields and the radar on." [15 hours to charge] [Shields on]
 
-// TODO: more options here: let player on/off shields, radar, independently
+// TODO: (?) more options here: let player on/off shields, radar, independently
 
 ---
 Bridge: Full speed
@@ -240,7 +238,7 @@ Without words, the Bodega immediately shuts off all non-essential systems, then 
 ---
 Bridge: Shields on
 
-"That is... considerate," the ship replies. "I will be using the radar only to periodically check for objects on collision course with me. In between, I'll divert the energy to the drive. That should shave one or two hours off the charge up time." You hear and feel the hum rising from the engine room.
+"That is... considerate," the ship replies. "I will be using the radar only to periodically check for trouble. In between, I'll divert the energy to the drive. That should shave one or two hours off the charge up time." You hear and feel the hum rising from the engine room.
 
 <script>
   points.add(5, "upholding interplanetary safety standards");
@@ -279,7 +277,7 @@ This time, though, you are so unbelievably tired you will probably fall asleep t
 
 The jump to Station Unity is ${eta - timeFromStart} hours away. What do you do?
 - Take the nap [A nap]
-- Take a look at the door in Corridor Right that never closes [~1 hour] [Door repair]
+- Take a look at the door in Corridor Left that never closes [~1 hour] [Door repair]
 - Take a look at the malfunctioning scanner [~2 hours] [Scanner repair]
 - Take a look at the engine, try to bring output from 92% back to 100% [~3 hours] [Engine repair]
 - Take a look at one of the four maneuvering jets that went offline [~4 hours] [Jets repair]
@@ -289,10 +287,10 @@ The jump to Station Unity is ${eta - timeFromStart} hours away. What do you do?
 Bridge: Door repair
 [[ visitOnce ]]
 
-You go to Corridor Right and find the malfunctioning door. ... // TODO
+You go to Corridor Left and find the malfunctioning door. ... // TODO
 
 <script>
-  bodega.systems["corridor right door"].hp.value.percentage = 1.0;
+  bodega.systems["corridor left door"].hp.value.percentage = 1.0;
   timeFromStart += 1;
   points.add(1, "repairing the door");
   if (timeFromStart >= 5) {
@@ -521,7 +519,23 @@ You try to imagine why the Messenger came here and why the pilot acted the way h
 ---
 Explore: Start
 
-TODO: segue?
+## The crew of one
+
+The Bodega is now running a full system check, all the monitors flicker with information so fast only a computer could make anything of it. "What the _hell_ is happening?" the ship says, her voice glitching. "How does one go from a fully manned, well-preserved, licensed cargo ship to a _ghost_ ship piloted by an idiot machinist _while_ being attacked by a corporate runner for no apparent reason – in two weeks!?"
+
+- "We survived, didn't we?" [{echo(""" "Well," she replies. "That's rich coming from someone who is probably going to die in a couple of hours." """)}]
+- "Shut up." []
+
+"Okay, this is all so totally outside the protocol," the Bodega continues. "We'd be full speed somewhere past Algol if it wasn't for the idiot Gorilla of yours in the cargo bay. Nobody would be dead. The disease would be someone else's problem. And there would be someone _actually capable_ on the bridge."
+
+The flow of information on the monitors stop, and they all go to their default view. "Who were we kidding? The whole thing is _your_ fault. If you watched the beast – as you're _required by the protocol_, by the way – there would be no explosion, no contagion, no deaths, and no using the utility laser to end a Messenger that was probably just trying to help."
+
+"I just hope you die real soon so I can go to emergency autopilot mode and get to somewhere civilized."
+
+- "What is this, a mutiny? Are you trying to kill me?" // don't be an idiot, I can't kill you
+- "You realize you wouldn't be going anywhere if I hadn't just spend days to fix the hyperdrive?"
+- "Whatever."
+// TODO bodega's reactions
 
 <variables>
   exploration = new Timeline();
@@ -532,43 +546,59 @@ TODO: segue?
 
   // TODO: addEvents - periodically say time
   // TODO: addEvent - hull breach has been sealed repair
+  
+  hullBreachRepairEta = timeFromStart + 2;
 </variables>
 
-- Look around the bridge [Explore: Bridge Lookaround]
+<script>
+  timeFromStart += 1;
+</script>
+
+It looks like the Bodega stopped talking, at least for a while. You still have ${eta - timeFromStart} hours before the hyperdrive is ready for the jump to Station Unity.
+
+- [Bridge Lookaround]
 
 ---
-Explore: Bridge Lookaround
-[[ visitOnce ]]
+Explore: Bodega's layout
 
-You are at the bridge. 
+[IMG bodega's layout]
 
-- [Bridge]
+- [<<<]
 
 ---
 Explore: Bridge
 
-<script>
-  if (currentPage.visited) {
-    <echo>
-      You are back at the bridge.
-    </echo>
-  }
+You are ${currentPage.visited ? "back " : ""}at the bridge.
 
+<script>
   exploration.time++;
 </script>
 
-{if (currentPage.visited)} You are back at the bridge. // TODO: implement
-
-- Look at the hull breach [Look at hull breach]
-
+- Put up information about the hull breach on the monitor [Look at hull breach]
+- Look at the Bodega's layout [Bodega's layout]
 
 ---
 Explore: Look at hull breach
 [[ visitOnce ]]
 
-TODO: explain the sealing process
-TODO: show current state
+The object from the Messenger crashed into the right side of the cargo bay. It managed to drill through the hull – as evidenced by the suddenly lower air pressure in the whole area – but fortunately the Bodega managed to isolate the impact zone with hermetic curtains. This means there is an area in the cargo bay that is presumably quite damaged, almost surely without air, and separated from the rest of the space by relatively thin, makeshift firewalls.
 
+The protocol states that these firewalls will stay down until the hull breach is patched. 
+
+<script>
+  var eta = hullBreachRepairEta - timeFromStart;
+  if (eta > 0) {
+    <echo>
+      It seems the Bodega's automatic hull repair system already kicked in and the hole in the hull should be sealed in $eta hour${eta > 1 ? "s" : ""} at most.
+    </echo>
+  } else {
+    <echo>
+      That has already been done and the firewalls seem to be down.
+    </echo>
+  }
+</script>
+
+- [<<<]
 
 ---
 Explore: Engine room
