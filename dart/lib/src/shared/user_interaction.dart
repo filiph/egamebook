@@ -8,7 +8,12 @@ import 'message.dart';
 
 class EgbUserInteraction {
   bool shown = false;
-  bool waitForEndOfPage;
+  /// The user interaction shouldn't be shown before we are at the end of the
+  /// page.
+  bool deferToEndOfPage;
+  /// The user interaction shouldn't be shown before there is an actual choice
+  /// list in the .egb.
+  bool deferToChoiceList;
   int hash;
 }
 
@@ -20,7 +25,6 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   String string;
   Function f;
   String goto;
-  bool showNow;
 
   /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently).
@@ -31,27 +35,37 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
    * actively shown to the player). That means that it hasn't been shown, 
    * is not automatic, is not waiting for end of page.
    * 
-   * Caller can supply two arguments. [endOfPage] signifies whether or not
-   * the scripter is currently at end of a page. With [filterOut], caller
+   * Caller can supply two arguments. [atEndOfPage] signifies whether or not
+   * the scripter is currently at end of a page. [atChoiceList] signifies
+   * whether the scripter is now at a ChoiceList (some choices might opt
+   * to be shown only with other, following choices, and not by themselves).
+   * 
+   * With [filterOut], caller
    * can provide a function that will filter out the choice [:ch:] if
    * [:filterOut(ch) == true:].  
    */
-  bool isActionable({bool endOfPage, bool filterOut(EgbChoice choice)}) {
+  bool isActionable({bool atEndOfPage, bool atChoiceList, 
+      bool filterOut(EgbChoice choice)}) {
     if (shown) return false;  // choice shown before
     if (isAutomatic) return false;
-    if (endOfPage != null && !endOfPage && waitForEndOfPage) {
+    if (atEndOfPage != null && !atEndOfPage && deferToEndOfPage) {
+      return false;
+    }
+    if (atChoiceList != null && !atChoiceList && deferToChoiceList) {
       return false;
     }
     if (filterOut != null && filterOut(this)) return false;
     return true;
   }
 
-  EgbChoice(String string, {this.goto, Function script, bool showNow: false}) :
+  EgbChoice(String string, {this.goto, Function script,
+        bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
       super() {
     this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
     f = script;
-    waitForEndOfPage = !showNow;
+    this.deferToEndOfPage = deferToEndOfPage;
+    this.deferToChoiceList = deferToChoiceList;
   }
 
   EgbChoice.fromMap(Map<String,dynamic> map) : super() {
@@ -64,7 +78,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 
     goto = map["goto"];
     if (map.containsKey("showNow")) {
-      showNow = map["showNow"];
+      deferToEndOfPage = !map["showNow"];
     }
     f = map["then"];
   }
@@ -138,18 +152,19 @@ class EgbChoiceList implements List<EgbChoice> {
       var choice = new EgbChoice(
                             string,
                             goto: map["goto"],
-                            script: map["script"],
-                            showNow: true);
+                            script: map["script"]);
       _choices.add(choice);
     }
   }
 
-  add(element, {Function script, String goto, showNow: false}) {
+  add(element, {Function script, String goto, 
+      bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
       _choices.add(element);
     } else if (element is String) {
       var choice = new EgbChoice(element, goto: goto, script: script, 
-                                 showNow: showNow);
+          deferToEndOfPage: deferToEndOfPage, 
+          deferToChoiceList: deferToChoiceList);
       _choices.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
@@ -180,14 +195,17 @@ class EgbChoiceList implements List<EgbChoice> {
    * satisfy [:filterOut(choice) == true:].
    */
   EgbMessage toMessage({
-      String prependText: null,
-      bool endOfPage: null,
+      String prependText,
+      bool atEndOfPage,
+      bool atChoiceList,
       bool filterOut(EgbChoice choice)}) {
     List<EgbChoice> choicesToSend;
 
     // filter out choices we don't want to show
     choicesToSend = _choices.where(
-        (choice) => choice.isActionable(endOfPage: endOfPage, 
+        (choice) => choice.isActionable(
+            atEndOfPage: atEndOfPage,
+            atChoiceList: atChoiceList,
             filterOut: filterOut)
     ).toList();
     

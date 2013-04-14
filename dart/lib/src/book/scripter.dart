@@ -76,8 +76,10 @@ EgbChoiceList choices = new EgbChoiceList();
  * is a choiceList on the page.
  */
 EgbChoice choice(String string, {String goto, ScriptBlock script, 
-                                 bool defer: false}) {
-  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:!defer);
+                                 bool deferToEndOfPage: false, 
+                                 bool deferToChoiceList: false}) {
+  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, 
+      deferToEndOfPage: deferToEndOfPage, deferToChoiceList: deferToChoiceList);
   choices.add(choice);
   return choice;
 }
@@ -290,6 +292,9 @@ abstract class EgbScripter {
     return new EgbMessage.NoResult();
   }
 
+  /**
+   * Picks the given [choice], i.e. runs the script and performs the goto.
+   */
   void _pickChoice(EgbChoice choice) {
     if (choice.f != null) {
       nextScript(choice.f);
@@ -305,16 +310,31 @@ abstract class EgbScripter {
    * Returns message for Runner.
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    bool endOfPage = currentBlockIndex == currentPage.blocks.length - 1;
+    bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
+    bool atChoiceList = 
+        currentBlockIndex != null &&
+        currentBlockIndex < currentPage.blocks.length &&
+        currentPage.blocks[currentBlockIndex] is List;
+    DEBUG_SCR("atEndOfPage = $atEndOfPage, atChoiceList = $atChoiceList");
     
     choices.removeWhere((choice) => choice.shown || 
         _leadsToIllegalPage(choice));
     if (!choices.isEmpty) {
-      DEBUG_SCR("$choices");
-      if (choices.any((choice) => choice.isActionable(endOfPage: endOfPage))) {
-        return choices.toMessage(endOfPage: endOfPage);
+      bool someChoicesAreActionable = choices.any((EgbChoice choice) =>
+        choice.isActionable(
+            atEndOfPage: atEndOfPage,
+            atChoiceList: atChoiceList));
+      if (someChoicesAreActionable) {
+        return choices.toMessage(
+            atEndOfPage: atEndOfPage, 
+            atChoiceList: atChoiceList);
       } else {
-        _pickChoice(choices.firstWhere((choice) => choice.isAutomatic));
+        EgbChoice autoChoice = 
+            choices.firstWhere((choice) => choice.isAutomatic,
+                orElse: () => null);
+        if (autoChoice != null) {
+          _pickChoice(autoChoice);
+        }
       }
     }
     
@@ -363,7 +383,9 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      if (choices.any((choice) => choice.isActionable(endOfPage: endOfPage,
+      if (choices.any((choice) => choice.isActionable(
+            atEndOfPage: atEndOfPage,
+            atChoiceList: true,
             filterOut: _leadsToIllegalPage)) && 
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
@@ -503,8 +525,17 @@ abstract class EgbScripter {
     if (EgbChoice.GO_BACK.hasMatch(choice.goto)) return false;
     var targetPage =
         pageMap.getPage(choice.goto, currentGroupName: currentPage.groupName);
-    if (targetPage == null) return true;
-    return targetPage.visitOnce && targetPage.visited;
+    if (targetPage == null) {
+      DEBUG_SCR("Target page '${choice.goto}' was not found.");
+      return true;
+    }
+    bool revisitingVisitOncePage = targetPage.visitOnce && targetPage.visited;
+    if (revisitingVisitOncePage) {
+      DEBUG_SCR("Trying to revisit a visitOnce page.");
+      return true;
+    } else {
+      return false;
+    }
   }
 
   EgbSavegame _createSaveGame() {
