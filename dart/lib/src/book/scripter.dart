@@ -70,11 +70,14 @@ PointsCounter _points = new PointsCounter();
 EgbChoiceList choices = new EgbChoiceList();
 
 /**
- * Utility shortcut for creating new choices.
+ * Utility shortcut for creating new choices. 
+ * 
+ * When [defer] is set to [:true:], the choice will not be shown until there
+ * is a choiceList on the page.
  */
-EgbChoice choice(String string, [String goto, ScriptBlock script, 
-                                 bool showNow=true]) {
-  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:showNow);
+EgbChoice choice(String string, {String goto, ScriptBlock script, 
+                                 bool defer: false}) {
+  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, showNow:!defer);
   choices.add(choice);
   return choice;
 }
@@ -318,7 +321,7 @@ abstract class EgbScripter {
     if (!_nextScriptStack.isEmpty) {
       // previous script asked for nextScript()
       ScriptBlock script = _nextScriptStack.removeLast();
-      return _runScriptBlock(script:script);
+      return _runScriptBlock(script);
     }
     
     if (_gotoPageName != null) {
@@ -369,7 +372,7 @@ abstract class EgbScripter {
       return new EgbMessage.NoResult();
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
-      return _runScriptBlock(script: currentPage.blocks[currentBlockIndex]);
+      return _runScriptBlock(currentPage.blocks[currentBlockIndex]);
     }
   }
 
@@ -475,18 +478,14 @@ abstract class EgbScripter {
   }
   */
 
-  // runs the current block or the specified block
-  EgbMessage _runScriptBlock({ScriptBlock script}) {
+  /// Runs the specified block.
+  EgbMessage _runScriptBlock(ScriptBlock script) {
     // clean up
     textBuffer = new StringBuffer();
 
     // run the actual script
     try {
-      if (script == null) {
-        currentPage.blocks[currentBlockIndex]();
-      } else {
-        script();
-      }
+      script();
     } catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
     }
