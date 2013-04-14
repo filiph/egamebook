@@ -39,7 +39,6 @@ class Pilot extends Actor {
       if (move.autoRepeat && move.currentTimeToFinish != null) {
         choicesToShow.add(
             new EgbChoice("Stop ${move.system.currentMove.instanceName} [2s]",
-              showNow: true,
               script: () {
                 move.stop();
                 timeToNextInteraction = 2;
@@ -50,7 +49,7 @@ class Pilot extends Actor {
       }
     });
     choicesToShow.add(
-        new EgbChoice("Wait [5s]", showNow: true,
+        new EgbChoice("Wait [5s]",
             script: () {
               timeToNextInteraction = 5;
             })

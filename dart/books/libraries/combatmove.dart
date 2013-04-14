@@ -140,7 +140,7 @@ abstract class CombatMove {
       throw new ArgumentError("Move $name needs targetShip to be non-null.");
     }
     return new EgbChoice("$commandText [${timeToSetup}s]", // TODO: add probability range
-        showNow: true, script: () {
+        script: () {
           this.targetShip = targetShip;
           system.currentMove = this;
           currentTimeToSetup = timeToSetup;
@@ -339,7 +339,7 @@ class FireGun extends CombatMove {
   EgbChoice _createChoiceForTargetSystem(ShipSystem targetSystem) {
     String probability = Randomly.humanStringify(
         calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 2);
-    choices.add("Target ${targetSystem.name} [$probability]", showNow: true, 
+    choices.add("Target ${targetSystem.name} [$probability]",
         script: () {
       this.targetSystem = targetSystem;
     });
