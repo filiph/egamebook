@@ -188,7 +188,7 @@ class EgbPlayerProfile {
       return completer.future;
     }
 
-    if (storyChronology.isEmpty) return new Future.immediate(null);
+    if (storyChronology.isEmpty) return new Future.value(null);
     return load(storyChronology.last);
   }
 }

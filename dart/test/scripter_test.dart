@@ -22,11 +22,13 @@ class MockInterface implements EgbInterface {
   bool closed = false;
 
   StreamController _streamController;
-  Stream get stream => _streamController.stream;
+  Stream _stream;
+  Stream get stream => _stream;
 
   MockInterface() : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>() {
-    _streamController = new StreamController.broadcast();
+    _streamController = new StreamController();
+    _stream = _streamController.stream.asBroadcastStream();
   }
 
   void setup() {
@@ -51,7 +53,7 @@ class MockInterface implements EgbInterface {
       int choiceNumber = choicesToBeTaken.removeFirst();
       print("MockInterface pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
                                 "-> ${choiceList[choiceNumber].hash}");
-      return new Future.immediate(choiceList[choiceNumber].hash);
+      return new Future.value(choiceList[choiceNumber].hash);
     } else if (choicesToBeTakenByString.length > 0) {
       String choiceString = choicesToBeTakenByString.removeFirst();
       int choiceNumber = null;
@@ -64,7 +66,7 @@ class MockInterface implements EgbInterface {
       if (choiceNumber == null) throw "Choice $choiceString not available.";
       print("MockInterface pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
                                 "-> ${choiceList[choiceNumber].hash}");
-      return new Future.immediate(choiceList[choiceNumber].hash);
+      return new Future.value(choiceList[choiceNumber].hash);
     } else {
       print("MockInterface pick: NONE, Quitting");
       _streamController.sink.add(

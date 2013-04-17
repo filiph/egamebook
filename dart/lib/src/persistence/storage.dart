@@ -33,17 +33,17 @@ class MemoryStorage implements EgbStorage {
   
   Future<bool> save(String key, String value) {
     memory[key] = value;
-    return new Future.immediate(true);
+    return new Future.value(true);
   }
   
   Future<String> load(String key) {
     var result = memory[key];
-    return new Future.immediate(result);
+    return new Future.value(result);
   }
   
   Future<bool> delete(String key) {
     memory.remove(key);
-    return new Future.immediate(true);
+    return new Future.value(true);
   }
   
   EgbPlayerProfile getDefaultPlayerProfile() {

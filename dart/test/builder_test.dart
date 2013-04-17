@@ -535,46 +535,46 @@ void main() {
 
     });
     
-    group('graphML', () {
-
-      test("creates XML", () {
-        var callback = expectAsync1((Builder b) {
-          b.updateGraphML();
-          expect(b.graphML.groupNodes.length,
-              2);
-          expect(b.graphML.nodes.length,
-              5);
-          expect(b.graphML.groupNodes[0].text,
-              "Group 1");
-          expect(b.graphML.nodes.last.text,
-              "Single");
-          expect(b.graphML.nodes[0].text,
-              "Start");
-          String xml = b.graphML.toString();
-          expect(xml,
-              startsWith("<?xml"));
-        });
-        new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
-      });
-
-      test("updates builder instance from XML", () {
-        var callback = expectAsync1((Builder b) {
-          expect(b.pages.length,
-              7);
-          expect(b.pages[b.pageHandles["Group 1: Start"]].gotoPageNames,
-              unorderedEquals(["Group 1: New node", "Group 1: End", "Group 2: Start"]));
-          expect(b.pageHandles["New single node"],
-              isNotNull);
-          expect(b.pages[b.pageHandles["Group 2: End"]].gotoPageNames,
-              contains("New single node"));
-        });
-        new Builder().readEgbFile(new File(getPath("update_from_graph.egb")))
-        .then((b) {
-          b.updateFromGraphMLFile();
-          callback(b);
-        });
-      });
-    });
+//    group('graphML', () {
+//
+//      test("creates XML", () {
+//        var callback = expectAsync1((Builder b) {
+//          b.updateGraphML();
+//          expect(b.graphML.groupNodes.length,
+//              2);
+//          expect(b.graphML.nodes.length,
+//              5);
+//          expect(b.graphML.groupNodes[0].text,
+//              "Group 1");
+//          expect(b.graphML.nodes.last.text,
+//              "Single");
+//          expect(b.graphML.nodes[0].text,
+//              "Start");
+//          String xml = b.graphML.toString();
+//          expect(xml,
+//              startsWith("<?xml"));
+//        });
+//        new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
+//      });
+//
+//      test("updates builder instance from XML", () {
+//        var callback = expectAsync1((Builder b) {
+//          expect(b.pages.length,
+//              7);
+//          expect(b.pages[b.pageHandles["Group 1: Start"]].gotoPageNames,
+//              unorderedEquals(["Group 1: New node", "Group 1: End", "Group 2: Start"]));
+//          expect(b.pageHandles["New single node"],
+//              isNotNull);
+//          expect(b.pages[b.pageHandles["Group 2: End"]].gotoPageNames,
+//              contains("New single node"));
+//        });
+//        new Builder().readEgbFile(new File(getPath("update_from_graph.egb")))
+//        .then((b) {
+//          b.updateFromGraphMLFile();
+//          callback(b);
+//        });
+//      });
+//    });
     
     group('egb writer', () {
       

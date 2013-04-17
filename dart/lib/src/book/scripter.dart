@@ -463,7 +463,7 @@ abstract class EgbScripter {
     initBlock();  // run contents of <variables>
   }
 
-  dynamic noSuchMethod(InvocationMirror invocation) {
+  dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isGetter) {
       return vars[invocation.memberName];
     } else if (invocation.isSetter) {
