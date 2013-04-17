@@ -14,8 +14,8 @@ class NumScale implements Saveable {
     } else {
       _value = max;
     }
-    _streamController = new StreamController.broadcast();
-    _stream = _streamController.stream;
+    _streamController = new StreamController();
+    _stream = _streamController.stream.asBroadcastStream();
   }
   
   num get value => _value;

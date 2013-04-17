@@ -20,7 +20,7 @@ library mock_instance;
 class MockInstance {
   Map vars = new Map();
   
-  dynamic noSuchMethod(InvocationMirror invocation) {
+  dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isGetter) {
       if (vars[invocation.memberName] == null) {
         vars[invocation.memberName] = new MockInstance();

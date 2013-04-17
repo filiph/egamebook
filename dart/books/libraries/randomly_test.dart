@@ -10,7 +10,7 @@ void main() {
       final int n = 10000;
       int result = 0;
       for (int i = 0; i < n; i++) {
-        result += (Randomly.tossCoin()) ? +1 : -1;
+        result += (Randomly.tossCoin()) ? 1 : -1;
       }
       expect(result, closeTo(0, n / 10));
     });
