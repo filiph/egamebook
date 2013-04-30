@@ -4,6 +4,7 @@ library egb_scripter;
 import 'dart:isolate';
 import 'dart:json';
 import 'dart:collection';
+import 'dart:mirrors';
 
 import '../shared/utils.dart';
 import '../shared/message.dart';
@@ -464,14 +465,15 @@ abstract class EgbScripter {
   }
 
   dynamic noSuchMethod(Invocation invocation) {
+    String memberName = MirrorSystem.getName(invocation.memberName);
     if (invocation.isGetter) {
-      return vars[Symbol.getName(invocation.memberName)];
+      return vars[memberName];
     } else if (invocation.isSetter) {
-      var memberName = Symbol.getName(invocation.memberName).replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      memberName = memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, Symbol.getName(invocation.memberName),
+      throw new NoSuchMethodError(this, memberName,
           invocation.positionalArguments, invocation.namedArguments);
     }
   }

@@ -1,4 +1,5 @@
 library mock_instance;
+import 'dart:mirrors';
 
 /**
  * A mock class for testing before any game logic is set up. When you create 
@@ -21,7 +22,8 @@ class MockInstance {
   Map vars = new Map();
   
   dynamic noSuchMethod(Invocation invocation) {
-    String memberName = Symbol.getName(invocation.memberName);
+    String memberName = MirrorSystem.getName(invocation.memberName);
+    print(memberName);
     if (invocation.isGetter) {
       if (vars[memberName] == null) {
         vars[memberName] = new MockInstance();
