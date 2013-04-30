@@ -5,7 +5,7 @@ import 'actor.dart';
 
 /**
  * The global instance of storyline which can be used for reporting. The 
- * contents are output to Scripter's [textBuffer] either manualy or 
+ * contents are output to Scripter's [:textBuffer:] either manualy or 
  * automatically by LoopedEvent (before each player interaction).
  */
 Storyline storyline = new Storyline();

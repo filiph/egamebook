@@ -52,7 +52,7 @@ class HtmlInterface implements EgbInterface {
     var p = new ParagraphElement();
     p.innerHtml = s;
     bookDiv.append(p);  // TODO: one by one, wait for transition end
-    return new Future.immediate(true);
+    return new Future.value(true);
   }
   
   DivElement _buildChoicesDiv(EgbChoiceList choiceList) {
@@ -157,17 +157,17 @@ class HtmlInterface implements EgbInterface {
 class LocalStorage implements EgbStorage {
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;
-    return new Future.immediate(true);
+    return new Future.value(true);
   }
   
   Future<String> load(String key) {
     var result = window.localStorage[key];
-    return new Future.immediate(result);
+    return new Future.value(result);
   }
   
   Future<bool> delete(String key) {
     window.localStorage.remove(key);
-    return new Future.immediate(true);
+    return new Future.value(true);
   }
   
   EgbPlayerProfile getDefaultPlayerProfile() {

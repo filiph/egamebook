@@ -126,8 +126,8 @@ class EgbPlayerProfile {
   }
 
   /**
-   * Adds the savegame to the existing [savegames] Queue, then saves to
-   * storage. Files it under the [currentEgamebookUid] and [playerUid].
+   * Saves the [savegame] to the storage. 
+   * Files it under the [currentEgamebookUid] and [playerUid].
    *
    * Gets rid of old savegames if there is more than [maxSaves] present in
    * the storage.

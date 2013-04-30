@@ -912,7 +912,7 @@ class Builder {
   /**
    * Goes out and checks if the imported files exist. The method finds out
    * if two imports are of the same file, in which case it removes the redundant
-   * [importFiles].
+   * [importLibFiles].
    *
    * @return    Future of bool, always true.
    **/

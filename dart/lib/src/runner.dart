@@ -84,8 +84,7 @@ class EgbRunner {
   }
   
   /**
-   * Utilify function [_send] sends message through the [_runnerPort] to the
-   * Runner.
+   * Utilify function that sends message to the scripter.
    */
   void _send(EgbMessage message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
@@ -95,7 +94,7 @@ class EgbRunner {
   
   /**
    * Main loop function. Receives a message from scripter, and either
-   * responds immediately, or asks for input via [interface], then responds.
+   * responds immediately, or asks for input via [_interface], then responds.
    */
   void receiveFromScripter(String messageJson, SendPort replyTo) {
     EgbMessage message = new EgbMessage.fromJson(messageJson);
@@ -176,7 +175,7 @@ class EgbRunner {
   
   /**
    * Runner receives gamebook UID from Scripter, typically just after opening
-   * the session with this particular book. If [playerProfile] has any saves
+   * the session with this particular book. If [_playerProfile] has any saves
    * for this particular book, Runner will automatically load the most recent.
    * If not, Runner will just start the book from start.
    */

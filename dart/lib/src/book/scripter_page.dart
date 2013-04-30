@@ -36,7 +36,7 @@ class EgbScripterBlockPointer {
 }
 
 /**
- * [EgbScripterPageList] is the container for the whole of the text and logic
+ * [EgbScripterPageMap] is the container for the whole of the text and logic
  * content of each book.
  */
 class EgbScripterPageMap {
@@ -51,8 +51,8 @@ class EgbScripterPageMap {
   EgbScripterPage operator [](String key) => pages[key];
 
   /**
-   * Returns page with name [name]. If [groupName] is given, then the function
-   * will first search for key in the format [:groupName: name:].
+   * Returns page with name [name]. If [currentGroupName] is given, then 
+   * the function will first search for key in the format [:groupName: name:].
    *
    * Returns [:null:] if there is no page of any compatible name.
    */
@@ -76,13 +76,11 @@ class EgbScripterPageMap {
 
   Map<String,dynamic> exportState() {
     var pageMapState = new Map<String,dynamic>();
-
     pages.forEach((name, page) {
       pageMapState[name] = {
           "visitCount": page.visitCount
       };
     });
-
     return pageMapState;
   }
 
@@ -96,8 +94,9 @@ class EgbScripterPageMap {
 
   /**
    * Clears play state of the page map. (Play state is the data that change
-   * while the egamebook is played by the player, e.g. the [visitCount]
-   * of every page. The actual texts and scripts stay.)
+   * while the egamebook is played by the player, e.g. the 
+   * [EgbScripterPage.visitCount] of every page. The actual texts and scripts 
+   * stay.)
    * 
    * Useful when restarting an egamebook from scratch.
    */

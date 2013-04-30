@@ -38,13 +38,13 @@ void echo(String str) {
 String _gotoPageName;
 
 /**
- * By calling [goto()], you're saying you want to change page to [dest].
+ * By calling [goto()], you're saying you want to change page to [pageName].
  * You can specify the page name in full (i.e. including the group name)
  * or in short (i.e. without group name).
  * 
  * This is a global, author-facing function. It will store
  * the name of the page in a variable that is later used to get the actual
- * page inside [Scripter]. 
+ * page inside [EgbScripter]. 
  */
 void goto(String pageName) {
   _gotoPageName = pageName;
@@ -72,8 +72,8 @@ EgbChoiceList choices = new EgbChoiceList();
 /**
  * Utility shortcut for creating new choices. 
  * 
- * When [defer] is set to [:true:], the choice will not be shown until there
- * is a choiceList on the page.
+ * When [deferToChoiceList] is set to [:true:], the choice will not be shown 
+ * until there is a choiceList on the page.
  */
 EgbChoice choice(String string, {String goto, ScriptBlock script, 
                                  bool deferToEndOfPage: false, 
@@ -149,7 +149,7 @@ abstract class EgbScripter {
   /// This is important for the  "No points for second guessing" rule.
   Set<String> _playerChronology;
   
-  /// [_playerChronlogy] has changed and needs to be sent to Runner.
+  /// [_playerChronology] has changed and needs to be sent to Runner.
   bool _playerChronologyChanged = false;
   
   /// Create a unique hash that identifies a path from one page to another.
@@ -465,13 +465,13 @@ abstract class EgbScripter {
 
   dynamic noSuchMethod(Invocation invocation) {
     if (invocation.isGetter) {
-      return vars[invocation.memberName];
+      return vars[Symbol.getName(invocation.memberName)];
     } else if (invocation.isSetter) {
-      var memberName = invocation.memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      var memberName = Symbol.getName(invocation.memberName).replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, invocation.memberName,
+      throw new NoSuchMethodError(this, Symbol.getName(invocation.memberName),
           invocation.positionalArguments, invocation.namedArguments);
     }
   }

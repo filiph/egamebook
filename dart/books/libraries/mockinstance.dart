@@ -21,26 +21,27 @@ class MockInstance {
   Map vars = new Map();
   
   dynamic noSuchMethod(Invocation invocation) {
+    String memberName = Symbol.getName(invocation.memberName);
     if (invocation.isGetter) {
-      if (vars[invocation.memberName] == null) {
-        vars[invocation.memberName] = new MockInstance();
+      if (vars[memberName] == null) {
+        vars[memberName] = new MockInstance();
       }      
       return vars[invocation.memberName];
     } else if (invocation.isSetter) {
-      var memberName = invocation.memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      memberName = memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
-    } else if (invocation.memberName == "[]=") {
+    } else if (memberName == "[]=") {
       vars[invocation.positionalArguments[0]] = 
           invocation.positionalArguments[1];
       return null;
-    } else if (invocation.memberName == "[]") {
+    } else if (memberName == "[]") {
       if (vars[invocation.positionalArguments[0]] == null) {
         vars[invocation.positionalArguments[0]] = new MockInstance();
       }
       return vars[invocation.positionalArguments[0]];
     } else {
-      throw new NoSuchMethodError(this, invocation.memberName,
+      throw new NoSuchMethodError(this, memberName,
           invocation.positionalArguments, invocation.namedArguments);
     }
   }

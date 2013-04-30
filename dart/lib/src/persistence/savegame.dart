@@ -141,12 +141,14 @@ class EgbSavegame {
       }
       return outputList;
     } else if (input is Map) {
+      Map inputMap = input as Map;
       Map outputMap = new Map();
-      (input as Map).forEach((dynamic key, dynamic value) {
-        if (_isSaveable((input as Map)[key])) {
+      inputMap.forEach((dynamic key, dynamic value) {
+        if (_isSaveable(inputMap[key])) {
           outputMap[key] = _dissolveToPrimitives(value);
         }
       });
+      print(outputMap);
       return outputMap;
     } else if (_isCustomSaveableClass(input)) {
       print("$input -> ${input.toMap()}");
