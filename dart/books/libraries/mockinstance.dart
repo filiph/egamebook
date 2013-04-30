@@ -23,12 +23,11 @@ class MockInstance {
   
   dynamic noSuchMethod(Invocation invocation) {
     String memberName = MirrorSystem.getName(invocation.memberName);
-    print(memberName);
     if (invocation.isGetter) {
       if (vars[memberName] == null) {
         vars[memberName] = new MockInstance();
       }      
-      return vars[invocation.memberName];
+      return vars[memberName];
     } else if (invocation.isSetter) {
       memberName = memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
