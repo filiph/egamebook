@@ -103,7 +103,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   static final RegExp GO_BACK = new RegExp(r"^\s*<<<\s*$"); 
 }
 
-// TODO: https://mail.google.com/mail/u/0/#inbox/13c6f302371edc38
+// TODO: https://code.google.com/p/dart/issues/detail?id=2600#c9
 class EgbChoiceList implements List<EgbChoice> {
   final List<EgbChoice> _choices;
   String question;  // TODO: implement
