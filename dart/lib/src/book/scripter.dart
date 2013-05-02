@@ -577,4 +577,6 @@ abstract class EgbScripter {
   }
 }
 
+/// A [ScriptBlock] (the Dart code between [:<script>:] and [:</script>:])
+/// takes no arguments and doesn't return value.
 typedef void ScriptBlock();

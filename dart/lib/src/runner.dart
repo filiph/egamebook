@@ -48,7 +48,7 @@ class EgbRunner {
           break;
         case (PlayerIntent.LOAD):
           // load saved state for the bookUid from playerProfile
-          // TODO: dry with below
+          // TODO: dry with below ([_startNewSession])
           _playerProfile.load((playerIntent as LoadIntent).uid)
           .then((EgbSavegame savegame) {
             if (savegame == null) {
@@ -56,6 +56,7 @@ class EgbRunner {
               _scripterPort.send(new EgbMessage.Start().toJson(), 
                   _receivePort.toSendPort());
             } else {
+              _interface.showText(savegame.textHistory);
               _scripterPort.send(savegame.toMessage(EgbMessage.LOAD_GAME).toJson(), 
                   _receivePort.toSendPort());
             }
@@ -111,6 +112,7 @@ class EgbRunner {
         return;
       case EgbMessage.SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
+        savegame.textHistory = _interface.getTextHistory();
         _playerProfile.save(savegame);
         _interface.addSavegameBookmark(savegame);
         _send(new EgbMessage.Continue());
@@ -191,6 +193,7 @@ class EgbRunner {
       } else {
         _playerProfile.loadPlayerChronology()
         .then((List<String> playerChronology) {
+          _interface.showText(savegame.textHistory);
           // Create LOAD_GAME message with scripter state in strContent (json).
           var loadgameMsg = savegame.toMessage(EgbMessage.LOAD_GAME);
           // Add playerChronology as listContent.

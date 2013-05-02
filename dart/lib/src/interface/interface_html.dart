@@ -15,12 +15,14 @@ class HtmlInterface implements EgbInterface {
 
   AnchorElement restartAnchor;
   
-  
   DivElement bookDiv;
   DivElement currentChoicesDiv;
   
   StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
+  
+  StringBuffer _textHistory = new StringBuffer();
+  String getTextHistory() => _textHistory.toString();
   
   /**
     Constructor.
@@ -31,16 +33,17 @@ class HtmlInterface implements EgbInterface {
   
   void setup() {
     // DOM
+    bookDiv = document.query("div#book-wrapper");
+
     restartAnchor = document.query("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
-        _streamController.sink.add(
-            new RestartIntent());
-        _currentSavegame = null;
-        // Clear text and choices
-        bookDiv.children.clear();
+      _streamController.sink.add(
+          new RestartIntent());
+      _currentSavegame = null;
+      // Clear text and choices
+      bookDiv.children.clear();
+      _textHistory.clear();
     });
-    
-    bookDiv = document.query("div#book-wrapper");
   }
   
   void close() {
@@ -49,6 +52,7 @@ class HtmlInterface implements EgbInterface {
   }
   
   Future<bool> showText(String s) {
+    _textHistory.writeln(s);
     var p = new ParagraphElement();
     p.innerHtml = s;
     bookDiv.append(p);  // TODO: one by one, wait for transition end
@@ -147,10 +151,8 @@ class HtmlInterface implements EgbInterface {
   EgbSavegame _currentSavegame;
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+    _textHistory.clear();
     _currentSavegame = savegame;
-//    var p = new ParagraphElement();
-//    p.text = "==> Savegame for '${savegame.currentPageName}', hash ${savegame.uid}";
-//    bookDiv.append(p);
   }
 }
 

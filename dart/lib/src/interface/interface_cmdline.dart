@@ -8,12 +8,14 @@ import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 
 class CmdlineInterface implements EgbInterface {
-
   Stream<String> _cmdLine;
   StreamSubscription<String> _cmdLineSubscription;
   
   StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
+  
+  StringBuffer _textHistory = new StringBuffer();
+  String getTextHistory() => _textHistory.toString();
   
   /**
     Constructor.
@@ -38,7 +40,8 @@ class CmdlineInterface implements EgbInterface {
   
   Future<bool> showText(String s) {
     print(s);
-    return new Future.immediate(true);
+    _textHistory.writeln(s);
+    return new Future.value(true);
   }
   
   void _handleCmdLine(String line) {
@@ -89,10 +92,13 @@ class CmdlineInterface implements EgbInterface {
     _currentChoiceList = choiceList;
     _cmdLineSubscription.resume();
     
+    // TODO: add choice text to _textHistory
+    
     return _choiceCompleter.future;
   }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+    _textHistory.clear();
     print("==> savegame created (${savegame.uid})");
   }
 }

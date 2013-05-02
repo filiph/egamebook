@@ -10,6 +10,8 @@ abstract class EgbInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
   
+  String getTextHistory();
+  
   void setup();
   void close();
 
