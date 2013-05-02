@@ -45,6 +45,9 @@ class MockInterface implements EgbInterface {
       latestOutput = s;
     }
   }
+  
+  String getTextHistory() => "Method getTextHistory() not implemented on "
+                             "MockInterface.";
 
   Future<int> showChoices(EgbChoiceList choiceList) {
     choiceList.forEach((choice) => print("MockInterface choice: '${choice.string}'"));
