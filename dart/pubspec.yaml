@@ -5,5 +5,6 @@ dependencies:
   browser: any
   unittest: 0.4.7+1
   args: any
+#  markdown: any
 #  graphml:
 #    git: https://github.com/filiph/dart-graphml.git
