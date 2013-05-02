@@ -137,7 +137,7 @@ class EgbRunner {
         } else {
           text = "+${message.intContent} points";
         }
-        _interface.showText(text);
+        _interface.showText("<p class='meta'>$text</p>");
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.SHOW_CHOICES:
