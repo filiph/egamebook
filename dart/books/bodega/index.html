@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Bodega Incident</title>
 
+  <link href='http://fonts.googleapis.com/css?family=Roboto:700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="egamebook.css" type="text/css" charset="utf-8">
 </head>
 <body>
@@ -13,9 +14,9 @@
     
     <nav>
       <div id="stats">
-        <a class="button stats" id="points-button"><span class="stats-legend">Points:&nbsp;</span><span id="points-value">13</span></a>
+        <a class="button stats" id="points-button"><span class="stats-legend">Points:&nbsp;</span><span id="points-value">0</span></a>
       </div>
-      <a class="button" id="book-restart">Menu</a>
+      <a class="button" id="book-restart">Restart</a>
 
     </nav>
     
@@ -25,6 +26,9 @@
     </div>
     
     <div id="book-wrapper">
+      <p id="loading" style="text-align: center; padding-top: 2em">
+        <img src="img/loading.gif" alt="Loading...">
+      </p>
     </div>
     
     <div id="book-whitespace-footer">
