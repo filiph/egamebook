@@ -10,6 +10,10 @@ abstract class EgbInterface {
   ReceivePort _receivePort;
   SendPort _scripterPort;
   
+  /**
+   * Outputs the text (in it's pure, non-HTMLified form) that has been shown
+   * so far since the last savegame (or beginning of book).
+   */
   String getTextHistory();
   
   void setup();

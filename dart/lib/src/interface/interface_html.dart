@@ -3,6 +3,8 @@ library egb_interface_html;
 import 'dart:async';
 import 'dart:html';
 
+import '../shared/markdown.dart' show markdown_to_html;
+
 import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
@@ -44,6 +46,8 @@ class HtmlInterface implements EgbInterface {
       bookDiv.children.clear();
       _textHistory.clear();
     });
+    
+    document.query("p#loading").remove();
   }
   
   void close() {
@@ -52,11 +56,24 @@ class HtmlInterface implements EgbInterface {
   }
   
   Future<bool> showText(String s) {
-    _textHistory.writeln(s);
-    var p = new ParagraphElement();
-    p.innerHtml = s;
-    bookDiv.append(p);  // TODO: one by one, wait for transition end
+    _textHistory.writeln("$s\n");
+    String html = markdown_to_html(s);
+    DivElement div = new DivElement();
+    div.innerHtml = html;
+    _recursiveRemoveScript(div);
+    bookDiv.append(div);  // TODO: one by one, wait for transition end
     return new Future.value(true);
+  }
+  
+  void _recursiveRemoveScript(Element e) {
+    if (e is ScriptElement) {
+      print("Script detected!");
+      e.remove();
+    } else if (e.children.length > 0) {
+      for (int i = 0; i < e.children.length; i++) {
+        _recursiveRemoveScript(e.children[i]);
+      }
+    }
   }
   
   DivElement _buildChoicesDiv(EgbChoiceList choiceList) {
