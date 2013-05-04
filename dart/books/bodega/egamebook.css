@@ -217,6 +217,7 @@ ol.choices-ol {
 
 ol.choices-ol li {
   background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+  background:-moz-linear-gradient(center top, #f5f5f5 0%, #f1f1f1 100%);
   background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
   padding: 0.4em 1.5em;
   margin: 0.4em 0;
