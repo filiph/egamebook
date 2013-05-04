@@ -1,4 +1,7 @@
-/* @override http://0.0.0.0:8000/egamebook.css */
+/* @override 
+	http://0.0.0.0:8000/egamebook.css
+	http://egamebook.com/test/egamebook.css
+*/
 
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
 
@@ -48,18 +51,24 @@ nav {
   top: 0;
   right: 0;
 
-  background-color:#ffffff;
+  background-color: #ffffff;
   background: -webkit-gradient(
 	linear,
 	left top,
 	left bottom,
-/*	color-stop(0, rgba(253, 253, 253, 1)),*/
+	color-stop(0.6, rgba(255, 255, 255, 1)),
+    color-stop(1, rgba(256, 256, 256, 0))
+  );
+  background: -moz-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+    background: gradient(
+	linear,
+	left top,
+	left bottom,
 	color-stop(0.6, rgba(255, 255, 255, 1)),
     color-stop(1, rgba(256, 256, 256, 0))
   );
 
   padding: 0.5em 1em 2em;
-
 }
 
 nav div#stats {
@@ -78,10 +87,6 @@ nav div#stats a span.stats-legend {
   display: none;
 }
 
-nav div#stats a:hover span.stats-legend {
-  display: inline;
-}
-
 nav div#stats a#points-button {
   border-color: gold;
 }
@@ -91,20 +96,17 @@ nav a {
 }
 
 .button {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6) );
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #f5f5f5), color-stop(1, #f1f1f1) );
 	background:-moz-linear-gradient( center top, #ffffff 5%, #f6f6f6 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6');
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#f1f1f1');
 	background-color:#ffffff;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	border-radius:4px;
-	border:1px solid #dcdcdc;
+	-moz-border-radius:0.2em;
+	-webkit-border-radius:0.2em;
+	border-radius:0.2em;
+	border:1px solid rgba(0,0,0,0.1);
 	display:inline-block;
 	color:#666666;
-	font-family:sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size:90%;
 	font-weight:normal;
 	padding:3px 9px;
@@ -149,8 +151,8 @@ p.meta {
   font: 90% 'Roboto', sans-serif;
   padding: 1em 2em;
   background: lightyellow;
-  border: 0.1em solid lightgray;
-  border-radius: 0.5em;
+ 
+  border-radius: 0.2em;
 }
 
 em {
@@ -185,17 +187,23 @@ div.savegame:hover {
 }
 
 ol.choices-ol {
+  font-family: 'Roboto', sans-serif;
   padding: 0;
   margin: 0;
-  padding-left: 2em;
+
   list-style-type: decimal;
   list-style-image: none;
-  list-style-position: outside;
+  list-style-position: inside;
 }
 
 ol.choices-ol li {
-  padding: 0.4em;
-  margin: 0;
+  background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
+  padding: 0.4em 1.5em;
+  margin: 0.4em 0;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0.2em;
+  text-align: left;
 }
 
 /*ol.choices-ol li:not(:last-child) {
