@@ -69,6 +69,7 @@ nav {
   );
 
   padding: 0.5em 1em 2em;
+  z-index: 1000;
 }
 
 nav div#stats {
@@ -187,7 +188,6 @@ div.bookmark-div {
 
 div.bookmark-div.hidden {
   opacity: 0.0;
-
 }
 
 div.bookmark-div a {
@@ -200,7 +200,6 @@ div.bookmark-div a {
   margin-right: 1em;
   background: black;
   cursor: pointer;
-
 }
 
 div.bookmark-div a img {
