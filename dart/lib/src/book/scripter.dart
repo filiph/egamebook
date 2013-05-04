@@ -391,8 +391,10 @@ abstract class EgbScripter {
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
           return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
+      } else {
+        // None of the choices is actionable.        
+        return new EgbMessage.NoResult();
       }
-      return new EgbMessage.NoResult();
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
       return _runScriptBlock(currentPage.blocks[currentBlockIndex]);

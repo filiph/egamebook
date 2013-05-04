@@ -18,11 +18,14 @@ class HtmlInterface implements EgbInterface {
   AnchorElement restartAnchor;
   
   DivElement bookDiv;
-  DivElement currentChoicesDiv;
   
   StreamController<PlayerIntent> _streamController;
   Stream get stream => _streamController.stream;
   
+  /**
+   * The text that has been shown to the player since last savegame bookmark.
+   * (Markdown format, pre-HTMLization.)
+   */
   StringBuffer _textHistory = new StringBuffer();
   String getTextHistory() => _textHistory.toString();
   
@@ -39,9 +42,7 @@ class HtmlInterface implements EgbInterface {
 
     restartAnchor = document.query("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
-      _streamController.sink.add(
-          new RestartIntent());
-      _currentSavegame = null;
+      _streamController.sink.add(new RestartIntent());
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
@@ -52,7 +53,6 @@ class HtmlInterface implements EgbInterface {
   
   void close() {
     _streamController.close();
-    if (currentChoicesDiv != null) currentChoicesDiv.remove();
   }
   
   Future<bool> showText(String s) {
@@ -65,6 +65,11 @@ class HtmlInterface implements EgbInterface {
     return new Future.value(true);
   }
   
+  /**
+   * Goes through DOM Element and removes any Script Elements (recursively).
+   * 
+   * Currently silent.
+   */
   void _recursiveRemoveScript(Element e) {
     if (e is ScriptElement) {
       print("Script detected!");
@@ -75,21 +80,12 @@ class HtmlInterface implements EgbInterface {
       }
     }
   }
-  
-  DivElement _buildChoicesDiv(EgbChoiceList choiceList) {
-    
-  }
 
   Future<int> showChoices(EgbChoiceList choiceList) {
     var completer = new Completer();
     
     var choicesDiv = new DivElement();
     choicesDiv.classes.add("choices-div");
-    if (_currentSavegame != null) {
-      choicesDiv.dataset["savegame-uid"] = _currentSavegame.uid;
-      _currentSavegame = null;
-      choicesDiv.classes.add("savegame");
-    }
     
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
@@ -150,26 +146,38 @@ class HtmlInterface implements EgbInterface {
       choicesDiv.onClick
       .listen((Event ev) {
         // TODO: make more elegant, with confirmation appearing on page
-        var confirm = window.confirm("Are you sure you want to come back to "
-                        "this decision ($uid) and lose your progress since?");
-        if (confirm) {
-          while (choicesDiv.nextElementSibling != null) {
-            choicesDiv.nextElementSibling.remove();
-          }
-          choicesDiv.remove();
-         
-          _streamController.sink.add(
-                        new LoadIntent(uid));
-        }
+        _handleSavegameBookmarkClick(uid, choicesDiv);
       });
     }
   }
-  
-  EgbSavegame _currentSavegame;
+
+  /**
+   * What happens when user clicks on a savegame bookmark.
+   */
+  void _handleSavegameBookmarkClick(String uid) {
+    // TODO: make more elegant, with confirmation appearing on page
+    var confirm = window.confirm("Are you sure you want to come back to "
+                    "this decision ($uid) and lose your progress since?");
+    if (confirm) {
+      bookDiv.children.clear();
+      // TODO: retain scroll position
+      _streamController.sink.add(new LoadIntent(uid));
+    }
+  }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
-    _textHistory.clear();
-    _currentSavegame = savegame;
+    print("Creating savegame bookmark for ${savegame.uid}");
+    _textHistory.clear();  // The _textHistory has been saved with the savegame.
+    var bookmarkDiv = new DivElement();
+    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
+    bookmarkDiv.classes.add("bookmark-div");
+    var bookmarkAnchor = new AnchorElement();
+    bookmarkAnchor.text = "Load [${savegame.uid}]";
+    bookmarkAnchor.onClick.listen((_) {
+      _handleSavegameBookmarkClick(savegame.uid);
+    });
+    bookmarkDiv.append(bookmarkAnchor);
+    bookDiv.append(bookmarkDiv);
   }
 }
 
