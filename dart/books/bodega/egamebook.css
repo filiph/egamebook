@@ -178,12 +178,33 @@ div#book-whitespace-footer {
   height: 20em;
 }
 
-div.savegame {
-  cursor: pointer;
+div.bookmark-div {
+  position: relative;
+  -webkit-transition: opacity 10s;
+  transition: opacity 10s;
+  opacity: 0.3;
 }
 
-div.savegame:hover {
-  border-right: 1px solid blue;
+div.bookmark-div.hidden {
+  opacity: 0.0;
+
+}
+
+div.bookmark-div a {
+  display: block;
+  position: absolute;
+  float: none;
+  right: 0.0em;
+  color: white;
+  margin-top: 0em;
+  margin-right: 1em;
+  background: black;
+  cursor: pointer;
+
+}
+
+div.bookmark-div a img {
+  margin-top: -30px
 }
 
 ol.choices-ol {
@@ -192,6 +213,7 @@ ol.choices-ol {
   margin: 0;
 
   list-style: none;
+  clear: both;
 }
 
 ol.choices-ol li {
@@ -205,7 +227,7 @@ ol.choices-ol li {
   cursor: pointer;
 }
 
-ol.choices-ol.chosen {
+ol.choices-ol.chosen li {
   cursor: default;
 }
 

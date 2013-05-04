@@ -99,6 +99,8 @@ class HtmlInterface implements EgbInterface {
     OListElement choicesOl = new OListElement();
     choicesOl.classes.add("choices-ol");
     
+    Set<StreamSubscription> clickSubscriptions = new Set();
+    
     // let player choose
     for (int i = 0; i < choiceList.length; i++) {
       EgbChoice choice = choiceList[i];
@@ -110,12 +112,8 @@ class HtmlInterface implements EgbInterface {
       
       var choiceDisplay = new SpanElement();
       choiceDisplay.classes.add("choice-display");
-      var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
-      var text = new SpanElement();
-      text.innerHtml = markdown_to_html(choiceWithInfochips.text);
-      text.classes.add("choice-text");
-
       
+      var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
       if (!choiceWithInfochips.infochips.isEmpty) {
         var infochips = new SpanElement();
         infochips.classes.add("choice-infochips");
@@ -128,16 +126,35 @@ class HtmlInterface implements EgbInterface {
         choiceDisplay.append(infochips);
       }
       
+      var text = new SpanElement();
+      text.innerHtml = markdown_to_html(choiceWithInfochips.text);
+      text.classes.add("choice-text");
       choiceDisplay.append(text);
 
-      li.onClick.listen((Event ev) {
+      var subscription = li.onClick.listen((Event ev) {
           // Send choice hash back to Scripter.
           completer.complete(choice.hash);
           // Mark this element as chosen.
           li.classes.add("chosen");
           choicesOl.classes.add("chosen");
-          // TODO: unregister listeners
+          // Unregister listeners.
+          clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
+          // Show bookmark.
+          if (bookmarkDiv != null) {
+            var _bookmarkDiv = bookmarkDiv;
+            // Make the global variable immediately available.
+            bookmarkDiv = null;
+            var height = "${choicesOl.client.height + 10}px";
+            _bookmarkDiv.query("a").style.height = height;
+            _bookmarkDiv.classes.add("hidden");
+            choicesOl.children.insert(0, _bookmarkDiv);
+            new Future.delayed(new Duration(seconds: 1)).then((_) {
+              _bookmarkDiv.classes.remove("hidden");
+              _bookmarkDiv.classes.add("shown");
+            });
+          }
       });
+      clickSubscriptions.add(subscription);
       
       li.append(number);
       li.append(choiceDisplay);
@@ -153,30 +170,6 @@ class HtmlInterface implements EgbInterface {
   }
   
   /**
-   * Makes choices in ordered list [choicesDiv] unclickable (removes <a> tags).
-   * When the element has [:savegame-uid:] data attribute set, then the list
-   * becomes a "bookmark" - saved state can be loaded by clicking on it.
-   */
-  void _makeIntoBookmark(DivElement choicesDiv) {
-    choicesDiv.classes.add("past");
-    // Remove <a> tags from all choices.
-    choicesDiv.query("ol.choices-ol").children.forEach((LIElement el) {
-      var string = el.query("a").innerHtml;
-      el.children.clear();
-      el.innerHtml = string;
-    });
-    if (choicesDiv.dataset.containsKey("savegame-uid")) {
-      String uid = choicesDiv.dataset["savegame-uid"];
-      // Make possible to come back to the associated savegame.
-      choicesDiv.onClick
-      .listen((Event ev) {
-        // TODO: make more elegant, with confirmation appearing on page
-        _handleSavegameBookmarkClick(uid, choicesDiv);
-      });
-    }
-  }
-
-  /**
    * What happens when user clicks on a savegame bookmark.
    */
   void _handleSavegameBookmarkClick(String uid) {
@@ -187,22 +180,26 @@ class HtmlInterface implements EgbInterface {
       bookDiv.children.clear();
       // TODO: retain scroll position
       _streamController.sink.add(new LoadIntent(uid));
+      // TODO: solve for when savegame with that uid is not available
     }
   }
+  
+  DivElement bookmarkDiv;
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _textHistory.clear();  // The _textHistory has been saved with the savegame.
-    var bookmarkDiv = new DivElement();
+    bookmarkDiv = new DivElement();
     bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
     bookmarkDiv.classes.add("bookmark-div");
     var bookmarkAnchor = new AnchorElement();
-    bookmarkAnchor.text = "Load [${savegame.uid}]";
+    var bookmarkImg = new ImageElement(src: "img/bookmark.png", 
+        width: 30, height: 60);
+    bookmarkAnchor.append(bookmarkImg);
     bookmarkAnchor.onClick.listen((_) {
       _handleSavegameBookmarkClick(savegame.uid);
     });
     bookmarkDiv.append(bookmarkAnchor);
-    bookDiv.append(bookmarkDiv);
   }
 }
 
