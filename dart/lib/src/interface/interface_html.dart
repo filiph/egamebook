@@ -13,6 +13,8 @@ import '../shared/user_interaction.dart';
 import '../persistence/storage.dart';
 import '../persistence/player_profile.dart';
 
+import 'choice_with_infochips.dart';
+
 class HtmlInterface implements EgbInterface {
 
   AnchorElement restartAnchor;
@@ -89,7 +91,7 @@ class HtmlInterface implements EgbInterface {
     
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
-      choicesQuestionP.innerHtml = choiceList.question;
+      choicesQuestionP.innerHtml = markdown_to_html(choiceList.question);
       choicesQuestionP.classes.add("choices-question");
       choicesDiv.children.add(choicesQuestionP);
     }
@@ -101,29 +103,47 @@ class HtmlInterface implements EgbInterface {
     for (int i = 0; i < choiceList.length; i++) {
       EgbChoice choice = choiceList[i];
       LIElement li = new Element.tag("li");
-      AnchorElement a = new Element.tag("a");
-      a.innerHtml = choice.string;
 
-      a.onClick.listen((Event ev) {
+      var number = new SpanElement();
+      number.text = "$i";
+      number.classes.add("choice-number");
+      
+      var choiceDisplay = new SpanElement();
+      var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
+      var text = new SpanElement();
+      text.innerHtml = markdown_to_html(choiceWithInfochips.text);
+      text.classes.add("choice-text");
+      choiceDisplay.append(text);
+      
+      if (!choiceWithInfochips.infochips.isEmpty) {
+        var infochips = new SpanElement();
+        infochips.classes.add("choice-infochips");
+        for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
+          var chip = new SpanElement();
+          chip.innerHtml = markdown_to_html(choiceWithInfochips.infochips[j]);
+          chip.classes.add("choice-infochip");
+          infochips.append(chip);
+        }
+        choiceDisplay.append(infochips);
+      }
+
+      li.onClick.listen((Event ev) {
           // Send choice hash back to Scripter.
           completer.complete(choice.hash);
           // Mark this element as chosen.
           li.classes.add("chosen");
-          
-          _makeIntoBookmark(choicesDiv);
-          ev.stopPropagation();  // Prevent event from immediately propagating
-                                 // to the enclosing choicesOl (thus trying to
-                                 // fire a LoadIntent).
       });
       
-      li.append(a);
+      li.append(number);
+      li.append(choiceDisplay);
+      
       choicesOl.append(li);
     }
     
     choicesDiv.append(choicesOl);
     
+    _recursiveRemoveScript(choicesDiv);
     bookDiv.append(choicesDiv);
-    
     return completer.future;
   }
   

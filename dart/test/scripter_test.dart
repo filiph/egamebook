@@ -12,6 +12,7 @@ import '../lib/src/persistence/savegame.dart';
 import '../lib/src/persistence/saveable.dart';
 import '../lib/src/shared/user_interaction.dart';
 import '../lib/builder.dart';
+import 'package:egamebook/src/interface/choice_with_infochips.dart';
 
 class MockInterface implements EgbInterface {
   Queue<int> choicesToBeTaken;
@@ -406,6 +407,42 @@ void main() {
         runner.run();
       });
 
+    });
+    
+    group("ChoiceWithInfochips", () {
+      test("lets through a choice without chips", () {
+        String s = "Some random string with no chips";
+        var a = new ChoiceWithInfochips(s);
+        expect(a.text, s);
+      });
+      test("lets through choices with weird bracket config", () {
+        String s1 = "Some random string with weird ] brackets]";
+        var a1 = new ChoiceWithInfochips(s1);
+        expect(a1.text, s1);
+        String s2 = "[Some random string with weird ] brackets]";
+        var a2 = new ChoiceWithInfochips(s2);
+        expect(a2.text, s2);
+      });
+      test("lets through choices with []", () {
+        String s = "Some random string with null [] brackets";
+        var a = new ChoiceWithInfochips(s);
+        expect(a.text, s);
+      });
+      test("detects 1 chip", () {
+        String s = "Fire torpedo [5s]";
+        var a = new ChoiceWithInfochips(s);
+        expect(a.text, "Fire torpedo ");
+        expect(a.infochips, hasLength(1));
+        expect(a.infochips[0], "5s");
+      });
+      test("detects many chips", () {
+        String s = "Fire torpedo [5s] [~45%] ";
+        var a = new ChoiceWithInfochips(s);
+        expect(a.text, "Fire torpedo ");
+        expect(a.infochips, hasLength(2));
+        expect(a.infochips[0], "5s");
+        expect(a.infochips[1], "~45%");
+      });
     });
   });
 
