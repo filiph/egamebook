@@ -191,9 +191,7 @@ ol.choices-ol {
   padding: 0;
   margin: 0;
 
-  list-style-type: decimal;
-  list-style-image: none;
-  list-style-position: inside;
+  list-style: none;
 }
 
 ol.choices-ol li {
@@ -204,21 +202,49 @@ ol.choices-ol li {
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 0.2em;
   text-align: left;
+  cursor: pointer;
 }
 
-/*ol.choices-ol li:not(:last-child) {
-  border-bottom: 1px solid #eee;
-}*/
-
-ol.choices-ol li a {
-  color: blue;
-  cursor: pointer;
+ol.choices-ol.chosen {
+  cursor: default;
 }
 
 ol.choices-ol li.chosen {
   font-weight: bold;
 }
 
-ol.choices-ol li a:hover {
-  text-decoration: underline;
+ol.choices-ol li span.choice-number {
+  display: block;
+  width: 1.5em;
+  float: left;
+  text-align: right;
+}
+
+ol.choices-ol li span.choice-display {
+  display: block;
+  padding-left: 2.5em;
+}
+
+ol.choices-ol li span.choice-text {
+  display: block;
+}
+
+ol.choices-ol li p {
+  margin: 0;
+  padding: 0;
+}
+
+ol.choices-ol li span.choice-infochips {
+  font-size: 90%;
+  float: right;
+  max-width: 70%;
+}
+
+ol.choices-ol li span.choice-infochip {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0 0.4em;
+  border-radius: 0.2em;
+  margin-left: 2em;
 }

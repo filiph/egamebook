@@ -105,15 +105,16 @@ class HtmlInterface implements EgbInterface {
       LIElement li = new Element.tag("li");
 
       var number = new SpanElement();
-      number.text = "$i";
+      number.text = "${i+1}.";
       number.classes.add("choice-number");
       
       var choiceDisplay = new SpanElement();
+      choiceDisplay.classes.add("choice-display");
       var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
       var text = new SpanElement();
       text.innerHtml = markdown_to_html(choiceWithInfochips.text);
       text.classes.add("choice-text");
-      choiceDisplay.append(text);
+
       
       if (!choiceWithInfochips.infochips.isEmpty) {
         var infochips = new SpanElement();
@@ -126,12 +127,16 @@ class HtmlInterface implements EgbInterface {
         }
         choiceDisplay.append(infochips);
       }
+      
+      choiceDisplay.append(text);
 
       li.onClick.listen((Event ev) {
           // Send choice hash back to Scripter.
           completer.complete(choice.hash);
           // Mark this element as chosen.
           li.classes.add("chosen");
+          choicesOl.classes.add("chosen");
+          // TODO: unregister listeners
       });
       
       li.append(number);
