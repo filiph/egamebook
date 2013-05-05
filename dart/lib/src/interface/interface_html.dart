@@ -14,6 +14,7 @@ import '../persistence/storage.dart';
 import '../persistence/player_profile.dart';
 
 import 'choice_with_infochips.dart';
+import 'dart:collection';
 
 class HtmlInterface implements EgbInterface {
 
@@ -36,6 +37,7 @@ class HtmlInterface implements EgbInterface {
     */
   HtmlInterface() {
     _streamController = new StreamController();
+    _elementShown = _elementShownController.stream.asBroadcastStream();
   }
   
   void setup() {
@@ -48,7 +50,13 @@ class HtmlInterface implements EgbInterface {
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
+      _elementsToShow.clear();
     });
+    
+    _periodicSubscription = _periodic.listen((_) {
+      _processElementsToShow();
+    });
+    _periodicSubscription.pause();
     
     document.query("p#loading").remove();
   }
@@ -57,14 +65,80 @@ class HtmlInterface implements EgbInterface {
     _streamController.close();
   }
   
+  Queue<Element> _elementsToShow = new Queue<Element>();
+  
   Future<bool> showText(String s) {
-    _textHistory.writeln("$s\n");
+    var completer = new Completer();
+    
+    _textHistory.write("$s\n\n");
     String html = markdown_to_html(s);
-    DivElement div = new DivElement();
-    div.innerHtml = html;
-    _recursiveRemoveScript(div);
-    bookDiv.append(div);  // TODO: one by one, wait for transition end
-    return new Future.value(true);
+    DivElement container = new DivElement();
+    container.innerHtml = html;
+    _recursiveRemoveScript(container);
+    for (int i = 0; i < container.children.length; i++) {
+      _elementsToShow.addLast(container.children[i].clone(true));
+    }
+    container.remove();  // TODO: find out if necessary to avoid leaks
+    
+    if (_elementsToShow.isEmpty) return new Future.value(true);
+    
+    var lastElementHash = _elementsToShow.last.hashCode;
+    
+    StreamSubscription subscription;
+    subscription = _elementShown.where((int hash) => hash == lastElementHash)
+        .listen((_) {
+      completer.complete(true);
+      subscription.cancel();
+      // TODO: prevent memory leaks when showText isn't completed
+    });
+    
+    _periodicSubscription.resume();
+    
+    _processElementsToShow();
+    return completer.future;
+  }
+  
+  StreamController<int> _elementShownController = new StreamController();
+  /// Stream of events when elements are shown in the web ui. The value
+  /// is the hashcode of the element.
+  Stream<int> _elementShown;
+  
+  static const Duration _durationBetweenShowingElements =
+      const Duration(milliseconds: 200);
+  Stream _periodic = new Stream.periodic(_durationBetweenShowingElements);
+  StreamSubscription _periodicSubscription;
+  
+  /**
+   * Goes through the list of outstanding elements to show and shows them
+   * if necessary.
+   */
+  void _processElementsToShow() {
+    if (_elementsToShow.isEmpty) {
+      _periodicSubscription.pause();
+      return;
+    }
+    if (!_scrolledPastEnd()) return;
+    
+    var el = _elementsToShow.removeFirst();
+    el.classes.add("hidden");
+    bookDiv.append(el);
+    new Future.value(null).then((_) {
+      el.classes.remove("hidden");
+    });
+    
+    _elementShownController.add(el.hashCode);
+    if (!_elementsToShow.isEmpty) _processElementsToShow();
+  }
+  
+  /**
+   * Checks if user scrolled past the end of [bookDiv].
+   */
+  bool _scrolledPastEnd() {
+    var currentBottom = document.body.scrollTop + window.innerHeight;
+    var bookDivBottom = bookDiv.offsetTop + bookDiv.offsetHeight;
+    print("checking scroll: bookdiv = ${bookDivBottom}, "
+          "currentBottom =  ${currentBottom}");
+    return (bookDivBottom < currentBottom - 20);
   }
   
   /**
@@ -150,8 +224,8 @@ class HtmlInterface implements EgbInterface {
             choicesOl.children.insert(0, _bookmarkDiv);
             new Future.delayed(new Duration(seconds: 1)).then((_) {
               _bookmarkDiv.classes.remove("hidden");
-              _bookmarkDiv.classes.add("shown");
             });
+            // TODO: show after scrolled past
           }
       });
       clickSubscriptions.add(subscription);

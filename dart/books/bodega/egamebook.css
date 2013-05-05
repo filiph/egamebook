@@ -144,6 +144,16 @@ h3 {
   font: 120% 'Roboto', sans-serif;
 }
 
+div#book-wrapper > * {
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
+  opacity: 1;
+}
+
+div#book-wrapper > *.hidden {
+  opacity: 0;
+}
+
 p {
   margin: 1em 0;
 }

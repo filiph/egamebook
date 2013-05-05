@@ -28,7 +28,8 @@ class EgbRunner {
   
   StreamController<String> _streamController;
   Stream<String> get stream => _streamController.stream;
-  Stream<String> get endOfBookReached => stream.where((value) => value == "END");
+  Stream<String> get endOfBookReached => 
+      stream.where((value) => value == "END");
   
   EgbRunner(this._receivePort, this._scripterPort, 
       this._interface, this._playerProfile) {
@@ -122,8 +123,8 @@ class EgbRunner {
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.TEXT_RESULT:
-        _interface.showText(message.strContent);
-        _send(new EgbMessage.Continue());
+        _interface.showText(message.strContent)
+        .then((_) => _send(new EgbMessage.Continue()));
         return;
       case EgbMessage.NO_RESULT:
         // No visible result from Scripter. Continuing.
@@ -137,8 +138,8 @@ class EgbRunner {
         } else {
           text = "+${message.intContent} points";
         }
-        _interface.showText("<p class='meta'>$text</p>");
-        _send(new EgbMessage.Continue());
+        _interface.showText("<p class='meta'>$text</p>")
+        .then((_) => _send(new EgbMessage.Continue()));
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);
