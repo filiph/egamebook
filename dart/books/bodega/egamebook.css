@@ -227,6 +227,11 @@ ol.choices-ol li {
   cursor: pointer;
 }
 
+ol.choices-ol li:active {
+	position:relative;
+	top:1px;
+}
+
 ol.choices-ol.chosen li {
   cursor: default;
 }

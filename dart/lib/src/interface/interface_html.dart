@@ -101,7 +101,7 @@ class HtmlInterface implements EgbInterface {
     
     Set<StreamSubscription> clickSubscriptions = new Set();
     
-    // let player choose
+    // Build the <li> elements one by one.
     for (int i = 0; i < choiceList.length; i++) {
       EgbChoice choice = choiceList[i];
       LIElement li = new Element.tag("li");
