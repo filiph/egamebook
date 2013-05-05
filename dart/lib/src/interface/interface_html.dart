@@ -85,11 +85,12 @@ class HtmlInterface implements EgbInterface {
     var lastElementHash = _elementsToShow.last.hashCode;
     
     StreamSubscription subscription;
-    subscription = _elementShown.where((int hash) => hash == lastElementHash)
-        .listen((_) {
-      completer.complete(true);
-      subscription.cancel();
-      // TODO: prevent memory leaks when showText isn't completed
+    subscription = _elementShown.listen((int hash) {
+      if (hash == lastElementHash) {  // Cannot use .where because of bug in JS.
+        completer.complete(true);
+        subscription.cancel();
+        // TODO: prevent memory leaks when showText isn't completed
+      }
     });
     
     _periodicSubscription.resume();
