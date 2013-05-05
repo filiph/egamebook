@@ -135,7 +135,7 @@ class HtmlInterface implements EgbInterface {
    * Checks if user scrolled past the end of [bookDiv].
    */
   bool _scrolledPastEnd() {
-    var currentBottom = document.body.scrollTop + window.innerHeight;
+    var currentBottom = window.pageYOffset + window.innerHeight;
     var bookDivBottom = bookDiv.offsetTop + bookDiv.offsetHeight;
     print("checking scroll: bookdiv = ${bookDivBottom}, "
           "currentBottom =  ${currentBottom}");
