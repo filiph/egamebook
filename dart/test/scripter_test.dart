@@ -45,6 +45,7 @@ class MockInterface implements EgbInterface {
     if (s.trim() != "") {
       latestOutput = s;
     }
+    return new Future.value(true);
   }
   
   String getTextHistory() => "Method getTextHistory() not implemented on "
