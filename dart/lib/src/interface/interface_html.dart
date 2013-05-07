@@ -50,11 +50,11 @@ class HtmlInterface implements EgbInterface {
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
-      _elementsToShow.clear();
+      // TODO: clear meta elements
     });
     
     _periodicSubscription = _periodic.listen((_) {
-      _processElementsToShow();
+      _checkMetaElementsInView();
     });
     _periodicSubscription.pause();
     
@@ -65,9 +65,11 @@ class HtmlInterface implements EgbInterface {
     _streamController.close();
   }
   
-  Queue<Element> _elementsToShow = new Queue<Element>();
-  
   // TODO: instead of creating one-by-one, create them all, use delayed transitions. Only use _periodic for checking if special "meta" divs are visible (can be once per second)
+  /**
+   * Converts [s] to HTML elements (via markdown) and shows them one by one
+   * on page. Returns when complete.
+   */
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
     var completer = new Completer();
@@ -77,28 +79,23 @@ class HtmlInterface implements EgbInterface {
     DivElement container = new DivElement();
     container.innerHtml = html;
     _recursiveRemoveScript(container);
+    int total = container.children.length;
     for (int i = 0; i < container.children.length; i++) {
-      _elementsToShow.addLast(container.children[i].clone(true));
+      var el = container.children[i];
+      if (el == null) continue;  // Yes, this can happen.
+      el.classes.add("hidden");
+      num transitionDelay = 
+          _durationBetweenShowingElements.inMilliseconds * i / 1000; 
+      el.style.transitionDelay = "${transitionDelay}s";
+      bookDiv.append(container.children[i]);
+      new Future.value(null).then((_) {
+        el.classes.remove("hidden");
+      });
     }
     container.remove();  // TODO: find out if necessary to avoid leaks
     
-    if (_elementsToShow.isEmpty) return new Future.value(true);
-    
-    var lastElementHash = _elementsToShow.last.hashCode;
-    
-    StreamSubscription subscription;
-    subscription = _elementShown.listen((int hash) {
-      if (hash == lastElementHash) {  // Cannot use .where because of bug in JS.
-        completer.complete(true);
-        subscription.cancel();
-        // TODO: prevent memory leaks when showText isn't completed
-      }
-    });
-    
-    _periodicSubscription.resume();
-    
-    _processElementsToShow();
-    return completer.future;
+    return new Future.delayed(_durationBetweenShowingElements * total, 
+        () => true);
   }
   
   StreamController<int> _elementShownController = new StreamController();
@@ -108,30 +105,38 @@ class HtmlInterface implements EgbInterface {
   
   static const Duration _durationBetweenShowingElements =
       const Duration(milliseconds: 200);
-  Stream _periodic = new Stream.periodic(_durationBetweenShowingElements);
+  static const Duration _durationBetweenCheckingForMetaElements =
+      const Duration(milliseconds: 1000);
+  Stream _periodic = 
+      new Stream.periodic(_durationBetweenCheckingForMetaElements);
   StreamSubscription _periodicSubscription;
   
   /**
-   * Goes through the list of outstanding elements to show and shows them
-   * if necessary.
+   * Checks if one of the meta elements is in view. If so, runs their
+   * associated action (e.g. show a toast and increase the counter when
+   * points are awarded).
    */
-  void _processElementsToShow() {
-    if (_elementsToShow.isEmpty) {
-      _periodicSubscription.pause();
-      return;
-    }
-    if (!_scrolledPastEnd()) return;
+  void _checkMetaElementsInView() {
     
-    var el = _elementsToShow.removeFirst();
-    el.classes.add("hidden");
-    bookDiv.append(el);
-    new Future.value(null).then((_) {
-      el.classes.remove("hidden");
-    });
-    
-    _elementShownController.add(el.hashCode);
-    if (!_elementsToShow.isEmpty) _processElementsToShow();
   }
+  
+//  void _processElementsToShow() {
+//    if (_elementsToShow.isEmpty) {
+//      _periodicSubscription.pause();
+//      return;
+//    }
+//    if (!_scrolledPastEnd()) return;
+//    
+//    var el = _elementsToShow.removeFirst();
+//    el.classes.add("hidden");
+//    bookDiv.append(el);
+//    new Future.value(null).then((_) {
+//      el.classes.remove("hidden");
+//    });
+//    
+//    _elementShownController.add(el.hashCode);
+//    if (!_elementsToShow.isEmpty) _processElementsToShow();
+//  }
   
   /**
    * Checks if user scrolled past the end of [bookDiv].
