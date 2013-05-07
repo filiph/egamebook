@@ -196,9 +196,12 @@ class EgbSavegame {
       } else {
         // need to create new variable
         String className = input["_class"];
-        if (constructors == null || !constructors.containsKey(className)) {
-          throw "Constructor for $className not set. Cannot assemble a new "
-                "instance.";
+        if (constructors == null) {
+          throw "No constructors set. Cannot assemble a new instance.";
+        } else if (!constructors.containsKey(className)) {
+          // XXX: This just silently fails!
+          throw new StateError("Constructor for $className not set. "
+              "Cannot assemble a new instance.");
         }
         return constructors[className](input);
       }
@@ -213,12 +216,13 @@ class EgbSavegame {
                                    Map<String,dynamic> vars,
                                    {Map<String,Function> constructors}) {
     // assemble and copy / update saved variables over vars
-    savegame.vars.forEach((key, value) {
-      if (vars[key] == null) {
+    savegame.vars.forEach((String key, value) {
+      var existingValue = vars[key];
+      if (existingValue == null) {
         vars[key] = _assembleFromPrimitives(value, constructors);
       } else {
         vars[key] = _assembleFromPrimitives(value, constructors,
-                                            updateExisting: vars[key]);
+                                            updateExisting: existingValue);
       }
     });
   }
