@@ -247,7 +247,11 @@ class HtmlInterface implements EgbInterface {
     choicesDiv.append(choicesOl);
     
     _recursiveRemoveScript(choicesDiv);
+    choicesDiv.classes.add("hidden");
     bookDiv.append(choicesDiv);
+    new Future.value(null).then((_) {
+      choicesDiv.classes.remove("hidden");
+    });
     return completer.future;
   }
   
