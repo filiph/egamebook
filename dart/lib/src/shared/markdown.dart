@@ -1,4 +1,4 @@
-// TODO: use pub package 'markdown' when 
+// TODO(filiph): use pub package 'markdown' when 
 // https://github.com/dpeek/dart-markdown/issues/2 is resolved
 /*
  * Copyright (c) 2012 Tom Alexander
