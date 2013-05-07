@@ -223,12 +223,14 @@ abstract class EgbScripter {
       case EgbMessage.GET_BOOK_UID:
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
+        DEBUG_SCR("GET_BOOK_UID received.");
         _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID")); 
         return;
       case EgbMessage.OPTION_SELECTED:
         _send(_handleOptionSelected(message));
         return;
       case EgbMessage.START:
+        DEBUG_SCR("Starting book from scratch.");
         currentBlockIndex = null;
         _nextScriptStack.clear();
         choices.clear();
@@ -239,6 +241,7 @@ abstract class EgbScripter {
         currentPage = firstPage;
         break;
       case EgbMessage.LOAD_GAME:
+        DEBUG_SCR("Loading a saved game.");
         currentBlockIndex = null;
         _nextScriptStack.clear();
         choices.clear();
@@ -249,17 +252,20 @@ abstract class EgbScripter {
     }
     
     if (!_points.pointsAwards.isEmpty) {
+      DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
       _send(new EgbMessage.PointsAward(award.points, award.justification));
       return;
     }
     
     if (_playerChronologyChanged) {
+      DEBUG_SCR("Saving player chronology.");
       _playerChronologyChanged = false;
       _send(new EgbMessage.SavePlayerChronology(_playerChronology));
       return;
     }
     
+    DEBUG_SCR("Calling _goOneStep().");
     // We can now handle the next block on the page.
     _send(_goOneStep(message));
   }
@@ -311,6 +317,7 @@ abstract class EgbScripter {
    * Returns message for Runner.
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
+    DEBUG_SCR("Resolving step (normally a text block).");
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
     bool atChoiceList = 
         currentBlockIndex != null &&
@@ -564,18 +571,22 @@ abstract class EgbScripter {
     }
     currentPage = pageMap[savegame.currentPageName];
 
+    DEBUG_SCR("Importing state from savegame.");
     pageMap.importState(savegame.pageMapState);
     
     if (message.listContent != null) {
       // This happens only at each new game session start. Normal LOAD_GAME
       // messages have listContent == null.
+      DEBUG_SCR("Importing player chronology.");
       _playerChronology.addAll(message.listContent);
     }
 
     var _constructors = {};
     // copy saved variables over vars
+    DEBUG_SCR("Copying save variables into vars.");
     EgbSavegame.importSavegameToVars(savegame, vars, 
                                      constructors: _constructors); // TODO
+    DEBUG_SCR("_loadFromSaveGameMessage() done.");
   }
 }
 
