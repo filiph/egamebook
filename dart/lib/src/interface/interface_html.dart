@@ -67,7 +67,9 @@ class HtmlInterface implements EgbInterface {
   
   Queue<Element> _elementsToShow = new Queue<Element>();
   
+  // TODO: instead of creating one-by-one, create them all, use delayed transitions. Only use _periodic for checking if special "meta" divs are visible (can be once per second)
   Future<bool> showText(String s) {
+    if (s == null) return new Future.value(false);
     var completer = new Completer();
     
     _textHistory.write("$s\n\n");
