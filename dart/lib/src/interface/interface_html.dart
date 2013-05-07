@@ -76,6 +76,11 @@ class HtmlInterface implements EgbInterface {
     
     _textHistory.write("$s\n\n");
     String html = markdown_to_html(s);
+    
+    if (s.trim().startsWith("<") && s.trim().endsWith(">")) {
+      html = s;  // Hacky way to prevent markdown from enclosing html tags
+                 // with html tags ("<p><p></p></p>").
+    }
     DivElement container = new DivElement();
     container.innerHtml = html;
     _recursiveRemoveScript(container);
@@ -156,7 +161,7 @@ class HtmlInterface implements EgbInterface {
    */
   void _recursiveRemoveScript(Element e) {
     if (e is ScriptElement) {
-      print("Script detected!");
+      print("INT: Script detected!");
       e.remove();
     } else if (e.children.length > 0) {
       for (int i = 0; i < e.children.length; i++) {
