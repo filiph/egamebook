@@ -19,6 +19,8 @@ class EgbMessage {
   static const int SAVE_PLAYER_CHRONOLOGY = 60;
   static const int POINTS_AWARD = 70;
   static const int END_OF_BOOK = 80;
+  static const int STAT_SET = 90;
+  static const int STAT_UPDATE = 100;
 
   // Messages from Runner to Scripter.
   static const int GET_BOOK_UID = 1000;
@@ -77,6 +79,24 @@ class EgbMessage {
     if (points == null) throw new ArgumentError("points cannot be null.");
     intContent = points;
     strContent = justification;
+  }
+  
+  /// Set a statistic without notifying the player.
+  EgbMessage.StatSet(String statName, int value) : type = STAT_SET {
+    if (statName == null) {
+      throw new ArgumentError("Stat name cannot be null.");
+    }
+    strContent = statName;
+    intContent = value;
+  }
+
+  /// Set a statistic and notify the player.
+  EgbMessage.StatUpdate(String statName, int value) : type = STAT_UPDATE {
+    if (statName == null) {
+      throw new ArgumentError("Stat name cannot be null.");
+    }
+    strContent = statName;
+    intContent = value;
   }
   
   EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
