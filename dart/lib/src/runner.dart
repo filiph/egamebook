@@ -33,6 +33,7 @@ class EgbRunner {
   
   EgbRunner(this._receivePort, this._scripterPort, 
       this._interface, this._playerProfile) {
+    print("RUN: Runner started.");
     _streamController = new StreamController();
     
     // Handling player intents (actions) that are 'out of order' - i.e. scripter
@@ -40,6 +41,7 @@ class EgbRunner {
     _interface.stream.listen((playerIntent) {
       switch (playerIntent.type) {
         case (PlayerIntent.RESTART):
+          print("RUN: Restarting book.");
           _scripterPort.send(new EgbMessage.Start().toJson(), 
               _receivePort.toSendPort());
           started = true;
@@ -71,6 +73,7 @@ class EgbRunner {
   }
   
   void run() {
+    print("RUN: Runner.run() called.");
     _interface.setup();
     _scripterPort.send(
         new EgbMessage.GetBookUid().toJson(),
@@ -109,6 +112,7 @@ class EgbRunner {
         _streamController.sink.add("END");  // send the info to anyone listening
         return;
       case EgbMessage.SEND_BOOK_UID:
+        print("RUN: Book UID received ('${message.strContent}')");
         _startNewSession(message);
         return;
       case EgbMessage.SAVE_GAME:
@@ -190,10 +194,12 @@ class EgbRunner {
     .then((EgbSavegame savegame) {
       if (savegame == null) {
         // No savegames for this egamebook.
+        print("RUN: No savegames for this egamebook. Starting anew.");
         _send(new EgbMessage.Start());
       } else {
         _playerProfile.loadPlayerChronology()
         .then((List<String> playerChronology) {
+          print("RUN: Saved state found. Loading.");
           _interface.showText(savegame.textHistory);
           // Create LOAD_GAME message with scripter state in strContent (json).
           var loadgameMsg = savegame.toMessage(EgbMessage.LOAD_GAME);
