@@ -206,7 +206,8 @@ class HtmlInterface implements EgbInterface {
         infochips.classes.add("choice-infochips");
         for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
           var chip = new SpanElement();
-          chip.innerHtml = markdown_to_html(choiceWithInfochips.infochips[j]);
+          // TODO: markdown the string below (and sanitize), but not as a paragraph (like a -2E is _not_ a <li>) 
+          chip.text = choiceWithInfochips.infochips[j];
           chip.classes.add("choice-infochip");
           infochips.append(chip);
         }
