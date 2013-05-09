@@ -227,6 +227,7 @@ class HtmlInterface implements EgbInterface {
           choicesOl.classes.add("chosen");
           // Unregister listeners.
           clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
+          clickSubscriptions.clear();
           // Show bookmark.
           if (bookmarkDiv != null) {
             var _bookmarkDiv = bookmarkDiv;
