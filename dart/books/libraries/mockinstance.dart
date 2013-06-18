@@ -43,7 +43,9 @@ class MockInstance {
       return vars[invocation.positionalArguments[0]];
     } else {
       throw new NoSuchMethodError(this, memberName,
-          invocation.positionalArguments, invocation.namedArguments);
+          invocation.positionalArguments, 
+          null //TODO: invocation.namedArguments
+          );
     }
   }
 }

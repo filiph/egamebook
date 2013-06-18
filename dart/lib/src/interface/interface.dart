@@ -46,5 +46,5 @@ abstract class EgbInterface {
   /// Stream that sends player's interactions (apart from choice selection).
   /// These interactions include loading game states, starting a gamebook
   /// from scratch, etc.
-  Stream<PlayerIntent> stream;
+  Stream<PlayerIntent> get stream;
 }

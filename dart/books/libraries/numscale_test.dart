@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 import 'numscale.dart';
 
 void main() {
@@ -31,13 +31,14 @@ void main() {
         scale.value += 17;
       }
     });
-    test("detects value pass", () {
+    solo_test("detects value pass", () {
       var scale = new NumScale(min: 0, max: 100, initialValue: 50);
       scale.onPass(40).listen(expectAsync1((v) {
         expect(v, lessThanOrEqualTo(40));
       }, count: 1 ));
       for (int i = 0; i < 50; i++) {
         scale.value -= 2;
+        print(scale.value);
       }
     });
     test("detects value pass downwards", () {

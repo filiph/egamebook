@@ -1,7 +1,7 @@
 library numscale;
 
 import 'dart:async';
-import '../../lib/src/persistence/saveable.dart';
+import 'package:egamebook/src/persistence/saveable.dart';
 
 /**
  * NumScale defines a range of numerical values and 
@@ -76,7 +76,7 @@ class NumScale implements Saveable {
   Stream onUpwardsChangeBy(num percentage) =>
       onChangeBy(percentage).where((v) => v > _lastValue);
   
-  final className = "NumScale";
+  static final className = "NumScale";
   toMap() => {"min": min, "max": max, "value": _value};
   updateFromMap(map) {
     _value = map["value"];

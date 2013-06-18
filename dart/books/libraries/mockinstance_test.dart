@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 import 'mockinstance.dart';
 
 void main() {

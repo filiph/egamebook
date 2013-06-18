@@ -4,6 +4,7 @@ if [ $? -gt 0 ]; then
   exit
 fi
 for f in $( ls $DIR/../books/libraries/*_test.dart ); do
+  echo $f
   /Applications/dart/dart-sdk/bin/dart --enable_type_checks --enable_asserts $f
   if [ $? -gt 0 ]; then
     exit

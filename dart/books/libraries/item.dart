@@ -1,6 +1,6 @@
 library item;
 
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 
 
 // allItems = 

@@ -21,7 +21,7 @@ import 'storage.dart';
  */
 class EgbPlayerProfile {
 
-  const String PREFERENCES_KEY = "prefs";
+  static const String PREFERENCES_KEY = "prefs";
 
   EgbPlayerProfile(this.playerUid, this._storage) {
     _loadPreferences();

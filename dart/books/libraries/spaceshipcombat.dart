@@ -1,6 +1,6 @@
 library shipfight;
 
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 import 'actor.dart';
 import 'loopedevent.dart';
 import 'storyline.dart';

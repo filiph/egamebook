@@ -1,18 +1,18 @@
 import 'dart:io';
 import 'package:args/args.dart';
-import '../lib/builder.dart';
+import 'package:egamebook/builder.dart';
 
 bool graphInput, graphOutput, compile;
 
 builderReadyHandler(Builder b) {
   if (graphInput) {
-    b.updateFromGraphMLFile();
+    print("Warning: updateFromGraphMLFile currently not implemented."); //b.updateFromGraphMLFile();
     b.updateEgbFile().then(builderReadyHandler);
     graphInput = false;
     return;
   }    
   if (graphOutput) {
-    b.writeGraphMLFile();
+    print("Warning: writeGraphMLFile currently not implemented."); //b.writeGraphMLFile();
   }
   if (compile) {
     b.writeDartFiles()

@@ -3,8 +3,8 @@ library looped_event;
 import 'storyline.dart';
 import 'timeline.dart';
 import 'actor.dart';
-import '../../lib/src/book/scripter.dart';
-import '../../lib/src/shared/user_interaction.dart';
+import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/src/shared/user_interaction.dart';
 
 /**
  * LoopedEvent is any event that gets executed in a loop, waiting for

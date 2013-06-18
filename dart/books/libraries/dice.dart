@@ -1,7 +1,7 @@
 library dice;
 
 import 'dart:math';
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 
 Random _random = new Random();
 

@@ -483,7 +483,9 @@ abstract class EgbScripter {
       return null;
     } else {
       throw new NoSuchMethodError(this, memberName,
-          invocation.positionalArguments, invocation.namedArguments);
+          invocation.positionalArguments, 
+          null //TODO: invocation.namedArguments
+          );
     }
   }
 

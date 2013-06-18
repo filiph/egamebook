@@ -1,6 +1,6 @@
 library timeline;
 
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 import 'storyline.dart';
 
 /// A singular event on the timeline.

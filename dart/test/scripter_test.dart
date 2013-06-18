@@ -5,13 +5,13 @@ import 'dart:collection';
 import 'dart:async';
 import 'dart:isolate';
 
-import '../lib/src/interface/interface.dart';
-import '../lib/src/runner.dart';
-import '../lib/src/persistence/storage.dart';
-import '../lib/src/persistence/savegame.dart';
-import '../lib/src/persistence/saveable.dart';
-import '../lib/src/shared/user_interaction.dart';
-import '../lib/builder.dart';
+import 'package:egamebook/src/interface/interface.dart';
+import 'package:egamebook/src/runner.dart';
+import 'package:egamebook/src/persistence/storage.dart';
+import 'package:egamebook/src/persistence/savegame.dart';
+import 'package:egamebook/src/persistence/saveable.dart';
+import 'package:egamebook/src/shared/user_interaction.dart';
+import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
 
 class MockInterface implements EgbInterface {

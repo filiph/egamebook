@@ -1,7 +1,7 @@
 library spaceship;
 
-import '../../lib/src/book/scripter.dart';
-import '../../lib/src/shared/user_interaction.dart';
+import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/src/shared/user_interaction.dart';
 import 'numscale.dart';
 import 'actor.dart';
 import 'storyline.dart';
@@ -71,7 +71,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   
   /// The current combined maneuverability of the ship's thrusters.
   int get maneuverability =>
-    thrusters.reduce(0, 
+    thrusters.fold(0, 
         (num prevValue, thruster) => prevValue + thruster.maneuverability)
         .toInt();
   

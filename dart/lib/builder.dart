@@ -1141,17 +1141,17 @@ class Builder {
     var substitutions = {
       // TODO: make this directory independent
       "import 'runner.dart';" :
-          "import '../../lib/src/runner.dart';\n",
+          "import 'package:egamebook/src/runner.dart';\n",
       "import 'interface/interface.dart';" :
-          "import '../../lib/src/interface/interface.dart';\n",
+          "import 'package:egamebook/src/interface/interface.dart';\n",
       "import 'interface/interface_cmdline.dart';" :
-          "import '../../lib/src/interface/interface_cmdline.dart';\n",
+          "import 'package:egamebook/src/interface/interface_cmdline.dart';\n",
       "import 'interface/interface_html.dart';" :
-          "import '../../lib/src/interface/interface_html.dart';\n",
+          "import 'package:egamebook/src/interface/interface_html.dart';\n",
       "import 'persistence/storage.dart';" :
-        "import '../../lib/src/persistence/storage.dart';\n",
+        "import 'package:egamebook/src/persistence/storage.dart';\n",
       "import 'persistence/player_profile.dart';" :
-        "import '../../lib/src/persistence/player_profile.dart';\n",
+        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
       "import 'book/reference_scripter_impl.dart';" :
           "import '$pathToOutputDart';\n", // TODO!!
     };
@@ -1247,7 +1247,7 @@ class Builder {
     var completer = new Completer();
 
     if (pages.isEmpty) {
-      return new Future.immediate(true);
+      return new Future.value(true);
     }  // TODO: unit test this
 
     String indent = "";
