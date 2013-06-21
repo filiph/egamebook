@@ -292,7 +292,7 @@ class Builder {
     f.exists()
     .then((exists) {
       if (!exists) {
-        completer.completeError(new FileIOException("File $f doesn't exist."));
+        completer.completeError(new FileException("File $f doesn't exist."));
       } else {
         f.fullPath().then((String fullPath) {
           inputEgbFileFullPath = fullPath;
@@ -936,7 +936,7 @@ class Builder {
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           completer.completeError(
-              new FileIOException("Source file tries to import a file that "
+              new FileException("Source file tries to import a file that "
                     "doesn't exist (${importLibFiles[i]})."));
         }
       }

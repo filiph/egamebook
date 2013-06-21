@@ -50,7 +50,7 @@ void main() {
 
       test("throws on nonexistent files", () {
         expect(new Builder().readEgbFile(new File(getPath("./nonexistent"))),
-          throwsA(new isInstanceOf<FileIOException>("FileIOException")));
+          throwsA(new isInstanceOf<FileException>("FileIOException")));
       });
 
     });
