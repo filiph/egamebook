@@ -15,6 +15,7 @@ books/test/*.html
 books/test/*.graphml
 books/test/*.dart
 books/bodega/bodega.*
+books/bodega/part.js*
 test/files/*.dart
 packages
 */packages
