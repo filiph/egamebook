@@ -104,30 +104,25 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 }
 
 // TODO: https://code.google.com/p/dart/issues/detail?id=2600#c9
-class EgbChoiceList implements List<EgbChoice> {
-  final List<EgbChoice> _choices;
+class EgbChoiceList extends ListBase<EgbChoice> {
   String question;  // TODO: implement
 
-//  EgbChoiceList() : _choices = new List<EgbChoice>() {
-//  }
+  List<EgbChoice> _choices = new List<EgbChoice>();
+  int get length => _choices.length;
+  set length(int value) => _choices.length = value;
+  operator[](int index) => _choices[index];
+  operator[]=(int index, EgbChoice value) => _choices[index] = value;
+  
+  EgbChoiceList()  {
+  }
 
-//  EgbChoiceList._from(Collection<EgbChoice> list)
-//      : _choices = new List<EgbChoice>() {
-//    _choices.addAll(list);
-//  }
-
-  EgbChoiceList() : _choices = new List<EgbChoice>();
-
-  EgbChoiceList.from(Iterable iterable) :
-      _choices = new List<EgbChoice>.from(iterable);
-
-  EgbChoiceList.fromMessage(EgbMessage m) : _choices = new List<EgbChoice>() {
+  EgbChoiceList.fromMessage(EgbMessage m) {
     if (m.listContent.length < 3) {
       throw "Message with choices doesn't have enough data: ${m.listContent}.";
     } else {
       question = m.listContent[1];
       for (int i = 2; i < m.listContent.length; i++) {
-        _choices.add(new EgbChoice.fromMap(m.listContent[i]));
+        this.add(new EgbChoice.fromMap(m.listContent[i]));
       }
     }
   }
@@ -153,41 +148,25 @@ class EgbChoiceList implements List<EgbChoice> {
                             string,
                             goto: map["goto"],
                             script: map["script"]);
-      _choices.add(choice);
+      this.add(choice);
     }
   }
 
   add(element, {Function script, String goto, 
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
-      _choices.add(element);
+      this.add(element);
     } else if (element is String) {
       var choice = new EgbChoice(element, goto: goto, script: script, 
           deferToEndOfPage: deferToEndOfPage, 
           deferToChoiceList: deferToChoiceList);
-      _choices.add(choice);
+      this.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
                               "either a new EgbChoice element or a String.");
     }
   }
 
-  where(f) => _choices.where(f);
-  singleWhere(f) => _choices.singleWhere(f);
-  firstWhere(test, {orElse}) => _choices.firstWhere(test, orElse: orElse);
-  removeWhere(f) => _choices.removeWhere(f);
-  any(bool f(EgbChoice)) => _choices.any(f);
-  get length => _choices.length;
-  operator [](int index) => _choices[index];
-  void forEach(void f(EgbChoice element)) {
-    _choices.forEach(f);
-  }
-  void clear() => _choices.clear();
-  get iterator => _choices.iterator;
-
-  bool get isEmpty => _choices.isEmpty;
-  void addAll(Iterable<EgbChoice> iterable) => _choices.addAll(iterable);
-  
   /**
    * Takes care of converting the current [EgbChoiceList] to a Message.
    *
@@ -202,7 +181,7 @@ class EgbChoiceList implements List<EgbChoice> {
     List<EgbChoice> choicesToSend;
 
     // filter out choices we don't want to show
-    choicesToSend = _choices.where(
+    choicesToSend = this.where(
         (choice) => choice.isActionable(
             atEndOfPage: atEndOfPage,
             atChoiceList: atChoiceList,
@@ -230,8 +209,6 @@ class EgbChoiceList implements List<EgbChoice> {
 
     return m;
   }
-  
-  toString() => "EgbChoiceList: $_choices";
 }
 
 class EgbTextInput extends EgbUserInteraction {
