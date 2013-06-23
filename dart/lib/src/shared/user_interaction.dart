@@ -122,7 +122,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     } else {
       question = m.listContent[1];
       for (int i = 2; i < m.listContent.length; i++) {
-        this.add(new EgbChoice.fromMap(m.listContent[i]));
+        _choices.add(new EgbChoice.fromMap(m.listContent[i]));
       }
     }
   }
@@ -148,19 +148,19 @@ class EgbChoiceList extends ListBase<EgbChoice> {
                             string,
                             goto: map["goto"],
                             script: map["script"]);
-      this.add(choice);
+      _choices.add(choice);
     }
   }
 
   add(element, {Function script, String goto, 
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
-      this.add(element);
+      _choices.add(element);
     } else if (element is String) {
       var choice = new EgbChoice(element, goto: goto, script: script, 
           deferToEndOfPage: deferToEndOfPage, 
           deferToChoiceList: deferToChoiceList);
-      this.add(choice);
+      _choices.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
                               "either a new EgbChoice element or a String.");
@@ -181,7 +181,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     List<EgbChoice> choicesToSend;
 
     // filter out choices we don't want to show
-    choicesToSend = this.where(
+    choicesToSend = _choices.where(
         (choice) => choice.isActionable(
             atEndOfPage: atEndOfPage,
             atChoiceList: atChoiceList,
