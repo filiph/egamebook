@@ -14,7 +14,8 @@ class NumScale implements Saveable {
     } else {
       _value = max;
     }
-    _streamController = new StreamController();
+    _lastValue = _value;
+    _streamController = new StreamController(sync: true);
     _stream = _streamController.stream.asBroadcastStream();
   }
   
@@ -29,7 +30,7 @@ class NumScale implements Saveable {
     if (v == _value) return;
     _lastValue = _value;
     _value = v;
-    _streamController.add(v);    
+    _streamController.add(v);
   }
   
   num _lastValue;
