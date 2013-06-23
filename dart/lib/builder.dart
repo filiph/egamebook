@@ -1969,7 +1969,7 @@ class Builder {
   final String implStartFile = """
 library Scripter_Implementation;
 
-import '../../lib/src/book/scripter.dart';
+import 'package:egamebook/src/book/scripter.dart';
 import 'dart:math';
 """;
 
