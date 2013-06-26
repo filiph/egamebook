@@ -9,6 +9,12 @@ class EgbMessage {
   List listContent;
   String strContent;
   int intContent;
+  
+  // TODO: implement
+  /// [:True:] when this type of message is "blocking", i.e. the sender will
+  /// (temporarily) stop execution after sending this. 
+  bool get needsAnswer => _needsAnswer;
+  final bool _needsAnswer;
 
   // Messages from Scripter to Runner.
   static const int SEND_BOOK_UID = 10;
@@ -37,52 +43,59 @@ class EgbMessage {
    * GET_BOOK_UID
    *                        SEND_BOOK_UID
    * LOAD_GAME/START (incl. player chronology)
-   *                        NO_RESULT/TEST_RESULT/SHOW_CHOICES
+   *                        NO_RESULT/TEXT_RESULT/SHOW_CHOICES
    * 
    */
 
-  EgbMessage(this.type) {
-  }
+  EgbMessage(this.type, {bool needsAnswer: true})
+      : _needsAnswer = needsAnswer;
 
-  EgbMessage.Quit() : type = QUIT {}
+  EgbMessage.Quit() : type = QUIT, _needsAnswer = false {}
 
-  EgbMessage.Continue() : type = CONTINUE {}
+  EgbMessage.Continue() : type = CONTINUE, _needsAnswer = true {}
 
-  EgbMessage.TextResult(String str) : type = TEXT_RESULT {
+  EgbMessage.TextResult(String str) : type = TEXT_RESULT, _needsAnswer = true {
     strContent = str.trim();
   }
 
-  EgbMessage.Start() : type = START {}
+  EgbMessage.Start() : type = START, _needsAnswer = true;
   
-  EgbMessage.BookUid(this.strContent) : type = SEND_BOOK_UID;
+  EgbMessage.BookUid(this.strContent) 
+      : type = SEND_BOOK_UID, _needsAnswer = true;
   
-  EgbMessage.GetBookUid() : type = GET_BOOK_UID;
+  EgbMessage.GetBookUid() : type = GET_BOOK_UID, _needsAnswer = true;
 
-  EgbMessage.EndOfBook() : type = END_OF_BOOK {}
+  EgbMessage.EndOfBook() : type = END_OF_BOOK, _needsAnswer = true;
 
-  EgbMessage.OptionSelected(int hash) : type = OPTION_SELECTED {
+  // TODO: SHOW_CHOICES
+  
+  EgbMessage.OptionSelected(int hash) 
+      : type = OPTION_SELECTED, _needsAnswer = true {
     intContent = hash;
   }
 
-  EgbMessage.NoResult() : type = NO_RESULT {}
+  EgbMessage.NoResult() : type = NO_RESULT, _needsAnswer = true;
   
-  EgbMessage.SaveGame(String json) : type = SAVE_GAME {
+  EgbMessage.SaveGame(String json) : type = SAVE_GAME, _needsAnswer = false {
     strContent = json;
   }
   
-  EgbMessage.LoadGame(String json) : type = LOAD_GAME {
+  EgbMessage.LoadGame(String json) : type = LOAD_GAME, _needsAnswer = true {
     strContent = json;
   }
   
+  // TODO: remake to EgbMessage.StatsUpdate
+    
   EgbMessage.PointsAward(int points, String justification) 
-      : type = POINTS_AWARD {
+      : type = POINTS_AWARD, _needsAnswer = false {
     if (points == null) throw new ArgumentError("points cannot be null.");
     intContent = points;
     strContent = justification;
   }
   
   /// Set a statistic without notifying the player.
-  EgbMessage.StatSet(String statName, int value) : type = STAT_SET {
+  EgbMessage.StatSet(String statName, int value) 
+      : type = STAT_SET, _needsAnswer = false {
     if (statName == null) {
       throw new ArgumentError("Stat name cannot be null.");
     }
@@ -91,7 +104,8 @@ class EgbMessage {
   }
 
   /// Set a statistic and notify the player.
-  EgbMessage.StatUpdate(String statName, int value) : type = STAT_UPDATE {
+  EgbMessage.StatUpdate(String statName, int value) 
+      : type = STAT_UPDATE, _needsAnswer = true {
     if (statName == null) {
       throw new ArgumentError("Stat name cannot be null.");
     }
@@ -100,14 +114,15 @@ class EgbMessage {
   }
   
   EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
-      : type = SAVE_PLAYER_CHRONOLOGY {
+      : type = SAVE_PLAYER_CHRONOLOGY, _needsAnswer = true {
     listContent = playerChronology.toList();
   }
   
   /**
     Ctor that creates the Message object from a JSON string.
     */
-  EgbMessage.fromJson(String json) {
+  EgbMessage.fromJson(String json, {bool needsAnswer: true}) 
+      : _needsAnswer = needsAnswer {
     Map<String,dynamic> data = parse(json);
     type = data["type"];
 

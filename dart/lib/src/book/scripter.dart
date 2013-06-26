@@ -408,6 +408,11 @@ abstract class EgbScripter {
     }
   }
 
+  /**
+   * Takes the [dest] string and converts it to an actual [EgbScripterPage].
+   * Solves for special goto destination [:<<<:] (i.e. go back) and for when
+   * the page groupName is omitted.
+   */
   void _performGoto(String dest) {
     EgbScripterPage _gotoPage;
     int _gotoBlockIndex;
@@ -419,8 +424,9 @@ abstract class EgbScripter {
             "no _preGotoPosition.");
       }
       _gotoPage = _preGotoPosition.page;
-      // Decresing block index by one because it will be automatically increased
-      // in _goOneStep.
+      // The [:<<<:] not only goes to a page, but also to an exact block on that
+      // page. We are decresing block index by one because it will be 
+      // automatically increased in _goOneStep.
       _gotoBlockIndex = _preGotoPosition.blockIndex - 1;
     } else {
       // Normal goto.
