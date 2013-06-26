@@ -15,14 +15,6 @@ import 'package:egamebook/src/interface/choice_with_infochips.dart';
 
 import 'mock_interface.dart';
 
-String getPath(String filename) {
-  var options = new Options();
-  var pathToScript = new Path(options.script);
-  var pathToFilename = pathToScript.directoryPath
-        .join(new Path("files"))
-        .join(new Path(filename));
-  return pathToFilename.toString();
-}
 
 // for Persistence testing
 class ClassWithMapMethods implements Saveable {
@@ -55,6 +47,47 @@ class ClassWithoutMapMethods {
   ClassWithoutMapMethods();
 }
 
+/// Utility function. Gets a filename and returns the canonical path
+/// to the file in the [:test/files:] directory.
+String getPath(String filename) {
+  var options = new Options();
+  var pathToScript = new Path(options.script);
+  var pathToFilename = pathToScript.directoryPath
+        .join(new Path("files"))
+        .join(new Path(filename));
+  return pathToFilename.toString();
+}
+
+/// Builds the given .egb file, returns the path to the file to be given to
+/// [spawnUri]. Usage:
+/// 
+///     build("test1.egb")
+///     .then((runnerPath) => run(runnerPath))
+///     .then((ui) => ui.choose("Abc"))
+///     .then((ui) => ui.choose("Xyz"))
+///     .then(expectAsync1((ui) => expect(ui.lastParagraph, contains("bla")));
+Future<String> build(String egbFilename) {
+  String canonicalEgbPath = getPath(egbFilename);
+  String dartFilename = 
+      egbFilename.replaceFirst(new RegExp(r"\.egb$"), ".dart");
+  String canonicalMainPath = 
+      canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"), "_main.dart");
+  return new Builder()
+  .readEgbFile(new File(canonicalEgbPath))
+  .then((Builder b) => b.writeDartFiles())
+  .then((_) {
+    var f = new File(canonicalMainPath).openWrite(mode: FileMode.WRITE)
+    ..write("""import '$dartFilename';
+
+void main() {
+  new ScripterImpl();
+}""");
+    return f.close()
+    .then((_) {
+      return canonicalMainPath;
+    });
+  });
+}
 
 
 void main() {
@@ -62,17 +95,20 @@ void main() {
   ReceivePort receivePort;
 
   // build files
-  Future aFuture = new Builder()
-      .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
-      .then((Builder b) => b.writeDartFiles());
-  Future bFuture = new Builder()
-      .readEgbFile(new File(getPath("scripter_test_save.egb")))
-      .then((Builder b) => b.writeDartFiles());
-  Future cFuture = new Builder()
-      .readEgbFile(new File(getPath("scripter_page_visitonce.egb")))
-      .then((Builder b) => b.writeDartFiles());
+//  Future aFuture = new Builder()
+//      .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
+//      .then((Builder b) => b.writeDartFiles());
+//  Future bFuture = new Builder()
+//      .readEgbFile(new File(getPath("scripter_test_save.egb")))
+//      .then((Builder b) => b.writeDartFiles());
+//  Future cFuture = new Builder()
+//      .readEgbFile(new File(getPath("scripter_page_visitonce.egb")))
+//      .then((Builder b) => b.writeDartFiles());
 
-  Future.wait([aFuture, bFuture, cFuture]).then((_) {
+  Future.wait(
+      [build("scripter_test_alternate_6.egb"), 
+       build("scripter_test_save.egb"), 
+       build("scripter_page_visitonce.egb")]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
@@ -337,6 +373,16 @@ void main() {
         runner.run();
       });
 
+    });
+    
+    group("Scripter test helpers", () {
+      test("Build works", () {
+        build("scripter_test_alternate_6.egb")
+        .then(expectAsync1((mainPath) {
+          print(mainPath);
+          expect(mainPath, endsWith("scripter_test_alternate_6_main.dart"));
+        }));
+      });
     });
     
     group("ChoiceWithInfochips", () {
