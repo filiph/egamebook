@@ -12,6 +12,7 @@ import 'package:egamebook/src/persistence/saveable.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
+import 'package:egamebook/src/interface/interface.dart';
 
 import 'mock_interface.dart';
 
@@ -65,7 +66,8 @@ String getPath(String filename) {
 ///     .then((runnerPath) => run(runnerPath))
 ///     .then((ui) => ui.choose("Abc"))
 ///     .then((ui) => ui.choose("Xyz"))
-///     .then(expectAsync1((ui) => expect(ui.lastParagraph, contains("bla")));
+///     .then(expectAsync1((ui) => expect(ui.lastParagraph, contains("bla")))
+///     .then((ui) => ui.quit());
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
   String dartFilename = 
@@ -89,21 +91,22 @@ void main() {
   });
 }
 
+/// Runs the built project and returns the [MockInterface] instance.
+Future<EgbInterface> run(String canonicalMainPath) {
+  var receivePort = new ReceivePort();
+  SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+  var interface = new MockInterface(waitForChoicesToBeTaken: true);
+  var storage = new MemoryStorage();
+  var runner = new EgbRunner(receivePort, scripterPort,
+      interface, storage.getDefaultPlayerProfile());
+  runner.run();
+  return new Future.value(interface);
+}
+
 
 void main() {
   // create [ReceivePort] for this isolate
   ReceivePort receivePort;
-
-  // build files
-//  Future aFuture = new Builder()
-//      .readEgbFile(new File(getPath("scripter_test_alternate_6.egb")))
-//      .then((Builder b) => b.writeDartFiles());
-//  Future bFuture = new Builder()
-//      .readEgbFile(new File(getPath("scripter_test_save.egb")))
-//      .then((Builder b) => b.writeDartFiles());
-//  Future cFuture = new Builder()
-//      .readEgbFile(new File(getPath("scripter_page_visitonce.egb")))
-//      .then((Builder b) => b.writeDartFiles());
 
   Future.wait(
       [build("scripter_test_alternate_6.egb"), 
@@ -376,12 +379,25 @@ void main() {
     });
     
     group("Scripter test helpers", () {
-      test("Build works", () {
+      test("build() works", () {
         build("scripter_test_alternate_6.egb")
         .then(expectAsync1((mainPath) {
           print(mainPath);
           expect(mainPath, endsWith("scripter_test_alternate_6_main.dart"));
         }));
+      });
+
+      test("choose() works", () {
+        build("scripter_test_alternate_6.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          new Timer(const Duration(seconds: 1), () {
+            ui.choose("ABC");
+            print(ui.latestOutput);
+            ui.quit();
+          });
+          
+        });
       });
     });
     
