@@ -16,14 +16,10 @@ import '../persistence/player_profile.dart';
 import 'choice_with_infochips.dart';
 import 'dart:collection';
 
-class HtmlInterface implements EgbInterface {
-
+class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
   
   DivElement bookDiv;
-  
-  StreamController<PlayerIntent> _streamController;
-  Stream get stream => _streamController.stream;
   
   /**
    * The text that has been shown to the player since last savegame bookmark.
@@ -35,8 +31,7 @@ class HtmlInterface implements EgbInterface {
   /**
     Constructor.
     */
-  HtmlInterface() {
-    _streamController = new StreamController();
+  HtmlInterface() : super() {
     _elementShown = _elementShownController.stream.asBroadcastStream();
   }
   
@@ -46,7 +41,7 @@ class HtmlInterface implements EgbInterface {
 
     restartAnchor = document.query("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
-      _streamController.sink.add(new RestartIntent());
+      streamController.sink.add(new RestartIntent());
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
@@ -62,7 +57,7 @@ class HtmlInterface implements EgbInterface {
   }
   
   void close() {
-    _streamController.close();
+    streamController.close();
   }
   
   // TODO: instead of creating one-by-one, create them all, use delayed transitions. Only use _periodic for checking if special "meta" divs are visible (can be once per second)
@@ -272,7 +267,7 @@ class HtmlInterface implements EgbInterface {
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      _streamController.sink.add(new LoadIntent(uid));
+      streamController.sink.add(new LoadIntent(uid));
       // TODO: solve for when savegame with that uid is not available
     }
   }

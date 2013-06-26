@@ -7,12 +7,9 @@ import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 
-class CmdlineInterface implements EgbInterface {
+class CmdlineInterface extends EgbInterfaceBase {
   Stream<String> _cmdLine;
   StreamSubscription<String> _cmdLineSubscription;
-  
-  StreamController<PlayerIntent> _streamController;
-  Stream get stream => _streamController.stream;
   
   StringBuffer _textHistory = new StringBuffer();
   String getTextHistory() => _textHistory.toString();
@@ -20,9 +17,7 @@ class CmdlineInterface implements EgbInterface {
   /**
     Constructor.
     */
-  CmdlineInterface() {
-    _streamController = new StreamController();
-  }
+  CmdlineInterface() : super();
   
   void setup() {
     _cmdLine = stdin
@@ -33,7 +28,7 @@ class CmdlineInterface implements EgbInterface {
   }
   
   void close() {
-    _streamController.close();
+    streamController.close();
     print("Closing cmdline");
     _cmdLineSubscription.cancel();
   }
@@ -52,7 +47,7 @@ class CmdlineInterface implements EgbInterface {
     print("[got: '$line']");
     
     if (line.trim().toLowerCase() == "quit") {
-      _streamController.sink.add(
+      streamController.sink.add(
           new PlayerIntent(PlayerIntent.QUIT));
       return;
     }

@@ -48,3 +48,12 @@ abstract class EgbInterface {
   /// from scratch, etc.
   Stream<PlayerIntent> get stream;
 }
+
+abstract class EgbInterfaceBase implements EgbInterface {
+  StreamController<PlayerIntent> streamController;
+  Stream get stream => streamController.stream;
+  
+  EgbInterfaceBase() {
+    streamController = new StreamController();
+  }
+}
