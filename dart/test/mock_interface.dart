@@ -98,6 +98,7 @@ class MockInterface extends EgbInterfaceBase {
     return list[choiceNumber].hash;
   }
   
+  // TODO: return future when interface gets first text (next choice?) back
   void choose(String choiceString) {
     if (_currentChoices == null) {
       choicesToBeTakenByString.addLast(choiceString);
@@ -115,8 +116,6 @@ class MockInterface extends EgbInterfaceBase {
     streamController.sink.add(
         new PlayerIntent(PlayerIntent.QUIT));
   }
-  
-  // TODO: stream [ended] and stream [waitingForInput]
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");
