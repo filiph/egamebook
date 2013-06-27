@@ -159,13 +159,13 @@ class EgbRunner {
     
     if (choices.length == 1 && choices[0].string.trim() == "") {
       // An auto-choice (without a string) means we should pick it silently.
-      _send(new EgbMessage.OptionSelected(choices[0].hash));
+      _send(new EgbMessage.ChoiceSelected(choices[0].hash));
     } else {
       // Let player choose.
       _interface.showChoices(choices)
       .then((int hash) {
         if (hash != null) {
-          _send(new EgbMessage.OptionSelected(hash));
+          _send(new EgbMessage.ChoiceSelected(hash));
         } else {
           // User wants to quit (hash == null).
           stop();

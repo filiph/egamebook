@@ -232,8 +232,8 @@ abstract class EgbScripter {
         DEBUG_SCR("GET_BOOK_UID received.");
         _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID")); 
         return;
-      case EgbMessage.OPTION_SELECTED:
-        _send(_handleOptionSelected(message));
+      case EgbMessage.CHOICE_SELECTED:
+        _send(_handleChoiceSelected(message));
         return;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
@@ -273,7 +273,7 @@ abstract class EgbScripter {
    * Returns either EgbMessage.NoResult or an EgbMessage with the text that 
    * the selected choice's inline script returned.
    */
-  EgbMessage _handleOptionSelected(EgbMessage message) {
+  EgbMessage _handleChoiceSelected(EgbMessage message) {
     choices.forEach((choice) {
       if (choice.hash == message.intContent) {
         // This choice was taken.

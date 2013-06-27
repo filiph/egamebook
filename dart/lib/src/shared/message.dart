@@ -10,9 +10,9 @@ class EgbMessage {
   String strContent;
   int intContent;
   
-  // TODO: implement
   /// [:True:] when this type of message is "blocking", i.e. the sender will
-  /// (temporarily) stop execution after sending this. 
+  /// (temporarily) stop execution after sending this (i.e. will wait for 
+  /// answer). 
   bool get needsAnswer => _needsAnswer;
   final bool _needsAnswer;
 
@@ -33,7 +33,7 @@ class EgbMessage {
   static const int START = 1010;
   static const int LOAD_GAME = 1020;
   static const int CONTINUE = 1040;
-  static const int OPTION_SELECTED = 1050;
+  static const int CHOICE_SELECTED = 1050;
   static const int QUIT = 1060;
   
   /*
@@ -69,8 +69,8 @@ class EgbMessage {
 
   // TODO: SHOW_CHOICES
   
-  EgbMessage.OptionSelected(int hash) 
-      : type = OPTION_SELECTED, _needsAnswer = true {
+  EgbMessage.ChoiceSelected(int hash) 
+      : type = CHOICE_SELECTED, _needsAnswer = true {
     intContent = hash;
   }
 
