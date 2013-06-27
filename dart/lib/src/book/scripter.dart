@@ -63,6 +63,10 @@ bool _pointsEmbargo = false;
  * The interface with which the author can award player with points. Author
  * can either use [:points += 6:] or [:points.add(6):] or - in case he
  * wants to add a justification - [:points.add(6, "clever use of resources"):].
+ * 
+ * Points are a special kind of [Stat] in that they, for example, cannot be
+ * received twice for visiting one page, and they aren't awarded when player
+ * goes back and second-guesses a choice.
  */
 PointsCounter _points = new PointsCounter();
 

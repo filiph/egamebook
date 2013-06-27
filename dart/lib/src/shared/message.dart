@@ -2,6 +2,8 @@ library egb_message;
 
 import 'dart:json';
 
+import 'stat.dart';
+
 class EgbMessage {
   int type;
 
@@ -9,6 +11,7 @@ class EgbMessage {
   List listContent;
   String strContent;
   int intContent;
+  Map<String,Object> mapContent;
   
   // Messages from Scripter to Runner.
   static const int SEND_BOOK_UID = 10;
@@ -19,8 +22,7 @@ class EgbMessage {
   static const int SAVE_PLAYER_CHRONOLOGY = 60;
   static const int POINTS_AWARD = 70;
   static const int END_OF_BOOK = 80;
-  static const int STAT_SET = 90;
-  static const int STAT_UPDATE = 100;
+  static const int STAT_UPDATE = 90;
 
   // Messages from Runner to Scripter.
   static const int GET_BOOK_UID = 1000;
@@ -77,8 +79,6 @@ class EgbMessage {
     strContent = json;
   }
   
-  // TODO: remake to EgbMessage.StatsUpdate
-    
   EgbMessage.PointsAward(int points, String justification) 
       : type = POINTS_AWARD {
     if (points == null) throw new ArgumentError("points cannot be null.");
@@ -87,23 +87,15 @@ class EgbMessage {
   }
   
   /// Set a statistic without notifying the player.
-  EgbMessage.StatSet(String statName, int value) 
-      : type = STAT_SET {
-    if (statName == null) {
-      throw new ArgumentError("Stat name cannot be null.");
-    }
-    strContent = statName;
-    intContent = value;
-  }
-
-  /// Set a statistic and notify the player.
-  EgbMessage.StatUpdate(String statName, int value) 
-      : type = STAT_UPDATE {
-    if (statName == null) {
-      throw new ArgumentError("Stat name cannot be null.");
-    }
-    strContent = statName;
-    intContent = value;
+  EgbMessage.StatUpdate(Set<Stat> stats) : type = STAT_UPDATE {
+    stats.where((Stat stat) => stat.changed).forEach((Stat stat) {
+      var statMap = new Map<String,Object>();
+      statMap["value"] = stat.value;
+      statMap["show"] = stat.show;
+      stat.changed = false;  // reset back to unchanged status
+      mapContent[stat.name] = statMap;
+    });
+    Stat.someChanged = false;  // reset the static state to unchanged
   }
   
   EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
@@ -114,7 +106,7 @@ class EgbMessage {
   /**
     Ctor that creates the Message object from a JSON string.
     */
-  EgbMessage.fromJson(String json, {bool needsAnswer: true}) {
+  EgbMessage.fromJson(String json) {
     Map<String,dynamic> data = parse(json);
     type = data["type"];
 
@@ -126,6 +118,9 @@ class EgbMessage {
     }
     if (data.containsKey("intContent")) {
       intContent = data["intContent"];
+    }
+    if (data.containsKey("mapContent")) {
+      mapContent = data["mapContent"];
     }
   }
 
@@ -145,6 +140,9 @@ class EgbMessage {
     }
     if (intContent != null) {
       data["intContent"] = intContent;
+    }
+    if (mapContent != null) {
+      data["mapContent"] = mapContent;
     }
 
     return stringify(data);
