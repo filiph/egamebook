@@ -103,7 +103,10 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   static final RegExp GO_BACK = new RegExp(r"^\s*<<<\s*$"); 
 }
 
-// TODO: https://code.google.com/p/dart/issues/detail?id=2600#c9
+/**
+ * A group of choices to be picked from. This class extends [ListBase], so it
+ * behaves like a normal (dynamic) list.
+ */
 class EgbChoiceList extends ListBase<EgbChoice> {
   String question;  // TODO: implement
 
@@ -216,6 +219,12 @@ class EgbTextInput extends EgbUserInteraction {
   // Question can be answered with text. Example: "What is your name?"
 }
 
+/**
+ * [PlayerIntent] is an interaction that is 'out of place' and asynchronous. 
+ * For example, when the interface is showing blocks of text, the player can
+ * click on the "Restart" button. The book should then stop everything that
+ * it's doing and restart itself. 
+ */
 class PlayerIntent {
   PlayerIntent(type) : this.type = type;
 
@@ -233,6 +242,8 @@ class RestartIntent extends PlayerIntent {
   RestartIntent() : super(PlayerIntent.RESTART);
 }
 
+/// The [LoadIntent] is always providing the exact [uid] of the Savegame that
+/// is supposed to be loaded.
 class LoadIntent extends PlayerIntent {
   String uid;
   LoadIntent(this.uid) : super(PlayerIntent.LOAD);

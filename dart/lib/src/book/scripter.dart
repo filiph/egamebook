@@ -20,8 +20,9 @@ part 'points.dart';
 
 /**
  * The StringBuffer which collects all echo()'d strings to put them all
- * together at the end of a block and send them to the Runner (and therefore,
- * the player).
+ * together at the end of a script block and send them to the Runner 
+ * (and therefore, the player). [textBuffer] is only used for text output
+ * generated inside <script> tags (through [echo()]).
  */
 StringBuffer textBuffer = new StringBuffer();
 
@@ -120,8 +121,8 @@ void nextScript(ScriptBlock f) {
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
- * UserInterface. It is subclassed by ScripterImpl, which is built from .egb 
- * file by egb_builder.
+ * the Interface through Runner. It is subclassed by ScripterImpl, which is 
+ * built from .egb file by egb_builder.
  */
 abstract class EgbScripter {
   /// The unique id of this particular gamebook. Used for saving.
@@ -150,7 +151,8 @@ abstract class EgbScripter {
   /// This is important for the  "No points for second guessing" rule.
   Set<String> _playerChronology;
   
-  /// [_playerChronology] has changed and needs to be sent to Runner.
+  /// Signifies that the [_playerChronology] has changed and needs to be
+  /// sent to Runner.
   bool _playerChronologyChanged = false;
   
   /// Create a unique hash that identifies a path from one page to another.
@@ -163,9 +165,12 @@ abstract class EgbScripter {
   bool _alreadyOffered(EgbScripterPage from, EgbScripterPage to) =>
       _playerChronology.contains(_createLinkHash(from, to));
 
+  /// The block in which variables are set (it corresponds to the <variables>
+  /// block in .egb).
   void initBlock();
 
-  int currentBlockIndex;  // the current position in the current page's blocks list
+  /// The current position in the current page's blocks list.
+  int currentBlockIndex;
 
   /**
    * This Map is filled in ScripterImpl automatically by the Builder. 
@@ -184,7 +189,8 @@ abstract class EgbScripter {
    */
   Map<String,Function> _constructors;
 
-  // -- private members below
+  /// Port for communication with the Runner (and through it, the Interface,
+  /// and the player).
   SendPort _runnerPort;
 
   EgbScripter() : super() {
@@ -193,7 +199,7 @@ abstract class EgbScripter {
     _playerChronology = new Set<String>();
     _initScriptEnvironment();
 
-    // start the loop
+    // Register the callback for communication with the Runner.
     port.receive(_messageReceiveCallback);
   }
   
@@ -231,22 +237,14 @@ abstract class EgbScripter {
         return;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
-        currentBlockIndex = null;
-        _nextScriptStack.clear();
-        choices.clear();
         _initScriptEnvironment();
-        pageMap.clearState();
         _playerChronology.clear();
         _playerChronologyChanged = true;
         currentPage = firstPage;
         break;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
-        currentBlockIndex = null;
-        _nextScriptStack.clear();
-        choices.clear();
         _initScriptEnvironment();
-        pageMap.clearState();
         _loadFromSaveGameMessage(message);
         break;
     }
@@ -318,6 +316,9 @@ abstract class EgbScripter {
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
     DEBUG_SCR("Resolving step (normally a text block).");
+    
+    // TODO: make some stuff async, therefore not needing these 'atEndOfPage' things, hopefully
+    
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
     bool atChoiceList = 
         currentBlockIndex != null &&
@@ -470,21 +471,25 @@ abstract class EgbScripter {
     previousPage.visitCount += 1;
   }
   
+  /// (Re-)initializes the environment after starting or loading a new game.
   void _initScriptEnvironment() {
+    currentBlockIndex = null;
+    _nextScriptStack.clear();
     choices.clear();
     vars.clear();
     vars["points"] = _points;
     _points.clear();
+    if (pageMap != null) pageMap.clearState();
 
     initBlock();  // run contents of <variables>
   }
 
-  dynamic noSuchMethod(Invocation invocation) {
+  noSuchMethod(Invocation invocation) {
     String memberName = MirrorSystem.getName(invocation.memberName);
     if (invocation.isGetter) {
       return vars[memberName];
     } else if (invocation.isSetter) {
-      memberName = memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      memberName = memberName.replaceAll("=", ""); // fix feature in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else {
@@ -495,31 +500,8 @@ abstract class EgbScripter {
     }
   }
 
-  // XXX: invokeOn not yet implemented in Dart
-  /*
-  noSuchMethod(InvocationMirror invocation) =>
-      invocation.invokeOn(vars[invocation.memberName]);
-  */
-
-  // XXX: this doesn't work either, membername is with "set:" and is always method
-
-  /*
-  dynamic noSuchMethod(InvocationMirror invocation) {
-    var name = invocation.memberName;
-    if (name.startsWith("get:") || name.startsWith("get ")) {
-      // TODO: throw error if not set
-      return vars[name.substring(4)];
-    } else if (name.startsWith("set:") || name.startsWith("set ")) {
-      vars[name.substring(4)] = invocation.positionalArguments[0];
-      return null;
-    } else {
-      throw new NoSuchMethodError(this, name, invocation.positionalArguments,
-          invocation.namedArguments);
-    }
-  }
-  */
-
-  /// Runs the specified block.
+  /// Runs the specified script block, catches exceptions and returns generated
+  /// text.
   EgbMessage _runScriptBlock(ScriptBlock script) {
     // clean up
     textBuffer = new StringBuffer();
@@ -563,14 +545,15 @@ abstract class EgbScripter {
   }
 
   /**
-   * Tak EgbMessage of type LOAD_GAME and populate the current game
+   * Take EgbMessage of type LOAD_GAME and populate the current game
    * state with its contents. This includes both the Story Chronology (where
    * the story is right now) and the Player Chronology (what the player has
    * seen already, including blind alleys and consecutive reloads).
    */
   void _loadFromSaveGameMessage(EgbMessage message) {
-    if (message.type != EgbMessage.LOAD_GAME) throw new ArgumentError("Invalid "
-                                             "message type (${message.type}).");
+    if (message.type != EgbMessage.LOAD_GAME) {
+      throw new ArgumentError("Invalid message type (${message.type}).");
+    }
     var savegame = new EgbSavegame.fromMessage(message);
 
     if (pageMap[savegame.currentPageName] == null) {
