@@ -233,8 +233,8 @@ abstract class EgbScripter {
         _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID")); 
         return;
       case EgbMessage.CHOICE_SELECTED:
-        _send(_handleChoiceSelected(message));
-        return;
+        _handleChoiceSelected(message);
+        break;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
         _initScriptEnvironment();
@@ -260,7 +260,6 @@ abstract class EgbScripter {
       DEBUG_SCR("Saving player chronology.");
       _playerChronologyChanged = false;
       _send(new EgbMessage.SavePlayerChronology(_playerChronology));
-      return;
     }
     
     DEBUG_SCR("Calling _goOneStep().");
@@ -270,10 +269,8 @@ abstract class EgbScripter {
   
   /**
    * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
-   * Returns either EgbMessage.NoResult or an EgbMessage with the text that 
-   * the selected choice's inline script returned.
    */
-  EgbMessage _handleChoiceSelected(EgbMessage message) {
+  void _handleChoiceSelected(EgbMessage message) {
     choices.forEach((choice) {
       if (choice.hash == message.intContent) {
         // This choice was taken.
@@ -294,7 +291,6 @@ abstract class EgbScripter {
         }
       }
     });
-    return new EgbMessage.NoResult();
   }
 
   /**

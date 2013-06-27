@@ -118,7 +118,6 @@ class EgbRunner {
         return;
       case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
         _playerProfile.savePlayerChronology(message.listContent);
-        _send(new EgbMessage.Continue());
         return;
       case EgbMessage.TEXT_RESULT:
         _interface.showText(message.strContent)
