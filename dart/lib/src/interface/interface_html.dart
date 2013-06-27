@@ -56,6 +56,10 @@ class HtmlInterface extends EgbInterfaceBase {
     document.query("p#loading").remove();
   }
   
+  void endBook() {
+    print("The book has ended.");
+  }
+  
   void close() {
     streamController.close();
   }

@@ -225,6 +225,10 @@ class PlayerIntent {
   static const int RESTART = 8;
 }
 
+class QuitIntent extends PlayerIntent {
+  QuitIntent() : super(PlayerIntent.QUIT);
+}
+
 class RestartIntent extends PlayerIntent {
   RestartIntent() : super(PlayerIntent.RESTART);
 }

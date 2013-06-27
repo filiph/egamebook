@@ -387,17 +387,35 @@ void main() {
         }));
       });
 
-      test("choose() works", () {
+      test("run() and ui.choose() works", () {
         build("scripter_test_alternate_6.egb")
         .then((mainPath) => run(mainPath))
         .then((MockInterface ui) {
-          new Timer(const Duration(seconds: 1), () {
-            ui.choose("ABC");
-            print(ui.latestOutput);
-            ui.quit();
-          });
-          
-        });
+          ui.choose("ABC");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, "Blah.");
+          ui.quit();
+        }));
+      });
+      
+      test("ui.restart() works", () {
+        build("scripter_test_alternate_6.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("ABC");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, "Blah.");
+          ui.restart();
+          return ui.waitForDone();
+        }))
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, "Starting. Setting time to 0.");
+          ui.quit();
+        }));
       });
     });
     

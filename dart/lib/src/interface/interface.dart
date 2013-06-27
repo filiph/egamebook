@@ -16,7 +16,14 @@ abstract class EgbInterface {
    */
   String getTextHistory();
   
+  /// Called on startup to create the interface environment.
   void setup();
+  /// Called when there is no more options to take in the book, and so it has
+  /// ended. Interface can choose to show a message, call-to-action, etc.
+  void endBook();
+  /// Called when interface is not needed anymore. This is not necessarily the
+  /// same time when the book ends ([endBook()]) -- a player can still choose
+  /// to use the interface to retry (restart or load).
   void close();
 
   /**
@@ -51,7 +58,7 @@ abstract class EgbInterface {
 
 abstract class EgbInterfaceBase implements EgbInterface {
   StreamController<PlayerIntent> streamController;
-  Stream get stream => streamController.stream;
+  Stream<PlayerIntent> get stream => streamController.stream;
   
   EgbInterfaceBase() {
     streamController = new StreamController();

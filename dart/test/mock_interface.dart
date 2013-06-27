@@ -30,15 +30,35 @@ class MockInterface extends EgbInterfaceBase {
 
   Stream _stream;
   Stream get stream => _stream;
+  
+  
+  StreamController<String> _eventStreamController;
+  Stream<String> _eventStream;
+  /// The public stream of events that the unit tests might care about (but
+  /// the generic interface shouldn't need), like new choiceLists, new toasts,
+  /// etc.  
+  Stream<String> get eventStream => _eventStream;
+  
+  static final String WAITING_FOR_INPUT_EVENT = "WAITING_FOR_INPUT";
+  static final String TEXTBLOCK_SHOWN_EVENT = "TEXTBLOCK_SHOWN";
+  static final String TOAST_SHOWN_EVENT = "TOAST_SHOWN";
+  static final String STATS_UPDATED_EVENT = "STATS_UPDATED";
+  static final String BOOK_ENDED_EVENT = "BOOK_ENDED";
 
   MockInterface({bool this.waitForChoicesToBeTaken: false}) 
       : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>(), super() {
     _stream = streamController.stream.asBroadcastStream();
+    _eventStreamController = new StreamController();
+    _eventStream = _eventStreamController.stream.asBroadcastStream();
   }
 
   void setup() {
     started = true;
+  }
+  
+  void endBook() {
+    _eventStreamController.sink.add(BOOK_ENDED_EVENT);
   }
 
   void close() {
@@ -49,6 +69,7 @@ class MockInterface extends EgbInterfaceBase {
     print("MockInterface output: $s");
     if (s.trim() != "") {
       latestOutput = s;
+      _eventStreamController.sink.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
   }
@@ -72,12 +93,13 @@ class MockInterface extends EgbInterfaceBase {
       if (waitForChoicesToBeTaken) {
         _currentChoices = choiceList;
         _currentChoicesCompleter = new Completer();
+        _eventStreamController.sink.add(WAITING_FOR_INPUT_EVENT);
         return _currentChoicesCompleter.future;
       } else {
         // No predefined choices and no waiting - let's quit.
         print("MockInterface pick: NONE, Quitting");
         streamController.sink.add(
-            new PlayerIntent(PlayerIntent.QUIT));
+            new QuitIntent());
         streamController.close();
         return new Completer().future;
       }
@@ -98,24 +120,39 @@ class MockInterface extends EgbInterfaceBase {
     return list[choiceNumber].hash;
   }
   
-  // TODO: return future when interface gets first text (next choice?) back
+  /// Choose from the current choiceList by string (or register this string
+  /// for the next future choice). The future completes when scripter waits
+  /// for next input or when the book ends.
   void choose(String choiceString) {
     if (_currentChoices == null) {
       choicesToBeTakenByString.addLast(choiceString);
       print("MockInterface will choose '$choiceString' on next choiceList.");
-      return;
+    } else {
+      int hash = _getChoiceHashFromString(choiceString, _currentChoices);
+      _currentChoices = null;
+      _currentChoicesCompleter.complete(hash);
+      _currentChoicesCompleter = null;
     }
-    int hash = _getChoiceHashFromString(choiceString, _currentChoices);
-    _currentChoices = null;
-    _currentChoicesCompleter.complete(hash);
-    _currentChoicesCompleter = null;
   }
   
   void quit() {
     print("MockInterface.quit() called.");
     streamController.sink.add(
-        new PlayerIntent(PlayerIntent.QUIT));
+        new QuitIntent());
   }
+  
+  void restart() {
+    print("MockInterface.restart() called.");
+    streamController.sink.add(
+        new RestartIntent());
+  }
+  
+  /// Completes the future when interface waits for input or when the book is
+  /// ended.
+  Future<EgbInterface> waitForDone() =>
+    eventStream.firstWhere((value) => 
+        value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
+        .then((_) => this);
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");

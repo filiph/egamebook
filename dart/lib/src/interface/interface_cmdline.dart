@@ -27,6 +27,10 @@ class CmdlineInterface extends EgbInterfaceBase {
     _cmdLineSubscription.pause();
   }
   
+  void endBook() {
+    print("=== END OF BOOK ===");
+  }
+  
   void close() {
     streamController.close();
     print("Closing cmdline");
@@ -48,7 +52,7 @@ class CmdlineInterface extends EgbInterfaceBase {
     
     if (line.trim().toLowerCase() == "quit") {
       streamController.sink.add(
-          new PlayerIntent(PlayerIntent.QUIT));
+          new QuitIntent());
       return;
     }
     
