@@ -103,7 +103,7 @@ class EgbRunner {
       case EgbMessage.END_OF_BOOK:
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
         _interface.endBook();
-        _streamController.sink.add("END");  // send the info to anyone listening
+        _streamController.add("END");  // send the info to anyone listening
         return;
       case EgbMessage.SEND_BOOK_UID:
         print("RUN: Book UID received ('${message.strContent}')");

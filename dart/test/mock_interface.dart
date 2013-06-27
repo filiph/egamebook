@@ -58,7 +58,7 @@ class MockInterface extends EgbInterfaceBase {
   }
   
   void endBook() {
-    _eventStreamController.sink.add(BOOK_ENDED_EVENT);
+    _eventStreamController.add(BOOK_ENDED_EVENT);
   }
 
   void close() {
@@ -69,7 +69,7 @@ class MockInterface extends EgbInterfaceBase {
     print("MockInterface output: $s");
     if (s.trim() != "") {
       latestOutput = s;
-      _eventStreamController.sink.add(TEXTBLOCK_SHOWN_EVENT);
+      _eventStreamController.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
   }
@@ -93,13 +93,12 @@ class MockInterface extends EgbInterfaceBase {
       if (waitForChoicesToBeTaken) {
         _currentChoices = choiceList;
         _currentChoicesCompleter = new Completer();
-        _eventStreamController.sink.add(WAITING_FOR_INPUT_EVENT);
+        _eventStreamController.add(WAITING_FOR_INPUT_EVENT);
         return _currentChoicesCompleter.future;
       } else {
         // No predefined choices and no waiting - let's quit.
         print("MockInterface pick: NONE, Quitting");
-        streamController.sink.add(
-            new QuitIntent());
+        streamController.add(new QuitIntent());
         streamController.close();
         return new Completer().future;
       }
@@ -137,14 +136,12 @@ class MockInterface extends EgbInterfaceBase {
   
   void quit() {
     print("MockInterface.quit() called.");
-    streamController.sink.add(
-        new QuitIntent());
+    streamController.add(new QuitIntent());
   }
   
   void restart() {
     print("MockInterface.restart() called.");
-    streamController.sink.add(
-        new RestartIntent());
+    streamController.add(new RestartIntent());
   }
   
   /// Completes the future when interface waits for input or when the book is

@@ -51,8 +51,7 @@ class CmdlineInterface extends EgbInterfaceBase {
     print("[got: '$line']");
     
     if (line.trim().toLowerCase() == "quit") {
-      streamController.sink.add(
-          new QuitIntent());
+      streamController.add(new QuitIntent());
       return;
     }
     
