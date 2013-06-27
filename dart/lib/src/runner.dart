@@ -42,8 +42,7 @@ class EgbRunner {
       switch (playerIntent.type) {
         case (PlayerIntent.RESTART):
           print("RUN: Restarting book.");
-          _scripterPort.send(new EgbMessage.Start().toJson(), 
-              _receivePort.toSendPort());
+          _send(new EgbMessage.Start());
           started = true;
           break;
         case (PlayerIntent.QUIT):
@@ -73,16 +72,13 @@ class EgbRunner {
   void run() {
     print("RUN: Runner.run() called.");
     _interface.setup();
-    _scripterPort.send(
-        new EgbMessage.GetBookUid().toJson(),
-        _receivePort.toSendPort()
-    );
+    _send(new EgbMessage.GetBookUid());
   }
   
   void stop() {
     _playerProfile.close();
     _interface.close();
-    _scripterPort.send(new EgbMessage.Quit().toJson());
+    _send(new EgbMessage.Quit());
     _receivePort.close();
   }
   
@@ -105,7 +101,6 @@ class EgbRunner {
     
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
-        // _scripterPort.send(new EgbMessage.Quit().toJson());
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
         _interface.endBook();
         _streamController.sink.add("END");  // send the info to anyone listening
