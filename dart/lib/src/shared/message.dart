@@ -22,7 +22,8 @@ class EgbMessage {
   static const int SAVE_PLAYER_CHRONOLOGY = 60;
   static const int POINTS_AWARD = 70;
   static const int END_OF_BOOK = 80;
-  static const int STAT_UPDATE = 90;
+  static const int STATS_SET = 90;
+  static const int STATS_UPDATE = 100;
 
   // Messages from Runner to Scripter.
   static const int GET_BOOK_UID = 1000;
@@ -86,9 +87,27 @@ class EgbMessage {
     strContent = justification;
   }
   
-  /// Set a statistic without notifying the player.
-  EgbMessage.StatUpdate(Set<Stat> stats) : type = STAT_UPDATE {
-    stats.where((Stat stat) => stat.changed).forEach((Stat stat) {
+  /// Sends the (final) list of all stats in the game, and their current state.
+  EgbMessage.StatsSet(Set<Stat> allStats) 
+      : type = STATS_UPDATE {
+    allStats.forEach((Stat stat) {
+      var statMap = new Map<String,Object>();
+      statMap["name"] = stat.name;
+      statMap["description"] = stat.description;
+      statMap["format"] = stat.format;
+      statMap["color"] = stat.color;
+      statMap["notifyOnChange"] = stat.notifyOnChange;
+      statMap["priority"] = stat.priority;
+      statMap["value"] = stat.value;
+      statMap["show"] = stat.show;
+      listContent.add(statMap);
+    });
+  }
+  
+  /// Sends statistics that were changed and need updating on the interface.
+  EgbMessage.StatsUpdate(Set<Stat> changedStats) 
+      : type = STATS_UPDATE {
+    changedStats/*.where((Stat stat) => stat.changed)*/.forEach((Stat stat) {
       var statMap = new Map<String,Object>();
       statMap["value"] = stat.value;
       statMap["show"] = stat.show;
