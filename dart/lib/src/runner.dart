@@ -56,12 +56,10 @@ class EgbRunner {
           .then((EgbSavegame savegame) {
             if (savegame == null) {
               // no savegames for this egamebook
-              _scripterPort.send(new EgbMessage.Start().toJson(), 
-                  _receivePort.toSendPort());
+              _send(new EgbMessage.Start());
             } else {
               _interface.showText(savegame.textHistory);
-              _scripterPort.send(savegame.toMessage(EgbMessage.LOAD_GAME).toJson(), 
-                  _receivePort.toSendPort());
+              _send(savegame.toMessage(EgbMessage.LOAD_GAME));
             }
           });
           started = true;
