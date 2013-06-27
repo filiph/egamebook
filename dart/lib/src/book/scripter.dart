@@ -253,7 +253,6 @@ abstract class EgbScripter {
       DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
       _send(new EgbMessage.PointsAward(award.points, award.justification));
-      return;
     }
     
     if (_playerChronologyChanged) {
@@ -262,9 +261,13 @@ abstract class EgbScripter {
       _send(new EgbMessage.SavePlayerChronology(_playerChronology));
     }
     
-    DEBUG_SCR("Calling _goOneStep().");
-    // We can now handle the next block on the page.
-    _send(_goOneStep(message));
+    // We can now handle the current block on the page.
+    EgbMessage returnMessage;
+    do {
+      DEBUG_SCR("Calling _goOneStep().");
+      returnMessage = _goOneStep(message); 
+    } while (returnMessage == null);
+    _send(returnMessage);
   }
   
   /**
@@ -308,11 +311,11 @@ abstract class EgbScripter {
 
   /** 
    * Walks through the instructions, one block at a time.
-   * Returns message for Runner.
+   * Returns message for Runner (with text, choices, etc.) or [:null:] when 
+   * there is no message needed (and therefore, the method can be called
+   * another time).
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    DEBUG_SCR("Resolving step (normally a text block).");
-    
     // TODO: make some stuff async, therefore not needing these 'atEndOfPage' things, hopefully
     
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
@@ -353,7 +356,7 @@ abstract class EgbScripter {
       // someone called the top level function [goto]
       _performGoto(_gotoPageName);
       _gotoPageName = null;
-      return new EgbMessage.NoResult();
+      return null;
     }
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
@@ -373,13 +376,13 @@ abstract class EgbScripter {
     }
 
     // Resolve current block.
-    if (currentBlockIndex >= currentPage.blocks.length) {
+    DEBUG_SCR("Resolving block: '${currentPage.name}' block $currentBlockIndex.");
+    if (currentBlockIndex == currentPage.blocks.length) {
       // At the end of page.
       assert(!choices.any((choice) => !choice.shown));
       DEBUG_SCR("End of book.");
-      // TODO: Make the saving, then ending a little less hacky.
       if (currentBlockIndex == currentPage.blocks.length) {
-        return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
+        _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
       }
       return new EgbMessage.EndOfBook();
     } else if (currentPage.blocks[currentBlockIndex] is String) {
@@ -394,10 +397,7 @@ abstract class EgbScripter {
             filterOut: _leadsToIllegalPage)) && 
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
-          return _createSaveGame().toMessage(EgbMessage.SAVE_GAME);
-      } else {
-        // None of the choices is actionable.        
-        return new EgbMessage.NoResult();
+          _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
       }
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.

@@ -114,7 +114,6 @@ class EgbRunner {
         savegame.textHistory = _interface.getTextHistory();
         _playerProfile.save(savegame);
         _interface.addSavegameBookmark(savegame);
-        _send(new EgbMessage.Continue());
         return;
       case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
         _playerProfile.savePlayerChronology(message.listContent);
@@ -135,8 +134,7 @@ class EgbRunner {
         } else {
           text = "+${message.intContent} points";
         }
-        _interface.showText("<p class='meta'>$text</p>")
-        .then((_) => _send(new EgbMessage.Continue()));
+        _interface.showText("<p class='meta'>$text</p>");
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);
