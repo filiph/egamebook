@@ -94,7 +94,7 @@ void main() {
 /// Runs the built project and returns the [MockInterface] instance.
 Future<EgbInterface> run(String canonicalMainPath) {
   var receivePort = new ReceivePort();
-  SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+  SendPort scripterPort = spawnUri(canonicalMainPath);
   var interface = new MockInterface(waitForChoicesToBeTaken: true);
   var storage = new MemoryStorage();
   var runner = new EgbRunner(receivePort, scripterPort,
@@ -417,6 +417,32 @@ void main() {
           ui.quit();
         }));
       });
+    });
+    
+    group("PointsAwards", () {
+      solo_test("successfully awards", () {
+        build("points_awards.egb")
+        .then((mainPath) {
+          print(mainPath);
+          return run(mainPath);
+        })
+        .then(expectAsync1((MockInterface ui) {
+          ui.eventStream
+          .where((event) => event == MockInterface.POINTS_AWARDED_EVENT)
+          .listen(expectAsync1((event) {
+            expect(ui.currentlyShownPoints, lessThanOrEqualTo(1));
+          }));
+          ui.choose("Go to next");
+          ui.choose("Do something stupid");
+          return ui.waitForDone();
+        }))
+        .then((MockInterface ui) {
+          ui.quit();
+        });
+      });
+//      test("keeps track", () {
+//        
+//      });
     });
     
     group("ChoiceWithInfochips", () {
