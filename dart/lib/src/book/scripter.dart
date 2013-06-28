@@ -267,6 +267,7 @@ abstract class EgbScripter {
       DEBUG_SCR("Saving player chronology.");
       _playerChronologyChanged = false;
       _send(new EgbMessage.SavePlayerChronology(_playerChronology));
+      print(_playerChronology);
     }
     
     // We can now handle the current block on the page.
@@ -282,14 +283,16 @@ abstract class EgbScripter {
    * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
    */
   void _handleChoiceSelected(EgbMessage message) {
+    EgbChoice pickedChoice;
     choices.forEach((choice) {
       if (choice.hash == message.intContent) {
         // This choice was taken.
         DEBUG_SCR("Found choice that was selected: ${choice.string}");
-        _pickChoice(choice);
+        pickedChoice = choice;
       } else {
         // This choice was offered but not taken. Put into the
-        // _gotoLinksAlreadyOffered set. The selected choice will
+        // _gotoLinksAlreadyOffered set. 
+        // Note that the _selected_ choice (above) will
         // be put there after the player walked through the page till
         // the end (otherwise, no points would ever be awarded).
         if (choice.goto != null) {
@@ -302,6 +305,11 @@ abstract class EgbScripter {
         }
       }
     });
+    if (pickedChoice == null) {
+      throw new ArgumentError("The sent choice hash is not one of those "
+          "offered.");
+    }
+    _pickChoice(pickedChoice);
   }
 
   /**
