@@ -246,21 +246,21 @@ abstract class EgbScripter {
         _playerChronology.clear();
         _playerChronologyChanged = true;
         currentPage = firstPage;
-        _send(new EgbMessage.PointsAward(0, 0));
+        _send(new PointsAward(0, 0).toMessage());
         break;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
         _initScriptEnvironment();
         _loadFromSaveGameMessage(message);
-        _send(new EgbMessage.PointsAward(0, _points.sum));
+        _send(new PointsAward(0, _points.sum).toMessage());
         break;
     }
     
     if (!_points.pointsAwards.isEmpty) {
       DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
-      _send(new EgbMessage.PointsAward(
-          award.addition, award.result, award.justification));
+      _send(new PointsAward(award.addition, award.result, award.justification)
+            .toMessage());
     }
     
     if (_playerChronologyChanged) {

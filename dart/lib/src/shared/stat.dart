@@ -1,5 +1,7 @@
 library stat;
 
+import 'message.dart';
+
 /**
  * This class is holding different statistics that are to be shown to the
  * player. These should be visible all the time on the interface alongside
@@ -84,4 +86,67 @@ class Stat {
   
   static final Map<String,Stat> _stats = new Map<String,Stat>();
   static Set<Stat> get all => _stats.values;
+  
+  /// Sends the (final) list of all stats in the game, and their current state.
+  /// The optional [changedOnly] specifies if only the changed Stats should
+  /// be sent.
+  EgbMessage toMessage({bool changedOnly: false}) {
+    if (changedOnly) {
+      return _toMessageChangedOnly();
+    } else {
+      return _toMessageAll();
+    }
+  }
+  
+  EgbMessage _toMessageAll() {
+    var message = new EgbMessage(EgbMessage.SET_STATS);
+    _stats.values.forEach((Stat stat) {
+      var statMap = new Map<String,Object>();
+      statMap["name"] = stat.name;
+      statMap["description"] = stat.description;
+      statMap["format"] = stat.format;
+      statMap["color"] = stat.color;
+      statMap["notifyOnChange"] = stat.notifyOnChange;
+      statMap["priority"] = stat.priority;
+      statMap["value"] = stat.value;
+      statMap["show"] = stat.show;
+      message.listContent.add(statMap);
+    });
+    return message;
+  }
+  
+/// Sends statistics that were changed and need updating on the interface.
+  EgbMessage _toMessageChangedOnly() {
+    var message = new EgbMessage(EgbMessage.UPDATE_STATS);
+    _stats.values.where((stat) => stat.changed).forEach((Stat stat) {
+      var statMap = new Map<String,Object>();
+      statMap["value"] = stat.value;
+      statMap["show"] = stat.show;
+      stat.changed = false;  // reset back to unchanged status
+      message.mapContent[stat.name] = statMap;
+    });
+    someChanged = false;  // reset the static state to unchanged
+    return message;
+  }
+  
+  /// Creates a list of [Stat] objects from an EgbMessage of type [STATS_SET].
+  /// The list is sorted by [priority].
+  static List<Stat> statsListFromMessage(EgbMessage message) {
+    if (message.type != EgbMessage.SET_STATS) {
+      throw new StateError("Cannot create Stats set. "
+          "Incorrect type of message");
+    }
+    var statsList = new List<Stat>(message.listContent.length);
+    int i = 0;
+    for (Map<String,Object> statMap in message.listContent) {
+      var stat = new Stat(statMap["name"], statMap["format"],
+          description: statMap["description"], color: statMap["color"], 
+          priority: statMap["priority"], initialValue: statMap["value"], 
+          show: statMap["show"]);
+      statsList[i] = stat;
+      i += 1;
+    }
+    statsList.sort((a, b) => b.priority - a.priority);
+    return statsList;
+  }
 }

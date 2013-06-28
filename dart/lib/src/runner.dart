@@ -128,7 +128,7 @@ class EgbRunner {
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.POINTS_AWARD:
-        _interface.awardPoints(message.toPointsAward());
+        _interface.awardPoints(new PointsAward.fromMessage(message));
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);

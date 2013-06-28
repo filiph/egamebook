@@ -116,19 +116,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
   operator[](int index) => _choices[index];
   operator[]=(int index, EgbChoice value) => _choices[index] = value;
   
-  EgbChoiceList()  {
-  }
-
-  EgbChoiceList.fromMessage(EgbMessage m) {
-    if (m.listContent.length < 3) {
-      throw "Message with choices doesn't have enough data: ${m.listContent}.";
-    } else {
-      question = m.listContent[1];
-      for (int i = 2; i < m.listContent.length; i++) {
-        _choices.add(new EgbChoice.fromMap(m.listContent[i]));
-      }
-    }
-  }
+  EgbChoiceList();
 
   /**
    * Takes list from Scripter page data and adds the contents to this.
@@ -170,6 +158,17 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
   }
 
+  EgbChoiceList.fromMessage(EgbMessage m) {
+    if (m.listContent.length < 3) {
+      throw "Message with choices doesn't have enough data: ${m.listContent}.";
+    } else {
+      question = m.listContent[1];
+      for (int i = 2; i < m.listContent.length; i++) {
+        _choices.add(new EgbChoice.fromMap(m.listContent[i]));
+      }
+    }
+  }
+  
   /**
    * Takes care of converting the current [EgbChoiceList] to a Message.
    *

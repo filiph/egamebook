@@ -2,9 +2,6 @@ library egb_message;
 
 import 'dart:json';
 
-import 'stat.dart';
-import '../shared/points_award.dart';
-
 class EgbMessage {
   int type;
 
@@ -23,8 +20,8 @@ class EgbMessage {
   static const int SAVE_PLAYER_CHRONOLOGY = 60;
   static const int POINTS_AWARD = 70;
   static const int END_OF_BOOK = 80;
-  static const int STATS_SET = 90;
-  static const int STATS_UPDATE = 100;
+  static const int SET_STATS = 90;
+  static const int UPDATE_STATS = 100;
 
   // Messages from Runner to Scripter.
   static const int GET_BOOK_UID = 1000;
@@ -64,7 +61,7 @@ class EgbMessage {
 
   EgbMessage.EndOfBook() : type = END_OF_BOOK;
 
-  // TODO: SHOW_CHOICES
+  // EgbMessage containing ChoiceList is created in EgbChoiceList.toMessage(). 
   
   EgbMessage.ChoiceSelected(int hash) 
       : type = CHOICE_SELECTED {
@@ -81,66 +78,9 @@ class EgbMessage {
     strContent = json;
   }
   
-  EgbMessage.PointsAward(int points, int result, [String justification]) 
-      : type = POINTS_AWARD {
-    if (points == null) throw new ArgumentError("points cannot be null.");
-    listContent = [points, result];
-    strContent = justification;
-  }
+  // PointsAward messages are made and deconstructed in points_award.dart.
   
-  PointsAward toPointsAward() {
-    return new PointsAward(listContent[0], listContent[1], strContent);
-  }
-  
-  /// Sends the (final) list of all stats in the game, and their current state.
-  EgbMessage.setStats(Set<Stat> allStats) 
-      : type = STATS_SET {
-    allStats.forEach((Stat stat) {
-      var statMap = new Map<String,Object>();
-      statMap["name"] = stat.name;
-      statMap["description"] = stat.description;
-      statMap["format"] = stat.format;
-      statMap["color"] = stat.color;
-      statMap["notifyOnChange"] = stat.notifyOnChange;
-      statMap["priority"] = stat.priority;
-      statMap["value"] = stat.value;
-      statMap["show"] = stat.show;
-      listContent.add(statMap);
-    });
-  }
-  
-  /// Creates a list of [Stat] objects from an EgbMessage of type [STATS_SET].
-  /// The list is sorted by [priority].
-  List<Stat> toStatsList() {
-    if (type != STATS_SET) {
-      throw new StateError("Cannot create Stats set. Incorrect type of message");
-    }
-    var statsList = new List<Stat>(listContent.length);
-    int i = 0;
-    for (Map<String,Object> statMap in listContent) {
-      var stat = new Stat(statMap["name"], statMap["format"],
-          description: statMap["description"], color: statMap["color"], 
-          priority: statMap["priority"], initialValue: statMap["value"], 
-          show: statMap["show"]);
-      statsList[i] = stat;
-      i += 1;
-    }
-    statsList.sort((a, b) => b.priority - a.priority);
-    return statsList;
-  }
-  
-  /// Sends statistics that were changed and need updating on the interface.
-  EgbMessage.updateStats(Set<Stat> changedStats) 
-      : type = STATS_UPDATE {
-    changedStats/*.where((Stat stat) => stat.changed)*/.forEach((Stat stat) {
-      var statMap = new Map<String,Object>();
-      statMap["value"] = stat.value;
-      statMap["show"] = stat.show;
-      stat.changed = false;  // reset back to unchanged status
-      mapContent[stat.name] = statMap;
-    });
-    Stat.someChanged = false;  // reset the static state to unchanged
-  }
+  // Stats messages are made and deconstructed in stat.dart.
   
   EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
       : type = SAVE_PLAYER_CHRONOLOGY {
