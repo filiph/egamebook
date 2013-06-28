@@ -1,6 +1,5 @@
 part of egb_scripter;
 
-
 /**
  * One PointAward is a bundle of points awarded for something concrete
  * to the player. This is mostly done by something like 

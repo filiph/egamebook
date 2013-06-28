@@ -88,8 +88,8 @@ class EgbMessage {
   }
   
   /// Sends the (final) list of all stats in the game, and their current state.
-  EgbMessage.StatsSet(Set<Stat> allStats) 
-      : type = STATS_UPDATE {
+  EgbMessage.setStats(Set<Stat> allStats) 
+      : type = STATS_SET {
     allStats.forEach((Stat stat) {
       var statMap = new Map<String,Object>();
       statMap["name"] = stat.name;
@@ -104,8 +104,28 @@ class EgbMessage {
     });
   }
   
+  /// Creates a list of [Stat] objects from an EgbMessage of type [STATS_SET].
+  /// The list is sorted by [priority].
+  List<Stat> toStatsList() {
+    if (type != STATS_SET) {
+      throw new StateError("Cannot create Stats set. Incorrect type of message");
+    }
+    var statsList = new List<Stat>(listContent.length);
+    int i = 0;
+    for (Map<String,Object> statMap in listContent) {
+      var stat = new Stat(statMap["name"], statMap["format"],
+          description: statMap["description"], color: statMap["color"], 
+          priority: statMap["priority"], initialValue: statMap["value"], 
+          show: statMap["show"]);
+      statsList[i] = stat;
+      i += 1;
+    }
+    statsList.sort((a, b) => b.priority - a.priority);
+    return statsList;
+  }
+  
   /// Sends statistics that were changed and need updating on the interface.
-  EgbMessage.StatsUpdate(Set<Stat> changedStats) 
+  EgbMessage.updateStats(Set<Stat> changedStats) 
       : type = STATS_UPDATE {
     changedStats/*.where((Stat stat) => stat.changed)*/.forEach((Stat stat) {
       var statMap = new Map<String,Object>();

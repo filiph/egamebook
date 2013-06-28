@@ -53,16 +53,22 @@ class Stat {
   factory Stat(String name, String format,
       {String description, String color: DEFAULT_COLOR, int priority: 0,
        num initialValue, bool show: true}) {
+    Stat stat;
     if (_stats.containsKey(name)) {
-      throw new StateError("A Stat with name '$name' already exists.");
+      print("Warning: A Stat with name '$name' already exists.");
+      stat = _stats[name];
+      assert(stat.description == description);
+      assert(stat.format == format);
+      assert(stat.color == color);
+      assert(stat.priority == priority);
     } else {
       final stat = 
           new Stat._internal(name, description, format, color, priority);
-      stat._value = initialValue;
-      stat._show = show;
-      _stats[name] = stat;
-      return stat;
     }
+    stat._value = initialValue;
+    stat._show = show;
+    _stats[name] = stat;
+    return stat;
   }
   
   Stat._internal(this.name, this.description, this.format, this.color, 
