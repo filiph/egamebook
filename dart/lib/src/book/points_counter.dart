@@ -6,6 +6,8 @@ part of egb_scripter;
  */
 class PointsCounter implements Saveable {
   int _points = 0;
+  /// The current sum of points.
+  int get sum => _points;
   Queue<PointsAward> pointsAwards;
   
   // TODO: in order to not break possible arithmetics inside scripts
@@ -20,7 +22,7 @@ class PointsCounter implements Saveable {
   void add(int value, [String justification]) {
     if (!_pointsEmbargo) {
       _points += value;
-      pointsAwards.add(new PointsAward(value, justification));
+      pointsAwards.add(new PointsAward(value, _points, justification));
     }
   }
   

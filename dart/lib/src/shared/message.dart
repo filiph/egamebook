@@ -81,15 +81,15 @@ class EgbMessage {
     strContent = json;
   }
   
-  EgbMessage.PointsAward(int points, String justification) 
+  EgbMessage.PointsAward(int points, int result, [String justification]) 
       : type = POINTS_AWARD {
     if (points == null) throw new ArgumentError("points cannot be null.");
-    intContent = points;
+    listContent = [points, result];
     strContent = justification;
   }
   
   PointsAward toPointsAward() {
-    return new PointsAward(intContent, strContent);
+    return new PointsAward(listContent[0], listContent[1], strContent);
   }
   
   /// Sends the (final) list of all stats in the game, and their current state.

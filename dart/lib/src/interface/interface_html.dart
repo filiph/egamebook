@@ -19,6 +19,7 @@ import 'dart:collection';
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
+  SpanElement pointsSpan;
   
   DivElement bookDiv;
   
@@ -48,6 +49,8 @@ class HtmlInterface extends EgbInterfaceBase {
       _textHistory.clear();
       // TODO: clear meta elements
     });
+    
+    pointsSpan = document.query("span#points-value");
     
     _periodicSubscription = _periodic.listen((_) {
       _checkMetaElementsInView();
@@ -264,6 +267,7 @@ class HtmlInterface extends EgbInterfaceBase {
   
   Future<bool> awardPoints(PointsAward award) {
     print("*** $award ***");
+    pointsSpan.text = "${award.result}";
     return new Future.value(true);
   }
   

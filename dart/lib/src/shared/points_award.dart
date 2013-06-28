@@ -7,17 +7,21 @@ library points_award;
  * bravery".
  */
 class PointsAward {
-  final int points;
+  /// The value of points to be awarded.
+  final int addition;
+  /// The resulting sum of points after this award.
+  final int result;
+  /// The (optional) justification for the award.
   final String justification;
   
-  PointsAward(this.points, [this.justification]);
+  PointsAward(this.addition, this.result, [this.justification]);
   
   toString() {
-    String s = (points == 1) ? "" : "s";
+    String s = (addition == 1) ? "" : "s";
     if (justification != null) {
-      return "+$points point$s for $justification";
+      return "+$addition point$s for $justification";
     } else {
-      return "+$points point$s";
+      return "+$addition point$s";
     }
   }
 }
