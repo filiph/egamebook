@@ -11,6 +11,7 @@ import 'persistence/savegame.dart';
 import 'persistence/player_profile.dart';
 import 'shared/user_interaction.dart';
 import 'shared/message.dart';
+import 'shared/points_award.dart';
 
 /**
  * EgbRunner manages communication between the Book and the Interface.
@@ -127,14 +128,7 @@ class EgbRunner {
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.POINTS_AWARD:
-        // TODO: make into stream event, show toast, update points...
-        var text;
-        if (message.strContent != null) {
-          text = "+${message.intContent} points for ${message.strContent}";
-        } else {
-          text = "+${message.intContent} points";
-        }
-        _interface.showText("<p class='meta'>$text</p>");
+        _interface.awardPoints(message.toPointsAward());
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);

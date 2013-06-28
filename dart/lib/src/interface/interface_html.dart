@@ -8,6 +8,7 @@ import '../shared/markdown.dart' show markdown_to_html;
 import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
+import '../shared/points_award.dart';
 
 // because we're defining localStorage here
 import '../persistence/storage.dart';
@@ -259,6 +260,11 @@ class HtmlInterface extends EgbInterfaceBase {
       choicesDiv.classes.remove("hidden");
     });
     return completer.future;
+  }
+  
+  Future<bool> awardPoints(PointsAward award) {
+    print("*** $award ***");
+    return new Future.value(true);
   }
   
   /**

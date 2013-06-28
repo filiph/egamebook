@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
+import '../shared/points_award.dart';
 
 abstract class EgbInterface {
   ReceivePort _receivePort;
@@ -42,6 +43,9 @@ abstract class EgbInterface {
    * Completes with null when user wants to quit.
    */
   Future<int> showChoices(EgbChoiceList choices);
+  
+  Future<bool> awardPoints(PointsAward award);
+  // TODO: setStats(), updateStats(), toast()
   
   /**
    * Marks the point at which the gameplay is saved. Interface should relay

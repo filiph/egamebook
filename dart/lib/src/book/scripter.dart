@@ -11,12 +11,13 @@ import '../shared/message.dart';
 import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
 import '../shared/page.dart';
+import '../shared/points_award.dart';
 
 import '../persistence/saveable.dart';
 export '../persistence/saveable.dart';
 
 part 'scripter_page.dart';
-part 'points.dart';
+part 'points_counter.dart';
 
 /**
  * The StringBuffer which collects all echo()'d strings to put them all

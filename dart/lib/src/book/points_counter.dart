@@ -1,19 +1,6 @@
 part of egb_scripter;
 
 /**
- * One PointAward is a bundle of points awarded for something concrete
- * to the player. This is mostly done by something like 
- * [:points.add(5, "bravery"):] and will be presented as "+5 points for
- * bravery".
- */
-class PointsAward {
-  final int points;
-  final String justification;
-  
-  PointsAward(this.points, [this.justification]);
-}
-
-/**
  * The class that lets author add points. [:points:] variable is an instance
  * of this class.
  */

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
+import '../shared/points_award.dart';
 
 class CmdlineInterface extends EgbInterfaceBase {
   Stream<String> _cmdLine;
@@ -93,6 +94,11 @@ class CmdlineInterface extends EgbInterfaceBase {
     // TODO: add choice text to _textHistory
     
     return _choiceCompleter.future;
+  }
+  
+  Future<bool> awardPoints(PointsAward award) {
+    print("*** $award ***");
+    return new Future.value(true);
   }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {

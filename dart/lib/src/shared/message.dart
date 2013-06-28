@@ -3,6 +3,7 @@ library egb_message;
 import 'dart:json';
 
 import 'stat.dart';
+import '../shared/points_award.dart';
 
 class EgbMessage {
   int type;
@@ -85,6 +86,10 @@ class EgbMessage {
     if (points == null) throw new ArgumentError("points cannot be null.");
     intContent = points;
     strContent = justification;
+  }
+  
+  PointsAward toPointsAward() {
+    return new PointsAward(intContent, strContent);
   }
   
   /// Sends the (final) list of all stats in the game, and their current state.
