@@ -148,10 +148,8 @@ class EgbSavegame {
           outputMap[key] = _dissolveToPrimitives(value);
         }
       });
-      print(outputMap);
       return outputMap;
     } else if (_isCustomSaveableClass(input)) {
-      print("$input -> ${input.toMap()}");
       Map saveableMap = (input as Saveable).toMap();
       saveableMap["_class"] = (input as Saveable).className;
       return _dissolveToPrimitives(saveableMap);
