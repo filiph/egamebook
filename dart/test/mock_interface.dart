@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:egamebook/src/interface/interface.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
+import 'package:egamebook/src/shared/points_award.dart';
 
 
 class MockInterface extends EgbInterfaceBase {
@@ -44,6 +45,7 @@ class MockInterface extends EgbInterfaceBase {
   static final String TOAST_SHOWN_EVENT = "TOAST_SHOWN";
   static final String STATS_UPDATED_EVENT = "STATS_UPDATED";
   static final String BOOK_ENDED_EVENT = "BOOK_ENDED";
+  static final String POINTS_AWARDED_EVENT = "POINTS_AWARDED";
 
   MockInterface({bool this.waitForChoicesToBeTaken: false}) 
       : choicesToBeTaken = new Queue<int>(),
@@ -150,6 +152,16 @@ class MockInterface extends EgbInterfaceBase {
     eventStream.firstWhere((value) => 
         value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
         .then((_) => this);
+  
+  Future<bool> awardPoints(PointsAward award) {
+    print("MockInterface: *** $award ***");
+    _eventStreamController.add(POINTS_AWARDED_EVENT);
+    _currentlyShownPoints = award.result;
+    return new Future.value(true);
+  }
+  
+  int _currentlyShownPoints;  // TODO: use for unittesting
+  int get currentlyShownPoints => _currentlyShownPoints;
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");
