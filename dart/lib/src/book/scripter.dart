@@ -256,7 +256,7 @@ abstract class EgbScripter {
         break;
     }
     
-    if (!_points.pointsAwards.isEmpty) {
+    while (!_points.pointsAwards.isEmpty) {
       DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
       _send(new PointsAward(award.addition, award.result, award.justification)

@@ -27,7 +27,7 @@ class HtmlInterface extends EgbInterfaceBase {
    * The text that has been shown to the player since last savegame bookmark.
    * (Markdown format, pre-HTMLization.)
    */
-  StringBuffer _textHistory = new StringBuffer();
+  final StringBuffer _textHistory = new StringBuffer();
   String getTextHistory() => _textHistory.toString();
   
   /**
@@ -107,13 +107,13 @@ class HtmlInterface extends EgbInterfaceBase {
       const Duration(milliseconds: 200);
   static const Duration _durationBetweenCheckingForMetaElements =
       const Duration(milliseconds: 1000);
-  Stream _periodic = 
+  final Stream _periodic = 
       new Stream.periodic(_durationBetweenCheckingForMetaElements);
   StreamSubscription _periodicSubscription;
   
-  /// A map of elements and their associated actions. When a _metaElement
-  /// comes into view, the Function is called.
-  Map<Element,Function> _metaElements = new Map<Element,Function>();
+  /// A list of elements and their associated actions and data. When a 
+  /// _metaElement comes into view, its [doAction()] function is called.
+  final List<EgbMetaElement> _metaElements = new List<EgbMetaElement>();
   
   /**
    * Checks if one of the meta elements is in view. If so, runs their
@@ -128,18 +128,17 @@ class HtmlInterface extends EgbInterfaceBase {
     // A line 20 pixels above fold.
     var currentBottom = window.pageYOffset + window.innerHeight - 20;
     print("_metaElements: currentBottom = $currentBottom");
-    var _processedElements = new Set();
-    _metaElements.forEach((Element el, Function action) {
-      assert(el.offsetParent == document.body);
-      if (el.offsetTop < currentBottom) {
-        action();
-        _processedElements.add(el);
+    var _processedElements = new Set<int>();
+    for (int i = 0; i < _metaElements.length; i++) {
+      var metaEl = _metaElements[i];
+      assert(metaEl.element.offsetParent == document.body);
+      if (metaEl.element.offsetTop < currentBottom) {
+        metaEl.doAction();
+        _processedElements.add(i);
       }
-    });
-    // Delete _metaElements whose actions have already been triggered.
-    for (var el in _processedElements) {
-      _metaElements.remove(el);
     }
+    // Delete _metaElements whose actions have already been triggered.
+    _metaElements.removeWhere((metaEl) => metaEl.done);
   }
   
   /**
@@ -278,12 +277,14 @@ class HtmlInterface extends EgbInterfaceBase {
     });
     // Only add the action after element fully visible.
     new Timer(_durationBetweenShowingElements, () {
-      _metaElements[p] = () {
+      var metaEl = new PointsAwardElement.fromPointsAward(award, p);
+      metaEl.action = () {
         pointsSpan.text = "${award.result}";
         _blink(p);
         p.classes.remove("non-dimmed");
         _blink(pointsSpan.parent); // The button element with pointsSpan in it.
       };
+      _metaElements.add(metaEl);
       if (_periodicSubscription.isPaused) _periodicSubscription.resume();
     });
     return new Future.value(true);
@@ -351,3 +352,41 @@ class LocalStorage implements EgbStorage {
         this);
   }
 }
+
+/**
+ * A special class for storing information about a PointsAward together
+ * with its meta element.
+ */
+class PointsAwardElement extends PointsAward implements EgbMetaElement {
+  final Element element;
+  PointsAwardElement(this.element, int addition, int result, 
+      [String justification]) : super(addition, result, justification);
+  
+  PointsAwardElement.fromPointsAward(PointsAward pointsAward, this.element)
+      : super(pointsAward.addition, pointsAward.result, 
+          pointsAward.justification);
+  
+  Action action;
+  void doAction() {
+    if (action != null && action is Action) {
+      action();
+      done = true;
+    } else {
+      throw new StateError("Called doAction() although action is null.");
+    }
+  }
+  bool done = false;
+}
+
+abstract class EgbMetaElement {
+  final Element element;
+  Action action;
+  void doAction();
+  bool done;
+  
+  EgbMetaElement(this.element);
+}
+
+/// A simple callback closure for use with metaElements (called when element
+/// comes into view).
+typedef void Action();
