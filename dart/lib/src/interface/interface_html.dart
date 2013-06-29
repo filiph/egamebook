@@ -111,33 +111,38 @@ class HtmlInterface extends EgbInterfaceBase {
       new Stream.periodic(_durationBetweenCheckingForMetaElements);
   StreamSubscription _periodicSubscription;
   
-  Set<Element> _metaElements = new Set<Element>();
+  /// A map of elements and their associated actions. When a _metaElement
+  /// comes into view, the Function is called.
+  Map<Element,Function> _metaElements = new Map<Element,Function>();
   /**
    * Checks if one of the meta elements is in view. If so, runs their
    * associated action (e.g. show a toast and increase the counter when
    * points are awarded).
    */
   void _checkMetaElementsInView() {
+    if (_metaElements.isEmpty) {
+      _periodicSubscription.pause();
+      return;
+    }
+    // A line 20 pixels above fold.
+    var currentBottom = window.pageYOffset + window.innerHeight - 20;
+    print("_metaElements: currentBottom = $currentBottom");
+    var _processedElements = new Set();
+    _metaElements.forEach((Element el, Function action) {
+      assert(el.offsetParent == document.body);
+      print("- el: ${el.offsetTop}");
+      if (el.offsetTop < currentBottom) {
+        action();
+        _processedElements.add(el);
+      }
+    });
+    // Delete _metaElements whose actions have already been triggered.
+    for (var el in _processedElements) {
+      _metaElements.remove(el);
+    }
+    
     
   }
-  
-//  void _processElementsToShow() {
-//    if (_elementsToShow.isEmpty) {
-//      _periodicSubscription.pause();
-//      return;
-//    }
-//    if (!_scrolledPastEnd()) return;
-//    
-//    var el = _elementsToShow.removeFirst();
-//    el.classes.add("hidden");
-//    bookDiv.append(el);
-//    new Future.value(null).then((_) {
-//      el.classes.remove("hidden");
-//    });
-//    
-//    _elementShownController.add(el.hashCode);
-//    if (!_elementsToShow.isEmpty) _processElementsToShow();
-//  }
   
   /**
    * Checks if user scrolled past the end of [bookDiv].
@@ -266,17 +271,28 @@ class HtmlInterface extends EgbInterfaceBase {
     }
     ParagraphElement p = new ParagraphElement();
     p.text = award.toString();
-    p.classes
-    ..add("meta")
-    ..add("toast")
-    ..add("hidden");
+    p.classes.addAll(["meta", "toast", "hidden"]);
+    // Not needed (yet?), but adding for extrea security.
     _recursiveRemoveScript(p);
     bookDiv.append(p);
     Timer.run(() {
       p.classes.remove("hidden");
     });
-    _metaElements.add(p);
+    // Only add the action after element fully visible.
+    new Timer(_durationBetweenShowingElements, () {
+      _metaElements[p] = () {
+        pointsSpan.text = "${award.result}";
+        _blink(p);
+        _blink(pointsSpan);
+      };
+      if (_periodicSubscription.isPaused) _periodicSubscription.resume();
+    });
     return new Future.value(true);
+  }
+  
+  /// Blinks the [el] element via CSS transitions.
+  void _blink(Element el) {
+    // TODO
   }
   
   /**
