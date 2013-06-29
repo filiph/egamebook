@@ -114,6 +114,7 @@ class HtmlInterface extends EgbInterfaceBase {
   /// A map of elements and their associated actions. When a _metaElement
   /// comes into view, the Function is called.
   Map<Element,Function> _metaElements = new Map<Element,Function>();
+  
   /**
    * Checks if one of the meta elements is in view. If so, runs their
    * associated action (e.g. show a toast and increase the counter when
@@ -140,8 +141,6 @@ class HtmlInterface extends EgbInterfaceBase {
     for (var el in _processedElements) {
       _metaElements.remove(el);
     }
-    
-    
   }
   
   /**
@@ -283,7 +282,7 @@ class HtmlInterface extends EgbInterfaceBase {
       _metaElements[p] = () {
         pointsSpan.text = "${award.result}";
         _blink(p);
-        _blink(pointsSpan);
+        _blink(pointsSpan.parent); // The button element with pointsSpan in it.
       };
       if (_periodicSubscription.isPaused) _periodicSubscription.resume();
     });
@@ -292,7 +291,9 @@ class HtmlInterface extends EgbInterfaceBase {
   
   /// Blinks the [el] element via CSS transitions.
   void _blink(Element el) {
-    // TODO
+    el.classes.add("blink");
+    new Timer(new Duration(milliseconds: 500), 
+        () => el.classes.remove("blink"));
   }
   
   /**

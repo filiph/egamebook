@@ -285,3 +285,34 @@ ol.choices-ol li span.choice-infochip {
   border-radius: 0.2em;
   margin-left: 2em;
 }
+
+.blink {
+  animation: highlight 0.5s;
+  -moz-animation: highlight 0.5s;
+  -webkit-animation: highlight 0.5s;
+  -o-animation: highlight 0.5s;
+}
+
+@keyframes highlight {
+  0%    {box-shadow: none;}
+  20%   {box-shadow: 0 0 0.5em 0.5em lightblue;}
+  100%  {box-shadow: none;}
+}
+
+@-webkit-keyframes highlight {
+  0%    {-webkit-box-shadow: none;}
+  20%   {-webkit-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  100%  {-webkit-box-shadow: none;}
+}
+
+@-moz-keyframes highlight 
+  0%    {-moz-box-shadow: none;}
+  20%   {-moz-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  100%  {-moz-box-shadow: none;}
+}
+
+@-o-keyframes highlight 
+  0%    {-o-box-shadow: none;}
+  20%   {-o-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  100%  {-o-box-shadow: none;}
+}
