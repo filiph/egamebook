@@ -154,7 +154,7 @@ abstract class EgbScripter {
   /// not picked. Links are represented by hashes created by
   /// [_createLinkHash].
   /// This is important for the  "No points for second guessing" rule.
-  Set<String> _playerChronology;
+  final Set<String> _playerChronology  = new Set<String>();
   
   /// Signifies that the [_playerChronology] has changed and needs to be
   /// sent to Runner.
@@ -200,7 +200,6 @@ abstract class EgbScripter {
 
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
-    _playerChronology = new Set<String>();
     _initScriptEnvironment();
 
     // Register the callback for communication with the Runner.
