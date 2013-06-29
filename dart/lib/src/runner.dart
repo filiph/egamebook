@@ -192,7 +192,6 @@ class EgbRunner {
           loadgameMsg.listContent = playerChronology;
           _send(loadgameMsg);
         });
-        
       }
     });
     started = true;

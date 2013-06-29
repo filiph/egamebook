@@ -82,27 +82,26 @@ class HtmlInterface extends EgbInterfaceBase {
     
     if (s.trim().startsWith("<") && s.trim().endsWith(">")) {
       html = s;  // Hacky way to prevent markdown from enclosing html tags
-                 // with html tags ("<p><p></p></p>").
+                 // with html tags ("<p><p></p></p>"). TODO: fix
     }
     DivElement container = new DivElement();
     container.innerHtml = html;
     _recursiveRemoveScript(container);
-    int total = container.children.length;
-    for (int i = 0; i < container.children.length; i++) {
-      var el = container.children[i];
-      if (el == null) continue;  // Yes, this can happen.
+    int count = 0;
+    for (Element el in container.children) {
+      count++;
       el.classes.add("hidden");
       num transitionDelay = 
-          _durationBetweenShowingElements.inMilliseconds * i / 1000; 
+          _durationBetweenShowingElements.inMilliseconds * count / 1000; 
       el.style.transitionDelay = "${transitionDelay}s";
-      bookDiv.append(container.children[i]);
+      bookDiv.append(el);//container.children[i]);
       new Future.value(null).then((_) {
         el.classes.remove("hidden");
       });
     }
     container.remove();  // TODO: find out if necessary to avoid leaks
     
-    return new Future.delayed(_durationBetweenShowingElements * total, 
+    return new Future.delayed(_durationBetweenShowingElements * count, 
         () => true);
   }
   
