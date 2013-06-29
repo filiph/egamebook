@@ -33,9 +33,7 @@ class HtmlInterface extends EgbInterfaceBase {
   /**
     Constructor.
     */
-  HtmlInterface() : super() {
-    _elementShown = _elementShownController.stream.asBroadcastStream();
-  }
+  HtmlInterface() : super();
   
   void setup() {
     // DOM
@@ -92,10 +90,10 @@ class HtmlInterface extends EgbInterfaceBase {
       count++;
       el.classes.add("hidden");
       num transitionDelay = 
-          _durationBetweenShowingElements.inMilliseconds * count / 1000; 
+          _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
       el.style.transitionDelay = "${transitionDelay}s";
       bookDiv.append(el);//container.children[i]);
-      new Future.value(null).then((_) {
+      Timer.run(() {
         el.classes.remove("hidden");
       });
     }
@@ -105,11 +103,6 @@ class HtmlInterface extends EgbInterfaceBase {
         () => true);
   }
   
-  StreamController<int> _elementShownController = new StreamController();
-  /// Stream of events when elements are shown in the web ui. The value
-  /// is the hashcode of the element.
-  Stream<int> _elementShown;
-  
   static const Duration _durationBetweenShowingElements =
       const Duration(milliseconds: 200);
   static const Duration _durationBetweenCheckingForMetaElements =
@@ -118,6 +111,7 @@ class HtmlInterface extends EgbInterfaceBase {
       new Stream.periodic(_durationBetweenCheckingForMetaElements);
   StreamSubscription _periodicSubscription;
   
+  Set<Element> _metaElements = new Set<Element>();
   /**
    * Checks if one of the meta elements is in view. If so, runs their
    * associated action (e.g. show a toast and increase the counter when
@@ -239,7 +233,7 @@ class HtmlInterface extends EgbInterfaceBase {
             _bookmarkDiv.query("a").style.height = height;
             _bookmarkDiv.classes.add("hidden");
             choicesOl.children.insert(0, _bookmarkDiv);
-            new Future.delayed(new Duration(seconds: 1)).then((_) {
+            new Timer(new Duration(seconds: 1), () {
               _bookmarkDiv.classes.remove("hidden");
             });
             // TODO: show after scrolled past
@@ -255,8 +249,8 @@ class HtmlInterface extends EgbInterfaceBase {
     
     choicesDiv.append(choicesOl);
     
-    _recursiveRemoveScript(choicesDiv);
     choicesDiv.classes.add("hidden");
+    _recursiveRemoveScript(choicesDiv);
     bookDiv.append(choicesDiv);
     new Future.value(null).then((_) {
       choicesDiv.classes.remove("hidden");
@@ -265,8 +259,23 @@ class HtmlInterface extends EgbInterfaceBase {
   }
   
   Future<bool> awardPoints(PointsAward award) {
-    print("*** $award ***");
-    pointsSpan.text = "${award.result}";
+    if (award.addition == 0) {
+      // This is just setting the Points count. Don't show Toast.
+      pointsSpan.text = "${award.result}";
+      return new Future.value(true);
+    }
+    ParagraphElement p = new ParagraphElement();
+    p.text = award.toString();
+    p.classes
+    ..add("meta")
+    ..add("toast")
+    ..add("hidden");
+    _recursiveRemoveScript(p);
+    bookDiv.append(p);
+    Timer.run(() {
+      p.classes.remove("hidden");
+    });
+    _metaElements.add(p);
     return new Future.value(true);
   }
   
