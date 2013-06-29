@@ -25,7 +25,7 @@ part 'points_counter.dart';
  * (and therefore, the player). [textBuffer] is only used for text output
  * generated inside <script> tags (through [echo()]).
  */
-StringBuffer textBuffer = new StringBuffer();
+final StringBuffer textBuffer = new StringBuffer();
 
 /**
  * The top level function that can be called from script blocks or library
@@ -69,12 +69,12 @@ bool _pointsEmbargo = false;
  * received twice for visiting one page, and they aren't awarded when player
  * goes back and second-guesses a choice.
  */
-PointsCounter _points = new PointsCounter();
+final PointsCounter _points = new PointsCounter();
 
 /**
  * List of choices to be shown to the player.
  */
-EgbChoiceList choices = new EgbChoiceList();
+final EgbChoiceList choices = new EgbChoiceList();
 
 /**
  * Utility shortcut for creating new choices. 
@@ -96,7 +96,7 @@ EgbChoice choice(String string, {String goto, ScriptBlock script,
  * by [:vars["name"]:], but thanks to noSuchMethod override, 
  * also by just [:name:].
  */
-Map<String, dynamic> vars = new Map<String, dynamic>();
+final Map<String, dynamic> vars = new Map<String, dynamic>();
 
 /**
  * The current block should be repeated after its execution.
@@ -116,7 +116,7 @@ void repeatBlock() {
 When a block/script/choice call for a script to be called afterwards,
 it ends up on this FIFO stack.
  */
-List<ScriptBlock> _nextScriptStack;
+final List<ScriptBlock> _nextScriptStack = new List<ScriptBlock>();
 
 /// Adds a script to the stack of scripts.
 void nextScript(ScriptBlock f) {
@@ -200,7 +200,6 @@ abstract class EgbScripter {
 
   EgbScripter() : super() {
     DEBUG_SCR("Scripter has been created.");
-    _nextScriptStack = new List<ScriptBlock>();
     _playerChronology = new Set<String>();
     _initScriptEnvironment();
 
@@ -332,8 +331,6 @@ abstract class EgbScripter {
    * another time).
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
-    // TODO: make some stuff async, therefore not needing these 'atEndOfPage' things, hopefully
-    
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
     bool atChoiceList = 
         currentBlockIndex != null &&
@@ -401,7 +398,9 @@ abstract class EgbScripter {
         _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
       }
       return new EgbMessage.EndOfBook();
-    } else if (currentPage.blocks[currentBlockIndex] is String) {
+    }
+    
+    if (currentPage.blocks[currentBlockIndex] is String) {
       // Just an ordinary paragraph, no script.
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
     } else if (currentPage.blocks[currentBlockIndex] is List) {
@@ -516,7 +515,7 @@ abstract class EgbScripter {
   /// text.
   EgbMessage _runScriptBlock(ScriptBlock script) {
     // clean up
-    textBuffer = new StringBuffer();
+    textBuffer.clear();
 
     // run the actual script
     try {
