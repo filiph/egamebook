@@ -31,6 +31,10 @@ class EgbMessage {
   static const int CHOICE_SELECTED = 1050;
   static const int QUIT = 1060;
   
+  /// Returns true for message types that are async, ie. sender doesn't wait
+  /// for the receiver to do something.
+  bool get isAsync => (type == SAVE_GAME) || (type == SAVE_PLAYER_CHRONOLOGY);
+  
   /*
    * The correct handshake looks like this:
    * 

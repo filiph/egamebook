@@ -89,6 +89,7 @@ class EgbRunner {
   void _send(EgbMessage message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
                                              "when _scripterPort is null.");
+    print("RUN: Sending message (${message.type})");
     _scripterPort.send(message.toJson(), _receivePort.toSendPort());
   }
   
@@ -121,14 +122,23 @@ class EgbRunner {
         return;
       case EgbMessage.TEXT_RESULT:
         _interface.showText(message.strContent)
-        .then((_) => _send(new EgbMessage.Continue()));
+        .then((_) {
+          // Since this is a text result waiting for a Continue message on
+          // a special port (because EgbScripter._send() uses port.call()),
+          // we need to do the sending explicitly, not through _send().
+          replyTo.send(
+              new EgbMessage.Continue().toJson(), _receivePort.toSendPort());
+        });
         return;
       case EgbMessage.NO_RESULT:
         // No visible result from Scripter. Continuing.
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.POINTS_AWARD:
-        _interface.awardPoints(new PointsAward.fromMessage(message));
+        _interface.awardPoints(new PointsAward.fromMessage(message))
+        .then((_) {
+          _send(new EgbMessage.Continue());
+        });
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);

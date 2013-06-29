@@ -206,16 +206,48 @@ abstract class EgbScripter {
     port.receive(_messageReceiveCallback);
   }
   
+  /// A cache of text messages so we can send them all together instead of
+  /// one by one.
+  final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
+  
   /**
    * Utilify function [_send] sends message through the [_runnerPort] to the
-   * Runner.
+   * Runner. 
    */
   void _send(EgbMessage message) {
     if (_runnerPort == null) throw new StateError("Cannot send message "
                                              "when _runnerPort is null.");
-    _runnerPort.send(message.toJson(), port.toSendPort());
+    if (message.isAsync) {
+      _runnerPort.send(message.toJson(), port.toSendPort());
+      return;
+    }
+    if (message.type == EgbMessage.TEXT_RESULT) {
+      // Put text result into the _textMessageCache.
+      if (message.strContent != "") _textMessageCache.add(message);
+      _runnerPort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
+    } else if (_textMessageCache.isEmpty) {
+      DEBUG_SCR("Sending nonText message (${message.type})");
+      _runnerPort.send(message.toJson(), port.toSendPort());
+    } else {
+      // When we have something in the _textMessageCache and we are about to
+      // send something new, we first zip the text messages into one huge
+      // message, wait for it to be shown (through port.call()), and only then
+      // send the original message.
+      var stringBuffer = new StringBuffer();
+      while (_textMessageCache.isNotEmpty) {
+        if (stringBuffer.isNotEmpty) stringBuffer.write("\n\n");
+        stringBuffer.write(_textMessageCache.removeAt(0).strContent);
+      }
+      var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
+      DEBUG_SCR("Sending a zip message (${zipMessage.type})");
+      _runnerPort.call(zipMessage.toJson()).then((replyJson) {
+        assert(new EgbMessage.fromJson(replyJson).type == EgbMessage.CONTINUE);
+        DEBUG_SCR("Sending a nonText message (${message.type}) after a zip message");
+        _runnerPort.send(message.toJson(), port.toSendPort());
+      });
+    }
   }
-
+  
   /**
    * Called on receiving a message from Runner. Handles the message and replies
    * when needed.
@@ -245,20 +277,21 @@ abstract class EgbScripter {
         _playerChronologyChanged = true;
         currentPage = firstPage;
         _send(new PointsAward(0, 0).toMessage());
-        break;
+        return;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
         _initScriptEnvironment();
         _loadFromSaveGameMessage(message);
         _send(new PointsAward(0, _points.sum).toMessage());
-        break;
+        return;
     }
     
-    while (!_points.pointsAwards.isEmpty) {
+    if (!_points.pointsAwards.isEmpty) {
       DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
       _send(new PointsAward(award.addition, award.result, award.justification)
             .toMessage());
+      return;
     }
     
     if (_playerChronologyChanged) {
@@ -281,6 +314,7 @@ abstract class EgbScripter {
    * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
    */
   void _handleChoiceSelected(EgbMessage message) {
+    assert(message.type == EgbMessage.CHOICE_SELECTED);
     EgbChoice pickedChoice;
     choices.forEach((choice) {
       if (choice.hash == message.intContent) {

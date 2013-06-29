@@ -293,9 +293,9 @@ void main() {
             [0, 1, 0, 1, 1]
         );
 
-        var interface2 = new MockInterface();
+        var interface2 = new MockInterface(waitForChoicesToBeTaken: true);
         interface2.choicesToBeTaken = new Queue<int>.from(
-            [1, 1, 1, 1, 1, 1, 1]
+            [1, 1, 1, 1, 1, 1]
         );
 
         var storage = new MemoryStorage();
@@ -314,13 +314,9 @@ void main() {
           var runner2 = new EgbRunner(receivePort, scripterPort2,
               interface2, playerProfile);
 
-          interface2.stream.firstWhere(
-              (interaction) => interaction.type == PlayerIntent.QUIT)
+          interface2.eventStream
+          .firstWhere((event) => event == MockInterface.WAITING_FOR_INPUT_EVENT)
           .then(expectAsync1((_) {
-            expect(interface2.closed,
-                true);
-            expect(runner2.ended,
-                false);
             expect(interface2.latestOutput,
                 contains("Time is now 10."));
             expect(interface2.latestOutput,
@@ -420,7 +416,7 @@ void main() {
     });
     
     group("PointsAwards", () {
-      solo_test("successfully awards", () {
+      test("successfully awards", () {
         build("points_awards.egb")
         .then((mainPath) {
           print(mainPath);

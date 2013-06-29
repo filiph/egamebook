@@ -266,6 +266,8 @@ class HtmlInterface extends EgbInterfaceBase {
       pointsSpan.text = "${award.result}";
       return new Future.value(true);
     }
+    var completer = new Completer();
+    
     ParagraphElement p = new ParagraphElement();
     p.text = "$award";
     p.classes.addAll(["toast", "non-dimmed", "hidden"]);
@@ -286,8 +288,9 @@ class HtmlInterface extends EgbInterfaceBase {
       };
       _metaElements.add(metaEl);
       if (_periodicSubscription.isPaused) _periodicSubscription.resume();
+      completer.complete(true);
     });
-    return new Future.value(true);
+    return completer.future;
   }
   
   /// Blinks the [el] element via CSS transitions.

@@ -70,7 +70,7 @@ class MockInterface extends EgbInterfaceBase {
   Future<bool> showText(String s) {
     print("MockInterface output: $s");
     if (s.trim() != "") {
-      latestOutput = s;
+      latestOutput = s.split("\n\n").last;
       _eventStreamController.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
