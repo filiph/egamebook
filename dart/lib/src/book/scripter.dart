@@ -134,7 +134,7 @@ abstract class EgbScripter {
   String gamebookUid;
 
   /// Information about all pages, their visit counts, and more.
-  EgbScripterPageMap pageMap;
+  final EgbScripterPageMap pageMap = new EgbScripterPageMap();
   /// The starting page of the book.
   EgbScripterPage firstPage;
   /// The page and block that called goto() that resulted in jumping to

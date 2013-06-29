@@ -49,7 +49,7 @@ class EgbMessage {
   EgbMessage.Continue() : type = CONTINUE;
 
   EgbMessage.TextResult(String str) : type = TEXT_RESULT {
-    strContent = str.trim();
+    strContent = str;
   }
 
   EgbMessage.Start() : type = START;

@@ -1985,7 +1985,6 @@ class ScripterImpl extends EgbScripter {
 
   final String implStartPages = """
     /* PAGES & BLOCKS */
-    pageMap = new EgbScripterPageMap();
 """;
 
   final String implEndPages = """
