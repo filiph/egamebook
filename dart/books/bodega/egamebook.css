@@ -166,6 +166,24 @@ p.meta {
   border-radius: 0.2em;
 }
 
+p.toast {
+  font: 90% 'Roboto', sans-serif;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 0.5em 1em;
+  -webkit-transition: color 5s;
+  transition: color 5s;
+  color: #999;
+
+  border-radius: 0.2em;
+}
+
+p.toast.non-dimmed {
+  color: inherit;
+  /* TODO: make the transition work */
+}
+
 em {
   font-style: italic;
 }
@@ -287,32 +305,32 @@ ol.choices-ol li span.choice-infochip {
 }
 
 .blink {
-  animation: highlight 0.5s;
-  -moz-animation: highlight 0.5s;
-  -webkit-animation: highlight 0.5s;
-  -o-animation: highlight 0.5s;
+  animation: highlight 1s;
+  -moz-animation: highlight 1s;
+  -webkit-animation: highlight 1s;
+  -o-animation: highlight 1s;
 }
 
 @keyframes highlight {
   0%    {box-shadow: none;}
-  20%   {box-shadow: 0 0 0.5em 0.5em lightblue;}
+  10%   {box-shadow: 0 0 0.5em 0.5em lightblue;}
   100%  {box-shadow: none;}
 }
 
 @-webkit-keyframes highlight {
   0%    {-webkit-box-shadow: none;}
-  20%   {-webkit-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  10%   {-webkit-box-shadow: 0 0 0.5em 0.5em lightblue;}
   100%  {-webkit-box-shadow: none;}
 }
 
 @-moz-keyframes highlight 
   0%    {-moz-box-shadow: none;}
-  20%   {-moz-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  10%   {-moz-box-shadow: 0 0 0.5em 0.5em lightblue;}
   100%  {-moz-box-shadow: none;}
 }
 
 @-o-keyframes highlight 
   0%    {-o-box-shadow: none;}
-  20%   {-o-box-shadow: 0 0 0.5em 0.5em lightblue;}
+  10%   {-o-box-shadow: 0 0 0.5em 0.5em lightblue;}
   100%  {-o-box-shadow: none;}
 }

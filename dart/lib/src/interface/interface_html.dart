@@ -131,7 +131,6 @@ class HtmlInterface extends EgbInterfaceBase {
     var _processedElements = new Set();
     _metaElements.forEach((Element el, Function action) {
       assert(el.offsetParent == document.body);
-      print("- el: ${el.offsetTop}");
       if (el.offsetTop < currentBottom) {
         action();
         _processedElements.add(el);
@@ -269,9 +268,9 @@ class HtmlInterface extends EgbInterfaceBase {
       return new Future.value(true);
     }
     ParagraphElement p = new ParagraphElement();
-    p.text = award.toString();
-    p.classes.addAll(["meta", "toast", "hidden"]);
-    // Not needed (yet?), but adding for extrea security.
+    p.text = "$award";
+    p.classes.addAll(["toast", "non-dimmed", "hidden"]);
+    // Not needed (yet?), but adding for extra security.
     _recursiveRemoveScript(p);
     bookDiv.append(p);
     Timer.run(() {
@@ -282,6 +281,7 @@ class HtmlInterface extends EgbInterfaceBase {
       _metaElements[p] = () {
         pointsSpan.text = "${award.result}";
         _blink(p);
+        p.classes.remove("non-dimmed");
         _blink(pointsSpan.parent); // The button element with pointsSpan in it.
       };
       if (_periodicSubscription.isPaused) _periodicSubscription.resume();
@@ -292,7 +292,7 @@ class HtmlInterface extends EgbInterfaceBase {
   /// Blinks the [el] element via CSS transitions.
   void _blink(Element el) {
     el.classes.add("blink");
-    new Timer(new Duration(milliseconds: 500), 
+    new Timer(new Duration(milliseconds: 1000), 
         () => el.classes.remove("blink"));
   }
   
