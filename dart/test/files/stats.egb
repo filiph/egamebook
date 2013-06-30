@@ -1,0 +1,35 @@
+# Stats
+
+<variables>
+  hp = new Stat("HP", "? HP", initialValue: 100);
+  gold = new Stat("gold", "¤?", initialValue: 0, show: false);
+</variables>
+
+---
+start
+
+You start your adventure and you're feeling quite healthy ($hp).
+
+- Go shopping [Shop]
+- Go to sleep [Sleep]
+
+---
+
+You arrive at the shop and realize you have no money!
+
+<script>
+  gold.show = true;
+</script>
+
+The shopkeeper looks at you like you're an idiot.
+
+---
+Sleep
+
+You realize there's nowhere to hurry and you go to bed. Yawn!
+
+<script>
+  hp.add(5);
+</script>
+
+You wake up refreshed!

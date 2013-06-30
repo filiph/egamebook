@@ -436,9 +436,24 @@ void main() {
           ui.quit();
         });
       });
-//      test("keeps track", () {
-//        
-//      });
+    });
+    
+    group("Stats", () {
+      solo_test("successfully shows on start", () {
+        build("stats.egb")
+        .then((mainPath) {
+          print(mainPath);
+          return run(mainPath);
+        })
+        .then((MockInterface ui) {
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.visibleStats, hasLength(1));
+          expect(ui.visibleStats[0].name, "HP");
+          ui.quit();
+        }));
+      });
     });
     
     group("ChoiceWithInfochips", () {

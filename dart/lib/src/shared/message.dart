@@ -33,7 +33,8 @@ class EgbMessage {
   
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
-  bool get isAsync => (type == SAVE_GAME) || (type == SAVE_PLAYER_CHRONOLOGY);
+  bool get isAsync => (type == SAVE_GAME) || (type == SAVE_PLAYER_CHRONOLOGY) ||
+      (type == SET_STATS) || (type == UPDATE_STATS);
   
   /*
    * The correct handshake looks like this:

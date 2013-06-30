@@ -13,6 +13,9 @@ import '../persistence/savegame.dart';
 import '../shared/page.dart';
 import '../shared/points_award.dart';
 
+import '../shared/stat.dart';
+export '../shared/stat.dart';
+
 import '../persistence/saveable.dart';
 export '../persistence/saveable.dart';
 
@@ -276,12 +279,14 @@ abstract class EgbScripter {
         _playerChronology.clear();
         _playerChronologyChanged = true;
         currentPage = firstPage;
+        _send(Stat.toMessage());
         _send(new PointsAward(0, 0).toMessage());
         return;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
         _initScriptEnvironment();
         _loadFromSaveGameMessage(message);
+        _send(Stat.toMessage());
         _send(new PointsAward(0, _points.sum).toMessage());
         return;
     }
@@ -292,6 +297,11 @@ abstract class EgbScripter {
       _send(new PointsAward(award.addition, award.result, award.justification)
             .toMessage());
       return;
+    }
+    
+    if (Stat.someChanged) {
+      DEBUG_SCR("Sending updated stats.");
+      _send(Stat.toMessage(changedOnly: true));
     }
     
     if (_playerChronologyChanged) {

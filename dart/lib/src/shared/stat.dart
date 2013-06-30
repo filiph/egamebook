@@ -20,7 +20,7 @@ class Stat {
   /// The color associated with this stat. It should be an HTML-recognizable
   /// string (e.g. "blue", or "#ff00ff").
   final String color;
-  static final DEFAULT_COLOR = "#cccccc";
+  static const DEFAULT_COLOR = "#cccccc";
   /// The higher the priority, the more prominently (top-side) the Stat will
   /// be shown.
   final int priority;
@@ -28,13 +28,23 @@ class Stat {
   /// always be rounded and showed as an integer.
   num _value;
   num get value => _value;
-  set value(val) {
+  set value(num val) {
     if (_value != val) {
       _value = val;
       changed = true;
       someChanged = true;
     }
   }
+  
+  void add(num val) {
+    value = value + val;
+  }
+  
+  Stat operator +(num val) {
+    add(val);
+    return this;
+  }
+  
   /// Signifies whether to show the Stat in the interface or not. Sometimes,
   /// it's useful to hide a Stat from player before he can use it.
   bool _show;
@@ -64,8 +74,7 @@ class Stat {
       assert(stat.color == color);
       assert(stat.priority == priority);
     } else {
-      final stat = 
-          new Stat._internal(name, description, format, color, priority);
+      stat = new Stat._internal(name, description, format, color, priority);
     }
     stat._value = initialValue;
     stat._show = show;
@@ -81,6 +90,10 @@ class Stat {
   /// the representation of the Stat. 
   bool changed = false;
   
+  String toString() {
+    return format.replaceFirst("?", value.round().toString());
+  }
+  
   /// True if one of the stats got changed.
   static bool someChanged = false;
   
@@ -90,7 +103,7 @@ class Stat {
   /// Sends the (final) list of all stats in the game, and their current state.
   /// The optional [changedOnly] specifies if only the changed Stats should
   /// be sent.
-  EgbMessage toMessage({bool changedOnly: false}) {
+  static EgbMessage toMessage({bool changedOnly: false}) {
     if (changedOnly) {
       return _toMessageChangedOnly();
     } else {
@@ -98,8 +111,9 @@ class Stat {
     }
   }
   
-  EgbMessage _toMessageAll() {
+  static EgbMessage _toMessageAll() {
     var message = new EgbMessage(EgbMessage.SET_STATS);
+    message.listContent = new List<Map>();
     _stats.values.forEach((Stat stat) {
       var statMap = new Map<String,Object>();
       statMap["name"] = stat.name;
@@ -115,8 +129,8 @@ class Stat {
     return message;
   }
   
-/// Sends statistics that were changed and need updating on the interface.
-  EgbMessage _toMessageChangedOnly() {
+  /// Sends statistics that were changed and need updating on the interface.
+  static EgbMessage _toMessageChangedOnly() {
     var message = new EgbMessage(EgbMessage.UPDATE_STATS);
     _stats.values.where((stat) => stat.changed).forEach((Stat stat) {
       var statMap = new Map<String,Object>();

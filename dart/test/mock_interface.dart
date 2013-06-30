@@ -7,7 +7,7 @@ import 'package:egamebook/src/interface/interface.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/shared/points_award.dart';
-
+import 'package:egamebook/src/shared/stat.dart';
 
 class MockInterface extends EgbInterfaceBase {
   Queue<int> choicesToBeTaken;
@@ -18,6 +18,7 @@ class MockInterface extends EgbInterfaceBase {
   EgbChoiceList get latestChoices => _latestChoices;
   bool started = false;
   bool closed = false;
+  final List<Stat> visibleStats = new List<Stat>();
   
   /// Choices that are being shown now.
   EgbChoiceList _currentChoices;
@@ -31,7 +32,6 @@ class MockInterface extends EgbInterfaceBase {
 
   Stream _stream;
   Stream get stream => _stream;
-  
   
   StreamController<String> _eventStreamController;
   Stream<String> _eventStream;

@@ -140,6 +140,12 @@ class EgbRunner {
           _send(new EgbMessage.Continue());
         });
         return;
+      case EgbMessage.SET_STATS:
+        print("UNIMPLEMENTED");
+        return;
+      case EgbMessage.UPDATE_STATS:
+        print("UNIMPLEMENTED");
+        return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);
         return;
