@@ -73,6 +73,15 @@ nav {
   z-index: 1000;
 }
 
+nav a#book-restart {
+	float: left;
+}
+
+nav div#right-hand-nav {
+	float: right;
+	width: 50%;
+}
+
 nav div#stats, nav a#points-button {
   float: right;
 }

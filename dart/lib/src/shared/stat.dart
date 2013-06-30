@@ -1,6 +1,7 @@
 library stat;
 
 import 'message.dart';
+import '../persistence/saveable.dart';
 
 /**
  * This class is holding different statistics that are to be shown to the
@@ -9,7 +10,7 @@ import 'message.dart';
  * 
  * A set of all Stats can always be accessed by the static method Stats.all.
  */
-class Stat {
+class Stat implements Saveable {
   /// The name of the stat. Ex.: "energy".
   final String name;
   /// The optional description of the Stat. To be shown when player somehow 
@@ -183,5 +184,22 @@ class Stat {
     }
     statsList.sort((a, b) => b.priority - a.priority);
     return statsList;
+  }
+
+  Map<String, dynamic> toMap() {
+    var map = new Map.from({
+      "name": this.name,
+      "value": this.value,
+      "show": this.show
+    });
+    return map;
+  }
+  
+  String className = "Stat";
+
+  void updateFromMap(Map<String, dynamic> map) {
+    assert(map["name"] == this.name);
+    this.value = map["value"];
+    this.show = map["show"];
   }
 }

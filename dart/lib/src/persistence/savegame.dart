@@ -215,6 +215,7 @@ class EgbSavegame {
                                    {Map<String,Function> constructors}) {
     // assemble and copy / update saved variables over vars
     savegame.vars.forEach((String key, value) {
+      print("$key - $value");
       var existingValue = vars[key];
       if (existingValue == null) {
         vars[key] = _assembleFromPrimitives(value, constructors);
