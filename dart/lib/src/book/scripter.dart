@@ -521,7 +521,7 @@ abstract class EgbScripter {
     // See https://www.pivotaltracker.com/story/show/52581979
     _pointsEmbargo = 
         (_alreadyOffered(currentPage, _gotoPage) || _gotoPage.visited) &&
-        !previousPage.visited;
+        (previousPage != null && !previousPage.visited);
     
     _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
         currentBlockIndex);
