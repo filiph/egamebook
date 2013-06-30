@@ -44,7 +44,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     }
   }
   
-  void reportFullRepair() => _report(stringDestroy, positive: true);
+  void reportFullRepair() => _report(stringFullRepair, positive: true);
   String stringFullRepair = "<subject> <is> now {{fully|} repaired|fully operational}";
   
   void reportDestroy() => _report(stringDestroy, negative: true);

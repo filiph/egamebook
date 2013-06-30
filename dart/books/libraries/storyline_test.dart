@@ -41,4 +41,29 @@ void main() {
         matches("You try to hit enemy in the stomach.+ he dodges your strike. "
         "He hits back.+ breaks your nose."));
   });
+  
+  test("possessive", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gun = new Actor(name: "gun", team: Actor.FRIEND, 
+        pronoun: Pronoun.IT);
+    var enemy = new Actor(name: "the enemy", team: Actor.DEFAULT_ENEMY, 
+        pronoun: Pronoun.HE);
+    storyline.add("<owner's> <subject> <is> pointed at <object>",
+                  owner: player, subject: gun, object: enemy, time: 1);
+    storyline.add("<subject> fire<s>",
+                  subject: gun, time: 2);
+    expect(storyline.toString(),
+        matches("Your gun is pointed at the enemy.+t fires."));
+    
+    storyline.clear();
+    var ship = new Actor(name: "ship", team: Actor.DEFAULT_ENEMY, 
+        pronoun: Pronoun.SHE);
+    storyline.add("<owner's> <subject> aim<s> <subject's> guns at <object>",
+        owner: enemy, subject: ship, object: player);
+    storyline.add("<owner's> <subject> <is> faster",
+        owner: player, subject: gun, but: true);
+    expect(storyline.toString(),
+        matches("The enemy's ship aims her guns at you.+ your gun is faster."));
+  });
 }
