@@ -145,6 +145,7 @@ class EgbRunner {
         _interface.setStats(Stat.statsListFromMessage(message));
         return;
       case EgbMessage.UPDATE_STATS:
+        print("RUN: Received updated stats.");
         _interface.updateStats(message.mapContent);
         return;
       case EgbMessage.SHOW_CHOICES:

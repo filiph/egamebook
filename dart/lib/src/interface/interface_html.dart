@@ -295,15 +295,38 @@ class HtmlInterface extends EgbInterfaceBase {
   }
   
   List<Stat> _statsList;
+  final Map<String,Element> _statsElementMap = new Map();
   
   Future<bool> setStats(List<Stat> stats) {
     _statsList = stats;
-    _printStats();
+    _printStats();  // DEBUG
+    var statsDiv = document.query("nav div#stats");
+    statsDiv.children.clear();
+    for (int i = 0; i < stats.length; i++) {
+      var current = stats[i];
+      var span = new SpanElement();
+      span.text = current.toString();
+      var a = new AnchorElement();
+      a.classes.add("button");
+      if (!current.show) a.classes.add("display-none");
+      a.children.add(span);
+      statsDiv.children.add(a);
+      _statsElementMap[current.name] = a;
+    }
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
     Stat.updateStatsListFromMap(_statsList, mapContent);
-    _printStats();
+    _printStats();  // DEBUG
+    _statsList.where((stat) => stat.changed).forEach((Stat current) {
+      var a = _statsElementMap[current.name];
+      a.children.single.text = current.toString();
+      if (current.show) {
+        a.classes.remove("display-none");
+      } else {
+        a.classes.add("display-none");
+      }
+    });
   }
   
   void _printStats() {

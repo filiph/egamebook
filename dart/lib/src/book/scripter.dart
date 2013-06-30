@@ -221,6 +221,7 @@ abstract class EgbScripter {
     if (_runnerPort == null) throw new StateError("Cannot send message "
                                              "when _runnerPort is null.");
     if (message.isAsync) {
+      DEBUG_SCR("Sending nonText async message (${message.type})");
       _runnerPort.send(message.toJson(), port.toSendPort());
       return;
     }

@@ -1,6 +1,7 @@
 /* @override 
 	http://0.0.0.0:8000/egamebook.css
 	http://egamebook.com/test/egamebook.css
+	http://10.0.0.103:3030/Users/filiph/Programs/egamebook/dart/books/bodega/egamebook.css
 */
 
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
@@ -72,28 +73,35 @@ nav {
   z-index: 1000;
 }
 
-nav div#stats {
+nav div#stats, nav a#points-button {
   float: right;
 }
 
 nav div#stats a {
+  float: left;
+  margin-right: 0.5em;
+}
+
+nav a#points-button {
+  margin-left: 0.5em;
   font-weight: bold;
 }
 
-nav div#stats a div {
-}
-
-nav div#stats a span.stats-legend {
+nav div#stats a span.stats-legend, nav a#points-button span.stats-legend {
   font-weight: normal;
   display: none;
 }
 
-nav div#stats a#points-button {
+nav a#points-button {
   border-color: gold;
 }
 
 nav a {
   cursor: pointer;
+}
+
+.display-none {
+  display: none;
 }
 
 .button {

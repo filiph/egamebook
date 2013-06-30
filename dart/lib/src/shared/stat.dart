@@ -64,7 +64,7 @@ class Stat {
   
   factory Stat(String name, String format,
       {String description, String color: DEFAULT_COLOR, int priority: 0,
-       num initialValue, bool show: true}) {
+       num initialValue: 0, bool show: true}) {
     Stat stat;
     if (_stats.containsKey(name)) {
       print("Warning: A Stat with name '$name' already exists.");
@@ -88,7 +88,7 @@ class Stat {
   /// independent stat, without using the [_stats] Map at all.
   Stat.independent(this.name, this.format,
       {this.description, this.color: DEFAULT_COLOR, this.priority: 0,
-       num initialValue, bool show: true}) 
+       num initialValue: 0, bool show: true}) 
        : _value = initialValue, _show = show;
   
   Stat._internal(this.name, this.description, this.format, this.color, 
@@ -141,6 +141,7 @@ class Stat {
   /// Sends statistics that were changed and need updating on the interface.
   static EgbMessage _toMessageChangedOnly() {
     var message = new EgbMessage(EgbMessage.UPDATE_STATS);
+    message.mapContent = new Map<String,Object>();
     _stats.values.where((stat) => stat.changed).forEach((Stat stat) {
       var statMap = new Map<String,Object>();
       statMap["value"] = stat.value;
