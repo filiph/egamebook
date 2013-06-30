@@ -109,7 +109,7 @@ nav a {
   cursor: pointer;
 }
 
-.display-none {
+nav div#stats a.display-none {
   display: none;
 }
 
