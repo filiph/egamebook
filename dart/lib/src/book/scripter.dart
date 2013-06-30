@@ -515,9 +515,13 @@ abstract class EgbScripter {
     }
     
     // Raise or lower the points embargo (no points for second-guessing,
-    // and no points for visiting for the second time). 
-    _pointsEmbargo = _alreadyOffered(currentPage, _gotoPage) ||
-        _gotoPage.visited;
+    // and no points for visiting for the second time).
+    // When previous page was visited before, that means it's a recurring
+    // node and therefore links leading from it should not be embargoed.
+    // See https://www.pivotaltracker.com/story/show/52581979
+    _pointsEmbargo = 
+        (_alreadyOffered(currentPage, _gotoPage) || _gotoPage.visited) &&
+        !previousPage.visited;
     
     _preGotoPosition = new EgbScripterBlockPointer(currentPage, 
         currentBlockIndex);
