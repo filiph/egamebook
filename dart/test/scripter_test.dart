@@ -423,23 +423,20 @@ void main() {
           return run(mainPath);
         })
         .then(expectAsync1((MockInterface ui) {
-          ui.eventStream
-          .where((event) => event == MockInterface.POINTS_AWARDED_EVENT)
-          .listen(expectAsync1((event) {
-            expect(ui.currentlyShownPoints, lessThanOrEqualTo(1));
-          }));
+          expect(ui.currentlyShownPoints, 0);
           ui.choose("Go to next");
           ui.choose("Do something stupid");
           return ui.waitForDone();
         }))
-        .then((MockInterface ui) {
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.currentlyShownPoints, 1);
           ui.quit();
-        });
+        }));
       });
     });
     
     group("Stats", () {
-      solo_test("successfully shows on start", () {
+      test("successfully shows on start", () {
         build("stats.egb")
         .then((mainPath) {
           print(mainPath);

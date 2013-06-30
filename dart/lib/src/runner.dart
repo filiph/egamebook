@@ -12,6 +12,7 @@ import 'persistence/player_profile.dart';
 import 'shared/user_interaction.dart';
 import 'shared/message.dart';
 import 'shared/points_award.dart';
+import 'shared/stat.dart';
 
 /**
  * EgbRunner manages communication between the Book and the Interface.
@@ -141,10 +142,10 @@ class EgbRunner {
         });
         return;
       case EgbMessage.SET_STATS:
-        print("UNIMPLEMENTED");
+        _interface.setStats(Stat.statsListFromMessage(message));
         return;
       case EgbMessage.UPDATE_STATS:
-        print("UNIMPLEMENTED");
+        _interface.updateStats(message.mapContent);
         return;
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);

@@ -18,7 +18,8 @@ class MockInterface extends EgbInterfaceBase {
   EgbChoiceList get latestChoices => _latestChoices;
   bool started = false;
   bool closed = false;
-  final List<Stat> visibleStats = new List<Stat>();
+  List<Stat> get visibleStats => 
+      _statsList.where((stat) => stat.show == true).toList(growable: false);
   
   /// Choices that are being shown now.
   EgbChoiceList _currentChoices;
@@ -160,8 +161,27 @@ class MockInterface extends EgbInterfaceBase {
     return new Future.value(true);
   }
   
-  int _currentlyShownPoints;  // TODO: use for unittesting
+  int _currentlyShownPoints = 0;  // TODO: use for unittesting
   int get currentlyShownPoints => _currentlyShownPoints;
+  
+  List<Stat> _statsList;
+  
+  Future<bool> setStats(List<Stat> stats) {
+    _statsList = stats;
+    _printStats();
+  }
+  
+  Future<bool> updateStats(Map<String,Object> mapContent) {
+    Stat.updateStatsListFromMap(_statsList, mapContent);
+    _printStats();
+  }
+  
+  void _printStats() {
+    print("Stats:");
+    _statsList.where((stat) => stat.show == true).forEach((stat) {
+      print("- $stat");
+    });
+  }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");

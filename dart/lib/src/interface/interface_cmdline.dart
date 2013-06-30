@@ -7,6 +7,7 @@ import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 import '../shared/points_award.dart';
+import '../shared/stat.dart';
 
 class CmdlineInterface extends EgbInterfaceBase {
   Stream<String> _cmdLine;
@@ -99,6 +100,25 @@ class CmdlineInterface extends EgbInterfaceBase {
   Future<bool> awardPoints(PointsAward award) {
     print("*** $award ***");
     return new Future.value(true);
+  }
+  
+  List<Stat> _statsList;
+  
+  Future<bool> setStats(List<Stat> stats) {
+    _statsList = stats;
+    _printStats();
+  }
+  
+  Future<bool> updateStats(Map<String,Object> mapContent) {
+    Stat.updateStatsListFromMap(_statsList, mapContent);
+    _printStats();
+  }
+  
+  void _printStats() {
+    print("Stats:");
+    _statsList.where((stat) => stat.show == true).forEach((stat) {
+      print("- $stat");
+    });
   }
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {

@@ -9,6 +9,7 @@ import 'interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 import '../shared/points_award.dart';
+import '../shared/stat.dart';
 
 // because we're defining localStorage here
 import '../persistence/storage.dart';
@@ -291,6 +292,25 @@ class HtmlInterface extends EgbInterfaceBase {
       completer.complete(true);
     });
     return completer.future;
+  }
+  
+  List<Stat> _statsList;
+  
+  Future<bool> setStats(List<Stat> stats) {
+    _statsList = stats;
+    _printStats();
+  }
+  
+  Future<bool> updateStats(Map<String,Object> mapContent) {
+    Stat.updateStatsListFromMap(_statsList, mapContent);
+    _printStats();
+  }
+  
+  void _printStats() {
+    print("Stats:");
+    _statsList.where((stat) => stat.show == true).forEach((stat) {
+      print("- $stat");
+    });
   }
   
   /// Blinks the [el] element via CSS transitions.

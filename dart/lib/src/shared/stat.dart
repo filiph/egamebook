@@ -26,7 +26,6 @@ class Stat {
   final int priority;
   /// The current value. It can be a real number, but when showed, it will 
   /// always be rounded and showed as an integer.
-  num _value;
   num get value => _value;
   set value(num val) {
     if (_value != val) {
@@ -35,6 +34,7 @@ class Stat {
       someChanged = true;
     }
   }
+  num _value;
   
   void add(num val) {
     value = value + val;
@@ -47,7 +47,6 @@ class Stat {
   
   /// Signifies whether to show the Stat in the interface or not. Sometimes,
   /// it's useful to hide a Stat from player before he can use it.
-  bool _show;
   bool get show => _show;
   set show(value) {
     if (_show != value) {
@@ -56,6 +55,7 @@ class Stat {
       someChanged = true;
     }
   }
+  bool _show;
   
   /// When set to [:true:], and when [:show == true:] and 
   /// [:this.changed == true:], the interface should notify the player on
@@ -81,6 +81,15 @@ class Stat {
     _stats[name] = stat;
     return stat;
   }
+  
+  /// Used to create stats outside Scripter. In Scripter, for convenience,
+  /// all calls to [:new Stat():] go through the factory and keep track of the
+  /// stat in the [_stats] Map. With this constructor, we can create an
+  /// independent stat, without using the [_stats] Map at all.
+  Stat.independent(this.name, this.format,
+      {this.description, this.color: DEFAULT_COLOR, this.priority: 0,
+       num initialValue, bool show: true}) 
+       : _value = initialValue, _show = show;
   
   Stat._internal(this.name, this.description, this.format, this.color, 
       this.priority);
@@ -143,6 +152,17 @@ class Stat {
     return message;
   }
   
+  /// Gets the Map from the [STAT_UPDATE] EgbMessage (as generated with
+  /// [_toMessageChangedOnly] and updates the [_stats] from it. 
+  static void updateStatsListFromMap(List<Stat> statsList, 
+                                     Map<String,Object> mapContent) {
+    mapContent.forEach((String statName, Map statMap) {
+      var stat = statsList.firstWhere((st) => st.name == statName);
+      stat.value = statMap["value"];
+      stat.show = statMap["show"];
+    });
+  }
+  
   /// Creates a list of [Stat] objects from an EgbMessage of type [STATS_SET].
   /// The list is sorted by [priority].
   static List<Stat> statsListFromMessage(EgbMessage message) {
@@ -153,7 +173,7 @@ class Stat {
     var statsList = new List<Stat>(message.listContent.length);
     int i = 0;
     for (Map<String,Object> statMap in message.listContent) {
-      var stat = new Stat(statMap["name"], statMap["format"],
+      var stat = new Stat.independent(statMap["name"], statMap["format"],
           description: statMap["description"], color: statMap["color"], 
           priority: statMap["priority"], initialValue: statMap["value"], 
           show: statMap["show"]);

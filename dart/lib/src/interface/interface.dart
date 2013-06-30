@@ -6,6 +6,7 @@ import 'dart:isolate';
 import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
 import '../shared/points_award.dart';
+import '../shared/stat.dart';
 
 abstract class EgbInterface {
   ReceivePort _receivePort;
@@ -28,7 +29,7 @@ abstract class EgbInterface {
   void close();
 
   /**
-   * Displays the HTML-formated text.
+   * Displays the markdown-formated text.
    */
   Future<bool> showText(String text);
   
@@ -44,8 +45,23 @@ abstract class EgbInterface {
    */
   Future<int> showChoices(EgbChoiceList choices);
   
+  /// Updates the points count and, when [award.addition] is non-zero, it also
+  /// informs the player about the new points.
   Future<bool> awardPoints(PointsAward award);
-  // TODO: setStats(), updateStats(), toast()
+  
+  /// Sets the stats to be used in the game. The interface should create/retain
+  /// the Stat objects for those and show all the stats which have
+  /// [:stat.show == true:]. During the game, only the [Stat.value] and the 
+  /// [Stat.show] will change (via [updateStats]).
+  Future<bool> setStats(List<Stat> stats);
+  
+  /// Tells the interface about changed stats. Interface should update the shown
+  /// value(s) and show/hide stats according to the [Stat.show] state.
+  /// Feed this function with the [EgbMessage.mapContent] of the received
+  /// [EgbMessage.UPDATE_STATS] message.  
+  Future<bool> updateStats(Map<String,Object> mapContent); 
+  
+  // TODO: toast() ?
   
   /**
    * Marks the point at which the gameplay is saved. Interface should relay
