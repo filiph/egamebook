@@ -13,7 +13,7 @@ abstract class Saveable {
    * The name of the class, so the instance can be constructed later. This
    * will be added to the Map created by toMap.
    */
-  String className;
+  String get className;
   
   /**
    * Update the instance from a Map. Typically, the Map is a one that was

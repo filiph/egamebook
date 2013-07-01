@@ -77,7 +77,7 @@ class NumScale implements Saveable {
   Stream onUpwardsChangeBy(num percentage) =>
       onChangeBy(percentage).where((v) => v > _lastValue);
   
-  static final className = "NumScale";
+  final className = "NumScale";
   toMap() => {"min": min, "max": max, "value": _value};
   updateFromMap(map) {
     _value = map["value"];
