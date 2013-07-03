@@ -41,11 +41,9 @@ class EgbScripterBlockPointer {
  */
 class EgbScripterPageMap {
   /// A map of page name -> page object.
-  Map<String, EgbScripterPage> pages;
+  final Map<String, EgbScripterPage> pages = new Map<String, EgbScripterPage>();
 
-  EgbScripterPageMap() {
-    pages = new Map<String, EgbScripterPage>();
-  }
+  EgbScripterPageMap();
 
   /// Returns page of exactly the name [key].
   EgbScripterPage operator [](String key) => pages[key];
