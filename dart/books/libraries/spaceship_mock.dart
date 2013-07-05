@@ -43,6 +43,7 @@ class ShipComponentMock {
   /// Operational means the component is able to work (but it needn't be
   /// charged right now).
   bool get isOperational => hp.value >= minimalHp;
+  bool get isDamaged => hp.value < hp.max;
   
   /// The charged state of the system. Energy-based systems are 100% operational
   /// at 100% charge. Charging can be 'rushed'.
