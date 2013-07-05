@@ -236,7 +236,7 @@ class HtmlInterface extends EgbInterfaceBase {
             _bookmarkDiv.query("a").style.height = height;
             _bookmarkDiv.classes.add("hidden");
             choicesOl.children.insert(0, _bookmarkDiv);
-            new Timer(new Duration(seconds: 1), () {
+            new Timer(new Duration(seconds: 20), () {
               _bookmarkDiv.classes.remove("hidden");
             });
             // TODO: show after scrolled past
