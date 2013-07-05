@@ -39,6 +39,13 @@ class NumScale implements Saveable {
   final num min;
   final num max;
   
+  void setMax() {
+    value = max;
+  }
+  void setMin() {
+    value = min;
+  }
+  
   num get range => (max - min).abs();
   
   num get percentage {
