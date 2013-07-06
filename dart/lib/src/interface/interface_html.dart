@@ -67,7 +67,6 @@ class HtmlInterface extends EgbInterfaceBase {
     streamController.close();
   }
   
-  // TODO: instead of creating one-by-one, create them all, use delayed transitions. Only use _periodic for checking if special "meta" divs are visible (can be once per second)
   /**
    * Converts [s] to HTML elements (via markdown) and shows them one by one
    * on page. Returns when complete.
@@ -237,9 +236,10 @@ class HtmlInterface extends EgbInterfaceBase {
             _bookmarkDiv.classes.add("hidden");
             choicesOl.children.insert(0, _bookmarkDiv);
             new Timer(new Duration(seconds: 20), () {
+              // Show the bookmark after a pause.
               _bookmarkDiv.classes.remove("hidden");
+              // TODO: show after scrolled past
             });
-            // TODO: show after scrolled past
           }
       });
       clickSubscriptions.add(subscription);
@@ -377,28 +377,6 @@ class HtmlInterface extends EgbInterfaceBase {
   }
 }
 
-class LocalStorage implements EgbStorage {
-  Future<bool> save(String key, String value) {
-    window.localStorage[key] = value;
-    return new Future.value(true);
-  }
-  
-  Future<String> load(String key) {
-    var result = window.localStorage[key];
-    return new Future.value(result);
-  }
-  
-  Future<bool> delete(String key) {
-    window.localStorage.remove(key);
-    return new Future.value(true);
-  }
-  
-  EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
-        this);
-  }
-}
-
 /**
  * A special class for storing information about a PointsAward together
  * with its meta element.
@@ -436,3 +414,29 @@ abstract class EgbMetaElement {
 /// A simple callback closure for use with metaElements (called when element
 /// comes into view).
 typedef void Action();
+
+/**
+ * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
+ * [HtmlInterface]).
+ */
+class LocalStorage implements EgbStorage {
+  Future<bool> save(String key, String value) {
+    window.localStorage[key] = value;
+    return new Future.value(true);
+  }
+  
+  Future<String> load(String key) {
+    var result = window.localStorage[key];
+    return new Future.value(result);
+  }
+  
+  Future<bool> delete(String key) {
+    window.localStorage.remove(key);
+    return new Future.value(true);
+  }
+  
+  EgbPlayerProfile getDefaultPlayerProfile() {
+    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
+        this);
+  }
+}
