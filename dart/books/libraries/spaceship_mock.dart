@@ -3,16 +3,26 @@ library spaceship_mock;
 import 'package:egamebook/src/persistence/saveable.dart';
 import 'numscale.dart';
 
-class SpaceshipMock {
+class SpaceshipMock implements Saveable {
   bool isAlive = true;
   ShipComponentCollection components = new ShipComponentCollection();
   ShipComponentMock get hull => components["hull"];
   ShipComponentMock get shield => components["shield"];
   ShipComponentMock get engine => components["engine"];
   ShipComponentMock get radar  => components["radar"];
+  
+  String className = "Spaceship";
+  Map toMap() => {
+    "isAlive": isAlive,
+    "components": components
+  };
+  void updateFromMap(Map map) {
+    isAlive = map["isAlive"];
+    components.updateFromMap(map["components"]);
+  }
 }
 
-class ShipComponentCollection {
+class ShipComponentCollection implements Saveable {
   Map<String, ShipComponentMock> _components = 
       new Map<String,ShipComponentMock>();
   
@@ -34,9 +44,20 @@ class ShipComponentCollection {
   }
   
   // TODO .all
+  
+  String className = "ShipComponentCollection";
+  Map toMap() => _components;
+  void updateFromMap(Map map) {
+    print("updating shipcomponentcollection from map: $map");
+    map.forEach((String key, Map value) {
+      if (_components.containsKey(key)) {
+        _components[key].updateFromMap(value);
+      }
+    });
+  }
 }
 
-class ShipComponentMock {
+class ShipComponentMock implements Saveable {
   IntScale hp = new IntScale(max: 10);
   /// A component is operational when it has at least this much HPs.
   final int minimalHp = 5;
@@ -60,4 +81,16 @@ class ShipComponentMock {
   /// it is an override. Set to [:false:] to not allow the player/AI to use
   /// this component.
   bool active = true;
+  
+  String className = "ShipComponentMock";
+  Map toMap() => {
+    "hp": hp,
+    "charge": charge,
+    "active": active
+  };
+  void updateFromMap(Map map) {
+    hp.updateFromMap(map["hp"]);
+    charge.updateFromMap(map["charge"]);
+    active = map["active"];
+  }
 }
