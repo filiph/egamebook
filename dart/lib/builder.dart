@@ -2038,8 +2038,8 @@ class ScripterImpl extends EgbScripter {
   /** used to communicate problems to caller */
   List<String> warningLines;
 
-  void WARNING(String msg, {int line}) {
-    if (!?line) {
+  void WARNING(String msg, {int line: null}) {
+    if (line == null) {
       line = _lineNumber;
     }
     String str = (line == null) ? msg : "$msg (line:$line)";
