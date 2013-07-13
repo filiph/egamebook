@@ -46,7 +46,9 @@ class ShipComponentCollection implements Saveable {
   // TODO .all
   
   String className = "ShipComponentCollection";
-  Map toMap() => _components;
+  Map toMap() => {
+    "components": _components
+  };
   void updateFromMap(Map map) {
     print("updating shipcomponentcollection from map: $map");
     map.forEach((String key, Map value) {
