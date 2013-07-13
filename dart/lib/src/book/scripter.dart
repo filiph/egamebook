@@ -126,6 +126,23 @@ void nextScript(ScriptBlock f) {
   _nextScriptStack.add(f);
 }
 
+/**
+ * Persistently flags the identifier [name] as [:true:]. Can be checked by
+ * [isFlagged] and unflagged by [unflag].
+ * 
+ * The reason is convenience: the author doesn't need to check for [:null:]
+ * before checking for true or false.
+ */
+void flag(String name) => _flags.add(name);
+
+void unflag(String name) {
+  _flags.remove(name);
+}
+
+bool isFlagged(String name) => _flags.contains(name);
+
+Set<String> _flags = new Set<String>();
+
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
@@ -599,6 +616,7 @@ abstract class EgbScripter {
   }
 
   EgbSavegame _createSaveGame() {
+    vars["_flags"] = _flags.toList(growable: false);
     return new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
   }
@@ -632,6 +650,13 @@ abstract class EgbScripter {
     }
 
     var _constructors = {};
+    
+    // extract flags and remove from vars
+    if (savegame.vars.containsKey("_flags")) {
+      _flags = new Set<String>.from(savegame.vars["_flags"]);
+      savegame.vars.remove("_flags");
+    }
+    
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
     EgbSavegame.importSavegameToVars(savegame, vars, 
