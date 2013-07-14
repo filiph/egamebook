@@ -586,6 +586,7 @@ abstract class EgbScripter {
     vars.clear();
     vars["points"] = _points;
     _points.clear();
+    _flags.clear();
     if (pageMap != null) pageMap.clearState();
 
     isInInitBlock = true;
@@ -688,6 +689,8 @@ abstract class EgbScripter {
     if (savegame.vars.containsKey("_flags")) {
       _flags = new Set<String>.from(savegame.vars["_flags"]);
       savegame.vars.remove("_flags");
+    } else {
+      _flags.clear();
     }
     
     // copy saved variables over vars

@@ -275,6 +275,28 @@ void main() {
           ui.quit();
         }));
       });
+      test("flags don't stay up after restart", () {
+        build("shutup.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("\"Shut up.\"");
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.restart();
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.choose("\"We survived, didn't we?\"");
+          ui.choose("\"Shut up.\"");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("You know what? You shut up."));
+          expect(ui.latestOutput, isNot(contains("Can you say anything else? Jesus.")));
+          ui.quit();
+        }));
+      });
     });
 
     group("Persistence", () {
