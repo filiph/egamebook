@@ -63,7 +63,33 @@ class Timeline implements Saveable {
     if (_time == null) _time = -1;
     if (value < _time) throw new ArgumentError("Cannot go back in time.");
     if (length != null && value > length) value = length;
+    _requestedTime = value;
     elapse(value - _time);
+  }
+  
+  /**
+   * Set time without going through the events in between.
+   */
+  void set(int time) {
+    _time = time;
+  }
+  
+  /**
+   * The time set by [:Timeline.time = x:]. This is used by [catchUp] as 
+   * a target when the normal [elapse] operation was interrupted by a [:goto():]
+   * or a choice. 
+   */
+  int _requestedTime = null;
+  
+  /**
+   * Whenever a TimedEvent calls goto() or creates a choice, the Timeline
+   * stops there. That TimedEvent has to make sure that [catchUp] is called
+   * afterwards so that the time catches up with the requested time.
+   */
+  void catchUp() {
+    if (_requestedTime == null) return;
+    assert(_requestedTime > _time);
+    elapse(_requestedTime - _time);
   }
   
   Function _mainLoop;
@@ -118,6 +144,7 @@ class Timeline implements Saveable {
       _handleEventOutput(event.run());
       if (finished) return;
     }
+
   }
   
   /**
@@ -131,6 +158,18 @@ class Timeline implements Saveable {
       _goOneTick();
       if (length != null && _time == length) finished = true;
       if (finished) break;
+      
+      if (gotoPageName != null) {
+        // An event called goto().
+        break;
+      }
+      if (!choices.isEmpty) {
+        // An event created a choice.
+        break;
+      }
+    }
+    if (_time == _requestedTime) {
+      _requestedTime = null;
     }
   }
 }

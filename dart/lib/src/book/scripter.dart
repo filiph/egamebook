@@ -41,7 +41,15 @@ void echo(String str) {
   textBuffer.write(str);
 }
 
-String _gotoPageName;
+/**
+ * This is the page name that was most recently called in a [:goto(name):]
+ * statement (or [:null:] if there was no recent call). Author should
+ * seldom access this field. Instead, they should use the [goto] function.
+ * 
+ * The variable is automatically reset to [:null:] by Scripter once the jump
+ * has been done.
+ */
+String gotoPageName;
 
 /**
  * By calling [goto()], you're saying you want to change page to [pageName].
@@ -53,7 +61,7 @@ String _gotoPageName;
  * page inside [EgbScripter]. 
  */
 void goto(String pageName) {
-  _gotoPageName = pageName;
+  gotoPageName = pageName;
 }
 
 /**
@@ -117,13 +125,13 @@ void repeatBlock() {
 
 /**
 When a block/script/choice call for a script to be called afterwards,
-it ends up on this FIFO stack.
+it ends up on this FILO stack.
  */
-final List<ScriptBlock> _nextScriptStack = new List<ScriptBlock>();
+final Queue<ScriptBlock> _nextScriptStack = new Queue<ScriptBlock>();
 
 /// Adds a script to the stack of scripts.
 void nextScript(ScriptBlock f) {
-  _nextScriptStack.add(f);
+  _nextScriptStack.addLast(f);
 }
 
 /**
@@ -449,10 +457,10 @@ abstract class EgbScripter {
       return _runScriptBlock(script);
     }
     
-    if (_gotoPageName != null) {
+    if (gotoPageName != null) {
       // someone called the top level function [goto]
-      _performGoto(_gotoPageName);
-      _gotoPageName = null;
+      _performGoto(gotoPageName);
+      gotoPageName = null;
       return null;
     }
 
