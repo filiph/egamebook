@@ -131,18 +131,27 @@ void nextScript(ScriptBlock f) {
  * [isFlagged] and unflagged by [unflag].
  * 
  * The reason is convenience: the author doesn't need to check for [:null:]
- * before checking for true or false.
+ * before checking for true or false using [isFlagged].
  */
 void flag(String name) => _flags.add(name);
 
+/**
+ * If [name] was flagged, it will be unflagged (i.e. [:isFlagged(name):] will
+ * return [:false:]). If [name] hasn't been previously flagged, nothinig 
+ * happens. 
+ */
 void unflag(String name) {
   _flags.remove(name);
 }
 
+/**
+ * Returns [:true:] if [name] has been flagged via [:flag(name):]. Returns 
+ * [:false:] otherwise (even if the flag is still 'undefined').
+ */
 bool isFlagged(String name) => _flags.contains(name);
 
+/// Internal representation of flags.
 Set<String> _flags = new Set<String>();
-
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
