@@ -3,11 +3,13 @@ library timeline;
 import 'package:egamebook/src/book/scripter.dart';
 import 'storyline.dart';
 
+typedef void ScheduledFunction();
+
 /// A singular event on the timeline.
 class TimedEvent {
   final int time;
   final int priority;
-  Function f;
+  ScheduledFunction f;
   String text;
   
   TimedEvent(this.time, dynamic action, {this.priority: 0}) {
@@ -17,7 +19,7 @@ class TimedEvent {
     }
     if (action is String) {
       text = action;
-    } else if (action is Function) {
+    } else if (action is ScheduledFunction) {
       f = action;
     } else {
       throw new ArgumentError("Second parameter in TimedEvent() constructor "
@@ -64,15 +66,26 @@ class Timeline implements Saveable {
     elapse(value - _time);
   }
   
-  Function mainLoop;
-  Set<TimedEvent> events;
-  bool finished;
+  Function _mainLoop;
+  Function get mainLoop => _mainLoop;
+  set mainLoop(Function f) {
+    throwIfNotInInitBlock();
+    _mainLoop = f;
+  }
+  
+  Set<TimedEvent> _events;
+  bool finished = false;
   
   Storyline storyline;
   
   Timeline({this.storyline}) {
-    finished = false;
-    events = new Set<TimedEvent>();
+    throwIfNotInInitBlock();
+    _events = new Set<TimedEvent>();
+  }
+  
+  void schedule(int time, Object action, {int priority: 0}) {
+    throwIfNotInInitBlock();
+    _events.add(new TimedEvent(time, action, priority: priority));
   }
 
   String className = "Timeline";
@@ -93,12 +106,12 @@ class Timeline implements Saveable {
   }
   
   void _goOneTick() {
-    if (mainLoop != null) {
-      _handleEventOutput(mainLoop());
+    if (_mainLoop != null) {
+      _handleEventOutput(_mainLoop());
     }
     if (finished) return;
     
-    List<TimedEvent> currentEvents = events.where((ev) => ev.time == _time)
+    List<TimedEvent> currentEvents = _events.where((ev) => ev.time == _time)
                                       .toList();
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {

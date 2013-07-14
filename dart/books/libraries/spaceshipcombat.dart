@@ -20,10 +20,6 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   Spaceship playerSpaceship;
   int timeToNextInteraction = 0;
   
-  void addEvent(int t, dynamic action) {
-    timeline.events.add(new TimedEvent(t, action));
-  }
-  
   void update() {
     timeline.time++;
     for (Spaceship ship in actors) { //actors.forEach((Spaceship ship) {

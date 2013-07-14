@@ -153,6 +153,20 @@ bool isFlagged(String name) => _flags.contains(name);
 /// Internal representation of flags.
 Set<String> _flags = new Set<String>();
 
+/// Constructors and functions can check for [isInInitBlock] and might choose
+/// to throw an Exception. For example, if an unsaveable property is changed
+/// during a <script> block.
+void throwIfNotInInitBlock() {
+  if (isInInitBlock == false) {
+    throw new StateError("An initialization code meant for the initBlock "
+        "(inside the <variables> tag) was called outside of it (probably "
+        "in a <script> tag).");
+  }
+}
+
+/// Internal state variable for [_throwIfNotInInitBlock].
+bool isInInitBlock = false;
+
 /**
  * Scripter is the class that runs the actual game and sends Messages to
  * the Interface through Runner. It is subclassed by ScripterImpl, which is 
@@ -566,7 +580,9 @@ abstract class EgbScripter {
     _points.clear();
     if (pageMap != null) pageMap.clearState();
 
+    isInInitBlock = true;
     initBlock();  // run contents of <variables>
+    isInInitBlock = false;
   }
 
   noSuchMethod(Invocation invocation) {
