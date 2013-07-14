@@ -144,7 +144,6 @@ class Timeline implements Saveable {
       _handleEventOutput(event.run());
       if (finished) return;
     }
-
   }
   
   /**
@@ -161,11 +160,11 @@ class Timeline implements Saveable {
       
       if (gotoPageName != null) {
         // An event called goto().
-        break;
+        throw new UnimplementedError("Cannot call goto() from a TimedEvent.");
       }
       if (!choices.isEmpty) {
         // An event created a choice.
-        break;
+        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
       }
     }
     if (_time == _requestedTime) {
