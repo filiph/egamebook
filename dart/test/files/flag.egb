@@ -1,0 +1,66 @@
+
+
+
+---
+start
+
+Would you like to give me some money?
+
+- Yes. [{flag("samaritan")} Yes]
+- No. [No]
+- Fuck off. [{flag("asshole")} Fuck off]
+
+---
+Yes
+
+Thanks, man, appreciate it.
+
+- No problem. [Finish]
+- ... [{flag("silentType")} Finish]
+
+---
+No
+
+Oh well, that's okay I guess.
+
+- Yep. [Finish]
+- ... [{flag("silentType")} Finish]
+
+---
+Fuck off
+
+Hey, _you_ fuck off.
+
+- Whatevs. [Finish]
+- ... [{flag("silentType")} Finish]
+
+---
+Finish
+
+...
+
+Much later, you run into that same guy. He's rich now.
+
+<script>
+  if (isFlagged("asshole")) {
+    <echo>
+      Hey, that's you, asshole!
+    </echo>
+    if (isFlagged("silentType")) {
+      <echo>
+        And don't give me that silent treatment again, bitch.
+      </echo>
+    }
+  }
+  
+  if (isFlagged("samaritan")) {
+    <echo>
+      Is that you? Here, have a Porsche!
+    </echo>
+    if (isFlagged("silentType")) {
+      <echo>
+        Oh, no need to thank, you were always a silent type.
+      </echo>
+    }
+  }
+</script>

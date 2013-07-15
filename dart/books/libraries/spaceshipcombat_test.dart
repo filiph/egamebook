@@ -6,6 +6,7 @@ import 'actor.dart';
 import 'storyline.dart';
 
 void main() {
+  isInInitBlock = true;
   var player = new Pilot.player();
   
   // setup ships
@@ -51,13 +52,14 @@ void main() {
   
   // setup combat
   var combat = new SpaceshipCombat(ships: [ship1, ship2]);
-  combat.addEvent(5, "String event.");
-  combat.addEvent(6, (_) => ship1.engine.hp.value--);
-  combat.addEvent(7, (_) => ship2.report("<subject> is starting to circle <object>", object: ship1));
+  combat.timeline.schedule(5, "String event.");
+  combat.timeline.schedule(6, () => ship1.engine.hp.value--);
+  combat.timeline.schedule(7, () => ship2.report("<subject> is starting to circle <object>", object: ship1));
   
   combat.onFinishedGoto = "something";
   
   player.timeToNextInteraction = 1;
+  isInInitBlock = false;
   
   // ---
   // combatloop

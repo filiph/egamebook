@@ -41,7 +41,15 @@ void echo(String str) {
   textBuffer.write(str);
 }
 
-String _gotoPageName;
+/**
+ * This is the page name that was most recently called in a [:goto(name):]
+ * statement (or [:null:] if there was no recent call). Author should
+ * seldom access this field. Instead, they should use the [goto] function.
+ * 
+ * The variable is automatically reset to [:null:] by Scripter once the jump
+ * has been done.
+ */
+String gotoPageName;
 
 /**
  * By calling [goto()], you're saying you want to change page to [pageName].
@@ -53,7 +61,7 @@ String _gotoPageName;
  * page inside [EgbScripter]. 
  */
 void goto(String pageName) {
-  _gotoPageName = pageName;
+  gotoPageName = pageName;
 }
 
 /**
@@ -117,15 +125,55 @@ void repeatBlock() {
 
 /**
 When a block/script/choice call for a script to be called afterwards,
-it ends up on this FIFO stack.
+it ends up on this FILO stack.
  */
-final List<ScriptBlock> _nextScriptStack = new List<ScriptBlock>();
+final Queue<ScriptBlock> _nextScriptStack = new Queue<ScriptBlock>();
 
 /// Adds a script to the stack of scripts.
 void nextScript(ScriptBlock f) {
-  _nextScriptStack.add(f);
+  _nextScriptStack.addLast(f);
 }
 
+/**
+ * Persistently flags the identifier [name] as [:true:]. Can be checked by
+ * [isFlagged] and unflagged by [unflag].
+ * 
+ * The reason is convenience: the author doesn't need to check for [:null:]
+ * before checking for true or false using [isFlagged].
+ */
+void flag(String name) => _flags.add(name);
+
+/**
+ * If [name] was flagged, it will be unflagged (i.e. [:isFlagged(name):] will
+ * return [:false:]). If [name] hasn't been previously flagged, nothinig 
+ * happens. 
+ */
+void unflag(String name) {
+  _flags.remove(name);
+}
+
+/**
+ * Returns [:true:] if [name] has been flagged via [:flag(name):]. Returns 
+ * [:false:] otherwise (even if the flag is still 'undefined').
+ */
+bool isFlagged(String name) => _flags.contains(name);
+
+/// Internal representation of flags.
+Set<String> _flags = new Set<String>();
+
+/// Constructors and functions can check for [isInInitBlock] and might choose
+/// to throw an Exception. For example, if an unsaveable property is changed
+/// during a <script> block.
+void throwIfNotInInitBlock() {
+  if (isInInitBlock == false) {
+    throw new StateError("An initialization code meant for the initBlock "
+        "(inside the <variables> tag) was called outside of it (probably "
+        "in a <script> tag).");
+  }
+}
+
+/// Internal state variable for [_throwIfNotInInitBlock].
+bool isInInitBlock = false;
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
@@ -409,10 +457,10 @@ abstract class EgbScripter {
       return _runScriptBlock(script);
     }
     
-    if (_gotoPageName != null) {
+    if (gotoPageName != null) {
       // someone called the top level function [goto]
-      _performGoto(_gotoPageName);
-      _gotoPageName = null;
+      _performGoto(gotoPageName);
+      gotoPageName = null;
       return null;
     }
 
@@ -538,9 +586,12 @@ abstract class EgbScripter {
     vars.clear();
     vars["points"] = _points;
     _points.clear();
+    _flags.clear();
     if (pageMap != null) pageMap.clearState();
 
+    isInInitBlock = true;
     initBlock();  // run contents of <variables>
+    isInInitBlock = false;
   }
 
   noSuchMethod(Invocation invocation) {
@@ -599,6 +650,7 @@ abstract class EgbScripter {
   }
 
   EgbSavegame _createSaveGame() {
+    vars["_flags"] = _flags.toList(growable: false);
     return new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
   }
@@ -632,6 +684,15 @@ abstract class EgbScripter {
     }
 
     var _constructors = {};
+    
+    // extract flags and remove from vars
+    if (savegame.vars.containsKey("_flags")) {
+      _flags = new Set<String>.from(savegame.vars["_flags"]);
+      savegame.vars.remove("_flags");
+    } else {
+      _flags.clear();
+    }
+    
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
     EgbSavegame.importSavegameToVars(savegame, vars, 

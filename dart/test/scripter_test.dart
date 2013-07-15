@@ -92,11 +92,17 @@ void main() {
 }
 
 /// Runs the built project and returns the [MockInterface] instance.
-Future<EgbInterface> run(String canonicalMainPath) {
+Future<EgbInterface> run(String canonicalMainPath, 
+    {EgbStorage persistentStorage: null}) {
   var receivePort = new ReceivePort();
   SendPort scripterPort = spawnUri(canonicalMainPath);
   var interface = new MockInterface(waitForChoicesToBeTaken: true);
-  var storage = new MemoryStorage();
+  var storage;
+  if (persistentStorage != null) {
+    storage = persistentStorage;
+  } else {
+    storage = new MemoryStorage();
+  }
   var runner = new EgbRunner(receivePort, scripterPort,
       interface, storage.getDefaultPlayerProfile());
   runner.run();
@@ -212,6 +218,86 @@ void main() {
         });
       });
     });
+    
+    group("flag()", () {
+      test("basic", () {
+        build("flag.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("Yes.");
+          ui.choose("No problem.");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput.trim(), "Is that you? Here, have a Porsche!");
+          ui.quit();
+        }));
+      });
+      test("2 different flags", () {
+        build("flag.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("Fuck off.");
+          ui.choose("...");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("Hey, that's you, asshole!"));
+          expect(ui.latestOutput, contains("And don't give me that silent treatment again, bitch."));
+          expect(ui.latestOutput, isNot(contains("Is that you? Here, have a Porsche!")));
+          ui.quit();
+        }));
+      });
+      test("persistence", () {
+        var storage = new MemoryStorage();
+        var mainPath;
+        build("flag.egb")
+        .then((path) {
+          mainPath = path;
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          ui.choose("Fuck off.");
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.quit();
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          ui.choose("...");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("Hey, that's you, asshole!"));
+          expect(ui.latestOutput, contains("And don't give me that silent treatment again, bitch."));
+          expect(ui.latestOutput, isNot(contains("Is that you? Here, have a Porsche!")));
+          ui.quit();
+        }));
+      });
+      test("flags don't stay up after restart", () {
+        build("shutup.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("\"Shut up.\"");
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.restart();
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.choose("\"We survived, didn't we?\"");
+          ui.choose("\"Shut up.\"");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("You know what? You shut up."));
+          expect(ui.latestOutput, isNot(contains("Can you say anything else? Jesus.")));
+          ui.quit();
+        }));
+      });
+    });
 
     group("Persistence", () {
       setUp(() {
@@ -284,59 +370,40 @@ void main() {
         expect(s1.vars, contains("saveable"));
         expect(s1.vars["saveable"], contains("m"));
       });
-
+      
       test("works between 2 independent runs", () {
-        SendPort scripterPort1 = spawnUri("files/scripter_test_alternate_6_main.dart");
-
-        var interface1 = new MockInterface();
-        interface1.choicesToBeTaken = new Queue<int>.from(
-            [0, 1, 0, 1, 1]
-        );
-
-        var interface2 = new MockInterface(waitForChoicesToBeTaken: true);
-        interface2.choicesToBeTaken = new Queue<int>.from(
-            [1, 1, 1, 1, 1, 1]
-        );
-
+        receivePort.close();
         var storage = new MemoryStorage();
-        var runner1 = new EgbRunner(receivePort, scripterPort1,
-            interface1, storage.getDefaultPlayerProfile());
-
-        interface1.stream.firstWhere(
-            (interaction) => interaction.type == PlayerIntent.QUIT)
-        .then(expectAsync1((_) {
-          runner1.stop();
-
-          receivePort = new ReceivePort();
-          SendPort scripterPort2 = spawnUri("files/scripter_test_alternate_6_main.dart");
-
-          var playerProfile = storage.getDefaultPlayerProfile();
-          var runner2 = new EgbRunner(receivePort, scripterPort2,
-              interface2, playerProfile);
-
-          interface2.eventStream
-          .firstWhere((event) => event == MockInterface.WAITING_FOR_INPUT_EVENT)
-          .then(expectAsync1((_) {
-            expect(interface2.latestOutput,
-                contains("Time is now 10."));
-            expect(interface2.latestOutput,
-                contains("customInstance.i is now 20."));
-
-            playerProfile.loadMostRecent()
-            .then(expectAsync1((EgbSavegame savegame) {
-              expect(savegame.pageMapState["dddeee"]["visitCount"],
-                  greaterThan(1));
-            }));
-
-            runner2.stop();
-          }));
-
-          // run second part
-          runner2.run();
+        var mainPath;
+        build("scripter_test_alternate_6.egb")
+        .then((path) {
+          mainPath = path;
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          ui.choicesToBeTaken = new Queue<int>.from(
+              [0, 1, 0, 1, 1]
+          );
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.quit();
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          ui.choicesToBeTaken = new Queue<int>.from(
+              [1, 1, 1, 1, 1, 1]
+          );
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput,
+              contains("Time is now 10."));
+          expect(ui.latestOutput,
+              contains("customInstance.i is now 20."));
+          print(ui.choicesToBeTaken);
+          ui.quit();
         }));
-
-        // run first part
-        runner1.run();
       });
     });
 

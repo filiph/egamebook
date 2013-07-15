@@ -3,11 +3,13 @@ library timeline;
 import 'package:egamebook/src/book/scripter.dart';
 import 'storyline.dart';
 
+typedef void ScheduledFunction();
+
 /// A singular event on the timeline.
 class TimedEvent {
   final int time;
   final int priority;
-  Function f;
+  ScheduledFunction f;
   String text;
   
   TimedEvent(this.time, dynamic action, {this.priority: 0}) {
@@ -17,7 +19,7 @@ class TimedEvent {
     }
     if (action is String) {
       text = action;
-    } else if (action is Function) {
+    } else if (action is ScheduledFunction) {
       f = action;
     } else {
       throw new ArgumentError("Second parameter in TimedEvent() constructor "
@@ -61,18 +63,55 @@ class Timeline implements Saveable {
     if (_time == null) _time = -1;
     if (value < _time) throw new ArgumentError("Cannot go back in time.");
     if (length != null && value > length) value = length;
+    _requestedTime = value;
     elapse(value - _time);
   }
   
-  Function mainLoop;
-  Set<TimedEvent> events;
-  bool finished;
+  /**
+   * Set time without going through the events in between.
+   */
+  void set(int time) {
+    _time = time;
+  }
+  
+  /**
+   * The time set by [:Timeline.time = x:]. This is used by [catchUp] as 
+   * a target when the normal [elapse] operation was interrupted by a [:goto():]
+   * or a choice. 
+   */
+  int _requestedTime = null;
+  
+  /**
+   * Whenever a TimedEvent calls goto() or creates a choice, the Timeline
+   * stops there. That TimedEvent has to make sure that [catchUp] is called
+   * afterwards so that the time catches up with the requested time.
+   */
+  void catchUp() {
+    if (_requestedTime == null) return;
+    assert(_requestedTime > _time);
+    elapse(_requestedTime - _time);
+  }
+  
+  Function _mainLoop;
+  Function get mainLoop => _mainLoop;
+  set mainLoop(Function f) {
+    throwIfNotInInitBlock();
+    _mainLoop = f;
+  }
+  
+  Set<TimedEvent> _events;
+  bool finished = false;
   
   Storyline storyline;
   
   Timeline({this.storyline}) {
-    finished = false;
-    events = new Set<TimedEvent>();
+    throwIfNotInInitBlock();
+    _events = new Set<TimedEvent>();
+  }
+  
+  void schedule(int time, Object action, {int priority: 0}) {
+    throwIfNotInInitBlock();
+    _events.add(new TimedEvent(time, action, priority: priority));
   }
 
   String className = "Timeline";
@@ -93,12 +132,12 @@ class Timeline implements Saveable {
   }
   
   void _goOneTick() {
-    if (mainLoop != null) {
-      _handleEventOutput(mainLoop());
+    if (_mainLoop != null) {
+      _handleEventOutput(_mainLoop());
     }
     if (finished) return;
     
-    List<TimedEvent> currentEvents = events.where((ev) => ev.time == _time)
+    List<TimedEvent> currentEvents = _events.where((ev) => ev.time == _time)
                                       .toList();
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
@@ -118,6 +157,18 @@ class Timeline implements Saveable {
       _goOneTick();
       if (length != null && _time == length) finished = true;
       if (finished) break;
+      
+      if (gotoPageName != null) {
+        // An event called goto().
+        throw new UnimplementedError("Cannot call goto() from a TimedEvent.");
+      }
+      if (!choices.isEmpty) {
+        // An event created a choice.
+        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
+      }
+    }
+    if (_time == _requestedTime) {
+      _requestedTime = null;
     }
   }
 }
