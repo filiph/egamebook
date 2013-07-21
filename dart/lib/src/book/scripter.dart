@@ -387,12 +387,18 @@ abstract class EgbScripter {
         // be put there after the player walked through the page till
         // the end (otherwise, no points would ever be awarded).
         if (choice.goto != null) {
-          _playerChronology.add(
-              _createLinkHash(currentPage, 
-                  pageMap.getPage(
-                      choice.goto, 
-                      currentGroupName: currentPage.groupName)));
-          _playerChronologyChanged = true;
+          EgbScripterPage toPage;
+          if (EgbChoice.GO_BACK.hasMatch(choice.goto)) {
+            toPage = _preGotoPosition.page;
+          } else {
+            toPage = pageMap.getPage(choice.goto,
+                currentGroupName: currentPage.groupName);
+          }
+          
+          if (toPage != null) {
+            _playerChronology.add(_createLinkHash(currentPage, toPage));
+            _playerChronologyChanged = true;
+          }
         }
       }
     });
