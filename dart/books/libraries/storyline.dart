@@ -47,7 +47,9 @@ class Report {
     this.positive, this.negative, this.endSentence, this.startSentence, 
     this.wholeSentence, this.time});
   
-  Report.empty() : string = "";
+  Report.empty() : string = "", subject = null, object = null, owner = null,
+      but = false, positive = false, negative = false, endSentence = false,
+      startSentence = false, wholeSentence = false, time = null;
   
   final String string;
   final Actor subject;
