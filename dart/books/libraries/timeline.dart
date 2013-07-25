@@ -148,8 +148,13 @@ class Timeline implements Saveable {
   
   /**
    * Elapse [t] number of discrete time units.
+   * 
+   * TODO: add a {betweenEchos} - makes possible to elapse a lot of time, with
+   * many expected echo events. [betweenEchos] gets called between each two
+   * echo events. Normally, the author can say things like "You continue
+   * repairing the door".
    */
-  void elapse([int t = 1]) {
+  void elapse(int t) {
     if (finished) return;
     if (_time == null) _time = -1;
     for (int i = 0; i < t; i++) {
