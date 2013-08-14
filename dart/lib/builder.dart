@@ -571,11 +571,11 @@ class Builder {
    * the lineStart or lineEnd).
    */
   BuilderBlock parseChoiceBlock(String line) {
-    if (!choice.hasMatch(line)) return null;
+    if (!oneLineChoice.hasMatch(line)) return null;
 
     var choiceBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
 
-    Match m = choice.firstMatch(line);
+    Match m = oneLineChoice.firstMatch(line);
     /*for (int i = 1; i <= m.groupCount; i++) {*/
       /*print("$i - \"${m.group(i)}\"");*/
     /*}*/
@@ -1035,7 +1035,7 @@ class Builder {
   /*static final RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
   static final RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", caseSensitive: false);
   static final RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
-  static final RegExp choice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  static final RegExp oneLineChoice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
   static final RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
   /**
@@ -1851,7 +1851,7 @@ class Builder {
           if (page != null) {
             // find out if this line has a goto, if so, remove from pageNamesToAdd
             String goto;
-            Match m = choice.firstMatch(line);
+            Match m = oneLineChoice.firstMatch(line);
             if (m != null) {
               goto = m.group(3); // TODO: make this into a function, DRY
             } else {
