@@ -656,7 +656,7 @@ class Builder {
       } else {
         // A normal line inside the multiline choice.
         var textLine = line.replaceFirst(new RegExp(r"^\s{4}"), "");  // de-indent
-        choiceSubBlock.options["script"] += textLine;
+        choiceSubBlock.options["script"] += "$textLine\n";
         return true;
       }
     } else {
