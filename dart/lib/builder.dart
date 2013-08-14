@@ -191,6 +191,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
   static final int BLK_CHOICE = 4;
   static final int BLK_CHOICE_WITH_SCRIPT = 32;
+  static final int BLK_CHOICE_MULTILINE = 64;
 
   BuilderBlock({this.lineStart, this.type: 0}) {
     options = new Map<String,dynamic>();
@@ -566,11 +567,11 @@ class Builder {
   }
 
   /**
-   * Checks if line is a valid choice. If not, returns [:null:].
+   * Checks if line is a valid one line choice. If not, returns [:null:].
    * If it is a valid choice, returns the corresponding [BuilderBlock] (without
    * the lineStart or lineEnd).
    */
-  BuilderBlock parseChoiceBlock(String line) {
+  BuilderBlock parseOneLineChoice(String line) {
     if (!oneLineChoice.hasMatch(line)) return null;
 
     var choiceBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
@@ -624,14 +625,60 @@ class Builder {
   bool _checkChoiceList(int number, String line) {
     // TODO: check even inside ECHO tags, add to script
     if (line == null || pages.isEmpty
-        || (_mode != MODE_NORMAL
+        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_CHOICE
         /* && _mode != MODE_INSIDE_SCRIPT_ECHO // TODO: implement */)) {
       return false;
     }
+    
+    BuilderBlock choiceSubBlock;
+    
+    // First, check for multiline choices - a multiline choice's information
+    // is only complete after we have read the last line.
+    if (_mode == MODE_INSIDE_CHOICE) {
+      // We are inside a choice.
+      var lastpage = pages.last;
+      assert(lastpage.blocks.isNotEmpty);
+      assert(lastpage.blocks.last.type == BuilderBlock.BLK_CHOICE_LIST);
+      assert(lastpage.blocks.last.subBlocks.isNotEmpty);
+      choiceSubBlock = lastpage.blocks.last.subBlocks.last;
+      
+      Match m = multiLineChoiceEnd.firstMatch(line);
+      if (m != null) {
+        // End of multiline choice.
+        var strBuf = new StringBuffer(choiceSubBlock.options["script"]);
+        strBuf.writeln("\"\"\");");  // end of echo()
+        strBuf.writeln(m.group(1));
+        choiceSubBlock.options["script"] = strBuf.toString();
+        choiceSubBlock.options["goto"] = m.group(2);
+        choiceSubBlock.lineEnd = number;
+        _mode = MODE_NORMAL;
+        return true;
+      } else {
+        // A normal line inside the multiline choice.
+        var textLine = line.replaceFirst(new RegExp(r"^\s{4}"), "");  // de-indent
+        choiceSubBlock.options["script"] += textLine;
+        return true;
+      }
+    } else {
+      Match m = multiLineChoiceStart.firstMatch(line);
+      if (m != null) {
+        // A new multiline choice.
+        choiceSubBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
+        choiceSubBlock.options["string"] = m.group(1);
+        choiceSubBlock.options["script"] = "echo(\"\"\"\n";  // start of echo
+        choiceSubBlock.lineStart = number;
+        _mode = MODE_INSIDE_CHOICE;
+      }
+    }
 
-    var choiceBlock = parseChoiceBlock(line);
-    if (choiceBlock == null) return false;
-    choiceBlock.lineStart = choiceBlock.lineEnd = number;
+    if (choiceSubBlock == null) {
+      choiceSubBlock = parseOneLineChoice(line);
+      if (choiceSubBlock == null) {
+        return false;  // No luck.
+      } else {
+        choiceSubBlock.lineStart = choiceSubBlock.lineEnd = number;
+      }
+    }
 
     BuilderBlock choiceList;
     var lastpage = pages.last;
@@ -648,7 +695,7 @@ class Builder {
             lineStart: number, type: BuilderBlock.BLK_CHOICE_LIST);
 
         // If the previous line is a text block, then that textblock needs to be
-        // added to this choiceList.
+        // added to this choiceList as question.
         if (lastblock.isTextBlock && lastblock.lineEnd == null) {
           choiceList.lineStart = lastblock.lineStart;
           lastpage.blocks.removeLast();
@@ -663,25 +710,26 @@ class Builder {
       lastpage.blocks.add(choiceList);
     }
 
-    bool hasVarInString = (choiceBlock.options["string"] != null
-        && variableInText.hasMatch(choiceBlock.options["string"]));
+    bool hasVarInString = (choiceSubBlock.options["string"] != null
+        && variableInText.hasMatch(choiceSubBlock.options["string"]));
 
     if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
       // TODO: just add a _choiceToScript(block) to the current script flow
-    } else if (_mode == MODE_NORMAL && choiceBlock.options["script"] == null &&
+    } else if (_mode == MODE_NORMAL && choiceSubBlock.options["script"] == null &&
                !hasVarInString) {
       // we have a simple choice (i.e. no scripts needed)
-      choiceBlock.type = BuilderBlock.BLK_CHOICE;
+      choiceSubBlock.type = BuilderBlock.BLK_CHOICE;
+    } else if (_mode == MODE_INSIDE_CHOICE) {
+      choiceSubBlock.type = BuilderBlock.BLK_CHOICE_MULTILINE;
     } else {
       // the choice will need to be rewritten into a standalone script (closure)
-      choiceBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
+      choiceSubBlock.type = BuilderBlock.BLK_CHOICE_WITH_SCRIPT;
     }
 
-    choiceBlock.lineEnd = number;  // TODO: fix for multiline choices (indented lines)
-    if (choiceBlock.options["goto"] != null) {
-      lastpage.gotoPageNames.add(choiceBlock.options["goto"]);
+    if (choiceSubBlock.options["goto"] != null) {
+      lastpage.gotoPageNames.add(choiceSubBlock.options["goto"]);
     }
-    choiceList.subBlocks.add(choiceBlock);
+    choiceList.subBlocks.add(choiceSubBlock);
 
     return true;
   }
@@ -1036,6 +1084,8 @@ class Builder {
   static final RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:classes)|(?:functions)|(?:variables))\s*>\s*$", caseSensitive: false);
   static final RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
   static final RegExp oneLineChoice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  static final RegExp multiLineChoiceStart = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*$");  // - Something [
+  static final RegExp multiLineChoiceEnd = new RegExp(r"^\s{0,3}\{\s*(.*)\s*\}[\s,]*([^\{].+)?\s*\]\s*$");  // {i++;} somepage]
   static final RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
 
   /**
@@ -2020,6 +2070,7 @@ class ScripterImpl extends EgbScripter {
   static int MODE_INSIDE_SCRIPT_ECHO = 16;
   static int MODE_INSIDE_SCRIPT_TAG = 32;
   static int MODE_METADATA = 64;
+  static int MODE_INSIDE_CHOICE = 128;
   /// This makes sure the parser remembers where it is during reading the file.
   int _mode;
 

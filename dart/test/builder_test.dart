@@ -210,27 +210,27 @@ void main() {
       
       test("detects individual choiceBlocks", () {
         var b = new Builder();
-        expect(b.parseChoiceBlock(""),
+        expect(b.parseOneLineChoice(""),
             isNull);
-        expect(b.parseChoiceBlock("- Simple choice [goto]"),
+        expect(b.parseOneLineChoice("- Simple choice [goto]"),
             isNotNull);
-        var messy = b.parseChoiceBlock("  -   A more meesy choice [ goto  ]  ");
+        var messy = b.parseOneLineChoice("  -   A more meesy choice [ goto  ]  ");
         expect(messy, isNotNull);
         expect(messy.type, BuilderBlock.BLK_CHOICE);
         expect(messy.options["string"], "A more meesy choice");
         expect(messy.options["goto"], "goto");
-        var auto = b.parseChoiceBlock("- [automaticGoto]"); 
+        var auto = b.parseOneLineChoice("- [automaticGoto]"); 
         expect(auto, isNotNull);
         expect(auto.type, BuilderBlock.BLK_CHOICE);
         expect(auto.options["string"], isNull);
         expect(auto.options["goto"], "automaticGoto");
-        var withscript = b.parseChoiceBlock("- Script [{blick++}]");
+        var withscript = b.parseOneLineChoice("- Script [{blick++}]");
         expect(withscript, isNotNull);
         expect(withscript.type, BuilderBlock.BLK_CHOICE_WITH_SCRIPT);
         expect(withscript.options["string"], "Script");
         expect(withscript.options["goto"], null);
         expect(withscript.options["script"], "blick++");
-        var empty = b.parseChoiceBlock("- Empty []");
+        var empty = b.parseOneLineChoice("- Empty []");
         expect(empty, isNotNull);
         expect(empty.type, BuilderBlock.BLK_CHOICE);
         expect(empty.options["string"], "Empty");
@@ -291,6 +291,40 @@ void main() {
             isNull);
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
+      });
+      
+      test("detects multiline choices", () {
+        new Builder().readEgbFile(new File(getPath("choices_multiline.egb")))
+        .then(expectAsync1((Builder b) {
+          var choiceList = b.pages[0].blocks[1];
+          expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
+          expect(choiceList.subBlocks.length, 4);
+          expect(choiceList.subBlocks[0].options["string"],
+              "That's okay.");
+          expect(choiceList.subBlocks[0].options["goto"],
+              isNull);
+          expect(choiceList.subBlocks[0].options["script"],
+              isNotNull);  // Multiline choices' text is rewriten as a echo()
+                           // and added to the script block.
+          expect(choiceList.subBlocks[1].options["string"],
+              "I need to do something about it.");
+          expect(choiceList.subBlocks[1].options["goto"],
+              """The "Do something about it" Page""");
+          expect(choiceList.subBlocks[1].options["script"],
+              isNotNull);
+          expect(choiceList.subBlocks[2].options["string"],
+              "Meh.");
+          expect(choiceList.subBlocks[2].options["goto"],
+              isNull);
+          expect(choiceList.subBlocks[2].options["script"],
+              isNull);
+          expect(choiceList.subBlocks[3].options["string"],
+              "Many people do!");
+          expect(choiceList.subBlocks[3].options["goto"],
+              isNull);
+          expect(choiceList.subBlocks[3].options["script"],
+              isNotNull);
+        }));
       });
       
       test("detects choices as pageHandlers in pages", () {
