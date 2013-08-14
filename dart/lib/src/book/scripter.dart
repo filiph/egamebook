@@ -276,7 +276,7 @@ abstract class EgbScripter {
     if (message.type == EgbMessage.TEXT_RESULT) {
       // Put text result into the _textMessageCache.
       if (message.strContent != "") _textMessageCache.add(message);
-      _runnerPort.send(new EgbMessage.NoResult().toJson(), port.toSendPort());
+      _runnerPort.send(new EgbMessage.NoResult().toJson(), port.toSendPort()); // TODO: this is here just because we need to keep the loop going – get rid of it
     } else if (_textMessageCache.isEmpty) {
       DEBUG_SCR("Sending nonText message (${message.type})");
       _runnerPort.send(message.toJson(), port.toSendPort());
@@ -361,6 +361,7 @@ abstract class EgbScripter {
     }
     
     // We can now handle the current block on the page.
+    // TODO: handle the looping in _goOneStep() (_goUntilMessage?)
     EgbMessage returnMessage;
     do {
       DEBUG_SCR("Calling _goOneStep().");
@@ -500,6 +501,7 @@ abstract class EgbScripter {
     
     if (currentPage.blocks[currentBlockIndex] is String) {
       // Just an ordinary paragraph, no script.
+      // TODO: create _textMessageCache here and not in _send()
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
@@ -514,6 +516,7 @@ abstract class EgbScripter {
       }
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
+      // TODO: create _textMessageCache here and not in _send()
       return _runScriptBlock(currentPage.blocks[currentBlockIndex]);
     }
   }
