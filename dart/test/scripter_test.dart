@@ -310,6 +310,7 @@ void main() {
           expect(ui.latestChoices.length, 4);
           expect(ui.latestChoices.first.string, "That's okay.");
           expect(ui.latestChoices.last.string, "Many people do!");
+          ui.quit();
         }));
       });
       test("works with scripts", () {
@@ -321,6 +322,7 @@ void main() {
         })
         .then(expectAsync1((MockInterface ui) {
           expect(ui.latestOutput, contains("No it doesn't."));
+          ui.quit();
         }));
       });
       test("works with gotos", () {
@@ -331,7 +333,9 @@ void main() {
           return ui.waitForDone();
         })
         .then(expectAsync1((MockInterface ui) {
-          expect(ui.latestOutput, contains("You tried to do something about it, but to no avail."));
+          expect(ui.latestOutput, 
+              contains("You tried to do something about it, but to no avail."));
+          ui.quit();
         }));
       });
       test("works with gotos and scripts", () {
@@ -342,8 +346,10 @@ void main() {
           return ui.waitForDone();
         })
         .then(expectAsync1((MockInterface ui) {
-          expect(ui.latestOutput, contains("You tried to do something about it, but to no avail."));
+          expect(ui.latestOutput, 
+              contains("You tried to do something about it, but to no avail."));
           expect(ui.currentlyShownPoints, 42);
+          ui.quit();
         }));
       });
     });

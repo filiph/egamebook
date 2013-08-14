@@ -302,16 +302,17 @@ void main() {
           expect(choiceList.subBlocks[0].options["string"],
               "That's okay.");
           expect(choiceList.subBlocks[0].options["goto"],
-              isNull);
+              """The "Do something about it" Page""");
           expect(choiceList.subBlocks[0].options["script"],
-              isNotNull);  // Multiline choices' text is rewriten as a echo()
-                           // and added to the script block.
+              isNotNull);
           expect(choiceList.subBlocks[1].options["string"],
               "I need to do something about it.");
           expect(choiceList.subBlocks[1].options["goto"],
               """The "Do something about it" Page""");
           expect(choiceList.subBlocks[1].options["script"],
-              isNotNull);
+              isNotNull);  // Multiline choices' text is rewriten as a echo()
+                           // and added to the script block. So there's script
+                           // even though it's not in the egb file.
           expect(choiceList.subBlocks[2].options["string"],
               "Meh.");
           expect(choiceList.subBlocks[2].options["goto"],
