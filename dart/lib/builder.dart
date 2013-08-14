@@ -191,7 +191,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
   static final int BLK_CHOICE = 4;
   static final int BLK_CHOICE_WITH_SCRIPT = 32;
-  static final int BLK_CHOICE_MULTILINE = 64;
+  static final int BLK_CHOICE_MULTILINE = 256;
 
   BuilderBlock({this.lineStart, this.type: 0}) {
     options = new Map<String,dynamic>();
@@ -1446,22 +1446,23 @@ class Builder {
               }
             }
           } else {
-            var choiceBlock = curBlock.subBlocks.firstWhere((block) =>
+            var choiceSubBlock = curBlock.subBlocks.firstWhere((block) =>
                   _insideLineRange(lineNumber, block, inclusive: true),
                   orElse: () => null);
 
-            if (choiceBlock != null) {
+            if (choiceSubBlock != null &&
+                choiceSubBlock.lineStart == lineNumber /* don't duplicate multiline blocks */) {
               write("{\n");
               var lines = new List<String>();
-              if (choiceBlock.options["string"] != null) {
+              if (choiceSubBlock.options["string"] != null) {
                 // TODO: don't use when not needed (no variable)
-                lines.add("  \"string\": () => \"\"\"${handleTrailingQuotes(choiceBlock.options["string"])}\"\"\"");
+                lines.add("  \"string\": () => \"\"\"${handleTrailingQuotes(choiceSubBlock.options["string"])}\"\"\"");
               }
-              if (choiceBlock.options["goto"] != null) {
-                lines.add("  \"goto\": r\"\"\"${handleTrailingQuotes(choiceBlock.options["goto"])}\"\"\"");
+              if (choiceSubBlock.options["goto"] != null) {
+                lines.add("  \"goto\": r\"\"\"${handleTrailingQuotes(choiceSubBlock.options["goto"])}\"\"\"");
               }
-              if (choiceBlock.options["script"] != null) {
-                lines.add("  \"script\": () {${choiceBlock.options["script"]};}");
+              if (choiceSubBlock.options["script"] != null) {
+                lines.add("  \"script\": () {${choiceSubBlock.options["script"]};}");
               }
               write(lines.join(",\n"));
               write("}${lineNumber != curBlock.lineEnd ? "," : ""}\n");

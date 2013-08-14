@@ -298,6 +298,55 @@ void main() {
         }));
       });
     });
+    
+    group("Multiline choices", () {
+      test("are shown", () {
+        build("choices_multiline.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestChoices.length, 4);
+          expect(ui.latestChoices.first.string, "That's okay.");
+          expect(ui.latestChoices.last.string, "Many people do!");
+        }));
+      });
+      test("works with scripts", () {
+        build("choices_multiline.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("Many people do!");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("No it doesn't."));
+        }));
+      });
+      test("works with gotos", () {
+        build("choices_multiline.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("I need to do something about it.");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("You tried to do something about it, but to no avail."));
+        }));
+      });
+      test("works with gotos and scripts", () {
+        build("choices_multiline.egb")
+        .then((mainPath) => run(mainPath))
+        .then((MockInterface ui) {
+          ui.choose("That's okay.");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("You tried to do something about it, but to no avail."));
+          expect(ui.currentlyShownPoints, 42);
+        }));
+      });
+    });
 
     group("Persistence", () {
       setUp(() {
