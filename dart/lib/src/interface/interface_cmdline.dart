@@ -2,6 +2,7 @@ library egb_interface_cmdline;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'interface.dart';
 import '../persistence/savegame.dart';
@@ -23,8 +24,8 @@ class CmdlineInterface extends EgbInterfaceBase {
   
   void setup() {
     _cmdLine = stdin
-              .transform(new StringDecoder())
-              .transform(new LineTransformer());
+              .transform(UTF8.decoder)
+              .transform(new LineSplitter());
     _cmdLineSubscription = _cmdLine.listen(_handleCmdLine);
     _cmdLineSubscription.pause();
   }

@@ -1,17 +1,18 @@
 import 'package:unittest/unittest.dart';
 import 'dart:io';
+import 'package:path/path.dart' as path;
 
 // importing files to test
 import "package:egamebook/src/shared/html_entities.dart";
 import "package:egamebook/builder.dart";
 
+/**
+ * Returns path to the file inside the [:/files:] subdirectory with filename
+ * [filename]. Convenience function.
+ */
 String getPath(String filename) {
-  var options = new Options();
-  var pathToScript = new Path(options.script);
-  var pathToFilename = pathToScript.directoryPath
-        .join(new Path("files"))
-        .join(new Path(filename));
-  return pathToFilename.toString();
+  var pathToScript = new Options().script;
+  return path.join(path.dirname(pathToScript), "files", filename);
 }
 
 void main() {

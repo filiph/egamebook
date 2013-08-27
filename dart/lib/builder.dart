@@ -2,6 +2,8 @@ library egb_builder;
 
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart' as path;
+import 'dart:convert';
 //import 'package:graphml/dart_graphml.dart';
 
 import 'src/shared/page.dart';
@@ -312,8 +314,8 @@ class Builder {
     var completer = new Completer();
 
     var strInputStream = inputStream
-                        .transform(new StringDecoder())
-                        .transform(new LineTransformer());
+                        .transform(UTF8.decoder)
+                        .transform(new LineSplitter());
 
     // The top of the file can be metadata. This will be changed to
     // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
@@ -892,11 +894,11 @@ class Builder {
       // Get rid of enclosing "" / ''.
       importFilePath = importFilePath.substring(1, importFilePath.length - 1); 
 
-      var inputFilePath = new Path(inputEgbFileFullPath);
-      var pathToImport = inputFilePath.directoryPath
-            .join(new Path(importFilePath));
+      //var inputFilePath = new Path(inputEgbFileFullPath);
+      var pathToImport = path.join(
+          path.dirname(inputEgbFileFullPath), importFilePath);
 
-      importLibFiles.add(new File.fromPath(pathToImport));
+      importLibFiles.add(new File(pathToImport));
       return true;
     } else {
       return false;
@@ -966,8 +968,6 @@ class Builder {
    **/
   Future<bool> _checkForDoubleImports() {
     var completer = new Completer();
-
-    var inputFilePath = new Path(inputEgbFileFullPath);
 
     List<Future<bool>> existsFutures = new List<Future<bool>>();
     List<Future<String>> fullPathFutures = new List<Future<String>>();
@@ -1115,12 +1115,12 @@ class Builder {
   Future<bool> writeScripterFile() {
     var completer = new Completer();
 
-    var pathToOutputDart = getPathFor("dart");
+    var pathToOutputDart = getPathForExtension("dart");
 
     // TODO: use .chain instead of .then
 
     // write the .dart file
-    File dartFile = new File.fromPath(pathToOutputDart);
+    File dartFile = new File(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
     dartOutStream.write(implStartFile); // TODO: fix path to #import('../egb_library.dart');
     _writeLibImports(dartOutStream);
@@ -1174,19 +1174,19 @@ class Builder {
   Future<bool> writeInterfaceFiles() {
     var completer = new Completer();
 
-    var scriptFilePath = new Path(new Options().script);
-    var pathToOutputDart = getPathFor("dart");
-    var pathToOutputCmd = getPathFor("cmdline.dart");
-    var pathToInputTemplateCmd = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/cmdline_template.dart"));
-    var pathToOutputHtml =getPathFor("html.dart");
-    var pathToInputTemplateHtml = scriptFilePath.directoryPath
-          .join(new Path("../lib/src/html_template.dart"));
+    var scriptFilePath = new Options().script;
+    var pathToOutputDart = getPathForExtension("dart");
+    var pathToOutputCmd = getPathForExtension("cmdline.dart");
+    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath),
+        "../lib/src/cmdline_template.dart");
+    var pathToOutputHtml = getPathForExtension("html.dart");
+    var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath),
+        "../lib/src/html_template.dart");
 
-    File cmdLineOutputFile = new File.fromPath(pathToOutputCmd);
-    File cmdLineTemplateFile = new File.fromPath(pathToInputTemplateCmd);
-    File htmlOutputFile = new File.fromPath(pathToOutputHtml);
-    File htmlTemplateFile = new File.fromPath(pathToInputTemplateHtml);
+    File cmdLineOutputFile = new File(pathToOutputCmd);
+    File cmdLineTemplateFile = new File(pathToInputTemplateCmd);
+    File htmlOutputFile = new File(pathToOutputHtml);
+    File htmlTemplateFile = new File(pathToInputTemplateHtml);
 
     var substitutions = {
       // TODO: make this directory independent
@@ -1237,8 +1237,8 @@ class Builder {
       } else {
         IOSink outStream = outFile.openWrite();
         inFile.openRead()
-              .transform(new StringDecoder())
-              .transform(new LineTransformer())
+              .transform(UTF8.decoder)
+              .transform(new LineSplitter())
               .listen((line) {
                 if (substitutions.containsKey(line)) {
                   outStream.write("${substitutions[line]}\n");
@@ -1588,8 +1588,8 @@ class Builder {
 
     };
 
-    inStream.transform(new StringDecoder())
-            .transform(new LineTransformer())
+    inStream.transform(UTF8.decoder)
+            .transform(new LineSplitter())
             .listen((String line) {
               lineNumber++;
               handleLine(line);
@@ -1639,8 +1639,8 @@ class Builder {
 
     int lineNumber = 0;
     inStream
-        .transform(new StringDecoder())
-        .transform(new LineTransformer())
+        .transform(UTF8.decoder)
+        .transform(new LineSplitter())
         .listen((line) {
           lineNumber++;
           
@@ -1663,11 +1663,10 @@ class Builder {
    * [:getPathFor('graphml'):] for [:path/to/example.egb:] will return
    * [:path/to/example.graphml:].
    */
-  Path getPathFor(String extension) {
-    Path inputFilePath = new Path(inputEgbFileFullPath);
-    return inputFilePath.directoryPath
-          .join(new Path("${inputFilePath.filenameWithoutExtension}"
-          ".$extension"));
+  String getPathForExtension(String extension) {
+    //Path inputFilePath = new Path(inputEgbFileFullPath);
+    return path.join(path.dirname(inputEgbFileFullPath), 
+        "${path.basenameWithoutExtension(inputEgbFileFullPath)}.$extension");
   }
 
   /**
@@ -1848,7 +1847,7 @@ class Builder {
   Future<Builder> updateEgbFile() {
     var completer = new Completer();
 
-    var tempFile = new File.fromPath(getPathFor("egb~"));
+    var tempFile = new File(getPathForExtension("egb~"));
     File outputEgbFile;
 
     var tempInStream = inputEgbFile.openRead();
@@ -1864,8 +1863,8 @@ class Builder {
         rawInputStream.pipe(outStream);
       } else {
         var inStream = rawInputStream
-                       .transform(new StringDecoder())
-                       .transform(new LineTransformer());
+                       .transform(UTF8.decoder)
+                       .transform(new LineSplitter());
 
         // TODO: rewrite based on logical structure (i.e. insert new pages where they belong)
 

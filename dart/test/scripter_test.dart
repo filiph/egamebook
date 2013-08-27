@@ -1,5 +1,6 @@
 import 'package:unittest/unittest.dart';
 import 'dart:io';
+import 'package:path/path.dart' as path;
 
 import 'dart:collection';
 import 'dart:async';
@@ -48,15 +49,13 @@ class ClassWithoutMapMethods {
   ClassWithoutMapMethods();
 }
 
-/// Utility function. Gets a filename and returns the canonical path
-/// to the file in the [:test/files:] directory.
+/**
+ * Returns path to the file inside the [:/files:] subdirectory with filename
+ * [filename]. Convenience function.
+ */
 String getPath(String filename) {
-  var options = new Options();
-  var pathToScript = new Path(options.script);
-  var pathToFilename = pathToScript.directoryPath
-        .join(new Path("files"))
-        .join(new Path(filename));
-  return pathToFilename.toString();
+  var pathToScript = new Options().script;
+  return path.join(path.dirname(pathToScript), "files", filename);
 }
 
 /// Builds the given .egb file, returns the path to the file to be given to
