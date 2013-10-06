@@ -3,10 +3,7 @@ library egb_runner;
 import 'dart:async';
 import 'dart:isolate';
 
-import 'shared/utils.dart';
-
 import 'interface/interface.dart';
-import 'persistence/storage.dart';
 import 'persistence/savegame.dart';
 import 'persistence/player_profile.dart';
 import 'shared/user_interaction.dart';

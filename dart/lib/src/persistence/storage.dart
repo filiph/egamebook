@@ -1,7 +1,6 @@
 library egb_storage;
 
 import 'dart:async';
-import 'savegame.dart';
 import 'player_profile.dart';
 
 /**

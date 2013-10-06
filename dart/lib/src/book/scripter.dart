@@ -2,7 +2,6 @@ library egb_scripter;
 
 
 import 'dart:isolate';
-import 'dart:json';
 import 'dart:collection';
 import 'dart:mirrors';
 

@@ -1,6 +1,5 @@
 library egb_user_interaction;
 
-import 'dart:math';
 import 'dart:collection';
 
 import 'utils.dart';

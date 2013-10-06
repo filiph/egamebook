@@ -200,8 +200,9 @@ class EgbSavegame {
           // XXX: This just silently fails!
           throw new StateError("Constructor for $className not set. "
               "Cannot assemble a new instance.");
+        } else {
+          return constructors[className](input);
         }
-        return constructors[className](input);
       }
       //return _dissolveToPrimitives(input.toMap());
     } else {
