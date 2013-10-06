@@ -612,7 +612,7 @@ abstract class EgbScripter {
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else {
-      throw new NoSuchMethodError(this, memberName,
+      throw new NoSuchMethodError(this, invocation.memberName,
           invocation.positionalArguments, 
           null //TODO: invocation.namedArguments
           );
