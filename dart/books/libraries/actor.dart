@@ -1,8 +1,14 @@
 library actor;
 
-//import 'loopedevent.dart';
 import 'storyline.dart';
 
+/**
+ * Entity is a thing, a creature, a robot, or a person that is an interactive
+ * part of the gamebook environment.
+ * 
+ * They have a [name], they are referred to by a [pronoun] and more often
+ * than not they are at a [location].
+ */
 class Entity {
   Entity(this.name, {this.pronoun: Pronoun.IT});
   
@@ -31,14 +37,27 @@ class Item extends Entity {
 }
 
 /**
- * Minimal class to store information about the actor in the [Storyline].
+ * Actor is a game [Entity] that is (often) capable of _acting_ on its own. 
+ * Player is just one instance of an actor. A friendly NPC is another one.
+ * On a higher level of abstraction, a spaceship (populated by people) is 
+ * an Actor.
+ * 
+ * Each actor is a part of a [team]. This affects whether they are hostile
+ * or not towards other actors. 
  */
 class Actor extends Entity {
-  Actor({String name, this.team: DEFAULT_ENEMY, this.isPlayer: false,
+  Actor({String name, this.team: NEUTRAL, this.isPlayer: false,
     pronoun: Pronoun.IT}) : super(name, pronoun: pronoun);
   
+  static const int NEUTRAL = 0;
   static const int FRIEND = 1;
   static const int DEFAULT_ENEMY = 2;
+  
+  bool isEnemyOf(Actor other) {
+    if (team == NEUTRAL || other.team == NEUTRAL) return false;
+    return team != other.team;
+  }
+  
   int team;
   final bool isPlayer;
   

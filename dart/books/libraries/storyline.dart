@@ -8,7 +8,7 @@ import 'actor.dart';
  * contents are output to Scripter's [:textBuffer:] either manualy or 
  * automatically by LoopedEvent (before each player interaction).
  */
-Storyline storyline = new Storyline();
+final Storyline storyline = new Storyline();
 
 /**
  * The pronouns and their different forms.
