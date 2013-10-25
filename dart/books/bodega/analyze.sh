@@ -1,9 +1,8 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 # Build bodega.
-cd $DIR/../books/bodega
-./build.sh
+$DIR/build.sh
 # Run analyzer
-/Applications/dart/dart-sdk/bin/dartanalyzer ./bodega.html.dart
+/Applications/dart/dart-sdk/bin/dartanalyzer $DIR/bodega.html.dart
 if [ $? -eq 2 ]; then
   echo "ERROR WITH BODEGA BUILD!"
   exit 1
