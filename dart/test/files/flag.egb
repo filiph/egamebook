@@ -1,4 +1,9 @@
 
+<variables>
+  samaritan = new Bit();
+  asshole = new Bit();
+  silentType = new Bit();
+</variables>
 
 
 ---
@@ -6,9 +11,9 @@ start
 
 Would you like to give me some money?
 
-- Yes. [{flag("samaritan")} Yes]
+- Yes. [{samaritan.flag()} Yes]
 - No. [No]
-- Fuck off. [{flag("asshole")} Fuck off]
+- Fuck off. [{asshole.flag()} Fuck off]
 
 ---
 Yes
@@ -16,7 +21,7 @@ Yes
 Thanks, man, appreciate it.
 
 - No problem. [Finish]
-- ... [{flag("silentType")} Finish]
+- ... [{silentType.flag()} Finish]
 
 ---
 No
@@ -24,7 +29,7 @@ No
 Oh well, that's okay I guess.
 
 - Yep. [Finish]
-- ... [{flag("silentType")} Finish]
+- ... [{silentType.flag()} Finish]
 
 ---
 Fuck off
@@ -32,7 +37,7 @@ Fuck off
 Hey, _you_ fuck off.
 
 - Whatevs. [Finish]
-- ... [{flag("silentType")} Finish]
+- ... [{silentType.flag()} Finish]
 
 ---
 Finish
@@ -42,22 +47,22 @@ Finish
 Much later, you run into that same guy. He's rich now.
 
 <script>
-  if (isFlagged("asshole")) {
+  if (asshole.isFlagged) {
     <echo>
       Hey, that's you, asshole!
     </echo>
-    if (isFlagged("silentType")) {
+    if (silentType.isFlagged) {
       <echo>
         And don't give me that silent treatment again, bitch.
       </echo>
     }
   }
   
-  if (isFlagged("samaritan")) {
+  if (samaritan.isFlagged) {
     <echo>
       Is that you? Here, have a Porsche!
     </echo>
-    if (isFlagged("silentType")) {
+    if (silentType.isFlagged) {
       <echo>
         Oh, no need to thank, you were always a silent type.
       </echo>

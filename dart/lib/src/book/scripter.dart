@@ -20,6 +20,7 @@ export '../persistence/saveable.dart';
 
 part 'scripter_page.dart';
 part 'points_counter.dart';
+part 'bit.dart';
 
 /**
  * The StringBuffer which collects all echo()'d strings to put them all
