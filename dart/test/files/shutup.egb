@@ -1,5 +1,7 @@
 <variables>
 bodegaAttitude = 0;
+firstShutUp = new Bit();
+secondShutUp = new Bit();
 </variables>
 
 ---
@@ -10,19 +12,19 @@ Explore: Start
 The Bodega is now running a full system check, all the monitors flicker with information so fast only a computer could make anything of it. "What the _hell_ is happening?" the ship says, her voice glitching. "How does one go from a fully manned, well-preserved, licensed cargo ship to a _ghost_ ship piloted by an idiot machinist _while_ being attacked by a corporate runner for no apparent reason whatsoever Ð all of that in just two weeks!?"
 
 - "We survived, didn't we?" [{echo(""" "Well," she replies. "That's rich coming from someone who is probably going to die in a couple of hours." You wish you had something to reply to that, but you don't.""")}]
-- "Shut up." [{bodegaAttitude -= 1; flag("firstShutUp")}]
+- "Shut up." [{bodegaAttitude -= 1; firstShutUp.flag()}]
 
 "Okay, this is all so totally outside the protocol," the Bodega continues. "We'd be full speed somewhere past Algol if it wasn't for the idiot Gorilla of yours in the cargo bay. Nobody would be dead. The disease would be someone else's problem. And there would be someone _actually capable_ on the bridge."
 
 The flow of information on the monitors stop, and they all go to their default view. "Who were we kidding? The whole thing is _your_ fault. If you watched the beast Ð as you're _required by the protocol_, by the way Ð there would be no explosion, no contagion, no deaths, and no using the utility laser to end a Messenger that was probably just trying to help."
 
 - "It attacked us first!" [{bodegaAttitude += 1}]
-- "Shut up." [{bodegaAttitude -= 1; flag("secondShutUp")}]
+- "Shut up." [{bodegaAttitude -= 1; secondShutUp.flag()}]
 
 <script>
-  if (isFlagged("secondShutUp")) {
+  if (secondShutUp.isFlagged) {
     echo(""" "You know what? You shut up. """);
-    if (isFlagged("firstShutUp")) {
+    if (firstShutUp.isFlagged) {
       echo("Can you say anything else? Jesus. ");
     }
   } else if (bodegaAttitude >= 1) {

@@ -134,33 +134,6 @@ void nextScript(ScriptBlock f) {
   _nextScriptStack.addLast(f);
 }
 
-/**
- * Persistently flags the identifier [name] as [:true:]. Can be checked by
- * [isFlagged] and unflagged by [unflag].
- * 
- * The reason is convenience: the author doesn't need to check for [:null:]
- * before checking for true or false using [isFlagged].
- */
-void flag(String name) => _flags.add(name);
-
-/**
- * If [name] was flagged, it will be unflagged (i.e. [:isFlagged(name):] will
- * return [:false:]). If [name] hasn't been previously flagged, nothinig 
- * happens. 
- */
-void unflag(String name) {
-  _flags.remove(name);
-}
-
-/**
- * Returns [:true:] if [name] has been flagged via [:flag(name):]. Returns 
- * [:false:] otherwise (even if the flag is still 'undefined').
- */
-bool isFlagged(String name) => _flags.contains(name);
-
-/// Internal representation of flags.
-Set<String> _flags = new Set<String>();
-
 /// Constructors and functions can check for [isInInitBlock] and might choose
 /// to throw an Exception. For example, if an unsaveable property is changed
 /// during a <script> block.
@@ -595,7 +568,6 @@ abstract class EgbScripter {
     vars.clear();
     vars["points"] = _points;
     _points.clear();
-    _flags.clear();
     if (pageMap != null) pageMap.clearState();
 
     isInInitBlock = true;
@@ -659,7 +631,6 @@ abstract class EgbScripter {
   }
 
   EgbSavegame _createSaveGame() {
-    vars["_flags"] = _flags.toList(growable: false);
     return new EgbSavegame(currentPage.name, vars,
         pageMap.exportState());
   }
@@ -693,14 +664,6 @@ abstract class EgbScripter {
     }
 
     var _constructors = {};
-    
-    // extract flags and remove from vars
-    if (savegame.vars.containsKey("_flags")) {
-      _flags = new Set<String>.from(savegame.vars["_flags"]);
-      savegame.vars.remove("_flags");
-    } else {
-      _flags.clear();
-    }
     
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
