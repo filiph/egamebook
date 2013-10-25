@@ -2,11 +2,13 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 # Build bodega.
 $DIR/build.sh
 # Run analyzer
-/Applications/dart/dart-sdk/bin/dartanalyzer $DIR/bodega.html.dart
+# You can change to bodega.html.dart for longer check in case there are any strange interferences.
+# But checking just bodega.dart should suffice.
+/Applications/dart/dart-sdk/bin/dartanalyzer $DIR/bodega.dart
 if [ $? -eq 2 ]; then
   echo "ERROR WITH BODEGA BUILD!"
   if [ $# -gt 0 ]; then
-    osascript -e 'tell app "System Events" to display alert "Error when building egamebook!"'
+    osascript -e 'tell app "Terminal" to display alert "Error when building egamebook!"'
   fi
   exit 1
 elif [ $? -eq 1 ]; then
