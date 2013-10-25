@@ -4,7 +4,7 @@ author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   path: any
   browser: any
-  unittest: 0.4.7+1
+  unittest: any
   args: any
 #  markdown: any
 #  graphml:
