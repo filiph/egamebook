@@ -5,6 +5,9 @@ $DIR/build.sh
 /Applications/dart/dart-sdk/bin/dartanalyzer $DIR/bodega.html.dart
 if [ $? -eq 2 ]; then
   echo "ERROR WITH BODEGA BUILD!"
+  if [ $# -gt 0 ]; then
+    osascript -e 'tell app "System Events" to display alert "Error when building egamebook!"'
+  fi
   exit 1
 elif [ $? -eq 1 ]; then
   echo "There were some warnings, but nothing fatal."
