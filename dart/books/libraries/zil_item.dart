@@ -1,6 +1,6 @@
 part of zil;
 
-abstract class Location extends Object {
+abstract class Located {
   /// Location of the entity in game. It is set to [:null:] for objects/actors 
   /// that are 'nowhere'.
   Room get location;
@@ -22,7 +22,7 @@ abstract class Location extends Object {
         visible: true
       );
  */
-class Item extends Entity with Location {
+class Item extends Entity implements Located {
   final Iterable<Action> actions;
   bool takeable;
   bool visible;
@@ -32,11 +32,11 @@ class Item extends Entity with Location {
   
   Set<Item> contents = new Set<Item>();
   
-  Item(String name, this.actions/*, {
+  Item(String name, this.actions, {
       this.takeable: true, this.visible: true, this.container: false,
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
-      Pronoun pronoun: Pronoun.IT}*/) : super(name/*, pronoun: pronoun*/) {
+      Pronoun pronoun: Pronoun.IT}) : super(name, pronoun: pronoun) {
         
     actions.forEach((action) => action.item = this);
     if (!container) {
@@ -59,7 +59,8 @@ class Item extends Entity with Location {
     return _location;
   }
   
-  
+  bool isIn(Room room) => location == room;
+  bool isInSameRoomAs(ZilActor actor) => location == actor.location;
   
   // TODO: droppable - some items just shouldn't be even giving the option to be dropped
   // TODO: get inspiration from item.dart
