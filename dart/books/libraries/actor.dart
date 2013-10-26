@@ -14,10 +14,6 @@ class Entity {
   
   final String name;
   
-  /// Location of the entity in game. Corresponds to a [Room] and/or 
-  /// a page name. It is set to [:null:] for objects that are 'nowhere'.
-  String location;
-  
   /**
    * Whether or not this entity should be shown to the player. This can be useful
    * for entities that are only relevant later in the game (i.e. after player
@@ -30,10 +26,6 @@ class Entity {
   void report(String text, {Actor object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff
   }
-}
-
-class Item extends Entity {
-  Item(String name) : super(name, pronoun: Pronoun.IT);
 }
 
 /**
