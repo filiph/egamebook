@@ -137,11 +137,11 @@ void nextScript(ScriptBlock f) {
 /// Constructors and functions can check for [isInInitBlock] and might choose
 /// to throw an Exception. For example, if an unsaveable property is changed
 /// during a <script> block.
-void throwIfNotInInitBlock() {
+void throwIfNotInInitBlock([String customMessage = ""]) {
   if (isInInitBlock == false) {
     throw new StateError("An initialization code meant for the initBlock "
         "(inside the <variables> tag) was called outside of it (probably "
-        "in a <script> tag).");
+        "in a <script> tag). $customMessage");
   }
 }
 
