@@ -17,7 +17,6 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 
 abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   LoopedEvent({this.actors: const [], this.timeline}) {
-    if (storyline == null) storyline = new Storyline();
     if (timeline == null) timeline = new Timeline();
 //    actors.forEach((actor) => actor.participateIn(this));
   }
