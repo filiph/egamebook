@@ -218,7 +218,7 @@ void main() {
       });
     });
     
-    group("flag()", () {
+    group("flags (Bits)", () {
       test("basic", () {
         build("flag.egb")
         .then((mainPath) => run(mainPath))
@@ -232,7 +232,7 @@ void main() {
           ui.quit();
         }));
       });
-      test("2 different flags", () {
+      test("2 different bits", () {
         build("flag.egb")
         .then((mainPath) => run(mainPath))
         .then((MockInterface ui) {
@@ -459,6 +459,34 @@ void main() {
           ui.quit();
         }));
       });
+      
+      test("script choices", () {
+        receivePort.close();
+        var storage = new MemoryStorage();
+        var mainPath;
+        build("scriptchoices.egb")
+        .then((path) {
+          mainPath = path;
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          ui.choose("Live!");
+          return ui.waitForDone();
+        })
+        .then((MockInterface ui) {
+          ui.quit();
+          return run(mainPath, persistentStorage: storage);
+        })
+        .then((MockInterface ui) {
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestChoices[0].string, "Another chance to die.");
+          expect(ui.latestChoices[1].string, "Win it!");
+          print(ui.choicesToBeTaken);
+          ui.quit();
+        }));
+      });
     });
 
     group("Page options", () {
@@ -572,6 +600,7 @@ void main() {
           ui.quit();
         }));
       });
+      // TODO test persistence
     });
     
     group("ChoiceWithInfochips", () {
