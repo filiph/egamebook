@@ -464,11 +464,9 @@ abstract class EgbScripter {
     DEBUG_SCR("Resolving block: '${currentPage.name}' block $currentBlockIndex.");
     if (currentBlockIndex == currentPage.blocks.length) {
       // At the end of page.
-      assert(!choices.any((choice) => !choice.shown));
+      assert(!choices.any((choice) => !choice.shown));  // Should have been handled above.
       DEBUG_SCR("End of book.");
-      if (currentBlockIndex == currentPage.blocks.length) {
-        _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
-      }
+      _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));  // End book save.
       return new EgbMessage.EndOfBook();
     }
     
@@ -479,7 +477,7 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
       choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      if (choices.any((choice) => choice.isActionable(
+      if (choices.any((choice) => choice.isActionable(  // TODO: make DRY
             atEndOfPage: atEndOfPage,
             atChoiceList: true,
             filterOut: _leadsToIllegalPage)) && 
@@ -490,7 +488,24 @@ abstract class EgbScripter {
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
       // TODO: create _textMessageCache here and not in _send()
-      return _runScriptBlock(currentPage.blocks[currentBlockIndex]);
+      var savegame = null;
+      if (currentBlockIndex == currentPage.blocks.length - 1) {
+        // Last block on page. Save the game.
+        savegame = _createSaveGame();
+      }
+      var scriptMessage = 
+          _runScriptBlock(currentPage.blocks[currentBlockIndex]);
+      
+      if (choices.any((choice) => choice.isActionable(
+            atEndOfPage: atEndOfPage,
+            atChoiceList: true,
+            filterOut: _leadsToIllegalPage)) &&
+          currentBlockIndex == currentPage.blocks.length - 1) {
+        assert(savegame != null);
+        // TODO deep compare assert((savegame as EgbSavegame).vars == _createSaveGame().vars);
+        _send(savegame.toMessage(EgbMessage.SAVE_GAME));
+      }
+      return scriptMessage;
     }
   }
 
