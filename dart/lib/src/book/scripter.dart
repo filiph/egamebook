@@ -50,6 +50,7 @@ void echo(String str) {
  * has been done.
  */
 String gotoPageName;
+bool get gotoCalledRecently => gotoPageName != null;
 
 /**
  * By calling [goto()], you're saying you want to change page to [pageName].
