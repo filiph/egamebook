@@ -29,6 +29,14 @@ class Item extends Entity implements Located {
   final bool container;
   final bool plural;
   int count;
+
+  /// This is the description of the item in it's initial state (in a room). 
+  /// It is equivalent to FDESC in ZIL. After the player has taken the item or 
+  /// has done anything with it, a generic description will be used (something
+  /// like [:"There is $name in here.":]).
+  /// When not provided (or explicitly set to [:null:]), the generic 
+  /// description will always be provided. 
+  final String firstDescription;
   
   Set<Item> contents = new Set<Item>();
   
@@ -36,7 +44,8 @@ class Item extends Entity implements Located {
       this.takeable: true, this.visible: true, this.container: false,
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
-      Pronoun pronoun: Pronoun.IT}) : super(name, pronoun: pronoun) {
+      Pronoun pronoun: Pronoun.IT, this.firstDescription: null}) 
+      : super(name, pronoun: pronoun) {
         
     actions.forEach((action) => action.item = this);
     if (!container) {
@@ -61,6 +70,10 @@ class Item extends Entity implements Located {
   
   bool isIn(Room room) => location == room;
   bool isInSameRoomAs(ZilActor actor) => location == actor.location;
+  
+  void showText() {
+    storyline.add("there is $name here");
+  }
   
   // TODO: droppable - some items just shouldn't be even giving the option to be dropped
   // TODO: get inspiration from item.dart

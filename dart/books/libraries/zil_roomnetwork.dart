@@ -22,12 +22,45 @@ class RoomNetwork {
     room.network = this;
   }
   
+  /**
+   * This is run after initialization of the room network and before the network
+   * is used for the first time. It will connect the [Exit]s to their 
+   * destination [Room]s. (We cannot do it on init because when creating the
+   * exit, the two rooms might not exist yet. It would be possible to create
+   * exits only after all rooms were created, but that would be much less
+   * readable.)
+   */
+  void _setExitToFields() {
+    _rooms.values.forEach((Room origin) {
+      origin.exits.forEach((Exit exit) {
+        assert(_rooms.keys.contains(exit.destinationPageName));
+        assert(exit.from == origin);
+        exit.to = _rooms[exit.destinationPageName];
+      });
+    });
+
+  }
+
+  bool _networkReady = false;
+  /**
+   * The network needs some setting up after all the components have been put
+   * in place but before it can do things like find paths.
+   */
+  void _checkNetworkReady() {
+    if (!_networkReady) {
+      _setExitToFields();
+      _networkReady = true;
+    }
+  }
+  
   void setCurrentFromPageName(String pagename) {
+    _checkNetworkReady();
     assert(_rooms.containsKey(pagename));
     current = _rooms[pagename];
   }
   
   Path findPath(Room from, Room to) {
+    _checkNetworkReady();
     // TODO
     throw new UnimplementedError();
   }

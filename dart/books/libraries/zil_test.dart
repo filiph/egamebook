@@ -1,12 +1,14 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/book/scripter.dart';
 import 'zil.dart';
+import 'storyline.dart';
 
 
 void main() {
   test("mainLoop works", () {
     
-    var captainsGun = new Item("captains {gun|pistol}", 
+    // Init
+    var captainsGun = new Item("captain's {gun|pistol}", 
         [
          new Action("check the gun", 
             () => echo("You check the gun. It's okay."),
@@ -25,15 +27,33 @@ void main() {
       visible: false
     );
     rooms.addRoom(new Room("Exploration.Bridge", // corresponds to pagename
-        [/*new UnconditionalExit("LeftCorridor"), 
-         new PlayerOnlyExit("SecretDoor"), 
-         new Exit("Hatchway", requirement: (actor) => actor.isSlim && hatchway.isOpen)*/],
+        [new Exit("LeftCorridor"), 
+         new Exit("Hatchway", requirement: () => player.isAlive)],
          //onEnter: () { /* Room function (on enter?) */ echo },
          //globalBitsOverride: {hearablePA: true, loudEnviron: false},
          coordinates: [0, 0, 0],
          items: [captainsGun]
     ));
+    rooms.addRoom(new Room("LeftCorridor",
+        [new Exit("Exploration.Bridge")]
+    ));
+    rooms.addRoom(new Room("Hatchway", []));
     
+    // Script
+    // npcs.update(1);
+    // rooms.update(1);
+    // ^^^ = zil.update(1);
+    rooms.setCurrentFromPageName("Exploration.Bridge");
+    // rooms.current.showArrival();  // "You have arrived to the bridge."
+    // rooms.current.showDescription();  // "You are standing at the bridge."
+    // npcs.showIn(rooms.current);  // "Gorilla is here. He sits on the floor."
+    rooms.current.showItems();  // "The captain's gun is here."
+    // rooms.current.showExits();  // "You can leave to corridor left, squeeze through the hatchway or use the ladder to ..."
+    
+    // Needed in debug only.
+    print(storyline.toString());
+    
+    // zil.showChoices();
   });
   
   // EXAMPLE

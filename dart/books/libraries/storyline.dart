@@ -132,6 +132,7 @@ class Storyline {
     bool but: false, bool positive: false, bool negative: false, 
     bool endSentence: false, bool startSentence: false, 
     bool wholeSentence: false, int time}) {
+    // TODO: work with entity (as opposed to Actor)
     
     if (str == null || str == "") throw new ArgumentError("Cannot create empty report.");
     
