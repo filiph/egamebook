@@ -5,7 +5,7 @@ import 'storyline.dart';
 
 
 void main() {
-  test("mainLoop works", () {
+  test("ZIL works", () {
     
     // Init
     var captainsGun = new Item("captain's {gun|pistol}", 
@@ -23,8 +23,7 @@ void main() {
       takeable: true,
       count: 1,  // can be >1 for things like bullets
       container: true,
-      contents: [],
-      visible: false
+      contents: []
     );
     rooms.addRoom(new Room("Exploration.Bridge", // corresponds to pagename
         [new Exit("LeftCorridor"), 
@@ -48,7 +47,7 @@ void main() {
     // rooms.current.showDescription();  // "You are standing at the bridge."
     // npcs.showIn(rooms.current);  // "Gorilla is here. He sits on the floor."
     rooms.current.showItems();  // "The captain's gun is here."
-    // rooms.current.showExits();  // "You can leave to corridor left, squeeze through the hatchway or use the ladder to ..."
+    // rooms.current.showExits();
     
     // Needed in debug only.
     print(storyline.toString());

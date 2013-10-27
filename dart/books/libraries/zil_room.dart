@@ -11,6 +11,8 @@ class Room extends Entity {
   Iterable<Item> items;
   Set<Exit> exits;
   
+  bool visited = false;
+  
   Room(String name, Iterable exits, 
       {this.onEnter, this.coordinates: const [0, 0, 0], this.items}) 
       : super(name) {
@@ -23,9 +25,25 @@ class Room extends Entity {
   RoomNetwork network;
   
   /// Shows the text associated with the room.
-  void showItems() {
+  void showDescription() {
     storyline.add("<subject> <is> standing in $name", subject: player);
-    items.forEach((Item item) => item.showText());
+    visited = true;
+  }
+
+  /// Shows all items currently visible in the room.
+  void showItems() {
+    items.where((Item item) => item.isActive)
+      .forEach((Item item) => item.showText());
+    // TODO: enumerate
+  }
+  
+  /// Example: "You can leave to corridor left, squeeze through the hatchway 
+  /// or use the ladder to ..."
+  void showExits() {
+    exits.forEach((exit) {
+      storyline.add("<subject> can leave to ${exit.to.name}", subject: player);
+    });
+    // TODO: enumerate
   }
   
   bool contains(Item item) => items.contains(item);  // TODO: freestanding vs in possession

@@ -25,7 +25,6 @@ abstract class Located {
 class Item extends Entity implements Located {
   final Iterable<Action> actions;
   bool takeable;
-  bool visible;
   final bool container;
   final bool plural;
   int count;
@@ -41,7 +40,7 @@ class Item extends Entity implements Located {
   Set<Item> contents = new Set<Item>();
   
   Item(String name, this.actions, {
-      this.takeable: true, this.visible: true, this.container: false,
+      this.takeable: true, this.container: false, bool isActive: true,
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
       Pronoun pronoun: Pronoun.IT, this.firstDescription: null}) 
@@ -54,6 +53,7 @@ class Item extends Entity implements Located {
       this.contents.addAll(contents);
     }
     if (!plural) assert(count == 1);
+    this.isActive = isActive;
   }
   
   Room _location;
