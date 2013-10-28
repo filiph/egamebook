@@ -43,9 +43,9 @@ class Pronoun {
  * naturally sounding narrative.
  */
 class Report {
-  Report(this.string, {this.subject, this.object, this.owner, this.but, 
-    this.positive, this.negative, this.endSentence, this.startSentence, 
-    this.wholeSentence, this.time});
+  Report(this.string, {this.subject, this.object, this.owner, this.but: false, 
+    this.positive: false, this.negative: false, this.endSentence: false, 
+    this.startSentence: false, this.wholeSentence: false, this.time});
   
   Report.empty() : string = "", subject = null, object = null, owner = null,
       but = false, positive = false, negative = false, endSentence = false,
@@ -133,7 +133,9 @@ class Storyline {
     bool endSentence: false, bool startSentence: false, 
     bool wholeSentence: false, int time}) {
     
-    if (str == null || str == "") throw new ArgumentError("Cannot create empty report.");
+    if (str == null || str == "") {
+      return;  // Ignore empty records. 
+    }
     
     if (time != null) {
       this.time = time;
@@ -189,8 +191,10 @@ class Storyline {
       }
     }
   }
+  
+  void addParagraph() => add("\n\n", wholeSentence: true);
 
-  String capitalize(String str) {
+  static String capitalize(String str) {
     if (str.isEmpty) return str;
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1)
