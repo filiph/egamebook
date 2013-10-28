@@ -9,6 +9,11 @@ abstract class Located {
   bool isInSameRoomAs(ZilActor actor) => location == actor.location;
 }
 
+//abstract class Described {
+//  String get description;
+//  
+//}
+
 /**
  *     var captainsGun = new Item("captains {gun|pistol}", 
           [

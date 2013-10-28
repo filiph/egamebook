@@ -128,7 +128,7 @@ class Storyline {
   /**
    * Add another event to the story. 
    */
-  Storyline add(String str, {Actor subject, Actor object, Actor owner, 
+  void add(String str, {Actor subject, Actor object, Actor owner, 
     bool but: false, bool positive: false, bool negative: false, 
     bool endSentence: false, bool startSentence: false, 
     bool wholeSentence: false, int time}) {
@@ -143,6 +143,51 @@ class Storyline {
         but: but, positive: positive, negative: negative, 
         endSentence: endSentence, startSentence: startSentence, 
         wholeSentence: wholeSentence, time: time));
+  }
+  
+  /**
+   * Add a sentence (or more) enumerating several things at once.
+   * Example: "You can see a handkerchief, a brush and a mirror here."
+   * You can provide "<also>" for a more human-like enumeration.
+   */
+  void addEnumeration(String start, Iterable<String> articles, String end, 
+                      {Actor subject, Actor object, Actor owner, 
+                       int maxPerSentence: 3}) {
+    assert(start != null);
+    assert(articles != null);
+    assert(articles.length > 0);
+    StringBuffer buf = new StringBuffer();
+    buf.write(start.replaceAll("<also>", "").replaceAll("  ", " ")); // TODO: less hacky
+    buf.write(" ");
+    int i = 0;
+    for (String article in articles) {
+      if (i > 0) {
+        if (i == 1 && article == articles.last) {
+          buf.write(" ");
+          buf.write("and");
+        } else if (i == maxPerSentence - 1) {
+          buf.write(", and");
+        } else {
+          buf.write(",");
+        }
+        buf.write(" ");
+      }
+      buf.write(article);
+      i++;
+      if (i > maxPerSentence - 1 || article == articles.last) {
+        if (end != null) {
+          buf.write(" ");
+          buf.write(end.replaceAll("<also>", "also"));
+        }
+        buf.write(".");
+        add(buf.toString(), subject: subject, object: object, owner: owner, 
+            wholeSentence: true);
+        i = 0;
+        buf.clear();
+        buf.write(start.replaceAll("<also>", "also"));
+        buf.write(" ");
+      }
+    }
   }
 
   String capitalize(String str) {

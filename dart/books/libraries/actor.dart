@@ -22,6 +22,8 @@ class Entity {
   bool isActive = true;
 
   final Pronoun pronoun;
+  // TODO: needsArticle (handkerchief does, Gorilla doesn't, captain's gun doesn't)
+  // TODO: alreadyReferredTo (false? article = a. true? article = the)
   
   void report(String text, {Actor object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff

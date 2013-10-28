@@ -5,28 +5,41 @@ part of zil;
  * an [EgbPage] name.
  */
 class Room extends Entity {
-  /// Must correspond to a pageName.
-  PerformFunction onEnter;
+  //PerformFunction onEnter;
   final List<int> coordinates;
-  Iterable<Item> items;
-  Set<Exit> exits;
+  final Set<Item> items;
+  final Set<Exit> exits;
+  
+  String description;
   
   bool visited = false;
   
-  Room(String name, Iterable exits, 
-      {this.onEnter, this.coordinates: const [0, 0, 0], this.items}) 
-      : super(name) {
+  Room(String name, this.description, Iterable exits, 
+      { //this.onEnter, 
+       this.coordinates: const [0, 0, 0], Iterable items: const []}) 
+      : this.exits = new Set.from(exits),
+        this.items = new Set.from(items),
+        super(name) {
     //throwIfNotInInitBlock("Cannot create room on the fly.");
-    this.exits = new Set.from(exits);
+    if (description == null) description = "<subject> <is> in $name";
     this.exits.forEach((exit) => exit.from = this);
   }
   
   /// The RoomNetwork this Room is a part of.
   RoomNetwork network;
   
+  /// Shows 
+  void describe(ticks) {
+    showDescription();
+    // npcs.describe(ticks, roomsToShow: [rooms.current]);
+    if (gotoCalledRecently) return;
+    showItems();
+    showExits();
+  }
+  
   /// Shows the text associated with the room.
   void showDescription() {
-    storyline.add("<subject> <is> standing in $name", subject: player);
+    storyline.add(description, subject: player);
     visited = true;
   }
 
