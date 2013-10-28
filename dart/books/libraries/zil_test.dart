@@ -25,7 +25,7 @@ void main() {
       container: true,
       contents: []
     );
-    rooms.addRoom(new Room("Exploration.Bridge", // corresponds to pagename
+    var bridge = rooms.add(new Room("Exploration.Bridge", // corresponds to pagename
         "the bridge",
         [new Exit("LeftCorridor"), 
          new Exit("Hatchway", requirement: () => player.isAlive)],
@@ -34,18 +34,20 @@ void main() {
          coordinates: [0, 0, 0],
          items: [captainsGun]
     ));
-    rooms.addRoom(new Room("LeftCorridor",
+    rooms.add(new Room("LeftCorridor",
         "Left Corridor",
         [new Exit("Exploration.Bridge")]
     ));
-    rooms.addRoom(new Room("Hatchway", "the hatchway", []));
+    rooms.add(new Room("Hatchway", "the hatchway", []));
+    
+    var gorilla = actors.add(new AIActor("Gorilla"), bridge);
     
     // Script
     // npcs.update(1);
     // rooms.update(1);
     // ^^^ = zil.update(1);
     rooms.setCurrentFromPageName("Exploration.Bridge");
-    rooms.current.describe(1);
+    rooms.current.describe(10);
     // rooms.current.showArrival();  // "You have arrived to the bridge."
     // rooms.current.showDescription();  // "You are standing at the bridge."
     // npcs.showIn(rooms.current);  // "Gorilla is here. He sits on the floor." / He carries ___. Heading towards ...

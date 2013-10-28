@@ -26,6 +26,7 @@ import 'package:egamebook/src/book/scripter.dart' show goto, echo, choice, throw
 import 'actor.dart';
 import 'storyline.dart';
 import 'randomly.dart' show Randomly;
+import 'dart:collection';
 
 part 'zil_room.dart';
 part 'zil_exit.dart';
@@ -33,4 +34,6 @@ part 'zil_roomnetwork.dart';
 part 'zil_item.dart';
 part 'zil_actor.dart';
 part 'zil_aiactor.dart';
+part 'zil_goal.dart';
+part 'zil_actorsociety.dart';
 part 'zil_action.dart';

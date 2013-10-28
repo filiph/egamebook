@@ -29,11 +29,16 @@ class Room extends Entity implements Described {
   /// The RoomNetwork this Room is a part of.
   RoomNetwork network;
   
-  /// Shows 
-  void describe(ticks) {
+  /// Shows the room, it's inhabitants, items and exits during the next [ticks].
+  /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
+  void describe(int ticks) {
     showDescription();
-    // npcs.describe(ticks, roomsToShow: [rooms.current]);
-    if (gotoCalledRecently) return;
+    storyline.addParagraph();
+    if (rooms.actors != null) {
+      actors.update(ticks, currentRoom: rooms.current);
+      if (gotoCalledRecently) return;
+    }
+    storyline.addParagraph();
     showItems();
     showExits();
   }
