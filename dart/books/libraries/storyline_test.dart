@@ -66,4 +66,56 @@ void main() {
     expect(storyline.toString(),
         matches("The enemy's ship aims her guns at you.+ your gun is faster."));
   });
+  
+  test("enumeration", () {
+    var storyline = new Storyline();
+    
+    // 1
+    storyline.addEnumeration("you see", ["a handkerchief"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief here."));
+    storyline.clear();
+    // 2
+    storyline.addEnumeration("you see", ["a handkerchief", "a brush"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief and a brush here."));
+    storyline.clear();
+    // 3
+    storyline.addEnumeration("you see", 
+        ["a handkerchief", "a brush", "a mirror"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief, a brush, and a mirror here."));
+    storyline.clear();
+    // 4
+    storyline.addEnumeration("you see", 
+        ["a handkerchief", "a brush", "a mirror", "a lipstick"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief, a brush, and a mirror here. "
+            "You see a lipstick here."));
+    storyline.clear();
+    // 5
+    storyline.addEnumeration("you see", 
+        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
+         "a crate of TNT"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief, a brush, and a mirror here. "
+            "You see a lipstick and a crate of TNT here."));
+    storyline.clear();
+    // 5 + also
+    storyline.addEnumeration("you <also> see", 
+        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
+         "a crate of TNT"], "here");
+    expect(storyline.toString(),
+        matches("You see a handkerchief, a brush, and a mirror here. "
+            "You also see a lipstick and a crate of TNT here."));
+    storyline.clear();
+    // 5 + also + no end
+    storyline.addEnumeration("you <also> see", 
+        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
+         "a crate of TNT"], null);
+    expect(storyline.toString(),
+        matches("You see a handkerchief, a brush, and a mirror. "
+            "You also see a lipstick and a crate of TNT."));
+    storyline.clear();
+  });
 }
