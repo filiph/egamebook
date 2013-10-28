@@ -9,6 +9,10 @@ abstract class Located {
   bool isInSameRoomAs(ZilActor actor) => location == actor.location;
 }
 
+abstract class Described {
+  String get description;
+}
+
 /**
  *     var captainsGun = new Item("captains {gun|pistol}", 
           [
@@ -22,7 +26,7 @@ abstract class Located {
         visible: true
       );
  */
-class Item extends Entity implements Located {
+class Item extends Entity implements Located, Described {
   final Iterable<Action> actions;
   bool takeable;
   final bool container;
@@ -37,9 +41,12 @@ class Item extends Entity implements Located {
   /// description will always be provided. 
   final String firstDescription;
   
+  String description;
+  
   Set<Item> contents = new Set<Item>();
   
   Item(String name, this.actions, {
+      this.description,
       this.takeable: true, this.container: false, bool isActive: true,
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
@@ -54,6 +61,8 @@ class Item extends Entity implements Located {
     }
     if (!plural) assert(count == 1);
     this.isActive = isActive;
+    
+    if (description == null) description = name;
   }
   
   Room _location;

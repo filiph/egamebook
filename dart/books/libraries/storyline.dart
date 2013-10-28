@@ -152,21 +152,21 @@ class Storyline {
    */
   void addEnumeration(String start, Iterable<String> articles, String end, 
                       {Actor subject, Actor object, Actor owner, 
-                       int maxPerSentence: 3}) {
+                       int maxPerSentence: 3, String conjuction: "and"}) {
     assert(start != null);
     assert(articles != null);
     assert(articles.length > 0);
     StringBuffer buf = new StringBuffer();
-    buf.write(start.replaceAll("<also>", "").replaceAll("  ", " ")); // TODO: less hacky
+    buf.write(start.replaceAll("<also>", "").replaceAll("  ", " ").trim()); // TODO: less hacky
     buf.write(" ");
     int i = 0;
     for (String article in articles) {
       if (i > 0) {
         if (i == 1 && article == articles.last) {
           buf.write(" ");
-          buf.write("and");
+          buf.write(conjuction);
         } else if (i == maxPerSentence - 1) {
-          buf.write(", and");
+          buf.write(", $conjuction");
         } else {
           buf.write(",");
         }

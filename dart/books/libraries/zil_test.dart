@@ -26,6 +26,7 @@ void main() {
       contents: []
     );
     rooms.addRoom(new Room("Exploration.Bridge", // corresponds to pagename
+        "the bridge",
         [new Exit("LeftCorridor"), 
          new Exit("Hatchway", requirement: () => player.isAlive)],
          //onEnter: () { /* Room function (on enter?) */ echo },
@@ -34,19 +35,21 @@ void main() {
          items: [captainsGun]
     ));
     rooms.addRoom(new Room("LeftCorridor",
+        "Left Corridor",
         [new Exit("Exploration.Bridge")]
     ));
-    rooms.addRoom(new Room("Hatchway", []));
+    rooms.addRoom(new Room("Hatchway", "the hatchway", []));
     
     // Script
     // npcs.update(1);
     // rooms.update(1);
     // ^^^ = zil.update(1);
     rooms.setCurrentFromPageName("Exploration.Bridge");
+    rooms.current.describe(1);
     // rooms.current.showArrival();  // "You have arrived to the bridge."
     // rooms.current.showDescription();  // "You are standing at the bridge."
-    // npcs.showIn(rooms.current);  // "Gorilla is here. He sits on the floor."
-    rooms.current.showItems();  // "The captain's gun is here."
+    // npcs.showIn(rooms.current);  // "Gorilla is here. He sits on the floor." / He carries ___. Heading towards ...
+    //rooms.current.showItems();  // "The captain's gun is here."
     // rooms.current.showExits();
     
     // Needed in debug only.
