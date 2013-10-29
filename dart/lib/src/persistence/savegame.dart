@@ -1,6 +1,6 @@
 library egb_savegame;
 
-import 'dart:json';
+import 'dart:convert' show JSON;
 
 import '../shared/message.dart';
 import 'saveable.dart';
@@ -46,7 +46,7 @@ class EgbSavegame {
   }
   
   EgbSavegame.fromJson(String json) {
-    Map<String,dynamic> saveMap = parse(json);
+    Map<String,dynamic> saveMap = JSON.decode(json);
     if (!saveMap.containsKey("currentPageName") 
         || !saveMap.containsKey("vars")) {
       throw "Invalid JSON for EgbSavegame. Doesn't contain required fields "
@@ -87,7 +87,7 @@ class EgbSavegame {
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
     }
-    return stringify(saveMap);
+    return JSON.encode(saveMap);
   }
   
   String toString() => toJson();

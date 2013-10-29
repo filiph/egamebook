@@ -2,7 +2,7 @@ library egb_player_profile;
 
 import 'dart:collection';
 import 'dart:async';
-import 'dart:json';
+import 'dart:convert' show JSON;
 
 import 'savegame.dart';
 import 'storage.dart';
@@ -44,7 +44,7 @@ class EgbPlayerProfile {
 
   Future<bool> _savePreferences() {
     return _storage.save("$playerUid::$PREFERENCES_KEY",
-                         stringify(preferences));
+                         JSON.encode(preferences));
   }
 
   Future<bool> _loadPreferences() {
@@ -54,7 +54,7 @@ class EgbPlayerProfile {
       if (json == null || json == "") {
         preferences = new Map();
       } else {
-        preferences = parse(json);
+        preferences = JSON.decode(json);
       }
       completer.complete(true);
     });
@@ -102,13 +102,13 @@ class EgbPlayerProfile {
   }
 
   Future<bool> _saveStoryChronology() {
-    return _save("_storyChronology", stringify(storyChronology.toList()));
+    return _save("_storyChronology", JSON.encode(storyChronology.toList()));
   }
 
   Future<bool> _loadStoryChronology() {
     return _load("_storyChronology").then((json) {
       if (json != null) {
-        List<String> list = parse(json);
+        List<String> list = JSON.decode(json);
         storyChronology = new Queue<String>.from(list);
       } else {
         storyChronology = new Queue<String>();
@@ -118,11 +118,11 @@ class EgbPlayerProfile {
   }
   
   Future<bool> savePlayerChronology(List<String> playerChronology) {
-    return _save("_playerChronology", stringify(playerChronology));
+    return _save("_playerChronology", JSON.encode(playerChronology));
   }
   
   Future<List<String>> loadPlayerChronology() {
-    return _load("_playerChronology").then((String s) => parse(s));
+    return _load("_playerChronology").then((String s) => JSON.decode(s));
   }
 
   /**

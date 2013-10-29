@@ -1,6 +1,6 @@
 library egb_message;
 
-import 'dart:json';
+import 'dart:convert' show JSON;
 
 class EgbMessage {
   int type;
@@ -96,7 +96,7 @@ class EgbMessage {
     Ctor that creates the Message object from a JSON string.
     */
   EgbMessage.fromJson(String json) {
-    Map<String,dynamic> data = parse(json);
+    Map<String,dynamic> data = JSON.decode(json);
     type = data["type"];
 
     if (data.containsKey("strContent")) {
@@ -134,6 +134,6 @@ class EgbMessage {
       data["mapContent"] = mapContent;
     }
 
-    return stringify(data);
+    return JSON.encode(data);
   }
 }
