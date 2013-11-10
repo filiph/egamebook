@@ -65,14 +65,18 @@ class EgbRunner {
       }
     });
     
-    _receivePort.receive(receiveFromScripter);
+    _receivePort.listen(receiveFromScripter);
   }
   
   void run() {
     print("RUN: Runner.run() called.");
     _interface.setup();
-    _send(new EgbMessage.GetBookUid());  // TODO: send with .call(), immediately process the book UID
+    if (_scripterPort != null) {
+      _send(new EgbMessage.GetBookUid());  // TODO: send with .call(), immediately process the book UID
+    }
+    readyToRun = true;
   }
+  bool readyToRun = false;
   
   void stop() {
     _playerProfile.close();
@@ -88,16 +92,22 @@ class EgbRunner {
     if (_scripterPort == null) throw new StateError("Cannot send message "
                                              "when _scripterPort is null.");
     print("RUN: Sending message (${message.type})");
-    _scripterPort.send(message.toJson(), _receivePort.toSendPort());
+    _scripterPort.send(message.toJson());
   }
   
   /**
    * Main loop function. Receives a message from scripter, and either
    * responds immediately, or asks for input via [_interface], then responds.
    */
-  void receiveFromScripter(String messageJson, SendPort replyTo) {
+  void receiveFromScripter(Object _message) {
+    print(_message);
+    if (_message is SendPort) {
+      _scripterPort = _message;
+      if (readyToRun) _send(new EgbMessage.GetBookUid());
+      return;
+    }
+    String messageJson = _message as String;
     EgbMessage message = new EgbMessage.fromJson(messageJson);
-    _scripterPort = replyTo;
     
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
@@ -124,8 +134,7 @@ class EgbRunner {
           // Since this is a text result waiting for a Continue message on
           // a special port (because EgbScripter._send() uses port.call()),
           // we need to do the sending explicitly, not through _send().
-          replyTo.send(
-              new EgbMessage.Continue().toJson(), _receivePort.toSendPort());
+          _scripterPort.send(new EgbMessage.Continue().toJson());
         });
         return;
       case EgbMessage.NO_RESULT:

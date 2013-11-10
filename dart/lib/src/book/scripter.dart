@@ -222,18 +222,24 @@ abstract class EgbScripter {
   /// Port for communication with the Runner (and through it, the Interface,
   /// and the player).
   SendPort _runnerPort;
+  
+  ReceivePort port;
 
-  EgbScripter() : super() {
+  EgbScripter(SendPort mainIsolatePort) {
     DEBUG_SCR("Scripter has been created.");
     _initScriptEnvironment();
 
+    _runnerPort = mainIsolatePort;
+    port = new ReceivePort();
     // Register the callback for communication with the Runner.
-    port.receive(_messageReceiveCallback);
+    port.listen(_messageReceiveCallback);
+    _runnerPort.send(port.sendPort);
   }
   
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
   final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
+  EgbMessage _messageBacklog;
   
   /**
    * Utilify function [_send] sends message through the [_runnerPort] to the
@@ -244,16 +250,16 @@ abstract class EgbScripter {
                                              "when _runnerPort is null.");
     if (message.isAsync) {
       DEBUG_SCR("Sending nonText async message (${message.type})");
-      _runnerPort.send(message.toJson(), port.toSendPort());
+      _runnerPort.send(message.toJson());
       return;
     }
     if (message.type == EgbMessage.TEXT_RESULT) {
       // Put text result into the _textMessageCache.
       if (message.strContent != "") _textMessageCache.add(message);
-      _runnerPort.send(new EgbMessage.NoResult().toJson(), port.toSendPort()); // TODO: this is here just because we need to keep the loop going – get rid of it
+      _runnerPort.send(new EgbMessage.NoResult().toJson()); // TODO: this is here just because we need to keep the loop going – get rid of it
     } else if (_textMessageCache.isEmpty) {
       DEBUG_SCR("Sending nonText message (${message.type})");
-      _runnerPort.send(message.toJson(), port.toSendPort());
+      _runnerPort.send(message.toJson());
     } else {
       // When we have something in the _textMessageCache and we are about to
       // send something new, we first zip the text messages into one huge
@@ -266,11 +272,9 @@ abstract class EgbScripter {
       }
       var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
       DEBUG_SCR("Sending a zip message (${zipMessage.type})");
-      _runnerPort.call(zipMessage.toJson()).then((replyJson) {
-        assert(new EgbMessage.fromJson(replyJson).type == EgbMessage.CONTINUE);
-        DEBUG_SCR("Sending a nonText message (${message.type}) after a zip message");
-        _runnerPort.send(message.toJson(), port.toSendPort());
-      });
+      _runnerPort.send(zipMessage);
+      DEBUG_SCR("Adding message ($message) to the backlog.");
+      _messageBacklog = message;
     }
   }
   
@@ -278,9 +282,21 @@ abstract class EgbScripter {
    * Called on receiving a message from Runner. Handles the message and replies
    * when needed.
    */
-  void _messageReceiveCallback(String messageJson, SendPort replyTo) {
+  void _messageReceiveCallback(Object _message) {
+    if (_message is SendPort) {
+      _runnerPort.send(port.sendPort);
+      return;
+    }
+    String messageJson = _message as String;
     EgbMessage message = new EgbMessage.fromJson(messageJson);
-    _runnerPort = replyTo;
+    
+    // Solve backlog. TODO: do better
+    if (_messageBacklog != null) {
+      assert(message.type == EgbMessage.CONTINUE);
+      _send(_messageBacklog);
+      _messageBacklog = null;
+      return;
+    }
 
     switch (message.type) {
       case EgbMessage.QUIT:
@@ -331,7 +347,7 @@ abstract class EgbScripter {
       DEBUG_SCR("Saving player chronology.");
       _playerChronologyChanged = false;
       _send(new EgbMessage.SavePlayerChronology(_playerChronology));
-      print(_playerChronology);
+      //print(_playerChronology);
     }
     
     // We can now handle the current block on the page.

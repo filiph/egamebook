@@ -37,7 +37,7 @@ class ShipComponentCollection implements Saveable {
     if (_components.containsKey(name)) {
       return _components[name];
     } else {
-      print("DEBUG ONLY: creating new component on access"); // TODO
+      //print("DEBUG ONLY: creating new component on access"); // TODO
       _components[name] = new ShipComponentMock();
       return _components[name];
     }

@@ -2021,6 +2021,7 @@ library Scripter_Implementation;
 
 import 'package:egamebook/src/book/scripter.dart';
 import 'dart:math';
+import 'dart:isolate';
 """;
 
   final String implStartClass = """
@@ -2030,7 +2031,7 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implStartCtor = """
-  ScripterImpl() : super() {
+  ScripterImpl(SendPort mainIsolatePort) : super(mainIsolatePort) {
 """;
 
   final String implStartPages = """

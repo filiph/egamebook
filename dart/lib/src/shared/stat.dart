@@ -68,7 +68,7 @@ class Stat implements Saveable {
        num initialValue: 0, bool show: true}) {
     Stat stat;
     if (_stats.containsKey(name)) {
-      print("Warning: A Stat with name '$name' already exists.");
+      //print("Warning: A Stat with name '$name' already exists.");
       stat = _stats[name];
       assert(stat.description == description);
       assert(stat.format == format);

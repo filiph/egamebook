@@ -2,6 +2,7 @@ library Reference_Scripter_Implementation;
 
 import 'dart:math';
 import 'scripter.dart';
+import 'dart:isolate';
 
 class A {
   int i;
@@ -15,7 +16,7 @@ class ScripterImpl extends EgbScripter {
     echo("OMG OMG!!!");
   }
 
-  ScripterImpl() : super() {
+  ScripterImpl(SendPort mainIsolatePort) : super(mainIsolatePort) {
     pageMap = new EgbScripterPageMap();
     pageMap[r"""handle"""] = new EgbScripterPage(
         [
