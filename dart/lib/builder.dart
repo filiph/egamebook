@@ -295,15 +295,13 @@ class Builder {
     f.exists()
     .then((exists) {
       if (!exists) {
-        completer.completeError(new FileException("File $f doesn't exist."));
+        completer.completeError(new Exception("File $f doesn't exist."));
       } else {
-        f.fullPath().then((String fullPath) {
-          inputEgbFileFullPath = fullPath;
-          print("Reading input file $f.");
+        inputEgbFileFullPath = f.path;
+        print("Reading input file $f.");
 
-          var inputStream = f.openRead();
-          readInputStream(inputStream).then((b) => completer.complete(b));
-        });
+        var inputStream = f.openRead();
+        readInputStream(inputStream).then((b) => completer.complete(b));
       }
     });
 
@@ -970,11 +968,11 @@ class Builder {
     var completer = new Completer();
 
     List<Future<bool>> existsFutures = new List<Future<bool>>();
-    List<Future<String>> fullPathFutures = new List<Future<String>>();
+    List<String> fullPaths = new List<String>();
 
     for (File f in importLibFiles) {
+      fullPaths.add(f.path);
       existsFutures.add(f.exists());
-      fullPathFutures.add(f.fullPath());
     }
 
     Future.wait(existsFutures)
@@ -984,30 +982,27 @@ class Builder {
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           completer.completeError(
-              new FileException("Source file tries to import a file that "
+              new Exception("Source file tries to import a file that "
                     "doesn't exist (${importLibFiles[i]})."));
         }
       }
 
-      Future.wait(fullPathFutures)
-      .then((List<String> fullPaths) {
-        assert(fullPaths.length == importLibFiles.length);
-
-        importLibFilesFullPaths = new Set.from(fullPaths);
-        for (int i = 0; i < fullPaths.length; i++) {
-          for (int j = 0; j < i; j++) {
-            if (fullPaths[i] == fullPaths[j]) {
-              WARNING("File '${fullPaths[i]}' has already been imported. "
-                      "Ignoring the redundant <import> tag.");
-              importLibFiles[i] = null;
-            }
+    })
+    .then((_) {
+      assert(fullPaths.length == importLibFiles.length);
+      importLibFilesFullPaths = new Set.from(fullPaths);
+      for (int i = 0; i < fullPaths.length; i++) {
+        for (int j = 0; j < i; j++) {
+          if (fullPaths[i] == fullPaths[j]) {
+            WARNING("File '${fullPaths[i]}' has already been imported. "
+            "Ignoring the redundant <import> tag.");
+            importLibFiles[i] = null;
           }
         }
-
-        // delete the nulls
-        importLibFiles = importLibFiles.where((f) => f != null).toList();
-        completer.complete(true);
-      });
+      }
+      // delete the nulls
+      importLibFiles = importLibFiles.where((f) => f != null).toList();
+      completer.complete(true);
     });
 
     return completer.future;
@@ -1174,7 +1169,7 @@ class Builder {
   Future<bool> writeInterfaceFiles() {
     var completer = new Completer();
 
-    var scriptFilePath = new Options().script;
+    var scriptFilePath = Platform.script;
     var pathToOutputDart = getPathForExtension("dart");
     var pathToOutputCmd = getPathForExtension("cmdline.dart");
     var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath),
