@@ -22,9 +22,7 @@ builderReadyHandler(Builder b) {
   }
 }
 
-void main() {
-  Options options = new Options();
-  
+void main(List<String> args) {
   var parser = new ArgParser();
   parser.addFlag("scaffold", defaultsTo:false, negatable:false,
       help:"Creates a scaffold with a 'hello world' egamebook "
@@ -36,7 +34,7 @@ void main() {
   parser.addFlag("graph-input", abbr:"u", defaultsTo:false,
       help:"Update existing .egb file from given GraphML (yEd) file.");
   
-  var results = parser.parse(options.arguments);
+  var results = parser.parse(args);
   graphInput = results["graph-input"];
   graphOutput = results["graph-output"];
   compile = results["compile"];
