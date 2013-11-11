@@ -21,8 +21,7 @@ void main() {
   Isolate.spawnUri(Uri.parse(scripterPath), [], receivePort.sendPort)
   .then((Isolate isolate) {
     // Create the [Runner] which ties everything together.
-    var runner = new EgbRunner(receivePort, null /* TODO get rid of this */, 
-        interface, playerProfile);
+    var runner = new EgbRunner(receivePort, interface, playerProfile);
     runner.run();
   });
 }

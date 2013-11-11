@@ -91,8 +91,8 @@ Future<EgbInterface> run(String dartFilename,
   } else {
     storage = new MemoryStorage();
   }
-  var runner = new EgbRunner(receivePort, null,
-      interface, storage.getDefaultPlayerProfile());
+  var runner = new EgbRunner(receivePort, interface, 
+      storage.getDefaultPlayerProfile());
   runner.run();
   return new Future.value(interface);
 }
@@ -125,8 +125,8 @@ void main() {
               [], receivePort.sendPort);
           var interface = new MockInterface();
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, null,
-              interface, storage.getDefaultPlayerProfile());
+          var runner = new EgbRunner(receivePort, interface, 
+              storage.getDefaultPlayerProfile());
           expect(runner.started,
               false);
           expect(runner.ended,
@@ -142,8 +142,8 @@ void main() {
               [0, 1, 0, 1, 0, 1]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, null,
-              interface, storage.getDefaultPlayerProfile());
+          var runner = new EgbRunner(receivePort, interface, 
+              storage.getDefaultPlayerProfile());
 
           runner.endOfBookReached.listen(expectAsync1((_) {
             expect(interface.latestOutput,
@@ -165,8 +165,8 @@ void main() {
               [0, 1, 0, 1, 0, 0]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, null,
-              interface, storage.getDefaultPlayerProfile());
+          var runner = new EgbRunner(receivePort, interface, 
+              storage.getDefaultPlayerProfile());
 
           interface.stream.listen(expectAsync1((interaction) {
             expect(interaction.type, PlayerIntent.QUIT);
@@ -191,8 +191,8 @@ void main() {
               [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, null,
-              interface, storage.getDefaultPlayerProfile());
+          var runner = new EgbRunner(receivePort, interface, 
+              storage.getDefaultPlayerProfile());
 
           interface.stream.listen(expectAsync1((interaction) {
             expect(interaction.type, PlayerIntent.QUIT);
@@ -360,8 +360,8 @@ void main() {
         );
         var storage = new MemoryStorage();
         var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, null,
-            interface, playerProfile);
+        var runner = new EgbRunner(receivePort, interface, 
+            playerProfile);
 
         runner.endOfBookReached.listen(expectAsync1((_) {
           expect(interface.latestOutput,
@@ -497,8 +497,8 @@ void main() {
         );
         var storage = new MemoryStorage();
         var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, null,
-            interface, playerProfile);
+        var runner = new EgbRunner(receivePort, interface, 
+            storage.getDefaultPlayerProfile());
 
         interface.stream.firstWhere(
             (interaction) => interaction.type == PlayerIntent.QUIT)

@@ -16,11 +16,11 @@ import 'shared/stat.dart';
  * It is interface-agnostic.
  */
 class EgbRunner {
-  ReceivePort _receivePort;
+  final ReceivePort _receivePort;
   SendPort _scripterPort;
-  EgbInterface _interface;
+  final EgbInterface _interface;
   
-  EgbPlayerProfile _playerProfile;
+  final EgbPlayerProfile _playerProfile;
   
   bool started = false;
   bool ended = false;
@@ -30,8 +30,7 @@ class EgbRunner {
   Stream<String> get endOfBookReached => 
       stream.where((value) => value == "END");
   
-  EgbRunner(this._receivePort, this._scripterPort, 
-      this._interface, this._playerProfile) {
+  EgbRunner(this._receivePort, this._interface, this._playerProfile) {
     print("RUN: Runner started.");
     _streamController = new StreamController();
     
