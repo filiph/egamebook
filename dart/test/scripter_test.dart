@@ -121,10 +121,11 @@ void main() {
         });
 
         test("runner initial values correct", () {
-          SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
+              [], receivePort.sendPort);
           var interface = new MockInterface();
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, scripterPort,
+          var runner = new EgbRunner(receivePort, null,
               interface, storage.getDefaultPlayerProfile());
           expect(runner.started,
               false);
@@ -134,13 +135,14 @@ void main() {
         });
 
         test("walks through when it should", () {
-          SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
+              [], receivePort.sendPort);
           var interface = new MockInterface();
           interface.choicesToBeTaken.addAll(
               [0, 1, 0, 1, 0, 1]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, scripterPort,
+          var runner = new EgbRunner(receivePort, null,
               interface, storage.getDefaultPlayerProfile());
 
           runner.endOfBookReached.listen(expectAsync1((_) {
@@ -156,13 +158,14 @@ void main() {
         });
 
         test("doesn't walk through when it shouldn't", () {
-          SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
+              [], receivePort.sendPort);
           var interface = new MockInterface();
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 0, 0]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, scripterPort,
+          var runner = new EgbRunner(receivePort, null,
               interface, storage.getDefaultPlayerProfile());
 
           interface.stream.listen(expectAsync1((interaction) {
@@ -181,13 +184,14 @@ void main() {
         });
 
         test("simple counting works", () {
-          SendPort scripterPort = spawnUri("files/scripter_test_alternate_6_main.dart");
+          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
+              [], receivePort.sendPort);
           var interface = new MockInterface();
           interface.choicesToBeTaken = new Queue<int>.from(
               [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, scripterPort,
+          var runner = new EgbRunner(receivePort, null,
               interface, storage.getDefaultPlayerProfile());
 
           interface.stream.listen(expectAsync1((interaction) {
@@ -348,14 +352,15 @@ void main() {
       });
 
       test("works for saveables and doesn't for non-saveables", () {
-        SendPort scripterPort = spawnUri("files/scripter_test_save_main.dart");
+        Isolate.spawnUri(Uri.parse("files/scripter_test_save.dart"), 
+            [], receivePort.sendPort);
         var interface = new MockInterface();
         interface.choicesToBeTaken = new Queue<int>.from(
             [0]
         );
         var storage = new MemoryStorage();
         var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, scripterPort,
+        var runner = new EgbRunner(receivePort, null,
             interface, playerProfile);
 
         runner.endOfBookReached.listen(expectAsync1((_) {
@@ -484,14 +489,15 @@ void main() {
       });
 
       test("prevents user to visit visitOnce page twice", () {
-        SendPort scripterPort = spawnUri("files/scripter_page_visitonce_main.dart");
+        Isolate.spawnUri(Uri.parse("files/scripter_page_visitonce.dart"), 
+            [], receivePort.sendPort);
         var interface = new MockInterface();
         interface.choicesToBeTakenByString = new Queue<String>.from(
             ["Get dressed"]
         );
         var storage = new MemoryStorage();
         var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, scripterPort,
+        var runner = new EgbRunner(receivePort, null,
             interface, playerProfile);
 
         interface.stream.firstWhere(
@@ -517,7 +523,7 @@ void main() {
         build("scripter_test_alternate_6.egb")
         .then(expectAsync1((mainPath) {
           print(mainPath);
-          expect(mainPath, endsWith("scripter_test_alternate_6_main.dart"));
+          expect(mainPath, endsWith("scripter_test_alternate_6.dart"));
         }));
       });
 

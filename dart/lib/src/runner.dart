@@ -81,7 +81,9 @@ class EgbRunner {
   void stop() {
     _playerProfile.close();
     _interface.close();
-    _send(new EgbMessage.Quit());
+    if (_scripterPort != null) {  // For when Runner is stopped too soon.
+      _send(new EgbMessage.Quit());
+    }
     _receivePort.close();
   }
   
