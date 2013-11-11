@@ -1172,10 +1172,10 @@ class Builder {
     var scriptFilePath = Platform.script;
     var pathToOutputDart = getPathForExtension("dart");
     var pathToOutputCmd = getPathForExtension("cmdline.dart");
-    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath),
+    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath.path),
         "../lib/src/cmdline_template.dart");
     var pathToOutputHtml = getPathForExtension("html.dart");
-    var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath),
+    var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
         "../lib/src/html_template.dart");
 
     File cmdLineOutputFile = new File(pathToOutputCmd);
