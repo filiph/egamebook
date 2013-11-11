@@ -971,7 +971,7 @@ class Builder {
     List<String> fullPaths = new List<String>();
 
     for (File f in importLibFiles) {
-      fullPaths.add(f.path);
+      fullPaths.add(path.normalize(path.absolute(f.path)));
       existsFutures.add(f.exists());
     }
 

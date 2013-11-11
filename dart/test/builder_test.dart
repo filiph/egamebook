@@ -11,7 +11,7 @@ import "package:egamebook/builder.dart";
  * [filename]. Convenience function.
  */
 String getPath(String filename) {
-  var pathToScript = new Options().script;
+  var pathToScript = Platform.script.path;
   return path.join(path.dirname(pathToScript), "files", filename);
 }
 
@@ -51,7 +51,7 @@ void main() {
 
       test("throws on nonexistent files", () {
         expect(new Builder().readEgbFile(new File(getPath("./nonexistent"))),
-          throwsA(new isInstanceOf<FileException>("FileIOException")));
+          throwsA(new isInstanceOf<Exception>("FileIOException")));
       });
 
     });
