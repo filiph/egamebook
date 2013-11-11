@@ -70,31 +70,20 @@ String getPath(String filename) {
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
   String dartFilename = 
-      egbFilename.replaceFirst(new RegExp(r"\.egb$"), ".dart");
-  String canonicalMainPath = 
-      canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"), "_main.dart");
+      canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"), ".dart");
   return new Builder()
   .readEgbFile(new File(canonicalEgbPath))
   .then((Builder b) => b.writeDartFiles())
   .then((_) {
-    var f = new File(canonicalMainPath).openWrite(mode: FileMode.WRITE)
-    ..write("""import '$dartFilename';
-
-void main() {
-  new ScripterImpl();
-}""");
-    return f.close()
-    .then((_) {
-      return canonicalMainPath;
-    });
+    return dartFilename;
   });
 }
 
 /// Runs the built project and returns the [MockInterface] instance.
-Future<EgbInterface> run(String canonicalMainPath, 
+Future<EgbInterface> run(String dartFilename, 
     {EgbStorage persistentStorage: null}) {
   var receivePort = new ReceivePort();
-  SendPort scripterPort = spawnUri(canonicalMainPath);
+  Isolate.spawnUri(Uri.parse(dartFilename), [], receivePort.sendPort);
   var interface = new MockInterface(waitForChoicesToBeTaken: true);
   var storage;
   if (persistentStorage != null) {
@@ -102,7 +91,7 @@ Future<EgbInterface> run(String canonicalMainPath,
   } else {
     storage = new MemoryStorage();
   }
-  var runner = new EgbRunner(receivePort, scripterPort,
+  var runner = new EgbRunner(receivePort, null,
       interface, storage.getDefaultPlayerProfile());
   runner.run();
   return new Future.value(interface);
