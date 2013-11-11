@@ -5,30 +5,25 @@ import 'interface/interface_cmdline.dart';
 import 'persistence/storage.dart';
 import 'persistence/player_profile.dart';
 
-// this will be rewritten with the actual file
-import 'book/reference_scripter_impl.dart';
 
 void main() {
-  // create [ReceivePort] for this isolate
-  ReceivePort receivePort = new ReceivePort();
-  // create the isolate
-  SendPort scripterPort = spawnFunction(createScripter);
+  // this will be rewritten with the actual file
+  var scripterPath = 'book/reference_scripter_impl.dart';
+  
   // create the interface
   EgbInterface interface = new CmdlineInterface();
   // open storage
   EgbStorage storage = new MemoryStorage(); // TODO: other storage?
   // get player profile
   EgbPlayerProfile playerProfile = storage.getDefaultPlayerProfile();
-  
-  var runner = new EgbRunner(receivePort, scripterPort, 
-      interface, playerProfile);
-  runner.run();
-}
-
-/**
-  Top-level function which spawns the isolate containing the Scripter 
-  instance (i.e. the actual egamebook).
-  */
-void createScripter() {
-  new ScripterImpl();
+  // create [ReceivePort] for this isolate
+  ReceivePort receivePort = new ReceivePort();
+  // create the isolate // https://plus.google.com/+dartlang/posts/NF6AJ3oPYuk
+  Isolate.spawnUri(Uri.parse(scripterPath), [], receivePort.sendPort)
+  .then((Isolate isolate) {
+    // Create the [Runner] which ties everything together.
+    var runner = new EgbRunner(receivePort, null /* TODO get rid of this */, 
+        interface, playerProfile);
+    runner.run();
+  });
 }
