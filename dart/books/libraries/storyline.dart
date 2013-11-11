@@ -390,7 +390,7 @@ class Storyline {
       }
       result = result.replaceAll(OWNER_PRONOUN, owner.pronoun.nominative);
       if (str.contains(new RegExp("$OWNER.+$OWNER_POSSESIVE"))) {
-        print("owner < owner_possessive: $str");
+        //print("owner < owner_possessive: $str");
         // "the ship and her gun"
         result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
       }

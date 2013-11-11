@@ -50,7 +50,7 @@ class ShipComponentCollection implements Saveable {
     "components": _components
   };
   void updateFromMap(Map map) {
-    print("updating shipcomponentcollection from map: $map");
+    //print("updating shipcomponentcollection from map: $map");
     map["components"].forEach((String key, Map value) {
       if (_components.containsKey(key)) {
         _components[key].updateFromMap(value);
