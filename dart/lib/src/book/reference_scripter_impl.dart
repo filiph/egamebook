@@ -1,8 +1,11 @@
 library Reference_Scripter_Implementation;
 
-import 'dart:math';
 import 'scripter.dart';
 import 'dart:isolate';
+
+void main(List<String> args, SendPort mainIsolatePort) {
+  new ScripterImpl(mainIsolatePort);
+}
 
 class A {
   int i;

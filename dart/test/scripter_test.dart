@@ -54,7 +54,7 @@ class ClassWithoutMapMethods {
  * [filename]. Convenience function.
  */
 String getPath(String filename) {
-  var pathToScript = new Options().script;
+  var pathToScript = Platform.script.path;
   return path.join(path.dirname(pathToScript), "files", filename);
 }
 

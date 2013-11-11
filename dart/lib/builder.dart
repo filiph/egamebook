@@ -1118,7 +1118,8 @@ class Builder {
     File dartFile = new File(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
     dartOutStream.write(implStartFile); // TODO: fix path to #import('../egb_library.dart');
-    _writeLibImports(dartOutStream);
+    _writeLibImports(dartOutStream, 
+        relativeToPath: path.dirname(dartFile.path));
     writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_CLASSES, indent:0)
     .then((_) {
       dartOutStream.write(implStartClass);
@@ -1150,12 +1151,14 @@ class Builder {
     return completer.future;
   }
 
-  _writeLibImports(IOSink dartOutStream) {
-    if (importLibFilesFullPaths == null) throw "importLibFilesFullPaths cannot "
-                                               "be null.";
+  _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
+    assert(importLibFilesFullPaths != null);
     dartOutStream.write("\n");
-    for (var path in importLibFilesFullPaths) {
-      dartOutStream.write("import '$path';\n");
+    for (var importPath in importLibFilesFullPaths) {
+      if (relativeToPath != null) {
+        importPath = path.relative(importPath, from: relativeToPath);
+      }
+      dartOutStream.write("import '$importPath';\n");
     }
   }
 
@@ -1177,6 +1180,9 @@ class Builder {
     var pathToOutputHtml = getPathForExtension("html.dart");
     var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
         "../lib/src/html_template.dart");
+    
+    var pathToOutputDartFromOutputHtml = 
+        path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
 
     File cmdLineOutputFile = new File(pathToOutputCmd);
     File cmdLineTemplateFile = new File(pathToInputTemplateCmd);
@@ -1184,7 +1190,6 @@ class Builder {
     File htmlTemplateFile = new File(pathToInputTemplateHtml);
 
     var substitutions = {
-      // TODO: make this directory independent
       "import 'runner.dart';" :
           "import 'package:egamebook/src/runner.dart';\n",
       "import 'interface/interface.dart';" :
@@ -1197,8 +1202,8 @@ class Builder {
         "import 'package:egamebook/src/persistence/storage.dart';\n",
       "import 'persistence/player_profile.dart';" :
         "import 'package:egamebook/src/persistence/player_profile.dart';\n",
-      "import 'book/reference_scripter_impl.dart';" :
-          "import '$pathToOutputDart';\n", // TODO!!
+      "  var scripterPath = 'book/reference_scripter_impl.dart';" :
+          "  var scripterPath = '$pathToOutputDartFromOutputHtml';"
     };
 
     Future.wait([
@@ -2015,7 +2020,6 @@ class Builder {
 library Scripter_Implementation;
 
 import 'package:egamebook/src/book/scripter.dart';
-import 'dart:math';
 import 'dart:isolate';
 """;
 
@@ -2055,6 +2059,11 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implEndFile = """
+
+// The entry point of the isolate.
+void main(List<String> args, SendPort mainIsolatePort) {
+  new ScripterImpl(mainIsolatePort);
+}
 """;
 
 

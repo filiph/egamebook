@@ -272,7 +272,7 @@ abstract class EgbScripter {
       }
       var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
       DEBUG_SCR("Sending a zip message (${zipMessage.type})");
-      _runnerPort.send(zipMessage);
+      _runnerPort.send(zipMessage.toJson());
       DEBUG_SCR("Adding message ($message) to the backlog.");
       _messageBacklog = message;
     }

@@ -5,10 +5,10 @@ import 'interface/interface_html.dart';
 import 'persistence/storage.dart';
 import 'persistence/player_profile.dart';
 
-// this will be rewritten with the actual file
-import 'book/reference_scripter_impl.dart';
-
 void main() {
+  // this will be rewritten with the actual file
+  var scripterPath = 'book/reference_scripter_impl.dart';
+  
   // create the interface
   EgbInterface interface = new HtmlInterface();
   // open storage
@@ -18,23 +18,11 @@ void main() {
   // create [ReceivePort] for this isolate
   ReceivePort receivePort = new ReceivePort();
   // create the isolate // https://plus.google.com/+dartlang/posts/NF6AJ3oPYuk
-  Isolate.spawn(createScripter, receivePort.sendPort)
+  Isolate.spawnUri(Uri.parse(scripterPath), [], receivePort.sendPort)
   .then((Isolate isolate) {
-    // Wait for the first reply from the Scripter.
-    return receivePort.first;
-  })
-  .then((SendPort scripterPort) {
     // Create the [Runner] which ties everything together.
-    var runner = new EgbRunner(receivePort, scripterPort, 
+    var runner = new EgbRunner(receivePort, null /* TODO get rid of this */, 
         interface, playerProfile);
     runner.run();
   });
-}
-
-/**
-  Top-level function which spawns the isolate containing the Scripter 
-  instance (i.e. the actual egamebook).
-  */
-void createScripter(SendPort mainIsolatePort) {
-  new ScripterImpl(mainIsolatePort);
 }
