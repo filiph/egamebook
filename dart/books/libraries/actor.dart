@@ -10,9 +10,16 @@ import 'storyline.dart';
  * than not they are at a [location].
  */
 class Entity {
-  Entity(this.name, {this.pronoun: Pronoun.IT});
+  Entity(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
+    this.isPlayer: false});
   
   final String name;
+  int team = Actor.NEUTRAL;
+  
+  bool isEnemyOf(Actor other) {
+    if (team == Actor.NEUTRAL || other.team == Actor.NEUTRAL) return false;
+    return team != other.team;
+  }
   
   /**
    * Whether or not this entity should be shown to the player. This can be useful
@@ -20,12 +27,13 @@ class Entity {
    * does something else) or items that become irrelevant after use.
    */
   bool isActive = true;
+  final bool isPlayer;
 
   final Pronoun pronoun;
   // TODO: needsArticle (handkerchief does, Gorilla doesn't, captain's gun doesn't)
   // TODO: alreadyReferredTo (false? article = a. true? article = the)
   
-  void report(String text, {Actor object}) {
+  void report(String text, {Entity object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff
   }
 }
@@ -40,20 +48,13 @@ class Entity {
  * or not towards other actors. 
  */
 class Actor extends Entity {
-  Actor({String name, this.team: NEUTRAL, this.isPlayer: false,
-    pronoun: Pronoun.IT}) : super(name, pronoun: pronoun);
+  Actor({String name, int team: NEUTRAL, bool isPlayer: false,
+    Pronoun pronoun: Pronoun.IT}) 
+    : super(name, pronoun: pronoun, team: team, isPlayer: isPlayer);
   
   static const int NEUTRAL = 0;
   static const int FRIEND = 1;
   static const int DEFAULT_ENEMY = 2;
-  
-  bool isEnemyOf(Actor other) {
-    if (team == NEUTRAL || other.team == NEUTRAL) return false;
-    return team != other.team;
-  }
-  
-  int team;
-  final bool isPlayer;
   
   /// True if Actor is alive, i.e. not destroyed or dead.
   bool get isAlive => true;

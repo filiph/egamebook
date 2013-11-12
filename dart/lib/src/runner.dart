@@ -101,7 +101,6 @@ class EgbRunner {
    * responds immediately, or asks for input via [_interface], then responds.
    */
   void receiveFromScripter(Object _message) {
-    print(_message);
     if (_message is SendPort) {
       _scripterPort = _message;
       if (readyToRun) _send(new EgbMessage.GetBookUid());

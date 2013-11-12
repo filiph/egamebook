@@ -70,6 +70,10 @@ void main() {
   test("enumeration", () {
     var storyline = new Storyline();
     
+    // 0
+    storyline.addEnumeration("you see", [], "here");
+    expect(storyline.toString(), "");
+    storyline.clear();
     // 1
     storyline.addEnumeration("you see", ["a handkerchief"], "here");
     expect(storyline.toString(),

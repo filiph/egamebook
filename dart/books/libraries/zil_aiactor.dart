@@ -1,17 +1,22 @@
 part of zil;
 
 class AIActor extends ZilActor {
-  
   Goal currentGoal;
-  int _currentGoalElapsed = 0;
   
   void update({Room currentRoom: null}) {
-    currentGoal.process(currentRoom: currentRoom);
+    if (currentGoal == null || currentGoal.completed) {      
+      // When nothing else is going on, switch to autonomous thinking mode.
+      currentGoal = new Think(this);
+      currentGoal.activate();
+    }
+    var reports = currentGoal._processInternal();
+    if (player.isInSameRoomAs(this)) {
+      // Only report if player is around.
+      storyline.reports.addAll(reports);
+    }
   }
   
   AIActor(String name) : super(name) {
-    currentGoal = new Think(this);
-    currentGoal.activate();
   }
   
 }

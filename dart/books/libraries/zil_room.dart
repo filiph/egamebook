@@ -24,6 +24,7 @@ class Room extends Entity implements Described {
     //throwIfNotInInitBlock("Cannot create room on the fly.");
     if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);
+    items.forEach((Item item) => item.location = this);
   }
   
   /// The RoomNetwork this Room is a part of.
@@ -35,12 +36,25 @@ class Room extends Entity implements Described {
     showDescription();
     storyline.addParagraph();
     if (rooms.actors != null) {
-      actors.update(ticks, currentRoom: rooms.current);
+      showActors();
+      actors.updateAll(ticks, currentRoom: rooms.current);
       if (gotoCalledRecently) return;
     }
     storyline.addParagraph();
     showItems();
     showExits();
+  }
+  
+  showActors() {
+    // TODO custom reports from actors
+    var presentActors = actors.npcs.where((ZilActor actor) => actor.isIn(this));
+    if (presentActors.length > 1) {
+      storyline.addEnumeration("<subject> {|can }see<s>", 
+          presentActors.map((ZilActor actor) => actor.name), 
+          "{|in }here", subject: player);
+    } else if (presentActors.length == 1) {
+      presentActors.single.report("<subject> is {|in }here");
+    }
   }
   
   /// Shows the text associated with the room.
@@ -60,8 +74,8 @@ class Room extends Entity implements Described {
   /// Example: "You can leave to corridor left, squeeze through the hatchway 
   /// or use the ladder to ..."
   void showExits() {
-    storyline.addEnumeration("<subject> can {leave|go} to", 
-        exits.map((exit) => exit.to.description), null, 
+    storyline.addEnumeration("<subject> can {leave|go}", 
+        exits.map((exit) => "to ${exit.to.description}"), null, 
         subject: player, conjuction: "or");
   }
   

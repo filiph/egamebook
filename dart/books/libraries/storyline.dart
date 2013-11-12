@@ -52,9 +52,9 @@ class Report {
       startSentence = false, wholeSentence = false, time = null;
   
   final String string;
-  final Actor subject;
-  final Actor object;
-  final Actor owner;
+  final Entity subject;
+  final Entity object;
+  final Entity owner;
   bool but;
   final bool positive;
   final bool negative;
@@ -128,7 +128,7 @@ class Storyline {
   /**
    * Add another event to the story. 
    */
-  void add(String str, {Actor subject, Actor object, Actor owner, 
+  void add(String str, {Entity subject, Entity object, Entity owner, 
     bool but: false, bool positive: false, bool negative: false, 
     bool endSentence: false, bool startSentence: false, 
     bool wholeSentence: false, int time}) {
@@ -153,11 +153,13 @@ class Storyline {
    * You can provide "<also>" for a more human-like enumeration.
    */
   void addEnumeration(String start, Iterable<String> articles, String end, 
-                      {Actor subject, Actor object, Actor owner, 
+                      {Entity subject, Entity object, Entity owner, 
                        int maxPerSentence: 3, String conjuction: "and"}) {
     assert(start != null);
     assert(articles != null);
-    assert(articles.length > 0);
+    if (articles.length == 0) {
+      return;  // Don't create any report.
+    }
     StringBuffer buf = new StringBuffer();
     buf.write(start.replaceAll("<also>", "").replaceAll("  ", " ").trim()); // TODO: less hacky
     buf.write(" ");
@@ -210,14 +212,14 @@ class Storyline {
       return reports[i].string;
   }
   
-  Actor subject(int i) {
+  Entity subject(int i) {
     if (i < 0 || i >= reports.length)
       return null;
     else
       return reports[i].subject;
   }
   
-  Actor object(int i) {
+  Entity object(int i) {
     if (i < 0 || i >= reports.length)
       return null;
     else
@@ -271,7 +273,7 @@ class Storyline {
     if (!valid(i) || !valid(j))
       return false;
     // subject(i) == object(j), opposite sentiments => same sentiment
-    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+    if (exchanged('subject', 'object', i, j) && subject(i).isEnemyOf(subject(j))) {
       if (reports[i].positive && reports[j].negative)
         return true;
       if (reports[i].negative && reports[j].positive)
@@ -291,7 +293,7 @@ class Storyline {
     if (!valid(i) || !valid(j))
       return false;
     // subject(i) == object(j), both have same sentiment => opposite sentiment
-    if (exchanged('subject', 'object', i, j) && subject(i).team != subject(j).team) {
+    if (exchanged('subject', 'object', i, j) && subject(i).isEnemyOf(subject(j))) {
       if (reports[i].positive && reports[j].positive)
         return true;
       if (reports[i].negative && reports[j].negative)
@@ -336,8 +338,8 @@ class Storyline {
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
-  static String getString(String str, {Actor subject, Actor object, 
-    Actor owner}) {
+  static String getString(String str, {Entity subject, Entity object, 
+      Entity owner}) {
     String result = str;
     if (subject != null) {
       if (subject.pronoun == Pronoun.YOU) { // don't talk like a robot: "player attacks wolf"

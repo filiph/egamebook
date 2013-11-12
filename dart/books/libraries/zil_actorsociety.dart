@@ -15,12 +15,14 @@ class ActorSociety {
   AIActor add(AIActor npc, Room location) {
     npcs.add(npc);
     npc.location = location;
+    return npc;
   }
   
-  void update(int ticks, {Room currentRoom: null}) {
+  void updateAll(int ticks, {Room currentRoom: null}) {
     for (int i = 0; i < ticks; i++) {      
       for (AIActor npc in npcs) {
         npc.update(currentRoom: currentRoom);
+        if (gotoCalledRecently) return;
       }
     }
   }

@@ -8,27 +8,55 @@ abstract class Goal {
 //  
 //  int status = INACTIVE;
   
+  // TODO: status. When status failed => propagate
+  
   bool completed = false;
   AIActor performer;
   
   Goal(this.performer);
   
   /// Planning phase.
-  void activate();
+  List<Report> activate();
   /// Execution.
-  void process({Room currentRoom: null});
+  List<Report> process();
   /// End.
-  void terminate();
+  List<Report> terminate();
+  
+  bool _activated = false;
+  List<Report> _processInternal() {
+    List<Report> reports = [];
+    if (!_activated) {
+      reports.addAll(activate());
+      _activated = true;
+    }
+    if (this is CompositeGoal) {
+      reports.addAll((this as CompositeGoal)._processSubgoals());
+    }
+    reports.addAll(process());
+    return reports;
+  }
 }
 
 abstract class AtomicGoal extends Goal {
   /// Time needed to complete the goal.
   final int time;
-  final Function endFunction;
   
-  AtomicGoal(AIActor performer, int time, Function endFunction) 
-      : this.time = time, this.endFunction = endFunction, super(performer);
+  AtomicGoal(AIActor performer, int time) 
+      : this.time = time, super(performer);
+}
+
+abstract class TimedAtomicGoal extends AtomicGoal {
+  int currentTime = 0;
+  TimedAtomicGoal(AIActor performer, int time) : super(performer, time);
   
+  List<Report> process() {
+    if (currentTime >= time) {
+      completed = true;
+      return terminate();
+    }
+    currentTime += 1;
+    return [];
+  }
 }
 
 abstract class CompositeGoal extends Goal {
@@ -37,69 +65,121 @@ abstract class CompositeGoal extends Goal {
   
   CompositeGoal(AIActor performer) : super(performer);
   
-  void processSubgoals({Room currentRoom: null}) {
+  List<Report> _processSubgoals() {
+    List<Report> reports = [];
     if (subgoals.isEmpty) {
       completed = true;
-      return;
+      reports.addAll(terminate());
+      return reports;
     }
     while (subgoals.first.completed) {
       subgoals.removeFirst();
     }
     while (subgoals.isNotEmpty) {
       var next = subgoals.first;
-      next.process(currentRoom: currentRoom);
+      reports.addAll(next._processInternal());
       if (next.completed) {
         subgoals.removeFirst();
       } else {
-        return;  // Next subgoal not completed. Let it live at least until next update.
+        return reports;  // Next subgoal not completed. Let it live at least until next update.
       }
     }
     completed = true;
+    return reports;
   }
 }
 
-class Wait extends AtomicGoal {
-  Wait(AIActor performer) : super(performer, 1, () => [new Report("the wait is over")]);
+class Wait extends TimedAtomicGoal {
+  Wait(AIActor performer) : super(performer, 1);
+
+  List<Report> activate() => [performer.report("<subject> start<s> waiting")];
+  List<Report> terminate() => [performer.report("<subject> finish<es> waiting")];
+}
+
+//class GoPickUp extends CompositeGoal {
+//  GoPickUp(AIActor performer) : super(performer);
+//
+//  void activate() {
+//    // TODO implement this method
+//  }
+//
+//  void process({Room currentRoom: null}) {
+//    // TODO implement this method
+//  }
+//
+//  void terminate() {
+//    // TODO implement this method
+//  }
+//}
+
+class TestPickUpAndComment extends CompositeGoal {
+  Item item;
+  TestPickUpAndComment(AIActor performer, this.item) : super(performer);
   
-  int currentTime = 0;
-  bool completed = false;
-  
-  void activate() {
-    currentTime = 0;
-    completed = false;
+  List<Report> activate() {
+    subgoals.add(new Say(performer, "I'm gonna pick this ${item.name} up."));
+    subgoals.add(new PickUpInRoom(performer, item));
+    subgoals.add(new Say(performer, "Great!"));
+    return [];
   }
+
+  List<Report> process() => [];
+
+  List<Report> terminate() => [];
+}
+
+class Say extends TimedAtomicGoal {
+  String message;
+  Say(AIActor performer, this.message) : super(performer, 1);
   
-  void process({Room currentRoom: null}) {
-    if (currentTime >= time) {
-      completed = true;
-      Iterable<Report> reports = endFunction();
-      if (reports != null && currentRoom != null && 
-          performer.isIn(currentRoom)) {
-        storyline.reports.addAll(reports);
-      }
-      return;
-    }
-    currentTime++;
+
+  List<Report> activate() => [];
+  List<Report> terminate() => [performer.report("<subject> say<s>: \"$message\"")];
+}
+
+class PickUpInRoom extends TimedAtomicGoal {
+  Item item;
+  
+  PickUpInRoom(AIActor performer, this.item) : super(performer, 1);
+
+  List<Report> activate() {
+    assert(item.isInSameRoomAs(performer));
+    assert(item.takeable);
+    return [];
   }
-  
-  void terminate() {}
+
+  List<Report> terminate() {
+    item.carrier = performer;
+    return [performer.report("<subject> pick<s> up <object>", object: item)];
+  }
+}
+
+class TraverseFromRoomToRoom extends TimedAtomicGoal {
+  Room from, to;
+  TraverseFromRoomToRoom(AIActor performer, Room from, Room to) 
+    : super(performer, 
+        from.exits.firstWhere((Exit exit) => exit.to == to, // Gets travel cost.
+          orElse: throw new Exception("Cannot traverse from $from to $to.")
+        ).cost) {
+    this.from = from;
+    this.to = to;
+  }
+
+  List<Report> activate() => [performer.report("<subject> leave<s> towards $to")];
+  List<Report> terminate() => [performer.report("<subject> arrive<s> from $from")];
 }
 
 class Think extends CompositeGoal {
   Think(AIActor performer) : super(performer);
 
-  void activate() {
+  List<Report> activate() {
     completed = false;
     subgoals.clear();
+    subgoals.add(new Wait(performer));
+    return [];
   }
 
-  void process({Room currentRoom: null}) {
-    if (completed) {
-      subgoals.addFirst(new Wait(performer));
-      completed = false;
-    }
-    processSubgoals(currentRoom: currentRoom);
-  }
+  List<Report> process() => [];
+  List<Report> terminate() => [];
 
-  void terminate() {}
 }

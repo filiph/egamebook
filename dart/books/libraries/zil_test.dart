@@ -41,6 +41,7 @@ void main() {
     rooms.add(new Room("Hatchway", "the hatchway", []));
     
     var gorilla = actors.add(new AIActor("Gorilla"), bridge);
+    gorilla.currentGoal = new TestPickUpAndComment(gorilla, captainsGun);
     
     // Script
     // npcs.update(1);

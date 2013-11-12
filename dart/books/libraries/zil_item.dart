@@ -66,15 +66,29 @@ class Item extends Entity implements Located, Described {
   }
   
   Room _location;
-  ZilActor carrier;
+  ZilActor _carrier;
   
-  bool get isBeingCarried => carrier != null;
-  bool isCarriedBy(ZilActor actor) => carrier == actor;
-  bool isInRoomFreeStanding(Room room) => carrier == null && _location == room;
+  ZilActor get carrier => _carrier;
+  set carrier(ZilActor value) {
+    if (_location != null) {
+      _location.items.remove(this);
+      _location = null;
+    }
+    _carrier = value;
+  }
+  
+  bool get isBeingCarried => _carrier != null;
+  bool isCarriedBy(ZilActor actor) => _carrier == actor;
+  bool isInRoomFreeStanding(Room room) => _carrier == null && _location == room;
   
   Room get location {
     if (carrier != null) return carrier.location;
     return _location;
+  }
+  
+  set location(Room value) {
+    _location = value;
+    _carrier = null;
   }
   
   bool isIn(Room room) => location == room;
