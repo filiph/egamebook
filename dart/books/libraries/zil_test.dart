@@ -40,7 +40,7 @@ void main() {
     ));
     rooms.add(new Room("Hatchway", "the hatchway", []));
     
-    var gorilla = actors.add(new AIActor("Gorilla"), bridge);
+    var gorilla = actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
     gorilla.currentGoal = new TestPickUpAndComment(gorilla, captainsGun);
     
     // Script

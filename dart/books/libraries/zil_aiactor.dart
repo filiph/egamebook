@@ -16,7 +16,8 @@ class AIActor extends ZilActor {
     }
   }
   
-  AIActor(String name) : super(name) {
-  }
+  AIActor(String name, {team: Actor.NEUTRAL, isPlayer: false,
+    pronoun: Pronoun.IT}) : super(name, team: team, isPlayer: isPlayer,
+        pronoun: pronoun);
   
 }

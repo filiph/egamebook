@@ -74,7 +74,7 @@ class Room extends Entity implements Described {
   /// Example: "You can leave to corridor left, squeeze through the hatchway 
   /// or use the ladder to ..."
   void showExits() {
-    storyline.addEnumeration("<subject> can {leave|go}", 
+    storyline.addEnumeration("<subject> can {leave|exit|go}", 
         exits.map((exit) => "to ${exit.to.description}"), null, 
         subject: player, conjuction: "or");
   }
