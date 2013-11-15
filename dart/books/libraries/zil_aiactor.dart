@@ -4,10 +4,9 @@ class AIActor extends ZilActor {
   Goal currentGoal;
   
   void update({Room currentRoom: null}) {
-    if (currentGoal == null || currentGoal.completed) {      
+    if (currentGoal == null || currentGoal.completed || currentGoal.failed) {      
       // When nothing else is going on, switch to autonomous thinking mode.
       currentGoal = new Think(this);
-      currentGoal.activate();
     }
     var reports = currentGoal._processInternal();
     if (player.isInSameRoomAs(this)) {

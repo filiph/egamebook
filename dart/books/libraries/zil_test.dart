@@ -8,7 +8,7 @@ void main() {
   test("ZIL works", () {
     
     // Init
-    var captainsGun = new Item("captain's {gun|pistol}", 
+    var captainsGun = new Item("captain's gun", 
         [
          new Action("check the gun", 
             () => echo("You check the gun. It's okay."),
@@ -20,7 +20,7 @@ void main() {
             needsToBeCarried: true,
             submenu: "...")
          ],
-      takeable: true,
+      takeable: false,
       count: 1,  // can be >1 for things like bullets
       container: true,
       contents: []

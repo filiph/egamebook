@@ -27,6 +27,7 @@ import 'actor.dart';
 import 'storyline.dart';
 import 'randomly.dart' show Randomly;
 import 'dart:collection';
+import 'package:a_star/a_star.dart';
 
 part 'zil_room.dart';
 part 'zil_exit.dart';
