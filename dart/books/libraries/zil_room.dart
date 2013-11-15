@@ -4,7 +4,7 @@ part of zil;
  * A [Room] is the a location in the game space. It's [name] must correspond to
  * an [EgbPage] name.
  */
-class Room extends Entity implements Described {
+class Room extends Entity with Node implements Described {
   //PerformFunction onEnter;
   final List<int> coordinates;
   final Set<Item> items;
@@ -13,6 +13,8 @@ class Room extends Entity implements Described {
   String description;
   // TODO: custom "you are in"
   
+  String toString() => "Room<$name>"; 
+  
   bool visited = false;
   
   Room(String name, this.description, Iterable exits, 
@@ -20,7 +22,7 @@ class Room extends Entity implements Described {
        this.coordinates: const [0, 0, 0], Iterable items: const []}) 
       : this.exits = new Set.from(exits),
         this.items = new Set.from(items),
-        super(name) {
+        super(name, Pronoun.IT, Actor.NEUTRAL, false) {
     //throwIfNotInInitBlock("Cannot create room on the fly.");
     if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);

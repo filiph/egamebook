@@ -9,9 +9,11 @@ final RoomNetwork rooms = new RoomNetwork();
 /** 
  * A network of rooms.
  */
-class RoomNetwork {
+class RoomNetwork implements Graph<Room> {
   Map<String,Room> _rooms = new Map<String,Room>();
   Room current = null;
+  
+  AStar aStar;
   
   /**
    * The actors that are inhabiting the rooms.
@@ -19,7 +21,9 @@ class RoomNetwork {
    */
   ActorSociety actors;
   
-  RoomNetwork();
+  RoomNetwork() {
+    // Nothing to do here.
+  }
   
   Room add(Room room) {
     //throwIfNotInInitBlock("Author can only set up room network on init.");
@@ -45,7 +49,14 @@ class RoomNetwork {
         exit.to = _rooms[exit.destinationPageName];
       });
     });
-
+  }
+  
+  /**
+   * This is also run after initialization and before first use. It sets up
+   * the [aStar] instance for finding paths.
+   */
+  void _createAStar() {
+    aStar = new AStar(this);
   }
 
   bool _networkReady = false;
@@ -56,6 +67,7 @@ class RoomNetwork {
   void _checkNetworkReady() {
     if (!_networkReady) {
       _setExitToFields();
+      _createAStar();
       _networkReady = true;
     }
   }
@@ -66,15 +78,33 @@ class RoomNetwork {
     current = _rooms[pagename];
   }
   
-  Path findPath(Room from, Room to) {
+  Queue<Room> findPath(Room from, Room to) {
     _checkNetworkReady();
-    // TODO
-    throw new UnimplementedError();
+    return aStar.findPathSync(from, to);
   }
-}
 
-class Path {
-  final List<Room> rooms;
+  // TODO: take into account exit prerequisites - different paths for different actors
   
-  Path(this.rooms);
+  Iterable<Room> get allNodes => _rooms.values;
+
+  num getDistance(Room a, Room b) {
+    Exit exitToB = a.exits.firstWhere((Exit exit) => exit.to == b, 
+        orElse: null);
+    if (exitToB == null) return null;
+    if (!exitToB.isActive) return null;
+    return exitToB.cost;
+  }
+
+  num getHeuristicDistance(Room a, Room b) {
+    assert(a.coordinates.length == 3);
+    assert(b.coordinates.length == 3);
+    if (a == b) return 0;
+    num xd = b.coordinates[0]-a.coordinates[0];
+    num yd = b.coordinates[1]-a.coordinates[1];
+    num zd = b.coordinates[2]-a.coordinates[2];
+    return Math.sqrt(xd*xd + yd*yd + zd*zd);
+  }
+
+  Iterable<Room> getNeighboursOf(Room room) =>
+      room.exits.map((Exit exit) => exit.to);
 }

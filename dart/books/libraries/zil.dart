@@ -28,6 +28,7 @@ import 'storyline.dart';
 import 'randomly.dart' show Randomly;
 import 'dart:collection';
 import 'package:a_star/a_star.dart';
+import 'dart:math' as Math;
 
 part 'zil_room.dart';
 part 'zil_exit.dart';

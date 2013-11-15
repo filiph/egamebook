@@ -24,9 +24,6 @@ abstract class Goal {
     status = COMPLETED;
   }
   
-  // TODO: status. When status failed => propagate
-  
-  
   AIActor performer;
   
   Goal(this.performer);
@@ -35,7 +32,7 @@ abstract class Goal {
   List<Report> onActivate();
   /// Execution. The method is run periodically each turn until the goal is
   /// finished or failed.
-  List<Report> onProcess();
+  List<Report> onUpdate();
   /// End. Gets called when goal is finished successfully. 
   List<Report> onTerminate();
   /// Fail. Gets called after the [fail] method.
@@ -58,7 +55,7 @@ abstract class Goal {
       if (failed) return reports;  // Stop from running onProcess if any subgoal
                                    // has failed.
     }
-    reports.addAll(onProcess());
+    reports.addAll(onUpdate());
     return reports;
   }
 }
@@ -73,9 +70,14 @@ abstract class AtomicGoal extends Goal {
 
 abstract class TimedAtomicGoal extends AtomicGoal {
   int currentTime = 0;
+  /// Returns current progress of the timed goal as a percentage (1.0 == done).
+  num get progress {
+    if (time == 0) return 1.0;
+    return currentTime / time;
+  } 
   TimedAtomicGoal(AIActor performer, int time) : super(performer, time);
   
-  List<Report> onProcess() {
+  List<Report> onUpdate() {
     if (currentTime >= time) {
       completed = true;
       return onTerminate();
@@ -124,8 +126,8 @@ abstract class CompositeGoal extends Goal {
 class Wait extends TimedAtomicGoal {
   Wait(AIActor performer) : super(performer, 1);
 
-  List<Report> onActivate() => [performer.report("<subject> start<s> waiting")];
-  List<Report> onTerminate() => [performer.report("<subject> finish<es> waiting")];
+  List<Report> onActivate() => [performer.createReport("<subject> start<s> waiting")];
+  List<Report> onTerminate() => [performer.createReport("<subject> finish<es> waiting")];
   List<Report> onFail() => [];
 }
 
@@ -156,9 +158,9 @@ class TestPickUpAndComment extends CompositeGoal {
     return [];
   }
 
-  List<Report> onProcess() => [];
+  List<Report> onUpdate() => [];
   List<Report> onTerminate() => [];
-  List<Report> onFail() => [performer.report("<subject> say<s>: \"Oh crap.\"")];
+  List<Report> onFail() => [performer.createReport("<subject> say<s>: \"Oh crap.\"")];
 }
 
 class Say extends TimedAtomicGoal {
@@ -166,7 +168,7 @@ class Say extends TimedAtomicGoal {
   Say(AIActor performer, this.message) : super(performer, 1);
 
   List<Report> onActivate() => [];
-  List<Report> onTerminate() => [performer.report("<subject> say<s>: \"$message\"")];
+  List<Report> onTerminate() => [performer.createReport("<subject> say<s>: \"$message\"")];
   List<Report> onFail() => [];
 }
 
@@ -185,47 +187,106 @@ class PickUpInRoom extends TimedAtomicGoal {
       return fail();
     }
     item.carrier = performer;
-    return [performer.report("<subject> pick<s> up <object>", object: item)];
+    return [performer.createReport("<subject> pick<s> up <object>", object: item)];
   }
 
   List<Report> onFail() => [];
 }
 
-class TraverseFromRoomToRoom extends TimedAtomicGoal {
+class TraverseToRoom extends TimedAtomicGoal {
   Room from, to;
-  TraverseFromRoomToRoom(AIActor performer, Room from, Room to) 
-    : super(performer, 
-        from.exits.firstWhere((Exit exit) => exit.to == to, // Gets travel cost.
-          orElse: throw new Exception("Cannot traverse from $from to $to.")
-        ).cost) {
-    this.from = from;
+  TraverseToRoom(AIActor performer, Room to) 
+    : from = performer.location,
+      super(performer, 
+        // Gets travel cost.
+        performer.location.exits.fold(null, (num bestCost, Exit exit) {
+          if (exit.to == to) {
+            if (bestCost == null || bestCost > exit.cost) {
+              return exit.cost;
+            }
+          }
+          return bestCost;
+        })) {
     this.to = to;
   }
+  
+  List<Report> onUpdate() {
+    print("Traversing from $from to $to, time $currentTime");
+    if (progress > 0.5) {
+      performer.location = to;
+    }
+    return super.onUpdate();
+  }
 
-  List<Report> onActivate() => [performer.report("<subject> leave<s> towards $to")];
-  List<Report> onTerminate() => [performer.report("<subject> arrive<s> from $from")];
+  List<Report> onActivate() => [performer.createReport("<subject> leave<s> towards $to")];
+  List<Report> onTerminate() {
+    performer.location = to;
+    return [performer.createReport("<subject> arrive<s> from $from")];
+  }
   List<Report> onFail() => [];
 }
 
 class GoToRoom extends CompositeGoal {
   final Room targetRoom;
-  GoToRoom(AIActor performer, this.targetRoom) : super(performer);
-
+  num distanceHeuristic;
+  /// Specifies how much longer than the heuristic distance should the goal be
+  /// executing before failing.
+  final num MAX_TIME_FACTOR = 2;
+  int counter = 0;
+  GoToRoom(AIActor performer, this.targetRoom) : super(performer) {
+  }
+  
   List<Report> onActivate() {
-    // TODO implement this method
+    distanceHeuristic = 
+        rooms.getHeuristicDistance(performer.location, targetRoom);
+    List<Report> reports = <Report>[];
+    Queue<Room> path = rooms.findPath(performer.location, targetRoom);
+    print(path);
+    if (path.isEmpty) {
+      reports.add(performer.createReport("<subject> can't find <subject's> way "
+          "to <object>", object: targetRoom));
+      reports.addAll(fail());
+      return reports;
+    }
+    var currentRoom = path.removeFirst();
+    assert(currentRoom == performer.location);
+    while (path.isNotEmpty) {
+      Room nextRoom = path.removeFirst();
+      assert(currentRoom.exits.any((Exit exit) => exit.to == nextRoom));
+      subgoals.add(new TraverseToRoom(performer, nextRoom));      
+      currentRoom = nextRoom;
+    }
+    return [];
   }
 
-  List<Report> onProcess() {
-    // TODO implement this method
+  List<Report> onUpdate() {
+    counter += 1;
+    if (counter > distanceHeuristic * MAX_TIME_FACTOR) {
+      return fail();
+    }
+    return [];
   }
-
-  List<Report> onTerminate() {
-    // TODO implement this method
-  }
-
+  List<Report> onTerminate() => [];
   List<Report> onFail() {
-    // TODO implement this method
+    if (counter <= distanceHeuristic * MAX_TIME_FACTOR) {
+      // Try again. Re-plan path.
+      status = Goal.ACTIVE;
+      return onActivate();
+    }
+    return [];
   }
+}
+
+class ArbitrarySetOfGoals extends CompositeGoal {
+  ArbitrarySetOfGoals(AIActor performer, Iterable<Goal> subgoals) 
+  : super(performer) {
+    this.subgoals.addAll(subgoals);
+  }
+  
+  List<Report> onActivate() => [];
+  List<Report> onFail() => [];
+  List<Report> onUpdate() => [];
+  List<Report> onTerminate() => [];
 }
 
 class Think extends CompositeGoal {
@@ -238,7 +299,7 @@ class Think extends CompositeGoal {
     return [];
   }
 
-  List<Report> onProcess() => [];
+  List<Report> onUpdate() => [];
   List<Report> onTerminate() => [];
   List<Report> onFail() {
     // TODO re-plan.

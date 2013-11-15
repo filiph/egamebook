@@ -23,7 +23,7 @@ class Exit extends Entity {
    */
   Exit(this.destinationPageName, {this.requirement: null, this.cost: 1,
       this.descriptionInfinitive: null}) 
-      : super("Exit");
+      : super("Exit", Pronoun.IT, Actor.NEUTRAL, false);
 
   // TODO PlayerOnlyExit("SecretDoor"),
   

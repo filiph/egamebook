@@ -51,7 +51,7 @@ class Item extends Entity implements Located, Described {
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
       Pronoun pronoun: Pronoun.IT, this.firstDescription: null}) 
-      : super(name, pronoun: pronoun) {
+      : super(name, pronoun, Actor.NEUTRAL, false) {
         
     actions.forEach((action) => action.item = this);
     if (!container) {

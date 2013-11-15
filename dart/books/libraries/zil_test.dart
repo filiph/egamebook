@@ -20,7 +20,7 @@ void main() {
             needsToBeCarried: true,
             submenu: "...")
          ],
-      takeable: false,
+      takeable: true,
       count: 1,  // can be >1 for things like bullets
       container: true,
       contents: []
@@ -34,20 +34,29 @@ void main() {
          coordinates: [0, 0, 0],
          items: [captainsGun]
     ));
-    rooms.add(new Room("LeftCorridor",
+    var leftCorridor = rooms.add(new Room("LeftCorridor",
         "Left Corridor",
-        [new Exit("Exploration.Bridge")]
+        [new Exit("Exploration.Bridge")],
+        coordinates: [1, 1, 0]
     ));
     rooms.add(new Room("Hatchway", "the hatchway", []));
     
     var gorilla = actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
-    gorilla.currentGoal = new TestPickUpAndComment(gorilla, captainsGun);
+    gorilla.currentGoal = new ArbitrarySetOfGoals(gorilla, 
+        [new TestPickUpAndComment(gorilla, captainsGun),
+         new GoToRoom(gorilla, leftCorridor),
+         new GoToRoom(gorilla, bridge),
+         new Say(gorilla, "Hi again!")]);
+    
     
     // Script
     // npcs.update(1);
     // rooms.update(1);
     // ^^^ = zil.update(1);
+    
+    player.location = bridge;
     rooms.setCurrentFromPageName("Exploration.Bridge");
+    
     rooms.current.describe(10);
     // rooms.current.showArrival();  // "You have arrived to the bridge."
     // rooms.current.showDescription();  // "You are standing at the bridge."

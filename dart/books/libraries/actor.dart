@@ -10,8 +10,10 @@ import 'storyline.dart';
  * than not they are at a [location].
  */
 class Entity {
-  Entity(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
+  Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
     this.isPlayer: false});
+  
+  Entity(this.name, this.pronoun, this.team, this.isPlayer);
   
   final String name;
   int team = Actor.NEUTRAL;
@@ -36,6 +38,10 @@ class Entity {
   void report(String text, {Entity object}) {
     storyline.add(text, subject: this, object: object); // TODO: add stuff
   }
+  
+  Report createReport(String text, {Entity object}) {
+    return new Report(text, subject: this, object: object);
+  }
 }
 
 /**
@@ -50,7 +56,7 @@ class Entity {
 class Actor extends Entity {
   Actor({String name, int team: NEUTRAL, bool isPlayer: false,
     Pronoun pronoun: Pronoun.IT}) 
-    : super(name, pronoun: pronoun, team: team, isPlayer: isPlayer);
+    : super(name, pronoun, team, isPlayer);
   
   static const int NEUTRAL = 0;
   static const int FRIEND = 1;
