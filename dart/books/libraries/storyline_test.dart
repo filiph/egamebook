@@ -1,6 +1,5 @@
 
 import 'package:unittest/unittest.dart';
-import 'package:egamebook/src/book/scripter.dart';
 import 'actor.dart';
 import 'storyline.dart';
 
@@ -23,6 +22,48 @@ void main() {
                 "engines. You gesture to your Gorilla.+"
                 "uns towards the engine room\."));
   });
+  
+  test("fixing .\". in sentences", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gorilla = new Actor(name: "Gorilla", team: Actor.FRIEND, 
+        pronoun: Pronoun.IT);
+    storyline.add("<subject> enter<s> the room", subject: gorilla);
+    storyline.add("<subject> say<s>: \"Isn't this great?\"", subject: gorilla, 
+        endSentence: true);
+    expect(storyline.toString(), endsWith("says: \"Isn't this great?\""));
+    storyline.clear();
+    storyline.add("<subject> say<s>: \"Well, I think it's great.\"", 
+        subject: gorilla);
+    expect(storyline.toString(), 
+        endsWith("says: \"Well, I think it's great.\""));
+    storyline.clear();
+    storyline.add("<subject> exclaim<s>: \"Well? Say something!\"", 
+        subject: gorilla);
+    expect(storyline.toString(), 
+        endsWith("exclaims: \"Well? Say something!\""));
+  });
+  
+  test("fixing .'. in sentences", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gorilla = new Actor(name: "Gorilla", team: Actor.FRIEND, 
+        pronoun: Pronoun.IT);
+    storyline.add("<subject> enter<s> the room", subject: gorilla);
+    storyline.add("<subject> say<s>: 'Isn't this great?'", subject: gorilla, 
+        endSentence: true);
+    expect(storyline.toString(), endsWith("says: 'Isn't this great?'"));
+    storyline.clear();
+    storyline.add("<subject> say<s>: 'Well, I think it's great.'", 
+        subject: gorilla);
+    expect(storyline.toString(), 
+        endsWith("says: 'Well, I think it's great.'"));
+    storyline.clear();
+    storyline.add("<subject> exclaim<s>: 'Well? Say something!'", 
+        subject: gorilla);
+    expect(storyline.toString(), 
+        endsWith("exclaims: 'Well? Say something!'"));
+  }); 
   
   test("exchange", () {
     var storyline = new Storyline();

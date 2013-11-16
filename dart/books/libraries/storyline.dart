@@ -125,6 +125,9 @@ class Storyline {
   static const String VERB_DO = "<does>";
   static const String VERB_BE = "<is>";
   
+  static final RegExp QUOTE_INTERPUNCTION_DUPLICATION = 
+      new RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
+  
   /**
    * Add another event to the story. 
    */
@@ -494,7 +497,14 @@ class Storyline {
     // add last dot
     if (!reports[length-1].wholeSentence)
       strBuf.write(".");
+    
+    String s = strBuf.toString();
+    
+    // Fix extra dots after quotes.
+    s = s.replaceAllMapped(QUOTE_INTERPUNCTION_DUPLICATION, (Match m) {
+      return "${m[1]}${m[2]}${m[3]}";
+    });
 
-    return strBuf.toString();
+    return s;
   }
 }
