@@ -210,18 +210,12 @@ class TraverseToRoom extends TimedAtomicGoal {
     this.to = to;
   }
   
-  List<Report> onUpdate() {
-    print("Traversing from $from to $to, time $currentTime");
-    if (progress > 0.5) {
-      performer.location = to;
-    }
-    return super.onUpdate();
-  }
-
-  List<Report> onActivate() => [performer.createReport("<subject> leave<s> towards $to")];
+  List<Report> onActivate() => 
+      [performer.createReport("<subject> leave<s> towards ${to.description}")];
   List<Report> onTerminate() {
     performer.location = to;
-    return [performer.createReport("<subject> arrive<s> from $from")];
+    return [performer.createReport(
+        "<subject> arrive<s> from ${from.description}")];
   }
   List<Report> onFail() => [];
 }
@@ -238,10 +232,9 @@ class GoToRoom extends CompositeGoal {
   
   List<Report> onActivate() {
     distanceHeuristic = 
-        rooms.getHeuristicDistance(performer.location, targetRoom);
+        Math.max(rooms.getHeuristicDistance(performer.location, targetRoom), 1);
     List<Report> reports = <Report>[];
     Queue<Room> path = rooms.findPath(performer.location, targetRoom);
-    print(path);
     if (path.isEmpty) {
       reports.add(performer.createReport("<subject> can't find <subject's> way "
           "to <object>", object: targetRoom));
