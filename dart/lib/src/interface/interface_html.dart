@@ -87,15 +87,17 @@ class HtmlInterface extends EgbInterfaceBase {
     _recursiveRemoveScript(container);
     int count = 0;
     for (Element el in container.children) {
-      count++;
-      el.classes.add("hidden");
-      num transitionDelay = 
-          _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
-      el.style.transitionDelay = "${transitionDelay}s";
+      if (USE_SHOWTEXT_ANIMATION) {
+        count++;
+        el.classes.add("hidden");
+        num transitionDelay = 
+            _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
+        el.style.transitionDelay = "${transitionDelay}s";
+        Timer.run(() {
+          el.classes.remove("hidden");
+        });
+      }
       bookDiv.append(el);//container.children[i]);
-      Timer.run(() {
-        el.classes.remove("hidden");
-      });
     }
     container.remove();  // TODO: find out if necessary to avoid leaks
     
@@ -103,6 +105,7 @@ class HtmlInterface extends EgbInterfaceBase {
         () => true);
   }
   
+  static const bool USE_SHOWTEXT_ANIMATION = false;
   static const Duration _durationBetweenShowingElements =
       const Duration(milliseconds: 200);
   static const Duration _durationBetweenCheckingForMetaElements =
@@ -418,6 +421,8 @@ typedef void Action();
 /**
  * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
  * [HtmlInterface]).
+ * 
+ * TODO: either use lawndart or make the following more robust
  */
 class LocalStorage implements EgbStorage {
   Future<bool> save(String key, String value) {
