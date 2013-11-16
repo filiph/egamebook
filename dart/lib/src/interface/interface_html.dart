@@ -38,9 +38,9 @@ class HtmlInterface extends EgbInterfaceBase {
   
   void setup() {
     // DOM
-    bookDiv = document.query("div#book-wrapper");
+    bookDiv = document.querySelector("div#book-wrapper");
 
-    restartAnchor = document.query("nav a#book-restart");
+    restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
       streamController.add(new RestartIntent());
       // Clear text and choices
@@ -49,14 +49,14 @@ class HtmlInterface extends EgbInterfaceBase {
       // TODO: clear meta elements
     });
     
-    pointsSpan = document.query("span#points-value");
+    pointsSpan = document.querySelector("span#points-value");
     
     _periodicSubscription = _periodic.listen((_) {
       _checkMetaElementsInView();
     });
     _periodicSubscription.pause();
     
-    document.query("p#loading").remove();
+    document.querySelector("p#loading").remove();
   }
   
   void endBook() {
@@ -232,7 +232,7 @@ class HtmlInterface extends EgbInterfaceBase {
             // Make the global variable immediately available.
             bookmarkDiv = null;
             var height = "${choicesOl.client.height + 10}px";
-            _bookmarkDiv.query("a").style.height = height;
+            _bookmarkDiv.querySelector("a").style.height = height;
             _bookmarkDiv.classes.add("hidden");
             choicesOl.children.insert(0, _bookmarkDiv);
             new Timer(new Duration(seconds: 20), () {
@@ -300,7 +300,7 @@ class HtmlInterface extends EgbInterfaceBase {
   Future<bool> setStats(List<Stat> stats) {
     _statsList = stats;
     _printStats();  // DEBUG
-    var statsDiv = document.query("nav div#stats");
+    var statsDiv = document.querySelector("nav div#stats");
     statsDiv.children.clear();
     for (int i = 0; i < stats.length; i++) {
       var current = stats[i];
