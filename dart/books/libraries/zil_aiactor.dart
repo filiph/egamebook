@@ -3,14 +3,13 @@ part of zil;
 class AIActor extends ZilActor {
   Goal currentGoal;
   
-  void update({Room currentRoom: null}) {
+  void update({Room currentRoom: null, bool describe: true}) {
     if (currentGoal == null || currentGoal.completed || currentGoal.failed) {      
       // When nothing else is going on, switch to autonomous thinking mode.
       currentGoal = new Think(this);
     }
     var reports = currentGoal._processInternal();
-    var pl = player;
-    if (player.isInSameRoomAs(this)) {
+    if (player.isInSameRoomAs(this) && describe) {
       // Only report if player is around.
       storyline.reports.addAll(reports);
     }

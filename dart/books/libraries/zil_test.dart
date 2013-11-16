@@ -58,7 +58,7 @@ void main() {
     
     rooms.setCurrentFromPageName("Exploration.Bridge");
     player.location = rooms.current;
-    rooms.current.describe(10);
+    rooms.current.update(10);
     
     // Needed in debug only.
     print(storyline.toString());
