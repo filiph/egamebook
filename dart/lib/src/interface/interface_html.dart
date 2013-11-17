@@ -24,6 +24,9 @@ class HtmlInterface extends EgbInterfaceBase {
   
   DivElement bookDiv;
   
+  ButtonElement startButton;
+  DivElement bookTitleDiv;
+  
   /**
    * The text that has been shown to the player since last savegame bookmark.
    * (Markdown format, pre-HTMLization.)
@@ -40,6 +43,16 @@ class HtmlInterface extends EgbInterfaceBase {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
     _loadingEl = document.querySelector("p#loading");
+    
+    bookTitleDiv = document.querySelector("div#book-title");
+    startButton = document.querySelector("button#start-button");
+    startButton.text = "START";
+    startButton.disabled = false;
+    startButton.onClick.first.then((_) {
+      bookTitleDiv.style.display = "none";
+      bookDiv.style.display = "block";
+      window.scrollTo(0, 0);
+    });
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
