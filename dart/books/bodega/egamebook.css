@@ -152,6 +152,31 @@ div#book-title {
   position: absolute;
 }
 
+div.dialog {
+  background: white;
+  box-shadow: 0 0 0.5em 0.5em silver;
+  position: fixed;
+  z-index: 500;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  max-height: 80%;
+  overflow: scroll;
+}
+
+div.dialog > div {
+  padding: 1em;
+}
+
+div.dialog h3 {
+  margin-top: 0.5em;
+}
+
+div.dialog p {
+  text-align: left;
+    font: 90% 'Roboto', sans-serif;
+}
+
 button.menu-button {
   text-align: center;
   font-size: 120%;
