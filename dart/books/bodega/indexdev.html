@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Bodega Incident</title>
 
-  <link href='http://fonts.googleapis.com/css?family=Roboto:700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="egamebook.css" type="text/css" charset="utf-8">
+  <link href='http://fonts.googleapis.com/css?family=Roboto:700,400&subset=latin' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="egamebook.css" type="text/css">
 </head>
 <body>
   <div id="wrapper">
@@ -23,8 +23,9 @@
     <div id="book-title">
       <h1>The Bodega Incident</h1>
       <p>Oh hi! Thanks for trying out this new egamebook thing. <strong>This is a very early preview.</strong> I'm sorry to say the story is more of a draft, and it's still not playable start-to-finish.</p>
-      <p>If things break (and they will), try refreshing the website in your browser and/or click the <em>Restart</em> button. Also, the interface can be slow or laggy at times. I'm really working hard on fixing all this. I would <em>love</em> to hear your feedback. Please <a href="mailto:filip.hracek@gmail.com">send me an email</a> with your comments, critique or bug reports. Thanks!!</p>
       <p><img src="img/placeholder_img.jpg" alt="Placeholder image"></p>
+      <p>If things break (and they will), try refreshing the website in your browser and/or click the <em>Restart</em> button. Also, the interface can be slow or laggy at times. I'm really working hard on fixing all this. I would <em>love</em> to hear your feedback. Please <a href="mailto:filip.hracek@gmail.com">send me an email</a> with your comments, critique or bug reports. Thanks!!</p>
+      <button class="button" id="start-button" disabled>Loading...</button>
     </div>
     
     <div id="book-about">
@@ -33,10 +34,10 @@
     </div>
     
     <div id="book-wrapper">
-      <p id="loading" style="text-align: center; padding-top: 2em">
-        <img src="img/loading.gif" alt="Loading...">
-      </p>
     </div>
+    <p id="loading" style="text-align: center;">
+      <img src="img/loading.gif" alt="Loading...">
+    </p>
     
     <div id="book-whitespace-footer">
     </div>

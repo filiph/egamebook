@@ -39,6 +39,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void setup() {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
+    _loadingEl = document.querySelector("p#loading");
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
@@ -46,17 +47,35 @@ class HtmlInterface extends EgbInterfaceBase {
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
+      _savegameToBe = null;
       // TODO: clear meta elements
     });
     
     pointsSpan = document.querySelector("span#points-value");
     
+    // Set up listening for meta elements (for not showing new points before
+    // user scrolls to the appropriate place in the text, for example).
     _periodicSubscription = _periodic.listen((_) {
       _checkMetaElementsInView();
     });
     _periodicSubscription.pause();
     
-    document.querySelector("p#loading").remove();
+    _showLoading(false);
+  }
+  
+  ParagraphElement _loadingEl;
+  /// Used to store [_loadingEl]'s state outside DOM.
+  bool _loadingElCurrentShowState = null;
+  /**
+   * Sets visibility of the loading gizmo.
+   */
+  void _showLoading(bool show) {
+    if (_loadingElCurrentShowState != null && 
+        show == _loadingElCurrentShowState) {
+      return;
+    }
+    _loadingEl.style.visibility = (show ? "visible" : "hidden");
+    _loadingElCurrentShowState = show;
   }
   
   void endBook() {
@@ -73,36 +92,44 @@ class HtmlInterface extends EgbInterfaceBase {
    */
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
-    var completer = new Completer();
+    Completer completer = new Completer<bool>();
     
-    _textHistory.write("$s\n\n");
-    String html = markdown_to_html(s);
+    _showLoading(false);
     
-    if (s.trim().startsWith("<") && s.trim().endsWith(">")) {
-      html = s;  // Hacky way to prevent markdown from enclosing html tags
-                 // with html tags ("<p><p></p></p>"). TODO: fix
-    }
-    DivElement container = new DivElement();
-    container.innerHtml = html;
-    _recursiveRemoveScript(container);
-    int count = 0;
-    for (Element el in container.children) {
-      if (USE_SHOWTEXT_ANIMATION) {
-        count++;
-        el.classes.add("hidden");
-        num transitionDelay = 
-            _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
-        el.style.transitionDelay = "${transitionDelay}s";
-        Timer.run(() {
-          el.classes.remove("hidden");
-        });
+    new Future.delayed(const Duration(milliseconds: 100), ()  {
+      _textHistory.write("$s\n\n");
+      String html = markdown_to_html(s);
+      
+      if (s.trim().startsWith("<") && s.trim().endsWith(">")) {
+        html = s;  // Hacky way to prevent markdown from enclosing html tags
+                   // with html tags ("<p><p></p></p>"). TODO: fix
       }
-      bookDiv.append(el);//container.children[i]);
-    }
-    container.remove();  // TODO: find out if necessary to avoid leaks
+      DivElement container = new DivElement();
+      container.innerHtml = html;
+      _recursiveRemoveScript(container);
+      int count = 0;
+      for (Element el in container.children) {
+        if (USE_SHOWTEXT_ANIMATION) {
+          count++;
+          el.classes.add("hidden");
+          num transitionDelay = 
+              _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
+          el.style.transitionDelay = "${transitionDelay}s";
+          new Future(() {
+            el.classes.remove("hidden");
+          });
+        }
+        bookDiv.append(el);//container.children[i]);
+      }
+      container.remove();  
+      // TODO: find out if necessary to avoid leaks
+      
+      new Future.delayed(_durationBetweenShowingElements * count, () =>
+          completer.complete(true)
+      );
+    });
     
-    return new Future.delayed(_durationBetweenShowingElements * count, 
-        () => true);
+    return completer.future;
   }
   
   static const bool USE_SHOWTEXT_ANIMATION = false;
@@ -130,7 +157,7 @@ class HtmlInterface extends EgbInterfaceBase {
     }
     // A line 20 pixels above fold.
     var currentBottom = window.pageYOffset + window.innerHeight - 20;
-    print("_metaElements: currentBottom = $currentBottom");
+    //print("_metaElements: currentBottom = $currentBottom");
     var _processedElements = new Set<int>();
     for (int i = 0; i < _metaElements.length; i++) {
       var metaEl = _metaElements[i];
@@ -192,7 +219,7 @@ class HtmlInterface extends EgbInterfaceBase {
     // Build the <li> elements one by one.
     for (int i = 0; i < choiceList.length; i++) {
       EgbChoice choice = choiceList[i];
-      LIElement li = new Element.tag("li");
+      ButtonElement btn = new ButtonElement();
 
       var number = new SpanElement();
       number.text = "${i+1}.";
@@ -220,37 +247,16 @@ class HtmlInterface extends EgbInterfaceBase {
       text.classes.add("choice-text");
       choiceDisplay.append(text);
 
-      var subscription = li.onClick.listen((Event ev) {
-          // Send choice hash back to Scripter.
-          completer.complete(choice.hash);
-          // Mark this element as chosen.
-          li.classes.add("chosen");
-          choicesOl.classes.add("chosen");
-          // Unregister listeners.
-          clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
-          clickSubscriptions.clear();
-          // Show bookmark.
-          if (bookmarkDiv != null) {
-            var _bookmarkDiv = bookmarkDiv;
-            // Make the global variable immediately available.
-            bookmarkDiv = null;
-            var height = "${choicesOl.client.height + 10}px";
-            _bookmarkDiv.querySelector("a").style.height = height;
-            _bookmarkDiv.classes.add("hidden");
-            choicesOl.children.insert(0, _bookmarkDiv);
-            new Timer(new Duration(seconds: 20), () {
-              // Show the bookmark after a pause.
-              _bookmarkDiv.classes.remove("hidden");
-              // TODO: show after scrolled past
-            });
-          }
-      });
+      var subscription = btn.onClick.listen((MouseEvent event) =>
+          _choiceClickListener(event, completer, choice, btn, choicesOl, 
+              clickSubscriptions)
+      );
       clickSubscriptions.add(subscription);
       
-      li.append(number);
-      li.append(choiceDisplay);
+      btn.append(number);
+      btn.append(choiceDisplay);
       
-      choicesOl.append(li);
+      choicesOl.append(btn);
     }
     
     choicesDiv.append(choicesOl);
@@ -258,10 +264,36 @@ class HtmlInterface extends EgbInterfaceBase {
     choicesDiv.classes.add("hidden");
     _recursiveRemoveScript(choicesDiv);
     bookDiv.append(choicesDiv);
-    new Future.value(null).then((_) {
-      choicesDiv.classes.remove("hidden");
-    });
+    _showLoading(false);
+    new Future(() => choicesDiv.classes.remove("hidden"));
     return completer.future;
+  }
+
+  void _choiceClickListener(MouseEvent event, Completer completer, 
+                            EgbChoice choice, ButtonElement btn, 
+                            OListElement choicesOl,
+                            Set<StreamSubscription> clickSubscriptions) {
+    // Send choice hash back to Scripter, but asynchronously.
+    new Future.delayed(const Duration(milliseconds: 100), 
+        () => completer.complete(choice.hash));
+    _showLoading(true);
+    // Mark this element as chosen.
+    btn.classes.add("chosen");
+    choicesOl.classes.add("chosen");
+    // Unregister listeners.
+    choicesOl.querySelectorAll("button").forEach(
+        (ButtonElement b) => b.disabled = true);
+    clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
+    clickSubscriptions.clear();
+    // Show bookmark.
+    if (_savegameToBe != null) {
+      choicesOl.classes.add("bookmark");
+      String savegameUid = _savegameToBe.uid;
+      choicesOl.onClick.listen((_) => 
+          _handleSavegameBookmarkClick(savegameUid));
+      _savegameToBe = null;
+    }
+    event.stopPropagation();
   }
   
   Future<bool> awardPoints(PointsAward award) {
@@ -278,11 +310,11 @@ class HtmlInterface extends EgbInterfaceBase {
     // Not needed (yet?), but adding for extra security.
     _recursiveRemoveScript(p);
     bookDiv.append(p);
-    Timer.run(() {
+    new Future(() {
       p.classes.remove("hidden");
     });
     // Only add the action after element fully visible.
-    new Timer(_durationBetweenShowingElements, () {
+    new Future.delayed(_durationBetweenShowingElements, () {
       var metaEl = new PointsAwardElement.fromPointsAward(award, p);
       metaEl.action = () {
         pointsSpan.text = "${award.result}";
@@ -342,41 +374,48 @@ class HtmlInterface extends EgbInterfaceBase {
   /// Blinks the [el] element via CSS transitions.
   void _blink(Element el) {
     el.classes.add("blink");
-    new Timer(new Duration(milliseconds: 1000), 
+    new Future.delayed(new Duration(milliseconds: 1000), 
         () => el.classes.remove("blink"));
   }
   
   /**
    * What happens when user clicks on a savegame bookmark.
    */
-  void _handleSavegameBookmarkClick(String uid) {
+  void _handleSavegameBookmarkClick(String savegameUid) {
     // TODO: make more elegant, with confirmation appearing on page
     var confirm = window.confirm("Are you sure you want to come back to "
-                    "this decision ($uid) and lose your progress since?");
+            "this decision ($savegameUid) and lose your progress since?");
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      streamController.add(new LoadIntent(uid));
+      streamController.add(new LoadIntent(savegameUid));
       // TODO: solve for when savegame with that uid is not available
     }
   }
   
-  DivElement bookmarkDiv;
+//  DivElement bookmarkDiv;
+  
+  /**
+   * Stored savegame which wait for the next choiceList to be appended to it.
+   */
+  EgbSavegame _savegameToBe;
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _textHistory.clear();  // The _textHistory has been saved with the savegame.
-    bookmarkDiv = new DivElement();
-    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
-    bookmarkDiv.classes.add("bookmark-div");
-    var bookmarkAnchor = new AnchorElement();
-    var bookmarkImg = new ImageElement(src: "img/bookmark.png", 
-        width: 30, height: 60);
-    bookmarkAnchor.append(bookmarkImg);
-    bookmarkAnchor.onClick.listen((_) {
-      _handleSavegameBookmarkClick(savegame.uid);
-    });
-    bookmarkDiv.append(bookmarkAnchor);
+    assert(_savegameToBe == null);
+    _savegameToBe = savegame;
+//    bookmarkDiv = new DivElement();
+//    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
+//    bookmarkDiv.classes.add("bookmark-div");
+//    var bookmarkAnchor = new AnchorElement();
+//    var bookmarkImg = new ImageElement(src: "img/bookmark.png", 
+//        width: 30, height: 60);
+//    bookmarkAnchor.append(bookmarkImg);
+//    bookmarkAnchor.onClick.listen((_) {
+//      _handleSavegameBookmarkClick(savegame.uid);
+//    });
+//    bookmarkDiv.append(bookmarkAnchor);
   }
 }
 

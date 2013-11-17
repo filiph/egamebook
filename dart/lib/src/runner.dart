@@ -92,7 +92,7 @@ class EgbRunner {
   void _send(EgbMessage message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
                                              "when _scripterPort is null.");
-    print("RUN: Sending message (${message.type})");
+    //print("RUN: Sending message (${message.type})");
     _scripterPort.send(message.toJson());
   }
   
