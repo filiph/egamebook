@@ -250,16 +250,16 @@ abstract class EgbScripter {
                                              "when _runnerPort is null.");
     if (message.isAsync) {
       DEBUG_SCR("Sending nonText async message (${message.type})");
-      _runnerPort.send(message.toJson());
+      _runnerPort.send(message.toMap());
       return;
     }
     if (message.type == EgbMessage.TEXT_RESULT) {
       // Put text result into the _textMessageCache.
       if (message.strContent != "") _textMessageCache.add(message);
-      _runnerPort.send(new EgbMessage.NoResult().toJson()); // TODO: this is here just because we need to keep the loop going – get rid of it
+      _runnerPort.send(new EgbMessage.NoResult().toMap()); // TODO: this is here just because we need to keep the loop going – get rid of it
     } else if (_textMessageCache.isEmpty) {
       DEBUG_SCR("Sending nonText message (${message.type})");
-      _runnerPort.send(message.toJson());
+      _runnerPort.send(message.toMap());
     } else {
       // When we have something in the _textMessageCache and we are about to
       // send something new, we first zip the text messages into one huge
@@ -272,7 +272,7 @@ abstract class EgbScripter {
       }
       var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
       DEBUG_SCR("Sending a zip message (${zipMessage.type})");
-      _runnerPort.send(zipMessage.toJson());
+      _runnerPort.send(zipMessage.toMap());
       DEBUG_SCR("Adding message ($message) to the backlog.");
       _messageBacklog = message;
     }
@@ -287,8 +287,8 @@ abstract class EgbScripter {
       _runnerPort.send(port.sendPort);
       return;
     }
-    String messageJson = _message as String;
-    EgbMessage message = new EgbMessage.fromJson(messageJson);
+    Map<String,Object> messageMap = _message as Map<String,Object>;
+    EgbMessage message = new EgbMessage.fromMap(messageMap);
     
     // Solve backlog. TODO: do better
     if (_messageBacklog != null) {

@@ -93,7 +93,7 @@ class EgbRunner {
     if (_scripterPort == null) throw new StateError("Cannot send message "
                                              "when _scripterPort is null.");
     //print("RUN: Sending message (${message.type})");
-    _scripterPort.send(message.toJson());
+    _scripterPort.send(message.toMap());
   }
   
   /**
@@ -106,8 +106,8 @@ class EgbRunner {
       if (readyToRun) _send(new EgbMessage.GetBookUid());
       return;
     }
-    String messageJson = _message as String;
-    EgbMessage message = new EgbMessage.fromJson(messageJson);
+    Map<String,Object> messageMap = _message as Map<String,Object>;
+    EgbMessage message = new EgbMessage.fromMap(messageMap);
     
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
@@ -134,7 +134,7 @@ class EgbRunner {
           // Since this is a text result waiting for a Continue message on
           // a special port (because EgbScripter._send() uses port.call()),
           // we need to do the sending explicitly, not through _send().
-          _scripterPort.send(new EgbMessage.Continue().toJson());
+          _scripterPort.send(new EgbMessage.Continue().toMap());
         });
         return;
       case EgbMessage.NO_RESULT:
