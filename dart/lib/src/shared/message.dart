@@ -95,21 +95,22 @@ class EgbMessage {
   /**
     Ctor that creates the Message object from a JSON string.
     */
-  EgbMessage.fromJson(String json) {
-    Map<String,dynamic> data = JSON.decode(json);
-    type = data["type"];
+  EgbMessage.fromJson(String json) : this.fromMap(JSON.decode(json));
+  
+  EgbMessage.fromMap(Map<String,Object> map) {
+    type = map["type"];
 
-    if (data.containsKey("strContent")) {
-      strContent = data["strContent"];
+    if (map.containsKey("strContent")) {
+      strContent = map["strContent"];
     }
-    if (data.containsKey("listContent")) {
-      listContent = data["listContent"];
+    if (map.containsKey("listContent")) {
+      listContent = map["listContent"];
     }
-    if (data.containsKey("intContent")) {
-      intContent = data["intContent"];
+    if (map.containsKey("intContent")) {
+      intContent = map["intContent"];
     }
-    if (data.containsKey("mapContent")) {
-      mapContent = data["mapContent"];
+    if (map.containsKey("mapContent")) {
+      mapContent = map["mapContent"];
     }
   }
 
@@ -117,23 +118,27 @@ class EgbMessage {
     Outputs message to JSON string. Useful when sending via Port to Isolate.
     */
   String toJson() {
-    Map<String,dynamic> data = new Map<String,dynamic>();
+    return JSON.encode(toMap());
+  }
+  
+  Map<String,Object> toMap() {
+    Map<String,Object> map = new Map<String,Object>();
 
-    data["type"] = type;
+    map["type"] = type;
 
     if (strContent != null) {
-      data["strContent"] = strContent;
+      map["strContent"] = strContent;
     }
     if (listContent != null) {
-      data["listContent"] = listContent;
+      map["listContent"] = listContent;
     }
     if (intContent != null) {
-      data["intContent"] = intContent;
+      map["intContent"] = intContent;
     }
     if (mapContent != null) {
-      data["mapContent"] = mapContent;
+      map["mapContent"] = mapContent;
     }
-
-    return JSON.encode(data);
+    
+    return map;
   }
 }
