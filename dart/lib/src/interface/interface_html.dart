@@ -78,6 +78,12 @@ class HtmlInterface extends EgbInterfaceBase {
     _periodicSubscription.pause();
     
     _showLoading(false);
+    
+    showDialog(new Dialog("Hi", "<p>Have a nice day!</p>", 
+        [new DialogButton("Close", () {
+          print("You clicked it!");
+          return true;
+        })]));
   }
   
   ParagraphElement _loadingEl;
@@ -434,7 +440,66 @@ class HtmlInterface extends EgbInterfaceBase {
 //    });
 //    bookmarkDiv.append(bookmarkAnchor);
   }
+  
+  /**
+   * Shows a dialog.
+   */
+  Future<bool> showDialog(Dialog dialog) {
+    DivElement dialogEl = new DivElement()
+      ..classes.add("dialog");
+    DivElement wrapper = new DivElement();
+    HeadingElement titleEl = new HeadingElement.h3()
+      ..text = dialog.title;
+    wrapper.children.add(titleEl);
+    DivElement textEl = new DivElement()
+      ..innerHtml = dialog.html;
+    wrapper.children.add(textEl);
+    DivElement buttonsDivEl = new DivElement()
+      ..classes.add("dialog-buttons");
+    for (DialogButton button in dialog.buttons) {
+      ButtonElement buttonEl = new ButtonElement()
+        ..text = button.label;
+      buttonEl.onClick.listen((_) {
+        bool shouldClose = button.behaviour();
+        if (shouldClose) {
+          dialogEl.remove();
+        }
+      });
+      buttonsDivEl.children.add(buttonEl);
+    }
+    wrapper.children.add(buttonsDivEl);
+    dialogEl.children.add(wrapper);
+    document.body.children.add(dialogEl);
+  }
 }
+
+class Dialog {
+  String title;
+  String html;
+  List<DialogButton> buttons;
+  
+  Dialog(this.title, this.html, [this.buttons = const [const DialogButton.JustClose("Close")]]);
+}
+
+class DialogButton {
+  final String label;
+  
+  final ClickBehaviour _behaviour;
+  static final ClickBehaviour NO_BEHAVIOUR = () => true;
+  ClickBehaviour get behaviour {
+    if (_behaviour == null) {
+      return NO_BEHAVIOUR;
+    } else {
+      return _behaviour;
+    }
+  }
+  const DialogButton(this.label, this._behaviour);
+  const DialogButton.JustClose(this.label) : _behaviour = null; 
+}
+
+/// Returns true if dialog can be closed.
+typedef bool ClickBehaviour();
+
 
 /**
  * A special class for storing information about a PointsAward together

@@ -174,13 +174,14 @@ div.bottom-fixed > div {
 
 div.dialog {
   background: white;
-  box-shadow: 0 0 0.5em 0.5em silver;
+  box-shadow: 0 0 0.5em 0.5em #ddd;
   position: fixed;
   z-index: 500;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  max-height: 80%;
+  top: 20%;
+  left: 50%;
+  margin-left: -10em;
+  width: 20em;
+  max-height: 60%;
   overflow: scroll;
 }
 
