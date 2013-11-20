@@ -149,7 +149,27 @@ div#book-title {
   z-index:1000;
   top:0;
   left:0;
-  position: absolute;
+  overflow: scroll;
+  position: fixed;
+}
+
+div.bottom-fixed {
+  position: fixed;
+  height: 6em;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: white;
+}
+
+div#book-about {
+  display: none;
+}
+
+div.bottom-fixed > div {
+  max-width: 40em;
+  padding: 1em 1em 0;
+  margin: 0 auto;
 }
 
 div.dialog {

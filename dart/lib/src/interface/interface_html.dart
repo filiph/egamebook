@@ -49,10 +49,14 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.text = "START";
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
-      bookTitleDiv.style.display = "none";
-      bookDiv.style.display = "block";
-      window.scrollTo(0, 0);
+      document.body.style.overflowY = "scroll";
+      new Future(() { 
+        bookDiv.children.last  // TODO: first/last according to Continue/Start
+          .scrollIntoView();  
+        bookTitleDiv.style.display = "none";
+      });
     });
+    document.body.style.overflowY = "hidden";
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
