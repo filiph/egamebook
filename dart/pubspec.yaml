@@ -6,8 +6,7 @@ dependencies:
   browser: any
   unittest: any
   args: any
-  a_star:
-    path: ../../dart-a-star
+  a_star: any
 #  markdown: any
 #  graphml:
 #    git: https://github.com/filiph/dart-graphml.git
