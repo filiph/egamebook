@@ -21,6 +21,7 @@ part of egb_scripter;
  *         gorillaAlive == false)) { /* ... */ }
  * 
  * TODO: There is a lot of room for performance/size improvements.
+ * TODO: Factory constructor. The whole thing is actually a BitArray?
  */
 class Bit implements Saveable {
   bool _state;
