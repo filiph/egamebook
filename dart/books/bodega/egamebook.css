@@ -183,7 +183,6 @@ div.dialog {
   margin-left: -10em;
   width: 20em;
   max-height: 60%;
-  overflow: scroll;
 }
 
 div.dialog > div {
