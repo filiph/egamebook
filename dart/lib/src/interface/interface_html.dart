@@ -69,6 +69,8 @@ class HtmlInterface extends EgbInterfaceBase {
     });
     
     pointsSpan = document.querySelector("span#points-value");
+    document.querySelector("a#points-button").onClick
+      .listen(_statsOnClickListener);
     
     // Set up listening for meta elements (for not showing new points before
     // user scrolls to the appropriate place in the text, for example).
@@ -78,12 +80,6 @@ class HtmlInterface extends EgbInterfaceBase {
     _periodicSubscription.pause();
     
     _showLoading(false);
-    
-    showDialog(new Dialog("Hi", "<p>Have a nice day!</p>", 
-        [new DialogButton("Close", () {
-          print("You clicked it!");
-          return true;
-        })]));
   }
   
   ParagraphElement _loadingEl;
@@ -319,7 +315,10 @@ class HtmlInterface extends EgbInterfaceBase {
     event.stopPropagation();
   }
   
+  
+  int _currentPoints;
   Future<bool> awardPoints(PointsAward award) {
+    _currentPoints = award.result;
     if (award.addition == 0) {
       // This is just setting the Points count. Don't show Toast.
       pointsSpan.text = "${award.result}";
@@ -370,6 +369,7 @@ class HtmlInterface extends EgbInterfaceBase {
       a.children.add(span);
       statsDiv.children.add(a);
       _statsElementMap[current.name] = a;
+      a.onClick.listen(_statsOnClickListener);
     }
   }
   
@@ -470,6 +470,20 @@ class HtmlInterface extends EgbInterfaceBase {
     wrapper.children.add(buttonsDivEl);
     dialogEl.children.add(wrapper);
     document.body.children.add(dialogEl);
+  }
+  
+  void _statsOnClickListener(Event event) {
+    var html = new StringBuffer();
+    html.writeln("<table>");
+    html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
+    for (int i = 0; i < _statsList.length; i++) {
+      Stat s = _statsList[i];
+      html.writeln("<tr><td>${s.name}:</td>"
+                   "<td>${s.toString()}</td></tr>");
+    }
+    html.writeln("</table>");
+    var d = new Dialog("Stats", html.toString());
+    showDialog(d);
   }
 }
 
