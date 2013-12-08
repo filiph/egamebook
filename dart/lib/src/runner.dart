@@ -76,7 +76,7 @@ class EgbRunner {
     print("RUN: Runner.run() called.");
     _interface.setup();
     if (_scripterPort != null) {
-      _send(new EgbMessage.GetBookUid());
+      _send(new EgbMessage.RequestBookUid());
     }
     readyToRun = true;
   }
@@ -108,7 +108,7 @@ class EgbRunner {
   void receiveFromScripter(Object _message) {
     if (_message is SendPort) {
       _scripterPort = _message;
-      if (readyToRun) _send(new EgbMessage.GetBookUid());
+      if (readyToRun) _send(new EgbMessage.RequestBookUid());
       return;
     }
     Map<String,Object> messageMap = _message as Map<String,Object>;

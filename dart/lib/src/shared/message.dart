@@ -24,7 +24,7 @@ class EgbMessage {
   static const int UPDATE_STATS = 100;
 
   // Messages from Runner to Scripter.
-  static const int GET_BOOK_UID = 1000;
+  static const int REQUEST_BOOK_UID = 1000;
   static const int START = 1010;
   static const int LOAD_GAME = 1020;
   static const int CONTINUE = 1040;
@@ -62,7 +62,7 @@ class EgbMessage {
   EgbMessage.BookUid(this.strContent) 
       : type = SEND_BOOK_UID;
   
-  EgbMessage.GetBookUid() : type = GET_BOOK_UID;
+  EgbMessage.RequestBookUid() : type = REQUEST_BOOK_UID;
 
   EgbMessage.EndOfBook() : type = END_OF_BOOK;
 

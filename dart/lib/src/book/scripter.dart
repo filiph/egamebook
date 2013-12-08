@@ -303,7 +303,7 @@ abstract class EgbScripter {
         // Just close the book, no need to answer.
         port.close();
         return;
-      case EgbMessage.GET_BOOK_UID:
+      case EgbMessage.REQUEST_BOOK_UID:
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
         DEBUG_SCR("GET_BOOK_UID received.");
