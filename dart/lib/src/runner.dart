@@ -34,37 +34,42 @@ class EgbRunner {
     print("RUN: Runner started.");
     _streamController = new StreamController();
     
-    // Handling player intents (actions) that are 'out of order' - i.e. scripter
-    // is not asking for them at the moment.
-    _interface.stream.listen((playerIntent) {
-      switch (playerIntent.type) {
-        case (PlayerIntent.RESTART):
-          print("RUN: Restarting book.");
-          _send(new EgbMessage.Start());
-          started = true;
-          break;
-        case (PlayerIntent.QUIT):
-          stop();
-          break;
-        case (PlayerIntent.LOAD):
-          // load saved state for the bookUid from playerProfile
-          // TODO: dry with below ([_startNewSession])
-          _playerProfile.load((playerIntent as LoadIntent).uid)
-          .then((EgbSavegame savegame) {
-            if (savegame == null) {
-              // no savegames for this egamebook
-              _send(new EgbMessage.Start());
-            } else {
-              _interface.showText(savegame.textHistory);
-              _send(savegame.toMessage(EgbMessage.LOAD_GAME));
-            }
-          });
-          started = true;
-          break;
-      }
-    });
+    _interface.stream.listen(_interfaceIntentListener);
     
     _receivePort.listen(receiveFromScripter);
+  }
+
+  /**
+   * Handling player intents (actions) that are 'out of order' - i.e. scripter
+   * is not asking for them at the moment. Exampe: Player wants to Quit (no
+   * matter whether they are in a choice or not).
+   */
+  _interfaceIntentListener(PlayerIntent playerIntent) {
+    switch (playerIntent.type) {
+      case (PlayerIntent.RESTART):
+        print("RUN: Restarting book.");
+        _send(new EgbMessage.Start());
+        started = true;
+        break;
+      case (PlayerIntent.QUIT):
+        stop();
+        break;
+      case (PlayerIntent.LOAD):
+        // load saved state for the bookUid from playerProfile
+        // TODO: dry with below ([_startNewSession])
+        _playerProfile.load((playerIntent as LoadIntent).uid)
+        .then((EgbSavegame savegame) {
+          if (savegame == null) {
+            // no savegames for this egamebook
+            _send(new EgbMessage.Start());
+          } else {
+            _interface.showText(savegame.textHistory);
+            _send(savegame.toMessage(EgbMessage.LOAD_GAME));
+          }
+        });
+        started = true;
+        break;
+    }
   }
   
   void run() {
