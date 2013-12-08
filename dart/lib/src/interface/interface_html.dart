@@ -478,8 +478,10 @@ class HtmlInterface extends EgbInterfaceBase {
     html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
     for (int i = 0; i < _statsList.length; i++) {
       Stat s = _statsList[i];
-      html.writeln("<tr><td>${s.name}:</td>"
-                   "<td>${s.toString()}</td></tr>");
+      if (s.show) {
+        html.writeln("<tr><td>${s.name}:</td>"
+                     "<td>${s.toString()}</td></tr>");
+      }
     }
     html.writeln("</table>");
     var d = new Dialog("Stats", html.toString());
