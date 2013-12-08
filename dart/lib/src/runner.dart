@@ -71,7 +71,7 @@ class EgbRunner {
     print("RUN: Runner.run() called.");
     _interface.setup();
     if (_scripterPort != null) {
-      _send(new EgbMessage.GetBookUid());  // TODO: send with .call(), immediately process the book UID
+      _send(new EgbMessage.GetBookUid());
     }
     readyToRun = true;
   }

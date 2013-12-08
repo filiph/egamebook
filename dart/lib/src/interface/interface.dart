@@ -83,4 +83,20 @@ abstract class EgbInterfaceBase implements EgbInterface {
   EgbInterfaceBase() {
     streamController = new StreamController();
   }
+  
+  void close() {
+    streamController.close();
+  }
+  
+  void sendRestartIntent() {
+    streamController.add(new RestartIntent());
+  }
+  
+  void sendLoadIntent(String savegameUid) {
+    streamController.add(new LoadIntent(savegameUid));
+  }
+  
+  void sendQuitIntent() {
+    streamController.add(new QuitIntent());
+  }
 }

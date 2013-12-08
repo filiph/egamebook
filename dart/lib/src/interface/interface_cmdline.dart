@@ -35,7 +35,7 @@ class CmdlineInterface extends EgbInterfaceBase {
   }
   
   void close() {
-    streamController.close();
+    super.close();
     print("Closing cmdline");
     _cmdLineSubscription.cancel();
   }
@@ -54,7 +54,7 @@ class CmdlineInterface extends EgbInterfaceBase {
     print("[got: '$line']");
     
     if (line.trim().toLowerCase() == "quit") {
-      streamController.add(new QuitIntent());
+      sendQuitIntent();
       return;
     }
     

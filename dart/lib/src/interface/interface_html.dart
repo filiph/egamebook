@@ -60,7 +60,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
-      streamController.add(new RestartIntent());
+      sendRestartIntent();
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
@@ -102,7 +102,7 @@ class HtmlInterface extends EgbInterfaceBase {
   }
   
   void close() {
-    streamController.close();
+    super.close();
   }
   
   /**
@@ -411,7 +411,7 @@ class HtmlInterface extends EgbInterfaceBase {
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      streamController.add(new LoadIntent(savegameUid));
+      sendLoadIntent(savegameUid);
       // TODO: solve for when savegame with that uid is not available
     }
   }
