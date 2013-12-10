@@ -146,7 +146,7 @@ div#book-title {
   background: white;
   width:100%;
   height: 90%;
-  z-index:1000;
+  z-index: 1000;
   top:0;
   left:0;
   overflow-y: scroll;
@@ -155,12 +155,17 @@ div#book-title {
 
 div.bottom-fixed {
   position: fixed;
+  z-index: 1000;
   height: 10%;
   min-height: 4em;
   bottom: 0;
   right: 0;
   left: 0;
   background: white;
+}
+
+.clear-both {
+  clear: both;
 }
 
 div#book-about {

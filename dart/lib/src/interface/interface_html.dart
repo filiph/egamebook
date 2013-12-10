@@ -26,6 +26,7 @@ class HtmlInterface extends EgbInterfaceBase {
   
   ButtonElement startButton;
   DivElement bookTitleDiv;
+  DivElement bigBottomButtonDiv;
   
   /**
    * The text that has been shown to the player since last savegame bookmark.
@@ -45,6 +46,7 @@ class HtmlInterface extends EgbInterfaceBase {
     _loadingEl = document.querySelector("p#loading");
     
     bookTitleDiv = document.querySelector("div#book-title");
+    bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
     startButton = document.querySelector("button#start-button");
     startButton.text = "START";
     startButton.disabled = false;
@@ -54,6 +56,7 @@ class HtmlInterface extends EgbInterfaceBase {
         bookDiv.children.last  // TODO: first/last according to Continue/Start
           .scrollIntoView();  
         bookTitleDiv.style.display = "none";
+        bigBottomButtonDiv.style.display = "none";
       });
     });
     document.body.style.overflowY = "hidden";
