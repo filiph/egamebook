@@ -11,6 +11,7 @@ import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
 import '../shared/page.dart';
 import '../shared/points_award.dart';
+import 'author_script_exception.dart';
 
 import '../shared/stat.dart';
 export '../shared/stat.dart';
@@ -246,10 +247,14 @@ abstract class EgbScripter {
    * Runner. 
    */
   void _send(EgbMessage message) {
-    if (_runnerPort == null) throw new StateError("Cannot send message "
-                                             "when _runnerPort is null.");
+    if (_runnerPort == null) {
+      // No big deal when trying to send a log (console) message.
+      if (message.type == EgbMessage.SCRIPTER_LOG) return;  
+      // Big deal in other circumstances.
+      throw new StateError("Cannot send message when _runnerPort is null.");
+    }
     if (message.isAsync) {
-      DEBUG_SCR("Sending nonText async message (${message.type})");
+      //DEBUG_SCR("Sending nonText async message (${message.type})");
       _runnerPort.send(message.toMap());
       return;
     }
@@ -258,7 +263,7 @@ abstract class EgbScripter {
       if (message.strContent != "") _textMessageCache.add(message);
       _runnerPort.send(new EgbMessage.NoResult().toMap()); // TODO: this is here just because we need to keep the loop going – get rid of it
     } else if (_textMessageCache.isEmpty) {
-      DEBUG_SCR("Sending nonText message (${message.type})");
+      DEBUG_SCR("Sending nonText message ($message)");
       _runnerPort.send(message.toMap());
     } else {
       // When we have something in the _textMessageCache and we are about to
@@ -271,7 +276,7 @@ abstract class EgbScripter {
         stringBuffer.write(_textMessageCache.removeAt(0).strContent);
       }
       var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
-      DEBUG_SCR("Sending a zip message (${zipMessage.type})");
+      DEBUG_SCR("Sending a zip message ($zipMessage)");
       _runnerPort.send(zipMessage.toMap());
       DEBUG_SCR("Adding message ($message) to the backlog.");
       _messageBacklog = message;
@@ -314,10 +319,7 @@ abstract class EgbScripter {
         break;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
-        _initScriptEnvironment();
-        _playerChronology.clear();
-        _playerChronologyChanged = true;
-        currentPage = firstPage;
+        _restart();
         _send(Stat.toMessage());
         _send(new PointsAward(0, 0).toMessage());
         return;
@@ -351,13 +353,28 @@ abstract class EgbScripter {
     }
     
     // We can now handle the current block on the page.
-    // TODO: handle the looping in _goOneStep() (_goUntilMessage?)
     EgbMessage returnMessage;
     do {
       DEBUG_SCR("Calling _goOneStep().");
-      returnMessage = _goOneStep(message); 
+      try {
+        returnMessage = _goOneStep(message);
+      } on AuthorScriptException catch (e) {
+        _send(new EgbMessage.ScripterError(e.toString()));
+        port.close();
+        return;
+      }
     } while (returnMessage == null);
     _send(returnMessage);
+  }
+
+  /**
+   * Restarts the Scripter environment to the beginning.
+   */
+  void _restart() {
+    _initScriptEnvironment();
+    _playerChronology.clear();
+    _playerChronologyChanged = true;
+    currentPage = firstPage;
   }
   
   /**
@@ -405,7 +422,8 @@ abstract class EgbScripter {
    */
   void _pickChoice(EgbChoice choice) {
     if (choice.f != null) {
-      nextScript(choice.f);
+      nextScript(choice.f);  // Wait for next iteration before running the 
+                             // script. 
     }
     if (choice.goto != null) {
       _performGoto(choice.goto);
@@ -421,23 +439,24 @@ abstract class EgbScripter {
    */
   EgbMessage _goOneStep(EgbMessage incomingMessage) {
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
-    bool atChoiceList = 
+    bool atStaticChoiceList = 
         currentBlockIndex != null &&
         currentBlockIndex < currentPage.blocks.length &&
         currentPage.blocks[currentBlockIndex] is List;
-    DEBUG_SCR("atEndOfPage = $atEndOfPage, atChoiceList = $atChoiceList");
+    DEBUG_SCR("atEndOfPage = $atEndOfPage, atStaticChoiceList = $atStaticChoiceList");
     
     choices.removeWhere((choice) => choice.shown || 
         _leadsToIllegalPage(choice));
     if (!choices.isEmpty) {
+      DEBUG_SCR("We have choices.");
       bool someChoicesAreActionable = choices.any((EgbChoice choice) =>
         choice.isActionable(
             atEndOfPage: atEndOfPage,
-            atChoiceList: atChoiceList));
+            atChoiceList: atStaticChoiceList));
       if (someChoicesAreActionable) {
         return choices.toMessage(
             atEndOfPage: atEndOfPage, 
-            atChoiceList: atChoiceList);
+            atChoiceList: atStaticChoiceList);
       } else {
         EgbChoice autoChoice = 
             choices.firstWhere((choice) => choice.isAutomatic,
@@ -477,6 +496,10 @@ abstract class EgbScripter {
       currentBlockIndex++;
     }
 
+    // Because currentBlockIndex could have changed, we need to update
+    // also atEndOfPage.
+    atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
+    
     // Resolve current block.
     DEBUG_SCR("Resolving block: '${currentPage.name}' block $currentBlockIndex.");
     if (currentBlockIndex == currentPage.blocks.length) {
@@ -493,13 +516,20 @@ abstract class EgbScripter {
       return new EgbMessage.TextResult(currentPage.blocks[currentBlockIndex]);
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
-      choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
+      DEBUG_SCR("A ChoiceList encountered.");
+      try {
+        choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
+      } on AuthorScriptException catch (e) {
+        _send(new EgbMessage.ScripterError(e.toString()));
+      }
+      DEBUG_SCR("- choices added");
       if (choices.any((choice) => choice.isActionable(  // TODO: make DRY
             atEndOfPage: atEndOfPage,
             atChoiceList: true,
             filterOut: _leadsToIllegalPage)) && 
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
+          DEBUG_SCR("Creating savegame");
           _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
       }
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
@@ -632,8 +662,9 @@ abstract class EgbScripter {
     // run the actual script
     try {
       script();
-    } catch (e, stacktrace) {
+    } on Exception catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
+      throw new AuthorScriptException(e.toString());
     }
 
     return new EgbMessage.TextResult(textBuffer.toString());
@@ -699,9 +730,20 @@ abstract class EgbScripter {
     
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
-    EgbSavegame.importSavegameToVars(savegame, vars, 
-                                     constructors: _constructors); // TODO
-    DEBUG_SCR("_loadFromSaveGameMessage() done.");
+    try {
+      EgbSavegame.importSavegameToVars(savegame, vars, 
+                                       constructors: _constructors); // TODO
+      DEBUG_SCR("_loadFromSaveGameMessage() done.");
+    } on IncompatibleSavegameException catch (e) {
+      // don't 
+      _send(new EgbMessage.ScripterError("Load failed due to incompatibility."));
+      _restart();
+      DEBUG_SCR("_loadFromSaveGameMessage() failed with $e");
+    }
+  }
+  
+  void DEBUG_SCR(String message) {
+    _send(new EgbMessage.ScripterLog(message));
   }
 }
 

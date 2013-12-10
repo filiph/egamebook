@@ -114,6 +114,10 @@ class EgbRunner {
     Map<String,Object> messageMap = _message as Map<String,Object>;
     EgbMessage message = new EgbMessage.fromMap(messageMap);
     
+    if (message.type != EgbMessage.SCRIPTER_LOG) {
+      print("RUN: Received: $message");
+    }
+    
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
         ended = true;  // TODO: not needed, Runner is not ended, Scripter is
@@ -162,6 +166,14 @@ class EgbRunner {
       case EgbMessage.SHOW_CHOICES:
         _showChoices(message);
         return;
+      case EgbMessage.SCRIPTER_ERROR:
+        print("SCRIPTER ERROR: ${message.strContent}");
+        return;
+      case EgbMessage.SCRIPTER_LOG:
+        print("Scripter: ${message.strContent}");
+        return;
+      default:
+        throw "Message $message not expected by Runner.";
     }
   }
 
@@ -201,6 +213,7 @@ class EgbRunner {
    * If not, Runner will just start the book from start.
    */
   EgbMessage _startNewSession(EgbMessage message) {
+    assert(message.type == EgbMessage.SEND_BOOK_UID);
     // Get bookUid from Scripter.
     _playerProfile.currentEgamebookUid = message.strContent;
     // Load latest saved state for the bookUid from playerProfile.

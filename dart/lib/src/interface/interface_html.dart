@@ -52,7 +52,8 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
       document.body.style.overflowY = "scroll";
-      new Future(() { 
+      new Future(() {
+        assert(bookDiv.children.length > 0);
         bookDiv.children.last  // TODO: first/last according to Continue/Start
           .scrollIntoView();  
         bookTitleDiv.style.display = "none";
@@ -183,7 +184,7 @@ class HtmlInterface extends EgbInterfaceBase {
     var _processedElements = new Set<int>();
     for (int i = 0; i < _metaElements.length; i++) {
       var metaEl = _metaElements[i];
-      assert(metaEl.element.offsetParent == document.body);
+      // assert(metaEl.element.offsetParent == document.body); // Does not apply - offsetparent can also be bookDiv? null?
       if (metaEl.element.offsetTop < currentBottom) {
         metaEl.doAction();
         _processedElements.add(i);
@@ -265,7 +266,7 @@ class HtmlInterface extends EgbInterfaceBase {
       }
       
       var text = new SpanElement();
-      text.innerHtml = markdown_to_html(choiceWithInfochips.text);
+      text.innerHtml = markdown_to_html(choiceWithInfochips.text); // TODO: remove the <p></p>!
       text.classes.add("choice-text");
       choiceDisplay.append(text);
 

@@ -18,7 +18,7 @@ class EgbSavegame {
   /// Holds information about visited pages and potentially other info.
   Map<String,dynamic> pageMapState;
   /// The serializable part of the [:vars:] map.
-  Map vars;
+  Map<String,Object> vars;
   // TODO: points -- NO!! points are per playthrough, but shouldn't be saved with savegame (i think)
   
   /**
@@ -195,11 +195,11 @@ class EgbSavegame {
         // need to create new variable
         String className = input["_class"];
         if (constructors == null) {
-          throw "No constructors set. Cannot assemble a new instance.";
-        } else if (!constructors.containsKey(className)) {
-          // XXX: This just silently fails!
-          throw new StateError("Constructor for $className not set. "
+          throw new IncompatibleSavegameException("No constructors set. "
               "Cannot assemble a new instance.");
+        } else if (!constructors.containsKey(className)) {
+          throw new IncompatibleSavegameException("Constructor for $className "
+              "not set. Cannot assemble a new instance.");
         } else {
           return constructors[className](input);
         }
@@ -214,6 +214,7 @@ class EgbSavegame {
   static void importSavegameToVars(EgbSavegame savegame, 
                                    Map<String,dynamic> vars,
                                    {Map<String,Function> constructors}) {
+    throw new IncompatibleSavegameException("TEST");
     // assemble and copy / update saved variables over vars
     savegame.vars.forEach((String key, value) {
       //print("$key - $value");
@@ -226,4 +227,10 @@ class EgbSavegame {
       }
     });
   }
+}
+
+class IncompatibleSavegameException implements Exception {
+  final String message;
+  const IncompatibleSavegameException(this.message);
+  String toString() => "IncompatibleSavegameException: $message";
 }

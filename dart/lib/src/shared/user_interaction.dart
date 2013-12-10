@@ -4,6 +4,7 @@ import 'dart:collection';
 
 import 'utils.dart';
 import 'message.dart';
+import '../book/author_script_exception.dart';
 
 class EgbUserInteraction {
   bool shown = false;
@@ -122,7 +123,11 @@ class EgbChoiceList extends ListBase<EgbChoice> {
    */
   void addFromScripterList(List list) {
     if (list[0] != null && list[0] is Function) {
-      question = list[0]();
+      try {
+        question = list[0]();
+      } catch (e) {
+        throw new AuthorScriptException(e.toString());
+      }
     } else {
       question = null;
     }
@@ -130,7 +135,11 @@ class EgbChoiceList extends ListBase<EgbChoice> {
       Map map = list[i];
       var string;
       if (map["string"] != null && map["string"] is Function) {
-        string = map["string"]();
+        try {
+          string = map["string"]();
+        } catch (e) {
+          throw new AuthorScriptException(e.toString());
+        }
       } else {
         string = "";
       }

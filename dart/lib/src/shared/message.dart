@@ -3,7 +3,7 @@ library egb_message;
 import 'dart:convert' show JSON;
 
 class EgbMessage {
-  int type;
+  final int type;
 
   // different types of contents
   List listContent;
@@ -22,6 +22,8 @@ class EgbMessage {
   static const int END_OF_BOOK = 80;
   static const int SET_STATS = 90;
   static const int UPDATE_STATS = 100;
+  static const int SCRIPTER_ERROR = 666;
+  static const int SCRIPTER_LOG = 667;
 
   // Messages from Runner to Scripter.
   static const int REQUEST_BOOK_UID = 1000;
@@ -31,10 +33,37 @@ class EgbMessage {
   static const int CHOICE_SELECTED = 1050;
   static const int QUIT = 1060;
   
+  String get typeString {
+    switch (type) {
+      case SEND_BOOK_UID: return "SEND_BOOK_UID";
+      case NO_RESULT: return "NO_RESULT";
+      case TEXT_RESULT: return "TEXT_RESULT";
+      case SHOW_CHOICES: return "SHOW_CHOICES";
+      case SAVE_GAME: return "SAVE_GAME";
+      case SAVE_PLAYER_CHRONOLOGY: return "SAVE_PLAYER_CHRONOLOGY";
+      case POINTS_AWARD: return "POINTS_AWARD";
+      case END_OF_BOOK: return "END_OF_BOOK";
+      case SET_STATS: return "SET_STATS";
+      case UPDATE_STATS: return "UPDATE_STATS";
+      case SCRIPTER_ERROR: return "SCRIPTER_ERROR";
+      case SCRIPTER_LOG: return "SCRIPTER_LOG";
+      case REQUEST_BOOK_UID: return "REQUEST_BOOK_UID";
+      case START: return "START";
+      case LOAD_GAME: return "LOAD_GAME";
+      case CONTINUE: return "CONTINUE";
+      case CHOICE_SELECTED: return "CHOICE_SELECTED";
+      case QUIT: return "QUIT";
+      default: "Unknown type=$type";
+    }
+  }
+  
+  toString() => "EgbMessage $typeString${isAsync ? ' (async)' : ''}";
+  
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
   bool get isAsync => (type == SAVE_GAME) || (type == SAVE_PLAYER_CHRONOLOGY) ||
-      (type == SET_STATS) || (type == UPDATE_STATS);
+      (type == SET_STATS) || (type == UPDATE_STATS) || 
+      (type == SCRIPTER_ERROR) || (type == SCRIPTER_LOG);
   
   /*
    * The correct handshake looks like this:
@@ -92,14 +121,20 @@ class EgbMessage {
     listContent = playerChronology.toList();
   }
   
+  EgbMessage.ScripterError(String message) : type = SCRIPTER_ERROR {
+    strContent = message;
+  }
+  
+  EgbMessage.ScripterLog(String message) : type = SCRIPTER_LOG {
+    strContent = message;
+  }
+  
   /**
     Ctor that creates the Message object from a JSON string.
     */
   EgbMessage.fromJson(String json) : this.fromMap(JSON.decode(json));
   
-  EgbMessage.fromMap(Map<String,Object> map) {
-    type = map["type"];
-
+  EgbMessage.fromMap(Map<String,Object> map) : type = map["type"] {
     if (map.containsKey("strContent")) {
       strContent = map["strContent"];
     }
