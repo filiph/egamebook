@@ -30,16 +30,16 @@ class Room extends Entity with Node implements Described {
   }
   
   /// The RoomNetwork this Room is a part of.
-  RoomNetwork network;
+  Zil _zil;
   
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
   void update(int ticks, {bool describe: true}) {
     showDescription(describe: describe);
     if (describe) storyline.addParagraph();
-    if (rooms.actors != null) {
+    if (_zil.rooms.actors != null) {
       showActors(describe: describe);
-      actors.updateAll(ticks, currentRoom: rooms.current, describe: describe);
+      _zil.actors.updateAll(ticks, currentRoom: _zil.rooms.current, describe: describe);
       if (gotoCalledRecently) return;
     }
     if (describe) storyline.addParagraph();
@@ -55,12 +55,12 @@ class Room extends Entity with Node implements Described {
     if (describe) {
       // TODO custom reports from actors
       print("showActors");
-      var presentActors = actors.npcs.where((ZilActor actor) => actor.isIn(this));
+      var presentActors = _zil.actors.npcs.where((ZilActor actor) => actor.isIn(this));
       print(presentActors);
       if (presentActors.length > 1) {
         storyline.addEnumeration("<subject> {|can }see<s>", 
             presentActors.map((ZilActor actor) => actor.name), 
-            "{|in }here", subject: player);
+            "{|in }here", subject: _zil.player);
       } else if (presentActors.length == 1) {
         presentActors.single.report("<subject> is {|in }here");
       }
@@ -71,7 +71,7 @@ class Room extends Entity with Node implements Described {
   void showDescription({bool describe: true}) {
     if (describe) {
       // TODO  custom
-      storyline.add("<subject> <is> in $description", subject: player);
+      storyline.add("<subject> <is> in $description", subject: _zil.player);
       visited = true;
     }
   }
@@ -81,7 +81,7 @@ class Room extends Entity with Node implements Described {
     if (describe) {
       // TODO: first, show items that can handle their own description.
       storyline.addEnumeration("{<subject> can see|there is} <also>", 
-          items.map((item) => item.description), "{in |}here", subject: player);
+          items.map((item) => item.description), "{in |}here", subject: _zil.player);
     }
   }
   
@@ -91,7 +91,7 @@ class Room extends Entity with Node implements Described {
     if (describe) {
       storyline.addEnumeration("<subject> can {leave|exit|go}", 
           exits.map((exit) => "to ${exit.to.description}"), null, 
-          subject: player, conjuction: "or");
+          subject: _zil.player, conjuction: "or");
     }
   }
   

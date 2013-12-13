@@ -4,6 +4,7 @@ part of zil;
  * A network of rooms.
  */
 class RoomNetwork implements Graph<Room> {
+  final Zil _zil;
   Map<String,Room> _rooms = new Map<String,Room>();
   Room current = null;
   
@@ -15,7 +16,7 @@ class RoomNetwork implements Graph<Room> {
    */
   ActorSociety actors;
   
-  RoomNetwork() {
+  RoomNetwork(this._zil) {
     // Nothing to do here.
   }
   
@@ -23,7 +24,7 @@ class RoomNetwork implements Graph<Room> {
     //throwIfNotInInitBlock("Author can only set up room network on init.");
     assert(!_rooms.keys.contains(room.name));
     _rooms[room.name] = room;
-    room.network = this;
+    room._zil = _zil;
     return room;
   }
   

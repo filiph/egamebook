@@ -222,13 +222,14 @@ class TraverseToRoom extends TimedAtomicGoal {
 
 class GoToRoom extends CompositeGoal {
   final Room targetRoom;
+  final RoomNetwork rooms;
   num distanceHeuristic;
   /// Specifies how much longer than the heuristic distance should the goal be
   /// executing before failing.
   final num MAX_TIME_FACTOR = 2;
   int counter = 0;
-  GoToRoom(AIActor performer, this.targetRoom) : super(performer) {
-  }
+  GoToRoom(AIActor performer, this.targetRoom, this.rooms) 
+      : super(performer);
   
   List<Report> onActivate() {
     distanceHeuristic = 

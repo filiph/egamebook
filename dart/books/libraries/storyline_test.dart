@@ -1,6 +1,5 @@
 
 import 'package:unittest/unittest.dart';
-import 'actor.dart';
 import 'storyline.dart';
 
 void main() {

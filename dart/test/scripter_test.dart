@@ -634,21 +634,21 @@ void main() {
       });
     });
     
-    group("ZIL library", () {
-      test("no action", () {
-        build("zil_basic.egb")
-        .then((mainPath) {
-          return run(mainPath);
-        })
-        .then(expectAsync1((MockInterface ui) {
-          return ui.waitForDone();
-        }))
-        .then(expectAsync1((MockInterface ui) {
-          print(ui.latestOutput);
-          ui.quit();
-        }));
-      });
-    });
+//    group("ZIL library", () {
+//      test("no action", () {
+//        build("zil_basic.egb")
+//        .then((mainPath) {
+//          return run(mainPath);
+//        })
+//        .then(expectAsync1((MockInterface ui) {
+//          return ui.waitForDone();
+//        }))
+//        .then(expectAsync1((MockInterface ui) {
+//          print(ui.latestOutput);
+//          ui.quit();
+//        }));
+//      });
+//    });
   });
 
 }

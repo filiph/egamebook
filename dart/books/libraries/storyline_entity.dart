@@ -1,6 +1,4 @@
-library actor;
-
-import 'storyline.dart';
+part of storyline;
 
 /**
  * Entity is a thing, a creature, a robot, or a person that is an interactive

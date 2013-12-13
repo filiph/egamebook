@@ -9,7 +9,7 @@ class AIActor extends ZilActor {
       currentGoal = new Think(this);
     }
     var reports = currentGoal._processInternal();
-    if (player.isInSameRoomAs(this) && describe) {
+    if (_zil.player.isInSameRoomAs(this) && describe) {
       // Only report if player is around.
       storyline.reports.addAll(reports);
     }

@@ -22,8 +22,8 @@
  */
 library zil;
 
-import 'package:egamebook/src/book/scripter.dart' show goto, echo, choice, throwIfNotInInitBlock, gotoCalledRecently; 
-import 'actor.dart';
+import 'package:egamebook/src/book/scripter.dart' show EgbScripter, goto, echo,
+          choice, throwIfNotInInitBlock, gotoCalledRecently; 
 import 'storyline.dart';
 import 'randomly.dart' show Randomly;
 import 'dart:collection';
@@ -40,21 +40,26 @@ part 'zil_goal.dart';
 part 'zil_actorsociety.dart';
 part 'zil_action.dart';
 
-void zilInit() {
-  rooms = new RoomNetwork();
-  player = new ZilActor("player", pronoun: Pronoun.YOU,
-      team: Actor.FRIEND, isPlayer: true);
-  actors = new ActorSociety(rooms, player);
+class Zil {
+  EgbScripter _scripter;
+  
+  /**
+   * The global instance of [RoomNetwork]. Most games will only utilize one
+   * RoomNetwork.
+   */
+  RoomNetwork rooms;
+
+  /// The player.
+  ZilActor player; 
+
+  /// All other actors.
+  ActorSociety actors;
+  
+  Zil(this._scripter) {
+    rooms = new RoomNetwork(this);
+    player = new ZilActor("player", pronoun: Pronoun.YOU,
+        team: Actor.FRIEND, isPlayer: true);
+    player._zil = this;
+    actors = new ActorSociety(this, player);
+  }
 }
-
-/**
- * The global instance of [RoomNetwork]. Most games will only utilize one
- * RoomNetwork.
- */
-RoomNetwork rooms;
-
-/// The player.
-ZilActor player; 
-
-/// All other actors.
-ActorSociety actors;

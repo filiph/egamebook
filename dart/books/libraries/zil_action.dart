@@ -54,8 +54,6 @@ class Action {
       {this.roomCheck: null, this.itemCheck: null, this.performerCheck: null,
        this.needsToBeCarried: false, this.submenu: null});
   
-  bool checkSuitabilityForPlayer() => _checkSuitability(rooms.current, player); 
-  
   bool _checkSuitability(Room currentRoom, ZilActor performer) {
     if (room != null && currentRoom != room) return false;
     if (item != null && !item.isIn(currentRoom)) return false;

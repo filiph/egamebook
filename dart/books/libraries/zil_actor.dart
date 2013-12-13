@@ -2,8 +2,10 @@ part of zil;
 
 class ZilActor extends Actor implements Located {
   ZilActor(String name, {team: Actor.NEUTRAL, isPlayer: false,
-    pronoun: Pronoun.IT}) : super(name: name, team: team, isPlayer: isPlayer,
-        pronoun: pronoun);
+    pronoun: Pronoun.IT}) 
+    : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun);
+  
+  Zil _zil;
   
   Room location;
 

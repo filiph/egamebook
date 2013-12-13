@@ -6,12 +6,13 @@ import 'storyline.dart';
 
 void main() {
 
+  Zil zil;
   Item captainsGun;
   Room bridge, leftCorridor;
   AIActor gorilla;
   
   setUp(() {
-    zilInit();
+    zil = new Zil(null);
     // Init
     captainsGun = new Item("captain's gun", 
         [
@@ -30,36 +31,36 @@ void main() {
          container: true,
          contents: []
     );
-    bridge = rooms.add(new Room("Exploration.Bridge", // corresponds to pagename
+    bridge = zil.rooms.add(new Room("Exploration.Bridge", // corresponds to pagename
         "the bridge",
         [new Exit("LeftCorridor"), 
-         new Exit("Hatchway", requirement: () => player.isAlive)],
+         new Exit("Hatchway", requirement: () => zil.player.isAlive)],
          //onEnter: () { /* Room function (on enter?) */ echo },
          //globalBitsOverride: {hearablePA: true, loudEnviron: false},
          coordinates: [0, 0, 0],
          items: [captainsGun]
     ));
-    leftCorridor = rooms.add(new Room("LeftCorridor",
+    leftCorridor = zil.rooms.add(new Room("LeftCorridor",
         "Left Corridor",
         [new Exit("Exploration.Bridge")],
         coordinates: [1, 1, 0]
     ));
-    rooms.add(new Room("Hatchway", "the hatchway", []));
+    zil.rooms.add(new Room("Hatchway", "the hatchway", []));
     
-    gorilla = actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
+    gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
   });
   
   
   test("AI actors move", () {
     gorilla.currentGoal = new ArbitrarySetOfGoals(gorilla, 
         [new TestPickUpAndComment(gorilla, captainsGun),
-         new GoToRoom(gorilla, leftCorridor),
-         new GoToRoom(gorilla, bridge),
+         new GoToRoom(gorilla, leftCorridor, zil.rooms),
+         new GoToRoom(gorilla, bridge, zil.rooms),
          new Say(gorilla, "Hi again!")]);
     
-    rooms.setCurrentFromPageName("Exploration.Bridge");
-    player.location = rooms.current;
-    rooms.current.update(10);
+    zil.rooms.setCurrentFromPageName("Exploration.Bridge");
+    zil.player.location = zil.rooms.current;
+    zil.rooms.current.update(10);
     
     // Needed in debug only.
     print(storyline.toString());

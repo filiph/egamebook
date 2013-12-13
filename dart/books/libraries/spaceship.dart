@@ -3,7 +3,6 @@ library spaceship;
 import 'package:egamebook/src/book/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'numscale.dart';
-import 'actor.dart';
 import 'storyline.dart';
 import 'timeline.dart';
 import 'randomly.dart';

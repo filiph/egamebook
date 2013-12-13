@@ -1,18 +1,20 @@
 part of zil;
 
 class ActorSociety {
+  final Zil _zil;
   Set<AIActor> npcs = new Set<AIActor>();
   ZilActor player;
   
   RoomNetwork rooms;
   
-  ActorSociety(this.rooms, this.player) {
-    rooms.actors = this;
+  ActorSociety(this._zil, this.player) {
+    _zil.rooms.actors = this;
   }
   
   AIActor add(AIActor npc, Room location) {
     npcs.add(npc);
     npc.location = location;
+    npc._zil = _zil;
     return npc;
   }
   

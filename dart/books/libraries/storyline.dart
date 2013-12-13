@@ -1,7 +1,9 @@
 library storyline;
 
 import 'randomly.dart';
-import 'actor.dart';
+
+part 'storyline_pronoun.dart';
+part 'storyline_entity.dart';
 
 /**
  * The global instance of storyline which can be used for reporting. The 
@@ -9,31 +11,6 @@ import 'actor.dart';
  * automatically by LoopedEvent (before each player interaction).
  */
 final Storyline storyline = new Storyline();
-
-/**
- * The pronouns and their different forms.
- */
-class Pronoun {
-  // see http://en.wikipedia.org/wiki/Latin_declension
-  final String nominative; // He (kdo? co?)
-  // vocative // not used
-  final String accusative; // Him (koho? co?)
-  final String genitive;   // His (koho? ceho?)
-  // dative // not used
-  // ablative
-  // locative
-  final String self; // Himself
-
-  String toString() => nominative;
-
-  const Pronoun(this.nominative, this.accusative, this.genitive, this.self); 
-
-  static const Pronoun YOU = const Pronoun("you", "you", "your", "yourself");
-  static const Pronoun HE = const Pronoun("he", "him", "his", "himself");
-  static const Pronoun SHE = const Pronoun("she", "her", "her", "herself");
-  static const Pronoun IT = const Pronoun("it", "it", "its", "itself");
-  static const Pronoun THEY = const Pronoun("they", "them", "their", "themselves");
-}
 
 /**
  * A single report about an event, atomic part of a story. It can be "John
