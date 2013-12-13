@@ -3,7 +3,7 @@ library egb_interface_html;
 import 'dart:async';
 import 'dart:html';
 
-import '../shared/markdown.dart' show markdown_to_html;
+import 'package:markdown/markdown.dart' show markdownToHtml;
 
 import 'interface.dart';
 import '../persistence/savegame.dart';
@@ -135,15 +135,9 @@ class HtmlInterface extends EgbInterfaceBase {
     
     new Future.delayed(const Duration(milliseconds: 100), ()  {
       _textHistory.write("$s\n\n");
-      String html = markdown_to_html(s);
-      
-      if (s.trim().startsWith("<") && s.trim().endsWith(">")) {
-        html = s;  // Hacky way to prevent markdown from enclosing html tags
-                   // with html tags ("<p><p></p></p>"). TODO: fix
-      }
-      DivElement container = new DivElement();
+      String html = markdownToHtml(s);
+      DocumentFragment container = new DocumentFragment();
       container.innerHtml = html;
-      _recursiveRemoveScript(container);
       int count = 0;
       for (Element el in container.children) {
         if (USE_SHOWTEXT_ANIMATION) {
@@ -156,7 +150,7 @@ class HtmlInterface extends EgbInterfaceBase {
             el.classes.remove("hidden");
           });
         }
-        bookDiv.append(el);//container.children[i]);
+        bookDiv.append(el);
       }
       container.remove();  
       // TODO: find out if necessary to avoid leaks
@@ -219,22 +213,6 @@ class HtmlInterface extends EgbInterfaceBase {
     return (bookDivBottom < currentBottom - 20);
   }
   
-  /**
-   * Goes through DOM Element and removes any Script Elements (recursively).
-   * 
-   * Currently silent.
-   */
-  void _recursiveRemoveScript(Element e) {
-    if (e is ScriptElement) {
-      print("INT: Script detected!");
-      e.remove();
-    } else if (e.children.length > 0) {
-      for (int i = 0; i < e.children.length; i++) {
-        _recursiveRemoveScript(e.children[i]);
-      }
-    }
-  }
-
   Future<int> showChoices(EgbChoiceList choiceList) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
@@ -247,7 +225,8 @@ class HtmlInterface extends EgbInterfaceBase {
     
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
-      choicesQuestionP.innerHtml = markdown_to_html(choiceList.question);
+      choicesQuestionP.innerHtml = 
+          markdownToHtml(choiceList.question, inlineOnly: true);
       choicesQuestionP.classes.add("choices-question");
       choicesDiv.children.add(choicesQuestionP);
     }
@@ -284,7 +263,8 @@ class HtmlInterface extends EgbInterfaceBase {
       }
       
       var text = new SpanElement();
-      text.innerHtml = markdown_to_html(choiceWithInfochips.text); // TODO: remove the <p></p>!
+      text.innerHtml = markdownToHtml(choiceWithInfochips.text, 
+          inlineOnly: true);
       text.classes.add("choice-text");
       choiceDisplay.append(text);
 
@@ -303,7 +283,6 @@ class HtmlInterface extends EgbInterfaceBase {
     choicesDiv.append(choicesOl);
     
     choicesDiv.classes.add("hidden");
-    _recursiveRemoveScript(choicesDiv);
     bookDiv.append(choicesDiv);
     _showLoading(false);
     new Future(() => choicesDiv.classes.remove("hidden"));
@@ -352,7 +331,6 @@ class HtmlInterface extends EgbInterfaceBase {
     p.text = "$award";
     p.classes.addAll(["toast", "non-dimmed", "hidden"]);
     // Not needed (yet?), but adding for extra security.
-    _recursiveRemoveScript(p);
     bookDiv.append(p);
     new Future(() {
       p.classes.remove("hidden");
