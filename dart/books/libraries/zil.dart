@@ -62,4 +62,7 @@ class Zil {
     player._zil = this;
     actors = new ActorSociety(this, player);
   }
+  
+  void update(int ticks, {bool describe: true}) => 
+      player.location.update(ticks, describe: describe);
 }

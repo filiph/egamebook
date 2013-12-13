@@ -39,7 +39,8 @@ class Room extends Entity with Node implements Described {
     if (describe) storyline.addParagraph();
     if (_zil.rooms.actors != null) {
       showActors(describe: describe);
-      _zil.actors.updateAll(ticks, currentRoom: _zil.rooms.current, describe: describe);
+      _zil.actors.updateAll(ticks, currentRoom: _zil.player.location, 
+          describe: describe);
       if (gotoCalledRecently) return;
     }
     if (describe) storyline.addParagraph();
@@ -54,9 +55,7 @@ class Room extends Entity with Node implements Described {
   void showActors({bool describe: true}) {
     if (describe) {
       // TODO custom reports from actors
-      print("showActors");
       var presentActors = _zil.actors.npcs.where((ZilActor actor) => actor.isIn(this));
-      print(presentActors);
       if (presentActors.length > 1) {
         storyline.addEnumeration("<subject> {|can }see<s>", 
             presentActors.map((ZilActor actor) => actor.name), 

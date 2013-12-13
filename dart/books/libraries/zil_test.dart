@@ -58,9 +58,8 @@ void main() {
          new GoToRoom(gorilla, bridge, zil.rooms),
          new Say(gorilla, "Hi again!")]);
     
-    zil.rooms.setCurrentFromPageName("Exploration.Bridge");
-    zil.player.location = zil.rooms.current;
-    zil.rooms.current.update(10);
+    zil.player.setLocationFromCurrentPage("Exploration.Bridge");
+    zil.update(10);
     
     // Needed in debug only.
     print(storyline.toString());

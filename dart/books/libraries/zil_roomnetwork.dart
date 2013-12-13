@@ -6,7 +6,6 @@ part of zil;
 class RoomNetwork implements Graph<Room> {
   final Zil _zil;
   Map<String,Room> _rooms = new Map<String,Room>();
-  Room current = null;
   
   AStar aStar;
   
@@ -26,6 +25,11 @@ class RoomNetwork implements Graph<Room> {
     _rooms[room.name] = room;
     room._zil = _zil;
     return room;
+  }
+  
+  Room getFromPageName(String pageName) {
+    assert(_rooms.containsKey(pageName));
+    return _rooms[pageName];
   }
   
   /**
@@ -66,13 +70,7 @@ class RoomNetwork implements Graph<Room> {
       _networkReady = true;
     }
   }
-  
-  void setCurrentFromPageName(String pagename) {
-    _checkNetworkReady();
-    assert(_rooms.containsKey(pagename));
-    current = _rooms[pagename];
-  }
-  
+
   Queue<Room> findPath(Room from, Room to) {
     _checkNetworkReady();
     return aStar.findPathSync(from, to);
