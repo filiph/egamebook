@@ -214,7 +214,6 @@ class EgbSavegame {
   static void importSavegameToVars(EgbSavegame savegame, 
                                    Map<String,dynamic> vars,
                                    {Map<String,Function> constructors}) {
-    throw new IncompatibleSavegameException("TEST");
     // assemble and copy / update saved variables over vars
     savegame.vars.forEach((String key, value) {
       //print("$key - $value");
