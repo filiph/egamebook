@@ -228,7 +228,6 @@ abstract class EgbScripter {
 
   EgbScripter(SendPort mainIsolatePort) {
     DEBUG_SCR("Scripter has been created.");
-    _initScriptEnvironment();
 
     _runnerPort = mainIsolatePort;
     port = new ReceivePort();
