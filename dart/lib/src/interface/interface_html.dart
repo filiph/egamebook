@@ -28,6 +28,13 @@ class HtmlInterface extends EgbInterfaceBase {
   DivElement bookTitleDiv;
   DivElement bigBottomButtonDiv;
   
+  /// The interface shows the title 'activity' (with a big START button on
+  /// the bottom).
+  static const int UI_ACTIVITY_TITLE = 1;
+  /// The UI is in the play state.
+  static const int UI_ACTIVITY_BOOK = 2;
+  int currentActivity = UI_ACTIVITY_TITLE;
+  
   /**
    * The text that has been shown to the player since last savegame bookmark.
    * (Markdown format, pre-HTMLization.)
@@ -48,19 +55,6 @@ class HtmlInterface extends EgbInterfaceBase {
     bookTitleDiv = document.querySelector("div#book-title");
     bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
     startButton = document.querySelector("button#start-button");
-    startButton.text = "START";
-    startButton.disabled = false;
-    startButton.onClick.first.then((_) {
-      document.body.style.overflowY = "scroll";
-      new Future(() {
-        assert(bookDiv.children.length > 0);
-        bookDiv.children.last  // TODO: first/last according to Continue/Start
-          .scrollIntoView();  
-        bookTitleDiv.style.display = "none";
-        bigBottomButtonDiv.style.display = "none";
-      });
-    });
-    document.body.style.overflowY = "hidden";
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
@@ -85,9 +79,29 @@ class HtmlInterface extends EgbInterfaceBase {
     
     _showLoading(false);
   }
+
+  /**
+   * This is called when the book is ready to be played. 
+   */
+  void _bookReadyHandler() {
+    startButton.text = "START";
+    startButton.disabled = false;
+    startButton.onClick.first.then((_) {
+      document.body.style.overflowY = "scroll";
+      new Future(() {  // Give the browser time to switch scrolling on.
+        assert(bookDiv.children.length > 0);
+        bookDiv.children.last  // TODO: first/last according to Continue/Start
+          .scrollIntoView();  
+        bookTitleDiv.style.display = "none";
+        bigBottomButtonDiv.style.display = "none";
+        currentActivity = UI_ACTIVITY_BOOK;
+      });
+    });
+    document.body.style.overflowY = "hidden";
+  }
   
   ParagraphElement _loadingEl;
-  /// Used to store [_loadingEl]'s state outside DOM.
+  /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
   bool _loadingElCurrentShowState = null;
   /**
    * Sets visibility of the loading gizmo.
@@ -95,7 +109,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void _showLoading(bool show) {
     if (_loadingElCurrentShowState != null && 
         show == _loadingElCurrentShowState) {
-      return;
+      return;  // Don't do anything if the show state is the same already.
     }
     _loadingEl.style.visibility = (show ? "visible" : "hidden");
     _loadingElCurrentShowState = show;
@@ -222,6 +236,10 @@ class HtmlInterface extends EgbInterfaceBase {
   }
 
   Future<int> showChoices(EgbChoiceList choiceList) {
+    if (currentActivity == UI_ACTIVITY_TITLE) {
+      _bookReadyHandler();
+    }
+    
     var completer = new Completer();
     
     var choicesDiv = new DivElement();
