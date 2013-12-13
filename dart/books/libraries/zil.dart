@@ -39,3 +39,22 @@ part 'zil_aiactor.dart';
 part 'zil_goal.dart';
 part 'zil_actorsociety.dart';
 part 'zil_action.dart';
+
+void zilInit() {
+  rooms = new RoomNetwork();
+  player = new ZilActor("player", pronoun: Pronoun.YOU,
+      team: Actor.FRIEND, isPlayer: true);
+  actors = new ActorSociety(rooms, player);
+}
+
+/**
+ * The global instance of [RoomNetwork]. Most games will only utilize one
+ * RoomNetwork.
+ */
+RoomNetwork rooms;
+
+/// The player.
+ZilActor player; 
+
+/// All other actors.
+ActorSociety actors;

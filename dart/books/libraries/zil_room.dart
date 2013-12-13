@@ -45,12 +45,18 @@ class Room extends Entity with Node implements Described {
     if (describe) storyline.addParagraph();
     showItems(describe: describe);
     showExits(describe: describe);
+    
+    if (describe) {
+      echo(storyline.toString());
+    }
   }
   
   void showActors({bool describe: true}) {
     if (describe) {
       // TODO custom reports from actors
+      print("showActors");
       var presentActors = actors.npcs.where((ZilActor actor) => actor.isIn(this));
+      print(presentActors);
       if (presentActors.length > 1) {
         storyline.addEnumeration("<subject> {|can }see<s>", 
             presentActors.map((ZilActor actor) => actor.name), 

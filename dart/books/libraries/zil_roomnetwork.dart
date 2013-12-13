@@ -1,11 +1,5 @@
 part of zil;
 
-/**
- * The global instance of [RoomNetwork]. Most games will only utilize one
- * RoomNetwork.
- */
-final RoomNetwork rooms = new RoomNetwork();
-
 /** 
  * A network of rooms.
  */

@@ -1,0 +1,79 @@
+Title:  Zil Test
+
+<import "../../books/libraries/zil.dart">
+<import "../../books/libraries/storyline.dart">
+
+<variables>
+  zilInit();
+
+  // ITEMS
+  captainsGun = new Item("captain's gun", 
+      [
+       new Action("check the gun", 
+           () => echo("You check the gun. It's okay."),
+           roomCheck: (room) => room.lit,
+           performerCheck: (actor) => actor.isHuman,
+           //targetActorCheck: (targetCandidate) => true,
+           //targetItemCheck: (targetCandidate) => true,
+           itemCheck: (item) => item.isActive,
+           needsToBeCarried: true,
+           submenu: "...")
+       ],
+       takeable: true,
+       count: 1,  // can be >1 for things like bullets
+       container: true,
+       contents: []
+  );
+
+  // ROOMS
+  bridge = rooms.add(new Room("Bridge", // corresponds to pagename
+      "bridge",
+      [new Exit("CorridorLeft")],
+      coordinates: [0, 0, 0]
+  ));
+  corridorLeft = rooms.add(new Room("CorridorLeft",
+      "Corridor Left",
+      [new Exit("Bridge"),
+       new Exit("CaptainsCabin")],
+      coordinates: [-5, -10, 0]
+  ));
+  captainsCabin = rooms.add(new Room("CaptainsCabin",
+      "captain's cabin",
+      [new Exit("Bridge")],
+      coordinates: [-10, -10, 0],
+      items: [captainsGun]
+  ));
+  
+  // ACTORS
+  gorilla = actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
+</variables>
+
+---
+Bridge
+
+The bridge is full of monitors and stuff.
+
+<script>
+  rooms.setCurrentFromPageName("Bridge");    
+  player.location = rooms.current;
+  rooms.current.update(1);
+  
+  
+  // TODO: make this instead
+  // player.setLocationFromCurrent(this);
+  // player.location.update(1);
+  // player.createChoices();
+</script>
+
+
+---
+CorridorLeft
+
+
+
+
+---
+CaptainsCabin
+
+
+

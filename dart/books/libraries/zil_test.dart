@@ -11,6 +11,7 @@ void main() {
   AIActor gorilla;
   
   setUp(() {
+    zilInit();
     // Init
     captainsGun = new Item("captain's gun", 
         [

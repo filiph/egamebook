@@ -1,7 +1,5 @@
 part of zil;
 
-ActorSociety actors = new ActorSociety(rooms, player);
-
 class ActorSociety {
   Set<AIActor> npcs = new Set<AIActor>();
   ZilActor player;

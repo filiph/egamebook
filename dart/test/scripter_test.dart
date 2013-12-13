@@ -393,9 +393,9 @@ void main() {
                 hasLength(2));
             expect(savegame.vars["saveable"] as Map,
                 hasLength(4));
-            expect(savegame.vars["saveable"]["s"],
+            expect((savegame.vars["saveable"] as Map)["s"],
                 "Řeřicha");
-            expect(savegame.vars["saveable"]["m"],
+            expect((savegame.vars["saveable"] as Map)["m"],
                 hasLength(2));
           }));
 
@@ -631,6 +631,22 @@ void main() {
         expect(a.infochips, hasLength(2));
         expect(a.infochips[0], "5s");
         expect(a.infochips[1], "~45%");
+      });
+    });
+    
+    group("ZIL library", () {
+      test("no action", () {
+        build("zil_basic.egb")
+        .then((mainPath) {
+          return run(mainPath);
+        })
+        .then(expectAsync1((MockInterface ui) {
+          return ui.waitForDone();
+        }))
+        .then(expectAsync1((MockInterface ui) {
+          print(ui.latestOutput);
+          ui.quit();
+        }));
       });
     });
   });
