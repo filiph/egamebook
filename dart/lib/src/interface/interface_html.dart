@@ -254,8 +254,8 @@ class HtmlInterface extends EgbInterfaceBase {
         infochips.classes.add("choice-infochips");
         for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
           var chip = new SpanElement();
-          // TODO: markdown the string below (and sanitize), but not as a paragraph (like a -2E is _not_ a <li>) 
-          chip.text = choiceWithInfochips.infochips[j];
+          chip.text = markdownToHtml(choiceWithInfochips.infochips[j], 
+              inlineOnly: true);
           chip.classes.add("choice-infochip");
           infochips.append(chip);
         }
@@ -315,7 +315,6 @@ class HtmlInterface extends EgbInterfaceBase {
     }
     event.stopPropagation();
   }
-  
   
   int _currentPoints;
   Future<bool> awardPoints(PointsAward award) {
