@@ -63,6 +63,8 @@ class Zil {
     actors = new ActorSociety(this, player);
   }
   
-  void update(int ticks, {bool describe: true}) => 
-      player.location.update(ticks, describe: describe);
+  void update(int ticks, {bool describe: true}) {
+    rooms._checkNetworkReady();
+    player.location.update(ticks, describe: describe);
+  }
 }
