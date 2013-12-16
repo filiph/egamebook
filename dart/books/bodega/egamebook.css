@@ -233,6 +233,7 @@ h3 {
 }
 
 div#book-wrapper {
+  display: none;
   margin-top: 3.5em;
 }
 

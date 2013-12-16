@@ -87,7 +87,7 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.text = "START";
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
-      document.body.style.overflowY = "scroll";
+      bookDiv.style.display = "block";
       new Future(() {  // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
         bookDiv.children.last  // TODO: first/last according to Continue/Start
@@ -97,7 +97,6 @@ class HtmlInterface extends EgbInterfaceBase {
         currentActivity = UI_ACTIVITY_BOOK;
       });
     });
-    document.body.style.overflowY = "hidden";
   }
   
   ParagraphElement _loadingEl;
