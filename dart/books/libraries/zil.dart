@@ -19,6 +19,36 @@
  * items in them, NPCs, wandering enemies, etc.
  * 
  * TODO: why ZIL and not Inform7, for example? hint: this is not IF
+ * 
+ * Canonical implementation:
+ * 
+ * * Rooms have their own pages with no text and only two script blocks.
+ * * First script block includes the zil.update() call (things happen).
+ * * Second script block only includes zil.createChoices(). This is important
+ *   because we want Scripter to be able to save state (zil.update() could
+ *   invalidate that save by changing state).
+ * * The preferred style is to include a <variables> block on the page where
+ *   the actual Zil implementation of the room is instantiated.
+ *   
+ *     <variables>
+ *       zil = new Zil(this);
+ *     </variables>
+ *   
+ *     ---
+ *     livingRoom
+ *     
+ *     <variables>
+ *       livingRoom = zil.rooms.add(new Room("livingRoom" ....));
+ *     </variables>
+ *     
+ *     <script>
+ *       zil.player.setLocationFromCurrentPage();
+ *       zil.update();
+ *     </script>
+ *     
+ *     <script>
+ *       zil.createChoices();
+ *     </script>
  */
 library zil;
 
@@ -64,6 +94,7 @@ class Zil {
   }
   
   void update(int ticks, {bool describe: true}) {
+    // XXX: ticks automatically according to arrive (?) 
     rooms._checkNetworkReady();
     player.location.update(ticks, describe: describe);
   }

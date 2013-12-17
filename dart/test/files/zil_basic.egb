@@ -57,10 +57,7 @@ The bridge is full of monitors and stuff.
   zil.player.setLocationFromCurrentPage();
   zil.update(1);
   
-  // TODO: make this instead
-  // player.setLocationFromCurrent(this);
-  // player.location.update(1);
-  // player.createChoices();
+  // TODO player.createChoices();
 </script>
 
 
