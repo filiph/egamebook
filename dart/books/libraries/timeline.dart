@@ -3,46 +3,40 @@ library timeline;
 import 'package:egamebook/src/book/scripter.dart';
 import 'storyline.dart';
 
-typedef void ScheduledFunction();
+typedef ScheduledFunction();
 
 /// A singular event on the timeline.
-class TimedEvent {
-  final int time;
+abstract class TimedEvent {
+  int get priority;
+  String run();
+}
+
+class StringTimedEvent implements TimedEvent {
+  final String text;
   final int priority;
-  ScheduledFunction f;
+  StringTimedEvent(this.text, {this.priority});
+  String run() => text;
+}
+
+class FunctionTimedEvent implements TimedEvent {
+  int time;
+  final int priority;
+  final ScheduledFunction action;
   String text;
   
-  TimedEvent(this.time, dynamic action, {this.priority: 0}) {
-    if (time == null || action == null || priority == null) {
-      throw new ArgumentError("Timed event needs to have time, closure "
+  FunctionTimedEvent(this.action, {this.priority: 0}) {
+    if (action == null || priority == null) {
+      throw new ArgumentError("Timed event needs to have function "
                               "and priority set.");
-    }
-    if (action is String) {
-      text = action;
-    } else if (action is ScheduledFunction) {
-      f = action;
-    } else {
-      throw new ArgumentError("Second parameter in TimedEvent() constructor "
-                              "must either be a String or a function.");
     }
   }
   
-  TimedEvent.string(this.time, this.text, {this.priority: 0});
-  
-  TimedEvent.function(this.time, this.f, {this.priority: 0});
-  
   String run() {
-    if (f != null) {
-      var returnValue = f();
-      if (returnValue != null && returnValue is String) {
-        return returnValue;
-      } else {
-        return null;
-      }
-    } else if (text != null) {
-      return text;
+    var returnValue = action();
+    if (returnValue != null && returnValue is String) {
+      return returnValue;
     } else {
-      throw "Invalid state of TimedEvent: both text and f are null.";
+      return null;
     }
   }
 }
@@ -55,24 +49,27 @@ class TimedEvent {
  * defined in the [:<variables>:] block. 
  */
 class Timeline implements Saveable {
-  int _time = -1;
-  int length;
-  
-  int get time => _time;
-  set time(value) {
-    if (_time == null) _time = -1;
-    if (value < _time) throw new ArgumentError("Cannot go back in time.");
-    if (length != null && value > length) value = length;
-    _requestedTime = value;
-    elapse(value - _time);
-  }
-  
   /**
-   * Set time without going through the events in between.
+   * The current time. Do *not* set this unless you want to jump in time.
+   * When you want the timeline to actually execute, use [elapse] or
+   * [elapseToTime]. 
    */
-  void set(int time) {
-    _time = time;
-  }
+  int time = -1;
+  /**
+   * The time after which this Timeline is finished.
+   */
+  int maxTime;
+  
+  /// A list of all events (strings and functions) - cannot change outside
+  /// initBlock.
+  final List<TimedEvent> _events = new List<TimedEvent>();
+  /// A schedule. An event [:_events[i]:] scheduled for time [:x:] will be seen
+  /// here as [:_schedule[i] == x:].
+  /// This can change (and therefore, the whole [Timeline] is [Saveable] even
+  /// though times of events can differ from playthrough to playthrough and 
+  /// can be edited in runtime).
+  final Map<int,int> _schedule = new Map<int,int>();
+
   
   /**
    * The time set by [:Timeline.time = x:]. This is used by [catchUp] as 
@@ -85,11 +82,17 @@ class Timeline implements Saveable {
    * Whenever a TimedEvent calls goto() or creates a choice, the Timeline
    * stops there. That TimedEvent has to make sure that [catchUp] is called
    * afterwards so that the time catches up with the requested time.
+   * 
+   * XXX: wouldn't it be better to ignore the rest of the time to elapse once
+   * goto() is called? Because with the current catchUp(), something can happen
+   * in the first few seconds of a long wait, the player gets transported
+   * somewhere, and then he doesn't get to play before a long wait is 'caught
+   * up'.
    */
   void catchUp() {
     if (_requestedTime == null) return;
-    assert(_requestedTime > _time);
-    elapse(_requestedTime - _time);
+    assert(_requestedTime > time);
+    elapse(_requestedTime - time);
   }
   
   Function _mainLoop;
@@ -99,36 +102,60 @@ class Timeline implements Saveable {
     _mainLoop = f;
   }
   
-  Set<TimedEvent> _events;
   bool finished = false;
   
-  Storyline storyline;
-  
-  Timeline({this.storyline}) {
+  Timeline() {
     throwIfNotInInitBlock();
-    _events = new Set<TimedEvent>();
   }
   
-  void schedule(int time, Object action, {int priority: 0}) {
+  /**
+   * Schedules an event at a given time. When [time] is [:null:], the event
+   * won't be fired unless it is later given a time using [reschedule].
+   */
+  TimedEvent schedule(int time, Object action, {int priority: 0}) {
     throwIfNotInInitBlock();
-    _events.add(new TimedEvent(time, action, priority: priority));
+    TimedEvent event;
+    if (action is String) {
+      event = new StringTimedEvent(action, priority: priority);
+    } else if (action is ScheduledFunction) {
+      event = new FunctionTimedEvent(action, priority: priority);
+    } else {
+      throw new ArgumentError("Only String or a function can be scheduled. "
+          "Instead, on object of type ${action.runtimeType} was recieved.");
+    }
+    _events.add(event);
+    if (time != null) {
+      assert(_events.lastIndexOf(event) == _events.length - 1);
+      _schedule[_events.length - 1] = time;
+    }
+    return event;
+  }
+  
+  /**
+   * Re-schedules the event for another time.
+   */
+  void reschedule(TimedEvent event, int time) {
+    int i = _events.indexOf(event);
+    if (i == -1) {
+      throw new ArgumentError("Event $event wasn't found in the timeline. "
+          "You must first add it to timeline in the init block before being "
+          "able to reschedule it."); 
+    }
+    _schedule[i] = time;
   }
 
   String className = "Timeline";
-  toMap() => {"time": _time};
-  updateFromMap(map) => _time = map["time"];
-  
-  // TODO add event
-  // TODO mainLoop = just another event, but with null time => priority!
+  toMap() => {"time": time, "schedule": _schedule};
+  updateFromMap(Map map) {
+    time = map["time"];
+    _schedule.clear();
+    _schedule.addAll(map["schedule"]);
+  }
   
   void _handleEventOutput(String s) {
     if (s == null) return;
-    if (this.storyline != null) {
-      storyline.add(s, time: _time);
-    } else {
-      // call top-level scripter function echo
-      echo(s);
-    }
+    // call top-level scripter function echo
+    echo(s);
   }
   
   void _goOneTick() {
@@ -137,8 +164,15 @@ class Timeline implements Saveable {
     }
     if (finished) return;
     
-    List<TimedEvent> currentEvents = _events.where((ev) => ev.time == _time)
-                                      .toList();
+    List<TimedEvent> currentEvents = new List<TimedEvent>();
+    // Need to walk through the list manually because we're interested in the
+    // indices. (This would not be needed if we didn't try to make this
+    // Saveable.
+    for (int i = 0; i < _events.length; i++) {
+      if (_schedule[i] == time) {
+        currentEvents.add(_events[i]);
+      }
+    }
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
       _handleEventOutput(event.run());
@@ -156,11 +190,11 @@ class Timeline implements Saveable {
    */
   void elapse(int t) {
     if (finished) return;
-    if (_time == null) _time = -1;
+    if (time == null) time = -1;
     for (int i = 0; i < t; i++) {
-      _time += 1;
+      time += 1;
       _goOneTick();
-      if (length != null && _time == length) finished = true;
+      if (maxTime != null && time == maxTime) finished = true;
       if (finished) break;
       
       if (gotoPageName != null) {
@@ -172,9 +206,22 @@ class Timeline implements Saveable {
         throw new UnimplementedError("Cannot create choice from a TimedEvent.");
       }
     }
-    if (_time == _requestedTime) {
+    if (time == _requestedTime) {
       _requestedTime = null;
     }
+  }
+  
+  /**
+   * Elapse time up until [time] == [t]. The [t] cannot be in the past.
+   */
+  void elapseToTime(int t) {
+    if (time == null) time = -1;
+    if (t < time) {
+      throw new ArgumentError("Time cannot be in the past for elapseToTime.");
+    }
+    if (maxTime != null && t > maxTime) t = maxTime;
+    _requestedTime = t;
+    elapse(t - time);
   }
 }
 

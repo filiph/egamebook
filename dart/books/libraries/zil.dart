@@ -42,7 +42,6 @@
  *     </variables>
  *     
  *     <script>
- *       zil.player.setLocationFromCurrentPage();
  *       zil.update();
  *     </script>
  *     
@@ -94,7 +93,8 @@ class Zil {
   }
   
   void update(int ticks, {bool describe: true}) {
-    // XXX: ticks automatically according to arrive (?) 
+    // XXX: ticks automatically according to arrive (?) OR: just 1 by default
+    // XXX: player location automatically from currentPage.name
     rooms._checkNetworkReady();
     player.location.update(ticks, describe: describe);
   }
