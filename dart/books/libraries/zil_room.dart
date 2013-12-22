@@ -39,9 +39,15 @@ class Room extends Entity with Node implements Described {
     if (describe) storyline.addParagraph();
     if (_zil.rooms.actors != null) {
       showActors(describe: describe);
-      _zil.actors.updateAll(ticks, currentRoom: _zil.player.location, 
-          describe: describe);
-      if (gotoCalledRecently) return;
+      for (int i = 0; i < ticks; i++) {
+        _zil.actors.updateAll(1, currentRoom: _zil.player.location, 
+            describe: describe);
+        if (gotoCalledRecently) return;
+        if (_zil.timeline != null) {
+          _zil.timeline.elapse(1);
+        }
+        if (gotoCalledRecently) return;
+      }
     }
     if (describe) storyline.addParagraph();
     showItems(describe: describe);

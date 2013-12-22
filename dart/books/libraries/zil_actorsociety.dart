@@ -19,7 +19,7 @@ class ActorSociety {
   }
   
   void updateAll(int ticks, {Room currentRoom: null, bool describe: true}) {
-    for (int i = 0; i < ticks; i++) {      
+    for (int i = 0; i < ticks; i++) {
       for (AIActor npc in npcs) {
         npc.update(currentRoom: currentRoom, describe: describe);
         if (gotoCalledRecently) return;

@@ -58,6 +58,7 @@ import 'randomly.dart' show Randomly;
 import 'dart:collection';
 import 'package:a_star/a_star.dart';
 import 'dart:math' as Math;
+import 'timeline.dart';
 
 part 'zil_room.dart';
 part 'zil_exit.dart';
@@ -84,7 +85,10 @@ class Zil {
   /// All other actors.
   ActorSociety actors;
   
-  Zil(this._scripter) {
+  /// Timeline
+  Timeline timeline;
+  
+  Zil(this._scripter, [this.timeline]) {
     rooms = new RoomNetwork(this);
     player = new ZilActor("player", pronoun: Pronoun.YOU,
         team: Actor.FRIEND, isPlayer: true);
@@ -94,8 +98,10 @@ class Zil {
   
   void update(int ticks, {bool describe: true}) {
     // XXX: ticks automatically according to arrive (?) OR: just 1 by default
-    // XXX: player location automatically from currentPage.name
     rooms._checkNetworkReady();
+    if (_scripter != null) {
+      player.setLocationFromCurrentPage();
+    }
     player.location.update(ticks, describe: describe);
   }
 }
