@@ -635,7 +635,7 @@ void main() {
     });
     
     group("ZIL library", () {
-      solo_test("no action", () {
+      test("no action", () {
         build("zil_basic.egb")
         .then((mainPath) {
           return run(mainPath);
