@@ -1,0 +1,1 @@
+fswatch . "./analyze.sh alert"
