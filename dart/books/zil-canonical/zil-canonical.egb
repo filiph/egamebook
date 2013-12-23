@@ -11,17 +11,12 @@ Title:  Zil Test
       [
        new Action("check the gun", 
            () => echo("You check the gun. It's okay."),
-           roomCheck: (room) => room.lit,
-           performerCheck: (actor) => actor.isHuman,
-           //targetActorCheck: (targetCandidate) => true,
-           //targetItemCheck: (targetCandidate) => true,
-           itemCheck: (item) => item.isActive,
            needsToBeCarried: true,
            submenu: "..."),
         new Action("shoot the Gorilla",
             () {
               echo("You lift the gun, aim at the Gorilla, and shoot.");
-              gorilla.isAlive = false;
+              gorilla.isActive = false;
               gorillaCorpse.isActive = true;
               gorillaCorpse.location = gorilla.location;
               echo("He takes it in the chest and goes down.");
@@ -35,7 +30,7 @@ Title:  Zil Test
        contents: []
   );
   gorillaCorpse = new Item("Gorilla's body",
-      [],
+      [/* search the corpse */],
       takeable: true,
       isActive: false
   );
@@ -43,18 +38,18 @@ Title:  Zil Test
   // ROOMS
   bridge = zil.rooms.add(new Room("Bridge", // corresponds to pagename
       "the bridge",
-      [new Exit("CorridorLeft")],
+      [new Exit("CorridorLeft", "leave to Corridor Left")],
       coordinates: [0, 0, 0]
   ));
   corridorLeft = zil.rooms.add(new Room("CorridorLeft",
       "Corridor Left",
-      [new Exit("Bridge"),
-       new Exit("CaptainsCabin")],
+      [new Exit("Bridge", "walk to the bridge"),
+       new Exit("CaptainsCabin", "enter Captain's cabin")],
       coordinates: [-5, -10, 0]
   ));
   captainsCabin = zil.rooms.add(new Room("CaptainsCabin",
       "captain's cabin",
-      [new Exit("Bridge")],
+      [new Exit("CorridorLeft", "exit the room")],
       coordinates: [-10, -10, 0],
       items: [captainsGun]
   ));
@@ -71,18 +66,30 @@ Bridge
 </script>
 
 <script>
-  // TODO player.createChoices();
+  zil.createChoices();
 </script>
 
 
 ---
 CorridorLeft
 
-This is great.
+<script>
+  zil.update(1);
+</script>
+
+<script>
+  zil.createChoices();
+</script>
 
 
 ---
 CaptainsCabin
 
+<script>
+  zil.update(1);
+</script>
 
+<script>
+  zil.createChoices();
+</script>
 

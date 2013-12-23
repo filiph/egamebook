@@ -80,7 +80,7 @@ class Zil {
   RoomNetwork rooms;
 
   /// The player.
-  ZilActor player; 
+  ZilPlayer player; 
 
   /// All other actors.
   ActorSociety actors;
@@ -90,8 +90,7 @@ class Zil {
   
   Zil(this._scripter, [this.timeline]) {
     rooms = new RoomNetwork(this);
-    player = new ZilActor("player", pronoun: Pronoun.YOU,
-        team: Actor.FRIEND, isPlayer: true);
+    player = new ZilPlayer("player");
     player._zil = this;
     actors = new ActorSociety(this, player);
   }
@@ -103,5 +102,10 @@ class Zil {
       player.setLocationFromCurrentPage();
     }
     player.location.update(ticks, describe: describe);
+  }
+  
+  createChoices() {
+    rooms._checkNetworkReady();
+    player.createChoices();
   }
 }

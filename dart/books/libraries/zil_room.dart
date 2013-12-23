@@ -17,6 +17,9 @@ class Room extends Entity with Node implements Described {
   
   bool visited = false;
   
+  /**
+   * Create a room whose [name] corresponds to an [EgbPage] name.
+   */
   Room(String name, this.description, Iterable exits, 
       { //this.onEnter, 
        this.coordinates: const [0, 0, 0], Iterable items: const []}) 
@@ -55,6 +58,7 @@ class Room extends Entity with Node implements Described {
     
     if (describe) {
       echo(storyline.toString());
+      storyline.clear();
     }
   }
   

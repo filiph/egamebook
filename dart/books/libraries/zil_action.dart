@@ -68,9 +68,23 @@ class Action {
     return true;
   }
   
-  void createChoice() {
-    choice(Randomly.parse(name), script: function);
+  /**
+   * Creates a choice for given [player] assuming all requirements are met.
+   */
+  void createChoiceForPlayer(ZilPlayer player) {
+    if (_checkSuitability(player.location, player)) {
+      choice(Randomly.parse(name), script: () {
+        function();
+        if (!gotoCalledRecently) {
+          // If the action doesn't call a goto explicitly, it will go back to
+          // the current room.
+          goto(player.location.name);
+        }
+      });
+    }
   }
+  
+  // TODO: allow action only to be taken once and never again - this would need action to be Saveable
   
   //void execute() => function();
 }

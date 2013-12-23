@@ -21,13 +21,33 @@ class Exit extends Entity {
    * Create an exit to a room as defined by [pageName] (because each [Room]
    * needs to correspond to a [EgbPage]).
    */
-  Exit(this.destinationPageName, {this.requirement: null, this.cost: 1,
-      this.descriptionInfinitive: null}) 
-      : super("Exit", Pronoun.IT, Actor.NEUTRAL, false);
+  Exit(this.destinationPageName, this.descriptionInfinitive,
+      {this.requirement: null, this.cost: 1}) 
+      : super("Exit", Pronoun.IT, Actor.NEUTRAL, false) {
+  }
 
-  // TODO PlayerOnlyExit("SecretDoor"),
+  /**
+   * Returns true if the exit is currently passable by actor.
+   */
+  bool isPassable(ZilActor actor) {
+    if (!isActive) return false;
+    if (requirement == null) return true;
+    return requirement(actor);
+  }
   
-
+  /**
+   * Creates a choice for given [player] assuming the actor is in [from] and
+   * meets the [requirement].
+   */
+  void createChoiceForPlayer(ZilPlayer player) {
+    assert(player.location == from);
+    if (isPassable(player)) {
+      choice(descriptionInfinitive, script: () {
+        echo("You leave to ${to.description}.");
+        goto(to.name);
+      });
+    }
+  }
 }
 
-typedef bool CheckFunction();
+typedef bool CheckFunction(Actor actor);

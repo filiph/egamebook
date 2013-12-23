@@ -34,8 +34,9 @@ void main() {
     );
     bridge = zil.rooms.add(new Room("Exploration.Bridge", // corresponds to pagename
         "the bridge",
-        [new Exit("LeftCorridor"), 
-         new Exit("Hatchway", requirement: () => zil.player.isAlive)],
+        [new Exit("LeftCorridor", "go to Corridor Left"), 
+         new Exit("Hatchway", "squeeze through the hatchway", 
+             requirement: (actor) => zil.player.isAlive)],
          //onEnter: () { /* Room function (on enter?) */ echo },
          //globalBitsOverride: {hearablePA: true, loudEnviron: false},
          coordinates: [0, 0, 0],
@@ -43,7 +44,7 @@ void main() {
     ));
     leftCorridor = zil.rooms.add(new Room("LeftCorridor",
         "Left Corridor",
-        [new Exit("Exploration.Bridge")],
+        [new Exit("Exploration.Bridge", "walk to the bridge")],
         coordinates: [1, 1, 0]
     ));
     zil.rooms.add(new Room("Hatchway", "the hatchway", []));

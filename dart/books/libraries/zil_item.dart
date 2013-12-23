@@ -70,16 +70,25 @@ class Item extends Entity implements Located, Described {
   
   ZilActor get carrier => _carrier;
   set carrier(ZilActor value) {
-    if (_location != null) {
+    if (_location != null && value != null) {
       _location.items.remove(this);
       _location = null;
     }
+    if (_carrier != null) {
+      _carrier.items.remove(this);
+    }
     _carrier = value;
+    if (_carrier != null) {
+      _carrier.items.add(this);
+    }
   }
   
-  bool get isBeingCarried => _carrier != null;
-  bool isCarriedBy(ZilActor actor) => _carrier == actor;
-  bool isInRoomFreeStanding(Room room) => _carrier == null && _location == room;
+  bool get isBeingCarried => _carrier != null && _carrier.isAliveAndActive &&
+      isActive;
+  bool isCarriedBy(ZilActor actor) => _carrier == actor && actor.isActive &&
+      isActive;
+  bool isInRoomFreeStanding(Room room) => _carrier == null &&
+      _location == room && isActive;
   
   Room get location {
     if (carrier != null) return carrier.location;
@@ -87,12 +96,17 @@ class Item extends Entity implements Located, Described {
   }
   
   set location(Room value) {
+    if (_location != null) {
+      _location.items.remove(this);
+    }
     _location = value;
+    _location.items.add(this);
     _carrier = null;
   }
   
-  bool isIn(Room room) => location == room;
-  bool isInSameRoomAs(ZilActor actor) => location == actor.location;
+  bool isIn(Room room) => location == room && isActive;
+  bool isInSameRoomAs(ZilActor actor) => location == actor.location &&
+      isActive && actor.isAliveAndActive;
   
   void showText() {
     storyline.add("there is $name here");
@@ -102,4 +116,18 @@ class Item extends Entity implements Located, Described {
   // TODO: get inspiration from item.dart
   
   // TODO: containers ?
+  
+  void createChoicesForPlayer(ZilPlayer player) {
+    assert(player.location == this.location);
+    if (takeable && !player.has(this)) {
+      choice("take $description", script: () {
+        echo("You take $description.");
+        carrier = player;
+        goto(player.location.name);
+      });
+    }
+    actions.forEach((Action action) {
+      action.createChoiceForPlayer(player);
+    });
+  }
 }
