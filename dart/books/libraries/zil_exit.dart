@@ -51,7 +51,8 @@ class Exit extends Entity {
   void createChoiceForPlayer(Zil zil, ZilPlayer player) {
     assert(player.location == from);
     if (isPassable(player)) {
-      choice(descriptionInfinitive, script: () {
+      choice(Storyline.getString(Storyline.capitalize(descriptionInfinitive), 
+          subject: player, object: this), script: () {
         if (cost > 1) {
           player.location = null;  // So that nothing will harm the player when
                                    // he's running away, for example.

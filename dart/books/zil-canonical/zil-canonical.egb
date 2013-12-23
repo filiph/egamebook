@@ -10,7 +10,7 @@ Title:  Zil Test
   captainsGun = new Item("captain's gun", 
       [
        new Action("check the gun", 
-           () => storyline.add("You check the gun. It's okay."),
+           () => storyline.add("You check the gun. It seems in fine condition and it's loaded."),
            needsToBeCarried: true,
            submenu: "..."),
         new Action("shoot the Gorilla",
@@ -25,6 +25,7 @@ Title:  Zil Test
             needsToBeCarried: true)
        ],
        takeable: true,
+       takeDescription: "<subject> lift<s> the <object> and put<s> it in the pocket",
        count: 1,  // can be >1 for things like bullets
        container: true,
        contents: []

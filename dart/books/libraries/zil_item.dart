@@ -43,6 +43,22 @@ class Item extends Entity implements Located, Described {
   
   String description;
   
+  final String _takeDescription;
+  String get takeDescription {
+    if (_takeDescription != null) {
+      return _takeDescription;
+    }
+    return "<subject> take<s> $description";
+  }
+  
+  final String _takeInfinitive;
+  String get takeInfinitive {
+    if (_takeInfinitive != null) {
+      return _takeInfinitive;
+    }
+    return "take $description";
+  }
+  
   Set<Item> contents = new Set<Item>();
   
   Item(String name, this.actions, {
@@ -50,8 +66,10 @@ class Item extends Entity implements Located, Described {
       this.takeable: true, this.container: false, bool isActive: true,
       this.plural: false, this.count: 1,
       Iterable<Item> contents: const [],
-      Pronoun pronoun: Pronoun.IT, this.firstDescription: null}) 
-      : super(name, pronoun, Actor.NEUTRAL, false) {
+      Pronoun pronoun: Pronoun.IT, this.firstDescription: null,
+      String takeDescription, String takeInfinitive}) 
+      : _takeDescription = takeDescription, _takeInfinitive = takeInfinitive,
+        super(name, pronoun, Actor.NEUTRAL, false) {
         
     actions.forEach((action) => action.item = this);
     if (!container) {
@@ -120,8 +138,9 @@ class Item extends Entity implements Located, Described {
   void createChoicesForPlayer(ZilPlayer player) {
     assert(player.location == this.location);
     if (takeable && !player.has(this)) {
-      choice("take $description", script: () {
-        echo("You take $description.");
+      choice(Storyline.getString(Storyline.capitalize(takeInfinitive), 
+          subject: player, object: this), script: () {
+        storyline.add(takeDescription, subject: player, object: this);
         carrier = player;
         goto(player.location.name);
       });

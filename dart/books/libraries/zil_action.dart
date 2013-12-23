@@ -73,7 +73,8 @@ class Action {
    */
   void createChoiceForPlayer(ZilPlayer player) {
     if (_checkSuitability(player.location, player)) {
-      choice(Randomly.parse(name), script: () {
+      choice(Storyline.getString(Storyline.capitalize(name), 
+          subject: player), script: () {
         function();
         if (!gotoCalledRecently) {
           // If the action doesn't call a goto explicitly, it will go back to
