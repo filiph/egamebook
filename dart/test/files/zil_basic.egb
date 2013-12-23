@@ -10,16 +10,16 @@ Title:  Zil Test
   captainsGun = new Item("captain's gun", 
       [
        new Action("check the gun", 
-           () => echo("You check the gun. It's okay."),
+           () => storyline.add("You check the gun. It's okay."),
            needsToBeCarried: true,
            submenu: "..."),
         new Action("shoot the Gorilla",
             () {
-              echo("You lift the gun, aim at the Gorilla, and shoot.");
+              storyline.add("You lift the gun, aim at Gorilla, and shoot.");
               gorilla.isActive = false;
               gorillaCorpse.isActive = true;
               gorillaCorpse.location = gorilla.location;
-              echo("He takes it in the chest and goes down.");
+              storyline.add("He takes it in the chest and goes down.");
             },
             performerCheck: (actor) => actor.isInSameRoomAs(gorilla),
             needsToBeCarried: true)
@@ -38,18 +38,23 @@ Title:  Zil Test
   // ROOMS
   bridge = zil.rooms.add(new Room("Bridge", // corresponds to pagename
       "the bridge",
-      [new Exit("CorridorLeft", "leave to Corridor Left")],
+      [new Exit("CorridorLeft", "leave to Corridor Left",
+          "<subject> go<es> through the sliding door into Corridor Left")],
+      descriptionPage: "Bridge.description",
       coordinates: [0, 0, 0]
   ));
   corridorLeft = zil.rooms.add(new Room("CorridorLeft",
       "Corridor Left",
-      [new Exit("Bridge", "walk to the bridge"),
-       new Exit("CaptainsCabin", "enter Captain's cabin")],
+      [new Exit("Bridge", "walk to the bridge",
+          "<subject> walk<s> to the bridge"),
+       new Exit("CaptainsCabin", "enter Captain's cabin",
+          "<subject> open<s> the door to the Captain's cabin and enter<s>")],
       coordinates: [-5, -10, 0]
   ));
   captainsCabin = zil.rooms.add(new Room("CaptainsCabin",
       "captain's cabin",
-      [new Exit("CorridorLeft", "exit the room")],
+      [new Exit("CorridorLeft", "exit the room",
+          "<subject> leave<s> into the corridor")],
       coordinates: [-10, -10, 0],
       items: [captainsGun]
   ));
@@ -57,6 +62,7 @@ Title:  Zil Test
   // ACTORS
   gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
 </variables>
+
 
 ---
 Bridge
@@ -69,6 +75,12 @@ Bridge
   zil.createChoices();
 </script>
 
+---
+Bridge.description
+
+The bridge is awesome.
+
+- [Bridge]
 
 ---
 CorridorLeft
@@ -93,3 +105,7 @@ CaptainsCabin
   zil.createChoices();
 </script>
 
+---
+GorillaShot
+
+You shot your best friend. You die of sadness.

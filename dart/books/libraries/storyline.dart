@@ -106,7 +106,10 @@ class Storyline {
       new RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
   
   /**
-   * Add another event to the story. 
+   * Add another event to the story.
+   * 
+   * When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
+   * letter, [wholeSentence] will automatically be [:true:] for convenience.
    */
   void add(String str, {Entity subject, Entity object, Entity owner, 
     bool but: false, bool positive: false, bool negative: false, 
@@ -119,6 +122,11 @@ class Storyline {
     
     if (time != null) {
       this.time = time;
+    }
+    
+    if ((str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
+        str.startsWith(new RegExp("[A-Z]"))) {
+      wholeSentence = true;
     }
     
     reports.add(new Report(str, subject: subject, object: object, owner: owner,

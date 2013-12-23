@@ -49,7 +49,7 @@ class ZilPlayer extends ZilActor {
       item.createChoicesForPlayer(this);
     });
     location.exits.forEach((exit) {
-      exit.createChoiceForPlayer(this);
+      exit.createChoiceForPlayer(_zil, this);
     });
   }
 }

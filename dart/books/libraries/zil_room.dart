@@ -5,7 +5,6 @@ part of zil;
  * an [EgbPage] name.
  */
 class Room extends Entity with Node implements Described {
-  //PerformFunction onEnter;
   final List<int> coordinates;
   final Set<Item> items;
   final Set<Exit> exits;
@@ -17,8 +16,6 @@ class Room extends Entity with Node implements Described {
   String descriptionPage;
   
   String toString() => "Room<$name>"; 
-  
-  bool visited = false;
   
   /**
    * Create a room whose [name] corresponds to an [EgbPage] name.
@@ -35,7 +32,7 @@ class Room extends Entity with Node implements Described {
     items.forEach((Item item) => item.location = this);
   }
   
-  /// The RoomNetwork this Room is a part of.
+  /// The [Zil] object this Room is a part of.
   Zil _zil;
   
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
@@ -47,8 +44,6 @@ class Room extends Entity with Node implements Described {
       goto(descriptionPage);
       return;
     }
-    showDescription(describe: describe);
-    if (describe) storyline.addParagraph();
     if (_zil.rooms.actors != null) {
       showActors(describe: describe);
       for (int i = 0; i < ticks; i++) {
@@ -63,7 +58,6 @@ class Room extends Entity with Node implements Described {
     }
     if (describe) storyline.addParagraph();
     showItems(describe: describe);
-    showExits(describe: describe);
     
     if (describe) {
       echo(storyline.toString());
@@ -85,15 +79,6 @@ class Room extends Entity with Node implements Described {
     }
   }
   
-  /// Shows the text associated with the room.
-  void showDescription({bool describe: true}) {
-    if (describe) {
-      // TODO  custom
-      storyline.add("<subject> <is> in $description", subject: _zil.player);
-      visited = true;
-    }
-  }
-
   /// Shows all items currently visible in the room.
   void showItems({bool describe: true}) {
     if (describe) {
@@ -105,6 +90,9 @@ class Room extends Entity with Node implements Described {
   
   /// Example: "You can leave to corridor left, squeeze through the hatchway 
   /// or use the ladder to ..."
+  /// 
+  /// Note: deprecated. The Exits are obvious from choices.
+  @deprecated
   void showExits({bool describe: true}) {
     if (describe) {
       storyline.addEnumeration("<subject> can {leave|exit|go}", 
@@ -115,5 +103,3 @@ class Room extends Entity with Node implements Described {
   
   bool contains(Item item) => items.contains(item);  // TODO: freestanding vs in possession
 }
-
-typedef void PerformFunction();
