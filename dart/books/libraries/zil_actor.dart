@@ -5,6 +5,8 @@ class ZilActor extends Actor implements Located {
     pronoun: Pronoun.IT}) 
     : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun);
   
+  bool isAlive = true;
+  
   Zil _zil;
   
   Room location;

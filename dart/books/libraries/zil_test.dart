@@ -12,6 +12,7 @@ void main() {
   AIActor gorilla;
   
   setUp(() {
+    isInInitBlock = true;
     zil = new Zil(null);
     // Init
     captainsGun = new Item("captain's gun", 
@@ -48,22 +49,25 @@ void main() {
     zil.rooms.add(new Room("Hatchway", "the hatchway", []));
     
     gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
+    isInInitBlock = false;
   });
   
   
   test("AI actors move", () {
+    isInInitBlock = true;
     gorilla.currentGoal = new ArbitrarySetOfGoals(gorilla, 
         [new TestPickUpAndComment(gorilla, captainsGun),
          new GoToRoom(gorilla, leftCorridor, zil.rooms),
          new GoToRoom(gorilla, bridge, zil.rooms),
          new Say(gorilla, "Hi again!")]);
+    isInInitBlock = false;
     
     zil.player.setLocationFromCurrentPage("Exploration.Bridge");
     zil.update(10);
     
     // Needed in debug only.
-    print(storyline.toString());
-    expect(storyline.toString(), contains(
+    print(textBuffer.toString());
+    expect(textBuffer.toString(), contains(
         r'''says: "I'm gonna pick this captain's gun up." He picks up '''
         r'''captain's gun. He says: "Great!" He leaves towards Left '''
         r'''Corridor. He arrives from Left Corridor. He says: "Hi again!"'''));

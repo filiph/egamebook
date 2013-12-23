@@ -23,7 +23,7 @@ class Room extends Entity with Node implements Described {
       : this.exits = new Set.from(exits),
         this.items = new Set.from(items),
         super(name, Pronoun.IT, Actor.NEUTRAL, false) {
-    //throwIfNotInInitBlock("Cannot create room on the fly.");
+    throwIfNotInInitBlock("Cannot create room on the fly.");
     if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);
     items.forEach((Item item) => item.location = this);

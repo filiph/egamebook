@@ -54,7 +54,6 @@ Bridge
 The bridge is full of monitors and stuff.
 
 <script>
-  zil.player.setLocationFromCurrentPage();
   zil.update(1);
   
   // TODO player.createChoices();
