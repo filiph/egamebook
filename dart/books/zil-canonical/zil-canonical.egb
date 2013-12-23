@@ -15,7 +15,7 @@ Title:  Zil Test
            submenu: "..."),
         new Action("shoot the Gorilla",
             () {
-              echo("You lift the gun, aim at the Gorilla, and shoot.");
+              storyline.add("You lift the gun, aim at Gorilla, and shoot.");
               gorilla.isActive = false;
               gorillaCorpse.isActive = true;
               gorillaCorpse.location = gorilla.location;
@@ -39,6 +39,7 @@ Title:  Zil Test
   bridge = zil.rooms.add(new Room("Bridge", // corresponds to pagename
       "the bridge",
       [new Exit("CorridorLeft", "leave to Corridor Left")],
+      descriptionPage: "Bridge.description",
       coordinates: [0, 0, 0]
   ));
   corridorLeft = zil.rooms.add(new Room("CorridorLeft",
@@ -58,6 +59,7 @@ Title:  Zil Test
   gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
 </variables>
 
+
 ---
 Bridge
 
@@ -69,6 +71,12 @@ Bridge
   zil.createChoices();
 </script>
 
+---
+Bridge.description
+
+The bridge is awesome.
+
+- [Bridge]
 
 ---
 CorridorLeft
@@ -93,3 +101,7 @@ CaptainsCabin
   zil.createChoices();
 </script>
 
+---
+GorillaShot
+
+You shot your best friend. You die of sadness.

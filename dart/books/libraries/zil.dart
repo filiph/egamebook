@@ -96,7 +96,7 @@ class Zil {
   }
   
   void update(int ticks, {bool describe: true}) {
-    // XXX: ticks automatically according to arrive (?) OR: just 1 by default
+    // TODO: ticks automatically according to arrive (?) OR: just 1 by default
     rooms._checkNetworkReady();
     if (_scripter != null) {
       player.setLocationFromCurrentPage();

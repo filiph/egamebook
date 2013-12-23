@@ -11,7 +11,10 @@ class Room extends Entity with Node implements Described {
   final Set<Exit> exits;
   
   String description;
-  // TODO: custom "you are in"
+  
+  /// A page to be shown when player first enters the room. Can be [:null:] (in
+  /// which case no page will be shown automatically).
+  String descriptionPage;
   
   String toString() => "Room<$name>"; 
   
@@ -21,7 +24,7 @@ class Room extends Entity with Node implements Described {
    * Create a room whose [name] corresponds to an [EgbPage] name.
    */
   Room(String name, this.description, Iterable exits, 
-      { //this.onEnter, 
+      { this.descriptionPage, 
        this.coordinates: const [0, 0, 0], Iterable items: const []}) 
       : this.exits = new Set.from(exits),
         this.items = new Set.from(items),
@@ -38,6 +41,12 @@ class Room extends Entity with Node implements Described {
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
   void update(int ticks, {bool describe: true}) {
+    if (_zil != null && _zil._scripter != null && 
+        !_zil._scripter.currentPage.visited && descriptionPage != null) {
+      print("DEBUG: ${_zil._scripter.currentPage.name} wasn't visited yet");
+      goto(descriptionPage);
+      return;
+    }
     showDescription(describe: describe);
     if (describe) storyline.addParagraph();
     if (_zil.rooms.actors != null) {

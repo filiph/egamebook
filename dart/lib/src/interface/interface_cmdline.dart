@@ -41,7 +41,9 @@ class CmdlineInterface extends EgbInterfaceBase {
   }
   
   Future<bool> showText(String s) {
+    print("=== <OUTPUT> ===");
     print(s);
+    print("=== </OUTPUT> ===");
     _textHistory.writeln(s);
     return new Future.value(true);
   }
