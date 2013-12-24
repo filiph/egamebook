@@ -201,10 +201,10 @@ class Timeline implements Saveable {
         // An event called goto().
         throw new UnimplementedError("Cannot call goto() from a TimedEvent.");
       }
-      if (!choices.isEmpty) {
-        // An event created a choice.
-        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
-      }
+//      if (!choices.isEmpty) {
+//        // An event created a choice.
+//        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
+//      }
     }
     if (time == _requestedTime) {
       _requestedTime = null;

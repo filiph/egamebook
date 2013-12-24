@@ -1,10 +1,14 @@
 Title:  Zil Test
 
 <import "../../books/libraries/zil.dart">
+<import "../../books/libraries/timeline.dart">
 <import "../../books/libraries/storyline.dart">
 
 <variables>
-  zil = new Zil(this);  // Initialize Zil with the Scripter instance.
+  var timeline = new Timeline();
+  zil = new Zil(this, timeline);  // Initialize Zil with the Scripter instance.
+  
+  var stinking = zil.timeline.schedule(null, "Gorilla's body starts to stink.");
 
   // ITEMS
   captainsGun = new Item("captain's gun", 
@@ -20,6 +24,7 @@ Title:  Zil Test
               gorillaCorpse.isActive = true;
               gorillaCorpse.location = gorilla.location;
               storyline.add("He takes it in the chest and goes down.");
+              zil.timeline.reschedule(stinking, zil.timeline.time + 2);
             },
             performerCheck: (actor) => actor.isInSameRoomAs(gorilla),
             needsToBeCarried: true)
