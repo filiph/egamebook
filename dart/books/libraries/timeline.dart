@@ -201,6 +201,9 @@ class Timeline implements Saveable {
         // An event called goto().
         throw new UnimplementedError("Cannot call goto() from a TimedEvent.");
       }
+      // TODO: make sure there are no choices created during the _goOneTick
+      // but allow choices to exist before the elapse... Or think about
+      // other options (is this guard even necessary?).
 //      if (!choices.isEmpty) {
 //        // An event created a choice.
 //        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
