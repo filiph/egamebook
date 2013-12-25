@@ -49,8 +49,9 @@ class EgbSavegame {
     Map<String,dynamic> saveMap = JSON.decode(json);
     if (!saveMap.containsKey("currentPageName") 
         || !saveMap.containsKey("vars")) {
-      throw "Invalid JSON for EgbSavegame. Doesn't contain required fields "
-            "'currentPageName' or 'vars'. JSON='$json'.";
+      throw new InvalidSavegameException("Invalid JSON for EgbSavegame. "
+          "Doesn't contain required fields 'currentPageName' or 'vars'. "
+          "JSON='$json'.");
     }
     uid = saveMap["uid"];
     currentPageName = saveMap["currentPageName"];
@@ -232,4 +233,10 @@ class IncompatibleSavegameException implements Exception {
   final String message;
   const IncompatibleSavegameException(this.message);
   String toString() => "IncompatibleSavegameException: $message";
+}
+
+class InvalidSavegameException implements Exception {
+  final String message;
+  const InvalidSavegameException(this.message);
+  String toString() => "InvalidSavegameException: $message";
 }

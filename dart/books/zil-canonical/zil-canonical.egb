@@ -1,4 +1,4 @@
-Title:  Zil Test
+Title:  Zil Canonical Test
 
 <import "../../books/libraries/zil.dart">
 <import "../../books/libraries/timeline.dart">

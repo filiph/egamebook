@@ -361,6 +361,11 @@ abstract class EgbScripter {
         _send(new EgbMessage.ScripterError(e.toString()));
         port.close();
         return;
+      } catch(e) {
+        // XXX: Debug only - until Dart correctly sends exceptions between isolates?
+        _send(new EgbMessage.ScripterError(e.toString()));
+        port.close();
+        return;
       }
     } while (returnMessage == null);
     _send(returnMessage);
@@ -710,8 +715,9 @@ abstract class EgbScripter {
     var savegame = new EgbSavegame.fromMessage(message);
 
     if (pageMap[savegame.currentPageName] == null) {
-      throw "Trying to load page '${savegame.currentPageName}' which doesn't "
-            "exist in current egamebook.";
+      throw new IncompatibleSavegameException("Trying to load page "
+          "'${savegame.currentPageName}' which doesn't exist in current "
+          "egamebook.");
     }
     currentPage = pageMap[savegame.currentPageName];
 
@@ -735,9 +741,11 @@ abstract class EgbScripter {
       DEBUG_SCR("_loadFromSaveGameMessage() done.");
     } on IncompatibleSavegameException catch (e) {
       // don't 
-      _send(new EgbMessage.ScripterError("Load failed due to incompatibility."));
+      _send(new EgbMessage.ScripterError("Load failed due to incompatibility. $e"));
       _restart();
-      DEBUG_SCR("_loadFromSaveGameMessage() failed with $e");
+    } catch (e) {
+      _send(new EgbMessage.ScripterError("Unknown error during load: $e."));
+      _restart();
     }
   }
   
