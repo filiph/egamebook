@@ -2024,6 +2024,7 @@ import 'dart:isolate';
 """;
 
   final String implStartClass = """
+@proxy  // Silence noSuchMethodExceptions.
 class ScripterImpl extends EgbScripter {
 
   /* LIBRARY */
