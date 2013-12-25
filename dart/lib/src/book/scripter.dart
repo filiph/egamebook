@@ -361,11 +361,6 @@ abstract class EgbScripter {
         _send(new EgbMessage.ScripterError(e.toString()));
         port.close();
         return;
-      } catch(e) {
-        // XXX: Debug only - until Dart correctly sends exceptions between isolates?
-        _send(new EgbMessage.ScripterError(e.toString()));
-        port.close();
-        return;
       }
     } while (returnMessage == null);
     _send(returnMessage);
@@ -666,7 +661,7 @@ abstract class EgbScripter {
     // run the actual script
     try {
       script();
-    } on Exception catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
       throw new AuthorScriptException(e.toString());
     }
