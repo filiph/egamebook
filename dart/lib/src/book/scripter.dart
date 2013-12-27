@@ -5,7 +5,6 @@ import 'dart:isolate';
 import 'dart:collection';
 import 'dart:mirrors';
 
-import '../shared/utils.dart';
 import '../shared/message.dart';
 import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
@@ -361,6 +360,10 @@ abstract class EgbScripter {
         _send(new EgbMessage.ScripterError(e.toString()));
         port.close();
         return;
+      } catch (e) {
+        _send(new EgbMessage.ScripterError(e.toString()));
+        port.close();
+        return;
       }
     } while (returnMessage == null);
     _send(returnMessage);
@@ -528,7 +531,7 @@ abstract class EgbScripter {
             filterOut: _leadsToIllegalPage)) && 
           currentBlockIndex == currentPage.blocks.length - 1) {
           // Last block on page. Save the game.
-          DEBUG_SCR("Creating savegame");
+          DEBUG_SCR("Creating & sending savegame");
           _send(_createSaveGame().toMessage(EgbMessage.SAVE_GAME));
       }
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
@@ -638,12 +641,17 @@ abstract class EgbScripter {
 
   noSuchMethod(Invocation invocation) {
     String memberName = MirrorSystem.getName(invocation.memberName);
+    _send(new EgbMessage.ScripterLog("noSuchMethod - $memberName"));
     if (invocation.isGetter) {
       return vars[memberName];
     } else if (invocation.isSetter) {
       memberName = memberName.replaceAll("=", ""); // fix feature in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
+    } else if (invocation.isMethod && vars.containsKey(memberName) && 
+        vars[memberName] is Function) {
+      return Function.apply(vars[memberName], invocation.positionalArguments,
+          invocation.namedArguments);
     } else {
       throw new NoSuchMethodError(this, invocation.memberName,
           invocation.positionalArguments, 
@@ -693,8 +701,13 @@ abstract class EgbScripter {
   }
 
   EgbSavegame _createSaveGame() {
-    return new EgbSavegame(currentPage.name, vars,
-        pageMap.exportState());
+    try {
+      return new EgbSavegame(currentPage.name, vars,
+          pageMap.exportState());
+    } catch (e) {
+      _send(new EgbMessage.ScripterError("Error when creating savegame: $e"));
+      throw e;
+    }
   }
 
   /**

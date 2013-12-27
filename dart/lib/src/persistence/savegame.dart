@@ -83,7 +83,8 @@ class EgbSavegame {
     saveMap["uid"] = uid;
     saveMap["currentPageName"] = currentPageName;
     saveMap["pageMapState"] = pageMapState;
-    saveMap["vars"] = vars;
+    saveMap["vars"] = vars;  // This has been already dissolved to primitives
+                             // in the contructor.
     saveMap["timestamp"] = timestamp;
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
