@@ -145,11 +145,24 @@ class Timeline implements Saveable {
   }
 
   String className = "Timeline";
-  toMap() => {"time": time, "schedule": _schedule};
+  Map<String,Object> toMap() {
+    Map<String,Object> map = new Map<String,Object>();
+    map["time"] = time;
+    Map s = map["schedule"] = new Map<String,int>();
+    _schedule.forEach((int key, int value) {
+      // Need to do this because Map keys need to be String for JSON to work 
+      // (not int).
+      s["$key"] = value;
+    });
+    return map;
+  }
   updateFromMap(Map map) {
     time = map["time"];
     _schedule.clear();
-    _schedule.addAll(map["schedule"]);
+    Map s = (map["schedule"] as Map<String,int>);
+    s.forEach((String key, int value) {
+      _schedule[int.parse(key)] = value;
+    });
   }
   
   void _handleEventOutput(String s) {
