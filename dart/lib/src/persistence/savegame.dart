@@ -152,7 +152,7 @@ class EgbSavegame {
       });
       return outputMap;
     } else if (_isCustomSaveableClass(input)) {
-      Map saveableMap = (input as Saveable).toMap();
+      Map<String,dynamic> saveableMap = (input as Saveable).toMap();
       saveableMap["_class"] = (input as Saveable).className;
       return _dissolveToPrimitives(saveableMap);
     } else {

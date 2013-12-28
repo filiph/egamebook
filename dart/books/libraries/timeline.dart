@@ -1,7 +1,6 @@
 library timeline;
 
 import 'package:egamebook/src/book/scripter.dart';
-import 'storyline.dart';
 
 typedef ScheduledFunction();
 
