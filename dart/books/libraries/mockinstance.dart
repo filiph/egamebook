@@ -18,6 +18,7 @@ import 'dart:mirrors';
  *     
  * Later, you can implement class Spaceship that will actually do some work.
  */
+@proxy
 class MockInstance {
   Map vars = new Map();
   

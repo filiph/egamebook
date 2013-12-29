@@ -54,7 +54,6 @@ library zil;
 import 'package:egamebook/src/book/scripter.dart' show EgbScripter, goto, echo,
           choice, throwIfNotInInitBlock, gotoCalledRecently; 
 import 'storyline.dart';
-import 'randomly.dart' show Randomly;
 import 'dart:collection';
 import 'package:a_star/a_star.dart';
 import 'dart:math' as Math;

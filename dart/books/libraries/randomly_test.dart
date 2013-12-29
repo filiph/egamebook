@@ -1,5 +1,4 @@
 import 'package:unittest/unittest.dart';
-import 'package:egamebook/src/book/scripter.dart';
 import 'randomly.dart';
 
 void main() {

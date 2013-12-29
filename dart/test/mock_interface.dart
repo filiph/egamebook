@@ -186,4 +186,8 @@ class MockInterface extends EgbInterfaceBase {
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");
   }
+
+  Future<bool> reportError(String title, String text) {
+    print("ERROR: $title\n$text");
+  }
 }

@@ -1,10 +1,5 @@
 library item;
 
-import 'package:egamebook/src/book/scripter.dart';
-
-
-// allItems = 
-
 class Item {
   
   Item._internal(this.name, this.location, this.active) {
