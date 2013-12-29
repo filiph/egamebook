@@ -491,7 +491,7 @@ class HtmlInterface extends EgbInterfaceBase {
   }
 
   Future<bool> reportError(String title, String text) {
-    Dialog error = new Dialog(title, "<pre>$text</pre>");
+    Dialog error = new Dialog(title, "<p>$text</p>");
     return showDialog(error);
   }
 }
