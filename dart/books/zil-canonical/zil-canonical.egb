@@ -19,12 +19,18 @@ Title:  Zil Canonical Test
            submenu: "..."),
         new Action("shoot the Gorilla",
             () {
-              storyline.add("You lift the gun, aim at Gorilla, and shoot.");
-              gorilla.isActive = false;
-              gorillaCorpse.isActive = true;
-              gorillaCorpse.location = gorilla.location;
-              storyline.add("He takes it in the chest and goes down.");
-              zil.timeline.reschedule(stinking, zil.timeline.time + 2);
+              storyline.add("You lift the gun and aim at Gorilla. He looks horrified.");
+              choice("Pull the trigger", script: () {
+                storyline.add("You shoot.");
+                gorilla.isActive = false;
+                gorillaCorpse.isActive = true;
+                gorillaCorpse.location = gorilla.location;
+                storyline.add("He takes it in the chest and goes down.");
+                zil.timeline.reschedule(stinking, zil.timeline.time + 2);
+              });
+              choice("Put the gun down", script: () {
+                storyline.add("You put the gun down. Gorilla still looks horrified.");
+              });
             },
             performerCheck: (actor) => actor.isInSameRoomAs(gorilla),
             needsToBeCarried: true)

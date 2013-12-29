@@ -76,6 +76,8 @@ class Action {
       choice(Storyline.getString(Storyline.capitalize(name), 
           subject: player), script: () {
         function();
+        echo(storyline.toString());
+        storyline.clear();
         if (!gotoCalledRecently) {
           // If the action doesn't call a goto explicitly, it will go back to
           // the current room.
