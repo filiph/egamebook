@@ -62,6 +62,7 @@ abstract class EgbInterface {
   Future<bool> updateStats(Map<String,Object> mapContent); 
   
   // TODO: toast() ?
+  Future<bool> reportError(String title, String text);
   
   /**
    * Marks the point at which the gameplay is saved. Interface should relay

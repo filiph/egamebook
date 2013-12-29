@@ -168,6 +168,7 @@ class EgbRunner {
         return;
       case EgbMessage.SCRIPTER_ERROR:
         print("SCRIPTER ERROR: ${message.strContent}");
+        _interface.reportError("Scripter Error", message.strContent);
         return;
       case EgbMessage.SCRIPTER_LOG:
         print("Scripter: ${message.strContent}");

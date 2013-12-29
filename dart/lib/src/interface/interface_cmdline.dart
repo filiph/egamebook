@@ -128,4 +128,9 @@ class CmdlineInterface extends EgbInterfaceBase {
     _textHistory.clear();
     print("==> savegame created (${savegame.uid})");
   }
+
+  Future<bool> reportError(String title, String text) {
+    print("ERROR: $title");
+    print(text);
+  }
 }

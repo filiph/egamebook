@@ -443,6 +443,8 @@ class HtmlInterface extends EgbInterfaceBase {
    * Shows a dialog.
    */
   Future<bool> showDialog(Dialog dialog) {
+    var completer = new Completer<bool>();
+    
     DivElement dialogEl = new DivElement()
       ..classes.add("dialog");
     DivElement wrapper = new DivElement();
@@ -461,6 +463,7 @@ class HtmlInterface extends EgbInterfaceBase {
         bool shouldClose = button.behaviour();
         if (shouldClose) {
           dialogEl.remove();
+          completer.complete(true);
         }
       });
       buttonsDivEl.children.add(buttonEl);
@@ -468,6 +471,7 @@ class HtmlInterface extends EgbInterfaceBase {
     wrapper.children.add(buttonsDivEl);
     dialogEl.children.add(wrapper);
     document.body.children.add(dialogEl);
+    return completer.future;
   }
   
   void _statsOnClickListener(Event event) {
@@ -484,6 +488,11 @@ class HtmlInterface extends EgbInterfaceBase {
     html.writeln("</table>");
     var d = new Dialog("Stats", html.toString());
     showDialog(d);
+  }
+
+  Future<bool> reportError(String title, String text) {
+    Dialog error = new Dialog(title, "<pre>$text</pre>");
+    return showDialog(error);
   }
 }
 
