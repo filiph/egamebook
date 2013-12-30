@@ -152,12 +152,10 @@ class Item extends Entity implements Located, Described, ZilSaveable {
     team = map["team"];
     if (map["location"] != null) {
       location = _zil.rooms.getFromPageName(map["location"]);
-    } else {
-      location = null;
-    }
-    if (map["carrier"] != null) {
+    } else if (map["carrier"] != null) {
       carrier = _zil.actors.findByName(map["carrier"]);
     } else {
+      location = null;
       carrier = null;
     }
     takeable = map["takeable"];
