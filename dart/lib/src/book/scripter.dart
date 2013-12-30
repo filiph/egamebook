@@ -324,7 +324,15 @@ abstract class EgbScripter {
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
         _initScriptEnvironment();
-        _loadFromSaveGameMessage(message);
+        try {
+          _loadFromSaveGameMessage(message);
+        } on IncompatibleSavegameException catch (e, stacktrace) { 
+          // don't 
+          _send(new EgbMessage.ScripterError(
+              "Load failed due to incompatibility: $e.\n"
+              "$stacktrace"));
+          _restart();
+        }
         _send(Stat.toMessage());
         _send(new PointsAward(0, _points.sum).toMessage());
         return;
@@ -356,12 +364,12 @@ abstract class EgbScripter {
       DEBUG_SCR("Calling _goOneStep().");
       try {
         returnMessage = _goOneStep(message);
-      } on AuthorScriptException catch (e) {
-        _send(new EgbMessage.ScripterError(e.toString()));
+      } on AuthorScriptException catch (e, stacktrace) {
+        _send(new EgbMessage.ScripterError("$e\nStacktrace: $stacktrace"));
         port.close();
         return;
-      } catch (e) {
-        _send(new EgbMessage.ScripterError(e.toString()));
+      } catch (e, stacktrace) {
+        _send(new EgbMessage.ScripterError("$e\nStacktrace: $stacktrace"));
         port.close();
         return;
       }
@@ -521,8 +529,8 @@ abstract class EgbScripter {
       DEBUG_SCR("A ChoiceList encountered.");
       try {
         choices.addFromScripterList(currentPage.blocks[currentBlockIndex]);
-      } on AuthorScriptException catch (e) {
-        _send(new EgbMessage.ScripterError(e.toString()));
+      } on AuthorScriptException catch (e, stacktrace) {
+        _send(new EgbMessage.ScripterError("$e\nStacktrace: $stacktrace"));
       }
       DEBUG_SCR("- choices added");
       if (choices.any((choice) => choice.isActionable(  // TODO: make DRY
@@ -703,8 +711,9 @@ abstract class EgbScripter {
     try {
       return new EgbSavegame(currentPage.name, vars,
           pageMap.exportState());
-    } catch (e) {
-      _send(new EgbMessage.ScripterError("Error when creating savegame: $e"));
+    } catch (e, stacktrace) {
+      _send(new EgbMessage.ScripterError("Error when creating savegame: $e\n"
+          "$stacktrace"));
       throw e;
     }
   }
@@ -742,18 +751,9 @@ abstract class EgbScripter {
     
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
-    try {
-      EgbSavegame.importSavegameToVars(savegame, vars, 
-                                       constructors: _constructors); // TODO
-      DEBUG_SCR("_loadFromSaveGameMessage() done.");
-    } on IncompatibleSavegameException catch (e) {
-      // don't 
-      _send(new EgbMessage.ScripterError("Load failed due to incompatibility. $e"));
-      _restart();
-    } catch (e, stacktrace) {
-      _send(new EgbMessage.ScripterError("Unknown error during load: $e. $stacktrace"));
-      _restart();
-    }
+    EgbSavegame.importSavegameToVars(savegame, vars, 
+                                     constructors: _constructors); // TODO
+    DEBUG_SCR("_loadFromSaveGameMessage() done.");
   }
   
   void DEBUG_SCR(String message) {
