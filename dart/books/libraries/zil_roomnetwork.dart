@@ -3,7 +3,7 @@ part of zil;
 /** 
  * A network of rooms.
  */
-class RoomNetwork implements Graph<Room> {
+class RoomNetwork implements Graph<Room>, ZilSaveable {
   final Zil _zil;
   Map<String,Room> _rooms = new Map<String,Room>();
   
@@ -98,4 +98,19 @@ class RoomNetwork implements Graph<Room> {
 
   Iterable<Room> getNeighboursOf(Room room) =>
       room.exits.map((Exit exit) => exit.to);
+
+  Map<String, dynamic> toMap() {
+    Map<String,dynamic> map = new Map<String,dynamic>();
+    _rooms.forEach((name, room) {
+      map[name] = room.toMap();
+    });
+    return map;
+  }
+
+  void updateFromMap(Map<String, dynamic> map) {
+    assert(map.length == _rooms.length);
+    _rooms.forEach((name, room) {
+      room.updateFromMap(map[name]);
+    });
+  }
 }

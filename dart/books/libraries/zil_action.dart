@@ -116,9 +116,26 @@ class Action {
     }
   }
   
-  // TODO: allow action only to be taken once and never again - this would need action to be Saveable
+  static Map<String,Map> iterableToMap(Iterable<Action> actions) {
+    Map<String,dynamic> map = new Map<String,dynamic>();
+    actions.forEach((action) {
+      assert(!map.containsKey(action.name)); // Duplicate action names.
+      map[action.name] = {
+          "isActive": action.isActive,
+          "performCount": action.performCount
+      };
+    });
+    return map;
+  }
   
-  //void execute() => function();
+  static void updateIterableFromMap(Map<String,Map> map, 
+                                    Iterable<Action> actions) {
+    map.forEach((key, Map actionMap) {
+      Action action = actions.singleWhere((action) => action.name == key);
+      action.isActive = actionMap["isActive"];
+      action.performCount = actionMap["performCount"];
+    });
+  }
 }
 
 typedef void ActionFunction();

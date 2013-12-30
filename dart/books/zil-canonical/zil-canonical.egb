@@ -163,6 +163,7 @@ Explore: CaptainsCabin
         new Action("check the gun", 
            () => storyline.add("You check the gun. It seems in fine condition and it's loaded."),
            needsToBeCarried: true,
+           onlyOnce: true,
            submenu: "..."),
         new Action("shoot the Gorilla",
             () {

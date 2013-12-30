@@ -4,7 +4,7 @@ part of zil;
  * A [Room] is the a location in the game space. It's [name] must correspond to
  * an [EgbPage] name.
  */
-class Room extends Entity with Node implements Described {
+class Room extends Entity with Node implements Described, ZilSaveable {
   final List<int> coordinates;
   final Set<Exit> exits;
   final Iterable<Action> actions;
@@ -13,7 +13,7 @@ class Room extends Entity with Node implements Described {
   
   /// A page to be shown when player first enters the room. Can be [:null:] (in
   /// which case no page will be shown automatically).
-  String descriptionPage;
+  final String descriptionPage;
   
   /// Must be separate from [EgbScripterPage.visitCount] because we can be
   /// currently on a different [EgbScripterPage] than is associated with the
@@ -136,5 +136,19 @@ class Room extends Entity with Node implements Described {
     actions.forEach((Action action) {
       action.createChoiceForPlayer(player);
     });
+  }
+  
+  Map<String, dynamic> toMap() => {
+    "isActive": isActive,
+    "team": team,
+    "visited": visited,
+    "actions": Action.iterableToMap(actions)
+  };
+
+  void updateFromMap(Map<String, dynamic> map) {
+    isActive = map["isActive"];
+    team = map["team"];
+    visited = map["visited"];
+    Action.updateIterableFromMap(map["actions"], actions);
   }
 }

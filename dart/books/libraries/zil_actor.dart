@@ -62,7 +62,8 @@ class ZilActor extends Actor implements Located, ZilSaveable {
     "isActive": isActive,
     "team": team,
     "isAlive": isAlive,
-    "location": (location != null ? location.name : null)
+    "location": (location != null ? location.name : null),
+    "actions": Action.iterableToMap(actions)
   };
 
   void updateFromMap(Map<String, dynamic> map) {
@@ -74,6 +75,7 @@ class ZilActor extends Actor implements Located, ZilSaveable {
     } else {
       location = null;
     }
+    Action.updateIterableFromMap(map["actions"], actions);
   }
 }
 

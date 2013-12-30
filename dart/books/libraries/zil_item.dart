@@ -144,7 +144,8 @@ class Item extends Entity implements Located, Described, ZilSaveable {
     "carrier": (carrier != null ? carrier.name : null),
     "takeable": takeable,
     "count": count,
-    "describedForTheFirstTimeAlready": describedForTheFirstTimeAlready
+    "describedForTheFirstTimeAlready": describedForTheFirstTimeAlready,
+    "actions": Action.iterableToMap(actions)
   };
 
   void updateFromMap(Map<String, dynamic> map) {
@@ -161,5 +162,6 @@ class Item extends Entity implements Located, Described, ZilSaveable {
     takeable = map["takeable"];
     count = map["count"];
     describedForTheFirstTimeAlready = map["describedForTheFirstTimeAlready"];
+    Action.updateIterableFromMap(map["actions"], actions);
   }
 }

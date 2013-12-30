@@ -126,6 +126,7 @@ class Zil implements Saveable {
     map["timeline"] = timeline;
     map["items"] = items.toMap();
     map["actors"] = actors.toMap();
+    map["rooms"] = rooms.toMap();
     print(map);
     return map;
   }
@@ -133,5 +134,6 @@ class Zil implements Saveable {
     timeline.updateFromMap(map["timeline"]);
     items.updateFromMap(map["items"]);
     actors.updateFromMap(map["actors"]);
+    rooms.updateFromMap(map["rooms"]);
   }
 }
