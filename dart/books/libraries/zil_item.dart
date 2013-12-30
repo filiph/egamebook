@@ -6,7 +6,8 @@ abstract class Located {
   Room get location;
   
   bool isIn(Room room) => location == room;
-  bool isInSameRoomAs(ZilActor actor) => location == actor.location;
+  bool isInSameRoomAs(ZilActor actor) => 
+      location == actor.location && actor.isAliveAndActive;
 }
 
 abstract class Described {
@@ -26,7 +27,7 @@ abstract class Described {
         visible: true
       );
  */
-class Item extends Entity implements Located, Described {
+class Item extends Entity implements Located, Described, ZilSaveable {
   final Iterable<Action> actions;
   bool takeable;
   final bool plural;
@@ -43,6 +44,7 @@ class Item extends Entity implements Located, Described {
   /// When not provided (or explicitly set to [:null:]), the generic 
   /// description will always be provided. 
   final String firstDescription;
+  bool describedForTheFirstTimeAlready = false;
   
   String description;
   
@@ -133,5 +135,33 @@ class Item extends Entity implements Located, Described {
     actions.forEach((Action action) {
       action.createChoiceForPlayer(player);
     });
+  }
+
+  Map<String, dynamic> toMap() => {
+    "isActive": isActive,
+    "team": team,
+    "location": (location != null ? location.name : null),
+    "carrier": (carrier != null ? carrier.name : null),
+    "takeable": takeable,
+    "count": count,
+    "describedForTheFirstTimeAlready": describedForTheFirstTimeAlready
+  };
+
+  void updateFromMap(Map<String, dynamic> map) {
+    isActive = map["isActive"];
+    team = map["team"];
+    if (map["location"] != null) {
+      location = _zil.rooms.getFromPageName(map["location"]);
+    } else {
+      location = null;
+    }
+    if (map["carrier"] != null) {
+      carrier = _zil.actors.findByName(map["carrier"]);
+    } else {
+      carrier = null;
+    }
+    takeable = map["takeable"];
+    count = map["count"];
+    describedForTheFirstTimeAlready = map["describedForTheFirstTimeAlready"];
   }
 }

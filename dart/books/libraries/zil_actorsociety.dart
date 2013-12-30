@@ -22,4 +22,11 @@ class ActorSociety {
       }
     }
   }
+  
+  ZilActor findByName(String name) {
+    if (name == player.name) {
+      return player;
+    }
+    return npcs.singleWhere((npc) => npc.name == name);
+  }
 }

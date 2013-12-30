@@ -71,7 +71,7 @@ part 'zil_action.dart';
 part 'zil_exception.dart';
 part 'zil_saveable.dart';
 
-class Zil /* TODO implements Saveable */ {
+class Zil implements Saveable {
   EgbScripter _scripter;
   
   /**
@@ -97,6 +97,7 @@ class Zil /* TODO implements Saveable */ {
     rooms = new RoomNetwork(this);
     actors = new ActorSociety(this);
     player = new ZilPlayer(this, "player");
+    if (timeline == null) timeline = new Timeline();
   }
   
   void update(int ticks, {bool describe: true}) {
@@ -121,9 +122,13 @@ class Zil /* TODO implements Saveable */ {
 
   String get className => "Zil";
   Map<String, dynamic> toMap() {
-    // TODO: implement toMap
+    Map<String,dynamic> map = new Map<String,dynamic>();
+    map["timeline"] = timeline;
+    map["items"] = items.toMap();
+    return map;
   }
   void updateFromMap(Map<String, dynamic> map) {
-    // TODO: implement updateFromMap
+    timeline.updateFromMap(map["timeline"]);
+    items.updateFromMap(map["items"]);
   }
 }

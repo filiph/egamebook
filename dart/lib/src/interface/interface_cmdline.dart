@@ -60,6 +60,12 @@ class CmdlineInterface extends EgbInterfaceBase {
       return;
     }
     
+    if (line.trim().toLowerCase().startsWith("load")) {
+      sendLoadIntent(line.trim().substring("load ".length));
+      _choiceCompleter = null;
+      return;
+    }
+    
     try {
       int optionNumber = int.parse(line);
       if (optionNumber >= 1 && optionNumber <= _currentChoiceList.length) {

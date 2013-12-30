@@ -13,7 +13,7 @@ class ZilActor extends Actor implements Located {
     });
     if (this is AIActor) {
       _zil.actors.add(this);
-    } else if (this is Player) {
+    } else if (this is ZilPlayer) {
       _zil.actors.player = this;  // TODO: guard against overwriting player
     }
   }

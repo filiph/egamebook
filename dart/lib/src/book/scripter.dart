@@ -750,8 +750,8 @@ abstract class EgbScripter {
       // don't 
       _send(new EgbMessage.ScripterError("Load failed due to incompatibility. $e"));
       _restart();
-    } catch (e) {
-      _send(new EgbMessage.ScripterError("Unknown error during load: $e."));
+    } catch (e, stacktrace) {
+      _send(new EgbMessage.ScripterError("Unknown error during load: $e. $stacktrace"));
       _restart();
     }
   }
