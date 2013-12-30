@@ -16,6 +16,12 @@ class Room extends Entity with Node implements Described {
   /// which case no page will be shown automatically).
   String descriptionPage;
   
+  /// Must be separate from [EgbScripterPage.visitCount] because we can be
+  /// currently on a different [EgbScripterPage] than is associated with the
+  /// [Room] (for example, when an [Action] is described on a separate page
+  /// but still needs to update time). 
+  bool visited = false;
+  
   String toString() => "Room<$name>"; 
   
   /**
@@ -41,13 +47,15 @@ class Room extends Entity with Node implements Described {
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
   void update(int ticks, {bool describe: true}) {
-    if (_zil != null && _zil._scripter != null && 
-        !_zil._scripter.currentPage.visited && descriptionPage != null) {
+    if (_zil != null && _zil._scripter != null && descriptionPage != null &&
+        !visited) {
       echo(storyline.toString());
       storyline.clear();
       goto(descriptionPage);
+      visited = true;
       return;
     }
+    visited = true;
     if (_zil.rooms.actors != null) {
       showActors(describe: describe);
       for (int i = 0; i < ticks; i++) {
@@ -63,10 +71,8 @@ class Room extends Entity with Node implements Described {
     if (describe) storyline.addParagraph();
     showItems(describe: describe);
     
-    if (describe) {
-      echo(storyline.toString());
-      storyline.clear();
-    }
+    echo(storyline.toString());
+    storyline.clear();
   }
   
   void showActors({bool describe: true}) {

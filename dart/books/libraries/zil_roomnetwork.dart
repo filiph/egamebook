@@ -28,7 +28,9 @@ class RoomNetwork implements Graph<Room> {
   }
   
   Room getFromPageName(String pageName) {
-    assert(_rooms.containsKey(pageName));
+    if (!_rooms.containsKey(pageName)) {
+      throw new PageNotDefinedInZilException(pageName);
+    }
     return _rooms[pageName];
   }
   

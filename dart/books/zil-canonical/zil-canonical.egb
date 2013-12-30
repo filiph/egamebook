@@ -170,7 +170,7 @@ Explore: CaptainsCabin
                 gorillaCorpse.isActive = true;
                 gorillaCorpse.location = gorilla.location;
                 storyline.add("He takes it in the chest and goes down.");
-                zil.timeline.reschedule(stinking, zil.timeline.time + 2);
+                // zil.timeline.reschedule(stinking, zil.timeline.time + 2);
               });
               choice("Put the gun down", script: () {
                 storyline.add("You put the gun down. Gorilla still looks horrified.");
@@ -190,6 +190,15 @@ Explore: CaptainsCabin
       isActive: false
   );
 
+  // ACTIONS
+  firstLookAround = new Action.Goto("have a look around", "CaptainsCabinLookAround", 
+    onlyOnce: true);
+  secondLookAround = new Action.Goto("continue with the search [5 minutes]",
+    "CaptainsCabinLookAroundContinue", onlyOnce: true, isActive: false);
+  thirdLookAround = new Action.Goto("search the rest of the room [3 minutes]",
+    "CaptainsCabinLookAroundTheRest", onlyOnce: true, isActive: false);
+  
+
   // ROOM
   captainsCabin = zil.rooms.add(new Room("Explore: CaptainsCabin",
       "captain's cabin",
@@ -197,7 +206,12 @@ Explore: CaptainsCabin
           "<subject> leave<s> into the corridor")],
       descriptionPage: "CaptainsCabin.description",
       coordinates: [-10, -10, 0],
-      items: [captainsGun]
+      /*items: [captainsGun],*/
+      actions: [
+        firstLookAround,
+        secondLookAround,
+        thirdLookAround
+      ]
   ));
 </variables>
 
@@ -226,24 +240,20 @@ It's not that the captain was more of a pig than everyone else on board. It's ju
 
 ---
 Explore: CaptainsCabinLookAround
-[[ visitOnce ]]
-
-<script>
-  captainsCabinPossibleActions -= 1;
-</script>
 
 You start sifting through all the garbage in the room. The plastiglass bottles clank as you accidentaly kick them around, and you move, methodically, from the bed-sofa to the door. Apart from the alcohol, there are tossed clothes, lowbrow magazines, memory sticks, cardboard boxes, used handkerchiefs, and lots of cheap entertainment gadgets. Mostly game consoles and video players. Anything that can keep a person's mind occupied. During the long hauls, boredom is the biggest enemy.
 
 <script>
-  exploration.elapse(5);
+  zil.update(5, describe: false);
+  secondLookAround.isActive = true;
 </script>
 
-You take a break after some five minutes of searching. You've covered about one third of the room, but you've also become quite efficient in making your way through the garbage now.
+You take a break after some five minutes of searching. You haven't found anything interesting. You've covered about one third of the room, but you've also become quite efficient in making your way through the garbage now.
 
-- Go on with searching []
-- Quit searching [
-    You leave the rest of the garbage alone.
-  {} CaptainsCabin]
+- [CaptainsCabin]
+
+---
+Explore: CaptainsCabinLookAroundContinue
 
 You get back to work. The items get familiar. Issues of Space Slam magazine. Cheap plastic game controllers of different kinds. Dirty sweatshirts of the same cut and color. You're throwing everything towards one corner of the room so you don't need to go through one thing twice.
 
@@ -254,21 +264,22 @@ Then, you pick up yet another plastic device from under a pair of trousers, and 
 The captain had a gun? Why? You stand there for a while, looking at the weapon in your hand.
 
 <script>
-  hasCaptainGun.flag(); 
-  exploration.elapse(5);
+  zil.update(5, describe: false);
+  captainsGun.carrier = zil.player;
+  thirdLookAround.isActive = true;
 </script>
 
 You realize another 5 minutes passed and there is still around a quarter of the room left. You put the gun in your pocket.
 
-- Go on with searching []
-- Quit searching [
-    You leave the rest of the garbage alone.
-  {} CaptainsCabin]
+- [CaptainsCabin]
+
+---
+Explore: CaptainsCabinLookAroundTheRest
 
 You search the rest of the room, but there's nothing interesting left, nor nothing that would explain the gun.
 
 <script>
-  exploration.elapse(3);
+  zil.update(3, describe: false);
 </script>
 
 - [CaptainsCabin]

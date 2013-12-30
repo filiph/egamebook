@@ -50,11 +50,37 @@ class Action {
   /// will instead be 'hidden' in a submenu.
   final String submenu;
   
+  int performCount = 0;
+  /// The maximum number of times this [Action] can be performed. When set to
+  /// [:null:] (the default), there is no limit. 
+  final int maxPerformCount;
+  
+  bool isActive = true;
+  
   Action(this.name, this.function,
       {this.roomCheck: null, this.itemCheck: null, this.performerCheck: null,
-       this.needsToBeCarried: false, this.submenu: null});
+       this.needsToBeCarried: false, this.submenu: null, bool onlyOnce: false,
+       int maxPerformCount: null, this.isActive: true})
+      : maxPerformCount = (onlyOnce ? 1 : maxPerformCount);
+  
+  /// A forwarding constructor than merely points to a different pageName.
+  /// It is defined for convenience, as this type of action is very common.
+  Action.Goto(String name, String pageName,
+      {RoomCheck roomCheck: null, ItemCheck itemCheck: null, 
+       ActorCheck performerCheck: null, bool needsToBeCarried: false, 
+       String submenu: null, bool onlyOnce: false,
+       int maxPerformCount: null, bool isActive: true}) 
+     : this(name, () => goto(pageName),
+       roomCheck: roomCheck, itemCheck: itemCheck, 
+       performerCheck: performerCheck, needsToBeCarried: needsToBeCarried,
+       submenu: submenu, onlyOnce: onlyOnce, maxPerformCount: maxPerformCount,
+       isActive: isActive);
   
   bool _checkSuitability(Room currentRoom, ZilActor performer) {
+    if (!isActive) return false;
+    if (maxPerformCount != null && performCount >= maxPerformCount) {
+      return false;
+    }
     if (room != null && currentRoom != room) return false;
     if (item != null && !item.isIn(currentRoom)) return false;
     if (needsToBeCarried && !item.isCarriedBy(performer)) return false;
@@ -76,6 +102,7 @@ class Action {
       choice(Storyline.getString(Storyline.capitalize(name), 
           subject: player), script: () {
         function();
+        performCount++;
         echo(storyline.toString());
         storyline.clear();
         if (!gotoCalledRecently) {

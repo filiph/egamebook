@@ -98,7 +98,14 @@ class Zil {
   void update(int ticks, {bool describe: true}) {
     rooms._checkNetworkReady();
     if (_scripter != null) {
-      player.setLocationFromCurrentPage();
+      try {
+        player.setLocationFromCurrentPage();
+      } on PageNotDefinedInZilException catch (e) {
+        if (player.location == null) {
+          throw e;  // Throw only if location has not been set yet. Otherwise,
+                    // we assume the location set previously still applies.
+        }
+      }
     }
     player.location.update(ticks, describe: describe);
   }
