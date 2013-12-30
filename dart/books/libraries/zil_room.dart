@@ -8,6 +8,7 @@ class Room extends Entity with Node implements Described {
   final List<int> coordinates;
   final Set<Item> items;
   final Set<Exit> exits;
+  final Iterable<Action> actions;
   
   String description;
   
@@ -22,7 +23,8 @@ class Room extends Entity with Node implements Described {
    */
   Room(String name, this.description, Iterable exits, 
       { this.descriptionPage, 
-       this.coordinates: const [0, 0, 0], Iterable items: const []}) 
+        this.coordinates: const [0, 0, 0], Iterable items: const [],
+        this.actions: const []}) 
       : this.exits = new Set.from(exits),
         this.items = new Set.from(items),
         super(name, Pronoun.IT, Actor.NEUTRAL, false) {
@@ -30,6 +32,7 @@ class Room extends Entity with Node implements Described {
     if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);
     items.forEach((Item item) => item.location = this);
+    actions.forEach((action) => action.room = this);
   }
   
   /// The [Zil] object this Room is a part of.
@@ -40,7 +43,8 @@ class Room extends Entity with Node implements Described {
   void update(int ticks, {bool describe: true}) {
     if (_zil != null && _zil._scripter != null && 
         !_zil._scripter.currentPage.visited && descriptionPage != null) {
-      print("DEBUG: ${_zil._scripter.currentPage.name} wasn't visited yet");
+      echo(storyline.toString());
+      storyline.clear();
       goto(descriptionPage);
       return;
     }
@@ -68,16 +72,19 @@ class Room extends Entity with Node implements Described {
   void showActors({bool describe: true}) {
     if (describe) {
       // TODO custom reports from actors
-      var presentActors = _zil.actors.npcs.where((ZilActor actor) => actor.isIn(this));
-      if (presentActors.length > 1) {
+      if (actors.length > 1) {
         storyline.addEnumeration("<subject> {|can }see<s>", 
-            presentActors.map((ZilActor actor) => actor.name), 
+            actors.map((ZilActor actor) => actor.name), 
             "{|in }here", subject: _zil.player);
-      } else if (presentActors.length == 1) {
-        presentActors.single.report("<subject> is {|in }here");
+      } else if (actors.length == 1) {
+        actors.single.report("<subject> is {|in }here");
       }
     }
   }
+  
+  /// An iterable with all actors in the room.
+  Iterable<ZilActor> get actors =>
+      _zil.actors.npcs.where((ZilActor actor) => actor.isIn(this));
   
   /// Shows all items currently visible in the room.
   void showItems({bool describe: true}) {
@@ -102,4 +109,11 @@ class Room extends Entity with Node implements Described {
   }
   
   bool contains(Item item) => items.contains(item);  // TODO: freestanding vs in possession
+  
+  void createChoicesForPlayer(ZilPlayer player) {
+    assert(player.location == this);
+    actions.forEach((Action action) {
+      action.createChoiceForPlayer(player);
+    });
+  }
 }

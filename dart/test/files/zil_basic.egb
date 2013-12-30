@@ -8,7 +8,7 @@ Title:  Zil Test
 
   // ITEMS
   captainsGun = new Item("captain's gun", 
-      [
+      actions: [
        new Action("check the gun", 
            () => storyline.add("You check the gun. It's okay."),
            needsToBeCarried: true,
@@ -30,7 +30,6 @@ Title:  Zil Test
        contents: []
   );
   gorillaCorpse = new Item("Gorilla's body",
-      [/* search the corpse */],
       takeable: true,
       isActive: false
   );

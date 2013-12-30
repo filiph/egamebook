@@ -68,6 +68,7 @@ part 'zil_aiactor.dart';
 part 'zil_goal.dart';
 part 'zil_actorsociety.dart';
 part 'zil_action.dart';
+part 'zil_exception.dart';
 
 class Zil {
   EgbScripter _scripter;

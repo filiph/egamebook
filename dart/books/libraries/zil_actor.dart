@@ -2,9 +2,11 @@ part of zil;
 
 class ZilActor extends Actor implements Located {
   ZilActor(String name, {team: Actor.NEUTRAL, isPlayer: false,
-    pronoun: Pronoun.IT, Iterable items: const []}) 
+    pronoun: Pronoun.IT, Iterable items: const [], this.actions: const []}) 
     : this.items = new Set.from(items),
-      super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun);
+      super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
+    actions.forEach((action) => action.actor = this);      
+  }
   
   bool isAlive = true;
   
@@ -12,6 +14,7 @@ class ZilActor extends Actor implements Located {
   
   Room location;
   final Set<Item> items;
+  final Iterable<Action> actions;
   
   /**
    * Sets this ZilActor's location to the one described by the Scripter's
@@ -35,6 +38,13 @@ class ZilActor extends Actor implements Located {
       isActive && actor.isActive;
   
   bool has(Item item) => items.contains(item) && item.isActive && isActive;
+  
+  void createChoicesForPlayer(ZilPlayer player) {
+    assert(player.location == this.location);
+    actions.forEach((Action action) {
+      action.createChoiceForPlayer(player);
+    });
+  }
 }
 
 class ZilPlayer extends ZilActor {
@@ -42,12 +52,21 @@ class ZilPlayer extends ZilActor {
       isPlayer: true);
   
   void createChoices() {
+    // Actions associated with the room.
+    location.createChoicesForPlayer(this);
+    // Actors in the room.
+    location.actors.forEach((ZilActor actor) {
+      actor.createChoicesForPlayer(this);
+    });
+    // Items in player's possession.
     items.forEach((Item item) {
       item.createChoicesForPlayer(this);
     });
+    // Items in the room.
     location.items.forEach((Item item) {
       item.createChoicesForPlayer(this);
     });
+    // Exits from the room.
     location.exits.forEach((exit) {
       exit.createChoiceForPlayer(_zil, this);
     });

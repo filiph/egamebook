@@ -61,7 +61,8 @@ class Item extends Entity implements Located, Described {
   
   Set<Item> contents = new Set<Item>();
   
-  Item(String name, this.actions, {
+  Item(String name, {
+      this.actions: const [],
       this.description,
       this.takeable: true, this.container: false, bool isActive: true,
       this.plural: false, this.count: 1,

@@ -641,7 +641,6 @@ abstract class EgbScripter {
 
   noSuchMethod(Invocation invocation) {
     String memberName = MirrorSystem.getName(invocation.memberName);
-    _send(new EgbMessage.ScripterLog("noSuchMethod - $memberName"));
     if (invocation.isGetter) {
       return vars[memberName];
     } else if (invocation.isSetter) {

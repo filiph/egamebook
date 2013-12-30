@@ -43,7 +43,11 @@ class RoomNetwork implements Graph<Room> {
   void _setExitToFields() {
     _rooms.values.forEach((Room origin) {
       origin.exits.forEach((Exit exit) {
-        assert(_rooms.keys.contains(exit.destinationPageName));
+        if (!_rooms.keys.contains(exit.destinationPageName)) {
+          throw new ZilException("Couldn't find '${exit.destinationPageName}' "
+              "among the rooms in the RoomNetwork. This is linked from "
+              "the page '${exit.from.name}'");
+        }
         assert(exit.from == origin);
         exit.to = _rooms[exit.destinationPageName];
       });

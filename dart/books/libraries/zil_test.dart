@@ -16,7 +16,7 @@ void main() {
     zil = new Zil(null);
     // Init
     captainsGun = new Item("captain's gun", 
-        [
+        actions: [
          new Action("check the gun", 
              () => echo("You check the gun. It's okay."),
              roomCheck: (room) => room.lit,
