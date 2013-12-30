@@ -51,8 +51,7 @@
  */
 library zil;
 
-import 'package:egamebook/src/book/scripter.dart' show EgbScripter, goto, echo,
-          choice, throwIfNotInInitBlock, gotoCalledRecently; 
+import 'package:egamebook/src/book/scripter.dart' show EgbScripter, Saveable, choice, echo, goto, gotoCalledRecently, throwIfNotInInitBlock; 
 import 'storyline.dart';
 import 'dart:collection';
 import 'package:a_star/a_star.dart';
@@ -63,14 +62,16 @@ part 'zil_room.dart';
 part 'zil_exit.dart';
 part 'zil_roomnetwork.dart';
 part 'zil_item.dart';
+part 'zil_itempool.dart';
 part 'zil_actor.dart';
 part 'zil_aiactor.dart';
 part 'zil_goal.dart';
 part 'zil_actorsociety.dart';
 part 'zil_action.dart';
 part 'zil_exception.dart';
+part 'zil_saveable.dart';
 
-class Zil {
+class Zil /* TODO implements Saveable */ {
   EgbScripter _scripter;
   
   /**
@@ -85,14 +86,17 @@ class Zil {
   /// All other actors.
   ActorSociety actors;
   
+  /// All the items.
+  ItemPool items;
+  
   /// Timeline
   Timeline timeline;
   
   Zil(this._scripter, [this.timeline]) {
+    items = new ItemPool(this);
     rooms = new RoomNetwork(this);
-    player = new ZilPlayer("player");
-    player._zil = this;
-    actors = new ActorSociety(this, player);
+    actors = new ActorSociety(this);
+    player = new ZilPlayer(this, "player");
   }
   
   void update(int ticks, {bool describe: true}) {
@@ -113,5 +117,13 @@ class Zil {
   createChoices() {
     rooms._checkNetworkReady();
     player.createChoices();
+  }
+
+  String get className => "Zil";
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+  }
+  void updateFromMap(Map<String, dynamic> map) {
+    // TODO: implement updateFromMap
   }
 }

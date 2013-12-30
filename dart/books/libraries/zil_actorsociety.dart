@@ -2,21 +2,16 @@ part of zil;
 
 class ActorSociety {
   final Zil _zil;
-  Set<AIActor> npcs = new Set<AIActor>();
+  List<AIActor> npcs = new List<AIActor>();
   ZilActor player;
   
   RoomNetwork rooms;
   
-  ActorSociety(this._zil, this.player) {
-    _zil.rooms.actors = this;
-  }
+  ActorSociety(this._zil);
   
-  AIActor add(AIActor npc, Room location) {
+  void add(AIActor npc) {
     throwIfNotInInitBlock();
     npcs.add(npc);
-    npc.location = location;
-    npc._zil = _zil;
-    return npc;
   }
   
   void updateAll(int ticks, {Room currentRoom: null, bool describe: true}) {

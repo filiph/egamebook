@@ -29,10 +29,13 @@ abstract class Described {
 class Item extends Entity implements Located, Described {
   final Iterable<Action> actions;
   bool takeable;
-  final bool container;
   final bool plural;
   int count;
 
+  // TODO: droppable - some items just shouldn't be even giving the option to be dropped
+  // TODO: containers: means that an Item can have a location, a carrier, or a container
+  //Item container;
+  
   /// This is the description of the item in it's initial state (in a room). 
   /// It is equivalent to FDESC in ZIL. After the player has taken the item or 
   /// has done anything with it, a generic description will be used (something
@@ -59,29 +62,25 @@ class Item extends Entity implements Located, Described {
     return "take $description";
   }
   
-  Set<Item> contents = new Set<Item>();
   
-  Item(String name, {
+  final Zil _zil;
+  
+  Item(this._zil, String name, {
       this.actions: const [],
       this.description,
-      this.takeable: true, this.container: false, bool isActive: true,
+      this.takeable: true, bool isActive: true,
       this.plural: false, this.count: 1,
-      Iterable<Item> contents: const [],
       Pronoun pronoun: Pronoun.IT, this.firstDescription: null,
       String takeDescription, String takeInfinitive}) 
       : _takeDescription = takeDescription, _takeInfinitive = takeInfinitive,
         super(name, pronoun, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock();
     actions.forEach((action) => action.item = this);
-    if (!container) {
-      assert(contents.isEmpty);
-    } else {
-      this.contents.addAll(contents);
-    }
     if (!plural) assert(count == 1);
     this.isActive = isActive;
     
     if (description == null) description = name;
+    _zil.items.add(this);
   }
   
   Room _location;
@@ -89,17 +88,14 @@ class Item extends Entity implements Located, Described {
   
   ZilActor get carrier => _carrier;
   set carrier(ZilActor value) {
-    if (_location != null && value != null) {
-      _location.items.remove(this);
-      _location = null;
-    }
-    if (_carrier != null) {
-      _carrier.items.remove(this);
-    }
+    _location = null;
     _carrier = value;
-    if (_carrier != null) {
-      _carrier.items.add(this);
-    }
+  }
+  
+  Room get location => _location;
+  set location(Room value) {
+    _carrier = null;
+    _location = value;
   }
   
   bool get isBeingCarried => _carrier != null && _carrier.isAliveAndActive &&
@@ -108,22 +104,15 @@ class Item extends Entity implements Located, Described {
       isActive;
   bool isInRoomFreeStanding(Room room) => _carrier == null &&
       _location == room && isActive;
+
   
-  Room get location {
-    if (carrier != null) return carrier.location;
-    return _location;
-  }
-  
-  set location(Room value) {
-    if (_location != null) {
-      _location.items.remove(this);
+  bool isIn(Room room, {bool countIfInPossession: true}) {
+    if (!isActive) return false;
+    if (countIfInPossession && carrier != null && carrier.location == room) {
+      return true;
     }
-    _location = value;
-    _location.items.add(this);
-    _carrier = null;
+    return location == room;
   }
-  
-  bool isIn(Room room) => location == room && isActive;
   bool isInSameRoomAs(ZilActor actor) => location == actor.location &&
       isActive && actor.isAliveAndActive;
   
@@ -131,13 +120,8 @@ class Item extends Entity implements Located, Described {
     storyline.add("there is $name here");
   }
   
-  // TODO: droppable - some items just shouldn't be even giving the option to be dropped
-  // TODO: get inspiration from item.dart
-  
-  // TODO: containers ?
-  
   void createChoicesForPlayer(ZilPlayer player) {
-    assert(player.location == this.location);
+    assert(player.location == this.location || this.carrier == player);
     if (takeable && !player.has(this)) {
       choice(Storyline.getString(Storyline.capitalize(takeInfinitive), 
           subject: player, object: this), script: () {

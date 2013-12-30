@@ -6,7 +6,6 @@ part of zil;
  */
 class Room extends Entity with Node implements Described {
   final List<int> coordinates;
-  final Set<Item> items;
   final Set<Exit> exits;
   final Iterable<Action> actions;
   
@@ -27,22 +26,32 @@ class Room extends Entity with Node implements Described {
   /**
    * Create a room whose [name] corresponds to an [EgbPage] name.
    */
-  Room(String name, this.description, Iterable exits, 
+  Room(this._zil, String name, this.description, Iterable exits, 
       { this.descriptionPage, 
-        this.coordinates: const [0, 0, 0], Iterable items: const [],
+        this.coordinates: const [0, 0, 0], 
+        Iterable<Item> items: const [],
+        Iterable<AIActor> actors: const[],
         this.actions: const []}) 
       : this.exits = new Set.from(exits),
-        this.items = new Set.from(items),
         super(name, Pronoun.IT, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock("Cannot create room on the fly.");
     if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);
     items.forEach((Item item) => item.location = this);
     actions.forEach((action) => action.room = this);
+    items.forEach((item) {
+      item.location = this;
+      _zil.items.add(item);
+    });
+    actors.forEach((AIActor actor) {
+      actor.location = this;
+      _zil.actors.add(actor);
+    });
+    _zil.rooms.add(this);
   }
   
   /// The [Zil] object this Room is a part of.
-  Zil _zil;
+  final Zil _zil;
   
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
@@ -56,15 +65,17 @@ class Room extends Entity with Node implements Described {
       return;
     }
     visited = true;
-    if (_zil.rooms.actors != null) {
+    if (_zil != null && _zil.actors != null) {
       showActors(describe: describe);
-      for (int i = 0; i < ticks; i++) {
+    }
+    for (int i = 0; i < ticks; i++) {
+      if (_zil != null && _zil.actors != null) {
         _zil.actors.updateAll(1, currentRoom: _zil.player.location, 
             describe: describe);
         if (gotoCalledRecently) return;
-        if (_zil.timeline != null) {
-          _zil.timeline.elapse(1);
-        }
+      }
+      if (_zil != null && _zil.timeline != null) {
+        _zil.timeline.elapse(1);
         if (gotoCalledRecently) return;
       }
     }
@@ -91,6 +102,10 @@ class Room extends Entity with Node implements Described {
   /// An iterable with all actors in the room.
   Iterable<ZilActor> get actors =>
       _zil.actors.npcs.where((ZilActor actor) => actor.isIn(this));
+  
+  Iterable<Item> get items =>
+      _zil.items.items.where((Item item) => 
+          item.isIn(this, countIfInPossession: false));
   
   /// Shows all items currently visible in the room.
   void showItems({bool describe: true}) {

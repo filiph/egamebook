@@ -9,22 +9,14 @@ class RoomNetwork implements Graph<Room> {
   
   AStar aStar;
   
-  /**
-   * The actors that are inhabiting the rooms.
-   * Set to the library's global variable [actors] by default.
-   */
-  ActorSociety actors;
-  
   RoomNetwork(this._zil) {
     // Nothing to do here.
   }
   
-  Room add(Room room) {
+  void add(Room room) {
     throwIfNotInInitBlock("Author can only set up room network on init.");
     assert(!_rooms.keys.contains(room.name));
     _rooms[room.name] = room;
-    room._zil = _zil;
-    return room;
   }
   
   Room getFromPageName(String pageName) {

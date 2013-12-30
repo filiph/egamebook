@@ -15,7 +15,7 @@ void main() {
     isInInitBlock = true;
     zil = new Zil(null);
     // Init
-    captainsGun = new Item("captain's gun", 
+    captainsGun = new Item(zil, "captain's gun", 
         actions: [
          new Action("check the gun", 
              () => echo("You check the gun. It's okay."),
@@ -28,11 +28,10 @@ void main() {
              submenu: "...")
          ],
          takeable: true,
-         count: 1,  // can be >1 for things like bullets
-         container: true,
-         contents: []
+         count: 1  // can be >1 for things like bullets
     );
-    bridge = zil.rooms.add(new Room("Exploration.Bridge", // corresponds to pagename
+    gorilla = new AIActor(zil, "Gorilla", pronoun: Pronoun.HE);
+    bridge = new Room(zil, "Exploration.Bridge", // corresponds to pagename
         "the bridge",
         [new Exit("LeftCorridor", "go to Corridor Left", 
             "<subject> go<es> through the sliding door into Corridor Left"), 
@@ -42,17 +41,17 @@ void main() {
          //onEnter: () { /* Room function (on enter?) */ echo },
          //globalBitsOverride: {hearablePA: true, loudEnviron: false},
          coordinates: [0, 0, 0],
-         items: [captainsGun]
-    ));
-    leftCorridor = zil.rooms.add(new Room("LeftCorridor",
+         items: [captainsGun],
+         actors: [gorilla]
+    );
+    leftCorridor = new Room(zil, "LeftCorridor",
         "Left Corridor",
         [new Exit("Exploration.Bridge", "walk to the bridge",
             "<subject> walk<s> to the bridge")],
         coordinates: [1, 1, 0]
-    ));
-    zil.rooms.add(new Room("Hatchway", "the hatchway", []));
+    );
+    new Room(zil, "Hatchway", "the hatchway", []);
     
-    gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
     isInInitBlock = false;
   });
   

@@ -1,21 +1,32 @@
 part of zil;
 
 class ZilActor extends Actor implements Located {
-  ZilActor(String name, {team: Actor.NEUTRAL, isPlayer: false,
-    pronoun: Pronoun.IT, Iterable items: const [], this.actions: const []}) 
-    : this.items = new Set.from(items),
-      super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
+  ZilActor(this._zil, String name, {int team: Actor.NEUTRAL,
+    bool isPlayer: false, Pronoun pronoun: Pronoun.IT,
+    Iterable<Item> items: const [], this.actions: const []})
+    : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
     throwIfNotInInitBlock();
-    actions.forEach((action) => action.actor = this);      
+    actions.forEach((action) => action.actor = this);
+    items.forEach((item) {
+      item.carrier = this;
+      _zil.items.add(item);
+    });
+    if (this is AIActor) {
+      _zil.actors.add(this);
+    } else if (this is Player) {
+      _zil.actors.player = this;  // TODO: guard against overwriting player
+    }
   }
   
   bool isAlive = true;
   
-  Zil _zil;
+  final Zil _zil;
   
   Room location;
-  final Set<Item> items;
   final Iterable<Action> actions;
+  
+  Iterable<Item> get items => 
+      _zil.items.items.where((item) => has(item));
   
   /**
    * Sets this ZilActor's location to the one described by the Scripter's
@@ -33,12 +44,12 @@ class ZilActor extends Actor implements Located {
   }
 
   bool isIn(Room room) => location == room && isActive;
-  bool isInOneOf(Iterable<Room> rooms) => rooms.any((room) => location == room) &&
-      isActive; 
+  bool isInOneOf(Iterable<Room> rooms) => 
+      rooms.any((room) => location == room) && isActive;
   bool isInSameRoomAs(ZilActor actor) => location == actor.location &&
       isActive && actor.isActive;
   
-  bool has(Item item) => items.contains(item) && item.isActive && isActive;
+  bool has(Item item) => item.carrier == this && item.isActive && isActive;
   
   void createChoicesForPlayer(ZilPlayer player) {
     assert(player.location == this.location);
@@ -49,8 +60,8 @@ class ZilActor extends Actor implements Located {
 }
 
 class ZilPlayer extends ZilActor {
-  ZilPlayer(String name) : super(name, pronoun: Pronoun.YOU, team: Actor.FRIEND,
-      isPlayer: true);
+  ZilPlayer(Zil zil, String name) : super(zil, name, pronoun: Pronoun.YOU,
+      team: Actor.FRIEND, isPlayer: true);
   
   void createChoices() {
     // Actions associated with the room.

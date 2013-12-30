@@ -27,23 +27,23 @@ Title:  Zil Canonical Test
 </variables>
 
 <variables>
-  var timeline = new Timeline();
+  var exploration = new Timeline();
   
-  timeline.mainLoop = () {
+  exploration.mainLoop = () {
     hyperdriveEta += 1;
     // TODO: player health down
   };
   
-  timeline.schedule(40, () {
+  exploration.schedule(40, () {
     echo("""There is another announcement by the Bodega. "The cargo bay hull breach is being reported as sealed. Trying to fill the enclosure with atmosphere. Expected removal of steel curtains in 10 minutes.""");
   });
   
-  timeline.schedule(50, () {
+  exploration.schedule(50, () {
     echo("""The PA speakers on the ship turn on and the Bodega starts to speak in her ceremonial tone: "Please be advised, the hull breach in the cargo bay has been fully repaired. Stay clear of the moving curtains." """);
     hullBreachRepaired.flag();
   });
   
-  zil = new Zil(this, timeline);  // Initialize Zil with the Scripter instance.
+  zil = new Zil(this, exploration);  // Initialize Zil with the Scripter instance.
 </variables>
 
 ---
@@ -55,17 +55,20 @@ start
 Explore: Bridge
 
 <variables>
+  // ACTORS
+  gorilla = new AIActor(zil, "Gorilla", pronoun: Pronoun.HE);
   // ROOM
-  bridge = zil.rooms.add(new Room("Explore: Bridge", // corresponds to pagename
+  new Room(zil, "Explore: Bridge", // corresponds to pagename
       "the bridge",
       [new Exit("Explore: CorridorLeftNextToCaptainsCabin", "leave to Corridor Left",
           "<subject> go<es> through the sliding door into Corridor Left")],
       descriptionPage: "Bridge.description",
-      coordinates: [0, 0, 0]
-  ));
+      coordinates: [0, 0, 0],
+      actors: [gorilla]
+  );
   
-  // ACTORS
-  gorilla = zil.actors.add(new AIActor("Gorilla", pronoun: Pronoun.HE), bridge);
+
+  // TODO: location
 </variables>
 
 <script>
@@ -124,7 +127,7 @@ The protocol states that these firewalls will stay down until the hull breach is
 Explore: CorridorLeftNextToCaptainsCabin
 
 <variables>
-  corridorLeft = zil.rooms.add(new Room("Explore: CorridorLeftNextToCaptainsCabin",
+  new Room(zil, "Explore: CorridorLeftNextToCaptainsCabin",
       "Corridor Left",
       [new Exit("Explore: Bridge", "walk to the bridge",
           "<subject> walk<s> to the bridge"),
@@ -132,7 +135,7 @@ Explore: CorridorLeftNextToCaptainsCabin
           "<subject> open<s> the door to the Captain's cabin and enter<s>")],
       descriptionPage: "CorridorLeftNextToCaptainsCabin.description",
       coordinates: [-5, -10, 0]
-  ));
+  );
 </variables>
 
 <script>
@@ -155,7 +158,7 @@ Explore: CaptainsCabin
 
 <variables>
   // ITEMS
-  captainsGun = new Item("captain's gun", 
+  captainsGun = new Item(zil, "captain's gun", 
       actions: [
         new Action("check the gun", 
            () => storyline.add("You check the gun. It seems in fine condition and it's loaded."),
@@ -181,11 +184,9 @@ Explore: CaptainsCabin
        ],
        takeable: true,
        takeDescription: "<subject> lift<s> the <object> and put<s> it in the pocket",
-       count: 1,  // can be >1 for things like bullets
-       container: true,
-       contents: []
+       count: 1  // can be >1 for things like bullets
   );
-  gorillaCorpse = new Item("Gorilla's body",
+  gorillaCorpse = new Item(zil, "Gorilla's body",
       takeable: true,
       isActive: false
   );
@@ -200,7 +201,7 @@ Explore: CaptainsCabin
   
 
   // ROOM
-  captainsCabin = zil.rooms.add(new Room("Explore: CaptainsCabin",
+  new Room(zil, "Explore: CaptainsCabin",
       "captain's cabin",
       [new Exit("Explore: CorridorLeftNextToCaptainsCabin", "exit the room",
           "<subject> leave<s> into the corridor")],
@@ -212,7 +213,7 @@ Explore: CaptainsCabin
         secondLookAround,
         thirdLookAround
       ]
-  ));
+  );
 </variables>
 
 <script>
