@@ -61,7 +61,9 @@ class Action {
       {this.roomCheck: null, this.itemCheck: null, this.performerCheck: null,
        this.needsToBeCarried: false, this.submenu: null, bool onlyOnce: false,
        int maxPerformCount: null, this.isActive: true})
-      : maxPerformCount = (onlyOnce ? 1 : maxPerformCount);
+      : maxPerformCount = (onlyOnce ? 1 : maxPerformCount) {
+    throwIfNotInInitBlock();
+  }
   
   /// A forwarding constructor than merely points to a different pageName.
   /// It is defined for convenience, as this type of action is very common.

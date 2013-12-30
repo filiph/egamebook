@@ -71,7 +71,7 @@ class Item extends Entity implements Located, Described {
       String takeDescription, String takeInfinitive}) 
       : _takeDescription = takeDescription, _takeInfinitive = takeInfinitive,
         super(name, pronoun, Actor.NEUTRAL, false) {
-        
+    throwIfNotInInitBlock();
     actions.forEach((action) => action.item = this);
     if (!container) {
       assert(contents.isEmpty);

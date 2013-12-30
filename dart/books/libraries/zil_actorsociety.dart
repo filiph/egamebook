@@ -12,6 +12,7 @@ class ActorSociety {
   }
   
   AIActor add(AIActor npc, Room location) {
+    throwIfNotInInitBlock();
     npcs.add(npc);
     npc.location = location;
     npc._zil = _zil;

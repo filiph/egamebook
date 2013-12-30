@@ -20,7 +20,7 @@ class RoomNetwork implements Graph<Room> {
   }
   
   Room add(Room room) {
-    //throwIfNotInInitBlock("Author can only set up room network on init.");
+    throwIfNotInInitBlock("Author can only set up room network on init.");
     assert(!_rooms.keys.contains(room.name));
     _rooms[room.name] = room;
     room._zil = _zil;

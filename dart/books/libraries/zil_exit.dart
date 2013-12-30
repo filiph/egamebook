@@ -33,7 +33,9 @@ class Exit extends Entity {
    */
   Exit(this.destinationPageName, this.descriptionInfinitive, 
       this.arriveDescription, {this.requirement: null, this.cost: 1}) 
-      : super("Exit", Pronoun.IT, Actor.NEUTRAL, false);
+      : super("Exit", Pronoun.IT, Actor.NEUTRAL, false) {
+    throwIfNotInInitBlock();
+  }
 
   /**
    * Returns true if the exit is currently passable by actor.

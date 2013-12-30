@@ -5,6 +5,7 @@ class ZilActor extends Actor implements Located {
     pronoun: Pronoun.IT, Iterable items: const [], this.actions: const []}) 
     : this.items = new Set.from(items),
       super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
+    throwIfNotInInitBlock();
     actions.forEach((action) => action.actor = this);      
   }
   
