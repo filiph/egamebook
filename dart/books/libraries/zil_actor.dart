@@ -1,6 +1,6 @@
 part of zil;
 
-class ZilActor extends Actor implements Located {
+class ZilActor extends Actor implements Located, ZilSaveable {
   ZilActor(this._zil, String name, {int team: Actor.NEUTRAL,
     bool isPlayer: false, Pronoun pronoun: Pronoun.IT,
     Iterable<Item> items: const [], this.actions: const []})
@@ -56,6 +56,24 @@ class ZilActor extends Actor implements Located {
     actions.forEach((Action action) {
       action.createChoiceForPlayer(player);
     });
+  }
+  
+  Map<String, dynamic> toMap() => {
+    "isActive": isActive,
+    "team": team,
+    "isAlive": isAlive,
+    "location": (location != null ? location.name : null)
+  };
+
+  void updateFromMap(Map<String, dynamic> map) {
+    isActive = map["isActive"];
+    team = map["team"];
+    isAlive = map["isAlive"];
+    if (map["location"] != null) {
+      location = _zil.rooms.getFromPageName(map["location"]);
+    } else {
+      location = null;
+    }
   }
 }
 

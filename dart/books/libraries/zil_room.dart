@@ -45,7 +45,7 @@ class Room extends Entity with Node implements Described {
     });
     actors.forEach((AIActor actor) {
       actor.location = this;
-      _zil.actors.add(actor);
+      // Actors are added to Zil by their own constructor.
     });
     _zil.rooms.add(this);
   }

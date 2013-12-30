@@ -125,11 +125,13 @@ class Zil implements Saveable {
     Map<String,dynamic> map = new Map<String,dynamic>();
     map["timeline"] = timeline;
     map["items"] = items.toMap();
+    map["actors"] = actors.toMap();
     print(map);
     return map;
   }
   void updateFromMap(Map<String, dynamic> map) {
     timeline.updateFromMap(map["timeline"]);
     items.updateFromMap(map["items"]);
+    actors.updateFromMap(map["actors"]);
   }
 }
