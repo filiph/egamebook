@@ -1,7 +1,20 @@
 part of zil;
 
+/**
+ * Exits are links between Rooms. Normally, the are the only means of
+ * transportation in the ZIL environment for both the [ZilPlayer] and the
+ * [AIActor]s. 
+ * 
+ * They are always one-way. This means that the author can easily create things
+ * like 'slides' or 'human canons' or whatever. More importantly, the reporting
+ * of movement through the environment can be much more natural (instead of
+ * "you go from the bridge to the corridor", the player can read things like
+ * "you enter the corridor").
+ */
 class Exit extends Entity {
+  /// The origin.
   Room from;
+  /// The destination.
   Room to;
   /// If this function returns [:false:], the exit is unavailable.
   final CheckFunction requirement;
@@ -10,6 +23,8 @@ class Exit extends Entity {
   /// rooms, for example. It defaults to 1.
   final int cost;
   
+  /// Because the [to] Room can be unavailable at the time of instantiation,
+  /// the destination is given by its [Room.name].
   final String destinationPageName;
   
   /// Description that works with "You can ___" or "A possible option is 
@@ -24,7 +39,7 @@ class Exit extends Entity {
   /// it is visited for the first time.)
   /// 
   /// Author can use [:<subject>:] (will be the player) and [:<object>:] (will
-  /// be the destination room ([to]).
+  /// be the destination room ([to])).
   final String arriveDescription;
   
   /**

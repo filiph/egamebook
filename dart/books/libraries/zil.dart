@@ -6,7 +6,7 @@
  * 
  * [Infocom manual for ZIL]: http://www.xlisp.org/zil.pdf
  * 
- * The original ZIL is a dialect of Lisp and had great limitations for 
+ * The original ZIL was a dialect of Lisp and had great limitations for 
  * performance and memory reasons. These limitations are largely lifted. For
  * this reason, and for convenience of the author, this library is _not_
  * a recreation of the original ZIL. It is inspired by the capabilities of that
@@ -14,22 +14,30 @@
  * on it.
  * 
  * This library will not let you make IF. The egamebook play format is not
- * about writing text, it's about choosing options. But it should make it
- * possible for you to create living, simulated, explorable environments with
- * items in them, NPCs, wandering enemies, etc.
+ * about _writing text_, it's about _choosing options_. Nevertheless, the 
+ * library should make it possible for you to create living, simulated,
+ * explorable environments with items in them, NPCs, wandering enemies, etc.
  * 
- * TODO: why ZIL and not Inform7, for example? hint: this is not IF
+ * Side note: Why is this library not inspired by a more modern IF technology,
+ * like Inform7, for example? Because these libraries are (understandably) much
+ * better suited and optimized for the text input of Interactive Fiction. In
+ * contrast, the original ZIL laid the basics of any exploration-based game:
+ * rooms, exits, items, NPCs. And it did so while being a relatively simple,
+ * code-driven architecture (in contrast with the complex, plain English-driven
+ * architecture of Inform7 and the like).
  * 
  * Canonical implementation:
  * 
  * * Rooms have their own pages with no text and only two script blocks.
- * * First script block includes the zil.update() call (things happen).
- * * Second script block only includes zil.createChoices(). This is important
- *   because we want Scripter to be able to save state (zil.update() could
- *   invalidate that save by changing state).
- * * The preferred style is to include a <variables> block on the page where
+ * * First script block includes the [:zil.update():] call (things happen).
+ * * Second script block only includes [:zil.createChoices():]. This is 
+ *   important because we want [EgbScripter] to be able to save state 
+ *   ([:zil.update():] could invalidate that save by changing state).
+ * * The preferred style is to include a [:<variables>:] block on the page where
  *   the actual Zil implementation of the room is instantiated.
  *   
+ * Example use:
+ * 
  *     <variables>
  *       zil = new Zil(this);
  *     </variables>
@@ -38,7 +46,7 @@
  *     livingRoom
  *     
  *     <variables>
- *       livingRoom = zil.rooms.add(new Room("livingRoom" ....));
+ *       new Room(zil, "livingRoom" ....));
  *     </variables>
  *     
  *     <script>
@@ -46,7 +54,9 @@
  *     </script>
  *     
  *     <script>
- *       zil.createChoices();
+ *       zil.createChoices();  // Needs to be in a separate script block
+ *                             // so that no state change happens on
+ *                             // showing the choices (would break save/load).
  *     </script>
  */
 library zil;
@@ -92,6 +102,8 @@ class Zil implements Saveable {
   /// Timeline
   Timeline timeline;
   
+  /// Create Zil with a pointer to the [EgbScripter] instance and, optionally,
+  /// a pre-existing [Timeline]. 
   Zil(this._scripter, [this.timeline]) {
     items = new ItemPool(this);
     rooms = new RoomNetwork(this);
@@ -100,6 +112,11 @@ class Zil implements Saveable {
     if (timeline == null) timeline = new Timeline();
   }
   
+  /// Move time forward by [ticks]-amount of time units. When [describe] is
+  /// [:true:], the method will generate text output. Otherwise, it will just
+  /// silently simulate.
+  /// 
+  /// The [timeline] output is always shown.
   void update(int ticks, {bool describe: true}) {
     rooms._checkNetworkReady();
     if (_scripter != null) {
@@ -115,6 +132,14 @@ class Zil implements Saveable {
     player.location.update(ticks, describe: describe);
   }
   
+  /// Creates choices for the [player] in the current [Room] and given the
+  /// present [Item]s and [AIActor]s.
+  /// 
+  /// Call this from a separate [:<script>:] block than [update] --- while
+  /// [update] can change state, a script block that generates choices can not
+  /// be changing any state. It would break the save/load contract. (Because
+  /// when loading, the choice-generating block is executed, and so some state
+  /// would be changed twice.)
   createChoices() {
     rooms._checkNetworkReady();
     player.createChoices();

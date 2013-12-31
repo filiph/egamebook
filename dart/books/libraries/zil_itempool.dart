@@ -1,5 +1,9 @@
 part of zil;
 
+/**
+ * [ItemPool] encompasses all [Item]s in the environment and takes care of their
+ * persistence.
+ */
 class ItemPool implements ZilSaveable {
   final Zil _zil;
   List<Item> items = new List<Item>();

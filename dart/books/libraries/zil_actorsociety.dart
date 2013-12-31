@@ -1,5 +1,9 @@
 part of zil;
 
+/**
+ * [ActorSociety] is a bundle of all the NPCs and the player. It keeps track
+ * of all of them and takes care of their persistence.
+ */
 class ActorSociety implements ZilSaveable {
   final Zil _zil;
   List<AIActor> npcs = new List<AIActor>();

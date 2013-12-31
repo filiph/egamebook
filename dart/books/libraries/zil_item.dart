@@ -15,16 +15,15 @@ abstract class Described {
 }
 
 /**
- *     var captainsGun = new Item("captains {gun|pistol}", 
-          [
+ * Item is anything inanimate that can be manipulated by the player or by
+ * NPCs. 
+ * 
+ *     var captainsGun = new Item("captain's {gun|pistol}", 
+          actions: [
            new Action("check the gun", 
               () => echo("You check the gun. It's okay."))
-           ],
-        count: 1,  // can be >1 for things like bullets
-        container: true,
-        contents: NO_ITEMS,
-        takeable: true,
-        visible: true
+          ],
+          takeable: true
       );
  */
 class Item extends Entity implements Located, Described, ZilSaveable {
@@ -107,7 +106,13 @@ class Item extends Entity implements Located, Described, ZilSaveable {
   bool isInRoomFreeStanding(Room room) => _carrier == null &&
       _location == room && isActive;
 
-  
+  /**
+   * Returns [:true:] if the item is in the [room] and [isActive]. When
+   * [countIfInPossession] is [:true:] (default), the item is considered to
+   * be in the room even if it is carried by a [ZilActor] (including player) who
+   * is currently in the room. Otherwise, only items that are 'lying on the
+   * floor' (their [location] equals [room]) will return [:true:].
+   */
   bool isIn(Room room, {bool countIfInPossession: true}) {
     if (!isActive) return false;
     if (countIfInPossession && carrier != null && carrier.location == room) {
@@ -117,10 +122,6 @@ class Item extends Entity implements Located, Described, ZilSaveable {
   }
   bool isInSameRoomAs(ZilActor actor) => location == actor.location &&
       isActive && actor.isAliveAndActive;
-  
-  void showText() {
-    storyline.add("there is $name here");
-  }
   
   void createChoicesForPlayer(ZilPlayer player) {
     assert(player.location == this.location || this.carrier == player);

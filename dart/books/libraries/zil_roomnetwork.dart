@@ -1,7 +1,8 @@
 part of zil;
 
 /** 
- * A network of rooms.
+ * [RoomNetwork] contains all the rooms in the game environment and takes care
+ * of their persistance. It also provides methods for pathfinding.
  */
 class RoomNetwork implements Graph<Room>, ZilSaveable {
   final Zil _zil;

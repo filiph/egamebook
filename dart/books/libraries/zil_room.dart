@@ -5,20 +5,32 @@ part of zil;
  * an [EgbPage] name.
  */
 class Room extends Entity with Node implements Described, ZilSaveable {
+  /// The 3D coordinates of the room in the game world. The are given by
+  /// a [:List<int>:] of length [:3:]. 
+  /// 
+  /// For example, a location at the center of the hypothetical world would have
+  /// [coordinates] set to [:[0, 0, 0]:]. Another room above it would have
+  /// [:[0, 0, 1]:] as its coordinates.
+  /// 
+  /// Coordinates are used for path-finding.
   final List<int> coordinates;
   final Set<Exit> exits;
   final Iterable<Action> actions;
   
-  String description;
+  /// The player-facing name of the room.
+  final String description;
   
   /// A page to be shown when player first enters the room. Can be [:null:] (in
-  /// which case no page will be shown automatically).
+  /// which case no page will be shown).
   final String descriptionPage;
   
+  /// Whether or not this room has been visited by the player.
+  /// 
   /// Must be separate from [EgbScripterPage.visitCount] because we can be
   /// currently on a different [EgbScripterPage] than is associated with the
   /// [Room] (for example, when an [Action] is described on a separate page
-  /// but still needs to update time). 
+  /// but still needs to update time, the EgbScripterPage could (correctly)
+  /// report visitCount to be 0). 
   bool visited = false;
   
   String toString() => "Room<$name>"; 
@@ -26,16 +38,15 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   /**
    * Create a room whose [name] corresponds to an [EgbPage] name.
    */
-  Room(this._zil, String name, this.description, Iterable exits, 
+  Room(this._zil, String pageName, this.description, Iterable exits, 
       { this.descriptionPage, 
         this.coordinates: const [0, 0, 0], 
         Iterable<Item> items: const [],
         Iterable<AIActor> actors: const[],
         this.actions: const []}) 
       : this.exits = new Set.from(exits),
-        super(name, Pronoun.IT, Actor.NEUTRAL, false) {
+        super(pageName, Pronoun.IT, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock("Cannot create room on the fly.");
-    if (description == null) description = name;
     this.exits.forEach((exit) => exit.from = this);
     items.forEach((Item item) => item.location = this);
     actions.forEach((action) => action.room = this);
@@ -128,8 +139,6 @@ class Room extends Entity with Node implements Described, ZilSaveable {
           subject: _zil.player, conjuction: "or");
     }
   }
-  
-  bool contains(Item item) => items.contains(item);  // TODO: freestanding vs in possession
   
   void createChoicesForPlayer(ZilPlayer player) {
     assert(player.location == this);

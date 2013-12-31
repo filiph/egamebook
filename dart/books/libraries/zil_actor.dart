@@ -79,10 +79,17 @@ class ZilActor extends Actor implements Located, ZilSaveable {
   }
 }
 
+/**
+ * This is the player's instance in the ZIL world.
+ */
 class ZilPlayer extends ZilActor {
   ZilPlayer(Zil zil, String name) : super(zil, name, pronoun: Pronoun.YOU,
       team: Actor.FRIEND, isPlayer: true);
   
+  /**
+   * For the player in his current [location], create all relevant choices from
+   * available [Action]s.
+   */
   void createChoices() {
     // Actions associated with the room.
     location.createChoicesForPlayer(this);
@@ -101,6 +108,10 @@ class ZilPlayer extends ZilActor {
     // Exits from the room.
     location.exits.forEach((exit) {
       exit.createChoiceForPlayer(_zil, this);
+      // TODO: gather the [EgbChoice]s first. This will allow for first checking
+      //       whether the destination room even allows for any action (except
+      //       going back to the origin), in which case that option might not
+      //       be even shown.
     });
   }
 }

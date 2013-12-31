@@ -1,15 +1,19 @@
 part of zil;
 
 /**
- *          new Action("check the gun", 
-              () => echo("You check the gun. It's okay."),
+ * Action is something that the [ZilPlayer] (or, alternately, an eligible
+ * [AIActor]) can do given requirements. For the player, when all requirements
+ * are met, the [Action] is presented as a [EgbChoice] with [name]. When this
+ * choice is picked by the player, [function] is executed.
+ * 
+ * Actions cannot exist by themselves, they need to be attached either to a
+ * [Room], to an [Item] or to a [ZilActor].
+ * 
+ *          new Action("talk to Gorilla", 
+              () => storyline.add("The Gorilla just shrugs."),
               roomCheck: (room) => room.lit,
-              performerCheck: (actor) => actor.isHuman,
-              targetActorCheck: (targetCandidate) => true,
-              targetItemCheck: (targetCandidate) => true,
-              itemCheck: (item) => item.isActive,
-              needsToBeInPossession: true,
-              submenu: DEFAULT_SUBMENU)
+              performerCheck: (actor) => actor.isInSameRoomAs(gorilla),
+              submenu: DEFAULT_SUBMENU);
  */
 class Action {
   final String name;
@@ -33,6 +37,7 @@ class Action {
   /// Useful when the action should only be performed when the performer
   /// is in a certain state (e.g. player is almost dead).
   final ActorCheck performerCheck;
+  
   // TODO allow the action to walk the actors in the room and offer itself for
   //      every suitable target
   // final ActorCheck targetActorCheck;
@@ -88,8 +93,6 @@ class Action {
     if (needsToBeCarried && !item.isCarriedBy(performer)) return false;
     if (actor != null && !actor.isIn(currentRoom)) return false;
     
-    // TODO: don't run this multiple times. Action is associated with: actor, room, item. Only run once.
-    
     if (roomCheck != null && !roomCheck(currentRoom)) return false;
     if (performerCheck != null && !performerCheck(performer)) return false;
     if (item != null && itemCheck != null && !itemCheck(item)) return false;
@@ -97,7 +100,8 @@ class Action {
   }
   
   /**
-   * Creates a choice for given [player] assuming all requirements are met.
+   * Creates a choice for given [player]. The method first checks 
+   * whether the requirements are met (calling [_checkSuitability]).
    */
   void createChoiceForPlayer(ZilPlayer player) {
     if (_checkSuitability(player.location, player)) {
@@ -116,6 +120,11 @@ class Action {
     }
   }
   
+  /**
+   * A helper function to save the state of a given list/iterable of actions.
+   * Because Actions are always attached to a [Room], and [Item] or a
+   * [ZilActor], these objects are responsible for persisting their actions.
+   */
   static Map<String,Map> iterableToMap(Iterable<Action> actions) {
     Map<String,dynamic> map = new Map<String,dynamic>();
     actions.forEach((action) {
@@ -128,6 +137,9 @@ class Action {
     return map;
   }
   
+  /**
+   * Same as [iterableToMap] above, but for loading state from a savegame.
+   */
   static void updateIterableFromMap(Map<String,Map> map, 
                                     Iterable<Action> actions) {
     map.forEach((key, Map actionMap) {
