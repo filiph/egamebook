@@ -44,9 +44,9 @@ class Bit implements Saveable {
     _state = state;
   }
   
-  @deprecated("Use isOn instead")
+  //@deprecated("Use isOn instead")
   bool get isFlagged => isOn;
-  @deprecated("Use isOff instead")
+  //@deprecated("Use isOff instead")
   bool get isNotFlagged => isOff;
   
   bool get isOn => _state;
