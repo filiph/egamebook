@@ -323,13 +323,26 @@ abstract class EgbScripter {
         return;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
-        _initScriptEnvironment();
+        try {
+          _initScriptEnvironment();
+        } catch (e, stacktrace) {
+          _send(new EgbMessage.ScripterError(
+              "An error occured when initializing: $e.\n"
+              "$stacktrace"));
+          throw e;
+        }
         try {
           _loadFromSaveGameMessage(message);
         } on IncompatibleSavegameException catch (e, stacktrace) { 
           // don't 
           _send(new EgbMessage.ScripterError(
               "Load failed due to incompatibility: $e.\n"
+              "$stacktrace"));
+          _restart();
+        } catch (e, stacktrace) { 
+          // XXX: get rid of this once all possible errors are encapsulated in SavegameExpceptions?
+          _send(new EgbMessage.ScripterError(
+              "Load failed for unknown reason: $e.\n"
               "$stacktrace"));
           _restart();
         }

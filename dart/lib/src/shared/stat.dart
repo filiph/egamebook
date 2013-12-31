@@ -10,14 +10,14 @@ import '../persistence/saveable.dart';
  * 
  * A set of all Stats can always be accessed by the static method Stats.all.
  */
-class Stat implements Saveable {
+class Stat implements Saveable {  // TODO: add generic (Stat<T>)
   /// The name of the stat. Ex.: "energy".
   final String name;
   /// The optional description of the Stat. To be shown when player somehow 
   /// interacts with the stat (e.g. click in HtmlInterface).
   final String description; 
   /// The format to use. Ex.: "? E"
-  final String format;
+  final String format;  // TODO: use a lambda instead (takes value, returns string)
   /// The color associated with this stat. It should be an HTML-recognizable
   /// string (e.g. "blue", or "#ff00ff").
   final String color;
