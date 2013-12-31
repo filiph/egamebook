@@ -57,6 +57,11 @@ Explore: Bridge
 <variables>
   // ACTORS
   gorilla = new AIActor(zil, "Gorilla", pronoun: Pronoun.HE);
+  
+  // ACTIONS
+  lookAtHullBreachFromBridge = new Action.Goto("put up the hull breach on the screen",
+      "LookAtHullBreachFromBridge", isActive: true);
+  
   // ROOM
   new Room(zil, "Explore: Bridge", // corresponds to pagename
       "the bridge",
@@ -64,11 +69,11 @@ Explore: Bridge
           "<subject> go<es> through the sliding door into Corridor Left")],
       descriptionPage: "Bridge.description",
       coordinates: [0, 0, 0],
-      actors: [gorilla]
+      actors: [gorilla],
+      actions: [
+          lookAtHullBreachFromBridge
+      ]
   );
-  
-
-  // TODO: location
 </variables>
 
 <script>
@@ -100,8 +105,7 @@ The bridge is connected with the rest of the ship via two main corridors: Corrid
 - [Bridge]
 
 ---
-Explore: Look at hull breach from bridge
-[[ visitOnce ]]
+Explore: LookAtHullBreachFromBridge
 
 The object from the Messenger crashed into the right side of the cargo bay. It managed to drill through the hull – as evidenced by the suddenly lowered air pressure in the whole area – but fortunately the Bodega managed to isolate the impact zone with hermetic curtains. This means there is an area in the cargo bay that is presumably quite damaged, almost surely without air, and separated from the rest of the space by relatively thin, makeshift firewalls.
 

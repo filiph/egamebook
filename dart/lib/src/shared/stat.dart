@@ -186,6 +186,8 @@ class Stat implements Saveable {
     return statsList;
   }
 
+  String className = "Stat";
+
   Map<String, dynamic> toMap() {
     var map = new Map.from({
       "name": this.name,
@@ -194,8 +196,6 @@ class Stat implements Saveable {
     });
     return map;
   }
-  
-  String className = "Stat";
 
   void updateFromMap(Map<String, dynamic> map) {
     assert(map["name"] == this.name);

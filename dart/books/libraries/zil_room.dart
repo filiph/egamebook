@@ -42,12 +42,12 @@ class Room extends Entity with Node implements Described, ZilSaveable {
       { this.descriptionPage, 
         this.coordinates: const [0, 0, 0], 
         Iterable<Item> items: const [],
-        Iterable<AIActor> actors: const[],
+        Iterable<AIActor> actors: const [],
         this.actions: const []}) 
       : this.exits = new Set.from(exits),
         super(pageName, Pronoun.IT, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock("Cannot create room on the fly.");
-    this.exits.forEach((exit) => exit.from = this);
+    this.exits.forEach((exit) => exit.from = this);  // TODO: guard all against null here
     items.forEach((Item item) => item.location = this);
     actions.forEach((action) => action.room = this);
     items.forEach((item) {

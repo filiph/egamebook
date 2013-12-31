@@ -25,7 +25,11 @@ part of egb_scripter;
  */
 class Bit implements Saveable {
   bool _state;
-  Bit([this._state = false]);
+  Bit([this._state = false]) {
+    if (_state == null) {
+      throw new ArgumentError("Bit cannot have null state.");
+    }
+  }
   
   void flag() {
     _state = true;
@@ -40,8 +44,13 @@ class Bit implements Saveable {
     _state = state;
   }
   
-  bool get isFlagged => _state;
-  bool get isNotFlagged => !_state;
+  @deprecated("Use isOn instead")
+  bool get isFlagged => isOn;
+  @deprecated("Use isOff instead")
+  bool get isNotFlagged => isOff;
+  
+  bool get isOn => _state;
+  bool get isOff => !_state;
   
   final className = "Bit";
   toMap() {
