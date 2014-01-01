@@ -352,7 +352,14 @@ abstract class EgbScripter {
               "$stacktrace"));
           _restart();
         }
-        _send(Stat.toMessage());
+        try {
+          _send(Stat.toMessage());
+        } catch (e, stacktrace) {
+          _send(new EgbMessage.ScripterError(
+              "Sending Stats failed for unknown reason: $e.\n"
+              "$stacktrace"));
+          throw e;
+        }
         _send(new PointsAward(0, _points.sum).toMessage());
         return;
     }
