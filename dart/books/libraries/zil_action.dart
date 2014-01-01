@@ -28,6 +28,10 @@ class Action {
   /// unless this actor is in room.
   ZilActor actor;
   
+  /// When this is defined, the action will only be offered if [genericCheck]()
+  /// returns [:true:].
+  final GenericCheck requirement;
+  
   /// When this is defined, the action won't be shown unless 
   /// [:roomCheck(rooms.current) == true:]. This is useful when you want to make
   /// sure that the player is offered to perform this action only in places
@@ -63,7 +67,8 @@ class Action {
   bool isActive = true;
   
   Action(this.name, this.function,
-      {this.roomCheck: null, this.itemCheck: null, this.performerCheck: null,
+      {this.requirement: null,
+       this.roomCheck: null, this.itemCheck: null, this.performerCheck: null,
        this.needsToBeCarried: false, this.submenu: null, bool onlyOnce: false,
        int maxPerformCount: null, this.isActive: true})
       : maxPerformCount = (onlyOnce ? 1 : maxPerformCount) {
@@ -73,12 +78,13 @@ class Action {
   /// A forwarding constructor than merely points to a different pageName.
   /// It is defined for convenience, as this type of action is very common.
   Action.Goto(String name, String pageName,
-      {RoomCheck roomCheck: null, ItemCheck itemCheck: null, 
+      {GenericCheck requirement: null, 
+       RoomCheck roomCheck: null, ItemCheck itemCheck: null, 
        ActorCheck performerCheck: null, bool needsToBeCarried: false, 
        String submenu: null, bool onlyOnce: false,
        int maxPerformCount: null, bool isActive: true}) 
      : this(name, () => goto(pageName),
-       roomCheck: roomCheck, itemCheck: itemCheck, 
+       requirement: requirement, roomCheck: roomCheck, itemCheck: itemCheck, 
        performerCheck: performerCheck, needsToBeCarried: needsToBeCarried,
        submenu: submenu, onlyOnce: onlyOnce, maxPerformCount: maxPerformCount,
        isActive: isActive);
@@ -92,7 +98,8 @@ class Action {
     if (item != null && !item.isIn(currentRoom)) return false;
     if (needsToBeCarried && !item.isCarriedBy(performer)) return false;
     if (actor != null && !actor.isIn(currentRoom)) return false;
-    
+
+    if (requirement != null && !requirement()) return false;
     if (roomCheck != null && !roomCheck(currentRoom)) return false;
     if (performerCheck != null && !performerCheck(performer)) return false;
     if (item != null && itemCheck != null && !itemCheck(item)) return false;
@@ -151,6 +158,7 @@ class Action {
 }
 
 typedef void ActionFunction();
+typedef bool GenericCheck();
 typedef bool RoomCheck(Room room);
 typedef bool ActorCheck(ZilActor actor);
 typedef bool ItemCheck(Item item);
