@@ -67,16 +67,18 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
   void update(int ticks, {bool describe: true}) {
-    if (_zil != null && _zil._scripter != null && descriptionPage != null &&
-        !visited) {
+    if (descriptionPage != null && !visited) {
       echo(storyline.toString());
       storyline.clear();
       goto(descriptionPage);
       visited = true;
+      _zil.player._lastTickLocation = null;  // Make sure player.justArrived
+                                             // will still be true when player
+                                             // 'returns' from descriptionPage.
       return;
     }
     visited = true;
-    if (_zil != null && _zil.actors != null) {
+    if (_zil != null && _zil.actors != null && _zil.player.justArrived) {
       showActors(describe: describe);
     }
     for (int i = 0; i < ticks; i++) {
@@ -90,11 +92,15 @@ class Room extends Entity with Node implements Described, ZilSaveable {
         if (gotoCalledRecently) return;
       }
     }
-    if (describe) storyline.addParagraph();
-    showItems(describe: describe);
+    if (_zil.player.justArrived) {
+      if (describe) storyline.addParagraph();
+      showItems(describe: describe);
+    }
     
     echo(storyline.toString());
     storyline.clear();
+    
+    _zil.player._lastTickLocation = this;
   }
   
   void showActors({bool describe: true}) {
@@ -107,6 +113,10 @@ class Room extends Entity with Node implements Described, ZilSaveable {
       } else if (actors.length == 1) {
         actors.single.report("<subject> is {|in }here");
       }
+      actors.where((actor) => actor is AIActor && actor.currentGoal != null)
+        .forEach((AIActor actor) {
+        storyline.reports.add(actor.currentGoal.createReportGoalInProgress());
+      });
     }
   }
   

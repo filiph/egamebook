@@ -123,9 +123,14 @@ class Zil implements Saveable {
       try {
         player.setLocationFromCurrentPage();
       } on PageNotDefinedInZilException catch (e) {
+        // zil.update was called on a ScripterPage that doesn't have an 
+        // associated Room. This can be just the author trying to elapse
+        // time during an Action.Goto (okay), but it could also be that
+        // they forgot to instantiate the Room or the pagenames don't match.
         if (player.location == null) {
-          throw e;  // Throw only if location has not been set yet. Otherwise,
-                    // we assume the location set previously still applies.
+          throw e;  // Throw only if no location has not been set yet, ever. 
+                    // Otherwise, we assume the location set previously still 
+                    // applies.
         }
       }
     }

@@ -6,8 +6,16 @@ class ZilActor extends Actor implements Located, ZilSaveable {
     Iterable<Item> items: const [], this.actions: const []})
     : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
     throwIfNotInInitBlock();
-    actions.forEach((action) => action.actor = this);
+    actions.forEach((action) {
+      if (action == null) {
+        throw new NullInOptionalParametersList("ZilActor", name, "actions"); 
+      }
+      action.actor = this;
+    }); 
     items.forEach((item) {
+      if (item == null) {
+        throw new NullInOptionalParametersList("ZilActor", name, "items"); 
+      }
       item.carrier = this;
       _zil.items.add(item);
     });
@@ -22,7 +30,9 @@ class ZilActor extends Actor implements Located, ZilSaveable {
   
   final Zil _zil;
   
+  /// The [Room] this actor is currently in.
   Room location;
+  
   final Iterable<Action> actions;
   
   Iterable<Item> get items => 
@@ -85,6 +95,11 @@ class ZilActor extends Actor implements Located, ZilSaveable {
 class ZilPlayer extends ZilActor {
   ZilPlayer(Zil zil, String name) : super(zil, name, pronoun: Pronoun.YOU,
       team: Actor.FRIEND, isPlayer: true);
+  
+  /// The room this actor was the last time we checked. This is used for
+  /// [justArrived].
+  Room _lastTickLocation;
+  bool get justArrived => location != _lastTickLocation;
   
   /**
    * For the player in his current [location], create all relevant choices from

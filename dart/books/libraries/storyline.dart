@@ -401,6 +401,7 @@ class Storyline {
 
   /// The main function that strings reports together into a coherent story.
   String toString() {
+    reports.removeWhere((report) => report.string == "");
     final int length = reports.length;
     if (length < 1)
       return "";
