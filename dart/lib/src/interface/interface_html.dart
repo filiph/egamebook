@@ -451,9 +451,12 @@ class HtmlInterface extends EgbInterfaceBase {
     HeadingElement titleEl = new HeadingElement.h3()
       ..text = dialog.title;
     wrapper.children.add(titleEl);
+    DivElement contentEl = new DivElement()
+      ..classes.add("dialog-content");
+    wrapper.children.add(contentEl);
     DivElement textEl = new DivElement()
       ..innerHtml = dialog.html;
-    wrapper.children.add(textEl);
+    contentEl.children.add(textEl);
     DivElement buttonsDivEl = new DivElement()
       ..classes.add("dialog-buttons");
     for (DialogButton button in dialog.buttons) {
