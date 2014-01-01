@@ -349,10 +349,10 @@ class HtmlInterface extends EgbInterfaceBase {
     return completer.future;
   }
   
-  List<Stat> _statsList;
+  List<UIStat> _statsList;
   final Map<String,Element> _statsElementMap = new Map();
   
-  Future<bool> setStats(List<Stat> stats) {
+  Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
     _printStats();  // DEBUG
     var statsDiv = document.querySelector("nav div#stats");
@@ -360,7 +360,7 @@ class HtmlInterface extends EgbInterfaceBase {
     for (int i = 0; i < stats.length; i++) {
       var current = stats[i];
       var span = new SpanElement();
-      span.text = current.toString();
+      span.text = current.string;
       var a = new AnchorElement();
       a.classes.add("button");
       if (!current.show) a.classes.add("display-none");
@@ -372,16 +372,16 @@ class HtmlInterface extends EgbInterfaceBase {
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
-    Stat.updateStatsListFromMap(_statsList, mapContent);
-    _printStats();  // DEBUG
-    _statsList.where((stat) => stat.changed).forEach((Stat current) {
-      var a = _statsElementMap[current.name];
-      a.children.single.text = current.toString();
-      if (current.show) {
-        a.classes.remove("display-none");
-      } else {
-        a.classes.add("display-none");
-      }
+    UIStat.updateStatsListFromMap(_statsList, mapContent)
+      // Returns only the changed stats.
+      .forEach((UIStat current) {
+        var a = _statsElementMap[current.name];
+        a.children.single.text = current.string;
+        if (current.show) {
+          a.classes.remove("display-none");
+        } else {
+          a.classes.add("display-none");
+        }
     });
   }
   
@@ -482,10 +482,10 @@ class HtmlInterface extends EgbInterfaceBase {
     html.writeln("<table>");
     html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
     for (int i = 0; i < _statsList.length; i++) {
-      Stat s = _statsList[i];
+      UIStat s = _statsList[i];
       if (s.show) {
         html.writeln("<tr><td>${s.name}:</td>"
-                     "<td>${s.toString()}</td></tr>");
+                     "<td>${s.string}</td></tr>");
       }
     }
     html.writeln("</table>");

@@ -53,7 +53,7 @@ abstract class EgbInterface {
   /// the Stat objects for those and show all the stats which have
   /// [:stat.show == true:]. During the game, only the [Stat.value] and the 
   /// [Stat.show] will change (via [updateStats]).
-  Future<bool> setStats(List<Stat> stats);
+  Future<bool> setStats(List<UIStat> stats);
   
   /// Tells the interface about changed stats. Interface should update the shown
   /// value(s) and show/hide stats according to the [Stat.show] state.

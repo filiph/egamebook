@@ -316,7 +316,14 @@ abstract class EgbScripter {
         break;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
-        _restart();
+        try {
+          _restart();
+        } catch (e, stacktrace) {
+          _send(new EgbMessage.ScripterError(
+              "An error occured when initializing: $e.\n"
+              "$stacktrace"));
+          throw e;
+        }
         _send(Stat.toMessage());
         _send(new PointsAward(0, 0).toMessage());
         return;

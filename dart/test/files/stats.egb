@@ -1,8 +1,8 @@
 # Stats
 
 <variables>
-  hp = new Stat("HP", "? HP", initialValue: 100);
-  gold = new Stat("gold", "¤?", initialValue: 0, show: false);
+  hp = new Stat<int>("HP", (value) => "$value HP", initialValue: 100);
+  gold = new Stat<int>("gold", (value) => "¤$value", initialValue: 0, show: false);
 </variables>
 
 ---

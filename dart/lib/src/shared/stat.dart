@@ -4,52 +4,130 @@ import 'message.dart';
 import '../persistence/saveable.dart';
 
 /**
+ * [StatBase] is the common interface of the [Stat] in [EgbScripter] and the
+ * limited [UIStat] in interfaces
+ */
+abstract class StatBase {
+  /// The name of the stat. Ex.: "energy".
+  String get name;
+  /// The optional description of the Stat. To be shown when player somehow 
+  /// interacts with the stat (e.g. click in HtmlInterface).
+  String get description; 
+  /// The color associated with this stat. It should be an HTML-recognizable
+  /// string (e.g. "blue", or "#ff00ff").
+  String get color;
+  /// The higher the priority, the more prominently (top-side) the Stat will
+  /// be shown.
+  int get priority;
+  /// Signifies whether to show the Stat in the interface or not. Sometimes,
+  /// it's useful to hide a Stat from player before he can use it.
+  bool get show;
+  /// When set to [:true:], and when [:show == true:] and 
+  /// [:this.changed == true:], the interface should notify the player on
+  /// the change (e.g. by blinking once).
+  bool get notifyOnChange;
+  
+  /// The current [String] value of the stat. Can be just a number (as with
+  /// points), but most often it is something else (e.g. "2:12am", "$32", ...).
+  String get string;
+  
+  String toString() => string;
+  
+  static const String DEFAULT_COLOR = "#CCCCCC";
+}
+
+
+class UIStat implements StatBase {
+  String name;
+  String description; 
+  String color;
+  int priority;
+  bool show;
+  bool notifyOnChange = true; // TODO: implement
+  String string;
+  
+  UIStat(this.name, this.description, this.color, this.priority, this.show,
+      this.notifyOnChange, this.string);
+  
+  /// Gets the Map from the [STAT_UPDATE] EgbMessage (as generated with
+  /// [Stat._toMessageChangedOnly] and updates the [_stats] from it.
+  /// 
+  /// Returns the list of the changed stats.
+  static List<UIStat> updateStatsListFromMap(List<UIStat> statsList, 
+                                     Map<String,Object> mapContent) {
+    List<UIStat> changedStats = new List<UIStat>(); 
+    mapContent.forEach((String statName, Map statMap) {
+      var stat = statsList.firstWhere((st) => st.name == statName);
+      stat.show = statMap["show"];
+      stat.string = statMap["string"];
+      changedStats.add(stat);
+    });
+    return changedStats;
+  }
+  
+  /// Creates a list of [UIStat] objects from an EgbMessage of type [STATS_SET].
+  /// The list is sorted by [priority].
+  static List<UIStat> statsListFromMessage(EgbMessage message) {
+    if (message.type != EgbMessage.SET_STATS) {
+      throw new StateError("Cannot create Stats set. "
+          "Incorrect type of message");
+    }
+    var statsList = new List<UIStat>(message.listContent.length);
+    int i = 0;
+    for (Map<String,Object> statMap in message.listContent) {
+      var stat = new UIStat(statMap["name"], statMap["description"], 
+          statMap["color"], statMap["priority"], statMap["show"], 
+          statMap["notifyOnChange"], statMap["string"]);
+      statsList[i] = stat;
+      i += 1;
+    }
+    statsList.sort((a, b) => b.priority - a.priority);
+    return statsList;
+  }
+}
+
+/**
  * This class is holding different statistics that are to be shown to the
  * player. These should be visible all the time on the interface alongside
  * [PointCouter]. Thus, it is discouraged to use too many Stats.
  * 
  * A set of all Stats can always be accessed by the static method Stats.all.
+ * 
+ * [T] needs to either be [Saveable] or a primitive type. TODO: check 
  */
-class Stat implements Saveable {  // TODO: add generic (Stat<T>)
+class Stat<T> implements StatBase, Saveable {
   /// The name of the stat. Ex.: "energy".
   final String name;
   /// The optional description of the Stat. To be shown when player somehow 
   /// interacts with the stat (e.g. click in HtmlInterface).
   final String description; 
-  /// The format to use. Ex.: "? E"
-  final String format;  // TODO: use a lambda instead (takes value, returns string)
+  
+  /// Lambda that takes care of of converting the [value] to a String that
+  /// can be shown in the interface.
+  final ValueToStringLambda valueToString;
+  
   /// The color associated with this stat. It should be an HTML-recognizable
   /// string (e.g. "blue", or "#ff00ff").
   final String color;
-  static const DEFAULT_COLOR = "#cccccc";
   /// The higher the priority, the more prominently (top-side) the Stat will
   /// be shown.
   final int priority;
   /// The current value. It can be a real number, but when showed, it will 
   /// always be rounded and showed as an integer.
-  num get value => _value;
-  set value(num val) {
+  T get value => _value;
+  set value(T val) {
     if (_value != val) {
       _value = val;
       changed = true;
       someChanged = true;
     }
   }
-  num _value;
-  
-  void add(num val) {
-    value = value + val;
-  }
-  
-  Stat operator +(num val) {
-    add(val);
-    return this;
-  }
+  T _value;
   
   /// Signifies whether to show the Stat in the interface or not. Sometimes,
   /// it's useful to hide a Stat from player before he can use it.
   bool get show => _show;
-  set show(value) {
+  set show(bool value) {
     if (_show != value) {
       _show = value;
       changed = true;
@@ -63,19 +141,19 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
   /// the change (e.g. by blinking once).
   bool notifyOnChange = true; // TODO: implement
   
-  factory Stat(String name, String format,
-      {String description, String color: DEFAULT_COLOR, int priority: 0,
-       num initialValue: 0, bool show: true}) {
+  factory Stat(String name, ValueToStringLambda valueToString,
+      {String description, String color: StatBase.DEFAULT_COLOR, 
+       int priority: 0, num initialValue: 0, bool show: true}) {
     Stat stat;
     if (_stats.containsKey(name)) {
       //print("Warning: A Stat with name '$name' already exists.");
       stat = _stats[name];
       assert(stat.description == description);
-      assert(stat.format == format);
       assert(stat.color == color);
       assert(stat.priority == priority);
     } else {
-      stat = new Stat._internal(name, description, format, color, priority);
+      stat = new Stat._internal(name, description, valueToString, color, 
+          priority);
     }
     stat._value = initialValue;
     stat._show = show;
@@ -83,16 +161,7 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
     return stat;
   }
   
-  /// Used to create stats outside Scripter. In Scripter, for convenience,
-  /// all calls to [:new Stat():] go through the factory and keep track of the
-  /// stat in the [_stats] Map. With this constructor, we can create an
-  /// independent stat, without using the [_stats] Map at all.
-  Stat.independent(this.name, this.format,
-      {this.description, this.color: DEFAULT_COLOR, this.priority: 0,
-       num initialValue: 0, bool show: true}) 
-       : _value = initialValue, _show = show;
-  
-  Stat._internal(this.name, this.description, this.format, this.color, 
+  Stat._internal(this.name, this.description, this.valueToString, this.color, 
       this.priority);
   
   /// Signifies if the [value] (or [show] state) has changed since last time.
@@ -100,9 +169,7 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
   /// the representation of the Stat. 
   bool changed = false;
   
-  String toString() {
-    return format.replaceFirst("?", value.round().toString());
-  }
+  String get string => valueToString(value);
   
   /// True if one of the stats got changed.
   static bool someChanged = false;
@@ -128,12 +195,11 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
       var statMap = new Map<String,Object>();
       statMap["name"] = stat.name;
       statMap["description"] = stat.description;
-      statMap["format"] = stat.format;
       statMap["color"] = stat.color;
-      statMap["notifyOnChange"] = stat.notifyOnChange;
       statMap["priority"] = stat.priority;
-      statMap["value"] = stat.value;
       statMap["show"] = stat.show;
+      statMap["notifyOnChange"] = stat.notifyOnChange;
+      statMap["string"] = stat.string;
       message.listContent.add(statMap);
     });
     return message;
@@ -145,8 +211,8 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
     message.mapContent = new Map<String,Object>();
     _stats.values.where((stat) => stat.changed).forEach((Stat stat) {
       var statMap = new Map<String,Object>();
-      statMap["value"] = stat.value;
       statMap["show"] = stat.show;
+      statMap["string"] = stat.string;
       stat.changed = false;  // reset back to unchanged status
       message.mapContent[stat.name] = statMap;
     });
@@ -154,38 +220,6 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
     return message;
   }
   
-  /// Gets the Map from the [STAT_UPDATE] EgbMessage (as generated with
-  /// [_toMessageChangedOnly] and updates the [_stats] from it. 
-  static void updateStatsListFromMap(List<Stat> statsList, 
-                                     Map<String,Object> mapContent) {
-    mapContent.forEach((String statName, Map statMap) {
-      var stat = statsList.firstWhere((st) => st.name == statName);
-      stat.value = statMap["value"];
-      stat.show = statMap["show"];
-    });
-  }
-  
-  /// Creates a list of [Stat] objects from an EgbMessage of type [STATS_SET].
-  /// The list is sorted by [priority].
-  static List<Stat> statsListFromMessage(EgbMessage message) {
-    if (message.type != EgbMessage.SET_STATS) {
-      throw new StateError("Cannot create Stats set. "
-          "Incorrect type of message");
-    }
-    var statsList = new List<Stat>(message.listContent.length);
-    int i = 0;
-    for (Map<String,Object> statMap in message.listContent) {
-      var stat = new Stat.independent(statMap["name"], statMap["format"],
-          description: statMap["description"], color: statMap["color"], 
-          priority: statMap["priority"], initialValue: statMap["value"], 
-          show: statMap["show"]);
-      statsList[i] = stat;
-      i += 1;
-    }
-    statsList.sort((a, b) => b.priority - a.priority);
-    return statsList;
-  }
-
   String className = "Stat";
 
   Map<String, dynamic> toMap() {
@@ -203,3 +237,5 @@ class Stat implements Saveable {  // TODO: add generic (Stat<T>)
     this.show = map["show"];
   }
 }
+
+typedef String ValueToStringLambda(Object o);

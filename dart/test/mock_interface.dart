@@ -18,7 +18,7 @@ class MockInterface extends EgbInterfaceBase {
   EgbChoiceList get latestChoices => _latestChoices;
   bool started = false;
   bool closed = false;
-  List<Stat> get visibleStats => 
+  List<UIStat> get visibleStats => 
       _statsList.where((stat) => stat.show == true).toList(growable: false);
   
   /// Choices that are being shown now.
@@ -164,15 +164,15 @@ class MockInterface extends EgbInterfaceBase {
   int _currentlyShownPoints = 0;  // TODO: use for unittesting
   int get currentlyShownPoints => _currentlyShownPoints;
   
-  List<Stat> _statsList;
+  List<UIStat> _statsList;
   
-  Future<bool> setStats(List<Stat> stats) {
+  Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
     _printStats();
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
-    Stat.updateStatsListFromMap(_statsList, mapContent);
+    UIStat.updateStatsListFromMap(_statsList, mapContent);
     _printStats();
   }
   

@@ -111,15 +111,15 @@ class CmdlineInterface extends EgbInterfaceBase {
     return new Future.value(true);
   }
   
-  List<Stat> _statsList;
+  List<UIStat> _statsList;
   
-  Future<bool> setStats(List<Stat> stats) {
+  Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
     _printStats();
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
-    Stat.updateStatsListFromMap(_statsList, mapContent);
+    UIStat.updateStatsListFromMap(_statsList, mapContent);
     _printStats();
   }
   

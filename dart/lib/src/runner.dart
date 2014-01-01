@@ -157,7 +157,7 @@ class EgbRunner {
         });
         return;
       case EgbMessage.SET_STATS:
-        _interface.setStats(Stat.statsListFromMessage(message));
+        _interface.setStats(UIStat.statsListFromMessage(message));
         return;
       case EgbMessage.UPDATE_STATS:
         print("RUN: Received updated stats.");
