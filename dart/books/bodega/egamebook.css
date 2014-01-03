@@ -52,24 +52,26 @@ nav {
   left: 0;
   top: 0;
   right: 0;
-
   background-color: #ffffff;
   background: -webkit-gradient(
-	linear,
-	left top,
-	left bottom,
-	color-stop(0.6, rgba(255, 255, 255, 1)),
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.6, rgba(255, 255, 255, 1)),
     color-stop(1, rgba(256, 256, 256, 0))
   );
+  background: -webkit-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
   background: -moz-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
-    background: gradient(
-	linear,
-	left top,
-	left bottom,
-	color-stop(0.6, rgba(255, 255, 255, 1)),
+  background: -o-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: -ms-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.6, rgba(255, 255, 255, 1)),
     color-stop(1, rgba(256, 256, 256, 0))
   );
-
   padding: 0.5em 1em 2em;
   z-index: 10;
 }
