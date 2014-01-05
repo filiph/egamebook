@@ -123,7 +123,7 @@ class Action {
           // the current room.
           goto(player.location.name);
         }
-      });
+      }, submenu: submenu);
     }
   }
   

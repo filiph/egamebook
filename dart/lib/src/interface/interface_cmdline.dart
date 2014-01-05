@@ -91,7 +91,10 @@ class CmdlineInterface extends EgbInterfaceBase {
     
     // let player choose
     for (int i = 0; i < choiceList.length; i++) {
-      print("${i+1}) ${choiceList[i].string}");
+      EgbChoice ch = choiceList[i];
+      print("${i+1}) "
+          "${ch.submenu == null ? "" : "${ch.submenu} > "}"
+          "${ch.string}");
     }
     print("");
     
