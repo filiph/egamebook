@@ -52,7 +52,6 @@ class Room extends Entity with Node implements Described, ZilSaveable {
     actions.forEach((action) => action.room = this);
     items.forEach((item) {
       item.location = this;
-      _zil.items.add(item);
     });
     actors.forEach((AIActor actor) {
       actor.location = this;
@@ -68,6 +67,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
   void update(int ticks, {bool describe: true}) {
     if (descriptionPage != null && !visited) {
+      // Go to descriptionPage.
       echo(storyline.toString());
       storyline.clear();
       goto(descriptionPage);
