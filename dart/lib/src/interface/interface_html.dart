@@ -233,53 +233,63 @@ class HtmlInterface extends EgbInterfaceBase {
     OListElement choicesOl = new OListElement();
     choicesOl.classes.add("choices-ol");
     
-    Set<StreamSubscription> clickSubscriptions = new Set();
+    Set<StreamSubscription> clickSubscriptions = new Set<StreamSubscription>();
     
-    // Build the <li> elements one by one.
-    for (int i = 0; i < choiceList.length; i++) {
-      EgbChoice choice = choiceList[i];
-      ButtonElement btn = new ButtonElement();
-
-      var number = new SpanElement();
-      number.text = "${i+1}.";
-      number.classes.add("choice-number");
-      
-      var choiceDisplay = new SpanElement();
-      choiceDisplay.classes.add("choice-display");
-      
-      var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
-      if (!choiceWithInfochips.infochips.isEmpty) {
-        var infochips = new SpanElement();
-        infochips.classes.add("choice-infochips");
-        for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
-          var chip = new SpanElement();
-          chip.text = markdownToHtml(choiceWithInfochips.infochips[j], 
-              inlineOnly: true);
-          chip.classes.add("choice-infochip");
-          infochips.append(chip);
-        }
-        choiceDisplay.append(infochips);
-      }
-      
-      var text = new SpanElement();
-      text.innerHtml = markdownToHtml(choiceWithInfochips.text, 
-          inlineOnly: true);
-      text.classes.add("choice-text");
-      choiceDisplay.append(text);
-
-      var subscription = btn.onClick.listen((MouseEvent event) =>
-          _choiceClickListener(event, completer, choice, btn, choicesOl, 
-              clickSubscriptions)
-      );
-      clickSubscriptions.add(subscription);
-      
-      btn.append(number);
-      btn.append(choiceDisplay);
+    // Build the <li> elements of the main (non-submenu) choices, one by one.
+    int mainChoiceListNumber = 1;
+    choiceList.where((choice) => choice.submenu == null).forEach((choice) {
+      ButtonElement btn = _createChoiceButton("$mainChoiceListNumber.", choice, 
+          completer, choicesDiv, clickSubscriptions);
       
       choicesOl.append(btn);
-    }
-    
+      mainChoiceListNumber++;
+    });
     choicesDiv.append(choicesOl);
+    
+    // Now let's see if there are any submenus we need to show.
+    Map<String,Submenu> submenus = new Map<String,Submenu>();
+    choiceList.where((choice) => choice.submenu != null).forEach((choice) {
+      Submenu sub = submenus.putIfAbsent(choice.submenu, 
+          () => new Submenu(choice.submenu));
+      sub.choices.add(choice);
+    });
+    
+    if (submenus.isNotEmpty) {
+      DivElement submenusDiv = new DivElement()
+      ..classes.add("choices-submenus");
+      
+      DivElement submenuButtonsDiv = new DivElement()
+      ..classes.add("choices-submenu-buttons");
+      submenusDiv.append(submenuButtonsDiv);
+      
+      submenus.forEach((name, submenu) {
+        ButtonElement submenuButton = new ButtonElement()
+        ..classes.add("submenu-button")
+        ..text = submenu.name;
+        
+        submenuButtonsDiv.append(submenuButton);
+        
+        OListElement submenuChoicesOl = new OListElement()
+        ..classes.addAll(["choices-ol", "display-none"]);
+        
+        submenu.choices.forEach((choice) {
+          ButtonElement btn = _createChoiceButton("", choice, 
+              completer, choicesDiv, clickSubscriptions);
+          
+          submenuChoicesOl.append(btn);
+        });
+        
+        var clickSubscription = submenuButton.onClick.listen((_) {
+          submenuChoicesOl.classes.toggle("display-none");
+          submenuButton.classes.toggle("depressed");
+        });
+        clickSubscriptions.add(clickSubscription);
+        
+        submenusDiv.append(submenuChoicesOl);
+      });
+      
+      choicesDiv.append(submenusDiv);
+    }
     
     choicesDiv.classes.add("hidden");
     bookDiv.append(choicesDiv);
@@ -288,9 +298,52 @@ class HtmlInterface extends EgbInterfaceBase {
     return completer.future;
   }
 
+  ButtonElement _createChoiceButton(String index, EgbChoice choice, 
+                          Completer completer, DivElement choicesDiv,
+                          Set<StreamSubscription> clickSubscriptions) {
+    ButtonElement btn = new ButtonElement();
+    
+    var number = new SpanElement();
+    number.text = index;
+    number.classes.add("choice-number");
+    
+    var choiceDisplay = new SpanElement();
+    choiceDisplay.classes.add("choice-display");
+    
+    var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
+    if (!choiceWithInfochips.infochips.isEmpty) {
+      var infochips = new SpanElement();
+      infochips.classes.add("choice-infochips");
+      for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
+        var chip = new SpanElement();
+        chip.text = markdownToHtml(choiceWithInfochips.infochips[j], 
+            inlineOnly: true);
+        chip.classes.add("choice-infochip");
+        infochips.append(chip);
+      }
+      choiceDisplay.append(infochips);
+    }
+    
+    var text = new SpanElement();
+    text.innerHtml = markdownToHtml(choiceWithInfochips.text, 
+        inlineOnly: true);
+    text.classes.add("choice-text");
+    choiceDisplay.append(text);
+    
+    var subscription = btn.onClick.listen((MouseEvent event) =>
+        _choiceClickListener(event, completer, choice, btn, choicesDiv, 
+            clickSubscriptions)
+    );
+    clickSubscriptions.add(subscription);
+    
+    btn.append(number);
+    btn.append(choiceDisplay);
+    return btn;
+  }
+
   void _choiceClickListener(MouseEvent event, Completer completer, 
                             EgbChoice choice, ButtonElement btn, 
-                            OListElement choicesOl,
+                            DivElement choicesDiv,
                             Set<StreamSubscription> clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
     new Future.delayed(const Duration(milliseconds: 100), 
@@ -298,17 +351,17 @@ class HtmlInterface extends EgbInterfaceBase {
     _showLoading(true);
     // Mark this element as chosen.
     btn.classes.add("chosen");
-    choicesOl.classes.add("chosen");
+    choicesDiv.classes.add("chosen");
     // Unregister listeners.
-    choicesOl.querySelectorAll("button").forEach(
+    choicesDiv.querySelectorAll("button").forEach(
         (ButtonElement b) => b.disabled = true);
     clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
     clickSubscriptions.clear();
     // Show bookmark.
     if (_savegameToBe != null) {
-      choicesOl.classes.add("bookmark");
+      choicesDiv.classes.add("bookmark");
       String savegameUid = _savegameToBe.uid;
-      choicesOl.onClick.listen((_) => 
+      choicesDiv.onClick.listen((_) => 
           _handleSavegameBookmarkClick(savegameUid));
       _savegameToBe = null;
     }
@@ -497,6 +550,13 @@ class HtmlInterface extends EgbInterfaceBase {
     Dialog error = new Dialog(title, "<p>$text</p>");
     return showDialog(error);
   }
+}
+
+class Submenu {
+  final String name;
+  final List<EgbChoice> choices = new List<EgbChoice>();
+  
+  Submenu(this.name);
 }
 
 class Dialog {

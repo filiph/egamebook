@@ -166,6 +166,10 @@ div.bottom-fixed {
   background: white;
 }
 
+.display-none {
+  display: none
+}
+
 .clear-both {
   clear: both;
 }
@@ -330,11 +334,11 @@ ol.choices-ol {
   clear: both;
 }
 
-ol.bookmark {
+.bookmark {
   cursor: pointer;
 }
 
-ol.choices-ol.bookmark button {
+.bookmark button {
   border: 1px solid rgba(0,180,0,0.5);
   cursor: pointer;
 }
@@ -357,20 +361,12 @@ button {
   font-size: 100%;
 }
 
-
-/*
-ol.choices-ol button:active {
-	position:relative;
-	top:1px;
-}
-*/
-
-ol.choices-ol.chosen button {
+.chosen button {
   cursor: default;
   background: white;
 }
 
-ol.choices-ol button.chosen {
+button.chosen {
   font-weight: bold;
 }
 
@@ -393,6 +389,7 @@ ol.choices-ol button span.choice-text {
 ol.choices-ol button p {
   margin: 0;
   padding: 0;
+  border: 1px solid red; /* this shouldn't happen - notify */
 }
 
 ol.choices-ol button span.choice-infochips {
@@ -408,6 +405,18 @@ ol.choices-ol button span.choice-infochip {
   padding: 0 0.4em;
   border-radius: 0.2em;
   margin-left: 2em;
+}
+
+/* CHOICELIST SUBMENU */
+
+.submenu-button {
+  font-size: 80%;
+  width: auto;
+  padding: 0.3em 0.8em;
+}
+
+.depressed {
+  background: white;
 }
 
 .blink {
