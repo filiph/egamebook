@@ -413,6 +413,8 @@ ol.choices-ol button span.choice-infochip {
   font-size: 80%;
   width: auto;
   padding: 0.3em 0.8em;
+  margin-right: 1em;
+  display: inline-block;
 }
 
 .depressed {
