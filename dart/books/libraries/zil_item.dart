@@ -60,7 +60,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
     if (_takeInfinitive != null) {
       return _takeInfinitive;
     }
-    return "take $description";
+    return "take the $description";
   }
   
   
