@@ -313,11 +313,16 @@ li.preferred a {
 }
 
 @media (max-width: 500px) {
-  
+  blockquote {
+    padding: 0 1em;
+  }
   .knight, .cleaner {
 	margin-top: 1em;
 	float: none;
 	max-width: 100%;
+  }
+  h1 img {
+    width: 100%;
   }
   
 }
