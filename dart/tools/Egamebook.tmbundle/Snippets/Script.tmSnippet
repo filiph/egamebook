@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>&lt;script&gt;
+  $1
+&lt;/script&gt;</string>
+	<key>name</key>
+	<string>Script</string>
+	<key>scope</key>
+	<string>source.egamebook</string>
+	<key>tabTrigger</key>
+	<string>script</string>
+	<key>uuid</key>
+	<string>56B6FC4C-81B0-4860-9D87-447AD4DC405F</string>
+</dict>
+</plist>

@@ -25,6 +25,14 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   String string;
   Function f;
   String goto;
+  
+  /// When set, this choice will be accessible in a sub menu called [submenu].
+  /// The user interface is responsible of grouping choices of the same submenu
+  /// together and adding a way for the player to 'open' the submenu and pick
+  /// a choice from it (or pick any other choice -- opening a submenu shouldn't
+  /// prevent the player from picking a choice from any other submenu or from
+  /// the main choice list).
+  String submenu;
 
   /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently).
@@ -58,7 +66,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     return true;
   }
 
-  EgbChoice(String string, {this.goto, Function script,
+  EgbChoice(String string, {this.goto, Function script, this.submenu: null,
         bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
       super() {
     this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
@@ -81,7 +89,17 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
       deferToEndOfPage = !map["showNow"];
     }
     f = map["then"];
+    
+    submenu = map["submenu"];
   }
+  
+  /// Creates a Map representation of the choice with only the data needed by
+  /// the interface: [string], [hash] and [submenu].
+  Map<String,Object> toMapForInterface() => {
+    "string": string,
+    "hash": hash,
+    "submenu": submenu
+  };
 
   EgbChoice then(Function _f) {
     f = _f;
@@ -133,7 +151,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
     for (var i = 1; i < list.length; i++) {
       Map map = list[i];
-      var string;
+      String string;
       if (map["string"] != null && map["string"] is Function) {
         try {
           string = map["string"]();
@@ -146,17 +164,19 @@ class EgbChoiceList extends ListBase<EgbChoice> {
       var choice = new EgbChoice(
                             string,
                             goto: map["goto"],
-                            script: map["script"]);
+                            script: map["script"],
+                            submenu: map["submenu"]);
       _choices.add(choice);
     }
   }
 
-  add(element, {Function script, String goto, 
+  add(Object element, {Function script, String goto, String submenu,
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
       _choices.add(element);
     } else if (element is String) {
       var choice = new EgbChoice(element, goto: goto, script: script, 
+          submenu: submenu,
           deferToEndOfPage: deferToEndOfPage, 
           deferToChoiceList: deferToChoiceList);
       _choices.add(choice);
@@ -210,10 +230,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     m.listContent.add(question);
     choicesToSend.forEach((choice) {
       DEBUG_SCR("- $choice");
-      m.listContent.add( {
-        "string": choice.string,
-        "hash": choice.hash
-      } );
+      m.listContent.add(choice.toMapForInterface());
       choice.shown = true;
     });
 

@@ -94,9 +94,11 @@ final EgbChoiceList choices = new EgbChoiceList();
  * until there is a choiceList on the page.
  */
 EgbChoice choice(String string, {String goto, ScriptBlock script, 
+                                 String submenu,
                                  bool deferToEndOfPage: false, 
                                  bool deferToChoiceList: false}) {
-  EgbChoice choice = new EgbChoice(string, goto:goto, script:script, 
+  EgbChoice choice = new EgbChoice(string, goto: goto, script: script, 
+      submenu: submenu,
       deferToEndOfPage: deferToEndOfPage, deferToChoiceList: deferToChoiceList);
   choices.add(choice);
   return choice;

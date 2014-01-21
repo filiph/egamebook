@@ -52,24 +52,26 @@ nav {
   left: 0;
   top: 0;
   right: 0;
-
   background-color: #ffffff;
   background: -webkit-gradient(
-	linear,
-	left top,
-	left bottom,
-	color-stop(0.6, rgba(255, 255, 255, 1)),
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.6, rgba(255, 255, 255, 1)),
     color-stop(1, rgba(256, 256, 256, 0))
   );
+  background: -webkit-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
   background: -moz-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
-    background: gradient(
-	linear,
-	left top,
-	left bottom,
-	color-stop(0.6, rgba(255, 255, 255, 1)),
+  background: -o-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: -ms-linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: linear-gradient( center top, rgba(255, 255, 255, 1) 60%, rgba(256, 256, 256, 0) 100% );
+  background: gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.6, rgba(255, 255, 255, 1)),
     color-stop(1, rgba(256, 256, 256, 0))
   );
-
   padding: 0.5em 1em 2em;
   z-index: 10;
 }
@@ -164,6 +166,10 @@ div.bottom-fixed {
   background: white;
 }
 
+.display-none {
+  display: none
+}
+
 .clear-both {
   clear: both;
 }
@@ -245,13 +251,22 @@ div#book-wrapper {
 
 div#book-wrapper > * {
   -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  -ms-transition: opacity 1s;
   transition: opacity 1s;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
   opacity: 1;
 }
 
+
 div#book-wrapper > *.hidden {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
   opacity: 0;
 }
+
 
 p {
   margin: 1em 0;
@@ -271,12 +286,16 @@ p.toast {
   margin-left: 10%;
   margin-right: 10%;
   padding: 0.5em 1em;
+
   -webkit-transition: color 5s;
+  -moz-transition: color 5s;
+  -o-transition: color 5s;
+  -ms-transition: color 5s;
   transition: color 5s;
   color: #999;
-
   border-radius: 0.2em;
 }
+
 
 p.toast.non-dimmed {
   color: inherit;
@@ -315,19 +334,22 @@ ol.choices-ol {
   clear: both;
 }
 
-ol.bookmark {
+.bookmark {
   cursor: pointer;
 }
 
-ol.choices-ol.bookmark button {
+.bookmark button {
   border: 1px solid rgba(0,180,0,0.5);
   cursor: pointer;
 }
 
 button {
+  background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+  background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+  background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
+  background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
   background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
-  background:-moz-linear-gradient(center top, #f5f5f5 0%, #f1f1f1 100%);
-  background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
+  -image background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
   padding: 0.4em 1.5em;
   margin: 0.4em 0;
   border: 1px solid rgba(0,0,0,0.1);
@@ -339,19 +361,12 @@ button {
   font-size: 100%;
 }
 
-/*
-ol.choices-ol button:active {
-	position:relative;
-	top:1px;
-}
-*/
-
-ol.choices-ol.chosen button {
+.chosen button {
   cursor: default;
   background: white;
 }
 
-ol.choices-ol button.chosen {
+button.chosen {
   font-weight: bold;
 }
 
@@ -374,6 +389,7 @@ ol.choices-ol button span.choice-text {
 ol.choices-ol button p {
   margin: 0;
   padding: 0;
+  border: 1px solid red; /* this shouldn't happen - notify */
 }
 
 ol.choices-ol button span.choice-infochips {
@@ -391,33 +407,96 @@ ol.choices-ol button span.choice-infochip {
   margin-left: 2em;
 }
 
+/* CHOICELIST SUBMENU */
+
+.submenu-button {
+  font-size: 80%;
+  width: auto;
+  padding: 0.3em 0.8em;
+  margin-right: 1em;
+  display: inline-block;
+}
+
+.depressed {
+  background: white;
+}
+
 .blink {
-  animation: highlight 1s;
-  -moz-animation: highlight 1s;
   -webkit-animation: highlight 1s;
+  -moz-animation: highlight 1s;
+  -ms-animation: highlight 1s;
   -o-animation: highlight 1s;
+  animation: highlight 1s;
 }
 
-@keyframes highlight {
-  0%    {box-shadow: none;}
-  10%   {box-shadow: 0 0 0.5em 0.5em lightblue;}
-  100%  {box-shadow: none;}
+
+@keyframes "highlight" {
+ 0% {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+ }
+ 10% {
+    -webkit-box-shadow: 0 0 0.5em 0.5em lightblue;
+    box-shadow: 0 0 0.5em 0.5em lightblue;
+ }
+ 100% {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+ }
+
 }
 
-@-webkit-keyframes highlight {
-  0%    {-webkit-box-shadow: none;}
-  10%   {-webkit-box-shadow: 0 0 0.5em 0.5em lightblue;}
-  100%  {-webkit-box-shadow: none;}
+@-moz-keyframes highlight {
+ 0% {
+   box-shadow: none;
+ }
+ 10% {
+   box-shadow: 0 0 0.5em 0.5em lightblue;
+ }
+ 100% {
+   box-shadow: none;
+ }
+
 }
 
-@-moz-keyframes highlight 
-  0%    {-moz-box-shadow: none;}
-  10%   {-moz-box-shadow: 0 0 0.5em 0.5em lightblue;}
-  100%  {-moz-box-shadow: none;}
+@-webkit-keyframes "highlight" {
+ 0% {
+   -webkit-box-shadow: none;
+   box-shadow: none;
+ }
+ 10% {
+   -webkit-box-shadow: 0 0 0.5em 0.5em lightblue;
+   box-shadow: 0 0 0.5em 0.5em lightblue;
+ }
+ 100% {
+   -webkit-box-shadow: none;
+   box-shadow: none;
+ }
+
 }
 
-@-o-keyframes highlight 
-  0%    {-o-box-shadow: none;}
-  10%   {-o-box-shadow: 0 0 0.5em 0.5em lightblue;}
-  100%  {-o-box-shadow: none;}
+@-ms-keyframes "highlight" {
+ 0% {
+   box-shadow: none;
+ }
+ 10% {
+   box-shadow: 0 0 0.5em 0.5em lightblue;
+ }
+ 100% {
+   box-shadow: none;
+ }
+
+}
+
+@-o-keyframes "highlight" {
+ 0% {
+   box-shadow: none;
+ }
+ 10% {
+   box-shadow: 0 0 0.5em 0.5em lightblue;
+ }
+ 100% {
+   box-shadow: none;
+ }
+
 }

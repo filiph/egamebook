@@ -17,7 +17,6 @@ class ZilActor extends Actor implements Located, ZilSaveable {
         throw new NullInOptionalParametersList("ZilActor", name, "items"); 
       }
       item.carrier = this;
-      _zil.items.add(item);
     });
     if (this is AIActor) {
       _zil.actors.add(this);
