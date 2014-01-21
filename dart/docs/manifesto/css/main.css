@@ -136,6 +136,8 @@ code {
 }
 
 .button {
+  background: #ccc;
+	
   background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
   background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
   background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
