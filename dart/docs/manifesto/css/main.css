@@ -244,8 +244,13 @@ li.preferred a {
   font-size: 80%;
   color: #666;
   margin-top: 4em;
+  margin-bottom: 4em;
   overflow: hidden;
   line-height: 1em;
+}
+
+.footer .g-community-wrapper {
+  float: left;
 }
 
 .footer .contact {
@@ -254,7 +259,7 @@ li.preferred a {
 }
 
 .footer .contact a {
-  color: #8085C1;
+  text-decoration: none;
 }
 
 .footer .rss {
@@ -310,11 +315,17 @@ li.preferred a {
   body {
 	font-size: 90%;
   }
+
+  .footer .g-community-wrapper {
+    clear: both;
+    float: right;
+    margin-top: 1em;
+  }
 }
 
 @media (max-width: 500px) {
   blockquote {
-    padding: 0 1em;
+    padding: 0 0 0 1em;
   }
   .knight, .cleaner {
 	margin-top: 1em;
