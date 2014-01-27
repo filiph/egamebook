@@ -301,7 +301,8 @@ class Builder {
         print("Reading input file $f.");
 
         var inputStream = f.openRead();
-        readInputStream(inputStream).then((b) => completer.complete(b));
+        readInputStream(inputStream).then((b) => completer.complete(b),
+            onError: (e, stackTrace) => completer.completeError(e, stackTrace));
       }
     });
 
@@ -340,8 +341,16 @@ class Builder {
           pages.last.blocks.last.lineEnd = _lineNumber;
         }
         
-        // fully specify gotoPageNames of every page
-        for (var page in this.pages) {
+        for (var page in pages) {
+          // check for duplicate pages
+          if (pages.where((BuilderPage otherPage) => 
+              page.name == otherPage.name).length != 1) {
+            completer.completeError(
+                newFormatException("Duplicate page name ('${page.name}')."));
+            return;
+          }
+          
+          // fully specify gotoPageNames of every page
           for (int i = 0; i < page.gotoPageNames.length; i++) {
             var gotoPageName = page.gotoPageNames[i];
             if (pageHandles.containsKey(

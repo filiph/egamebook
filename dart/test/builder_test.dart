@@ -170,6 +170,14 @@ void main() {
         };
         new Builder().readEgbFile(new File(getPath("full_project.egb"))).then(expectAsync1(callback));
       });
+      
+      test("throws on duplicate pagenames", () {
+        new Builder().readEgbFile(new File(getPath("duplicate_pagenames.egb")))
+        .then((_) => fail("Building duplicate_pagenames.egb should fail."), 
+          onError: expectAsync1((e) {
+            expect(e, isNotNull);
+        }));
+      });
     });
 
     group('advanced files', () {

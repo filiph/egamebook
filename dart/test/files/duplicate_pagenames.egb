@@ -1,0 +1,18 @@
+
+
+---
+start
+
+This is the start page.
+
+---
+end
+
+This is the end page.
+
+---
+end
+
+This is the end page, too, with the same pagename. This should throw even though
+there's no link between the pages. Just a duplicate pagename is enough for
+throwing.
