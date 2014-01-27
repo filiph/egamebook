@@ -10,7 +10,6 @@ if [ $? -eq 255 ]; then
   fi
   exit 1
 fi
-echo "Hi"
 # Run analyzer
 # You can change to bodega.html.dart for longer check in case there are any strange interferences.
 # But checking just bodega.dart should suffice.
