@@ -161,7 +161,8 @@ class Room extends Entity with Node implements Described, ZilSaveable {
     "isActive": isActive,
     "team": team,
     "visited": visited,
-    "actions": Action.iterableToMap(actions)
+    "actions": Action.iterableToMap(actions),
+    "exits": Exit.iterableToMap(exits)
   };
 
   void updateFromMap(Map<String, dynamic> map) {
@@ -169,5 +170,6 @@ class Room extends Entity with Node implements Described, ZilSaveable {
     team = map["team"];
     visited = map["visited"];
     Action.updateIterableFromMap(map["actions"], actions);
+    Exit.updateIterableFromMap(map["exits"], exits);
   }
 }

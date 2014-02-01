@@ -80,6 +80,30 @@ class Exit extends Entity {
       });
     }
   }
+  
+  int get _uniqueIdentifier => "$destinationPageName>>$descriptionInfinitive"
+      ">>$arriveDescription".hashCode;
+  
+  static Map<String,dynamic> iterableToMap(Iterable<Exit> exits) {
+    Map<String,dynamic> map = new Map<String,dynamic>();
+    exits.forEach((Exit exit) {
+      // Duplicate exit unique identifiers?
+      assert(!map.containsKey("${exit._uniqueIdentifier}")); 
+      map["${exit._uniqueIdentifier}"] = {
+          "isActive": exit.isActive
+      };
+    });
+    return map;
+  }
+  
+  static void updateIterableFromMap(Map<String,dynamic> map, 
+                                    Iterable<Exit> exits) {
+    map.forEach((key, Map exitMap) {
+      Exit exit = exits.singleWhere((exit) => 
+          exit._uniqueIdentifier == int.parse(key));
+      exit.isActive = exitMap["isActive"];
+    });
+  }
 }
 
 typedef bool CheckFunction(Actor actor);
