@@ -110,6 +110,13 @@ class Timeline implements Saveable {
   /**
    * Schedules an event at a given time. When [time] is [:null:], the event
    * won't be fired unless it is later given a time using [reschedule].
+   * 
+   * When scheduling events that call [goto], the author should be aware that
+   * once such an even is called, the flow of time is cut off. For example,
+   * if the [time] is 15, an event with a [:goto("somewhere");:] line is
+   * scheduled for time 20, and we call [:elapse(10):], the elapse function
+   * will stop prematurely (at [:time == 20:]). Any next call to [elapse] will
+   * continue from time 20.
    */
   TimedEvent schedule(int time, Object action, {int priority: 0}) {
     throwIfNotInInitBlock();
@@ -211,7 +218,7 @@ class Timeline implements Saveable {
       
       if (gotoPageName != null) {
         // An event called goto().
-        throw new UnimplementedError("Cannot call goto() from a TimedEvent.");
+        break;
       }
       // TODO: make sure there are no choices created during the _goOneTick
       // but allow choices to exist before the elapse... Or think about
