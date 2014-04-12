@@ -2040,7 +2040,7 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implStartCtor = """
-  ScripterImpl(SendPort mainIsolatePort) : super(mainIsolatePort) {
+  ScripterImpl() : super() {
 """;
 
   final String implStartPages = """
@@ -2072,7 +2072,9 @@ class ScripterImpl extends EgbScripter {
 
 // The entry point of the isolate.
 void main(List<String> args, SendPort mainIsolatePort) {
-  new ScripterImpl(mainIsolatePort);
+  EgbInterfaceProxy interface = new EgbIsolateInterfaceProxy(mainIsolatePort);
+  EgbScripter book = new ScripterImpl();
+  book.setInterface(interface);
 }
 """;
 

@@ -8,7 +8,9 @@ import '../persistence/savegame.dart';
 import '../shared/points_award.dart';
 import '../shared/stat.dart';
 
-abstract class EgbInterface {
+import 'interface_proxy.dart';
+
+abstract class EgbInterface implements EgbInterfaceScripterView {
   ReceivePort _receivePort;
   SendPort _scripterPort;
   

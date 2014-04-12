@@ -135,6 +135,8 @@ class EgbChoiceList extends ListBase<EgbChoice> {
   operator[]=(int index, EgbChoice value) => _choices[index] = value;
   
   EgbChoiceList();
+  
+  EgbChoiceList.fromList(this._choices);
 
   /**
    * Takes list from Scripter page data and adds the contents to this.
