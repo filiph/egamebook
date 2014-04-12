@@ -102,6 +102,7 @@ void main() {
   // create [ReceivePort] for this isolate
   ReceivePort receivePort;
 
+  // TODO: instead of this, use the asynchronous nature of setUp() - http://japhr.blogspot.cz/2013/06/async-test-setup-in-dart.html
   Future.wait(
       [build("scripter_test_alternate_6.egb"), 
        build("scripter_test_save.egb"), 
@@ -115,7 +116,7 @@ void main() {
             false);
       });
 
-      solo_group("alternate_6", () {
+      group("alternate_6", () {
         setUp(() {
           receivePort = new ReceivePort();
         });
@@ -334,7 +335,7 @@ void main() {
           "primitive": 8
         };
         var s1 = new EgbSavegame("blah", vars1, {"blah": null});
-        print(s1.vars);
+        logMessage(s1.vars.toString());
         expect(s1.vars, contains("saveable"));
         expect(s1.vars["saveable"], contains("m"));
       });
@@ -369,7 +370,7 @@ void main() {
               contains("Time is now 10."));
           expect(ui.latestOutput,
               contains("customInstance.i is now 20."));
-          print(ui.choicesToBeTaken);
+          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
@@ -397,7 +398,7 @@ void main() {
         .then(expectAsync1((MockInterface ui) {
           expect(ui.latestChoices[0].string, "Another chance to die.");
           expect(ui.latestChoices[1].string, "Win it!");
-          print(ui.choicesToBeTaken);
+          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
@@ -442,7 +443,7 @@ void main() {
       test("build() works", () {
         build("scripter_test_alternate_6.egb")
         .then(expectAsync1((mainPath) {
-          print(mainPath);
+          logMessage(mainPath);
           expect(mainPath, endsWith("scripter_test_alternate_6.dart"));
         }));
       });
@@ -483,7 +484,7 @@ void main() {
       test("successfully awards", () {
         build("points_awards.egb")
         .then((mainPath) {
-          print(mainPath);
+          logMessage(mainPath);
           return run(mainPath);
         })
         .then(expectAsync1((MockInterface ui) {
@@ -503,7 +504,7 @@ void main() {
       test("successfully shows on start", () {
         build("stats.egb")
         .then((mainPath) {
-          print(mainPath);
+          logMessage(mainPath);
           return run(mainPath);
         })
         .then((MockInterface ui) {
@@ -564,7 +565,7 @@ void main() {
 //          return ui.waitForDone();
 //        }))
 //        .then(expectAsync1((MockInterface ui) {
-//          print(ui.latestOutput);
+//          logMessage(ui.latestOutput);
 //          ui.quit();
 //        }));
 //      });

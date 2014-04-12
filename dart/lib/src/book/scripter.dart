@@ -5,7 +5,6 @@ import 'dart:isolate';
 import 'dart:collection';
 import 'dart:mirrors';
 
-import '../shared/message.dart';
 import '../shared/user_interaction.dart';
 import '../persistence/savegame.dart';
 import '../shared/page.dart';
@@ -236,11 +235,6 @@ abstract class EgbScripter {
     interface.setScripter(this);
   }
 
-  /// A cache of text messages so we can send them all together instead of
-  /// one by one.
-  final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
-  EgbMessage _messageBacklog;
-
   /**
    * Function is called when we're ready for the next batch of outputs from the
    * Scripter. Goes through the blocks on the page or processes previously 
@@ -268,11 +262,11 @@ abstract class EgbScripter {
     }
 
     // We can now handle the current block on the page.
-    bool stop;
+    bool loop;
     do {
       DEBUG_SCR("Calling _goOneStep().");
       try {
-        stop = _goOneStep();
+        loop = _goOneStep();
       } on AuthorScriptException catch (e, stacktrace) {
         interface.reportError("AuthorScriptException",
             "$e\nStacktrace: $stacktrace");
@@ -282,7 +276,8 @@ abstract class EgbScripter {
             "$e\nStacktrace: $stacktrace");
         return;
       }
-    } while (stop == false);
+      assert(loop != null);
+    } while (loop == _CONTINUE);
   }
 
   /**
@@ -453,6 +448,7 @@ abstract class EgbScripter {
         interface.save(_createSaveGame());
         return _CONTINUE;
       }
+      return _CONTINUE;
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
       // TODO: create _textMessageCache here and not in _send()
@@ -462,7 +458,7 @@ abstract class EgbScripter {
         // the script block.
         savegame = _createSaveGame();
       }
-      bool stop = _runScriptBlock(currentPage.blocks[currentBlockIndex]);
+      bool canContinue = _runScriptBlock(currentPage.blocks[currentBlockIndex]);
 
       if (choices.any((choice) => choice.isActionable(atEndOfPage: atEndOfPage,
           atChoiceList: true, filterOut: _leadsToIllegalPage)) && currentBlockIndex ==
@@ -470,9 +466,8 @@ abstract class EgbScripter {
         assert(savegame != null);
         // TODO deep compare assert((savegame as EgbSavegame).vars == _createSaveGame().vars);
         interface.save(savegame);
-        stop = true;
       }
-      return stop;
+      return canContinue;
     }
   }
 

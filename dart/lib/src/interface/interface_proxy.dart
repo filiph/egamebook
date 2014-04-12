@@ -70,6 +70,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     switch (message.type) {
       case EgbMessage.QUIT:
         // Just close the book, no need to answer.
+        _choiceSelectedCompleter = null;
         port.close();
         return;
       case EgbMessage.REQUEST_BOOK_UID:
@@ -88,6 +89,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         return;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
+        _choiceSelectedCompleter = null;
         try {
           scripter.restart();
         } catch (e, stacktrace) {
@@ -102,6 +104,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         return;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
+        _choiceSelectedCompleter = null;
         try {
           var savegame = new EgbSavegame.fromMessage(message);
           var playerChronology = message.listContent;
@@ -202,7 +205,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   void savePlayerChronology(Set<String> playerChronology) {
-    // TODO: implement savePlayerChronology
+    _send(new EgbMessage.SavePlayerChronology(playerChronology));
   }
 
   @override
@@ -235,7 +238,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   void save(EgbSavegame savegame) {
-    // TODO: implement save
+    _send(savegame.toMessage(EgbMessage.SAVE_GAME));
   }
 }
 
