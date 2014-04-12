@@ -10,6 +10,8 @@ part 'combatmove.dart';
 part 'shipsystem.dart';
 part 'pilot.dart';
 
+// XXX: When (if!) ready, add ShipBrain to ship (from spaceship_combat), 
+//      + thurster configuration, start calling the ship brain on each update.
 
 class Spaceship extends Actor /*TODO: implements Saveable*/ {
   Spaceship(String name, {this.shield, this.engine, this.hull,
