@@ -103,7 +103,7 @@ void main() {
   ReceivePort receivePort;
 
   Future.wait(
-      [build("scripter_test_alternate_6.egb"), 
+      [// XXX: build("scripter_test_alternate_6.egb"), 
        build("scripter_test_save.egb"), 
        build("scripter_page_visitonce.egb")]).then((_) {
     group("Scripter basic", () {
@@ -115,7 +115,7 @@ void main() {
             false);
       });
 
-      group("alternate_6", () {
+      solo_group("alternate_6", () {
         setUp(() {
           receivePort = new ReceivePort();
         });
