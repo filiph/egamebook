@@ -27,9 +27,9 @@ abstract class EgbInterfaceScripterView {
   Future<bool> showText(String text);
 
   void updateStats(Map<String, Object> mapContent);
-  
+
   void savePlayerChronology(Set<String> playerChronology);
-  
+
   void save(EgbSavegame savegame);
 }
 
@@ -70,7 +70,12 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     switch (message.type) {
       case EgbMessage.QUIT:
         // Just close the book, no need to answer.
-        _choiceSelectedCompleter = null;
+        if (_choiceSelectedCompleter != null) {
+          _choiceSelectedCompleter.completeError(
+              new EgbAsyncOperationOverridenException("Book Quit before choice "
+                  "was selected."));
+          _choiceSelectedCompleter = null;
+        }
         port.close();
         return;
       case EgbMessage.REQUEST_BOOK_UID:
@@ -82,14 +87,18 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
       case EgbMessage.CHOICE_SELECTED:
         int choiceHash = message.intContent;
         assert(_choiceSelectedCompleter != null);
-        _choiceSelectedCompleter.complete(choiceHash);        
+        print("___ choiceHash = $choiceHash");
+        _choiceSelectedCompleter.complete(choiceHash);
         _choiceSelectedCompleter = null;
-        scripter.handleChoiceSelected(choiceHash);  // TODO: do we need this?
-        scripter.walk();
         return;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
-        _choiceSelectedCompleter = null;
+        if (_choiceSelectedCompleter != null) {
+          _choiceSelectedCompleter.completeError(
+              new EgbAsyncOperationOverridenException("Book Restart before "
+                  "choice was selected."));
+          _choiceSelectedCompleter = null;
+        }
         try {
           scripter.restart();
         } catch (e, stacktrace) {
@@ -97,14 +106,19 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
               "An error occured when initializing: $e.\n" "$stacktrace"));
           throw e;
         }
-        _send(Stat.toMessage());  // This works because Stat is a singleton.
-                                  // TODO: more elegant (scripter should have
-                                  //       a Stat getter?)
+        _send(Stat.toMessage()); // This works because Stat is a singleton.
+        // TODO: more elegant (scripter should have
+        //       a Stat getter?)
         _send(new PointsAward(0, 0).toMessage());
         return;
       case EgbMessage.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
-        _choiceSelectedCompleter = null;
+        if (_choiceSelectedCompleter != null) {
+          _choiceSelectedCompleter.completeError(
+              new EgbAsyncOperationOverridenException("Book Load before choice "
+                  "was selected."));
+          _choiceSelectedCompleter = null;
+        }
         try {
           var savegame = new EgbSavegame.fromMessage(message);
           var playerChronology = message.listContent;
@@ -147,9 +161,10 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
-  final List<EgbMessage> _textMessageCache = new List<EgbMessage>();  // TODO: get rid of this (no ZipMessage!)
-  EgbMessage _messageBacklog;  // TODO: get rid of this (no ZipMessage!)
-  
+  final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
+      // TODO: get rid of this (no ZipMessage!)
+  EgbMessage _messageBacklog; // TODO: get rid of this (no ZipMessage!)
+
   /**
    * Utilify function [_send] sends message through the [_runnerPort] to the
    * Runner. 
@@ -164,7 +179,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
       // Put text result into the _textMessageCache.
       if (message.strContent != "") _textMessageCache.add(message);
       mainIsolatePort.send(new EgbMessage.NoResult().toMap());
-          // TODO: this is here just because we need to keep the loop going – get rid of it
+      // TODO: this is here just because we need to keep the loop going – get rid of it
     } else if (_textMessageCache.isEmpty) {
       DEBUG_SCR("Sending nonText message ($message)");
       mainIsolatePort.send(message.toMap());
@@ -214,11 +229,16 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   }
 
   Completer<int> _choiceSelectedCompleter;
-  
+
   @override
   Future<int> showChoices(EgbChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
-    assert(_choiceSelectedCompleter == null);
+    if (_choiceSelectedCompleter != null) {
+      _choiceSelectedCompleter.completeError(
+          new EgbAsyncOperationOverridenException("Showing new "
+          "choice before previous one was selected."));
+      _choiceSelectedCompleter = null;
+    }
     _choiceSelectedCompleter = new Completer<int>();
     _send(choices.toMessage());
     return _choiceSelectedCompleter.future;
@@ -227,8 +247,8 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   @override
   Future<bool> showText(String text) {
     _send(new EgbMessage.TextResult(text));
-    return new Future.value();  // TODO: wait for interface to return
-                                //       EgbMessage.TEXT_SHOWN
+    return new Future.value(); // TODO: wait for interface to return
+    //       EgbMessage.TEXT_SHOWN
   }
 
   @override
@@ -244,4 +264,10 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
 void DEBUG_SCR(String message) {
   print(message);
+}
+
+class EgbAsyncOperationOverridenException implements Exception {
+  final String message;
+  const EgbAsyncOperationOverridenException(this.message);
+  String toString() => "EgbAsyncOperationOverridenException: $message.";
 }

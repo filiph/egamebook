@@ -103,7 +103,7 @@ class MockInterface extends EgbInterfaceBase {
         print("MockInterface pick: NONE, Quitting");
         streamController.add(new QuitIntent());
         streamController.close();
-        return new Completer().future;
+        return new Future.value(null);
       }
     }
   }

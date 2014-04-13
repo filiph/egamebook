@@ -278,6 +278,7 @@ abstract class EgbScripter {
       }
       assert(loop != null);
     } while (loop == _CONTINUE);
+    DEBUG_SCR("Ending _goOneStep() loop.");
   }
 
   /**
@@ -323,10 +324,11 @@ abstract class EgbScripter {
       }
     });
     if (pickedChoice == null) {
-      throw new ArgumentError("The sent choice hash is not one of those "
-          "offered.");
+      throw new ArgumentError("The sent choice hash ($choiceHash) is not one "
+          "of those offered.");
     }
     _pickChoice(pickedChoice);
+    walk();
   }
 
   /**
@@ -366,7 +368,11 @@ abstract class EgbScripter {
           choices.where((EgbChoice choice) => choice.isActionable(atEndOfPage:
           atEndOfPage, atChoiceList: atStaticChoiceList)).toList());
       if (actionableChoices.isNotEmpty) {
-        interface.showChoices(actionableChoices);
+        print("___ actionable choices: $actionableChoices");
+        interface.showChoices(actionableChoices)
+        .then(handleChoiceSelected)
+        .catchError((e) => DEBUG_SCR("$e"), 
+                    test: (e) => e is EgbAsyncOperationOverridenException);
         return _STOP;
       } else {
         EgbChoice autoChoice = choices.firstWhere((choice) =>
@@ -428,7 +434,7 @@ abstract class EgbScripter {
     if (currentPage.blocks[currentBlockIndex] is String) {
       // Just an ordinary paragraph, no script.
       interface.showText(currentPage.blocks[currentBlockIndex]);
-      return _STOP; // Find out if we can use _CONTINUE here.
+      return _STOP;  // TODO: Find out if we can use _CONTINUE here.
     } else if (currentPage.blocks[currentBlockIndex] is List) {
       // A ChoiceList block.
       DEBUG_SCR("A ChoiceList encountered.");
@@ -468,6 +474,9 @@ abstract class EgbScripter {
         interface.save(savegame);
       }
       return canContinue;
+    } else {
+      throw new StateError("Invalid block: "
+          "${currentPage.blocks[currentBlockIndex]}");
     }
   }
 
@@ -661,7 +670,7 @@ abstract class EgbScripter {
 
   void DEBUG_SCR(String message) {
     //_send(new EgbMessage.ScripterLog(message));
-    print(message);
+    print("SCR: $message");
   }
 
   PointsCounter getPoints() {

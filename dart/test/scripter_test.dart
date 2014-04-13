@@ -121,19 +121,30 @@ void main() {
           receivePort = new ReceivePort();
         });
 
-        test("runner initial values correct", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
-          var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
-          expect(runner.started,
-              false);
-          expect(runner.ended,
-              false);
-          runner.stop();
-        });
+//        test("runner initial values correct", () {
+////          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
+////              [], receivePort.sendPort);
+////          var interface = new MockInterface();
+////          var storage = new MemoryStorage();
+////          interface.setPlayerProfile(storage.getDefaultPlayerProfile());
+////          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+////              Uri.parse("files/scripter_test_alternate_6.dart"));
+////          bookProxy.init()  // Spawns the Isolate (if needed) and asks for BookUid
+////          .then((_) {
+////            interface.setScripter(bookProxy);
+////            bookProxy.setInterface(interface);
+////          });
+////          expect(bookProxy.started, false);
+////          expect(bookProxy.ended, false);
+////          
+////          var runner = new EgbRunner(receivePort, interface, 
+////              storage.getDefaultPlayerProfile());
+////          expect(runner.started,
+////              false);
+////          expect(runner.ended,
+////              false);
+////          runner.stop();
+//        });
 
         test("walks through when it should", () {
           Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
