@@ -9,8 +9,10 @@ import '../shared/points_award.dart';
 import '../shared/stat.dart';
 
 import 'interface_proxy.dart';
+import 'package:egamebook/src/persistence/player_profile.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
 
-abstract class EgbInterface implements EgbInterfaceScripterView {
+abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   ReceivePort _receivePort;
   SendPort _scripterPort;
   
@@ -77,6 +79,12 @@ abstract class EgbInterface implements EgbInterfaceScripterView {
   /// These interactions include loading game states, starting a gamebook
   /// from scratch, etc.
   Stream<PlayerIntent> get stream;
+  
+  EgbPlayerProfile get playerProfile;
+  
+  void setPlayerProfile(EgbPlayerProfile playerProfile);
+  
+  void setScripter(EgbScripterProxy scripterProxy);
 }
 
 abstract class EgbInterfaceBase implements EgbInterface {
@@ -89,6 +97,7 @@ abstract class EgbInterfaceBase implements EgbInterface {
   
   void close() {
     streamController.close();
+    playerProfile.close();
   }
   
   void sendRestartIntent() {

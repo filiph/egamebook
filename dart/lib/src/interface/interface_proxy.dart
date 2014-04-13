@@ -13,23 +13,15 @@ import '../book/scripter.dart';
 /**
  * The methods of EgbInterface that are callable by EgbScripter.
  */
-abstract class EgbInterfaceScripterView {
+abstract class EgbInterfaceViewedFromScripter {
   void awardPoints(PointsAward award);
-
   void endBook();
-
   void reportError(String title, String text);
-
   void setStats(List<UIStat> stats);
-
   Future<int> showChoices(EgbChoiceList choices);
-
   Future<bool> showText(String text);
-
   void updateStats(Map<String, Object> mapContent);
-
   void savePlayerChronology(Set<String> playerChronology);
-
   void save(EgbSavegame savegame);
 }
 
@@ -37,13 +29,16 @@ abstract class EgbInterfaceScripterView {
  * A proxy/view of the Interface that has methods callable from Scripter.
  * It has direct access to the Scripter object.
  */
-abstract class EgbInterfaceProxy extends EgbInterfaceScripterView {
+abstract class EgbInterfaceProxy extends EgbInterfaceViewedFromScripter {
   EgbScripter scripter;
   void setScripter(EgbScripter scripter) {
     this.scripter = scripter;
   }
 }
 
+/**
+ * The proxy that deals with Interface in another Isolate.
+ */
 class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   /// Port of the calling isolate.

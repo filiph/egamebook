@@ -117,8 +117,9 @@ class EgbPlayerProfile {
     });
   }
   
-  Future<bool> savePlayerChronology(List<String> playerChronology) {
-    return _save("_playerChronology", JSON.encode(playerChronology));
+  Future<bool> savePlayerChronology(Set<String> playerChronology) {
+    return _save("_playerChronology", 
+        JSON.encode(playerChronology.toList(growable: false)));
   }
   
   Future<List<String>> loadPlayerChronology() {

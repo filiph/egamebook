@@ -294,7 +294,7 @@ abstract class EgbScripter {
   /**
    * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
    */
-  void handleChoiceSelected(int choiceHash) {
+  void _handleChoiceSelected(int choiceHash) {
     EgbChoice pickedChoice;
     choices.forEach((choice) {
       if (choice.hash == choiceHash) {
@@ -370,7 +370,7 @@ abstract class EgbScripter {
       if (actionableChoices.isNotEmpty) {
         print("___ actionable choices: $actionableChoices");
         interface.showChoices(actionableChoices)
-        .then(handleChoiceSelected)
+        .then(_handleChoiceSelected)
         .catchError((e) => DEBUG_SCR("$e"), 
                     test: (e) => e is EgbAsyncOperationOverridenException);
         return _STOP;

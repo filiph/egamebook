@@ -8,6 +8,8 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/src/persistence/player_profile.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
 
 class MockInterface extends EgbInterfaceBase {
   Queue<int> choicesToBeTaken;
@@ -61,8 +63,12 @@ class MockInterface extends EgbInterfaceBase {
   }
   
   void endBook() {
+    print("MockInterface: End of Book");
     _eventStreamController.add(BOOK_ENDED_EVENT);
   }
+  
+  Stream<String> get endOfBookReached => 
+        eventStream.where((value) => value == BOOK_ENDED_EVENT);
 
   void close() {
     closed = true;
@@ -189,5 +195,28 @@ class MockInterface extends EgbInterfaceBase {
 
   Future<bool> reportError(String title, String text) {
     print("ERROR: $title\n$text");
+  }
+
+  @override
+  void save(EgbSavegame savegame) {
+    playerProfile.save(savegame);
+  }
+
+  @override
+  void savePlayerChronology(Set<String> playerChronology) {
+    playerProfile.savePlayerChronology(playerChronology);
+  }
+  
+  @override
+  EgbPlayerProfile get playerProfile => _playerProfile;
+  
+  EgbPlayerProfile _playerProfile;
+  void setPlayerProfile(EgbPlayerProfile playerProfile) {
+    _playerProfile = playerProfile;
+  }
+  
+  EgbScripterProxy _scripterProxy;
+  void setScripter(EgbScripterProxy scripterProxy) {
+    _scripterProxy = scripterProxy;
   }
 }

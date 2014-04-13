@@ -14,6 +14,8 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
 import 'package:egamebook/src/interface/interface.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
+
 
 import 'mock_interface.dart';
 
@@ -118,58 +120,57 @@ void main() {
 
       group("alternate_6", () {
         setUp(() {
-          receivePort = new ReceivePort();
+//          receivePort = new ReceivePort();
         });
 
-//        test("runner initial values correct", () {
-////          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-////              [], receivePort.sendPort);
-////          var interface = new MockInterface();
-////          var storage = new MemoryStorage();
-////          interface.setPlayerProfile(storage.getDefaultPlayerProfile());
-////          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-////              Uri.parse("files/scripter_test_alternate_6.dart"));
-////          bookProxy.init()  // Spawns the Isolate (if needed) and asks for BookUid
-////          .then((_) {
-////            interface.setScripter(bookProxy);
-////            bookProxy.setInterface(interface);
-////          });
-////          expect(bookProxy.started, false);
-////          expect(bookProxy.ended, false);
-////          
-////          var runner = new EgbRunner(receivePort, interface, 
-////              storage.getDefaultPlayerProfile());
-////          expect(runner.started,
-////              false);
-////          expect(runner.ended,
-////              false);
-////          runner.stop();
-//        });
+        test("runner initial values correct", () {
+          var interface = new MockInterface();
+          var storage = new MemoryStorage();
+          interface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+              Uri.parse("files/scripter_test_alternate_6.dart"));
+          bookProxy.init()  // Spawns the Isolate (if needed) and asks for BookUid
+          .then(expectAsync1((_) {
+            interface.setScripter(bookProxy);
+            bookProxy.setInterface(interface);
+            expect(bookProxy.uid, isNotNull);
+            bookProxy.quit();
+            interface.close();
+          }));
+          
+        });
 
         test("walks through when it should", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
-          interface.choicesToBeTaken.addAll(
+          var mockInterface = new MockInterface();
+          mockInterface.choicesToBeTaken.addAll(
               [0, 1, 0, 1, 0, 1]
           );
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
+          mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+              Uri.parse("files/scripter_test_alternate_6.dart"));
 
-          runner.endOfBookReached.listen(expectAsync1((_) {
-            expect(interface.latestOutput,
-            "End of book.");
-            expect(interface.choicesToBeTaken.length,
-                0);
-
-            runner.stop();
+          bookProxy.init()
+          .then((_) {
+            mockInterface.setScripter(bookProxy);
+            bookProxy.setInterface(mockInterface);
+            bookProxy.restart();
+            return mockInterface.endOfBookReached.first; 
+          })
+          .then(expectAsync1((_) {
+              expect(mockInterface.latestOutput,
+                  "End of book.");
+              expect(mockInterface.choicesToBeTaken.length,
+                  0);
+              bookProxy.quit();
+              mockInterface.close();
           }));
-
-          runner.run();
+          
+          
         });
 
-        test("doesn't walk through when it shouldn't", () {
+        solo_test("doesn't walk through when it shouldn't", () {
+          // XXX: recreate as per new proxy design
           Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
               [], receivePort.sendPort);
           var interface = new MockInterface();
