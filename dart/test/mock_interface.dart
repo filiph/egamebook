@@ -33,15 +33,15 @@ class MockInterface extends EgbInterfaceBase {
   /// [MockInterface.choose()].
   bool waitForChoicesToBeTaken;
 
-  Stream _stream;
-  Stream get stream => _stream;
+//  Stream _stream;
+//  Stream get stream => _stream;
   
-  StreamController<String> _eventStreamController;
-  Stream<String> _eventStream;
+  StreamController<String> _debugStreamController;
+  Stream<String> _debugStream;
   /// The public stream of events that the unit tests might care about (but
   /// the generic interface shouldn't need), like new choiceLists, new toasts,
   /// etc.  
-  Stream<String> get eventStream => _eventStream;
+  Stream<String> get debugStream => _debugStream;
   
   static final String WAITING_FOR_INPUT_EVENT = "WAITING_FOR_INPUT";
   static final String TEXTBLOCK_SHOWN_EVENT = "TEXTBLOCK_SHOWN";
@@ -50,12 +50,14 @@ class MockInterface extends EgbInterfaceBase {
   static final String BOOK_ENDED_EVENT = "BOOK_ENDED";
   static final String POINTS_AWARDED_EVENT = "POINTS_AWARDED";
 
+  static final String PLAYER_QUIT_EVENT = "PLAYER_QUIT";
+
   MockInterface({bool this.waitForChoicesToBeTaken: false}) 
       : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>(), super() {
-    _stream = streamController.stream.asBroadcastStream();
-    _eventStreamController = new StreamController();
-    _eventStream = _eventStreamController.stream.asBroadcastStream();
+//    _stream = streamController.stream.asBroadcastStream();
+    _debugStreamController = new StreamController();
+    _debugStream = _debugStreamController.stream.asBroadcastStream();
   }
 
   void setup() {
@@ -64,11 +66,14 @@ class MockInterface extends EgbInterfaceBase {
   
   void endBook() {
     print("MockInterface: End of Book");
-    _eventStreamController.add(BOOK_ENDED_EVENT);
+    _debugStreamController.add(BOOK_ENDED_EVENT);
   }
   
   Stream<String> get endOfBookReached => 
-        eventStream.where((value) => value == BOOK_ENDED_EVENT);
+        debugStream.where((value) => value == BOOK_ENDED_EVENT);
+  
+  Stream<String> get playerQuit => 
+          debugStream.where((value) => value == PLAYER_QUIT_EVENT);
 
   void close() {
     closed = true;
@@ -78,7 +83,7 @@ class MockInterface extends EgbInterfaceBase {
     print("MockInterface output: $s");
     if (s.trim() != "") {
       latestOutput = s.split("\n\n").last;
-      _eventStreamController.add(TEXTBLOCK_SHOWN_EVENT);
+      _debugStreamController.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
   }
@@ -102,13 +107,14 @@ class MockInterface extends EgbInterfaceBase {
       if (waitForChoicesToBeTaken) {
         _currentChoices = choiceList;
         _currentChoicesCompleter = new Completer();
-        _eventStreamController.add(WAITING_FOR_INPUT_EVENT);
+        _debugStreamController.add(WAITING_FOR_INPUT_EVENT);
         return _currentChoicesCompleter.future;
       } else {
         // No predefined choices and no waiting - let's quit.
         print("MockInterface pick: NONE, Quitting");
-        streamController.add(new QuitIntent());
-        streamController.close();
+        quit();
+//        streamController.add(new QuitIntent());
+//        streamController.close();
         return new Future.value(null);
       }
     }
@@ -145,24 +151,28 @@ class MockInterface extends EgbInterfaceBase {
   
   void quit() {
     print("MockInterface.quit() called.");
-    streamController.add(new QuitIntent());
+    playerProfile.close();
+    _scripterProxy.quit();
+    _debugStreamController.add(PLAYER_QUIT_EVENT);
+//    streamController.add(new QuitIntent());
   }
   
   void restart() {
     print("MockInterface.restart() called.");
-    streamController.add(new RestartIntent());
+    _scripterProxy.restart();
+//    streamController.add(new RestartIntent());
   }
   
   /// Completes the future when interface waits for input or when the book is
   /// ended.
   Future<EgbInterface> waitForDone() =>
-    eventStream.firstWhere((value) => 
+    debugStream.firstWhere((value) => 
         value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
         .then((_) => this);
   
   Future<bool> awardPoints(PointsAward award) {
     print("MockInterface: *** $award ***");
-    _eventStreamController.add(POINTS_AWARDED_EVENT);
+    _debugStreamController.add(POINTS_AWARDED_EVENT);
     _currentlyShownPoints = award.result;
     return new Future.value(true);
   }

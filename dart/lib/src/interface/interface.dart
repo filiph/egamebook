@@ -29,7 +29,9 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   void endBook();
   /// Called when interface is not needed anymore. This is not necessarily the
   /// same time when the book ends ([endBook()]) -- a player can still choose
-  /// to use the interface to retry (restart or load).
+  /// to use the interface to retry (restart or load). But when the game session
+  /// is ending, for example, then this method should be called on the running
+  /// user interface. 
   void close();
 
   /**
@@ -75,10 +77,10 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
    */
   Future<bool> addSavegameBookmark(EgbSavegame savegame);
   
-  /// Stream that sends player's interactions (apart from choice selection).
-  /// These interactions include loading game states, starting a gamebook
-  /// from scratch, etc.
-  Stream<PlayerIntent> get stream;
+//  /// Stream that sends player's interactions (apart from choice selection).
+//  /// These interactions include loading game states, starting a gamebook
+//  /// from scratch, etc.
+//  Stream<PlayerIntent> get stream;
   
   EgbPlayerProfile get playerProfile;
   
@@ -88,27 +90,27 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
 }
 
 abstract class EgbInterfaceBase implements EgbInterface {
-  StreamController<PlayerIntent> streamController;
-  Stream<PlayerIntent> get stream => streamController.stream;
-  
+//  StreamController<PlayerIntent> streamController;
+//  Stream<PlayerIntent> get stream => streamController.stream;
+//  
   EgbInterfaceBase() {
-    streamController = new StreamController();
+//    streamController = new StreamController();
   }
   
   void close() {
-    streamController.close();
+//    streamController.close();
     playerProfile.close();
   }
   
   void sendRestartIntent() {
-    streamController.add(new RestartIntent());
+//    streamController.add(new RestartIntent());
   }
   
   void sendLoadIntent(String savegameUid) {
-    streamController.add(new LoadIntent(savegameUid));
+//    streamController.add(new LoadIntent(savegameUid));
   }
   
   void sendQuitIntent() {
-    streamController.add(new QuitIntent());
+//    streamController.add(new QuitIntent());
   }
 }

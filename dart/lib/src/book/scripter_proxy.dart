@@ -22,7 +22,7 @@ abstract class EgbScripterViewedFromInterface {
   Future init();
   String get uid;
   void restart();
-  void load(EgbSavegame savegame);
+  void load(EgbSavegame savegame, Set<String> playerChronology);
   void quit();
 }
 
@@ -159,8 +159,10 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   }
   
   @override
-  void load(EgbSavegame savegame) {
-    // TODO: implement load
+  void load(EgbSavegame savegame, Set<String> playerChronology) {
+    EgbMessage loadMessage = savegame.toMessage(EgbMessage.LOAD_GAME);
+    loadMessage.listContent = playerChronology.toList(growable: false);
+    _send(loadMessage);
   }
 
   @override
