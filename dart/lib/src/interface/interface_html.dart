@@ -470,8 +470,10 @@ class HtmlInterface extends EgbInterfaceBase {
             reportError("Bad gamesave", "That savegame is missing.");
             // TODO: provide solutions, feedback, etc.
           } else {
-            showText(savegame.textHistory);
-            scripterProxy.load(savegame);
+            showText(savegame.textHistory)
+            .then((_) {
+              scripterProxy.load(savegame);
+            });
           }
        });
     }
@@ -486,7 +488,6 @@ class HtmlInterface extends EgbInterfaceBase {
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
-    _textHistory.clear();  // The _textHistory has been saved with the savegame.
     assert(_savegameToBe == null);
     _savegameToBe = savegame;
     return new Future.value(true);
@@ -565,7 +566,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
   @override
   void save(EgbSavegame savegame) {
-    savegame.textHistory = getTextHistory();
+    _textHistory.clear();
     playerProfile.save(savegame);
     addSavegameBookmark(savegame);
   }

@@ -170,35 +170,36 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
    * Runner. 
    */
   void _send(EgbMessage message) {
-    if (message.isAsync) {
-      //DEBUG_SCR("Sending nonText async message (${message.type})");
-      mainIsolatePort.send(message.toMap());
-      return;
-    }
-    if (message.type == EgbMessage.TEXT_RESULT) {
-      // Put text result into the _textMessageCache.
-      if (message.strContent != "") _textMessageCache.add(message);
-      mainIsolatePort.send(new EgbMessage.NoResult().toMap());
-      // TODO: this is here just because we need to keep the loop going – get rid of it
-    } else if (_textMessageCache.isEmpty) {
-      DEBUG_SCR("Sending nonText message ($message)");
-      mainIsolatePort.send(message.toMap());
-    } else {
-      // When we have something in the _textMessageCache and we are about to
-      // send something new, we first zip the text messages into one huge
-      // message, wait for it to be shown (through port.call()), and only then
-      // send the original message.
-      var stringBuffer = new StringBuffer();
-      while (_textMessageCache.isNotEmpty) {
-        if (stringBuffer.isNotEmpty) stringBuffer.write("\n\n");
-        stringBuffer.write(_textMessageCache.removeAt(0).strContent);
-      }
-      var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
-      DEBUG_SCR("Sending a zip message ($zipMessage)");
-      mainIsolatePort.send(zipMessage.toMap());
-      DEBUG_SCR("Adding message ($message) to the backlog.");
-      _messageBacklog = message;
-    }
+    mainIsolatePort.send(message.toMap());
+//    if (message.isAsync) {
+//      //DEBUG_SCR("Sending nonText async message (${message.type})");
+//      mainIsolatePort.send(message.toMap());
+//      return;
+//    }
+//    if (message.type == EgbMessage.TEXT_RESULT) {
+//      // Put text result into the _textMessageCache.
+//      if (message.strContent != "") _textMessageCache.add(message);
+//      mainIsolatePort.send(new EgbMessage.NoResult().toMap());
+//      // TODO: this is here just because we need to keep the loop going – get rid of it
+//    } else if (_textMessageCache.isEmpty) {
+//      DEBUG_SCR("Sending nonText message ($message)");
+//      mainIsolatePort.send(message.toMap());
+//    } else {
+//      // When we have something in the _textMessageCache and we are about to
+//      // send something new, we first zip the text messages into one huge
+//      // message, wait for it to be shown (through port.call()), and only then
+//      // send the original message.
+//      var stringBuffer = new StringBuffer();
+//      while (_textMessageCache.isNotEmpty) {
+//        if (stringBuffer.isNotEmpty) stringBuffer.write("\n\n");
+//        stringBuffer.write(_textMessageCache.removeAt(0).strContent);
+//      }
+//      var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
+//      DEBUG_SCR("Sending a zip message ($zipMessage)");
+//      mainIsolatePort.send(zipMessage.toMap());
+//      DEBUG_SCR("Adding message ($message) to the backlog.");
+//      _messageBacklog = message;
+//    }
   }
 
 
