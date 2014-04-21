@@ -391,29 +391,20 @@ void main() {
     });
 
     group("Page options", () {
-      solo_test("prevents user from visiting visitOnce page twice", () {
-        Isolate.spawnUri(Uri.parse("files/scripter_page_visitonce.dart"), [],
-            receivePort.sendPort);
-        var interface = new MockInterface();
-        interface.choicesToBeTakenByString = new Queue<String>.from(
-            ["Get dressed"]);
-        var storage = new MemoryStorage();
-        var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, interface,
-            storage.getDefaultPlayerProfile());
-
-        interface.stream.firstWhere((interaction) => interaction.type ==
-            PlayerIntent.QUIT).then(expectAsync1((_) {
-          expect(interface.latestChoices, hasLength(3));
-          expect(interface.latestChoices[0].string, isNot("Get dressed"));
-          expect(interface.latestChoices[0].string, "Call the police");
-
-          runner.stop();
+      test("prevents user from visiting visitOnce page twice", () {
+        run("files/scripter_page_visitonce.dart")
+        .then((MockInterface ui) {
+          ui.choose("Get dressed");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestChoices, hasLength(3));
+          expect(ui.latestChoices[0].string, isNot("Get dressed"));
+          expect(ui.latestChoices[0].string, "Call the police");
+          
+          ui.quit();
         }));
-
-        runner.run();
       });
-
     });
 
     group("Scripter test helpers", () {
