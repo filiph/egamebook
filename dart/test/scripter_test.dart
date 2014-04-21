@@ -6,14 +6,14 @@ import 'dart:collection';
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:egamebook/src/runner.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/persistence/saveable.dart';
-import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
 import 'package:egamebook/src/interface/interface.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
+
 
 import 'mock_interface.dart';
 
@@ -26,16 +26,20 @@ class ClassWithMapMethods implements Saveable {
     "a": 1,
     "b": 2
   };
-  
+
   String className = "ClassWithMapMethods";
-  toMap() => {"i": i, "s": s, "m": m};
-  
+  toMap() => {
+    "i": i,
+    "s": s,
+    "m": m
+  };
+
   ClassWithMapMethods();
-  
+
   ClassWithMapMethods.fromMap(map) {
     updateFromMap(map);
   }
-  
+
   updateFromMap(map) {
     i = map["i"];
     s = map["s"];
@@ -60,165 +64,163 @@ String getPath(String filename) {
 
 /// Builds the given .egb file, returns the path to the file to be given to
 /// [spawnUri]. Usage:
-/// 
+///
 ///     build("test1.egb")
 ///     .then((runnerPath) => run(runnerPath))
 ///     .then((ui) => ui.choose("Abc"))
 ///     .then((ui) => ui.choose("Xyz"))
 ///     .then(expectAsync1((ui) => expect(ui.lastParagraph, contains("bla")))
 ///     .then((ui) => ui.quit());
+///     
+///     TODO: add generated files to a list to be deleted afterwards?
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
-  String dartFilename = 
-      canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"), ".dart");
-  return new Builder()
-  .readEgbFile(new File(canonicalEgbPath))
-  .then((Builder b) => b.writeDartFiles())
-  .then((_) {
+  String dartFilename = canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"),
+      ".dart");
+  return new Builder().readEgbFile(new File(canonicalEgbPath)).then((Builder b)
+      => b.writeDartFiles()).then((_) {
     return dartFilename;
   });
 }
 
 /// Runs the built project and returns the [MockInterface] instance.
-Future<EgbInterface> run(String dartFilename, 
-    {EgbStorage persistentStorage: null}) {
-  var receivePort = new ReceivePort();
-  Isolate.spawnUri(Uri.parse(dartFilename), [], receivePort.sendPort);
-  var interface = new MockInterface(waitForChoicesToBeTaken: true);
-  var storage;
+Future<EgbInterface> run(String dartFilename, {EgbStorage persistentStorage:
+    null}) {
+  var mockInterface = new MockInterface(waitForChoicesToBeTaken: true);
+  EgbStorage storage;
   if (persistentStorage != null) {
     storage = persistentStorage;
   } else {
     storage = new MemoryStorage();
   }
-  var runner = new EgbRunner(receivePort, interface, 
-      storage.getDefaultPlayerProfile());
-  runner.run();
-  return new Future.value(interface);
+  mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+  EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+      Uri.parse(dartFilename));
+  
+  EgbSavegame lastSavegame;
+  Set<String> playerChronology;
+  
+  return bookProxy.init()
+  .then((_) {
+    mockInterface.setScripter(bookProxy);
+    bookProxy.setInterface(mockInterface);
+    
+    return mockInterface.continueSavedGameOrCreateNew();
+  });
 }
 
 
 void main() {
-  // create [ReceivePort] for this isolate
+  // create [ReceivePort] for this isolate: TODO: delete
   ReceivePort receivePort;
 
-  Future.wait(
-      [build("scripter_test_alternate_6.egb"), 
-       build("scripter_test_save.egb"), 
-       build("scripter_page_visitonce.egb")]).then((_) {
+  // TODO: instead of this, use the asynchronous nature of setUp() - http://japhr.blogspot.cz/2013/06/async-test-setup-in-dart.html
+  Future.wait([build("scripter_test_alternate_6.egb"), build(
+      "scripter_test_save.egb"), build("scripter_page_visitonce.egb")]).then((_) {
     group("Scripter basic", () {
       test("interface initial values correct", () {
         var interface = new MockInterface();
-        expect(interface.started,
-            false);
-        expect(interface.closed,
-            false);
+        expect(interface.started, false);
+        expect(interface.closed, false);
       });
 
       group("alternate_6", () {
         setUp(() {
-          receivePort = new ReceivePort();
+          //          receivePort = new ReceivePort();
         });
 
         test("runner initial values correct", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
+          var mockInterface = new MockInterface();
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
-          expect(runner.started,
-              false);
-          expect(runner.ended,
-              false);
-          runner.stop();
+          mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+              "files/scripter_test_alternate_6.dart"));
+          bookProxy.init()
+              // Spawns the Isolate (if needed) and asks for BookUid
+          .then(expectAsync1((_) {
+            mockInterface.setScripter(bookProxy);
+            bookProxy.setInterface(mockInterface);
+            expect(bookProxy.uid, isNotNull);
+
+            mockInterface.quit();
+          }));
+
         });
 
         test("walks through when it should", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
-          interface.choicesToBeTaken.addAll(
-              [0, 1, 0, 1, 0, 1]
-          );
+          var mockInterface = new MockInterface();
+          mockInterface.choicesToBeTaken.addAll([0, 1, 0, 1, 0, 1]);
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
+          mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+              "files/scripter_test_alternate_6.dart"));
 
-          runner.endOfBookReached.listen(expectAsync1((_) {
-            expect(interface.latestOutput,
-            "End of book.");
-            expect(interface.choicesToBeTaken.length,
-                0);
+          bookProxy.init().then((_) {
+            mockInterface.setScripter(bookProxy);
+            bookProxy.setInterface(mockInterface);
+            bookProxy.restart();
+            return mockInterface.endOfBookReached.first;
+          }).then(expectAsync1((_) {
+            expect(mockInterface.latestOutput, "End of book.");
+            expect(mockInterface.choicesToBeTaken.length, 0);
 
-            runner.stop();
+            mockInterface.quit();
           }));
-
-          runner.run();
         });
 
         test("doesn't walk through when it shouldn't", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
-          interface.choicesToBeTaken = new Queue<int>.from(
-              [0, 1, 0, 1, 0, 0]
-          );
+          var mockInterface = new MockInterface();
+          mockInterface.choicesToBeTaken = new Queue<int>.from([0, 1, 0, 1, 0,
+              0]);
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
+          mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+              "files/scripter_test_alternate_6.dart"));
 
-          interface.stream.listen(expectAsync1((interaction) {
-            expect(interaction.type, PlayerIntent.QUIT);
-            expect(interface.closed,
-                true);
-            expect(runner.ended,
-                false);
-            expect(interface.latestOutput,
-                startsWith("Welcome (back?) to dddeee."));
-
-            runner.stop();
+          mockInterface.playerQuit.first
+              .then(expectAsync1((_) {
+            expect(mockInterface.latestOutput, startsWith(
+                "Welcome (back?) to dddeee."));
           }));
 
-          runner.run();
+          bookProxy.init().then((_) {
+            mockInterface.setScripter(bookProxy);
+            bookProxy.setInterface(mockInterface);
+            bookProxy.restart();
+          });
         });
 
         test("simple counting works", () {
-          Isolate.spawnUri(Uri.parse("files/scripter_test_alternate_6.dart"), 
-              [], receivePort.sendPort);
-          var interface = new MockInterface();
-          interface.choicesToBeTaken = new Queue<int>.from(
-              [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-          );
+          var mockInterface = new MockInterface();
+          mockInterface.choicesToBeTaken = new Queue<int>.from([0, 1, 0, 1, 1,
+              1, 1, 1, 1, 1, 1, 1]);
           var storage = new MemoryStorage();
-          var runner = new EgbRunner(receivePort, interface, 
-              storage.getDefaultPlayerProfile());
+          mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+              "files/scripter_test_alternate_6.dart"));
 
-          interface.stream.listen(expectAsync1((interaction) {
-            expect(interaction.type, PlayerIntent.QUIT);
-            expect(interface.closed,
-                true);
-            expect(runner.ended,
-                false);
-            expect(interface.latestOutput,
-                contains("Time is now 10."));
+          mockInterface.playerQuit.first
+              .then(expectAsync1((_) {
+            expect(mockInterface.latestOutput, contains("Time is now 10."));
 
-            runner.stop();
+            mockInterface.quit();
           }));
 
-          runner.run();
+          bookProxy.init().then((_) {
+            mockInterface.setScripter(bookProxy);
+            bookProxy.setInterface(mockInterface);
+            bookProxy.restart();
+          });
         });
       });
     });
-    
+
     group("Multiline choices", () {
       test("are shown", () {
-        build("choices_multiline.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("choices_multiline.egb").then((mainPath) => run(mainPath)).then(
+            (MockInterface ui) {
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.latestChoices.length, 4);
           expect(ui.latestChoices.first.string, "That's okay.");
           expect(ui.latestChoices.last.string, "Many people do!");
@@ -226,40 +228,34 @@ void main() {
         }));
       });
       test("works with scripts", () {
-        build("choices_multiline.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("choices_multiline.egb").then((mainPath) => run(mainPath)).then(
+            (MockInterface ui) {
           ui.choose("Many people do!");
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.latestOutput, contains("No it doesn't."));
           ui.quit();
         }));
       });
       test("works with gotos", () {
-        build("choices_multiline.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("choices_multiline.egb").then((mainPath) => run(mainPath)).then(
+            (MockInterface ui) {
           ui.choose("I need to do something about it.");
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
-          expect(ui.latestOutput, 
-              contains("You tried to do something about it, but to no avail."));
+        }).then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains(
+              "You tried to do something about it, but to no avail."));
           ui.quit();
         }));
       });
       test("works with gotos and scripts", () {
-        build("choices_multiline.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("choices_multiline.egb").then((mainPath) => run(mainPath)).then(
+            (MockInterface ui) {
           ui.choose("That's okay.");
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
-          expect(ui.latestOutput, 
-              contains("You tried to do something about it, but to no avail."));
+        }).then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains(
+              "You tried to do something about it, but to no avail."));
           expect(ui.currentlyShownPoints, 42);
           ui.quit();
         }));
@@ -267,65 +263,50 @@ void main() {
     });
 
     group("Persistence", () {
-      setUp(() {
-        receivePort = new ReceivePort();
-      });
 
       test("works for saveables and doesn't for non-saveables", () {
-        Isolate.spawnUri(Uri.parse("files/scripter_test_save.dart"), 
-            [], receivePort.sendPort);
-        var interface = new MockInterface();
-        interface.choicesToBeTaken = new Queue<int>.from(
-            [0]
-        );
+        var mockInterface = new MockInterface();
+        mockInterface.choicesToBeTaken = new Queue<int>.from([0]);
         var storage = new MemoryStorage();
-        var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, interface, 
-            playerProfile);
+        mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
+        EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+            "files/scripter_test_save.dart"));
 
-        runner.endOfBookReached.listen(expectAsync1((_) {
-          expect(interface.latestOutput,
-              contains("Scripter should still have all variables"));
-
-          runner.stop();
-
-          playerProfile.loadMostRecent()
-          .then(expectAsync1((EgbSavegame savegame) {
-            expect(savegame.vars.length,
-                isNonZero);
-            expect(savegame.vars["nullified"],
-                isNull);
-            expect(savegame.vars["integer"],
-                0);
-            expect(savegame.vars["numeric"],
-                3.14);
-            expect(savegame.vars["string"],
-                "Řeřicha UTF-8 String");
-            expect(savegame.vars.containsKey("nonSaveable"),
-                false);
-            expect(savegame.vars["list1"],
-                ["a", "b", "ř"]);
-            expect(savegame.vars["list2"],
-                   [0, 3.14, ["a", "b", "ř"]]);
-            expect(savegame.vars["map1"],
-                {"c": null, "a": 0, "b": 3.14});
-            expect(savegame.vars["map2"] as Map,
-                hasLength(2));
-            expect(savegame.vars["saveable"] as Map,
-                hasLength(4));
-            expect((savegame.vars["saveable"] as Map)["s"],
-                "Řeřicha");
-            expect((savegame.vars["saveable"] as Map)["m"],
-                hasLength(2));
-          }));
-
+        bookProxy.init().then((_) {
+          mockInterface.setScripter(bookProxy);
+          bookProxy.setInterface(mockInterface);
+          bookProxy.restart();
+          return mockInterface.endOfBookReached.first;
+        }).then((_) {
+          return mockInterface.playerProfile.loadMostRecent();
+        })
+        .then(expectAsync1((EgbSavegame savegame) {
+          expect(mockInterface.latestOutput, contains(
+                        "Scripter should still have all variables"));
+          
+          expect(savegame.vars.length, isNonZero);
+          expect(savegame.vars["nullified"], isNull);
+          expect(savegame.vars["integer"], 0);
+          expect(savegame.vars["numeric"], 3.14);
+          expect(savegame.vars["string"], "Řeřicha UTF-8 String");
+          expect(savegame.vars.containsKey("nonSaveable"), false);
+          expect(savegame.vars["list1"], ["a", "b", "ř"]);
+          expect(savegame.vars["list2"], [0, 3.14, ["a", "b", "ř"]]);
+          expect(savegame.vars["map1"], {
+            "c": null,
+            "a": 0,
+            "b": 3.14
+          });
+          expect(savegame.vars["map2"] as Map, hasLength(2));
+          expect(savegame.vars["saveable"] as Map, hasLength(4));
+          expect((savegame.vars["saveable"] as Map)["s"], "Řeřicha");
+          expect((savegame.vars["saveable"] as Map)["m"], hasLength(2));
+          
+          mockInterface.quit();
         }));
-
-        runner.run();
       });
-      
+
       test("works on classes with toMap and fromMap", () {
-        receivePort.close();
         var saveableInstance = new ClassWithMapMethods();
         saveableInstance.s = "Universal truth";
         saveableInstance.i = 42;
@@ -333,183 +314,137 @@ void main() {
           "saveable": saveableInstance,
           "primitive": 8
         };
-        var s1 = new EgbSavegame("blah", vars1, {"blah": null});
-        print(s1.vars);
+        var s1 = new EgbSavegame("blah", vars1, {
+          "blah": null
+        });
+        logMessage(s1.vars.toString());
         expect(s1.vars, contains("saveable"));
         expect(s1.vars["saveable"], contains("m"));
       });
-      
+
       test("works between 2 independent runs", () {
-        receivePort.close();
         var storage = new MemoryStorage();
-        var mainPath;
-        build("scripter_test_alternate_6.egb")
-        .then((path) {
+        String mainPath;
+        build("scripter_test_alternate_6.egb").then((path) {
           mainPath = path;
           return run(mainPath, persistentStorage: storage);
-        })
-        .then((MockInterface ui) {
-          ui.choicesToBeTaken = new Queue<int>.from(
-              [0, 1, 0, 1, 1]
-          );
+        }).then((MockInterface ui) {
+          ui.choicesToBeTaken = new Queue<int>.from([0, 1, 0, 1, 1]);
           return ui.waitForDone();
-        })
-        .then((MockInterface ui) {
+        }).then((MockInterface ui) {
           ui.quit();
           return run(mainPath, persistentStorage: storage);
-        })
-        .then((MockInterface ui) {
-          ui.choicesToBeTaken = new Queue<int>.from(
-              [1, 1, 1, 1, 1, 1]
-          );
+        }).then((MockInterface ui) {
+          ui.choicesToBeTaken = new Queue<int>.from([1, 1, 1, 1, 1, 1]);
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
-          expect(ui.latestOutput,
-              contains("Time is now 10."));
-          expect(ui.latestOutput,
-              contains("customInstance.i is now 20."));
-          print(ui.choicesToBeTaken);
+        }).then(expectAsync1((MockInterface ui) {
+          expect(ui.latestOutput, contains("Time is now 10."));
+          expect(ui.latestOutput, contains("customInstance.i is now 20."));
+          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
-      
+
       test("script choices", () {
-        receivePort.close();
         var storage = new MemoryStorage();
         var mainPath;
-        build("scriptchoices.egb")
-        .then((path) {
+        build("scriptchoices.egb").then((path) {
           mainPath = path;
           return run(mainPath, persistentStorage: storage);
-        })
-        .then((MockInterface ui) {
+        }).then((MockInterface ui) {
           ui.choose("Live!");
           return ui.waitForDone();
-        })
-        .then((MockInterface ui) {
+        }).then((MockInterface ui) {
           ui.quit();
           return run(mainPath, persistentStorage: storage);
-        })
-        .then((MockInterface ui) {
+        }).then((MockInterface ui) {
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.latestChoices[0].string, "Another chance to die.");
           expect(ui.latestChoices[1].string, "Win it!");
-          print(ui.choicesToBeTaken);
+          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
     });
 
     group("Page options", () {
-      setUp(() {
-        receivePort = new ReceivePort();
-      });
-
-      test("prevents user to visit visitOnce page twice", () {
-        Isolate.spawnUri(Uri.parse("files/scripter_page_visitonce.dart"), 
-            [], receivePort.sendPort);
-        var interface = new MockInterface();
-        interface.choicesToBeTakenByString = new Queue<String>.from(
-            ["Get dressed"]
-        );
-        var storage = new MemoryStorage();
-        var playerProfile = storage.getDefaultPlayerProfile();
-        var runner = new EgbRunner(receivePort, interface, 
-            storage.getDefaultPlayerProfile());
-
-        interface.stream.firstWhere(
-            (interaction) => interaction.type == PlayerIntent.QUIT)
-        .then(expectAsync1((_) {
-          expect(interface.latestChoices,
-              hasLength(3));
-          expect(interface.latestChoices[0].string,
-              isNot("Get dressed"));
-          expect(interface.latestChoices[0].string,
-              "Call the police");
-
-          runner.stop();
+      test("prevents user from visiting visitOnce page twice", () {
+        run("files/scripter_page_visitonce.dart")
+        .then((MockInterface ui) {
+          ui.choose("Get dressed");
+          return ui.waitForDone();
+        })
+        .then(expectAsync1((MockInterface ui) {
+          expect(ui.latestChoices, hasLength(3));
+          expect(ui.latestChoices[0].string, isNot("Get dressed"));
+          expect(ui.latestChoices[0].string, "Call the police");
+          
+          ui.quit();
         }));
-
-        runner.run();
       });
-
     });
-    
+
     group("Scripter test helpers", () {
       test("build() works", () {
-        build("scripter_test_alternate_6.egb")
-        .then(expectAsync1((mainPath) {
-          print(mainPath);
+        build("scripter_test_alternate_6.egb").then(expectAsync1((mainPath) {
+          logMessage(mainPath);
           expect(mainPath, endsWith("scripter_test_alternate_6.dart"));
         }));
       });
 
       test("run() and ui.choose() works", () {
-        build("scripter_test_alternate_6.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("scripter_test_alternate_6.egb").then((mainPath) => run(mainPath)
+            ).then((MockInterface ui) {
           ui.choose("ABC");
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.latestOutput, "Blah.");
           ui.quit();
         }));
       });
-      
+
       test("ui.restart() works", () {
-        build("scripter_test_alternate_6.egb")
-        .then((mainPath) => run(mainPath))
-        .then((MockInterface ui) {
+        build("scripter_test_alternate_6.egb").then((mainPath) => run(mainPath)
+            ).then((MockInterface ui) {
           ui.choose("ABC");
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.latestOutput, "Blah.");
           ui.restart();
           return ui.waitForDone();
-        }))
-        .then(expectAsync1((MockInterface ui) {
+        })).then(expectAsync1((MockInterface ui) {
           expect(ui.latestOutput, "Starting. Setting time to 0.");
           ui.quit();
         }));
       });
     });
-    
+
     group("PointsAwards", () {
       test("successfully awards", () {
-        build("points_awards.egb")
-        .then((mainPath) {
-          print(mainPath);
+        build("points_awards.egb").then((mainPath) {
+          logMessage(mainPath);
           return run(mainPath);
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.currentlyShownPoints, 0);
           ui.choose("Go to next");
           ui.choose("Do something stupid");
           return ui.waitForDone();
-        }))
-        .then(expectAsync1((MockInterface ui) {
+        })).then(expectAsync1((MockInterface ui) {
           expect(ui.currentlyShownPoints, 1);
           ui.quit();
         }));
       });
     });
-    
+
     group("Stats", () {
       test("successfully shows on start", () {
-        build("stats.egb")
-        .then((mainPath) {
-          print(mainPath);
+        build("stats.egb").then((mainPath) {
+          logMessage(mainPath);
           return run(mainPath);
-        })
-        .then((MockInterface ui) {
+        }).then((MockInterface ui) {
           return ui.waitForDone();
-        })
-        .then(expectAsync1((MockInterface ui) {
+        }).then(expectAsync1((MockInterface ui) {
           expect(ui.visibleStats, hasLength(1));
           expect(ui.visibleStats[0].name, "HP");
           ui.quit();
@@ -517,7 +452,7 @@ void main() {
       });
       // TODO test persistence
     });
-    
+
     group("ChoiceWithInfochips", () {
       test("lets through a choice without chips", () {
         String s = "Some random string with no chips";
@@ -553,22 +488,22 @@ void main() {
         expect(a.infochips[1], "~45%");
       });
     });
-    
-//    group("ZIL library", () {
-//      test("no action", () {
-//        build("zil_basic.egb")
-//        .then((mainPath) {
-//          return run(mainPath);
-//        })
-//        .then(expectAsync1((MockInterface ui) {
-//          return ui.waitForDone();
-//        }))
-//        .then(expectAsync1((MockInterface ui) {
-//          print(ui.latestOutput);
-//          ui.quit();
-//        }));
-//      });
-//    });
+
+    //    group("ZIL library", () {
+    //      test("no action", () {
+    //        build("zil_basic.egb")
+    //        .then((mainPath) {
+    //          return run(mainPath);
+    //        })
+    //        .then(expectAsync1((MockInterface ui) {
+    //          return ui.waitForDone();
+    //        }))
+    //        .then(expectAsync1((MockInterface ui) {
+    //          logMessage(ui.latestOutput);
+    //          ui.quit();
+    //        }));
+    //      });
+    //    });
   });
 
 }

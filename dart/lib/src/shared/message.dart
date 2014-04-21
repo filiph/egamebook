@@ -53,7 +53,7 @@ class EgbMessage {
       case CONTINUE: return "CONTINUE";
       case CHOICE_SELECTED: return "CHOICE_SELECTED";
       case QUIT: return "QUIT";
-      default: "Unknown type=$type";
+      default: return "Unknown type=$type";
     }
   }
   
@@ -176,4 +176,10 @@ class EgbMessage {
     
     return map;
   }
+}
+
+class EgbMessageException implements Exception {
+  final String message;
+  const EgbMessageException(this.message);
+  String toString() => "EgbMessageException: $message";
 }

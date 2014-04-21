@@ -8,6 +8,8 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/src/persistence/player_profile.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
 
 class MockInterface extends EgbInterfaceBase {
   Queue<int> choicesToBeTaken;
@@ -31,15 +33,12 @@ class MockInterface extends EgbInterfaceBase {
   /// [MockInterface.choose()].
   bool waitForChoicesToBeTaken;
 
-  Stream _stream;
-  Stream get stream => _stream;
-  
-  StreamController<String> _eventStreamController;
-  Stream<String> _eventStream;
+  StreamController<String> _debugStreamController;
+  Stream<String> _debugStream;
   /// The public stream of events that the unit tests might care about (but
   /// the generic interface shouldn't need), like new choiceLists, new toasts,
   /// etc.  
-  Stream<String> get eventStream => _eventStream;
+  Stream<String> get debugStream => _debugStream;
   
   static final String WAITING_FOR_INPUT_EVENT = "WAITING_FOR_INPUT";
   static final String TEXTBLOCK_SHOWN_EVENT = "TEXTBLOCK_SHOWN";
@@ -48,12 +47,13 @@ class MockInterface extends EgbInterfaceBase {
   static final String BOOK_ENDED_EVENT = "BOOK_ENDED";
   static final String POINTS_AWARDED_EVENT = "POINTS_AWARDED";
 
+  static final String PLAYER_QUIT_EVENT = "PLAYER_QUIT";
+
   MockInterface({bool this.waitForChoicesToBeTaken: false}) 
       : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>(), super() {
-    _stream = streamController.stream.asBroadcastStream();
-    _eventStreamController = new StreamController();
-    _eventStream = _eventStreamController.stream.asBroadcastStream();
+    _debugStreamController = new StreamController();
+    _debugStream = _debugStreamController.stream.asBroadcastStream();
   }
 
   void setup() {
@@ -61,8 +61,15 @@ class MockInterface extends EgbInterfaceBase {
   }
   
   void endBook() {
-    _eventStreamController.add(BOOK_ENDED_EVENT);
+    print("MockInterface: End of Book");
+    _debugStreamController.add(BOOK_ENDED_EVENT);
   }
+  
+  Stream<String> get endOfBookReached => 
+        debugStream.where((value) => value == BOOK_ENDED_EVENT);
+  
+  Stream<String> get playerQuit => 
+          debugStream.where((value) => value == PLAYER_QUIT_EVENT);
 
   void close() {
     closed = true;
@@ -72,7 +79,7 @@ class MockInterface extends EgbInterfaceBase {
     print("MockInterface output: $s");
     if (s.trim() != "") {
       latestOutput = s.split("\n\n").last;
-      _eventStreamController.add(TEXTBLOCK_SHOWN_EVENT);
+      _debugStreamController.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
   }
@@ -96,14 +103,13 @@ class MockInterface extends EgbInterfaceBase {
       if (waitForChoicesToBeTaken) {
         _currentChoices = choiceList;
         _currentChoicesCompleter = new Completer();
-        _eventStreamController.add(WAITING_FOR_INPUT_EVENT);
+        _debugStreamController.add(WAITING_FOR_INPUT_EVENT);
         return _currentChoicesCompleter.future;
       } else {
         // No predefined choices and no waiting - let's quit.
         print("MockInterface pick: NONE, Quitting");
-        streamController.add(new QuitIntent());
-        streamController.close();
-        return new Completer().future;
+        quit();
+        return new Future.value(null);
       }
     }
   }
@@ -139,24 +145,26 @@ class MockInterface extends EgbInterfaceBase {
   
   void quit() {
     print("MockInterface.quit() called.");
-    streamController.add(new QuitIntent());
+    playerProfile.close();
+    scripterProxy.quit();
+    _debugStreamController.add(PLAYER_QUIT_EVENT);
   }
   
   void restart() {
     print("MockInterface.restart() called.");
-    streamController.add(new RestartIntent());
+    scripterProxy.restart();
   }
   
   /// Completes the future when interface waits for input or when the book is
   /// ended.
   Future<EgbInterface> waitForDone() =>
-    eventStream.firstWhere((value) => 
+    debugStream.firstWhere((value) => 
         value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
         .then((_) => this);
   
   Future<bool> awardPoints(PointsAward award) {
     print("MockInterface: *** $award ***");
-    _eventStreamController.add(POINTS_AWARDED_EVENT);
+    _debugStreamController.add(POINTS_AWARDED_EVENT);
     _currentlyShownPoints = award.result;
     return new Future.value(true);
   }
@@ -169,11 +177,13 @@ class MockInterface extends EgbInterfaceBase {
   Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
     _printStats();
+    return new Future.value(true);
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
     UIStat.updateStatsListFromMap(_statsList, mapContent);
     _printStats();
+    return new Future.value(true);
   }
   
   void _printStats() {
@@ -185,9 +195,16 @@ class MockInterface extends EgbInterfaceBase {
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");
+    return new Future.value(true);
   }
 
   Future<bool> reportError(String title, String text) {
     print("ERROR: $title\n$text");
+    return new Future.value(true);
+  }
+
+  @override
+  void save(EgbSavegame savegame) {
+    playerProfile.save(savegame);
   }
 }

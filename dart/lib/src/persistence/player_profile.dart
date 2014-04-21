@@ -35,6 +35,8 @@ class EgbPlayerProfile {
   /// Uid of the player this profile is associated with.
   String playerUid;
   /// Uid of current gamebook. *Must* be set for saving and loading to work.
+  /// TODO: get rid of this. All calls to playerProfile should explicitly state
+  ///       the UID.
   String currentEgamebookUid;
 
   /**
@@ -117,12 +119,14 @@ class EgbPlayerProfile {
     });
   }
   
-  Future<bool> savePlayerChronology(List<String> playerChronology) {
-    return _save("_playerChronology", JSON.encode(playerChronology));
+  Future<bool> savePlayerChronology(Set<String> playerChronology) {
+    return _save("_playerChronology", 
+        JSON.encode(playerChronology.toList(growable: false)));
   }
   
-  Future<List<String>> loadPlayerChronology() {
-    return _load("_playerChronology").then((String s) => JSON.decode(s));
+  Future<Set<String>> loadPlayerChronology() {
+    return _load("_playerChronology")
+        .then((String s) => (JSON.decode(s) as List<String>).toSet());
   }
 
   /**
