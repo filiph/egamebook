@@ -24,9 +24,14 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   
   /// Called on startup to create the interface environment.
   void setup();
+  
+  /// Either loads the latest savegame or -- if missing -- creates a new one.
+  Future continueSavedGameOrCreateNew();
+  
   /// Called when there is no more options to take in the book, and so it has
   /// ended. Interface can choose to show a message, call-to-action, etc.
   void endBook();
+  
   /// Called when interface is not needed anymore. This is not necessarily the
   /// same time when the book ends ([endBook()]) -- a player can still choose
   /// to use the interface to retry (restart or load). But when the game session
@@ -75,12 +80,8 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
    * the information to the player and make it possible to reload the position
    * later. (Communicated to the Runner via [stream].)
    */
+  @deprecated
   Future<bool> addSavegameBookmark(EgbSavegame savegame);
-  
-//  /// Stream that sends player's interactions (apart from choice selection).
-//  /// These interactions include loading game states, starting a gamebook
-//  /// from scratch, etc.
-//  Stream<PlayerIntent> get stream;
   
   EgbPlayerProfile get playerProfile;
   
@@ -90,27 +91,53 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
 }
 
 abstract class EgbInterfaceBase implements EgbInterface {
-//  StreamController<PlayerIntent> streamController;
-//  Stream<PlayerIntent> get stream => streamController.stream;
-//  
-  EgbInterfaceBase() {
-//    streamController = new StreamController();
+  
+  EgbScripterProxy scripterProxy;
+  void setScripter(EgbScripterProxy scripterProxy) {
+    this.scripterProxy = scripterProxy;
+  }
+  
+  Future<EgbInterface> continueSavedGameOrCreateNew() {
+    EgbSavegame lastSavegame;
+    Set<String> playerChronology;
+    
+    return playerProfile.loadMostRecent()
+    .then((EgbSavegame savegame) {
+      lastSavegame = savegame;
+      
+      if (lastSavegame == null) {
+        return new Set<String>();
+      } else {
+        return playerProfile.loadPlayerChronology();
+      }
+    })
+    .then((Set<String> chronology) {
+      playerChronology = chronology;
+      
+      if (lastSavegame != null) {
+        scripterProxy.load(lastSavegame, playerChronology);
+      } else {
+        scripterProxy.restart();
+      }
+      
+      return this;
+    });
+  }
+  
+  @override
+  EgbPlayerProfile get playerProfile => _playerProfile;
+  
+  EgbPlayerProfile _playerProfile;
+  void setPlayerProfile(EgbPlayerProfile playerProfile) {
+    _playerProfile = playerProfile;
+  }
+  
+  @override
+  void savePlayerChronology(Set<String> playerChronology) {
+    playerProfile.savePlayerChronology(playerChronology);
   }
   
   void close() {
-//    streamController.close();
     playerProfile.close();
-  }
-  
-  void sendRestartIntent() {
-//    streamController.add(new RestartIntent());
-  }
-  
-  void sendLoadIntent(String savegameUid) {
-//    streamController.add(new LoadIntent(savegameUid));
-  }
-  
-  void sendQuitIntent() {
-//    streamController.add(new QuitIntent());
   }
 }

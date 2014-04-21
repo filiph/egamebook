@@ -11,12 +11,14 @@ import '../shared/message.dart';
 import '../book/scripter.dart';
 
 /**
- * The methods of EgbInterface that are callable by EgbScripter.
+ * The methods of EgbInterface that are callable by EgbScripter (mostly through
+ * a [EgbInterfaceProxy], but conceivably also directly).
  */
 abstract class EgbInterfaceViewedFromScripter {
   void awardPoints(PointsAward award);
   void endBook();
   void reportError(String title, String text);
+  void log(String text);
   void setStats(List<UIStat> stats);
   Future<int> showChoices(EgbChoiceList choices);
   Future<bool> showText(String text);
@@ -82,7 +84,6 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
       case EgbMessage.CHOICE_SELECTED:
         int choiceHash = message.intContent;
         assert(_choiceSelectedCompleter != null);
-        print("___ choiceHash = $choiceHash");
         _choiceSelectedCompleter.complete(choiceHash);
         _choiceSelectedCompleter = null;
         return;
@@ -117,7 +118,11 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         try {
           var savegame = new EgbSavegame.fromMessage(message);
           var playerChronology = message.listContent;
-          scripter.loadFromSaveGame(savegame, playerChronology);
+          if (playerChronology != null) {
+            scripter.loadFromSaveGame(savegame, playerChronology);
+          } else {
+            scripter.loadFromSaveGame(savegame);
+          }
         } on IncompatibleSavegameException catch (e, stacktrace) {
           // don't
           _send(new EgbMessage.ScripterError(
@@ -212,6 +217,11 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     _send(new EgbMessage.ScripterError("$title: $text"));
     // TODO: Should close port!?
   }
+  
+  @override
+  void log(String text) {
+    _send(new EgbMessage.ScripterLog(text));
+  }
 
   @override
   void savePlayerChronology(Set<String> playerChronology) {
@@ -220,7 +230,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   void setStats(List<UIStat> stats) {
-    // TODO: implement setStats
+    _send(Stat.toMessage(changedOnly: false));
   }
 
   Completer<int> _choiceSelectedCompleter;
@@ -248,17 +258,19 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   Future<bool> updateStats(Map<String, Object> mapContent) {
-    // TODO: implement updateStats
+    _send(Stat.toMessage(changedOnly: true));
+    return new Future.value(true);
   }
 
   @override
   void save(EgbSavegame savegame) {
     _send(savegame.toMessage(EgbMessage.SAVE_GAME));
   }
-}
-
-void DEBUG_SCR(String message) {
-  print(message);
+  
+  void DEBUG_SCR(String message) {
+    //print(message);
+    log(message);
+  }
 }
 
 class EgbAsyncOperationOverridenException implements Exception {

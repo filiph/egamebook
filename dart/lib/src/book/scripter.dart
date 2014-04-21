@@ -368,7 +368,6 @@ abstract class EgbScripter {
           choices.where((EgbChoice choice) => choice.isActionable(atEndOfPage:
           atEndOfPage, atChoiceList: atStaticChoiceList)).toList());
       if (actionableChoices.isNotEmpty) {
-        print("___ actionable choices: $actionableChoices");
         interface.showChoices(actionableChoices)
         .then(_handleChoiceSelected)
         .catchError((e) => DEBUG_SCR("$e"), 
@@ -638,8 +637,11 @@ abstract class EgbScripter {
    * state with its contents. This includes both the Story Chronology (where
    * the story is right now) and the Player Chronology (what the player has
    * seen already, including blind alleys and consecutive reloads).
+   * 
+   * Player Chronology need only provided at the start of player session. It is
+   * not overwritten by loading or saving games.
    */
-  void loadFromSaveGame(EgbSavegame savegame, List<String> playerChronology) {
+  void loadFromSaveGame(EgbSavegame savegame, [List<String> playerChronology]) {
     _initScriptEnvironment();
 
     if (pageMap[savegame.currentPageName] == null) {
@@ -669,8 +671,8 @@ abstract class EgbScripter {
   }
 
   void DEBUG_SCR(String message) {
-    //_send(new EgbMessage.ScripterLog(message));
-    print("SCR: $message");
+    interface.log(message);
+    //print("SCR: $message");
   }
 
   PointsCounter getPoints() {

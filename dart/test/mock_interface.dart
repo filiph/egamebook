@@ -33,9 +33,6 @@ class MockInterface extends EgbInterfaceBase {
   /// [MockInterface.choose()].
   bool waitForChoicesToBeTaken;
 
-//  Stream _stream;
-//  Stream get stream => _stream;
-  
   StreamController<String> _debugStreamController;
   Stream<String> _debugStream;
   /// The public stream of events that the unit tests might care about (but
@@ -55,7 +52,6 @@ class MockInterface extends EgbInterfaceBase {
   MockInterface({bool this.waitForChoicesToBeTaken: false}) 
       : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>(), super() {
-//    _stream = streamController.stream.asBroadcastStream();
     _debugStreamController = new StreamController();
     _debugStream = _debugStreamController.stream.asBroadcastStream();
   }
@@ -113,8 +109,6 @@ class MockInterface extends EgbInterfaceBase {
         // No predefined choices and no waiting - let's quit.
         print("MockInterface pick: NONE, Quitting");
         quit();
-//        streamController.add(new QuitIntent());
-//        streamController.close();
         return new Future.value(null);
       }
     }
@@ -152,15 +146,13 @@ class MockInterface extends EgbInterfaceBase {
   void quit() {
     print("MockInterface.quit() called.");
     playerProfile.close();
-    _scripterProxy.quit();
+    scripterProxy.quit();
     _debugStreamController.add(PLAYER_QUIT_EVENT);
-//    streamController.add(new QuitIntent());
   }
   
   void restart() {
     print("MockInterface.restart() called.");
-    _scripterProxy.restart();
-//    streamController.add(new RestartIntent());
+    scripterProxy.restart();
   }
   
   /// Completes the future when interface waits for input or when the book is
@@ -185,11 +177,13 @@ class MockInterface extends EgbInterfaceBase {
   Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
     _printStats();
+    return new Future.value(true);
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
     UIStat.updateStatsListFromMap(_statsList, mapContent);
     _printStats();
+    return new Future.value(true);
   }
   
   void _printStats() {
@@ -201,32 +195,16 @@ class MockInterface extends EgbInterfaceBase {
   
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("==> savegame created (${savegame.uid})");
+    return new Future.value(true);
   }
 
   Future<bool> reportError(String title, String text) {
     print("ERROR: $title\n$text");
+    return new Future.value(true);
   }
 
   @override
   void save(EgbSavegame savegame) {
     playerProfile.save(savegame);
-  }
-
-  @override
-  void savePlayerChronology(Set<String> playerChronology) {
-    playerProfile.savePlayerChronology(playerChronology);
-  }
-  
-  @override
-  EgbPlayerProfile get playerProfile => _playerProfile;
-  
-  EgbPlayerProfile _playerProfile;
-  void setPlayerProfile(EgbPlayerProfile playerProfile) {
-    _playerProfile = playerProfile;
-  }
-  
-  EgbScripterProxy _scripterProxy;
-  void setScripter(EgbScripterProxy scripterProxy) {
-    _scripterProxy = scripterProxy;
   }
 }

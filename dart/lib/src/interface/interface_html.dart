@@ -6,6 +6,7 @@ import 'dart:html';
 import 'package:markdown/markdown.dart' show markdownToHtml;
 
 import 'interface.dart';
+export 'interface.dart' show EgbInterface;
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 import '../shared/points_award.dart';
@@ -16,7 +17,6 @@ import '../persistence/storage.dart';
 import '../persistence/player_profile.dart';
 
 import 'choice_with_infochips.dart';
-import 'dart:collection';
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
@@ -58,7 +58,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
     restartAnchor = document.querySelector("nav a#book-restart");
     restartAnchor.onClick.listen((_) {
-      sendRestartIntent();
+      scripterProxy.restart();
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
@@ -456,14 +456,24 @@ class HtmlInterface extends EgbInterfaceBase {
    * What happens when user clicks on a savegame bookmark.
    */
   void _handleSavegameBookmarkClick(String savegameUid) {
-    // TODO: make more elegant, with confirmation appearing on page
+    // TODO: make more elegant, with confirmation appearing on page, 
+    //       and non-blocking
     var confirm = window.confirm("Are you sure you want to come back to "
             "this decision ($savegameUid) and lose your progress since?");
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      sendLoadIntent(savegameUid);
-      // TODO: solve for when savegame with that uid is not available
+      playerProfile.load(savegameUid)
+      .then((EgbSavegame savegame) {
+          if (savegame == null) {
+            // no savegames for this egamebook savegame uid
+            reportError("Bad gamesave", "That savegame is missing.");
+            // TODO: provide solutions, feedback, etc.
+          } else {
+            showText(savegame.textHistory);
+            scripterProxy.load(savegame);
+          }
+       });
     }
   }
   
@@ -479,6 +489,8 @@ class HtmlInterface extends EgbInterfaceBase {
     _textHistory.clear();  // The _textHistory has been saved with the savegame.
     assert(_savegameToBe == null);
     _savegameToBe = savegame;
+    return new Future.value(true);
+    
 //    bookmarkDiv = new DivElement();
 //    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
 //    bookmarkDiv.classes.add("bookmark-div");
@@ -549,6 +561,18 @@ class HtmlInterface extends EgbInterfaceBase {
   Future<bool> reportError(String title, String text) {
     Dialog error = new Dialog(title, "<p>$text</p>");
     return showDialog(error);
+  }
+
+  @override
+  void save(EgbSavegame savegame) {
+    savegame.textHistory = getTextHistory();
+    playerProfile.save(savegame);
+    addSavegameBookmark(savegame);
+  }
+
+  @override
+  void log(String text) {
+    print("HtmlInterface.log: $text");
   }
 }
 

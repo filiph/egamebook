@@ -22,7 +22,7 @@ abstract class EgbScripterViewedFromInterface {
   Future init();
   String get uid;
   void restart();
-  void load(EgbSavegame savegame, Set<String> playerChronology);
+  void load(EgbSavegame savegame, [Set<String> playerChronology]);
   void quit();
 }
 
@@ -60,6 +60,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
 
   @override
   Future init() {
+    INT_DEBUG("Initializing the isolate at $_isolateUri");
     _initCompleter = new Completer();
     _receivePort = new ReceivePort();
     Isolate.spawnUri(_isolateUri, [], _receivePort.sendPort);
@@ -69,6 +70,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   
   void _onMessageFromScripterIsolate(Object _message) {
     if (_message is SendPort) {
+      INT_DEBUG("Received SendPort from Isolate");
       _scripterPort = _message;
       _send(new EgbMessage.RequestBookUid());
       return;
@@ -85,19 +87,16 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
         interface.endBook();
-//        _streamController.add("END");  // send the info to anyone listening
         return;
       case EgbMessage.SEND_BOOK_UID:
         INT_DEBUG("Book UID received ('${message.strContent}')");
         _uid = message.strContent;
         _initCompleter.complete();
-//        _startNewSession(message);
         return;
       case EgbMessage.SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
         savegame.textHistory = interface.getTextHistory();
-        interface.playerProfile.save(savegame);
-        interface.addSavegameBookmark(savegame);
+        interface.save(savegame);
         return;
       case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
         interface.playerProfile
@@ -127,6 +126,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         interface.updateStats(message.mapContent);
         return;
       case EgbMessage.SHOW_CHOICES:
+        INT_DEBUG("Showing choices.");
         interface.showChoices(new EgbChoiceList.fromMessage(message))
         .then((int hash) {
           if (hash != null) {
@@ -159,9 +159,13 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   }
   
   @override
-  void load(EgbSavegame savegame, Set<String> playerChronology) {
+  void load(EgbSavegame savegame, [Set<String> playerChronology]) {
     EgbMessage loadMessage = savegame.toMessage(EgbMessage.LOAD_GAME);
-    loadMessage.listContent = playerChronology.toList(growable: false);
+    if (playerChronology != null) {
+      loadMessage.listContent = playerChronology.toList(growable: false);
+    } else {
+      loadMessage.listContent = null;  // No playerChronology needs to be sent.
+    }
     _send(loadMessage);
   }
 

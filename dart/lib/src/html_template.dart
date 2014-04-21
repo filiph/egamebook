@@ -1,9 +1,6 @@
-import 'dart:isolate';
 import 'runner.dart';
-import 'interface/interface.dart';
 import 'interface/interface_html.dart';
 import 'persistence/storage.dart';
-import 'persistence/player_profile.dart';
 
 void main() {
   // this will be rewritten with the actual file
@@ -13,15 +10,8 @@ void main() {
   EgbInterface interface = new HtmlInterface();
   // open storage
   EgbStorage storage = new LocalStorage();
-  // get player profile
-  EgbPlayerProfile playerProfile = storage.getDefaultPlayerProfile();
-  // create [ReceivePort] for this isolate
-  ReceivePort receivePort = new ReceivePort();
-  // create the isolate // https://plus.google.com/+dartlang/posts/NF6AJ3oPYuk
-  Isolate.spawnUri(Uri.parse(scripterPath), [], receivePort.sendPort)
-  .then((Isolate isolate) {
-    // Create the [Runner] which ties everything together.
-    var runner = new EgbRunner(receivePort, interface, playerProfile);
-    runner.run();
-  });
+  // set player profile
+  interface.setPlayerProfile(storage.getDefaultPlayerProfile());
+  // run
+  runFromIsolate(scripterPath, interface, storage);
 }

@@ -6,11 +6,9 @@ import 'dart:collection';
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:egamebook/src/runner.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/persistence/saveable.dart';
-import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
 import 'package:egamebook/src/interface/interface.dart';
@@ -107,27 +105,7 @@ Future<EgbInterface> run(String dartFilename, {EgbStorage persistentStorage:
     mockInterface.setScripter(bookProxy);
     bookProxy.setInterface(mockInterface);
     
-    return mockInterface.playerProfile.loadMostRecent();
-  })
-  .then((EgbSavegame savegame) {
-    lastSavegame = savegame;
-    
-    if (lastSavegame == null) {
-      return new Set<String>();
-    } else {
-      return mockInterface.playerProfile.loadPlayerChronology();
-    }
-  })
-  .then((Set<String> chronology) {
-    playerChronology = chronology;
-    
-    if (lastSavegame != null) {
-      bookProxy.load(lastSavegame, playerChronology);
-    } else {
-      bookProxy.restart();
-    }
-    
-    return mockInterface;
+    return mockInterface.continueSavedGameOrCreateNew();
   });
 }
 

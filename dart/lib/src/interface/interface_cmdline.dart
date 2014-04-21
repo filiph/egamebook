@@ -10,6 +10,7 @@ import '../shared/user_interaction.dart';
 import '../shared/points_award.dart';
 import '../shared/stat.dart';
 
+@deprecated
 class CmdlineInterface extends EgbInterfaceBase {
   Stream<String> _cmdLine;
   StreamSubscription<String> _cmdLineSubscription;
