@@ -16,7 +16,12 @@ library egb_form;
  * 
  * It is possible for the form's elements to be updated automatically after
  * user's input. For instance, when player has allocated all of his resources,
- * all resource sliders should be locked at their current maximum. 
+ * all resource sliders should be locked at their current maximum. If two
+ * checkboxes are mutually exclusive and one of them has been checked, the other
+ * one should be disabled.
+ * 
+ * The logic of the updating can be quite complex and gamebook-dependent, so it
+ * is executed in the Scripter. 
  * 
  * When presented to the user, and after each user input, the form is 
  * temporarily disabled (no user input allowed) and a callback is fired. This
@@ -24,7 +29,27 @@ library egb_form;
  * has to go into another Isolate or even to a server).
  * 
  * Each node of the Form structure is given a unique ID. This makes it easy
- * for the     
+ * to identify the element to be updated.
+ * 
+ * ## Example use
+ * 
+ *     String name;
+ *     int age;
+ *     String sex;
+ *     var form = new Form();
+ *     form.add(new TextInput("Name:", (value) => name = value,
+ *                            validate: (value) => value != "");
+ *     form.add(new RangeInput("Age:", (value) => age = value,
+ *                             min: 20, max: 100, value: 30, step: 1,
+ *                             maxEnabled: 40));
+ *     form.add(new RadioChoice("Sex:", {"m": "Male", "f": "Female"}, 
+ *                              (value) => sex = m));
+ *     form.onChange.listen((element) {
+ *     });
+ *     
+ *     ask(form)
+ *     .then((_) {});
+ *  
  */
 class Form {
   
