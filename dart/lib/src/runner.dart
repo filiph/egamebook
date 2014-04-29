@@ -1,5 +1,12 @@
 library egb_runner;
 
+/**
+ * Helper class that initializes the most common setups for an egamebook 
+ * session. This mostly involves creating an Isolate (if needed), linking
+ * the interface to it, and telling the interface to continue a saved game
+ * or create a new one.
+ */
+
 import 'dart:async';
 import 'package:egamebook/src/interface/interface.dart';
 import 'package:egamebook/src/persistence/storage.dart';
