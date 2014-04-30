@@ -11,6 +11,7 @@ import '../shared/stat.dart';
 import 'interface_proxy.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/src/interface/form_proxy.dart';
 
 abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   ReceivePort _receivePort;
@@ -71,6 +72,14 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   /// Feed this function with the [EgbMessage.mapContent] of the received
   /// [EgbMessage.UPDATE_STATS] message.  
   Future<bool> updateStats(Map<String,Object> mapContent); 
+  
+  /// Shows a form in the interface, set with the initial values. Each time the
+  /// user changes a value, the new values are emitted via the returned 
+  /// [Stream].
+  Stream<Map> showForm(FormProxy formProxy);
+  
+  /// Updates the values and setup of the form with given [values].
+  void updateForm(Map<String,Object> values);
   
   // TODO: toast() ?
   Future<bool> reportError(String title, String text);

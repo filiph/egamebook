@@ -1,5 +1,7 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/shared/form.dart';
+import 'package:egamebook/src/interface/form_proxy.dart';
+import 'dart:convert';
 
 void main() {
   group("Basic", () {
@@ -15,26 +17,23 @@ void main() {
           1000, step: 100);
     });
 
-    test("Children are added to parents", () {
-      form.add(input1);
-      expect(input1.parent, form);
-      expect(input2.parent, isNull);
-      expect(form.children.length, 1);
-    });
-
-    test("Form keeps track of ids of children", () {
-      form.add(input1);
-      form.add(input2);
+    test("Form gives its children unique ids before sending", () {
+      form.children.add(input1);
+      form.children.add(input2);
+      form.toMap();
       expect(input1.id, isNot(input2.id));
       expect(input1.id, isNotNull);
     });
 
     test("Form from Scripter is recreated in interface", () {
-      form.add(input1);
-      form.add(input2);
-      Map formMap = form.toMap();
-      InterfaceForm interfaceForm = new InterfaceForm(formMap);
-      expect(interfaceForm.children.length, form.children.length);
+      form.children.add(input1);
+      form.children.add(input2);
+      Map map = form.toMap();
+      print(JSON.encode(map));
+      FormProxy formProxy = new FormProxy.fromMap(map);
+      expect(formProxy.children.length, form.children.length);
+      expect((form.children[0] as BaseRangeInput).max, 
+          (formProxy.children[0] as BaseRangeInput).max);
     });
   });
 }

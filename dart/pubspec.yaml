@@ -2,11 +2,13 @@ name: egamebook
 version: 0.0.1
 author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
-  path: any
-  browser: any
-  unittest: any
-  args: any
-  a_star: any
+  html5lib: ">=0.10.0 <0.11.0"
+  jsonml: ">=0.1.1 <0.2.0"
+  path: ">=1.1.0 <1.2.0"
+  browser: ">=0.10.0+2 <0.11.0"
+  unittest: ">=0.10.1+2 <0.11.0"
+  args: ">=0.10.0+2 <0.11.0"
+  a_star: ">=0.3.0 <0.4.0"
   markdown:
     git: https://github.com/filiph/dart-markdown.git
 #  graphml:

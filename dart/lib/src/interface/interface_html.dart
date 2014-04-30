@@ -17,6 +17,7 @@ import '../persistence/storage.dart';
 import '../persistence/player_profile.dart';
 
 import 'choice_with_infochips.dart';
+import 'package:egamebook/src/interface/form_proxy.dart';
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
@@ -575,6 +576,11 @@ class HtmlInterface extends EgbInterfaceBase {
   void log(String text) {
     print("HtmlInterface.log: $text");
   }
+}
+
+class HtmlForm {
+  FormProxy formProxy;
+  // XXX: start HERE!
 }
 
 class Submenu {

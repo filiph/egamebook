@@ -83,66 +83,79 @@ library egb_form;
  *   
  */
 
-class FormElement {
-  final String elementClass = "OVERRIDE";
+import "package:html5lib/dom.dart" as html5lib;
+import "package:jsonml/html5lib2jsonml.dart";
+import 'dart:math';
 
-  /**
-   * The [id] is unique in any form and is assigned by the top-level [Form]
-   * element. (This allows for [Form.update] payloads to only carry the updated
-   * data.
-   */
-  int id;
+class FormElement extends html5lib.Element {
+  FormElement(String elementClass) : super.tag(elementClass);
 
-  /// The parent element. Should be [:null:] only when this element is the
-  /// [Form].
-  FormElement parent;
+  //  /**
+  //   * The [id] is unique in any form and is assigned by the top-level [Form]
+  //   * element. (This allows for [Form.update] payloads to only carry the updated
+  //   * data.
+  //   */
+  //  int id;
+
+  //  /// The parent element. Should be [:null:] only when this element is the
+  //  /// [Form].
+  //  FormElement parent;
 
   /// Every form element can have a help button that shows a text message.
-  String helpMessage;
+  String get helpMessage => attributes["helpMessage"];
+  set helpMessage(String value) => attributes["helpMessage"] = value;
 
   /// Sets the visibility of the element. This works like CSS [:display:],
   /// meaning that when set to [:false:], the element will not occupy its
   /// space (there will be no 'white rectange' in the place of a hidden element
   /// like with CSS [:visibility:]).
-  bool hidden = false;
-}
-
-class _ElementContainer {
-  List<FormElement> children = new List<FormElement>();
-
-  void add(FormElement element) {
-    assert(element.elementClass != "OVERRIDE");
-    children.add(element);
-    element.parent = (this as FormElement);
-    FormElement topLevelForm = (this as FormElement);
-    while (topLevelForm is! Form) {
-      topLevelForm = topLevelForm.parent;
+  bool get hidden => attributes["hidden"] == "true";
+  set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
+  
+  /// Utility function that walks through the whole structure recursively and
+  /// adds all [FormElement] children to the [set].
+  void _addFormChildrenToSet(FormElement element, Set<FormElement> set) {
+    for (html5lib.Element child in element.children) {
+      if (child is FormElement) {
+        set.add(child);
+        _addFormChildrenToSet(child, set);
+      }
     }
-    element.id = (topLevelForm as Form).lastId + 1;
-    (topLevelForm as Form).lastId += 1;
+  }
+  
+  Set<FormElement> get allFormElements {
+    Set<FormElement> set = new Set<FormElement>();
+    _addFormChildrenToSet(this, set);
+    return set;
   }
 }
 
-class _Form extends FormElement with _ElementContainer {
-  @override
-  String elementClass = "Form";
-  
+abstract class UpdatableByMap {
+  Map<String,Object> toMap();
+  void updateFromMap(Map<String,Object> map);
+}
+
+class FormBase extends FormElement {
+  FormBase() : super("Form");
+
   /// The text to be on the submit button. Defaults to [:null:], in which case
   /// the button will just have a generic graphic (such as an arrow or a check
   /// mark).
-  String submitText;
-
-  /// The highest given [FormElement.id] yet.
-  int lastId = 0;
+  String get submitText => attributes["submitText"];
+  set submitText(String value) => attributes["submitText"] = value;
 }
 
 /**
  * The top level element of a form, containing all other elements. 
  * Author-facing.
  */
-class Form extends _Form {
+class Form extends FormBase {
+  String formUid;
+  Random _random = new Random();
+  
   Form({String submitText}) {
     this.submitText = submitText;
+    formUid = "${_random.nextInt((1<<16))}";  // Assuming this is enough.
   }
 
   receiveUserInput(Map newValues) {
@@ -152,20 +165,35 @@ class Form extends _Form {
     // Returns Future?
   }
   
+  bool _uniqueIdsGiven = false;
+  void _giveChildrenUniqueIds() {
+    int id = 0;
+    allFormElements.forEach((FormElement element) {
+      element.id = "$formUid::${id++}";
+    });
+    _uniqueIdsGiven = true;
+  }
+
   Map<String,Object> toMap() {
-    // TODO
+    if (!_uniqueIdsGiven) {
+      // Set all children with a unique ID here or before here.
+      _giveChildrenUniqueIds();
+    }
+    Map<String,Object> map = new Map<String,Object>();
+    map["jsonml"] = encodeToJsonML(this);
+    Map<String,Object> valuesMap = new Map<String,Object>(); 
+    map["values"] = valuesMap;
+    for (UpdatableByMap element 
+        in allFormElements.where((element) => element is UpdatableByMap)) {
+      valuesMap[(element as FormElement).id] = element.toMap(); 
+    }
+    return map;
   }
 }
 
-class InterfaceForm extends _Form {
-  InterfaceForm(jsonml); // TODO: creates the interface-side of the form
-  // Listens to user actions, sends for updates to scripter
-}
-
-class FormSection extends _ElementContainer {
-  String elementClass = "FormSection";
+class FormSection extends FormElement {
   final String name;
-  FormSection(this.name);
+  FormSection(this.name) : super("FormSection");
 }
 
 class _ValueCallback<T> {
@@ -181,17 +209,24 @@ typedef void InputCallback(value);
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
-class _RangeInput extends FormElement {
-  @override
-  final String elementClass = "RangeInput";
-  String name;
+class BaseRangeInput extends FormElement implements UpdatableByMap {
+  String get name => attributes["name"];
+  set name(String value) => attributes["name"] = value;
+  
+  static const String elementClass = "RangeInput";
 
-  _RangeInput();
-  _RangeInput.withConstraints(this.name, this.value, this.min, this.max, this.step, this.minEnabled, this.maxEnabled);
+  BaseRangeInput(String name) : super(elementClass) {
+    this.name = name;
+  }
+  BaseRangeInput.withConstraints(String name, this.current, this.min, this.max, 
+      this.step, this.minEnabled, this.maxEnabled) : super(elementClass) {
+    this.name = name;
+  }
 
   /// Current (or predefined) value selected on the range input. Defaults to
-  /// [:0:].
-  int value = 0;
+  /// [:0:]. We use `current` because `value` is the [String] value of any
+  /// HTML5 element (although it's deprecated in html5lib).
+  int current = 0;
   /// Minimal value on the range input. Defaults to [:0:].
   int min = 0;
   /// Maximal value on the range input. Defaults to [:10:].
@@ -204,26 +239,38 @@ class _RangeInput extends FormElement {
   /// possible to choose in other circumstances. When set to [:null:] (default),
   /// all numbers are possible.
   int minEnabled;
-  /// As with [minEnabled], but for values _above_ this number.
+  /// Same as [minEnabled], but for values _above_ this number.
   int maxEnabled;
+
+  @override
+  Map<String, Object> toMap() => {
+    "current": current,
+    "min": min,
+    "max": max,
+    "step": step,
+    "minEnabled": minEnabled,
+    "maxEnabled": maxEnabled
+  };
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    current = map["current"];
+    min = map["min"];
+    max = map["max"];
+    step = map["step"];
+    minEnabled = map["minEnabled"];
+    maxEnabled = map["maxEnabled"];
+  }
 }
 
 /**
  * The author-facing class of the range input element. It works only with
  * integers
  */
-class RangeInput extends _RangeInput with _ValueCallback<int> {
+class RangeInput extends BaseRangeInput with _ValueCallback<int> {
   RangeInput(String name, InputCallback onInput, {int value: 0, int min: 0, int
       max: 10, int step: 1, int minEnabled, int maxEnabled}) : super.withConstraints(
       name, value, min, max, step, minEnabled, maxEnabled) {
     this.onInput = onInput;
   }
 }
-
-class InterfaceRangeInput extends _RangeInput {
-  @override
-  String name;
-  InterfaceRangeInput(this.name);
-}
-
-
