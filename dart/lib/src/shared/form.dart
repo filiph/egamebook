@@ -49,7 +49,7 @@ library egb_form;
  *     form.add(new RadioChoice("Sex", 
  *                              {"m": "Male [+1 STR]", "f": "Female [+1 INT]"}, 
  *                              (value) => sex = m));
- *     ask(form)
+ *     showForm(form)
  *     .then((_) {});
  *
  * Another, more complex example:
@@ -79,7 +79,7 @@ library egb_form;
  *       form.update();  // Sends the new setup to interface.
  *     };
  * 
- *     ask(form);
+ *     showForm(form);
  *   
  */
 
@@ -89,17 +89,6 @@ import 'dart:math';
 
 class FormElement extends html5lib.Element {
   FormElement(String elementClass) : super.tag(elementClass);
-
-  //  /**
-  //   * The [id] is unique in any form and is assigned by the top-level [Form]
-  //   * element. (This allows for [Form.update] payloads to only carry the updated
-  //   * data.
-  //   */
-  //  int id;
-
-  //  /// The parent element. Should be [:null:] only when this element is the
-  //  /// [Form].
-  //  FormElement parent;
 
   /// Every form element can have a help button that shows a text message.
   String get helpMessage => attributes["helpMessage"];
@@ -158,18 +147,39 @@ class Form extends FormBase {
     formUid = "${_random.nextInt((1<<16))}";  // Assuming this is enough.
   }
 
-  receiveUserInput(Map newValues) {
-    // TODO: go to each element, if element has onInputListener, then fire that,
-    // otherwise, change value directly. Also, walk up the parent chain to
-    // see if there are other onInputListeners to fire.
-    // Returns Future?
+  /**
+   * Receives changed values, computes collaterals, and either returns all 
+   * values back, or -- in case [newValues.submitted] was [:true:] -- returns
+   * [:null:] (because we're moving on).
+   */
+  FormConfiguration receiveUserInput(CurrentState newValues) {
+    Set<String> updatedIds = new Set<String>();
+    for (FormElement element 
+            in allFormElements.where((element) => element is UpdatableByMap &&
+            element is Input)) {
+      Object newCurrent = newValues.getById(element.id);
+      if (newCurrent != null && newCurrent != (element as Input).current) {
+        (element as Input).current = newCurrent;
+        if (element is _ValueCallback && 
+            (element as _ValueCallback).onInput != null) {
+          (element as _ValueCallback).onInput(newCurrent);
+          // TODO: fire also onInputs of parents (recursively) 
+        }
+      }
+    }
+    
+    if (newValues.submitted) {
+      return null;
+    } else {
+      return _createConfiguration();
+    }
   }
   
   bool _uniqueIdsGiven = false;
   void _giveChildrenUniqueIds() {
     int id = 0;
     allFormElements.forEach((FormElement element) {
-      element.id = "$formUid::${id++}";
+      element.id = "form$formUid-element${id++}";
     });
     _uniqueIdsGiven = true;
   }
@@ -181,14 +191,66 @@ class Form extends FormBase {
     }
     Map<String,Object> map = new Map<String,Object>();
     map["jsonml"] = encodeToJsonML(this);
-    Map<String,Object> valuesMap = new Map<String,Object>(); 
-    map["values"] = valuesMap;
-    for (UpdatableByMap element 
-        in allFormElements.where((element) => element is UpdatableByMap)) {
-      valuesMap[(element as FormElement).id] = element.toMap(); 
-    }
+    map["values"] = _createConfiguration().toMap();
     return map;
   }
+  
+  FormConfiguration _createConfiguration() {
+    FormConfiguration values = new FormConfiguration();
+    for (UpdatableByMap element 
+        in allFormElements.where((element) => element is UpdatableByMap)) {
+      values.add((element as FormElement).id, element.toMap());
+    }
+    return values;
+  }
+}
+
+/**
+ * The 'struct' that is being sent from [EgbScripter] to [EgbInterface] when 
+ * form is created and after it is updated.
+ */
+class FormConfiguration {
+  Map<String,Map<String,Object>> _valuesMap;
+  
+  FormConfiguration() : _valuesMap = new Map<String,Map<String,Object>>();
+  FormConfiguration.fromMap(Map<String,Map<String,Object>> map) : _valuesMap = map;
+  
+  void add(String id, Map<String,Object> attributesMap) {
+    _valuesMap[id] = attributesMap;
+  }
+  
+  Map<String,Object> getById(String id) => _valuesMap[id];
+  
+  Map<String,Map<String,Object>> toMap() => _valuesMap;
+}
+
+/**
+ * The 'struct' that is send from [EgbInterface] to [EgbScripter] after each
+ * user interaction.
+ */
+class CurrentState {
+  Map<String,Object> _valuesMap;
+  /**
+   * Whether or not this form is being submitted. This information is stored
+   * in a 'magic' key-value pair.
+   */
+  bool get submitted => _valuesMap["__submitted__"];
+  set submitted(bool value) => _valuesMap["__submitted__"] = value;
+  
+  CurrentState() : _valuesMap = new Map<String,Object>() {
+    submitted = false;
+  }
+  CurrentState.fromMap(Map<String,Object> map) : _valuesMap = map {
+    submitted = false;
+  }
+  
+  void add(String id, Object current) {
+      _valuesMap[id] = current;
+    }
+  
+  Object getById(String id) => _valuesMap[id];
+  
+  Map<String,Object> toMap() => _valuesMap;
 }
 
 class FormSection extends FormElement {
@@ -206,10 +268,14 @@ class _ValueCallback<T> {
 
 typedef void InputCallback(value);
 
+abstract class Input {
+  Object current;
+}
+
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
-class BaseRangeInput extends FormElement implements UpdatableByMap {
+class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
   
@@ -226,7 +292,7 @@ class BaseRangeInput extends FormElement implements UpdatableByMap {
   /// Current (or predefined) value selected on the range input. Defaults to
   /// [:0:]. We use `current` because `value` is the [String] value of any
   /// HTML5 element (although it's deprecated in html5lib).
-  int current = 0;
+  @override int current = 0;
   /// Minimal value on the range input. Defaults to [:0:].
   int min = 0;
   /// Maximal value on the range input. Defaults to [:10:].

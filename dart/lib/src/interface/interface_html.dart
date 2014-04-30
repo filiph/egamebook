@@ -18,6 +18,8 @@ import '../persistence/player_profile.dart';
 
 import 'choice_with_infochips.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/shared/form.dart';
+import 'package:html5lib/dom.dart' as html5lib;
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
@@ -576,11 +578,116 @@ class HtmlInterface extends EgbInterfaceBase {
   void log(String text) {
     print("HtmlInterface.log: $text");
   }
+
+  @override
+  Stream<CurrentState> showForm(FormProxy formProxy) {
+    HtmlForm form = new HtmlForm.fromProxy(formProxy);
+    bookDiv.append(form.domElement);
+    return form.stream;
+  }
+
+//  @override
+//  void updateForm(Map<String, Object> values) {
+//    // TODO: implement updateForm
+//  }
 }
 
 class HtmlForm {
-  FormProxy formProxy;
-  // XXX: start HERE!
+  static const String DEFAULT_SUBMIT_TEXT = ">>";
+  
+  final FormProxy formProxy;
+  StreamController<CurrentState> _streamController = 
+      new StreamController<CurrentState>();
+  Stream<CurrentState> get stream => _streamController.stream;
+  DivElement domElement;
+  ButtonElement submitButton;
+  
+  HtmlForm.fromProxy(this.formProxy) {
+    domElement = new DivElement()
+      ..classes.add("form");
+    _walkAndCreateForm(domElement, formProxy);
+  }
+  
+  void _walkAndCreateForm(Element domContainer, html5lib.Element formNode) {
+    DivElement childrenContainer;
+    if (formNode is FormBase) {
+      childrenContainer = _buildForm(formProxy, domContainer);
+    } else if (formNode is BaseRangeInput) {
+      childrenContainer = _buildRangeInput(formNode, domContainer);
+    }
+    
+    for (html5lib.Element childNode in formNode.children) {
+      _walkAndCreateForm(childrenContainer, childNode);
+    }
+  }
+  
+  /// Utility function that creates a new [DivElement] and appends it to
+  /// [container].
+  DivElement _appendChildrenElementTo(Element container) {
+    DivElement childrenContainer = new DivElement();
+    container.append(childrenContainer);
+    return childrenContainer;
+  }
+  
+  void _returnValuesToScripter() {
+    // TODO: disable every input
+    CurrentState state = new CurrentState();
+    formProxy.allFormElements
+        .where((element) => element is Input).forEach((element) {
+      state.add(element.id, (element as Input).current);
+    });
+    _streamController.add(state);
+  }
+  
+  DivElement _buildForm(FormProxy formProxy, Element domContainer) {
+    // TODO: Add 'header' to the form?
+   
+    DivElement childrenContainer = _appendChildrenElementTo(domContainer);
+   
+    String submitText = formProxy.submitText;
+    if (submitText == null) {
+      submitText = DEFAULT_SUBMIT_TEXT;
+    }
+    
+    submitButton = new ButtonElement()
+      ..classes.add("submit")
+      ..text = submitText;
+    domContainer.append(submitButton);
+    return childrenContainer;
+  }
+  
+  DivElement _buildRangeInput(BaseRangeInput rangeInput, Element domContainer) {
+    DivElement rangeInputElement = new DivElement()
+      ..classes.add("range-input")
+      ..id = rangeInput.id;
+    
+    LabelElement label = new LabelElement()
+    ..htmlFor = rangeInput.id
+    ..text = rangeInput.name;
+    rangeInputElement.append(label);
+    
+    DivElement radioButtonsDiv = new DivElement()
+    ..classes.add("buttons");
+    rangeInputElement.append(radioButtonsDiv);
+    
+    for (int i = rangeInput.min; i <= rangeInput.max; i += rangeInput.step) {
+      RadioButtonInputElement radioButton = new RadioButtonInputElement()
+      ..name = rangeInput.id
+      ..checked = i == rangeInput.current
+      ..value = "$i"
+      ..disabled = (rangeInput.minEnabled != null && i < rangeInput.minEnabled)
+      || (rangeInput.maxEnabled != null && i > rangeInput.maxEnabled);
+      radioButton.onClick.listen((_) {
+        rangeInput.current = i;
+        _returnValuesToScripter();
+      });
+      radioButtonsDiv.append(radioButton);
+    }
+    
+    DivElement childrenElement = _appendChildrenElementTo(rangeInputElement);
+    domContainer.append(rangeInputElement);
+    return childrenElement;
+  }
 }
 
 class Submenu {

@@ -15,10 +15,11 @@ class FormProxy extends FormBase {
     assert((map["jsonml"] as List)[0] == "Form");
     submitText = (map["jsonml"] as List)[1]["submitText"];
     createElementsFromJsonML(map["jsonml"]);
+    FormConfiguration values = new FormConfiguration.fromMap(map["values"]);
     allFormElements.forEach((FormElement element) {
-      Map<String,Object> values = (map["values"] as Map)[element.id];
-      if (values != null) {
-        (element as UpdatableByMap).updateFromMap(values);
+      Map<String,Object> elementValues = values.getById(element.id);
+      if (elementValues != null) {
+        (element as UpdatableByMap).updateFromMap(elementValues);
       }
     });
   }
@@ -35,7 +36,6 @@ class FormProxy extends FormBase {
 
 Map<String,CustomTagHandler> customTagHandlers = {
   BaseRangeInput.elementClass: (Object jsonObject) {
-    print("customTag for $jsonObject");
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceRangeInput(attributes["name"], attributes["id"]);
   }
