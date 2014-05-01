@@ -97,8 +97,6 @@ void main() {
       radioButton.click();
     });
     
-    // TODO: disabled right after changing a value
-    
     test("sends and closes after being submitted", () {
       form.children.add(input1);
       form.children.add(input2);
@@ -117,6 +115,8 @@ void main() {
       }));
       submitButton.click();
     });
+    
+    // TODO: create ScripterStub and test updateForm behaviour.
     
   });
 }

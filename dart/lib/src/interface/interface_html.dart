@@ -616,8 +616,14 @@ class HtmlForm implements UiElement {
      
      submitButton = new ButtonElement()
      ..classes.add("submit")
-     ..text = submitText
-     ..onClick.listen((ev) => _onInputController.add(ev));
+     ..text = submitText;
+     
+     StreamSubscription subscription;
+     subscription = submitButton.onClick
+         .listen((ev) {
+       _onInputController.add(ev);
+       subscription.cancel();
+     });
      uiRepresentation.append(submitButton);
   }
   
@@ -651,6 +657,7 @@ class HtmlRangeInput implements UiElement, Input {
   DivElement uiRepresentation;
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
+  Set<StreamSubscription> _radioButtonsSubscriptions = new Set();
   
   HtmlRangeInput(this.blueprint) {
     uiRepresentation = new DivElement()
@@ -681,10 +688,14 @@ class HtmlRangeInput implements UiElement, Input {
       ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
       || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
       disabled;
-      radioButton.onClick.listen((ev) {
-        _current = i;
-        _onInputController.add(ev);
-      });
+      if (!radioButton.disabled) {
+        StreamSubscription subscription;
+        subscription = radioButton.onClick.listen((ev) {
+          _current = i;
+          _onInputController.add(ev);
+        });
+        _radioButtonsSubscriptions.add(subscription);
+      }
       _radioButtonsDiv.append(radioButton);
     }
   }
@@ -722,6 +733,7 @@ class HtmlRangeInput implements UiElement, Input {
   @override
   void update() {
     _current = blueprint.current;
+    _radioButtonsSubscriptions.forEach((subscription) => subscription.cancel());
     _radioButtonsDiv.children.clear();
     _createRadioButtons();
   }
