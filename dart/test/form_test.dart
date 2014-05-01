@@ -8,6 +8,7 @@ import 'dart:html';
 import 'dart:async';
 
 void main() {
+  unittestConfiguration.timeout = new Duration(seconds: 5);
   
   group("Pure", () {
     Form form;
@@ -96,6 +97,8 @@ void main() {
       radioButton.click();
     });
     
+    // TODO: disabled right after changing a value
+    
     test("sends and closes after being submitted", () {
       form.children.add(input1);
       form.children.add(input2);
@@ -105,6 +108,12 @@ void main() {
           querySelectorAll("button.submit").last;
       stream.listen(expectAsync((CurrentState values) {
         expect(values.submitted, true);
+        // Select the second radio button of the first RangeInput -> age = 25.
+        RadioButtonInputElement radioButton = 
+            querySelector("#${formProxy.children.first.id} div.buttons "
+            "input:nth-child(2)");
+        expect(radioButton.disabled, true);
+        expect(submitButton.disabled, true);
       }));
       submitButton.click();
     });

@@ -104,15 +104,20 @@ class FormElement extends html5lib.Element {
   /// Utility function that walks through the whole structure recursively and
   /// adds all [FormElement] children to the [set].
   void _addFormChildrenToSet(FormElement element, Set<FormElement> set) {
-    for (html5lib.Element child in element.children) {
-      if (child is FormElement) {
-        set.add(child);
-        _addFormChildrenToSet(child, set);
-      }
+    for (FormElement child in element.formElementChildren) {
+      set.add(child);
+      _addFormChildrenToSet(child, set);
     }
   }
   
-  Set<FormElement> get allFormElements {
+  Iterable<FormElement> get formElementChildren => 
+      children.where((html5lib.Element child) => child is FormElement);
+  
+  /**
+   * Deep set of all elements that are of class [FormElement] and below this
+   * element.
+   */
+  Set<FormElement> get allFormElementsBelowThisOne {
     Set<FormElement> set = new Set<FormElement>();
     _addFormChildrenToSet(this, set);
     return set;
@@ -153,9 +158,9 @@ class Form extends FormBase {
    * [:null:] (because we're moving on).
    */
   FormConfiguration receiveUserInput(CurrentState newValues) {
-    Set<String> updatedIds = new Set<String>();
+    Set<String> updatedIds = new Set<String>();  // TODO use for firing onInput of parents
     for (FormElement element 
-            in allFormElements.where((element) => element is UpdatableByMap &&
+            in allFormElementsBelowThisOne.where((element) => element is UpdatableByMap &&
             element is Input)) {
       Object newCurrent = newValues.getById(element.id);
       if (newCurrent != null && newCurrent != (element as Input).current) {
@@ -178,7 +183,7 @@ class Form extends FormBase {
   bool _uniqueIdsGiven = false;
   void _giveChildrenUniqueIds() {
     int id = 0;
-    allFormElements.forEach((FormElement element) {
+    allFormElementsBelowThisOne.forEach((FormElement element) {
       element.id = "form$formUid-element${id++}";
     });
     _uniqueIdsGiven = true;
@@ -198,7 +203,7 @@ class Form extends FormBase {
   FormConfiguration _createConfiguration() {
     FormConfiguration values = new FormConfiguration();
     for (UpdatableByMap element 
-        in allFormElements.where((element) => element is UpdatableByMap)) {
+        in allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)) {
       values.add((element as FormElement).id, element.toMap());
     }
     return values;

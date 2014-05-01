@@ -1,7 +1,7 @@
 library egb_interface_html;
 
 import 'dart:async';
-import 'dart:html';
+import 'dart:html' hide FormElement;
 
 import 'package:markdown/markdown.dart' show markdownToHtml;
 
@@ -581,112 +581,149 @@ class HtmlInterface extends EgbInterfaceBase {
 
   @override
   Stream<CurrentState> showForm(FormProxy formProxy) {
-    HtmlForm form = new HtmlForm.fromProxy(formProxy);
-    bookDiv.append(form.domElement);
-    return form.stream;
+    HtmlForm form = formProxy.buildUiElements(ELEMENT_BUILDERS);
+    bookDiv.append(form.uiRepresentation);
+    return formProxy.stream;
   }
-
-//  @override
-//  void updateForm(Map<String, Object> values) {
-//    // TODO: implement updateForm
-//  }
 }
 
-class HtmlForm {
+Map<String,UiElementBuilder> ELEMENT_BUILDERS = {
+  "Form": (FormElement e) => new HtmlForm(e),
+  "RangeInput": (FormElement e) => new HtmlRangeInput(e)
+};
+
+class HtmlForm implements UiElement {
   static const String DEFAULT_SUBMIT_TEXT = ">>";
   
-  final FormProxy formProxy;
-  StreamController<CurrentState> _streamController = 
-      new StreamController<CurrentState>();
-  Stream<CurrentState> get stream => _streamController.stream;
-  DivElement domElement;
+  FormProxy blueprint;
+  DivElement uiRepresentation;
+  DivElement _childrenContainer;
   ButtonElement submitButton;
   
-  HtmlForm.fromProxy(this.formProxy) {
-    domElement = new DivElement()
+  HtmlForm(this.blueprint) {
+    uiRepresentation = new DivElement()
       ..classes.add("form");
-    _walkAndCreateForm(domElement, formProxy);
-  }
-  
-  void _walkAndCreateForm(Element domContainer, html5lib.Element formNode) {
-    DivElement childrenContainer;
-    if (formNode is FormBase) {
-      childrenContainer = _buildForm(formProxy, domContainer);
-    } else if (formNode is BaseRangeInput) {
-      childrenContainer = _buildRangeInput(formNode, domContainer);
-    }
     
-    for (html5lib.Element childNode in formNode.children) {
-      _walkAndCreateForm(childrenContainer, childNode);
-    }
-  }
-  
-  /// Utility function that creates a new [DivElement] and appends it to
-  /// [container].
-  DivElement _appendChildrenElementTo(Element container) {
-    DivElement childrenContainer = new DivElement();
-    container.append(childrenContainer);
-    return childrenContainer;
-  }
-  
-  void _returnValuesToScripter() {
-    // TODO: disable every input
-    CurrentState state = new CurrentState();
-    formProxy.allFormElements
-        .where((element) => element is Input).forEach((element) {
-      state.add(element.id, (element as Input).current);
-    });
-    _streamController.add(state);
-  }
-  
-  DivElement _buildForm(FormProxy formProxy, Element domContainer) {
     // TODO: Add 'header' to the form?
-   
-    DivElement childrenContainer = _appendChildrenElementTo(domContainer);
-   
-    String submitText = formProxy.submitText;
-    if (submitText == null) {
-      submitText = DEFAULT_SUBMIT_TEXT;
-    }
     
-    submitButton = new ButtonElement()
-      ..classes.add("submit")
-      ..text = submitText;
-    domContainer.append(submitButton);
-    return childrenContainer;
+    _childrenContainer = new DivElement();
+    uiRepresentation.append(_childrenContainer);
+    
+     String submitText = blueprint.submitText;
+     if (submitText == null) {
+       submitText = DEFAULT_SUBMIT_TEXT;
+     }
+     
+     submitButton = new ButtonElement()
+     ..classes.add("submit")
+     ..text = submitText
+     ..onClick.listen((ev) => _onInputController.add(ev));
+     uiRepresentation.append(submitButton);
   }
   
-  DivElement _buildRangeInput(BaseRangeInput rangeInput, Element domContainer) {
-    DivElement rangeInputElement = new DivElement()
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenContainer.append(childUiRepresentation);
+  }
+
+  bool _disabled = false;
+  @override
+  bool get disabled => _disabled;
+
+  @override
+  set disabled(bool value) {
+    _disabled = value;
+    submitButton.disabled = value;
+  }
+
+  StreamController _onInputController = new StreamController();
+  @override
+  Stream get onInput => _onInputController.stream;
+
+  @override
+  void update() {
+    submitButton.text = blueprint.submitText;
+  }
+}
+
+class HtmlRangeInput implements UiElement, Input {
+  BaseRangeInput blueprint;
+  DivElement uiRepresentation;
+  DivElement _childrenElement;
+  DivElement _radioButtonsDiv;
+  
+  HtmlRangeInput(this.blueprint) {
+    uiRepresentation = new DivElement()
       ..classes.add("range-input")
-      ..id = rangeInput.id;
+      ..id = blueprint.id;
     
     LabelElement label = new LabelElement()
-    ..htmlFor = rangeInput.id
-    ..text = rangeInput.name;
-    rangeInputElement.append(label);
+    ..htmlFor = blueprint.id
+    ..text = blueprint.name;
+    uiRepresentation.append(label);
     
-    DivElement radioButtonsDiv = new DivElement()
+    _radioButtonsDiv = new DivElement()
     ..classes.add("buttons");
-    rangeInputElement.append(radioButtonsDiv);
+    uiRepresentation.append(_radioButtonsDiv);
     
-    for (int i = rangeInput.min; i <= rangeInput.max; i += rangeInput.step) {
+    update();
+    
+    _childrenElement = new DivElement();
+    uiRepresentation.append(_childrenElement);
+  }
+
+  void _createRadioButtons() {
+    for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = new RadioButtonInputElement()
-      ..name = rangeInput.id
-      ..checked = i == rangeInput.current
+      ..name = blueprint.id
+      ..checked = i == blueprint.current
       ..value = "$i"
-      ..disabled = (rangeInput.minEnabled != null && i < rangeInput.minEnabled)
-      || (rangeInput.maxEnabled != null && i > rangeInput.maxEnabled);
-      radioButton.onClick.listen((_) {
-        rangeInput.current = i;
-        _returnValuesToScripter();
+      ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
+      || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
+      disabled;
+      radioButton.onClick.listen((ev) {
+        _current = i;
+        _onInputController.add(ev);
       });
-      radioButtonsDiv.append(radioButton);
+      _radioButtonsDiv.append(radioButton);
     }
-    
-    DivElement childrenElement = _appendChildrenElementTo(rangeInputElement);
-    domContainer.append(rangeInputElement);
-    return childrenElement;
+  }
+
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  bool _disabled = false;
+  @override
+  bool get disabled => _disabled;
+
+  @override
+  set disabled(bool value) {
+    _disabled = value;
+    update();
+  }
+
+  StreamController _onInputController = new StreamController();
+  @override
+  Stream get onInput => _onInputController.stream;
+
+  int _current;
+  
+  @override
+  int get current => _current;
+
+  @override
+  void set current(int value) {
+    _current = value;
+    update();
+  }
+
+  @override
+  void update() {
+    _current = blueprint.current;
+    _radioButtonsDiv.children.clear();
+    _createRadioButtons();
   }
 }
 
