@@ -579,11 +579,19 @@ class HtmlInterface extends EgbInterfaceBase {
     print("HtmlInterface.log: $text");
   }
 
+  /// Currently shown [FormProxy].
+  FormProxy _formProxy;
   @override
   Stream<CurrentState> showForm(FormProxy formProxy) {
-    HtmlForm form = formProxy.buildUiElements(ELEMENT_BUILDERS);
+    _formProxy = formProxy;
+    HtmlForm form = _formProxy.buildUiElements(ELEMENT_BUILDERS);
     bookDiv.append(form.uiRepresentation);
-    return formProxy.stream;
+    return _formProxy.stream;
+  }
+
+  @override
+  void updateForm(FormConfiguration values) {
+    _formProxy.update(values);
   }
 }
 
@@ -657,7 +665,6 @@ class HtmlRangeInput implements UiElement, Input {
   DivElement uiRepresentation;
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
-  Set<StreamSubscription> _radioButtonsSubscriptions = new Set();
   
   HtmlRangeInput(this.blueprint) {
     uiRepresentation = new DivElement()
@@ -694,7 +701,6 @@ class HtmlRangeInput implements UiElement, Input {
           _current = i;
           _onInputController.add(ev);
         });
-        _radioButtonsSubscriptions.add(subscription);
       }
       _radioButtonsDiv.append(radioButton);
     }
@@ -733,10 +739,18 @@ class HtmlRangeInput implements UiElement, Input {
   @override
   void update() {
     _current = blueprint.current;
-    _radioButtonsSubscriptions.forEach((subscription) => subscription.cancel());
     _radioButtonsDiv.children.clear();
     _createRadioButtons();
   }
+
+  @override
+  void set waitingForUpdate(bool _waitingForUpdate) {
+    // TODO: implement waitingForUpdate                  START HERE!!!!!
+  }
+
+  // TODO: implement waitingForUpdate
+  @override
+  bool get waitingForUpdate => null;
 }
 
 class Submenu {

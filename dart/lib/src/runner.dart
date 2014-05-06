@@ -12,6 +12,11 @@ import 'package:egamebook/src/interface/interface.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 
+/**
+ * Does the required work to start an Isolate wrapped in an
+ * [EgbIsolateScripterProxy], set it up, tie it with the provided [interface],
+ * and try to load a saved game or create a new one.
+ */
 Future<EgbInterface> runFromIsolate(String dartFilename, EgbInterface
     interface, EgbStorage storage) {
   interface.setPlayerProfile(storage.getDefaultPlayerProfile());
@@ -21,6 +26,15 @@ Future<EgbInterface> runFromIsolate(String dartFilename, EgbInterface
   return init(bookProxy, interface).then((_) {
     interface.setup();
     interface.continueSavedGameOrCreateNew();
+  });
+}
+
+Future<EgbInterface> runDirectly(EgbScripterProxy bookProxy, EgbInterface
+    interface, EgbStorage storage) {
+  interface.setPlayerProfile(storage.getDefaultPlayerProfile());
+  return init(bookProxy, interface).then((_) {
+      interface.setup();
+      interface.continueSavedGameOrCreateNew();
   });
 }
 

@@ -143,7 +143,7 @@ class FormBase extends FormElement {
  * The top level element of a form, containing all other elements. 
  * Author-facing.
  */
-class Form extends FormBase {
+class Form extends FormBase with _ValueCallback {
   String formUid;
   Random _random = new Random();
   

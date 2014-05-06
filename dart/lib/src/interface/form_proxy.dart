@@ -49,6 +49,18 @@ class FormProxy extends FormBase {
     return uiElement;
   }
   
+  /// Updates all elements according to the provided [config].
+  void update(FormConfiguration config) {
+    allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)
+    .forEach((FormElement element) {
+      Map<String,Object> map = config.getById(element.id);
+      if (map != null) {
+        (element as UpdatableByMap).updateFromMap(map);
+        elementsMap[element].update();
+      }
+    });
+  }
+  
   CurrentState _createCurrentState({bool submitted: false, 
     bool disableEach: false}) {
     CurrentState state = new CurrentState();
@@ -81,12 +93,19 @@ typedef UiElement UiElementBuilder(FormElement elementBlueprint);
 
 abstract class UiElement {
   UiElement(FormElement elementBlueprint);
-  /// Updates the UiElement after the blueprint is changed.
+  /// Updates the UiElement after the blueprint is changed. Sets
+  /// [waitingForUpdate] back to [:false:].
   void update();
   /// Fired every time user interacts with Element and changes something.
   Stream get onInput;
   set disabled(bool value);
   bool get disabled;
+  /// This is set to [:true:] after the user has interacted with the form and
+  /// each [UiElement] in it should be disabled until [update] is called. This
+  /// prevents user form setting the form's inputs into an invalid state.
+  /// ([EgbScripter] always has a chance to act first, changing values,
+  /// hiding inputs, disabling ranges, etc.)
+  bool waitingForUpdate;
   /// This is the representation of the object in the UI. For HTML, this would
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
   /// that materializes the [TextOutput]. 
