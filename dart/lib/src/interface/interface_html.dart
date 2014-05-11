@@ -3,7 +3,7 @@ library egb_interface_html;
 import 'dart:async';
 import 'dart:html' hide FormElement;
 
-import 'package:markdown/markdown.dart' show markdownToHtml;
+import 'package:markdown/markdown.dart' as mdown show InlineParser, InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
 import 'interface.dart';
 export 'interface.dart' show EgbInterface;
@@ -137,7 +137,10 @@ class HtmlInterface extends EgbInterfaceBase {
     
     new Future.delayed(const Duration(milliseconds: 100), ()  {
       _textHistory.write("$s\n\n");
-      String html = markdownToHtml(s);
+      final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
+          new FootnoteSupTagSyntax()
+      ];
+      String html = mdown.markdownToHtml(s, inlineSyntaxes: syntaxes);
       DocumentFragment container = new DocumentFragment();
       container.innerHtml = html;
       int count = 0;
@@ -152,6 +155,13 @@ class HtmlInterface extends EgbInterfaceBase {
             el.classes.remove("hidden");
           });
         }
+        // Search for footnotes and attach click listeners on them.
+        el.querySelectorAll(".footnote").forEach((Element footnoteEl) {
+          print("Found footnote");
+          footnoteEl.onClick.listen((_) {
+            showDialog(new Dialog("Footnote", "<p>${footnoteEl.title}</p>"));
+          });
+        });
         bookDiv.append(el);
       }
       container.remove();  
@@ -228,7 +238,7 @@ class HtmlInterface extends EgbInterfaceBase {
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
       choicesQuestionP.innerHtml = 
-          markdownToHtml(choiceList.question, inlineOnly: true);
+          mdown.markdownToHtml(choiceList.question, inlineOnly: true);
       choicesQuestionP.classes.add("choices-question");
       choicesDiv.children.add(choicesQuestionP);
     }
@@ -319,7 +329,7 @@ class HtmlInterface extends EgbInterfaceBase {
       infochips.classes.add("choice-infochips");
       for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
         var chip = new SpanElement();
-        chip.text = markdownToHtml(choiceWithInfochips.infochips[j], 
+        chip.text = mdown.markdownToHtml(choiceWithInfochips.infochips[j], 
             inlineOnly: true);
         chip.classes.add("choice-infochip");
         infochips.append(chip);
@@ -328,7 +338,7 @@ class HtmlInterface extends EgbInterfaceBase {
     }
     
     var text = new SpanElement();
-    text.innerHtml = markdownToHtml(choiceWithInfochips.text, 
+    text.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, 
         inlineOnly: true);
     text.classes.add("choice-text");
     choiceDisplay.append(text);
@@ -871,5 +881,27 @@ class LocalStorage implements EgbStorage {
   EgbPlayerProfile getDefaultPlayerProfile() {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
         this);
+  }
+}
+
+/// Custom syntax that allows `<sup>` tags with titles to act as footnotes.
+/// This just forces [mdown] not to escape HTML of a <sup> tag.
+class FootnoteSupTagSyntax extends mdown.TagSyntax {
+  String title;
+  
+  FootnoteSupTagSyntax()
+    : super(r'<sup title="(.*?)">', end: r'</sup>', tag: 'sup');
+  
+  bool onMatch(mdown.InlineParser parser, Match match) {
+    title = match.group(1);
+    return super.onMatch(parser, match);
+  }
+  
+  bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state) {
+    mdown.Element element = new mdown.Element(tag, state.children);
+    element.attributes["class"] = "footnote";
+    element.attributes["title"] = title;
+    parser.addNode(element);
+    return true;
   }
 }

@@ -9,7 +9,8 @@ dependencies:
   unittest: ">=0.10.1+2 <0.11.0"
   args: ">=0.10.0+2 <0.11.0"
   a_star: ">=0.3.0 <0.4.0"
-  markdown:
-    git: https://github.com/filiph/dart-markdown.git
+  markdown: ">=0.7.0 <0.8.0"
+#  markdown:
+#    git: https://github.com/filiph/dart-markdown.git
 #  graphml:
 #    git: https://github.com/filiph/dart-graphml.git
