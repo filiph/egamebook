@@ -692,13 +692,17 @@ class HtmlRangeInput implements UiElement {
     ..text = blueprint.name;
     uiRepresentation.append(label);
     
+    DivElement buttonsAndValue = new DivElement()
+    ..classes.add("buttons-and-value");
+    uiRepresentation.append(buttonsAndValue);
+    
     _radioButtonsDiv = new DivElement()
     ..classes.add("buttons");
-    uiRepresentation.append(_radioButtonsDiv);
+    buttonsAndValue.append(_radioButtonsDiv);
     
     _currentValueElement = new ParagraphElement()
     ..classes.add("current-value");
-    uiRepresentation.append(_currentValueElement);
+    buttonsAndValue.append(_currentValueElement);
     
     update();
     

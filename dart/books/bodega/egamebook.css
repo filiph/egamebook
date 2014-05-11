@@ -3,6 +3,7 @@
 	http://egamebook.com/test/egamebook.css
 	http://10.0.0.103:3030/Users/filiph/Programs/egamebook/dart/books/bodega/egamebook.css
 	http://127.0.0.1:3030/dart/books/bodega/egamebook.css
+	http://127.0.0.1:8081/bodega/egamebook.css
 */
 
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
@@ -419,6 +420,40 @@ ol.choices-ol button span.choice-infochip {
 
 .depressed {
   background: white;
+}
+
+/* FORM */
+
+div.form {
+}
+
+div.form div.range-input {
+  padding-top: 0.5em;
+}
+
+
+div.form label, div.form p {
+  font-family: 'Roboto', sans-serif;
+}
+
+div.form label {
+  display: block;
+}
+
+div.form div.buttons-and-value > div {
+  display: inline-block;
+  margin-right: 2em;
+}
+
+div.form div.buttons-and-value > p.current-value {
+	display: inline-block;
+	margin: 0;
+}
+
+div.form .submit {
+	margin-top:  1em;
+	width: auto;
+	font-size: 80%;
 }
 
 .blink {
