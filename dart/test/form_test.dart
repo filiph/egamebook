@@ -147,7 +147,7 @@ void main() {
       submitButton.click();
     });
     
-    solo_test("updates according to onInput listeners", () {
+    test("updates according to onInput listeners", () {
       form.children.add(input1);
       form.children.add(input2);
       form.children.add(input3);
@@ -156,16 +156,30 @@ void main() {
           input3.maxEnabled = null;
         } else {
           input3.maxEnabled = 5;
-//          input3.current = min(input3.current, input3.maxEnabled);
         }
       };
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
       
-      stream.listen(/*expectAsync(*/(CurrentState values) {
+      RadioButtonInputElement freeTimeButton = 
+          querySelector("#${formProxy.children[2].id} div.buttons "
+          "input:nth-child(8)");
+      expect(freeTimeButton.disabled, true);
+      
+      stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         interface.updateForm(changedConfig);
-      }/*)*/);
+        RadioButtonInputElement freeTimeButton = 
+            querySelector("#${formProxy.children[2].id} div.buttons "
+            "input:nth-child(8)");
+        expect(freeTimeButton.disabled, false);
+      }));
+      
+      // Select age = 25.
+      RadioButtonInputElement ageButton = 
+          querySelector("#${formProxy.children.first.id} div.buttons "
+          "input:nth-child(2)");
+      ageButton.click();
     });
     
   });
