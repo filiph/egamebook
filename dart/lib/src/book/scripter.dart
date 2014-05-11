@@ -378,7 +378,8 @@ abstract class EgbScripter {
       DEBUG_SCR("We have choices.");
       EgbChoiceList actionableChoices = new EgbChoiceList.fromList(
           choices.where((EgbChoice choice) => choice.isActionable(atEndOfPage:
-          atEndOfPage, atChoiceList: atStaticChoiceList)).toList());
+          atEndOfPage, atChoiceList: atStaticChoiceList)).toList(),
+          choices.question);
       if (actionableChoices.isNotEmpty) {
         interface.showChoices(actionableChoices)
         .then(_handleChoiceSelected)

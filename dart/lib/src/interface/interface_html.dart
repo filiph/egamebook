@@ -240,7 +240,7 @@ class HtmlInterface extends EgbInterfaceBase {
       choicesQuestionP.innerHtml = 
           mdown.markdownToHtml(choiceList.question, inlineOnly: true);
       choicesQuestionP.classes.add("choices-question");
-      choicesDiv.children.add(choicesQuestionP);
+      choicesDiv.append(choicesQuestionP);
     }
     
     OListElement choicesOl = new OListElement();

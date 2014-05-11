@@ -136,7 +136,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
   
   EgbChoiceList();
   
-  EgbChoiceList.fromList(this._choices);
+  EgbChoiceList.fromList(this._choices, this.question);
 
   /**
    * Takes list from Scripter page data and adds the contents to this.
@@ -238,11 +238,6 @@ class EgbChoiceList extends ListBase<EgbChoice> {
 
     return m;
   }
-}
-
-class EgbTextInput extends EgbUserInteraction {
-  // TODO: implement
-  // Question can be answered with text. Example: "What is your name?"
 }
 
 /**
