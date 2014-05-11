@@ -583,6 +583,9 @@ class HtmlInterface extends EgbInterfaceBase {
   FormProxy _formProxy;
   @override
   Stream<CurrentState> showForm(FormProxy formProxy) {
+    if (currentActivity == UI_ACTIVITY_TITLE) {
+      _bookReadyHandler();
+    }
     _formProxy = formProxy;
     HtmlForm form = _formProxy.buildUiElements(ELEMENT_BUILDERS);
     bookDiv.append(form.uiRepresentation);
