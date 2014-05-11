@@ -152,8 +152,15 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
   return (jsonObject as List)[1] as Map<String,Object>;
 }
 
-class InterfaceRangeInput extends BaseRangeInput {
+class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder {
   InterfaceRangeInput(String name, String id) : super(name) {
     this.id = id;
+  }
+  String currentStringRepresentation;
+  
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
+    currentStringRepresentation = map["__string__"];
   }
 }

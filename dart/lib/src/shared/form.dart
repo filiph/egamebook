@@ -143,7 +143,7 @@ class FormBase extends FormElement {
  * The top level element of a form, containing all other elements. 
  * Author-facing.
  */
-class Form extends FormBase with _ValueCallback {
+class Form extends FormBase with _NewValueCallback {
   String formUid;
   math.Random _random = new math.Random();
   
@@ -158,7 +158,7 @@ class Form extends FormBase with _ValueCallback {
    * [:null:] (because we're moving on).
    */
   FormConfiguration receiveUserInput(CurrentState newValues) {
-    Set<_ValueCallback> parentsOfUpdatedElements = new Set<_ValueCallback>();
+    Set<_NewValueCallback> parentsOfUpdatedElements = new Set<_NewValueCallback>();
     for (FormElement element 
             in allFormElementsBelowThisOne
             .where((element) => element is UpdatableByMap &&
@@ -166,25 +166,25 @@ class Form extends FormBase with _ValueCallback {
       Object newCurrent = newValues.getById(element.id);
       if (newCurrent != null && newCurrent != (element as Input).current) {
         (element as Input).current = newCurrent;
-        if (element is _ValueCallback && 
-            (element as _ValueCallback).onInput != null) {
-          (element as _ValueCallback).onInput(newCurrent);
+        if (element is _NewValueCallback && 
+            (element as _NewValueCallback).onInput != null) {
+          (element as _NewValueCallback).onInput(newCurrent);
         }
         
         // Walk upwards to mark element's parent to be called with onInput.
         FormElement parent = element;
         do {
           parent = parent.parent;
-          if (parent is _ValueCallback && 
-              (parent as _ValueCallback).onInput != null) {
-            parentsOfUpdatedElements.add(parent as _ValueCallback);
+          if (parent is _NewValueCallback && 
+              (parent as _NewValueCallback).onInput != null) {
+            parentsOfUpdatedElements.add(parent as _NewValueCallback);
           }
         } while (parent.parent != null);
       }
     }
     
     // Also fire onInput on all parent elements.
-    parentsOfUpdatedElements.forEach((_ValueCallback parent) {
+    parentsOfUpdatedElements.forEach((_NewValueCallback parent) {
       Object value = null;
       if (parent is Input) {
         value = (parent as Input).current;
@@ -228,7 +228,12 @@ class Form extends FormBase with _ValueCallback {
     FormConfiguration values = new FormConfiguration();
     for (UpdatableByMap element 
         in allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)) {
-      values.add((element as FormElement).id, element.toMap());
+      Map<String,Object> map = element.toMap();
+      if (element is StringRepresentationCreator && element is Input) {
+        map["__string__"] = (element as StringRepresentationCreator)
+            .stringifyFunction((element as Input).current);
+      }
+      values.add((element as FormElement).id, map);
     }
     return values;
   }
@@ -287,7 +292,7 @@ class FormSection extends FormElement {
   FormSection(this.name) : super("FormSection");
 }
 
-class _ValueCallback<T> {
+class _NewValueCallback<T> {
   /**
    * The function to be called when the element has a new value. The value is
    * given as the only argument to the callback.
@@ -295,7 +300,25 @@ class _ValueCallback<T> {
   InputCallback onInput;
 }
 
-typedef void InputCallback(value);
+typedef void InputCallback(Object value);
+
+class StringRepresentationCreator<T> {
+  /// The function that takes the value of current and returns its [String]
+  /// representation. Such as (42) => "42 %".
+  StringifyFunction stringifyFunction = (T value) => "$value";
+}
+
+typedef String StringifyFunction(Object current);
+
+/**
+ * This interface is for UI blueprints that need to show a value as a string.
+ * That value is created via [StringRepresentationCreator.stringifyFunction]
+ * in [EgbInterface] each time a value is updated.
+ */
+abstract class StringRepresentationHolder {
+  String currentStringRepresentation;
+}
+
 
 abstract class Input {
   Object current;
@@ -395,10 +418,15 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
  * The author-facing class of the range input element. It works only with
  * integers
  */
-class RangeInput extends BaseRangeInput with _ValueCallback<int> {
-  RangeInput(String name, InputCallback onInput, {int value: 0, int min: 0, int
+class RangeInput extends BaseRangeInput with _NewValueCallback<int>, StringRepresentationCreator<int> {
+  RangeInput(String name, InputCallback onInput, {int value: 0, 
+      StringifyFunction stringifyFunction,
+      int min: 0, int
       max: 10, int step: 1, int minEnabled, int maxEnabled}) : super.withConstraints(
       name, value, min, max, step, minEnabled, maxEnabled) {
     this.onInput = onInput;
+    if (stringifyFunction != null) {
+      this.stringifyFunction = stringifyFunction;
+    }
   }
 }

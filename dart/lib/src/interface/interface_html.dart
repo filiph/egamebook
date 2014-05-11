@@ -677,6 +677,7 @@ class HtmlRangeInput implements UiElement {
   DivElement uiRepresentation;
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
+  ParagraphElement _currentValueElement;
   
   HtmlRangeInput(this.blueprint) {
     uiRepresentation = new DivElement()
@@ -691,6 +692,10 @@ class HtmlRangeInput implements UiElement {
     _radioButtonsDiv = new DivElement()
     ..classes.add("buttons");
     uiRepresentation.append(_radioButtonsDiv);
+    
+    _currentValueElement = new ParagraphElement()
+    ..classes.add("current-value");
+    uiRepresentation.append(_currentValueElement);
     
     update();
     
@@ -746,6 +751,8 @@ class HtmlRangeInput implements UiElement {
     _current = blueprint.current;
     _radioButtonsDiv.children.clear();
     _createRadioButtons();
+    _currentValueElement.text = (blueprint as StringRepresentationHolder)
+        .currentStringRepresentation;
   }
 
   bool _waitingForUpdate = false;
