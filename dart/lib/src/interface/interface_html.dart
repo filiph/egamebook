@@ -658,6 +658,15 @@ class HtmlForm implements UiElement {
   void update() {
     submitButton.text = blueprint.submitText;
   }
+
+  @override
+  void set waitingForUpdate(bool _waitingForUpdate) {
+    // TODO: implement waitingForUpdate
+  }
+
+  // TODO: implement waitingForUpdate
+  @override
+  bool get waitingForUpdate => null;
 }
 
 class HtmlRangeInput implements UiElement, Input {
@@ -694,7 +703,7 @@ class HtmlRangeInput implements UiElement, Input {
       ..value = "$i"
       ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
       || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
-      disabled;
+      disabled || waitingForUpdate;
       if (!radioButton.disabled) {
         StreamSubscription subscription;
         subscription = radioButton.onClick.listen((ev) {
@@ -743,14 +752,15 @@ class HtmlRangeInput implements UiElement, Input {
     _createRadioButtons();
   }
 
+  bool _waitingForUpdate = false;
   @override
-  void set waitingForUpdate(bool _waitingForUpdate) {
-    // TODO: implement waitingForUpdate                  START HERE!!!!!
+  void set waitingForUpdate(bool value) {
+    _waitingForUpdate = value;
+    update();
   }
 
-  // TODO: implement waitingForUpdate
   @override
-  bool get waitingForUpdate => null;
+  bool get waitingForUpdate => _waitingForUpdate;
 }
 
 class Submenu {

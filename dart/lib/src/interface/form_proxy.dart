@@ -36,7 +36,8 @@ class FormProxy extends FormBase {
     elementsMap[element] = uiElement;
     if (uiElement.onInput != null) {
       uiElement.onInput.listen((_) {
-        CurrentState state = _createCurrentState(disableEach: true,
+        // Send the state to the Scripter.
+        CurrentState state = _createCurrentState(setWaitingForUpdate: true,
             // Events from the Form UiElement itself are Submit events.
             submitted: uiElement == elementsMap[this]);  
         _streamController.add(state);
@@ -49,8 +50,10 @@ class FormProxy extends FormBase {
     return uiElement;
   }
   
-  /// Updates all elements according to the provided [config].
-  void update(FormConfiguration config) {
+  /// Updates all elements according to the provided [config]. If 
+  /// [unsetWaitingForUpdate] is not [:true:] (default), the elements will stay
+  /// in the [UiElement.waitingForUpdate] state (i.e., disabled).
+  void update(FormConfiguration config, {bool unsetWaitingForUpdate: true}) {
     allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)
     .forEach((FormElement element) {
       Map<String,Object> map = config.getById(element.id);
@@ -59,19 +62,32 @@ class FormProxy extends FormBase {
         elementsMap[element].update();
       }
     });
+    if (unsetWaitingForUpdate) {
+      allFormElementsBelowThisOne.where((element) => element is Input)
+      .forEach((element) {
+        elementsMap[element].waitingForUpdate = false;
+      });
+    }
   }
   
+  /// Utility function that gathers values from the form. When [submitted] is
+  /// [:true:], the form gets disabled. When [setWaitingForUpdate] is [:true:], 
+  /// all elements are temporarily 'disabled' in order to wait for update from
+  /// Scripter.
   CurrentState _createCurrentState({bool submitted: false, 
-    bool disableEach: false}) {
+    bool setWaitingForUpdate: false}) {
     CurrentState state = new CurrentState();
     allFormElementsBelowThisOne.where((element) => element is Input)
     .forEach((element) {
       state.add(element.id, (elementsMap[element] as Input).current);
-      if (disableEach) {
-        elementsMap[element].disabled = true;
+      if (setWaitingForUpdate) {
+        elementsMap[element].waitingForUpdate = true;
       }
     });
-    if (disableEach || submitted) {
+    if (setWaitingForUpdate) {
+      elementsMap[this].waitingForUpdate = true;
+    }
+    if (submitted) {
       elementsMap[this].disabled = true;
     }
     state.submitted = submitted;
@@ -105,6 +121,11 @@ abstract class UiElement {
   /// prevents user form setting the form's inputs into an invalid state.
   /// ([EgbScripter] always has a chance to act first, changing values,
   /// hiding inputs, disabling ranges, etc.)
+  /// 
+  /// This can be manifested the same way as [disabled], but is automatically
+  /// called on all elements and is meant to be set to false after [EgbScripter]
+  /// has had a chance to react to player's input. It shouldn't override
+  /// [disabled] state.
   bool waitingForUpdate;
   /// This is the representation of the object in the UI. For HTML, this would
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]

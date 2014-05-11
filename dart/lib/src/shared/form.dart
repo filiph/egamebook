@@ -158,9 +158,10 @@ class Form extends FormBase with _ValueCallback {
    * [:null:] (because we're moving on).
    */
   FormConfiguration receiveUserInput(CurrentState newValues) {
-    Set<String> updatedIds = new Set<String>();  // TODO use for firing onInput of parents
+    Set<_ValueCallback> parentsOfUpdatedElements = new Set<_ValueCallback>();
     for (FormElement element 
-            in allFormElementsBelowThisOne.where((element) => element is UpdatableByMap &&
+            in allFormElementsBelowThisOne
+            .where((element) => element is UpdatableByMap &&
             element is Input)) {
       Object newCurrent = newValues.getById(element.id);
       if (newCurrent != null && newCurrent != (element as Input).current) {
@@ -168,10 +169,28 @@ class Form extends FormBase with _ValueCallback {
         if (element is _ValueCallback && 
             (element as _ValueCallback).onInput != null) {
           (element as _ValueCallback).onInput(newCurrent);
-          // TODO: fire also onInputs of parents (recursively) 
         }
+        
+        // Walk upwards to mark element's parent to be called with onInput.
+        FormElement parent = element;
+        do {
+          parent = parent.parent;
+          if (parent is _ValueCallback && 
+              (parent as _ValueCallback).onInput != null) {
+            parentsOfUpdatedElements.add(parent as _ValueCallback);
+          }
+        } while (parent.parent != null);
       }
     }
+    
+    // Also fire onInput on all parent elements.
+    parentsOfUpdatedElements.forEach((_ValueCallback parent) {
+      Object value = null;
+      if (parent is Input) {
+        value = (parent as Input).current;
+      }
+      parent.onInput(value);
+    });
     
     if (newValues.submitted) {
       return null;
