@@ -79,7 +79,7 @@ class FormProxy extends FormBase {
     CurrentState state = new CurrentState();
     allFormElementsBelowThisOne.where((element) => element is Input)
     .forEach((element) {
-      state.add(element.id, (elementsMap[element] as Input).current);
+      state.add(element.id, (elementsMap[element]).current);
       if (setWaitingForUpdate) {
         elementsMap[element].waitingForUpdate = true;
       }
@@ -127,6 +127,9 @@ abstract class UiElement {
   /// has had a chance to react to player's input. It shouldn't override
   /// [disabled] state.
   bool waitingForUpdate;
+  /// The current value of the UiElement. Only getter, because the values are
+  /// set through element blueprint and by calling [update].
+  Object get current;
   /// This is the representation of the object in the UI. For HTML, this would
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
   /// that materializes the [TextOutput]. 
@@ -134,6 +137,8 @@ abstract class UiElement {
   void appendChild(Object childUiRepresentation);
 }
 
+/// Maps [FormElement.elementClass] name to a function that takes the JSON
+/// objects and returns 
 Map<String,CustomTagHandler> customTagHandlers = {
   BaseRangeInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
@@ -142,6 +147,8 @@ Map<String,CustomTagHandler> customTagHandlers = {
 };
 
 Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
+  // A JsonML element has it's attribute on the second position. Ex.: 
+  // <a href="#"></a> is ["a", {"href": "#"}].
   return (jsonObject as List)[1] as Map<String,Object>;
 }
 

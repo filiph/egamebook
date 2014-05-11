@@ -85,7 +85,7 @@ library egb_form;
 
 import "package:html5lib/dom.dart" as html5lib;
 import "package:jsonml/html5lib2jsonml.dart";
-import 'dart:math';
+import 'dart:math' as math;
 
 class FormElement extends html5lib.Element {
   FormElement(String elementClass) : super.tag(elementClass);
@@ -145,7 +145,7 @@ class FormBase extends FormElement {
  */
 class Form extends FormBase with _ValueCallback {
   String formUid;
-  Random _random = new Random();
+  math.Random _random = new math.Random();
   
   Form({String submitText}) {
     this.submitText = submitText;
@@ -190,6 +190,11 @@ class Form extends FormBase with _ValueCallback {
         value = (parent as Input).current;
       }
       parent.onInput(value);
+    });
+    
+    allFormElementsBelowThisOne.where((element) => element is Input)
+    .forEach((FormElement element) {
+      (element as Input).sanitizeCurrent();
     });
     
     if (newValues.submitted) {
@@ -294,6 +299,10 @@ typedef void InputCallback(value);
 
 abstract class Input {
   Object current;
+  
+  /// Called to ensure that the current value is valid. This method will 
+  /// normally set [current] below any maximum values etc.
+  void sanitizeCurrent();
 }
 
 /**
@@ -311,6 +320,10 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
   BaseRangeInput.withConstraints(String name, this.current, this.min, this.max, 
       this.step, this.minEnabled, this.maxEnabled) : super(elementClass) {
     this.name = name;
+    if ((max - min) % step != 0) {
+      throw new ArgumentError("The value of max ($max) is not valid, given "
+          "the step ($step) and min($min).");
+    }
   }
 
   /// Current (or predefined) value selected on the range input. Defaults to
@@ -331,6 +344,31 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
   int minEnabled;
   /// Same as [minEnabled], but for values _above_ this number.
   int maxEnabled;
+  
+  /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
+  /// [minEnabled], [min], or outside [step]. In each case, moves [current] to
+  /// the closest valid position. 
+  void sanitizeCurrent() {
+    // Ensure current is min + step*n.
+    int stepModulo = (current - min) % step;
+    if (stepModulo != 0) {
+      if (stepModulo > step / 2) {
+        current = current - stepModulo + step;
+      } else {
+        current = current - stepModulo;
+      }
+    }
+    
+    // Ensure current is not more or less than constrains.
+    current = math.min(current, max);
+    if (maxEnabled != null) {
+      current = math.min(current, maxEnabled);
+    }
+    current = math.max(current, min);
+    if (minEnabled != null) {
+      current = math.max(current, minEnabled);
+    }
+  }
 
   @override
   Map<String, Object> toMap() => {

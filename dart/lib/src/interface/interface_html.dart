@@ -667,9 +667,12 @@ class HtmlForm implements UiElement {
   // TODO: implement waitingForUpdate
   @override
   bool get waitingForUpdate => null;
+
+  @override
+  Object get current => null;
 }
 
-class HtmlRangeInput implements UiElement, Input {
+class HtmlRangeInput implements UiElement {
   BaseRangeInput blueprint;
   DivElement uiRepresentation;
   DivElement _childrenElement;
@@ -735,15 +738,8 @@ class HtmlRangeInput implements UiElement, Input {
   Stream get onInput => _onInputController.stream;
 
   int _current;
-  
   @override
   int get current => _current;
-
-  @override
-  void set current(int value) {
-    _current = value;
-    update();
-  }
 
   @override
   void update() {

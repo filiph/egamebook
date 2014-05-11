@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/runner.dart';
+import 'dart:math';
 
 
 class ScripterProxyStub extends EgbScripterProxy {
@@ -151,11 +152,11 @@ void main() {
       form.children.add(input2);
       form.children.add(input3);
       form.onInput = (_) {
-        print(input1.current);
         if (input1.current <= 25) {
           input3.maxEnabled = null;
         } else {
           input3.maxEnabled = 5;
+//          input3.current = min(input3.current, input3.maxEnabled);
         }
       };
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
