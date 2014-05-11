@@ -25,6 +25,8 @@ abstract class EgbInterfaceViewedFromScripter {
   void updateStats(Map<String, Object> mapContent);
   void savePlayerChronology(Set<String> playerChronology);
   void save(EgbSavegame savegame);
+  Stream<CurrentState> showForm(FormBase form);
+  void updateForm(FormConfiguration values);
 }
 
 /**
@@ -61,7 +63,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     assert(_message is Map);
     Map<String, Object> messageMap = _message as Map<String, Object>;
     EgbMessage message = new EgbMessage.fromMap(messageMap);
-
+    
     // Handle low-level messages, and either answer them directly, or forward
     // their substance to Scripter.
     switch (message.type) {
@@ -86,6 +88,11 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         assert(_choiceSelectedCompleter != null);
         _choiceSelectedCompleter.complete(choiceHash);
         _choiceSelectedCompleter = null;
+        return;
+      case EgbMessage.FORM_INPUT:
+        DEBUG_SCR("New form state from player received.");
+        CurrentState state = new CurrentState.fromMap(message.mapContent);
+        _formInputStreamController.add(state);
         return;
       case EgbMessage.START:
         DEBUG_SCR("Starting book from scratch.");
@@ -154,8 +161,10 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         scripter.walk();
         return;
       default:
-        throw new EgbMessageException("Wrong message type received by "
-            "Scripter - ${message.type}.");
+        _send(new EgbMessage.ScripterError("Wrong message type received by "
+            "Scripter - ${message.type}."));
+//        throw new EgbMessageException("Wrong message type received by "
+//            "Scripter - ${message.type}.");
     }
   }
 
@@ -271,6 +280,22 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   void DEBUG_SCR(String message) {
     //print(message);
     log(message);
+  }
+
+  StreamController<CurrentState> _formInputStreamController;
+  
+  @override
+  Stream<CurrentState> showForm(FormBase form) {
+    DEBUG_SCR("Scripter asks to show form.");
+    _formInputStreamController = new StreamController<CurrentState>();
+    _send(new EgbMessage.ShowForm(form));
+    return _formInputStreamController.stream;
+  }
+
+  @override
+  void updateForm(FormConfiguration values) {
+    DEBUG_SCR("Scripter sends newly updated values.");
+    _send(new EgbMessage.UpdateForm(values));
   }
 }
 

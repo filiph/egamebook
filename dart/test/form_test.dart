@@ -9,7 +9,6 @@ import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/runner.dart';
-import 'dart:math';
 
 
 class ScripterProxyStub extends EgbScripterProxy {

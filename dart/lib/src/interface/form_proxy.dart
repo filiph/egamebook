@@ -39,7 +39,7 @@ class FormProxy extends FormBase {
         // Send the state to the Scripter.
         CurrentState state = _createCurrentState(setWaitingForUpdate: true,
             // Events from the Form UiElement itself are Submit events.
-            submitted: uiElement == elementsMap[this]);  
+            submitted: uiElement == elementsMap[this]);
         _streamController.add(state);
       });
     }

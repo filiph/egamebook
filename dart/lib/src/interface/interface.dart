@@ -89,6 +89,8 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
    * Marks the point at which the gameplay is saved. Interface should relay
    * the information to the player and make it possible to reload the position
    * later. (Communicated to the Runner via [stream].)
+   * 
+   * The naming is deprecated - should just be 'save'.
    */
   @deprecated
   Future<bool> addSavegameBookmark(EgbSavegame savegame);

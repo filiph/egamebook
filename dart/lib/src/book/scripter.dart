@@ -17,7 +17,11 @@ export '../interface/interface_proxy.dart';
 import '../shared/stat.dart';
 export '../shared/stat.dart';
 
+import '../shared/form.dart';
+export '../shared/form.dart';
+
 import '../persistence/saveable.dart';
+import 'dart:async';
 export '../persistence/saveable.dart';
 
 part 'scripter_page.dart';
@@ -102,6 +106,14 @@ EgbChoice choice(String string, {String goto, ScriptBlock script, String
       deferToChoiceList);
   choices.add(choice);
   return choice;
+}
+
+Form _currentForm;
+/**
+ * Show the [form].
+ */
+void showForm(Form form) {
+  _currentForm = form;
 }
 
 /**
@@ -380,6 +392,26 @@ abstract class EgbScripter {
           _pickChoice(autoChoice);
         }
       }
+    }
+    
+    if (_currentForm != null) {
+      DEBUG_SCR("We have a form.");
+      Stream<CurrentState> stream = interface.showForm(_currentForm);
+      StreamSubscription subscription;
+      subscription = stream.listen((CurrentState values) {
+        DEBUG_SCR("New values = $values.");
+        FormConfiguration changedConfig = _currentForm.receiveUserInput(values);
+        if (!values.submitted) {
+          interface.updateForm(changedConfig);
+        } else {
+          DEBUG_SCR("The form has been submitted.");
+          subscription.cancel();
+          _currentForm = null;
+          walk();
+        }
+      });
+      
+      return _STOP;
     }
 
     if (!_nextScriptStack.isEmpty) {

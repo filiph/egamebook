@@ -1,6 +1,7 @@
 library egb_message;
 
 import 'dart:convert' show JSON;
+import 'package:egamebook/src/shared/form.dart';
 
 class EgbMessage {
   final int type;
@@ -22,6 +23,8 @@ class EgbMessage {
   static const int END_OF_BOOK = 80;
   static const int SET_STATS = 90;
   static const int UPDATE_STATS = 100;
+  static const int SHOW_FORM = 110;
+  static const int UPDATE_FORM = 120;
   static const int SCRIPTER_ERROR = 666;
   static const int SCRIPTER_LOG = 667;
 
@@ -31,7 +34,8 @@ class EgbMessage {
   static const int LOAD_GAME = 1020;
   static const int CONTINUE = 1040;
   static const int CHOICE_SELECTED = 1050;
-  static const int QUIT = 1060;
+  static const int FORM_INPUT = 1060;
+  static const int QUIT = 1070;
   
   String get typeString {
     switch (type) {
@@ -45,6 +49,8 @@ class EgbMessage {
       case END_OF_BOOK: return "END_OF_BOOK";
       case SET_STATS: return "SET_STATS";
       case UPDATE_STATS: return "UPDATE_STATS";
+      case SHOW_FORM: return "SHOW_FORM";
+      case UPDATE_FORM: return "UPDATE_FORM";
       case SCRIPTER_ERROR: return "SCRIPTER_ERROR";
       case SCRIPTER_LOG: return "SCRIPTER_LOG";
       case REQUEST_BOOK_UID: return "REQUEST_BOOK_UID";
@@ -52,6 +58,7 @@ class EgbMessage {
       case LOAD_GAME: return "LOAD_GAME";
       case CONTINUE: return "CONTINUE";
       case CHOICE_SELECTED: return "CHOICE_SELECTED";
+      case FORM_INPUT: return "FORM_INPUT";
       case QUIT: return "QUIT";
       default: return "Unknown type=$type";
     }
@@ -119,6 +126,19 @@ class EgbMessage {
   EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
       : type = SAVE_PLAYER_CHRONOLOGY {
     listContent = playerChronology.toList();
+  }
+  
+  EgbMessage.ShowForm(Form form) : type = SHOW_FORM {
+    mapContent = form.toMap();
+  }
+  
+  EgbMessage.UpdateForm(FormConfiguration formConfiguration) 
+      : type = UPDATE_FORM {
+    mapContent = formConfiguration.toMap();
+  }
+  
+  EgbMessage.FormInput(CurrentState state) : type = FORM_INPUT {
+    mapContent = state.toMap();
   }
   
   EgbMessage.ScripterError(String message) : type = SCRIPTER_ERROR {

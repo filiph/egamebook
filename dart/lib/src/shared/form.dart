@@ -275,7 +275,9 @@ class CurrentState {
     submitted = false;
   }
   CurrentState.fromMap(Map<String,Object> map) : _valuesMap = map {
-    submitted = false;
+    if (!_valuesMap.containsKey("__submitted__")) {
+      submitted = false;
+    }
   }
   
   void add(String id, Object current) {
@@ -285,6 +287,8 @@ class CurrentState {
   Object getById(String id) => _valuesMap[id];
   
   Map<String,Object> toMap() => _valuesMap;
+  
+  String toString() => "<CurrentState submitted=$submitted>";
 }
 
 class FormSection extends FormElement {
@@ -302,10 +306,10 @@ class _NewValueCallback<T> {
 
 typedef void InputCallback(Object value);
 
-class StringRepresentationCreator<T> {
+class StringRepresentationCreator {
   /// The function that takes the value of current and returns its [String]
   /// representation. Such as (42) => "42 %".
-  StringifyFunction stringifyFunction = (T value) => "$value";
+  StringifyFunction stringifyFunction = (Object value) => "$value";
 }
 
 typedef String StringifyFunction(Object current);
@@ -418,7 +422,7 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
  * The author-facing class of the range input element. It works only with
  * integers
  */
-class RangeInput extends BaseRangeInput with _NewValueCallback<int>, StringRepresentationCreator<int> {
+class RangeInput extends BaseRangeInput with _NewValueCallback<int>, StringRepresentationCreator {
   RangeInput(String name, InputCallback onInput, {int value: 0, 
       StringifyFunction stringifyFunction,
       int min: 0, int
