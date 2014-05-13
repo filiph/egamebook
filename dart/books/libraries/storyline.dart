@@ -136,7 +136,7 @@ class Storyline {
   }
   
   /**
-   * Add a sentence (or more) enumerating several things at once.
+   * Add a sentence (or more) enumerating several things ([articles]) at once.
    * Example: "You can see a handkerchief, a brush and a mirror here."
    * You can provide "<also>" for a more human-like enumeration.
    */
