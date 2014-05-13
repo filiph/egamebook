@@ -253,17 +253,8 @@ abstract class EgbScripter {
    * registered actions.
    */
   void walk() {
-    if (!_points.pointsAwards.isEmpty) {
-      DEBUG_SCR("Awarding points.");
-      var award = _points.pointsAwards.removeFirst();
-      interface.awardPoints(new PointsAward(award.addition, award.result,
-          award.justification));
-      return;
-    }
-
     if (Stat.someChanged) {
       DEBUG_SCR("Sending updated stats.");
-      // TODO: untangle (Stat shouldn't create the whole message, only for most of it to be dropped)
       interface.updateStats(Stat.createUpdates());
     }
 
@@ -366,6 +357,14 @@ abstract class EgbScripter {
    * or [:false:] when the method can be called another time.
    */
   bool _goOneStep() {
+    if (!_points.pointsAwards.isEmpty) {
+      DEBUG_SCR("Awarding points.");
+      var award = _points.pointsAwards.removeFirst();
+      interface.awardPoints(new PointsAward(award.addition, award.result,
+          award.justification));
+      return _STOP;
+    }
+    
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
     bool atStaticChoiceList = currentBlockIndex != null && currentBlockIndex <
         currentPage.blocks.length && currentPage.blocks[currentBlockIndex] is List;
@@ -568,6 +567,8 @@ abstract class EgbScripter {
     // See https://www.pivotaltracker.com/story/show/52581979
     _pointsEmbargo = (_alreadyOffered(currentPage, _gotoPage) ||
         _gotoPage.visited) && (previousPage != null && !previousPage.visited);
+    
+    DEBUG_SCR("Points embargo = $_pointsEmbargo");
 
     _preGotoPosition = new EgbScripterBlockPointer(currentPage,
         currentBlockIndex);

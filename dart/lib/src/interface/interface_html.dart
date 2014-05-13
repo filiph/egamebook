@@ -19,7 +19,6 @@ import '../persistence/player_profile.dart';
 import 'choice_with_infochips.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
-import 'package:html5lib/dom.dart' as html5lib;
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
