@@ -100,7 +100,7 @@ class FormElement extends html5lib.Element {
   /// like with CSS [:visibility:]).
   bool get hidden => attributes["hidden"] == "true";
   set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
-  
+
   /// Utility function that walks through the whole structure recursively and
   /// adds all [FormElement] children to the [set].
   void _addFormChildrenToSet(FormElement element, Set<FormElement> set) {
@@ -109,10 +109,10 @@ class FormElement extends html5lib.Element {
       _addFormChildrenToSet(child, set);
     }
   }
-  
-  Iterable<FormElement> get formElementChildren => 
-      children.where((html5lib.Element child) => child is FormElement);
-  
+
+  Iterable<FormElement> get formElementChildren => children.where(
+      (html5lib.Element child) => child is FormElement);
+
   /**
    * Deep set of all elements that are of class [FormElement] and below this
    * element.
@@ -125,8 +125,8 @@ class FormElement extends html5lib.Element {
 }
 
 abstract class UpdatableByMap {
-  Map<String,Object> toMap();
-  void updateFromMap(Map<String,Object> map);
+  Map<String, Object> toMap();
+  void updateFromMap(Map<String, Object> map);
 }
 
 class FormBase extends FormElement {
@@ -146,10 +146,10 @@ class FormBase extends FormElement {
 class Form extends FormBase with _NewValueCallback {
   String formUid;
   math.Random _random = new math.Random();
-  
+
   Form({String submitText}) {
     this.submitText = submitText;
-    formUid = "${_random.nextInt((1<<16))}";  // Assuming this is enough.
+    formUid = "${_random.nextInt((1<<16))}"; // Assuming this is enough.
   }
 
   /**
@@ -158,31 +158,30 @@ class Form extends FormBase with _NewValueCallback {
    * [:null:] (because we're moving on).
    */
   FormConfiguration receiveUserInput(CurrentState newValues) {
-    Set<_NewValueCallback> parentsOfUpdatedElements = new Set<_NewValueCallback>();
-    for (FormElement element 
-            in allFormElementsBelowThisOne
-            .where((element) => element is UpdatableByMap &&
-            element is Input)) {
+    Set<_NewValueCallback> parentsOfUpdatedElements =
+        new Set<_NewValueCallback>();
+    for (FormElement element in allFormElementsBelowThisOne.where((element) =>
+        element is UpdatableByMap && element is Input)) {
       Object newCurrent = newValues.getById(element.id);
       if (newCurrent != null && newCurrent != (element as Input).current) {
         (element as Input).current = newCurrent;
-        if (element is _NewValueCallback && 
-            (element as _NewValueCallback).onInput != null) {
+        if (element is _NewValueCallback && (element as
+            _NewValueCallback).onInput != null) {
           (element as _NewValueCallback).onInput(newCurrent);
         }
-        
+
         // Walk upwards to mark element's parent to be called with onInput.
         FormElement parent = element;
         do {
           parent = parent.parent;
-          if (parent is _NewValueCallback && 
-              (parent as _NewValueCallback).onInput != null) {
+          if (parent is _NewValueCallback && (parent as
+              _NewValueCallback).onInput != null) {
             parentsOfUpdatedElements.add(parent as _NewValueCallback);
           }
         } while (parent.parent != null);
       }
     }
-    
+
     // Also fire onInput on all parent elements.
     parentsOfUpdatedElements.forEach((_NewValueCallback parent) {
       Object value = null;
@@ -191,19 +190,19 @@ class Form extends FormBase with _NewValueCallback {
       }
       parent.onInput(value);
     });
-    
-    allFormElementsBelowThisOne.where((element) => element is Input)
-    .forEach((FormElement element) {
+
+    allFormElementsBelowThisOne.where((element) => element is Input).forEach(
+        (FormElement element) {
       (element as Input).sanitizeCurrent();
     });
-    
+
     if (newValues.submitted) {
       return null;
     } else {
       return _createConfiguration();
     }
   }
-  
+
   bool _uniqueIdsGiven = false;
   void _giveChildrenUniqueIds() {
     int id = 0;
@@ -213,25 +212,25 @@ class Form extends FormBase with _NewValueCallback {
     _uniqueIdsGiven = true;
   }
 
-  Map<String,Object> toMap() {
+  Map<String, Object> toMap() {
     if (!_uniqueIdsGiven) {
       // Set all children with a unique ID here or before here.
       _giveChildrenUniqueIds();
     }
-    Map<String,Object> map = new Map<String,Object>();
+    Map<String, Object> map = new Map<String, Object>();
     map["jsonml"] = encodeToJsonML(this);
     map["values"] = _createConfiguration().toMap();
     return map;
   }
-  
+
   FormConfiguration _createConfiguration() {
     FormConfiguration values = new FormConfiguration();
-    for (UpdatableByMap element 
-        in allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)) {
-      Map<String,Object> map = element.toMap();
+    for (UpdatableByMap element in allFormElementsBelowThisOne.where((element)
+        => element is UpdatableByMap)) {
+      Map<String, Object> map = element.toMap();
       if (element is StringRepresentationCreator && element is Input) {
-        map["__string__"] = (element as StringRepresentationCreator)
-            .stringifyFunction((element as Input).current);
+        map["__string__"] = (element as
+            StringRepresentationCreator).stringifyFunction((element as Input).current);
       }
       values.add((element as FormElement).id, map);
     }
@@ -244,18 +243,19 @@ class Form extends FormBase with _NewValueCallback {
  * form is created and after it is updated.
  */
 class FormConfiguration {
-  Map<String,Map<String,Object>> _valuesMap;
-  
-  FormConfiguration() : _valuesMap = new Map<String,Map<String,Object>>();
-  FormConfiguration.fromMap(Map<String,Map<String,Object>> map) : _valuesMap = map;
-  
-  void add(String id, Map<String,Object> attributesMap) {
+  Map<String, Map<String, Object>> _valuesMap;
+
+  FormConfiguration() : _valuesMap = new Map<String, Map<String, Object>>();
+  FormConfiguration.fromMap(Map<String, Map<String, Object>> map) : _valuesMap =
+      map;
+
+  void add(String id, Map<String, Object> attributesMap) {
     _valuesMap[id] = attributesMap;
   }
-  
-  Map<String,Object> getById(String id) => _valuesMap[id];
-  
-  Map<String,Map<String,Object>> toMap() => _valuesMap;
+
+  Map<String, Object> getById(String id) => _valuesMap[id];
+
+  Map<String, Map<String, Object>> toMap() => _valuesMap;
 }
 
 /**
@@ -263,31 +263,31 @@ class FormConfiguration {
  * user interaction.
  */
 class CurrentState {
-  Map<String,Object> _valuesMap;
+  Map<String, Object> _valuesMap;
   /**
    * Whether or not this form is being submitted. This information is stored
    * in a 'magic' key-value pair.
    */
   bool get submitted => _valuesMap["__submitted__"];
   set submitted(bool value) => _valuesMap["__submitted__"] = value;
-  
-  CurrentState() : _valuesMap = new Map<String,Object>() {
+
+  CurrentState() : _valuesMap = new Map<String, Object>() {
     submitted = false;
   }
-  CurrentState.fromMap(Map<String,Object> map) : _valuesMap = map {
+  CurrentState.fromMap(Map<String, Object> map) : _valuesMap = map {
     if (!_valuesMap.containsKey("__submitted__")) {
       submitted = false;
     }
   }
-  
+
   void add(String id, Object current) {
-      _valuesMap[id] = current;
-    }
-  
+    _valuesMap[id] = current;
+  }
+
   Object getById(String id) => _valuesMap[id];
-  
-  Map<String,Object> toMap() => _valuesMap;
-  
+
+  Map<String, Object> toMap() => _valuesMap;
+
   String toString() => "<CurrentState submitted=$submitted>";
 }
 
@@ -326,8 +326,8 @@ abstract class StringRepresentationHolder {
 
 abstract class Input {
   Object current;
-  
-  /// Called to ensure that the current value is valid. This method will 
+
+  /// Called to ensure that the current value is valid. This method will
   /// normally set [current] below any maximum values etc.
   void sanitizeCurrent();
 }
@@ -335,17 +335,16 @@ abstract class Input {
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
-class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
+class BaseRange extends FormElement implements UpdatableByMap {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
-  
-  static const String elementClass = "RangeInput";
 
-  BaseRangeInput(String name) : super(elementClass) {
+  BaseRange(String elementClass, String name) : super(elementClass) {
     this.name = name;
   }
-  BaseRangeInput.withConstraints(String name, this.current, this.min, this.max, 
-      this.step, this.minEnabled, this.maxEnabled) : super(elementClass) {
+  BaseRange.withConstraints(String elementClass, String
+      name, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
+      : super(elementClass) {
     this.name = name;
     if ((max - min) % step != 0) {
       throw new ArgumentError("The value of max ($max) is not valid, given "
@@ -353,10 +352,6 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
     }
   }
 
-  /// Current (or predefined) value selected on the range input. Defaults to
-  /// [:0:]. We use `current` because `value` is the [String] value of any
-  /// HTML5 element (although it's deprecated in html5lib).
-  @override int current = 0;
   /// Minimal value on the range input. Defaults to [:0:].
   int min = 0;
   /// Maximal value on the range input. Defaults to [:10:].
@@ -371,10 +366,43 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
   int minEnabled;
   /// Same as [minEnabled], but for values _above_ this number.
   int maxEnabled;
+
+  @override
+  Map<String, Object> toMap() => {
+    "min": min,
+    "max": max,
+    "step": step,
+    "minEnabled": minEnabled,
+    "maxEnabled": maxEnabled
+  };
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    min = map["min"];
+    max = map["max"];
+    step = map["step"];
+    minEnabled = map["minEnabled"];
+    maxEnabled = map["maxEnabled"];
+  }
+}
+
+class BaseRangeInput extends BaseRange with Input {
+  static const String elementClass = "RangeInput";
+  BaseRangeInput.withConstraints(String name, this.current, int min, int max, 
+      int step, int minEnabled, int maxEnabled) 
+      : super.withConstraints(elementClass, name, min, max, step, 
+          minEnabled, maxEnabled);
+  
+  BaseRangeInput(String name) : super(elementClass, name);
+  
+  /// Current (or predefined) value selected on the range input. Defaults to
+  /// [:0:]. We use `current` because `value` is the [String] value of any
+  /// HTML5 element (although it's deprecated in html5lib).
+  @override int current = 0;
   
   /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
   /// [minEnabled], [min], or outside [step]. In each case, moves [current] to
-  /// the closest valid position. 
+  /// the closest valid position.
   void sanitizeCurrent() {
     // Ensure current is min + step*n.
     int stepModulo = (current - min) % step;
@@ -385,7 +413,7 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
         current = current - stepModulo;
       }
     }
-    
+
     // Ensure current is not more or less than constrains.
     current = math.min(current, max);
     if (maxEnabled != null) {
@@ -396,25 +424,18 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
       current = math.max(current, minEnabled);
     }
   }
-
+  
   @override
-  Map<String, Object> toMap() => {
-    "current": current,
-    "min": min,
-    "max": max,
-    "step": step,
-    "minEnabled": minEnabled,
-    "maxEnabled": maxEnabled
-  };
+  Map<String, Object> toMap() {
+    Map<String, Object> map = super.toMap();
+    map["current"] =  current;
+    return map;
+  }
 
   @override
   void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
     current = map["current"];
-    min = map["min"];
-    max = map["max"];
-    step = map["step"];
-    minEnabled = map["minEnabled"];
-    maxEnabled = map["maxEnabled"];
   }
 }
 
@@ -422,15 +443,23 @@ class BaseRangeInput extends FormElement implements UpdatableByMap, Input {
  * The author-facing class of the range input element. It works only with
  * integers
  */
-class RangeInput extends BaseRangeInput with _NewValueCallback<int>, StringRepresentationCreator {
-  RangeInput(String name, InputCallback onInput, {int value: 0, 
-      StringifyFunction stringifyFunction,
-      int min: 0, int
-      max: 10, int step: 1, int minEnabled, int maxEnabled}) : super.withConstraints(
-      name, value, min, max, step, minEnabled, maxEnabled) {
+class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
+    StringRepresentationCreator {
+  RangeInput(String name, InputCallback onInput, {int value:
+      0, StringifyFunction stringifyFunction, int min: 0, int max: 10, int step:
+      1, int minEnabled, int maxEnabled}) : super.withConstraints(name, value, min,
+      max, step, minEnabled, maxEnabled) {
     this.onInput = onInput;
     if (stringifyFunction != null) {
       this.stringifyFunction = stringifyFunction;
     }
   }
 }
+//
+///**
+// * Base class of [RangeOutput] and [InterfaceRangeOutput].
+// */
+//class RangeOutput extends BaseRange with StringRepresentationCreator {
+//  static const String elementClass = "RangeOutput";
+//
+//}

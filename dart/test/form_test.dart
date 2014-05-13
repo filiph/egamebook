@@ -66,8 +66,8 @@ void main() {
       print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.length, form.children.length);
-      expect((form.children[0] as BaseRangeInput).max, (formProxy.children[0] as
-          BaseRangeInput).max);
+      expect((form.children[0] as BaseRange).max, (formProxy.children[0] as
+          BaseRange).max);
     });
   });
 

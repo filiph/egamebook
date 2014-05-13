@@ -153,6 +153,7 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
 }
 
 class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder {
+  
   InterfaceRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
