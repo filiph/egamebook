@@ -181,7 +181,7 @@ class MockInterface extends EgbInterfaceBase {
   }
   
   Future<bool> updateStats(Map<String,Object> mapContent) {
-    UIStat.updateStatsListFromMap(_statsList, mapContent);
+    UIStat.updateStatsList(_statsList, mapContent);
     _printStats();
     return new Future.value(true);
   }

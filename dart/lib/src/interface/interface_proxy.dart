@@ -22,7 +22,7 @@ abstract class EgbInterfaceViewedFromScripter {
   void setStats(List<UIStat> stats);
   Future<int> showChoices(EgbChoiceList choices);
   Future<bool> showText(String text);
-  void updateStats(Map<String, Object> mapContent);
+  void updateStats(StatUpdateCollection updates);
   void savePlayerChronology(Set<String> playerChronology);
   void save(EgbSavegame savegame);
   Stream<CurrentState> showForm(FormBase form);
@@ -109,9 +109,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
               "An error occured when initializing: $e.\n" "$stacktrace"));
           throw e;
         }
-        _send(Stat.toMessage()); // This works because Stat is a singleton.
-        // TODO: more elegant (scripter should have
-        //       a Stat getter?)
+        _send(new EgbMessage.StatsInit(Stat.createStatList()));
         _send(new PointsAward(0, 0).toMessage());
         return;
       case EgbMessage.LOAD_GAME:
@@ -142,7 +140,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
           scripter.restart();
         }
         try {
-          _send(Stat.toMessage());
+          _send(new EgbMessage.StatsInit(Stat.createStatList()));
         } catch (e, stacktrace) {
           _send(new EgbMessage.ScripterError(
               "Sending Stats failed for unknown reason: $e.\n" "$stacktrace"));
@@ -240,7 +238,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   void setStats(List<UIStat> stats) {
-    _send(Stat.toMessage(changedOnly: false));
+    _send(new EgbMessage.StatsInit(Stat.createStatList()));
   }
 
   Completer<int> _choiceSelectedCompleter;
@@ -267,8 +265,8 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   }
 
   @override
-  Future<bool> updateStats(Map<String, Object> mapContent) {
-    _send(Stat.toMessage(changedOnly: true));
+  Future<bool> updateStats(StatUpdateCollection updates) {
+    _send(new EgbMessage.StatUpdates(updates));
     return new Future.value(true);
   }
 

@@ -52,12 +52,12 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   ReceivePort _receivePort;
   SendPort _scripterPort;
   String _uid;
-  
+
   @override
   String get uid => _uid;
-  
+
   Completer _initCompleter;
-  
+
   EgbIsolateScripterProxy(this._isolateUri);
 
   @override
@@ -69,7 +69,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     _receivePort.listen(_onMessageFromScripterIsolate);
     return _initCompleter.future;
   }
-  
+
   void _onMessageFromScripterIsolate(Object _message) {
     if (_message is SendPort) {
       INT_DEBUG("Received SendPort from Isolate");
@@ -77,15 +77,15 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
       _send(new EgbMessage.RequestBookUid());
       return;
     }
-    
+
     assert(_message is Map);
-    Map<String,Object> messageMap = _message as Map<String,Object>;
+    Map<String, Object> messageMap = _message as Map<String, Object>;
     EgbMessage message = new EgbMessage.fromMap(messageMap);
-    
+
     if (message.type != EgbMessage.SCRIPTER_LOG) {
       INT_DEBUG("Received: $message");
     }
-    
+
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
         interface.endBook();
@@ -101,12 +101,11 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         interface.save(savegame);
         return;
       case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
-        interface.playerProfile
-            .savePlayerChronology(message.listContent.toSet());
+        interface.playerProfile.savePlayerChronology(message.listContent.toSet()
+            );
         return;
       case EgbMessage.TEXT_RESULT:
-        interface.showText(message.strContent)
-        .then((_) {
+        interface.showText(message.strContent).then((_) {
           _send(new EgbMessage.Continue());
         });
         return;
@@ -115,22 +114,23 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         _send(new EgbMessage.Continue());
         return;
       case EgbMessage.POINTS_AWARD:
-        interface.awardPoints(new PointsAward.fromMessage(message))
-        .then((_) {
+        interface.awardPoints(new PointsAward.fromMessage(message)).then((_) {
           _send(new EgbMessage.Continue());
         });
         return;
       case EgbMessage.SET_STATS:
-        interface.setStats(UIStat.statsListFromMessage(message));
+        interface.setStats(UIStat.overwriteStatsListFromDataStructure(
+            message.listContent));
         return;
       case EgbMessage.UPDATE_STATS:
         print("RUN: Received updated stats.");
-        interface.updateStats(message.mapContent);
+        interface.updateStats(new StatUpdateCollection.fromMap(
+            message.mapContent));
         return;
       case EgbMessage.SHOW_CHOICES:
         INT_DEBUG("Showing choices.");
-        interface.showChoices(new EgbChoiceList.fromMessage(message))
-        .then((int hash) {
+        interface.showChoices(new EgbChoiceList.fromMessage(message)).then((int
+            hash) {
           if (hash != null) {
             _send(new EgbMessage.ChoiceSelected(hash));
           } else {
@@ -142,16 +142,15 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
       case EgbMessage.SHOW_FORM:
         INT_DEBUG("Showing form.");
         FormProxy formProxy = new FormProxy.fromMap(message.mapContent);
-        interface.showForm(formProxy)
-        .listen((CurrentState state) {
+        interface.showForm(formProxy).listen((CurrentState state) {
           INT_DEBUG("Form updated or submitted by player.");
           _send(new EgbMessage.FormInput(state));
         });
         return;
       case EgbMessage.UPDATE_FORM:
         INT_DEBUG("Updating form.");
-        FormConfiguration changedConfig = 
-            new FormConfiguration.fromMap(message.mapContent);
+        FormConfiguration changedConfig = new FormConfiguration.fromMap(
+            message.mapContent);
         interface.updateForm(changedConfig);
         return;
       case EgbMessage.SCRIPTER_ERROR:
@@ -171,17 +170,17 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
    */
   void _send(EgbMessage message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
-                                             "when _scripterPort is null.");
+        "when _scripterPort is null.");
     _scripterPort.send(message.toMap());
   }
-  
+
   @override
   void load(EgbSavegame savegame, [Set<String> playerChronology]) {
     EgbMessage loadMessage = savegame.toMessage(EgbMessage.LOAD_GAME);
     if (playerChronology != null) {
       loadMessage.listContent = playerChronology.toList(growable: false);
     } else {
-      loadMessage.listContent = null;  // No playerChronology needs to be sent.
+      loadMessage.listContent = null; // No playerChronology needs to be sent.
     }
     _send(loadMessage);
   }

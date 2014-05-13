@@ -263,8 +263,8 @@ abstract class EgbScripter {
 
     if (Stat.someChanged) {
       DEBUG_SCR("Sending updated stats.");
-      // TODO: untangle (Stat shouldn't create the whole message)
-      interface.updateStats(Stat.toMessage(changedOnly: true).mapContent);
+      // TODO: untangle (Stat shouldn't create the whole message, only for most of it to be dropped)
+      interface.updateStats(Stat.createUpdates());
     }
 
     if (_playerChronologyChanged) {

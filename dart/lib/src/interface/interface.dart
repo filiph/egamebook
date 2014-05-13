@@ -72,7 +72,7 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   /// value(s) and show/hide stats according to the [Stat.show] state.
   /// Feed this function with the [EgbMessage.mapContent] of the received
   /// [EgbMessage.UPDATE_STATS] message.  
-  Future<bool> updateStats(Map<String,Object> mapContent); 
+  Future<bool> updateStats(StatUpdateCollection updates); 
   
   /// Shows a form in the interface, set with the initial values. Each time the
   /// user changes a value, the new values are emitted via the returned 

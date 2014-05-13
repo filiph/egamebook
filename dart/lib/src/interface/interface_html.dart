@@ -437,8 +437,8 @@ class HtmlInterface extends EgbInterfaceBase {
     }
   }
   
-  Future<bool> updateStats(Map<String,Object> mapContent) {
-    UIStat.updateStatsListFromMap(_statsList, mapContent)
+  Future<bool> updateStats(StatUpdateCollection updates) {
+    UIStat.updateStatsList(_statsList, updates)
       // Returns only the changed stats.
       .forEach((UIStat current) {
         var a = _statsElementMap[current.name];

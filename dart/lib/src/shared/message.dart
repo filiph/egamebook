@@ -2,6 +2,7 @@ library egb_message;
 
 import 'dart:convert' show JSON;
 import 'package:egamebook/src/shared/form.dart';
+import 'package:egamebook/src/shared/stat.dart';
 
 class EgbMessage {
   final int type;
@@ -36,7 +37,7 @@ class EgbMessage {
   static const int CHOICE_SELECTED = 1050;
   static const int FORM_INPUT = 1060;
   static const int QUIT = 1070;
-  
+
   String get typeString {
     switch (type) {
       case SEND_BOOK_UID: return "SEND_BOOK_UID";
@@ -107,6 +108,16 @@ class EgbMessage {
   EgbMessage.ChoiceSelected(int hash) 
       : type = CHOICE_SELECTED {
     intContent = hash;
+  }
+  
+  EgbMessage.StatUpdates(StatUpdateCollection updates) 
+      : type = UPDATE_STATS {
+    mapContent = updates.toMap();
+  }
+  
+  EgbMessage.StatsInit(List<Map<String,Object>> list) 
+      : type = SET_STATS {
+    listContent = list;
   }
 
   EgbMessage.NoResult() : type = NO_RESULT;

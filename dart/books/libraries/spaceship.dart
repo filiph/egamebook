@@ -102,8 +102,3 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
    */
 }
 
-
-
-
-
-
