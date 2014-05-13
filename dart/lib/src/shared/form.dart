@@ -455,11 +455,13 @@ class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
     }
   }
 }
-//
-///**
-// * Base class of [RangeOutput] and [InterfaceRangeOutput].
-// */
-//class RangeOutput extends BaseRange with StringRepresentationCreator {
-//  static const String elementClass = "RangeOutput";
-//
-//}
+
+/**
+ * Base class of [RangeOutput] and [InterfaceRangeOutput].
+ */
+class BaseRangeOutput extends BaseRange {
+  static const String elementClass = "RangeOutput";
+  
+  
+  // XXX: START HERE!!
+}
