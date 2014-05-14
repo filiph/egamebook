@@ -332,6 +332,10 @@ abstract class Input {
   void sanitizeCurrent();
 }
 
+abstract class Output {
+  Object current;
+}
+
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
@@ -459,9 +463,9 @@ class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
 /**
  * Base class of [RangeOutput] and [InterfaceRangeOutput].
  */
-class BaseRangeOutput extends BaseRange {
+class BaseRangeOutput extends BaseRange with Output {
   static const String elementClass = "RangeOutput";
-  
+  @override int current = 0;
   
   // XXX: START HERE!!
 }
