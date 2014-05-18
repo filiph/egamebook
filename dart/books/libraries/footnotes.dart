@@ -14,5 +14,5 @@ String fn(String name) {
     throw new ArgumentError("Footnote with name '$name' has not been defined.");
   }
   String escaped = _footnotes[name].replaceAll("\"", "&quot;");
-  return "<sup title=\"$escaped\">?</sup>";
+  return "<sup class=\"footnote\" title=\"$escaped\">?</sup>";
 }

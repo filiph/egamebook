@@ -76,6 +76,7 @@ void main() {
     RangeInput input1, input2, input3;
     RangeOutput energyGauge;
     RangeInput weapons, shields;
+    TextOutput textOutput;
     int age, money, freetime;
     EgbInterface interface;
     EgbStorage storage;
@@ -98,6 +99,8 @@ void main() {
       energyGauge = new RangeOutput("Energy available", max: 10, value: 10);
       weapons = new RangeInput("Weapons", updateEnergyGauges, value: 0);
       shields = new RangeInput("Shields", updateEnergyGauges, value: 0);
+      
+      textOutput = new TextOutput();
 
       interface = new HtmlInterface();
       storage = new MemoryStorage();
@@ -236,6 +239,38 @@ void main() {
       RadioButtonInputElement eightButton = querySelector(
           "#${formProxy.children.last.id} div.buttons input:nth-child(9)");
       eightButton.click();
+    });
+    
+    test("creates text output", () {
+      textOutput.html = "<p>Initial text.</p>";
+      form.children.add(textOutput);
+      form.children.add(input1);
+      
+      form.onInput = (_) {
+        textOutput.html = "<p>You are currently <strong>${input1.current}"
+            "</strong> years old.</p>";
+      };
+      
+      Map map = form.toMap();
+      print(JSON.encode(map));
+
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = interface.showForm(formProxy);
+
+      stream.listen((CurrentState values) {
+        FormConfiguration changedConfig = form.receiveUserInput(values);
+        interface.updateForm(changedConfig);
+        
+        
+        ParagraphElement textOutputParagraph = querySelector(
+            "#${formProxy.children.first.id} p");
+        expect(textOutputParagraph.text, "You are currently 35 years old.");
+      });
+      
+      // Select age = 35
+      RadioButtonInputElement ageButton = querySelector(
+          "#${formProxy.children.last.id} div.buttons input:nth-child(4)");
+      ageButton.click();
     });
 
   });

@@ -489,8 +489,36 @@ class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
   }
 }
 
-class TextOutput {
-  // TODO
+class BaseText extends FormElement implements UpdatableByMap {
+  BaseText(String elementClass) : super(elementClass);
+  
+  String html;
+
+  @override
+  Map<String, Object> toMap() => {
+    "html": html
+  };
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    html = map["html"];
+  }
+}
+
+class BaseTextOutput extends BaseText with Output<String> {
+  static const String elementClass = "TextOutput";
+  BaseTextOutput() : super(elementClass);
+  
+  @override
+  String get current => html;
+  @override
+  set current(String value) {
+    html = value;
+  }
+}
+
+class TextOutput extends BaseTextOutput {
+  
 }
 
 class OptionInput {

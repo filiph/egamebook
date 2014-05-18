@@ -153,6 +153,10 @@ Map<String,CustomTagHandler> customTagHandlers = {
   BaseRangeOutput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceRangeOutput(attributes["name"], attributes["id"]);
+  },
+  BaseTextOutput.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceTextOutput(attributes["id"]);
   }
 };
 
@@ -188,5 +192,11 @@ class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentati
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
+  }
+}
+
+class InterfaceTextOutput extends BaseTextOutput {
+  InterfaceTextOutput(String id) : super() {
+    this.id = id;
   }
 }

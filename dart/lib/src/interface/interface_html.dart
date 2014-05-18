@@ -154,13 +154,7 @@ class HtmlInterface extends EgbInterfaceBase {
             el.classes.remove("hidden");
           });
         }
-        // Search for footnotes and attach click listeners on them.
-        el.querySelectorAll(".footnote").forEach((Element footnoteEl) {
-          print("Found footnote");
-          footnoteEl.onClick.listen((_) {
-            showDialog(new Dialog("Footnote", "<p>${footnoteEl.title}</p>"));
-          });
-        });
+        _attachFootnoteClickListeners(el);
         bookDiv.append(el);
       }
       container.remove();  
@@ -172,6 +166,19 @@ class HtmlInterface extends EgbInterfaceBase {
     });
     
     return completer.future;
+  }
+
+  /// Search for footnotes in [el] and attach click listeners on them. Clicking
+  /// on a footnote creates a [Dialog] with the [Element.title] as its
+  /// text content.
+  void _attachFootnoteClickListeners(Element el) {
+    // Search for footnotes and attach click listeners on them.
+    el.querySelectorAll(".footnote").forEach((Element footnoteEl) {
+      print("Found footnote");
+      footnoteEl.onClick.listen((_) {
+        showDialog(new Dialog("Footnote", "<p>${footnoteEl.title}</p>"));
+      });
+    });
   }
   
   static const bool USE_SHOWTEXT_ANIMATION = false;
@@ -598,6 +605,7 @@ class HtmlInterface extends EgbInterfaceBase {
     _formProxy = formProxy;
     HtmlForm form = _formProxy.buildUiElements(ELEMENT_BUILDERS);
     bookDiv.append(form.uiRepresentation);
+    _attachFootnoteClickListeners(form.uiRepresentation);
     _showLoading(false);
     return _formProxy.stream;
   }
@@ -611,7 +619,8 @@ class HtmlInterface extends EgbInterfaceBase {
 Map<String,UiElementBuilder> ELEMENT_BUILDERS = {
   "Form": (FormElement e) => new HtmlForm(e),
   "RangeInput": (FormElement e) => new HtmlRangeInput(e),
-  "RangeOutput": (FormElement e) => new HtmlRangeOuput(e)
+  "RangeOutput": (FormElement e) => new HtmlRangeOuput(e),
+  "TextOutput": (FormElement e) => new HtmlTextOuput(e)
 };
 
 class HtmlForm implements UiElement {
@@ -693,14 +702,14 @@ abstract class HtmlRangeBase implements UiElement {
   DivElement _radioButtonsDiv;
   ParagraphElement _currentValueElement;
   
-  HtmlRangeBase(this.blueprint) {
+  HtmlRangeBase(this.blueprint, String divClass) {
     uiRepresentation = new DivElement()
-      ..classes.add("range-input")
+      ..classes.add(divClass)
       ..id = blueprint.id;
     
     LabelElement label = new LabelElement()
     ..htmlFor = blueprint.id
-    ..text = blueprint.name;
+    ..innerHtml = blueprint.name;
     uiRepresentation.append(label);
     
     DivElement buttonsAndValue = new DivElement()
@@ -774,7 +783,7 @@ abstract class HtmlRangeBase implements UiElement {
 }
 
 class HtmlRangeOuput extends HtmlRangeBase {
-  HtmlRangeOuput(BaseRangeOutput blueprint) : super(blueprint);
+  HtmlRangeOuput(BaseRangeOutput blueprint) : super(blueprint, "range-output");
 
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -785,10 +794,13 @@ class HtmlRangeOuput extends HtmlRangeBase {
     ..disabled = true;
     return radioButton;
   }
+  
+  @override
+  Stream get onInput => null;
 }
 
 class HtmlRangeInput extends HtmlRangeBase {
-  HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint);
+  HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint, "range-input");
   
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -808,6 +820,46 @@ class HtmlRangeInput extends HtmlRangeBase {
     }
     return radioButton;
   }
+}
+
+class HtmlTextOuput implements UiElement {
+  
+  BaseText blueprint;
+  DivElement uiRepresentation;
+  DivElement _childrenElement;
+  
+  HtmlTextOuput(this.blueprint) {
+    uiRepresentation = new DivElement()
+      ..classes.add("text-output")
+      ..id = blueprint.id;
+    
+    update();
+    
+    _childrenElement = new DivElement();
+    uiRepresentation.append(_childrenElement);
+  }
+  
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  @override
+  Object get current => uiRepresentation.text;
+
+  @override
+  bool disabled = false;
+
+  @override
+  Stream get onInput => null;
+
+  @override
+  void update() {
+    uiRepresentation.innerHtml = blueprint.html;
+  }
+
+  @override
+  bool waitingForUpdate = false;
 }
 
 class Submenu {
@@ -917,7 +969,8 @@ class FootnoteSupTagSyntax extends mdown.TagSyntax {
   String title;
   
   FootnoteSupTagSyntax()
-    : super(r'<sup title="(.*?)">', end: r'</sup>', tag: 'sup');
+    : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', 
+        tag: 'sup');
   
   bool onMatch(mdown.InlineParser parser, Match match) {
     title = match.group(1);
