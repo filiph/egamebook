@@ -438,6 +438,11 @@ ol.choices-ol button span.choice-infochip {
 /* FORM */
 
 div.form {
+  padding: 1em 2em;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.2em;
+  text-align: left;
 }
 
 div.form div.range-input {
