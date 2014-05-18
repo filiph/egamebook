@@ -598,6 +598,7 @@ class HtmlInterface extends EgbInterfaceBase {
     _formProxy = formProxy;
     HtmlForm form = _formProxy.buildUiElements(ELEMENT_BUILDERS);
     bookDiv.append(form.uiRepresentation);
+    _showLoading(false);
     return _formProxy.stream;
   }
 

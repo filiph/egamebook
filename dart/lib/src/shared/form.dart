@@ -489,7 +489,10 @@ class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
   }
 }
 
-class HtmlOutput {
+class TextOutput {
   // TODO
 }
 
+class OptionInput {
+  // TODO
+}
