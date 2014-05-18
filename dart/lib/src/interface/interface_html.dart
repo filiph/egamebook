@@ -609,7 +609,8 @@ class HtmlInterface extends EgbInterfaceBase {
 
 Map<String,UiElementBuilder> ELEMENT_BUILDERS = {
   "Form": (FormElement e) => new HtmlForm(e),
-  "RangeInput": (FormElement e) => new HtmlRangeInput(e)
+  "RangeInput": (FormElement e) => new HtmlRangeInput(e),
+  "RangeOutput": (FormElement e) => new HtmlRangeOuput(e)
 };
 
 class HtmlForm implements UiElement {
@@ -684,14 +685,14 @@ class HtmlForm implements UiElement {
   Object get current => null;
 }
 
-class HtmlRangeInput implements UiElement {
-  BaseRangeInput blueprint;
+abstract class HtmlRangeBase implements UiElement {
+  BaseRange blueprint;
   DivElement uiRepresentation;
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
   ParagraphElement _currentValueElement;
   
-  HtmlRangeInput(this.blueprint) {
+  HtmlRangeBase(this.blueprint) {
     uiRepresentation = new DivElement()
       ..classes.add("range-input")
       ..id = blueprint.id;
@@ -721,23 +722,12 @@ class HtmlRangeInput implements UiElement {
 
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
-      RadioButtonInputElement radioButton = new RadioButtonInputElement()
-      ..name = blueprint.id
-      ..checked = i == blueprint.current
-      ..value = "$i"
-      ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
-      || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
-      disabled || waitingForUpdate;
-      if (!radioButton.disabled) {
-        StreamSubscription subscription;
-        subscription = radioButton.onClick.listen((ev) {
-          _current = i;
-          _onInputController.add(ev);
-        });
-      }
+      RadioButtonInputElement radioButton = _createRadioButton(i);
       _radioButtonsDiv.append(radioButton);
     }
   }
+
+  RadioButtonInputElement _createRadioButton(int i);
 
   @override
   void appendChild(Object childUiRepresentation) {
@@ -780,6 +770,43 @@ class HtmlRangeInput implements UiElement {
 
   @override
   bool get waitingForUpdate => _waitingForUpdate;
+}
+
+class HtmlRangeOuput extends HtmlRangeBase {
+  HtmlRangeOuput(BaseRangeOutput blueprint) : super(blueprint);
+
+  @override
+  RadioButtonInputElement _createRadioButton(int i) {
+    RadioButtonInputElement radioButton = new RadioButtonInputElement()
+    ..name = blueprint.id
+    ..checked = i == blueprint.current
+    ..value = "$i"
+    ..disabled = true;
+    return radioButton;
+  }
+}
+
+class HtmlRangeInput extends HtmlRangeBase {
+  HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint);
+  
+  @override
+  RadioButtonInputElement _createRadioButton(int i) {
+    RadioButtonInputElement radioButton = new RadioButtonInputElement()
+    ..name = blueprint.id
+    ..checked = i == blueprint.current
+    ..value = "$i"
+    ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
+    || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
+    disabled || waitingForUpdate;
+    if (!radioButton.disabled) {
+      StreamSubscription subscription;
+      subscription = radioButton.onClick.listen((ev) {
+        _current = i;
+        _onInputController.add(ev);
+      });
+    }
+    return radioButton;
+  }
 }
 
 class Submenu {

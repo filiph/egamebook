@@ -32,6 +32,11 @@ class FormProxy extends FormBase {
   Map<FormElement,UiElement> elementsMap = new Map<FormElement,UiElement>();
   UiElement _recursiveCreateUiElement(Map<String,UiElementBuilder> builders, 
                         FormElement element) {
+    if (!builders.containsKey(element.localName)) {
+      throw new UnimplementedError("The tag '${element.localName}' is not "
+          "among the implemented interface builders "
+          "(${builders.keys.join(', ')}).");
+    }
     UiElement uiElement = builders[element.localName](element);
     elementsMap[element] = uiElement;
     if (uiElement.onInput != null) {
@@ -99,7 +104,7 @@ class FormProxy extends FormBase {
     Stream<CurrentState> get stream => _streamController.stream;
   
   void createElementsFromJsonML(List<Object> jsonml) {
-    html5lib.Node node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
+    InterfaceForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
         unsafe: true);
     children.addAll(node.children);
   }
@@ -140,9 +145,14 @@ abstract class UiElement {
 /// Maps [FormElement.elementClass] name to a function that takes the JSON
 /// objects and returns 
 Map<String,CustomTagHandler> customTagHandlers = {
+  FormBase.elementClass: (_) => new InterfaceForm(),
   BaseRangeInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceRangeInput(attributes["name"], attributes["id"]);
+  },
+  BaseRangeOutput.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceRangeOutput(attributes["name"], attributes["id"]);
   }
 };
 
@@ -152,9 +162,24 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
   return (jsonObject as List)[1] as Map<String,Object>;
 }
 
+class InterfaceForm extends FormBase {
+}
+
 class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder {
-  
   InterfaceRangeInput(String name, String id) : super(name) {
+    this.id = id;
+  }
+  String currentStringRepresentation;
+  
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
+    currentStringRepresentation = map["__string__"];
+  }
+}
+
+class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentationHolder {
+  InterfaceRangeOutput(String name, String id) : super(name) {
     this.id = id;
   }
   String currentStringRepresentation;

@@ -74,6 +74,8 @@ void main() {
   group("HtmlInterface", () {
     Form form;
     RangeInput input1, input2, input3;
+    RangeOutput energyGauge;
+    RangeInput weapons, shields;
     int age, money, freetime;
     EgbInterface interface;
     EgbStorage storage;
@@ -87,6 +89,15 @@ void main() {
           step: 100);
       input3 = new RangeInput("Free time", (value) => freetime = value, max: 10,
           maxEnabled: 5);
+      
+      Function updateEnergyGauges = (_) {
+        energyGauge.current = 10 - weapons.current - shields.current;
+        weapons.maxEnabled = weapons.current + energyGauge.current;
+        shields.maxEnabled = shields.current + energyGauge.current;
+      };
+      energyGauge = new RangeOutput("Energy available", max: 10, value: 10);
+      weapons = new RangeInput("Weapons", updateEnergyGauges, value: 0);
+      shields = new RangeInput("Shields", updateEnergyGauges, value: 0);
 
       interface = new HtmlInterface();
       storage = new MemoryStorage();
@@ -199,6 +210,32 @@ void main() {
       RadioButtonInputElement percentageButton = querySelector(
           "#${formProxy.children.last.id} div.buttons input:nth-child(11)");
       percentageButton.click();
+    });
+    
+    test("creates RangeOutput and updates it", () {
+      form.children.add(energyGauge);
+      form.children.add(weapons);
+      form.children.add(shields);
+      
+      Map map = form.toMap();
+      print(JSON.encode(map));
+
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = interface.showForm(formProxy);
+
+      stream.listen(expectAsync((CurrentState values) {
+        FormConfiguration changedConfig = form.receiveUserInput(values);
+        interface.updateForm(changedConfig);
+        
+        RadioButtonInputElement onlyTwoAvailableButton = querySelector(
+            "#${formProxy.children.first.id} div.buttons input:nth-child(3)");
+        expect(onlyTwoAvailableButton.checked, true);
+      }));
+      
+      // Select Shields = 8
+      RadioButtonInputElement eightButton = querySelector(
+          "#${formProxy.children.last.id} div.buttons input:nth-child(9)");
+      eightButton.click();
     });
 
   });

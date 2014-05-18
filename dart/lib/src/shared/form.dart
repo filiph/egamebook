@@ -130,7 +130,8 @@ abstract class UpdatableByMap {
 }
 
 class FormBase extends FormElement {
-  FormBase() : super("Form");
+  static const String elementClass = "Form";
+  FormBase() : super(elementClass);
 
   /// The text to be on the submit button. Defaults to [:null:], in which case
   /// the button will just have a generic graphic (such as an arrow or a check
@@ -228,9 +229,19 @@ class Form extends FormBase with _NewValueCallback {
     for (UpdatableByMap element in allFormElementsBelowThisOne.where((element)
         => element is UpdatableByMap)) {
       Map<String, Object> map = element.toMap();
-      if (element is StringRepresentationCreator && element is Input) {
-        map["__string__"] = (element as
-            StringRepresentationCreator).stringifyFunction((element as Input).current);
+      if (element is StringRepresentationCreator) {
+        Object elementCurrent;
+        if (element is Input) {
+          elementCurrent = (element as Input).current;
+        } else if (element is Output) {
+          elementCurrent = (element as Output).current;
+        } else {
+          throw new StateError("Cannot create string representation of a "
+              "StringRepresentationCreator when it doesn't have a current "
+              "value. (Element: $element)");
+        }
+        map["__string__"] = (element as StringRepresentationCreator)
+            .stringifyFunction(elementCurrent);
       }
       values.add((element as FormElement).id, map);
     }
@@ -347,8 +358,7 @@ class BaseRange extends FormElement implements UpdatableByMap {
     this.name = name;
   }
   BaseRange.withConstraints(String elementClass, String
-      name, this.current, this.min, this.max, this.step, this.minEnabled, 
-          this.maxEnabled)
+      name, this.current, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
       : super(elementClass) {
     this.name = name;
     if ((max - min) % step != 0) {
@@ -399,13 +409,13 @@ class BaseRange extends FormElement implements UpdatableByMap {
 
 class BaseRangeInput extends BaseRange implements Input<int> {
   static const String elementClass = "RangeInput";
-  BaseRangeInput.withConstraints(String name, int current, int min, int max, 
-      int step, int minEnabled, int maxEnabled) 
-      : super.withConstraints(elementClass, name, current, min, max, step, 
+  BaseRangeInput.withConstraints(String name, int current, int min, int max, int
+      step, int minEnabled, int maxEnabled)
+      : super.withConstraints(elementClass, name, current, min, max, step,
           minEnabled, maxEnabled);
-  
+
   BaseRangeInput(String name) : super(elementClass, name);
-  
+
   /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
   /// [minEnabled], [min], or outside [step]. In each case, moves [current] to
   /// the closest valid position.
@@ -454,12 +464,32 @@ class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
  */
 class BaseRangeOutput extends BaseRange implements Output<int> {
   static const String elementClass = "RangeOutput";
-  @override int current = 0;
-  
-  BaseRangeOutput.withConstraints(String name, int current, int min, int max, 
-        int step, int minEnabled, int maxEnabled) 
-        : super.withConstraints(elementClass, name, current,  min, max, step, 
-            minEnabled, maxEnabled);
-    
+
+  BaseRangeOutput.withConstraints(String name, int current, int min, int
+      max, int step, int minEnabled, int maxEnabled)
+      : super.withConstraints(elementClass, name, current, min, max, step,
+          minEnabled, maxEnabled);
+
   BaseRangeOutput(String name) : super(elementClass, name);
 }
+
+/**
+ * An element of the [Form] that looks almost identical to [RangeInput], but
+ * isn't meant for input. It can show, for example, the remaining 'resources'
+ * to distribute to RangeInputs.
+ */
+class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
+  RangeOutput(String name, {int value: 0, StringifyFunction
+      stringifyFunction, int min: 0, int max: 10, int step: 1, int minEnabled, int
+      maxEnabled}) : super.withConstraints(name, value, min, max, step, minEnabled,
+      maxEnabled) {
+    if (stringifyFunction != null) {
+      this.stringifyFunction = stringifyFunction;
+    }
+  }
+}
+
+class HtmlOutput {
+  // TODO
+}
+
