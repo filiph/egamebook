@@ -324,16 +324,16 @@ abstract class StringRepresentationHolder {
 }
 
 
-abstract class Input {
-  Object current;
+abstract class Input<T> {
+  T current;
 
   /// Called to ensure that the current value is valid. This method will
   /// normally set [current] below any maximum values etc.
   void sanitizeCurrent();
 }
 
-abstract class Output {
-  Object current;
+abstract class Output<T> {
+  T current;
 }
 
 /**
@@ -347,7 +347,8 @@ class BaseRange extends FormElement implements UpdatableByMap {
     this.name = name;
   }
   BaseRange.withConstraints(String elementClass, String
-      name, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
+      name, this.current, this.min, this.max, this.step, this.minEnabled, 
+          this.maxEnabled)
       : super(elementClass) {
     this.name = name;
     if ((max - min) % step != 0) {
@@ -356,6 +357,10 @@ class BaseRange extends FormElement implements UpdatableByMap {
     }
   }
 
+  /// Current (or predefined) value selected on the range input. Defaults to
+  /// [:0:]. We use `current` because `value` is the [String] value of any
+  /// HTML5 element (although it's deprecated in html5lib).
+  int current = 0;
   /// Minimal value on the range input. Defaults to [:0:].
   int min = 0;
   /// Maximal value on the range input. Defaults to [:10:].
@@ -377,7 +382,8 @@ class BaseRange extends FormElement implements UpdatableByMap {
     "max": max,
     "step": step,
     "minEnabled": minEnabled,
-    "maxEnabled": maxEnabled
+    "maxEnabled": maxEnabled,
+    "current": current
   };
 
   @override
@@ -387,22 +393,18 @@ class BaseRange extends FormElement implements UpdatableByMap {
     step = map["step"];
     minEnabled = map["minEnabled"];
     maxEnabled = map["maxEnabled"];
+    current = map["current"];
   }
 }
 
-class BaseRangeInput extends BaseRange with Input {
+class BaseRangeInput extends BaseRange implements Input<int> {
   static const String elementClass = "RangeInput";
-  BaseRangeInput.withConstraints(String name, this.current, int min, int max, 
+  BaseRangeInput.withConstraints(String name, int current, int min, int max, 
       int step, int minEnabled, int maxEnabled) 
-      : super.withConstraints(elementClass, name, min, max, step, 
+      : super.withConstraints(elementClass, name, current, min, max, step, 
           minEnabled, maxEnabled);
   
   BaseRangeInput(String name) : super(elementClass, name);
-  
-  /// Current (or predefined) value selected on the range input. Defaults to
-  /// [:0:]. We use `current` because `value` is the [String] value of any
-  /// HTML5 element (although it's deprecated in html5lib).
-  @override int current = 0;
   
   /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
   /// [minEnabled], [min], or outside [step]. In each case, moves [current] to
@@ -428,19 +430,6 @@ class BaseRangeInput extends BaseRange with Input {
       current = math.max(current, minEnabled);
     }
   }
-  
-  @override
-  Map<String, Object> toMap() {
-    Map<String, Object> map = super.toMap();
-    map["current"] =  current;
-    return map;
-  }
-
-  @override
-  void updateFromMap(Map<String, Object> map) {
-    super.updateFromMap(map);
-    current = map["current"];
-  }
 }
 
 /**
@@ -463,9 +452,14 @@ class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
 /**
  * Base class of [RangeOutput] and [InterfaceRangeOutput].
  */
-class BaseRangeOutput extends BaseRange with Output {
+class BaseRangeOutput extends BaseRange implements Output<int> {
   static const String elementClass = "RangeOutput";
   @override int current = 0;
   
-  // XXX: START HERE!!
+  BaseRangeOutput.withConstraints(String name, int current, int min, int max, 
+        int step, int minEnabled, int maxEnabled) 
+        : super.withConstraints(elementClass, name, current,  min, max, step, 
+            minEnabled, maxEnabled);
+    
+  BaseRangeOutput(String name) : super(elementClass, name);
 }
