@@ -445,15 +445,37 @@ div.form {
   text-align: left;
 }
 
-div.form div.range-input {
+div.form .range-input {
   padding-top: 0.5em;
+}
+
+div.form .range-input label {
+  font-weight: bold;
+}
+
+div.form .range-input label, div.form .range-input .buttons-and-value {
+  display: table-row;
+}
+
+div.form .range-input .buttons, div.form .range-input .current-value {
+  display: table-cell;
+  
+  margin: 0;
+}
+
+div.form .range-input .buttons {
+  padding: 0 2em 0 0;
+  width: 10em;
+}
+
+div.form .range-input .current-value {
 }
 
 
 div.form label, div.form p {
   font-family: 'Roboto', sans-serif;
 }
-
+/*
 div.form label {
   display: block;
 }
@@ -466,10 +488,10 @@ div.form div.buttons-and-value > div {
 div.form div.buttons-and-value > p.current-value {
 	display: inline-block;
 	margin: 0;
-}
+}*/
 
 div.form .submit {
-	margin-top:  1em;
+	margin-top:  2em;
 	width: auto;
 	font-size: 80%;
 }
