@@ -336,7 +336,7 @@ class FireGun extends CombatMove {
     });
   }
   
-  EgbChoice _createChoiceForTargetSystem(ShipSystem targetSystem) {
+  void _createChoiceForTargetSystem(ShipSystem targetSystem) {
     String probability = Randomly.humanStringify(
         calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 2);
     choices.add("Target ${targetSystem.name} [$probability]",

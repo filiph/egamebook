@@ -623,7 +623,8 @@ abstract class EgbScripter {
       script();
     } catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
-      throw new AuthorScriptException(e.toString());
+      throw new AuthorScriptException.withPageName(e.toString(), 
+          currentPage.name, currentBlockIndex);
     }
 
     if (textBuffer.isNotEmpty) {
