@@ -1090,7 +1090,7 @@ class Builder {
   static final RegExp oneLineChoice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
   static final RegExp multiLineChoiceStart = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*$");  // - Something [
   static final RegExp multiLineChoiceEnd = new RegExp(r"^\s{0,3}\{\s*(.*)\s*\}[\s,]*([^\{].+)?\s*\]\s*$");  // {i++;} somepage]
-  static final RegExp variableInText = new RegExp(r"[^\\]\$[a-zA-Z_][a-zA-Z0-9_]*|[^\\]\${[^}]+}");
+  static final RegExp variableInText = new RegExp(r"(^|[^\\])\$[a-zA-Z_][a-zA-Z0-9_]*|(^|[^\\])\${[^}]+}");
 
   /**
    * Writes following Dart files to disk:

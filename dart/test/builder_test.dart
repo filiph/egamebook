@@ -200,6 +200,8 @@ void main() {
             equals(BuilderBlock.BLK_TEXT_WITH_VAR));
           expect(b.pages[0].blocks[4].type,
             equals(BuilderBlock.BLK_TEXT_WITH_VAR));
+          expect(b.pages[0].blocks[5].type,
+            equals(BuilderBlock.BLK_TEXT_WITH_VAR));
         });
         new Builder().readEgbFile(new File(getPath("variables_in_text.egb"))).then(callback);
       });
