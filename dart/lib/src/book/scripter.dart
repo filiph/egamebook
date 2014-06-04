@@ -588,7 +588,13 @@ abstract class EgbScripter {
     if (pageMap != null) pageMap.clearState();
 
     isInInitBlock = true;
-    initBlock(); // run contents of <variables>
+    try {
+      initBlock(); // run contents of <variables>
+    } catch (e, stacktrace) {
+      interface.reportError("Author Exception in initBlock() (<variables>)", 
+          "$e\n$stacktrace");
+      throw e;
+    }
     isInInitBlock = false;
   }
 
