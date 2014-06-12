@@ -38,8 +38,8 @@ class FormProxy extends FormBase {
     }
     UiElement uiElement = builders[element.localName](element);
     elementsMap[element] = uiElement;
-    if (uiElement.onInput != null) {
-      uiElement.onInput.listen((_) {
+    if (uiElement.onChange != null) {
+      uiElement.onChange.listen((_) {
         // Send the state to the Scripter.
         CurrentState state = _createCurrentState(setWaitingForUpdate: true,
             // Events from the Form UiElement itself are Submit events.
@@ -117,7 +117,7 @@ abstract class UiElement {
   /// [waitingForUpdate] back to [:false:].
   void update();
   /// Fired every time user interacts with Element and changes something.
-  Stream get onInput;
+  Stream get onChange;
   set disabled(bool value);
   bool get disabled;
   /// This is set to [:true:] after the user has interacted with the form and
@@ -160,6 +160,16 @@ Map<String,CustomTagHandler> customTagHandlers = {
   BaseTextOutput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceTextOutput(attributes["id"]);
+  },
+  BaseMultipleChoiceInput.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceMultipleChoiceInput(attributes["name"], 
+        attributes["id"]);
+  },
+  BaseOption.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceOption(attributes["text"],
+        attributes["selected"] == "true", attributes["id"]);
   }
 };
 
@@ -209,6 +219,19 @@ class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentati
 
 class InterfaceTextOutput extends BaseTextOutput {
   InterfaceTextOutput(String id) : super() {
+    this.id = id;
+  }
+}
+
+class InterfaceMultipleChoiceInput extends BaseMultipleChoiceInput {
+  InterfaceMultipleChoiceInput(String name, String id) : super(name) {
+    this.id = id;
+  }
+}
+
+class InterfaceOption extends BaseOption {
+  InterfaceOption(String text, bool selected, String id) : 
+    super(text, selected: selected) {
     this.id = id;
   }
 }

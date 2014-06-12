@@ -36,6 +36,13 @@ class Pilot extends Actor {
   void _playerCreateForm(List<CombatMove> moves, List<FormSection> sections) {
     Form form = new Form();
     
+    MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
+    
+    Option a = new Option("Zvolit A", null, selected: true);
+    Option b = new Option("Zvolit B", null);
+    moveChoice.children.addAll([a, b]);
+    
+    form.append(moveChoice);
     
     form.children.addAll(sections);
     

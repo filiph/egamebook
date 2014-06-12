@@ -3,7 +3,8 @@ library egb_interface_html;
 import 'dart:async';
 import 'dart:html' hide FormElement;
 
-import 'package:markdown/markdown.dart' as mdown show InlineParser, InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
+import 'package:markdown/markdown.dart' as mdown show InlineParser,
+    InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
 import 'interface.dart';
 export 'interface.dart' show EgbInterface;
@@ -23,37 +24,37 @@ import 'package:egamebook/src/shared/form.dart';
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
   SpanElement pointsSpan;
-  
+
   DivElement bookDiv;
-  
+
   ButtonElement startButton;
   DivElement bookTitleDiv;
   DivElement bigBottomButtonDiv;
-  
+
   /// The interface shows the title 'activity' (with a big START button on
   /// the bottom).
   static const int UI_ACTIVITY_TITLE = 1;
   /// The UI is in the play state.
   static const int UI_ACTIVITY_BOOK = 2;
   int currentActivity = UI_ACTIVITY_TITLE;
-  
+
   /**
    * The text that has been shown to the player since last savegame bookmark.
    * (Markdown format, pre-HTMLization.)
    */
   final StringBuffer _textHistory = new StringBuffer();
   String getTextHistory() => _textHistory.toString();
-  
+
   /**
     Constructor.
     */
   HtmlInterface() : super();
-  
+
   void setup() {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
     _loadingEl = document.querySelector("p#loading");
-    
+
     bookTitleDiv = document.querySelector("div#book-title");
     bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
     startButton = document.querySelector("button#start-button");
@@ -67,18 +68,18 @@ class HtmlInterface extends EgbInterfaceBase {
       _savegameToBe = null;
       // TODO: clear meta elements
     });
-    
+
     pointsSpan = document.querySelector("span#points-value");
-    document.querySelector("a#points-button").onClick
-      .listen(_statsOnClickListener);
-    
+    document.querySelector("a#points-button").onClick.listen(
+        _statsOnClickListener);
+
     // Set up listening for meta elements (for not showing new points before
     // user scrolls to the appropriate place in the text, for example).
     _periodicSubscription = _periodic.listen((_) {
       _checkMetaElementsInView();
     });
     _periodicSubscription.pause();
-    
+
     _showLoading(false);
   }
 
@@ -90,17 +91,17 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
       bookDiv.style.display = "block";
-      new Future(() {  // Give the browser time to switch scrolling on.
+      new Future(() { // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
-        bookDiv.children.last  // TODO: first/last according to Continue/Start
-          .scrollIntoView();  
+        bookDiv.children.last // TODO: first/last according to Continue/Start
+        .scrollIntoView();
         bookTitleDiv.style.display = "none";
         bigBottomButtonDiv.style.display = "none";
         currentActivity = UI_ACTIVITY_BOOK;
       });
     });
   }
-  
+
   ParagraphElement _loadingEl;
   /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
   bool _loadingElCurrentShowState = null;
@@ -108,22 +109,22 @@ class HtmlInterface extends EgbInterfaceBase {
    * Sets visibility of the loading gizmo.
    */
   void _showLoading(bool show) {
-    if (_loadingElCurrentShowState != null && 
-        show == _loadingElCurrentShowState) {
-      return;  // Don't do anything if the show state is the same already.
+    if (_loadingElCurrentShowState != null && show ==
+        _loadingElCurrentShowState) {
+      return; // Don't do anything if the show state is the same already.
     }
     _loadingEl.style.visibility = (show ? "visible" : "hidden");
     _loadingElCurrentShowState = show;
   }
-  
+
   void endBook() {
     print("The book has ended.");
   }
-  
+
   void close() {
     super.close();
   }
-  
+
   /**
    * Converts [s] to HTML elements (via markdown) and shows them one by one
    * on page. Returns when complete.
@@ -131,14 +132,13 @@ class HtmlInterface extends EgbInterfaceBase {
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
     Completer completer = new Completer<bool>();
-    
+
     _showLoading(false);
-    
-    new Future.delayed(const Duration(milliseconds: 100), ()  {
+
+    new Future.delayed(const Duration(milliseconds: 100), () {
       _textHistory.write("$s\n\n");
-      final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
-          new FootnoteSupTagSyntax()
-      ];
+      final List<mdown.InlineSyntax> syntaxes =
+          <mdown.InlineSyntax>[new FootnoteSupTagSyntax()];
       String html = mdown.markdownToHtml(s, inlineSyntaxes: syntaxes);
       DocumentFragment container = new DocumentFragment();
       container.innerHtml = html;
@@ -147,8 +147,8 @@ class HtmlInterface extends EgbInterfaceBase {
         if (USE_SHOWTEXT_ANIMATION) {
           count++;
           el.classes.add("hidden");
-          num transitionDelay = 
-              _durationBetweenShowingElements.inMilliseconds * (count - 1) / 1000; 
+          num transitionDelay = _durationBetweenShowingElements.inMilliseconds *
+              (count - 1) / 1000;
           el.style.transitionDelay = "${transitionDelay}s";
           new Future(() {
             el.classes.remove("hidden");
@@ -157,14 +157,13 @@ class HtmlInterface extends EgbInterfaceBase {
         _attachFootnoteClickListeners(el);
         bookDiv.append(el);
       }
-      container.remove();  
+      container.remove();
       // TODO: find out if necessary to avoid leaks
-      
+
       new Future.delayed(_durationBetweenShowingElements * count, () =>
-          completer.complete(true)
-      );
+          completer.complete(true));
     });
-    
+
     return completer.future;
   }
 
@@ -180,20 +179,20 @@ class HtmlInterface extends EgbInterfaceBase {
       });
     });
   }
-  
+
   static const bool USE_SHOWTEXT_ANIMATION = false;
-  static const Duration _durationBetweenShowingElements =
-      const Duration(milliseconds: 200);
+  static const Duration _durationBetweenShowingElements = const Duration(
+      milliseconds: 200);
   static const Duration _durationBetweenCheckingForMetaElements =
       const Duration(milliseconds: 1000);
-  final Stream _periodic = 
-      new Stream.periodic(_durationBetweenCheckingForMetaElements);
+  final Stream _periodic = new Stream.periodic(
+      _durationBetweenCheckingForMetaElements);
   StreamSubscription _periodicSubscription;
-  
-  /// A list of elements and their associated actions and data. When a 
+
+  /// A list of elements and their associated actions and data. When a
   /// _metaElement comes into view, its [doAction()] function is called.
   final List<EgbMetaElement> _metaElements = new List<EgbMetaElement>();
-  
+
   /**
    * Checks if one of the meta elements is in view. If so, runs their
    * associated action (e.g. show a toast and increase the counter when
@@ -219,7 +218,7 @@ class HtmlInterface extends EgbInterfaceBase {
     // Delete _metaElements whose actions have already been triggered.
     _metaElements.removeWhere((metaEl) => metaEl.done);
   }
-  
+
   /**
    * Checks if user scrolled past the end of [bookDiv].
    */
@@ -227,89 +226,89 @@ class HtmlInterface extends EgbInterfaceBase {
     var currentBottom = window.pageYOffset + window.innerHeight;
     var bookDivBottom = bookDiv.offsetTop + bookDiv.offsetHeight;
     print("checking scroll: bookdiv = ${bookDivBottom}, "
-          "currentBottom =  ${currentBottom}");
+        "currentBottom =  ${currentBottom}");
     return (bookDivBottom < currentBottom - 20);
   }
-  
+
   Future<int> showChoices(EgbChoiceList choiceList) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
-    
+
     var completer = new Completer();
-    
+
     var choicesDiv = new DivElement();
     choicesDiv.classes.add("choices-div");
-    
+
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
-      choicesQuestionP.innerHtml = 
-          mdown.markdownToHtml(choiceList.question, inlineOnly: true);
+      choicesQuestionP.innerHtml = mdown.markdownToHtml(choiceList.question,
+          inlineOnly: true);
       choicesQuestionP.classes.add("choices-question");
       choicesDiv.append(choicesQuestionP);
     }
-    
+
     OListElement choicesOl = new OListElement();
     choicesOl.classes.add("choices-ol");
-    
+
     Set<StreamSubscription> clickSubscriptions = new Set<StreamSubscription>();
-    
+
     // Build the <li> elements of the main (non-submenu) choices, one by one.
     int mainChoiceListNumber = 1;
     choiceList.where((choice) => choice.submenu == null).forEach((choice) {
-      ButtonElement btn = _createChoiceButton("$mainChoiceListNumber.", choice, 
+      ButtonElement btn = _createChoiceButton("$mainChoiceListNumber.", choice,
           completer, choicesDiv, clickSubscriptions);
-      
+
       choicesOl.append(btn);
       mainChoiceListNumber++;
     });
     choicesDiv.append(choicesOl);
-    
+
     // Now let's see if there are any submenus we need to show.
-    Map<String,Submenu> submenus = new Map<String,Submenu>();
+    Map<String, Submenu> submenus = new Map<String, Submenu>();
     choiceList.where((choice) => choice.submenu != null).forEach((choice) {
-      Submenu sub = submenus.putIfAbsent(choice.submenu, 
-          () => new Submenu(choice.submenu));
+      Submenu sub = submenus.putIfAbsent(choice.submenu, () => new Submenu(
+          choice.submenu));
       sub.choices.add(choice);
     });
-    
+
     if (submenus.isNotEmpty) {
-      DivElement submenusDiv = new DivElement()
-      ..classes.add("choices-submenus");
-      
-      DivElement submenuButtonsDiv = new DivElement()
-      ..classes.add("choices-submenu-buttons");
+      DivElement submenusDiv = new DivElement()..classes.add("choices-submenus"
+          );
+
+      DivElement submenuButtonsDiv = new DivElement()..classes.add(
+          "choices-submenu-buttons");
       submenusDiv.append(submenuButtonsDiv);
-      
+
       submenus.forEach((name, submenu) {
         ButtonElement submenuButton = new ButtonElement()
-        ..classes.add("submenu-button")
-        ..text = submenu.name;
-        
+            ..classes.add("submenu-button")
+            ..text = submenu.name;
+
         submenuButtonsDiv.append(submenuButton);
-        
-        OListElement submenuChoicesOl = new OListElement()
-        ..classes.addAll(["choices-ol", "display-none"]);
-        
+
+        OListElement submenuChoicesOl = new OListElement()..classes.addAll(
+            ["choices-ol", "display-none"]);
+
         submenu.choices.forEach((choice) {
-          ButtonElement btn = _createChoiceButton("", choice, 
-              completer, choicesDiv, clickSubscriptions);
-          
+          ButtonElement btn = _createChoiceButton("", choice, completer,
+              choicesDiv, clickSubscriptions);
+
           submenuChoicesOl.append(btn);
         });
-        
+
         var clickSubscription = submenuButton.onClick.listen((_) {
           submenuChoicesOl.classes.toggle("display-none");
           submenuButton.classes.toggle("depressed");
         });
         clickSubscriptions.add(clickSubscription);
-        
+
         submenusDiv.append(submenuChoicesOl);
       });
-      
+
       choicesDiv.append(submenusDiv);
     }
-    
+
     choicesDiv.classes.add("hidden");
     bookDiv.append(choicesDiv);
     _showLoading(false);
@@ -317,76 +316,73 @@ class HtmlInterface extends EgbInterfaceBase {
     return completer.future;
   }
 
-  ButtonElement _createChoiceButton(String index, EgbChoice choice, 
-                          Completer completer, DivElement choicesDiv,
-                          Set<StreamSubscription> clickSubscriptions) {
+  ButtonElement _createChoiceButton(String index, EgbChoice choice, Completer
+      completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
-    
+
     var number = new SpanElement();
     number.text = index;
     number.classes.add("choice-number");
-    
+
     var choiceDisplay = new SpanElement();
     choiceDisplay.classes.add("choice-display");
-    
+
     var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
     if (!choiceWithInfochips.infochips.isEmpty) {
       var infochips = new SpanElement();
       infochips.classes.add("choice-infochips");
       for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
         var chip = new SpanElement();
-        chip.text = mdown.markdownToHtml(choiceWithInfochips.infochips[j], 
+        chip.text = mdown.markdownToHtml(choiceWithInfochips.infochips[j],
             inlineOnly: true);
         chip.classes.add("choice-infochip");
         infochips.append(chip);
       }
       choiceDisplay.append(infochips);
     }
-    
+
     var text = new SpanElement();
-    text.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, 
-        inlineOnly: true);
+    text.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly:
+        true);
     text.classes.add("choice-text");
     choiceDisplay.append(text);
-    
+
     var subscription = btn.onClick.listen((MouseEvent event) =>
-        _choiceClickListener(event, completer, choice, btn, choicesDiv, 
-            clickSubscriptions)
-    );
+        _choiceClickListener(event, completer, choice, btn, choicesDiv,
+        clickSubscriptions));
     clickSubscriptions.add(subscription);
-    
+
     btn.append(number);
     btn.append(choiceDisplay);
     return btn;
   }
 
-  void _choiceClickListener(MouseEvent event, Completer completer, 
-                            EgbChoice choice, ButtonElement btn, 
-                            DivElement choicesDiv,
-                            Set<StreamSubscription> clickSubscriptions) {
+  void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
+      choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
+      clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
-    new Future.delayed(const Duration(milliseconds: 100), 
-        () => completer.complete(choice.hash));
+    new Future.delayed(const Duration(milliseconds: 100), () =>
+        completer.complete(choice.hash));
     _showLoading(true);
     // Mark this element as chosen.
     btn.classes.add("chosen");
     choicesDiv.classes.add("chosen");
     // Unregister listeners.
-    choicesDiv.querySelectorAll("button").forEach(
-        (ButtonElement b) => b.disabled = true);
+    choicesDiv.querySelectorAll("button").forEach((ButtonElement b) =>
+        b.disabled = true);
     clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
     clickSubscriptions.clear();
     // Show bookmark.
     if (_savegameToBe != null) {
       choicesDiv.classes.add("bookmark");
       String savegameUid = _savegameToBe.uid;
-      choicesDiv.onClick.listen((_) => 
-          _handleSavegameBookmarkClick(savegameUid));
+      choicesDiv.onClick.listen((_) => _handleSavegameBookmarkClick(savegameUid)
+          );
       _savegameToBe = null;
     }
     event.stopPropagation();
   }
-  
+
   int _currentPoints;
   Future<bool> awardPoints(PointsAward award) {
     _currentPoints = award.result;
@@ -396,7 +392,7 @@ class HtmlInterface extends EgbInterfaceBase {
       return new Future.value(true);
     }
     var completer = new Completer();
-    
+
     ParagraphElement p = new ParagraphElement();
     p.text = "$award";
     p.classes.addAll(["toast", "non-dimmed", "hidden"]);
@@ -420,13 +416,13 @@ class HtmlInterface extends EgbInterfaceBase {
     });
     return completer.future;
   }
-  
+
   List<UIStat> _statsList;
-  final Map<String,Element> _statsElementMap = new Map();
-  
+  final Map<String, Element> _statsElementMap = new Map();
+
   Future<bool> setStats(List<UIStat> stats) {
     _statsList = stats;
-    _printStats();  // DEBUG
+    _printStats(); // DEBUG
     var statsDiv = document.querySelector("nav div#stats");
     statsDiv.children.clear();
     for (int i = 0; i < stats.length; i++) {
@@ -442,111 +438,103 @@ class HtmlInterface extends EgbInterfaceBase {
       a.onClick.listen(_statsOnClickListener);
     }
   }
-  
+
   Future<bool> updateStats(StatUpdateCollection updates) {
-    UIStat.updateStatsList(_statsList, updates)
-      // Returns only the changed stats.
-      .forEach((UIStat current) {
-        var a = _statsElementMap[current.name];
-        a.children.single.text = current.string;
-        if (current.show) {
-          a.classes.remove("display-none");
-        } else {
-          a.classes.add("display-none");
-        }
+    UIStat.updateStatsList(_statsList, updates
+        )// Returns only the changed stats.
+    .forEach((UIStat current) {
+      var a = _statsElementMap[current.name];
+      a.children.single.text = current.string;
+      if (current.show) {
+        a.classes.remove("display-none");
+      } else {
+        a.classes.add("display-none");
+      }
     });
   }
-  
+
   void _printStats() {
     print("Stats:");
     _statsList.where((stat) => stat.show == true).forEach((stat) {
       print("- $stat");
     });
   }
-  
+
   /// Blinks the [el] element via CSS transitions.
   void _blink(Element el) {
     el.classes.add("blink");
-    new Future.delayed(new Duration(milliseconds: 1000), 
-        () => el.classes.remove("blink"));
+    new Future.delayed(new Duration(milliseconds: 1000), () =>
+        el.classes.remove("blink"));
   }
-  
+
   /**
    * What happens when user clicks on a savegame bookmark.
    */
   void _handleSavegameBookmarkClick(String savegameUid) {
-    // TODO: make more elegant, with confirmation appearing on page, 
+    // TODO: make more elegant, with confirmation appearing on page,
     //       and non-blocking
     var confirm = window.confirm("Are you sure you want to come back to "
-            "this decision ($savegameUid) and lose your progress since?");
+        "this decision ($savegameUid) and lose your progress since?");
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      playerProfile.load(savegameUid)
-      .then((EgbSavegame savegame) {
-          if (savegame == null) {
-            // no savegames for this egamebook savegame uid
-            reportError("Bad gamesave", "That savegame is missing.");
-            // TODO: provide solutions, feedback, etc.
-          } else {
-            showText(savegame.textHistory)
-            .then((_) {
-              scripterProxy.load(savegame);
-            });
-          }
-       });
+      playerProfile.load(savegameUid).then((EgbSavegame savegame) {
+        if (savegame == null) {
+          // no savegames for this egamebook savegame uid
+          reportError("Bad gamesave", "That savegame is missing.");
+          // TODO: provide solutions, feedback, etc.
+        } else {
+          showText(savegame.textHistory).then((_) {
+            scripterProxy.load(savegame);
+          });
+        }
+      });
     }
   }
-  
-//  DivElement bookmarkDiv;
-  
+
+  //  DivElement bookmarkDiv;
+
   /**
    * Stored savegame which wait for the next choiceList to be appended to it.
    */
   EgbSavegame _savegameToBe;
-  
+
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     assert(_savegameToBe == null);
     _savegameToBe = savegame;
     return new Future.value(true);
-    
-//    bookmarkDiv = new DivElement();
-//    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
-//    bookmarkDiv.classes.add("bookmark-div");
-//    var bookmarkAnchor = new AnchorElement();
-//    var bookmarkImg = new ImageElement(src: "img/bookmark.png", 
-//        width: 30, height: 60);
-//    bookmarkAnchor.append(bookmarkImg);
-//    bookmarkAnchor.onClick.listen((_) {
-//      _handleSavegameBookmarkClick(savegame.uid);
-//    });
-//    bookmarkDiv.append(bookmarkAnchor);
+
+    //    bookmarkDiv = new DivElement();
+    //    bookmarkDiv.id = "bookmark-uid-${savegame.uid}";
+    //    bookmarkDiv.classes.add("bookmark-div");
+    //    var bookmarkAnchor = new AnchorElement();
+    //    var bookmarkImg = new ImageElement(src: "img/bookmark.png",
+    //        width: 30, height: 60);
+    //    bookmarkAnchor.append(bookmarkImg);
+    //    bookmarkAnchor.onClick.listen((_) {
+    //      _handleSavegameBookmarkClick(savegame.uid);
+    //    });
+    //    bookmarkDiv.append(bookmarkAnchor);
   }
-  
+
   /**
    * Shows a dialog.
    */
   Future<bool> showDialog(Dialog dialog) {
     var completer = new Completer<bool>();
-    
-    DivElement dialogEl = new DivElement()
-      ..classes.add("dialog");
+
+    DivElement dialogEl = new DivElement()..classes.add("dialog");
     DivElement wrapper = new DivElement();
-    HeadingElement titleEl = new HeadingElement.h3()
-      ..text = dialog.title;
+    HeadingElement titleEl = new HeadingElement.h3()..text = dialog.title;
     wrapper.children.add(titleEl);
-    DivElement contentEl = new DivElement()
-      ..classes.add("dialog-content");
+    DivElement contentEl = new DivElement()..classes.add("dialog-content");
     wrapper.children.add(contentEl);
-    DivElement textEl = new DivElement()
-      ..innerHtml = dialog.html;
+    DivElement textEl = new DivElement()..innerHtml = dialog.html;
     contentEl.children.add(textEl);
-    DivElement buttonsDivEl = new DivElement()
-      ..classes.add("dialog-buttons");
+    DivElement buttonsDivEl = new DivElement()..classes.add("dialog-buttons");
     for (DialogButton button in dialog.buttons) {
-      ButtonElement buttonEl = new ButtonElement()
-        ..text = button.label;
+      ButtonElement buttonEl = new ButtonElement()..text = button.label;
       buttonEl.onClick.listen((_) {
         bool shouldClose = button.behaviour();
         if (shouldClose) {
@@ -561,7 +549,7 @@ class HtmlInterface extends EgbInterfaceBase {
     document.body.children.add(dialogEl);
     return completer.future;
   }
-  
+
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
@@ -569,8 +557,7 @@ class HtmlInterface extends EgbInterfaceBase {
     for (int i = 0; i < _statsList.length; i++) {
       UIStat s = _statsList[i];
       if (s.show) {
-        html.writeln("<tr><td>${s.name}:</td>"
-                     "<td>${s.string}</td></tr>");
+        html.writeln("<tr><td>${s.name}:</td>" "<td>${s.string}</td></tr>");
       }
     }
     html.writeln("</table>");
@@ -616,49 +603,50 @@ class HtmlInterface extends EgbInterfaceBase {
   }
 }
 
-Map<String,UiElementBuilder> ELEMENT_BUILDERS = {
+Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
   BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
   BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
-  BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e)
+  BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e),
+  BaseMultipleChoiceInput.elementClass: (FormElement e) =>
+      new HtmlMultipleChoiceInput(e),
+  BaseOption.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
 class HtmlForm implements UiElement {
   static const String DEFAULT_SUBMIT_TEXT = ">>";
-  
+
   FormProxy blueprint;
   DivElement uiRepresentation;
   DivElement _childrenContainer;
   ButtonElement submitButton;
-  
+
   HtmlForm(this.blueprint) {
-    uiRepresentation = new DivElement()
-      ..classes.add("form");
-    
+    uiRepresentation = new DivElement()..classes.add("form");
+
     // TODO: Add 'header' to the form?
-    
+
     _childrenContainer = new DivElement();
     uiRepresentation.append(_childrenContainer);
-    
-     String submitText = blueprint.submitText;
-     if (submitText == null) {
-       submitText = DEFAULT_SUBMIT_TEXT;
-     }
-     
-     submitButton = new ButtonElement()
-     ..classes.add("submit")
-     ..text = submitText;
-     
-     StreamSubscription subscription;
-     subscription = submitButton.onClick
-         .listen((ev) {
-       _onInputController.add(ev);
-       subscription.cancel();
-     });
-     uiRepresentation.append(submitButton);
+
+    String submitText = blueprint.submitText;
+    if (submitText == null) {
+      submitText = DEFAULT_SUBMIT_TEXT;
+    }
+
+    submitButton = new ButtonElement()
+        ..classes.add("submit")
+        ..text = submitText;
+
+    StreamSubscription subscription;
+    subscription = submitButton.onClick.listen((ev) {
+      _onChangeController.add(ev);
+      subscription.cancel();
+    });
+    uiRepresentation.append(submitButton);
   }
-  
+
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenContainer.append(childUiRepresentation);
@@ -674,9 +662,9 @@ class HtmlForm implements UiElement {
     submitButton.disabled = value;
   }
 
-  StreamController _onInputController = new StreamController();
+  StreamController _onChangeController = new StreamController();
   @override
-  Stream get onInput => _onInputController.stream;
+  Stream get onChange => _onChangeController.stream;
 
   @override
   void update() {
@@ -697,52 +685,54 @@ class HtmlForm implements UiElement {
 }
 
 class HtmlFormSection implements UiElement {
-  
+
   FormSection blueprint;
   DivElement uiRepresentation;
   Element _header;
   /// The element which opens or closes the FormSection contents when clicked.
   Element _openCloseElement;
   DivElement _childrenElement;
-  
+
   bool open = false;
-  
+
   HtmlFormSection(this.blueprint) {
     uiRepresentation = new DivElement()
-      ..classes.add("form-section")
-      ..id = blueprint.id;
-    
+        ..classes.add("form-section")
+        ..id = blueprint.id;
+
     DivElement titleWrapper = new DivElement()
-      ..classes.add("form-section-title-wrapper")
-      ..onClick.listen((_) {
-        open = !open;
-        if (open) {
-          _childrenElement.classes.remove("closed");
-        } else {
-          _childrenElement.classes.add("closed");
-        }
-    });
-    
+        ..classes.add("form-section-title-wrapper")
+        ..onClick.listen((_) {
+          open = !open;
+          if (open) {
+            _childrenElement.classes.remove("closed");
+            _openCloseElement.text = "<";
+          } else {
+            _childrenElement.classes.add("closed");
+            _openCloseElement.text = "V";
+          }
+        });
+
     _openCloseElement = new DivElement()
-      ..classes.add("form-section-open-close")
-      ..text = "V";
+        ..classes.add("form-section-open-close")
+        ..text = "V";
     titleWrapper.append(_openCloseElement);
-    
+
     _header = new HeadingElement.h1()
-      ..classes.add("form-section-title")
-      ..text = blueprint.name;
+        ..classes.add("form-section-title")
+        ..text = blueprint.name;
     titleWrapper.append(_header);
-    
+
     uiRepresentation.append(titleWrapper);
-    
+
     update();
-    
+
     _childrenElement = new DivElement()
-      ..classes.add("form-section-children")
-      ..classes.add("closed");
+        ..classes.add("form-section-children")
+        ..classes.add("closed");
     uiRepresentation.append(_childrenElement);
   }
-  
+
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenElement.append(childUiRepresentation);
@@ -755,7 +745,7 @@ class HtmlFormSection implements UiElement {
   bool disabled = false;
 
   @override
-  Stream get onInput => null;
+  Stream get onChange => null;
 
   @override
   void update() {
@@ -772,31 +762,29 @@ abstract class HtmlRangeBase implements UiElement {
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
   ParagraphElement _currentValueElement;
-  
+
   HtmlRangeBase(this.blueprint, String divClass) {
     uiRepresentation = new DivElement()
-      ..classes.add(divClass)
-      ..id = blueprint.id;
-    
+        ..classes.add(divClass)
+        ..id = blueprint.id;
+
     LabelElement label = new LabelElement()
-    ..htmlFor = blueprint.id
-    ..innerHtml = blueprint.name;
+        ..htmlFor = blueprint.id
+        ..innerHtml = blueprint.name;
     uiRepresentation.append(label);
-    
-    DivElement buttonsAndValue = new DivElement()
-    ..classes.add("buttons-and-value");
+
+    DivElement buttonsAndValue = new DivElement()..classes.add(
+        "buttons-and-value");
     uiRepresentation.append(buttonsAndValue);
-    
-    _radioButtonsDiv = new DivElement()
-    ..classes.add("buttons");
+
+    _radioButtonsDiv = new DivElement()..classes.add("buttons");
     buttonsAndValue.append(_radioButtonsDiv);
-    
-    _currentValueElement = new ParagraphElement()
-    ..classes.add("current-value");
+
+    _currentValueElement = new ParagraphElement()..classes.add("current-value");
     buttonsAndValue.append(_currentValueElement);
-    
+
     update();
-    
+
     _childrenElement = new DivElement();
     uiRepresentation.append(_childrenElement);
   }
@@ -825,9 +813,9 @@ abstract class HtmlRangeBase implements UiElement {
     update();
   }
 
-  StreamController _onInputController = new StreamController();
+  StreamController _onChangeController = new StreamController();
   @override
-  Stream get onInput => _onInputController.stream;
+  Stream get onChange => _onChangeController.stream;
 
   int _current;
   @override
@@ -837,9 +825,9 @@ abstract class HtmlRangeBase implements UiElement {
   void update() {
     _current = blueprint.current;
     _radioButtonsDiv.children.clear();
-    _createRadioButtons();
-    _currentValueElement.text = (blueprint as StringRepresentationHolder)
-        .currentStringRepresentation;
+    _createRadioButtons(); // TODO: update instead of re-creating from scratch
+    _currentValueElement.text = (blueprint as
+        StringRepresentationHolder).currentStringRepresentation;
   }
 
   bool _waitingForUpdate = false;
@@ -859,34 +847,34 @@ class HtmlRangeOuput extends HtmlRangeBase {
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
-    ..name = blueprint.id
-    ..checked = i == blueprint.current
-    ..value = "$i"
-    ..disabled = true;
+        ..name = blueprint.id
+        ..checked = i == blueprint.current
+        ..value = "$i"
+        ..disabled = true;
     return radioButton;
   }
-  
+
   @override
-  Stream get onInput => null;
+  Stream get onChange => null;
 }
 
 class HtmlRangeInput extends HtmlRangeBase {
   HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint, "range-input");
-  
+
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
-    ..name = blueprint.id
-    ..checked = i == blueprint.current
-    ..value = "$i"
-    ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
-    || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
-    disabled || waitingForUpdate;
+        ..name = blueprint.id
+        ..checked = i == blueprint.current
+        ..value = "$i"
+        ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
+            || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) || disabled ||
+            waitingForUpdate;
     if (!radioButton.disabled) {
       StreamSubscription subscription;
       subscription = radioButton.onClick.listen((ev) {
         _current = i;
-        _onInputController.add(ev);
+        _onChangeController.add(ev);
       });
     }
     return radioButton;
@@ -894,22 +882,21 @@ class HtmlRangeInput extends HtmlRangeBase {
 }
 
 class HtmlTextOuput implements UiElement {
-  
   BaseText blueprint;
   DivElement uiRepresentation;
   DivElement _childrenElement;
-  
+
   HtmlTextOuput(this.blueprint) {
     uiRepresentation = new DivElement()
-      ..classes.add("text-output")
-      ..id = blueprint.id;
-    
+        ..classes.add("text-output")
+        ..id = blueprint.id;
+
     update();
-    
+
     _childrenElement = new DivElement();
     uiRepresentation.append(_childrenElement);
   }
-  
+
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenElement.append(childUiRepresentation);
@@ -922,7 +909,7 @@ class HtmlTextOuput implements UiElement {
   bool disabled = false;
 
   @override
-  Stream get onInput => null;
+  Stream get onChange => null;
 
   @override
   void update() {
@@ -933,10 +920,119 @@ class HtmlTextOuput implements UiElement {
   bool waitingForUpdate = false;
 }
 
+class HtmlMultipleChoiceInput implements UiElement {
+
+  BaseMultipleChoiceInput blueprint;
+  DivElement uiRepresentation;
+  LabelElement _labelElement;
+  SelectElement _childrenElement;
+
+  HtmlMultipleChoiceInput(this.blueprint) {
+    uiRepresentation = new DivElement()
+        ..classes.add("multiple-choice-input")
+        ..id = blueprint.id;
+
+    _labelElement = new LabelElement()..text = blueprint.name;
+
+    update();
+
+    _childrenElement = new SelectElement();
+    
+    // XXX: START HERE - attach onChange to ^^^, send to children
+    
+    uiRepresentation.append(_childrenElement);
+  }
+
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  // TODO: implement current
+  @override
+  Object get current => null;
+
+  bool _disabled = false;
+  @override
+  bool get disabled => _disabled;
+
+  @override
+  set disabled(bool value) {
+    _childrenElement.disabled = value;
+    _disabled = value;
+  }
+
+  // TODO: implement onInput
+  @override
+  Stream get onChange => null;
+
+  @override
+  void update() {
+    // TODO: implement update
+  }
+
+  @override
+  void set waitingForUpdate(bool _waitingForUpdate) {
+    // TODO: implement waitingForUpdate
+  }
+
+  // TODO: implement waitingForUpdate
+  @override
+  bool get waitingForUpdate => null;
+}
+
+class HtmlOption implements UiElement {
+
+  BaseOption blueprint;
+  OptionElement uiRepresentation;
+
+  HtmlOption(this.blueprint) {
+    uiRepresentation = new OptionElement(value: blueprint.id, selected:
+        blueprint.selected)
+        ..text = blueprint.text;
+  }
+
+  @override
+  void appendChild(Object childUiRepresentation) {
+    throw "Not implemented: adding children to Option";
+  }
+
+  // TODO: implement current
+  @override
+  Object get current => null;
+
+  // TODO: implement disabled
+  @override
+  bool get disabled => null;
+
+  @override
+  set disabled(bool value) {
+    // TODO: implement disabled
+  }
+
+  // TODO: implement onInput
+  @override
+  Stream get onChange => null;
+
+  @override
+  void update() {
+    // TODO: implement update
+  }
+
+  @override
+  void set waitingForUpdate(bool _waitingForUpdate) {
+    // TODO: implement waitingForUpdate
+  }
+
+  // TODO: implement waitingForUpdate
+  @override
+  bool get waitingForUpdate => null;
+}
+
 class Submenu {
   final String name;
   final List<EgbChoice> choices = new List<EgbChoice>();
-  
+
   Submenu(this.name);
 }
 
@@ -944,13 +1040,14 @@ class Dialog {
   String title;
   String html;
   List<DialogButton> buttons;
-  
-  Dialog(this.title, this.html, [this.buttons = const [const DialogButton.JustClose("Close")]]);
+
+  Dialog(this.title, this.html, [this.buttons = const
+      [const DialogButton.JustClose("Close")]]);
 }
 
 class DialogButton {
   final String label;
-  
+
   final ClickBehaviour _behaviour;
   static final ClickBehaviour NO_BEHAVIOUR = () => true;
   ClickBehaviour get behaviour {
@@ -961,7 +1058,7 @@ class DialogButton {
     }
   }
   const DialogButton(this.label, this._behaviour);
-  const DialogButton.JustClose(this.label) : _behaviour = null; 
+  const DialogButton.JustClose(this.label) : _behaviour = null;
 }
 
 /// Returns true if dialog can be closed.
@@ -974,13 +1071,13 @@ typedef bool ClickBehaviour();
  */
 class PointsAwardElement extends PointsAward implements EgbMetaElement {
   final Element element;
-  PointsAwardElement(this.element, int addition, int result, 
-      [String justification]) : super(addition, result, justification);
-  
+  PointsAwardElement(this.element, int addition, int result, [String
+      justification]) : super(addition, result, justification);
+
   PointsAwardElement.fromPointsAward(PointsAward pointsAward, this.element)
-      : super(pointsAward.addition, pointsAward.result, 
+      : super(pointsAward.addition, pointsAward.result,
           pointsAward.justification);
-  
+
   Action action;
   void doAction() {
     if (action != null && action is Action) {
@@ -998,7 +1095,7 @@ abstract class EgbMetaElement {
   Action action;
   void doAction();
   bool done;
-  
+
   EgbMetaElement(this.element);
 }
 
@@ -1017,20 +1114,19 @@ class LocalStorage implements EgbStorage {
     window.localStorage[key] = value;
     return new Future.value(true);
   }
-  
+
   Future<String> load(String key) {
     var result = window.localStorage[key];
     return new Future.value(result);
   }
-  
+
   Future<bool> delete(String key) {
     window.localStorage.remove(key);
     return new Future.value(true);
   }
-  
+
   EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
-        this);
+    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, this);
   }
 }
 
@@ -1038,17 +1134,18 @@ class LocalStorage implements EgbStorage {
 /// This just forces [mdown] not to escape HTML of a <sup> tag.
 class FootnoteSupTagSyntax extends mdown.TagSyntax {
   String title;
-  
+
   FootnoteSupTagSyntax()
-    : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', 
-        tag: 'sup');
-  
+      : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', tag:
+          'sup');
+
   bool onMatch(mdown.InlineParser parser, Match match) {
     title = match.group(1);
     return super.onMatch(parser, match);
   }
-  
-  bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state) {
+
+  bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state)
+      {
     mdown.Element element = new mdown.Element(tag, state.children);
     element.attributes["class"] = "footnote";
     element.attributes["title"] = title;

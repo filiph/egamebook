@@ -273,5 +273,13 @@ void main() {
       ageButton.click();
     });
 
+    test("creates MultipleChoice", () {
+      MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
+      Option a = new Option("Zvolit A", null, selected: true);
+      Option b = new Option("Zvolit B", null);
+      moveChoice.children.addAll([a, b]);
+          
+      form.append(moveChoice);
+    });
   });
 }

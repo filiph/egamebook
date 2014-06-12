@@ -29,6 +29,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   
   bool get isAlive => hp.value > 0;
   
+  /// List of actions (one per turn) that the player can take with this 
+  /// [ShipSystem].
   List<CombatMove> availableMoves = [];
   CombatMove currentMove;
   
@@ -72,6 +74,12 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     }
   }
   
+  /// Create the [Form] section in which the player can refine setup for the
+  /// particular [ShipSystem]. For example, player can setup the engine to
+  /// redistribute energy in a non-default way, or they can setup a weapon
+  /// to target another ship.
+  /// 
+  /// Returns [:null:] when no section is required for the system.
   FormSection createSetupSection() {
     FormSection section = new FormSection(name);
     TextOutput text = new TextOutput();
@@ -145,6 +153,9 @@ class Thruster extends ShipSystem {
   /// chance to hit.
   int maxManeuverability;
   int get maneuverability => (hp.percentage * maxManeuverability).toInt();
+  
+  @override
+  FormSection createSetupSection() => null;  // Thrusters are not setup-able.
 }
 
 class Hull extends ShipSystem {
@@ -153,6 +164,9 @@ class Hull extends ShipSystem {
   }
   
   bool isOutsideHull = true;
+  
+  @override
+  FormSection createSetupSection() => null;  // Hull is not setup-able.
 }
 
 class Shield extends ShipSystem {

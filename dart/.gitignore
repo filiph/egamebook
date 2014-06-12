@@ -22,3 +22,6 @@ packages
 */packages/*
 */*/packages
 */*/packages/*
+**/*.tmLanguage.cache
+**/*.tmPreferences.cache
+

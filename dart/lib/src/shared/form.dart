@@ -81,6 +81,22 @@ library egb_form;
  * 
  *     showForm(form);
  *   
+ * 
+ * ## A bit about the classes.
+ * 
+ * All form elements have a base class (e.g. [BaseRangeInput]) which 
+ * has the methods and contructors shared by both [EgbScripter] and
+ * [EgbInterface]. 
+ * 
+ * On the [EgbScripter] side, we have [RangeInput], for example,
+ * which is the class used by the author. These classes can have closures
+ * attached to them. These elements also automatically receive unique 
+ * [FormElement.id] when they're attached to a [Form].
+ * 
+ * On the [EgbInterface] side, we have [InterfaceRangeInput], a "blueprint"
+ * that can't have closures (no way to transport closure from [EgbScripter]
+ * to [EgbInterface]) and whose [FormElement.id] is copied from [EgbScripter].
+ * From these blueprints, the interface creates and updates [UiElement]. 
  */
 
 import "package:html5lib/dom.dart" as html5lib;
@@ -240,8 +256,8 @@ class Form extends FormBase with _NewValueCallback {
               "StringRepresentationCreator when it doesn't have a current "
               "value. (Element: $element)");
         }
-        map["__string__"] = (element as StringRepresentationCreator)
-            .stringifyFunction(elementCurrent);
+        map["__string__"] = (element as
+            StringRepresentationCreator).stringifyFunction(elementCurrent);
       }
       values.add((element as FormElement).id, map);
     }
@@ -305,7 +321,7 @@ class CurrentState {
 class FormSection extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
-  
+
   static const String elementClass = "FormSection";
   FormSection(String name) : super(elementClass) {
     this.name = name;
@@ -496,7 +512,7 @@ class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
 
 class BaseText extends FormElement implements UpdatableByMap {
   BaseText(String elementClass) : super(elementClass);
-  
+
   String html;
 
   @override
@@ -513,7 +529,7 @@ class BaseText extends FormElement implements UpdatableByMap {
 class BaseTextOutput extends BaseText with Output<String> {
   static const String elementClass = "TextOutput";
   BaseTextOutput() : super(elementClass);
-  
+
   @override
   String get current => html;
   @override
@@ -523,9 +539,88 @@ class BaseTextOutput extends BaseText with Output<String> {
 }
 
 class TextOutput extends BaseTextOutput {
-  
+  // No need to implement anything. This is here in case we need to attach
+  // closures to the scripter-facing representation.
 }
 
-class OptionInput {
-  // TODO
+class BaseMultipleChoiceInput extends FormElement {
+  //    with UpdatableByMap
+  String get name => attributes["name"];
+  set name(String value) => attributes["name"] = value;
+
+  //  List<BaseOption> options = new List<BaseOption>();
+  //  void add(BaseOption option) => options.add(option);
+  //  void addAll(Iterable<BaseOption> options) => this.options.addAll(options);
+
+  static const String elementClass = "MultipleChoiceInput";
+  BaseMultipleChoiceInput(String name) : super(elementClass) {
+    this.name = name;
+  }
+
+  //  @override
+  //  Map<String, Object> toMap() => {
+  //    "name": name,
+  //    "helpMessage": helpMessage
+  //    "options": options.map((BaseOption option) => option.toMap())
+  //  };
+  //
+  //  @override
+  //  void updateFromMap(Map<String, Object> map) {
+  //    name = map["name"];
+  //    helpMessage = map["helpMessage"];
+  //    List<Map> optionMaps = map["options"];
+  //    options.forEach((BaseOption option) {
+  //      Map optionMap = optionMaps.singleWhere((Map m) =>
+  //          m["name"] == option.name);
+  //      option.updateFromMap(optionMap);
+  //    });
+  //  }
+}
+
+class MultipleChoiceInput extends BaseMultipleChoiceInput with
+    _NewValueCallback<int> {
+  MultipleChoiceInput(String name, InputCallback onInput) : super(name) {
+    this.onInput = onInput;
+  }
+}
+
+class BaseOption extends FormElement implements UpdatableByMap {
+  String get text => attributes["text"];
+  set text(String value) => attributes["text"] = value;
+  bool get selected => attributes["selected"] == "true";
+  set selected(bool value) => attributes["selected"] = value == true ? "true" : null;
+
+  static const String elementClass = "Option";
+  BaseOption(String text, {bool selected, String helpMessage}) :
+      super(elementClass) {
+    this.text = text;
+    this.selected = selected;
+    this.helpMessage = helpMessage;
+  }
+  
+  // This exists because of https://code.google.com/p/dart/issues/detail?id=15101
+  BaseOption.noOptional(String text, bool selected, String helpMessage) : 
+    this(text, selected: selected, helpMessage: helpMessage);
+
+  @override
+  Map<String, Object> toMap() => {
+    "text": text,
+    "selected": selected,
+    "helpMessage": helpMessage
+  };
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    text = map["text"];
+    selected = map["selected"];
+    helpMessage = map["helpMessage"];
+  }
+}
+
+class Option extends BaseOption with _NewValueCallback<bool> {
+  Option(String text, InputCallback onChoose, {bool
+      selected, String helpMessage}) : super.noOptional(text, selected,
+      helpMessage) {
+    this.onInput = onChoose;
+  }
 }

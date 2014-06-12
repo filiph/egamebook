@@ -102,7 +102,10 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   List<FormSection> getSystemSetupSections() {
     List<FormSection> sections = <FormSection>[];
     allSystems.forEach((system) {
-      sections.add(system.createSetupSection());
+      FormSection section = system.createSetupSection();
+      if (section != null) {
+        sections.add(section);
+      }
     });
     return sections;
   }
