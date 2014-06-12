@@ -109,6 +109,7 @@ EgbChoice choice(String string, {String goto, ScriptBlock script, String
 }
 
 Form _currentForm;
+Form get currentForm => _currentForm;
 /**
  * Show the [form].
  */

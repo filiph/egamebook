@@ -617,10 +617,11 @@ class HtmlInterface extends EgbInterfaceBase {
 }
 
 Map<String,UiElementBuilder> ELEMENT_BUILDERS = {
-  "Form": (FormElement e) => new HtmlForm(e),
-  "RangeInput": (FormElement e) => new HtmlRangeInput(e),
-  "RangeOutput": (FormElement e) => new HtmlRangeOuput(e),
-  "TextOutput": (FormElement e) => new HtmlTextOuput(e)
+  FormBase.elementClass: (FormElement e) => new HtmlForm(e),
+  FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
+  BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
+  BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
+  BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e)
 };
 
 class HtmlForm implements UiElement {
@@ -693,6 +694,76 @@ class HtmlForm implements UiElement {
 
   @override
   Object get current => null;
+}
+
+class HtmlFormSection implements UiElement {
+  
+  FormSection blueprint;
+  DivElement uiRepresentation;
+  Element _header;
+  /// The element which opens or closes the FormSection contents when clicked.
+  Element _openCloseElement;
+  DivElement _childrenElement;
+  
+  bool open = false;
+  
+  HtmlFormSection(this.blueprint) {
+    uiRepresentation = new DivElement()
+      ..classes.add("form-section")
+      ..id = blueprint.id;
+    
+    DivElement titleWrapper = new DivElement()
+      ..classes.add("form-section-title-wrapper")
+      ..onClick.listen((_) {
+        open = !open;
+        if (open) {
+          _childrenElement.classes.remove("closed");
+        } else {
+          _childrenElement.classes.add("closed");
+        }
+    });
+    
+    _openCloseElement = new DivElement()
+      ..classes.add("form-section-open-close")
+      ..text = "V";
+    titleWrapper.append(_openCloseElement);
+    
+    _header = new HeadingElement.h1()
+      ..classes.add("form-section-title")
+      ..text = blueprint.name;
+    titleWrapper.append(_header);
+    
+    uiRepresentation.append(titleWrapper);
+    
+    update();
+    
+    _childrenElement = new DivElement()
+      ..classes.add("form-section-children")
+      ..classes.add("closed");
+    uiRepresentation.append(_childrenElement);
+  }
+  
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  @override
+  Object get current => _header.text;
+
+  @override
+  bool disabled = false;
+
+  @override
+  Stream get onInput => null;
+
+  @override
+  void update() {
+    _header.text = blueprint.name;
+  }
+
+  @override
+  bool waitingForUpdate = false;
 }
 
 abstract class HtmlRangeBase implements UiElement {

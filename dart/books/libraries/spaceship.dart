@@ -97,6 +97,16 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     return moves;
   }
   
+  /// Returns a list of [FormSection] elements, one for each [ShipSystem] that
+  /// can be interacted with during combat.
+  List<FormSection> getSystemSetupSections() {
+    List<FormSection> sections = <FormSection>[];
+    allSystems.forEach((system) {
+      sections.add(system.createSetupSection());
+    });
+    return sections;
+  }
+  
   /*
    * TODO: saveable only primitives, rest should be remembered by Combat
    */

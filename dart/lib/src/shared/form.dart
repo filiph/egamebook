@@ -303,8 +303,13 @@ class CurrentState {
 }
 
 class FormSection extends FormElement {
-  final String name;
-  FormSection(this.name) : super("FormSection");
+  String get name => attributes["name"];
+  set name(String value) => attributes["name"] = value;
+  
+  static const String elementClass = "FormSection";
+  FormSection(String name) : super(elementClass) {
+    this.name = name;
+  }
 }
 
 class _NewValueCallback<T> {

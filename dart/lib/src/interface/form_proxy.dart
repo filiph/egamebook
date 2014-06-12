@@ -10,7 +10,6 @@ import 'dart:async';
  * [EgbInterface] is then responsible for creating the actual form (for example,
  * by adding DOM elements to page) and listening to user input.
  */
-
 class FormProxy extends FormBase {
   FormProxy.fromMap(Map<String,Object> map) {
     assert((map["jsonml"] as List)[0] == "Form");
@@ -146,6 +145,10 @@ abstract class UiElement {
 /// objects and returns 
 Map<String,CustomTagHandler> customTagHandlers = {
   FormBase.elementClass: (_) => new InterfaceForm(),
+  FormSection.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceFormSection(attributes["name"], attributes["id"]);
+  },
   BaseRangeInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceRangeInput(attributes["name"], attributes["id"]);
@@ -169,10 +172,19 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
 class InterfaceForm extends FormBase {
 }
 
+class InterfaceFormSection extends FormSection {
+  InterfaceFormSection(String name, String id) : super(name) {
+    this.id = id;
+  }
+}
+
 class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder {
   InterfaceRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
+  /// The string representation. This is computed on the [EgbScripter] side
+  /// and can be, for example, something like "90%" for [:0.9:] (percentage) or 
+  /// "intelligent" for [:120:] (IQ).
   String currentStringRepresentation;
   
   @override

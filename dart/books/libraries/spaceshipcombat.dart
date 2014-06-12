@@ -2,10 +2,11 @@ library shipfight;
 
 import 'loopedevent.dart';
 import 'spaceship.dart';
+import 'timeline.dart';
 
 
 class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
-  SpaceshipCombat({List<Spaceship> ships: const [], timeline}) 
+  SpaceshipCombat({List<Spaceship> ships: const [], Timeline timeline}) 
       : super(actors: ships, timeline: timeline) {
     // Find the ship under player's control.
     ships.forEach((ship) {
@@ -14,13 +15,12 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   }
   
   Spaceship playerSpaceship;
-  int timeToNextInteraction = 0;
   
   void update() {
     timeline.time++;
-    for (Spaceship ship in actors) { //actors.forEach((Spaceship ship) {
-      ship.update();  // this trickles down to ship components and CombatMoves
-                      // and pilots
+    for (Spaceship ship in actors) {
+      // this trickles down to ship components and CombatMoves and pilots
+      ship.update();
     }
     
     // make sure the fight still needs to continue

@@ -4,6 +4,7 @@
 	http://10.0.0.103:3030/Users/filiph/Programs/egamebook/dart/books/bodega/egamebook.css
 	http://127.0.0.1:3030/dart/books/bodega/egamebook.css
 	http://127.0.0.1:8081/bodega/egamebook.css
+	http://127.0.0.1:8080/samaya/egamebook.css
 */
 
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
@@ -489,6 +490,35 @@ div.form div.buttons-and-value > p.current-value {
 	display: inline-block;
 	margin: 0;
 }*/
+
+.form-section {
+  clear: both;
+}
+
+.form-section .form-section-title-wrapper {
+  background: #ddd;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.form-section .form-section-title {
+  font-size: 100%;
+}
+
+.form-section .form-section-open-close {
+  float: right;
+}
+
+.form-section .form-section-children.closed {
+  display: none;
+}
+
+.form-section .form-section-children {
+  margin: 1em 1em 2em;
+}
+
+
+
 
 div.form .submit {
 	margin-top:  2em;

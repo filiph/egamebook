@@ -1,5 +1,7 @@
 //import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/src/shared/form.dart';
+
 import 'spaceship.dart';
 import 'spaceshipcombat.dart';
 import 'storyline.dart';
@@ -27,7 +29,8 @@ void main() {
             new Weapon("Front Utility Laser")
           ]
   );
-  ship1.hull.hp.onPassDownwards(50).take(1).listen((_) => ship1.report("<subject's> hull has taken some major damage"));
+//  ship1.hull.hp.onPassDownwards(50).take(1).listen((_) => 
+//      ship1.report("<subject's> hull has taken some major damage"));
   
   var ship2 = new Spaceship(
         "Messenger",
@@ -64,7 +67,7 @@ void main() {
   // combatloop
   combat.run();
   
-  choices.forEach((ch) => print(ch));
+  print(currentForm.toMap());
   
   // - [combatloop]
   

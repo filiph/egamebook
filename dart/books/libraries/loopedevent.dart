@@ -40,7 +40,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       return;
     }
       
-    while (!finished && choices.isEmpty) {
+    while (!finished && choices.isEmpty && currentForm == null) {
       update();
     }
     echo(storyline.toString());

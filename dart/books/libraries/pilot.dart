@@ -22,8 +22,9 @@ class Pilot extends Actor {
     
     if (spaceship != null && timeToNextInteraction <= 0) {
       var availableMoves = spaceship.getAvailableMoves();
+      var formSections = spaceship.getSystemSetupSections();
       if (isPlayer) {
-        _playerChooseMove(availableMoves);
+        _playerCreateForm(availableMoves, formSections);
       } else {
         _aiChooseMove(availableMoves);
       }
@@ -32,30 +33,36 @@ class Pilot extends Actor {
     --timeToNextInteraction;
   }
   
-  void _playerChooseMove(List<CombatMove> moves) {
-    List<EgbChoice> choicesToShow = [];
-    moves.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
-    moves.forEach((move) {
-      if (move.autoRepeat && move.currentTimeToFinish != null) {
-        choicesToShow.add(
-            new EgbChoice("Stop ${move.system.currentMove.instanceName} [2s]",
-              script: () {
-                move.stop();
-                timeToNextInteraction = 2;
-              })
-            );
-      } else {
-        choicesToShow.add(move.createChoice(targetShip: spaceship.targetShip));
-      }
-    });
-    choicesToShow.add(
-        new EgbChoice("Wait [5s]",
-            script: () {
-              timeToNextInteraction = 5;
-            })
-        );
+  void _playerCreateForm(List<CombatMove> moves, List<FormSection> sections) {
+    Form form = new Form();
+    
+    
+    form.children.addAll(sections);
+    
+//    List<EgbChoice> choicesToShow = [];
+//    moves.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
+//    moves.forEach((move) {
+//      if (move.autoRepeat && move.currentTimeToFinish != null) {
+//        choicesToShow.add(
+//            new EgbChoice("Stop ${move.system.currentMove.instanceName} [2s]",
+//              script: () {
+//                move.stop();
+//                timeToNextInteraction = 2;
+//              })
+//            );
+//      } else {
+//        choicesToShow.add(move.createChoice(targetShip: spaceship.targetShip));
+//      }
+//    });
+//    choicesToShow.add(
+//        new EgbChoice("Wait [5s]",
+//            script: () {
+//              timeToNextInteraction = 5;
+//            })
+//        );
     // TODO: target another ship
-    choices.addAll(choicesToShow);
+//    choices.addAll(choicesToShow);
+    showForm(form);
   }
   
   // TODO author can subclass Pilot and pre-program AI to pick moves

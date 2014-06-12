@@ -71,6 +71,14 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       }
     }
   }
+  
+  FormSection createSetupSection() {
+    FormSection section = new FormSection(name);
+    TextOutput text = new TextOutput();
+    text.current = "This is $name section.";
+    section.append(text);
+    return section;
+  }
 }
 
 //class Projectile extends Actor {
