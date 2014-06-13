@@ -161,7 +161,7 @@ class FormBase extends FormElement implements Submitter {
  * The top level element of a form, containing all other elements. 
  * Author-facing.
  */
-class Form extends FormBase implements ScripterSubmitter {
+class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
   math.Random _random = new math.Random();
 
   Form({String submitText}) {
@@ -170,6 +170,7 @@ class Form extends FormBase implements ScripterSubmitter {
   }
   
   SubmitCallback onSubmit;
+  InputCallback onInput;
 
   /**
    * Receives changed values, computes collaterals, and either returns all 

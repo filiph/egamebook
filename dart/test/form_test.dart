@@ -145,7 +145,7 @@ void main() {
       form.children.add(input2);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
-      ButtonElement submitButton = querySelectorAll("button.submit").last;
+      ButtonElement submitButton = querySelectorAll("button.submit-main").last;
       stream.listen(expectAsync((CurrentState values) {
         expect(values.submitted, true);
         // Select the second radio button of the first RangeInput -> age = 25.
