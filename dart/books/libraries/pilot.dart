@@ -15,10 +15,20 @@ class Pilot extends Actor {
                     isPlayer: false, pronoun: Pronoun.HE);
   
   Spaceship spaceship;
+  @deprecated  // Each action takes exactly one unit of time.
   int timeToNextInteraction = 0;
+  
+  CombatMove currentMove;
   
   void update() {
     if (!isAliveAndActive) return;
+    
+    if (currentMove != null) {
+      currentMove.targetShip = spaceship.targetShip;
+      currentMove.start();
+      currentMove.update();
+      currentMove = null;
+    }
     
     if (spaceship != null && timeToNextInteraction <= 0) {
       var availableMoves = spaceship.getAvailableMoves();
@@ -42,38 +52,22 @@ class Pilot extends Actor {
     textOutput.html = "Nothing yet.";
     form.append(textOutput);
     
-    Option a = new Option("Zvolit A", (_) => textOutput.html = "A selected.");
-    Option b = new Option("Zvolit B", (_) => textOutput.html = "B selected.", selected: true);
-    moveChoice.children.addAll([a, b]);
-
+    moveChoice.append(new Option("None", (_) => currentMove = null, selected: 
+      true));
     
+    moves.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
+    moves.forEach((CombatMove move) {
+      Option o = new Option(move.commandText, (_) {
+        currentMove = move;
+        textOutput.html = "The move '${move.commandText}' selected";
+      });
+      moveChoice.append(o);
+    });
     form.append(moveChoice);
+    // TODO: target another ship
     
     form.children.addAll(sections);
-    
-//    List<EgbChoice> choicesToShow = [];
-//    moves.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
-//    moves.forEach((move) {
-//      if (move.autoRepeat && move.currentTimeToFinish != null) {
-//        choicesToShow.add(
-//            new EgbChoice("Stop ${move.system.currentMove.instanceName} [2s]",
-//              script: () {
-//                move.stop();
-//                timeToNextInteraction = 2;
-//              })
-//            );
-//      } else {
-//        choicesToShow.add(move.createChoice(targetShip: spaceship.targetShip));
-//      }
-//    });
-//    choicesToShow.add(
-//        new EgbChoice("Wait [5s]",
-//            script: () {
-//              timeToNextInteraction = 5;
-//            })
-//        );
-    // TODO: target another ship
-//    choices.addAll(choicesToShow);
+
     showForm(form);
   }
   

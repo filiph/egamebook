@@ -135,19 +135,29 @@ abstract class CombatMove {
         defaultSuccessChance;
   final num defaultSuccessChance = 1.0;
   
-  EgbChoice createChoice({Spaceship targetShip}) {
-    if (needsTargetShip && targetShip == null) {
-      throw new ArgumentError("Move $name needs targetShip to be non-null.");
-    }
-    return new EgbChoice("$commandText [${timeToSetup}s]", // TODO: add probability range
-        script: () {
-          this.targetShip = targetShip;
-          system.currentMove = this;
-          currentTimeToSetup = timeToSetup;
-          start();
-          system.spaceship.pilot.timeToNextInteraction = timeToSetup;
-    });
-  }
+//  EgbChoice createChoice({Spaceship targetShip}) {
+//    if (needsTargetShip && targetShip == null) {
+//      throw new ArgumentError("Move $name needs targetShip to be non-null.");
+//    }
+//    return new EgbChoice("$commandText [${timeToSetup}s]", // TODO: add probability range
+//        script: () {
+//          this.targetShip = targetShip;
+//          system.currentMove = this;
+//          currentTimeToSetup = timeToSetup;
+//          start();
+//          system.spaceship.pilot.timeToNextInteraction = timeToSetup;
+//    });
+//  }
+  
+//  Option createOption({Spaceship targetShip}) {
+//    if (needsTargetShip && targetShip == null) {
+//      throw new ArgumentError("Move $name needs targetShip to be non-null.");
+//    }
+//    return new Option("$commandText", (_) {
+//      this.targetShip = targetShip;
+//      system.currentMove = this;
+//    });
+//  }
   
   /**
    * Runs just after the CombatMove gets picked by the player. Can just update

@@ -39,7 +39,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       goto(onFinishedGoto);
       return;
     }
-      
+    
     while (!finished && choices.isEmpty && currentForm == null) {
       update();
     }

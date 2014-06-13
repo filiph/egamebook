@@ -45,7 +45,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
         // Send the state to the Scripter.
         CurrentState state = _createCurrentState(setWaitingForUpdate: true,
             // Events from the Form UiElement itself are Submit events.
-            submitted: uiElement == this.uiElement);
+            submitted: uiElement == this.uiElement /* TODO || uiElement is InterfaceSubmitButton*/);
         _streamController.add(state);
       });
     }

@@ -391,6 +391,7 @@ abstract class EgbScripter {
             choice.isAutomatic, orElse: () => null);
         if (autoChoice != null) {
           _pickChoice(autoChoice);
+          choices.remove(autoChoice);
         }
       }
     }
