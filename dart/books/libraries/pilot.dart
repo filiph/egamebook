@@ -15,7 +15,6 @@ class Pilot extends Actor {
                     isPlayer: false, pronoun: Pronoun.HE);
   
   Spaceship spaceship;
-  @deprecated  // Each action takes exactly one unit of time.
   int timeToNextInteraction = 0;
   
   CombatMove currentMove;
@@ -31,40 +30,40 @@ class Pilot extends Actor {
     }
     
     if (spaceship != null && timeToNextInteraction <= 0) {
-      var availableMoves = spaceship.getAvailableMoves();
-      var formSections = spaceship.getSystemSetupSections();
       if (isPlayer) {
-        _playerCreateForm(availableMoves, formSections);
+        _playerCreateForm([], spaceship.getSystemSetupSections());
       } else {
-        _aiChooseMove(availableMoves);
+        _aiChooseMove(spaceship.getAvailableMoves());
       }
     }
     
     --timeToNextInteraction;
   }
   
-  void _playerCreateForm(List<CombatMove> moves, List<FormSection> sections) {
+  // TODO: add pilot's maneuvres, communications, specials
+  // TODO: FormSection -> FormDialogs
+  void _playerCreateForm(List<CombatMove> maneuvres, List<FormSection> sections) {
     Form form = new Form();
     
-    MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
-
-    TextOutput textOutput = new TextOutput();
-    textOutput.html = "Nothing yet.";
-    form.append(textOutput);
-    
-    moveChoice.append(new Option("None", (_) => currentMove = null, selected: 
-      true));
-    
-    moves.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
-    moves.forEach((CombatMove move) {
-      Option o = new Option(move.commandText, (_) {
-        currentMove = move;
-        textOutput.html = "The move '${move.commandText}' selected";
-      });
-      moveChoice.append(o);
-    });
-    form.append(moveChoice);
-    // TODO: target another ship
+//    MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
+//
+//    TextOutput textOutput = new TextOutput();
+//    textOutput.html = "Nothing yet.";
+//    form.append(textOutput);
+//    
+//    moveChoice.append(new Option("None", (_) => currentMove = null, selected: 
+//      true));
+//    
+//    maneuvres.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
+//    maneuvres.forEach((CombatMove move) {
+//      Option o = new Option(move.commandText, (_) {
+//        currentMove = move;
+//        textOutput.html = "The move '${move.commandText}' selected";
+//      });
+//      moveChoice.append(o);
+//    });
+//    form.append(moveChoice);
+//    // TODO: target another ship
     
     form.children.addAll(sections);
 

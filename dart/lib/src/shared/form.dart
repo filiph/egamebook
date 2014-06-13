@@ -146,7 +146,7 @@ abstract class UpdatableByMap {
   void updateFromMap(Map<String, Object> map);
 }
 
-class FormBase extends FormElement {
+class FormBase extends FormElement implements Submitter {
   static const String elementClass = "Form";
   FormBase() : super(elementClass);
 
@@ -161,14 +161,15 @@ class FormBase extends FormElement {
  * The top level element of a form, containing all other elements. 
  * Author-facing.
  */
-class Form extends FormBase with _NewValueCallback {
-  String formUid;
+class Form extends FormBase implements ScripterSubmitter {
   math.Random _random = new math.Random();
 
   Form({String submitText}) {
     this.submitText = submitText;
-    formUid = "${_random.nextInt((1<<16))}"; // Assuming this is enough.
+    id = "${_random.nextInt((1<<16))}"; // Assuming this is enough.
   }
+  
+  SubmitCallback onSubmit;
 
   /**
    * Receives changed values, computes collaterals, and either returns all 
@@ -215,6 +216,19 @@ class Form extends FormBase with _NewValueCallback {
     });
 
     if (newValues.submitted) {
+      assert(newValues.submitterId != null);
+      ScripterSubmitter submitter;
+      if (newValues.submitterId == this.id) {
+        submitter = this;
+      } else {
+        // It wasn't a click on the main submit button.
+        submitter = allFormElementsBelowThisOne
+            .singleWhere((element) => element is ScripterSubmitter &&
+            element.id == newValues.submitterId);
+      }
+      if (submitter.onSubmit != null) {
+        submitter.onSubmit();
+      }
       return null;
     } else {
       return _createConfiguration();
@@ -225,7 +239,7 @@ class Form extends FormBase with _NewValueCallback {
   void _giveChildrenUniqueIds() {
     int id = 0;
     allFormElementsBelowThisOne.forEach((FormElement element) {
-      element.id = "form$formUid-element${id++}";
+      element.id = "form${this.id}-element${id++}";
     });
     _uniqueIdsGiven = true;
   }
@@ -298,6 +312,9 @@ class CurrentState {
    */
   bool get submitted => _valuesMap["__submitted__"];
   set submitted(bool value) => _valuesMap["__submitted__"] = value;
+  
+  String get submitterId => _valuesMap["__submitterId__"];
+  set submitterId(String value) => _valuesMap["__submitterId__"] = value;
 
   CurrentState() : _valuesMap = new Map<String, Object>() {
     submitted = false;
@@ -368,6 +385,42 @@ abstract class Input<T> {
 abstract class Output<T> {
   T current;
 }
+
+typedef void SubmitCallback();
+
+class Submitter extends FormElement {
+  Submitter(String elementClass) : super(elementClass);
+}
+
+class ScripterSubmitter extends Submitter {
+  ScripterSubmitter(String elementClass) : super(elementClass);
+  SubmitCallback onSubmit;
+}
+
+class BaseSubmitButton extends FormElement implements Submitter {
+  String get name => attributes["name"];
+  set name(String value) => attributes["name"] = value;
+  
+  static const String elementClass = "SubmitButton";
+  
+  BaseSubmitButton(String name, {String helpMessage}) : super(elementClass) {
+    this.name = name;
+    this.helpMessage = helpMessage;
+  }
+  
+  BaseSubmitButton.noOptional(String name, String helpMessage) : this(name, 
+      helpMessage: helpMessage);
+}
+
+class SubmitButton extends BaseSubmitButton implements ScripterSubmitter {
+  SubmitCallback onSubmit;
+  SubmitButton(String name, this.onSubmit, {String helpMessage}) : 
+    super.noOptional(name, helpMessage);
+}
+
+// TODO: SkillSubmitButton - allows player to have better results according
+// to skill (acumen)
+
 
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].

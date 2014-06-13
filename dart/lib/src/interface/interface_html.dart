@@ -606,6 +606,7 @@ class HtmlInterface extends EgbInterfaceBase {
 Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
+  BaseSubmitButton.elementClass: (FormElement e) => new HtmlSubmitButton(e),
   BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
   BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
   BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e),
@@ -636,7 +637,7 @@ class HtmlForm implements UiElement {
     }
 
     submitButton = new ButtonElement()
-        ..classes.add("submit")
+        ..classes.add("submit-main")
         ..text = submitText;
 
     StreamSubscription subscription;
@@ -754,6 +755,59 @@ class HtmlFormSection implements UiElement {
 
   @override
   bool waitingForUpdate = false;
+}
+
+class HtmlSubmitButton implements UiElement {
+  InterfaceSubmitButton blueprint;
+  ButtonElement uiRepresentation;
+  DivElement _childrenElement;
+  
+  HtmlSubmitButton(this.blueprint) {
+    _childrenElement = new DivElement();
+    
+    uiRepresentation = new ButtonElement()
+    ..text = blueprint.name
+    ..classes.add("submit-button")
+    ..append(_childrenElement)
+    ..onClick.listen((ev) {
+      _onChangeController.add(ev);
+    });
+  }
+
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  @override
+  Object get current => null;
+
+  // TODO: implement disabled
+  @override
+  bool get disabled => null;
+
+  @override
+  set disabled(bool value) {
+    // TODO: implement disabled
+  }
+
+  StreamController _onChangeController = new StreamController();
+  @override
+  Stream get onChange => _onChangeController.stream;
+
+  @override
+  void update() {
+    // TODO: implement update
+  }
+
+  @override
+  void set waitingForUpdate(bool _waitingForUpdate) {
+    // TODO: implement waitingForUpdate
+  }
+
+  // TODO: implement waitingForUpdate
+  @override
+  bool get waitingForUpdate => null;
 }
 
 abstract class HtmlRangeBase implements UiElement {

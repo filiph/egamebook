@@ -83,8 +83,13 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   FormSection createSetupSection() {
     FormSection section = new FormSection(name);
     TextOutput text = new TextOutput();
-    text.current = "This is $name section.";
+    text.current = "This is $name section.";  // Status + description.
     section.append(text);
+    
+    availableMoves.forEach((CombatMove move) {
+      SubmitButton button = move.createSubmitButton(spaceship.targetShip); // TODO: targetShip per system
+      section.append(button);
+    });
     return section;
   }
 }

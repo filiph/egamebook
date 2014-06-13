@@ -43,9 +43,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     if (uiElement.onChange != null) {
       uiElement.onChange.listen((_) {
         // Send the state to the Scripter.
-        CurrentState state = _createCurrentState(setWaitingForUpdate: true,
-            // Events from the Form UiElement itself are Submit events.
-            submitted: uiElement == this.uiElement /* TODO || uiElement is InterfaceSubmitButton*/);
+        CurrentState state = _createCurrentState(element);
         _streamController.add(state);
       });
     }
@@ -80,8 +78,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// [:true:], the form gets disabled. When [setWaitingForUpdate] is [:true:], 
   /// all elements are temporarily 'disabled' in order to wait for update from
   /// Scripter.
-  CurrentState _createCurrentState({bool submitted: false, 
-    bool setWaitingForUpdate: false}) {
+  CurrentState _createCurrentState(BlueprintWithUiRepresentation elementTouched,
+                                   [bool setWaitingForUpdate=true]) {
     CurrentState state = new CurrentState();
     allFormElementsBelowThisOne.where((element) => element is Input)
     .forEach((element) {
@@ -93,10 +91,13 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     if (setWaitingForUpdate) {
       this.uiElement.waitingForUpdate = true;
     }
-    if (submitted) {
+    // Events from the Form UiElement itself are Submit events. And events from
+    // submit buttons are also Submit events.
+    state.submitted = elementTouched is Submitter;
+    if (state.submitted) {
       this.uiElement.disabled = true;
+      state.submitterId = elementTouched.id;
     }
-    state.submitted = submitted;
     return state;
   }
   
@@ -107,6 +108,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   void createElementsFromJsonML(List<Object> jsonml) {
     InterfaceForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
         unsafe: true);
+    id = node.id;
     children.addAll(node.children);
   }
 }
@@ -152,10 +154,17 @@ abstract class UiElement {
 /// Maps [FormElement.elementClass] name to a function that takes the JSON
 /// objects and returns 
 Map<String,CustomTagHandler> customTagHandlers = {
-  FormBase.elementClass: (_) => new InterfaceForm(),
+  FormBase.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceForm(attributes["id"]);
+  }, 
   FormSection.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceFormSection(attributes["name"], attributes["id"]);
+  },
+  BaseSubmitButton.elementClass: (Object jsonObject) {
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new InterfaceSubmitButton(attributes["name"], attributes["id"]);
   },
   BaseRangeInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
@@ -188,10 +197,21 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
 }
 
 class InterfaceForm extends FormBase {
+  InterfaceForm(String id) {
+    this.id = id;
+  }
 }
 
 class InterfaceFormSection extends FormSection implements BlueprintWithUiRepresentation {
   InterfaceFormSection(String name, String id) : super(name) {
+    this.id = id;
+  }
+
+  UiElement uiElement;
+}
+
+class InterfaceSubmitButton extends BaseSubmitButton implements BlueprintWithUiRepresentation {
+  InterfaceSubmitButton(String name, String id) : super(name) {
     this.id = id;
   }
 
