@@ -933,18 +933,24 @@ class HtmlMultipleChoiceInput implements UiElement {
         ..id = blueprint.id;
 
     _labelElement = new LabelElement()..text = blueprint.name;
+    uiRepresentation.append(_labelElement);
 
     update();
 
-    _childrenElement = new SelectElement();
-    
-    // XXX: START HERE - attach onChange to ^^^, send to children
-    
+    _childrenElement = new SelectElement()
+    ..onChange.listen((Event ev) {
+      List<InterfaceOption> childOptions = blueprint.children.where((element) => element is InterfaceOption).toList(growable: false);
+      InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
+      HtmlOption htmlOption = selected.uiElement;
+      htmlOption.select();
+    });
+
     uiRepresentation.append(_childrenElement);
   }
 
   @override
   void appendChild(Object childUiRepresentation) {
+    assert(childUiRepresentation is OptionElement);
     _childrenElement.append(childUiRepresentation);
   }
 
@@ -962,9 +968,8 @@ class HtmlMultipleChoiceInput implements UiElement {
     _disabled = value;
   }
 
-  // TODO: implement onInput
   @override
-  Stream get onChange => null;
+  Stream get onChange => null;  // All the "changes" happen below, on options.
 
   @override
   void update() {
@@ -981,6 +986,7 @@ class HtmlMultipleChoiceInput implements UiElement {
   bool get waitingForUpdate => null;
 }
 
+
 class HtmlOption implements UiElement {
 
   BaseOption blueprint;
@@ -988,8 +994,7 @@ class HtmlOption implements UiElement {
 
   HtmlOption(this.blueprint) {
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
-        blueprint.selected)
-        ..text = blueprint.text;
+        blueprint.current)..text = blueprint.text;
   }
 
   @override
@@ -997,9 +1002,8 @@ class HtmlOption implements UiElement {
     throw "Not implemented: adding children to Option";
   }
 
-  // TODO: implement current
   @override
-  Object get current => null;
+  Object get current => uiRepresentation.selected;
 
   // TODO: implement disabled
   @override
@@ -1010,13 +1014,17 @@ class HtmlOption implements UiElement {
     // TODO: implement disabled
   }
 
-  // TODO: implement onInput
+  void select() {
+    _onChangeController.add(new Event("select"));
+  }
+  
+  StreamController _onChangeController = new StreamController();
   @override
-  Stream get onChange => null;
+  Stream get onChange => _onChangeController.stream;
 
   @override
   void update() {
-    // TODO: implement update
+    uiRepresentation.selected = blueprint.current;
   }
 
   @override
@@ -1027,6 +1035,7 @@ class HtmlOption implements UiElement {
   // TODO: implement waitingForUpdate
   @override
   bool get waitingForUpdate => null;
+
 }
 
 class Submenu {

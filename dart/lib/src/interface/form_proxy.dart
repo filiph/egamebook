@@ -10,7 +10,7 @@ import 'dart:async';
  * [EgbInterface] is then responsible for creating the actual form (for example,
  * by adding DOM elements to page) and listening to user input.
  */
-class FormProxy extends FormBase {
+class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   FormProxy.fromMap(Map<String,Object> map) {
     assert((map["jsonml"] as List)[0] == "Form");
     submitText = (map["jsonml"] as List)[1]["submitText"];
@@ -28,26 +28,28 @@ class FormProxy extends FormBase {
     return _recursiveCreateUiElement(builders, this);
   }
   
-  Map<FormElement,UiElement> elementsMap = new Map<FormElement,UiElement>();
+  /// Mapping from [FormElement] (blueprint) to actual UI representations.
+  UiElement uiElement;
+  
   UiElement _recursiveCreateUiElement(Map<String,UiElementBuilder> builders, 
-                        FormElement element) {
+                        BlueprintWithUiRepresentation element) {
     if (!builders.containsKey(element.localName)) {
       throw new UnimplementedError("The tag '${element.localName}' is not "
           "among the implemented interface builders "
           "(${builders.keys.join(', ')}).");
     }
     UiElement uiElement = builders[element.localName](element);
-    elementsMap[element] = uiElement;
+    element.uiElement = uiElement;
     if (uiElement.onChange != null) {
       uiElement.onChange.listen((_) {
         // Send the state to the Scripter.
         CurrentState state = _createCurrentState(setWaitingForUpdate: true,
             // Events from the Form UiElement itself are Submit events.
-            submitted: uiElement == elementsMap[this]);
+            submitted: uiElement == this.uiElement);
         _streamController.add(state);
       });
     }
-    for (FormElement child in element.formElementChildren) {
+    for (BlueprintWithUiRepresentation child in element.formElementChildren) {
       UiElement childUiElement = _recursiveCreateUiElement(builders, child);
       uiElement.appendChild(childUiElement.uiRepresentation);
     }
@@ -63,13 +65,13 @@ class FormProxy extends FormBase {
       Map<String,Object> map = config.getById(element.id);
       if (map != null) {
         (element as UpdatableByMap).updateFromMap(map);
-        elementsMap[element].update();
+        (element as BlueprintWithUiRepresentation).uiElement.update();
       }
     });
     if (unsetWaitingForUpdate) {
       allFormElementsBelowThisOne.where((element) => element is Input)
       .forEach((element) {
-        elementsMap[element].waitingForUpdate = false;
+        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = false;
       });
     }
   }
@@ -83,16 +85,16 @@ class FormProxy extends FormBase {
     CurrentState state = new CurrentState();
     allFormElementsBelowThisOne.where((element) => element is Input)
     .forEach((element) {
-      state.add(element.id, (elementsMap[element]).current);
+      state.add(element.id, (element as BlueprintWithUiRepresentation).uiElement.current);
       if (setWaitingForUpdate) {
-        elementsMap[element].waitingForUpdate = true;
+        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = true;
       }
     });
     if (setWaitingForUpdate) {
-      elementsMap[this].waitingForUpdate = true;
+      this.uiElement.waitingForUpdate = true;
     }
     if (submitted) {
-      elementsMap[this].disabled = true;
+      this.uiElement.disabled = true;
     }
     state.submitted = submitted;
     return state;
@@ -110,6 +112,12 @@ class FormProxy extends FormBase {
 }
 
 typedef UiElement UiElementBuilder(FormElement elementBlueprint);
+
+abstract class BlueprintWithUiRepresentation extends FormElement {
+  UiElement uiElement;
+
+  BlueprintWithUiRepresentation(String elementClass) : super(elementClass);
+}
 
 abstract class UiElement {
   UiElement(FormElement elementBlueprint);
@@ -182,13 +190,15 @@ Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
 class InterfaceForm extends FormBase {
 }
 
-class InterfaceFormSection extends FormSection {
+class InterfaceFormSection extends FormSection implements BlueprintWithUiRepresentation {
   InterfaceFormSection(String name, String id) : super(name) {
     this.id = id;
   }
+
+  UiElement uiElement;
 }
 
-class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder {
+class InterfaceRangeInput extends BaseRangeInput implements StringRepresentationHolder, BlueprintWithUiRepresentation {
   InterfaceRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
@@ -202,9 +212,11 @@ class InterfaceRangeInput extends BaseRangeInput implements StringRepresentation
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
+  
+  UiElement uiElement;
 }
 
-class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentationHolder {
+class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentationHolder, BlueprintWithUiRepresentation {
   InterfaceRangeOutput(String name, String id) : super(name) {
     this.id = id;
   }
@@ -215,23 +227,31 @@ class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentati
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
+  
+  UiElement uiElement;
 }
 
-class InterfaceTextOutput extends BaseTextOutput {
+class InterfaceTextOutput extends BaseTextOutput implements BlueprintWithUiRepresentation {
   InterfaceTextOutput(String id) : super() {
     this.id = id;
   }
+  
+  UiElement uiElement;
 }
 
-class InterfaceMultipleChoiceInput extends BaseMultipleChoiceInput {
+class InterfaceMultipleChoiceInput extends BaseMultipleChoiceInput implements BlueprintWithUiRepresentation {
   InterfaceMultipleChoiceInput(String name, String id) : super(name) {
     this.id = id;
   }
+  
+  UiElement uiElement;
 }
 
-class InterfaceOption extends BaseOption {
+class InterfaceOption extends BaseOption implements BlueprintWithUiRepresentation {
   InterfaceOption(String text, bool selected, String id) : 
     super(text, selected: selected) {
     this.id = id;
   }
+  
+  UiElement uiElement;
 }

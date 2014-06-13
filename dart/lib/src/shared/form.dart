@@ -102,6 +102,7 @@ library egb_form;
 import "package:html5lib/dom.dart" as html5lib;
 import "package:jsonml/html5lib2jsonml.dart";
 import 'dart:math' as math;
+import 'dart:async';
 
 class FormElement extends html5lib.Element {
   FormElement(String elementClass) : super.tag(elementClass);
@@ -583,18 +584,17 @@ class MultipleChoiceInput extends BaseMultipleChoiceInput with
     this.onInput = onInput;
   }
 }
-
-class BaseOption extends FormElement implements UpdatableByMap {
+  
+/// Base class for a single element to choose in a [MultipleChoiceInput]. 
+class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
   String get text => attributes["text"];
   set text(String value) => attributes["text"] = value;
-  bool get selected => attributes["selected"] == "true";
-  set selected(bool value) => attributes["selected"] = value == true ? "true" : null;
 
   static const String elementClass = "Option";
-  BaseOption(String text, {bool selected, String helpMessage}) :
+  BaseOption(String text, {bool selected: false, String helpMessage}) :
       super(elementClass) {
     this.text = text;
-    this.selected = selected;
+    this.current = selected;
     this.helpMessage = helpMessage;
   }
   
@@ -605,22 +605,34 @@ class BaseOption extends FormElement implements UpdatableByMap {
   @override
   Map<String, Object> toMap() => {
     "text": text,
-    "selected": selected,
+    "current": current,
     "helpMessage": helpMessage
   };
 
   @override
   void updateFromMap(Map<String, Object> map) {
     text = map["text"];
-    selected = map["selected"];
+    current = map["current"];
     helpMessage = map["helpMessage"];
   }
+
+  @override
+  bool current = false;
+
+  @override
+  void sanitizeCurrent() {}
 }
 
 class Option extends BaseOption with _NewValueCallback<bool> {
-  Option(String text, InputCallback onChoose, {bool
+  /// The [onSelect] callback is only triggered when the option has just been
+  /// selected (not when it was deselected).
+  Option(String text, InputCallback onSelect, {bool
       selected, String helpMessage}) : super.noOptional(text, selected,
       helpMessage) {
-    this.onInput = onChoose;
+    this.onInput = (bool selected) {
+      if (selected) {
+        onSelect(selected);
+      }
+    };
   }
 }

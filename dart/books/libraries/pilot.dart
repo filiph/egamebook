@@ -37,10 +37,15 @@ class Pilot extends Actor {
     Form form = new Form();
     
     MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
+
+    TextOutput textOutput = new TextOutput();
+    textOutput.html = "Nothing yet.";
+    form.append(textOutput);
     
-    Option a = new Option("Zvolit A", null, selected: true);
-    Option b = new Option("Zvolit B", null);
+    Option a = new Option("Zvolit A", (_) => textOutput.html = "A selected.");
+    Option b = new Option("Zvolit B", (_) => textOutput.html = "B selected.", selected: true);
     moveChoice.children.addAll([a, b]);
+
     
     form.append(moveChoice);
     
