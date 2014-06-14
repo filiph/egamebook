@@ -62,7 +62,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     .forEach((FormElement element) {
       Map<String,Object> map = config.getById(element.id);
       if (map != null) {
-        (element as UpdatableByMap).updateFromMap(map);
+        element.updateFromMap(map);
         (element as BlueprintWithUiRepresentation).uiElement.update();
       }
     });
@@ -122,14 +122,26 @@ abstract class BlueprintWithUiRepresentation extends FormElement {
 }
 
 abstract class UiElement {
-  UiElement(FormElement elementBlueprint);
+  FormElement _blueprint;
+  UiElement(this._blueprint);
+  
   /// Updates the UiElement after the blueprint is changed. Sets
   /// [waitingForUpdate] back to [:false:].
-  void update();
+  void update() {
+    waitingForUpdate = false;
+    disabled = _blueprint.disabled;
+    hidden = _blueprint.hidden;
+  }
+  
   /// Fired every time user interacts with Element and changes something.
   Stream get onChange;
+  
   set disabled(bool value);
   bool get disabled;
+  
+  set hidden(bool value);
+  bool get hidden;
+  
   /// This is set to [:true:] after the user has interacted with the form and
   /// each [UiElement] in it should be disabled until [update] is called. This
   /// prevents user form setting the form's inputs into an invalid state.

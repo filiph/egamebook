@@ -615,7 +615,27 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   BaseOption.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
-class HtmlForm implements UiElement {
+abstract class HtmlUiElement extends UiElement {
+  HtmlUiElement(FormElement blueprint) : super(blueprint);
+  
+  Element uiRepresentation;
+  
+  bool _hidden = false;
+  @override
+  set hidden(bool value) {
+    if (value == true) {
+      uiRepresentation.classes.add("display-none");
+    } else {
+      uiRepresentation.classes.remove("display-none");
+    }
+    _hidden = value;
+  }
+
+  @override
+  bool get hidden => _hidden;
+}
+
+class HtmlForm extends HtmlUiElement {
   static const String DEFAULT_SUBMIT_TEXT = ">>";
 
   FormProxy blueprint;
@@ -623,7 +643,8 @@ class HtmlForm implements UiElement {
   DivElement _childrenContainer;
   ButtonElement submitButton;
 
-  HtmlForm(this.blueprint) {
+  HtmlForm(FormProxy blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
 
     // TODO: Add 'header' to the form?
@@ -669,6 +690,7 @@ class HtmlForm implements UiElement {
 
   @override
   void update() {
+    super.update();
     submitButton.text = blueprint.submitText;
   }
 
@@ -685,7 +707,7 @@ class HtmlForm implements UiElement {
   Object get current => null;
 }
 
-class HtmlFormSection implements UiElement {
+class HtmlFormSection extends HtmlUiElement {
 
   FormSection blueprint;
   DivElement uiRepresentation;
@@ -696,7 +718,8 @@ class HtmlFormSection implements UiElement {
 
   bool open = false;
 
-  HtmlFormSection(this.blueprint) {
+  HtmlFormSection(FormSection blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("form-section")
         ..id = blueprint.id;
@@ -750,6 +773,7 @@ class HtmlFormSection implements UiElement {
 
   @override
   void update() {
+    super.update();
     _header.text = blueprint.name;
   }
 
@@ -757,12 +781,13 @@ class HtmlFormSection implements UiElement {
   bool waitingForUpdate = false;
 }
 
-class HtmlSubmitButton implements UiElement {
+class HtmlSubmitButton extends HtmlUiElement {
   InterfaceSubmitButton blueprint;
   ButtonElement uiRepresentation;
   DivElement _childrenElement;
   
-  HtmlSubmitButton(this.blueprint) {
+  HtmlSubmitButton(InterfaceSubmitButton blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
     _childrenElement = new DivElement();
     
     uiRepresentation = new ButtonElement()
@@ -782,42 +807,40 @@ class HtmlSubmitButton implements UiElement {
   @override
   Object get current => null;
 
-  // TODO: implement disabled
+  bool _disabled = false;
   @override
-  bool get disabled => null;
+  bool get disabled => _disabled;
 
   @override
   set disabled(bool value) {
-    // TODO: implement disabled
+    uiRepresentation.disabled = value;
+    _disabled = value;
   }
 
   StreamController _onChangeController = new StreamController();
   @override
   Stream get onChange => _onChangeController.stream;
 
+  bool _waitingForUpdate = false;
   @override
-  void update() {
-    // TODO: implement update
+  void set waitingForUpdate(bool value) {
+    uiRepresentation.disabled = value;
+    _waitingForUpdate = value;
   }
 
   @override
-  void set waitingForUpdate(bool _waitingForUpdate) {
-    // TODO: implement waitingForUpdate
-  }
-
-  // TODO: implement waitingForUpdate
-  @override
-  bool get waitingForUpdate => null;
+  bool get waitingForUpdate => _waitingForUpdate;
 }
 
-abstract class HtmlRangeBase implements UiElement {
+abstract class HtmlRangeBase extends HtmlUiElement {
   BaseRange blueprint;
   DivElement uiRepresentation;
   DivElement _childrenElement;
   DivElement _radioButtonsDiv;
   ParagraphElement _currentValueElement;
 
-  HtmlRangeBase(this.blueprint, String divClass) {
+  HtmlRangeBase(BaseRange blueprint, String divClass) : super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add(divClass)
         ..id = blueprint.id;
@@ -837,20 +860,30 @@ abstract class HtmlRangeBase implements UiElement {
     _currentValueElement = new ParagraphElement()..classes.add("current-value");
     buttonsAndValue.append(_currentValueElement);
 
-    update();
+    _createRadioButtons();
 
     _childrenElement = new DivElement();
     uiRepresentation.append(_childrenElement);
   }
 
+  Map<int,RadioButtonInputElement> _radioButtons = 
+      new Map<int,RadioButtonInputElement>();
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = _createRadioButton(i);
+      _radioButtons[i] = radioButton;
       _radioButtonsDiv.append(radioButton);
     }
   }
 
   RadioButtonInputElement _createRadioButton(int i);
+  
+  void _updateRadioButtons() {
+    _radioButtons.forEach((int i, RadioButtonInputElement e) => 
+        _updateRadioButton(i, e));
+  }
+  
+  void _updateRadioButton(int i, RadioButtonInputElement radioButton);
 
   @override
   void appendChild(Object childUiRepresentation) {
@@ -864,7 +897,7 @@ abstract class HtmlRangeBase implements UiElement {
   @override
   set disabled(bool value) {
     _disabled = value;
-    update();
+    _updateRadioButtons();
   }
 
   StreamController _onChangeController = new StreamController();
@@ -877,9 +910,9 @@ abstract class HtmlRangeBase implements UiElement {
 
   @override
   void update() {
+    super.update();
     _current = blueprint.current;
-    _radioButtonsDiv.children.clear();
-    _createRadioButtons(); // TODO: update instead of re-creating from scratch
+    _updateRadioButtons();
     _currentValueElement.text = (blueprint as
         StringRepresentationHolder).currentStringRepresentation;
   }
@@ -888,7 +921,7 @@ abstract class HtmlRangeBase implements UiElement {
   @override
   void set waitingForUpdate(bool value) {
     _waitingForUpdate = value;
-    update();
+    _updateRadioButtons();
   }
 
   @override
@@ -902,14 +935,19 @@ class HtmlRangeOuput extends HtmlRangeBase {
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
         ..name = blueprint.id
-        ..checked = i == blueprint.current
         ..value = "$i"
         ..disabled = true;
+    _updateRadioButton(i, radioButton);
     return radioButton;
   }
 
   @override
   Stream get onChange => null;
+
+  @override
+  void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
+    radioButton.checked = i == blueprint.current;
+  }
 }
 
 class HtmlRangeInput extends HtmlRangeBase {
@@ -920,27 +958,35 @@ class HtmlRangeInput extends HtmlRangeBase {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
         ..name = blueprint.id
         ..checked = i == blueprint.current
-        ..value = "$i"
-        ..disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
-            || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) || disabled ||
-            waitingForUpdate;
-    if (!radioButton.disabled) {
-      StreamSubscription subscription;
-      subscription = radioButton.onClick.listen((ev) {
+        ..value = "$i";
+    _updateRadioButton(i, radioButton);
+    
+    StreamSubscription subscription;
+    subscription = radioButton.onClick.listen((ev) {
+      if (!radioButton.disabled) {
         _current = i;
         _onChangeController.add(ev);
-      });
-    }
+      }
+    });
     return radioButton;
+  }
+
+  @override
+  void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
+    radioButton.checked = i == blueprint.current;
+    radioButton.disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
+        || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) || disabled ||
+        waitingForUpdate;
   }
 }
 
-class HtmlTextOuput implements UiElement {
+class HtmlTextOuput extends HtmlUiElement {
   BaseText blueprint;
   DivElement uiRepresentation;
   DivElement _childrenElement;
 
-  HtmlTextOuput(this.blueprint) {
+  HtmlTextOuput(BaseText blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("text-output")
         ..id = blueprint.id;
@@ -967,6 +1013,7 @@ class HtmlTextOuput implements UiElement {
 
   @override
   void update() {
+    super.update();
     uiRepresentation.innerHtml = blueprint.html;
   }
 
@@ -974,14 +1021,16 @@ class HtmlTextOuput implements UiElement {
   bool waitingForUpdate = false;
 }
 
-class HtmlMultipleChoiceInput implements UiElement {
+class HtmlMultipleChoiceInput extends HtmlUiElement {
 
   BaseMultipleChoiceInput blueprint;
   DivElement uiRepresentation;
   LabelElement _labelElement;
   SelectElement _childrenElement;
 
-  HtmlMultipleChoiceInput(this.blueprint) {
+  HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) : 
+    super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("multiple-choice-input")
         ..id = blueprint.id;
@@ -989,16 +1038,18 @@ class HtmlMultipleChoiceInput implements UiElement {
     _labelElement = new LabelElement()..text = blueprint.name;
     uiRepresentation.append(_labelElement);
 
-    update();
-
     _childrenElement = new SelectElement()
     ..onChange.listen((Event ev) {
-      List<InterfaceOption> childOptions = blueprint.children.where((element) => element is InterfaceOption).toList(growable: false);
-      InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
-      HtmlOption htmlOption = selected.uiElement;
-      htmlOption.select();
+      if (!_childrenElement.disabled) {
+        List<InterfaceOption> childOptions = blueprint.children
+            .where((element) => element is InterfaceOption)
+            .toList(growable: false);
+        InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
+        HtmlOption htmlOption = selected.uiElement;
+        htmlOption.select();
+      }
     });
-
+    
     uiRepresentation.append(_childrenElement);
   }
 
@@ -1025,28 +1076,24 @@ class HtmlMultipleChoiceInput implements UiElement {
   @override
   Stream get onChange => null;  // All the "changes" happen below, on options.
 
+  bool _waitingForUpdate = false;
   @override
-  void update() {
-    // TODO: implement update
+  void set waitingForUpdate(bool value) {
+    _childrenElement.disabled = value;
+    _waitingForUpdate = value;
   }
 
   @override
-  void set waitingForUpdate(bool _waitingForUpdate) {
-    // TODO: implement waitingForUpdate
-  }
-
-  // TODO: implement waitingForUpdate
-  @override
-  bool get waitingForUpdate => null;
+  bool get waitingForUpdate => _waitingForUpdate;
 }
 
 
-class HtmlOption implements UiElement {
-
+class HtmlOption extends HtmlUiElement {
   BaseOption blueprint;
   OptionElement uiRepresentation;
 
-  HtmlOption(this.blueprint) {
+  HtmlOption(BaseOption blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
         blueprint.current)..text = blueprint.text;
   }
@@ -1059,13 +1106,14 @@ class HtmlOption implements UiElement {
   @override
   Object get current => uiRepresentation.selected;
 
-  // TODO: implement disabled
+  bool _disabled = false;
   @override
-  bool get disabled => null;
+  bool get disabled => _disabled;
 
   @override
   set disabled(bool value) {
-    // TODO: implement disabled
+    uiRepresentation.disabled = value;
+    _disabled = value;
   }
 
   void select() {
@@ -1078,18 +1126,19 @@ class HtmlOption implements UiElement {
 
   @override
   void update() {
+    super.update();
     uiRepresentation.selected = blueprint.current;
   }
 
+  bool _waitingForUpdate = false;
   @override
-  void set waitingForUpdate(bool _waitingForUpdate) {
-    // TODO: implement waitingForUpdate
+  void set waitingForUpdate(bool value) {
+    uiRepresentation.disabled = value;
+    _waitingForUpdate = value;
   }
 
-  // TODO: implement waitingForUpdate
   @override
-  bool get waitingForUpdate => null;
-
+  bool get waitingForUpdate => _waitingForUpdate;
 }
 
 class Submenu {

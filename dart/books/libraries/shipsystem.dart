@@ -1,7 +1,7 @@
 part of spaceship;
 
 class ShipSystem extends Actor /* TODO: implements Saveable*/ {
-  ShipSystem(this.name, {maxHp: 10, IntScale hp, maxPowerInput: 1.0}) {
+  ShipSystem(this.name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) {
     if (hp == null) hp = new IntScale(max: maxHp);
     this.hp = hp;
     hp.onMax().listen((_) {
@@ -83,11 +83,66 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   FormSection createSetupSection() {
     FormSection section = new FormSection(name);
     TextOutput text = new TextOutput();
-    text.current = "This is $name section.";  // Status + description.
+    text.current = "This is $name section.";  // TODO: Status + description.
     section.append(text);
     
+    List<SubmitButton> allSubmitButtons = <SubmitButton>[];
+    
+    Spaceship targetShip;
+    ShipSystem targetSystem;
+    if (this is Targettable) {
+      targetShip = (this as Targettable).targetShip;
+      targetSystem = (this as Targettable).targetSystem;
+      
+      MultipleChoiceInput targetShipInput = 
+          new MultipleChoiceInput("Target ship:", (_) {});
+      
+      Option none = new Option("None (off)", (_) {
+        targetShip = null;
+        allSubmitButtons.forEach((SubmitButton b) => b.disabled = true);
+      }, selected: targetShip == null);
+      targetShipInput.append(none);
+      
+      Iterable<Spaceship> enemySpaceships = 
+          spaceship.currentCombat.spaceships
+          .where((Spaceship other) => spaceship.isEnemyOf(other));
+      
+      enemySpaceships.forEach((Spaceship enemy) {
+        Option o = new Option(enemy.name, (_) {
+          targetShip = enemy;
+          allSubmitButtons.forEach((SubmitButton b) => b.disabled = false);
+        }, selected: targetShip == enemy);
+        targetShipInput.append(o);
+        
+        // TODO: add ship systems to anothe multipleChoice, hide them
+      });
+      section.append(targetShipInput);
+      
+//        choices.question = 
+//            "Which part of ${targetShip.name} do you want to target?";
+//        _createChoiceForTargetSystem(targetShip.hull);  // first one is hull
+//        targetShip.allSystems.where((system) {
+//          if (system is Hull) return false;
+//          return system.isOutsideHull;
+//        }).forEach((system) {
+//          _createChoiceForTargetSystem(system);
+//        });
+      // TODO: create multiple choice, updating targetShip + targetSystem
+    }
+    
     availableMoves.forEach((CombatMove move) {
-      SubmitButton button = move.createSubmitButton(spaceship.targetShip); // TODO: targetShip per system
+      SubmitButton button = new SubmitButton(
+          "${move.commandText} [${move.timeToSetup}s]", // TODO: add probability range
+          () {
+            move.targetShip = targetShip;
+            // TODO: let choose: move.targetSystem = targetSystem;
+            move.targetSystem = targetShip.hull;
+            move.currentTimeToSetup = move.timeToSetup;
+            currentMove = move;
+            move.start();
+            spaceship.pilot.timeToNextInteraction = move.timeToSetup;
+      });
+      allSubmitButtons.add(button);
       section.append(button);
     });
     return section;
@@ -103,7 +158,15 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 //  
 //}
 
-class Weapon extends ShipSystem {
+abstract class Targettable extends ShipSystem {
+  Spaceship targetShip;
+  ShipSystem targetSystem;
+
+  Targettable(String name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) : 
+    super(name, maxHp: maxHp, hp: hp, maxPowerInput: maxPowerInput);
+}
+
+class Weapon extends ShipSystem implements Targettable {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
                        this.damage: 1.0, this.shieldPenetration: 0.0,
                        this.accuracyModifier: 1.0}) 
@@ -116,6 +179,9 @@ class Weapon extends ShipSystem {
     var defaultCombatMove = new FireGun(this);
     availableMoves.add(defaultCombatMove);
   }
+  
+  Spaceship targetShip;
+  ShipSystem targetSystem;
   
   IntScale ammo;
   String projectileName = "projectile";

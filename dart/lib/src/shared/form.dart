@@ -102,9 +102,8 @@ library egb_form;
 import "package:html5lib/dom.dart" as html5lib;
 import "package:jsonml/html5lib2jsonml.dart";
 import 'dart:math' as math;
-import 'dart:async';
 
-class FormElement extends html5lib.Element {
+class FormElement extends html5lib.Element implements UpdatableByMap {
   FormElement(String elementClass) : super.tag(elementClass);
 
   /// Every form element can have a help button that shows a text message.
@@ -117,7 +116,21 @@ class FormElement extends html5lib.Element {
   /// like with CSS [:visibility:]).
   bool get hidden => attributes["hidden"] == "true";
   set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
+  
+  /// Whether or not the element should be disabled. Disabled elements are still
+  /// visible, but cannot be clicked or changed, and are clearly marked as such.
+  bool get disabled => attributes["disabled"] == "true";
+  set disabled(bool value) => attributes["disabled"] = value ? "true" : "false";
 
+  Map<String, Object> toMap() => {
+    "hidden": hidden,
+    "disabled": disabled
+  };
+  void updateFromMap(Map<String, Object> map) {
+    hidden = map["hidden"];
+    disabled = map["disabled"];
+  }
+  
   /// Utility function that walks through the whole structure recursively and
   /// adds all [FormElement] children to the [set].
   void _addFormChildrenToSet(FormElement element, Set<FormElement> set) {
@@ -245,12 +258,13 @@ class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
     _uniqueIdsGiven = true;
   }
 
+  @override
   Map<String, Object> toMap() {
     if (!_uniqueIdsGiven) {
       // Set all children with a unique ID here or before here.
       _giveChildrenUniqueIds();
     }
-    Map<String, Object> map = new Map<String, Object>();
+    Map<String, Object> map = super.toMap();
     map["jsonml"] = encodeToJsonML(this);
     map["values"] = _createConfiguration().toMap();
     return map;
@@ -463,17 +477,22 @@ class BaseRange extends FormElement implements UpdatableByMap {
   int maxEnabled;
 
   @override
-  Map<String, Object> toMap() => {
-    "min": min,
-    "max": max,
-    "step": step,
-    "minEnabled": minEnabled,
-    "maxEnabled": maxEnabled,
-    "current": current
-  };
+  Map<String, Object> toMap() {
+    Map<String,Object> map = super.toMap();
+    map.addAll({
+      "min": min,
+      "max": max,
+      "step": step,
+      "minEnabled": minEnabled,
+      "maxEnabled": maxEnabled,
+      "current": current
+    });
+    return map;
+  }
 
   @override
   void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
     min = map["min"];
     max = map["max"];
     step = map["step"];
@@ -571,12 +590,17 @@ class BaseText extends FormElement implements UpdatableByMap {
   String html;
 
   @override
-  Map<String, Object> toMap() => {
-    "html": html
-  };
+  Map<String, Object> toMap() {
+    Map<String,Object> map = super.toMap();
+    map.addAll({
+      "html": html
+    });
+    return map;
+  }
 
   @override
   void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
     html = map["html"];
   }
 }
@@ -657,17 +681,20 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
     this(text, selected: selected, helpMessage: helpMessage);
 
   @override
-  Map<String, Object> toMap() => {
-    "text": text,
-    "current": current,
-    "helpMessage": helpMessage
-  };
-
+  Map<String, Object> toMap() {
+    Map<String,Object> map = super.toMap();
+    map.addAll({
+      "text": text,
+      "current": current
+    });
+    return map;
+  }
+  
   @override
   void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
     text = map["text"];
     current = map["current"];
-    helpMessage = map["helpMessage"];
   }
 
   @override

@@ -135,21 +135,6 @@ abstract class CombatMove {
         defaultSuccessChance;
   final num defaultSuccessChance = 1.0;
   
-  SubmitButton createSubmitButton(Spaceship targetShip) {
-    if (needsTargetShip && targetShip == null) {
-      throw new ArgumentError("Move $name needs targetShip to be non-null.");
-    }
-    return new SubmitButton("$commandText [${timeToSetup}s]", // TODO: add probability range
-        () {
-          this.targetShip = targetShip;
-          system.currentMove = this;
-          currentTimeToSetup = timeToSetup;
-          start();
-          system.spaceship.pilot.timeToNextInteraction = timeToSetup;
-          echo("Hi");
-    });  
-  }
-  
   /**
    * Runs just after the CombatMove gets picked by the player. Can just update
    * some variable, or can create a list of choices.
@@ -324,18 +309,6 @@ class FireGun extends CombatMove {
     return chance;
   }
   num defaultSuccessChance = 0.8;
-  
-  void start() {
-    choices.question = 
-        "Which part of ${targetShip.name} do you want to target?";
-    _createChoiceForTargetSystem(targetShip.hull);  // first one is hull
-    targetShip.allSystems.where((system) {
-      if (system is Hull) return false;
-      return system.isOutsideHull;
-    }).forEach((system) {
-      _createChoiceForTargetSystem(system);
-    });
-  }
   
   void _createChoiceForTargetSystem(ShipSystem targetSystem) {
     String probability = Randomly.humanStringify(

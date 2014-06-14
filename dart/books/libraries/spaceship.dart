@@ -1,10 +1,10 @@
 library spaceship;
 
 import 'package:egamebook/src/book/scripter.dart';
-import 'package:egamebook/src/shared/user_interaction.dart';
 import 'numscale.dart';
 import 'storyline.dart';
 import 'randomly.dart';
+import 'spaceshipcombat.dart';
 
 part 'combatmove.dart';
 part 'shipsystem.dart';
@@ -26,6 +26,9 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
       system.team = team;
     });
   }
+  
+  /// The combat situation this ship is currently involved in.
+  SpaceshipCombat currentCombat;
   
   bool get isAlive => hull.hp.value > 0;
   Pilot pilot;
