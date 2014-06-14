@@ -17,17 +17,8 @@ class Pilot extends Actor {
   Spaceship spaceship;
   int timeToNextInteraction = 0;
   
-  CombatMove currentMove;
-  
   void update() {
     if (!isAliveAndActive) return;
-    
-    if (currentMove != null) {
-      currentMove.targetShip = spaceship.targetShip;
-      currentMove.start();
-      currentMove.update();
-      currentMove = null;
-    }
     
     if (spaceship != null && timeToNextInteraction <= 0) {
       if (isPlayer) {
@@ -44,26 +35,6 @@ class Pilot extends Actor {
   // TODO: FormSection -> FormDialogs
   void _playerCreateForm(List<CombatMove> maneuvres, List<FormSection> sections) {
     Form form = new Form();
-    
-//    MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
-//
-//    TextOutput textOutput = new TextOutput();
-//    textOutput.html = "Nothing yet.";
-//    form.append(textOutput);
-//    
-//    moveChoice.append(new Option("None", (_) => currentMove = null, selected: 
-//      true));
-//    
-//    maneuvres.sort((a, b) => Comparable.compare(a.system.name, b.system.name));
-//    maneuvres.forEach((CombatMove move) {
-//      Option o = new Option(move.commandText, (_) {
-//        currentMove = move;
-//        textOutput.html = "The move '${move.commandText}' selected";
-//      });
-//      moveChoice.append(o);
-//    });
-//    form.append(moveChoice);
-//    // TODO: target another ship
     
     form.children.addAll(sections);
 

@@ -98,9 +98,9 @@ abstract class CombatMove {
   }
   
   /// Whether this combat move needs a target ship that is alive.
-  static final bool needsTargetShip = true;
+  final bool needsTargetShip = true;
   /// Whether this combat move needs a target system that is alive.
-  static final bool needsTargetSystem = true;
+  final bool needsTargetSystem = true;
   
   /// Whether the move is supposed to automatically renew itself after each
   /// run.
@@ -215,10 +215,10 @@ class FireGun extends CombatMove {
   /// as a weapon
   Weapon weapon;
   
-  static final bool needsTargetShip = true;
-  static final bool needsTargetSystem = true;
+  final bool needsTargetShip = true;
+  final bool needsTargetSystem = true;
   
-  bool autoRepeat = true;
+  bool autoRepeat = false;
   
   int timeToSetup = 4;
   int timeToFinish = 3;
@@ -269,7 +269,7 @@ class FireGun extends CombatMove {
       storyline.add("the ${(system as Weapon).projectileName} "
           "{hits|succeeds to hit|successfully hits} <object>",
           subject: system.spaceship, object: targetSystem, positive: true);
-      targetSystem.hp.value -= damage;
+      targetSystem.hp.value -= damage.toInt();
     }
   }
   
@@ -302,6 +302,10 @@ class FireGun extends CombatMove {
   
   num calculateSuccessChance({Spaceship targetShip, ShipSystem targetSystem}) {
     if (targetSystem == null) targetSystem = this.targetSystem;
+    if (targetSystem == null && targetShip != null) {
+      targetSystem = targetShip.hull;
+    }
+    if (targetSystem == null) return 0.0;  // No target, no luck.
     var chance = defaultSuccessChance * targetSystem.exposedFactor *
                  weapon.accuracyModifier;
     chance -= targetSystem.spaceship.maneuverability / 100;
@@ -311,7 +315,7 @@ class FireGun extends CombatMove {
   num defaultSuccessChance = 0.8;
   
   void _createChoiceForTargetSystem(ShipSystem targetSystem) {
-    String probability = Randomly.humanStringify(
+    String probability = Randomly.humanStringifyProbability(
         calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 2);
     choices.add("Target ${targetSystem.name} [$probability]",
         script: () {

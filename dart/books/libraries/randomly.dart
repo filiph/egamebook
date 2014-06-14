@@ -95,7 +95,7 @@ class Randomly {
     }
   }
   
-  static String humanStringify(num probability, 
+  static String humanStringifyProbability(num probability, 
                    {int precisionSteps: 10, 
                     String prefix: "", String postfix: "%"}) {
     probability *= 100 / precisionSteps;    // ex. 6.4

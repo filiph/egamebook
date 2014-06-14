@@ -822,6 +822,11 @@ class HtmlSubmitButton extends HtmlUiElement {
   StreamController _onChangeController = new StreamController();
   @override
   Stream get onChange => _onChangeController.stream;
+  
+  void update() {
+    super.update();
+    uiRepresentation.text = blueprint.name;
+  }
 
   bool _waitingForUpdate = false;
   @override

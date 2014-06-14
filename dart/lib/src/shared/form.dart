@@ -425,6 +425,21 @@ class BaseSubmitButton extends FormElement implements Submitter {
   
   BaseSubmitButton.noOptional(String name, String helpMessage) : this(name, 
       helpMessage: helpMessage);
+  
+  @override
+  Map<String, Object> toMap() {
+    Map<String,Object> map = super.toMap();
+    map.addAll({
+      "name": name
+    });
+    return map;
+  }
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
+    name = map["name"];
+  }
 }
 
 class SubmitButton extends BaseSubmitButton implements ScripterSubmitter {

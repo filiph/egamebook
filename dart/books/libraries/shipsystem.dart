@@ -39,6 +39,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   /// How much of a target this system is on the outside of the craft.
   /// By default, this is proportion of this hp.max to the hull.hp.max.
   num get exposedFactor {
+    if (this is Hull) return 1;
     if (!isOutsideHull) {
       return 0;
     } else {
@@ -86,11 +87,22 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     text.current = "This is $name section.";  // TODO: Status + description.
     section.append(text);
     
-    List<SubmitButton> allSubmitButtons = <SubmitButton>[];
-    
+    Map<CombatMove,SubmitButton> allMoveSubmitButtons = 
+        <CombatMove,SubmitButton>{};
+        
     Spaceship targetShip;
     ShipSystem targetSystem;
     if (this is Targettable) {
+      void recalculateProbabilities() {
+        allMoveSubmitButtons.forEach((move, button) {
+          num chance = move.calculateSuccessChance(targetShip: targetShip,
+                                                   targetSystem: targetSystem);
+          String probability = Randomly.humanStringifyProbability(chance, 
+              precisionSteps: 2);
+          button.name = "${move.commandText} [$probability]";
+        });
+      }
+      
       targetShip = (this as Targettable).targetShip;
       targetSystem = (this as Targettable).targetSystem;
       
@@ -103,8 +115,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       
       Option noTargetShip = new Option("None (off)", (_) {
         targetShip = null;
-        allSubmitButtons.forEach((SubmitButton b) => b.disabled = true);
+        allMoveSubmitButtons.forEach((_, SubmitButton b) => b.disabled = true);
         allTargetSystemInputs.forEach((i) => i.hidden = true);
+        recalculateProbabilities();
       }, selected: targetShip == null);
       targetShipInput.append(noTargetShip);
       
@@ -120,6 +133,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         
         Option noTargetSystem = new Option("Whole ship", (_) {
           targetSystem = enemy.hull;
+          recalculateProbabilities();
         }, selected: targetSystem == null || targetSystem == enemy.hull);
         targetSystemInput.append(noTargetSystem);
         
@@ -127,15 +141,18 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         enemy.allTargettableSystems.forEach((ShipSystem enemyShipSystem) {
           Option systemOption = new Option(enemyShipSystem.name, (_) {
             targetSystem = enemyShipSystem;
+            recalculateProbabilities();
           });
           targetSystemInput.append(systemOption);
         });
         
         Option shipOption = new Option(enemy.name, (_) {
           targetShip = enemy;
-          allSubmitButtons.forEach((SubmitButton b) => b.disabled = false);
+          allMoveSubmitButtons.forEach((_, SubmitButton b) => 
+              b.disabled = false);
           allTargetSystemInputs.forEach((i) => i.hidden = true);
           targetSystemInput.hidden = false;
+          recalculateProbabilities();
         }, selected: targetShip == enemy);
         targetShipInput.append(shipOption);
       });
@@ -143,22 +160,30 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       allTargetSystemInputs.forEach((MultipleChoiceInput input) {
         section.append(input);
       });
+      recalculateProbabilities();
     }
     
     availableMoves.forEach((CombatMove move) {
       SubmitButton button = new SubmitButton(
-          "${move.commandText} [${move.timeToSetup}s]", // TODO: add probability range
+          "${move.commandText}", // TODO: add probability range
           () {
+            if (targetShip != null && targetSystem == null) {
+              targetSystem = targetShip.hull;
+            }
             move.targetShip = targetShip;
-            // TODO: let choose: move.targetSystem = targetSystem;
-            move.targetSystem = targetShip.hull;
+            move.targetSystem = targetSystem;
+            if (this is Targettable) {
+              (this as Targettable).targetShip = targetShip;
+              (this as Targettable).targetSystem = targetSystem;
+            }
             move.currentTimeToSetup = move.timeToSetup;
             currentMove = move;
             move.start();
-            spaceship.pilot.timeToNextInteraction = move.timeToSetup;
+            spaceship.pilot.timeToNextInteraction = 
+                move.timeToSetup + move.timeToFinish;
       });
       button.disabled = targetShip == null;
-      allSubmitButtons.add(button);
+      allMoveSubmitButtons[move] = button;
       section.append(button);
     });
     return section;

@@ -402,7 +402,14 @@ abstract class EgbScripter {
       StreamSubscription subscription;
       subscription = stream.listen((CurrentState values) {
         DEBUG_SCR("New values = $values.");
-        FormConfiguration changedConfig = _currentForm.receiveUserInput(values);
+        FormConfiguration changedConfig;
+        try {
+          changedConfig = _currentForm.receiveUserInput(values);
+        } catch (e, stacktrace) {
+          interface.reportError("Error while handling user input in Form",
+              "$e\n$stacktrace");
+          throw e;
+        }
         if (!values.submitted) {
           interface.updateForm(changedConfig);
         } else {
