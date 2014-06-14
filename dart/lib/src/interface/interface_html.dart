@@ -1123,6 +1123,15 @@ class HtmlOption extends HtmlUiElement {
     uiRepresentation.disabled = value;
     _disabled = value;
   }
+  
+  @override
+  bool get hidden => false;
+  @override  // <option> in <select> can't be hidden by CSS
+  set hidden(bool value) {
+    if (value == true) {
+      throw "Can't hide a <option> in a select";
+    }
+  }
 
   void select() {
     _onChangeController.add(new Event("select"));

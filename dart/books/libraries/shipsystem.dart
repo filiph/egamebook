@@ -97,40 +97,52 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       MultipleChoiceInput targetShipInput = 
           new MultipleChoiceInput("Target ship:", (_) {});
       
-      MultipleChoiceInput targetSystemInput =
-          new MultipleChoiceInput("Target system:", (_) {});
+      // We need those to show them after the ship inputs.
+      Set<MultipleChoiceInput> allTargetSystemInputs = 
+          new Set<MultipleChoiceInput>();
       
-      Option none = new Option("None (off)", (_) {
+      Option noTargetShip = new Option("None (off)", (_) {
         targetShip = null;
         allSubmitButtons.forEach((SubmitButton b) => b.disabled = true);
+        allTargetSystemInputs.forEach((i) => i.hidden = true);
       }, selected: targetShip == null);
-      targetShipInput.append(none);
+      targetShipInput.append(noTargetShip);
       
       Iterable<Spaceship> enemySpaceships = 
           spaceship.currentCombat.spaceships
           .where((Spaceship other) => spaceship.isEnemyOf(other));
       
       enemySpaceships.forEach((Spaceship enemy) {
-        Option o = new Option(enemy.name, (_) {
+        MultipleChoiceInput targetSystemInput =
+                  new MultipleChoiceInput("Target system:", (_) {})
+        ..hidden = targetShip != enemy;
+        allTargetSystemInputs.add(targetSystemInput);
+        
+        Option noTargetSystem = new Option("Whole ship", (_) {
+          targetSystem = enemy.hull;
+        }, selected: targetSystem == null || targetSystem == enemy.hull);
+        targetSystemInput.append(noTargetSystem);
+        
+        // Create option for each targettable system of the enemy ship.
+        enemy.allTargettableSystems.forEach((ShipSystem enemyShipSystem) {
+          Option systemOption = new Option(enemyShipSystem.name, (_) {
+            targetSystem = enemyShipSystem;
+          });
+          targetSystemInput.append(systemOption);
+        });
+        
+        Option shipOption = new Option(enemy.name, (_) {
           targetShip = enemy;
           allSubmitButtons.forEach((SubmitButton b) => b.disabled = false);
+          allTargetSystemInputs.forEach((i) => i.hidden = true);
+          targetSystemInput.hidden = false;
         }, selected: targetShip == enemy);
-        targetShipInput.append(o);
-        
-        // TODO: add ship systems to anothe multipleChoice, hide them
+        targetShipInput.append(shipOption);
       });
       section.append(targetShipInput);
-      
-//        choices.question = 
-//            "Which part of ${targetShip.name} do you want to target?";
-//        _createChoiceForTargetSystem(targetShip.hull);  // first one is hull
-//        targetShip.allSystems.where((system) {
-//          if (system is Hull) return false;
-//          return system.isOutsideHull;
-//        }).forEach((system) {
-//          _createChoiceForTargetSystem(system);
-//        });
-      // TODO: create multiple choice, updating targetShip + targetSystem
+      allTargetSystemInputs.forEach((MultipleChoiceInput input) {
+        section.append(input);
+      });
     }
     
     availableMoves.forEach((CombatMove move) {
@@ -238,7 +250,7 @@ class Hull extends ShipSystem {
       : super(name, maxHp: maxHp) {
   }
   
-  bool isOutsideHull = true;
+  bool isOutsideHull = false;  // Hull is not, technically, _outside_ hull.
   
   @override
   FormSection createSetupSection() => null;  // Hull is not setup-able.

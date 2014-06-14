@@ -47,30 +47,13 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /// Life support, mining equipment, hyperdrive ...
   final List<SpecialSystems> systems;
   
+  Iterable<ShipSystem> get allTargettableSystems => 
+      allSystems.where((ShipSystem system) => system.isOutsideHull);
+  
   /// Return the list of all the ship's systems, including engine, weapons, etc.
-  Iterable<ShipSystem> get allSystems => new Iterable.generate(
-      systems.length + weapons.length + thrusters.length + 3, /* shield + engine + hull */
-      (int i) {
-        if (i < systems.length) {
-          return systems[i];
-        }
-        if (i < systems.length + weapons.length) {
-          return weapons[i - systems.length];
-        }
-        if (i < systems.length + weapons.length + thrusters.length) {
-          return thrusters[i - systems.length - weapons.length];
-        }
-        if (i == systems.length + weapons.length + thrusters.length) {
-          return shield;
-        }
-        if (i == systems.length + weapons.length + thrusters.length + 1) {
-          return engine;
-        }
-        if (i == systems.length + weapons.length + thrusters.length + 2) {
-          return hull;
-        }
-      }
-  ).where((system) => system != null);
+  Iterable<ShipSystem> get allSystems => 
+      <List<ShipSystem>>[weapons, thrusters, systems, [shield, engine, hull]]
+      .expand((s) => s).where((system) => system != null);
   
   /// The current combined maneuverability of the ship's thrusters.
   int get maneuverability =>
