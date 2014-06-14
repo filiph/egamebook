@@ -797,6 +797,8 @@ class HtmlSubmitButton extends HtmlUiElement {
     ..onClick.listen((ev) {
       _onChangeController.add(ev);
     });
+    
+    update();
   }
 
   @override
@@ -864,6 +866,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
     _childrenElement = new DivElement();
     uiRepresentation.append(_childrenElement);
+    
+    update();
   }
 
   Map<int,RadioButtonInputElement> _radioButtons = 
@@ -1029,7 +1033,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   SelectElement _childrenElement;
 
   HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) : 
-    super(blueprint) {
+      super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("multiple-choice-input")
@@ -1051,6 +1055,8 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     });
     
     uiRepresentation.append(_childrenElement);
+    
+    update();
   }
 
   @override
@@ -1096,6 +1102,8 @@ class HtmlOption extends HtmlUiElement {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
         blueprint.current)..text = blueprint.text;
+    
+    update();
   }
 
   @override

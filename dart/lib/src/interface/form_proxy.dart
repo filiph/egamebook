@@ -1,7 +1,6 @@
 library egb_form_proxy;
 
 import "../shared/form.dart";
-import 'package:html5lib/dom.dart' as html5lib;
 import "package:jsonml/jsonml2html5lib.dart";
 import 'dart:async';
 
@@ -19,7 +18,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     allFormElementsBelowThisOne.forEach((FormElement element) {
       Map<String,Object> elementValues = values.getById(element.id);
       if (elementValues != null) {
-        (element as UpdatableByMap).updateFromMap(elementValues);
+        element.updateFromMap(elementValues);
       }
     });
   }
@@ -41,11 +40,12 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     UiElement uiElement = builders[element.localName](element);
     element.uiElement = uiElement;
     if (uiElement.onChange != null) {
-      uiElement.onChange.listen((_) {
+      var subscription = uiElement.onChange.listen((_) {
         // Send the state to the Scripter.
         CurrentState state = _createCurrentState(element);
         _streamController.add(state);
       });
+      _onChangeSubscriptions.add(subscription);
     }
     for (BlueprintWithUiRepresentation child in element.formElementChildren) {
       UiElement childUiElement = _recursiveCreateUiElement(builders, child);
@@ -97,8 +97,15 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     if (state.submitted) {
       this.uiElement.disabled = true;
       state.submitterId = elementTouched.id;
+      _cancelSubscriptions();
     }
     return state;
+  }
+  
+  Set<StreamSubscription> _onChangeSubscriptions = 
+      new Set<StreamSubscription>();
+  void _cancelSubscriptions() {
+    _onChangeSubscriptions.forEach((StreamSubscription s) => s.cancel());
   }
   
   StreamController<CurrentState> _streamController = 
@@ -122,6 +129,9 @@ abstract class BlueprintWithUiRepresentation extends FormElement {
 }
 
 abstract class UiElement {
+  /// The same as the subclass's blueprint, but not typed to a particular
+  /// FormElement subtype. This is just convenience, and probably could be 
+  /// solved more elegantly.
   FormElement _blueprint;
   UiElement(this._blueprint);
   

@@ -5,6 +5,20 @@ import 'spaceship.dart';
 import 'timeline.dart';
 import 'storyline.dart';
 
+/*
+
+EXAMPLE 
+
+You divert some more energy to the weapons system. Your aim on the Ghuang 
+ * improves slightly but the Ghuang also manages to pull out a good maneuvre 
+ * and gain strategic positioning.
+
+The Ghuang's front laser misses you by only a few meters. Your rear turret 
+ * fires at the opponent and hits his cockpit. The enemy ship goes up in a 
+ * bright explosion.
+
+ */
+
 
 class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
   SpaceshipCombat({List<Spaceship> ships: const [], Timeline timeline}) 

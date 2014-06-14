@@ -97,6 +97,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       MultipleChoiceInput targetShipInput = 
           new MultipleChoiceInput("Target ship:", (_) {});
       
+      MultipleChoiceInput targetSystemInput =
+          new MultipleChoiceInput("Target system:", (_) {});
+      
       Option none = new Option("None (off)", (_) {
         targetShip = null;
         allSubmitButtons.forEach((SubmitButton b) => b.disabled = true);
@@ -142,6 +145,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
             move.start();
             spaceship.pilot.timeToNextInteraction = move.timeToSetup;
       });
+      button.disabled = targetShip == null;
       allSubmitButtons.add(button);
       section.append(button);
     });
