@@ -159,6 +159,19 @@ void main() {
         matches("You pick up the apple."));
   });
   
+  test("don't use <owner's> to pronoun", () {
+      var storyline = new Storyline();
+      var player = new Player();
+      var ship = new Actor(name: "Haijing", pronoun: Pronoun.IT);
+      var part = new Actor(name: "main jet", pronoun: Pronoun.IT);
+      storyline.add("<subject> hit<s> <object>",
+          subject: player, object: part);
+      storyline.add("<owner's> <subject> <is> damaged heavily",
+          subject: part, owner: ship);
+      expect(storyline.toString().indexOf("Haijing's it"),
+          -1);
+  });
+  
   test("possessive", () {
     var storyline = new Storyline();
     var player = new Player();

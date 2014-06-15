@@ -87,6 +87,7 @@ class Storyline {
   static const String SUBJECT_POSSESIVE = "<subject's>";
   static const String OWNER = "<owner>";
   static const String OWNER_POSSESIVE = "<owner's>";
+  static const String OBJECT_OWNER_POSSESIVE = "<object-owner's>";
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
@@ -95,6 +96,7 @@ class Storyline {
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
+  static const String OBJECT_OWNER_PRONOUN_POSSESIVE = "<object-ownerPronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
   static const String VERB_ES = "<es>"; // e.g. in "goes"
@@ -309,10 +311,21 @@ class Storyline {
       // if doing something to someone in succession, use pronoun
       // but not if the pronoun is "it" for both subject and object, 
       // that makes sentences like "it makes it"
+      
+      // Never show "the guard's it".
+      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", 
+        object(i).pronoun.nominative);
+      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", 
+        object(i).pronoun.nominative);
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
     if (useSubjectPronoun || same('subject', i, i-1)) {
+      // Never show "the guard's it".
+      result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", 
+          subject(i).pronoun.nominative);
+      result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT", 
+          subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
@@ -320,12 +333,24 @@ class Storyline {
     // (and it's not misleading), use pronoun
     if (object(i-1) != null && subject(i) != null && subject(i-1) != null
         && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
-      result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
-      result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
+      
+       // Never show "the guard's it".
+       result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", 
+           subject(i).pronoun.nominative);
+       result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT", 
+           subject(i).pronoun.nominative);
+       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
+       result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
     // same as previous, but with object-subject reversed
     if (subject(i-1) != null && object(i) != null && subject(i-1) != null
         && subject(i-1) == object(i) && subject(i-1).pronoun != subject(i).pronoun) {
+      
+      // Never show "the guard's it".
+      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", 
+        object(i).pronoun.nominative);
+      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", 
+        object(i).pronoun.nominative);
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }

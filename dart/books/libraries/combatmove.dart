@@ -91,7 +91,7 @@ abstract class CombatMove {
     system.currentMove = null;
   }
   
-  void _report(String str, {Actor object, bool positive: false, 
+  void _report(String str, {Entity object, bool positive: false, 
     bool negative: false}) {
     if (str == null || str == "") return;
     Actor owner;
@@ -104,10 +104,22 @@ abstract class CombatMove {
       owner = system.spaceship;
     }
     if (object == null) {
-      object = targetShip;
+      object = _getTargetObject();
     }
     storyline.add(str, subject: subject, owner: owner, object: object, 
         positive: positive, negative: negative);
+  }
+  
+  Entity _getTargetObject() {
+    Entity object = targetSystem;
+    if (object is Hull) {
+      // When failing to hit hull, what we really miss is the ship.
+      object = (object as Hull).spaceship;
+    }
+    if (object == null) {
+      object = targetShip;
+    }
+    return object;
   }
   
   /// Whether this combat move needs a target ship that is alive.
@@ -277,10 +289,6 @@ class FireGun extends CombatMove {
         _report("<owner's> <subject> {drill<s> into|hit<s>} <object's> shield",
                 positive: true);
         // better = "<subject-owner's> <subject> {drill<s> into|hit<s>} <object-owner's> <object>"
-//        storyline.add("the ${weapon.projectileName} "
-//            "{drills into|hits} <object's> shield",
-//            subject: system.spaceship, object: targetSystem.spaceship,
-//            positive: true);
         if (damage > shield.sp.value) {
           // Rest of energy goes to hp damage
           damage -= shield.sp.value;
@@ -300,10 +308,8 @@ class FireGun extends CombatMove {
     }
     if (damage > 0) {
       _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
-          "successfully hit<s>} <object>", positive: true);
-//      storyline.add("the ${(system as Weapon).projectileName} "
-//          "{hits|succeeds to hit|successfully hits} <object>",
-//          subject: system.spaceship, object: targetSystem, positive: true);
+          "successfully hit<s>} <object>", object: targetSystem,
+          positive: true);
       targetSystem.hp.value -= damage;
     }
   }
@@ -311,10 +317,6 @@ class FireGun extends CombatMove {
   void reportFailure() {
     _report("<owner's> <subject> {fail<s> to hit|miss<es>|go<es> wide of} "
         "<object>", negative: true);
-//    storyline.add("<subject's> ${system.name} " 
-//                  "{fails to hit|misses|goes wide of} <object>",
-//                  subject: system.spaceship, object: targetSystem, 
-//                  negative: true);
   }
   
   void onFailure() {
