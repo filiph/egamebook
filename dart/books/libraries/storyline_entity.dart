@@ -9,21 +9,21 @@ part of storyline;
  */
 class Entity {
   Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
-    this.isPlayer: false, this.properName});
+    this.isPlayer: false, this.nameIsProperNoun});
   
-  Entity(this.name, this.properName, this.pronoun, this.team, this.isPlayer);
+  Entity(this.name, this.nameIsProperNoun, this.pronoun, this.team, this.isPlayer);
   
-  /// A proper name of an entity is a unique name: like "John" for a character
+  /// A proper noun of an entity is a unique name: like "John" for a character
   /// or "Sun" for our star, or "Painless" for the gun in the movie Predator.
+  /// http://en.wikipedia.org/wiki/Proper_noun
   /// 
-  /// Not all entities need have a [properName].
-  /// 
-  /// No article ("the"/"a") is prepended before proper names, and they rarely
+  /// If [nameIsProperNoun] is [:true:], then [name] is treated as a proper
+  /// noun. No article ("the"/"a") is prepended before proper nouns, and they rarely
   /// should need <owner's>. ("Your The Bodega" doesn't feel right.)
-  final String properName;
+  final bool nameIsProperNoun;
   
   /// The name of the entity is how it is primarily referred to. It is different
-  /// from [properName] because it's generic. There can be any number of "F-16s"
+  /// from [nameIsProperNoun] because it's generic. There can be any number of "F-16s"
   /// and it's their name, but it's not their proper name.
   final String name;
   
@@ -36,7 +36,7 @@ class Entity {
   /// When an entity is [alreadyMentioned], it will be used with the definite
   /// article ("the"). Otherwise, the indefinitey article ("a") will be used.
   /// 
-  /// The articles won't be used woth [properName].
+  /// The articles won't be used woth [nameIsProperNoun].
   /// 
   /// This field is by default set to [:true:]. The reason behind this is that
   /// in most cases, the entities in the simulation have been described in
@@ -82,9 +82,9 @@ class Entity {
  * or not towards other actors. 
  */
 class Actor extends Entity {
-  Actor({String name, String properName, int team: NEUTRAL, 
+  Actor({String name, bool nameIsProperNoun, int team: NEUTRAL, 
     bool isPlayer: false, Pronoun pronoun: Pronoun.IT})
-    : super(name, properName, pronoun, team, isPlayer);
+    : super(name, nameIsProperNoun, pronoun, team, isPlayer);
   
   static const int NEUTRAL = 0;
   static const int FRIEND = 1;
