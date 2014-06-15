@@ -172,6 +172,22 @@ void main() {
           -1);
   });
   
+  test("put 'and' between two sentences in a complex sentence", () {
+      var storyline = new Storyline();
+      var player = new Player();
+      var gun = new Actor(name: "front laser", pronoun: Pronoun.IT);
+      var ship = new Actor(name: "Haijing", pronoun: Pronoun.IT);
+      storyline.add("<subject> take<s> hold of <object's> controls",
+          subject: player, object: gun, time: 1);
+      storyline.add("<subject> begin<s> to aim at <object>",
+          subject: player, object: ship, time: 1);
+      storyline.add("<subject> go<es> wide of <object>",
+          subject: player, object: ship, time: 10);
+      expect(storyline.toString(),
+          matches("You take hold of the front laser's controls,? "
+              "and begin to aim at the Haijing\..+"));
+  });
+  
   test("possessive", () {
     var storyline = new Storyline();
     var player = new Player();

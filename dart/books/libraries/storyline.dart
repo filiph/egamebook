@@ -525,7 +525,8 @@ class Storyline {
               endThisSentence = true;
           } else {
             if (same('subject', i, i-1) && string(i).startsWith("$SUBJECT ")
-                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1) {
+                && i < length - 1  && i - lastEndSentence < MAX_SENTENCE_LENGTH - 1 &&
+                !(timeSincePrevious(i+1) > SHORT_TIME) /* Makes the sentence end. TODO: check for all sentence ending logic. */) {
               strBuf.write(", ");
             } else {
               strBuf.write(Randomly.choose([" and ", " and ", ", and "]));
