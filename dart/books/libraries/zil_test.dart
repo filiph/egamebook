@@ -31,7 +31,8 @@ void main() {
            takeable: true,
            count: 1  // can be >1 for things like bullets
       );
-      gorilla = new AIActor(zil, "Gorilla", pronoun: Pronoun.HE);
+      gorilla = new AIActor(zil, "Gorilla", nameIsProperNoun: true,
+          pronoun: Pronoun.HE);
       bridge = new Room(zil, "Exploration.Bridge", // corresponds to pagename
           "the bridge",
           [new Exit("LeftCorridor", "go to Corridor Left", 
@@ -73,7 +74,7 @@ void main() {
       print(textBuffer.toString());
       expect(textBuffer.toString(), contains(
           r'''says: "I'm gonna pick this captain's gun up." He picks up '''
-          r'''captain's gun. He says: "Great!" He leaves towards Left '''
+          r'''the captain's gun. He says: "Great!" He leaves towards Left '''
           r'''Corridor. He arrives from Left Corridor. He says: "Hi again!"'''));
       
       // zil.showChoices();

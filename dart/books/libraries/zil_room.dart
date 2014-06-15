@@ -40,7 +40,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
    */
   Room(this._zil, String pageName, this.description, Iterable exits, 
       { this.descriptionPage,
-        bool nameIsProperNoun,
+        bool nameIsProperNoun: false,
         this.coordinates: const [0, 0, 0], 
         Iterable<Item> items: const [],
         Iterable<AIActor> actors: const [],

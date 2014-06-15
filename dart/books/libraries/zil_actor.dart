@@ -1,10 +1,11 @@
 part of zil;
 
 class ZilActor extends Actor implements Located, ZilSaveable {
-  ZilActor(this._zil, String name, {int team: Actor.NEUTRAL,
-    bool isPlayer: false, Pronoun pronoun: Pronoun.IT,
+  ZilActor(this._zil, String name, {bool nameIsProperNoun: false, 
+    int team: Actor.NEUTRAL, bool isPlayer: false, Pronoun pronoun: Pronoun.IT,
     Iterable<Item> items: const [], this.actions: const []})
-    : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {
+    : super(name: name, nameIsProperNoun: nameIsProperNoun, team: team, 
+        isPlayer: isPlayer, pronoun: pronoun) {
     throwIfNotInInitBlock();
     actions.forEach((action) {
       if (action == null) {

@@ -67,7 +67,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
   final Zil _zil;
   
   Item(this._zil, String name, {
-      bool nameIsProperNoun,
+      bool nameIsProperNoun: false,
       this.actions: const [],
       this.description,
       this.takeable: true, bool isActive: true,
