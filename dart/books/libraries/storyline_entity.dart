@@ -9,7 +9,7 @@ part of storyline;
  */
 class Entity {
   Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
-    this.isPlayer: false, this.nameIsProperNoun});
+    this.isPlayer: false, this.nameIsProperNoun: false});
   
   Entity(this.name, this.nameIsProperNoun, this.pronoun, this.team, this.isPlayer);
   
@@ -20,6 +20,8 @@ class Entity {
   /// If [nameIsProperNoun] is [:true:], then [name] is treated as a proper
   /// noun. No article ("the"/"a") is prepended before proper nouns, and they rarely
   /// should need <owner's>. ("Your The Bodega" doesn't feel right.)
+  /// 
+  /// This is [:false:] by default.
   final bool nameIsProperNoun;
   
   /// The name of the entity is how it is primarily referred to. It is different
@@ -82,7 +84,7 @@ class Entity {
  * or not towards other actors. 
  */
 class Actor extends Entity {
-  Actor({String name, bool nameIsProperNoun, int team: NEUTRAL, 
+  Actor({String name, bool nameIsProperNoun: false, int team: NEUTRAL, 
     bool isPlayer: false, Pronoun pronoun: Pronoun.IT})
     : super(name, nameIsProperNoun, pronoun, team, isPlayer);
   

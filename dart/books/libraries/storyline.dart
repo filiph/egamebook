@@ -303,7 +303,12 @@ class Storyline {
   String substitute(int i, String str, [bool useSubjectPronoun=false, 
       bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
-    if (useObjectPronoun || same('object', i, i-1)) { // if doing something to someone in succession, use pronoun
+    if ((useObjectPronoun || same('object', i, i-1)) &&
+        !(object(i).pronoun == Pronoun.IT && 
+          subject(i).pronoun == Pronoun.IT)) { 
+      // if doing something to someone in succession, use pronoun
+      // but not if the pronoun is "it" for both subject and object, 
+      // that makes sentences like "it makes it"
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
@@ -311,7 +316,8 @@ class Storyline {
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
-    // if someone who was object last sentence is now subject (and it's not misleading), use pronoun
+    // if someone who was object last sentence is now subject 
+    // (and it's not misleading), use pronoun
     if (object(i-1) != null && subject(i) != null && subject(i-1) != null
         && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
@@ -332,52 +338,67 @@ class Storyline {
       Entity owner}) {
     String result = str;
     if (subject != null) {
-      if (subject.pronoun == Pronoun.YOU) { // don't talk like a robot: "player attacks wolf"
-        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
-        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      if (subject.isPlayer) {
+        // don't talk like a robot: "player attack wolf" -> "you attack wolf"
+        result = result.replaceAll(SUBJECT, Pronoun.YOU.nominative);
+        result = result.replaceAll(SUBJECT_POSSESIVE, Pronoun.YOU.genitive);
+      }
+      
+      if (subject.pronoun == Pronoun.YOU || subject.pronoun == Pronoun.THEY) {
+        // "you fly there", "they pick up the bananas" ...
         result = result.replaceAll(VERB_S, "");
         result = result.replaceAll(VERB_ES, "");
         result = result.replaceAll(VERB_IES, "y");
         result = result.replaceAll(VERB_DO, "do");
         result = result.replaceAll(VERB_BE, "are");
-      } else { // third person
-        result = result.replaceFirst(SUBJECT, subject.name);
-        result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+      } else { 
+        // "he flies there", "it picks up the bananas" ...
         result = result.replaceAll(VERB_S, "s");
         result = result.replaceAll(VERB_ES, "es");
         result = result.replaceAll(VERB_IES, "ies");
         result = result.replaceAll(VERB_DO, "does");
         result = result.replaceAll(VERB_BE, "is");
       }
+      
+      result = addParticleToFirstOccurence(result, SUBJECT, subject);
+      result = result.replaceFirst(SUBJECT, subject.name);
+      result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+      
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       if (str.contains(new RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
+      result = addParticleToFirstOccurence(result, SUBJECT_POSSESIVE, subject);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
     }
+    
     if (object != null) {
-      if (object.isPlayer) { // don't talk like a robot: "wolf attacks player"
-        result = result.replaceAll(OBJECT, object.pronoun.accusative);
-        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      if (object.isPlayer) {
+        result = result.replaceAll(OBJECT, Pronoun.YOU.accusative);
+        result = result.replaceAll(OBJECT_POSSESIVE, Pronoun.YOU.genitive);
       } else {
+        result = addParticleToFirstOccurence(result, OBJECT, object);
         result = result.replaceAll(OBJECT, object.name);
+        // TODO: change first to name, next to pronoun?
       }
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
       if (str.contains(new RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) { // "actor takes his weapon"
         result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       }
+      result = addParticleToFirstOccurence(result, OBJECT_POSSESIVE, object);
       result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
       result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
     if (owner != null) {
-      if (owner.isPlayer) { // don't talk like a robot: "player's gun shoots"
-        result = result.replaceAll(OWNER, owner.pronoun.accusative);
-        result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
+      if (owner.isPlayer) { 
+        result = result.replaceAll(OWNER, Pronoun.YOU.accusative);
+        result = result.replaceAll(OWNER_POSSESIVE, Pronoun.YOU.genitive);
       } else {
+        result = addParticleToFirstOccurence(result, OWNER, owner);
         result = result.replaceAll(OWNER, owner.name);
       }
       result = result.replaceAll(OWNER_PRONOUN, owner.pronoun.nominative);
@@ -386,6 +407,7 @@ class Storyline {
         // "the ship and her gun"
         result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
       }
+      result = addParticleToFirstOccurence(result, OWNER_POSSESIVE, owner);
       result = result.replaceFirst(OWNER_POSSESIVE, "${owner.name}'s");
       result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
       result = result.replaceAll(OWNER_PRONOUN_POSSESIVE, owner.pronoun.genitive);
@@ -399,6 +421,30 @@ class Storyline {
     return Randomly.parse(result);
   }
 
+  static String addParticleToFirstOccurence(String string, String SUB_STRING, 
+                                            Entity entity) {
+    // Make sure we don't add particles to "your car" etc.
+    if (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
+        string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
+      return string;
+    }
+    
+    if (!entity.nameIsProperNoun) {
+      if (entity.alreadyMentioned) {
+        string = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
+      } else {
+        if (entity.name.startsWith(new RegExp(r"[aeiouy]", 
+            caseSensitive: false))) {
+          string = string.replaceFirst(SUB_STRING, "an $SUB_STRING");
+        } else {
+          string = string.replaceFirst(SUB_STRING, "a $SUB_STRING");
+        }
+        entity.alreadyMentioned = true;
+      }
+    }
+    return string;
+  }
+  
   Storyline();
 
   void clear() {
