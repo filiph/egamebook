@@ -50,7 +50,8 @@ abstract class CombatMove {
       throw new StateError("reportSettingUp should not have been called since "
           "this spaceship's pilot is null or is not player");
     }
-    storyline.add(stringSettingUp, subject: pilot, object: system);
+    storyline.add(stringSettingUp, subject: pilot, object: system,
+        time: system.spaceship.currentCombat.timeline.time);
   }
   String get stringSettingUp => "<subject> start<s> programming the "
                                 "${system.name} to $commandText";
@@ -107,7 +108,8 @@ abstract class CombatMove {
       object = _getTargetObject();
     }
     storyline.add(str, subject: subject, owner: owner, object: object, 
-        positive: positive, negative: negative);
+        positive: positive, negative: negative, 
+        time: system.spaceship.currentCombat.timeline.time);
   }
   
   Entity _getTargetObject() {
@@ -260,11 +262,13 @@ class FireGun extends CombatMove {
     }
     
     storyline.add("<subject> {grab<s>|take<s>|take<s> hold of} <owner's> "
-        "controls", subject: pilot, owner: system);
+        "controls", subject: pilot, owner: system, 
+        time: system.spaceship.currentCombat.timeline.time);
     storyline.add("<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
         "begin<s> to {{take |}aim at|fix on|zero in on}} <object>",
-        subject: pilot, object: targetShip);
+        subject: pilot, object: targetShip,
+        time: system.spaceship.currentCombat.timeline.time);
   }
   
   String get stringStarting => null; 
@@ -303,7 +307,8 @@ class FireGun extends CombatMove {
         storyline.add("the ${weapon.projectileName} "
             "goes {right|} through <object's> shield",
             subject: system.spaceship, object: targetSystem.spaceship, 
-            positive: true);
+            positive: true,
+            time: system.spaceship.currentCombat.timeline.time);
       }
     }
     if (damage > 0) {

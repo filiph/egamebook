@@ -11,8 +11,10 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       reportDestroy();
       onDestroy();
     });
-    hp.onDownwardsChangeBy(0.5).listen((_) {
-      reportMajorDamage();
+    hp.changesStream.listen((num change) {
+      if (change < 0 && hp.isNonZero) {
+        reportDamage(change.abs());
+      }
     });
     
     powerInput = new NumScale(max: maxPowerInput);
@@ -51,16 +53,49 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   String stringFullRepair = "<owner's> <subject> <is> now {{fully|} repaired|fully operational}";
   
   void reportDestroy() => _report(stringDestroy, negative: true);
-  String stringDestroy = "<owner's> <subject> {blow<s> up|<is> destroyed}";
+  String stringDestroy = "<owner's> <subject> {blow<s> {up|apart}|"
+      "<is> {destroyed|no more}}";
   void onDestroy() {}
   
-  void reportMajorDamage() => _report(stringMajorDamage, negative: true);
-  String stringMajorDamage = 
-      "<owner's> <subject> {is damaged heavily|receives major damage}";
+  void reportDamage(num damage) {
+    num percentage = damage / hp.range;
+    if (percentage >= 0.7) {
+      _report("<owner's> <subject> {get<s>|<is>} {almost|nearly} "
+          "{destroyed|shattered}", negative: true);
+      return;
+    } 
+    
+    if (percentage >= 0.5) {
+      _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
+          "{heavy|substantial|considerable|devastating} damage", 
+          negative: true);
+    } else if (percentage >= 0.3) {
+      _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
+          "{quite a|hefty|quite heavy} damage", 
+          negative: true);
+    } else if (percentage >= 0.05) {
+      _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
+          "{some|minor|slight} damage", 
+          negative: true);
+    } else {
+      _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
+          "{{only|merely} {a dent|negligible damage}|"
+          "{almost|nearly|practically|close to} no damage}", 
+          negative: false /* because it's not really a big deal */);
+    }
+    
+    if (hp.percentage < 0.2 && !_reportedAlmostCompletelyDestroyed) {
+      _report("<owner's> <subject> <is> {now|} "
+          "{almost {completely|}|nearly|close to} "
+          "{destroyed|shattered|finished}", negative: true);
+      _reportedAlmostCompletelyDestroyed = true;
+    }
+  }
+  bool _reportedAlmostCompletelyDestroyed = false;  // Only report once.
   
   void _report(String str, {bool negative: false, bool positive: false}) {
     storyline.add(str, subject: this, owner: spaceship, negative: negative, 
-        positive: positive);
+        positive: positive, time: spaceship.currentCombat.timeline.time);
   }
   
   void update() {
@@ -282,6 +317,9 @@ class Hull extends ShipSystem {
   
   @override
   FormSection createSetupSection() => null;  // Hull is not setup-able.
+  
+  @override
+  String stringDestroy = null;  // When hull is destroyed, so is the ship.
 }
 
 class Shield extends ShipSystem {

@@ -25,6 +25,10 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
       system.spaceship = this;
       system.team = team;
     });
+    if (hull == null) {
+      throw new Exception("Spaceship $name's hull cannot be null.");
+    }
+    hull.hp.onMin().listen((_) => reportDestroy());
   }
   
   /// The combat situation this ship is currently involved in.
@@ -95,6 +99,16 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     });
     return sections;
   }
+  
+  /// This is called by the ship automatically when it's hull is destroyed.
+  /// 
+  void reportDestroy() {
+    storyline.add(stringReportDestroy, subject: this, negative: true,
+        time: currentCombat.timeline.time);
+  }
+  String stringReportDestroy = 
+      "<subject> {{violently|} explode<s>|blow<s> {up|apart} {violently|}|"
+      "fl<ies> apart in a {bright|powerful|violent} explosion}";
   
   /*
    * TODO: saveable only primitives, rest should be remembered by Combat

@@ -45,6 +45,7 @@ class NumScale implements Saveable {
     value = min;
   }
   
+  /// The 'length' of the scale, from min to max.
   num get range => (max - min).abs();
   
   num get percentage {
@@ -59,28 +60,33 @@ class NumScale implements Saveable {
   StreamController _streamController;
   Stream<num> _stream;
   
-  Stream onMin() {
+  Stream<num> onMin() {
     return _stream.where((v) => v == min);
   }
   
-  Stream onMax() {
+  Stream<num> onMax() {
     return _stream.where((v) => v == max);
   }
-  Stream onPass(num passValue) =>
+  Stream<num> onPass(num passValue) =>
       _stream.where((v) =>
           v <= passValue && passValue < _lastValue ||
           _lastValue < passValue && passValue <= v);
-  Stream onPassDownwards(num passValue) => 
+  Stream<num> onPassDownwards(num passValue) => 
       _stream.where((v) => v <= passValue && passValue < _lastValue);
-  Stream onPassUpwards(num passValue) =>
+  Stream<num> onPassUpwards(num passValue) =>
       _stream.where((v) => _lastValue < passValue && passValue <= v);
   
-  Stream onChangeBy(num percentage) {
+  /// Same as [_stream], but instead of reporting values, it reports _changes_
+  /// in values; 
+  Stream<num> get changesStream =>
+      _stream.map((num v) => v - _lastValue);
+  
+  Stream<num> onChangeBy(num percentage) {
     return _stream.where((v) => (v - _lastValue).abs() / range > percentage);
   }
-  Stream onDownwardsChangeBy(num percentage) =>
+  Stream<num> onDownwardsChangeBy(num percentage) =>
       onChangeBy(percentage).where((v) => v < _lastValue);
-  Stream onUpwardsChangeBy(num percentage) =>
+  Stream<num> onUpwardsChangeBy(num percentage) =>
       onChangeBy(percentage).where((v) => v > _lastValue);
   
   final className = "NumScale";
