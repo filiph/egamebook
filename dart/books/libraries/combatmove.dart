@@ -49,9 +49,8 @@ abstract class CombatMove {
     if (pilot == null || !pilot.isPlayer) {
       throw new StateError("reportSettingUp should not have been called since "
           "this spaceship's pilot is null or is not player");
-      //return new Report.empty();
     }
-    storyline.add(stringSettingUp, subject: pilot, object: targetShip);
+    storyline.add(stringSettingUp, subject: pilot, object: system);
   }
   String get stringSettingUp => "<subject> start<s> programming the "
                                 "${system.name} to $commandText";
@@ -92,9 +91,23 @@ abstract class CombatMove {
     system.currentMove = null;
   }
   
-  void _report(String str) {
+  void _report(String str, {Actor object, bool positive: false, 
+    bool negative: false}) {
     if (str == null || str == "") return;
-    storyline.add(str, subject: system.spaceship, object: targetShip);
+    Actor owner;
+    Actor subject;
+    if (system.spaceship.pilot.isPlayer) {
+      subject = system.spaceship.pilot;
+      owner = null;
+    } else {
+      subject = system;
+      owner = system.spaceship;
+    }
+    if (object == null) {
+      object = targetShip;
+    }
+    storyline.add(str, subject: subject, owner: owner, object: object, 
+        positive: positive, negative: negative);
   }
   
   /// Whether this combat move needs a target ship that is alive.
@@ -104,7 +117,7 @@ abstract class CombatMove {
   
   /// Whether the move is supposed to automatically renew itself after each
   /// run.
-  bool autoRepeat = false;
+  final bool autoRepeat = false;
   
   /// Is the move currently eligible to be carried out?
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
@@ -224,15 +237,31 @@ class FireGun extends CombatMove {
   int timeToFinish = 3;
   
   static final String name = "fire gun";
-  String get commandText => 
-      "{fire|shoot} ${system.name}";
-      
-  String get stringStarting => "<subject's> ${system.name} {begins|starts} "
-                               "charging";
+  String get commandText => "fire";
+
+  @override
+  void reportSettingUp() {
+    var pilot = system.spaceship.pilot;
+    if (pilot == null || !pilot.isPlayer) {
+      throw new StateError("reportSettingUp should not have been called since "
+          "this spaceship's pilot is null or is not player");
+    }
+    
+    storyline.add("<subject> {grab<s>|take<s>|take<s> hold of} <owner's> "
+        "controls", subject: pilot, owner: system);
+    storyline.add("<subject> {start<s> "
+        "{aiming at|taking aim at|fixing on|zeroing in on}|"
+        "begin<s> to {{take |}aim at|fix on|zero in on}} <object>",
+        subject: pilot, object: targetShip);
+  }
+  
+  String get stringStarting => null; 
+//      "<subject's> ${system.name} {begins|starts} "
+//                               "charging";
                                
   void reportSuccess() {
-    storyline.add("<subject's> ${system.name} fires at <object>",
-                  subject: system.spaceship, object: targetShip);
+//    storyline.add("<subject's> ${system.name} fires at <object>",
+//                  subject: system.spaceship, object: targetShip);
   }
   
   void onSuccess() {
@@ -245,10 +274,13 @@ class FireGun extends CombatMove {
     var shield = targetSystem.spaceship.shield;
     if (shield != null && shield.isAliveAndActive && shield.sp.isNonZero) {
       if (!Randomly.saveAgainst(weapon.shieldPenetration)) {
-        storyline.add("the ${weapon.projectileName} "
-            "{drills into|hits} <object's> shield",
-            subject: system.spaceship, object: targetSystem.spaceship,
-            positive: true);
+        _report("<owner's> <subject> {drill<s> into|hit<s>} <object's> shield",
+                positive: true);
+        // better = "<subject-owner's> <subject> {drill<s> into|hit<s>} <object-owner's> <object>"
+//        storyline.add("the ${weapon.projectileName} "
+//            "{drills into|hits} <object's> shield",
+//            subject: system.spaceship, object: targetSystem.spaceship,
+//            positive: true);
         if (damage > shield.sp.value) {
           // Rest of energy goes to hp damage
           damage -= shield.sp.value;
@@ -259,6 +291,7 @@ class FireGun extends CombatMove {
           damage = 0;
         }
       } else {
+        // TODO: better
         storyline.add("the ${weapon.projectileName} "
             "goes {right|} through <object's> shield",
             subject: system.spaceship, object: targetSystem.spaceship, 
@@ -266,18 +299,22 @@ class FireGun extends CombatMove {
       }
     }
     if (damage > 0) {
-      storyline.add("the ${(system as Weapon).projectileName} "
-          "{hits|succeeds to hit|successfully hits} <object>",
-          subject: system.spaceship, object: targetSystem, positive: true);
-      targetSystem.hp.value -= damage.toInt();
+      _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
+          "successfully hit<s>} <object>", positive: true);
+//      storyline.add("the ${(system as Weapon).projectileName} "
+//          "{hits|succeeds to hit|successfully hits} <object>",
+//          subject: system.spaceship, object: targetSystem, positive: true);
+      targetSystem.hp.value -= damage;
     }
   }
   
   void reportFailure() {
-    storyline.add("<subject's> ${system.name} " 
-                  "{fails to hit|misses|goes wide of} <object>",
-                  subject: system.spaceship, object: targetSystem, 
-                  negative: true);
+    _report("<owner's> <subject> {fail<s> to hit|miss<es>|go<es> wide of} "
+        "<object>", negative: true);
+//    storyline.add("<subject's> ${system.name} " 
+//                  "{fails to hit|misses|goes wide of} <object>",
+//                  subject: system.spaceship, object: targetSystem, 
+//                  negative: true);
   }
   
   void onFailure() {

@@ -186,6 +186,7 @@ class Storyline {
 
   static String capitalize(String str) {
     if (str.isEmpty) return str;
+    str = str.trimLeft();
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1)
       return firstLetter;
@@ -297,7 +298,8 @@ class Storyline {
       return false;
   }
 
-  /// makes sure the sentence flows well with the previous sentence(s), then calls getString to do in-sentence substitution
+  /// makes sure the sentence flows well with the previous sentence(s), then 
+  /// calls getString to do in-sentence substitution
   String substitute(int i, String str, [bool useSubjectPronoun=false, 
       bool useObjectPronoun=false]) {
     String result = str.replaceAll(ACTION, string(i));
@@ -387,6 +389,11 @@ class Storyline {
       result = result.replaceFirst(OWNER_POSSESIVE, "${owner.name}'s");
       result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
       result = result.replaceAll(OWNER_PRONOUN_POSSESIVE, owner.pronoun.genitive);
+    } else {
+      // owner == null
+      // Get rid of <owner's> and <owner> when none is set up.
+      result = result.replaceAll(OWNER, "");
+      result = result.replaceAll(OWNER_POSSESIVE, "");
     }
 
     return Randomly.parse(result);

@@ -82,6 +82,65 @@ void main() {
         "He hits back.+ breaks your nose."));
   });
   
+  test("substitute pronouns where proper ('he gives him the money')", () {
+    var storyline = new Storyline();
+    var enemy = new Actor(name: "John", team: 3, 
+        pronoun: Pronoun.HE);
+    var enemy2 = new Actor(name: "Jack", team: 4, 
+            pronoun: Pronoun.HE);
+    storyline.add("<subject> meet<s> <object> at the station", subject: enemy,
+        object: enemy2);
+    storyline.add("<subject> give<s> <object> the money", subject: enemy,
+            object: enemy2);
+    expect(storyline.toString(),
+        matches("John meets Jack at the station. He gives him the money."));
+    
+  });
+  
+  test("ignore <owner's> when owner is null", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gun = new Actor(name: "front laser", team: Actor.FRIEND, 
+                pronoun: Pronoun.IT);
+    
+    storyline.add("<subject> start<s> programming <owner's> <object> to fire",
+            subject: player, object: gun);
+    expect(storyline.toString().indexOf("<owner's>"),
+        -1);
+  });
+  
+  test("ignoring <owner's> at start of sentence doesn't screw up capitalization", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var hull = new Actor(name: "hull", team: Actor.FRIEND, 
+                pronoun: Pronoun.IT);
+    
+    storyline.add("<owner's> <subject> fail's to hit <object>",
+            subject: player, object: hull);
+    expect(storyline.toString(),
+        matches("You.+"));
+  }); 
+  
+  test("don't substitute pronouns where confusing ('it hits it')", () {
+    var storyline = new Storyline();
+    // TODO
+  }); 
+  
+  test("don't substitute pronoun when it was used in the same form", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gun = new Actor(name: "front laser", team: Actor.FRIEND, 
+            pronoun: Pronoun.IT);
+    var enemy = new Actor(name: "ship", team: Actor.DEFAULT_ENEMY, 
+                pronoun: Pronoun.IT);
+    storyline.add("<subject> start<s> programming <object> to fire",
+        subject: player, object: gun);
+    storyline.add("<subject> go<es> wide of <object>",
+        subject: player, object: enemy);
+    expect(storyline.toString().indexOf("wide of it"),
+        -1);
+  }); 
+  
   test("possessive", () {
     var storyline = new Storyline();
     var player = new Player();

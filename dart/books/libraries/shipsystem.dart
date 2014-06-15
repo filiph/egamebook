@@ -1,8 +1,8 @@
 part of spaceship;
 
 class ShipSystem extends Actor /* TODO: implements Saveable*/ {
-  ShipSystem(this.name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) {
-    if (hp == null) hp = new IntScale(max: maxHp);
+  ShipSystem(this.name, {int maxHp: 10, NumScale hp, num maxPowerInput: 1.0}) {
+    if (hp == null) hp = new NumScale(max: maxHp);
     this.hp = hp;
     hp.onMax().listen((_) {
       reportFullRepair();
@@ -22,7 +22,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   /// Which spaceship is this system part of.
   Spaceship spaceship;
   
-  IntScale hp;
+  NumScale hp;
   NumScale powerInput;
   
   bool isOutsideHull = false;
@@ -48,18 +48,19 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   }
   
   void reportFullRepair() => _report(stringFullRepair, positive: true);
-  String stringFullRepair = "<subject> <is> now {{fully|} repaired|fully operational}";
+  String stringFullRepair = "<owner's> <subject> <is> now {{fully|} repaired|fully operational}";
   
   void reportDestroy() => _report(stringDestroy, negative: true);
-  String stringDestroy = "<subject> {blow<s> up|<is> destroyed}";
+  String stringDestroy = "<owner's> <subject> {blow<s> up|<is> destroyed}";
   void onDestroy() {}
   
   void reportMajorDamage() => _report(stringMajorDamage, negative: true);
   String stringMajorDamage = 
-      "<subject> {is damaged heavily|receives major damage}";
+      "<owner's> <subject> {is damaged heavily|receives major damage}";
   
   void _report(String str, {bool negative: false, bool positive: false}) {
-    storyline.add(str, subject: this, negative: negative, positive: positive);
+    storyline.add(str, subject: this, owner: spaceship, negative: negative, 
+        positive: positive);
   }
   
   void update() {
@@ -142,7 +143,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
           Option systemOption = new Option(enemyShipSystem.name, (_) {
             targetSystem = enemyShipSystem;
             recalculateProbabilities();
-          });
+          }, selected: targetSystem == enemyShipSystem);
           targetSystemInput.append(systemOption);
         });
         
@@ -220,6 +221,8 @@ class Weapon extends ShipSystem implements Targettable {
     var defaultCombatMove = new FireGun(this);
     availableMoves.add(defaultCombatMove);
   }
+  
+  bool isOutsideHull = true;
   
   Spaceship targetShip;
   ShipSystem targetSystem;
@@ -303,7 +306,7 @@ class Shield extends ShipSystem {
 // TODO: class Bridge - when destroyed, it's finished 
 
 class SpecialSystems extends ShipSystem {
-  SpecialSystems(String name, {maxHp: 2, IntScale hp, maxPowerInput: 1.0}) 
+  SpecialSystems(String name, {int maxHp: 2, NumScale hp, maxPowerInput: 1.0}) 
     : super(name, maxHp: maxHp, hp: hp, 
         maxPowerInput: maxPowerInput);
     

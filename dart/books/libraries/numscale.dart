@@ -8,7 +8,6 @@ import 'package:egamebook/src/persistence/saveable.dart';
  */
 class NumScale implements Saveable {
   NumScale({this.min: 0, this.max: 100, initialValue}) {
-    if (min == max) throw new ArgumentError("Max cannot be same as min.");
     if (initialValue != null) {
       _value = initialValue;
     } else {
