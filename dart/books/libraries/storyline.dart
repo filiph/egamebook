@@ -185,8 +185,8 @@ class Storyline {
   void addParagraph() => add("\n\n", wholeSentence: true);
 
   static String capitalize(String str) {
-    if (str.isEmpty) return str;
     str = str.trimLeft();
+    if (str.isEmpty) return str;
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1)
       return firstLetter;
