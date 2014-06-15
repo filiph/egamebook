@@ -67,6 +67,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
   final Zil _zil;
   
   Item(this._zil, String name, {
+      String properName,
       this.actions: const [],
       this.description,
       this.takeable: true, bool isActive: true,
@@ -74,7 +75,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
       Pronoun pronoun: Pronoun.IT, this.firstDescription: null,
       String takeDescription, String takeInfinitive}) 
       : _takeDescription = takeDescription, _takeInfinitive = takeInfinitive,
-        super(name, pronoun, Actor.NEUTRAL, false) {
+        super(name, properName, pronoun, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock();
     actions.forEach((action) => action.item = this);
     if (!plural) assert(count == 1);

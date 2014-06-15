@@ -39,13 +39,14 @@ class Room extends Entity with Node implements Described, ZilSaveable {
    * Create a room whose [name] corresponds to an [EgbPage] name.
    */
   Room(this._zil, String pageName, this.description, Iterable exits, 
-      { this.descriptionPage, 
+      { this.descriptionPage,
+        String properName,
         this.coordinates: const [0, 0, 0], 
         Iterable<Item> items: const [],
         Iterable<AIActor> actors: const [],
         this.actions: const []}) 
       : this.exits = new Set.from(exits),
-        super(pageName, Pronoun.IT, Actor.NEUTRAL, false) {
+        super(pageName, properName, Pronoun.IT, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock("Cannot create room on the fly.");
     this.exits.forEach((exit) => exit.from = this);  // TODO: guard all against null here
     items.forEach((Item item) => item.location = this);

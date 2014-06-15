@@ -9,11 +9,41 @@ part of storyline;
  */
 class Entity {
   Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
-    this.isPlayer: false});
+    this.isPlayer: false, this.properName});
   
-  Entity(this.name, this.pronoun, this.team, this.isPlayer);
+  Entity(this.name, this.properName, this.pronoun, this.team, this.isPlayer);
   
+  /// A proper name of an entity is a unique name: like "John" for a character
+  /// or "Sun" for our star, or "Painless" for the gun in the movie Predator.
+  /// 
+  /// Not all entities need have a [properName].
+  /// 
+  /// No article ("the"/"a") is prepended before proper names, and they rarely
+  /// should need <owner's>. ("Your The Bodega" doesn't feel right.)
+  final String properName;
+  
+  /// The name of the entity is how it is primarily referred to. It is different
+  /// from [properName] because it's generic. There can be any number of "F-16s"
+  /// and it's their name, but it's not their proper name.
   final String name;
+  
+  /// Categories are secondary ways to refer to the entity. For example, "front
+  /// laser" has several categories, like "gun" or "laser". Whenever possible,
+  /// these categories are used. When two entities have overlapping categories
+  /// in one sentence, only the non-overlapping ones are used.
+  final List<String> categories = new List<String>();
+  
+  /// When an entity is [alreadyMentioned], it will be used with the definite
+  /// article ("the"). Otherwise, the indefinitey article ("a") will be used.
+  /// 
+  /// The articles won't be used woth [properName].
+  /// 
+  /// This field is by default set to [:true:]. The reason behind this is that
+  /// in most cases, the entities in the simulation have been described in
+  /// text, or are understood to be known to the player character ("You take
+  /// the gun and walk out of the room.").
+  bool alreadyMentioned = true;
+  
   int team = Actor.NEUTRAL;
   
   bool isEnemyOf(Actor other) {
@@ -52,9 +82,9 @@ class Entity {
  * or not towards other actors. 
  */
 class Actor extends Entity {
-  Actor({String name, int team: NEUTRAL, bool isPlayer: false,
-    Pronoun pronoun: Pronoun.IT}) 
-    : super(name, pronoun, team, isPlayer);
+  Actor({String name, String properName, int team: NEUTRAL, 
+    bool isPlayer: false, Pronoun pronoun: Pronoun.IT})
+    : super(name, properName, pronoun, team, isPlayer);
   
   static const int NEUTRAL = 0;
   static const int FRIEND = 1;
