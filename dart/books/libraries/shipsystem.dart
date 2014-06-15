@@ -128,8 +128,10 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         
     Spaceship targetShip;
     ShipSystem targetSystem;
-    if (this is Targettable) {
-      void recalculateProbabilities() {
+    
+    // Helper method that adds probability to action buttons.
+    void recalculateProbabilities() {
+      if (this is Targettable) {
         allMoveSubmitButtons.forEach((move, button) {
           num chance = move.calculateSuccessChance(targetShip: targetShip,
                                                    targetSystem: targetSystem);
@@ -138,7 +140,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
           button.name = "${move.commandText} [$probability]";
         });
       }
-      
+    }
+    
+    if (this is Targettable) {
       targetShip = (this as Targettable).targetShip;
       targetSystem = (this as Targettable).targetSystem;
       
@@ -196,7 +200,6 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       allTargetSystemInputs.forEach((MultipleChoiceInput input) {
         section.append(input);
       });
-      recalculateProbabilities();
     }
     
     availableMoves.forEach((CombatMove move) {
@@ -222,6 +225,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       allMoveSubmitButtons[move] = button;
       section.append(button);
     });
+    recalculateProbabilities();
     return section;
   }
 }

@@ -331,6 +331,9 @@ class FireGun extends CombatMove {
       if (Randomly.saveAgainst(
               calculateSuccessChance(targetSystem: targetShip.hull) / 2.0)) {
         _hit(targetShip.hull);
+      } else {
+        _report("<subject> {miss<es>|go<es> wide of} <object>, too", 
+            object: targetShip, negative: true);
       }
     }
   }
