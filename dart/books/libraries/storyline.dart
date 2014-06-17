@@ -103,6 +103,7 @@ class Storyline {
   static const String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
   static const String VERB_DO = "<does>";
   static const String VERB_BE = "<is>";
+  static const String VERB_HAVE = "<has>";
   
   static final RegExp QUOTE_INTERPUNCTION_DUPLICATION = 
       new RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
@@ -380,6 +381,7 @@ class Storyline {
         result = result.replaceAll(VERB_IES, "y");
         result = result.replaceAll(VERB_DO, "do");
         result = result.replaceAll(VERB_BE, "are");
+        result = result.replaceAll(VERB_HAVE, "have");
       } else { 
         // "he flies there", "it picks up the bananas" ...
         result = result.replaceAll(VERB_S, "s");
@@ -387,6 +389,7 @@ class Storyline {
         result = result.replaceAll(VERB_IES, "ies");
         result = result.replaceAll(VERB_DO, "does");
         result = result.replaceAll(VERB_BE, "is");
+        result = result.replaceAll(VERB_HAVE, "has");
       }
       
       result = addParticleToFirstOccurence(result, SUBJECT, subject);

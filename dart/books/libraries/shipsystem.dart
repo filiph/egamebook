@@ -71,7 +71,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     
     if (percentage >= 0.5) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
-          "{heavy|substantial|considerable|devastating} damage", 
+          "{heavy|substantial|devastating} damage", 
           negative: true);
     } else if (percentage >= 0.3) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
@@ -87,15 +87,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
           "{almost|nearly|practically|close to} no damage}", 
           negative: false /* because it's not really a big deal */);
     }
-    
-    if (hp.percentage < 0.2 && !_reportedAlmostCompletelyDestroyed) {
-      _report("<owner's> <subject> <is> {now|} "
-          "{almost {completely|}|nearly|close to} "
-          "{destroyed|shattered|finished}", negative: true);
-      _reportedAlmostCompletelyDestroyed = true;
-    }
   }
-  bool _reportedAlmostCompletelyDestroyed = false;  // Only report once.
   
   void _report(String str, {bool negative: false, bool positive: false}) {
     storyline.add(str, subject: this, owner: spaceship, negative: negative, 
@@ -344,7 +336,20 @@ class Thruster extends ShipSystem {
            this.maxForwardlyForce: 0, this.maxManeuverability: 0,
            Pronoun pronoun: Pronoun.IT}) 
            : super(name, maxHp: maxHp, hp: hp, 
-                   maxPowerInput: maxPowerInput, pronoun: pronoun);
+                   maxPowerInput: maxPowerInput, pronoun: pronoun) {
+    
+    this.hp.downwardsChangeCallbacks[0.5] = (_) {
+      _report("<owner's> <subject> start<s> spewing sparks from its internals", 
+          negative: true);
+      _report("<subject> lose<s> most of <subject's> thrust", 
+                negative: true);
+    };
+    this.hp.downwardsChangeCallbacks[0.2] = (_) {
+      _report("<owner's> <subject> <is> {now|} "
+          "{almost {completely|}|nearly|close to} "
+          "{destroyed|shattered|finished}", negative: true);
+    };
+  }
   
   bool isOutsideHull = true;
   

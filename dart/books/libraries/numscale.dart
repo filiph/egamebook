@@ -7,7 +7,9 @@ import 'package:egamebook/src/persistence/saveable.dart';
  * NumScale defines a range of numerical values and 
  */
 class NumScale implements Saveable {
-  NumScale({this.min: 0, this.max: 100, initialValue}) {
+  NumScale({this.min: 0, this.max: 100, initialValue, 
+    this.downwardsChangeCallbacks,
+    this.upwardsChangeCallbacks}) {
     if (initialValue != null) {
       _value = initialValue;
     } else {
@@ -16,6 +18,12 @@ class NumScale implements Saveable {
     _lastValue = _value;
     _streamController = new StreamController(sync: true);
     _stream = _streamController.stream.asBroadcastStream();
+    if (downwardsChangeCallbacks == null) {
+      downwardsChangeCallbacks = new Map();
+    }
+    if (upwardsChangeCallbacks == null) {
+      upwardsChangeCallbacks = new Map();
+    }
   }
   
   num get value => _value;
@@ -30,10 +38,54 @@ class NumScale implements Saveable {
     _lastValue = _value;
     _value = v;
     _streamController.add(v);
+    if (_value < _lastValue) {
+      // Downwards change.
+      List<num> passedKeys = 
+          _getPassedChangeCallbackKeys(downwardsChangeCallbacks, 
+              (k) => k >= _computePercentage(_value) &&
+                     k < _computePercentage(_lastValue));
+      if (passedKeys.isNotEmpty) {
+        downwardsChangeCallbacks[passedKeys.first](_value);
+      }
+    } else {
+      // Upwards change.
+      List<num> passedKeys = 
+          _getPassedChangeCallbackKeys(upwardsChangeCallbacks, 
+              (k) => k > _computePercentage(_lastValue) &&
+                     k <= _computePercentage(_value));
+      if (passedKeys.isNotEmpty) {
+        upwardsChangeCallbacks[passedKeys.last](_value);
+      }
+    }
+  }
+
+  List<num> _getPassedChangeCallbackKeys(Map<num,ChangeCallback> callbackMap, 
+      Function rangeChecker) {
+    List<num> passedKeys = callbackMap.keys
+        .where(rangeChecker)
+        .toList();
+    passedKeys.sort();
+    return passedKeys;
   }
   
   num _lastValue;
   num _value;
+  
+  /// Functions to call when the [percentage] goes downwards of each [num] key.
+  /// If the [percentage] goes by several keys in the map, only the lowest key
+  /// is fired and the rest is skipped. So, if we have:
+  /// 
+  ///     downwardsChangeCallbacks = {
+  ///       0.2: () => print("The ship is inoperational."), 
+  ///       0.3: () => print("The ship is heavily damaged.")
+  ///     };
+  ///     
+  /// ... and the value goes from [:5:] to [:2:], only the inoperational message
+  /// is printed out.
+  Map<num,ChangeCallback> downwardsChangeCallbacks;
+  
+  /// Same as [downwardsChangeCallbacks], but upwards.
+  Map<num,ChangeCallback> upwardsChangeCallbacks;
   
   final num min;
   final num max;
@@ -50,10 +102,13 @@ class NumScale implements Saveable {
   
   num get percentage {
     if (max - min == 0) return 1.0;
-    return (_value - min) / (max - min);
+    return _computePercentage(_value);
   }
   set percentage(num percentage) =>
         value = min + percentage * (max - min);
+
+  /// Computes percentage of given value.
+  num _computePercentage(num v) => (v - min) / (max - min);
   
   bool get isNonZero => _value != 0;
   
@@ -96,6 +151,8 @@ class NumScale implements Saveable {
     // TODO: min, max
   }
 }
+
+typedef void ChangeCallback(num value);
 
 /**
  * IntScale is the same as NumScale, but only takes integer values.
