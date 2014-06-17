@@ -95,6 +95,9 @@ class Randomly {
     }
   }
   
+  /// Returns the probability in "rounded" by [precisionSteps]. So, if 
+  /// [precisionSteps] is [:10:], a [probability] of [:0.46:] becomes "50%".
+  /// When [precisionSteps] is [:5:], then it becomes "45%".
   static String humanStringifyProbability(num probability, 
                    {int precisionSteps: 10, 
                     String prefix: "", String postfix: "%"}) {
@@ -102,6 +105,40 @@ class Randomly {
     probability = probability.round();  // ex. 6.0
     probability *= precisionSteps;  // ex. 60
     return "$prefix${probability.toStringAsFixed(0)}$postfix";
+  }
+  
+  static String humanDescribeProbability(num probability) {
+    if (probability >= 1.0) {
+      return "sure";
+    }
+    if (probability >= 0.8) {
+      return "almost sure";
+    }
+    if (probability >= 0.7) {
+      return "very probable";
+    }
+    if (probability >= 0.6) {
+      return "quite likely";
+    }
+    if (probability >= 0.5) {
+      return "quite possible";
+    }
+    if (probability >= 0.4) {
+      return "possible";
+    }
+    if (probability >= 0.3) {
+      return "improbable";
+    }
+    if (probability >= 0.2) {
+      return "quite unlikely";
+    }
+    if (probability >= 0.1) {
+      return "very unlikely";
+    }
+    if (probability > 0.0) {
+      return "almost impossible";
+    }
+    return "impossible";
   }
 
 }

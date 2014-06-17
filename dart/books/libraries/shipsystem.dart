@@ -5,13 +5,13 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     Pronoun pronoun: Pronoun.IT}) : super(pronoun: pronoun) {
     if (hp == null) hp = new NumScale(max: maxHp);
     this.hp = hp;
-    hp.onMax().listen((_) {
+    hp.upwardsChangeCallbacks[1.0] = (_) {
       reportFullRepair();
-    });
-    hp.onMin().listen((_) {
+    };
+    hp.downwardsChangeCallbacks[0.0] = (_) {
       reportDestroy();
       onDestroy();
-    });
+    };
     hp.changesStream.listen((num change) {
       if (change < 0 && hp.isNonZero) {
         reportDamage(change.abs());
@@ -131,8 +131,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         allMoveSubmitButtons.forEach((move, button) {
           num chance = move.calculateSuccessChance(targetShip: targetShip,
                                                    targetSystem: targetSystem);
-          String probability = Randomly.humanStringifyProbability(chance, 
-              precisionSteps: 2);
+          String probability = Randomly.humanDescribeProbability(chance);
           button.name = "${move.commandText} [$probability]";
         });
       }
