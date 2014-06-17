@@ -290,14 +290,18 @@ class Storyline {
       if (reports[i].negative && reports[j].negative)
         return true;
     }
-    if (!same('subject', i, j))
-      return false;
-    if (reports[i].positive && reports[j].negative)
-      return true;
-    if (reports[i].negative && reports[j].positive)
-      return true;
-    else
-      return false;
+    if (_sameTeam(reports[i].subject, reports[j].subject)) {
+      if (reports[i].positive && reports[j].negative)
+        return true;
+      if (reports[i].negative && reports[j].positive)
+        return true;
+    }
+    return false;
+  }
+  
+  bool _sameTeam(Entity a, Entity b) {
+    if (a == null || b == null) return false;
+    return a.team == b.team;
   }
 
   /// makes sure the sentence flows well with the previous sentence(s), then 
@@ -492,6 +496,7 @@ class Storyline {
       // TODO: look into future - make sentences like "Although __, __" 
       // TODO: ^^ can be done by 2 for loops
       // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
+      // TODO: glue sentences together first (look ahead, optimize)
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchanged('subject', 'object', i-1, i);

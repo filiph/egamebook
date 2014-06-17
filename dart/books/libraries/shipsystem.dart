@@ -1,7 +1,8 @@
 part of spaceship;
 
 class ShipSystem extends Actor /* TODO: implements Saveable*/ {
-  ShipSystem(this.name, {int maxHp: 10, NumScale hp, num maxPowerInput: 1.0}) {
+  ShipSystem(this.name, {int maxHp: 10, NumScale hp, num maxPowerInput: 1.0,
+    Pronoun pronoun: Pronoun.IT}) : super(pronoun: pronoun) {
     if (hp == null) hp = new NumScale(max: maxHp);
     this.hp = hp;
     hp.onMax().listen((_) {
@@ -26,6 +27,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   
   NumScale hp;
   NumScale powerInput;
+  
+  // TODO: supercharged (int -> seconds left?)
+  // TODO: overheated (int -> seconds left?)
   
   bool isOutsideHull = false;
   
@@ -250,9 +254,10 @@ abstract class Targettable extends ShipSystem {
 class Weapon extends ShipSystem implements Targettable {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
                        this.damage: 1.0, this.shieldPenetration: 0.0,
-                       this.accuracyModifier: 1.0}) 
-      : super(name, maxHp: maxHp) {
-    if (ammo == null) ammo = new IntScale(max: maxAmmo);
+                       this.accuracyModifier: 1.0,
+                       Pronoun pronoun: Pronoun.IT}) 
+      : super(name, maxHp: maxHp, pronoun: pronoun) {
+    if (ammo == null) ammo = new IntScale(max: maxAmmo);  // TODO: unlimited
     ammo.onMin().listen((_) {
       _report("<subject> is out of ammo", negative: true);
     });
@@ -272,13 +277,57 @@ class Weapon extends ShipSystem implements Targettable {
   num accuracyModifier = 1.0;
   num shieldPenetration = 0.0;
   num damage = 1;
+  
+  Map<Spaceship,int> _aimMap = new Map<Spaceship,int>();
+  int getAimAt(Spaceship targetShip) {
+    if (!_aimMap.containsKey(targetShip)) {
+      _aimMap[targetShip] = 0;
+    }
+    return _aimMap[targetShip];
+  }
+  void setAimAt(Spaceship targetShip, int value) {
+    _aimMap[targetShip] = value;
+  }
 }
+
+String getAimString(int aim) {
+  if (aim <= 0) {
+    return "poor";
+  } else if (aim == 1) {
+    return "decent";
+  } else if (aim == 2) {
+    return "good";
+  } else if (aim == 3) {
+    return "great";
+  } else /* aim >= 4 */ {
+    return "perfect";
+  }
+}
+
+//class Aim {
+//  Aim(this.value);
+//  
+//  int value;
+//  operator +(int i) {
+//    return new Aim(value + i);
+//  }
+//  operator -(int i) {
+//    return new Aim(value - i);
+//  }
+//  
+//  String toString() {
+//    switch (value) {
+//      case -2
+//    }
+//  }
+//}
 
 // TODO: laser gun
 
 class Engine extends ShipSystem {
-  Engine({String name: "engine", maxHp: 10, this.maxPowerOutput}) 
-      : super(name, maxHp: maxHp) {
+  Engine({String name: "engine", maxHp: 10, this.maxPowerOutput,
+    Pronoun pronoun: Pronoun.IT}) 
+      : super(name, maxHp: maxHp, pronoun: pronoun) {
   }
   
   // TODO: priority list of ship systems for power input 
@@ -291,9 +340,10 @@ class Engine extends ShipSystem {
 
 class Thruster extends ShipSystem {
   Thruster(String name, {int maxHp: 10, hp, num maxPowerInput: 1.0, 
-           this.maxForwardlyForce: 0, this.maxManeuverability: 0}) 
+           this.maxForwardlyForce: 0, this.maxManeuverability: 0,
+           Pronoun pronoun: Pronoun.IT}) 
            : super(name, maxHp: maxHp, hp: hp, 
-                   maxPowerInput: maxPowerInput);
+                   maxPowerInput: maxPowerInput, pronoun: pronoun);
   
   bool isOutsideHull = true;
   
@@ -328,8 +378,9 @@ class Hull extends ShipSystem {
 
 class Shield extends ShipSystem {
   Shield({String name: "shields", maxHp: 5, maxSp: 10, NumScale sp, 
-          maxPowerInput: 1.0}) 
-      : super(name, maxHp: maxHp, maxPowerInput: maxPowerInput) {
+          maxPowerInput: 1.0, Pronoun pronoun: Pronoun.THEY}) 
+      : super(name, maxHp: maxHp, maxPowerInput: maxPowerInput,
+          pronoun: pronoun) {
     if (sp == null) sp = new NumScale(max: maxSp);
     this.sp = sp;
   }
@@ -348,9 +399,10 @@ class Shield extends ShipSystem {
 // TODO: class Bridge - when destroyed, it's finished 
 
 class SpecialSystems extends ShipSystem {
-  SpecialSystems(String name, {int maxHp: 2, NumScale hp, maxPowerInput: 1.0}) 
+  SpecialSystems(String name, {int maxHp: 2, NumScale hp, maxPowerInput: 1.0,
+    Pronoun pronoun: Pronoun.IT}) 
     : super(name, maxHp: maxHp, hp: hp, 
-        maxPowerInput: maxPowerInput);
+        maxPowerInput: maxPowerInput, pronoun: pronoun);
     
   bool isOutsideHull = false;
 }

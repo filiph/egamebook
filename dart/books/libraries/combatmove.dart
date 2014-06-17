@@ -317,12 +317,18 @@ class FireGun extends CombatMove {
           positive: true);
       targetSystem.hp.value -= damage;
     }
+    if (Randomly.saveAgainst(CHANCE_OF_IMPROVE_AIM_ON_SUCCESS)) {
+      _improveAim();
+    }
   }
   
   void reportFailure() {
     _report("<owner's> <subject> {fail<s> to hit|miss<es>|go<es> wide of} "
         "<object>", negative: true);
   }
+  
+  static const num CHANCE_OF_IMPROVE_AIM_ON_SUCCESS = 0.2;
+  static const num CHANCE_OF_IMPROVE_AIM_ON_FAILURE = 0.2;
   
   void onFailure() {
     if (!(targetSystem is Hull)) {
@@ -336,6 +342,21 @@ class FireGun extends CombatMove {
             object: targetShip, negative: true);
       }
     }
+    if (Randomly.saveAgainst(CHANCE_OF_IMPROVE_AIM_ON_FAILURE)) {
+      _improveAim();
+    }
+  }
+  
+  void _improveAim() {
+    if (!targetShip.isAliveAndActive) {
+      return;
+    }
+    weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + 1);
+    Entity owner = weapon.spaceship.pilot.isPlayer ? 
+        weapon.spaceship.pilot : weapon.spaceship;
+    storyline.add("<owner's> <subject's> aim at <object> gets better", 
+        subject: weapon, owner: owner, object: targetShip,
+        positive: true, time: system.spaceship.currentCombat.timeline.time);
   }
   
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
@@ -356,20 +377,18 @@ class FireGun extends CombatMove {
     var chance = defaultSuccessChance * targetSystem.exposedFactor *
                  weapon.accuracyModifier;
     chance -= targetSystem.spaceship.maneuverability / 100;
+    chance += 0.1 * weapon.getAimAt(targetShip);
     if (chance < 0) return 0.0;
     return chance;
   }
   num defaultSuccessChance = 0.8;
-  
-  void _createChoiceForTargetSystem(ShipSystem targetSystem) {
-    String probability = Randomly.humanStringifyProbability(
-        calculateSuccessChance(targetSystem: targetSystem), precisionSteps: 2);
-    choices.add("Target ${targetSystem.name} [$probability]",
-        script: () {
-      this.targetSystem = targetSystem;
-    });
-  }
 }
+
+// TODO class QuickFireGun extends FireGun
+// TODO class BerserkFireGun extends FireGun
+
+// TODO class ImproveAim 
+
 
 //class RedistributeEnergy extends CombatMove {
 //  RedistributeEnergy() : super("<subject> redistribute<s> energy", 
