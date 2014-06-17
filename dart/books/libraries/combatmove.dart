@@ -33,7 +33,7 @@ abstract class CombatMove {
   /// Whether this move is currently available to the actor. Use this to
   /// hide options from the player and then add them as a form of progression.
   // @saveable
-  static bool available = true; // TODO: saveable!!!?
+  bool isActive = true; // TODO: saveable!!!?
   
   /// The unique name of this particular type of move.
   static final String name = "undefined move";
@@ -147,7 +147,7 @@ abstract class CombatMove {
       }
       if (targetSystem == null || !targetSystem.isAliveAndActive) return false;
     }
-    if (!available) return false;
+    if (!isActive) return false;
     if (!system.isAlive) return false;
     if (!system.spaceship.isAliveAndActive) return false;
     return true;

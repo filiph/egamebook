@@ -52,7 +52,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   final List<SpecialSystems> systems;
   
   Iterable<ShipSystem> get allTargettableSystems => 
-      allSystems.where((ShipSystem system) => system.isOutsideHull);
+      allSystems.where((ShipSystem system) => system.isOutsideHull &&
+                                              system.isAliveAndActive);
   
   /// Return the list of all the ship's systems, including engine, weapons, etc.
   Iterable<ShipSystem> get allSystems => 
@@ -66,7 +67,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         .toInt();
   
   void update() {
-    allSystems.forEach((system) => system.update());
+    allSystems.where((system) => system.isAliveAndActive)
+      .forEach((system) => system.update());
     pilot.update();
   }
   

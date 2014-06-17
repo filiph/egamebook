@@ -167,7 +167,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       
       Iterable<Spaceship> enemySpaceships = 
           spaceship.currentCombat.spaceships
-          .where((Spaceship other) => spaceship.isEnemyOf(other));
+          .where((Spaceship other) => spaceship.isEnemyOf(other) &&
+                                      other.isAliveAndActive);
       
       enemySpaceships.forEach((Spaceship enemy) {
         MultipleChoiceInput targetSystemInput =
@@ -206,7 +207,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       });
     }
     
-    availableMoves.forEach((CombatMove move) {
+    availableMoves.where((move) => move.isActive).forEach((CombatMove move) {
       SubmitButton button = new SubmitButton(
           "${move.commandText}", // TODO: add probability range
           () {
