@@ -414,7 +414,15 @@ class QuickFireGun extends FireGun {
 
 
 // TODO class BerserkFireGun extends FireGun
-
+//- Beam Weapon
+//  - Target - ship or its system, or off
+//  - Improve aim
+//  - Careful shot [slow]
+//  - Quick shot [quick]
+//  - Precision strike [slow] - no hull fallback, either hits targetSystem or doesn't fire
+//  - Berserk [slow] [multiple]
+//  - Supercharge (next shot will be super powerful)
+//  - Unjam
 
 class ImproveAim extends CombatMove {
   ImproveAim(ShipSystem system) : super(system);
