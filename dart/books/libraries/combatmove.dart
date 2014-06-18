@@ -158,7 +158,7 @@ abstract class CombatMove {
   
   /// Can be overridden with more involved mathemathics (incl. things like
   /// maneuverability of targetShip, etc.).
-  num calculateSuccessChance({Spaceship targetShip, ShipSystem targetSystem}) => 
+  num calculateSuccessChance(Spaceship targetShip, ShipSystem targetSystem) => 
         defaultSuccessChance;
   final num defaultSuccessChance = 1.0;
   
@@ -212,7 +212,8 @@ abstract class CombatMove {
       currentTimeToFinish -= 1;
     }
     if (currentTimeToFinish == 0) {
-      if (Randomly.saveAgainst(calculateSuccessChance())) {
+      if (Randomly.saveAgainst(calculateSuccessChance(targetShip, 
+                                                      targetSystem))) {
         reportSuccess();
         onSuccess();
       } else {
@@ -251,7 +252,7 @@ class FireGun extends CombatMove {
   int timeToFinish = 3;
   
   static final String name = "fire gun";
-  String get commandText => "fire";
+  String get commandText => "take a shot";
 
   @override
   void reportSettingUp() {
@@ -327,15 +328,15 @@ class FireGun extends CombatMove {
         "<object>", negative: true);
   }
   
-  static const num CHANCE_OF_IMPROVE_AIM_ON_SUCCESS = 0.2;
-  static const num CHANCE_OF_IMPROVE_AIM_ON_FAILURE = 0.2;
+  final num CHANCE_OF_IMPROVE_AIM_ON_SUCCESS = 0.2;
+  final num CHANCE_OF_IMPROVE_AIM_ON_FAILURE = 0.2;
   
   void onFailure() {
     if (!(targetSystem is Hull)) {
       // when targetting a specific system, it's possible to miss that one
       // but still hit the hull (but with half the probability)
       if (Randomly.saveAgainst(
-              calculateSuccessChance(targetSystem: targetShip.hull) / 2.0)) {
+              calculateSuccessChance(targetShip, targetShip.hull) / 2.0)) {
         _hit(targetShip.hull);
       } else {
         _report("<subject> {miss<es>|go<es> wide of} <object>, too", 
@@ -368,7 +369,7 @@ class FireGun extends CombatMove {
     return true;
   }
   
-  num calculateSuccessChance({Spaceship targetShip, ShipSystem targetSystem}) {
+  num calculateSuccessChance(Spaceship targetShip, ShipSystem targetSystem) {
     if (targetSystem == null) targetSystem = this.targetSystem;
     if (targetSystem == null && targetShip != null) {
       targetSystem = targetShip.hull;
@@ -379,16 +380,68 @@ class FireGun extends CombatMove {
     chance -= targetSystem.spaceship.maneuverability / 100;
     chance += 0.1 * weapon.getAimAt(targetShip);
     if (chance < 0) return 0.0;
+    if (chance > 1) return 1.0;
     return chance;
   }
   num defaultSuccessChance = 0.8;
 }
 
-// TODO class QuickFireGun extends FireGun
+class QuickFireGun extends FireGun {
+  QuickFireGun(ShipSystem system) : super(system);
+  
+  String commandText = "take a quick shot";
+  int timeToSetup = 1;
+  int timeToFinish = 3;
+  
+  @override
+  void reportSettingUp() {
+    var pilot = system.spaceship.pilot;
+    if (pilot == null || !pilot.isPlayer) {
+      throw new StateError("reportSettingUp should not have been called since "
+          "this spaceship's pilot is null or is not player");
+    }
+    
+    storyline.add("<subject> decide<s> to take a quick shot at <object's> "
+        "controls", subject: pilot, owner: system, object: targetShip,
+        time: system.spaceship.currentCombat.timeline.time);
+  }
+  
+  final num CHANCE_OF_IMPROVE_AIM_ON_SUCCESS = 0.1;
+  final num CHANCE_OF_IMPROVE_AIM_ON_FAILURE = 0.0;
+  
+  num defaultSuccessChance = 0.6;
+}
+
+
 // TODO class BerserkFireGun extends FireGun
 
-// TODO class ImproveAim 
 
+class ImproveAim extends CombatMove {
+  ImproveAim(ShipSystem system) : super(system);
+  
+  String get commandText => "improve aim";
+  int timeToSetup = 1;
+  int timeToFinish = 3;
+  
+  final bool needsTargetShip = true;
+  final bool needsTargetSystem = true;
+  
+  String stringSettingUp = null;
+  
+  String stringStarting = "<subject> {start<s> "
+        "{aiming at|taking aim at|fixing on|zeroing in on}|"
+        "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
+  
+  final num defaultSuccessChance = 0.9;
+  
+  String stringSuccess = "<subject> successfully improve<s> <subject's> aim "
+      "on <object>";
+  void onSuccess() {
+    Weapon weapon = (system as Weapon);
+    weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + 1);
+  }
+  
+}
 
 //class RedistributeEnergy extends CombatMove {
 //  RedistributeEnergy() : super("<subject> redistribute<s> energy", 

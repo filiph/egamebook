@@ -129,10 +129,10 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     void recalculateProbabilities() {
       if (this is Targettable) {
         allMoveSubmitButtons.forEach((move, button) {
-          num chance = move.calculateSuccessChance(targetShip: targetShip,
-                                                   targetSystem: targetSystem);
+          num chance = move.calculateSuccessChance(targetShip, targetSystem);
           String probability = Randomly.humanDescribeProbability(chance);
-          button.name = "${move.commandText} [$probability]";
+          button.name = "${Storyline.capitalize(move.commandText)} "
+              "[$probability]";
         });
       }
     }
@@ -254,8 +254,9 @@ class Weapon extends ShipSystem implements Targettable {
       _report("<subject> is out of ammo", negative: true);
     });
         
-    var defaultCombatMove = new FireGun(this);
-    availableMoves.add(defaultCombatMove);
+    availableMoves.addAll(<CombatMove>[
+        new FireGun(this), new QuickFireGun(this), new ImproveAim(this)
+    ]);
   }
   
   bool isOutsideHull = true;
