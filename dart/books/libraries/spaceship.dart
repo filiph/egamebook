@@ -29,10 +29,20 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
       throw new Exception("Spaceship $name's hull cannot be null.");
     }
     hull.hp.onMin().listen((_) => reportDestroy());
+    
+    availableMoves.addAll(<CombatMove>[
+        new ImprovePosition(thrusters.first)
+    ]);
   }
   
   /// The combat situation this ship is currently involved in.
   SpaceshipCombat currentCombat;
+  
+  /// List of actions that the player can take with [Spaceship]. These are
+  /// ship-level maneuvres, such as "loop" (for improving relative position)
+  /// and "hyperdrive jump".
+  List<CombatMove> availableMoves = [];
+  CombatMove currentMove;
   
   bool get isAlive => hull.hp.value > 0;
   Pilot pilot;
@@ -66,7 +76,28 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         (num prevValue, thruster) => prevValue + thruster.maneuverability)
         .toInt();
   
+  /// This is the linear representation of the positional advantages a ship
+  /// has towards other. The only meaningful number is [position] minus
+  /// [targetShip.position], which indicates how well the ship is situated in
+  /// relation to the [targetShip]. The absolute value of position is 
+  /// meaningless.
+  /// 
+  /// TODO: reset [position] to a meaningful value when targetShip is changed.
+  int position = 0;
+  
+  static const int POSITION_HORRIBLE = -2;
+  static const int POSITION_BAD = -1;
+  static const int POSITION_BALANCED = 0;
+  static const int POSITION_GOOD = 1;
+  static const int POSITION_GREAT = 2;
+  
   void update() {
+    if (currentMove != null) {
+      currentMove.update();
+      if (currentMove.isFinished) {
+        currentMove = null;
+      }
+    }
     allSystems.where((system) => system.isAliveAndActive)
       .forEach((system) => system.update());
     pilot.update();
@@ -100,6 +131,30 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
       }
     });
     return sections;
+  }
+  
+  /// Creates all-ship maneuvres.
+  /// TODO: this is very similar to [ShipSystem.createSetupSection], make DRY
+  FormSection getManeuvreSetupSection() {
+    FormSection section = new FormSection("Maneuvres");
+    TextOutput text = new TextOutput();
+    text.current = "This is the maneuvres section.";  // TODO: Status + description.
+    section.append(text);
+    
+    availableMoves.where((move) => move.isActive).forEach((CombatMove move) {
+      SubmitButton button = new SubmitButton(
+          "${Storyline.capitalize(move.commandText)}",
+          () {
+            move.targetShip = targetShip;
+            move.currentTimeToSetup = move.timeToSetup;
+            currentMove = move;
+            move.start();
+            pilot.timeToNextInteraction = move.timeToSetup + move.timeToFinish;
+      });
+      button.disabled = targetShip == null;
+      section.append(button);
+    });
+    return section;
   }
   
   /// This is called by the ship automatically when it's hull is destroyed.

@@ -22,7 +22,8 @@ class Pilot extends Actor {
     
     if (spaceship != null && timeToNextInteraction <= 0) {
       if (isPlayer) {
-        _playerCreateForm([], spaceship.getSystemSetupSections());
+        _playerCreateForm(spaceship.getManeuvreSetupSection(), 
+            spaceship.getSystemSetupSections());
       } else {
         _aiChooseMove(spaceship.getAvailableMoves());
       }
@@ -33,19 +34,18 @@ class Pilot extends Actor {
   
   // TODO: add pilot's maneuvres, communications, specials
   // TODO: FormSection -> FormDialogs
-  void _playerCreateForm(List<CombatMove> maneuvres, List<FormSection> sections) {
+  void _playerCreateForm(FormSection maneuvres, List<FormSection> sections) {
     Form form = new Form();
-    
+    if (maneuvres != null) {
+      form.children.add(maneuvres);
+    }
     form.children.addAll(sections);
-
     showForm(form);
   }
   
   // TODO author can subclass Pilot and pre-program AI to pick moves
   void _aiChooseMove(List<CombatMove> moves) {
-    // dumb pilot doesn't touch anything
-    // TODO: target most healthy enemy ship
-    // TODO: start retreating if shaken up and allowed to do so
+    // Randomly.choose(moves) TODO
   }
   
   // TODO _aiUpdate - add 

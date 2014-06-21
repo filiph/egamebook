@@ -35,7 +35,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   
   bool get isAlive => hp.value > 0;
   
-  /// List of actions (one per turn) that the player can take with this 
+  /// List of actions that the player can take with this 
   /// [ShipSystem].
   List<CombatMove> availableMoves = [];
   CombatMove currentMove;
@@ -97,12 +97,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   void update() {
     if (currentMove != null) {
       currentMove.update();
-      if (currentMove.currentTimeToFinish == 0) {
-        if (currentMove.autoRepeat) {
-          currentMove.currentTimeToFinish = currentMove.timeToFinish;
-        } else {
-          currentMove = null;
-        }
+      if (currentMove.isFinished) {
+        currentMove = null;
       }
     }
   }
@@ -200,7 +196,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     
     availableMoves.where((move) => move.isActive).forEach((CombatMove move) {
       SubmitButton button = new SubmitButton(
-          "${move.commandText}", // TODO: add probability range
+          "${Storyline.capitalize(move.commandText)}",
           () {
             if (targetShip != null && targetSystem == null) {
               targetSystem = targetShip.hull;
@@ -211,7 +207,6 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
               (this as Targettable).targetShip = targetShip;
               (this as Targettable).targetSystem = targetSystem;
             }
-            move.currentTimeToSetup = move.timeToSetup;
             currentMove = move;
             move.start();
             spaceship.pilot.timeToNextInteraction = 
