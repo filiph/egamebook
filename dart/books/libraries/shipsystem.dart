@@ -114,7 +114,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   /// 
   /// Returns [:null:] when no section is required for the system.
   FormSection createSetupSection() {
-    FormSection section = new FormSection(name);
+    FormSection section = new FormSection(Storyline.capitalize(name));
     TextOutput text = new TextOutput();
     text.current = "This is $name section.";  // TODO: Status + description.
     section.append(text);
