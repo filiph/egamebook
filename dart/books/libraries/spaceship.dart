@@ -182,7 +182,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
                                                  Weapon weapon) {
     storyline.add("thanks to <object's> "
         "${relativePosition >= Spaceship.POSITION_GREAT ? 'vastly ' : ''}"
-        "superior position, <subject> is hit in "
+        "superior position, <subjectNoun> is hit in "
         "<subjectPronoun's> weak spot", subject: system, 
         object: weapon.spaceship, endSentence: true, negative: true,
         time: currentCombat.timeline.time);
@@ -194,7 +194,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
                                                  Weapon weapon) {
     storyline.add("because of <object's> "
         "${relativePosition <= Spaceship.POSITION_HORRIBLE ? 'extremely ' : ''}"
-        "bad position, <subject> is hit in "
+        "bad position, <subjectNoun> is hit in "
         "<subjectPronoun's> toughest spot", subject: system, 
         object: weapon.spaceship, endSentence: true, positive: true,
         time: currentCombat.timeline.time);

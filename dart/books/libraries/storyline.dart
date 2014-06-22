@@ -92,6 +92,7 @@ class Storyline {
   static const String OBJECT_POSSESIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
   static const String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
+  static const String SUBJECT_NOUN = "<subjectNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
@@ -307,8 +308,8 @@ class Storyline {
 
   /// makes sure the sentence flows well with the previous sentence(s), then 
   /// calls getString to do in-sentence substitution
-  String substitute(int i, String str, [bool useSubjectPronoun=false, 
-      bool useObjectPronoun=false]) {
+  String substitute(int i, String str, {bool useSubjectPronoun: false, 
+      bool useObjectPronoun: false}) {
     String result = str.replaceAll(ACTION, string(i));
     if ((useObjectPronoun || same('object', i, i-1)) &&
         !(object(i).pronoun == Pronoun.IT && 
@@ -392,9 +393,11 @@ class Storyline {
         result = result.replaceAll(VERB_HAVE, "has");
       }
       
-      result = addParticleToFirstOccurence(result, SUBJECT, subject);
-      result = result.replaceFirst(SUBJECT, subject.name);
+      result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
       result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
+      
+      result = addParticleToFirstOccurence(result, SUBJECT_NOUN, subject);
+      result = result.replaceFirst(SUBJECT_NOUN, subject.name);
       
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       if (str.contains(new RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
@@ -453,6 +456,9 @@ class Storyline {
     return Randomly.parse(result);
   }
 
+  /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like 
+  /// [:<subject>:]) in [string]. The next occurences will be automatically
+  /// converted to pronouns. 
   static String addParticleToFirstOccurence(String string, String SUB_STRING, 
                                             Entity entity) {
     // Make sure we don't add particles to "your car" etc.
