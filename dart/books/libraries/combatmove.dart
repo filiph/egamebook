@@ -300,8 +300,6 @@ class FireGun extends CombatMove {
   void _hit(ShipSystem targetSystem) {
     var damage = weapon.damage;
     
-    // XXX: START HERE - relative position influences damage.
-    
     if (damage == 0) return;
     var shield = targetSystem.spaceship.shield;
     if (shield != null && shield.isAliveAndActive && shield.sp.isNonZero) {
@@ -331,6 +329,29 @@ class FireGun extends CombatMove {
       _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
           "successfully hit<s>} <object>", object: targetSystem,
           positive: true);
+      
+      int relativePosition = system.spaceship.position - 
+          targetSystem.spaceship.position;
+      
+      if (relativePosition >= Spaceship.POSITION_GREAT) {
+        damage *= 1.5;
+        targetSystem.spaceship.reportIncreasedHitDamageBecauseOfPosition(
+            relativePosition, targetSystem, weapon);
+      } else if (relativePosition >= Spaceship.POSITION_GOOD) {
+        damage *= 1.25;
+        targetSystem.spaceship.reportIncreasedHitDamageBecauseOfPosition(
+            relativePosition, targetSystem, weapon);
+      }
+      
+      if (relativePosition <= Spaceship.POSITION_HORRIBLE) {
+        damage /= 1.5;
+        targetSystem.spaceship.reportDecreasedHitDamageBecauseOfPosition(
+            relativePosition, targetSystem, weapon);
+      } else if (relativePosition <= Spaceship.POSITION_BAD) {
+        targetSystem.spaceship.reportDecreasedHitDamageBecauseOfPosition(
+            relativePosition, targetSystem, weapon);
+      }
+      
       targetSystem.hp.value -= damage;
     }
     if (Randomly.saveAgainst(chanceOfImproveAimOnSuccess)) {

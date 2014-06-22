@@ -170,5 +170,34 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /*
    * TODO: saveable only primitives, rest should be remembered by Combat
    */
+  
+  /// Called by [CombatMove] when the position of an attacking ship allows it
+  /// to do more damage.
+  /// 
+  /// This is meant to be overridden by different types of ship. For example,
+  /// a capital ship could "open it's broadside", while a fighter could 
+  /// "flash its weak spot".
+  void reportIncreasedHitDamageBecauseOfPosition(int relativePosition, 
+                                                 ShipSystem system,
+                                                 Weapon weapon) {
+    storyline.add("thanks to <object's> "
+        "${relativePosition >= Spaceship.POSITION_GREAT ? 'vastly ' : ''}"
+        "superior position, <subject> is hit in "
+        "<subjectPronoun's> weak spot", subject: system, 
+        object: weapon.spaceship, endSentence: true, negative: true,
+        time: currentCombat.timeline.time);
+  }
+  
+  /// Same as [reportIncreasedHitDamageBecauseOfPosition], but for 
+  void reportDecreasedHitDamageBecauseOfPosition(int relativePosition, 
+                                                 ShipSystem system,
+                                                 Weapon weapon) {
+    storyline.add("because of <object's> "
+        "${relativePosition <= Spaceship.POSITION_HORRIBLE ? 'extremely ' : ''}"
+        "bad position, <subject> is hit in "
+        "<subjectPronoun's> toughest spot", subject: system, 
+        object: weapon.spaceship, endSentence: true, positive: true,
+        time: currentCombat.timeline.time);
+  }
 }
 
