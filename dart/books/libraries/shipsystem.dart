@@ -63,11 +63,6 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   
   void reportDamage(num damage) {
     num percentage = damage / hp.range;
-    if (percentage >= 0.7) {
-      _report("<owner's> <subject> {get<s>|<is>} {almost|nearly} "
-          "{destroyed|shattered}", negative: true);
-      return;
-    } 
     
     if (percentage >= 0.5) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "

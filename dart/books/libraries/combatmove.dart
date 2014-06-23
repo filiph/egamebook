@@ -76,7 +76,7 @@ abstract class CombatMove {
   
   /// Reported when the move finished with failure.
   void reportFailure() => _report(stringFailure); 
-  String stringFailure = "<subject> failed to perform $name";
+  String stringFailure = "<subject> fail<s> to perform $name";
   void onFailure() {}
 
   /// Reported when the move is going for another round.
@@ -533,6 +533,9 @@ class ImprovePosition extends SpaceshipCombatMove {
   void onSuccess() {
     spaceship.position += 1;
   }
+  
+  String stringFailure = "<subject> fail<s> to improve <subject's> position "
+      "on <object>";
   
   static const int IMPROVE_BY = 1;
 }
