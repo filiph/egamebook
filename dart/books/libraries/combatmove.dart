@@ -100,9 +100,13 @@ abstract class CombatMove {
     if (system.spaceship.pilot.isPlayer) {
       subject = system.spaceship.pilot;
       owner = null;
+    } else if (system.spaceship.team == Actor.FRIEND ||
+        system.spaceship.team == Actor.NEUTRAL) {
+      subject = system.spaceship;
+      owner = system.spaceship.pilot;
     } else {
-      subject = system;
-      owner = system.spaceship;
+      subject = system.spaceship;
+      owner = null;
     }
     if (object == null) {
       object = _getTargetObject();
@@ -516,7 +520,7 @@ class ImprovePosition extends SpaceshipCombatMove {
   
   String commandText = "improve position";
   int timeToSetup = 1;
-  int timeToFinish = 3;
+  int timeToFinish = 5;
   
   final bool needsTargetShip = true;
   
