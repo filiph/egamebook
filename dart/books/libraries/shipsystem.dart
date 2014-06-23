@@ -89,6 +89,35 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         positive: positive, time: spaceship.currentCombat.timeline.time);
   }
   
+  /// Returns a natural entity for reporting of a [CombatMove] performed
+  /// by this system. E.g. if an enemy's system is firing at you, we want
+  /// to read that "the enemy is firing at you".
+  Entity getReportingSubject() {
+    Actor subject;
+    if (spaceship.pilot.isPlayer) {
+      subject = spaceship.pilot;
+    } else if (spaceship.team == Actor.FRIEND ||
+        spaceship.team == Actor.NEUTRAL) {
+      subject = spaceship;
+    } else {
+      subject = spaceship;
+    }
+    return subject;
+  }
+  
+  Entity getReportingOwner() {
+    Actor owner;
+    if (spaceship.pilot.isPlayer) {
+      owner = null;
+    } else if (spaceship.team == Actor.FRIEND ||
+        spaceship.team == Actor.NEUTRAL) {
+      owner = spaceship.pilot;
+    } else {
+      owner = null;
+    }
+    return owner;
+  }
+  
   void update() {
     if (currentMove != null) {
       currentMove.update();
@@ -237,12 +266,16 @@ class Weapon extends ShipSystem implements Targettable {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
                        this.damage: 1.0, this.shieldPenetration: 0.0,
                        this.accuracyModifier: 1.0,
-                       Pronoun pronoun: Pronoun.IT}) 
+                       Pronoun pronoun: Pronoun.IT,
+                       Entity projectile}) 
       : super(name, maxHp: maxHp, pronoun: pronoun) {
     if (ammo == null) ammo = new IntScale(max: maxAmmo);  // TODO: unlimited
     ammo.onMin().listen((_) {
       _report("<subject> is out of ammo", negative: true);
     });
+    if (projectile != null) {
+      this.projectile = projectile;
+    }
         
     availableMoves.addAll(<CombatMove>[
         new FireGun(this), new QuickFireGun(this), new ImproveAim(this)
@@ -255,7 +288,7 @@ class Weapon extends ShipSystem implements Targettable {
   ShipSystem targetSystem;
   
   IntScale ammo;
-  String projectileName = "projectile";
+  Entity projectile = new Entity.withOptions("projectile");
   
   num accuracyModifier = 1.0;
   num shieldPenetration = 0.0;

@@ -92,31 +92,27 @@ abstract class CombatMove {
     system.currentMove = null;
   }
   
-  void _report(String str, {Entity object, bool positive: false, 
+  void _report(String str, {Entity subject, Entity owner, 
+    Entity object, bool positive: false, 
     bool negative: false}) {
     if (str == null || str == "") return;
-    Actor owner;
-    Actor subject;
-    if (system.spaceship.pilot.isPlayer) {
-      subject = system.spaceship.pilot;
-      owner = null;
-    } else if (system.spaceship.team == Actor.FRIEND ||
-        system.spaceship.team == Actor.NEUTRAL) {
-      subject = system.spaceship;
-      owner = system.spaceship.pilot;
-    } else {
-      subject = system.spaceship;
-      owner = null;
+    
+    if (subject == null) {
+      subject = system.getReportingSubject();
     }
+    if (owner == null) {
+      owner = system.getReportingOwner();
+    }
+    
     if (object == null) {
-      object = _getTargetObject();
+      object = getTargetObject(targetShip, targetSystem);
     }
     storyline.add(str, subject: subject, owner: owner, object: object, 
         positive: positive, negative: negative, 
         time: system.spaceship.currentCombat.timeline.time);
   }
   
-  Entity _getTargetObject() {
+  static Entity getTargetObject(Entity targetShip, Entity targetSystem) {
     Entity object = targetSystem;
     if (object is Hull) {
       // When failing to hit hull, what we really miss is the ship.
@@ -124,6 +120,9 @@ abstract class CombatMove {
     }
     if (object == null) {
       object = targetShip;
+    }
+    if (object is Spaceship && (object as Spaceship).pilot.isPlayer) {
+      object = (object as Spaceship).pilot;
     }
     return object;
   }
@@ -304,6 +303,9 @@ class FireGun extends CombatMove {
   void _hit(ShipSystem targetSystem) {
     var damage = weapon.damage;
     
+    Entity object = CombatMove.getTargetObject(targetSystem.spaceship, 
+        targetSystem);
+    
     if (damage == 0) return;
     var shield = targetSystem.spaceship.shield;
     if (shield != null && shield.isAliveAndActive && shield.sp.isNonZero) {
@@ -322,16 +324,16 @@ class FireGun extends CombatMove {
         }
       } else {
         // TODO: better
-        storyline.add("the ${weapon.projectileName} "
+        storyline.add("<subject> "
             "goes {right|} through <object's> shield",
-            subject: system.spaceship, object: targetSystem.spaceship, 
+            subject: weapon.projectile, object: targetSystem.spaceship, 
             positive: true,
             time: system.spaceship.currentCombat.timeline.time);
       }
     }
     if (damage > 0) {
       _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
-          "successfully hit<s>} <object>", object: targetSystem,
+          "successfully hit<s>} <object>", object: object,
           positive: true);
       
       int relativePosition = system.spaceship.position - 
@@ -339,21 +341,21 @@ class FireGun extends CombatMove {
       
       if (relativePosition >= Spaceship.POSITION_GREAT) {
         damage *= 1.5;
-        targetSystem.spaceship.reportIncreasedHitDamageBecauseOfPosition(
-            relativePosition, targetSystem, weapon);
+        _report("<subject> hit<s> <object's> weakest spot", 
+            subject: weapon.projectile, object: object, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_GOOD) {
         damage *= 1.25;
-        targetSystem.spaceship.reportIncreasedHitDamageBecauseOfPosition(
-            relativePosition, targetSystem, weapon);
+        _report("<subject> hit<s> one of <object's> weaker spots", 
+            subject: weapon.projectile, object: object, positive: true);
       }
       
       if (relativePosition <= Spaceship.POSITION_HORRIBLE) {
         damage /= 1.5;
-        targetSystem.spaceship.reportDecreasedHitDamageBecauseOfPosition(
-            relativePosition, targetSystem, weapon);
+        _report("<subject> hit<s> <object's> toughest spot", 
+            subject: weapon.projectile, object: object, negative: true);
       } else if (relativePosition <= Spaceship.POSITION_BAD) {
-        targetSystem.spaceship.reportDecreasedHitDamageBecauseOfPosition(
-            relativePosition, targetSystem, weapon);
+        _report("<subject> hit<s> one of <object's> tougher spots", 
+            subject: weapon.projectile, object: object, negative: true);
       }
       
       targetSystem.hp.value -= damage;
@@ -441,7 +443,7 @@ class QuickFireGun extends FireGun {
           "this spaceship's pilot is null or is not player");
     }
     
-    storyline.add("<subject> decide<s> to take a quick shot at <object's>", 
+    storyline.add("<subject> decide<s> to take a quick shot at <object>", 
         subject: pilot, owner: system, object: targetShip,
         time: system.spaceship.currentCombat.timeline.time);
   }
