@@ -49,7 +49,15 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   
   /// The ship that this spaceship is focused on. Doesn't prevent a weapon 
   /// from targeting a different ship.
-  Spaceship targetShip;
+  Spaceship get targetShip => _targetShip;
+  Spaceship _targetShip;
+  set targetShip(Spaceship value) {
+    weapons.forEach((weapon) {
+      weapon.targetShip = value;
+      weapon.targetSystem = null;
+    });
+    _targetShip = value;
+  }
   
   final Hull hull;
   final Shield shield;

@@ -25,7 +25,8 @@ class Pilot extends Actor {
         _playerCreateForm(spaceship.getManeuvreSetupSection(), 
             spaceship.getSystemSetupSections());
       } else {
-        _aiChooseMove(spaceship.getAvailableMoves());
+        _aiChooseMove(spaceship.getManeuvreSetupSection(), 
+            spaceship.getSystemSetupSections());
       }
     }
     
@@ -44,8 +45,13 @@ class Pilot extends Actor {
   }
   
   // TODO author can subclass Pilot and pre-program AI to pick moves
-  void _aiChooseMove(List<CombatMove> moves) {
-    // Randomly.choose(moves) TODO
+  void _aiChooseMove(FormSection maneuvres, List<FormSection> sections) {
+    List<SubmitButton> allButtons = [[maneuvres], sections].expand((e) => e)
+        .expand((FormSection s) => s.children.where((el) => el is SubmitButton))
+        .toList(growable: false);
+    
+    SubmitButton buttonToPress = Randomly.choose(allButtons);
+    buttonToPress.onSubmit();
   }
   
   // TODO _aiUpdate - add 
