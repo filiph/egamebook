@@ -96,9 +96,6 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     Actor subject;
     if (spaceship.pilot.isPlayer) {
       subject = spaceship.pilot;
-    } else if (spaceship.team == Actor.FRIEND ||
-        spaceship.team == Actor.NEUTRAL) {
-      subject = spaceship;
     } else {
       subject = spaceship;
     }

@@ -20,11 +20,13 @@ final Storyline storyline = new Storyline();
  * naturally sounding narrative.
  */
 class Report {
-  Report(this.string, {this.subject, this.object, this.owner, this.but: false, 
-    this.positive: false, this.negative: false, this.endSentence: false, 
-    this.startSentence: false, this.wholeSentence: false, this.time});
+  Report(this.string, {this.subject, this.object, this.owner, this.objectOwner, 
+      this.but: false, this.positive: false, this.negative: false, 
+      this.endSentence: false, this.startSentence: false, 
+      this.wholeSentence: false, this.time});
   
   Report.empty() : string = "", subject = null, object = null, owner = null,
+      objectOwner = null,
       but = false, positive = false, negative = false, endSentence = false,
       startSentence = false, wholeSentence = false, time = null;
   
@@ -32,6 +34,7 @@ class Report {
   final Entity subject;
   final Entity object;
   final Entity owner;
+  final Entity objectOwner;
   bool but;
   final bool positive;
   final bool negative;
@@ -87,6 +90,7 @@ class Storyline {
   static const String SUBJECT_POSSESIVE = "<subject's>";
   static const String OWNER = "<owner>";
   static const String OWNER_POSSESIVE = "<owner's>";
+  static const String OBJECT_OWNER = "<object-owner>";
   static const String OBJECT_OWNER_POSSESIVE = "<object-owner's>";
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESIVE = "<object's>";
@@ -97,6 +101,7 @@ class Storyline {
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
+  static const String OBJECT_OWNER_PRONOUN = "<object-ownerPronoun>";
   static const String OBJECT_OWNER_PRONOUN_POSSESIVE = "<object-ownerPronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
@@ -116,6 +121,7 @@ class Storyline {
    * letter, [wholeSentence] will automatically be [:true:] for convenience.
    */
   void add(String str, {Entity subject, Entity object, Entity owner, 
+    Entity objectOwner,
     bool but: false, bool positive: false, bool negative: false, 
     bool endSentence: false, bool startSentence: false, 
     bool wholeSentence: false, int time}) {
@@ -134,6 +140,7 @@ class Storyline {
     }
     
     reports.add(new Report(str, subject: subject, object: object, owner: owner,
+        objectOwner: objectOwner,
         but: but, positive: positive, negative: negative, 
         endSentence: endSentence, startSentence: startSentence, 
         wholeSentence: wholeSentence, time: time));
@@ -320,9 +327,9 @@ class Storyline {
       
       // Never show "the guard's it".
       result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", 
-        object(i).pronoun.nominative);
+        object(i).pronoun.accusative);
       result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", 
-        object(i).pronoun.nominative);
+        object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
@@ -361,12 +368,13 @@ class Storyline {
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
     return getString(result, subject: reports[i].subject, 
-        object: reports[i].object, owner: reports[i].owner);
+        object: reports[i].object, owner: reports[i].owner, 
+        objectOwner: reports[i].objectOwner);
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
   static String getString(String str, {Entity subject, Entity object, 
-      Entity owner}) {
+      Entity owner, Entity objectOwner}) {
     String result = str;
     if (subject != null) {
       if (subject.isPlayer) {
@@ -428,32 +436,55 @@ class Storyline {
       result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
+    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESIVE,
+        OWNER_PRONOUN, OWNER_PRONOUN_POSSESIVE);
+    result = _realizeOwner(objectOwner, result, str, OBJECT_OWNER, 
+        OBJECT_OWNER_POSSESIVE, OBJECT_OWNER_PRONOUN, 
+        OBJECT_OWNER_PRONOUN_POSSESIVE);
+
+    return Randomly.parse(result);
+  }
+
+  static String _realizeOwner(Entity owner, String result, String str, 
+        String OWNER_OR_OBJECT_OWNER, String OWNER_OR_OBJECT_OWNER_POSSESSIVE,
+        String OWNER_OR_OBJECT_OWNER_PRONOUN, 
+        String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE) {
     if (owner != null) {
       if (owner.isPlayer) { 
-        result = result.replaceAll(OWNER, Pronoun.YOU.accusative);
-        result = result.replaceAll(OWNER_POSSESIVE, Pronoun.YOU.genitive);
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, 
+            Pronoun.YOU.accusative);
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+            Pronoun.YOU.genitive);
       } else {
-        result = addParticleToFirstOccurence(result, OWNER, owner);
-        result = result.replaceAll(OWNER, owner.name);
+        result = addParticleToFirstOccurence(result, OWNER_OR_OBJECT_OWNER, 
+            owner);
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
       }
-      result = result.replaceAll(OWNER_PRONOUN, owner.pronoun.nominative);
-      if (str.contains(new RegExp("$OWNER.+$OWNER_POSSESIVE"))) {
-        //print("owner < owner_possessive: $str");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN, 
+          owner.pronoun.nominative);
+      if (str.contains(new RegExp("$OWNER_OR_OBJECT_OWNER.+"
+          "$OWNER_OR_OBJECT_OWNER_POSSESSIVE"))) {
         // "the ship and her gun"
-        result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+            owner.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, OWNER_POSSESIVE, owner);
-      result = result.replaceFirst(OWNER_POSSESIVE, "${owner.name}'s");
-      result = result.replaceAll(OWNER_POSSESIVE, owner.pronoun.genitive);
-      result = result.replaceAll(OWNER_PRONOUN_POSSESIVE, owner.pronoun.genitive);
+      result = addParticleToFirstOccurence(result, 
+          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner);
+      result = result.replaceFirst(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+          "${owner.name}'s");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+          owner.pronoun.genitive);
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE, 
+          owner.pronoun.genitive);
     } else {
       // owner == null
       // Get rid of <owner's> and <owner> when none is set up.
-      result = result.replaceAll(OWNER, "");
-      result = result.replaceAll(OWNER_POSSESIVE, "");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER, "");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, "");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN, "");
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE, "");
     }
-
-    return Randomly.parse(result);
+    return result;
   }
 
   /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like 
@@ -463,7 +494,9 @@ class Storyline {
                                             Entity entity) {
     // Make sure we don't add particles to "your car" etc.
     if (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
+        string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
+        string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
+        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
       return string;
     }
     

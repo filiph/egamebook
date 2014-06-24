@@ -92,8 +92,8 @@ abstract class CombatMove {
     system.currentMove = null;
   }
   
-  void _report(String str, {Entity subject, Entity owner, 
-    Entity object, bool positive: false, 
+  void _report(String str, {Entity subject, Entity owner, Entity objectOwner,
+    Entity object, bool positive: false, bool but: false,
     bool negative: false}) {
     if (str == null || str == "") return;
     
@@ -107,8 +107,15 @@ abstract class CombatMove {
     if (object == null) {
       object = getTargetObject(targetShip, targetSystem);
     }
-    storyline.add(str, subject: subject, owner: owner, object: object, 
-        positive: positive, negative: negative, 
+    if (objectOwner == null && object != null) {
+      if (object is ShipSystem && object is! Hull) {
+        objectOwner = object.spaceship;
+      }
+    }
+    
+    storyline.add(str, subject: subject, owner: owner, object: object,
+        objectOwner: objectOwner,
+        positive: positive, negative: negative, but: but,
         time: system.spaceship.currentCombat.timeline.time);
   }
   
@@ -291,10 +298,8 @@ class FireGun extends CombatMove {
 //      "<subject's> ${system.name} {begins|starts} "
 //                               "charging";
                                
-  void reportSuccess() {
-//    storyline.add("<subject's> ${system.name} fires at <object>",
-//                  subject: system.spaceship, object: targetShip);
-  }
+  @override
+  String stringSuccess = null;
   
   void onSuccess() {
     _hit(targetSystem);
@@ -305,6 +310,18 @@ class FireGun extends CombatMove {
     
     Entity object = CombatMove.getTargetObject(targetSystem.spaceship, 
         targetSystem);
+    Entity owner;
+    Entity subject;
+    
+    if (!system.spaceship.pilot.isPlayer) {
+      // Override the normal owner and subject - we need to report the enemy AI
+      // ship's weapon involved.
+      owner = weapon.spaceship;
+      subject = weapon;
+    }
+    // For player, use defaults (provide null to _report()).
+    _report("<owner's> <subject> {shoot<s>|fire<s>} at "
+        "<object-owner's> <object>", subject: subject, owner: owner);
     
     if (damage == 0) return;
     var shield = targetSystem.spaceship.shield;
@@ -332,9 +349,9 @@ class FireGun extends CombatMove {
       }
     }
     if (damage > 0) {
-      _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
-          "successfully hit<s>} <object>", object: object,
-          positive: true);
+//      _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
+//          "successfully hit<s>} <object>", object: object,
+//          positive: true);
       
       int relativePosition = system.spaceship.position - 
           targetSystem.spaceship.position;
@@ -347,14 +364,16 @@ class FireGun extends CombatMove {
         damage *= 1.25;
         _report("<subject> hit<s> one of <object's> weaker spots", 
             subject: weapon.projectile, object: object, positive: true);
-      }
-      
-      if (relativePosition <= Spaceship.POSITION_HORRIBLE) {
+      } else if (relativePosition >= Spaceship.POSITION_BALANCED) {
+        _report("<subject> hit<s>", 
+            subject: weapon.projectile, object: object, positive: true);
+      } else if (relativePosition >= Spaceship.POSITION_BAD) {
+        damage /= 1.25;
+        _report("<subject> hit<s> one of <object's> tougher spots", 
+            subject: weapon.projectile, object: object, negative: true);
+      } else /* relativePosition == Spaceship.POSITION_HORRIBLE, or worse */ {
         damage /= 1.5;
         _report("<subject> hit<s> <object's> toughest spot", 
-            subject: weapon.projectile, object: object, negative: true);
-      } else if (relativePosition <= Spaceship.POSITION_BAD) {
-        _report("<subject> hit<s> one of <object's> tougher spots", 
             subject: weapon.projectile, object: object, negative: true);
       }
       
@@ -366,8 +385,19 @@ class FireGun extends CombatMove {
   }
   
   void reportFailure() {
-    _report("<owner's> <subject> {fail<s> to hit|miss<es>|go<es> wide of} "
-        "<object>", negative: true);
+    Entity owner;
+    Entity subject;
+    if (!system.spaceship.pilot.isPlayer) {
+      // Override the normal owner and subject - we need to report the enemy AI
+      // ship's weapon involved.
+      owner = weapon.spaceship;
+      subject = weapon;
+    }
+    // For player, use defaults (provide null to _report()).
+    _report("<owner's> <subject> {shoot<s>|fire<s>} at "
+        "<object-owner's> <object>", subject: subject, owner: owner);
+    _report("<subject> {fail<s> to hit|miss<es>|go<es> wide}",
+        subject: weapon.projectile, negative: true, but: true);
   }
   
   final num chanceOfImproveAimOnSuccess = 0.2;
@@ -381,7 +411,7 @@ class FireGun extends CombatMove {
               calculateSuccessChance(targetShip, targetShip.hull) / 2.0)) {
         _hit(targetShip.hull);
       } else {
-        _report("<subject> {miss<es>|go<es> wide of} <object>, too", 
+        _report("<subject> completely {miss<es>|go<es> wide of} <object>", 
             object: targetShip, negative: true);
       }
     }
