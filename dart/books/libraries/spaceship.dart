@@ -85,14 +85,27 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         (num prevValue, thruster) => prevValue + thruster.maneuverability)
         .toInt();
   
-  /// This is the linear representation of the positional advantages a ship
-  /// has towards other. The only meaningful number is [position] minus
-  /// [targetShip.position], which indicates how well the ship is situated in
-  /// relation to the [targetShip]. The absolute value of position is 
-  /// meaningless.
-  /// 
-  /// TODO: reset [position] to a meaningful value when targetShip is changed.
-  int position = 0;
+  Map<Spaceship,int> _positionMap = new Map<Spaceship,int>();
+  int getPositionTowards(Spaceship targetShip) {
+    if (!_positionMap.containsKey(targetShip)) {
+      _positionMap[targetShip] = 0;
+    }
+    return _positionMap[targetShip];
+  }
+  void setPositionTowards(Spaceship targetShip, int value) {
+    if (value < POSITION_HORRIBLE) value = POSITION_HORRIBLE;
+    if (value > POSITION_GREAT) value = POSITION_GREAT;
+    _positionMap[targetShip] = value;
+  }
+  /// Changes relative position to both this ship and [targetShip]. When
+  /// [this] gains position, [targetShip] loses, and vice versa.
+  void changePositionDifferenceTowards(Spaceship targetShip, int change) {
+    // Change for this ship.
+    setPositionTowards(targetShip, getPositionTowards(targetShip) + change);
+    // Change for the other ship.
+    targetShip.setPositionTowards(this, 
+        targetShip.getPositionTowards(this) - change);
+  }
   
   static const int POSITION_HORRIBLE = -2;
   static const int POSITION_BAD = -1;

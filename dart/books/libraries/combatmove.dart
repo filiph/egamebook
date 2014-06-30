@@ -308,6 +308,17 @@ class FireGun extends CombatMove {
   String stringSuccess = null;
   
   void onSuccess() {
+    Entity owner, subject;
+    if (!system.spaceship.pilot.isPlayer) {
+      // Override the normal owner and subject - we need to report the enemy AI
+      // ship's weapon involved.
+      owner = weapon.spaceship;
+      subject = weapon;
+    }
+    // For player, use defaults (provide null to _report()).
+    _report("<owner's> <subject> {shoot<s>|fire<s>} at "
+        "<object-owner's> <object>", subject: subject, owner: owner);
+    
     _hit(targetSystem);
   }
   
@@ -318,16 +329,6 @@ class FireGun extends CombatMove {
         targetSystem);
     Entity owner;
     Entity subject;
-    
-    if (!system.spaceship.pilot.isPlayer) {
-      // Override the normal owner and subject - we need to report the enemy AI
-      // ship's weapon involved.
-      owner = weapon.spaceship;
-      subject = weapon;
-    }
-    // For player, use defaults (provide null to _report()).
-    _report("<owner's> <subject> {shoot<s>|fire<s>} at "
-        "<object-owner's> <object>", subject: subject, owner: owner);
     
     if (damage == 0) return;
     var shield = targetSystem.spaceship.shield;
@@ -359,8 +360,8 @@ class FireGun extends CombatMove {
 //          "successfully hit<s>} <object>", object: object,
 //          positive: true);
       
-      int relativePosition = system.spaceship.position - 
-          targetSystem.spaceship.position;
+      int relativePosition = system.spaceship
+          .getPositionTowards(targetSystem.spaceship);
       
       if (relativePosition >= Spaceship.POSITION_GREAT) {
         damage *= 1.5;
@@ -533,6 +534,11 @@ class ImproveAim extends CombatMove {
     weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + IMPROVE_BY);
   }
   
+  @override
+  void reportFailure() => _report(stringFailure, object: Entity.NOTHING,
+      negative: true);
+  String stringFailure = "<subject's> maneuvre fails";
+  
   static const int IMPROVE_BY = 1;
 }
 
@@ -598,7 +604,7 @@ class ImprovePosition extends SpaceshipCombatMove {
       "position on <object>";
   
   void onSuccess() {
-    spaceship.position += improvementStep;
+    spaceship.changePositionDifferenceTowards(targetShip, improvementStep);
     // TODO: report successful maneuvre, but wait for position reporting
     // until the end of "turn", where we say what the relative position is now.
   }
