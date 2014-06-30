@@ -591,6 +591,7 @@ abstract class EgbScripter {
     currentBlockIndex = null;
     _nextScriptStack.clear();
     choices.clear();
+    _currentForm = null;
     vars.clear();
     vars["points"] = _points;
     _points.clear();

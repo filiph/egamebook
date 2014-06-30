@@ -70,12 +70,12 @@ abstract class CombatMove {
   String stringCannotContinue = ""; // <subject> is no longer able to fire at <object>
   
   /// Reported when the move is successfully finished.
-  void reportSuccess() => _report(stringSuccess);
+  void reportSuccess() => _report(stringSuccess, positive: true);
   String stringSuccess = "<subject> successfully finish<es> $name";
   void onSuccess() {}
   
   /// Reported when the move finished with failure.
-  void reportFailure() => _report(stringFailure); 
+  void reportFailure() => _report(stringFailure, negative: true); 
   String stringFailure = "<subject> fail<s> to perform $name";
   void onFailure() {}
 
@@ -92,7 +92,8 @@ abstract class CombatMove {
     system.currentMove = null;
   }
   
-  void _report(String str, {Entity subject, Entity owner, Entity objectOwner,
+  void _report(String str, {Entity subject, 
+    Entity owner, Entity objectOwner,
     Entity object, bool positive: false, bool but: false,
     bool negative: false}) {
     if (str == null || str == "") return;
@@ -112,6 +113,11 @@ abstract class CombatMove {
         objectOwner = object.spaceship;
       }
     }
+    
+    if (subject == Entity.NOTHING) subject = null;
+    if (owner == Entity.NOTHING) owner = null;
+    if (objectOwner == Entity.NOTHING) objectOwner = null;
+    if (object == Entity.NOTHING) object = null;
     
     storyline.add(str, subject: subject, owner: owner, object: object,
         objectOwner: objectOwner,
@@ -366,7 +372,7 @@ class FireGun extends CombatMove {
             subject: weapon.projectile, object: object, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_BALANCED) {
         _report("<subject> hit<s>", 
-            subject: weapon.projectile, object: object, positive: true);
+            subject: weapon.projectile, object: Entity.NOTHING, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_BAD) {
         damage /= 1.25;
         _report("<subject> hit<s> one of <object's> tougher spots", 
@@ -397,7 +403,8 @@ class FireGun extends CombatMove {
     _report("<owner's> <subject> {shoot<s>|fire<s>} at "
         "<object-owner's> <object>", subject: subject, owner: owner);
     _report("<subject> {fail<s> to hit|miss<es>|go<es> wide}",
-        subject: weapon.projectile, negative: true, but: true);
+        subject: weapon.projectile, object: Entity.NOTHING,
+        negative: true, but: true);
   }
   
   final num chanceOfImproveAimOnSuccess = 0.2;
@@ -508,12 +515,17 @@ class ImproveAim extends CombatMove {
   
   String stringSettingUp = null;
   
+  @override
+  void reportStarting() => _report(stringStarting, object: targetShip);
   String stringStarting = "<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
         "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
   
   final num defaultSuccessChance = 0.9;
   
+  @override
+  void reportSuccess() => _report(stringSuccess, object: targetShip, 
+      positive: true);
   String stringSuccess = "<subject> successfully improve<s> <subject's> aim "
       "on <object>";
   void onSuccess() {
@@ -524,6 +536,9 @@ class ImproveAim extends CombatMove {
   static const int IMPROVE_BY = 1;
 }
 
+
+/// A subclass of CombatMove that is not dependent on one single [ShipSystem].
+/// Maneuvres like "improve position" are an example of [SpaceshipCombatMove].
 abstract class SpaceshipCombatMove extends CombatMove {
   SpaceshipCombatMove(ShipSystem system) : super(system) {
     spaceship = system.spaceship;
@@ -545,6 +560,20 @@ abstract class SpaceshipCombatMove extends CombatMove {
   }
   
   final bool needsTargetSystem = false;
+  
+  @override
+  void reportStarting() => _report(stringStarting, object: targetShip);
+  @override
+  void reportSuccess() => _report(stringSuccess, object: targetShip, 
+      positive: true);
+  @override
+  void reportCannotContinue() => _report(stringCannotContinue, 
+      object: targetShip);
+  @override
+  void reportFailure() => _report(stringFailure, object: targetShip,
+      negative: true); 
+  @override
+  void reportAutoRepeat() => _report(stringAutoRepeat, object: targetShip); 
 }
 
 class ImprovePosition extends SpaceshipCombatMove {
@@ -554,6 +583,9 @@ class ImprovePosition extends SpaceshipCombatMove {
   int timeToSetup = 1;
   int timeToFinish = 5;
   
+  final num defaultSuccessChance = 0.9;
+  final int improvementStep = 1;
+
   final bool needsTargetShip = true;
   
   String stringSettingUp = null;
@@ -562,16 +594,43 @@ class ImprovePosition extends SpaceshipCombatMove {
       "to {improve|better} <subject's> "
       "position on <object>";
   
-  final num defaultSuccessChance = 0.9;
-  
   String stringSuccess = "<subject> successfully improve<s> <subject's> "
       "position on <object>";
+  
   void onSuccess() {
-    spaceship.position += 1;
+    spaceship.position += improvementStep;
+    // TODO: report successful maneuvre, but wait for position reporting
+    // until the end of "turn", where we say what the relative position is now.
   }
   
   String stringFailure = "<subject> fail<s> to improve <subject's> position "
       "on <object>";
+}
+
+class RiskyImprovePosition extends ImprovePosition {
+  RiskyImprovePosition(ShipSystem mainThruster) : super(mainThruster);
   
-  static const int IMPROVE_BY = 1;
+  String commandText = "offensive maneuvre";
+  
+  @override
+  final num defaultSuccessChance = 0.3;
+  @override
+  final int improvementStep = 3;
+  final num regressionChance = 0.2;
+  
+  String stringStarting = "<subject> {start<s>|begin<s>} a {risky|daring} "
+      "maneuvre to gain positional advantage on <object>";
+  
+  String stringSuccess = "<subject> successfully pull<s> off the maneuvre "
+      "on <object>";
+  
+  void reportFailure() => _report(stringFailure, object: Entity.NOTHING);
+  String stringFailure = "<subject's> maneuvre fails";
+  
+  @override
+  void onFailure() {
+    if (Randomly.saveAgainst(regressionChance)) {
+      _report("in fact, <subject's> position on <object> worsens");
+    }
+  }
 }

@@ -12,6 +12,12 @@ class Entity {
     this.isPlayer: false, this.nameIsProperNoun: false});
   
   Entity(this.name, this.nameIsProperNoun, this.pronoun, this.team, this.isPlayer);
+
+  /// Used to allow passing arguments that are automatically generated from
+  /// context. In this case, a method can accept both a [:null:] Entity (i.e.
+  /// what makes most sense given other arguments) or [Entity.NOTHING] (i.e.
+  /// nothing/nobody).
+  static final Entity NOTHING = new Entity.withOptions("__NOTHING__");
   
   /// A proper noun of an entity is a unique name: like "John" for a character
   /// or "Sun" for our star, or "Painless" for the gun in the movie Predator.

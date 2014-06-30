@@ -31,7 +31,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     hull.hp.onMin().listen((_) => reportDestroy());
     
     availableMoves.addAll(<CombatMove>[
-        new ImprovePosition(thrusters.first)
+        new ImprovePosition(thrusters.first),
+        new RiskyImprovePosition(thrusters.first)
     ]);
   }
   
@@ -178,40 +179,6 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /*
    * TODO: saveable only primitives, rest should be remembered by Combat
    */
-  
-  /// Called by [CombatMove] when the position of an attacking ship allows it
-  /// to do more damage.
-  /// 
-  /// This is meant to be overridden by different types of ship. For example,
-  /// a capital ship could "open it's broadside", while a fighter could 
-  /// "flash its weak spot".
-  @deprecated("Use this for changing position, not hits.")
-  void reportIncreasedHitDamageBecauseOfPosition(int relativePosition, 
-                                                 ShipSystem system,
-                                                 Weapon weapon) {
-    Actor subject = CombatMove.getTargetObject(weapon.spaceship, weapon);
-    Actor owner = weapon.getReportingOwner();
-    storyline.add("thanks to <object's> "
-        "${relativePosition >= Spaceship.POSITION_GREAT ? 'vastly ' : ''}"
-        "superior position, <owner's> <subjectNoun> <is> hit in "
-        "<subjectPronoun's> weak spot", subject: subject, owner: owner,
-        object: weapon.spaceship, endSentence: true, negative: true,
-        time: currentCombat.timeline.time);
-  }
-  
-  /// Same as [reportIncreasedHitDamageBecauseOfPosition], but for 
-  @deprecated("Use this for changing position, not hits.")
-  void reportDecreasedHitDamageBecauseOfPosition(int relativePosition, 
-                                                 ShipSystem system,
-                                                 Weapon weapon) {
-    Actor subject = weapon.getReportingSubject();
-    Actor owner = weapon.getReportingOwner();
-    storyline.add("because of <object's> "
-        "${relativePosition <= Spaceship.POSITION_HORRIBLE ? 'extremely ' : ''}"
-        "bad position, <owner's> <subjectNoun> <is> hit in "
-        "<subjectPronoun's> toughest spot", subject: subject, owner: owner,
-        object: weapon.spaceship, endSentence: true, positive: true,
-        time: currentCombat.timeline.time);
-  }
+ 
 }
 
