@@ -144,7 +144,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     
     // Helper method that adds probability to action buttons.
     void recalculateProbabilities() {
-      if (this is Targettable) {
+      if (this is CanHaveTarget) {
         allMoveSubmitButtons.forEach((move, button) {
           num chance = move.calculateSuccessChance(targetShip, targetSystem);
           String probability = Randomly.humanDescribeProbability(chance);
@@ -154,9 +154,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       }
     }
     
-    if (this is Targettable) {
-      targetShip = (this as Targettable).targetShip;
-      targetSystem = (this as Targettable).targetSystem;
+    if (this is CanHaveTarget) {
+      targetShip = (this as CanHaveTarget).targetShip;
+      targetSystem = (this as CanHaveTarget).targetSystem;
       
       MultipleChoiceInput targetShipInput = 
           new MultipleChoiceInput("Target ship:", (_) {});
@@ -224,9 +224,9 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
             }
             move.targetShip = targetShip;
             move.targetSystem = targetSystem;
-            if (this is Targettable) {
-              (this as Targettable).targetShip = targetShip;
-              (this as Targettable).targetSystem = targetSystem;
+            if (this is CanHaveTarget) {
+              (this as CanHaveTarget).targetShip = targetShip;
+              (this as CanHaveTarget).targetSystem = targetSystem;
             }
             currentMove = move;
             move.start();
@@ -242,24 +242,15 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   }
 }
 
-//class Projectile extends Actor {
-//  Projectile(name, {this.shieldDamage: 0, this.shieldPenetration: 0.0, 
-//                    this.hpDamage: 0, team: null}) 
-//      : super(name: name, team: team, isPlayer: false, pronoun: Pronoun.IT) {
-//    
-//  }
-//  
-//}
-
-abstract class Targettable extends ShipSystem {
+abstract class CanHaveTarget extends ShipSystem {
   Spaceship targetShip;
   ShipSystem targetSystem;
 
-  Targettable(String name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) : 
+  CanHaveTarget(String name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) : 
     super(name, maxHp: maxHp, hp: hp, maxPowerInput: maxPowerInput);
 }
 
-class Weapon extends ShipSystem implements Targettable {
+class Weapon extends ShipSystem implements CanHaveTarget {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
                        this.damage: 1.0, this.shieldPenetration: 0.0,
                        this.accuracyModifier: 1.0,
@@ -362,7 +353,7 @@ class Thruster extends ShipSystem {
       _report("<owner's> <subject> start<s> spewing sparks from its internals", 
           negative: true);
       _report("<subject> lose<s> most of <subject's> thrust", 
-                negative: true);
+          negative: true);
     };
     this.hp.downwardsChangeCallbacks[0.2] = (_) {
       _report("<owner's> <subject> <is> {now|} "
@@ -391,6 +382,41 @@ class Thruster extends ShipSystem {
 class Hull extends ShipSystem {
   Hull({String name: "hull", maxHp: 10}) 
       : super(name, maxHp: maxHp) {
+    
+    hp.downwardsChangeCallbacks[0.80] = (_) {
+      reportEightyPercentHP();
+    };
+    hp.downwardsChangeCallbacks[0.60] = (_) {
+      reportSixtyPercentHP();
+    };
+    hp.downwardsChangeCallbacks[0.40] = (_) {
+      reportFortyPercentHP();
+    };
+    hp.downwardsChangeCallbacks[0.20] = (_) {
+      reportTwentyPercentHP();
+    };
+  }
+  
+  void reportEightyPercentHP() {
+    _report("there are a number of {ridges|scars} on <owner's> <subject> "
+        "surface now", negative: true);
+  }
+  
+  void reportSixtyPercentHP() {
+    _report("<owner's> <subject> <is> now torn on many places", 
+        negative: true);
+  }
+  
+  void reportFortyPercentHP() {
+    _report("<owner's> <subject> lose<s> <subject's> structural integrity", 
+        negative: true);
+  }
+  
+  void reportTwentyPercentHP() {
+    _report("<owner's> <subject> <is> now full of gaping holes", 
+        negative: true);
+    _report("<owner's> <subject> <is> {horribly |}deformed", 
+        negative: true);
   }
   
   bool isOutsideHull = false;  // Hull is not, technically, _outside_ hull.
@@ -401,6 +427,9 @@ class Hull extends ShipSystem {
   @override
   String stringDestroy = null;  // When hull is destroyed, so is the ship.
 }
+
+// TODO: class BigHull extends Hull // with tailored reporting
+
 
 class Shield extends ShipSystem {
   Shield({String name: "shields", maxHp: 5, maxSp: 10, NumScale sp, 
