@@ -93,9 +93,10 @@ abstract class CombatMove {
   }
   
   void _report(String str, {Entity subject, 
-    Entity owner, Entity objectOwner,
-    Entity object, bool positive: false, bool but: false,
-    bool negative: false}) {
+      Entity owner, Entity objectOwner,
+      Entity object, bool preferShipAsObject: false, 
+      bool positive: false, bool but: false,
+      bool negative: false}) {
     if (str == null || str == "") return;
     
     if (subject == null) {
@@ -107,6 +108,9 @@ abstract class CombatMove {
     
     if (object == null) {
       object = getTargetObject(targetShip, targetSystem);
+      if (preferShipAsObject && object is ShipSystem) {
+        object = (object as ShipSystem).spaceship;
+      }
     }
     if (objectOwner == null && object != null) {
       if (object is ShipSystem && object is! Hull) {
@@ -517,7 +521,7 @@ class ImproveAim extends CombatMove {
   String stringSettingUp = null;
   
   @override
-  void reportStarting() => _report(stringStarting, object: targetShip);
+  void reportStarting() => _report(stringStarting, preferShipAsObject: true);
   String stringStarting = "<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
         "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
@@ -525,21 +529,21 @@ class ImproveAim extends CombatMove {
   final num defaultSuccessChance = 0.9;
   
   @override
-  void reportSuccess() => _report(stringSuccess, object: targetShip, 
+  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true, 
       positive: true);
   String stringSuccess = "<subject> successfully improve<s> <subject's> aim "
       "on <object>";
   void onSuccess() {
     Weapon weapon = (system as Weapon);
-    weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + IMPROVE_BY);
+    weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + improvementStep);
   }
   
   @override
-  void reportFailure() => _report(stringFailure, object: Entity.NOTHING,
+  void reportFailure() => _report(stringFailure, preferShipAsObject: true,
       negative: true);
-  String stringFailure = "<subject's> maneuvre fails";
+  String stringFailure = "<subject's> aim on <object> doesn't improve";
   
-  static const int IMPROVE_BY = 1;
+  final int improvementStep = 1;
 }
 
 
@@ -568,18 +572,19 @@ abstract class SpaceshipCombatMove extends CombatMove {
   final bool needsTargetSystem = false;
   
   @override
-  void reportStarting() => _report(stringStarting, object: targetShip);
+  void reportStarting() => _report(stringStarting, preferShipAsObject: true);
   @override
-  void reportSuccess() => _report(stringSuccess, object: targetShip, 
+  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true, 
       positive: true);
   @override
   void reportCannotContinue() => _report(stringCannotContinue, 
-      object: targetShip);
+      preferShipAsObject: true);
   @override
-  void reportFailure() => _report(stringFailure, object: targetShip,
+  void reportFailure() => _report(stringFailure, preferShipAsObject: true,
       negative: true); 
   @override
-  void reportAutoRepeat() => _report(stringAutoRepeat, object: targetShip); 
+  void reportAutoRepeat() => _report(stringAutoRepeat, 
+      preferShipAsObject: true); 
 }
 
 class ImprovePosition extends SpaceshipCombatMove {

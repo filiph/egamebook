@@ -264,6 +264,7 @@ class Weapon extends ShipSystem implements CanHaveTarget {
     if (projectile != null) {
       this.projectile = projectile;
     }
+    this.projectile.team = team;
         
     availableMoves.addAll(<CombatMove>[
         new FireGun(this), new QuickFireGun(this), new ImproveAim(this)
@@ -398,8 +399,8 @@ class Hull extends ShipSystem {
   }
   
   void reportEightyPercentHP() {
-    _report("there are a number of {ridges|scars} on <owner's> <subject> "
-        "surface now", negative: true);
+    _report("there are a number of battle-inflicted scars on "
+        "<owner's> <subject> surface now", negative: true);
   }
   
   void reportSixtyPercentHP() {
