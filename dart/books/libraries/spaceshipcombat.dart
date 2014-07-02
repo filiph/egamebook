@@ -35,7 +35,7 @@ class SpaceshipCombat extends LoopedEvent /* TODO implements Saveable */ {
       actors.where((Actor actor) => actor is Spaceship);
   
   void update() {
-    timeline.time++;
+    timeline.elapse(1);
     for (Spaceship ship in actors) {
       // this trickles down to ship components and CombatMoves and pilots
       ship.update();

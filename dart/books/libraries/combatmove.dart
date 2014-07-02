@@ -407,8 +407,17 @@ class FireGun extends CombatMove {
     // For player, use defaults (provide null to _report()).
     _report("<owner's> <subject> {shoot<s>|fire<s>} at "
         "<object-owner's> <object>", subject: subject, owner: owner);
-    _report("<subject> {fail<s> to hit|miss<es>|go<es> wide}",
-        subject: weapon.projectile, object: Entity.NOTHING,
+    String miss;
+    Entity object;
+    if (targetSystem is Hull) {
+      miss = "<subject> {fail<s> to hit|miss<es>|go<es> wide}";
+      object = Entity.NOTHING;
+    } else {
+      miss = "<subject> {fail<s> to hit|miss<es>|go<es> wide} of <object>";
+      object = targetSystem;
+    }
+    _report(miss,
+        subject: weapon.projectile, object: object,
         negative: true, but: true);
   }
   

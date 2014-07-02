@@ -400,7 +400,7 @@ class Hull extends ShipSystem {
   
   void reportEightyPercentHP() {
     _report("there are a number of battle-inflicted scars on "
-        "<owner's> <subject> surface now", negative: true);
+        "<subject's> surface now", negative: true);
   }
   
   void reportSixtyPercentHP() {
