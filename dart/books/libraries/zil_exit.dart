@@ -76,6 +76,8 @@ class Exit extends Entity {
           zil.update(cost - 1, describe: false);
         }
         player.report(arriveDescription, object: to);
+        echo(storyline.toString());
+        storyline.clear();
         goto(to.name);
       });
     }
