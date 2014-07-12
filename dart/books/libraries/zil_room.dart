@@ -17,6 +17,14 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   final Set<Exit> exits;
   final Iterable<Action> actions;
   
+  /// A custom function called on each update at this room. Can be used to
+  /// trigger events that happen when player visits the room _after_ they have
+  /// done something else.
+  /// 
+  /// Should return [:true:] when it's okay to continue with the normal routine.
+  /// Return [:false:] if you're calling [goto].
+  final OnUpdateFunction onUpdate;
+  
   /// The player-facing name of the room.
   final String description;
   
@@ -44,7 +52,8 @@ class Room extends Entity with Node implements Described, ZilSaveable {
         this.coordinates: const [0, 0, 0], 
         Iterable<Item> items: const [],
         Iterable<AIActor> actors: const [],
-        this.actions: const []}) 
+        this.actions: const [],
+        this.onUpdate: null}) 
       : this.exits = new Set.from(exits),
         super(pageName, nameIsProperNoun, Pronoun.IT, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock("Cannot create room on the fly.");
@@ -79,6 +88,14 @@ class Room extends Entity with Node implements Described, ZilSaveable {
       return;
     }
     visited = true;
+    
+    if (onUpdate != null) {
+      bool shouldContinue = onUpdate();
+      if (!shouldContinue) {
+        return;
+      }
+    }
+    
     if (_zil != null && _zil.actors != null && _zil.player.justArrived) {
       showActors(describe: describe);
     }
@@ -174,3 +191,6 @@ class Room extends Entity with Node implements Described, ZilSaveable {
     Exit.updateIterableFromMap(map["exits"], exits);
   }
 }
+
+/// Returns whether the update routine of the [Room] should continue.
+typedef bool OnUpdateFunction();
