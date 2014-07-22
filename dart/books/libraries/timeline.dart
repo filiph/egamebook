@@ -2,6 +2,7 @@ library timeline;
 
 import 'package:egamebook/src/book/scripter.dart';
 
+/// Return type is purposefully left dynamic.
 typedef ScheduledFunction();
 
 /// A singular event on the timeline.
