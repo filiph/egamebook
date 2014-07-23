@@ -122,7 +122,7 @@ void showForm(Form form) {
  * by [:vars["name"]:], but thanks to noSuchMethod override, 
  * also by just [:name:].
  */
-final Map<String, dynamic> vars = new Map<String, dynamic>();
+final Map<String, Object> vars = new Map<String, Object>();
 
 /**
  * The current block should be repeated after its execution.
