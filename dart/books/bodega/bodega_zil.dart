@@ -4,19 +4,13 @@ import '../libraries/zil.dart';
 import '../libraries/timeline.dart';
 import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/book/scripter_typedefs.dart';
-import 'package:egamebook/src/book/scripter.dart' show EgbScripter;
+import 'package:egamebook/src/book/scripter.dart' show EgbScripter, PointsCounter;
 import '../libraries/storyline.dart';
-
-// XXX START HERE: class BodegaZil
-//          - initializes with echo, goto, etc. (DI)
-//          - encapsulates everything, so in bodega.egb, we write:
-//                bridge = bodegaZil.bridge;
-//          - or maybe even just:
-//                bodegaZil.init(vars);
 
 class BodegaZil {
   BodegaZil(this.goto, this.echo, this.choice, this.vars, EgbScripter scripter) 
       : zil = new Zil(scripter) {
+    points = vars["points"];
     
     setupExploration();
     setupActors();
@@ -52,6 +46,432 @@ class BodegaZil {
     setupNose();
     setupCorridorLeftNextToCaptainsCabin();
     setupCaptainsCabin();
+    setupCorridorLeftNextToAirlock();
+    setupStaffRoom();
+    setupCorridorLeftNextToBunks();
+    setupBunks();
+    setupCorridorLeftJunction();
+    setupGuts();
+    setupEngineRoom();
+    setupCorridorRightNextToComputerRoom();
+    setupComputerRoom();
+    setupCorridorRightNextToAirlock();
+    setupMedicalBay();
+    setupCorridorRightNextToBunks();
+    setupCorridorRightJunction();
+    setupCargoBayLeft();
+    setupExplodedContainer();
+    setupCargoCenter();
+    setupCargoBayRight();
+    setupPlaceOfBreach();
+    setupGorillasDen();
+  }
+  
+  void setupGorillasDen() {
+    gorillasDen = new Room(zil, "Explore: GorillasDen",
+        "cargo bay",
+        [new Exit("Explore: CargoBayLeft", 
+            "go back to entrance to Corridor Left",
+            "you arrive at the entrance to Corridor Left")],
+        descriptionPage: "GorillasDen.description",
+        coordinates: [-10, -70, 0]
+    );
+  }
+  
+  Room gorillasDen;
+  
+  void setupPlaceOfBreach() {
+    new Room(zil, "Explore: PlaceOfBreach",
+        "cargo bay",
+        [new Exit("Explore: CargoBayRight", 
+            "go back to entrance to Corridor Right",
+            "you arrive at the entrance to Corridor Right")],
+        descriptionPage: "PlaceOfBreach.description",
+        coordinates: [10, -70, 0]
+    );
+  }
+  
+  void setupCargoBayRight() {
+    /*
+    TODO
+    exits: hull breach == Nearby, a spy robot
+     */
+
+    // EXITS
+    exitToHullBreach = new Exit("Explore: PlaceOfBreach", 
+        "go to the hull breach",
+        "you arrive at the place of the breach");
+    exitToHullBreach.isActive = false;
+
+    // ROOM
+    new Room(zil, "Explore: CargoBayRight",
+        "cargo bay",
+        [new Exit("Explore: CorridorRightJunction", "enter Corridor Right",
+             "<subject> leave<s> the cargo bay and walk<s> up to the right "
+             "junction"),
+         new Exit("Explore: CargoCenter", 
+             "go to the other side of the cargo bay",
+             "after a few moments, <subject> arrive<s> at the cargo bay "
+             "console, located at the front center of the bay", cost: 2),
+         exitToHullBreach],
+        descriptionPage: "CargoBayRight.description",
+        coordinates: [10, -55, 0]
+    );
+  }
+  
+  Exit exitToHullBreach;
+  
+  void setupCargoCenter() {
+    new Room(zil, "Explore: CargoCenter",
+        "cargo bay",
+        [new Exit("Explore: CargoBayLeft", 
+            "go to the left side of the cargo bay",
+            "<subject> arrive<s> at the left side of the cargo bay", cost: 2),
+         new Exit("Explore: CargoBayRight", "go to the right side of the "
+             "cargo bay",
+             "<subject> arrive<s> at the right side of the cargo bay", 
+             cost: 2)],
+        descriptionPage: "CargoCenter.description",
+        coordinates: [0, -55, 0],
+        actions: [new Action.Goto("approach the console", 
+            "CargoCenter.console",
+            onlyOnce: false)]
+    );
+  }
+  
+  void setupExplodedContainer() {
+    new Room(zil, "Explore: ExplodedContainer",
+        "cargo bay",
+        [new Exit("Explore: CargoBayLeft", "go to the Corridor Left entrance",
+            "<subject> arrive<s> at the front left side of the cargo bay", 
+            cost: 2)],
+        descriptionPage: "ExplodedContainer.description",
+        coordinates: [-10, -100, -10],
+        actions: [new Action.Goto("Search [~30 minutes]", 
+            "ExplodedContainer.search", 
+            onlyOnce: true)]
+    );
+  }
+  
+  void setupCargoBayLeft() {
+    /*
+    TODO
+    hasSteelRod - "You pick up the steel rod. It's quite heavy, but still easy to wield. The men used it for prying crates open, for propping things in place, and for reaching into narrow openings. It has a cross-shaped tip that fits into the head of the big screws around here."
+    exits: damaged Sentaco container - NOT YET!
+     */
+
+    // TODO: scavenge - let player choose row+column ("A245") and either give random thing or something specific (medical supplies)
+
+    // ROOM
+    cargoBayLeft = new Room(zil, "Explore: CargoBayLeft",
+        "cargo bay",
+        [new Exit("Explore: CorridorLeftJunction", "enter Corridor Left",
+             "<subject> leave<s> the cargo bay and walk<s> up to the left "
+             "junction"),
+         new Exit("Explore: CargoCenter", 
+             "go to the other side of the cargo bay",
+             "after a few moments, <subject> arrive<s> at the cargo bay "
+             "console, located at the front center of the bay", cost: 2),
+         new Exit("Explore: ExplodedContainer", 
+             "go to the place of the explosion",
+             "you head deep into the cargo bay and after about 2 minutes, "
+             "you arrive at the site of the explosion", cost: 2)
+        ],
+        descriptionPage: "CargoBayLeft.description",
+        coordinates: [-10, -55, 0]
+    );
+  }
+  
+  Room cargoBayLeft;
+  
+  void setupCorridorRightJunction() {
+    new Room(zil, "Explore: CorridorRightJunction",
+        "right junction",
+        [new Exit("Explore: CorridorRightNextToBunks", 
+            "walk towards the bridge",
+            "after quite a walk, <subject> arrive<s> to the entrance to the "
+            "bunks"),
+         new Exit("Explore: Guts", "enter the guts",
+            "<subject> open<s> the door and step<s> through a narrow hatchway"),
+         new Exit("Explore: EngineRoom", "enter the engine room",
+            "<subject> open<s> the bigger door and enter<s> into the engine "
+             "room"),
+         new Exit("Explore: CargoBayRight", "go into the cargo bay",
+            "<subject> walk<s> to the very end of Corridor Right and enter<s> "
+             "the cargo bay through a huge {entrance|door}")
+        ],
+        descriptionPage: "CorridorRightJunction.description",
+        coordinates: [5, -45, 0]
+    );
+  }
+  
+  void setupCorridorRightNextToBunks() {
+    new Room(zil, "Explore: CorridorRightNextToBunks",
+        "Corridor Right",
+        [new Exit("Explore: CorridorRightNextToAirlock", 
+            "walk towards the {bridge|front of the ship}",
+            "<subject> walk<s> towards the front of the ship"),
+         new Exit("Explore: Bunks", "enter the bunks",
+             "<subject> enter<s> the bunks"),
+         new Exit("Explore: CorridorRightJunction", 
+             "walk {toward the cargo bay|to the {aft|back} of the ship}",
+             "after walking for 3 minutes, <subject> arrive<s> at the right "
+             "junction", 
+            cost: 2)],
+        descriptionPage: "CorridorRightNextToBunks.description",
+        coordinates: [5, -25, 0]
+    );
+  }
+  
+  void setupMedicalBay() {
+    /*
+    TODO: precision chainsaw (??)
+    // recollections about how the contagion started
+    // TODO: repair something?
+    // living tissue on petri dish */
+
+    // ROOM
+    new Room(zil, "Explore: MedicalBay",
+        "medical bay",
+        [new Exit("Explore: StaffRoom", "use the little door",
+            "<subject> walk<s> through a narrow corridor and arrive<s> at "
+            "the staff room"),
+         new Exit("Explore: CorridorRightNextToAirlock", 
+             "exit to Corridor Right",
+            "<subject> walk<s> out of the medical bay onto Corridor Right")],
+        descriptionPage: "MedicalBay.description",
+        coordinates: [5, -15, 0]
+    );
+  }
+  
+  void setupCorridorRightNextToAirlock() {
+    // ACTIONS
+    pullLever = new Action.Goto("pull the lever to let the captain's body out", 
+        "CorridorRightNextToAirlock.PullLever",
+        onlyOnce: true,
+        isActive: false);
+
+    // ROOM
+    new Room(zil, "Explore: CorridorRightNextToAirlock",
+        "Corridor Right",
+        [new Exit("Explore: CorridorRightNextToComputerRoom", 
+            "walk towards the bridge",
+            "<subject> arrive<s> at the door to the computer room"),
+         new Exit("Explore: MedicalBay", "enter the medical bay",
+            "<subject> enter<s> the medical bay"),
+         new Exit("Explore: CorridorRightNextToBunks", 
+             "walk {toward the cargo bay|to the {aft|back} of the ship}",
+            "<subject> {stride|walk}<s> towards the {{aft|back} of the "
+             "ship|cargo bay}")],
+        descriptionPage: "CorridorRightNextToAirlock.description",
+        coordinates: [10, -15, 0],
+        actions: [
+            new Action.Goto("look into the airlock", 
+                "CorridorRightNextToAirlock.Look", onlyOnce: true),
+            pullLever
+        ]
+    );
+  }
+  
+  Action pullLever;
+  
+  void setupComputerRoom() {
+    // ACTIONS
+    // just look around
+    // go through latest internal ship memos
+    // later: break stuff
+    // change RAID - makes bodega happier
+
+    // ROOM
+    new Room(zil, "Explore: ComputerRoom",
+        "Computer Room",
+        [new Exit("Explore: CorridorRightNextToComputerRoom", "leave",
+            "<subject> {walk|step}<s> out to Corridor Right")
+        ],
+        descriptionPage: "ComputerRoom.description",
+        coordinates: [7, -10, 0]
+    );
+  }
+  
+  void setupCorridorRightNextToComputerRoom() {
+    new Room(zil, "Explore: CorridorRightNextToComputerRoom",
+        "Corridor Right",
+        [new Exit("Explore: Bridge", "walk to the bridge",
+            "<subject> {enter<s>|arrive<s> at} the bridge"),
+         new Exit("Explore: ComputerRoom", "enter the Computer Room",
+            "<subject> {walk|step}<s> through the door"),
+         new Exit("Explore: CorridorRightNextToAirlock", "walk {toward the cargo bay|to the {aft|back} of the ship}",
+            "<subject> {stride|walk}<s> towards the {{aft|back} of the ship|cargo bay}")],
+        descriptionPage: "CorridorRightNextToComputerRoom.description",
+        coordinates: [5, -10, 0]
+    );
+  }
+  
+  void setupEngineRoom() {
+    // TODO steel something gets attracted
+    
+    // ACTIONS
+    repairEngineAction = new Action.Goto("Take a look at the engine, "
+        "try to bring output from 89% back to 100% [~3 hours]", 
+        "EngineRoom.RepairEngine",
+        onlyOnce: true, isActive: false);
+
+    // ROOM
+    new Room(zil, "Explore: EngineRoom",
+        "engine room",
+        [new Exit("Explore: CorridorLeftJunction", "exit to Corridor Left",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Left"),
+         new Exit("Explore: CorridorRightJunction", "exit to Corridor Right",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Right")],
+        descriptionPage: "EngineRoom.description",
+        coordinates: [0, -50, 0],
+        actions: [repairEngineAction]
+    );
+  }
+  
+  Action repairEngineAction;
+  
+  void setupGuts() {
+    // TODO toolbox
+    // TODO: Defensive turret, shield generator, radar.
+    // TODO: allow something hidden from Bodega
+    // ROOM
+    new Room(zil, "Explore: Guts",
+        "guts",
+        [new Exit("Explore: CorridorLeftJunction", "exit to Corridor Left",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Left"),
+         new Exit("Explore: CorridorRightJunction", "exit to Corridor Right",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Right")],
+        descriptionPage: "Guts.description",
+        coordinates: [0, -45, 0]
+    );
+  }
+  
+  void setupCorridorLeftJunction() {
+    new Room(zil, "Explore: CorridorLeftJunction",
+        "left junction",
+        [new Exit("Explore: CorridorLeftNextToBunks", "walk towards the bridge",
+            "after quite a walk, <subject> arrive<s> to the entrance to the "
+            "bunks"),
+         new Exit("Explore: Guts", "enter the guts",
+            "<subject> open<s> the door and step<s> through a narrow hatchway"),
+         new Exit("Explore: EngineRoom", "enter the engine room",
+            "<subject> open<s> the bigger door and enter<s> into the engine "
+             "room"),
+         new Exit("Explore: CargoBayLeft", "go into the cargo bay",
+            "<subject> walk<s> to the very end of Corridor Left and enter<s> "
+             "the cargo bay through a huge {entrance|door}")],
+        descriptionPage: "CorridorLeftJunction.description",
+        coordinates: [-5, -45, 0]
+    );
+  }
+  
+  void setupBunks() {
+    // ROOM
+    new Room(zil, "Explore: Bunks",
+        "bunks",
+        [new Exit("Explore: CorridorLeftNextToBunks", "exit to Corridor Left",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Left"),
+         new Exit("Explore: CorridorRightNextToBunks", "exit to Corridor Right",
+            "<subject> {{exit|leave}<s>|step<s> out} to Corridor Right")],
+        descriptionPage: "Bunks.description",
+        coordinates: [0, -25, 0]
+    );
+  }
+  
+  void setupCorridorLeftNextToBunks() {
+    new Room(zil, "Explore: CorridorLeftNextToBunks",
+        "corridor left",
+        [new Exit("Explore: CorridorLeftNextToAirlock", 
+            "walk towards the bridge",
+            "<subject> arrive<s> to the Corridor Left airlock and the staff "
+            "room"),
+         new Exit("Explore: Bunks", "enter the bunks",
+            "<subject> step<s> inside the {living quarters|bunks}"),
+         new Exit("Explore: CorridorLeftJunction", 
+             "walk {toward the cargo bay|to the {aft|back} of the ship}",
+            "after walking for 3 minutes, <subject> arrive<s> at the left "
+             "junction", 
+            cost: 2)],
+        descriptionPage: "CorridorLeftNextToBunks.description",
+        coordinates: [-5, -25, 0]
+    );
+  }
+  
+  void setupStaffRoom() {
+    // ITEMS
+    banana = new Item(zil, "banana", 
+        actions: [
+          new Action("eat the banana", 
+             () {
+               storyline.add("You pull the banana out of your pocket, peel it, "
+                   "and eat it. It's delicious. You feel a little bit "
+                   "invigorated.");
+               // TODO: player.hp++
+               stoleOfficersBanana = true; // TODO: bodega doesn't like this
+               banana.isActive = false;
+             },
+             needsToBeCarried: true,
+             onlyOnce: true,
+             submenu: INVENTORY),
+          new Action("give the banana to Gorilla",
+              () {
+                storyline.add("You hand the banana to Gorilla. He watches it with amazement, than proceeds to peel it eagerly. Before he takes the first bite, though, he gives you a thankful look.\n\nAfter only a few seconds, the banana is no more. But Gorilla seems very happy.");
+                gorillaAttitude += 2;
+                stoleOfficersBanana = true; // TODO: bodega doesn't like this
+                banana.isActive = false;
+                points.add(5, "making friends");
+              },
+              performerCheck: (actor) => actor.isInSameRoomAs(gorilla),
+              submenu: INVENTORY)
+         ],
+         takeable: true,
+         isActive: false
+    );
+
+    // ROOM
+    new Room(zil, "Explore: StaffRoom",
+        "staff room",
+        [new Exit("Explore: MedicalBay", "go through the little door",
+            "<subject> squeeze<s> through a narrow, white passage and "
+            "<subject> enter<s> the medbay through another small door"),
+         new Exit("Explore: CorridorLeftNextToAirlock", 
+             "exit to Corridor Left",
+            "<subject> walk<s> out of the room into Corridor Left")],
+        descriptionPage: "StaffRoom.description",
+        coordinates: [-5, -15, 0],
+        items: [banana],
+        actions: [new Action.Goto("look for food", "StaffRoom.findFood", 
+            onlyOnce: true)]
+    );
+  }
+  
+  Item banana;
+  
+  void setupCorridorLeftNextToAirlock() {
+    // ACTIONS
+    // TODO repair door (search corridorLeftDoorRepaired)
+    // TODO: map for visitors: takeable, shown after LeftAirlock.Look
+
+    // ROOM
+    new Room(zil, "Explore: CorridorLeftNextToAirlock",
+        "Corridor Left",
+        [new Exit("Explore: CorridorLeftNextToCaptainsCabin", 
+            "walk towards the bridge",
+            "<subject> walk<s> towards the bridge up to the point where there "
+            "is the door to the captain's cabin on the left hand side"),
+         new Exit("Explore: StaffRoom", "enter the staff room",
+            "<subject> enter<s> the staff room"),
+         new Exit("Explore: CorridorLeftNextToBunks", 
+             "walk {toward the cargo bay|to the {aft|back} of the ship}",
+            "<subject> arrive<s> at the door to the sleeping quarters")],
+        descriptionPage: "CorridorLeftNextToAirlock.description",
+        coordinates: [-10, -15, 0],
+        actions: [
+            new Action.Goto("examine the airlock", "LeftAirlock.Look", 
+                onlyOnce: true)
+        ]
+    );
   }
   
   void setupCaptainsCabin() {
@@ -258,6 +678,7 @@ class BodegaZil {
   final EchoFunction echo;
   final ChoiceFunction choice;
   final Map<String, Object> vars;
+  PointsCounter points;
   Timeline exploration;
   
   // Utility functions.
@@ -291,6 +712,17 @@ class BodegaZil {
   set roomBeforeOvercameBySleepiness(String value) {
     vars["roomBeforeOvercameBySleepiness"] = value;
   }
+  bool get stoleOfficersBanana => 
+      vars["stoleOfficersBanana"];
+  set stoleOfficersBanana(bool value) {
+    vars["stoleOfficersBanana"] = value;
+  }
+  int get gorillaAttitude => 
+      vars["gorillaAttitude"];
+  set gorillaAttitude(int value) {
+    vars["gorillaAttitude"] = value;
+  }
+  
 }
 
 const String INVENTORY = "···";  // Middle dots.
