@@ -12,12 +12,12 @@ class BodegaZil {
       : zil = new Zil(scripter) {
     points = vars["points"];
     
-    setupExploration();
+    setupTimeline();
     setupActors();
     setupRooms();
   }
   
-  void setupExploration() {
+  void setupTimeline() {
     exploration = zil.timeline;
     exploration.mainLoop = () {
       clock.value += 1;
@@ -27,15 +27,23 @@ class BodegaZil {
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
       roomBeforeOvercameBySleepiness = zil.player.location.name;
       goto("Bridge: OvercomeBySleepiness");
-    });
+    }, type: TimedEvent.MAJOR);
     
     exploration.schedule(MAX_TIME_BEFORE_HYPERDRIVE_READY, () {
       jumpToSpaceStationUnity.isActive = true;
       echo("""\n\nThe ship's PA system makes a short bleep, then Bodega """
-          """says: "The hyperdrive is fully operational. We are ready to """
-          """jump, $salutation$name." """);
+          """says: "The hyperdrive is fully operational. I am ready to """
+          """jump, ${getInformalSalutation()}." """);
     });
+    
+    unityArrivalEvent = exploration.schedule(null, () {
+      echo("""The Bodega says: "We have arrived to Space Station Unity." """);
+      justArrivedAtUnity = true;
+      currentlyInJump = false;
+    }, type: TimedEvent.MAJOR);
   }
+  
+  TimedEvent unityArrivalEvent;
   
   void setupActors() {
     gorilla = new AIActor(zil, "Gorilla", pronoun: Pronoun.HE);
@@ -314,7 +322,8 @@ class BodegaZil {
     repairEngineAction = new Action.Goto("Take a look at the engine, "
         "try to bring output from 89% back to 100% [~3 hours]", 
         "EngineRoom.RepairEngine",
-        onlyOnce: true, isActive: false);
+        requirement: () => isEngineer && !currentlyInJump,
+        onlyOnce: true);
 
     // ROOM
     new Room(zil, "Explore: EngineRoom",
@@ -464,7 +473,19 @@ class BodegaZil {
   Item banana;
   
   void setupCorridorLeftNextToAirlock() {
-    // ACTIONS
+    infoFlyer = new Item(zil, "info flyer",
+        takeDescription: "<subject> take<s> <object>, fold<s> <objectPronoun> "
+          "and put<s> <objectPronoun> in a pocket",
+        actions: [
+            new Action("look at info flyer", () {
+              echo("You pull the flyer out of your pocket and unfold it. "
+                  "\n\n[IMG]\n\nThen you fold it again and put "
+                  "it back.");
+            },
+            needsToBeCarried: true,
+            submenu: INVENTORY)
+        ],
+        isActive: false);
     
     // TODO repair door (search corridorLeftDoorRepaired)
     // TODO: map for visitors: takeable, shown after LeftAirlock.Look
@@ -483,12 +504,15 @@ class BodegaZil {
             "<subject> arrive<s> at the door to the sleeping quarters")],
         descriptionPage: "CorridorLeftNextToAirlock.description",
         coordinates: [-10, -15, 0],
+        items: [infoFlyer],
         actions: [
             new Action.Goto("examine the airlock", "LeftAirlock.Look", 
                 onlyOnce: true)
         ]
     );
   }
+  
+  Item infoFlyer;
   
   void setupCaptainsCabin() {
     // ITEMS
@@ -525,10 +549,9 @@ class BodegaZil {
               needsToBeCarried: true,
               submenu: INVENTORY)
          ],
-         takeable: true,
          takeDescription: "<subject> lift<s> the <object> and put<s> it in the "
            "pocket",
-         count: 1  // can be >1 for things like bullets
+         isActive: false
     );
     gorillaCorpse = new Item(zil, "Gorilla's body",
         takeable: true,
@@ -536,17 +559,16 @@ class BodegaZil {
     );
 
     // ACTIONS
-    firstLookAround = new Action.Goto("have a look around [5 minutes]", 
+    firstLookAround = new Action.Goto("have a look around [~15 minutes]", 
         "CaptainsCabinLookAround", 
         onlyOnce: true);
-    secondLookAround = new Action.Goto("continue with the search [5 minutes]",
+    secondLookAround = new Action.Goto("continue with the search [~15 minutes]",
       "CaptainsCabinLookAroundContinue", onlyOnce: true, isActive: false);
-    thirdLookAround = new Action.Goto("search the rest of the room [3 minutes]",
+    thirdLookAround = new Action.Goto("search the rest of the room [~5 minutes]",
       "CaptainsCabinLookAroundTheRest", onlyOnce: true, isActive: false);
     captainsComputerFirst = new Action.Goto("look at captain's computer screen",
       "CaptainsComputerFirst", onlyOnce: true);
     
-
     // ROOM
     new Room(zil, "Explore: CaptainsCabin",
         "captain's cabin",
@@ -554,7 +576,7 @@ class BodegaZil {
             "<subject> leave<s> into the corridor")],
         descriptionPage: "CaptainsCabin.description",
         coordinates: [-10, -10, 0],
-        /*items: [captainsGun],*/
+        items: [captainsGun],
         actions: [
           firstLookAround,
           secondLookAround,
@@ -597,7 +619,6 @@ class BodegaZil {
     takeANap = new Action.Goto("Take a nap",
         "Bridge: Nap", onlyOnce: true,
         requirement: () => zil.timeline.time < MAX_TIME_BEFORE_NAP);
-    // TODO: add radar on/off
     waitForJumpToUnity = 
         new Action.Goto("Wait until ready to jump to Unity",
         "Bridge: WaitForJump", onlyOnce: true,
@@ -609,9 +630,6 @@ class BodegaZil {
         new Action.Goto("initiate the jump to Space Station Unity", 
         "Unity: Jump", isActive: false,
         requirement: () => !jumpedToUnity);
-    
-    // ITEMS
-    // TODO: worn out map of the Bodega - near left Airlock
     
     // ROOM
     bridge = new Room(zil, "Explore: Bridge", // corresponds to pagename
@@ -664,7 +682,7 @@ class BodegaZil {
     // ACTIONS
     scannerLook = new Action.Goto("Take a look at the scanner", 
         "Nose.ScannerLook", onlyOnce: true);
-    scannerRepair = new Action.Goto("Repair the scanner", 
+    scannerRepair = new Action.Goto("Repair the scanner [~1 hour]", 
         "Nose.ScannerRepair", isActive: false, onlyOnce: true);
     // TODO: laser upgrade
     // TODO: floodlights repair
@@ -715,13 +733,37 @@ class BodegaZil {
       echo("""You are feeling ${tirednessStrings[index]}.""");
   }
   
+  // Returns "John", or "captain" (even for "acting captain").
+  String getInformalSalutation() {
+    if (title == "") {
+      return name;
+    } else {
+      return "captain";
+    }
+  }
+  
+  num computeProductivity(bool skilled) {
+    num productivity = 1.0;
+    if (currentlyHighOnShabu) {
+      productivity += 0.3;
+    }
+    if (skilled) {
+      productivity += 0.3;
+    }
+    return productivity;
+  }
+  
+  int computeTimeRequired(int baseTime, bool skilled) {
+    return (baseTime / computeProductivity(skilled)).round();
+  }
+  
   // Map saveable vars to strongly typed variables.
   Stat get clock => vars["clock"];
-  String get salutation => vars["salutation"];
+  String get title => vars["title"];
   String get name => vars["name"];
   List<String> get bodegaTopics => vars["bodegaTopics"];
   bool get jumpedToUnity => vars["jumpedToUnity"];
-  bool get justArrivedAtUnity => vars["justArrivedAtUnity"];
+  bool get isEngineer => vars["isEngineer"];
   // Read & Write
   String get roomBeforeOvercameBySleepiness => 
       vars["roomBeforeOvercameBySleepiness"];
@@ -733,10 +775,25 @@ class BodegaZil {
   set stoleOfficersBanana(bool value) {
     vars["stoleOfficersBanana"] = value;
   }
+  bool get currentlyHighOnShabu => 
+      vars["currentlyHighOnShabu"];
+  set currentlyHighOnShabu(bool value) {
+    vars["currentlyHighOnShabu"] = value;
+  }
   int get gorillaAttitude => 
       vars["gorillaAttitude"];
   set gorillaAttitude(int value) {
     vars["gorillaAttitude"] = value;
+  }
+  bool get justArrivedAtUnity => 
+      vars["justArrivedAtUnity"];
+  set justArrivedAtUnity(bool value) {
+    vars["justArrivedAtUnity"] = value;
+  }
+  bool get currentlyInJump => 
+      vars["currentlyInJump"];
+  set currentlyInJump(bool value) {
+    vars["currentlyInJump"] = value;
   }
   
 }
@@ -746,6 +803,8 @@ const String INVENTORY = "···";  // Middle dots.
 const int MAX_TIME_BEFORE_NAP = 148;
 const int MESSENGER_CONTACT_TIME = 460;
 const int MAX_TIME_BEFORE_HYPERDRIVE_READY = 473;
+
+const int JUMP_TIME_TO_UNITY = 60;
 
 // Printing how tired the player is.
 const List tirednessStrings = const ["quite tired", "really tired", 
