@@ -367,6 +367,16 @@ class BodegaZil {
   }
   
   void setupBunks() {
+    
+    shabuVials = new Item(zil, "shabu vials", pronoun: Pronoun.THEY,
+        count: 2,
+        isActive: false);
+    
+    Action siftThrough = new Action.Goto("sift through lockers [~30 minutes]", 
+        "Bunks.SiftThroughLockers", onlyOnce: true);
+    // TODO: BreakIntoLockedBoxes - sift through locked lockers => find clues, reminisce about solitude
+    //                and find things that are surprising + an item
+    //          requirement: strong or has crowbar
     // ROOM
     new Room(zil, "Explore: Bunks",
         "bunks",
@@ -375,9 +385,13 @@ class BodegaZil {
          new Exit("Explore: CorridorRightNextToBunks", "exit to Corridor Right",
             "<subject> {{exit|leave}<s>|step<s> out} to Corridor Right")],
         descriptionPage: "Bunks.description",
-        coordinates: [0, -25, 0]
+        coordinates: [0, -25, 0],
+        items: [shabuVials],
+        actions: [siftThrough]
     );
   }
+  
+  Item shabuVials;
   
   void setupCorridorLeftNextToBunks() {
     new Room(zil, "Explore: CorridorLeftNextToBunks",
@@ -450,6 +464,7 @@ class BodegaZil {
   
   void setupCorridorLeftNextToAirlock() {
     // ACTIONS
+    
     // TODO repair door (search corridorLeftDoorRepaired)
     // TODO: map for visitors: takeable, shown after LeftAirlock.Look
 
@@ -574,8 +589,8 @@ class BodegaZil {
   
   void setupBridge() {
     lookAtHullBreachFromBridge = 
-        new Action.Goto("put up the hull breach on the screen""",
-        "LookAtHullBreachFromBridge", isActive: false);
+        new Action.Goto("put up the hull breach on the screen",
+        "LookAtHullBreachFromBridge", isActive: false, onlyOnce: true);
     askBodegaQuestions = new Action.Goto("ask Bodega some questions",
         "BodegaQuestions: Start", requirement: () => bodegaTopics.length > 0);
     takeANap = new Action.Goto("Take a nap",

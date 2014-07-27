@@ -2,6 +2,7 @@ library bodega_shipcombat;
 
 import "../libraries/spaceship.dart";
 import '../libraries/storyline.dart';
+import '../libraries/spaceshipcombat.dart';
 
 Pilot playerPilot = new Pilot.player();
 
@@ -46,4 +47,57 @@ class MessengerShip extends Spaceship {
                   projectile: new Entity.withOptions("burst"))
                ]
   );
+}
+
+class FirstCombat extends SpaceshipCombat {
+  FirstCombat(Spaceship bodega, Spaceship messenger, String onFinishedGoto) 
+      : super(ships: <Spaceship>[bodega, messenger]) {
+    this.bodega = bodega;
+    this.messenger = messenger;
+    this.onFinishedGoto = onFinishedGoto;
+
+    timeline.schedule(20, () {
+        messenger.report("<subject> launch<es> some kind of an object from "
+            "<subjectPronoun's> underside", 
+            object: spybotObject);
+        storyline.add("<subject> zip<s> around <object>, but keep<s> "
+            "<subject's> distance.", subject: spybotObject, object: bodega, 
+            wholeSentence: true);
+        messengerManagedToLaunchSpyBot = true;
+     });
+    
+    timeline.schedule(24, () => 
+        storyline.add("<owner's> <subject> suddenly plummet<s> "
+            "towards <object-owner's> <object>", owner: messenger, 
+            subject: spybotObject, objectOwner: bodega, object: bodega.hull));
+    
+    timeline.schedule(25, () {
+        storyline.add("<subject> crash<es> somewhere into <object-owner's> "
+            "right side cargo bay", 
+            subject: spybotObject, objectOwner: bodega, object: bodega.hull);
+        storyline.add(""" "Hull breach," the Bodega says. """, 
+            wholeSentence: true);
+        storyline.add("It doesn't seem like it has done any major damage, "
+            "though.", 
+            wholeSentence: true);
+        spybotManagedToCrashIntoBodega = true;
+    });
+  }
+  
+  /**
+   * Initializes the combat. To be run right before the combat itself.
+   */
+  void setup() {
+    bodega.targetShip = messenger;
+    messenger.targetShip = bodega;
+  }
+  
+  Spaceship bodega;
+  Spaceship messenger;
+  
+  Entity spybotObject = 
+      new Entity.withOptions("object", alreadyMentioned: false);
+  
+  bool messengerManagedToLaunchSpyBot = false;
+  bool spybotManagedToCrashIntoBodega = false;
 }
