@@ -341,9 +341,12 @@ class BodegaZil {
   Action repairEngineAction;
   
   void setupGuts() {
-    // TODO toolbox
+    // ACTIONS
+    
+    // XXX START HERE!!!
     // TODO: Defensive turret, shield generator, radar.
-    // TODO: allow something hidden from Bodega
+    
+    // TODO(low): allow something hidden from Bodega
     // ROOM
     new Room(zil, "Explore: Guts",
         "guts",
@@ -385,7 +388,8 @@ class BodegaZil {
     Action siftThrough = new Action.Goto("sift through lockers [~30 minutes]", 
         "Bunks.SiftThroughLockers", onlyOnce: true);
     // TODO: BreakIntoLockedBoxes - sift through locked lockers => find clues, reminisce about solitude
-    //                and find things that are surprising + an item
+    //                and find things that are surprising 
+    //                + an item = senior engineer's multitool?
     //          requirement: strong or has crowbar
     // ROOM
     new Room(zil, "Explore: Bunks",
