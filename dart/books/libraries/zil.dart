@@ -116,8 +116,15 @@ class Zil implements Saveable {
   /// [:true:], the method will generate text output. Otherwise, it will just
   /// silently simulate.
   /// 
+  /// If [interactive] is [:true:] (default), the last tick is considered 
+  /// interactive, which means that [TimedEvent.MAJOR] events from [timeline] 
+  /// can occur on the last tick. Otherwise, these events (and every other 
+  /// events that are scheduled after them) are shifted until just after
+  /// [Timeline.time] + [ticks]. Set to [:false:] when inside a 'scripted'
+  /// event that you don't want to be interrupted by major events.
+  /// 
   /// The [timeline] output is always shown.
-  void update(int ticks, {bool describe: true}) {
+  void update(int ticks, {bool describe: true, bool interactive: true}) {
     rooms._checkNetworkReady();
     if (_scripter != null) {
       try {
@@ -134,7 +141,8 @@ class Zil implements Saveable {
         }
       }
     }
-    player.location.update(ticks, describe: describe);
+    player.location.update(ticks, 
+        describe: describe, interactive: interactive);
   }
   
   /// Creates choices for the [player] in the current [Room] and given the

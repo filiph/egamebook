@@ -370,6 +370,7 @@ class BodegaZil {
     
     shabuVials = new Item(zil, "shabu vials", pronoun: Pronoun.THEY,
         count: 2,
+        // TODO: Action: use - makes better physically, has withdrawal
         isActive: false);
     
     Action siftThrough = new Action.Goto("sift through lockers [~30 minutes]", 
