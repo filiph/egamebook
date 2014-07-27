@@ -126,7 +126,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
       // TODO custom reports from actors
       if (actors.length > 1) {
         storyline.addEnumeration("<subject> {|can }see<s>", 
-            actors.map((ZilActor actor) => actor.name), 
+            actors, 
             "{|in }here", subject: _zil.player);
       } else if (actors.length == 1) {
         actors.single.report("<subject> is {|in }here");
@@ -151,7 +151,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
     if (describe) {
       // TODO: first, show items that can handle their own description.
       storyline.addEnumeration("<subject> {{can|} <also> see|<also> notice}", 
-          items.map((item) => item.description), "{in |}here", 
+          items, "{in |}here", 
           subject: _zil.player);
     }
   }
@@ -164,7 +164,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   void showExits({bool describe: true}) {
     if (describe) {
       storyline.addEnumeration("<subject> can {leave|exit|go}", 
-          exits.map((exit) => "to ${exit.to.description}"), null, 
+          exits, null, 
           subject: _zil.player, conjuction: "or");
     }
   }

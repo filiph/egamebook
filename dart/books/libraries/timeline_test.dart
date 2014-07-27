@@ -106,6 +106,62 @@ void main() {
         "Closure event.");    
   });
   
+  group("major events", () {
+    test("delay those after them", () {
+      textBuffer.clear();
+      isInInitBlock = true;
+      var timeline = new Timeline();
+      timeline.schedule(1, "String event on 1.");
+      timeline.schedule(5, "String event on 5.");
+      timeline.schedule(7, "Major event on 7.", type: TimedEvent.MAJOR);
+      timeline.schedule(10, () => echo("Closure event on 10, but actual time "
+          "is ${timeline.time}."));
+      timeline.schedule(15, "String event on 15.");
+      
+      timeline.elapse(10);  // Only the last tick is considered interactive.
+      timeline.elapse(10);
+      
+      var str = textBuffer.toString();
+      expect(str, "String event on 1. String event on 5. Major event on 7. "
+          "Closure event on 10, but actual time is 12. String event on 15.");
+    });
+    
+    test("aren't fired at all when elapse is non-interactive", () {
+      textBuffer.clear();
+      isInInitBlock = true;
+      var timeline = new Timeline();
+      timeline.schedule(1, "String event on 1.");
+      timeline.schedule(5, "String event on 5.");
+      timeline.schedule(7, "Major event on 7.", type: TimedEvent.MAJOR);
+      timeline.schedule(10, () => echo("Closure event on 10, but actual time "
+          "is ${timeline.time}."));
+      timeline.schedule(15, "String event on 15.");
+      
+      timeline.elapse(20, interactive: false);
+      
+      var str = textBuffer.toString();
+      expect(str, "String event on 1. String event on 5.");
+    });
+    
+    test("aren't fired themselves but allow non-major events scheduled on same "
+        "time to be fired", () {
+      textBuffer.clear();
+      isInInitBlock = true;
+      var timeline = new Timeline();
+      timeline.schedule(1, "String event on 1.");
+      timeline.schedule(7, "String event on 7.");
+      timeline.schedule(7, "Major event on 7.", type: TimedEvent.MAJOR);
+      timeline.schedule(10, () => echo("Closure event on 10, but actual time "
+          "is ${timeline.time}."));
+      timeline.schedule(15, "String event on 15.");
+      
+      timeline.elapse(10, interactive: false);
+      
+      var str = textBuffer.toString();
+      expect(str, "String event on 1. String event on 7.");
+    });
+  });
+  
   test("throws outside initblock", () {
     textBuffer.clear();
     isInInitBlock = true;

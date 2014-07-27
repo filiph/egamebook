@@ -7,24 +7,57 @@ typedef ScheduledFunction();
 
 /// A singular event on the timeline.
 abstract class TimedEvent {
+  int get type; 
   int get priority;
   String run();
+  
+  /// Info events are often simple, short messages. They need to be run and
+  /// presented to the player, but they are not immediately actionable, and
+  /// they do not call [goto].
+  /// 
+  /// Example: "The ship computer announces end of red alert."
+  static const int INFO = 1;
+  /// Time progress events are events that can be skipped if needed. They are
+  /// there to give a sense of elapsing time. When two or more time progress
+  /// events meet next to each other, only the second one is displayed.
+  /// 
+  /// Example: "You are feeling more and more sick."
+  static const int TIME_PROGRESS = 2;
+  /// Major events are those that cannot be skipped, and that shouldn't happen
+  /// inside other 'scripted' events. They often call [goto]. They should be
+  /// immediately actionable right after they have been fired. Thus, we 
+  /// shouldn't advance time after a major event was fired unless player
+  /// had a chance to react to it. This would create bizarre situations in which
+  /// the player is, say, repairing a hatch, then a huge explosion happens
+  /// somewhere on the ship, after which the player continues with the repair
+  /// like nothing happened.
+  /// 
+  /// The implementation of [Timeline] moves these events (and every event that
+  /// comes after them) until it knows that the player will be able to act
+  /// on them.
+  /// 
+  /// Example: "There is a sudden explosion on the ship! ..."
+  static const int MAJOR = 3;
+  
+  bool get isMajor => type == TimedEvent.MAJOR;
 }
 
-class StringTimedEvent implements TimedEvent {
+class StringTimedEvent extends TimedEvent {
+  final int type;
   final String text;
   final int priority;
-  StringTimedEvent(this.text, {this.priority});
+  StringTimedEvent(this.text, {this.priority: 0, this.type: TimedEvent.INFO});
   String run() => text;
 }
 
-class FunctionTimedEvent implements TimedEvent {
-  int time;
-  final int priority;
+class FunctionTimedEvent extends TimedEvent {
+  final int type;
   final ScheduledFunction action;
+  final int priority;
   String text;
   
-  FunctionTimedEvent(this.action, {this.priority: 0}) {
+  FunctionTimedEvent(this.action, {this.priority: 0, 
+      this.type: TimedEvent.INFO}) {
     if (action == null || priority == null) {
       throw new ArgumentError("Timed event needs to have function "
                               "and priority set.");
@@ -70,31 +103,6 @@ class Timeline implements Saveable {
   /// can be edited in runtime).
   final Map<int,int> _schedule = new Map<int,int>();
 
-  
-  /**
-   * The time set by [:Timeline.time = x:]. This is used by [catchUp] as 
-   * a target when the normal [elapse] operation was interrupted by a [:goto():]
-   * or a choice. 
-   */
-  int _requestedTime = null;
-  
-  /**
-   * Whenever a TimedEvent calls goto() or creates a choice, the Timeline
-   * stops there. That TimedEvent has to make sure that [catchUp] is called
-   * afterwards so that the time catches up with the requested time.
-   * 
-   * XXX: wouldn't it be better to ignore the rest of the time to elapse once
-   * goto() is called? Because with the current catchUp(), something can happen
-   * in the first few seconds of a long wait, the player gets transported
-   * somewhere, and then he doesn't get to play before a long wait is 'caught
-   * up'.
-   */
-  void catchUp() {
-    if (_requestedTime == null) return;
-    assert(_requestedTime > time);
-    elapse(_requestedTime - time);
-  }
-  
   Function _mainLoop;
   Function get mainLoop => _mainLoop;
   set mainLoop(Function f) {
@@ -119,13 +127,14 @@ class Timeline implements Saveable {
    * will stop prematurely (at [:time == 20:]). Any next call to [elapse] will
    * continue from time 20.
    */
-  TimedEvent schedule(int time, Object action, {int priority: 0}) {
+  TimedEvent schedule(int time, Object action, {int priority: 0, 
+      int type: TimedEvent.INFO}) {
     throwIfNotInInitBlock();
     TimedEvent event;
     if (action is String) {
-      event = new StringTimedEvent(action, priority: priority);
+      event = new StringTimedEvent(action, priority: priority, type: type);
     } else if (action is ScheduledFunction) {
-      event = new FunctionTimedEvent(action, priority: priority);
+      event = new FunctionTimedEvent(action, priority: priority, type: type);
     } else {
       throw new ArgumentError("Only String or a function can be scheduled. "
           "Instead, on object of type ${action.runtimeType} was recieved.");
@@ -178,7 +187,7 @@ class Timeline implements Saveable {
     echo(s);
   }
   
-  void _goOneTick() {
+  void _goOneTick(bool interactive) {
     if (_mainLoop != null) {
       _handleEventOutput(_mainLoop());
     }
@@ -187,12 +196,27 @@ class Timeline implements Saveable {
     List<TimedEvent> currentEvents = new List<TimedEvent>();
     // Need to walk through the list manually because we're interested in the
     // indices. (This would not be needed if we didn't try to make this
-    // Saveable.
+    // Saveable.)
     for (int i = 0; i < _events.length; i++) {
       if (_schedule[i] == time) {
         currentEvents.add(_events[i]);
       }
     }
+    
+    if (!interactive && currentEvents.any((TimedEvent e) => e.isMajor)) {
+      // Push all upcoming events by one tick.
+      Set<int> indexesToPush = new Set<int>();
+      _schedule.forEach((int eventIndex, int eventTime) {
+        if (eventTime > time || 
+            // Move only major events, the rest can stay and be run below.
+            (eventTime == time && _events[eventIndex].isMajor)) {
+          indexesToPush.add(eventIndex);
+          currentEvents.remove(_events[eventIndex]);
+        }
+      });
+      indexesToPush.forEach((int index) => _schedule[index] += 1);
+    }
+    
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
       _handleEventOutput(event.run());
@@ -201,24 +225,29 @@ class Timeline implements Saveable {
   }
   
   /**
-   * Elapse [t] number of discrete time units.
+   * Elapse [t] number of discrete time units. Fire events scheduled for
+   * that time.
+   * 
+   * If [interactive] is [:true:] (default), the last tick is considered
+   * interactive, which means that [TimedEvent.MAJOR] events can occur on the
+   * last tick.Otherwise, these events (and every other events that are 
+   * scheduled after them) are shifted until just after [t]. 
    * 
    * TODO: add a {betweenEchos} - makes possible to elapse a lot of time, with
    * many expected echo events. [betweenEchos] gets called between each two
    * echo events. Normally, the author can say things like "You continue
    * repairing the door".
    */
-  void elapse(int t) {
+  void elapse(int t, {bool interactive: true}) {
     if (finished) return;
     if (time == null) time = -1;
     for (int i = 0; i < t; i++) {
       time += 1;
-      _goOneTick();
+      _goOneTick(interactive && (i == t - 1));
       if (maxTime != null && time == maxTime) finished = true;
       if (finished) break;
       
-      if (gotoPageName != null) {
-        // An event called goto().
+      if (gotoCalledRecently) {
         break;
       }
       // TODO: make sure there are no choices created during the _goOneTick
@@ -229,22 +258,18 @@ class Timeline implements Saveable {
 //        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
 //      }
     }
-    if (time == _requestedTime) {
-      _requestedTime = null;
-    }
   }
   
   /**
    * Elapse time up until [time] == [t]. The [t] cannot be in the past.
    */
-  void elapseToTime(int t) {
+  void elapseToTime(int t, {bool interactive: true}) {
     if (time == null) time = -1;
     if (t < time) {
       throw new ArgumentError("Time cannot be in the past for elapseToTime.");
     }
     if (maxTime != null && t > maxTime) t = maxTime;
-    _requestedTime = t;
-    elapse(t - time);
+    elapse(t - time, interactive: interactive);
   }
 }
 
