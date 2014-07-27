@@ -151,7 +151,7 @@ class Storyline {
    * Example: "You can see a handkerchief, a brush and a mirror here."
    * You can provide "<also>" for a more human-like enumeration.
    */
-  void addEnumeration(String start, Iterable<String> articles, String end, 
+  void addEnumeration(String start, Iterable<Entity> articles, String end, 
                       {Entity subject, Entity object, Entity owner, 
                        int maxPerSentence: 3, String conjuction: "and"}) {
     assert(start != null);
@@ -163,7 +163,7 @@ class Storyline {
     buf.write(start.replaceAll("<also>", "").replaceAll("  ", " ").trim()); // TODO: less hacky
     buf.write(" ");
     int i = 0;
-    for (String article in articles) {
+    for (Entity article in articles) {
       if (i > 0) {
         if (i == 1 && article == articles.last) {
           buf.write(" ");
@@ -175,7 +175,12 @@ class Storyline {
         }
         buf.write(" ");
       }
-      buf.write(article);
+      // Adds 'the', 'a', or nothing. TODO: instead of using the
+      // addParticleToFirstOccurence method (designed for longer texts), use
+      // something smaller.
+      String articleWithParticle = addParticleToFirstOccurence(article.name, 
+          article.name, article);
+      buf.write(articleWithParticle);
       i++;
       if (i > maxPerSentence - 1 || article == articles.last) {
         if (end != null) {

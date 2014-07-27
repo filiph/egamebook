@@ -150,8 +150,9 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   void showItems({bool describe: true}) {
     if (describe) {
       // TODO: first, show items that can handle their own description.
-      storyline.addEnumeration("{<subject> can see|there is} <also>", 
-          items.map((item) => item.description), "{in |}here", subject: _zil.player);
+      storyline.addEnumeration("<subject> {{can|} <also> see|<also> notice}", 
+          items.map((item) => item.description), "{in |}here", 
+          subject: _zil.player);
     }
   }
   

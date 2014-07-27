@@ -51,6 +51,7 @@ class ZilActor extends Actor implements Located, ZilSaveable {
       pageName = _zil._scripter.currentPage.name;
     }
     location = _zil.rooms.getFromPageName(pageName);
+    // TODO: if unsuccessful, try guessing from Action.Goto
   }
 
   bool isIn(Room room) => location == room && isActive;

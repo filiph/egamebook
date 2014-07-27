@@ -52,7 +52,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
     if (_takeDescription != null) {
       return _takeDescription;
     }
-    return "<subject> take<s> $description";
+    return "<subject> take<s> the $description";
   }
   
   final String _takeInfinitive;
@@ -78,7 +78,6 @@ class Item extends Entity implements Located, Described, ZilSaveable {
         super(name, nameIsProperNoun, pronoun, Actor.NEUTRAL, false) {
     throwIfNotInInitBlock();
     actions.forEach((action) => action.item = this);
-    if (!plural) assert(count == 1);
     this.isActive = isActive;
     
     if (description == null) description = name;

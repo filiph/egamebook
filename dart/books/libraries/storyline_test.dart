@@ -215,54 +215,71 @@ void main() {
   
   test("enumeration", () {
     var storyline = new Storyline();
+    Entity handkerchief = new Entity.withOptions("handkerchief");
+    Entity brush = new Entity.withOptions("brush");
+    Entity mirror = new Entity.withOptions("mirror");
+    Entity lipstick = new Entity.withOptions("lipstick");
+    Entity crateOfTnt = new Entity.withOptions("crate of TNT");
+    
+    void resetAlreadyMentioned() {
+      handkerchief.alreadyMentioned = false;
+      brush.alreadyMentioned = false;
+      mirror.alreadyMentioned = false;
+      lipstick.alreadyMentioned = false;
+      crateOfTnt.alreadyMentioned = false;
+    }
     
     // 0
     storyline.addEnumeration("you see", [], "here");
     expect(storyline.toString(), "");
     storyline.clear();
     // 1
-    storyline.addEnumeration("you see", ["a handkerchief"], "here");
+    resetAlreadyMentioned();
+    storyline.addEnumeration("you see", [handkerchief], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief here."));
     storyline.clear();
     // 2
-    storyline.addEnumeration("you see", ["a handkerchief", "a brush"], "here");
+    resetAlreadyMentioned();
+    storyline.addEnumeration("you see", [handkerchief, brush], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief and a brush here."));
     storyline.clear();
     // 3
+    resetAlreadyMentioned();
     storyline.addEnumeration("you see", 
-        ["a handkerchief", "a brush", "a mirror"], "here");
+        [handkerchief, brush, mirror], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief, a brush, and a mirror here."));
     storyline.clear();
     // 4
+    resetAlreadyMentioned();
     storyline.addEnumeration("you see", 
-        ["a handkerchief", "a brush", "a mirror", "a lipstick"], "here");
+        [handkerchief, brush, mirror, lipstick], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You see a lipstick here."));
     storyline.clear();
     // 5
+    resetAlreadyMentioned();
     storyline.addEnumeration("you see", 
-        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
-         "a crate of TNT"], "here");
+        [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You see a lipstick and a crate of TNT here."));
     storyline.clear();
     // 5 + also
+    resetAlreadyMentioned();
     storyline.addEnumeration("you <also> see", 
-        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
-         "a crate of TNT"], "here");
+        [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
     expect(storyline.toString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You also see a lipstick and a crate of TNT here."));
     storyline.clear();
     // 5 + also + no end
+    resetAlreadyMentioned();
     storyline.addEnumeration("you <also> see", 
-        ["a handkerchief", "a brush", "a mirror", "a lipstick", 
-         "a crate of TNT"], null);
+        [handkerchief, brush, mirror, lipstick, crateOfTnt], null);
     expect(storyline.toString(),
         matches("You see a handkerchief, a brush, and a mirror. "
             "You also see a lipstick and a crate of TNT."));

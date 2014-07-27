@@ -8,8 +8,9 @@ part of storyline;
  * than not they are at a [location].
  */
 class Entity {
-  Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, this.team: Actor.NEUTRAL, 
-    this.isPlayer: false, this.nameIsProperNoun: false});
+  Entity.withOptions(this.name, {this.pronoun: Pronoun.IT, 
+    this.team: Actor.NEUTRAL, this.isPlayer: false, 
+    this.nameIsProperNoun: false, this.alreadyMentioned: true});
   
   Entity(this.name, this.nameIsProperNoun, this.pronoun, this.team, this.isPlayer);
 
