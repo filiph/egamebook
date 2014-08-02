@@ -342,9 +342,13 @@ class BodegaZil {
   
   void setupGuts() {
     // ACTIONS
+    Action lookAtTurret = new Action.Goto("look at nonfunctional defensive "
+        "turret", "Guts.TurretLook", onlyOnce: true);
+    repairTurret = new Action.Goto("repair the defensive turret [~45 minutes]", 
+        "Guts.TurretRepair", onlyOnce: true, isActive: false);
     
     // XXX START HERE!!!
-    // TODO: Defensive turret, shield generator, radar.
+    // TODO: shield generator, radar.
     
     // TODO(low): allow something hidden from Bodega
     // ROOM
@@ -355,9 +359,15 @@ class BodegaZil {
          new Exit("Explore: CorridorRightJunction", "exit to Corridor Right",
             "<subject> {{exit|leave}<s>|step<s> out} to Corridor Right")],
         descriptionPage: "Guts.description",
-        coordinates: [0, -45, 0]
+        coordinates: [0, -45, 0],
+        actions: [
+            lookAtTurret,
+            repairTurret
+        ]
     );
   }
+  
+  Action repairTurret;
   
   void setupCorridorLeftJunction() {
     new Room(zil, "Explore: CorridorLeftJunction",

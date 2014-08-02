@@ -279,7 +279,11 @@ class Weapon extends ShipSystem implements CanHaveTarget {
   IntScale ammo;
   Entity projectile = new Entity.withOptions("projectile");
   
+  /// Some weapons can be more or less precise than average. Their accuracy
+  /// can also change in time.
   num accuracyModifier = 1.0;
+  /// Some weapons can go through shields. This property says what percentage
+  /// of their energy goes through them.
   num shieldPenetration = 0.0;
   num damage = 1;
   
@@ -306,6 +310,25 @@ String getAimString(int aim) {
     return "great";
   } else /* aim >= 4 */ {
     return "perfect";
+  }
+}
+
+/// Autonomous weapon system (such as defensive turret).
+class AutoWeapon extends Weapon {
+  AutoWeapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
+                       num damage: 1.0, num shieldPenetration: 0.0,
+                       num accuracyModifier: 1.0,
+                       Pronoun pronoun: Pronoun.IT,
+                       Entity projectile}) 
+      : super(name, ammo: ammo, maxHp: maxHp, damage: damage, 
+          shieldPenetration: shieldPenetration, 
+          accuracyModifier: accuracyModifier, pronoun: pronoun,
+          projectile: projectile) {
+    
+    // Exchange direct weapon moves with autonomous moves.
+    availableMoves = <CombatMove>[
+        new AutoGunStart(this)
+    ];
   }
 }
 

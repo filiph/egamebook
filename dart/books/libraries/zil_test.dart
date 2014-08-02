@@ -92,14 +92,4 @@ void main() {
       expect(bridge.exits.first.isActive, false);
     });
   });
-  
-  
-  // EXAMPLE
-  // aiActors.update(); // something like that?
-  // rooms.setCurrentFromPageName(currentPageName);
-  // rooms.current.showText();  // "You are standing in the cargo bay. There's a steel bar on the ground here."
-                                // "Gorilla is walking through here. He's heading to the hatch Corridor Left."
-  // timeline.time++;           // "Through the PA, you hear ..." 
-  
-  // rooms.current.showChoices();  // Run this in a separate script block!
 }

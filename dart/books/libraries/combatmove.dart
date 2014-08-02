@@ -555,6 +555,14 @@ class ImproveAim extends CombatMove {
   final int improvementStep = 1;
 }
 
+class AutoGunStart extends FireGun {
+  AutoGunStart(ShipSystem system) : super(system);
+  
+  bool autoRepeat = true;
+  
+  // TODO: allow stopping 
+}
+
 
 /// A subclass of CombatMove that is not dependent on one single [ShipSystem].
 /// Maneuvres like "improve position" are an example of [SpaceshipCombatMove].
