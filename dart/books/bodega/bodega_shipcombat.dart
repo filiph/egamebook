@@ -23,14 +23,15 @@ class BodegaShip extends Spaceship {
       weapons: [
           new Weapon("front laser", 
               projectile: new Entity.withOptions("laser beam"))
-          ..damage = 2
+          ..damage = 2,
+          new AutoWeapon("defensive turret",
+                projectile: new Entity.withOptions("shot"))
+          ..isActive = false
         ]) {
-    weapons.add(turret);
+    turret = weapons[1];
   }
   
-  Weapon turret = new AutoWeapon("defensive turret",
-      projectile: new Entity.withOptions("shot"))
-  ..isActive = false;
+  Weapon turret;
 }
 
 class MessengerShip extends Spaceship {
