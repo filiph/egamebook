@@ -678,9 +678,15 @@ class BodegaZil {
       choiceString.write(option.choiceString);
       if (option.physicalPointsRequired > 0) {
         choiceString.write(" [-${option.physicalPointsRequired} P]");
+        if (option.physicalPointsRequired > physicalPoints.value) {
+          choiceString.write(" [DISABLED]"); // TODO: actually disable!
+        }
       }
       if (option.mentalPointsRequired > 0) {
         choiceString.write(" [-${option.mentalPointsRequired} M]");
+        if (option.mentalPointsRequired > mentalPoints.value) {
+          choiceString.write(" [DISABLED]"); // TODO: actually disable!
+        }
       }
       String probability = Randomly.humanStringifyProbability(
           option.probability);
