@@ -140,8 +140,16 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
     }
   }
 
-  Iterable<FormElement> get formElementChildren => children.where(
-      (html5lib.Element child) => child is FormElement);
+  Iterable<FormElement> get formElementChildren {
+    // Normally, this should be possible through children.where, but this
+    // fails with typecasting Iterable<Element> to Iterable<FormElement>.
+    List<FormElement> result = new List<FormElement>();
+    for (FormElement child in 
+        children.where((html5lib.Element child) => child is FormElement)) {
+      result.add(child);
+    }
+    return result;
+  }
 
   /**
    * Deep set of all elements that are of class [FormElement] and below this
