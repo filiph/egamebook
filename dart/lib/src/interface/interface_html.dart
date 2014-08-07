@@ -607,6 +607,7 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
   BaseSubmitButton.elementClass: (FormElement e) => new HtmlSubmitButton(e),
+  BaseCheckboxInput.elementClass: (FormElement e) => new HtmlCheckboxInput(e),
   BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
   BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
   BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e),
@@ -837,6 +838,65 @@ class HtmlSubmitButton extends HtmlUiElement {
 
   @override
   bool get waitingForUpdate => _waitingForUpdate;
+}
+
+class HtmlCheckboxInput extends HtmlUiElement {
+  BaseCheckboxInput blueprint;
+  DivElement uiRepresentation;
+  CheckboxInputElement _checkboxEl;
+  LabelElement _labelEl;
+  DivElement _childrenElement;
+
+  HtmlCheckboxInput(BaseCheckboxInput blueprint) : super(blueprint) {
+    this.blueprint = blueprint;
+    print(this.blueprint.name);
+    
+    uiRepresentation = new DivElement()
+        ..classes.add("checkbox-input")
+        ..id = blueprint.id;
+    
+    String checkboxId = "${blueprint.id}-checkbox";
+    _checkboxEl = new CheckboxInputElement()
+        ..id = checkboxId;
+    _labelEl = new LabelElement()
+        ..htmlFor = checkboxId
+        ..innerHtml = blueprint.name;
+    uiRepresentation.append(_checkboxEl);
+    uiRepresentation.append(_labelEl);
+    
+    update();
+
+    _childrenElement = new DivElement();
+    uiRepresentation.append(_childrenElement);
+  }
+
+  @override
+  void appendChild(Object childUiRepresentation) {
+    _childrenElement.append(childUiRepresentation);
+  }
+
+  @override
+  Object get current => _checkboxEl.checked;
+
+  @override
+  Stream get onChange => _checkboxEl.onChange;
+
+  @override
+  void update() {
+    super.update();
+    _checkboxEl.checked = blueprint.current;
+  }
+
+  @override
+  bool waitingForUpdate = false;
+
+  @override
+  bool get disabled => _checkboxEl.disabled;
+
+  @override
+  set disabled(bool value) {
+    _checkboxEl.disabled = value;
+  }
 }
 
 abstract class HtmlRangeBase extends HtmlUiElement {
@@ -1163,6 +1223,7 @@ class HtmlOption extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
+/// A menu with choices in it – like for example an inventory menu.
 class Submenu {
   final String name;
   final List<EgbChoice> choices = new List<EgbChoice>();

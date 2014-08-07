@@ -162,6 +162,11 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   }
 }
 
+/**
+ * Interface shared by all form elements that can be updated on the fly (i.e.
+ * their content/state is not set in stone, but can be either changed by user
+ * or by script).
+ */
 abstract class UpdatableByMap {
   Map<String, Object> toMap();
   void updateFromMap(Map<String, Object> map);
@@ -396,7 +401,10 @@ abstract class StringRepresentationHolder {
   String currentStringRepresentation;
 }
 
-
+/**
+ * Interface shared by all inputs. All inputs have a [current] value and
+ * they provide [sanitizeCurrent] method.
+ */
 abstract class Input<T> {
   T current;
 
@@ -459,6 +467,55 @@ class SubmitButton extends BaseSubmitButton implements ScripterSubmitter {
 // TODO: SkillSubmitButton - allows player to have better results according
 // to skill (acumen)
 
+
+class BaseCheckbox extends FormElement implements UpdatableByMap {
+  String get name => attributes["name"];
+  set name(String value) => attributes["name"] = value;
+  
+  BaseCheckbox(String elementClass, String name) 
+      : super(elementClass) {
+    this.name = name;
+  }
+  
+  /// Checked or not.
+  bool current;
+  
+  @override
+  Map<String, Object> toMap() {
+    Map<String,Object> map = super.toMap();
+    map.addAll({
+      "current": current
+    });
+    return map;
+  }
+
+  @override
+  void updateFromMap(Map<String, Object> map) {
+    super.updateFromMap(map);
+    current = map["current"];
+  }
+}
+
+class BaseCheckboxInput extends BaseCheckbox implements Input<bool> {
+  static const String elementClass = "CheckboxInput";
+  BaseCheckboxInput(String name) 
+    : super(elementClass, name);
+  
+  @override
+  void sanitizeCurrent() {
+    if (current == null) {
+      throw new StateError("CheckboxInput state must be either true or false.");
+    }
+  }
+}
+
+class CheckboxInput extends BaseCheckboxInput with _NewValueCallback<bool> {
+  CheckboxInput(String name, InputCallback onInput, {bool checked: false}) 
+      : super(name) {
+    this.onInput = onInput;
+    this.current = checked;
+  }
+}
 
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].

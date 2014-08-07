@@ -666,6 +666,9 @@ class BodegaZil {
    * Success and failure callbacks are defined by the [ExtraEffortOption]
    * instances. If not, the [defaultOnSuccess] and [defaultOnFailure] provide
    * backup.
+   * 
+   * TODO: form instead - allows going with noTry, or trying stuff, while
+   * putting in extra effort is done via a checkbox. 
    */
   void createExtraEffortChoiceList(
       String noTryChoiceString, Function onNoTry,

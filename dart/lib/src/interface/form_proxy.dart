@@ -188,6 +188,10 @@ Map<String,CustomTagHandler> customTagHandlers = {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceSubmitButton(attributes["name"], attributes["id"]);
   },
+  BaseCheckboxInput.elementClass: (Object jsonObject) {
+      Map attributes = _getAttributesFromJsonML(jsonObject);
+      return new InterfaceCheckboxInput(attributes["name"], attributes["id"]);
+  },
   BaseRangeInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceRangeInput(attributes["name"], attributes["id"]);
@@ -234,6 +238,15 @@ class InterfaceFormSection extends FormSection implements BlueprintWithUiReprese
 
 class InterfaceSubmitButton extends BaseSubmitButton implements BlueprintWithUiRepresentation {
   InterfaceSubmitButton(String name, String id) : super(name) {
+    this.id = id;
+  }
+
+  UiElement uiElement;
+}
+
+class InterfaceCheckboxInput extends BaseCheckboxInput 
+    implements BlueprintWithUiRepresentation {
+  InterfaceCheckboxInput(String name, String id) : super(name) {
     this.id = id;
   }
 

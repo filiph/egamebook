@@ -41,6 +41,7 @@ void main() {
   group("Pure", () {
     Form form;
     RangeInput input1, input2;
+    CheckboxInput checkboxInput;
     int age, money;
 
     setUp(() {
@@ -49,6 +50,7 @@ void main() {
           value: 30, step: 1, maxEnabled: 40);
       input2 = new RangeInput("Money", (value) => money = value, max: 1000,
           step: 100);
+      checkboxInput = new CheckboxInput("Use extra force", (_) {});
     });
 
     test("Form gives its children unique ids before sending", () {
@@ -62,6 +64,7 @@ void main() {
     test("Form from Scripter is recreated in interface", () {
       form.children.add(input1);
       form.children.add(input2);
+      form.children.add(checkboxInput);
       Map map = form.toMap();
       print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
@@ -76,6 +79,7 @@ void main() {
     RangeInput input1, input2, input3;
     RangeOutput energyGauge;
     RangeInput weapons, shields;
+    CheckboxInput checkboxInput;
     TextOutput textOutput;
     int age, money, freetime;
     EgbInterface interface;
@@ -101,6 +105,8 @@ void main() {
       shields = new RangeInput("Shields", updateEnergyGauges, value: 0);
       
       textOutput = new TextOutput();
+      
+      checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
       interface = new HtmlInterface();
       storage = new MemoryStorage();
@@ -121,6 +127,21 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       interface.showForm(formProxy);
       expect(querySelector("#${formProxy.children.first.id}"), isNotNull);
+    });
+    
+    test("creates checkbox", () {
+      form.children.add(checkboxInput);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = interface.showForm(formProxy);
+      CheckboxInputElement checkboxEl = 
+          querySelector("#${formProxy.children.first.id} input");
+      expect(checkboxInput.current, false);
+      stream.listen(expectAsync((CurrentState values) {
+        print(JSON.encode(values.toMap()));
+        form.receiveUserInput(values);
+        expect((form.children[0] as CheckboxInput).current, true);
+      }));
+      checkboxEl.click();
     });
 
     test("sends updated values", () {
