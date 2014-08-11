@@ -130,6 +130,8 @@ void main() {
     });
     
     test("creates checkbox", () {
+      bool checked = false;
+      checkboxInput.onInput = (bool value) => checked = value; 
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
@@ -140,6 +142,7 @@ void main() {
         print(JSON.encode(values.toMap()));
         form.receiveUserInput(values);
         expect((form.children[0] as CheckboxInput).current, true);
+        expect(checked, true);
       }));
       checkboxEl.click();
     });
