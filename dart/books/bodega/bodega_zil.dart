@@ -619,6 +619,39 @@ class BodegaZil {
     return (baseTime / computeProductivity(skilled)).round();
   }
 
+  ///  
+  void createExtraEffortChoiceList(
+      String normalChoiceString, Function normalOutcome,
+      String extraEffortChoiceString, int physicalCost, int mentalCost,
+      Function extraEffortOutcome) {
+  
+    choice(normalChoiceString, script: () {
+      normalOutcome();
+    });
+    
+    StringBuffer choiceString = new StringBuffer();
+    choiceString.write(extraEffortChoiceString);
+    
+    if (physicalCost > 0) {
+      choiceString.write(" [-${physicalCost} P]");
+      if (physicalCost > physicalPoints.value) {
+        choiceString.write(" [DISABLED]"); // TODO: actually disable!
+      }
+    }
+    if (mentalCost > 0) {
+      choiceString.write(" [-${mentalCost} M]");
+      if (mentalCost > mentalPoints.value) {
+        choiceString.write(" [DISABLED]"); // TODO: actually disable!
+      }
+    }
+    
+    choice(choiceString.toString(), script: () {
+      physicalPoints.value -= physicalCost;
+      mentalPoints.value -= mentalCost;
+      extraEffortOutcome();
+    });
+  }
+
   // Map saveable vars to strongly typed variables.
   Stat get clock => vars["clock"];
   String get title => vars["title"];
@@ -652,24 +685,6 @@ class BodegaZil {
   set currentlyInJump(bool value) {
     vars["currentlyInJump"] = value;
   }
-
-}
-
-/// Helper class that defines an option for when player is faced with something
-/// that can be _tried_ (outcome is unsure) and which can benefit from adding
-/// extra effort ([BodegaZil.physicalPoints] or [BodegaZil.mentalPoints]).
-class ExtraEffortOption {
-  
-  ExtraEffortOption(this.choiceString, this.probability, 
-      this.physicalPointsRequired, this.mentalPointsRequired, this.onSuccess, 
-      this.onFailure);
-
-  final String choiceString;
-  final num probability;
-  final int physicalPointsRequired;
-  final int mentalPointsRequired;
-  final Function onSuccess;
-  final Function onFailure;
 }
 
 const String INVENTORY = "···"; // Middle dots.
