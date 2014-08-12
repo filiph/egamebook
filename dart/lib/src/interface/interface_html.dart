@@ -501,7 +501,6 @@ class HtmlInterface extends EgbInterfaceBase {
 
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
-    assert(_savegameToBe == null);
     _savegameToBe = savegame;
     return new Future.value(true);
 
