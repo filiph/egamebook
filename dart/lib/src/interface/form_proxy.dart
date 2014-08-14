@@ -139,7 +139,7 @@ abstract class UiElement {
   /// [waitingForUpdate] back to [:false:].
   void update() {
     waitingForUpdate = false;
-    disabled = _blueprint.disabled;
+    disabled = _blueprint.disabledOrInsideDisabledParent;
     hidden = _blueprint.hidden;
   }
   

@@ -4,18 +4,13 @@ import '../libraries/zil.dart';
 import '../libraries/timeline.dart';
 import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/book/scripter_typedefs.dart';
-import 'package:egamebook/src/book/scripter.dart' show EgbScripter,
-    PointsCounter;
+import 'package:egamebook/src/book/scripter.dart' show CheckboxInput, EgbScripter, Form, PointsCounter, RangeOutput;
 import '../libraries/storyline.dart';
-import '../libraries/randomly.dart';
 
 class BodegaZil {
-  BodegaZil(this.goto, this.echo, this.choice, this.vars, EgbScripter scripter)
-      : zil = new Zil(scripter) {
-    points = vars["points"];
-    vars["physicalPoints"] = physicalPoints;
-    vars["mentalPoints"] = mentalPoints;
-
+  BodegaZil(this.goto, this.echo, this.choice, this.showForm, 
+      Map<String, Object> vars, EgbScripter scripter)
+      : zil = new Zil(scripter), this.vars = new Vars(vars) {
     setupTimeline();
     setupActors();
     setupRooms();
@@ -24,12 +19,12 @@ class BodegaZil {
   void setupTimeline() {
     exploration = zil.timeline;
     exploration.mainLoop = () {
-      clock.value += 1;
+      vars.clock.value += 1;
       // TODO: Exploration timeline - no jumping, no rescheduling
     };
 
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
-      roomBeforeOvercameBySleepiness = zil.player.location.name;
+      vars.roomBeforeOvercameBySleepiness = zil.player.location.name;
       goto("Bridge: OvercomeBySleepiness");
     }, type: TimedEvent.MAJOR);
 
@@ -42,8 +37,8 @@ class BodegaZil {
 
     unityArrivalEvent = exploration.schedule(null, () {
       echo("""The Bodega says: "We have arrived to Space Station Unity." """);
-      justArrivedAtUnity = true;
-      currentlyInJump = false;
+      vars.justArrivedAtUnity = true;
+      vars.currentlyInJump = false;
     }, type: TimedEvent.MAJOR);
   }
 
@@ -269,7 +264,8 @@ class BodegaZil {
     // ACTIONS
     repairEngineAction = new Action.Goto("Take a look at the engine, "
         "try to bring output from 89% back to 100% [~3 hours]",
-        "EngineRoom.RepairEngine", requirement: () => isEngineer && !currentlyInJump,
+        "EngineRoom.RepairEngine", 
+        requirement: () => vars.isEngineer && !vars.currentlyInJump,
         onlyOnce: true);
 
     // ROOM
@@ -364,17 +360,17 @@ class BodegaZil {
         storyline.add("You pull the banana out of your pocket, peel it, "
             "and eat it. It's delicious. You feel a little bit " "invigorated.");
         // TODO: player.hp++
-        stoleOfficersBanana = true; // TODO: bodega doesn't like this
+        vars.stoleOfficersBanana = true; // TODO: bodega doesn't like this
         banana.isActive = false;
       }, needsToBeCarried: true, onlyOnce: true, submenu: INVENTORY),
           new Action("give the banana to Gorilla", () {
         storyline.add(
             "You hand the banana to Gorilla. He watches it with amazement, than proceeds to peel it eagerly. Before he takes the first bite, though, he gives you a thankful look.\n\nAfter only a few seconds, the banana is no more. But Gorilla seems very happy."
             );
-        gorillaAttitude += 2;
-        stoleOfficersBanana = true; // TODO: bodega doesn't like this
+        vars.gorillaAttitude += 2;
+        vars.stoleOfficersBanana = true; // TODO: bodega doesn't like this
         banana.isActive = false;
-        points.add(5, "making friends");
+        vars.points.add(5, "making friends");
       }, performerCheck: (actor) => actor.isInSameRoomAs(gorilla), submenu:
           INVENTORY)], takeable: true, isActive: false);
 
@@ -497,16 +493,17 @@ class BodegaZil {
         "put up the hull breach on the screen", "LookAtHullBreachFromBridge", isActive:
         false, onlyOnce: true);
     askBodegaQuestions = new Action.Goto("ask Bodega some questions",
-        "BodegaQuestions: Start", requirement: () => bodegaTopics.length > 0);
+        "BodegaQuestions: Start", 
+        requirement: () => vars.bodegaTopics.length > 0);
     takeANap = new Action.Goto("Take a nap", "Bridge: Nap", onlyOnce: true,
         requirement: () => zil.timeline.time < MAX_TIME_BEFORE_NAP);
     waitForJumpToUnity = new Action.Goto("Wait until ready to jump to Unity",
         "Bridge: WaitForJump", onlyOnce: true, requirement: () => zil.timeline.time >=
         MESSENGER_CONTACT_TIME && zil.timeline.time < MAX_TIME_BEFORE_HYPERDRIVE_READY
-        && !jumpedToUnity);
+        && !vars.jumpedToUnity);
     jumpToSpaceStationUnity = new Action.Goto(
         "initiate the jump to Space Station Unity", "Unity: Jump", isActive: false,
-        requirement: () => !jumpedToUnity);
+        requirement: () => !vars.jumpedToUnity);
 
     // ROOM
     bridge = new Room(zil, "Explore: Bridge", // corresponds to pagename
@@ -525,7 +522,7 @@ class BodegaZil {
         jumpToSpaceStationUnity, askBodegaQuestions, lookAtHullBreachFromBridge,
         takeANap], onUpdate: () {
       // Check whether we just arrived to Unity.
-      if (justArrivedAtUnity) {
+      if (vars.justArrivedAtUnity) {
         goto("Unity: Arrival");
         return false;
       }
@@ -567,15 +564,9 @@ class BodegaZil {
   final GotoFunction goto;
   final EchoFunction echo;
   final ChoiceFunction choice;
-  final Map<String, Object> vars;
-  PointsCounter points;
+  final ShowFormFunction showForm;
+  final Vars vars;
   Timeline exploration;
-
-  // Stats
-  final Stat physicalPoints = new Stat<int>("Physical reserve", (int value) =>
-      "$value P", description: "Spare physical energy", show: false);
-  final Stat mentalPoints = new Stat<int>("Mental reserve", (int value) =>
-      "$value M", description: "Spare mental energy", show: false);
 
   // Utility functions.
   String getHoursToHyperdrive() {
@@ -597,8 +588,8 @@ class BodegaZil {
 
   // Returns "John", or "captain" (even for "acting captain").
   String getInformalSalutation() {
-    if (title == "") {
-      return name;
+    if (vars.title == "") {
+      return vars.name;
     } else {
       return "captain";
     }
@@ -606,7 +597,7 @@ class BodegaZil {
 
   num computeProductivity(bool skilled) {
     num productivity = 1.0;
-    if (currentlyHighOnShabu) {
+    if (vars.currentlyHighOnShabu) {
       productivity += 0.3;
     }
     if (skilled) {
@@ -618,8 +609,98 @@ class BodegaZil {
   int computeTimeRequired(int baseTime, bool skilled) {
     return (baseTime / computeProductivity(skilled)).round();
   }
+  
+  void createTraitsForm() {
+    Form traitsForm = new Form();
+    
+    RangeOutput pointsLeft = new RangeOutput("Trait points", 
+        max: MAX_TRAIT_POINTS,
+        value: MAX_TRAIT_POINTS);
+    
+    void updateTraitPoints(bool checked) {
+      pointsLeft.current += checked ? -1 : 1;
+      if (pointsLeft.current == 0) {
+        traitsForm.disabled = true;
+      } else {
+        traitsForm.disabled = false;
+      }
+    }
+    
+    CheckboxInput isHawkeyedInput = new CheckboxInput(
+        "You have good eyesight and spotting abilities",
+        (bool value) {
+          vars.isHawkeyed = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput knowsJapaneseInput = new CheckboxInput(
+        "You can speak basic Japanese",
+        (bool value) {
+          vars.knowsJapanese = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput understandsAnimalsInput = new CheckboxInput(
+        "You are good with animals",
+        (bool value) {
+          vars.understandsAnimals = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput understandsAIInput = new CheckboxInput(
+        "You have received a psychology training on artificial intelligence",
+        (bool value) {
+          vars.understandsAI = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput understandsElectronicsInput = new CheckboxInput(
+        "You understand electronics well and you are proficient in using and "
+        "repairing them",
+        (bool value) {
+          vars.understandsElectronics = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput hasScienceEducationInput = new CheckboxInput(
+        "You have science education",
+        (bool value) {
+          vars.hasScienceEducation = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput isHandyInput = new CheckboxInput(
+        "You know your way around a spaceship",
+        (bool value) {
+      vars.isHandy = value;
+      updateTraitPoints(value);
+    });
+    
+    if (vars.isEngineer) {
+      understandsElectronicsInput
+          ..current = true
+          ..disabled = true;
+    }
+    if (vars.isMedic) {
+      hasScienceEducationInput
+          ..current = true
+          ..disabled = true;
+    }
+    if (vars.isSpaceman) {
+      isHandyInput
+          ..current = true
+          ..disabled = true;
+    }
+    
+    traitsForm
+        ..append(pointsLeft)
+        ..append(isHawkeyedInput)
+        ..append(knowsJapaneseInput)
+        ..append(understandsAnimalsInput)
+        ..append(understandsAIInput)
+        ..append(understandsElectronicsInput)
+        ..append(hasScienceEducationInput)
+        ..append(isHandyInput);
+    showForm(traitsForm);
+  }
 
-  ///  
+  /// Allows easy creation of choices that let player exert [physicalPoints] or
+  /// [mentalPoints] in exchange for some kind of advantace (faster action,
+  /// more information, etc.).
   void createExtraEffortChoiceList(
       String normalChoiceString, Function normalOutcome,
       String extraEffortChoiceString, int physicalCost, int mentalCost,
@@ -634,32 +715,80 @@ class BodegaZil {
     
     if (physicalCost > 0) {
       choiceString.write(" [-${physicalCost} P]");
-      if (physicalCost > physicalPoints.value) {
+      if (physicalCost > vars.physicalPoints.value) {
         choiceString.write(" [DISABLED]"); // TODO: actually disable!
       }
     }
     if (mentalCost > 0) {
       choiceString.write(" [-${mentalCost} M]");
-      if (mentalCost > mentalPoints.value) {
+      if (mentalCost > vars.mentalPoints.value) {
         choiceString.write(" [DISABLED]"); // TODO: actually disable!
       }
     }
     
     choice(choiceString.toString(), script: () {
-      physicalPoints.value -= physicalCost;
-      mentalPoints.value -= mentalCost;
+      vars.physicalPoints.value -= physicalCost;
+      vars.mentalPoints.value -= mentalCost;
       extraEffortOutcome();
     });
   }
 
-  // Map saveable vars to strongly typed variables.
+
+}
+
+/// A strongly typed container of all the saveable variables defined in Bodega. 
+class Vars {
+  Vars(this.vars);
+  final Map<String, Object> vars;
+  
+  PointsCounter get points => vars["points"];
+      
+  // Stats
+  Stat get physicalPoints => vars["physicalPoints"];
+  Stat get mentalPoints => vars["mentalPoints"];
+  
   Stat get clock => vars["clock"];
   String get title => vars["title"];
   String get name => vars["name"];
   List<String> get bodegaTopics => vars["bodegaTopics"];
   bool get jumpedToUnity => vars["jumpedToUnity"];
+  
   bool get isEngineer => vars["isEngineer"];
+  bool get isMedic => vars["isMedic"];
+  bool get isSpaceman => vars["isSpaceman"];
+
   // Read & Write
+  // Traits
+  bool get isHawkeyed => vars["isHawkeyed"];
+  set isHawkeyed(bool value) {
+    vars["isHawkeyed"] = value;
+  }
+  bool get knowsJapanese => vars["knowsJapanese"];
+  set knowsJapanese(bool value) {
+    vars["knowsJapanese"] = value;
+  }
+  bool get understandsAnimals => vars["understandsAnimals"];
+  set understandsAnimals(bool value) {
+    vars["understandsAnimals"] = value;
+  }
+  bool get understandsAI => vars["understandsAI"];
+  set understandsAI(bool value) {
+    vars["understandsAI"] = value;
+  }
+  bool get hasScienceEducation => vars["hasScienceEducation"];
+  set hasScienceEducation(bool value) {
+    vars["hasScienceEducation"] = value;
+  }
+  bool get understandsElectronics => vars["understandsElectronics"];
+  set understandsElectronics(bool value) {
+    vars["understandsElectronics"] = value;
+  }
+  bool get isHandy => vars["isHandy"];
+  set isHandy(bool value) {
+    vars["isHandy"] = value;
+  }
+
+  // Rest
   String get roomBeforeOvercameBySleepiness =>
       vars["roomBeforeOvercameBySleepiness"];
   set roomBeforeOvercameBySleepiness(String value) {
@@ -689,6 +818,7 @@ class BodegaZil {
 
 const String INVENTORY = "···"; // Middle dots.
 
+const int MAX_TRAIT_POINTS = 3;
 const int MAX_TIME_BEFORE_NAP = 148;
 const int MESSENGER_CONTACT_TIME = 460;
 const int MAX_TIME_BEFORE_HYPERDRIVE_READY = 473;

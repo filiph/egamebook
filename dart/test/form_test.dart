@@ -146,6 +146,16 @@ void main() {
       }));
       checkboxEl.click();
     });
+    
+    test("creates disabled checkbox", () {
+      checkboxInput.disabled = true;
+      form.children.add(checkboxInput);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = interface.showForm(formProxy);
+      CheckboxInputElement checkboxEl = 
+          querySelector("#${formProxy.children.first.id} input");
+      expect(checkboxEl.disabled, true);
+    });
 
     test("sends updated values", () {
       form.children.add(input1);

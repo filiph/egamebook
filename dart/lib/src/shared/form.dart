@@ -121,7 +121,19 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /// visible, but cannot be clicked or changed, and are clearly marked as such.
   bool get disabled => attributes["disabled"] == "true";
   set disabled(bool value) => attributes["disabled"] = value ? "true" : "false";
-
+  
+  /// Returns whether this element is disabled. It differs from [disabled] in
+  /// that it also checks whether any parent in the hierarchy is disabled.
+  /// 
+  /// XXX START HERE !!! - do all elements get parents, if so, why doesn't this work?
+  bool get disabledOrInsideDisabledParent {
+    if (parent != null && 
+        (parent as FormElement).disabledOrInsideDisabledParent) {
+      return true;
+    }
+    return disabled;
+  }
+  
   Map<String, Object> toMap() => {
     "hidden": hidden,
     "disabled": disabled
