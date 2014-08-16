@@ -69,7 +69,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     if (unsetWaitingForUpdate) {
       allFormElementsBelowThisOne.where((element) => element is Input)
       .forEach((element) {
-        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = false;
+        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = 
+            false;
       });
     }
   }

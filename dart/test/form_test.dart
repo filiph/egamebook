@@ -4,7 +4,7 @@ import 'package:egamebook/src/interface/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/src/interface/interface_html.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-import 'dart:html';
+import 'dart:html' show ButtonElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -66,11 +66,40 @@ void main() {
       form.children.add(input2);
       form.children.add(checkboxInput);
       Map map = form.toMap();
-      print(JSON.encode(map));
+      // print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.length, form.children.length);
       expect((form.children[0] as BaseRange).max, (formProxy.children[0] as
           BaseRange).max);
+    });
+    
+    test("Elements get parents", () {
+      form.children.add(input1);
+      Map map = form.toMap();
+      FormProxy formProxy = new FormProxy.fromMap(map);
+      expect(formProxy.children.single.parent, formProxy);
+    });
+    
+    // TODO make this work (Form currently doesn't update its disabled/hidden
+    //   status)
+//    test("disabledOrInsideDisabledParent works with Form", () {
+//      form.children.add(input1);
+//      form.disabled = true;
+//      Map map = form.toMap();
+//      FormProxy formProxy = new FormProxy.fromMap(map);
+//      expect((formProxy.children.single as FormElement)
+//          .disabledOrInsideDisabledParent, true);
+//    });
+    
+    test("disabledOrInsideDisabledParent works with FormSection", () {
+      FormSection section = new FormSection("Test")
+          ..children.add(input1)
+          ..disabled = true;
+      form.children.add(section);
+      Map map = form.toMap();
+      FormProxy formProxy = new FormProxy.fromMap(map);
+      expect((formProxy.children.single.children.single as FormElement)
+          .disabledOrInsideDisabledParent, true);
     });
   });
 

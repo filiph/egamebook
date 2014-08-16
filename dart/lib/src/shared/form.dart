@@ -124,8 +124,6 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   
   /// Returns whether this element is disabled. It differs from [disabled] in
   /// that it also checks whether any parent in the hierarchy is disabled.
-  /// 
-  /// XXX START HERE !!! - do all elements get parents, if so, why doesn't this work?
   bool get disabledOrInsideDisabledParent {
     if (parent != null && 
         (parent as FormElement).disabledOrInsideDisabledParent) {
@@ -152,6 +150,8 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
     }
   }
 
+  /// Returns all direct [children] of this element that are of type
+  /// [FormElement] (skips things like [:<div>:]). 
   Iterable<FormElement> get formElementChildren {
     // Normally, this should be possible through children.where, but this
     // fails with typecasting Iterable<Element> to Iterable<FormElement>.
@@ -200,7 +200,7 @@ class FormBase extends FormElement implements Submitter {
  * Author-facing.
  */
 class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
-  math.Random _random = new math.Random();
+  static math.Random _random = new math.Random();
 
   Form({String submitText}) {
     this.submitText = submitText;

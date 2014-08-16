@@ -10,6 +10,8 @@ import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/shared/form.dart';
 
 class MockInterface extends EgbInterfaceBase {
   Queue<int> choicesToBeTaken;
@@ -180,8 +182,8 @@ class MockInterface extends EgbInterfaceBase {
     return new Future.value(true);
   }
   
-  Future<bool> updateStats(Map<String,Object> mapContent) {
-    UIStat.updateStatsList(_statsList, mapContent);
+  Future<bool> updateStats(StatUpdateCollection updates) {
+    UIStat.updateStatsList(_statsList, updates);
     _printStats();
     return new Future.value(true);
   }
@@ -206,5 +208,20 @@ class MockInterface extends EgbInterfaceBase {
   @override
   void save(EgbSavegame savegame) {
     playerProfile.save(savegame);
+  }
+
+  @override
+  void log(String text) {
+    // TODO: implement log
+  }
+
+  @override
+  Stream<CurrentState> showForm(FormProxy formProxy) {
+    // TODO: implement showForm
+  }
+
+  @override
+  void updateForm(FormConfiguration values) {
+    // TODO: implement updateForm
   }
 }
