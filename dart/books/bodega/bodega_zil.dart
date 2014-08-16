@@ -4,7 +4,7 @@ import '../libraries/zil.dart';
 import '../libraries/timeline.dart';
 import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/book/scripter_typedefs.dart';
-import 'package:egamebook/src/book/scripter.dart' show CheckboxInput, EgbScripter, Form, PointsCounter, RangeOutput;
+import 'package:egamebook/src/book/scripter.dart' show CheckboxInput, EgbScripter, Form, FormElement, PointsCounter, RangeOutput;
 import '../libraries/storyline.dart';
 
 class BodegaZil {
@@ -617,12 +617,25 @@ class BodegaZil {
         max: MAX_TRAIT_POINTS,
         value: MAX_TRAIT_POINTS);
     
+    // Temporarily disables inputs if needed.
+    Set<CheckboxInput> inputsDisabledTemporarily = new Set<CheckboxInput>();
     void updateTraitPoints(bool checked) {
       pointsLeft.current += checked ? -1 : 1;
       if (pointsLeft.current == 0) {
-        traitsForm.disabled = true;
+        // Disallow checking any more traits.
+        for (FormElement el in traitsForm.formElementChildren) {
+          if (el is CheckboxInput && el.current == false) {
+            el.disabled = true;
+            inputsDisabledTemporarily.add(el);
+          }
+        }
       } else {
-        traitsForm.disabled = false;
+        // Allow again.
+        for (CheckboxInput el in inputsDisabledTemporarily) {
+          assert(el.disabled);
+          el.disabled = false;
+        }
+        inputsDisabledTemporarily.clear();
       }
     }
     
@@ -695,6 +708,11 @@ class BodegaZil {
         ..append(understandsElectronicsInput)
         ..append(hasScienceEducationInput)
         ..append(isHandyInput);
+    
+    traitsForm.onSubmit = () {
+      vars.pointsToDistribute = pointsLeft.current;
+    };
+    
     showForm(traitsForm);
   }
 
@@ -758,6 +776,11 @@ class Vars {
   bool get isSpaceman => vars["isSpaceman"];
 
   // Read & Write
+  int get pointsToDistribute => vars["pointsToDistribute"];
+  set pointsToDistribute(int value) {
+    vars["pointsToDistribute"] = value;
+  }
+  
   // Traits
   bool get isHawkeyed => vars["isHawkeyed"];
   set isHawkeyed(bool value) {
