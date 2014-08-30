@@ -6,6 +6,8 @@ import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/book/scripter_typedefs.dart';
 import 'package:egamebook/src/book/scripter.dart' show CheckboxInput, EgbScripter, Form, FormElement, PointsCounter, RangeOutput;
 import '../libraries/storyline.dart';
+import '../libraries/randomly.dart';
+import 'dart:collection';
 
 class BodegaZil {
   BodegaZil(this.goto, this.echo, this.choice, this.showForm, 
@@ -594,6 +596,15 @@ class BodegaZil {
       return "captain";
     }
   }
+  
+  /// Returns machinist, medic or spaceman.
+  String getInformalRole(String article) {
+    var str;
+    if (vars.isEngineer) str = "machinist";
+    if (vars.isMedic) str = "medic";
+    if (vars.isSpaceman) str = "{spaceman|sailor}";
+    return Randomly.parse("$article $str");
+  }
 
   num computeProductivity(bool skilled) {
     num productivity = 1.0;
@@ -643,6 +654,12 @@ class BodegaZil {
         "You have good eyesight and spotting abilities",
         (bool value) {
           vars.isHawkeyed = value;
+          updateTraitPoints(value);
+        });
+    CheckboxInput isStrongInput = new CheckboxInput(
+        "You are physically strong, a good fighter",
+        (bool value) {
+          vars.isStrong = value;
           updateTraitPoints(value);
         });
     CheckboxInput knowsJapaneseInput = new CheckboxInput(
@@ -702,6 +719,7 @@ class BodegaZil {
     traitsForm
         ..append(pointsLeft)
         ..append(isHawkeyedInput)
+        ..append(isStrongInput)
         ..append(knowsJapaneseInput)
         ..append(understandsAnimalsInput)
         ..append(understandsAIInput)
@@ -714,6 +732,46 @@ class BodegaZil {
     };
     
     showForm(traitsForm);
+  }
+  
+  void echoTraits() {
+    var assets = new Queue<String>();
+    
+    if (vars.isHawkeyed) assets.add("good eyesight");
+    if (vars.isStrong) assets.add("a strong hand");
+    if (vars.knowsJapanese) assets.add("an ability to speak Japanese");
+    if (vars.understandsAnimals) assets.add("reasonable animal handling skills");
+    if (vars.understandsAI) assets.add("some AI training");
+    
+    if (vars.understandsElectronics && !vars.isEngineer) {
+      assets.add("decent understanding of electronics");
+    }
+    if (vars.hasScienceEducation && !vars.isMedic) {
+      assets.add("good science education");
+    }
+    if (vars.isHandy && !vars.isSpaceman) {
+      assets.add("general space savvy");
+    }
+    
+    var buf = new StringBuffer("You're not the fastest, smoothest or most "
+        "experienced of the old crew, but you're a decent "
+        "${getInformalRole('')}");
+    
+    if (assets.isNotEmpty) {
+      buf.write(" with ");
+      
+      buf.write(assets.removeFirst());
+      
+      while (assets.isNotEmpty) {
+        buf.write(assets.length > 1 ? ", " : " and ");
+        buf.write(assets.removeFirst());
+      }
+    }
+
+    buf.write(". ");
+    buf.write("You've survived this far. There _must_ be a reason you're not "
+        "dead already.");
+    echo(buf.toString());
   }
 
   /// Allows easy creation of choices that let player exert [physicalPoints] or
@@ -785,6 +843,10 @@ class Vars {
   bool get isHawkeyed => vars["isHawkeyed"];
   set isHawkeyed(bool value) {
     vars["isHawkeyed"] = value;
+  }
+  bool get isStrong => vars["isStrong"];
+  set isStrong(bool value) {
+    vars["isStrong"] = value;
   }
   bool get knowsJapanese => vars["knowsJapanese"];
   set knowsJapanese(bool value) {
