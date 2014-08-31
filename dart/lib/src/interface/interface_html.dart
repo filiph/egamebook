@@ -20,6 +20,7 @@ import '../persistence/player_profile.dart';
 import 'choice_with_infochips.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
+import "package:html5lib/dom.dart" as html5lib;
 
 class HtmlInterface extends EgbInterfaceBase {
   AnchorElement restartAnchor;
@@ -1109,9 +1110,18 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     _childrenElement = new SelectElement()
     ..onChange.listen((Event ev) {
       if (!_childrenElement.disabled) {
-        List<InterfaceOption> childOptions = blueprint.children
-            .where((element) => element is InterfaceOption)
-            .toList(growable: false);
+        // TODO: report (html5lib?) bug which throws type exception here
+//        List<InterfaceOption> childOptions = blueprint.children
+//            .where((html5lib.Element element) => element is InterfaceOption)
+//            .toList(growable: false);
+        
+        List<InterfaceOption> childOptions = new List();
+        for (html5lib.Element el in blueprint.children) {
+          if (el is InterfaceOption) {
+            childOptions.add(el);
+          }
+        }
+        
         InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
         HtmlOption htmlOption = selected.uiElement;
         htmlOption.select();
