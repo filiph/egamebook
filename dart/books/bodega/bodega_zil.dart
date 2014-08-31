@@ -24,6 +24,15 @@ class BodegaZil {
       vars.clock.value += 1;
       // TODO: Exploration timeline - no jumping, no rescheduling
     };
+    
+    // TODO: add bodega's rants
+    // - Update: it'll take about __ minutes for my hyperdrive to synchronize.
+    // - I know you don't want to hear this, but you are dying.
+    // - While you're __, you think about the fact that you always liked solitude
+    // - Bodega: Hey, I just re-analyzed your history. Let's face it, you're
+    //           damaged goods. But you know what? I don't care. Everyone I've
+    //           ever worked with turned out to have a history of some sort.
+    //           I'm tired of hearing this as an excuse.
 
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
       vars.roomBeforeOvercameBySleepiness = zil.player.location.name;
