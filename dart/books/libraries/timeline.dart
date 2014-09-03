@@ -23,6 +23,11 @@ abstract class TimedEvent {
   /// 
   /// Example: "You are feeling more and more sick."
   static const int TIME_PROGRESS = 2;
+  /// Singular events can happen in stretches of non-interactive timespans,
+  /// but they must be the only events presented there.
+  /// 
+  /// Example: "While $whileString, the Bodega starts ranting about ..."
+  static const int SINGULAR = 4;
   /// Major events are those that cannot be skipped, and that shouldn't happen
   /// inside other 'scripted' events. They often call [goto]. They should be
   /// immediately actionable right after they have been fired. Thus, we 
@@ -40,6 +45,7 @@ abstract class TimedEvent {
   static const int MAJOR = 3;
   
   bool get isMajor => type == TimedEvent.MAJOR;
+  bool get isSingular => type == TimedEvent.SINGULAR;
 }
 
 class StringTimedEvent extends TimedEvent {
@@ -92,6 +98,38 @@ class Timeline implements Saveable {
    * The time after which this Timeline is finished.
    */
   int maxTime;
+  
+  /// This string will be set during the time of [elapse]. It can be used by
+  /// TimedEvents to provide a linguistic bridge.
+  /// 
+  /// For example, this call:
+  /// 
+  ///     timeline.elapse(6, whileString: "you are repairing the hyperdrive");
+  ///     
+  /// coupled with this event:
+  /// 
+  ///     TimedEvent(() => echo("While ${timeline.whileString}, the lights "
+  ///                           "flicker for a moment"));
+  /// 
+  /// will generate:
+  /// 
+  ///     While you are repairing the hyperdrive, the lights flicker 
+  ///     for a moment.
+  String get whileString => _whileString;
+  
+  String _whileString;
+  
+  /// Utility function that outputs [:"":] when [whileString] is [:null:] or
+  /// the full string.
+  /// 
+  /// [template] should include the string [:<whileString>:] – it will be
+  /// replaced with the current value of [whileString].
+  String generateWhileOutput(String template) {
+    if (whileString == null) return "";
+    return template.replaceAll(WHILE_TEMPLATE_STRING, whileString);
+  }
+  
+  static const String WHILE_TEMPLATE_STRING = "<whileString>";
   
   /// A list of all events (strings and functions) - cannot change outside
   /// initBlock.
@@ -193,6 +231,23 @@ class Timeline implements Saveable {
     }
     if (finished) return;
     
+    List<TimedEvent> currentEvents = _getOrPostponeEvents(interactive);
+    
+    currentEvents.sort((a, b) => b.priority - a.priority);
+    for (var event in currentEvents) {
+      _handleEventOutput(event.run());
+      if (event.isSingular) {
+        _singularAlreadyFired = true;
+        return;
+      }
+      if (finished) return;
+    }
+  }
+
+  /// Goes through events, takes those that should run in this [time] and either
+  /// returns them, or postpones them (when they're major and we are not in
+  /// interactive mode, for example).
+  List<TimedEvent> _getOrPostponeEvents(bool interactive) {
     List<TimedEvent> currentEvents = new List<TimedEvent>();
     // Need to walk through the list manually because we're interested in the
     // indices. (This would not be needed if we didn't try to make this
@@ -203,25 +258,27 @@ class Timeline implements Saveable {
       }
     }
     
-    if (!interactive && currentEvents.any((TimedEvent e) => e.isMajor)) {
+    bool waitingForInteractivity = !interactive && 
+        currentEvents.any((TimedEvent e) => e.isMajor);
+    bool waitingBecauseOfSingularEvent = _singularAlreadyFired && 
+        currentEvents.any((TimedEvent e) => e.isSingular);
+    
+    if (waitingForInteractivity || waitingBecauseOfSingularEvent) {
       // Push all upcoming events by one tick.
       Set<int> indexesToPush = new Set<int>();
       _schedule.forEach((int eventIndex, int eventTime) {
         if (eventTime > time || 
             // Move only major events, the rest can stay and be run below.
-            (eventTime == time && _events[eventIndex].isMajor)) {
+            (waitingForInteractivity && eventTime == time && 
+             _events[eventIndex].isMajor) ||
+             waitingBecauseOfSingularEvent && eventTime >= time) {
           indexesToPush.add(eventIndex);
           currentEvents.remove(_events[eventIndex]);
         }
       });
       indexesToPush.forEach((int index) => _schedule[index] += 1);
     }
-    
-    currentEvents.sort((a, b) => b.priority - a.priority);
-    for (var event in currentEvents) {
-      _handleEventOutput(event.run());
-      if (finished) return;
-    }
+    return currentEvents;
   }
   
   /**
@@ -238,9 +295,11 @@ class Timeline implements Saveable {
    * echo events. Normally, the author can say things like "You continue
    * repairing the door".
    */
-  void elapse(int t, {bool interactive: true}) {
+  void elapse(int t, {bool interactive: true, String whileString}) {
     if (finished) return;
     if (time == null) time = -1;
+    _singularAlreadyFired = false;
+    _whileString = whileString;
     for (int i = 0; i < t; i++) {
       time += 1;
       _goOneTick(interactive && (i == t - 1));
@@ -258,7 +317,10 @@ class Timeline implements Saveable {
 //        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
 //      }
     }
+    _whileString = null;
   }
+  
+  bool _singularAlreadyFired = false;
   
   /**
    * Elapse time up until [time] == [t]. The [t] cannot be in the past.

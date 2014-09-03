@@ -162,6 +162,87 @@ void main() {
     });
   });
   
+  group("Singular events", () {
+    Timeline timeline;
+    
+    setUp(() {
+      textBuffer.clear();
+      isInInitBlock = true;
+      timeline = new Timeline();
+    });
+    
+    test("are only called one by one", () {
+      timeline.schedule(1, "Normal string event on 1.");
+      timeline.schedule(2, "Singular action on 2.", type: TimedEvent.SINGULAR);
+      timeline.schedule(3, "Singular action on 3.", type: TimedEvent.SINGULAR);
+      isInInitBlock = false;
+            
+      timeline.elapse(10);
+      
+      var str = textBuffer.toString();
+      expect(str, isNot(matches("Singular action on 3.")));
+      
+      textBuffer.clear();
+      timeline.elapse(10);
+      
+      str = textBuffer.toString();
+      expect(str, matches("Singular action on 3."));
+    });
+    
+
+  });
+  
+  group("whileString", () {
+    Timeline timeline;
+    
+    setUp(() {
+      textBuffer.clear();
+      isInInitBlock = true;
+      timeline = new Timeline();
+    });
+    
+    test("works", () {
+      timeline.schedule(2, () => echo("While ${timeline.whileString} there is "
+          "a loud noise coming from somewhere afar."));
+      isInInitBlock = false;
+      
+      timeline.elapse(10, whileString: "you are fixing the hyperdrive");
+      
+      var str = textBuffer.toString();
+      expect(str, matches("While you are fixing the hyperdrive there is "
+          "a loud noise coming from somewhere afar."));
+    });
+    
+    test("works also through generateWhileOutput", () {
+      timeline.schedule(2, () {
+        echo(timeline.generateWhileOutput("While <whileString> the Bodega "
+                                          "makes another anouncement."));
+        echo("\"My hyperdrive seems to be ready\", the Bodega says.");
+      });
+      isInInitBlock = false;
+      
+      timeline.elapse(10, whileString: "you are fixing the hyperdrive");
+      
+      var str = textBuffer.toString();
+      expect(str, matches("While you are fixing the hyperdrive the Bodega "
+          "makes another anouncement."));
+    });
+    
+    test("works also through generateWhileOutput when whileString is null", () {
+      timeline.schedule(2, () {
+        echo(timeline.generateWhileOutput("While <whileString> the Bodega "
+                                          "makes another anouncement."));
+        echo("\"My hyperdrive seems to be ready\", the Bodega says.");
+      });
+      isInInitBlock = false;
+      
+      timeline.elapse(10);
+      
+      var str = textBuffer.toString();
+      expect(str, "\"My hyperdrive seems to be ready\", the Bodega says.");
+    });
+  });
+  
   test("throws outside initblock", () {
     textBuffer.clear();
     isInInitBlock = true;
