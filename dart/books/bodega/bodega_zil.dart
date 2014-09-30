@@ -25,7 +25,7 @@ class BodegaZil {
       // TODO: Exploration timeline - no jumping, no rescheduling
     };
     
-    // TODO: add bodega's rants
+    // TODO: add bodega's rants (SINGULAR)
     // - Update: it'll take about __ minutes for my hyperdrive to synchronize.
     // - I know you don't want to hear this, but you are dying.
     // - While you're __, you think about the fact that you always liked solitude
