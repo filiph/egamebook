@@ -6,18 +6,18 @@ import 'dart:html' hide FormElement;
 import 'package:markdown/markdown.dart' as mdown show InlineParser,
     InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
-import 'interface.dart';
-export 'interface.dart' show EgbInterface;
-import '../persistence/savegame.dart';
-import '../shared/user_interaction.dart';
-import '../shared/points_award.dart';
-import '../shared/stat.dart';
+import '../interface.dart';
+export '../interface.dart' show EgbInterface;
+import '../src/persistence/savegame.dart';
+import '../src/shared/user_interaction.dart';
+import '../src/shared/points_award.dart';
+import '../src/shared/stat.dart';
 
 // because we're defining localStorage here
-import '../persistence/storage.dart';
-import '../persistence/player_profile.dart';
+import '../src/persistence/storage.dart';
+import '../src/persistence/player_profile.dart';
 
-import 'choice_with_infochips.dart';
+import '../src/interface/choice_with_infochips.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;

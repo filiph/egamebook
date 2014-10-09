@@ -3,7 +3,7 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
-import '../interface/interface.dart';
+import '../../interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
 import '../shared/points_award.dart';

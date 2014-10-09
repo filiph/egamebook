@@ -1,6 +1,6 @@
-import '../runner.dart';
-import 'interface/interface_html.dart';
-import 'persistence/storage.dart';
+import 'package:egamebook/runner.dart';
+import 'package:egamebook/default_interface/interface_html.dart';
+import 'package:egamebook/src/persistence/storage.dart';
 
 void main() {
   // this will be rewritten with the actual file

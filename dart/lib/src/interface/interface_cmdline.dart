@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
-import 'interface.dart';
+import '../../interface.dart';
 import '../persistence/savegame.dart';
 import '../shared/user_interaction.dart';
 import '../shared/points_award.dart';

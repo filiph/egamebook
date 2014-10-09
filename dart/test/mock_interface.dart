@@ -3,7 +3,7 @@ library mock_interface;
 import 'dart:collection';
 import 'dart:async';
 
-import 'package:egamebook/src/interface/interface.dart';
+import 'package:egamebook/interface.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/shared/points_award.dart';

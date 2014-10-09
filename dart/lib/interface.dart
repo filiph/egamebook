@@ -3,12 +3,12 @@ library egb_interface;
 import 'dart:async';
 import 'dart:isolate';
 
-import '../shared/user_interaction.dart';
-import '../persistence/savegame.dart';
-import '../shared/points_award.dart';
-import '../shared/stat.dart';
+import 'src/shared/user_interaction.dart';
+import 'src/persistence/savegame.dart';
+import 'src/shared/points_award.dart';
+import 'src/shared/stat.dart';
 
-import 'interface_proxy.dart';
+import 'src/interface/interface_proxy.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';

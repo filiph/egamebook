@@ -11,7 +11,7 @@ import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/persistence/saveable.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/src/interface/choice_with_infochips.dart';
-import 'package:egamebook/src/interface/interface.dart';
+import 'package:egamebook/interface.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 
 
