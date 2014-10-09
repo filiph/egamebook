@@ -1,5 +1,5 @@
 import 'dart:isolate';
-import 'runner.dart';
+import '../runner.dart';
 import 'interface/interface.dart';
 import 'interface/interface_cmdline.dart';
 import 'persistence/storage.dart';

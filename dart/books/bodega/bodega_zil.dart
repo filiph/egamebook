@@ -4,7 +4,7 @@ import '../libraries/zil.dart';
 import '../libraries/timeline.dart';
 import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/book/scripter_typedefs.dart';
-import 'package:egamebook/src/book/scripter.dart' show CheckboxInput, EgbScripter, Form, FormElement, PointsCounter, RangeOutput;
+import 'package:egamebook/scripter.dart' show CheckboxInput, EgbScripter, Form, FormElement, PointsCounter, RangeOutput;
 import '../libraries/storyline.dart';
 import '../libraries/randomly.dart';
 import 'dart:collection';

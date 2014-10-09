@@ -1183,9 +1183,9 @@ class Builder {
 
     var scriptFilePath = Platform.script;
     var pathToOutputDart = getPathForExtension("dart");
-    var pathToOutputCmd = getPathForExtension("cmdline.dart");
-    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath.path),
-        "../lib/src/cmdline_template.dart");
+//    var pathToOutputCmd = getPathForExtension("cmdline.dart");
+//    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath.path),
+//        "../lib/src/cmdline_template.dart");
     var pathToOutputHtml = getPathForExtension("html.dart");
     var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
         "../lib/src/html_template.dart");
@@ -1193,14 +1193,14 @@ class Builder {
     var pathToOutputDartFromOutputHtml = 
         path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
 
-    File cmdLineOutputFile = new File(pathToOutputCmd);
-    File cmdLineTemplateFile = new File(pathToInputTemplateCmd);
+//    File cmdLineOutputFile = new File(pathToOutputCmd);
+//    File cmdLineTemplateFile = new File(pathToInputTemplateCmd);
     File htmlOutputFile = new File(pathToOutputHtml);
     File htmlTemplateFile = new File(pathToInputTemplateHtml);
 
     var substitutions = {
-      "import 'runner.dart';" :
-          "import 'package:egamebook/src/runner.dart';\n",
+      "import '../runner.dart';" :
+          "import 'package:egamebook/runner.dart';\n",
       "import 'interface/interface.dart';" :
           "import 'package:egamebook/src/interface/interface.dart';\n",
       "import 'interface/interface_cmdline.dart';" :
@@ -1216,7 +1216,7 @@ class Builder {
     };
 
     Future.wait([
-        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
+//        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
         _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
     ]).then((List<bool> bools) => completer.complete(bools.every((b) => b)));
 
@@ -2028,7 +2028,7 @@ class Builder {
   final String implStartFile = """
 library Scripter_Implementation;
 
-import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/scripter.dart';
 import 'dart:isolate';
 """;
 

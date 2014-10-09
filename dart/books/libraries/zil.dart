@@ -61,7 +61,7 @@
  */
 library zil;
 
-import 'package:egamebook/src/book/scripter.dart' show EgbScripter, Saveable, choice, echo, goto, gotoCalledRecently, throwIfNotInInitBlock; 
+import 'package:egamebook/scripter.dart' show EgbScripter, Saveable, choice, echo, goto, gotoCalledRecently, throwIfNotInInitBlock; 
 import 'storyline.dart';
 import 'dart:collection';
 import 'package:a_star/a_star.dart';

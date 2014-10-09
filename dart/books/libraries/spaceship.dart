@@ -1,6 +1,6 @@
 library spaceship;
 
-import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/scripter.dart';
 import 'numscale.dart';
 import 'storyline.dart';
 import 'randomly.dart';

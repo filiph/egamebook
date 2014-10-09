@@ -1,6 +1,6 @@
 library timeline;
 
-import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/scripter.dart';
 
 /// Return type is purposefully left dynamic.
 typedef ScheduledFunction();

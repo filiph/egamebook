@@ -1,4 +1,4 @@
-import 'runner.dart';
+import '../runner.dart';
 import 'interface/interface_html.dart';
 import 'persistence/storage.dart';
 

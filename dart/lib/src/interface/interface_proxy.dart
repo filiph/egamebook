@@ -8,7 +8,7 @@ import '../shared/points_award.dart';
 import '../shared/stat.dart';
 import '../shared/user_interaction.dart';
 import '../shared/message.dart';
-import '../book/scripter.dart';
+import '../../scripter.dart';
 
 /**
  * The methods of EgbInterface that are callable by EgbScripter (mostly through

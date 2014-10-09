@@ -1,5 +1,5 @@
 //import 'package:unittest/unittest.dart';
-import 'package:egamebook/src/book/scripter.dart';
+import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/form.dart';
 
 import 'spaceship.dart';
