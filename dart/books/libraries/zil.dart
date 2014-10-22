@@ -124,7 +124,8 @@ class Zil implements Saveable {
   /// event that you don't want to be interrupted by major events.
   /// 
   /// The [timeline] output is always shown.
-  void update(int ticks, {bool describe: true, bool interactive: true}) {
+  void update(int ticks, {bool describe: true, bool interactive: true,
+      String whileString}) {
     rooms._checkNetworkReady();
     if (_scripter != null) {
       try {
@@ -142,7 +143,7 @@ class Zil implements Saveable {
       }
     }
     player.location.update(ticks, 
-        describe: describe, interactive: interactive);
+        describe: describe, interactive: interactive, whileString: whileString);
   }
   
   /// Creates choices for the [player] in the current [Room] and given the
