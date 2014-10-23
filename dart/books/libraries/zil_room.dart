@@ -75,7 +75,8 @@ class Room extends Entity with Node implements Described, ZilSaveable {
   
   /// Shows the room, it's inhabitants, items and exits during the next [ticks].
   /// TODO: don't repeat yourself (naive implementation = save storyline, compare)
-  void update(int ticks, {bool describe: true, bool interactive: true}) {
+  void update(int ticks, {bool describe: true, bool interactive: true,
+      String whileString}) {
     if (descriptionPage != null && !visited) {
       // Go to descriptionPage.
       echo(storyline.toString());
@@ -106,7 +107,8 @@ class Room extends Entity with Node implements Described, ZilSaveable {
         if (gotoCalledRecently) return;
       }
       if (_zil != null && _zil.timeline != null) {
-        _zil.timeline.elapse(1, interactive: interactive && (i == ticks - 1));
+        _zil.timeline.elapse(1, interactive: interactive && (i == ticks - 1),
+            whileString: whileString);
         if (gotoCalledRecently) return;
       }
     }
