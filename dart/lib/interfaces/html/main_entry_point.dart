@@ -1,10 +1,13 @@
 import 'package:egamebook/runner.dart';
-import 'package:egamebook/default_interface/interface_html.dart';
+import 'package:egamebook/interfaces/html/html_interface.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 
+/// This is the entry point of the egamebook app as implemented through
+/// [HtmlInterface]. It's a template, to be rewritten by [EgbBuilder]. 
+
 void main() {
-  // this will be rewritten with the actual file
-  var scripterPath = 'book/reference_scripter_impl.dart';
+  // This will be rewritten with the actual file.
+  var scripterPath = '[[PathToEgbScripterImplementation]]';
   
   // create the interface
   EgbInterface interface = new HtmlInterface();

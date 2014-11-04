@@ -1188,7 +1188,7 @@ class Builder {
 //        "../lib/src/cmdline_template.dart");
     var pathToOutputHtml = getPathForExtension("html.dart");
     var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
-        "../lib/src/html_template.dart");
+        "../lib/interfaces/html/main_entry_point.dart");
     
     var pathToOutputDartFromOutputHtml = 
         path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
@@ -1211,7 +1211,7 @@ class Builder {
         "import 'package:egamebook/src/persistence/storage.dart';\n",
       "import 'persistence/player_profile.dart';" :
         "import 'package:egamebook/src/persistence/player_profile.dart';\n",
-      "  var scripterPath = 'book/reference_scripter_impl.dart';" :
+      "  var scripterPath = '[[PathToEgbScripterImplementation]]';" :
           "  var scripterPath = '$pathToOutputDartFromOutputHtml';"
     };
 

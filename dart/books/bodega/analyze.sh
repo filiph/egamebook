@@ -13,7 +13,7 @@ fi
 # Run analyzer
 # You can change to bodega.html.dart for longer check in case there are any strange interferences.
 # But checking just bodega.dart should suffice.
-/Applications/dart/dart-sdk/bin/dartanalyzer --machine $DIR/bodega.dart
+/Applications/dart/dart-sdk/bin/dartanalyzer --machine -p $DIR/../../packages/ $DIR/bodega.dart
 if [ $? -eq 2 ]; then
   echo "ERROR WITH BODEGA BUILD! (in Analyzer)"
   if [ $# -gt 0 ]; then
