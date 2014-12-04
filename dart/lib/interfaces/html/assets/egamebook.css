@@ -1,4 +1,4 @@
-/* @override 
+/* @override
 	http://0.0.0.0:8000/egamebook.css
 	http://egamebook.com/test/egamebook.css
 	http://10.0.0.103:3030/Users/filiph/Programs/egamebook/dart/books/bodega/egamebook.css
@@ -86,7 +86,7 @@ nav div#right-hand-nav {
 	float: right;
 	max-width: 50%;
 	overflow-x: hidden;
-	
+
 	white-space: nowrap;
 }
 
@@ -195,11 +195,11 @@ div.dialog {
   box-shadow: 0 0 0.5em 0.5em #ddd;
   position: fixed;
   z-index: 500;
-  top: 20%;
+  top: 10vh;
   left: 50%;
   margin-left: -10em;
   width: 20em;
-  height: 60%;
+  max-height: 80vh;
 }
 
 div.dialog > div {
@@ -207,9 +207,13 @@ div.dialog > div {
   padding: 1em;
 }
 
-div.dialog div.dialog-content {
+.dialog-content {
   height: 70%;
   overflow-y: auto;
+}
+
+.dialog-buttons {
+  margin-top: 2em;
 }
 
 div.dialog h3 {
@@ -282,7 +286,7 @@ p.meta {
   font: 90% 'Roboto', sans-serif;
   padding: 1em 2em;
   background: lightyellow;
- 
+
   border-radius: 0.2em;
 }
 
@@ -464,7 +468,7 @@ div.form .range-input label, div.form .range-input .buttons-and-value {
 
 div.form .range-input .buttons, div.form .range-input .current-value {
   display: table-cell;
-  
+
   margin: 0;
 }
 
