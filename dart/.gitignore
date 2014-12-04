@@ -24,4 +24,5 @@ packages
 */*/packages/*
 **/*.tmLanguage.cache
 **/*.tmPreferences.cache
+**/.idea/*
 
