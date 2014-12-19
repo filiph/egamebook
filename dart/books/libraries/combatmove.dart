@@ -3,25 +3,29 @@ part of spaceship;
 /**
  * [CombatMove] defines a possibility (choice) for the player / AI to perform
  * with a specified system. E.g. fire a gun, redistribute energy from an engine,
- * use the tractor beam. 
- * 
+ * use the tractor beam.
+ *
  * The most general characteristics of a move are defined by static variables
  * ([name], [needsTarget]) and methods ([update]). But specific variants of the
  * move (i.e. firing from a concrete gun on a concrete ship) are implemented
- * by creating a new instance and adding it to the [ShipSystem]'s 
- * [availableMoves] list. When a [CombatMove] is started, it is referenced 
+ * by creating a new instance and adding it to the [ShipSystem]'s
+ * [availableMoves] list. When a [CombatMove] is started, it is referenced
  * by the [ShipSystem]'s [currentMove] variable and updated on each turn.
- * 
+ *
  * When finished, the CombatMove can either [autoRepeat], or it stops (the
  * [currentMove] variable is set to [:null:]).
- * 
+ *
  * Class [CombatMove] can be extended (e.g. by [FireGun] or [RepairSystem])
  * for more readable code.
  */
 abstract class CombatMove {
   CombatMove(this.system) {
   }
-  
+
+  // TODO: Use prototype pattern - availableMoves is a list of prototypes.
+  // When we need the moves themselves, we call [clone()].
+  // CombatMove clone();
+
   /// The system that performs this move. Ex.: the laser gun performing this
   /// laser shot.
   final ShipSystem system;
@@ -29,19 +33,25 @@ abstract class CombatMove {
   Spaceship targetShip;
   /// The (optional) exact target system.
   ShipSystem targetSystem;
-  
+
   /// Whether this move is currently available to the actor. Use this to
   /// hide options from the player and then add them as a form of progression.
   // @saveable
   bool isActive = true; // TODO: saveable!!!?
-  
+
   /// The unique name of this particular type of move.
   static final String name = "undefined move";
   get instanceName => name; // Dart cannot access static member, so we need to copy
-  
+
   /// The text of the choice presented to player.
   String get commandText;  // fire weapon at <object>
-  
+
+  /// If true, this is something that only the actor gets reports about. The
+  /// targets and 3rd parties don't get notified. Example: "You switch to
+  /// armor piercing rounds." or "You improve your aim to GREEN."
+  /// This is [:false:] by default.
+  bool onlyActorGetsReports = false;
+
   /// Only reported for player (TODO: or other people on same ship) when he
   /// starts programming the ship computer to do something.
   void reportSettingUp() {
@@ -55,34 +65,39 @@ abstract class CombatMove {
   }
   String get stringSettingUp => "<subject> start<s> programming the "
                                 "${system.name} to $commandText";
-  
+
   /// Reported when the computer/system starts the sequence.
-  void reportStarting() => _report(stringStarting); 
+  void reportStarting() => _report(stringStarting);
   String stringStarting = "<subject> {initiate|start}<s> the $name";
-  
-  /// Ex.: <subject> <is> firing at <object> 
+
+  /// Ex.: <subject> <is> firing at <object>
   // YAGNI?
   //String gerundString;
-  
+
   /// Reported when an already started CombatMove ceases to be eligible to
   /// continue (e.g. targetShip disappears, goes out of range, etc.).
-  void reportCannotContinue() => _report(stringCannotContinue);  
+  void reportCannotContinue() => _report(stringCannotContinue);
   String stringCannotContinue = ""; // <subject> is no longer able to fire at <object>
-  
+
   /// Reported when the move is successfully finished.
   void reportSuccess() => _report(stringSuccess, positive: true);
+  /// Reports success in a general case scenario (someone succesfully does
+  /// something).
   String stringSuccess = "<subject> successfully finish<es> $name";
+  /// Describes success as seen by target. Some moves are not really seen from
+  /// the t
+  String stringSuccessFromTarget = "<subject> successfully finish<es> $name";
   void onSuccess() {}
-  
+
   /// Reported when the move finished with failure.
-  void reportFailure() => _report(stringFailure, negative: true); 
+  void reportFailure() => _report(stringFailure, negative: true);
   String stringFailure = "<subject> fail<s> to perform $name";
   void onFailure() {}
 
   /// Reported when the move is going for another round.
-  void reportAutoRepeat() => _report(stringAutoRepeat); 
+  void reportAutoRepeat() => _report(stringAutoRepeat);
   String stringAutoRepeat = "";   // <subject> goes for another round of
-  
+
   void reportStop() => _report(stringStop);
   String get stringStop => "<subject> stop<s> to $commandText";
   void stop() {
@@ -91,21 +106,21 @@ abstract class CombatMove {
     currentTimeToSetup = null;
     system.currentMove = null;
   }
-  
-  void _report(String str, {Entity subject, 
+
+  void _report(String str, {Entity subject,
       Entity owner, Entity objectOwner,
-      Entity object, bool preferShipAsObject: false, 
+      Entity object, bool preferShipAsObject: false,
       bool positive: false, bool but: false,
       bool negative: false}) {
     if (str == null || str == "") return;
-    
+
     if (subject == null) {
       subject = system.getReportingSubject();
     }
     if (owner == null) {
       owner = system.getReportingOwner();
     }
-    
+
     if (object == null) {
       object = getTargetObject(targetShip, targetSystem);
       if (preferShipAsObject && object is ShipSystem) {
@@ -117,18 +132,20 @@ abstract class CombatMove {
         objectOwner = object.spaceship;
       }
     }
-    
+
     if (subject == Entity.NOTHING) subject = null;
     if (owner == Entity.NOTHING) owner = null;
     if (objectOwner == Entity.NOTHING) objectOwner = null;
     if (object == Entity.NOTHING) object = null;
-    
+
     storyline.add(str, subject: subject, owner: owner, object: object,
         objectOwner: objectOwner,
         positive: positive, negative: negative, but: but,
         time: system.spaceship.currentCombat.timeline.time);
   }
-  
+
+  /// Returns the target [Entity] that we probably want to use when reporting
+  /// about this combatmove.
   static Entity getTargetObject(Entity targetShip, Entity targetSystem) {
     Entity object = targetSystem;
     if (object is Hull) {
@@ -143,16 +160,16 @@ abstract class CombatMove {
     }
     return object;
   }
-  
+
   /// Whether this combat move needs a target ship that is alive.
   final bool needsTargetShip = true;
   /// Whether this combat move needs a target system that is alive.
   final bool needsTargetSystem = true;
-  
+
   /// Whether the move is supposed to automatically renew itself after each
   /// run.
   final bool autoRepeat = false;
-  
+
   /// Is the move currently eligible to be carried out?
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
     if (needsTargetShip) {
@@ -172,16 +189,16 @@ abstract class CombatMove {
     if (!system.spaceship.isAliveAndActive) return false;
     return true;
   }
-  
+
   /// Can the move continue?
   bool canContinue() => isEligible();
-  
+
   /// Can be overridden with more involved mathemathics (incl. things like
   /// maneuverability of targetShip, etc.).
-  num calculateSuccessChance(Spaceship targetShip, ShipSystem targetSystem) => 
+  num calculateSuccessChance(Spaceship targetShip, ShipSystem targetSystem) =>
         defaultSuccessChance;
   final num defaultSuccessChance = 1.0;
-  
+
   /**
    * Runs just after the CombatMove gets picked by the player. Can just update
    * some variable, or can create a list of choices.
@@ -190,24 +207,24 @@ abstract class CombatMove {
     currentTimeToSetup = timeToSetup;
     _isFinished = false;
   }
-  
+
   /// The time it takes for a pilot to setup the combat move on the console.
   int timeToSetup;
   int currentTimeToSetup;
-  
+
   /// The time it takes for the combat to finish (e.g. for a laser gun to fire).
   int timeToFinish;
   /// The current countdown to finish (when [onSuccess]/[onFailure] happens).
   int currentTimeToFinish;
-  
+
   bool _isFinished = false;
   bool get isFinished => _isFinished;
-  
+
   /// The timeline from start of performing to finish (e.g. charging to fire).
   // Timeline timeline <-- YAGNI
-  
+
   /**
-   * Goes one tick in the lifetime of the CombatMove. Decreases 
+   * Goes one tick in the lifetime of the CombatMove. Decreases
    * [currentTimeToSetup] or [currentTimeToFinish], depending on state of the
    * move (setup phase or perform phase).
    */
@@ -218,7 +235,7 @@ abstract class CombatMove {
       currentTimeToSetup = null;
       currentTimeToFinish = null;
     }
-    
+
     if (currentTimeToSetup != null) {
       if (currentTimeToSetup == timeToSetup && system.spaceship.pilot != null
           && system.spaceship.pilot.isPlayer) {
@@ -232,7 +249,7 @@ abstract class CombatMove {
       }
       return;
     }
-    
+
     if (currentTimeToFinish == null) {
       return;
 //      throw "update() called on a move whose currentTimeToFinish is set to null";
@@ -243,7 +260,7 @@ abstract class CombatMove {
       currentTimeToFinish -= 1;
     }
     if (currentTimeToFinish == 0) {
-      if (Randomly.saveAgainst(calculateSuccessChance(targetShip, 
+      if (Randomly.saveAgainst(calculateSuccessChance(targetShip,
                                                       targetSystem))) {
         reportSuccess();
         onSuccess();
@@ -274,15 +291,15 @@ class FireGun extends CombatMove {
   /// Copy of [system], but because this is [FireGun], its safe to cast it
   /// as a weapon
   Weapon weapon;
-  
+
   final bool needsTargetShip = true;
   final bool needsTargetSystem = true;
-  
+
   bool autoRepeat = false;
-  
+
   int timeToSetup = 4;
   int timeToFinish = 3;
-  
+
   static final String name = "fire gun";
   String get commandText => "take a shot";
 
@@ -293,9 +310,9 @@ class FireGun extends CombatMove {
       throw new StateError("reportSettingUp should not have been called since "
           "this spaceship's pilot is null or is not player");
     }
-    
+
     storyline.add("<subject> {grab<s>|take<s>|take<s> hold of} <owner's> "
-        "controls", subject: pilot, owner: system, 
+        "controls", subject: pilot, owner: system,
         time: system.spaceship.currentCombat.timeline.time);
     storyline.add("<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
@@ -303,14 +320,14 @@ class FireGun extends CombatMove {
         subject: pilot, object: targetShip,
         time: system.spaceship.currentCombat.timeline.time);
   }
-  
-  String get stringStarting => null; 
+
+  String get stringStarting => null;
 //      "<subject's> ${system.name} {begins|starts} "
 //                               "charging";
-                               
+
   @override
   String stringSuccess = null;
-  
+
   void onSuccess() {
     Entity owner, subject;
     if (!system.spaceship.pilot.isPlayer) {
@@ -322,18 +339,18 @@ class FireGun extends CombatMove {
     // For player, use defaults (provide null to _report()).
     _report("<owner's> <subject> {shoot<s>|fire<s>} at "
         "<object-owner's> <object>", subject: subject, owner: owner);
-    
+
     _hit(targetSystem);
   }
-  
+
   void _hit(ShipSystem targetSystem) {
     var damage = weapon.damage;
-    
-    Entity object = CombatMove.getTargetObject(targetSystem.spaceship, 
+
+    Entity object = CombatMove.getTargetObject(targetSystem.spaceship,
         targetSystem);
     Entity owner;
     Entity subject;
-    
+
     if (damage == 0) return;
     var shield = targetSystem.spaceship.shield;
     if (shield != null && shield.isAliveAndActive && shield.sp.isNonZero) {
@@ -354,7 +371,7 @@ class FireGun extends CombatMove {
         // TODO: better
         storyline.add("<subject> "
             "goes {right|} through <object's> shield",
-            subject: weapon.projectile, object: targetSystem.spaceship, 
+            subject: weapon.projectile, object: targetSystem.spaceship,
             positive: true,
             time: system.spaceship.currentCombat.timeline.time);
       }
@@ -363,38 +380,38 @@ class FireGun extends CombatMove {
 //      _report("<owner's> <subject> {hit<s>|succeed<s> to hit|"
 //          "successfully hit<s>} <object>", object: object,
 //          positive: true);
-      
+
       int relativePosition = system.spaceship
           .getPositionTowards(targetSystem.spaceship);
-      
+
       if (relativePosition >= Spaceship.POSITION_GREAT) {
         damage *= 1.5;
-        _report("<subject> hit<s> <object's> weakest spot", 
+        _report("<subject> hit<s> <object's> weakest spot",
             subject: weapon.projectile, object: object, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_GOOD) {
         damage *= 1.25;
-        _report("<subject> hit<s> one of <object's> weaker spots", 
+        _report("<subject> hit<s> one of <object's> weaker spots",
             subject: weapon.projectile, object: object, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_BALANCED) {
-        _report("<subject> hit<s>", 
+        _report("<subject> hit<s>",
             subject: weapon.projectile, object: Entity.NOTHING, positive: true);
       } else if (relativePosition >= Spaceship.POSITION_BAD) {
         damage /= 1.25;
-        _report("<subject> hit<s> one of <object's> tougher spots", 
+        _report("<subject> hit<s> one of <object's> tougher spots",
             subject: weapon.projectile, object: object, negative: true);
       } else /* relativePosition == Spaceship.POSITION_HORRIBLE, or worse */ {
         damage /= 1.5;
-        _report("<subject> hit<s> <object's> toughest spot", 
+        _report("<subject> hit<s> <object's> toughest spot",
             subject: weapon.projectile, object: object, negative: true);
       }
-      
+
       targetSystem.hp.value -= damage;
     }
     if (Randomly.saveAgainst(chanceOfImproveAimOnSuccess)) {
       _improveAim();
     }
   }
-  
+
   void reportFailure() {
     Entity owner;
     Entity subject;
@@ -420,10 +437,10 @@ class FireGun extends CombatMove {
         subject: weapon.projectile, object: object,
         negative: true, but: true);
   }
-  
+
   final num chanceOfImproveAimOnSuccess = 0.2;
   final num chanceOfImproveAimOnFailure = 0.2;
-  
+
   void onFailure() {
     if (!(targetSystem is Hull)) {
       // when targetting a specific system, it's possible to miss that one
@@ -432,7 +449,7 @@ class FireGun extends CombatMove {
               calculateSuccessChance(targetShip, targetShip.hull) / 2.0)) {
         _hit(targetShip.hull);
       } else {
-        _report("<subject> completely {miss<es>|go<es> wide of} <object>", 
+        _report("<subject> completely {miss<es>|go<es> wide of} <object>",
             object: targetShip, negative: true);
       }
     }
@@ -440,19 +457,19 @@ class FireGun extends CombatMove {
       _improveAim();
     }
   }
-  
+
   void _improveAim() {
     if (!targetShip.isAliveAndActive) {
       return;
     }
     weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + 1);
-    Entity owner = weapon.spaceship.pilot.isPlayer ? 
+    Entity owner = weapon.spaceship.pilot.isPlayer ?
         weapon.spaceship.pilot : weapon.spaceship;
-    storyline.add("<owner's> <subject's> aim at <object> gets better", 
+    storyline.add("<owner's> <subject's> aim at <object> gets better",
         subject: weapon, owner: owner, object: targetShip,
         positive: true, time: system.spaceship.currentCombat.timeline.time);
   }
-  
+
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
     if (!super.isEligible(targetShip: targetShip, targetSystem: targetSystem)) {
       return false;
@@ -461,7 +478,7 @@ class FireGun extends CombatMove {
     if (targetSystem != null && !targetSystem.isOutsideHull) return false;
     return true;
   }
-  
+
   num calculateSuccessChance(Spaceship targetShip, ShipSystem targetSystem) {
     if (targetSystem == null) targetSystem = this.targetSystem;
     if (targetSystem == null && targetShip != null) {
@@ -481,11 +498,11 @@ class FireGun extends CombatMove {
 
 class QuickFireGun extends FireGun {
   QuickFireGun(ShipSystem system) : super(system);
-  
+
   String commandText = "take a quick shot";
   int timeToSetup = 1;
   int timeToFinish = 3;
-  
+
   @override
   void reportSettingUp() {
     var pilot = system.spaceship.pilot;
@@ -493,15 +510,15 @@ class QuickFireGun extends FireGun {
       throw new StateError("reportSettingUp should not have been called since "
           "this spaceship's pilot is null or is not player");
     }
-    
-    storyline.add("<subject> decide<s> to take a quick shot at <object>", 
+
+    storyline.add("<subject> decide<s> to take a quick shot at <object>",
         subject: pilot, owner: system, object: targetShip,
         time: system.spaceship.currentCombat.timeline.time);
   }
-  
+
   final num chanceOfImproveAimOnSuccess = 0.1;
   final num chanceOfImproveAimOnFailure = 0.0;
-  
+
   num defaultSuccessChance = 0.6;
 }
 
@@ -519,26 +536,26 @@ class QuickFireGun extends FireGun {
 
 class ImproveAim extends CombatMove {
   ImproveAim(ShipSystem system) : super(system);
-  
+
   String get commandText => "improve aim";
   int timeToSetup = 1;
   int timeToFinish = 3;
-  
+
   final bool needsTargetShip = true;
   final bool needsTargetSystem = true;
-  
+
   String stringSettingUp = null;
-  
+
   @override
   void reportStarting() => _report(stringStarting, preferShipAsObject: true);
   String stringStarting = "<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
         "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
-  
+
   final num defaultSuccessChance = 0.9;
-  
+
   @override
-  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true, 
+  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true,
       positive: true);
   String stringSuccess = "<subject> successfully improve<s> <subject's> aim "
       "on <object>";
@@ -546,21 +563,21 @@ class ImproveAim extends CombatMove {
     Weapon weapon = (system as Weapon);
     weapon.setAimAt(targetShip, weapon.getAimAt(targetShip) + improvementStep);
   }
-  
+
   @override
   void reportFailure() => _report(stringFailure, preferShipAsObject: true,
       negative: true);
   String stringFailure = "<subject's> aim on <object> doesn't improve";
-  
+
   final int improvementStep = 1;
 }
 
 class AutoGunStart extends FireGun {
   AutoGunStart(ShipSystem system) : super(system);
-  
+
   bool autoRepeat = true;
-  
-  // TODO: allow stopping 
+
+  // TODO: allow stopping
 }
 
 
@@ -572,7 +589,7 @@ abstract class SpaceshipCombatMove extends CombatMove {
   }
 
   Spaceship spaceship;
-  
+
   /// Is the move currently eligible to be carried out?
   @override
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
@@ -585,76 +602,76 @@ abstract class SpaceshipCombatMove extends CombatMove {
     if (!spaceship.isAliveAndActive) return false;
     return true;
   }
-  
+
   final bool needsTargetSystem = false;
-  
+
   @override
   void reportStarting() => _report(stringStarting, preferShipAsObject: true);
   @override
-  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true, 
+  void reportSuccess() => _report(stringSuccess, preferShipAsObject: true,
       positive: true);
   @override
-  void reportCannotContinue() => _report(stringCannotContinue, 
+  void reportCannotContinue() => _report(stringCannotContinue,
       preferShipAsObject: true);
   @override
   void reportFailure() => _report(stringFailure, preferShipAsObject: true,
-      negative: true); 
+      negative: true);
   @override
-  void reportAutoRepeat() => _report(stringAutoRepeat, 
-      preferShipAsObject: true); 
+  void reportAutoRepeat() => _report(stringAutoRepeat,
+      preferShipAsObject: true);
 }
 
 class ImprovePosition extends SpaceshipCombatMove {
   ImprovePosition(ShipSystem mainThruster) : super(mainThruster);
-  
+
   String commandText = "improve position";
   int timeToSetup = 1;
   int timeToFinish = 5;
-  
+
   final num defaultSuccessChance = 0.9;
   final int improvementStep = 1;
 
   final bool needsTargetShip = true;
-  
+
   String stringSettingUp = null;
-  
+
   String stringStarting = "<subject> {start<s>|begin<s>} {trying|an attempt} "
       "to {improve|better} <subject's> "
       "position on <object>";
-  
+
   String stringSuccess = "<subject> successfully improve<s> <subject's> "
       "position on <object>";
-  
+
   void onSuccess() {
     spaceship.changePositionDifferenceTowards(targetShip, improvementStep);
     // TODO: report successful maneuvre, but wait for position reporting
     // until the end of "turn", where we say what the relative position is now.
   }
-  
+
   String stringFailure = "<subject> fail<s> to improve <subject's> position "
       "on <object>";
 }
 
 class RiskyImprovePosition extends ImprovePosition {
   RiskyImprovePosition(ShipSystem mainThruster) : super(mainThruster);
-  
+
   String commandText = "offensive maneuvre";
-  
+
   @override
   final num defaultSuccessChance = 0.3;
   @override
   final int improvementStep = 3;
   final num regressionChance = 0.2;
-  
+
   String stringStarting = "<subject> {start<s>|begin<s>} a {risky|daring} "
       "maneuvre to gain positional advantage on <object>";
-  
+
   String stringSuccess = "<subject> successfully pull<s> off the maneuvre "
       "on <object>";
-  
+
   void reportFailure() => _report(stringFailure, object: Entity.NOTHING);
   String stringFailure = "<subject's> maneuvre fails";
-  
+
   @override
   void onFailure() {
     if (Randomly.saveAgainst(regressionChance)) {

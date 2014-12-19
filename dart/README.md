@@ -435,6 +435,22 @@ Now Skippy's state will persist between play sessions.
 
 ## Development
 
+Diagram (TODO: explain)
+
+                        +-Isolate+-------------+
+                        |                      |
+                        |         +----------+ |
+                        |         |          | |
+     +> ScripterProxy +-----------> Scripter | |
+     |                  |         |          | |
+     |                  |         +---------++ |
+    ++----------+       |                   |  |
+    |           |       |                   |  |
+    | Interface <---------+ InterfaceProxy <+  |
+    |           |       |                      |
+    +-----------+       +----------------------+
+
+
 Run unit tests:
 
     bin/unit_tests.sh
