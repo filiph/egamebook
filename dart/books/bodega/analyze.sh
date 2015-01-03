@@ -1,5 +1,6 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 # Build bodega.
+echo "Starting build..."
 $DIR/build.sh
 BUILDER_EXIT_CODE=$?
 if [ $BUILDER_EXIT_CODE -eq 255 ]; then
@@ -7,7 +8,7 @@ if [ $BUILDER_EXIT_CODE -eq 255 ]; then
   # https://api.dartlang.org/docs/channels/stable/latest/dart_io.html#exit
   echo "ERROR WITH BODEGA BUILD! (in Builder)"
   if [ $# -gt 0 ]; then
-    osascript -e 'tell app "Terminal" to display alert "Error when building egamebook!"'
+    osascript -e 'tell app "iTerm" to display alert "Error when building egamebook!"'
   fi
   exit 1
 fi
@@ -21,7 +22,7 @@ echo "Exit code = $ANALYZER_EXIT_CODE"
 if [ $ANALYZER_EXIT_CODE -eq 3 ]; then
   echo "ERROR WITH BODEGA BUILD! (in Analyzer)"
   if [ $# -gt 0 ]; then
-    osascript -e 'tell app "Terminal" to display alert "Error when building egamebook!"'
+    osascript -e 'tell app "iTerm" to display alert "Error when building egamebook!"'
   fi
   exit 1
 elif [ $ANALYZER_EXIT_CODE -eq 1 ]; then
