@@ -1,1 +1,1 @@
-fswatch ~/Google\ Drive/egamebook "./analyze.sh alert"
+fswatch ~/Google\ Drive/egamebook --one-per-batch --latency 2 --exclude "\.tmp" | xargs -n1 "./analyze.sh" alert
