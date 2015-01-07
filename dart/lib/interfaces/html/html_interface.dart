@@ -1,9 +1,9 @@
 library egb_interface_html;
 
-/// Default implementation of the [EgbInterface] abstract class. It uses 
+/// Default implementation of the [EgbInterface] abstract class. It uses
 /// vanilla [:dart:html:] to act as an interface to an [EgbScripter]. This means
 /// no fancy framework is used. It also means there are probably many edge cases
-/// and even bugs, and it's not that extensible.    
+/// and even bugs, and it's not that extensible.
 
 import 'dart:async';
 import 'dart:html' hide FormElement;
@@ -90,7 +90,7 @@ class HtmlInterface extends EgbInterfaceBase {
   }
 
   /**
-   * This is called when the book is ready to be played. 
+   * This is called when the book is ready to be played.
    */
   void _bookReadyHandler() {
     startButton.text = "START";
@@ -363,6 +363,7 @@ class HtmlInterface extends EgbInterfaceBase {
     return btn;
   }
 
+  // TODO: use onClick.first.then() - no need to unregister listener
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
       clickSubscriptions) {
@@ -623,9 +624,9 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
 
 abstract class HtmlUiElement extends UiElement {
   HtmlUiElement(FormElement blueprint) : super(blueprint);
-  
+
   Element uiRepresentation;
-  
+
   bool _hidden = false;
   @override
   set hidden(bool value) {
@@ -791,11 +792,11 @@ class HtmlSubmitButton extends HtmlUiElement {
   InterfaceSubmitButton blueprint;
   ButtonElement uiRepresentation;
   DivElement _childrenElement;
-  
+
   HtmlSubmitButton(InterfaceSubmitButton blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     _childrenElement = new DivElement();
-    
+
     uiRepresentation = new ButtonElement()
     ..text = blueprint.name
     ..classes.add("submit-button")
@@ -803,7 +804,7 @@ class HtmlSubmitButton extends HtmlUiElement {
     ..onClick.listen((ev) {
       _onChangeController.add(ev);
     });
-    
+
     update();
   }
 
@@ -828,7 +829,7 @@ class HtmlSubmitButton extends HtmlUiElement {
   StreamController _onChangeController = new StreamController();
   @override
   Stream get onChange => _onChangeController.stream;
-  
+
   void update() {
     super.update();
     uiRepresentation.text = blueprint.name;
@@ -855,11 +856,11 @@ class HtmlCheckboxInput extends HtmlUiElement {
   HtmlCheckboxInput(BaseCheckboxInput blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     print(this.blueprint.name);
-    
+
     uiRepresentation = new DivElement()
         ..classes.add("checkbox-input")
         ..id = blueprint.id;
-    
+
     String checkboxId = "${blueprint.id}-checkbox";
     _checkboxEl = new CheckboxInputElement()
         ..id = checkboxId;
@@ -868,7 +869,7 @@ class HtmlCheckboxInput extends HtmlUiElement {
         ..innerHtml = blueprint.name;
     uiRepresentation.append(_checkboxEl);
     uiRepresentation.append(_labelEl);
-    
+
     update();
 
     _childrenElement = new DivElement();
@@ -936,11 +937,11 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
     _childrenElement = new DivElement();
     uiRepresentation.append(_childrenElement);
-    
+
     update();
   }
 
-  Map<int,RadioButtonInputElement> _radioButtons = 
+  Map<int,RadioButtonInputElement> _radioButtons =
       new Map<int,RadioButtonInputElement>();
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
@@ -951,12 +952,12 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   }
 
   RadioButtonInputElement _createRadioButton(int i);
-  
+
   void _updateRadioButtons() {
-    _radioButtons.forEach((int i, RadioButtonInputElement e) => 
+    _radioButtons.forEach((int i, RadioButtonInputElement e) =>
         _updateRadioButton(i, e));
   }
-  
+
   void _updateRadioButton(int i, RadioButtonInputElement radioButton);
 
   @override
@@ -1034,7 +1035,7 @@ class HtmlRangeInput extends HtmlRangeBase {
         ..checked = i == blueprint.current
         ..value = "$i";
     _updateRadioButton(i, radioButton);
-    
+
     StreamSubscription subscription;
     subscription = radioButton.onClick.listen((ev) {
       if (!radioButton.disabled) {
@@ -1102,7 +1103,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   LabelElement _labelElement;
   SelectElement _childrenElement;
 
-  HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) : 
+  HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) :
       super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1119,22 +1120,22 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 //        List<InterfaceOption> childOptions = blueprint.children
 //            .where((html5lib.Element element) => element is InterfaceOption)
 //            .toList(growable: false);
-        
+
         List<InterfaceOption> childOptions = new List();
         for (html5lib.Element el in blueprint.children) {
           if (el is InterfaceOption) {
             childOptions.add(el);
           }
         }
-        
+
         InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
         HtmlOption htmlOption = selected.uiElement;
         htmlOption.select();
       }
     });
-    
+
     uiRepresentation.append(_childrenElement);
-    
+
     update();
   }
 
@@ -1181,7 +1182,7 @@ class HtmlOption extends HtmlUiElement {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
         blueprint.current)..text = blueprint.text;
-    
+
     update();
   }
 
@@ -1202,7 +1203,7 @@ class HtmlOption extends HtmlUiElement {
     uiRepresentation.disabled = value;
     _disabled = value;
   }
-  
+
   @override
   bool get hidden => false;
   @override  // <option> in <select> can't be hidden by CSS
@@ -1215,7 +1216,7 @@ class HtmlOption extends HtmlUiElement {
   void select() {
     _onChangeController.add(new Event("select"));
   }
-  
+
   StreamController _onChangeController = new StreamController();
   @override
   Stream get onChange => _onChangeController.stream;
@@ -1315,7 +1316,7 @@ typedef void Action();
 /**
  * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
  * [HtmlInterface]).
- * 
+ *
  * TODO: either use lawndart or make the following more robust
  */
 class LocalStorage implements EgbStorage {
