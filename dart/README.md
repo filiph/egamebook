@@ -9,18 +9,16 @@ Or how to be a published interactive fiction writer in 8 easy steps!
 Note: This is **not** implemented yet. It's a vision.
 
 1.  Download Dart Editor and install it.
-2.  On the command line, run `pub global activate egamebook`.
+2.  On the command line, run `[pub global](https://www.dartlang.org/tools/pub/cmd/pub-global.html) activate egamebook`. This will install the `egamebook` command line tool.
 3.  Create a folder (`mkdir mybook`).
-4.  Inside that folder (`cd mybook`), run `pub global run egamebook:create`. This will create a project scaffold that you can edit.
-5.  Run `pub global run egamebook:watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
+4.  Inside that folder (`cd mybook`), run `egamebook create`. This will create a project scaffold that you can edit.
+5.  Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
 6.  Edit the `.egb` file. This is the main source of your book.
 7.  Open `build/index.html` in your favorite browser to test the egamebook in action.
 
-<!-- The following is currently on hold, but most of the code is done.
+<!-- XXX: The following is currently on hold, but some of the GraphML <-> egb code is done.
 
 ### Graphing your egamebook
-
-TODO: IMPLEMENT
 
 Also included with the quick_start project is a GraphML file. GraphML is editable in 
 the free, cross-platform [yEd](http://www.yworks.com/en/products_yed_about.html) 
@@ -29,22 +27,23 @@ flow of your egamebook.
 
 IMAGE
 
-Every time you run `compile.sh`, the .graphml file is updated for you. It's also
-possible to run `update_to_graphml.sh` if you want to do just that.
-(You may want to use the *Layout > Hierarchical* function in yEd after doing so
-for a nicer looking layout. Just click OK on the modal window.)
+Every time you run `egamebook compile` (or every time `egamebook watch` detects a change), the .graphml file is updated for you. It's also possible to run `egamebook updategraph` if you want to do just that. (You may want to use the *Layout > Hierarchical* function in yEd after doing so for a nicer looking layout. Just click OK on the modal window.)
 
 IMAGE
 
 Add new nodes and groups, link between them, change their names. When you're
-happy with the new flow, save the file in yEd and run `update_from_graphml.sh`.
+happy with the new flow, save the file in yEd and run `egamebook usegraph`.
 Your .egb file will be updated with the new pages and choices.
 
 -->
 
 ## egb file format
 
-The .egb (read: _egg_) file is the main source of your egamebook. A basic one can look like this:
+The .egb (read: _egg_) file is the main source of your egamebook. 
+
+The `egb` format is basically a [Markdown](http://daringfireball.net/projects/markdown/) file with an optional MultiMarkdown-style [metadata header](https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide#metadata), and some custom gamebook-specific syntax.
+
+A basic one can look like this:
 
     ---
     start
@@ -70,7 +69,7 @@ This will create an egamebook that starts in the first room (conveniently named 
 
 ### A more practical example
 
-Let's go through some more complex examples while showing advanced features. Please don't take this as the canonical way to write egamebooks. This is mostly to teach you the basics without having to deal with the advanced stuff.
+Let's go through some more complex examples while showing advanced features. Please don't take the following as the canonical way to write egamebooks. This is mostly to teach you the basics without having to deal with the advanced stuff.
 
     Title:      Test Gamebook #1  
     Subtitle:   The Adventures of a Guy with a Gun  
@@ -79,8 +78,13 @@ Let's go through some more complex examples while showing advanced features. Ple
     Web:        http://filiph.net/  
     Email:      abc@example.com  
     Keywords:   crimi, thriller  
-    Copyright:  Creative Commons
+    Copyright:  Creative Commons CC-BY 3.0
+    Date:       2015-01-01
     Version:    1.0.2
+
+    Welcome to **Test Gamebook!** This egamebook is about crime, betrayal, and pancakes.
+
+    These two paragraphs are above the first page, so they will be the 'welcome' message (Synopsis). This is what players read before the game is loaded.
 
     ---
     Day1.WakeUp
@@ -268,6 +272,30 @@ But you don't need to do that if you don't want to. You can also write:
     - [nextpage]
 
 And the egamebook moves on automatically. It'll give a much better flow to the player as they aren't even aware of the page turn.
+
+### Page options
+
+You can give options to any page by including them in a `[[ ]]` bracket just below the page's name.
+
+#### visitOnce
+
+Often, when building your egamebook, you will want to have a page that the player can only visit once. You could of course use scripting for that, but the egamebook format gives you a more convenient way:
+
+    ---
+    dilemma
+
+    - Warn Amy [warnAmy]
+    - Run away [runAway]
+
+    ---
+    warnAmy
+    [[ visitOnce ]]
+
+    You call Amy to warn her. She doesn't pick up.
+
+    - [dilemma]
+
+Note the `[[ visitOnce ]]` option attached to `warnAmy`. This will allow the player to visit that page once. When the player is automatically redirected back to `dilemma`, they will no longer see the option to warn Amy.
 
 ### Scripts
 
