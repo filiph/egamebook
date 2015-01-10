@@ -6,10 +6,10 @@ A system which automatically creates playable electronic gamebooks from .egb fil
 
 Or how to be a published interactive fiction writer in 8 easy steps!
 
-Note: This is **not** implemented yet. It's a vision.
+Note: This is **not** implemented yet. The converter from .egb to .dart is done and works, but the workflow is only a vision.
 
 1.  Download Dart Editor and install it.
-2.  On the command line, run `[pub global](https://www.dartlang.org/tools/pub/cmd/pub-global.html) activate egamebook`. This will install the `egamebook` command line tool.
+2.  On the command line, run `pub global activate egamebook`. This will install the `egamebook` command line tool.
 3.  Create a folder (`mkdir mybook`).
 4.  Inside that folder (`cd mybook`), run `egamebook create`. This will create a project scaffold that you can edit.
 5.  Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
