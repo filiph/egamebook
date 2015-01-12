@@ -25,7 +25,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   String string;
   Function f;
   String goto;
-  
+
   /// When set, this choice will be accessible in a sub menu called [submenu].
   /// The user interface is responsible of grouping choices of the same submenu
   /// together and adding a way for the player to 'open' the submenu and pick
@@ -37,22 +37,22 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently).
   bool get isAutomatic => string.isEmpty;
-  
+
   /**
-   * Returns true if this choice is currently actionable (ie. should be 
-   * actively shown to the player). That means that it hasn't been shown, 
+   * Returns true if this choice is currently actionable (ie. should be
+   * actively shown to the player). That means that it hasn't been shown,
    * is not automatic, is not waiting for end of page.
-   * 
+   *
    * Caller can supply two arguments. [atEndOfPage] signifies whether or not
    * the scripter is currently at end of a page. [atChoiceList] signifies
    * whether the scripter is now at a ChoiceList (some choices might opt
    * to be shown only with other, following choices, and not by themselves).
-   * 
+   *
    * With [filterOut], caller
    * can provide a function that will filter out the choice [:ch:] if
-   * [:filterOut(ch) == true:].  
+   * [:filterOut(ch) == true:].
    */
-  bool isActionable({bool atEndOfPage, bool atChoiceList, 
+  bool isActionable({bool atEndOfPage, bool atChoiceList,
       bool filterOut(EgbChoice choice)}) {
     if (shown) return false;  // choice shown before
     if (isAutomatic) return false;
@@ -69,6 +69,9 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   EgbChoice(String string, {this.goto, Function script, this.submenu: null,
         bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
       super() {
+    if (string == null) {
+      throw new ArgumentError("String given to choice cannot be null.");
+    }
     this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
     f = script;
@@ -89,10 +92,10 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
       deferToEndOfPage = !map["showNow"];
     }
     f = map["then"];
-    
+
     submenu = map["submenu"];
   }
-  
+
   /// Creates a Map representation of the choice with only the data needed by
   /// the interface: [string], [hash] and [submenu].
   Map<String,Object> toMapForInterface() => {
@@ -111,14 +114,14 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   toString() {
     return "Choice: $string [$goto]";
   }
-  
+
   /**
    * The string the author can use when he wants a choice to go back to
    * a previous choice. Like so:
-   * 
+   *
    *     - [<<<]
    */
-  static final RegExp GO_BACK = new RegExp(r"^\s*<<<\s*$"); 
+  static final RegExp GO_BACK = new RegExp(r"^\s*<<<\s*$");
 }
 
 /**
@@ -133,9 +136,9 @@ class EgbChoiceList extends ListBase<EgbChoice> {
   set length(int value) => _choices.length = value;
   operator[](int index) => _choices[index];
   operator[]=(int index, EgbChoice value) => _choices[index] = value;
-  
+
   EgbChoiceList();
-  
+
   EgbChoiceList.fromList(this._choices, this.question);
 
   /**
@@ -177,9 +180,9 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     if (element is EgbChoice) {
       _choices.add(element);
     } else if (element is String) {
-      var choice = new EgbChoice(element, goto: goto, script: script, 
+      var choice = new EgbChoice(element, goto: goto, script: script,
           submenu: submenu,
-          deferToEndOfPage: deferToEndOfPage, 
+          deferToEndOfPage: deferToEndOfPage,
           deferToChoiceList: deferToChoiceList);
       _choices.add(choice);
     } else {
@@ -198,7 +201,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
       }
     }
   }
-  
+
   /**
    * Takes care of converting the current [EgbChoiceList] to a Message.
    *
@@ -219,7 +222,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
             atChoiceList: atChoiceList,
             filterOut: filterOut)
     ).toList();
-    
+
     if (choicesToSend.isEmpty) {
       throw "Choices is empty, but still choices.toMessage was called.";
     }
@@ -241,10 +244,10 @@ class EgbChoiceList extends ListBase<EgbChoice> {
 }
 
 /**
- * [PlayerIntent] is an interaction that is 'out of place' and asynchronous. 
+ * [PlayerIntent] is an interaction that is 'out of place' and asynchronous.
  * For example, when the interface is showing blocks of text, the player can
  * click on the "Restart" button. The book should then stop everything that
- * it's doing and restart itself. 
+ * it's doing and restart itself.
  */
 class PlayerIntent {
   PlayerIntent(type) : this.type = type;
