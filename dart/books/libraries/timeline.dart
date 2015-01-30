@@ -7,43 +7,49 @@ typedef ScheduledFunction();
 
 /// A singular event on the timeline.
 abstract class TimedEvent {
-  int get type; 
+  int get type;
   int get priority;
   String run();
-  
+
   /// Info events are often simple, short messages. They need to be run and
   /// presented to the player, but they are not immediately actionable, and
   /// they do not call [goto].
-  /// 
+  ///
+  /// You normally want to use [SINGULAR] events (those are default with
+  /// [Timeline.schedule]) because those guarantee that during a longer stretch
+  /// of elapsed time, you won't see many events one right after another.
+  ///
   /// Example: "The ship computer announces end of red alert."
   static const int INFO = 1;
   /// Time progress events are events that can be skipped if needed. They are
   /// there to give a sense of elapsing time. When two or more time progress
   /// events meet next to each other, only the second one is displayed.
-  /// 
+  ///
   /// Example: "You are feeling more and more sick."
   static const int TIME_PROGRESS = 2;
   /// Singular events can happen in stretches of non-interactive timespans,
   /// but they must be the only events presented there.
-  /// 
+  ///
+  /// This helps from having several different events one right after another.
+  ///
   /// Example: "While $whileString, the Bodega starts ranting about ..."
   static const int SINGULAR = 4;
   /// Major events are those that cannot be skipped, and that shouldn't happen
   /// inside other 'scripted' events. They often call [goto]. They should be
-  /// immediately actionable right after they have been fired. Thus, we 
+  /// immediately actionable right after they have been fired. Thus, we
   /// shouldn't advance time after a major event was fired unless player
   /// had a chance to react to it. This would create bizarre situations in which
   /// the player is, say, repairing a hatch, then a huge explosion happens
   /// somewhere on the ship, after which the player continues with the repair
   /// like nothing happened.
-  /// 
+  ///
   /// The implementation of [Timeline] moves these events (and every event that
   /// comes after them) until it knows that the player will be able to act
   /// on them.
-  /// 
+  ///
   /// Example: "There is a sudden explosion on the ship! ..."
   static const int MAJOR = 3;
-  
+
   bool get isMajor => type == TimedEvent.MAJOR;
   bool get isSingular => type == TimedEvent.SINGULAR;
 }
@@ -61,15 +67,15 @@ class FunctionTimedEvent extends TimedEvent {
   final ScheduledFunction action;
   final int priority;
   String text;
-  
-  FunctionTimedEvent(this.action, {this.priority: 0, 
+
+  FunctionTimedEvent(this.action, {this.priority: 0,
       this.type: TimedEvent.INFO}) {
     if (action == null || priority == null) {
       throw new ArgumentError("Timed event needs to have function "
                               "and priority set.");
     }
   }
-  
+
   String run() {
     var returnValue = action();
     if (returnValue != null && returnValue is String) {
@@ -83,61 +89,61 @@ class FunctionTimedEvent extends TimedEvent {
 /**
  * The [Timeline] contains a series of scheduled events. Events are then
  * executed according to what the time is.
- * 
+ *
  * Only the current [time] is saved and loaded. The rest needs to be
- * defined in the [:<variables>:] block. 
+ * defined in the [:<variables>:] block.
  */
 class Timeline implements Saveable {
   /**
    * The current time. Do *not* set this unless you want to jump in time.
    * When you want the timeline to actually execute, use [elapse] or
-   * [elapseToTime]. 
+   * [elapseToTime].
    */
   int time = -1;
   /**
    * The time after which this Timeline is finished.
    */
   int maxTime;
-  
+
   /// This string will be set during the time of [elapse]. It can be used by
   /// TimedEvents to provide a linguistic bridge.
-  /// 
+  ///
   /// For example, this call:
-  /// 
+  ///
   ///     timeline.elapse(6, whileString: "you are repairing the hyperdrive");
-  ///     
+  ///
   /// coupled with this event:
-  /// 
+  ///
   ///     TimedEvent(() => echo("While ${timeline.whileString}, the lights "
   ///                           "flicker for a moment"));
-  /// 
+  ///
   /// will generate:
-  /// 
-  ///     While you are repairing the hyperdrive, the lights flicker 
+  ///
+  ///     While you are repairing the hyperdrive, the lights flicker
   ///     for a moment.
   String get whileString => _whileString;
-  
+
   String _whileString;
-  
-  /// Utility function that outputs [:"":] when [whileString] is [:null:] or
-  /// the full string.
-  /// 
+
+  /// Utility function that outputs [otherwise] when [whileString] is [:null:]
+  /// or it uses the [template] with the current value of [whileString].
+  ///
   /// [template] should include the string [:<whileString>:] – it will be
   /// replaced with the current value of [whileString].
-  String generateWhileOutput(String template) {
-    if (whileString == null) return "";
+  String generateWhileOutput(String template, String otherwise) {
+    if (whileString == null) return otherwise;
     return template.replaceAll(WHILE_TEMPLATE_STRING, whileString);
   }
-  
+
   static const String WHILE_TEMPLATE_STRING = "<whileString>";
-  
+
   /// A list of all events (strings and functions) - cannot change outside
   /// initBlock.
   final List<TimedEvent> _events = new List<TimedEvent>();
   /// A schedule. An event [:_events[i]:] scheduled for time [:x:] will be seen
   /// here as [:_schedule[i] == x:].
   /// This can change (and therefore, the whole [Timeline] is [Saveable] even
-  /// though times of events can differ from playthrough to playthrough and 
+  /// though times of events can differ from playthrough to playthrough and
   /// can be edited in runtime).
   final Map<int,int> _schedule = new Map<int,int>();
 
@@ -147,17 +153,17 @@ class Timeline implements Saveable {
     throwIfNotInInitBlock();
     _mainLoop = f;
   }
-  
+
   bool finished = false;
-  
+
   Timeline() {
     throwIfNotInInitBlock();
   }
-  
+
   /**
    * Schedules an event at a given time. When [time] is [:null:], the event
    * won't be fired unless it is later given a time using [reschedule].
-   * 
+   *
    * When scheduling events that call [goto], the author should be aware that
    * once such an even is called, the flow of time is cut off. For example,
    * if the [time] is 15, an event with a [:goto("somewhere");:] line is
@@ -165,8 +171,8 @@ class Timeline implements Saveable {
    * will stop prematurely (at [:time == 20:]). Any next call to [elapse] will
    * continue from time 20.
    */
-  TimedEvent schedule(int time, Object action, {int priority: 0, 
-      int type: TimedEvent.INFO}) {
+  TimedEvent schedule(int time, Object action, {int priority: 0,
+      int type: TimedEvent.SINGULAR}) {
     throwIfNotInInitBlock();
     TimedEvent event;
     if (action is String) {
@@ -184,7 +190,7 @@ class Timeline implements Saveable {
     }
     return event;
   }
-  
+
   /**
    * Re-schedules the event for another time.
    */
@@ -193,7 +199,7 @@ class Timeline implements Saveable {
     if (i == -1) {
       throw new ArgumentError("Event $event wasn't found in the timeline. "
           "You must first add it to timeline in the init block before being "
-          "able to reschedule it."); 
+          "able to reschedule it.");
     }
     _schedule[i] = time;
   }
@@ -204,7 +210,7 @@ class Timeline implements Saveable {
     map["time"] = time;
     Map s = map["schedule"] = new Map<String,int>();
     _schedule.forEach((int key, int value) {
-      // Need to do this because Map keys need to be String for JSON to work 
+      // Need to do this because Map keys need to be String for JSON to work
       // (not int).
       s["$key"] = value;
     });
@@ -218,21 +224,21 @@ class Timeline implements Saveable {
       _schedule[int.parse(key)] = value;
     });
   }
-  
+
   void _handleEventOutput(String s) {
     if (s == null) return;
     // call top-level scripter function echo
     echo(s);
   }
-  
+
   void _goOneTick(bool interactive) {
     if (_mainLoop != null) {
       _handleEventOutput(_mainLoop());
     }
     if (finished) return;
-    
+
     List<TimedEvent> currentEvents = _getOrPostponeEvents(interactive);
-    
+
     currentEvents.sort((a, b) => b.priority - a.priority);
     for (var event in currentEvents) {
       _handleEventOutput(event.run());
@@ -257,19 +263,19 @@ class Timeline implements Saveable {
         currentEvents.add(_events[i]);
       }
     }
-    
-    bool waitingForInteractivity = !interactive && 
+
+    bool waitingForInteractivity = !interactive &&
         currentEvents.any((TimedEvent e) => e.isMajor);
-    bool waitingBecauseOfSingularEvent = _singularAlreadyFired && 
+    bool waitingBecauseOfSingularEvent = _singularAlreadyFired &&
         currentEvents.any((TimedEvent e) => e.isSingular);
-    
+
     if (waitingForInteractivity || waitingBecauseOfSingularEvent) {
       // Push all upcoming events by one tick.
       Set<int> indexesToPush = new Set<int>();
       _schedule.forEach((int eventIndex, int eventTime) {
-        if (eventTime > time || 
+        if (eventTime > time ||
             // Move only major events, the rest can stay and be run below.
-            (waitingForInteractivity && eventTime == time && 
+            (waitingForInteractivity && eventTime == time &&
              _events[eventIndex].isMajor) ||
              waitingBecauseOfSingularEvent && eventTime >= time) {
           indexesToPush.add(eventIndex);
@@ -280,16 +286,16 @@ class Timeline implements Saveable {
     }
     return currentEvents;
   }
-  
+
   /**
    * Elapse [t] number of discrete time units. Fire events scheduled for
    * that time.
-   * 
+   *
    * If [interactive] is [:true:] (default), the last tick is considered
    * interactive, which means that [TimedEvent.MAJOR] events can occur on the
-   * last tick.Otherwise, these events (and every other events that are 
-   * scheduled after them) are shifted until just after [t]. 
-   * 
+   * last tick. Otherwise, these events (and every other events that are
+   * scheduled after them) are shifted until just after [t].
+   *
    * TODO: add a {betweenEchos} - makes possible to elapse a lot of time, with
    * many expected echo events. [betweenEchos] gets called between each two
    * echo events. Normally, the author can say things like "You continue
@@ -298,14 +304,13 @@ class Timeline implements Saveable {
   void elapse(int t, {bool interactive: true, String whileString}) {
     if (finished) return;
     if (time == null) time = -1;
-    _singularAlreadyFired = false;
     _whileString = whileString;
     for (int i = 0; i < t; i++) {
       time += 1;
       _goOneTick(interactive && (i == t - 1));
       if (maxTime != null && time == maxTime) finished = true;
       if (finished) break;
-      
+
       if (gotoCalledRecently) {
         break;
       }
@@ -317,11 +322,13 @@ class Timeline implements Saveable {
 //        throw new UnimplementedError("Cannot create choice from a TimedEvent.");
 //      }
     }
+    // Reset singular _after_ the last tick of elapse, if interactive.
+    if (interactive) _singularAlreadyFired = false;
     _whileString = null;
   }
-  
+
   bool _singularAlreadyFired = false;
-  
+
   /**
    * Elapse time up until [time] == [t]. The [t] cannot be in the past.
    */

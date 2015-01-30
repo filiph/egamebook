@@ -10,7 +10,7 @@ import '../libraries/randomly.dart';
 import 'dart:collection';
 
 class BodegaZil {
-  BodegaZil(this.goto, this.echo, this.choice, this.showForm, 
+  BodegaZil(this.goto, this.echo, this.choice, this.showForm,
       Map<String, Object> vars, EgbScripter scripter)
       : zil = new Zil(scripter), this.vars = new Vars(vars) {
     setupTimeline();
@@ -24,7 +24,7 @@ class BodegaZil {
       vars.clock.value += 1;
       // TODO: Exploration timeline - no jumping, no rescheduling
     };
-    
+
     // TODO: add bodega's rants (SINGULAR)
     // - Update: it'll take about __ minutes for my hyperdrive to synchronize.
     // - I know you don't want to hear this, but you are dying.
@@ -41,9 +41,10 @@ class BodegaZil {
 
     exploration.schedule(MAX_TIME_BEFORE_HYPERDRIVE_READY, () {
       jumpToSpaceStationUnity.isActive = true;
-      echo("""\n\nThe ship's PA system makes a short bleep, then Bodega """
-          """says: "The hyperdrive is fully operational. I am ready to """
-          """jump, ${getInformalSalutation()}." """);
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString> the ship's PA system makes a short bleep,", "The ship's PA system makes a short bleep,"));
+      echo("""then Bodega says: "The hyperdrive is fully operational. I am ready to """
+          """jump, ${getInformalSalutation()}." \n\n""");
     });
 
     unityArrivalEvent = exploration.schedule(null, () {
@@ -51,6 +52,19 @@ class BodegaZil {
       vars.justArrivedAtUnity = true;
       vars.currentlyInJump = false;
     }, type: TimedEvent.MAJOR);
+
+    exploration.schedule(MESSENGER_CONTACT_TIME + 5, () {
+      echo("""\n\n Although you're more or less rested after the short nap, something doesn't feel quite right. You are sweating and you have a strange taste in your mouth. Is it just paranoia? \n\n""");
+    });
+
+    exploration.schedule(MESSENGER_CONTACT_TIME + 22, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString> you have to stop for a moment.", ""));
+      echo("""You have a brief fit of uncontrollable coughing. You stand there for a while, waiting if it comes back but it doesn't. You tell yourself it's nothing. \n\n""");
+      // TODO: medic? more info
+    });
+
+    // XXX START HERE: more medical emergencies
   }
 
   TimedEvent unityArrivalEvent;
@@ -275,7 +289,7 @@ class BodegaZil {
     // ACTIONS
     repairEngineAction = new Action.Goto("Take a look at the engine, "
         "try to bring output from 89% back to 100% [~3 hours]",
-        "EngineRoom.RepairEngine", 
+        "EngineRoom.RepairEngine",
         requirement: () => vars.isEngineer && !vars.currentlyInJump,
         onlyOnce: true);
 
@@ -504,7 +518,7 @@ class BodegaZil {
         "put up the hull breach on the screen", "LookAtHullBreachFromBridge", isActive:
         false, onlyOnce: true);
     askBodegaQuestions = new Action.Goto("ask Bodega some questions",
-        "BodegaQuestions: Start", 
+        "BodegaQuestions: Start",
         requirement: () => vars.bodegaTopics.length > 0);
     takeANap = new Action.Goto("Take a nap", "Bridge: Nap", onlyOnce: true,
         requirement: () => zil.timeline.time < MAX_TIME_BEFORE_NAP);
@@ -605,7 +619,7 @@ class BodegaZil {
       return "captain";
     }
   }
-  
+
   /// Returns machinist, medic or spaceman.
   String getInformalRole(String article) {
     var str;
@@ -629,14 +643,14 @@ class BodegaZil {
   int computeTimeRequired(int baseTime, bool skilled) {
     return (baseTime / computeProductivity(skilled)).round();
   }
-  
+
   void createTraitsForm() {
     Form traitsForm = new Form();
-    
-    RangeOutput pointsLeft = new RangeOutput("Trait points", 
+
+    RangeOutput pointsLeft = new RangeOutput("Trait points",
         max: MAX_TRAIT_POINTS,
         value: MAX_TRAIT_POINTS);
-    
+
     // Temporarily disables inputs if needed.
     Set<CheckboxInput> inputsDisabledTemporarily = new Set<CheckboxInput>();
     void updateTraitPoints(bool checked) {
@@ -658,7 +672,7 @@ class BodegaZil {
         inputsDisabledTemporarily.clear();
       }
     }
-    
+
     CheckboxInput isHawkeyedInput = new CheckboxInput(
         "You have good eyesight and spotting abilities",
         (bool value) {
@@ -708,7 +722,7 @@ class BodegaZil {
       vars.isHandy = value;
       updateTraitPoints(value);
     });
-    
+
     if (vars.isEngineer) {
       understandsElectronicsInput
           ..current = true
@@ -724,7 +738,7 @@ class BodegaZil {
           ..current = true
           ..disabled = true;
     }
-    
+
     traitsForm
         ..append(pointsLeft)
         ..append(isHawkeyedInput)
@@ -735,23 +749,23 @@ class BodegaZil {
         ..append(understandsElectronicsInput)
         ..append(hasScienceEducationInput)
         ..append(isHandyInput);
-    
+
     traitsForm.onSubmit = () {
       vars.pointsToDistribute = pointsLeft.current;
     };
-    
+
     showForm(traitsForm);
   }
-  
+
   void echoTraits() {
     var assets = new Queue<String>();
-    
+
     if (vars.isHawkeyed) assets.add("good eyesight");
     if (vars.isStrong) assets.add("a strong hand");
     if (vars.knowsJapanese) assets.add("an ability to speak Japanese");
     if (vars.understandsAnimals) assets.add("reasonable animal handling skills");
     if (vars.understandsAI) assets.add("some AI training");
-    
+
     if (vars.understandsElectronics && !vars.isEngineer) {
       assets.add("decent understanding of electronics");
     }
@@ -761,16 +775,16 @@ class BodegaZil {
     if (vars.isHandy && !vars.isSpaceman) {
       assets.add("general space savvy");
     }
-    
+
     var buf = new StringBuffer("You're not the fastest, smoothest or most "
         "experienced of the old crew, but you're a decent "
         "${getInformalRole('')}");
-    
+
     if (assets.isNotEmpty) {
       buf.write(" with ");
-      
+
       buf.write(assets.removeFirst());
-      
+
       while (assets.isNotEmpty) {
         buf.write(assets.length > 1 ? ", " : " and ");
         buf.write(assets.removeFirst());
@@ -790,14 +804,14 @@ class BodegaZil {
       String normalChoiceString, Function normalOutcome,
       String extraEffortChoiceString, int physicalCost, int mentalCost,
       Function extraEffortOutcome) {
-  
+
     choice(normalChoiceString, script: () {
       normalOutcome();
     });
-    
+
     StringBuffer choiceString = new StringBuffer();
     choiceString.write(extraEffortChoiceString);
-    
+
     if (physicalCost > 0) {
       choiceString.write(" [-${physicalCost} P]");
       if (physicalCost > vars.physicalPoints.value) {
@@ -810,7 +824,7 @@ class BodegaZil {
         choiceString.write(" [DISABLED]"); // TODO: actually disable!
       }
     }
-    
+
     choice(choiceString.toString(), script: () {
       vars.physicalPoints.value -= physicalCost;
       vars.mentalPoints.value -= mentalCost;
@@ -821,23 +835,23 @@ class BodegaZil {
 
 }
 
-/// A strongly typed container of all the saveable variables defined in Bodega. 
+/// A strongly typed container of all the saveable variables defined in Bodega.
 class Vars {
   Vars(this.vars);
   final Map<String, Object> vars;
-  
+
   PointsCounter get points => vars["points"];
-      
+
   // Stats
   Stat get physicalPoints => vars["physicalPoints"];
   Stat get mentalPoints => vars["mentalPoints"];
-  
+
   Stat get clock => vars["clock"];
   String get title => vars["title"];
   String get name => vars["name"];
   List<String> get bodegaTopics => vars["bodegaTopics"];
   bool get jumpedToUnity => vars["jumpedToUnity"];
-  
+
   bool get isEngineer => vars["isEngineer"];
   bool get isMedic => vars["isMedic"];
   bool get isSpaceman => vars["isSpaceman"];
@@ -847,7 +861,7 @@ class Vars {
   set pointsToDistribute(int value) {
     vars["pointsToDistribute"] = value;
   }
-  
+
   // Traits
   bool get isHawkeyed => vars["isHawkeyed"];
   set isHawkeyed(bool value) {
