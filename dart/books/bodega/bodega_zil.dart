@@ -64,6 +64,21 @@ class BodegaZil {
       // TODO: medic? more info
     });
 
+    exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString> you suddenly feel pressure %%.", ""));
+      echo("""0000 \n\n""");
+      // TODO: medic? more info
+    });
+
+    // Rash showing
+//    exploration.schedule(_____, () {
+//      echo("\n\n");
+//      echo(exploration.generateWhileOutput("While <whileString> you can't shake the feeling that your right hand is looking strange.", ""));
+//      echo("""  \n\n""");
+//      // TODO: medic? more info
+//    });
+
     // XXX START HERE: more medical emergencies
   }
 
