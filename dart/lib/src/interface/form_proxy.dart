@@ -22,15 +22,15 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
       }
     });
   }
-  
+
   UiElement buildUiElements(Map<String,UiElementBuilder> builders) {
     return _recursiveCreateUiElement(builders, this);
   }
-  
+
   /// Mapping from [FormElement] (blueprint) to actual UI representations.
   UiElement uiElement;
-  
-  UiElement _recursiveCreateUiElement(Map<String,UiElementBuilder> builders, 
+
+  UiElement _recursiveCreateUiElement(Map<String,UiElementBuilder> builders,
                         BlueprintWithUiRepresentation element) {
     if (!builders.containsKey(element.localName)) {
       throw new UnimplementedError("The tag '${element.localName}' is not "
@@ -53,8 +53,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     }
     return uiElement;
   }
-  
-  /// Updates all elements according to the provided [config]. If 
+
+  /// Updates all elements according to the provided [config]. If
   /// [unsetWaitingForUpdate] is not [:true:] (default), the elements will stay
   /// in the [UiElement.waitingForUpdate] state (i.e., disabled).
   void update(FormConfiguration config, {bool unsetWaitingForUpdate: true}) {
@@ -69,14 +69,14 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     if (unsetWaitingForUpdate) {
       allFormElementsBelowThisOne.where((element) => element is Input)
       .forEach((element) {
-        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = 
+        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate =
             false;
       });
     }
   }
-  
+
   /// Utility function that gathers values from the form. When [submitted] is
-  /// [:true:], the form gets disabled. When [setWaitingForUpdate] is [:true:], 
+  /// [:true:], the form gets disabled. When [setWaitingForUpdate] is [:true:],
   /// all elements are temporarily 'disabled' in order to wait for update from
   /// Scripter.
   CurrentState _createCurrentState(BlueprintWithUiRepresentation elementTouched,
@@ -94,7 +94,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     }
     // Events from the Form UiElement itself are Submit events. And events from
     // submit buttons are also Submit events.
-    state.submitted = elementTouched is Submitter;
+    state.submitted = elementTouched is BaseSubmitButton || elementTouched is FormBase;
     if (state.submitted) {
       this.uiElement.disabled = true;
       state.submitterId = elementTouched.id;
@@ -102,17 +102,17 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     }
     return state;
   }
-  
-  Set<StreamSubscription> _onChangeSubscriptions = 
+
+  Set<StreamSubscription> _onChangeSubscriptions =
       new Set<StreamSubscription>();
   void _cancelSubscriptions() {
     _onChangeSubscriptions.forEach((StreamSubscription s) => s.cancel());
   }
-  
-  StreamController<CurrentState> _streamController = 
+
+  StreamController<CurrentState> _streamController =
         new StreamController<CurrentState>();
     Stream<CurrentState> get stream => _streamController.stream;
-  
+
   void createElementsFromJsonML(List<Object> jsonml) {
     InterfaceForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
         unsafe: true);
@@ -131,11 +131,11 @@ abstract class BlueprintWithUiRepresentation extends FormElement {
 
 abstract class UiElement {
   /// The same as the subclass's blueprint, but not typed to a particular
-  /// FormElement subtype. This is just convenience, and probably could be 
+  /// FormElement subtype. This is just convenience, and probably could be
   /// solved more elegantly.
   FormElement _blueprint;
   UiElement(this._blueprint);
-  
+
   /// Updates the UiElement after the blueprint is changed. Sets
   /// [waitingForUpdate] back to [:false:].
   void update() {
@@ -143,22 +143,22 @@ abstract class UiElement {
     disabled = _blueprint.disabledOrInsideDisabledParent;
     hidden = _blueprint.hidden;
   }
-  
+
   /// Fired every time user interacts with Element and changes something.
   Stream get onChange;
-  
+
   set disabled(bool value);
   bool get disabled;
-  
+
   set hidden(bool value);
   bool get hidden;
-  
+
   /// This is set to [:true:] after the user has interacted with the form and
   /// each [UiElement] in it should be disabled until [update] is called. This
   /// prevents user form setting the form's inputs into an invalid state.
   /// ([EgbScripter] always has a chance to act first, changing values,
   /// hiding inputs, disabling ranges, etc.)
-  /// 
+  ///
   /// This can be manifested the same way as [disabled], but is automatically
   /// called on all elements and is meant to be set to false after [EgbScripter]
   /// has had a chance to react to player's input. It shouldn't override
@@ -169,18 +169,18 @@ abstract class UiElement {
   Object get current;
   /// This is the representation of the object in the UI. For HTML, this would
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
-  /// that materializes the [TextOutput]. 
+  /// that materializes the [TextOutput].
   Object get uiRepresentation;
   void appendChild(Object childUiRepresentation);
 }
 
 /// Maps [FormElement.elementClass] name to a function that takes the JSON
-/// objects and returns 
+/// objects and returns
 Map<String,CustomTagHandler> customTagHandlers = {
   FormBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceForm(attributes["id"]);
-  }, 
+  },
   FormSection.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceFormSection(attributes["name"], attributes["id"]);
@@ -207,7 +207,7 @@ Map<String,CustomTagHandler> customTagHandlers = {
   },
   BaseMultipleChoiceInput.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceMultipleChoiceInput(attributes["name"], 
+    return new InterfaceMultipleChoiceInput(attributes["name"],
         attributes["id"]);
   },
   BaseOption.elementClass: (Object jsonObject) {
@@ -218,7 +218,7 @@ Map<String,CustomTagHandler> customTagHandlers = {
 };
 
 Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
-  // A JsonML element has it's attribute on the second position. Ex.: 
+  // A JsonML element has it's attribute on the second position. Ex.:
   // <a href="#"></a> is ["a", {"href": "#"}].
   return (jsonObject as List)[1] as Map<String,Object>;
 }
@@ -245,7 +245,7 @@ class InterfaceSubmitButton extends BaseSubmitButton implements BlueprintWithUiR
   UiElement uiElement;
 }
 
-class InterfaceCheckboxInput extends BaseCheckboxInput 
+class InterfaceCheckboxInput extends BaseCheckboxInput
     implements BlueprintWithUiRepresentation {
   InterfaceCheckboxInput(String name, String id) : super(name) {
     this.id = id;
@@ -259,16 +259,16 @@ class InterfaceRangeInput extends BaseRangeInput implements StringRepresentation
     this.id = id;
   }
   /// The string representation. This is computed on the [EgbScripter] side
-  /// and can be, for example, something like "90%" for [:0.9:] (percentage) or 
+  /// and can be, for example, something like "90%" for [:0.9:] (percentage) or
   /// "intelligent" for [:120:] (IQ).
   String currentStringRepresentation;
-  
+
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
-  
+
   UiElement uiElement;
 }
 
@@ -277,13 +277,13 @@ class InterfaceRangeOutput extends BaseRangeOutput implements StringRepresentati
     this.id = id;
   }
   String currentStringRepresentation;
-  
+
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
-  
+
   UiElement uiElement;
 }
 
@@ -291,7 +291,7 @@ class InterfaceTextOutput extends BaseTextOutput implements BlueprintWithUiRepre
   InterfaceTextOutput(String id) : super() {
     this.id = id;
   }
-  
+
   UiElement uiElement;
 }
 
@@ -299,15 +299,15 @@ class InterfaceMultipleChoiceInput extends BaseMultipleChoiceInput implements Bl
   InterfaceMultipleChoiceInput(String name, String id) : super(name) {
     this.id = id;
   }
-  
+
   UiElement uiElement;
 }
 
 class InterfaceOption extends BaseOption implements BlueprintWithUiRepresentation {
-  InterfaceOption(String text, bool selected, String id) : 
+  InterfaceOption(String text, bool selected, String id) :
     super(text, selected: selected) {
     this.id = id;
   }
-  
+
   UiElement uiElement;
 }

@@ -3,40 +3,40 @@ library egb_form;
 /**
  * A container of a 'form' - a specialized type of choice when you need more
  * than simple choice ([EgbChoice]).
- * 
+ *
  * Forms materialize as something very similar to a standard HTML Form, with
  * input fields (such as text fields, sliders, multiple-choice, checkboxes),
  * labels, other arbitrary HTML elements (such as visualizations) and one or
  * more submit buttons.
- * 
+ *
  * The whole structure is sent as JsonML, so everything can be nested, and
  * HTML(-like) interfaces have very easy ways to materialize the [Form].
- * 
+ *
  * ## Live updates
- * 
+ *
  * It is possible for the form's elements to be updated automatically after
  * user's input. For instance, when player has allocated all of his resources,
  * all resource sliders should be locked at their current maximum. If two
  * checkboxes are mutually exclusive and one of them has been checked, the other
  * one should be disabled.
- * 
+ *
  * The logic of the updating can be quite complex and gamebook-dependent, so it
- * is executed in the Scripter. 
- * 
- * When presented to the user, and after each user input, the form is 
+ * is executed in the Scripter.
+ *
+ * When presented to the user, and after each user input, the form is
  * temporarily disabled (no user input allowed) and a callback is fired. This
  * callback goes from [EgbInterface] to [EgbScripter] (therefore, sometimes it
  * has to go into another Isolate or even to a server).
- * 
+ *
  * Each node of the Form structure is given a unique ID. This makes it easy
  * to identify the element to be updated.
- * 
+ *
  * ## Example use
- * 
- * All this happens in a `<script>` element, not in `<variables>` (of course, 
+ *
+ * All this happens in a `<script>` element, not in `<variables>` (of course,
  * the variables like `name` can be defined in `<variables>`, but the form
  * itself should not be persistent between sessions).
- * 
+ *
  *     String name;
  *     int age;
  *     String sex;
@@ -46,14 +46,14 @@ library egb_form;
  *     form.add(new RangeInput("Age", (value) => age = value,
  *                             min: 20, max: 100, value: 30, step: 1,
  *                             maxEnabled: 40));
- *     form.add(new RadioChoice("Sex", 
- *                              {"m": "Male [+1 STR]", "f": "Female [+1 INT]"}, 
+ *     form.add(new RadioChoice("Sex",
+ *                              {"m": "Male [+1 STR]", "f": "Female [+1 INT]"},
  *                              (value) => sex = m));
  *     showForm(form)
  *     .then((_) {});
  *
  * Another, more complex example:
- * 
+ *
  *     int energyAvailable = 15;
  *     int energyReserve = 4;
  *     int energyToManeuvres = 0;
@@ -61,13 +61,13 @@ library egb_form;
  *     int energyToRepair = 0;
  *     int energyToHyperdrive = 0;
  *     int energyToWeapons = 0;
- * 
+ *
  *     var form = new Form();
  *     var energySection = new FormSection("Energy");
- *     var energyAvailableEl = new RangeOutput("Available", max: 15, 
+ *     var energyAvailableEl = new RangeOutput("Available", max: 15,
  *                                             value: energyAvailable);
  *     energySection.add(energyAvailableEl);
- *     var energyReserveEl = new RangeOutput("Reserves", max: 6, 
+ *     var energyReserveEl = new RangeOutput("Reserves", max: 6,
  *                                           value: energyReserve);
  *     energySection.add(energyReserveEl);
  *     var energyToManeuvresEl = new RangeInput("Maneuvres", max: 6, value: 0);
@@ -78,25 +78,25 @@ library egb_form;
  *       // ...
  *       form.update();  // Sends the new setup to interface.
  *     };
- * 
+ *
  *     showForm(form);
- *   
- * 
+ *
+ *
  * ## A bit about the classes.
- * 
- * All form elements have a base class (e.g. [BaseRangeInput]) which 
+ *
+ * All form elements have a base class (e.g. [BaseRangeInput]) which
  * has the methods and contructors shared by both [EgbScripter] and
- * [EgbInterface]. 
- * 
+ * [EgbInterface].
+ *
  * On the [EgbScripter] side, we have [RangeInput], for example,
  * which is the class used by the author. These classes can have closures
- * attached to them. These elements also automatically receive unique 
+ * attached to them. These elements also automatically receive unique
  * [FormElement.id] when they're attached to a [Form].
- * 
+ *
  * On the [EgbInterface] side, we have [InterfaceRangeInput], a "blueprint"
  * that can't have closures (no way to transport closure from [EgbScripter]
  * to [EgbInterface]) and whose [FormElement.id] is copied from [EgbScripter].
- * From these blueprints, the interface creates and updates [UiElement]. 
+ * From these blueprints, the interface creates and updates [UiElement].
  */
 
 import "package:html5lib/dom.dart" as html5lib;
@@ -116,22 +116,22 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /// like with CSS [:visibility:]).
   bool get hidden => attributes["hidden"] == "true";
   set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
-  
+
   /// Whether or not the element should be disabled. Disabled elements are still
   /// visible, but cannot be clicked or changed, and are clearly marked as such.
   bool get disabled => attributes["disabled"] == "true";
   set disabled(bool value) => attributes["disabled"] = value ? "true" : "false";
-  
+
   /// Returns whether this element is disabled. It differs from [disabled] in
   /// that it also checks whether any parent in the hierarchy is disabled.
   bool get disabledOrInsideDisabledParent {
-    if (parent != null && 
+    if (parent != null &&
         (parent as FormElement).disabledOrInsideDisabledParent) {
       return true;
     }
     return disabled;
   }
-  
+
   Map<String, Object> toMap() => {
     "hidden": hidden,
     "disabled": disabled
@@ -140,7 +140,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
     hidden = map["hidden"];
     disabled = map["disabled"];
   }
-  
+
   /// Utility function that walks through the whole structure recursively and
   /// adds all [FormElement] children to the [set].
   void _addFormChildrenToSet(FormElement element, Set<FormElement> set) {
@@ -151,12 +151,12 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   }
 
   /// Returns all direct [children] of this element that are of type
-  /// [FormElement] (skips things like [:<div>:]). 
+  /// [FormElement] (skips things like [:<div>:]).
   Iterable<FormElement> get formElementChildren {
     // Normally, this should be possible through children.where, but this
     // fails with typecasting Iterable<Element> to Iterable<FormElement>.
     List<FormElement> result = new List<FormElement>();
-    for (FormElement child in 
+    for (FormElement child in
         children.where((html5lib.Element child) => child is FormElement)) {
       result.add(child);
     }
@@ -184,7 +184,7 @@ abstract class UpdatableByMap {
   void updateFromMap(Map<String, Object> map);
 }
 
-class FormBase extends FormElement implements Submitter {
+class FormBase extends FormElement {
   static const String elementClass = "Form";
   FormBase() : super(elementClass);
 
@@ -196,22 +196,22 @@ class FormBase extends FormElement implements Submitter {
 }
 
 /**
- * The top level element of a form, containing all other elements. 
+ * The top level element of a form, containing all other elements.
  * Author-facing.
  */
-class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
+class Form extends FormBase implements _NewValueCallback {
   static math.Random _random = new math.Random();
 
   Form({String submitText}) {
     this.submitText = submitText;
     id = "${_random.nextInt((1<<16))}"; // Assuming this is enough.
   }
-  
+
   SubmitCallback onSubmit;
   InputCallback onInput;
 
   /**
-   * Receives changed values, computes collaterals, and either returns all 
+   * Receives changed values, computes collaterals, and either returns all
    * values back, or -- in case [newValues.submitted] was [:true:] -- returns
    * [:null:] (because we're moving on).
    */
@@ -256,17 +256,19 @@ class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
 
     if (newValues.submitted) {
       assert(newValues.submitterId != null);
-      ScripterSubmitter submitter;
+      SubmitCallback callback;
       if (newValues.submitterId == this.id) {
-        submitter = this;
+        callback = this.onSubmit;
       } else {
         // It wasn't a click on the main submit button.
-        submitter = allFormElementsBelowThisOne
-            .singleWhere((element) => element is ScripterSubmitter &&
-            element.id == newValues.submitterId);
+        callback = (allFormElementsBelowThisOne
+            .singleWhere((element) =>
+                (element is SubmitButton) &&
+                (element as FormElement).id == newValues.submitterId)
+                as SubmitButton).onSubmit;
       }
-      if (submitter.onSubmit != null) {
-        submitter.onSubmit();
+      if (callback != null) {
+        callback();
       }
       return null;
     } else {
@@ -321,7 +323,7 @@ class Form extends FormBase implements ScripterSubmitter, _NewValueCallback {
 }
 
 /**
- * The 'struct' that is being sent from [EgbScripter] to [EgbInterface] when 
+ * The 'struct' that is being sent from [EgbScripter] to [EgbInterface] when
  * form is created and after it is updated.
  */
 class FormConfiguration {
@@ -352,7 +354,7 @@ class CurrentState {
    */
   bool get submitted => _valuesMap["__submitted__"];
   set submitted(bool value) => _valuesMap["__submitted__"] = value;
-  
+
   String get submitterId => _valuesMap["__submitterId__"];
   set submitterId(String value) => _valuesMap["__submitterId__"] = value;
 
@@ -429,31 +431,20 @@ abstract class Output<T> {
   T current;
 }
 
-typedef void SubmitCallback();
-
-class Submitter extends FormElement {
-  Submitter(String elementClass) : super(elementClass);
-}
-
-class ScripterSubmitter extends Submitter {
-  ScripterSubmitter(String elementClass) : super(elementClass);
-  SubmitCallback onSubmit;
-}
-
-class BaseSubmitButton extends FormElement implements Submitter {
+class BaseSubmitButton extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
-  
+
   static const String elementClass = "SubmitButton";
-  
+
   BaseSubmitButton(String name, {String helpMessage}) : super(elementClass) {
     this.name = name;
     this.helpMessage = helpMessage;
   }
-  
-  BaseSubmitButton.noOptional(String name, String helpMessage) : this(name, 
+
+  BaseSubmitButton.noOptional(String name, String helpMessage) : this(name,
       helpMessage: helpMessage);
-  
+
   @override
   Map<String, Object> toMap() {
     Map<String,Object> map = super.toMap();
@@ -470,9 +461,11 @@ class BaseSubmitButton extends FormElement implements Submitter {
   }
 }
 
-class SubmitButton extends BaseSubmitButton implements ScripterSubmitter {
+typedef void SubmitCallback();
+
+class SubmitButton extends BaseSubmitButton  {
   SubmitCallback onSubmit;
-  SubmitButton(String name, this.onSubmit, {String helpMessage}) : 
+  SubmitButton(String name, this.onSubmit, {String helpMessage}) :
     super.noOptional(name, helpMessage);
 }
 
@@ -483,15 +476,15 @@ class SubmitButton extends BaseSubmitButton implements ScripterSubmitter {
 class BaseCheckbox extends FormElement implements UpdatableByMap {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
-  
-  BaseCheckbox(String elementClass, String name) 
+
+  BaseCheckbox(String elementClass, String name)
       : super(elementClass) {
     this.name = name;
   }
-  
+
   /// Checked or not.
   bool current;
-  
+
   @override
   Map<String, Object> toMap() {
     Map<String,Object> map = super.toMap();
@@ -510,9 +503,9 @@ class BaseCheckbox extends FormElement implements UpdatableByMap {
 
 class BaseCheckboxInput extends BaseCheckbox implements Input<bool> {
   static const String elementClass = "CheckboxInput";
-  BaseCheckboxInput(String name) 
+  BaseCheckboxInput(String name)
     : super(elementClass, name);
-  
+
   @override
   void sanitizeCurrent() {
     if (current == null) {
@@ -522,7 +515,7 @@ class BaseCheckboxInput extends BaseCheckbox implements Input<bool> {
 }
 
 class CheckboxInput extends BaseCheckboxInput with _NewValueCallback<bool> {
-  CheckboxInput(String name, InputCallback onInput, {bool checked: false}) 
+  CheckboxInput(String name, InputCallback onInput, {bool checked: false})
       : super(name) {
     this.onInput = onInput;
     this.current = checked;
@@ -754,8 +747,8 @@ class MultipleChoiceInput extends BaseMultipleChoiceInput with
     this.onInput = onInput;
   }
 }
-  
-/// Base class for a single element to choose in a [MultipleChoiceInput]. 
+
+/// Base class for a single element to choose in a [MultipleChoiceInput].
 class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
   String get text => attributes["text"];
   set text(String value) => attributes["text"] = value;
@@ -767,9 +760,9 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
     this.current = selected;
     this.helpMessage = helpMessage;
   }
-  
+
   // This exists because of https://code.google.com/p/dart/issues/detail?id=15101
-  BaseOption.noOptional(String text, bool selected, String helpMessage) : 
+  BaseOption.noOptional(String text, bool selected, String helpMessage) :
     this(text, selected: selected, helpMessage: helpMessage);
 
   @override
@@ -781,7 +774,7 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
     });
     return map;
   }
-  
+
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);

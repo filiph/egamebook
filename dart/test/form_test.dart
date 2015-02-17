@@ -72,14 +72,14 @@ void main() {
       expect((form.children[0] as BaseRange).max, (formProxy.children[0] as
           BaseRange).max);
     });
-    
+
     test("Elements get parents", () {
       form.children.add(input1);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.single.parent, formProxy);
     });
-    
+
     // TODO make this work (Form currently doesn't update its disabled/hidden
     //   status)
 //    test("disabledOrInsideDisabledParent works with Form", () {
@@ -90,7 +90,7 @@ void main() {
 //      expect((formProxy.children.single as FormElement)
 //          .disabledOrInsideDisabledParent, true);
 //    });
-    
+
     test("disabledOrInsideDisabledParent works with FormSection", () {
       FormSection section = new FormSection("Test")
           ..children.add(input1)
@@ -123,7 +123,7 @@ void main() {
           step: 100);
       input3 = new RangeInput("Free time", (value) => freetime = value, max: 10,
           maxEnabled: 5);
-      
+
       Function updateEnergyGauges = (_) {
         energyGauge.current = 10 - weapons.current - shields.current;
         weapons.maxEnabled = weapons.current + energyGauge.current;
@@ -132,9 +132,9 @@ void main() {
       energyGauge = new RangeOutput("Energy available", max: 10, value: 10);
       weapons = new RangeInput("Weapons", updateEnergyGauges, value: 0);
       shields = new RangeInput("Shields", updateEnergyGauges, value: 0);
-      
+
       textOutput = new TextOutput();
-      
+
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
       interface = new HtmlInterface();
@@ -157,14 +157,14 @@ void main() {
       interface.showForm(formProxy);
       expect(querySelector("#${formProxy.children.first.id}"), isNotNull);
     });
-    
+
     test("creates checkbox", () {
       bool checked = false;
-      checkboxInput.onInput = (bool value) => checked = value; 
+      checkboxInput.onInput = (bool value) => checked = value;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
-      CheckboxInputElement checkboxEl = 
+      CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxInput.current, false);
       stream.listen(expectAsync((CurrentState values) {
@@ -175,13 +175,13 @@ void main() {
       }));
       checkboxEl.click();
     });
-    
+
     test("creates disabled checkbox", () {
       checkboxInput.disabled = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
-      CheckboxInputElement checkboxEl = 
+      CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
     });
@@ -210,7 +210,7 @@ void main() {
       Stream<CurrentState> stream = interface.showForm(formProxy);
       ButtonElement submitButton = querySelectorAll("button.submit-main").last;
       stream.listen(expectAsync((CurrentState values) {
-        expect(values.submitted, true);
+        expect(values.submitted, true, reason: "not submitted");
         // Select the second radio button of the first RangeInput -> age = 25.
         RadioButtonInputElement radioButton = querySelector(
             "#${formProxy.children.first.id} div.buttons input:nth-child(2)");
@@ -271,18 +271,18 @@ void main() {
             "#${formProxy.children.last.id} p.current-value");
         expect(percentageStringElement.text, "100 %");
       }));
-      
+
       // Select percentage = 100%.
       RadioButtonInputElement percentageButton = querySelector(
           "#${formProxy.children.last.id} div.buttons input:nth-child(11)");
       percentageButton.click();
     });
-    
+
     test("creates RangeOutput and updates it", () {
       form.children.add(energyGauge);
       form.children.add(weapons);
       form.children.add(shields);
-      
+
       Map map = form.toMap();
       print(JSON.encode(map));
 
@@ -292,28 +292,28 @@ void main() {
       stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         interface.updateForm(changedConfig);
-        
+
         RadioButtonInputElement onlyTwoAvailableButton = querySelector(
             "#${formProxy.children.first.id} div.buttons input:nth-child(3)");
         expect(onlyTwoAvailableButton.checked, true);
       }));
-      
+
       // Select Shields = 8
       RadioButtonInputElement eightButton = querySelector(
           "#${formProxy.children.last.id} div.buttons input:nth-child(9)");
       eightButton.click();
     });
-    
+
     test("creates text output", () {
       textOutput.html = "<p>Initial text.</p>";
       form.children.add(textOutput);
       form.children.add(input1);
-      
+
       form.onInput = (_) {
         textOutput.html = "<p>You are currently <strong>${input1.current}"
             "</strong> years old.</p>";
       };
-      
+
       Map map = form.toMap();
       print(JSON.encode(map));
 
@@ -323,13 +323,13 @@ void main() {
       stream.listen((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         interface.updateForm(changedConfig);
-        
-        
+
+
         ParagraphElement textOutputParagraph = querySelector(
             "#${formProxy.children.first.id} p");
         expect(textOutputParagraph.text, "You are currently 35 years old.");
       });
-      
+
       // Select age = 35
       RadioButtonInputElement ageButton = querySelector(
           "#${formProxy.children.last.id} div.buttons input:nth-child(4)");
@@ -341,7 +341,7 @@ void main() {
       Option a = new Option("Zvolit A", null, selected: true);
       Option b = new Option("Zvolit B", null);
       moveChoice.children.addAll([a, b]);
-          
+
       form.append(moveChoice);
     });
   });
