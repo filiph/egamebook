@@ -66,10 +66,15 @@ class BodegaZil {
 
     exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
       echo("\n\n");
-      echo(exploration.generateWhileOutput("While <whileString> you suddenly feel pressure %%.", ""));
-      echo("""0000 \n\n""");
+      echo(exploration.generateWhileOutput("While <whileString>, you suddenly feel formidable pressure in your chest.",
+                                           "Suddenly, you feel formidable pressure in your chest."));
+      echo("""In a few seconds, the pressure builds into agonising pain. You fall on your knees and wonder if this is it. If this is the end of the line. The time you die. You can't breathe. You can't scream. You can't even bring your hands up to your face to sink your fingernails into it. \n\n""");
+      echo("""But then, in a few seconds time, the pain is gone and so is the pressure. You carefully try to breathe in, and there's nothing. Not even a cough. This thing — whatever it was — has passed. \n\n""");
       // TODO: medic? more info
     });
+
+    // XXX START HERE: more medical emergencies -
+    // another fit of cough
 
     // Rash showing
 //    exploration.schedule(_____, () {
@@ -78,8 +83,6 @@ class BodegaZil {
 //      echo("""  \n\n""");
 //      // TODO: medic? more info
 //    });
-
-    // XXX START HERE: more medical emergencies
   }
 
   TimedEvent unityArrivalEvent;
