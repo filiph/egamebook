@@ -7,7 +7,7 @@ part of egb_scripter;
  */
 class EgbScripterPage extends EgbPage {
   /// The text and/or logic of each block inside this page.
-  final List<dynamic> blocks;
+  final List blocks;
 
   /// Number of times this page has been visited by player.
   int visitCount = 0;
@@ -19,7 +19,7 @@ class EgbScripterPage extends EgbPage {
    * Name is copied from Map key when added to [EgbScripterPageMap].
    */
   EgbScripterPage(
-      List<dynamic> this.blocks,
+      this.blocks,
       {bool visitOnce: false, bool showOnce: false}) :
         super(visitOnce: visitOnce, showOnce: showOnce);
 }
@@ -29,10 +29,10 @@ class EgbScripterPage extends EgbPage {
  * block. 
  */
 class EgbScripterBlockPointer {
-  EgbScripterBlockPointer(this.page, this.blockIndex);
-  
   final EgbScripterPage page;
   final int blockIndex;
+    
+  EgbScripterBlockPointer(this.page, this.blockIndex); 
 }
 
 /**
