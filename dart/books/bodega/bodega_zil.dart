@@ -73,8 +73,26 @@ class BodegaZil {
       // TODO: medic? more info
     });
 
-    // XXX START HERE: more medical emergencies -
+    exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString>, you suddenly feel formidable pressure in your chest.",
+                                           "Suddenly, you feel formidable pressure in your chest."));
+      echo("""In a few seconds, the pressure builds into agonising pain. You fall on your knees and wonder if this is it. If this is the end of the line. The time you die. You can't breathe. You can't scream. You can't even bring your hands up to your face to sink your fingernails into it. \n\n""");
+      echo("""But then, in a few seconds time, the pain is gone and so is the pressure. You carefully try to breathe in, and there's nothing. Not even a cough. This thing — whatever it was — has passed. \n\n""");
+      // TODO: medic? more info
+    });
+
     // another fit of cough
+    exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString>, the cough comes back.",
+                                           "The cough is back."));
+      echo("""It's stronger and more painful than before, and you have to close your eyes and curl your body to keep on top of it. It feels like your lungs.\n\n""");
+      echo("""In a few seconds it fades but if the rest of the crew is any indication, this was just a mild beginning.\n\n""");
+    });
+
+    // XXX START HERE: more medical emergencies -
+
 
     // Rash showing
 //    exploration.schedule(_____, () {
@@ -84,6 +102,8 @@ class BodegaZil {
 //      // TODO: medic? more info
 //    });
   }
+
+  // TODO: (Nice-To-Have) Unity questions anywhere in zil...
 
   TimedEvent unityArrivalEvent;
 
@@ -190,6 +210,8 @@ class BodegaZil {
 
     // TODO: scavenge - let player choose row+column ("A245") and either give random thing or something specific (medical supplies)
 
+    // TODO: repair Jet (see Bodega Snippets)
+
     // ROOM
     cargoBayLeft = new Room(zil, "Explore: CargoBayLeft", "cargo bay",
         [new Exit("Explore: CorridorLeftJunction", "enter Corridor Left",
@@ -279,7 +301,7 @@ class BodegaZil {
     // just look around
     // go through latest internal ship memos
     // later: break stuff
-    // change RAID - makes bodega happier
+    // TODO: change RAID - makes bodega happier - repair
 
     // ROOM
     new Room(zil, "Explore: ComputerRoom", "Computer Room", [new Exit(
