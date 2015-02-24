@@ -73,22 +73,27 @@ class BodegaZil {
       // TODO: medic? more info
     });
 
-    exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
-      echo("\n\n");
-      echo(exploration.generateWhileOutput("While <whileString>, you suddenly feel formidable pressure in your chest.",
-                                           "Suddenly, you feel formidable pressure in your chest."));
-      echo("""In a few seconds, the pressure builds into agonising pain. You fall on your knees and wonder if this is it. If this is the end of the line. The time you die. You can't breathe. You can't scream. You can't even bring your hands up to your face to sink your fingernails into it. \n\n""");
-      echo("""But then, in a few seconds time, the pain is gone and so is the pressure. You carefully try to breathe in, and there's nothing. Not even a cough. This thing — whatever it was — has passed. \n\n""");
-      // TODO: medic? more info
-    });
-
     // another fit of cough
-    exploration.schedule(MESSENGER_CONTACT_TIME + 48, () {
+    exploration.schedule(MESSENGER_CONTACT_TIME + 55, () {
       echo("\n\n");
       echo(exploration.generateWhileOutput("While <whileString>, the cough comes back.",
                                            "The cough is back."));
       echo("""It's stronger and more painful than before, and you have to close your eyes and curl your body to keep on top of it. It feels like your lungs.\n\n""");
       echo("""In a few seconds it fades but if the rest of the crew is any indication, this was just a mild beginning.\n\n""");
+    });
+
+    // Cramp  + on knees + bend bar
+    exploration.schedule(MESSENGER_CONTACT_TIME + 70, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString>, you suddenly feel your muscles getting stiff.",
+                                           "Suddenly, you feel your muscles getting stiff."));
+      echo("""The more you try to move, the worse it gets. You quickly grab a nearby steel railing and you go to your knees, trying to brace for the pain. You close your eyes. \n\n""");
+      echo("""What comes next is unspeakable. Your whole body burns and shakes with wave after wave of excruciating pain, and it just doesn't go away, for what seems like millenia. If you could scream, you would. At one point, you solemnly pray for death. \n\n""");
+      echo("""Which is about when the whole thing fades away. The waves of pain get milder until you can sense other things again. You open your eyes and find out you're exactly in the same position, kneeling next to a railing, as when the pain started.""");
+      echo("""\n\n ![Hand grabbing a railing IMG] \n\n""");
+      echo("""And then you notice your hand on the railing and you realize that what was previously a straight steel pipe is now slightly bent at the point where your hand rests. You just deformed a solid metal railing. With your bare hand. \n\n""");
+      echo("""_What?_ You lift your hand and have a better look at the railing below it. It's the same steel as everywhere else. _Am I getting crazy now?_ You try to bend it some more, but the steel doesn't budge. \n\n""");
+      echo("""You slowly stand up and shake your head. _I'm definitely getting crazy._ \n\n""");
     });
 
     // XXX START HERE: more medical emergencies -
