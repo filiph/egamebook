@@ -33,7 +33,7 @@ class EgbMessage {
   static const int REQUEST_BOOK_UID = 1000;
   static const int START = 1010;
   static const int LOAD_GAME = 1020;
-  static const int CONTINUE = 1040;
+  static const int PROCEED = 1040;
   static const int CHOICE_SELECTED = 1050;
   static const int FORM_INPUT = 1060;
   static const int QUIT = 1070;
@@ -57,7 +57,7 @@ class EgbMessage {
       case REQUEST_BOOK_UID: return "REQUEST_BOOK_UID";
       case START: return "START";
       case LOAD_GAME: return "LOAD_GAME";
-      case CONTINUE: return "CONTINUE";
+      case PROCEED: return "PROCEED";
       case CHOICE_SELECTED: return "CHOICE_SELECTED";
       case FORM_INPUT: return "FORM_INPUT";
       case QUIT: return "QUIT";
@@ -65,7 +65,7 @@ class EgbMessage {
     }
   }
   
-  toString() => "EgbMessage $typeString${isAsync ? ' (async)' : ''}";
+  String toString() => "EgbMessage $typeString${isAsync ? ' (async)' : ''}";
   
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
@@ -86,47 +86,46 @@ class EgbMessage {
 
   EgbMessage(this.type, {bool needsAnswer: true});
 
-  EgbMessage.Quit() : type = QUIT;
+  EgbMessage.quit() : type = QUIT;
 
-  EgbMessage.Continue() : type = CONTINUE;
+  EgbMessage.proceed() : type = PROCEED;
 
-  EgbMessage.TextResult(String str) : type = TEXT_RESULT {
+  EgbMessage.textResult(String str) : type = TEXT_RESULT {
     strContent = str;
   }
 
-  EgbMessage.Start() : type = START;
+  EgbMessage.start() : type = START;
   
-  EgbMessage.BookUid(this.strContent) 
-      : type = SEND_BOOK_UID;
+  EgbMessage.bookUid(this.strContent) : type = SEND_BOOK_UID;
   
-  EgbMessage.RequestBookUid() : type = REQUEST_BOOK_UID;
+  EgbMessage.requestBookUid() : type = REQUEST_BOOK_UID;
 
-  EgbMessage.EndOfBook() : type = END_OF_BOOK;
+  EgbMessage.endOfBook() : type = END_OF_BOOK;
 
   // EgbMessage containing ChoiceList is created in EgbChoiceList.toMessage(). 
   
-  EgbMessage.ChoiceSelected(int hash) 
+  EgbMessage.choiceSelected(int hash) 
       : type = CHOICE_SELECTED {
     intContent = hash;
   }
   
-  EgbMessage.StatUpdates(StatUpdateCollection updates) 
+  EgbMessage.statUpdates(StatUpdateCollection updates) 
       : type = UPDATE_STATS {
     mapContent = updates.toMap();
   }
   
-  EgbMessage.StatsInit(List<Map<String,Object>> list) 
+  EgbMessage.statsInit(List<Map<String,Object>> list) 
       : type = SET_STATS {
     listContent = list;
   }
 
-  EgbMessage.NoResult() : type = NO_RESULT;
+  EgbMessage.noResult() : type = NO_RESULT;
   
-  EgbMessage.SaveGame(String json) : type = SAVE_GAME {
+  EgbMessage.saveGame(String json) : type = SAVE_GAME {
     strContent = json;
   }
   
-  EgbMessage.LoadGame(String json) : type = LOAD_GAME {
+  EgbMessage.loadGame(String json) : type = LOAD_GAME {
     strContent = json;
   }
   
@@ -134,29 +133,29 @@ class EgbMessage {
   
   // Stats messages are made and deconstructed in stat.dart.
   
-  EgbMessage.SavePlayerChronology(Set<String> playerChronology) 
+  EgbMessage.savePlayerChronology(Set<String> playerChronology) 
       : type = SAVE_PLAYER_CHRONOLOGY {
     listContent = playerChronology.toList();
   }
   
-  EgbMessage.ShowForm(Form form) : type = SHOW_FORM {
+  EgbMessage.showForm(Form form) : type = SHOW_FORM {
     mapContent = form.toMap();
   }
   
-  EgbMessage.UpdateForm(FormConfiguration formConfiguration) 
+  EgbMessage.updateForm(FormConfiguration formConfiguration) 
       : type = UPDATE_FORM {
     mapContent = formConfiguration.toMap();
   }
   
-  EgbMessage.FormInput(CurrentState state) : type = FORM_INPUT {
+  EgbMessage.formInput(CurrentState state) : type = FORM_INPUT {
     mapContent = state.toMap();
   }
   
-  EgbMessage.ScripterError(String message) : type = SCRIPTER_ERROR {
+  EgbMessage.scripterError(String message) : type = SCRIPTER_ERROR {
     strContent = message;
   }
   
-  EgbMessage.ScripterLog(String message) : type = SCRIPTER_LOG {
+  EgbMessage.scripterLog(String message) : type = SCRIPTER_LOG {
     strContent = message;
   }
   
