@@ -56,14 +56,18 @@ class EgbScripterPageMap {
    */
   EgbScripterPage getPage(String name, {String currentGroupName: null}) {
     if (currentGroupName != null &&
-        pages.containsKey("$currentGroupName: $name")) {
-      return pages["$currentGroupName: $name"];
+        pages.containsKey(_getCurrentGroupName(name, currentGroupName))) {
+      return pages[_getCurrentGroupName(name, currentGroupName)];
     } else if (pages.containsKey(name)) {
       return pages[name];
     } else {
       return null;
     }
   }
+  
+  /// Returns current group name string
+  String _getCurrentGroupName(String name, String currentGroupName) 
+      => "$currentGroupName: $name";
 
   operator []=(String key, EgbScripterPage newPage) {
     pages[key] = newPage;
