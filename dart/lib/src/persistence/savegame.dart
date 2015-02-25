@@ -16,9 +16,9 @@ class EgbSavegame {
   /// choices.
   String currentPageName;
   /// Holds information about visited pages and potentially other info.
-  Map<String,dynamic> pageMapState;
+  Map<String, dynamic> pageMapState;
   /// The serializable part of the [:vars:] map.
-  Map<String,Object> vars;
+  Map<String, Object> vars;
   // TODO: points -- NO!! points are per playthrough, but shouldn't be saved with savegame (i think)
   
   /**
@@ -46,7 +46,7 @@ class EgbSavegame {
   }
   
   EgbSavegame.fromJson(String json) {
-    Map<String,dynamic> saveMap = JSON.decode(json);
+    Map<String, dynamic> saveMap = JSON.decode(json);
     if (!saveMap.containsKey("currentPageName") 
         || !saveMap.containsKey("vars")) {
       throw new InvalidSavegameException("Invalid JSON for EgbSavegame. "
@@ -79,7 +79,7 @@ class EgbSavegame {
   }
   
   String toJson() {
-    Map<String,dynamic> saveMap = new Map<String,dynamic>();
+    Map<String, dynamic> saveMap = new Map<String, dynamic>();
     saveMap["uid"] = uid;
     saveMap["currentPageName"] = currentPageName;
     saveMap["pageMapState"] = pageMapState;
@@ -97,7 +97,7 @@ class EgbSavegame {
   /**
    * Returns true if variable is Saveable or a primitive type.
    */
-  static bool _isSaveable(dynamic variable) {
+  static bool _isSaveable(variable) {
     bool primitivelySaveable = (variable == null || variable is String || 
         variable is int || variable is num || variable is bool || 
         variable is List || variable is Map);
@@ -105,7 +105,7 @@ class EgbSavegame {
     return _isCustomSaveableClass(variable);
   }
   
-  static bool _isCustomSaveableClass(dynamic variable) {
+  static bool _isCustomSaveableClass(variable) {
     return variable is Saveable; // TODO cease to use if this really works
     
     // The below is an ugly way to check for saveable-ness without
@@ -130,7 +130,7 @@ class EgbSavegame {
    * 
    * Works recursively, so a Map of Maps is a valid input.
    */
-  static dynamic _dissolveToPrimitives(dynamic input) {
+  static dynamic _dissolveToPrimitives(input) {
     if (input == null || input is String || input is int || input is num 
         || input is bool) {
       return input;
@@ -145,14 +145,14 @@ class EgbSavegame {
     } else if (input is Map) {
       Map inputMap = input as Map;
       Map outputMap = new Map();
-      inputMap.forEach((dynamic key, dynamic value) {
+      inputMap.forEach((key, value) {
         if (_isSaveable(inputMap[key])) {
           outputMap[key] = _dissolveToPrimitives(value);
         }
       });
       return outputMap;
     } else if (_isCustomSaveableClass(input)) {
-      Map<String,dynamic> saveableMap = (input as Saveable).toMap();
+      Map<String, dynamic> saveableMap = (input as Saveable).toMap();
       saveableMap["_class"] = (input as Saveable).className;
       return _dissolveToPrimitives(saveableMap);
     } else {
@@ -169,9 +169,9 @@ class EgbSavegame {
    * of created anew. This only applies to custom classes, all primitives
    * will be overwritten.
    */
-  static dynamic _assembleFromPrimitives(dynamic input,
+  static dynamic _assembleFromPrimitives(input,
                                          Map<String,Function> constructors,
-                                         {dynamic updateExisting}) {
+                                         {updateExisting}) {
     if (input == null || input is String || input is int || input is num 
         || input is bool) {
       return input;
@@ -184,7 +184,7 @@ class EgbSavegame {
       return outputList;
     } else if (input is Map && !(input as Map).containsKey("_class")) {
       Map outputMap = new Map();
-      (input as Map).forEach((dynamic key, dynamic value) {
+      (input as Map).forEach((key, value) {
           outputMap[key] = _assembleFromPrimitives(value, constructors);
       });
       return outputMap;
@@ -214,8 +214,8 @@ class EgbSavegame {
   }
   
   static void importSavegameToVars(EgbSavegame savegame, 
-                                   Map<String,dynamic> vars,
-                                   {Map<String,Function> constructors}) {
+                                   Map<String, dynamic> vars,
+                                   {Map<String, Function> constructors}) {
     // assemble and copy / update saved variables over vars
     savegame.vars.forEach((String key, value) {
       //print("$key - $value");
