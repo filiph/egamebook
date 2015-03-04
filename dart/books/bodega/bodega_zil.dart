@@ -34,6 +34,15 @@ class BodegaZil {
     //           ever worked with turned out to have a history of some sort.
     //           I'm tired of hearing this as an excuse.
 
+    exploration.schedule(52, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput(
+          "While <whileString> you have a brief sensation of mild tingling in your nose.",
+          "You have a brief sensation of mild tingling in your nose."));
+      echo("You ascribe it to sleep deprivation.");
+      echo("\n\n");
+    });
+
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
       vars.roomBeforeOvercameBySleepiness = zil.player.location.name;
       goto("Bridge: OvercomeBySleepiness");
@@ -96,7 +105,7 @@ class BodegaZil {
       echo("""You slowly stand up and shake your head. _I'm definitely getting crazy._ \n\n""");
     });
 
-    // XXX START HERE: more medical emergencies -
+    // TODO START HERE: more medical emergencies
 
 
     // Rash showing
@@ -972,7 +981,7 @@ class Vars {
 const String INVENTORY = "···"; // Middle dots.
 
 const int MAX_TRAIT_POINTS = 3;
-const int MAX_TIME_BEFORE_NAP = 148;
+const int MAX_TIME_BEFORE_NAP = 96;
 const int MESSENGER_CONTACT_TIME = 460;
 const int MAX_TIME_BEFORE_HYPERDRIVE_READY = 473;
 
