@@ -947,8 +947,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
     update();
   }
 
-  Map<int,RadioButtonInputElement> _radioButtons =
-      new Map<int,RadioButtonInputElement>();
+  Map<int, RadioButtonInputElement> _radioButtons =
+      new Map<int, RadioButtonInputElement>();
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = _createRadioButton(i);

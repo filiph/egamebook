@@ -18,7 +18,7 @@ class PointsAward {
   
   PointsAward(this.addition, this.result, [this.justification]);
   
-  toString() {
+  String toString() {
     String s = (addition == 1) ? "" : "s";
     if (justification != null) {
       return "+$addition point$s for $justification";

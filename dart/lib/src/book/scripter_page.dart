@@ -76,8 +76,8 @@ class EgbScripterPageMap {
     newPage.name = key;
   }
 
-  Map<String,dynamic> exportState() {
-    var pageMapState = new Map<String,dynamic>();
+  Map<String, dynamic> exportState() {
+    var pageMapState = new Map<String, dynamic>();
     pages.forEach((name, page) {
       pageMapState[name] = {
           "visitCount": page.visitCount
@@ -86,7 +86,7 @@ class EgbScripterPageMap {
     return pageMapState;
   }
 
-  void importState(Map<String,dynamic> pageMapState) {
+  void importState(Map<String, dynamic> pageMapState) {
     pageMapState.forEach((name, map) {
       if (pages.containsKey(name)) {
         pages[name].visitCount = map["visitCount"];

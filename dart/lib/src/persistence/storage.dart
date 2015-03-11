@@ -24,7 +24,7 @@ abstract class EgbStorage {
  * no persistence.
  */
 class MemoryStorage implements EgbStorage {
-  Map<String,String> memory;
+  Map<String, String> memory;
   
   MemoryStorage() {
     memory = new Map();

@@ -55,21 +55,21 @@ class StatUpdate {
 }
 
 class StatUpdateCollection {
-  final Map<String,StatUpdate> _updates = new Map<String,StatUpdate>();
+  final Map<String, StatUpdate> _updates = new Map<String, StatUpdate>();
   StatUpdateCollection();
   void add(String name, StatUpdate update) {
     _updates[name] = update;
   }
-  Map<String,Object> toMap() {
-    Map<String,Object> map = new Map<String,Object>();
+  Map<String, Object> toMap() {
+    Map<String, Object> map = new Map<String, Object>();
     _updates.forEach((String name, StatUpdate update) {
       map[name] = update.toMap();
     });
     return map;
   }
-  StatUpdateCollection.fromMap(Map<String,Object> map) {
+  StatUpdateCollection.fromMap(Map<String, Object> map) {
     map.forEach((String name, Object o) {
-      _updates[name] = new StatUpdate.fromMap(o as Map<String,Object>);
+      _updates[name] = new StatUpdate.fromMap(o as Map<String, Object>);
     });
   }
   
@@ -235,8 +235,8 @@ class Stat<T> implements StatBase, Saveable {
    * Take all Stats, and create a big data structure of them. This is for 
    * sending from [EgbScripter] to [EgbInterface].
    */ 
-  static List<Map<String,Object>> createStatList() {
-    List<Map<String,Object>> list = new List<Map<String,Object>>();
+  static List<Map<String, Object>> createStatList() {
+    List<Map<String, Object>> list = new List<Map<String, Object>>();
     _stats.values.forEach((Stat stat) {
       var statMap = new Map<String, Object>();
       statMap["name"] = stat.name;

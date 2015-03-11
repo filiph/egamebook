@@ -447,7 +447,7 @@ class BaseSubmitButton extends FormElement {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "name": name
     });
@@ -487,7 +487,7 @@ class BaseCheckbox extends FormElement implements UpdatableByMap {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "current": current
     });
@@ -563,7 +563,7 @@ class BaseRange extends FormElement implements UpdatableByMap {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "min": min,
       "max": max,
@@ -676,7 +676,7 @@ class BaseText extends FormElement implements UpdatableByMap {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "html": html
     });
@@ -767,7 +767,7 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "text": text,
       "current": current

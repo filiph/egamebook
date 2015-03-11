@@ -7,7 +7,7 @@ abstract class Saveable {
    * primitives. The class should be able to recreate its instance state from 
    * the contents of this Map alone.
    */
-  Map<String,dynamic> toMap();
+  Map<String, dynamic> toMap();
   
   /**
    * The name of the class, so the instance can be constructed later. This
@@ -20,5 +20,5 @@ abstract class Saveable {
    * earlier set by the [toMap()] method and that was saved by the Runner
    * to a Storage.
    */
-  void updateFromMap(Map<String,dynamic> map);
+  void updateFromMap(Map<String, dynamic> map);
 }

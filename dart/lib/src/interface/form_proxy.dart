@@ -10,27 +10,27 @@ import 'dart:async';
  * by adding DOM elements to page) and listening to user input.
  */
 class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
-  FormProxy.fromMap(Map<String,Object> map) {
+  FormProxy.fromMap(Map<String, Object> map) {
     assert((map["jsonml"] as List)[0] == "Form");
     submitText = (map["jsonml"] as List)[1]["submitText"];
     createElementsFromJsonML(map["jsonml"]);
     FormConfiguration values = new FormConfiguration.fromMap(map["values"]);
     allFormElementsBelowThisOne.forEach((FormElement element) {
-      Map<String,Object> elementValues = values.getById(element.id);
+      Map<String, Object> elementValues = values.getById(element.id);
       if (elementValues != null) {
         element.updateFromMap(elementValues);
       }
     });
   }
 
-  UiElement buildUiElements(Map<String,UiElementBuilder> builders) {
+  UiElement buildUiElements(Map<String, UiElementBuilder> builders) {
     return _recursiveCreateUiElement(builders, this);
   }
 
   /// Mapping from [FormElement] (blueprint) to actual UI representations.
   UiElement uiElement;
 
-  UiElement _recursiveCreateUiElement(Map<String,UiElementBuilder> builders,
+  UiElement _recursiveCreateUiElement(Map<String, UiElementBuilder> builders,
                         BlueprintWithUiRepresentation element) {
     if (!builders.containsKey(element.localName)) {
       throw new UnimplementedError("The tag '${element.localName}' is not "
@@ -60,7 +60,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   void update(FormConfiguration config, {bool unsetWaitingForUpdate: true}) {
     allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)
     .forEach((FormElement element) {
-      Map<String,Object> map = config.getById(element.id);
+      Map<String, Object> map = config.getById(element.id);
       if (map != null) {
         element.updateFromMap(map);
         (element as BlueprintWithUiRepresentation).uiElement.update();
@@ -176,7 +176,7 @@ abstract class UiElement {
 
 /// Maps [FormElement.elementClass] name to a function that takes the JSON
 /// objects and returns
-Map<String,CustomTagHandler> customTagHandlers = {
+Map<String, CustomTagHandler> customTagHandlers = {
   FormBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
     return new InterfaceForm(attributes["id"]);
@@ -217,10 +217,10 @@ Map<String,CustomTagHandler> customTagHandlers = {
   }
 };
 
-Map<String,Object> _getAttributesFromJsonML(Object jsonObject) {
+Map<String, Object> _getAttributesFromJsonML(Object jsonObject) {
   // A JsonML element has it's attribute on the second position. Ex.:
   // <a href="#"></a> is ["a", {"href": "#"}].
-  return (jsonObject as List)[1] as Map<String,Object>;
+  return (jsonObject as List)[1] as Map<String, Object>;
 }
 
 class InterfaceForm extends FormBase {

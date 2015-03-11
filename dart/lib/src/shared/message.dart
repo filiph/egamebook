@@ -11,7 +11,7 @@ class EgbMessage {
   List listContent;
   String strContent;
   int intContent;
-  Map<String,Object> mapContent;
+  Map<String, Object> mapContent;
   
   // Messages from Scripter to Runner.
   static const int SEND_BOOK_UID = 10;
@@ -114,7 +114,7 @@ class EgbMessage {
     mapContent = updates.toMap();
   }
   
-  EgbMessage.statsInit(List<Map<String,Object>> list) 
+  EgbMessage.statsInit(List<Map<String, Object>> list) 
       : type = SET_STATS {
     listContent = list;
   }
@@ -164,7 +164,7 @@ class EgbMessage {
     */
   EgbMessage.fromJson(String json) : this.fromMap(JSON.decode(json));
   
-  EgbMessage.fromMap(Map<String,Object> map) : type = map["type"] {
+  EgbMessage.fromMap(Map<String, Object> map) : type = map["type"] {
     if (map.containsKey("strContent")) {
       strContent = map["strContent"];
     }
@@ -186,8 +186,8 @@ class EgbMessage {
     return JSON.encode(toMap());
   }
   
-  Map<String,Object> toMap() {
-    Map<String,Object> map = new Map<String,Object>();
+  Map<String, Object> toMap() {
+    Map<String, Object> map = new Map<String, Object>();
 
     map["type"] = type;
 

@@ -42,7 +42,7 @@ class EgbPlayerProfile {
   /**
    * Global (non-gamebook-specific) preferences of the player.
    */
-  Map<String,dynamic> preferences;
+  Map<String, dynamic> preferences;
 
   Future<bool> _savePreferences() {
     return _storage.save("$playerUid::$PREFERENCES_KEY",

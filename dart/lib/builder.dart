@@ -17,8 +17,7 @@ class EgbFormatException implements Exception {
   int line;
   File file;
 
-  EgbFormatException(String this.msg, {this.line, this.file}) {
-  }
+  EgbFormatException(String this.msg, {this.line, this.file});
 
   String toString() {
     StringBuffer strBuf = new StringBuffer();
@@ -176,7 +175,7 @@ class BuilderBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
   int type = 0;
-  Map<String,dynamic> options;
+  Map<String, dynamic> options;
   List<BuilderBlock> subBlocks;
 
   static final int BLK_TEXT = 1;
@@ -196,7 +195,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_MULTILINE = 256;
 
   BuilderBlock({this.lineStart, this.type: 0}) {
-    options = new Map<String,dynamic>();
+    options = new Map<String, dynamic>();
     subBlocks = new List<BuilderBlock>();
   }
 }
@@ -271,7 +270,7 @@ class Builder {
     metadata = new List<BuilderMetadata>();
     synopsisLineNumbers = new List<int>();
     pages = new List<BuilderPage>();
-    pageHandles = new Map<String,int>();
+    pageHandles = new Map<String, int>();
     initBlocks = new List<BuilderInitBlock>();
     importLibFiles = new List<File>();
     importLibFilesFullPaths = new Set<String>();
@@ -1160,7 +1159,7 @@ class Builder {
     return completer.future;
   }
 
-  _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
+  void _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
     assert(importLibFilesFullPaths != null);
     dartOutStream.write("\n");
     for (var importPath in importLibFilesFullPaths) {
@@ -1232,7 +1231,7 @@ class Builder {
    * @param substitutions A map of String->String substitutions.
    */
   Future<bool> _fileFromTemplate(File inFile, File outFile,
-      [Map<String,String> substitutions]) {
+      [Map<String, String> substitutions]) {
     if (substitutions == null) {
       substitutions = new Map();
     }
@@ -1710,7 +1709,7 @@ class Builder {
 //    graphML = new GraphML();
 //
 //    // create group nodes
-//    Map<String,Node> pageGroupNodes = new Map<String,Node>();
+//    Map<String, Node> pageGroupNodes = new Map<String, Node>();
 //    for (int i = 0; i < pageGroups.length; i++) {
 //      var node = new Node(pageGroups[i].name);
 //      pageGroupNodes[pageGroups[i].name] = node;
@@ -1718,7 +1717,7 @@ class Builder {
 //    }
 //
 //    // create nodes
-//    Map<String,Node> pageNodes = new Map<String,Node>();
+//    Map<String, Node> pageNodes = new Map<String, Node>();
 //    for (int i = 0; i < pages.length; i++) {
 //      var node = new Node(pages[i].nameWithoutGroup);
 //      pageNodes[pages[i].name] = node;
@@ -1785,7 +1784,7 @@ class Builder {
 //   */
 //  void updateFromGraphML() {
 //    // populate map of all nodes in graph
-//    Map<String,Node> nodesToAdd = new Map<String,Node>();
+//    Map<String, Node> nodesToAdd = new Map<String, Node>();
 //    for (var node in graphML.nodes) {
 //      nodesToAdd[node.fullText] = node;
 //    }
@@ -1799,7 +1798,7 @@ class Builder {
 //
 //        // populate map of all linked nodes in graphml
 //        Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
-//        Map<String,Node> linkedPageFullNamesToAdd = new Map<String,Node>();
+//        Map<String, Node> linkedPageFullNamesToAdd = new Map<String, Node>();
 //        for (var node in linkedNodesToAdd) {
 //          linkedPageFullNamesToAdd[node.fullText] = node;
 //        }
