@@ -111,7 +111,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 
   int compareTo(EgbChoice other) => this.string.compareTo(other.string);
 
-  toString() {
+  String toString() {
     return "Choice: $string [$goto]";
   }
 
