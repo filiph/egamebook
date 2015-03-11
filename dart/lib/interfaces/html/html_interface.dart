@@ -433,7 +433,7 @@ class HtmlInterface extends EgbInterfaceBase {
   List<UIStat> _stats;
   final Map<String, Element> _statsElements = new Map();
 
-  Future<bool> setStats(List<UIStat> stats) {
+  Future setStats(List<UIStat> stats) {
     _stats = stats;
     _printStats(); // DEBUG
     var statsDiv = document.querySelector("nav div#stats");
@@ -450,9 +450,10 @@ class HtmlInterface extends EgbInterfaceBase {
       _statsElements[stat.name] = anchor;
       anchor.onClick.listen(_statsOnClickListener);
     }
+    return new Future.value();
   }
 
-  Future<bool> updateStats(StatUpdateCollection updates) {
+  Future updateStats(StatUpdateCollection updates) {
     UIStat.updateStatsList(_stats, updates
         )// Returns only the changed stats.
     .forEach((UIStat stat) {
@@ -464,6 +465,7 @@ class HtmlInterface extends EgbInterfaceBase {
         anchor.classes.add("display-none");
       }
     });
+    return new Future.value();
   }
 
   void _printStats() {
