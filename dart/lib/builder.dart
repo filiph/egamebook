@@ -1008,7 +1008,7 @@ class Builder {
           }
         }
       }
-      // delete the nulls
+      // remove the nulls
       importLibFiles = importLibFiles.where((f) => f != null).toList();
       completer.complete(true);
     });

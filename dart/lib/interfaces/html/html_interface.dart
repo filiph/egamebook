@@ -224,7 +224,7 @@ class HtmlInterface extends EgbInterfaceBase {
         _processedElements.add(i);
       }
     }
-    // Delete _metaElements whose actions have already been triggered.
+    // Remove _metaElements whose actions have already been triggered.
     _metaElements.removeWhere((metaEl) => metaEl.done);
   }
 

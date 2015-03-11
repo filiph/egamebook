@@ -96,7 +96,7 @@ class EgbPlayerProfile {
   }
 
   /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
-  /// the key, then removes the key-value paid from the storage.
+  /// the key, then deletes the key-value paid from the storage.
   /// Throws if [currentEgamebookUid] is not set.
   Future<bool> _delete(String key) {
     if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
