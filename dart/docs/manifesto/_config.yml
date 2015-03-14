@@ -1,3 +1,20 @@
 name: Egamebook – home of the new electronic gamebook
+# description: 
+url: http://egamebook.com
+timezone: Europe/Prague
+
 markdown: redcarpet
+redcarpet:
+    extensions: ["smart"]
 highlighter: pygments
+
+permalink: /blog/:title
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Filip Hracek"
