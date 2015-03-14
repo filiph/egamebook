@@ -110,17 +110,17 @@ class HtmlInterface extends EgbInterfaceBase {
 
   ParagraphElement _loadingEl;
   /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
-  bool _loadingElCurrentShowState;
+  bool _loadingElVisible;
   /**
    * Sets visibility of the loading gizmo.
    */
   void _showLoading(bool show) {
-    if (_loadingElCurrentShowState != null && show ==
-        _loadingElCurrentShowState) {
+    if (_loadingElVisible != null && show ==
+        _loadingElVisible) {
       return; // Don't do anything if the show state is the same already.
     }
     _loadingEl.style.visibility = (show ? "visible" : "hidden");
-    _loadingElCurrentShowState = show;
+    _loadingElVisible = show;
   }
 
   void endBook() {
