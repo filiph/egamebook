@@ -1,5 +1,7 @@
 library egb_saveable;
 
+/// [Saveable] is an abstract class describing interface for all 
+/// saveable classes.
 abstract class Saveable {
   /**
    * When serializing a custom class and when it's Saveable, the Scripter
