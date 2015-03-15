@@ -4,6 +4,7 @@
 .children
 .buildlog
 pubspec.lock
+.pub/*
 books/tis/*.js
 books/tis/*.js.map
 books/tis/*.html
