@@ -1,12 +1,20 @@
 import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/src/generated/scanner.dart';
 import 'package:analyzer/src/generated/parser.dart';
+import 'dart:collection';
 
 /// Takes variable declaration source string and keeps track of defined
 /// variables and their types. Generates code for use in ScripterImpl.
 class VarsGenerator {
   final List<TypedVariable> _vars = new List<TypedVariable>();
   final List<AnalysisError> _errors = new List<AnalysisError>();
+
+  UnmodifiableListView _varsView;
+  List<TypedVariable> get variables => _varsView;
+
+  VarsGenerator() {
+    _varsView = new UnmodifiableListView(_vars);
+  }
 
   /// Receives and analyzes a source String ([src]).
   void addSource(String src) {
