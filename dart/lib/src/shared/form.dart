@@ -473,7 +473,7 @@ class SubmitButton extends BaseSubmitButton  {
 // to skill (acumen)
 
 
-class BaseCheckbox extends FormElement implements UpdatableByMap {
+class BaseCheckbox extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
@@ -525,7 +525,7 @@ class CheckboxInput extends BaseCheckboxInput with _NewValueCallback<bool> {
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
-class BaseRange extends FormElement implements UpdatableByMap {
+class BaseRange extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
@@ -669,7 +669,7 @@ class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
   }
 }
 
-class BaseText extends FormElement implements UpdatableByMap {
+class BaseText extends FormElement {
   BaseText(String elementClass) : super(elementClass);
 
   String html;
@@ -749,7 +749,7 @@ class MultipleChoiceInput extends BaseMultipleChoiceInput with
 }
 
 /// Base class for a single element to choose in a [MultipleChoiceInput].
-class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
+class BaseOption extends FormElement implements Input<bool> {
   String get text => attributes["text"];
   set text(String value) => attributes["text"] = value;
 

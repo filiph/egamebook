@@ -44,6 +44,7 @@ void main() {
     CheckboxInput checkboxInput;
     MultipleChoiceInput multipleChoiceInput;
     Option option1, option2, option3;
+    TextOutput textOutput;
     
     int age, money;
 
@@ -58,6 +59,7 @@ void main() {
       option1 = new Option("Option 1", (_) {});
       option2 = new Option("Option 2", (_) {}, selected: true);
       option3 = new Option("Option 3", (_) {}, helpMessage: "Help option");
+      textOutput = new TextOutput();
     });
 
     test("Form gives its children unique ids before sending", () {
@@ -150,6 +152,13 @@ void main() {
       expect((formProxy.children.single.parent as FormElement)
           .allFormElementsBelowThisOne.length, 
           form.children.length + multipleChoiceInput.children.length);
+    });
+    
+    test("FormElements are instances (implement) of UpdatableByMap", () {      
+      expect(input1, new isInstanceOf<UpdatableByMap>());
+      expect(checkboxInput, new isInstanceOf<UpdatableByMap>());  
+      expect(textOutput, new isInstanceOf<UpdatableByMap>());
+      expect(option1, new isInstanceOf<UpdatableByMap>());
     });
   });
 
