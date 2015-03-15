@@ -44,11 +44,13 @@ class EgbPlayerProfile {
    */
   Map<String, dynamic> preferences;
 
+  /// Saves preferences for the player into the storage.
   Future<bool> _savePreferences() {
     return _storage.save("$playerUid::$PREFERENCES_KEY",
                          JSON.encode(preferences));
   }
 
+  /// Loads preferences for the player from the storage.
   Future<bool> _loadPreferences() {
     var completer = new Completer();
     _storage.load("$playerUid::$PREFERENCES_KEY")
@@ -96,7 +98,7 @@ class EgbPlayerProfile {
   }
 
   /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
-  /// the key, then deletes the key-value paid from the storage.
+  /// the key, then deletes the key-value pair from the storage.
   /// Throws if [currentEgamebookUid] is not set.
   Future<bool> _delete(String key) {
     if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
