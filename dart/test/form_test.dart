@@ -78,8 +78,8 @@ void main() {
       // print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.length, form.children.length);
-      expect((form.children[0] as BaseRange).max, (formProxy.children[0] as
-          BaseRange).max);
+      expect((form.children[0] as RangeBase).max, (formProxy.children[0] as
+          RangeBase).max);
     });
 
     test("Elements get parents", () {
@@ -120,9 +120,9 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.single.children.length, 
           multipleChoiceInput.children.length);
-      expect((formProxy.children.single.children[0] as BaseOption).current, 
-          (multipleChoiceInput.children[0] as BaseOption).current);
-      expect((formProxy.children.single.children[1] as BaseOption).current, 
+      expect((formProxy.children.single.children[0] as OptionBase).current, 
+          (multipleChoiceInput.children[0] as OptionBase).current);
+      expect((formProxy.children.single.children[1] as OptionBase).current, 
           true); //we are setting selected as true
       expect((formProxy.children.single.children[2] as FormElement).helpMessage, 
           isNotNull);

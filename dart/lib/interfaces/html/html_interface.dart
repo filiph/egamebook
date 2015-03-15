@@ -620,14 +620,14 @@ class HtmlInterface extends EgbInterfaceBase {
 Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
-  BaseSubmitButton.elementClass: (FormElement e) => new HtmlSubmitButton(e),
-  BaseCheckboxInput.elementClass: (FormElement e) => new HtmlCheckboxInput(e),
-  BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
-  BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
-  BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e),
-  BaseMultipleChoiceInput.elementClass: (FormElement e) =>
+  SubmitButtonBase.elementClass: (FormElement e) => new HtmlSubmitButton(e),
+  CheckboxInputBase.elementClass: (FormElement e) => new HtmlCheckboxInput(e),
+  RangeInputBase.elementClass: (FormElement e) => new HtmlRangeInput(e),
+  RangeOutputBase.elementClass: (FormElement e) => new HtmlRangeOuput(e),
+  TextOutputBase.elementClass: (FormElement e) => new HtmlTextOuput(e),
+  MultipleChoiceInputBase.elementClass: (FormElement e) =>
       new HtmlMultipleChoiceInput(e),
-  BaseOption.elementClass: (FormElement e) => new HtmlOption(e)
+  OptionBase.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
 abstract class HtmlUiElement extends UiElement {
@@ -855,13 +855,13 @@ class HtmlSubmitButton extends HtmlUiElement {
 }
 
 class HtmlCheckboxInput extends HtmlUiElement {
-  BaseCheckboxInput blueprint;
+  CheckboxInputBase blueprint;
   DivElement uiRepresentation;
   CheckboxInputElement _checkboxEl;
   LabelElement _labelEl;
   DivElement _childrenDiv;
 
-  HtmlCheckboxInput(BaseCheckboxInput blueprint) : super(blueprint) {
+  HtmlCheckboxInput(CheckboxInputBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     print(this.blueprint.name);
 
@@ -914,13 +914,13 @@ class HtmlCheckboxInput extends HtmlUiElement {
 }
 
 abstract class HtmlRangeBase extends HtmlUiElement {
-  BaseRange blueprint;
+  RangeBase blueprint;
   DivElement uiRepresentation;
   DivElement _childrenDiv;
   DivElement _radioButtonsDiv;
   ParagraphElement _currentValueP;
 
-  HtmlRangeBase(BaseRange blueprint, String divClass) : super(blueprint) {
+  HtmlRangeBase(RangeBase blueprint, String divClass) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add(divClass)
@@ -1012,7 +1012,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 }
 
 class HtmlRangeOuput extends HtmlRangeBase {
-  HtmlRangeOuput(BaseRangeOutput blueprint) : super(blueprint, "range-output");
+  HtmlRangeOuput(RangeOutputBase blueprint) : super(blueprint, "range-output");
 
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -1034,7 +1034,7 @@ class HtmlRangeOuput extends HtmlRangeBase {
 }
 
 class HtmlRangeInput extends HtmlRangeBase {
-  HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint, "range-input");
+  HtmlRangeInput(RangeInputBase blueprint) : super(blueprint, "range-input");
 
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -1063,11 +1063,11 @@ class HtmlRangeInput extends HtmlRangeBase {
 }
 
 class HtmlTextOuput extends HtmlUiElement {
-  BaseText blueprint;
+  TextBase blueprint;
   DivElement uiRepresentation;
   DivElement _childrenDiv;
 
-  HtmlTextOuput(BaseText blueprint) : super(blueprint) {
+  HtmlTextOuput(TextBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("text-output")
@@ -1105,12 +1105,12 @@ class HtmlTextOuput extends HtmlUiElement {
 
 class HtmlMultipleChoiceInput extends HtmlUiElement {
 
-  BaseMultipleChoiceInput blueprint;
+  MultipleChoiceInputBase blueprint;
   DivElement uiRepresentation;
   LabelElement _labelElement;
   SelectElement _childrenSelectElement;
 
-  HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) :
+  HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint) :
       super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1182,10 +1182,10 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 
 
 class HtmlOption extends HtmlUiElement {
-  BaseOption blueprint;
+  OptionBase blueprint;
   OptionElement uiRepresentation;
 
-  HtmlOption(BaseOption blueprint) : super(blueprint) {
+  HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
         blueprint.current)..text = blueprint.text;
