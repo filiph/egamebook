@@ -16,8 +16,8 @@ void main() {
         """;
       var generator = new VarsGenerator();
       expect(() => generator.addSource(code), returnsNormally);
-      print(generator.createExtractMethod());
-      print(generator.createPopulateMethod());
+      print(generator.generateExtractMethodCode());
+      print(generator.generatePopulateMethodCode());
     });
 
     test("extracts all variables", () {
@@ -99,9 +99,9 @@ void main() {
 
       var generator = new VarsGenerator();
       generator.addSource(code);
-      String generatedExtractMethod = generator.createExtractMethod();
+      String generatedExtractMethod = generator.generateExtractMethodCode();
       expect(generatedExtractMethod.trim(), extractMethod.trim());
-      String generatedPopulateMethod = generator.createPopulateMethod();
+      String generatedPopulateMethod = generator.generatePopulateMethodCode();
       expect(generatedPopulateMethod.trim(), populateMethod.trim());
     });
   });

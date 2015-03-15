@@ -3,20 +3,27 @@ import 'package:analyzer/src/generated/scanner.dart';
 import 'package:analyzer/src/generated/parser.dart';
 import 'dart:collection';
 
-/// Takes variable declaration source string and keeps track of defined
-/// variables and their types. Generates code for use in ScripterImpl.
+/// Takes variable declaration source String and keeps track of defined
+/// variables and their types. [generateExtractMethodCode] and
+/// [generatePopulateMethodCode] generate code for use in [ScripterImpl] that
+/// substitutes [:dart:mirrors:].
 class VarsGenerator {
   final List<TypedVariable> _vars = new List<TypedVariable>();
-  final List<AnalysisError> _errors = new List<AnalysisError>();
-
   UnmodifiableListView _varsView;
+
+  /// Unmodifiable view of the variables present in the code.
   List<TypedVariable> get variables => _varsView;
 
   VarsGenerator() {
     _varsView = new UnmodifiableListView(_vars);
   }
 
-  /// Receives and analyzes a source String ([src]).
+  /// Receives and analyzes [src] and looks for top level variable declarations,
+  /// adding them into the [variables] list. Can be called several times
+  /// with separate code blocks.
+  ///
+  /// Throws when the source code contains a syntax error, or when there are
+  /// multiple variables with the same name.
   void addSource(String src) {
     var errorListener = new _ErrorCollector();
     var reader = new CharSequenceReader(src);
@@ -27,6 +34,10 @@ class VarsGenerator {
 
     var visitor = new _TopLevelVariableHarvester();
     unit.accept(visitor);
+
+    if (errorListener.errors.isNotEmpty) {
+      throw new ArgumentError("There were errors in the source.");
+    }
 
     List<String> varNames = visitor.vars.map((variable) => variable.name)
         .toList();
@@ -40,14 +51,23 @@ class VarsGenerator {
       }
     }
     _vars.addAll(visitor.vars);
-
-    _errors.addAll(errorListener.errors);
-    if (errorListener.errors.isNotEmpty) {
-      throw new ArgumentError("There were errors in the source.");
-    }
   }
 
-  String createPopulateMethod() {
+  /// Generates the code of the [:populateVarsFromState():] method. This
+  /// method takes declared variables and creates or updates members of the
+  /// [:vars:] Map from them.
+  ///
+  /// Example output:
+  ///
+  ///     void populateVarsFromState() {
+  ///       vars["bodega"] = bodega;
+  ///       vars["isEngineer"] = isEngineer;
+  ///       vars["maxPhysicalPoints"] = maxPhysicalPoints;
+  ///     }
+  String generatePopulateMethodCode() {
+    // Note that the method currently generates its output through simple
+    // String concatenation. It could build the code from AST, but that
+    // would be way too complicated given the simplicity of the output.
     final StringBuffer out = new StringBuffer();
     out.writeln("  void populateVarsFromState() {");
     for (TypedVariable variable in _vars) {
@@ -57,7 +77,19 @@ class VarsGenerator {
     return out.toString();
   }
 
-  String createExtractMethod() {
+  /// Generates the code of the [:extractStateFromVars():] method. This
+  /// method takes values from the [:vars:] Map and updates the declared
+  /// variables by them.
+  ///
+  /// Example output:
+  ///
+  ///     void extractStateFromVars() {
+  ///       bodega = vars["bodega"] as SpaceshipMock;
+  ///       isEngineer = vars["isEngineer"] as bool;
+  ///       maxPhysicalPoints = vars["maxPhysicalPoints"] as int;
+  ///       untypedValue = vars["untypedValue"];
+  ///     }
+  String generateExtractMethodCode() {
     final StringBuffer out = new StringBuffer();
     out.writeln("  void extractStateFromVars() {");
     for (TypedVariable variable in _vars) {
@@ -72,6 +104,8 @@ class VarsGenerator {
   }
 }
 
+/// A simple struct holding a variable's [name], and [type] (which is
+/// [:null:] when the variable is dynamic).
 class TypedVariable {
   final String type;
   final String name;
@@ -79,6 +113,8 @@ class TypedVariable {
   toString() => "$name ($type)";
 }
 
+/// A simple visitor that keeps track of top level variable declarations
+/// and puts them into [vars].
 class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
   List<TypedVariable> vars = new List<TypedVariable>();
 
@@ -95,6 +131,7 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
   }
 }
 
+/// Simple class which keeps track of errors.
 class _ErrorCollector extends AnalysisErrorListener {
   List<AnalysisError> errors;
   _ErrorCollector() : errors = new List<AnalysisError>();
