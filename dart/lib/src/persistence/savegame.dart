@@ -39,12 +39,16 @@ class EgbSavegame {
   /// since Epoch.
   int timestamp;
   
+  /// Constructor.
   EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
     timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
   
+  /// Constructor creates savegame from JSON. The JSON has to contain either
+  /// key for [currentPageName] or for [vars], or both. If there are no keys
+  /// like that, [InvalidSavegameException] is thrown.
   EgbSavegame.fromJson(String json) {
     Map<String, dynamic> saveMap = JSON.decode(json);
     if (!saveMap.containsKey("currentPageName") 
@@ -63,10 +67,16 @@ class EgbSavegame {
     }
   }
   
+  /// Constructor creates savegame from [EgbMessage]. It uses its String
+  /// content saved as JSON.
   factory EgbSavegame.fromMessage(EgbMessage message) {
     return new EgbSavegame.fromJson(message.strContent);
   }
   
+  /// Returns current savegame as [EgbMessage]. 
+  /// 
+  /// Parameter [type] has to match either type [EgbMessage.SAVE_GAME] 
+  /// or [EgbMessage.LOAD_GAME].
   EgbMessage toMessage(int type) {
     if (type != EgbMessage.SAVE_GAME && type != EgbMessage.LOAD_GAME) {
       throw "Cannot create EgbMessage of type $type. Can only be MSG_SAVE_GAME "
@@ -78,6 +88,7 @@ class EgbSavegame {
     return message;
   }
   
+  /// Returns current savegame as JSON string.
   String toJson() {
     Map<String, dynamic> saveMap = new Map<String, dynamic>();
     saveMap["uid"] = uid;
@@ -95,7 +106,7 @@ class EgbSavegame {
   String toString() => toJson();
   
   /**
-   * Returns true if variable is Saveable or a primitive type.
+   * Returns true if [variable] is [Saveable] or a primitive type.
    */
   static bool _isSaveable(variable) {
     bool primitivelySaveable = (variable == null || variable is String || 
@@ -105,6 +116,7 @@ class EgbSavegame {
     return _isCustomSaveableClass(variable);
   }
   
+  /// Returns true if [variable] is [Saveable].
   static bool _isCustomSaveableClass(variable) {
     return variable is Saveable; // TODO cease to use if this really works
     
@@ -213,6 +225,7 @@ class EgbSavegame {
     }
   }
   
+  /// Imports vars from [EgbSavegame] and copies them over existing [vars].
   static void importSavegameToVars(EgbSavegame savegame, 
                                    Map<String, dynamic> vars,
                                    {Map<String, Function> constructors}) {
@@ -230,12 +243,14 @@ class EgbSavegame {
   }
 }
 
+/// An [Exception] thrown in case of incompatible savegame.
 class IncompatibleSavegameException implements Exception {
   final String message;
   const IncompatibleSavegameException(this.message);
   String toString() => "IncompatibleSavegameException: $message";
 }
 
+/// An [Exception] thrown in case of loading of invalid savegame.
 class InvalidSavegameException implements Exception {
   final String message;
   const InvalidSavegameException(this.message);
