@@ -163,6 +163,7 @@ class HtmlInterface extends EgbInterfaceBase {
             el.classes.remove("hidden");
           });
         }
+//        el.text = _exchangeChars(el.text, "▒");
         _attachFootnoteClickListeners(el);
         bookDiv.append(el);
       }
@@ -353,6 +354,7 @@ class HtmlInterface extends EgbInterfaceBase {
     var textSpan = new SpanElement();
     textSpan.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly:
         true);
+//  textSpan.text = _exchangeChars(textSpan.text, "▒");
     textSpan.classes.add("choice-text");
     choiceDisplaySpan.append(textSpan);
 
@@ -1369,4 +1371,9 @@ class FootnoteSupTagSyntax extends mdown.TagSyntax {
     parser.addNode(element);
     return true;
   }
+}
+
+String _exchangeChars(String input, String char) {
+  final RegExp re = new RegExp(r"\w");
+  return input.replaceAll(re, char);
 }

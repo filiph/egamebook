@@ -34,6 +34,15 @@ class BodegaZil {
     //           ever worked with turned out to have a history of some sort.
     //           I'm tired of hearing this as an excuse.
 
+    exploration.schedule(52, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput(
+          "While <whileString> you have a brief sensation of mild tingling in your nose.",
+          "You have a brief sensation of mild tingling in your nose."));
+      echo("You ascribe it to sleep deprivation.");
+      echo("\n\n");
+    });
+
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
       vars.roomBeforeOvercameBySleepiness = zil.player.location.name;
       goto("Bridge: OvercomeBySleepiness");
@@ -73,8 +82,31 @@ class BodegaZil {
       // TODO: medic? more info
     });
 
-    // XXX START HERE: more medical emergencies -
     // another fit of cough
+    exploration.schedule(MESSENGER_CONTACT_TIME + 55, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString>, the cough comes back.",
+                                           "The cough is back."));
+      echo("""It's stronger and more painful than before, and you have to close your eyes and curl your body to keep on top of it. It feels like your lungs.\n\n""");
+      echo("""In a few seconds it fades but if the rest of the crew is any indication, this was just a mild beginning.\n\n""");
+    });
+
+    // Cramp  + on knees + bend bar
+    exploration.schedule(MESSENGER_CONTACT_TIME + 70, () {
+      echo("\n\n");
+      echo(exploration.generateWhileOutput("While <whileString>, you suddenly feel your muscles getting stiff.",
+                                           "Suddenly, you feel your muscles getting stiff."));
+      echo("""The more you try to move, the worse it gets. You quickly grab a nearby steel railing and you go to your knees, trying to brace for the pain. You close your eyes. \n\n""");
+      echo("""What comes next is unspeakable. Your whole body burns and shakes with wave after wave of excruciating pain, and it just doesn't go away, for what seems like millenia. If you could scream, you would. At one point, you solemnly pray for death. \n\n""");
+      echo("""Which is about when the whole thing fades away. The waves of pain get milder until you can sense other things again. You open your eyes and find out you're exactly in the same position, kneeling next to a railing, as when the pain started.""");
+      echo("""\n\n ![Hand grabbing a railing IMG] \n\n""");
+      echo("""And then you notice your hand on the railing and you realize that what was previously a straight steel pipe is now slightly bent at the point where your hand rests. You just deformed a solid metal railing. With your bare hand. \n\n""");
+      echo("""_What?_ You lift your hand and have a better look at the railing below it. It's the same steel as everywhere else. _Am I getting crazy now?_ You try to bend it some more, but the steel doesn't budge. \n\n""");
+      echo("""You slowly stand up and shake your head. _I'm definitely getting crazy._ \n\n""");
+    });
+
+    // TODO START HERE: more medical emergencies
+
 
     // Rash showing
 //    exploration.schedule(_____, () {
@@ -84,6 +116,8 @@ class BodegaZil {
 //      // TODO: medic? more info
 //    });
   }
+
+  // TODO: (Nice-To-Have) Unity questions anywhere in zil...
 
   TimedEvent unityArrivalEvent;
 
@@ -190,6 +224,8 @@ class BodegaZil {
 
     // TODO: scavenge - let player choose row+column ("A245") and either give random thing or something specific (medical supplies)
 
+    // TODO: repair Jet (see Bodega Snippets)
+
     // ROOM
     cargoBayLeft = new Room(zil, "Explore: CargoBayLeft", "cargo bay",
         [new Exit("Explore: CorridorLeftJunction", "enter Corridor Left",
@@ -279,7 +315,7 @@ class BodegaZil {
     // just look around
     // go through latest internal ship memos
     // later: break stuff
-    // change RAID - makes bodega happier
+    // TODO: change RAID - makes bodega happier - repair
 
     // ROOM
     new Room(zil, "Explore: ComputerRoom", "Computer Room", [new Exit(
@@ -945,7 +981,7 @@ class Vars {
 const String INVENTORY = "···"; // Middle dots.
 
 const int MAX_TRAIT_POINTS = 3;
-const int MAX_TIME_BEFORE_NAP = 148;
+const int MAX_TIME_BEFORE_NAP = 96;
 const int MESSENGER_CONTACT_TIME = 460;
 const int MAX_TIME_BEFORE_HYPERDRIVE_READY = 473;
 

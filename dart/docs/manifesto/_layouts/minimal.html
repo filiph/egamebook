@@ -9,11 +9,10 @@
         {% endif %}
         <meta name="viewport" content="width=device-width">
 
-        <!-- syntax highlighting CSS -->
-        <!--<link rel="stylesheet" href="/css/syntax.css">-->
-
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/css/main.css">
+
+        <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
 
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -46,6 +45,9 @@
               <div class="g-community" data-href="https://plus.google.com/communities/117415708119099457420" data-layout="landscape"></div>
             </div>
           </div>
+
+          {% include blog-ticker.html %}
+
         </div>
 
     </body>
