@@ -86,6 +86,11 @@ Let's go through some more complex examples while showing advanced features. Ple
 
     These two paragraphs are above the first page, so they will be the 'welcome' message (Synopsis). This is what players read before the game is loaded.
 
+    <declarations>
+      int time;
+      String weapon;
+    </declarations>
+
     ---
     Day1.WakeUp
     
@@ -324,54 +329,78 @@ There are a few special functions that you can always use inside any script. The
 
 #### Variable persistence
 
-Every `<script>` block is actually a function (closure), so variables initialized in it will be lost after the block is ended. There's a simple way around this, though: when you don't initialize, but just _use_ the variable, it will be saved.
+Every `<script>` block is actually a function (closure), so variables initialized in it will be lost after the block is ended. There's a simple way around this, though: declare the variable in a `<declare>` block.
+
+    <declare>
+      // This creates a variable and tells egamebook it should persist (be saved).
+      var b;
+    </declare>
 
     <script>
       // This variable will disappear after execution of this block ends.
       var a = "Hello.";
-      // This variable will be created and will stay.
+      // This variable was declared above and will stay.
       b = "World!";
     </script>
     
 The `b` variable will also be automatically saved _between_ play sessions. When the player closes the browser and opens it later, your variables will be still there without you needing to worry about it.
 
-Technical note: This is made possible by Dart's noSuchMethod functionality. Non-initialized variables (like `b` above) are automaticaly saved into the magic `vars` Map. So the `b` above is accessible and assignable both through `b` as well as through `vars["b"]`, and its value will persist between play session.
+<!--Technical note: This is made possible by Dart's noSuchMethod functionality. Non-initialized variables (like `b` above) are automaticaly saved into the magic `vars` Map. So the `b` above is accessible and assignable both through `b` as well as through `vars["b"]`, and its value will persist between play session.-->
 
 ### Imports and initializations
 
-Apart from the `<script>` block, there are currently two other types of scripting-related tags. The purpose of these is to allow you to initialize or define things that you want to be able to use in any script throughout the book.
+Apart from the `<script>` block, there are currently three other types of scripting-related tags. The purpose of these is to allow you to initialize or define things that you want to be able to use in any script throughout the book.
 
 Note: These two (in contrast to the script blocks) can be _anywhere_ in the book file. It is customary to put them at the top of the `.egb` file. In some cases, it might be preferable to put them at the top of relevant _pages_ inside the `.egb` file. No matter what you choose, try to be consistent.
 
 #### Library imports
 
-We encourage egamebooks that — apart from being engaging stories — also have complex internal logic. This means you will probably want to write and use libraries, just like in any Dart file. For that, use the `<import>` tag like so:
+We encourage egamebooks that — apart from being engaging stories — also have non-trivial internal logic. This means you will probably want to write and use libraries, just like in any Dart file. For that, use the `<import>` tag like so:
 
     <import 'path/to/library.dart'/>
 
 You can put this line anywhere in your file. It will be automatically hoisted to the top. It is equivalent to `import 'path/to/library.dart';` in a Dart file.
 
-#### Variables blocks
+#### Declare block(s)
 
-This block is called every time the player opens the book and before he/she loads a savegame. It should contain **variables** that you want to use throughout and that you want to make sure are defined from the very start.
+In this block, you declare the variables that you will use throughout the book. Those are the variables that describe player's progress and the game world's state. They will persist during gameplay and between play sessions.
 
-    <variables>
-      time = 0;
-    </variables>
+    <declare>
+      // Player's coins and experience points.
+      var coins, xp;
+      // Whether or not player can use magic.
+      var isMagicUser = false;
+    </declare>
 
-When you include the above definition in the book, you can use the `time` variable anywhere and you can be sure it's initialized.
+The code block above declares 3 variables: `coins`, `xp` and `isMagicUser`. The third one has a default value (you should probably put a default value everywhere you can). All this is the standard way of declaring variables in Dart.
 
-    <script>
-      if (time > 50) {
-        echo("Your time is up!");
-      } 
-    </script>
+You can type your variables for better code structure and easier debugging.
 
-It's probably a good idea (though not required) to define **all** variables in a variables block and only _change_ them in script blocks. The advantage of this is that you don't need to worry about whether you have defined the variable you want to use yet or not. This can be a problem when your egamebook's pages are deeply interconnected (which they will be) and it's not easy to predict which page will be visited first.
+    <declare>
+      int coins, xp;
+      bool isMagicUser = false;
+      SomeCustomClass variable;
+    </declare>
 
-Technical note: think of the `<variables>` block as the body of a constructor.
+With typing, the compiler will warn you if you try to, for example, assign `1.5` to `coins` (should be integer) or `"yes"` to `isMagicUser` (should be either `true` or `false`). This can save you headaches.
 
-Remember that the variables block is run _before_ any savegame is loaded. This means that when the player saves a game after `time` has been incremented to 42, when he loads again, time will equal 42 (and not 0).
+But you're still free not to use typing. Just use `var`.
+
+#### Init blocks
+
+The init block is called every time the player opens the book _and_ before he/she loads a savegame. It should contain initializations of the variables that you define in `<declare>` but can't initialize there. This is relatively rare but important. For example:
+
+    <declare>
+      CustomSimulationClass simulation;
+    </declare>
+
+    <init>
+      // The CustomSimulationClass takes [this] in order to be able to do its work.
+      // The line below wouldn't work in <declare>.
+      simulation = new CustomSimulationClass(this);
+    </init>
+
+Remember that the init block is run _before_ any savegame is loaded. This means that when the player saves a game after `time` has been incremented to 42, when he loads again, time will equal 42 (and not 0).
 
 ##### A note about classes
 
@@ -396,9 +425,9 @@ Classes are at their most useful when used as **custom types** for objects in th
 
 Now, you can do this in your `.egb` file:
 
-    <variables>
-      skippy = new Spider("Skippy");
-    </variables>
+    <declare>
+      Spider skippy = new Spider("Skippy");
+    </declare>
 
     <script>
       echo("You see your toilet friend ${skippy.name} here.");
@@ -453,6 +482,12 @@ Scripter is a class that encapsulates all the functionality related to communica
 This is what the book can then look like after being converted from `.egb` to a Dart file. Egamebook authors *shouldn't* need to know the structure of such Dart files. This is what we're shielding them from by the `.egb` format.
 
     class ScripterImpl extends EgbScripter {
+
+      /* These are the contents of the `<declare>` blocks. */
+      int time;
+      String weapon;
+      String name, surname;
+      int age;
 
       ScripterImpl() : super() {
         /* These are the pages, and the blocks of texts and the script blocks inside them. */
@@ -511,7 +546,7 @@ This is what the book can then look like after being converted from `.egb` to a 
       }
 
       void initBlock() {
-        /* These are the contents of the `<variables>` blocks. */
+        /* These are the contents of the `<init>` blocks. */
         name = "Filip";
         age = 30;
         surname="Hracek";
