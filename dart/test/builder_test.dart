@@ -79,7 +79,7 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
-      
+
       test("reads pageGroups", () {
         var callback = expectAsync((Builder b) {
           expect(b.pageGroups,
@@ -93,7 +93,7 @@ void main() {
           expect(b.pages[b.pageHandles["Single"]].group,
               isNull);
         });
-        new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);       
+        new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
       });
 
       test("reads UTF8 pages", () {
@@ -140,7 +140,7 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("simple_8textblocks.egb"))).then(callback);
       });
-      
+
       test("reads text block at end of file", () {
         var callback = (var b) {
           var lastpage = b.pages.last;
@@ -155,7 +155,7 @@ void main() {
         };
         new Builder().readEgbFile(new File(getPath("simple_textblock_eof.egb"))).then(expectAsync(callback));
       });
-      
+
       test("reads last text block at end of bigger file", () {
         var callback = (var b) {
           var lastpage = b.pages.last;
@@ -164,16 +164,16 @@ void main() {
           expect(lastpage.blocks[1].type,
             BuilderBlock.BLK_TEXT);
           expect(lastpage.blocks[1].lineStart,
-              140);
+              139);
           expect(lastpage.blocks[1].lineEnd,
-              140);
+              139);
         };
         new Builder().readEgbFile(new File(getPath("full_project.egb"))).then(expectAsync(callback));
       });
-      
+
       test("throws on duplicate pagenames", () {
         new Builder().readEgbFile(new File(getPath("duplicate_pagenames.egb")))
-        .then((_) => fail("Building duplicate_pagenames.egb should fail."), 
+        .then((_) => fail("Building duplicate_pagenames.egb should fail."),
           onError: expectAsync((e) {
             expect(e, isNotNull);
         }));
@@ -218,7 +218,7 @@ void main() {
 //        });
 //        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
 //      });
-      
+
       test("detects individual choiceBlocks", () {
         var b = new Builder();
         expect(b.parseOneLineChoice(""),
@@ -230,7 +230,7 @@ void main() {
         expect(messy.type, BuilderBlock.BLK_CHOICE);
         expect(messy.options["string"], "A more meesy choice");
         expect(messy.options["goto"], "goto");
-        var auto = b.parseOneLineChoice("- [automaticGoto]"); 
+        var auto = b.parseOneLineChoice("- [automaticGoto]");
         expect(auto, isNotNull);
         expect(auto.type, BuilderBlock.BLK_CHOICE);
         expect(auto.options["string"], isNull);
@@ -255,11 +255,11 @@ void main() {
           for (var i = 0; i <= 10; i++) {
             expect(b.pages[0].blocks[i].type,
               isNot(
-                anyOf([BuilderBlock.BLK_CHOICE, 
+                anyOf([BuilderBlock.BLK_CHOICE,
                        BuilderBlock.BLK_CHOICE_WITH_SCRIPT,
                        BuilderBlock.BLK_CHOICE_LIST])));
           }
-          
+
           // first page, second part (valid choices in one choiceList)
           var choiceList = b.pages[0].blocks[11];
           expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
@@ -290,7 +290,7 @@ void main() {
             equals("start"));
           expect(b.pages[1].blocks[0].subBlocks[4].options["script"],
             equals("this script } should;"));
-          
+
           // third page
           expect(b.pages[2].blocks[0].type, BuilderBlock.BLK_CHOICE_LIST);
           expect(b.pages[2].blocks[0].subBlocks, hasLength(2));
@@ -303,7 +303,7 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
       });
-      
+
       test("detects multiline choices", () {
         new Builder().readEgbFile(new File(getPath("choices_multiline.egb")))
         .then(expectAsync((Builder b) {
@@ -338,7 +338,7 @@ void main() {
               isNotNull);
         }));
       });
-      
+
       test("detects choices as pageHandlers in pages", () {
         var callback = expectAsync((Builder b) {
           expect(b.pages[b.pageHandles["Day1.WakeUp"]].gotoPageNames,
@@ -349,30 +349,18 @@ void main() {
         new Builder().readEgbFile(new File(getPath("full_project.egb"))).then(callback);
       });
 
-      test("detects <classes>", () {
+      test("detects <declare>", () {
         var callback = expectAsync((var b) {
           expect(b.initBlocks,
-            hasLength(4));
+            hasLength(2));
           expect(b.initBlocks[0].type,
-            equals(BuilderInitBlock.BLK_CLASSES));
+            equals(BuilderInitBlock.BLK_DECLARE));
           expect(b.initBlocks[0].lineStart,
-            equals(7));
+            equals(2));
           expect(b.initBlocks[0].lineEnd,
-            equals(12));
+            equals(6));
         });
-        new Builder().readEgbFile(new File(getPath("classes_4blocks.egb"))).then(callback);
-      });
-
-      test("detects <CLASSES>", () {
-        var callback = expectAsync((var b) {
-          expect(b.initBlocks[1].type,
-            equals(BuilderInitBlock.BLK_CLASSES));
-          expect(b.initBlocks[1].lineStart,
-            equals(31));
-          expect(b.initBlocks[1].lineEnd,
-            equals(36));
-        });
-        new Builder().readEgbFile(new File(getPath("classes_4blocks.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("declare.egb"))).then(callback);
       });
 
       test("detects different init blocks", () {
@@ -380,62 +368,62 @@ void main() {
           expect(b.initBlocks,
             hasLength(3));
           expect(b.initBlocks[0].type,
-            equals(BuilderInitBlock.BLK_FUNCTIONS));
+            equals(BuilderInitBlock.BLK_DECLARE));
           expect(b.initBlocks[0].lineStart,
             equals(4));
           expect(b.initBlocks[0].lineEnd,
-            equals(9));
+            equals(6));
           expect(b.initBlocks[1].type,
-            equals(BuilderInitBlock.BLK_CLASSES));
+            equals(BuilderInitBlock.BLK_INIT));
           expect(b.initBlocks[1].lineStart,
-            equals(28));
+            equals(25));
           expect(b.initBlocks[1].lineEnd,
-            equals(33));
+            equals(27));
           expect(b.initBlocks[2].type,
-            equals(BuilderInitBlock.BLK_VARIABLES));
+            equals(BuilderInitBlock.BLK_DECLARE));
           expect(b.initBlocks[2].lineStart,
-            equals(55));
+            equals(49));
           expect(b.initBlocks[2].lineEnd,
-            equals(60));
+            equals(51));
         });
         new Builder().readEgbFile(new File(getPath("initblocks_all.egb"))).then(callback);
       });
 
       test("plays well around text blocks", () {
         var callback = expectAsync((var b) {
-          var variables = b.initBlocks[1];
+          var declare = b.initBlocks[1];
           var textblock1 = b.pages[0].blocks[0];
           var textblock2 = b.pages[0].blocks[1];
-          expect(variables.type,
-            equals(BuilderInitBlock.BLK_VARIABLES));
-          expect(variables.lineStart,
+          expect(declare.type,
+            equals(BuilderInitBlock.BLK_DECLARE));
+          expect(declare.lineStart,
+            equals(19));
+          expect(declare.lineEnd,
             equals(21));
-          expect(variables.lineEnd,
-            equals(23));
           expect(textblock1.type,
             equals(BuilderBlock.BLK_TEXT));
           expect(textblock2.type,
             equals(BuilderBlock.BLK_TEXT));
           expect(textblock1.lineStart,
-            equals(20));
+            equals(18));
           expect(textblock1.lineEnd,
-            equals(20));
+            equals(18));
           expect(textblock2.lineStart,
-            equals(24));
+            equals(22));
           expect(textblock2.lineEnd,
-            equals(24));
+            equals(22));
         });
         new Builder().readEgbFile(new File(getPath("textblock_initblock_proximity.egb"))).then(callback);
       });
 
       // TODO: check throws
-//      test("throws on nested tag", () {
-//        expect(wrapAsync(new Builder().readEgbFile(new File(getPath("initblocks_nested.egb")))),
-//               throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));
-//      });
+      test("throws on nested tag", () {
+        new Builder().readEgbFile(new File(getPath("initblocks_nested.egb")))
+        .catchError(expectAsync((error) => print(error)));
+      });
 
     });
-    
+
     group('scripts', () {
 
       test("is detected", () {
@@ -449,19 +437,19 @@ void main() {
           expect(script1.lineStart,
             equals(15));
           expect(script1.lineEnd,
-            equals(17));
+            equals(18));
           expect(script2.type,
             equals(BuilderBlock.BLK_SCRIPT));
           expect(script2.lineStart,
-            equals(37));
+            equals(35));
           expect(script2.lineEnd,
-            equals(38));
+            equals(36));
           expect(notscript.type,
             isNot(BuilderBlock.BLK_SCRIPT));
           expect(notscript.lineStart,
-            equals(49));
+            equals(47));
           expect(notscript.lineEnd,
-            equals(49));
+            equals(47));
         });
         new Builder().readEgbFile(new File(getPath("script_2tags.egb"))).then(callback);
       });
@@ -580,7 +568,7 @@ void main() {
       });
 
     });
-    
+
 //    group('graphML', () {
 //
 //      test("creates XML", () {
@@ -621,27 +609,27 @@ void main() {
 //        });
 //      });
 //    });
-    
+
     group('egb writer', () {
-      
+
       test("updates egb file from builder instance", () {
         File orig = new File(getPath("update_egb_file_original.egb"));
         File egb = new File(getPath("update_egb_file.egb"));
-        
+
         var inputStream = orig.openRead();
         var ioSink = egb.openWrite();
         inputStream.pipe(ioSink)
         .then(expectAsync((_) {
           new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
           .then((Builder b) {
-            b.pages.add(new BuilderPage("Programatically added page", 
+            b.pages.add(new BuilderPage("Programatically added page",
                 b.pages.last.index + 1));
             b.pageHandles["Programatically added page"] = b.pages.last.index;
             b.pages[3].gotoPageNames.add("Programatically added page");
             return b.updateEgbFile();
           })
           .then(expectAsync((Builder b) {
-            expect(b.pages.last.name, 
+            expect(b.pages.last.name,
             "Programatically added page");
             expect(b.pages[3].gotoPageNames,
                 contains("Programatically added page"));

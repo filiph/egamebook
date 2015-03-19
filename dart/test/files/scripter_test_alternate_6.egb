@@ -7,35 +7,11 @@ Email:      abc@example.com
 Keywords:   crimi, thriller  
 Copyright:  Creative Commons  
 
-<classes>
-class A {
-  int i;
-}
+<import 'scripter_test_alternate_6_lib.dart' />
 
-// for custom class persistence testing
-class ClassWithMapMethods implements Saveable {
-  int i;
-  String s;
-  Map m = const {
-    "a": 1,
-    "b": 2
-  };
-  
-  String className = "ClassWithMapMethods";
-  toMap() => {"i": i, "s": s, "m": m};
-  
-  ClassWithMapMethods();
-  
-  ClassWithMapMethods.fromMap(map) {
-    updateFromMap(map);
-  }
-  
-  updateFromMap(map) {
-    i = map["i"];
-    s = map["s"];
-  }
-}
-</classes>
+<declare>
+  int time;
+</declare>
 
 ---
 aaa
@@ -44,6 +20,7 @@ Starting. Setting time to 0.
 
 <script>
   time = 0;
+  ClassWithMapMethods customInstance;
 </script>
 
 - ABC [bbb]
@@ -54,11 +31,11 @@ bbb
 
 Blah.
 
-<variables>
-customInstance = new ClassWithMapMethods();
-customInstance.i = 10;
-customInstance.s = "Hello World";
-</variables>
+<init>
+  customInstance = new ClassWithMapMethods();
+  customInstance.i = 10;
+  customInstance.s = "Hello World";
+</init>
 
 - efger [zzz]
 - gegreg [ccc]

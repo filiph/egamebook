@@ -7,20 +7,18 @@ Email:      abc@example.com
 Keywords:   crimi, thriller  
 Copyright:  Creative Commons  
 
-<classes>
-class A {
-  int i;
-}
-</classes>
+<declare>
+  var a;
+</declare>
 
 ---
 Day1.warnAmy
 [[ visitOnce ]]
 
 You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow.
-<variables>
-surname="Hracek";
-</variables>
+<declare>
+var surname="Hracek";
+</declare>
 "Wha' uppp?"
 
 "Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know."

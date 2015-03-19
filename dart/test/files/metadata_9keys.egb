@@ -18,6 +18,10 @@ You woke up and quickly realize the house is surrounded by the police. "Oh Rick,
 
 You have a minute at most before the pigs kick the door in.
 
+<declare>
+  int time;
+</declare>
+
 <script>
   time = 0;
 </script>

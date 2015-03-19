@@ -1,0 +1,19 @@
+
+<declare>
+	int a;
+	String b;
+	/* A random comment. */
+</declare>
+
+---
+start
+
+Hello.
+
+<script>
+  a = 3;
+</script>
+
+<declare>
+	var something;
+</declare>
