@@ -72,7 +72,7 @@ class Action {
        this.needsToBeCarried: false, this.submenu: null, bool onlyOnce: false,
        int maxPerformCount: null, this.isActive: true})
       : maxPerformCount = (onlyOnce ? 1 : maxPerformCount) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
   }
   
   /// A forwarding constructor than merely points to a different pageName.

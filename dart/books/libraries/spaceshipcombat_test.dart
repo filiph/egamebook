@@ -7,7 +7,7 @@ import 'spaceshipcombat.dart';
 import 'storyline.dart';
 
 void main() {
-  isInInitBlock = true;
+  isInInitOrDeclareBlock = true;
   var player = new Pilot.player();
   
   // setup ships
@@ -61,7 +61,7 @@ void main() {
   combat.onFinishedGoto = "something";
   
   player.timeToNextInteraction = 1;
-  isInInitBlock = false;
+  isInInitOrDeclareBlock = false;
   
   // ---
   // combatloop

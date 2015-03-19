@@ -14,7 +14,7 @@ class ActorSociety implements ZilSaveable {
   ActorSociety(this._zil);
   
   void add(AIActor npc) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
     npcs.add(npc);
   }
   

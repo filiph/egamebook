@@ -76,7 +76,7 @@ class Item extends Entity implements Located, Described, ZilSaveable {
       String takeDescription, String takeInfinitive}) 
       : _takeDescription = takeDescription, _takeInfinitive = takeInfinitive,
         super(name, nameIsProperNoun, pronoun, Actor.NEUTRAL, false) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
     actions.forEach((action) => action.item = this);
     this.isActive = isActive;
     

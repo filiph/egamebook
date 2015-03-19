@@ -150,14 +150,14 @@ class Timeline implements Saveable {
   Function _mainLoop;
   Function get mainLoop => _mainLoop;
   set mainLoop(Function f) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
     _mainLoop = f;
   }
 
   bool finished = false;
 
   Timeline() {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
   }
 
   /**
@@ -173,7 +173,7 @@ class Timeline implements Saveable {
    */
   TimedEvent schedule(int time, Object action, {int priority: 0,
       int type: TimedEvent.SINGULAR}) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
     TimedEvent event;
     if (action is String) {
       event = new StringTimedEvent(action, priority: priority, type: type);

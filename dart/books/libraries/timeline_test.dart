@@ -6,12 +6,12 @@ import 'timeline.dart';
 void main() {
   test("mainLoop works", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
     };
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
     timeline.elapse(10);
     var str = textBuffer.toString();
     expect(str, contains("9 past the hour"));
@@ -19,7 +19,7 @@ void main() {
 
   test("custom event at given time works", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -29,7 +29,7 @@ void main() {
 
     timeline.schedule(7, "Bam.", type: TimedEvent.INFO);
     timeline.schedule(7, "Bim.", priority: 10, type: TimedEvent.INFO);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
 
     timeline.elapse(10);
     var str = textBuffer.toString();
@@ -41,7 +41,7 @@ void main() {
 
   test("length works", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.maxTime = 9;
     timeline.mainLoop = () {
@@ -51,7 +51,7 @@ void main() {
     timeline.schedule(6, () => echo("Closure event."));
     timeline.schedule(7, "Bam.");
     timeline.schedule(7, "Bim.", priority: 10);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
 
     timeline.elapse(10);
     var str = textBuffer.toString();
@@ -63,7 +63,7 @@ void main() {
 
   test("elapseToTime and elapse are equivalent", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -72,7 +72,7 @@ void main() {
     timeline.schedule(6, () => echo("Closure event."));
     timeline.schedule(7, "Bam.");
     timeline.schedule(7, "Bim.", priority: 10);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
     timeline.time = 0;
     timeline.elapse(10);
     var str = textBuffer.toString();
@@ -85,7 +85,7 @@ void main() {
 
   test("advancing time one tick at a time is equivalent to in bulk", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
@@ -96,7 +96,7 @@ void main() {
     timeline.schedule(6, () => echo("Closure event."));
     timeline.schedule(7, "Bam.");
     timeline.schedule(7, "Bim.", priority: 10);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
     timeline.time = 0;
     int ticks = 10;
     timeline.elapse(ticks);
@@ -112,13 +112,13 @@ void main() {
 
   test("progress events show in non-interactive elapses", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("The hand on the clock moves to ${timeline.time} past the hour.");
     };
     timeline.schedule(4, "Progress action.", type: TimedEvent.TIME_PROGRESS);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
     timeline.time = 0;
     int ticks = 10;
     timeline.elapse(ticks, interactive: false);
@@ -135,7 +135,7 @@ void main() {
 
   test("rescheduling works", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
     timeline.mainLoop = () {
       echo("Time: ${timeline.time}.");
@@ -144,7 +144,7 @@ void main() {
     var functionEv = timeline.schedule(null, () => echo("Closure event."), type: TimedEvent.INFO);
     timeline.schedule(7, "Bam.", type: TimedEvent.INFO);
     timeline.schedule(7, "Bim.", priority: 10, type: TimedEvent.INFO);
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
 
     timeline.elapseToTime(3);
     timeline.reschedule(stringEv, timeline.time + 1);
@@ -159,7 +159,7 @@ void main() {
   group("major events", () {
     test("delay those after them", () {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.schedule(1, "String event on 1.", type: TimedEvent.INFO);
       timeline.schedule(5, "String event on 5.", type: TimedEvent.INFO);
@@ -178,7 +178,7 @@ void main() {
 
     test("are fired at the end when elapse is interactive", () {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.schedule(1, "String event on 1.", type: TimedEvent.INFO);
       timeline.schedule(5, "String event on 5.", type: TimedEvent.INFO);
@@ -196,7 +196,7 @@ void main() {
     test("are fired at the end when elapse is interactive, "
         "when elapsing tick by tick", () {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.schedule(1, "String event on 1.", type: TimedEvent.INFO);
       timeline.schedule(5, "String event on 5.", type: TimedEvent.INFO);
@@ -215,7 +215,7 @@ void main() {
 
     test("aren't fired at all when elapse is non-interactive", () {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.schedule(1, "String event on 1.", type: TimedEvent.INFO);
       timeline.schedule(5, "String event on 5.", type: TimedEvent.INFO);
@@ -233,7 +233,7 @@ void main() {
     test("aren't fired themselves but allow non-major events scheduled on same "
         "time to be fired", () {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.schedule(1, "String event on 1.", type: TimedEvent.INFO);
       timeline.schedule(7, "String event on 7.", type: TimedEvent.INFO);
@@ -254,7 +254,7 @@ void main() {
 
     setUp(() {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       timeline = new Timeline();
     });
 
@@ -262,7 +262,7 @@ void main() {
       timeline.schedule(1, "Normal string event on 1.", type: TimedEvent.INFO);
       timeline.schedule(2, "Singular action on 2.", type: TimedEvent.SINGULAR);
       timeline.schedule(3, "Singular action on 3.", type: TimedEvent.SINGULAR);
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
 
       timeline.elapse(10);
 
@@ -280,7 +280,7 @@ void main() {
       timeline.schedule(1, "Normal string event on 1.", type: TimedEvent.INFO);
       timeline.schedule(2, "Singular action on 2.", type: TimedEvent.SINGULAR);
       timeline.schedule(3, "Singular action on 3.", type: TimedEvent.SINGULAR);
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
 
       int ticks = 10;
       for (int i = 0; i < ticks; i++) {
@@ -308,14 +308,14 @@ void main() {
 
     setUp(() {
       textBuffer.clear();
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       timeline = new Timeline();
     });
 
     test("works", () {
       timeline.schedule(2, () => echo("While ${timeline.whileString} there is "
           "a loud noise coming from somewhere afar."));
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
 
       timeline.elapse(10, whileString: "you are fixing the hyperdrive");
 
@@ -330,7 +330,7 @@ void main() {
                                           "makes another anouncement.", ""));
         echo("\"My hyperdrive seems to be ready\", the Bodega says.");
       });
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
 
       timeline.elapse(10, whileString: "you are fixing the hyperdrive");
 
@@ -345,7 +345,7 @@ void main() {
                                           "makes another anouncement.", ""));
         echo("\"My hyperdrive seems to be ready\", the Bodega says.");
       });
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
 
       timeline.elapse(10);
 
@@ -356,9 +356,9 @@ void main() {
 
   test("throws outside initblock", () {
     textBuffer.clear();
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     var timeline = new Timeline();
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
     expect(() {
       timeline.mainLoop = () => echo("Tick tock.");
     }, throwsA(new isInstanceOf<StateError>()));
@@ -371,7 +371,7 @@ void main() {
     var stringEv;
     var functionEv;
     var createNewTimeline = () {
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       var timeline = new Timeline();
       timeline.mainLoop = () {
         echo("Time: ${timeline.time}.");
@@ -380,7 +380,7 @@ void main() {
       functionEv = timeline.schedule(null, () => echo("Closure event."), type: TimedEvent.INFO);
       timeline.schedule(7, "Bam.", type: TimedEvent.INFO);
       timeline.schedule(7, "Bim.", priority: 10, type: TimedEvent.INFO);
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
       return timeline;
     };
 

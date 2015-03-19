@@ -148,11 +148,11 @@ void nextScript(ScriptBlock f) {
   _nextScriptStack.addLast(f);
 }
 
-/// Constructors and functions can check for [isInInitBlock] and might choose
+/// Constructors and functions can check for [isInInitOrDeclareBlock] and might choose
 /// to throw an Exception. For example, if an unsaveable property is changed
 /// during a <script> block.
-void throwIfNotInInitBlock([String customMessage = ""]) {
-  if (isInInitBlock == false) {
+void throwIfNotInInitOrDeclareBlock([String customMessage = ""]) {
+  if (isInInitOrDeclareBlock == false) {
     throw new StateError("An initialization code meant for the initBlock "
         "(inside the <variables> tag) was called outside of it (probably "
         "in a <script> tag). $customMessage");
@@ -160,7 +160,7 @@ void throwIfNotInInitBlock([String customMessage = ""]) {
 }
 
 /// Internal state variable for [_throwIfNotInInitBlock].
-bool isInInitBlock = false;
+bool isInInitOrDeclareBlock = true;
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
@@ -607,7 +607,7 @@ abstract class EgbScripter {
     _points.clear();
     if (pageMap != null) pageMap.clearState();
 
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     try {
       initBlock(); // run contents of <init>
     } catch (e, stacktrace) {
@@ -618,7 +618,7 @@ abstract class EgbScripter {
     // Just so that [vars] is filled with some data before we try to
     // run initBlock() etc.
     populateVarsFromState();
-    isInInitBlock = false;
+    isInInitOrDeclareBlock = false;
   }
 
   /// Runs the specified script block, catches exceptions and returns generated
