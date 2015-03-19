@@ -8,7 +8,7 @@ import 'saveable.dart';
 /**
  * Savegame stores information of one point in time of the gameplay. This
  * includes the [currentPageName], information about visited pages
- * ([pageMapState] and [vars] defined by author. 
+ * ([pageMapState] and [vars] defined by author.
  */
 class EgbSavegame {
   /// The page on which this savegame was created. Savegames are always created
@@ -20,34 +20,34 @@ class EgbSavegame {
   /// The serializable part of the [:vars:] map.
   Map<String,Object> vars;
   // TODO: points -- NO!! points are per playthrough, but shouldn't be saved with savegame (i think)
-  
+
   /**
    * Every savegame can define the text history that should prepend it.
-   * 
+   *
    * When a savegame is opened, [textHistory] is printed so that player is
    * reminded about the context.
-   * 
+   *
    * Normally, [textHistory] is the rendered contents of the current
    * page.
    */
   String textHistory;
-  
+
   /// The [uid] uniquely defines this savegame for later retrieval.
   String uid;
-  
+
   /// Timestamp of the moment when this savegame was created, in milliseconds
   /// since Epoch.
   int timestamp;
-  
+
   EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
     timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
-  
+
   EgbSavegame.fromJson(String json) {
     Map<String,dynamic> saveMap = JSON.decode(json);
-    if (!saveMap.containsKey("currentPageName") 
+    if (!saveMap.containsKey("currentPageName")
         || !saveMap.containsKey("vars")) {
       throw new InvalidSavegameException("Invalid JSON for EgbSavegame. "
           "Doesn't contain required fields 'currentPageName' or 'vars'. "
@@ -62,11 +62,11 @@ class EgbSavegame {
       textHistory = saveMap["previousText"];
     }
   }
-  
+
   factory EgbSavegame.fromMessage(EgbMessage message) {
     return new EgbSavegame.fromJson(message.strContent);
   }
-  
+
   EgbMessage toMessage(int type) {
     if (type != EgbMessage.SAVE_GAME && type != EgbMessage.LOAD_GAME) {
       throw "Cannot create EgbMessage of type $type. Can only be MSG_SAVE_GAME "
@@ -77,7 +77,7 @@ class EgbSavegame {
     message.strContent = toJson();
     return message;
   }
-  
+
   String toJson() {
     Map<String,dynamic> saveMap = new Map<String,dynamic>();
     saveMap["uid"] = uid;
@@ -91,23 +91,23 @@ class EgbSavegame {
     }
     return JSON.encode(saveMap);
   }
-  
+
   String toString() => toJson();
-  
+
   /**
    * Returns true if variable is Saveable or a primitive type.
    */
   static bool _isSaveable(dynamic variable) {
-    bool primitivelySaveable = (variable == null || variable is String || 
-        variable is int || variable is num || variable is bool || 
+    bool primitivelySaveable = (variable == null || variable is String ||
+        variable is int || variable is num || variable is bool ||
         variable is List || variable is Map);
     if (primitivelySaveable) return true;
     return _isCustomSaveableClass(variable);
   }
-  
+
   static bool _isCustomSaveableClass(dynamic variable) {
     return variable is Saveable; // TODO cease to use if this really works
-    
+
     // The below is an ugly way to check for saveable-ness without
     // the need of full scale mirroring.
 //    bool customClassSaveable;
@@ -119,19 +119,19 @@ class EgbSavegame {
 //    }
 //    return customClassSaveable == true;
   }
-  
+
   /**
-   * Takes a variable and copies it to a variable that only contains 
+   * Takes a variable and copies it to a variable that only contains
    * primitive types (null, String, int, num, bool, List, Map) ready
    * to be JSONified.
-   * 
+   *
    * When a non-primitive type is detected and it supports the toMap()
    * function, it will be included. Everything else will be ignored.
-   * 
+   *
    * Works recursively, so a Map of Maps is a valid input.
    */
   static dynamic _dissolveToPrimitives(dynamic input) {
-    if (input == null || input is String || input is int || input is num 
+    if (input == null || input is String || input is int || input is num
         || input is bool) {
       return input;
     } else if (input is List) {
@@ -156,15 +156,15 @@ class EgbSavegame {
       saveableMap["_class"] = (input as Saveable).className;
       return _dissolveToPrimitives(saveableMap);
     } else {
-      throw "Function _dissolveToPrimitivess called with a non-saveable " 
+      throw "Function _dissolveToPrimitivess called with a non-saveable "
             "argument type.";
     }
   }
-  
+
   /**
    * Takes output of [_dissolveToPrimitives] and assembles it back to
    * non-primitive types (such as custom classes).
-   * 
+   *
    * When called with [updateExisting], that value will be updated instead
    * of created anew. This only applies to custom classes, all primitives
    * will be overwritten.
@@ -172,7 +172,7 @@ class EgbSavegame {
   static dynamic _assembleFromPrimitives(dynamic input,
                                          Map<String,Function> constructors,
                                          {dynamic updateExisting}) {
-    if (input == null || input is String || input is int || input is num 
+    if (input == null || input is String || input is int || input is num
         || input is bool) {
       return input;
     } else if (input is List) {
@@ -208,12 +208,12 @@ class EgbSavegame {
       }
       //return _dissolveToPrimitives(input.toMap());
     } else {
-      throw "Function _assembleFromPrimitives called with a non-primitive " 
+      throw "Function _assembleFromPrimitives called with a non-primitive "
             "argument type.";
     }
   }
-  
-  static void importSavegameToVars(EgbSavegame savegame, 
+
+  static void importSavegameToVars(EgbSavegame savegame,
                                    Map<String,dynamic> vars,
                                    {Map<String,Function> constructors}) {
     // assemble and copy / update saved variables over vars

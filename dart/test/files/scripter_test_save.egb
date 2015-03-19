@@ -9,6 +9,11 @@ Copyright:  Creative Commons
 
 <import 'scripter_test_save_lib.dart'/>
 
+<declare>
+  var nullified, integer, numeric, string, nonSaveable, list1, list2,
+      map1, map2, saveable;
+</declare>
+
 ---
 aaa
 

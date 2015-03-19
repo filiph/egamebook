@@ -3,7 +3,6 @@ library egb_scripter;
 
 import 'dart:isolate';
 import 'dart:collection';
-import 'dart:mirrors';
 
 import 'src/shared/user_interaction.dart';
 import 'src/persistence/savegame.dart';
@@ -187,6 +186,8 @@ abstract class EgbScripter {
 
   /// The ChoiceList to be shown on next occasion.
   EgbSavegame _choicesToShow;
+
+  PointsCounter get points => _points;
 
   /// Goto links (page1 -> page 2) that have been shown to the player, but
   /// not picked. Links are represented by hashes created by
@@ -608,33 +609,16 @@ abstract class EgbScripter {
 
     isInInitBlock = true;
     try {
-      initBlock(); // run contents of <variables>
+      initBlock(); // run contents of <init>
     } catch (e, stacktrace) {
       interface.reportError("Author Exception in initBlock() (<variables>)",
           "$e\n$stacktrace");
       throw e;
     }
+    // Just so that [vars] is filled with some data before we try to
+    // run initBlock() etc.
+    populateVarsFromState();
     isInInitBlock = false;
-  }
-
-  noSuchMethod(Invocation invocation) {
-    String memberName = MirrorSystem.getName(invocation.memberName);
-    if (invocation.isGetter) {
-      return vars[memberName];
-    } else if (invocation.isSetter) {
-      memberName = memberName.replaceAll("=", "");
-          // fix feature in Dart that sets memberName to "variable=" when setter
-      vars[memberName] = invocation.positionalArguments[0];
-      return null;
-    } else if (invocation.isMethod && vars.containsKey(memberName) &&
-        vars[memberName] is Function) {
-      return Function.apply(vars[memberName], invocation.positionalArguments,
-          invocation.namedArguments);
-    } else {
-      throw new NoSuchMethodError(this, invocation.memberName,
-          invocation.positionalArguments, null //TODO: invocation.namedArguments
-      );
-    }
   }
 
   /// Runs the specified script block, catches exceptions and returns generated
@@ -707,7 +691,8 @@ abstract class EgbScripter {
 
     if (pageMap[savegame.currentPageName] == null) {
       throw new IncompatibleSavegameException("Trying to load page "
-          "'${savegame.currentPageName}' which doesn't exist in current " "egamebook.");
+          "'${savegame.currentPageName}' which doesn't exist in current "
+          "egamebook.");
     }
     currentPage = pageMap[savegame.currentPageName];
 

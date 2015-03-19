@@ -11,6 +11,7 @@ Copyright:  Creative Commons
 
 <declare>
   int time;
+  ClassWithMapMethods customInstance;
 </declare>
 
 ---
