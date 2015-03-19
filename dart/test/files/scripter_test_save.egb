@@ -7,36 +7,12 @@ Email:      abc@example.com
 Keywords:   crimi, thriller  
 Copyright:  Creative Commons  
 
-<classes>
-class A {
-  int i;
-}
+<import 'scripter_test_save_lib.dart'/>
 
-// for Persistence testing
-class ClassWithMapMethods implements Saveable {
-  int i;
-  String s;
-  Map m = const {
-    "a": 1,
-    "b": 2
-  };
-  
-  String className = "ClassWithMapMethods";
-  toMap() => {"i": i, "s": s, "m": m};
-  
-  ClassWithMapMethods();
-  
-  ClassWithMapMethods.fromMap(map) {
-    updateFromMap(map);
-  }
-  
-  updateFromMap(map) {
-    i = map["i"];
-    s = map["s"];
-  }
-}
-
-</classes>
+<declare>
+  var nullified, integer, numeric, string, nonSaveable, list1, list2,
+      map1, map2, saveable;
+</declare>
 
 ---
 aaa

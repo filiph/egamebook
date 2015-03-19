@@ -1,9 +1,11 @@
 # Stats
 
-<variables>
-  hp = new Stat<int>("HP", (value) => "$value HP", initialValue: 100);
-  gold = new Stat<int>("gold", (value) => "¤$value", initialValue: 0, show: false);
-</variables>
+<declare>
+  Stat<int> hp = 
+      new Stat<int>("HP", (value) => "$value HP", initialValue: 100);
+  Stat<int> gold = 
+      new Stat<int>("gold", (value) => "¤$value", initialValue: 0, show: false);
+</declare>
 
 ---
 start

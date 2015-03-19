@@ -13,7 +13,8 @@ start
 You are in a room full of spiders. The spiders look annoyed.
 
  < sCRIPT>
-  this should, though
+  // this should, though
+  b = 3;
 </script>
 
 ---     
@@ -24,12 +25,9 @@ You try to squash the spiders, but there's too many of them. Oh god,
 they're eating your face off now!
 
 !
-<CLASSES>  
-  class B {
-    B() {
-    }
-  }
-</classes>
+<declare>  
+  int b = 2;
+</declare>
 This is just great.
 
 This one below is a script! (Though it's empty.)
@@ -52,9 +50,6 @@ This is also not a <script>, of course!
 exit
 
 
-<variables>          
-  class D {
-    D() {
-    }
-  }
-</VARIABLES>
+<init>          
+  b = 3;
+</init>

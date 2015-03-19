@@ -13,7 +13,7 @@ void main() {
     AIActor gorilla;
     
     setUp(() {
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       zil = new Zil(null);
       // Init
       captainsGun = new Item(zil, "captain's gun", 
@@ -54,18 +54,18 @@ void main() {
       );
       new Room(zil, "Hatchway", "the hatchway", []);
       
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
     });
     
     
     test("AI actors move", () {
-      isInInitBlock = true;
+      isInInitOrDeclareBlock = true;
       gorilla.currentGoal = new ArbitrarySetOfGoals(gorilla, 
           [new TestPickUpAndComment(gorilla, captainsGun),
            new GoToRoom(gorilla, leftCorridor, zil.rooms),
            new GoToRoom(gorilla, bridge, zil.rooms),
            new Say(gorilla, "Hi again!")]);
-      isInInitBlock = false;
+      isInInitOrDeclareBlock = false;
       
       zil.player.setLocationFromCurrentPage("Exploration.Bridge");
       zil.update(10);
@@ -97,7 +97,7 @@ void main() {
     var zil, captainsGun, bridge, leftCorridor;
     
     setUp(() {
-          isInInitBlock = true;
+          isInInitOrDeclareBlock = true;
           zil = new Zil(null);
           // Init
           captainsGun = new Item(zil, "captain's gun", 
@@ -135,7 +135,7 @@ void main() {
           );
           new Room(zil, "Hatchway", "the hatchway", []);
           
-          isInInitBlock = false;
+          isInInitOrDeclareBlock = false;
         });
     
     test("whileString", () {

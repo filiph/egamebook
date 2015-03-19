@@ -6,7 +6,7 @@ class ZilActor extends Actor implements Located, ZilSaveable {
     Iterable<Item> items: const [], this.actions: const []})
     : super(name: name, nameIsProperNoun: nameIsProperNoun, team: team, 
         isPlayer: isPlayer, pronoun: pronoun) {
-    throwIfNotInInitBlock();
+    throwIfNotInInitOrDeclareBlock();
     actions.forEach((action) {
       if (action == null) {
         throw new NullInOptionalParametersList("ZilActor", name, "actions"); 

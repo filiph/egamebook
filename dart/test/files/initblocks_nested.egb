@@ -1,16 +1,16 @@
 Name:   Example
 Author: John Doe
 
-<functions>
+<declare>
   class A {
     A() {
     }
   }
 
-  <classes>
+  <init>
     THIS SHOULD THROW
-  </classes>
-</functions>
+  </init>
+</declare>
 
 Same here!
 

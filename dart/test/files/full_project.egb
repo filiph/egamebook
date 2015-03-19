@@ -7,11 +7,10 @@ Email:      abc@example.com
 Keywords:   crimi, thriller  
 Copyright:  Creative Commons  
 
-<classes>
-class A {
-  int i;
-}
-</classes>
+<declare>
+  int time = 0;
+  String weapon;
+</declare>
 
 ---
 Day1.WakeUp
@@ -56,10 +55,10 @@ Day1.getDressed
 You quickly grab the clothes that you left on the bedside table and get dressed. You actually manage to do it in 20 seconds in spite of being nervous as hell.
 Good!
 
-<variables>
-name = "Filip";
-age = 30;
-</variables>
+<declare>
+  String name = "Filip";
+  String age = 30;
+</declare>
 
 <script>
   time += 20;
@@ -91,9 +90,9 @@ Day1.warnAmy
 [[ visitOnce ]]
 
 You grab the phone and speed-dial number one. It takes ages for her to pick up, and when she does, she's sleepy and slow.
-<variables>
-surname="Hracek";
-</variables>
+<declare>
+  String surname = "Hracek";
+</declare>
 "Wha' uppp?"
 
 "Hey baby," you start quickly, "I have pigs outside. Rick must have talked. Go. Go somewhere safe. Somewhere I wouldn't know."

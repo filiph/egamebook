@@ -71,7 +71,7 @@ String getPath(String filename) {
 ///     .then((ui) => ui.choose("Xyz"))
 ///     .then(expectAsync((ui) => expect(ui.lastParagraph, contains("bla")))
 ///     .then((ui) => ui.quit());
-///     
+///
 ///     TODO: add generated files to a list to be deleted afterwards?
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
@@ -96,15 +96,15 @@ Future<EgbInterface> run(String dartFilename, {EgbStorage persistentStorage:
   mockInterface.setPlayerProfile(storage.getDefaultPlayerProfile());
   EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
       Uri.parse(dartFilename));
-  
+
   EgbSavegame lastSavegame;
   Set<String> playerChronology;
-  
+
   return bookProxy.init()
   .then((_) {
     mockInterface.setScripter(bookProxy);
     bookProxy.setInterface(mockInterface);
-    
+
     return mockInterface.continueSavedGameOrCreateNew();
   });
 }
@@ -283,7 +283,7 @@ void main() {
         .then(expectAsync((EgbSavegame savegame) {
           expect(mockInterface.latestOutput, contains(
                         "Scripter should still have all variables"));
-          
+
           expect(savegame.vars.length, isNonZero);
           expect(savegame.vars["nullified"], isNull);
           expect(savegame.vars["integer"], 0);
@@ -301,7 +301,7 @@ void main() {
           expect(savegame.vars["saveable"] as Map, hasLength(4));
           expect((savegame.vars["saveable"] as Map)["s"], "Řeřicha");
           expect((savegame.vars["saveable"] as Map)["m"], hasLength(2));
-          
+
           mockInterface.quit();
         }));
       });
@@ -379,7 +379,7 @@ void main() {
           expect(ui.latestChoices, hasLength(3));
           expect(ui.latestChoices[0].string, isNot("Get dressed"));
           expect(ui.latestChoices[0].string, "Call the police");
-          
+
           ui.quit();
         }));
       });

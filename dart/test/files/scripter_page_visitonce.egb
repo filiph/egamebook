@@ -1,3 +1,8 @@
+<declare>
+  int time;
+  bool lookedForWeapon, gotDressed, calledPolice;
+</declare>
+
 ---
 Morning, Day 2: continueWatching
 

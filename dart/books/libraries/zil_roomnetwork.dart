@@ -15,7 +15,7 @@ class RoomNetwork implements Graph<Room>, ZilSaveable {
   }
   
   void add(Room room) {
-    throwIfNotInInitBlock("Author can only set up room network on init.");
+    throwIfNotInInitOrDeclareBlock("Author can only set up room network on init.");
     assert(!_rooms.keys.contains(room.name));
     _rooms[room.name] = room;
   }

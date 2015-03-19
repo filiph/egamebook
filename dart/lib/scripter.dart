@@ -3,7 +3,6 @@ library egb_scripter;
 
 import 'dart:isolate';
 import 'dart:collection';
-import 'dart:mirrors';
 
 import 'src/shared/user_interaction.dart';
 import 'src/persistence/savegame.dart';
@@ -29,7 +28,7 @@ part 'src/book/points_counter.dart';
 
 /**
  * The StringBuffer which collects all echo()'d strings to put them all
- * together at the end of a script block and send them to the Runner 
+ * together at the end of a script block and send them to the Runner
  * (and therefore, the player). [textBuffer] is only used for text output
  * generated inside <script> tags (through [echo()]).
  */
@@ -50,7 +49,7 @@ void echo(String str) {
  * This is the page name that was most recently called in a [:goto(name):]
  * statement (or [:null:] if there was no recent call). Author should
  * seldom access this field. Instead, they should use the [goto] function.
- * 
+ *
  * The variable is automatically reset to [:null:] by Scripter once the jump
  * has been done.
  */
@@ -61,10 +60,10 @@ bool get gotoCalledRecently => gotoPageName != null;
  * By calling [goto()], you're saying you want to change page to [pageName].
  * You can specify the page name in full (i.e. including the group name)
  * or in short (i.e. without group name).
- * 
+ *
  * This is a global, author-facing function. It will store
  * the name of the page in a variable that is later used to get the actual
- * page inside [EgbScripter]. 
+ * page inside [EgbScripter].
  */
 void goto(String pageName) {
   gotoPageName = pageName;
@@ -81,7 +80,7 @@ bool _pointsEmbargo = false;
  * The interface with which the author can award player with points. Author
  * can either use [:points += 6:] or [:points.add(6):] or - in case he
  * wants to add a justification - [:points.add(6, "clever use of resources"):].
- * 
+ *
  * Points are a special kind of [Stat] in that they, for example, cannot be
  * received twice for visiting one page, and they aren't awarded when player
  * goes back and second-guesses a choice.
@@ -94,9 +93,9 @@ final PointsCounter _points = new PointsCounter();
 final EgbChoiceList choices = new EgbChoiceList();
 
 /**
- * Utility shortcut for creating new choices. 
- * 
- * When [deferToChoiceList] is set to [:true:], the choice will not be shown 
+ * Utility shortcut for creating new choices.
+ *
+ * When [deferToChoiceList] is set to [:true:], the choice will not be shown
  * until there is a choiceList on the page.
  */
 EgbChoice choice(String string, {String goto, ScriptBlock script, String
@@ -119,7 +118,7 @@ void showForm(Form form) {
 
 /**
  * The map holding all author-defined variables. This is accessed either
- * by [:vars["name"]:], but thanks to noSuchMethod override, 
+ * by [:vars["name"]:], but thanks to noSuchMethod override,
  * also by just [:name:].
  */
 final Map<String, Object> vars = new Map<String, Object>();
@@ -149,11 +148,11 @@ void nextScript(ScriptBlock f) {
   _nextScriptStack.addLast(f);
 }
 
-/// Constructors and functions can check for [isInInitBlock] and might choose
+/// Constructors and functions can check for [isInInitOrDeclareBlock] and might choose
 /// to throw an Exception. For example, if an unsaveable property is changed
 /// during a <script> block.
-void throwIfNotInInitBlock([String customMessage = ""]) {
-  if (isInInitBlock == false) {
+void throwIfNotInInitOrDeclareBlock([String customMessage = ""]) {
+  if (isInInitOrDeclareBlock == false) {
     throw new StateError("An initialization code meant for the initBlock "
         "(inside the <variables> tag) was called outside of it (probably "
         "in a <script> tag). $customMessage");
@@ -161,11 +160,11 @@ void throwIfNotInInitBlock([String customMessage = ""]) {
 }
 
 /// Internal state variable for [_throwIfNotInInitBlock].
-bool isInInitBlock = false;
+bool isInInitOrDeclareBlock = true;
 
 /**
  * Scripter is the class that runs the actual game and sends Messages to
- * the Interface through Runner. It is subclassed by ScripterImpl, which is 
+ * the Interface through Runner. It is subclassed by ScripterImpl, which is
  * built from .egb file by egb_builder.
  */
 abstract class EgbScripter {
@@ -187,6 +186,8 @@ abstract class EgbScripter {
 
   /// The ChoiceList to be shown on next occasion.
   EgbSavegame _choicesToShow;
+
+  PointsCounter get points => _points;
 
   /// Goto links (page1 -> page 2) that have been shown to the player, but
   /// not picked. Links are represented by hashes created by
@@ -216,15 +217,15 @@ abstract class EgbScripter {
   int currentBlockIndex;
 
   /**
-   * This Map is filled in ScripterImpl automatically by the Builder. 
+   * This Map is filled in ScripterImpl automatically by the Builder.
    * The purpose of [_constructors] is to make it possible to assemble
-   * [vars] variables of custom types (by [Class.fromMap()] constructors) 
+   * [vars] variables of custom types (by [Class.fromMap()] constructors)
    * without the need of full scale reflection.
-   * 
+   *
    * See https://www.pivotaltracker.com/story/show/43483599 for more context.
-   * 
+   *
    * An example definition of [_constructors]:
-   * 
+   *
    *     _constructors = {
    *       "ClassA": (map) => new ClassA.fromMap(map),
    *       "ClassB": (map) => new ClassB.fromMap(map)
@@ -247,9 +248,18 @@ abstract class EgbScripter {
     interface.setScripter(this);
   }
 
+  /// This method will be generated by Builder. It populates [vars] with
+  /// the current state of the variables that were declared in the
+  /// [:<declare>:] blocks.
+  void populateVarsFromState();
+  /// This method will be generated by Builder. It populates the variables that
+  /// were declared in the [:<declare>:] blocks with what is in [vars].
+  /// (This is done mostly after [vars] was updated from a savegame.
+  void extractStateFromVars();
+
   /**
    * Function is called when we're ready for the next batch of outputs from the
-   * Scripter. Goes through the blocks on the page or processes previously 
+   * Scripter. Goes through the blocks on the page or processes previously
    * registered actions.
    */
   void walk() {
@@ -351,7 +361,7 @@ abstract class EgbScripter {
   static final bool _STOP = true;
   static final bool _CONTINUE = false;
 
-  /** 
+  /**
    * Walks through the instructions, one block at a time.
    * Returns [bool] which is either [:true:] when the execution needs to stop,
    * or [:false:] when the method can be called another time.
@@ -364,7 +374,7 @@ abstract class EgbScripter {
           award.justification));
       return _STOP;
     }
-    
+
     bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
     bool atStaticChoiceList = currentBlockIndex != null && currentBlockIndex <
         currentPage.blocks.length && currentPage.blocks[currentBlockIndex] is List;
@@ -382,7 +392,7 @@ abstract class EgbScripter {
       if (actionableChoices.isNotEmpty) {
         interface.showChoices(actionableChoices)
         .then(_handleChoiceSelected)
-        .catchError((e) => DEBUG_SCR("$e"), 
+        .catchError((e) => DEBUG_SCR("$e"),
                     test: (e) => e is EgbAsyncOperationOverridenException);
         return _STOP;
       } else {
@@ -394,7 +404,7 @@ abstract class EgbScripter {
         }
       }
     }
-    
+
     if (_currentForm != null) {
       DEBUG_SCR("We have a form.");
       Stream<CurrentState> stream = interface.showForm(_currentForm);
@@ -418,7 +428,7 @@ abstract class EgbScripter {
           walk();
         }
       });
-      
+
       return _STOP;
     }
 
@@ -575,7 +585,7 @@ abstract class EgbScripter {
     // See https://www.pivotaltracker.com/story/show/52581979
     _pointsEmbargo = (_alreadyOffered(currentPage, _gotoPage) ||
         _gotoPage.visited) && (previousPage != null && !previousPage.visited);
-    
+
     DEBUG_SCR("Points embargo = $_pointsEmbargo");
 
     _preGotoPosition = new EgbScripterBlockPointer(currentPage,
@@ -596,35 +606,18 @@ abstract class EgbScripter {
     _points.clear();
     if (pageMap != null) pageMap.clearState();
 
-    isInInitBlock = true;
+    isInInitOrDeclareBlock = true;
     try {
-      initBlock(); // run contents of <variables>
+      initBlock(); // run contents of <init>
     } catch (e, stacktrace) {
-      interface.reportError("Author Exception in initBlock() (<variables>)", 
+      interface.reportError("Author Exception in initBlock() (<variables>)",
           "$e\n$stacktrace");
       throw e;
     }
-    isInInitBlock = false;
-  }
-
-  noSuchMethod(Invocation invocation) {
-    String memberName = MirrorSystem.getName(invocation.memberName);
-    if (invocation.isGetter) {
-      return vars[memberName];
-    } else if (invocation.isSetter) {
-      memberName = memberName.replaceAll("=", "");
-          // fix feature in Dart that sets memberName to "variable=" when setter
-      vars[memberName] = invocation.positionalArguments[0];
-      return null;
-    } else if (invocation.isMethod && vars.containsKey(memberName) &&
-        vars[memberName] is Function) {
-      return Function.apply(vars[memberName], invocation.positionalArguments,
-          invocation.namedArguments);
-    } else {
-      throw new NoSuchMethodError(this, invocation.memberName,
-          invocation.positionalArguments, null //TODO: invocation.namedArguments
-      );
-    }
+    // Just so that [vars] is filled with some data before we try to
+    // run initBlock() etc.
+    populateVarsFromState();
+    isInInitOrDeclareBlock = false;
   }
 
   /// Runs the specified script block, catches exceptions and returns generated
@@ -638,7 +631,7 @@ abstract class EgbScripter {
       script();
     } catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
-      throw new AuthorScriptException.withPageName(e.toString(), 
+      throw new AuthorScriptException.withPageName(e.toString(),
           currentPage.name, currentBlockIndex);
     }
 
@@ -674,6 +667,7 @@ abstract class EgbScripter {
   }
 
   EgbSavegame _createSaveGame() {
+    populateVarsFromState();
     try {
       return new EgbSavegame(currentPage.name, vars, pageMap.exportState());
     } catch (e, stacktrace) {
@@ -687,7 +681,7 @@ abstract class EgbScripter {
    * state with its contents. This includes both the Story Chronology (where
    * the story is right now) and the Player Chronology (what the player has
    * seen already, including blind alleys and consecutive reloads).
-   * 
+   *
    * Player Chronology need only provided at the start of player session. It is
    * not overwritten by loading or saving games.
    */
@@ -696,7 +690,8 @@ abstract class EgbScripter {
 
     if (pageMap[savegame.currentPageName] == null) {
       throw new IncompatibleSavegameException("Trying to load page "
-          "'${savegame.currentPageName}' which doesn't exist in current " "egamebook.");
+          "'${savegame.currentPageName}' which doesn't exist in current "
+          "egamebook.");
     }
     currentPage = pageMap[savegame.currentPageName];
 
@@ -717,6 +712,7 @@ abstract class EgbScripter {
     DEBUG_SCR("Copying save variables into vars.");
     EgbSavegame.importSavegameToVars(savegame, vars, constructors: _constructors
         ); // TODO
+    extractStateFromVars();
     DEBUG_SCR("loadFromSaveGame() done.");
   }
 

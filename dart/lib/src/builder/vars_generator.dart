@@ -36,7 +36,9 @@ class VarsGenerator {
     unit.accept(visitor);
 
     if (errorListener.errors.isNotEmpty) {
-      throw new ArgumentError("There were errors in the source.");
+      throw new ArgumentError("There were errors in the source: \n\n$src\n\n "
+          "${errorListener.errors.map((error) =>
+              "${error.message} (${error.offset} ${error.errorCode})")}");
     }
 
     List<String> varNames = visitor.vars.map((variable) => variable.name)

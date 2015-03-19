@@ -56,7 +56,7 @@ class Room extends Entity with Node implements Described, ZilSaveable {
         this.onUpdate: null}) 
       : this.exits = new Set.from(exits),
         super(pageName, nameIsProperNoun, Pronoun.IT, Actor.NEUTRAL, false) {
-    throwIfNotInInitBlock("Cannot create room on the fly.");
+    throwIfNotInInitOrDeclareBlock("Cannot create room on the fly.");
     this.exits.forEach((exit) => exit.from = this);  // TODO: guard all against null here
     items.forEach((Item item) => item.location = this);
     actions.forEach((action) => action.room = this);
