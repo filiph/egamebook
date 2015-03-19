@@ -239,8 +239,7 @@ abstract class EgbScripter {
 
   ReceivePort port;
 
-  EgbScripter() {
-  }
+  EgbScripter();
 
   EgbInterfaceProxy interface;
 

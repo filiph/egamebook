@@ -110,17 +110,17 @@ class HtmlInterface extends EgbInterfaceBase {
 
   ParagraphElement _loadingEl;
   /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
-  bool _loadingElCurrentShowState = null;
+  bool _loadingElVisible;
   /**
    * Sets visibility of the loading gizmo.
    */
   void _showLoading(bool show) {
-    if (_loadingElCurrentShowState != null && show ==
-        _loadingElCurrentShowState) {
+    if (_loadingElVisible != null && show ==
+        _loadingElVisible) {
       return; // Don't do anything if the show state is the same already.
     }
     _loadingEl.style.visibility = (show ? "visible" : "hidden");
-    _loadingElCurrentShowState = show;
+    _loadingElVisible = show;
   }
 
   void endBook() {
@@ -130,6 +130,9 @@ class HtmlInterface extends EgbInterfaceBase {
   void close() {
     super.close();
   }
+  
+  static const Duration _durationBetweenShowingText = const Duration(
+      milliseconds: 100);
 
   /**
    * Converts [s] to HTML elements (via markdown) and shows them one by one
@@ -141,7 +144,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
     _showLoading(false);
 
-    new Future.delayed(const Duration(milliseconds: 100), () {
+    new Future.delayed(_durationBetweenShowingText, () {
       _textHistory.write("$s\n\n");
       final List<mdown.InlineSyntax> syntaxes =
           <mdown.InlineSyntax>[new FootnoteSupTagSyntax()];
@@ -222,14 +225,14 @@ class HtmlInterface extends EgbInterfaceBase {
         _processedElements.add(i);
       }
     }
-    // Delete _metaElements whose actions have already been triggered.
+    // Remove _metaElements whose actions have already been triggered.
     _metaElements.removeWhere((metaEl) => metaEl.done);
   }
 
   /**
    * Checks if user scrolled past the end of [bookDiv].
    */
-  bool _scrolledPastEnd() {
+  bool _isScrolledPastToEnd() {
     var currentBottom = window.pageYOffset + window.innerHeight;
     var bookDivBottom = bookDiv.offsetTop + bookDiv.offsetHeight;
     print("checking scroll: bookdiv = ${bookDivBottom}, "
@@ -327,50 +330,53 @@ class HtmlInterface extends EgbInterfaceBase {
       completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
 
-    var number = new SpanElement();
-    number.text = index;
-    number.classes.add("choice-number");
+    var numberSpan = new SpanElement();
+    numberSpan.text = index;
+    numberSpan.classes.add("choice-number");
 
-    var choiceDisplay = new SpanElement();
-    choiceDisplay.classes.add("choice-display");
+    var choiceDisplaySpan = new SpanElement();
+    choiceDisplaySpan.classes.add("choice-display");
 
     var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
     if (!choiceWithInfochips.infochips.isEmpty) {
-      var infochips = new SpanElement();
-      infochips.classes.add("choice-infochips");
+      var infochipsSpan = new SpanElement();
+      infochipsSpan.classes.add("choice-infochips");
       for (int j = 0; j < choiceWithInfochips.infochips.length; j++) {
-        var chip = new SpanElement();
-        chip.text = mdown.markdownToHtml(choiceWithInfochips.infochips[j],
+        var chipSpan = new SpanElement();
+        chipSpan.text = mdown.markdownToHtml(choiceWithInfochips.infochips[j],
             inlineOnly: true);
-        chip.classes.add("choice-infochip");
-        infochips.append(chip);
+        chipSpan.classes.add("choice-infochip");
+        infochipsSpan.append(chipSpan);
       }
-      choiceDisplay.append(infochips);
+      choiceDisplaySpan.append(infochipsSpan);
     }
 
-    var text = new SpanElement();
-    text.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly:
+    var textSpan = new SpanElement();
+    textSpan.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly:
         true);
-//    text.text = _exchangeChars(text.text, "▒");
-    text.classes.add("choice-text");
-    choiceDisplay.append(text);
+//  textSpan.text = _exchangeChars(textSpan.text, "▒");
+    textSpan.classes.add("choice-text");
+    choiceDisplaySpan.append(textSpan);
 
     var subscription = btn.onClick.listen((MouseEvent event) =>
         _choiceClickListener(event, completer, choice, btn, choicesDiv,
         clickSubscriptions));
     clickSubscriptions.add(subscription);
 
-    btn.append(number);
-    btn.append(choiceDisplay);
+    btn.append(numberSpan);
+    btn.append(choiceDisplaySpan);
     return btn;
   }
 
+  static const Duration _durationBetweenSendingHash = const Duration(
+      milliseconds: 100);
+  
   // TODO: use onClick.first.then() - no need to unregister listener
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
       clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
-    new Future.delayed(const Duration(milliseconds: 100), () =>
+    new Future.delayed(_durationBetweenSendingHash, () =>
         completer.complete(choice.hash));
     _showLoading(true);
     // Mark this element as chosen.
@@ -402,21 +408,21 @@ class HtmlInterface extends EgbInterfaceBase {
     }
     var completer = new Completer();
 
-    ParagraphElement p = new ParagraphElement();
-    p.text = "$award";
-    p.classes.addAll(["toast", "non-dimmed", "hidden"]);
+    ParagraphElement paragraph = new ParagraphElement();
+    paragraph.text = "$award";
+    paragraph.classes.addAll(["toast", "non-dimmed", "hidden"]);
     // Not needed (yet?), but adding for extra security.
-    bookDiv.append(p);
+    bookDiv.append(paragraph);
     new Future(() {
-      p.classes.remove("hidden");
+      paragraph.classes.remove("hidden");
     });
     // Only add the action after element fully visible.
     new Future.delayed(_durationBetweenShowingElements, () {
-      var metaEl = new PointsAwardElement.fromPointsAward(award, p);
+      var metaEl = new PointsAwardElement.fromPointsAward(award, paragraph);
       metaEl.action = () {
         pointsSpan.text = "${award.result}";
-        _blink(p);
-        p.classes.remove("non-dimmed");
+        _blink(paragraph);
+        paragraph.classes.remove("non-dimmed");
         _blink(pointsSpan.parent); // The button element with pointsSpan in it.
       };
       _metaElements.add(metaEl);
@@ -426,45 +432,47 @@ class HtmlInterface extends EgbInterfaceBase {
     return completer.future;
   }
 
-  List<UIStat> _statsList;
-  final Map<String, Element> _statsElementMap = new Map();
+  List<UIStat> _stats;
+  final Map<String, Element> _statsElements = new Map();
 
-  Future<bool> setStats(List<UIStat> stats) {
-    _statsList = stats;
+  Future setStats(List<UIStat> stats) {
+    _stats = stats;
     _printStats(); // DEBUG
     var statsDiv = document.querySelector("nav div#stats");
     statsDiv.children.clear();
     for (int i = 0; i < stats.length; i++) {
-      var current = stats[i];
+      var stat = stats[i];
       var span = new SpanElement();
-      span.text = current.string;
-      var a = new AnchorElement();
-      a.classes.add("button");
-      if (!current.show) a.classes.add("display-none");
-      a.children.add(span);
-      statsDiv.children.add(a);
-      _statsElementMap[current.name] = a;
-      a.onClick.listen(_statsOnClickListener);
+      span.text = stat.string;
+      var anchor = new AnchorElement();
+      anchor.classes.add("button");
+      if (!stat.show) anchor.classes.add("display-none");
+      anchor.children.add(span);
+      statsDiv.children.add(anchor);
+      _statsElements[stat.name] = anchor;
+      anchor.onClick.listen(_statsOnClickListener);
     }
+    return new Future.value();
   }
 
-  Future<bool> updateStats(StatUpdateCollection updates) {
-    UIStat.updateStatsList(_statsList, updates
+  Future updateStats(StatUpdateCollection updates) {
+    UIStat.updateStatsList(_stats, updates
         )// Returns only the changed stats.
-    .forEach((UIStat current) {
-      var a = _statsElementMap[current.name];
-      a.children.single.text = current.string;
-      if (current.show) {
-        a.classes.remove("display-none");
+    .forEach((UIStat stat) {
+      var anchor = _statsElements[stat.name];
+      anchor.children.single.text = stat.string;
+      if (stat.show) {
+        anchor.classes.remove("display-none");
       } else {
-        a.classes.add("display-none");
+        anchor.classes.add("display-none");
       }
     });
+    return new Future.value();
   }
 
   void _printStats() {
     print("Stats:");
-    _statsList.where((stat) => stat.show == true).forEach((stat) {
+    _stats.where((stat) => stat.show == true).forEach((stat) {
       print("- $stat");
     });
   }
@@ -532,29 +540,29 @@ class HtmlInterface extends EgbInterfaceBase {
   Future<bool> showDialog(Dialog dialog) {
     var completer = new Completer<bool>();
 
-    DivElement dialogEl = new DivElement()..classes.add("dialog");
-    DivElement wrapper = new DivElement();
+    DivElement dialogDiv = new DivElement()..classes.add("dialog");
+    DivElement wrapperDiv = new DivElement();
     HeadingElement titleEl = new HeadingElement.h3()..text = dialog.title;
-    wrapper.children.add(titleEl);
-    DivElement contentEl = new DivElement()..classes.add("dialog-content");
-    wrapper.children.add(contentEl);
-    DivElement textEl = new DivElement()..innerHtml = dialog.html;
-    contentEl.children.add(textEl);
-    DivElement buttonsDivEl = new DivElement()..classes.add("dialog-buttons");
-    for (DialogButton button in dialog.buttons) {
-      ButtonElement buttonEl = new ButtonElement()..text = button.label;
+    wrapperDiv.children.add(titleEl);
+    DivElement contentDiv = new DivElement()..classes.add("dialog-content");
+    wrapperDiv.children.add(contentDiv);
+    DivElement textDiv = new DivElement()..innerHtml = dialog.html;
+    contentDiv.children.add(textDiv);
+    DivElement buttonsDiv = new DivElement()..classes.add("dialog-buttons");
+    for (DialogButton dialogButton in dialog.buttons) {
+      ButtonElement buttonEl = new ButtonElement()..text = dialogButton.label;
       buttonEl.onClick.listen((_) {
-        bool shouldClose = button.behaviour();
+        bool shouldClose = dialogButton.behaviour();
         if (shouldClose) {
-          dialogEl.remove();
+          dialogDiv.remove();
           completer.complete(true);
         }
       });
-      buttonsDivEl.children.add(buttonEl);
+      buttonsDiv.children.add(buttonEl);
     }
-    wrapper.children.add(buttonsDivEl);
-    dialogEl.children.add(wrapper);
-    document.body.children.add(dialogEl);
+    wrapperDiv.children.add(buttonsDiv);
+    dialogDiv.children.add(wrapperDiv);
+    document.body.children.add(dialogDiv);
     return completer.future;
   }
 
@@ -562,20 +570,20 @@ class HtmlInterface extends EgbInterfaceBase {
     var html = new StringBuffer();
     html.writeln("<table>");
     html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
-    for (int i = 0; i < _statsList.length; i++) {
-      UIStat s = _statsList[i];
-      if (s.show) {
-        html.writeln("<tr><td>${s.name}:</td>" "<td>${s.string}</td></tr>");
+    for (int i = 0; i < _stats.length; i++) {
+      UIStat stat = _stats[i];
+      if (stat.show) {
+        html.writeln("<tr><td>${stat.name}:</td>" "<td>${stat.string}</td></tr>");
       }
     }
     html.writeln("</table>");
-    var d = new Dialog("Stats", html.toString());
-    showDialog(d);
+    var dialog = new Dialog("Stats", html.toString());
+    showDialog(dialog);
   }
 
   Future<bool> reportError(String title, String text) {
-    Dialog error = new Dialog(title, "<p>$text</p>");
-    return showDialog(error);
+    Dialog errorDialog = new Dialog(title, "<p>$text</p>");
+    return showDialog(errorDialog);
   }
 
   @override
@@ -614,14 +622,14 @@ class HtmlInterface extends EgbInterfaceBase {
 Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
-  BaseSubmitButton.elementClass: (FormElement e) => new HtmlSubmitButton(e),
-  BaseCheckboxInput.elementClass: (FormElement e) => new HtmlCheckboxInput(e),
-  BaseRangeInput.elementClass: (FormElement e) => new HtmlRangeInput(e),
-  BaseRangeOutput.elementClass: (FormElement e) => new HtmlRangeOuput(e),
-  BaseTextOutput.elementClass: (FormElement e) => new HtmlTextOuput(e),
-  BaseMultipleChoiceInput.elementClass: (FormElement e) =>
+  SubmitButtonBase.elementClass: (FormElement e) => new HtmlSubmitButton(e),
+  CheckboxInputBase.elementClass: (FormElement e) => new HtmlCheckboxInput(e),
+  RangeInputBase.elementClass: (FormElement e) => new HtmlRangeInput(e),
+  RangeOutputBase.elementClass: (FormElement e) => new HtmlRangeOuput(e),
+  TextOutputBase.elementClass: (FormElement e) => new HtmlTextOuput(e),
+  MultipleChoiceInputBase.elementClass: (FormElement e) =>
       new HtmlMultipleChoiceInput(e),
-  BaseOption.elementClass: (FormElement e) => new HtmlOption(e)
+  OptionBase.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
 abstract class HtmlUiElement extends UiElement {
@@ -649,7 +657,7 @@ class HtmlForm extends HtmlUiElement {
 
   FormProxy blueprint;
   DivElement uiRepresentation;
-  DivElement _childrenContainer;
+  DivElement _childrenContainerDiv;
   ButtonElement submitButton;
 
   HtmlForm(FormProxy blueprint) : super(blueprint) {
@@ -658,8 +666,8 @@ class HtmlForm extends HtmlUiElement {
 
     // TODO: Add 'header' to the form?
 
-    _childrenContainer = new DivElement();
-    uiRepresentation.append(_childrenContainer);
+    _childrenContainerDiv = new DivElement();
+    uiRepresentation.append(_childrenContainerDiv);
 
     String submitText = blueprint.submitText;
     if (submitText == null) {
@@ -680,7 +688,7 @@ class HtmlForm extends HtmlUiElement {
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenContainer.append(childUiRepresentation);
+    _childrenContainerDiv.append(childUiRepresentation);
   }
 
   bool _disabled = false;
@@ -720,10 +728,10 @@ class HtmlFormSection extends HtmlUiElement {
 
   FormSection blueprint;
   DivElement uiRepresentation;
-  Element _header;
+  Element _headerEl;
   /// The element which opens or closes the FormSection contents when clicked.
-  Element _openCloseElement;
-  DivElement _childrenElement;
+  Element _openCloseEl;
+  DivElement _childrenDiv;
 
   bool open = false;
 
@@ -733,46 +741,46 @@ class HtmlFormSection extends HtmlUiElement {
         ..classes.add("form-section")
         ..id = blueprint.id;
 
-    DivElement titleWrapper = new DivElement()
+    DivElement titleWrapperDiv = new DivElement()
         ..classes.add("form-section-title-wrapper")
         ..onClick.listen((_) {
           open = !open;
           if (open) {
-            _childrenElement.classes.remove("closed");
-            _openCloseElement.text = "<";
+            _childrenDiv.classes.remove("closed");
+            _openCloseEl.text = "<";
           } else {
-            _childrenElement.classes.add("closed");
-            _openCloseElement.text = "V";
+            _childrenDiv.classes.add("closed");
+            _openCloseEl.text = "V";
           }
         });
 
-    _openCloseElement = new DivElement()
+    _openCloseEl = new DivElement()
         ..classes.add("form-section-open-close")
         ..text = "V";
-    titleWrapper.append(_openCloseElement);
+    titleWrapperDiv.append(_openCloseEl);
 
-    _header = new HeadingElement.h1()
+    _headerEl = new HeadingElement.h1()
         ..classes.add("form-section-title")
         ..text = blueprint.name;
-    titleWrapper.append(_header);
+    titleWrapperDiv.append(_headerEl);
 
-    uiRepresentation.append(titleWrapper);
+    uiRepresentation.append(titleWrapperDiv);
 
     update();
 
-    _childrenElement = new DivElement()
+    _childrenDiv = new DivElement()
         ..classes.add("form-section-children")
         ..classes.add("closed");
-    uiRepresentation.append(_childrenElement);
+    uiRepresentation.append(_childrenDiv);
   }
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenElement.append(childUiRepresentation);
+    _childrenDiv.append(childUiRepresentation);
   }
 
   @override
-  Object get current => _header.text;
+  Object get current => _headerEl.text;
 
   @override
   bool disabled = false;
@@ -783,7 +791,7 @@ class HtmlFormSection extends HtmlUiElement {
   @override
   void update() {
     super.update();
-    _header.text = blueprint.name;
+    _headerEl.text = blueprint.name;
   }
 
   @override
@@ -793,16 +801,16 @@ class HtmlFormSection extends HtmlUiElement {
 class HtmlSubmitButton extends HtmlUiElement {
   InterfaceSubmitButton blueprint;
   ButtonElement uiRepresentation;
-  DivElement _childrenElement;
+  DivElement _childrenDiv;
 
   HtmlSubmitButton(InterfaceSubmitButton blueprint) : super(blueprint) {
     this.blueprint = blueprint;
-    _childrenElement = new DivElement();
+    _childrenDiv = new DivElement();
 
     uiRepresentation = new ButtonElement()
     ..text = blueprint.name
     ..classes.add("submit-button")
-    ..append(_childrenElement)
+    ..append(_childrenDiv)
     ..onClick.listen((ev) {
       _onChangeController.add(ev);
     });
@@ -812,7 +820,7 @@ class HtmlSubmitButton extends HtmlUiElement {
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenElement.append(childUiRepresentation);
+    _childrenDiv.append(childUiRepresentation);
   }
 
   @override
@@ -849,13 +857,13 @@ class HtmlSubmitButton extends HtmlUiElement {
 }
 
 class HtmlCheckboxInput extends HtmlUiElement {
-  BaseCheckboxInput blueprint;
+  CheckboxInputBase blueprint;
   DivElement uiRepresentation;
   CheckboxInputElement _checkboxEl;
   LabelElement _labelEl;
-  DivElement _childrenElement;
+  DivElement _childrenDiv;
 
-  HtmlCheckboxInput(BaseCheckboxInput blueprint) : super(blueprint) {
+  HtmlCheckboxInput(CheckboxInputBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     print(this.blueprint.name);
 
@@ -874,13 +882,13 @@ class HtmlCheckboxInput extends HtmlUiElement {
 
     update();
 
-    _childrenElement = new DivElement();
-    uiRepresentation.append(_childrenElement);
+    _childrenDiv = new DivElement();
+    uiRepresentation.append(_childrenDiv);
   }
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenElement.append(childUiRepresentation);
+    _childrenDiv.append(childUiRepresentation);
   }
 
   @override
@@ -908,13 +916,13 @@ class HtmlCheckboxInput extends HtmlUiElement {
 }
 
 abstract class HtmlRangeBase extends HtmlUiElement {
-  BaseRange blueprint;
+  RangeBase blueprint;
   DivElement uiRepresentation;
-  DivElement _childrenElement;
+  DivElement _childrenDiv;
   DivElement _radioButtonsDiv;
-  ParagraphElement _currentValueElement;
+  ParagraphElement _currentValueP;
 
-  HtmlRangeBase(BaseRange blueprint, String divClass) : super(blueprint) {
+  HtmlRangeBase(RangeBase blueprint, String divClass) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add(divClass)
@@ -925,26 +933,26 @@ abstract class HtmlRangeBase extends HtmlUiElement {
         ..innerHtml = blueprint.name;
     uiRepresentation.append(label);
 
-    DivElement buttonsAndValue = new DivElement()..classes.add(
+    DivElement buttonsAndValueDiv = new DivElement()..classes.add(
         "buttons-and-value");
-    uiRepresentation.append(buttonsAndValue);
+    uiRepresentation.append(buttonsAndValueDiv);
 
     _radioButtonsDiv = new DivElement()..classes.add("buttons");
-    buttonsAndValue.append(_radioButtonsDiv);
+    buttonsAndValueDiv.append(_radioButtonsDiv);
 
-    _currentValueElement = new ParagraphElement()..classes.add("current-value");
-    buttonsAndValue.append(_currentValueElement);
+    _currentValueP = new ParagraphElement()..classes.add("current-value");
+    buttonsAndValueDiv.append(_currentValueP);
 
     _createRadioButtons();
 
-    _childrenElement = new DivElement();
-    uiRepresentation.append(_childrenElement);
+    _childrenDiv = new DivElement();
+    uiRepresentation.append(_childrenDiv);
 
     update();
   }
 
-  Map<int,RadioButtonInputElement> _radioButtons =
-      new Map<int,RadioButtonInputElement>();
+  Map<int, RadioButtonInputElement> _radioButtons =
+      new Map<int, RadioButtonInputElement>();
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = _createRadioButton(i);
@@ -964,7 +972,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenElement.append(childUiRepresentation);
+    _childrenDiv.append(childUiRepresentation);
   }
 
   bool _disabled = false;
@@ -990,7 +998,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
     super.update();
     _current = blueprint.current;
     _updateRadioButtons();
-    _currentValueElement.text = (blueprint as
+    _currentValueP.text = (blueprint as
         StringRepresentationHolder).currentStringRepresentation;
   }
 
@@ -1006,7 +1014,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 }
 
 class HtmlRangeOuput extends HtmlRangeBase {
-  HtmlRangeOuput(BaseRangeOutput blueprint) : super(blueprint, "range-output");
+  HtmlRangeOuput(RangeOutputBase blueprint) : super(blueprint, "range-output");
 
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -1028,7 +1036,7 @@ class HtmlRangeOuput extends HtmlRangeBase {
 }
 
 class HtmlRangeInput extends HtmlRangeBase {
-  HtmlRangeInput(BaseRangeInput blueprint) : super(blueprint, "range-input");
+  HtmlRangeInput(RangeInputBase blueprint) : super(blueprint, "range-input");
 
   @override
   RadioButtonInputElement _createRadioButton(int i) {
@@ -1038,8 +1046,7 @@ class HtmlRangeInput extends HtmlRangeBase {
         ..value = "$i";
     _updateRadioButton(i, radioButton);
 
-    StreamSubscription subscription;
-    subscription = radioButton.onClick.listen((ev) {
+    StreamSubscription subscription = radioButton.onClick.listen((ev) {
       if (!radioButton.disabled) {
         _current = i;
         _onChangeController.add(ev);
@@ -1058,11 +1065,11 @@ class HtmlRangeInput extends HtmlRangeBase {
 }
 
 class HtmlTextOuput extends HtmlUiElement {
-  BaseText blueprint;
+  TextBase blueprint;
   DivElement uiRepresentation;
-  DivElement _childrenElement;
+  DivElement _childrenDiv;
 
-  HtmlTextOuput(BaseText blueprint) : super(blueprint) {
+  HtmlTextOuput(TextBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
         ..classes.add("text-output")
@@ -1070,13 +1077,13 @@ class HtmlTextOuput extends HtmlUiElement {
 
     update();
 
-    _childrenElement = new DivElement();
-    uiRepresentation.append(_childrenElement);
+    _childrenDiv = new DivElement();
+    uiRepresentation.append(_childrenDiv);
   }
 
   @override
   void appendChild(Object childUiRepresentation) {
-    _childrenElement.append(childUiRepresentation);
+    _childrenDiv.append(childUiRepresentation);
   }
 
   @override
@@ -1100,12 +1107,12 @@ class HtmlTextOuput extends HtmlUiElement {
 
 class HtmlMultipleChoiceInput extends HtmlUiElement {
 
-  BaseMultipleChoiceInput blueprint;
+  MultipleChoiceInputBase blueprint;
   DivElement uiRepresentation;
   LabelElement _labelElement;
-  SelectElement _childrenElement;
+  SelectElement _childrenSelectElement;
 
-  HtmlMultipleChoiceInput(BaseMultipleChoiceInput blueprint) :
+  HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint) :
       super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1115,9 +1122,9 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     _labelElement = new LabelElement()..text = blueprint.name;
     uiRepresentation.append(_labelElement);
 
-    _childrenElement = new SelectElement()
+    _childrenSelectElement = new SelectElement()
     ..onChange.listen((Event ev) {
-      if (!_childrenElement.disabled) {
+      if (!_childrenSelectElement.disabled) {
         // TODO: report (html5lib?) bug which throws type exception here
 //        List<InterfaceOption> childOptions = blueprint.children
 //            .where((html5lib.Element element) => element is InterfaceOption)
@@ -1130,13 +1137,13 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
           }
         }
 
-        InterfaceOption selected = childOptions[_childrenElement.selectedIndex];
-        HtmlOption htmlOption = selected.uiElement;
+        InterfaceOption selectedOption = childOptions[_childrenSelectElement.selectedIndex];
+        HtmlOption htmlOption = selectedOption.uiElement;
         htmlOption.select();
       }
     });
 
-    uiRepresentation.append(_childrenElement);
+    uiRepresentation.append(_childrenSelectElement);
 
     update();
   }
@@ -1144,7 +1151,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   @override
   void appendChild(Object childUiRepresentation) {
     assert(childUiRepresentation is OptionElement);
-    _childrenElement.append(childUiRepresentation);
+    _childrenSelectElement.append(childUiRepresentation);
   }
 
   // TODO: implement current
@@ -1157,7 +1164,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 
   @override
   set disabled(bool value) {
-    _childrenElement.disabled = value;
+    _childrenSelectElement.disabled = value;
     _disabled = value;
   }
 
@@ -1167,7 +1174,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   bool _waitingForUpdate = false;
   @override
   void set waitingForUpdate(bool value) {
-    _childrenElement.disabled = value;
+    _childrenSelectElement.disabled = value;
     _waitingForUpdate = value;
   }
 
@@ -1177,10 +1184,10 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 
 
 class HtmlOption extends HtmlUiElement {
-  BaseOption blueprint;
+  OptionBase blueprint;
   OptionElement uiRepresentation;
 
-  HtmlOption(BaseOption blueprint) : super(blueprint) {
+  HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
         blueprint.current)..text = blueprint.text;
@@ -1254,7 +1261,7 @@ class Dialog {
   List<DialogButton> buttons;
 
   Dialog(this.title, this.html, [this.buttons = const
-      [const DialogButton.JustClose("Close")]]);
+      [const DialogButton.justClose("Close")]]);
 }
 
 class DialogButton {
@@ -1270,7 +1277,7 @@ class DialogButton {
     }
   }
   const DialogButton(this.label, this._behaviour);
-  const DialogButton.JustClose(this.label) : _behaviour = null;
+  const DialogButton.justClose(this.label) : _behaviour = null;
 }
 
 /// Returns true if dialog can be closed.

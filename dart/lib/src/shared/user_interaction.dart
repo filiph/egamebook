@@ -79,7 +79,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     this.deferToChoiceList = deferToChoiceList;
   }
 
-  EgbChoice.fromMap(Map<String,dynamic> map) : super() {
+  EgbChoice.fromMap(Map<String, dynamic> map) : super() {
     string = map["string"].trim();
     if (map.containsKey("hash")) {
       hash = map["hash"];
@@ -98,7 +98,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 
   /// Creates a Map representation of the choice with only the data needed by
   /// the interface: [string], [hash] and [submenu].
-  Map<String,Object> toMapForInterface() => {
+  Map<String, Object> toMapForInterface() => {
     "string": string,
     "hash": hash,
     "submenu": submenu
@@ -111,7 +111,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
 
   int compareTo(EgbChoice other) => this.string.compareTo(other.string);
 
-  toString() {
+  String toString() {
     return "Choice: $string [$goto]";
   }
 
@@ -175,7 +175,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
   }
 
-  add(Object element, {Function script, String goto, String submenu,
+  void add(Object element, {Function script, String goto, String submenu,
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
       _choices.add(element);

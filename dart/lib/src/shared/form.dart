@@ -84,7 +84,7 @@ library egb_form;
  *
  * ## A bit about the classes.
  *
- * All form elements have a base class (e.g. [BaseRangeInput]) which
+ * All form elements have a base class (e.g. [RangeInputBase]) which
  * has the methods and contructors shared by both [EgbScripter] and
  * [EgbInterface].
  *
@@ -431,23 +431,23 @@ abstract class Output<T> {
   T current;
 }
 
-class BaseSubmitButton extends FormElement {
+class SubmitButtonBase extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
   static const String elementClass = "SubmitButton";
 
-  BaseSubmitButton(String name, {String helpMessage}) : super(elementClass) {
+  SubmitButtonBase(String name, {String helpMessage}) : super(elementClass) {
     this.name = name;
     this.helpMessage = helpMessage;
   }
 
-  BaseSubmitButton.noOptional(String name, String helpMessage) : this(name,
+  SubmitButtonBase.noOptional(String name, String helpMessage) : this(name,
       helpMessage: helpMessage);
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "name": name
     });
@@ -463,7 +463,7 @@ class BaseSubmitButton extends FormElement {
 
 typedef void SubmitCallback();
 
-class SubmitButton extends BaseSubmitButton  {
+class SubmitButton extends SubmitButtonBase  {
   SubmitCallback onSubmit;
   SubmitButton(String name, this.onSubmit, {String helpMessage}) :
     super.noOptional(name, helpMessage);
@@ -473,11 +473,11 @@ class SubmitButton extends BaseSubmitButton  {
 // to skill (acumen)
 
 
-class BaseCheckbox extends FormElement implements UpdatableByMap {
+class CheckboxBase extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
-  BaseCheckbox(String elementClass, String name)
+  CheckboxBase(String elementClass, String name)
       : super(elementClass) {
     this.name = name;
   }
@@ -487,7 +487,7 @@ class BaseCheckbox extends FormElement implements UpdatableByMap {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "current": current
     });
@@ -501,9 +501,9 @@ class BaseCheckbox extends FormElement implements UpdatableByMap {
   }
 }
 
-class BaseCheckboxInput extends BaseCheckbox implements Input<bool> {
+class CheckboxInputBase extends CheckboxBase implements Input<bool> {
   static const String elementClass = "CheckboxInput";
-  BaseCheckboxInput(String name)
+  CheckboxInputBase(String name)
     : super(elementClass, name);
 
   @override
@@ -514,7 +514,7 @@ class BaseCheckboxInput extends BaseCheckbox implements Input<bool> {
   }
 }
 
-class CheckboxInput extends BaseCheckboxInput with _NewValueCallback<bool> {
+class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
   CheckboxInput(String name, InputCallback onInput, {bool checked: false})
       : super(name) {
     this.onInput = onInput;
@@ -525,14 +525,14 @@ class CheckboxInput extends BaseCheckboxInput with _NewValueCallback<bool> {
 /**
  * Base class of [RangeInput] and [InterfaceRangeInput].
  */
-class BaseRange extends FormElement implements UpdatableByMap {
+class RangeBase extends FormElement {
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
-  BaseRange(String elementClass, String name) : super(elementClass) {
+  RangeBase(String elementClass, String name) : super(elementClass) {
     this.name = name;
   }
-  BaseRange.withConstraints(String elementClass, String
+  RangeBase.withConstraints(String elementClass, String
       name, this.current, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
       : super(elementClass) {
     this.name = name;
@@ -563,7 +563,7 @@ class BaseRange extends FormElement implements UpdatableByMap {
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "min": min,
       "max": max,
@@ -587,14 +587,14 @@ class BaseRange extends FormElement implements UpdatableByMap {
   }
 }
 
-class BaseRangeInput extends BaseRange implements Input<int> {
+class RangeInputBase extends RangeBase implements Input<int> {
   static const String elementClass = "RangeInput";
-  BaseRangeInput.withConstraints(String name, int current, int min, int max, int
+  RangeInputBase.withConstraints(String name, int current, int min, int max, int
       step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
           minEnabled, maxEnabled);
 
-  BaseRangeInput(String name) : super(elementClass, name);
+  RangeInputBase(String name) : super(elementClass, name);
 
   /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
   /// [minEnabled], [min], or outside [step]. In each case, moves [current] to
@@ -626,7 +626,7 @@ class BaseRangeInput extends BaseRange implements Input<int> {
  * The author-facing class of the range input element. It works only with
  * integers
  */
-class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
+class RangeInput extends RangeInputBase with _NewValueCallback<int>,
     StringRepresentationCreator {
   RangeInput(String name, InputCallback onInput, {int value:
       0, StringifyFunction stringifyFunction, int min: 0, int max: 10, int step:
@@ -642,15 +642,15 @@ class RangeInput extends BaseRangeInput with _NewValueCallback<int>,
 /**
  * Base class of [RangeOutput] and [InterfaceRangeOutput].
  */
-class BaseRangeOutput extends BaseRange implements Output<int> {
+class RangeOutputBase extends RangeBase implements Output<int> {
   static const String elementClass = "RangeOutput";
 
-  BaseRangeOutput.withConstraints(String name, int current, int min, int
+  RangeOutputBase.withConstraints(String name, int current, int min, int
       max, int step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
           minEnabled, maxEnabled);
 
-  BaseRangeOutput(String name) : super(elementClass, name);
+  RangeOutputBase(String name) : super(elementClass, name);
 }
 
 /**
@@ -658,7 +658,7 @@ class BaseRangeOutput extends BaseRange implements Output<int> {
  * isn't meant for input. It can show, for example, the remaining 'resources'
  * to distribute to RangeInputs.
  */
-class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
+class RangeOutput extends RangeOutputBase with StringRepresentationCreator {
   RangeOutput(String name, {int value: 0, StringifyFunction
       stringifyFunction, int min: 0, int max: 10, int step: 1, int minEnabled, int
       maxEnabled}) : super.withConstraints(name, value, min, max, step, minEnabled,
@@ -669,14 +669,14 @@ class RangeOutput extends BaseRangeOutput with StringRepresentationCreator {
   }
 }
 
-class BaseText extends FormElement implements UpdatableByMap {
-  BaseText(String elementClass) : super(elementClass);
+class TextBase extends FormElement {
+  TextBase(String elementClass) : super(elementClass);
 
   String html;
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "html": html
     });
@@ -690,9 +690,9 @@ class BaseText extends FormElement implements UpdatableByMap {
   }
 }
 
-class BaseTextOutput extends BaseText with Output<String> {
+class TextOutputBase extends TextBase with Output<String> {
   static const String elementClass = "TextOutput";
-  BaseTextOutput() : super(elementClass);
+  TextOutputBase() : super(elementClass);
 
   @override
   String get current => html;
@@ -702,22 +702,22 @@ class BaseTextOutput extends BaseText with Output<String> {
   }
 }
 
-class TextOutput extends BaseTextOutput {
+class TextOutput extends TextOutputBase {
   // No need to implement anything. This is here in case we need to attach
   // closures to the scripter-facing representation.
 }
 
-class BaseMultipleChoiceInput extends FormElement {
+class MultipleChoiceInputBase extends FormElement {
   //    with UpdatableByMap
   String get name => attributes["name"];
   set name(String value) => attributes["name"] = value;
 
-  //  List<BaseOption> options = new List<BaseOption>();
-  //  void add(BaseOption option) => options.add(option);
-  //  void addAll(Iterable<BaseOption> options) => this.options.addAll(options);
+    //List<OptionBase> options = new List<OptionBase>();
+    //void add(OptionBase option) => options.add(option);
+    //void addAll(Iterable<OptionBase> options) => this.options.addAll(options);
 
   static const String elementClass = "MultipleChoiceInput";
-  BaseMultipleChoiceInput(String name) : super(elementClass) {
+  MultipleChoiceInputBase(String name) : super(elementClass) {
     this.name = name;
   }
 
@@ -725,7 +725,7 @@ class BaseMultipleChoiceInput extends FormElement {
   //  Map<String, Object> toMap() => {
   //    "name": name,
   //    "helpMessage": helpMessage
-  //    "options": options.map((BaseOption option) => option.toMap())
+  //    "options": options.map((OptionBase option) => option.toMap())
   //  };
   //
   //  @override
@@ -733,7 +733,7 @@ class BaseMultipleChoiceInput extends FormElement {
   //    name = map["name"];
   //    helpMessage = map["helpMessage"];
   //    List<Map> optionMaps = map["options"];
-  //    options.forEach((BaseOption option) {
+  //    options.forEach((OptionBase option) {
   //      Map optionMap = optionMaps.singleWhere((Map m) =>
   //          m["name"] == option.name);
   //      option.updateFromMap(optionMap);
@@ -741,7 +741,7 @@ class BaseMultipleChoiceInput extends FormElement {
   //  }
 }
 
-class MultipleChoiceInput extends BaseMultipleChoiceInput with
+class MultipleChoiceInput extends MultipleChoiceInputBase with
     _NewValueCallback<int> {
   MultipleChoiceInput(String name, InputCallback onInput) : super(name) {
     this.onInput = onInput;
@@ -749,12 +749,12 @@ class MultipleChoiceInput extends BaseMultipleChoiceInput with
 }
 
 /// Base class for a single element to choose in a [MultipleChoiceInput].
-class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
+class OptionBase extends FormElement implements Input<bool> {
   String get text => attributes["text"];
   set text(String value) => attributes["text"] = value;
 
   static const String elementClass = "Option";
-  BaseOption(String text, {bool selected: false, String helpMessage}) :
+  OptionBase(String text, {bool selected: false, String helpMessage}) :
       super(elementClass) {
     this.text = text;
     this.current = selected;
@@ -762,12 +762,12 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
   }
 
   // This exists because of https://code.google.com/p/dart/issues/detail?id=15101
-  BaseOption.noOptional(String text, bool selected, String helpMessage) :
+  OptionBase.noOptional(String text, bool selected, String helpMessage) :
     this(text, selected: selected, helpMessage: helpMessage);
 
   @override
   Map<String, Object> toMap() {
-    Map<String,Object> map = super.toMap();
+    Map<String, Object> map = super.toMap();
     map.addAll({
       "text": text,
       "current": current
@@ -789,7 +789,7 @@ class BaseOption extends FormElement implements UpdatableByMap, Input<bool> {
   void sanitizeCurrent() {}
 }
 
-class Option extends BaseOption with _NewValueCallback<bool> {
+class Option extends OptionBase with _NewValueCallback<bool> {
   /// The [onSelect] callback is only triggered when the option has just been
   /// selected (not when it was deselected).
   Option(String text, InputCallback onSelect, {bool

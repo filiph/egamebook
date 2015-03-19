@@ -19,8 +19,7 @@ class EgbFormatException implements Exception {
   int line;
   File file;
 
-  EgbFormatException(String this.msg, {this.line, this.file}) {
-  }
+  EgbFormatException(String this.msg, {this.line, this.file});
 
   String toString() {
     StringBuffer strBuf = new StringBuffer();
@@ -178,7 +177,7 @@ class BuilderBlock implements BuilderLineRange {
   int lineStart;
   int lineEnd;
   int type = 0;
-  Map<String,dynamic> options;
+  Map<String, dynamic> options;
   List<BuilderBlock> subBlocks;
 
   static final int BLK_TEXT = 1;
@@ -198,7 +197,7 @@ class BuilderBlock implements BuilderLineRange {
   static final int BLK_CHOICE_MULTILINE = 256;
 
   BuilderBlock({this.lineStart, this.type: 0}) {
-    options = new Map<String,dynamic>();
+    options = new Map<String, dynamic>();
     subBlocks = new List<BuilderBlock>();
   }
 }
@@ -291,7 +290,7 @@ class Builder {
     metadata = new List<BuilderMetadata>();
     synopsisLineNumbers = new List<int>();
     pages = new List<BuilderPage>();
-    pageHandles = new Map<String,int>();
+    pageHandles = new Map<String, int>();
     initBlocks = new List<BuilderInitBlock>();
     importLibFiles = new List<File>();
     importLibFilesFullPaths = new Set<String>();
@@ -422,7 +421,6 @@ class Builder {
    * This method takes care of checking each new line, trying to find
    * patterns (like a new page).
    *
-   * @return    Future of bool. Always true on completion.
    **/
   void _check(int number, String line) {
     // start finding patterns in the line
@@ -452,7 +450,7 @@ class Builder {
   /**
    * Checks if current line is a blank line. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkBlankLine(int number, String line) {
     if (_mode != MODE_NORMAL) {
@@ -485,7 +483,7 @@ class Builder {
   /**
    * Checks if current line is a metadata line. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkMetadataLine(int number, String line) {
     if (_mode != MODE_METADATA || line == null) {
@@ -519,7 +517,7 @@ class Builder {
   /**
    * Checks if current line is a beginning of a new page. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkNewPage(int number, String line) {
     // TODO: check inside echo tags, throw error if true
@@ -577,7 +575,7 @@ class Builder {
    * Checks if current line is an options line below new page line.
    * Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkPageOptions(int number, String line) {
     if (_mode != MODE_NORMAL || line == null) {
@@ -654,7 +652,7 @@ class Builder {
   /**
    * Checks if current line is choice. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkChoiceList(int number, String line) {
     // TODO: check even inside ECHO tags, add to script
@@ -772,7 +770,7 @@ class Builder {
    * Checks if current line is one of `<classes>`, `<functions>` or
    * `<variables>` (or their closing tags). Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkInitBlockTags(int number, String line) {
     if (_mode == MODE_INSIDE_SCRIPT_TAG || line == null) {
@@ -818,7 +816,7 @@ class Builder {
    * Checks if current line is one of `<script>` or `</script>`.
    * Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkScriptTags(int number, String line) {
     if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_VARIABLES
@@ -892,7 +890,7 @@ class Builder {
   /**
    * Checks if there is a goto("") statement inside a script. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkGotoInsideScript(int number, String line) {
     if (line == null) {
@@ -913,7 +911,7 @@ class Builder {
   /**
    * Checks if current line is an `<import>` tag. Acts accordingly.
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkImportTag(int number, String line) {
     if (_mode == MODE_INSIDE_SCRIPT_TAG || line == null) {
@@ -944,7 +942,7 @@ class Builder {
    * (Unless it's above the first page, in which case it's a line
    * in the synopsis.)
    *
-   * @return    Future of bool, indicating the result of the check.
+   * @return    bool, indicating the result of the check.
    **/
   bool _checkNormalParagraph(int number, String line) {
     // TODO: check also inside echo tags, add to script block
@@ -1036,7 +1034,7 @@ class Builder {
           }
         }
       }
-      // delete the nulls
+      // remove the nulls
       importLibFiles = importLibFiles.where((f) => f != null).toList();
       completer.complete(true);
     });
@@ -1182,7 +1180,7 @@ class Builder {
     return completer.future;
   }
 
-  _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
+  void _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
     assert(importLibFilesFullPaths != null);
     dartOutStream.write("\n");
     for (var importPath in importLibFilesFullPaths) {
@@ -1254,7 +1252,7 @@ class Builder {
    * @param substitutions A map of String->String substitutions.
    */
   Future<bool> _fileFromTemplate(File inFile, File outFile,
-      [Map<String,String> substitutions]) {
+      [Map<String, String> substitutions]) {
     if (substitutions == null) {
       substitutions = new Map();
     }
@@ -1297,7 +1295,7 @@ class Builder {
    * @param dartOutStream Stream to be written to.
    * @param initBlockType The type of blocks whose contents we want to copy.
    * @param indent  Whitespace indent.
-   * @return    Always true.
+   * @return    Future of bool. Always true.
    */
   Future<bool> writeInitBlocks(IOSink dartOutStream, int initBlockType,
                          {int indent: 0}) {
@@ -1346,7 +1344,7 @@ class Builder {
    * Dart file.)
    *
    * @param dartOutStream Stream to be written to.
-   * @return    Always true.
+   * @return    Future. Always true.
    */
   Future writePagesToScripter(IOSink dartOutStream) {
     var completer = new Completer();
@@ -1686,7 +1684,7 @@ class Builder {
    * @param inclusive Should the starting and ending lines in the lineRanges
    *                  be included?
    * @param indentLength  Whitespace indent.
-   * @return  Always true.
+   * @return  Future of bool. Always true.
    */
   Future<bool> copyLineRanges(List<BuilderLineRange> lineRanges,
       Stream<List<int>> inStream, IOSink outStream,
@@ -1763,7 +1761,7 @@ class Builder {
 //    graphML = new GraphML();
 //
 //    // create group nodes
-//    Map<String,Node> pageGroupNodes = new Map<String,Node>();
+//    Map<String, Node> pageGroupNodes = new Map<String, Node>();
 //    for (int i = 0; i < pageGroups.length; i++) {
 //      var node = new Node(pageGroups[i].name);
 //      pageGroupNodes[pageGroups[i].name] = node;
@@ -1771,7 +1769,7 @@ class Builder {
 //    }
 //
 //    // create nodes
-//    Map<String,Node> pageNodes = new Map<String,Node>();
+//    Map<String, Node> pageNodes = new Map<String, Node>();
 //    for (int i = 0; i < pages.length; i++) {
 //      var node = new Node(pages[i].nameWithoutGroup);
 //      pageNodes[pages[i].name] = node;
@@ -1838,7 +1836,7 @@ class Builder {
 //   */
 //  void updateFromGraphML() {
 //    // populate map of all nodes in graph
-//    Map<String,Node> nodesToAdd = new Map<String,Node>();
+//    Map<String, Node> nodesToAdd = new Map<String, Node>();
 //    for (var node in graphML.nodes) {
 //      nodesToAdd[node.fullText] = node;
 //    }
@@ -1852,7 +1850,7 @@ class Builder {
 //
 //        // populate map of all linked nodes in graphml
 //        Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
-//        Map<String,Node> linkedPageFullNamesToAdd = new Map<String,Node>();
+//        Map<String, Node> linkedPageFullNamesToAdd = new Map<String, Node>();
 //        for (var node in linkedNodesToAdd) {
 //          linkedPageFullNamesToAdd[node.fullText] = node;
 //        }

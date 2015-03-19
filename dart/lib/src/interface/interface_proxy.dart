@@ -81,7 +81,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
         DEBUG_SCR("GET_BOOK_UID received.");
-        _send(new EgbMessage.BookUid("DEFAULT_BOOK_UID"));
+        _send(new EgbMessage.bookUid("DEFAULT_BOOK_UID"));
         return;
       case EgbMessage.CHOICE_SELECTED:
         int choiceHash = message.intContent;
@@ -105,11 +105,11 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         try {
           scripter.restart();
         } catch (e, stacktrace) {
-          _send(new EgbMessage.ScripterError(
+          _send(new EgbMessage.scripterError(
               "An error occured when initializing: $e.\n" "$stacktrace"));
           throw e;
         }
-        _send(new EgbMessage.StatsInit(Stat.createStatList()));
+        _send(new EgbMessage.statsInit(Stat.createStatList()));
         _send(new PointsAward(0, 0).toMessage());
         return;
       case EgbMessage.LOAD_GAME:
@@ -130,26 +130,26 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
           }
         } on IncompatibleSavegameException catch (e, stacktrace) {
           // don't
-          _send(new EgbMessage.ScripterError(
+          _send(new EgbMessage.scripterError(
               "Load failed due to incompatibility: $e.\n" "$stacktrace"));
           scripter.restart();
         } catch (e, stacktrace) {
           // XXX: get rid of this once all possible errors are encapsulated in SavegameExpceptions?
-          _send(new EgbMessage.ScripterError(
+          _send(new EgbMessage.scripterError(
               "Load failed for unknown reason: $e.\n" "$stacktrace"));
           scripter.restart();
         }
         try {
-          _send(new EgbMessage.StatsInit(Stat.createStatList()));
+          _send(new EgbMessage.statsInit(Stat.createStatList()));
         } catch (e, stacktrace) {
-          _send(new EgbMessage.ScripterError(
+          _send(new EgbMessage.scripterError(
               "Sending Stats failed for unknown reason: $e.\n" "$stacktrace"));
           throw e;
         }
         int pointSum = scripter.getPoints().sum;
         _send(new PointsAward(0, pointSum).toMessage());
         return;
-      case EgbMessage.CONTINUE:
+      case EgbMessage.PROCEED:
         // Solve backlog. TODO: do better or drop completely
         if (_messageBacklog != null) {
           _send(_messageBacklog);
@@ -159,7 +159,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
         scripter.walk();
         return;
       default:
-        _send(new EgbMessage.ScripterError("Wrong message type received by "
+        _send(new EgbMessage.scripterError("Wrong message type received by "
             "Scripter - ${message.type}."));
 //        throw new EgbMessageException("Wrong message type received by "
 //            "Scripter - ${message.type}.");
@@ -217,28 +217,28 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   void endBook() {
-    _send(new EgbMessage.EndOfBook());
+    _send(new EgbMessage.endOfBook());
   }
 
   @override
   void reportError(String title, String text) {
-    _send(new EgbMessage.ScripterError("$title: $text"));
+    _send(new EgbMessage.scripterError("$title: $text"));
     // TODO: Should close port!?
   }
   
   @override
   void log(String text) {
-    _send(new EgbMessage.ScripterLog(text));
+    _send(new EgbMessage.scripterLog(text));
   }
 
   @override
   void savePlayerChronology(Set<String> playerChronology) {
-    _send(new EgbMessage.SavePlayerChronology(playerChronology));
+    _send(new EgbMessage.savePlayerChronology(playerChronology));
   }
 
   @override
   void setStats(List<UIStat> stats) {
-    _send(new EgbMessage.StatsInit(Stat.createStatList()));
+    _send(new EgbMessage.statsInit(Stat.createStatList()));
   }
 
   Completer<int> _choiceSelectedCompleter;
@@ -259,14 +259,14 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   @override
   Future<bool> showText(String text) {
-    _send(new EgbMessage.TextResult(text));
+    _send(new EgbMessage.textResult(text));
     return new Future.value(); // TODO: wait for interface to return
     //       EgbMessage.TEXT_SHOWN
   }
 
   @override
   Future<bool> updateStats(StatUpdateCollection updates) {
-    _send(new EgbMessage.StatUpdates(updates));
+    _send(new EgbMessage.statUpdates(updates));
     return new Future.value(true);
   }
 
@@ -286,14 +286,14 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");
     _formInputStreamController = new StreamController<CurrentState>();
-    _send(new EgbMessage.ShowForm(form));
+    _send(new EgbMessage.showForm(form));
     return _formInputStreamController.stream;
   }
 
   @override
   void updateForm(FormConfiguration values) {
     DEBUG_SCR("Scripter sends newly updated values.");
-    _send(new EgbMessage.UpdateForm(values));
+    _send(new EgbMessage.updateForm(values));
   }
 }
 

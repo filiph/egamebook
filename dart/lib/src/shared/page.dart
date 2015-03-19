@@ -10,10 +10,9 @@ class EgbPage {
   bool visitOnce;
   bool showOnce;
   
-  EgbPage({this.name, this.visitOnce: false, this.showOnce: false}) {
-  }
+  EgbPage({this.name, this.visitOnce: false, this.showOnce: false});
   
-  toString() => name;
+  String toString() => name;
   
   /**
    *  When [name] starts with "Something: ", then "Something" is the name of

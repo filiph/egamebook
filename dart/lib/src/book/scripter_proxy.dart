@@ -16,13 +16,14 @@ import 'package:egamebook/src/shared/form.dart';
  * The methods of Scripter that are callable by Interface.
  */
 abstract class EgbScripterViewedFromInterface {
+  String get uid;
+  
   /**
    * Initializes the Scripter. In case of a Scripter in its own Isolate, this
    * creates the Isolate and waits for the UID. The returned Future completes
    * only after that.
    */
-  Future init();
-  String get uid;
+  Future init();  
   void restart();
   void load(EgbSavegame savegame, [Set<String> playerChronology]);
   void quit();
@@ -34,6 +35,7 @@ abstract class EgbScripterViewedFromInterface {
  */
 abstract class EgbScripterProxy extends EgbScripterViewedFromInterface {
   EgbInterface interface;
+  
   void setInterface(EgbInterface interface) {
     this.interface = interface;
     if (uid != null) {
@@ -74,7 +76,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     if (_message is SendPort) {
       INT_DEBUG("Received SendPort from Isolate");
       _scripterPort = _message;
-      _send(new EgbMessage.RequestBookUid());
+      _send(new EgbMessage.requestBookUid());
       return;
     }
 
@@ -106,16 +108,16 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.TEXT_RESULT:
         interface.showText(message.strContent).then((_) {
-          _send(new EgbMessage.Continue());
+          _send(new EgbMessage.proceed());
         });
         return;
       case EgbMessage.NO_RESULT:
-        // No visible result from Scripter. Continuing.
-        _send(new EgbMessage.Continue());
+        // No visible result from Scripter. Proceeding.
+        _send(new EgbMessage.proceed());
         return;
       case EgbMessage.POINTS_AWARD:
         interface.awardPoints(new PointsAward.fromMessage(message)).then((_) {
-          _send(new EgbMessage.Continue());
+          _send(new EgbMessage.proceed());
         });
         return;
       case EgbMessage.SET_STATS:
@@ -132,7 +134,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         interface.showChoices(new EgbChoiceList.fromMessage(message)).then((int
             hash) {
           if (hash != null) {
-            _send(new EgbMessage.ChoiceSelected(hash));
+            _send(new EgbMessage.choiceSelected(hash));
           } else {
             // User wants to quit (hash == null).
             quit();
@@ -144,7 +146,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         FormProxy formProxy = new FormProxy.fromMap(message.mapContent);
         interface.showForm(formProxy).listen((CurrentState state) {
           INT_DEBUG("Form updated or submitted by player.");
-          _send(new EgbMessage.FormInput(state));
+          _send(new EgbMessage.formInput(state));
         });
         return;
       case EgbMessage.UPDATE_FORM:
@@ -188,14 +190,14 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   @override
   void quit() {
     if (_scripterPort != null) {
-      _send(new EgbMessage.Quit());
+      _send(new EgbMessage.quit());
     }
     _receivePort.close();
   }
 
   @override
   void restart() {
-    _send(new EgbMessage.Start());
+    _send(new EgbMessage.start());
   }
 }
 

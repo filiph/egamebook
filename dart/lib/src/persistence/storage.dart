@@ -16,6 +16,7 @@ abstract class EgbStorage {
   Future<String> load(String key);
   Future<bool> delete(String key);
 
+  /// Returns default player [EgbPlayerProfile] for the storage.
   EgbPlayerProfile getDefaultPlayerProfile();
 }
 
@@ -24,7 +25,7 @@ abstract class EgbStorage {
  * no persistence.
  */
 class MemoryStorage implements EgbStorage {
-  Map<String,String> memory;
+  Map<String, String> memory;
   
   MemoryStorage() {
     memory = new Map();
@@ -48,6 +49,5 @@ class MemoryStorage implements EgbStorage {
   EgbPlayerProfile getDefaultPlayerProfile() {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
                                              this);
-  }
-  
+  }  
 }
