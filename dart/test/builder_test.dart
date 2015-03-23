@@ -11,7 +11,7 @@ import "package:egamebook/builder.dart";
  * [filename]. Convenience function.
  */
 String getPath(String filename) {
-  var pathToScript = Platform.script.path;
+  var pathToScript = Platform.script.toFilePath();
   return path.join(path.dirname(pathToScript), "files", filename);
 }
 
