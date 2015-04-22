@@ -20,6 +20,15 @@ String getPathToBuildScript() {
       .toFilePath();
 }
 
+// TODO maybe also test/
+/// Returns if the path is within bin/, lib/ or web/ directory.
+bool isSourcesDirectory(String path) {
+  List segments = p.split(path);
+
+  return segments.contains("bin") || segments.contains("lib") ||
+      segments.contains("web");
+}
+
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
 abstract class Worker {
@@ -161,43 +170,59 @@ class ProjectBuilder implements Worker {
 class ProjectWatcher implements Worker {
   /// File extensions watched
   final List extensions = [".egb", ".dart"];
-  final String ignoredExtension = ".html.dart";
+  /// Extension which is not valid for building
+  final String invalidExtension = ".html.dart";
   /// Path used for watching
   final String _path;
-  String _actualPath = "";
-  String _lastPath = "";
+  /// Filename of last generated file from .egb file
+  String _generatedDartFileName;
+  /// If builder is building at the moment
+  bool _building = false;
 
   /// Constructor
   ProjectWatcher(List params)
       : _path = (params.isEmpty) ? "." : params.first;
 
-  //TODO needs more care
-  //TODO when files which I am changing are changed again and generate others.
   /// Runs builder after each file change.
+  /// Builder regenerates files of only valid [extensions] and not from files
+  /// in sources directory (bin/, lib/, web/).
+  ///
+  /// The flow of builder is follows:
+  ///
+  /// When .egb file is changed, we don't want to rebuild also new (or updated)
+  /// .dart and .html.dart files.
+  ///
+  /// When .dart file is changed, we don't want it to rebuild again and
+  /// we don't want to rebuild also .html.dart file.
+  ///
+  /// When .html.dart file is changed, we don't want to rebuild anything.
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
     watcher.events.listen((WatchEvent event) {
-      print(event);
-      print(p.basename(event.path));
-      print("$_actualPath$ignoredExtension");
+      if (!_building &&
+          !isSourcesDirectory(event.path) &&
+          _isValidBuilderExtension(event.path) &&
+          p.basename(event.path) != _generatedDartFileName) {
+        // filename of .dart file from .egb file
+        _generatedDartFileName = "${p.basenameWithoutExtension(event.path)}.dart";
+        _building = true; // prevents problems with StreamSink
 
-      if (extensions.contains(p.extension(event.path)) &&
-          p.basename(event.path) != "$_actualPath$ignoredExtension" &&
-          p.basename(event.path) != _lastPath) {
-        print("BUILDING");
-        print("${p.basename(event.path)} changed.");
-        _actualPath = p.basenameWithoutExtension(event.path);
-        _lastPath = p.basename(event.path);
+        print("Building ${p.basename(event.path)}.");
+
         Process.start("dart", [getPathToBuildScript(), event.path])
           .then((process) {
             Future.wait([
               stdout.addStream(process.stdout),
               stderr.addStream(process.stderr)])
               .then((_) {
+                _building = false;
                 print("BUILD SUCCESSFULL!");
                 new Future.delayed(new Duration(seconds: 1), () {
-                  _actualPath = "";
-                  _lastPath = ""; //lastPath gets invalidated after 1 sec
+                  // The value is saved only for small amount of time to prevent
+                  // repeating builds on same .dart file.
+                  // But we want to also have the possibility to update the file
+                  // again by editing manually so it needs to be reseted.
+                  _generatedDartFileName = null;
                 });
             });
         });
@@ -205,5 +230,17 @@ class ProjectWatcher implements Worker {
     }, onError: print);
 
     return new Future.value("Watching for changes in project...");
+  }
+
+  /// Returns if the extension of [path] is valid.
+  /// In order to be valid it has to be in [extensions]
+  /// and it can't be [invalidExtension].
+  bool _isValidBuilderExtension(String path) {
+    // .html.dart is not regular extension
+    if (!extensions.contains(p.extension(path)) ||
+        path.endsWith(invalidExtension)) {
+      return false;
+    }
+    return true;
   }
 }
