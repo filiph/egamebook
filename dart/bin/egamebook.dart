@@ -27,7 +27,4 @@ main(List<String> args) {
       print(error);
       exit(64); // Exit code 64 indicates a usage error.
     });
-
-  //TODO return something better in future than string?
-  //TODO omit lib, test and bin folders from building and watching
 }

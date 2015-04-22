@@ -7,7 +7,7 @@ import 'src/cli/cli.dart';
 /// Abstract class [WorkerCommand] defines base class for all commands.
 abstract class WorkerCommand extends Command {
   /// Error message used during failed validation.
-  final String error;
+  final String error = "";
 
   /// Runs appropriate command and validates parameters.
   /// If params are not valid, it fails to execute the command.
