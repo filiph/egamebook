@@ -4,10 +4,11 @@ author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   a_star: '>=0.3.0 <0.4.0'
   analyzer: '>=0.22.4 <0.23.0'
-  args: '>=0.10.0+2 <0.11.0'
+  args: any
   browser: '>=0.10.0+2 <0.11.0'
   html5lib: '>=0.10.0 <0.11.0'
   jsonml: '>=0.1.1 <0.2.0'
   markdown: '>=0.7.0 <0.8.0'
   path: '>=1.1.0 <2.0.0'
   unittest: '>=0.10.1+2 <0.11.0'
+  watcher: any
