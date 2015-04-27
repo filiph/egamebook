@@ -339,7 +339,7 @@ class FormConfiguration {
 
   Map<String, Object> getById(String id) => _valuesMap[id];
 
-  Map<String, Map<String, Object>> toMap() => _valuesMap;
+  Map<String, Map<String, Object>> toMap() => new Map.from(_valuesMap);
 }
 
 /**
@@ -373,7 +373,7 @@ class CurrentState {
 
   Object getById(String id) => _valuesMap[id];
 
-  Map<String, Object> toMap() => _valuesMap;
+  Map<String, Object> toMap() => new Map.from(_valuesMap);
 
   String toString() => "<CurrentState submitted=$submitted>";
 }

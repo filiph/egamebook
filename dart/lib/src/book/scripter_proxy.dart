@@ -17,13 +17,13 @@ import 'package:egamebook/src/shared/form.dart';
  */
 abstract class EgbScripterViewedFromInterface {
   String get uid;
-  
+
   /**
    * Initializes the Scripter. In case of a Scripter in its own Isolate, this
    * creates the Isolate and waits for the UID. The returned Future completes
    * only after that.
    */
-  Future init();  
+  Future init();
   void restart();
   void load(EgbSavegame savegame, [Set<String> playerChronology]);
   void quit();
@@ -35,7 +35,7 @@ abstract class EgbScripterViewedFromInterface {
  */
 abstract class EgbScripterProxy extends EgbScripterViewedFromInterface {
   EgbInterface interface;
-  
+
   void setInterface(EgbInterface interface) {
     this.interface = interface;
     if (uid != null) {
@@ -143,7 +143,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.SHOW_FORM:
         INT_DEBUG("Showing form.");
-        FormProxy formProxy = new FormProxy.fromMap(message.mapContent);
+        FormProxy formProxy = new FormProxy.fromMessage(message);
         interface.showForm(formProxy).listen((CurrentState state) {
           INT_DEBUG("Form updated or submitted by player.");
           _send(new EgbMessage.formInput(state));
