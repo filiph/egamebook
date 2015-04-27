@@ -1088,6 +1088,10 @@ class Builder {
    */
   List<BuilderInitBlock> initBlocks;
 
+  /// The code generator that analyzes <init> blocks and keeps track of
+  /// variables.
+  VarsGenerator varsGenerator;
+
   /**
    * GraphML representation of the page flow.
    **/
@@ -1301,6 +1305,7 @@ class Builder {
                          {int indent: 0}) {
     var completer = new Completer();
 
+    dartOutStream.write(varsGenerator.generateInitBlockCode());
     copyLineRanges(
         initBlocks.where((block) => block.type == initBlockType).toList(),
         inputEgbFile.openRead(),
@@ -1327,10 +1332,10 @@ class Builder {
         inclusive: false, indentLength: indent,
         contentsCopyDestination: contents)
     .then((_) {
-      var generator = new VarsGenerator();
-      generator.addSource(contents.toString());
-      dartOutStream.write(generator.generatePopulateMethodCode());
-      dartOutStream.write(generator.generateExtractMethodCode());
+      varsGenerator = new VarsGenerator();
+      varsGenerator.addSource(contents.toString());
+      dartOutStream.write(varsGenerator.generatePopulateMethodCode());
+      dartOutStream.write(varsGenerator.generateExtractMethodCode());
       completer.complete(true);
     });
 
