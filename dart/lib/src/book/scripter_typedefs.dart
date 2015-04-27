@@ -7,6 +7,9 @@ import 'package:egamebook/src/shared/form.dart';
  * [:echo:] and [:goto:].
  */
 
+/// Corresponds to [EgbScripter.extractStateFromVars].
+typedef void ExtractStateFromVarsFunction();
+
 /// Corresponds to [EgbScripter.goto].
 typedef void GotoFunction(String pageName);
 
@@ -14,7 +17,7 @@ typedef void GotoFunction(String pageName);
 typedef void EchoFunction(String str);
 
 /// Corresponds to [EgbScripter.choice].
-typedef EgbChoice ChoiceFunction(String string, {String goto, Function script, 
+typedef EgbChoice ChoiceFunction(String string, {String goto, Function script,
     String submenu, bool deferToEndOfPage, bool deferToChoiceList});
 
 /// Corresponds to [EgbScripter.showForm].

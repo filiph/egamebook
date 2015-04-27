@@ -11,6 +11,7 @@ import 'dart:collection';
 
 class BodegaZil {
   BodegaZil(this.goto, this.echo, this.choice, this.showForm,
+      this.extractStateFromVars,
       Map<String, Object> vars, EgbScripter scripter)
       : zil = new Zil(scripter), this.vars = new Vars(vars) {
     setupTimeline();
@@ -644,6 +645,9 @@ class BodegaZil {
   final EchoFunction echo;
   final ChoiceFunction choice;
   final ShowFormFunction showForm;
+  // Currently, we need to make sure this function gets called any time
+  // we change any variable through [vars].
+  final ExtractStateFromVarsFunction extractStateFromVars;
   final Vars vars;
   Timeline exploration;
 
@@ -806,6 +810,7 @@ class BodegaZil {
 
     traitsForm.onSubmit = () {
       vars.pointsToDistribute = pointsLeft.current;
+      extractStateFromVars();
     };
 
     showForm(traitsForm);
@@ -852,7 +857,7 @@ class BodegaZil {
   }
 
   /// Allows easy creation of choices that let player exert [physicalPoints] or
-  /// [mentalPoints] in exchange for some kind of advantace (faster action,
+  /// [mentalPoints] in exchange for some kind of advantage (faster action,
   /// more information, etc.).
   void createExtraEffortChoiceList(
       String normalChoiceString, Function normalOutcome,
