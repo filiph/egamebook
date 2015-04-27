@@ -1015,13 +1015,13 @@ class Builder {
 
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
-          completer.completeError(
-              new Exception("Source file tries to import a file that "
-                    "doesn't exist (${importLibFiles[i]})."));
+          return new Exception("Source file tries to import a file that "
+              "doesn't exist (${importLibFiles[i]}).");
         }
       }
 
     })
+    .catchError((e) => completer.complete(e))
     .then((_) {
       assert(fullPaths.length == importLibFiles.length);
       importLibFilesFullPaths = new Set.from(fullPaths);
