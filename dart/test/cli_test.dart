@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:unittest/unittest.dart';
 import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
@@ -51,16 +52,13 @@ class CreateCommandStub extends CreateCommand {
 }
 
 void main() {
-  group("egamebook create", () {
-    CommandRunner runner;
-    Command command;
+  CommandRunner runner =
+      new CommandRunner("egamebooktest", "Egamebook test builder.")
+      ..addCommand(new CreateCommandStub())
+      ..addCommand(new BuildCommand())
+      ..addCommand(new WatchCommand());
 
-    setUp(() {
-      runner =
-          new CommandRunner("egamebooktest", "Egamebook test builder.");
-      command = new CreateCommandStub();
-      runner.addCommand(command);
-    });
+  group("egamebook create", () {
 
     test("fails with no parameters", () {
       var callback = expectAsync((message) {
@@ -148,15 +146,6 @@ void main() {
   });
 
   group("egamebook build", () {
-    CommandRunner runner;
-    Command command;
-
-    setUp(() {
-      runner =
-          new CommandRunner("egamebooktest", "Egamebook test builder.");
-      command = new BuildCommand();
-      runner.addCommand(command);
-    });
 
     test("fails with two parameters", () {
       var callback = expectAsync((message) {
@@ -200,8 +189,8 @@ void main() {
     });
   });
 
-  group("egamebook build getEgbFile", () {
-    test("returns correct .egb file", () {
+  group("egamebook build getEgbFiles", () {
+    test("returns correct .egb files", () {
       String path = getPath("test_search_egb");
       Directory temp = new Directory(path);
       temp.createSync();
@@ -215,12 +204,36 @@ void main() {
 
       ProjectBuilder builder = new ProjectBuilder([]);
 
-      var callback = expectAsync((fileName) {
-        expect(p.basename(fileName), "test1.egb");
+      var callback = expectAsync((List files) {
+        expect(files.length, 3);
+        expect(p.basename(files[0].path), "test1.egb");
+        expect(p.basename(files[1].path), "test2.egb");
+        expect(p.basename(files[2].path), "test3.egb");
         temp.deleteSync(recursive: true);
       });
 
-      builder.getEgbFile(path).then(callback);
+      builder.getEgbFiles(path).then(callback);
+    });
+  });
+
+  group("egamebook watch", () {
+
+    test("builds .egb file after change", () {
+      String path = getPath("test_watch_egb");
+      Directory temp = new Directory(path);
+      temp.createSync();
+
+      File file1 = new File(p.join(path, "test1.egb"));
+      file1.createSync();
+
+      var callback = expectAsync((fileName) {
+        print(fileName);
+        file1.writeAsStringSync('some content2');
+        //File file2 = new File(p.join(path, "test1.dart"));
+        //expect(file2.existsSync(), isTrue);
+      });
+
+      runner.run(["watch", path]).then(callback);
     });
   });
 }

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:watcher/watcher.dart';
+import 'dart:collection';
 
 /// Returns path to build.dart script in the bin/ folder.
 /// TODO probably will be rewritten.
@@ -114,49 +115,63 @@ class ProjectBuilder implements Worker {
   ProjectBuilder(List params)
       : _path = (params.isEmpty) ? "." : params.first;
 
-  /// Runs egamebook builder on found .egb file.
+  /// Runs egamebook builder on found .egb files in [_path].
+  /// The files are retrieved as a [List] which is then converted to
+  /// [ListQueue] and then the build is run on every file in this queue.
   Future run() {
     Completer completer = new Completer();
 
-    getEgbFile(_path).then((filePath) {
-      print("Starting build $filePath...");
-      Process.start("dart", [getPathToBuildScript(), filePath])
-        .then((process) {
-          Future.wait([
-            stdout.addStream(process.stdout),
-            stderr.addStream(process.stderr)])
-              .then((_) => completer.complete("BUILD SUCCESSFULL!"))
-              .catchError(completer.completeError);
-      });
+    getEgbFiles(_path).then((List files) {
+      ListQueue queue = new ListQueue.from(files);
+      return buildFile(queue, completer);
     }).catchError(completer.completeError);
 
     return completer.future;
   }
 
-  /// Returns first .egb file name in the given [path] as [Future].
+  /// Builds recursively all files in [queue].
+  /// If the queue is already empty, it competes with success.
+  Future buildFile(ListQueue queue, Completer completer){
+    File file = queue.removeFirst();
+    print("Building $file...");
+
+    Process.start("dart", [getPathToBuildScript(), file.path])
+      .then((process) {
+        Future.wait([
+          stdout.addStream(process.stdout),
+          stderr.addStream(process.stderr)])
+            .then((_) {
+              if (queue.isEmpty) {
+                return completer.complete("BUILD SUCCESSFULL!");
+              } else {
+                buildFile(queue, completer);
+              }
+            }).catchError(completer.completeError);
+    });
+
+    return completer.future;
+  }
+
+  /// Returns every .egb file name in the given [path] as [Future].
   /// If no .egb file is found, build fails.
-  Future getEgbFile(String path) {
-    String filePath;
+  Future getEgbFiles(String path) {
     Directory from = new Directory(path);
 
     if (!from.existsSync()) {
       return new Future.error("BUILD FAILED!\nDirectory $path doesn't exist.");
     }
 
-    List files = from.listSync(recursive: true, followLinks: false);
-    for (var entity in files) {
-      if (entity is File && p.extension(entity.path) == extension) {
-        filePath = entity.path;
-        break;
-      }
-    }
+    List files = from.listSync(recursive: true, followLinks: false)
+        .where((entity)
+            => entity is File && p.extension(entity.path) == extension)
+            .toList();
 
-    if (filePath == null) {
+    if (files.isEmpty) {
       return new Future.error(
           "BUILD FAILED!\nNo $extension file in this directory.");
     }
 
-    return new Future.value(filePath);
+    return new Future.value(files);
   }
 }
 
@@ -198,7 +213,8 @@ class ProjectWatcher implements Worker {
   /// When .html.dart file is changed, we don't want to rebuild anything.
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
-    watcher.events.listen((WatchEvent event) {
+
+    var subscription = watcher.events.listen((WatchEvent event) {
       if (!_building &&
           !isSourcesDirectory(event.path) &&
           _isValidBuilderExtension(event.path) &&
@@ -209,7 +225,7 @@ class ProjectWatcher implements Worker {
 
         print("Building ${p.basename(event.path)}.");
 
-        Process.start("dart", [getPathToBuildScript(), event.path])
+        /*Process.start("dart", [getPathToBuildScript(), event.path])
           .then((process) {
             Future.wait([
               stdout.addStream(process.stdout),
@@ -225,9 +241,11 @@ class ProjectWatcher implements Worker {
                   _generatedDartFileName = null;
                 });
             });
-        });
+        });*/
       }
     }, onError: print);
+
+    subscription.cancel();
 
     return new Future.value("Watching for changes in project...");
   }
