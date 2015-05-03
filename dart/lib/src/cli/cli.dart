@@ -144,7 +144,7 @@ class ProjectBuilder implements Worker {
               if (queue.isEmpty) {
                 return completer.complete("BUILD SUCCESSFULL!");
               } else {
-                return buildFile(queue, completer);
+                buildFile(queue, completer);
               }
             }).catchError(completer.completeError);
     });
@@ -193,6 +193,10 @@ class ProjectWatcher implements Worker {
   String _generatedDartFileName;
   /// If builder is building at the moment
   bool _building = false;
+  /// Subscription to watcher events. Can be used to cancel watching
+  StreamSubscription _subscription;
+  /// Getter for [_subscription]
+  StreamSubscription get subscription => _subscription;
 
   /// Constructor
   ProjectWatcher(List params)
@@ -214,7 +218,7 @@ class ProjectWatcher implements Worker {
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
 
-    var subscription = watcher.events.listen((WatchEvent event) {
+    _subscription = watcher.events.listen((WatchEvent event) {
       if (!_building &&
           !isSourcesDirectory(event.path) &&
           _isValidBuilderExtension(event.path) &&
@@ -225,7 +229,7 @@ class ProjectWatcher implements Worker {
 
         print("Building ${p.basename(event.path)}.");
 
-        /*Process.start("dart", [getPathToBuildScript(), event.path])
+        Process.start("dart", [getPathToBuildScript(), event.path])
           .then((process) {
             Future.wait([
               stdout.addStream(process.stdout),
@@ -241,11 +245,9 @@ class ProjectWatcher implements Worker {
                   _generatedDartFileName = null;
                 });
             });
-        });*/
+        });
       }
     }, onError: print);
-
-    subscription.cancel();
 
     return new Future.value("Watching for changes in project...");
   }
