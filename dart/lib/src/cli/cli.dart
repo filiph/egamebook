@@ -144,7 +144,7 @@ class ProjectBuilder implements Worker {
               if (queue.isEmpty) {
                 return completer.complete("BUILD SUCCESSFULL!");
               } else {
-                buildFile(queue, completer);
+                return buildFile(queue, completer);
               }
             }).catchError(completer.completeError);
     });
