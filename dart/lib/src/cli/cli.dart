@@ -123,7 +123,7 @@ class ProjectBuilder implements Worker {
 
     getEgbFiles(_path).then((List files) {
       ListQueue queue = new ListQueue.from(files);
-      return buildFile(queue, completer);
+      return _buildFile(queue, completer);
     }).catchError(completer.completeError);
 
     return completer.future;
@@ -131,7 +131,7 @@ class ProjectBuilder implements Worker {
 
   /// Builds recursively all files in [queue].
   /// If the queue is already empty, it competes with success.
-  Future buildFile(ListQueue queue, Completer completer){
+  Future _buildFile(ListQueue queue, Completer completer){
     File file = queue.removeFirst();
     print("Building $file...");
 
@@ -144,7 +144,7 @@ class ProjectBuilder implements Worker {
               if (queue.isEmpty) {
                 return completer.complete("BUILD SUCCESSFULL!");
               } else {
-                buildFile(queue, completer);
+                _buildFile(queue, completer);
               }
             }).catchError(completer.completeError);
     });
