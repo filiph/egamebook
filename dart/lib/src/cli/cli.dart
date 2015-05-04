@@ -134,6 +134,7 @@ class ProjectBuilder implements Worker {
   final String extension = ".egb";
   /// Path used for search
   final String _path;
+  /// Should be the built file analyzed
   final bool _analyze;
 
   ///Constructor
@@ -243,10 +244,16 @@ class ProjectBuilder implements Worker {
 /// Class [ProjectWatcher] watches for desired file types in the project
 /// and runs builder after change on the file.
 ///
+/// It's also possible to run command with -a or --analyze to run analyzer
+/// after each build.
+///
 /// Watcher can be launched in forms:
 ///   watch
 ///   watch .
 ///   watch <path>
+///   watch -a
+///   watch -a .
+///   watch -a <path>
 class ProjectWatcher implements Worker {
   /// File extensions watched
   final List extensions = [".egb", ".dart"];
@@ -254,17 +261,21 @@ class ProjectWatcher implements Worker {
   final String invalidExtension = ".html.dart";
   /// Path used for watching
   final String _path;
+  /// Should be the built file analyzed
+  final bool _analyze;
   /// Filename of last generated file from .egb file
   String _generatedDartFileName;
   /// If builder is building at the moment
   bool _building = false;
+  /// If analyzer is analyzing at the moment
+  bool _analyzing = false;
   /// Subscription to watcher events. Can be used to cancel watching
   StreamSubscription _subscription;
   /// Getter for [_subscription]
   StreamSubscription get subscription => _subscription;
 
   /// Constructor
-  ProjectWatcher(List params)
+  ProjectWatcher(List params, this._analyze)
       : _path = (params.isEmpty) ? "." : params.first;
 
   /// Runs builder after each file change.
@@ -282,11 +293,12 @@ class ProjectWatcher implements Worker {
   /// When .html.dart file is changed, we don't want to rebuild anything.
   ///
   /// When file is removed, we don't want to rebuild.
+  /// TODO when building or analyzing, add it to queque
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
 
     _subscription = watcher.events.listen((WatchEvent event) {
-      if (!_building &&
+      if (!_building && !_analyzing &&
           event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(event.path) &&
           _isValidBuilderExtension(event.path) &&
@@ -302,7 +314,31 @@ class ProjectWatcher implements Worker {
               stderr.addStream(process.stderr)])
               .then((_) {
                 _building = false;
-                print("BUILD SUCCESSFULL!\n");
+
+                String pathDart = getBuiltFileFromEgbFile(event.path);
+
+                if (!new File(pathDart).existsSync()) {
+                  print("BUILD FAILED!\n");
+                  return;
+                }
+
+                if (!_analyze) {
+                  print("BUILD SUCCESSFULL!\n");
+                } else {
+                  _analyzing = true;
+
+                  runAnalyzer(pathDart)
+                    .then((process) {
+                      Future.wait([
+                        stdout.addStream(process.stdout),
+                        stderr.addStream(process.stderr)])
+                          .then((_) {
+                            _analyzing = false;
+                            print("BUILD SUCCESSFULL!\n");
+                            return;
+                          });
+                    });
+                }
                 new Future.delayed(new Duration(seconds: 1), () {
                   // The value is saved only for small amount of time to prevent
                   // repeating builds on same .dart file.
