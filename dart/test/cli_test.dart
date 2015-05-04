@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:convert';
+import 'dart:async';
 import 'package:unittest/unittest.dart';
 import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
@@ -7,7 +7,7 @@ import 'package:egamebook/command.dart';
 import 'package:egamebook/src/cli/cli.dart';
 
 /// Where the template files for tests are located.
-String templateFiles = "files";
+String templateFiles = "template_files";
 
 /// Returns full path to the desired [fileName].
 String getPath(String fileName) {
@@ -59,6 +59,21 @@ void main() {
       ..addCommand(new WatchCommand());
 
   group("egamebook create", () {
+
+    setUp(() {
+      String path = getPath(templateFiles);
+      Directory directory = new Directory(path);
+      directory.createSync();
+
+      File bodega = new File(p.join(directory.path, "bodega.egb"));
+      bodega.writeAsStringSync('Some content of bodega .egb file.');
+    });
+
+    tearDown(() {
+      String path = getPath(templateFiles);
+      Directory directory = new Directory(path);
+      directory.deleteSync(recursive: true);
+    });
 
     test("fails with no parameters", () {
       var callback = expectAsync((message) {
@@ -122,30 +137,24 @@ void main() {
 
       runner.run(["create", path]).then(callback);
     });
-
-    // TODO remains project folder - why?S
-    /*test("creates new nested path project", () {
-      String path = getPath("project_name${Platform.pathSeparator}project_name2");
-      Directory temp = new Directory(path);
-
-      if (temp.existsSync()) { //fixes it it remained from previous failed test.
-        temp.deleteSync(recursive: true);
-      }
-
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
-        expect(lines[0], "New project in $path successfully created.");
-        expect(temp.existsSync(), isTrue);
-        expect(getNumberOfFilesInPath(path),
-            getNumberOfFilesInPath(getPath(templateFiles)));
-        temp.deleteSync(recursive: true);
-      });
-
-      runner.run(["create", path]).then(callback);
-    });*/
   });
 
   group("egamebook build", () {
+
+    setUp(() {
+      String path = getPath(templateFiles);
+      Directory directory = new Directory(path);
+      directory.createSync();
+
+      File bodega = new File(p.join(directory.path, "bodega.egb"));
+      bodega.writeAsStringSync('Some content of bodega .egb file.');
+    });
+
+    tearDown(() {
+      String path = getPath(templateFiles);
+      Directory directory = new Directory(path);
+      directory.deleteSync(recursive: true);
+    });
 
     test("fails with two parameters", () {
       var callback = expectAsync((message) {
@@ -157,20 +166,22 @@ void main() {
       runner.run(["build", "test1", "test2"]).catchError(callback);
     });
 
-    test("builds with no parameters", () {
+    // TODO stupid - builds all files in test - also files/ - how to?
+    // TODO commented to not build all files/
+    /*test("builds with no parameters", () {
       var callback = expectAsync((message) {
         expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
       });
 
       runner.run(["build"]).then(callback);
-    });
+    });*/
 
     test("builds test project", () {
       var callback = expectAsync((message) {
         expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
       });
 
-      runner.run(["build", getPath("files")]).then(callback);
+      runner.run(["build", getPath(templateFiles)]).then(callback);
     });
 
     test("builds project with no .egb files", () {
@@ -186,6 +197,46 @@ void main() {
       });
 
       runner.run(["build", path]).catchError(callback);
+    });
+
+    test("builds with .egb file as parameter", () {
+      String path = getPath("test_build_egb_file");
+      Directory temp = new Directory(path);
+      temp.createSync();
+
+      File file = new File(p.join(path, "test1.egb"));
+      file.writeAsStringSync('Some content of egb file.');
+
+      var callback = expectAsync((message) {
+        File fileHtmlBuild = new File(p.join(path, "test1.html.dart"));
+        File fileDartBuild = new File(p.join(path, "test1.dart"));
+
+        expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
+        expect(fileHtmlBuild.existsSync(), isTrue);
+        expect(fileDartBuild.existsSync(), isTrue);
+        temp.deleteSync(recursive: true);
+      });
+
+      runner.run(["build", "$path${Platform.pathSeparator}test1.egb"]).then(callback);
+    });
+
+    test("fails with .other file as parameter", () {
+      String path = getPath("test_build_other_file");
+      Directory temp = new Directory(path);
+      temp.createSync();
+
+      File file = new File(p.join(path, "test1.other"));
+      file.writeAsStringSync('Not supported file!');
+
+      var callback = expectAsync((message) {
+        List lines = message.split("\n");
+        expect(lines[0], "BUILD FAILED!");
+        expect(lines[1],
+            "File type of $path${Platform.pathSeparator}test1.other is not supported.");
+        temp.deleteSync(recursive: true);
+      });
+
+      runner.run(["build", "$path${Platform.pathSeparator}test1.other"]).catchError(callback);
     });
   });
 
@@ -219,18 +270,25 @@ void main() {
   group("egamebook watch", () {
 
     test("builds .egb file after change", () {
-      String path = getPath("test_watch_egb");
+      String path = getPath("test_watch");
       Directory temp = new Directory(path);
       temp.createSync();
 
-      File file1 = new File(p.join(path, "test1.egb"));
-      file1.createSync();
+      File file = new File(p.join(path, "test1.egb"));
 
       var callback = expectAsync((fileName) {
-        print(fileName);
-        file1.writeAsStringSync('some content2');
-        //File file2 = new File(p.join(path, "test1.dart"));
-        //expect(file2.existsSync(), isTrue);
+        // Starts watching
+        new Future.delayed(new Duration(seconds: 1), () {
+          file.writeAsStringSync('Some updated content.');
+          // Waiting for builder which build file
+          new Future.delayed(new Duration(seconds: 2), () {
+            File fileHtmlBuild = new File(p.join(path, "test1.html.dart"));
+            File fileDartBuild = new File(p.join(path, "test1.dart"));
+            expect(fileHtmlBuild.existsSync(), isTrue);
+            expect(fileDartBuild.existsSync(), isTrue);
+            temp.deleteSync(recursive: true);
+          });
+        });
       });
 
       runner.run(["watch", path]).then(callback);

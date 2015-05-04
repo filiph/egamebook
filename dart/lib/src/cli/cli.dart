@@ -155,6 +155,19 @@ class ProjectBuilder implements Worker {
   /// Returns every .egb file name in the given [path] as [Future].
   /// If no .egb file is found, build fails.
   Future getEgbFiles(String path) {
+
+    if (p.extension(path).isNotEmpty) {
+      if (p.extension(path) == extension) {
+        File file = new File(path);
+        if (!file.existsSync()) {
+          return new Future.error("BUILD FAILED!\nFile $path doesn't exist.");
+        }
+        return new Future.value(new List.from([file]));
+      }
+      return new Future.error(
+          "BUILD FAILED!\nFile type of $path is not supported.");
+    }
+
     Directory from = new Directory(path);
 
     if (!from.existsSync()) {
@@ -215,11 +228,14 @@ class ProjectWatcher implements Worker {
   /// we don't want to rebuild also .html.dart file.
   ///
   /// When .html.dart file is changed, we don't want to rebuild anything.
+  ///
+  /// When file is removed, we don't want to rebuild.
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
 
     _subscription = watcher.events.listen((WatchEvent event) {
       if (!_building &&
+          event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(event.path) &&
           _isValidBuilderExtension(event.path) &&
           p.basename(event.path) != _generatedDartFileName) {
