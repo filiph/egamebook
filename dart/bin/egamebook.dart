@@ -10,6 +10,7 @@ import 'package:egamebook/command.dart';
 ///   build
 ///   build .
 ///   build <path>
+///   build <egb_path>
 ///
 ///   watch
 ///   watch .
