@@ -21,7 +21,8 @@ main(List<String> args) {
     ..addCommand(new BuildCommand())
     ..addCommand(new WatchCommand());
   runner.run(args)
-    .then((message) => print(message))
+    .then((message) =>
+        (message != null && message.isNotEmpty) ? print(message) : "")
     .catchError((error) {
       print(error);
       exit(64); // Exit code 64 indicates a usage error.

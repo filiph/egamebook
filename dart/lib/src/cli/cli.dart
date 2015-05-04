@@ -30,6 +30,22 @@ bool isSourcesDirectory(String path) {
       segments.contains("web");
 }
 
+/// Runs build.dart command line tool on given [path].
+Future runBuilder(String path) {
+  print("Building $path...");
+  return Process.start("dart", [getPathToBuildScript(), path]);
+}
+
+/// Runs dartanalyzer command line tool on given [path].
+Future runAnalyzer(String path) {
+  print("Running analyzer on $path...");
+  return Process.start("dartanalyzer", [path]);
+}
+
+/// Returns .dart built file for .egb file on given [path].
+String getBuiltFileFromEgbFile(String path)  =>
+    "${p.withoutExtension(path)}.dart";
+
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
 abstract class Worker {
@@ -106,14 +122,19 @@ class ProjectCreator implements Worker {
 ///   build .
 ///   build <path>
 ///   build <egb_file>
+///   build -a
+///   build -a .
+///   build -a <path>
+///   build -a <egb_file>
 class ProjectBuilder implements Worker {
   /// File extension which is searched
   final String extension = ".egb";
   /// Path used for search
   final String _path;
+  final bool _analyze;
 
   ///Constructor
-  ProjectBuilder(List params)
+  ProjectBuilder(List params, this._analyze)
       : _path = (params.isEmpty) ? "." : params.first;
 
   /// Runs egamebook builder on found .egb files in [_path].
@@ -132,23 +153,50 @@ class ProjectBuilder implements Worker {
 
   /// Builds recursively all files in [queue].
   /// If the queue is already empty, it competes with success.
+  /// If analyzer option is set, the analyzer is run after build.
   Future _buildFile(ListQueue queue, Completer completer){
     File file = queue.removeFirst();
-    print("Building $file...");
-
-    Process.start("dart", [getPathToBuildScript(), file.path])
+    runBuilder(file.path)
       .then((process) {
         Future.wait([
           stdout.addStream(process.stdout),
           stderr.addStream(process.stderr)])
             .then((_) {
-              if (queue.isEmpty) {
-                return completer.complete("BUILD SUCCESSFULL!");
-              } else {
-                _buildFile(queue, completer);
+              String pathDart = getBuiltFileFromEgbFile(file.path);
+
+              if (!new File(pathDart).existsSync()) {
+                print("BUILD FAILED!\n");
+                return _buildFileOrComplete(queue, completer); //but move to next
               }
+
+              if (!_analyze) {
+                print("BUILD SUCCESSFULL!\n");
+                return _buildFileOrComplete(queue, completer);
+              } else {
+                runAnalyzer(pathDart)
+                  .then((process) {
+                    Future.wait([
+                      stdout.addStream(process.stdout),
+                      stderr.addStream(process.stderr)])
+                        .then((_) {
+                          print("BUILD SUCCESSFULL!\n");
+                          return _buildFileOrComplete(queue, completer);
+                        });
+                  });
+               }
             }).catchError(completer.completeError);
     });
+
+    return completer.future;
+  }
+
+  /// Builds next file in [queue] or completes with success.
+  Future _buildFileOrComplete(ListQueue queue, Completer completer) {
+    if (queue.isEmpty) {
+      completer.complete("DONE.");
+    } else {
+      _buildFile(queue, completer);
+    }
 
     return completer.future;
   }
@@ -245,16 +293,14 @@ class ProjectWatcher implements Worker {
         _generatedDartFileName = "${p.basenameWithoutExtension(event.path)}.dart";
         _building = true; // prevents problems with StreamSink
 
-        print("Building ${p.basename(event.path)}.");
-
-        Process.start("dart", [getPathToBuildScript(), event.path])
+        runBuilder(event.path)
           .then((process) {
             Future.wait([
               stdout.addStream(process.stdout),
               stderr.addStream(process.stderr)])
               .then((_) {
                 _building = false;
-                print("BUILD SUCCESSFULL!");
+                print("BUILD SUCCESSFULL!\n");
                 new Future.delayed(new Duration(seconds: 1), () {
                   // The value is saved only for small amount of time to prevent
                   // repeating builds on same .dart file.

@@ -59,14 +59,17 @@ class BuildCommand extends WorkerCommand {
   /// Error message used with usage
   final String error = "Please specify one project folder.";
 
-  BuildCommand();
+  BuildCommand() {
+    argParser.addFlag("analyze", abbr: "a",
+        help: "Runs analyzer on built file.", negatable: false);
+  }
 
   bool paramsValid(List params) {
     return params.length <= 1;
   }
 
   Worker createWorker(List params) {
-    return new ProjectBuilder(params);
+    return new ProjectBuilder(params, argResults["analyze"]);
   }
 }
 
