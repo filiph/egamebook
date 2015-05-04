@@ -105,6 +105,7 @@ class ProjectCreator implements Worker {
 ///   build
 ///   build .
 ///   build <path>
+///   build <egb_file>
 class ProjectBuilder implements Worker {
   /// File extension which is searched
   final String extension = ".egb";
@@ -154,6 +155,7 @@ class ProjectBuilder implements Worker {
 
   /// Returns every .egb file name in the given [path] as [Future].
   /// If no .egb file is found, build fails.
+  /// Works also for single file with extension .egb.
   Future getEgbFiles(String path) {
 
     if (p.extension(path).isNotEmpty) {
