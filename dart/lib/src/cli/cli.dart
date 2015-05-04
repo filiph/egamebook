@@ -117,6 +117,9 @@ class ProjectCreator implements Worker {
 /// Before building, the .egb file is searched and when it is found,
 /// the build proccess is started.
 ///
+/// It's also possible to run command with -a or --analyze to run analyzer
+/// after each build.
+///
 /// Builder can be launched in forms:
 ///   build
 ///   build .
@@ -205,7 +208,6 @@ class ProjectBuilder implements Worker {
   /// If no .egb file is found, build fails.
   /// Works also for single file with extension .egb.
   Future getEgbFiles(String path) {
-
     if (p.extension(path).isNotEmpty) {
       if (p.extension(path) == extension) {
         File file = new File(path);
