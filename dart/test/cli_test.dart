@@ -178,7 +178,7 @@ void main() {
 
     test("builds test project", () {
       var callback = expectAsync((message) {
-        expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
+        expect(message.contains("DONE."), isTrue);
       });
 
       runner.run(["build", getPath(templateFiles)]).then(callback);
@@ -211,7 +211,7 @@ void main() {
         File fileHtmlBuild = new File(p.join(path, "test1.html.dart"));
         File fileDartBuild = new File(p.join(path, "test1.dart"));
 
-        expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
+        expect(message.contains("DONE."), isTrue);
         expect(fileHtmlBuild.existsSync(), isTrue);
         expect(fileDartBuild.existsSync(), isTrue);
         temp.deleteSync(recursive: true);
@@ -253,7 +253,7 @@ void main() {
       File file3 = new File(p.join(path, "test3.egb"));
       file3.createSync();
 
-      ProjectBuilder builder = new ProjectBuilder([]);
+      ProjectBuilder builder = new ProjectBuilder([], false);
 
       var callback = expectAsync((List files) {
         expect(files.length, 3);
