@@ -10,6 +10,11 @@ import 'dart:collection';
 /// TODO probably will be rewritten.
 /// TODO check on Windows
 String getPathToBuildScript() {
+  /// For the pub run
+  if (Platform.script.scheme.startsWith("http")) {
+    return Platform.script.resolve("build.dart").toString();
+  }
+
   if (Platform.script.toFilePath().endsWith("bin/")) {
     return Platform.script.resolve("build.dart").toFilePath();
   }
