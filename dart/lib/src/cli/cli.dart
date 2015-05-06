@@ -44,7 +44,7 @@ Future runAnalyzer(String path) {
 
 /// Returns .dart built file for .egb file on given [path].
 String getBuiltFileFromEgbFile(String path)  =>
-    "${p.withoutExtension(path)}.dart";
+    (path != null) ? "${p.withoutExtension(path)}.dart" : null;
 
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
@@ -148,7 +148,7 @@ class ProjectBuilder implements Worker {
     Completer completer = new Completer();
 
     getEgbFiles(_path).then((List files) {
-      ListQueue queue = new ListQueue.from(files);
+      ListQueue<File> queue = new ListQueue.from(files);
       return _buildFile(queue, completer);
     }).catchError(completer.completeError);
 
@@ -263,8 +263,8 @@ class ProjectWatcher implements Worker {
   final String _path;
   /// Should be the built file analyzed
   final bool _analyze;
-  /// Filename of last generated file from .egb file
-  String _generatedDartFileName;
+  /// Filename of last built file
+  String _actualBuiltFileName;
   /// If builder is building at the moment
   bool _building = false;
   /// If analyzer is analyzing at the moment
@@ -293,65 +293,88 @@ class ProjectWatcher implements Worker {
   /// When .html.dart file is changed, we don't want to rebuild anything.
   ///
   /// When file is removed, we don't want to rebuild.
-  /// TODO when building or analyzing, add it to queque
+  ///
+  /// Every valid event (which wraps changed path) for build is added into
+  /// [ListQueue] and built when it's right time for it.
   Future run() {
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
+    ListQueue<WatchEvent> queue = new ListQueue();
 
     _subscription = watcher.events.listen((WatchEvent event) {
-      if (!_building && !_analyzing &&
-          event.type != ChangeType.REMOVE &&
+      if (event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(event.path) &&
           _isValidBuilderExtension(event.path) &&
-          p.basename(event.path) != _generatedDartFileName) {
-        // filename of .dart file from .egb file
-        _generatedDartFileName = "${p.basenameWithoutExtension(event.path)}.dart";
-        _building = true; // prevents problems with StreamSink
+          _actualBuiltFileName != getBuiltFileFromEgbFile(event.path)) {//prevents cycle builds
+        _actualBuiltFileName = getBuiltFileFromEgbFile(event.path);
 
-        runBuilder(event.path)
-          .then((process) {
-            Future.wait([
-              stdout.addStream(process.stdout),
-              stderr.addStream(process.stderr)])
-              .then((_) {
-                _building = false;
-
-                String pathDart = getBuiltFileFromEgbFile(event.path);
-
-                if (!new File(pathDart).existsSync()) {
-                  print("BUILD FAILED!\n");
-                  return;
-                }
-
-                if (!_analyze) {
-                  print("BUILD SUCCESSFULL!\n");
-                } else {
-                  _analyzing = true;
-
-                  runAnalyzer(pathDart)
-                    .then((process) {
-                      Future.wait([
-                        stdout.addStream(process.stdout),
-                        stderr.addStream(process.stderr)])
-                          .then((_) {
-                            _analyzing = false;
-                            print("BUILD SUCCESSFULL!\n");
-                            return;
-                          });
-                    });
-                }
-                new Future.delayed(new Duration(seconds: 1), () {
-                  // The value is saved only for small amount of time to prevent
-                  // repeating builds on same .dart file.
-                  // But we want to also have the possibility to update the file
-                  // again by editing manually so it needs to be reseted.
-                  _generatedDartFileName = null;
-                });
-            });
-        });
+        queue.add(event);
+        _buildFile(queue);
       }
     }, onError: print);
 
     return new Future.value("Watching for changes in project...");
+  }
+
+  /// Builds first file in [queue] if nothing is building or analyzing at the
+  /// moment.
+  /// When build is finished, the next file in [queue] is retrieved, built
+  /// and corresponding .dart file analyzed.
+  void _buildFile(ListQueue queue) {
+  if (!_building && !_analyzing) { //because of streams
+      _building = true;
+      WatchEvent event = queue.removeFirst();
+
+      runBuilder(event.path)
+        .then((process) {
+          Future.wait([
+            stdout.addStream(process.stdout),
+            stderr.addStream(process.stderr)])
+            .then((_) {
+              _building = false;
+
+              new Future.delayed(new Duration(milliseconds: 500), () {
+                // The value is saved only for small amount of time to prevent
+                // repeating builds on same file.
+                // But we want to also have the possibility to update the file
+                // again and again by editing manually so it needs to be reseted.
+                _actualBuiltFileName = null;
+              });
+
+              if (!new File(_actualBuiltFileName).existsSync()) {
+                print("BUILD FAILED!\n");
+                _buildFileOrEnd(queue); //but try next one in queue
+                return;
+              }
+
+              if (!_analyze) {
+                print("BUILD SUCCESSFULL!\n");
+                _buildFileOrEnd(queue);
+              } else {
+                _analyzing = true;
+
+                runAnalyzer(_actualBuiltFileName)
+                  .then((process) {
+                    Future.wait([
+                      stdout.addStream(process.stdout),
+                      stderr.addStream(process.stderr)])
+                        .then((_) {
+                          _analyzing = false;
+
+                          print("BUILD SUCCESSFULL!\n");
+                          _buildFileOrEnd(queue);
+                        });
+                    });
+                }
+              });
+            });
+      }
+  }
+
+  /// Builds actual file path in [queue] or ends.
+  void _buildFileOrEnd(ListQueue queue) {
+    if (queue.isNotEmpty) {
+      _buildFile(queue);
+    }
   }
 
   /// Returns if the extension of [path] is valid.
