@@ -297,8 +297,8 @@ class FireGun extends CombatMove {
 
   bool autoRepeat = false;
 
-  int timeToSetup = 4;
-  int timeToFinish = 3;
+  int timeToSetup = 1;
+  int timeToFinish = 4;
 
   static final String name = "fire gun";
   String get commandText => "take a shot";
