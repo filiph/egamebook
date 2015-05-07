@@ -7,8 +7,6 @@ import 'package:watcher/watcher.dart';
 import 'dart:collection';
 
 /// Returns path to build.dart script in the bin/ folder.
-/// TODO probably will be rewritten.
-/// TODO check on Windows
 String getPathToBuildScript() {
   /// For the pub run
   if (Platform.script.scheme.startsWith("http")) {
@@ -19,19 +17,20 @@ String getPathToBuildScript() {
     return getPath("build.dart");
   }
 
-  // TODO will this work on Windows?
   /// For the test folder
   return getPath(
       "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
 }
 
-/// Gets path relative to the running script in bin/
+/// Gets path relative to the running script in bin/.
+///
 /// TODO this will not work with pub run.
 String getPath(String path)
   => Platform.script.resolve(path).toFilePath();
 
-// TODO maybe also test/
 /// Returns if the path is within bin/, lib/ or web/ directory.
+///
+/// TODO maybe also test/.
 bool isSourcesDirectory(String path) {
   List segments = p.split(path);
 
@@ -130,14 +129,14 @@ class ProjectCreator implements Worker {
 /// after each build.
 ///
 /// Builder can be launched in forms:
-///   build
-///   build .
-///   build <path>
-///   build <egb_file>
-///   build -a
-///   build -a .
-///   build -a <path>
-///   build -a <egb_file>
+///     build
+///     build .
+///     build <path>
+///     build <egb_file>
+///     build -a
+///     build -a .
+///     build -a <path>
+///     build -a <egb_file>
 class ProjectBuilder implements Worker {
   /// File extension which is searched
   final String extension = ".egb";
@@ -257,12 +256,12 @@ class ProjectBuilder implements Worker {
 /// after each build.
 ///
 /// Watcher can be launched in forms:
-///   watch
-///   watch .
-///   watch <path>
-///   watch -a
-///   watch -a .
-///   watch -a <path>
+///     watch
+///     watch .
+///     watch <path>
+///     watch -a
+///     watch -a .
+///     watch -a <path>
 class ProjectWatcher implements Worker {
   /// File extensions watched
   final List extensions = [".egb", ".dart"];

@@ -5,16 +5,16 @@ import 'package:egamebook/command.dart';
 /// TODO use async/await
 ///
 /// Runs egamebook script with [args] which expects commands in form:
-///   create <path>
+///     create <path>
 ///
-///   build
-///   build .
-///   build <path>
-///   build <egb_path>
+///     build
+///     build .
+///     build <path>
+///     build <egb_path>
 ///
-///   watch
-///   watch .
-///   watch <path>
+///     watch
+///     watch .
+///     watch <path>
 main(List<String> args) {
   CommandRunner runner = new CommandRunner("egamebook", "Egamebook builder.")
     ..addCommand(new CreateCommand())
