@@ -16,15 +16,19 @@ String getPathToBuildScript() {
   }
 
   if (Platform.script.toFilePath().endsWith("bin/")) {
-    return Platform.script.resolve("build.dart").toFilePath();
+    return getPath("build.dart");
   }
 
   // TODO will this work on Windows?
   /// For the test folder
-  return Platform.script.resolve(
-      "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart")
-      .toFilePath();
+  return getPath(
+      "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
 }
+
+/// Gets path relative to the running script in bin/
+/// TODO this will not work with pub run.
+String getPath(String path)
+  => Platform.script.resolve(path).toFilePath();
 
 // TODO maybe also test/
 /// Returns if the path is within bin/, lib/ or web/ directory.
@@ -61,7 +65,7 @@ abstract class Worker {
 /// from templates directory.
 class ProjectCreator implements Worker {
   /// Directory with template files
-  final String templates = "books${Platform.pathSeparator}bodega";
+  final String templates = getPath("../books${Platform.pathSeparator}bodega");
   /// Path where the project is created
   final String _path;
 
