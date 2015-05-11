@@ -38,6 +38,15 @@ class ScripterProxyStub extends EgbScripterProxy {
 void main() {
   unittestConfiguration.timeout = new Duration(seconds: 5);
 
+  group("Basic setup", () {
+    test("defines the same builder closures for "
+        "FormProxy and HtmlPresenter", () {
+      Set<String> proxyBuilders = customTagHandlers.keys.toSet();
+      Set<String> presenterBuilders = ELEMENT_BUILDERS.keys.toSet();
+      expect(proxyBuilders, equals(presenterBuilders));
+    });
+  });
+
   group("Pure", () {
     Form form;
     RangeInput input1, input2;
