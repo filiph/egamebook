@@ -54,7 +54,7 @@ void main() {
     MultipleChoiceInput multipleChoiceInput;
     Option option1, option2, option3;
     TextOutput textOutput;
-    
+
     int age, money;
 
     setUp(() {
@@ -119,7 +119,7 @@ void main() {
       expect((formProxy.children.single.children.single as FormElement)
           .disabledOrInsideDisabledParent, true);
     });
-    
+
     test("Options in MultipleChoice", () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -127,18 +127,18 @@ void main() {
       form.children.add(multipleChoiceInput);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
-      expect(formProxy.children.single.children.length, 
+      expect(formProxy.children.single.children.length,
           multipleChoiceInput.children.length);
-      expect((formProxy.children.single.children[0] as OptionBase).current, 
+      expect((formProxy.children.single.children[0] as OptionBase).current,
           (multipleChoiceInput.children[0] as OptionBase).current);
-      expect((formProxy.children.single.children[1] as OptionBase).current, 
+      expect((formProxy.children.single.children[1] as OptionBase).current,
           true); //we are setting selected as true
-      expect((formProxy.children.single.children[2] as FormElement).helpMessage, 
+      expect((formProxy.children.single.children[2] as FormElement).helpMessage,
           isNotNull);
-      expect((formProxy.children.single.children[2] as FormElement).helpMessage, 
+      expect((formProxy.children.single.children[2] as FormElement).helpMessage,
              (multipleChoiceInput.children[2] as FormElement).helpMessage);
     });
-    
+
     test("formElementChildren in MultipleChoice", () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -149,8 +149,8 @@ void main() {
       expect((formProxy.children.single as FormElement)
           .formElementChildren.length, multipleChoiceInput.children.length);
     });
-    
-    test("allFormElementsBelowThisOne for Form, MultipleChoice and Options", 
+
+    test("allFormElementsBelowThisOne for Form, MultipleChoice and Options",
       () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -159,13 +159,13 @@ void main() {
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect((formProxy.children.single.parent as FormElement)
-          .allFormElementsBelowThisOne.length, 
+          .allFormElementsBelowThisOne.length,
           form.children.length + multipleChoiceInput.children.length);
     });
-    
-    test("FormElements are instances (implement) of UpdatableByMap", () {      
+
+    test("FormElements are instances (implement) of UpdatableByMap", () {
       expect(input1, new isInstanceOf<UpdatableByMap>());
-      expect(checkboxInput, new isInstanceOf<UpdatableByMap>());  
+      expect(checkboxInput, new isInstanceOf<UpdatableByMap>());
       expect(textOutput, new isInstanceOf<UpdatableByMap>());
       expect(option1, new isInstanceOf<UpdatableByMap>());
     });

@@ -31,8 +31,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     hull.hp.onMin().listen((_) => reportDestroy());
 
     availableMoves.addAll(<CombatMove>[
-        new ImprovePosition(thrusters.first),
-        new RiskyImprovePosition(thrusters.first)
+        new ImprovePosition(),
+        new RiskyImprovePosition()
     ]);
   }
 
@@ -163,11 +163,12 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     text.current = "This is the maneuvres section.";  // TODO: Status + description.
     section.append(text);
 
-    availableMoves.where((move) => move.isActive).forEach((CombatMove move) {
+    availableMoves.where((move) => move.isActive).forEach((CombatMove proto) {
       // TODO: map from combatmove prototype to instances by cloning. also elsewhere.
       SubmitButton button = new SubmitButton(
-          "${Storyline.capitalize(move.commandText)}",
+          "${Storyline.capitalize(proto.commandText)}",
           () {
+            var move = proto.clone(thrusters.first);
             move.targetShip = targetShip;
             move.currentTimeToSetup = move.timeToSetup;
             currentMove = move;
