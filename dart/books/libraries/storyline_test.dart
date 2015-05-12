@@ -285,4 +285,35 @@ void main() {
             "You also see a lipstick and a crate of TNT."));
     storyline.clear();
   });
+
+  group("actionThread", () {
+    // Basic actionThread functionality is currently just "assign int to field".
+    // No neet to test that.
+
+    group("isSupportiveActionInThread", () {
+      var threadA = 42;
+
+      test("shows normally when apart", () {
+        storyline.add("you aim at the sky",
+            actionThread: threadA, isSupportiveActionInThread: true);
+        storyline.add("<subject> <is> heard from the distance",
+            subject: new Entity.withOptions("big bang", alreadyMentioned: false));
+        storyline.add("you shoot a duck",
+            actionThread: threadA);
+        expect(storyline.toString(), contains("aim at the sky"));
+        expect(storyline.toString(), contains("shoot a duck"));
+        storyline.clear();
+      });
+
+      test("not shown when next to another report of same actionThread", () {
+        storyline.add("you aim at the sky",
+            actionThread: threadA, isSupportiveActionInThread: true);
+        storyline.add("you shoot a duck",
+            actionThread: threadA);
+        expect(storyline.toString(), isNot(contains("aim at the sky")));
+        expect(storyline.toString(), contains("shoot a duck"));
+        storyline.clear();
+      });
+    });
+  });
 }

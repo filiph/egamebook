@@ -24,12 +24,14 @@ class Report {
   Report(this.string, {this.subject, this.object, this.owner, this.objectOwner,
       this.but: false, this.positive: false, this.negative: false,
       this.endSentence: false, this.startSentence: false,
-      this.wholeSentence: false, this.time});
+      this.wholeSentence: false, this.actionThread,
+      this.isSupportiveActionInThread: false, this.time});
 
   Report.empty() : string = "", subject = null, object = null, owner = null,
       objectOwner = null,
       but = false, positive = false, negative = false, endSentence = false,
-      startSentence = false, wholeSentence = false, time = null;
+      startSentence = false, wholeSentence = false, actionThread = null,
+      isSupportiveActionInThread = false, time = null;
 
   final String string;
   final Entity subject;
@@ -42,6 +44,20 @@ class Report {
   final bool endSentence;
   final bool startSentence;
   final bool wholeSentence;
+
+  /// A unique identifier of a thread of events that belong together. This is
+  /// used with [isSupportiveActionInThread] but can also work as a hint for
+  /// the document planner.
+  final int actionThread;
+
+  /// This report will not be shown when report with same [actionThread] is
+  /// right next to this one.
+  ///
+  /// This is useful when you have a report such as "You start aiming at the
+  /// enemy" and another one that says "You shoot at the enemy". When there is
+  /// additional action between those two reports, it makes sense to keep both.
+  /// But when they're reported side by side, it doesn't read well.
+  final bool isSupportiveActionInThread;
   final int time;
 
   operator [](key) {
@@ -125,7 +141,8 @@ class Storyline {
     Entity objectOwner,
     bool but: false, bool positive: false, bool negative: false,
     bool endSentence: false, bool startSentence: false,
-    bool wholeSentence: false, int time}) {
+    bool wholeSentence: false, int actionThread,
+    bool isSupportiveActionInThread: false, int time}) {
 
     if (str == null || str == "") {
       return;  // Ignore empty records.
@@ -144,7 +161,8 @@ class Storyline {
         objectOwner: objectOwner,
         but: but, positive: positive, negative: negative,
         endSentence: endSentence, startSentence: startSentence,
-        wholeSentence: wholeSentence, time: time));
+        wholeSentence: wholeSentence, actionThread: actionThread,
+        isSupportiveActionInThread: isSupportiveActionInThread, time: time));
   }
 
   /**
@@ -532,6 +550,20 @@ class Storyline {
   /// The main function that strings reports together into a coherent story.
   String toString() {
     reports.removeWhere((report) => report.string == "");
+    List<Report> cleanedReports = reports.fold(
+        [], (List<Report> list, Report report) {
+      Report previousReport = list.isNotEmpty ? list.last : null;
+      if (previousReport != null && previousReport.isSupportiveActionInThread &&
+          report.actionThread == previousReport.actionThread) {
+        // Skip the Report that is supportive and is next to another report
+        // of the same actionThread.
+        list[list.length - 1] = report;
+      } else {
+        list.add(report);
+      }
+      return list;
+    });
+    reports.retainWhere((Report report) => cleanedReports.contains(report));
     final int length = reports.length;
     if (length < 1)
       return "";
