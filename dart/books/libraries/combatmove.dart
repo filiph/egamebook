@@ -138,7 +138,8 @@ abstract class CombatMove {
 
   void _report(String str, {Entity subject, Entity owner, Entity objectOwner,
       Entity object, bool preferShipAsObject: false, bool positive: false,
-      bool but: false, bool negative: false}) {
+      bool but: false, bool negative: false, bool endSentence: false,
+      bool isSupportiveActionInThread: false}) {
     if (str == null || str == "") return;
 
     if (subject == null) {
@@ -173,6 +174,9 @@ abstract class CombatMove {
         positive: positive,
         negative: negative,
         but: but,
+        endSentence: endSentence,
+        actionThread: hashCode,
+        isSupportiveActionInThread: isSupportiveActionInThread,
         time: system.spaceship.currentCombat.timeline.time);
   }
 
@@ -356,16 +360,18 @@ class FireGun extends CombatMove {
           "this spaceship's pilot is null or is not player");
     }
 
-    storyline.add("<subject> {grab<s>|take<s>|take<s> hold of} <owner's> "
-        "controls",
-        subject: pilot,
-        owner: system,
-        time: system.spaceship.currentCombat.timeline.time);
+//    storyline.add("<subject> {grab<s>|take<s>|take<s> hold of} <owner's> "
+//        "controls",
+//        subject: pilot,
+//        owner: system,
+//        time: system.spaceship.currentCombat.timeline.time);
     storyline.add("<subject> {start<s> "
         "{aiming at|taking aim at|fixing on|zeroing in on}|"
         "begin<s> to {{take |}aim at|fix on|zero in on}} <object>",
         subject: pilot,
         object: targetShip,
+        actionThread: this.hashCode,
+        isSupportiveActionInThread: true,
         time: system.spaceship.currentCombat.timeline.time);
   }
 
@@ -391,7 +397,7 @@ class FireGun extends CombatMove {
     _hit(targetSystem);
   }
 
-  void _hit(ShipSystem targetSystem) {
+  void _hit(ShipSystem targetSystem, {bool collateral: false}) {
     var damage = weapon.damage;
 
     Entity object =
@@ -433,7 +439,12 @@ class FireGun extends CombatMove {
       int relativePosition =
           system.spaceship.getPositionTowards(targetSystem.spaceship);
 
-      if (relativePosition >= Spaceship.POSITION_GREAT) {
+      if (collateral) {
+        assert(targetSystem is Hull);
+        _report("<subject> land<s> on <object-owner's> <object> instead",
+            subject: weapon.projectile, objectOwner: targetSystem.spaceship,
+            object: targetSystem, positive: true);
+      } else if (relativePosition >= Spaceship.POSITION_GREAT) {
         damage *= 1.5;
         _report("<subject> hit<s> <object's> weakest spot",
             subject: weapon.projectile, object: object, positive: true);
@@ -479,7 +490,7 @@ class FireGun extends CombatMove {
       miss = "<subject> {fail<s> to hit|miss<es>|go<es> wide}";
       object = Entity.NOTHING;
     } else {
-      miss = "<subject> {fail<s> to hit|miss<es>|go<es> wide} of <object>";
+      miss = "<subject> {fail<s> to hit|miss<es>|go<es> wide of} <object>";
       object = targetSystem;
     }
     _report(miss,
@@ -495,10 +506,11 @@ class FireGun extends CombatMove {
       // but still hit the hull (but with half the probability)
       if (Randomly.saveAgainst(
           calculateSuccessChance(system, targetShip, targetShip.hull) / 2.0)) {
-        _hit(targetShip.hull);
+        _hit(targetShip.hull, collateral: true);
       } else {
-        _report("<subject> completely {miss<es>|go<es> wide of} <object>",
-            object: targetShip, negative: true);
+        _report("<subject> completely {miss<es>|go<es> wide of} <object>, too",
+            subject: weapon.projectile, object: targetShip, negative: true,
+            endSentence: true);
       }
     }
     if (Randomly.saveAgainst(chanceOfImproveAimOnFailure)) {
@@ -568,6 +580,8 @@ class QuickFireGun extends FireGun {
         subject: pilot,
         owner: system,
         object: targetShip,
+        actionThread: hashCode,
+        isSupportiveActionInThread: true,
         time: system.spaceship.currentCombat.timeline.time);
   }
 
@@ -607,7 +621,8 @@ class ImproveAim extends CombatMove {
   String stringSettingUp = null;
 
   @override
-  void reportStarting() => _report(stringStarting, preferShipAsObject: true);
+  void reportStarting() => _report(stringStarting, preferShipAsObject: true,
+      isSupportiveActionInThread: true);
   String stringStarting = "<subject> {start<s> "
       "{aiming at|taking aim at|fixing on|zeroing in on}|"
       "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
@@ -656,11 +671,11 @@ abstract class SpaceshipCombatMove extends CombatMove {
     return true;
   }
 
-  @override
-  final bool needsTargetSystem = false;
+  bool needsTargetSystem = false;
 
   @override
-  void reportStarting() => _report(stringStarting, preferShipAsObject: true);
+  void reportStarting() => _report(stringStarting, preferShipAsObject: true,
+      isSupportiveActionInThread: true);
   @override
   void reportSuccess() =>
       _report(stringSuccess, preferShipAsObject: true, positive: true);
@@ -688,10 +703,10 @@ class ImprovePosition extends SpaceshipCombatMove {
   int timeToSetup = 1;
   int timeToFinish = 5;
 
-  final num defaultSuccessChance = 0.9;
+  num defaultSuccessChance = 0.9;
   int improvementStep = 1;
 
-  final bool needsTargetShip = true;
+  bool needsTargetShip = true;
 
   String stringSettingUp = null;
 
@@ -723,11 +738,11 @@ class RiskyImprovePosition extends ImprovePosition {
     return clone;
   }
 
-  String commandText = "flip maneuvre";
+  String commandText = "reversal maneuvre";
 
-  @override
-  final num defaultSuccessChance = 0.3;
-  @override
+  // TODO: isEligible (only when position bad)
+
+  num defaultSuccessChance = 0.3;
   int improvementStep = 3;
   num regressionChance = 0.2;
 
