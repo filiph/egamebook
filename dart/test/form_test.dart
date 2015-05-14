@@ -274,6 +274,7 @@ void main() {
     test("sends and closes after being submitted", () {
       form.children.add(input1);
       form.children.add(input2);
+      form.submitText = ">>";
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = interface.showForm(formProxy);
       ButtonElement submitButton = querySelectorAll("button.submit-main").last;
