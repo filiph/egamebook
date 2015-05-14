@@ -1,0 +1,327 @@
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  /* color: #999; */ }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+body {
+  font-family: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
+  line-height: 1.88571rem;
+  text-align: justify;
+  font-size: 1.2rem; }
+
+.wrapper {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 1rem 1rem 3rem; }
+
+nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10; }
+  nav button {
+    width: auto; }
+
+#top-nav {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  background-color: white; }
+
+#bottom-gradient-nav {
+  height: 1rem;
+  background-color: transparent;
+  background-image: -webkit-linear-gradient(top, white 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: linear-gradient(to bottom,white 0%, rgba(255, 255, 255, 0) 100%); }
+
+#left-hand-nav {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1 0 0;
+  -moz-flex: 1 0 0;
+  -ms-flex: 1 0 0;
+  flex: 1 0 0;
+  padding-top: 0.5rem;
+  padding-left: 1rem; }
+
+#right-hand-nav {
+  -webkit-box-flex: 2;
+  -moz-box-flex: 2;
+  box-flex: 2;
+  -webkit-flex: 2 0 0;
+  -moz-flex: 2 0 0;
+  -ms-flex: 2 0 0;
+  flex: 2 0 0;
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+  display: inline;
+  text-align: right; }
+  #right-hand-nav button {
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem; }
+
+#stats {
+  display: inline;
+  text-align: right; }
+
+#points-button {
+  font-weight: bold;
+  border-color: gold; }
+
+nav button {
+  display: inline-block;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 1.08rem;
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f9f9f9;
+  background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
+  background-image: linear-gradient(#f9f9f9 10%, #ededed);
+  cursor: pointer;
+  box-sizing: border-box;
+  min-height: 1.25714rem;
+  color: #666;
+  text-shadow: 1px 1px 0px #ffffff; }
+
+.display-none {
+  display: none; }
+
+.blink {
+  -webkit-animation: highlight 1s;
+  -moz-animation: highlight 1s;
+  animation: highlight 1s; }
+
+@-webkit-keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+@-moz-keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+@keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+p.toast {
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 1.88571rem;
+  -webkit-transition: color 5s;
+  -moz-transition: color 5s;
+  transition: color 5s;
+  color: #999;
+  border-radius: 0.2rem; }
+
+p.toast.non-dimmed {
+  color: inherit;
+  /* TODO: make the transition work */ }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(100, 100, 100, 0.5); }
+
+.dialog-window {
+  background: white;
+  position: fixed;
+  z-index: 500;
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  margin-left: -40vw;
+  max-height: 70vh;
+  margin-top: -35vh;
+  box-shadow: 0 0 0.5rem 0.5rem #fff;
+  box-sizing: border-box;
+  padding: 5vh;
+  border-radius: 0.2rem; }
+
+div.dialog h3 {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem; }
+
+.dialog-content {
+  overflow-y: auto;
+  max-height: 35vh; }
+
+.dialog-buttons {
+  margin-top: 1.5rem; }
+
+div.dialog p {
+  text-align: left;
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
+
+div.dialog table {
+  width: 100%; }
+  div.dialog table td {
+    font-size: 1.08rem;
+    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+    padding: 0.5rem;
+    padding-left: 0;
+    padding-right: 1rem;
+    border-top: 1px solid lightgray; }
+  div.dialog table tr:first-child td {
+    border-top: 2px solid lightgray; }
+
+p {
+  margin-bottom: 1.88571rem; }
+
+p img {
+  max-width: 100%; }
+
+em {
+  font-style: italic; }
+
+strong {
+  font-weight: bold; }
+
+.choices-question {
+  margin-bottom: 0.68571rem; }
+
+.choices-ol {
+  margin-bottom: 1.88571rem; }
+
+button {
+  display: inline-block;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 1.08rem;
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f9f9f9;
+  background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
+  background-image: linear-gradient(#f9f9f9 10%, #ededed);
+  cursor: pointer;
+  box-sizing: border-box;
+  min-height: 1.25714rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0.62857rem;
+  padding: 0.4rem 1.5rem; }
+
+ol.choices-ol button span.choice-number {
+  display: block;
+  width: 1.5rem;
+  float: left;
+  text-align: right; }
+
+ol.choices-ol button span.choice-display {
+  display: block;
+  padding-left: 2.5rem; }
+
+ol.choices-ol button span.choice-text {
+  display: block; }
+
+.form {
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  margin-top: 1.88571rem;
+  margin-bottom: 1.88571rem;
+  padding: 0 1.88571rem; }
+  .form > div > div {
+    min-height: 1.88571rem;
+    margin-bottom: 0.94286rem; }
+
+.buttons-and-value {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  align-items: center; }
+  .buttons-and-value .buttons input {
+    vertical-align: middle; }
+  .buttons-and-value .current-value {
+    margin: 0;
+    margin-left: 2rem; }
+
+.checkbox-input::after {
+  clear: both;
+  content: "";
+  display: table; }
+.checkbox-input input {
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  transform: scale(1.5);
+  float: left;
+  height: 1.88571rem; }
+.checkbox-input label {
+  display: block;
+  text-align: left;
+  padding-left: 2rem;
+  min-height: 1.88571rem; }
+
+/*# sourceMappingURL=egamebook.css.map */

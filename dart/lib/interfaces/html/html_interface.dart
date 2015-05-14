@@ -28,7 +28,7 @@ import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
 class HtmlInterface extends EgbInterfaceBase {
-  AnchorElement restartAnchor;
+  ButtonElement restartAnchor;
   SpanElement pointsSpan;
 
   DivElement bookDiv;
@@ -63,9 +63,9 @@ class HtmlInterface extends EgbInterfaceBase {
 
     bookTitleDiv = document.querySelector("div#book-title");
     bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
-    startButton = document.querySelector("button#start-button");
+    startButton = document.querySelector("#start-button");
 
-    restartAnchor = document.querySelector("nav a#book-restart");
+    restartAnchor = document.querySelector("#book-restart");
     restartAnchor.onClick.listen((_) {
       scripterProxy.restart();
       // Clear text and choices
@@ -76,7 +76,7 @@ class HtmlInterface extends EgbInterfaceBase {
     });
 
     pointsSpan = document.querySelector("span#points-value");
-    document.querySelector("a#points-button").onClick.listen(
+    document.querySelector("#points-button").onClick.listen(
         _statsOnClickListener);
 
     // Set up listening for meta elements (for not showing new points before
@@ -444,13 +444,12 @@ class HtmlInterface extends EgbInterfaceBase {
       var stat = stats[i];
       var span = new SpanElement();
       span.text = stat.string;
-      var anchor = new AnchorElement();
-      anchor.classes.add("button");
-      if (!stat.show) anchor.classes.add("display-none");
-      anchor.children.add(span);
-      statsDiv.children.add(anchor);
-      _statsElements[stat.name] = anchor;
-      anchor.onClick.listen(_statsOnClickListener);
+      var button = new ButtonElement();
+      if (!stat.show) button.classes.add("display-none");
+      button.children.add(span);
+      statsDiv.children.add(button);
+      _statsElements[stat.name] = button;
+      button.onClick.listen(_statsOnClickListener);
     }
     return new Future.value();
   }
@@ -541,7 +540,9 @@ class HtmlInterface extends EgbInterfaceBase {
     var completer = new Completer<bool>();
 
     DivElement dialogDiv = new DivElement()..classes.add("dialog");
-    DivElement wrapperDiv = new DivElement();
+    DivElement overlayDiv = new DivElement()..classes.add("overlay");
+    dialogDiv.children.add(overlayDiv);
+    DivElement wrapperDiv = new DivElement()..classes.add("dialog-window");
     HeadingElement titleEl = new HeadingElement.h3()..text = dialog.title;
     wrapperDiv.children.add(titleEl);
     DivElement contentDiv = new DivElement()..classes.add("dialog-content");
