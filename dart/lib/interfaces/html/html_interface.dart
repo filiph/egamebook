@@ -671,20 +671,18 @@ class HtmlForm extends HtmlUiElement {
     uiRepresentation.append(_childrenContainerDiv);
 
     String submitText = blueprint.submitText;
-    if (submitText == null) {
-      submitText = DEFAULT_SUBMIT_TEXT;
+    if (submitText != null) {
+      submitButton = new ButtonElement()
+          ..classes.add("submit-main")
+          ..text = submitText;
+
+      StreamSubscription subscription;
+      subscription = submitButton.onClick.listen((ev) {
+        _onChangeController.add(ev);
+        subscription.cancel();
+      });
+      uiRepresentation.append(submitButton);
     }
-
-    submitButton = new ButtonElement()
-        ..classes.add("submit-main")
-        ..text = submitText;
-
-    StreamSubscription subscription;
-    subscription = submitButton.onClick.listen((ev) {
-      _onChangeController.add(ev);
-      subscription.cancel();
-    });
-    uiRepresentation.append(submitButton);
   }
 
   @override

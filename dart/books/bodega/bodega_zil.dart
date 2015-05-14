@@ -703,6 +703,7 @@ class BodegaZil {
 
   void createTraitsForm() {
     Form traitsForm = new Form();
+    traitsForm.submitText = ">>";
 
     RangeOutput pointsLeft = new RangeOutput("Trait points",
         max: MAX_TRAIT_POINTS,
