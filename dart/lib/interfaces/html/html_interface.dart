@@ -697,7 +697,7 @@ class HtmlForm extends HtmlUiElement {
   @override
   set disabled(bool value) {
     _disabled = value;
-    submitButton.disabled = value;
+    if (submitButton != null) submitButton.disabled = value;
   }
 
   StreamController _onChangeController = new StreamController();
@@ -707,7 +707,7 @@ class HtmlForm extends HtmlUiElement {
   @override
   void update() {
     super.update();
-    submitButton.text = blueprint.submitText;
+    if (submitButton != null) submitButton.text = blueprint.submitText;
   }
 
   @override
