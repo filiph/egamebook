@@ -62,6 +62,8 @@ class BuildCommand extends WorkerCommand {
   BuildCommand() {
     argParser.addFlag("analyze", abbr: "a",
         help: "Runs analyzer on built file.", negatable: false);
+    argParser.addFlag("full-directory", abbr: "f",
+        help: "Runs builder on all .egb files in directory.", negatable: false);
   }
 
   bool paramsValid(List params) {
@@ -69,7 +71,8 @@ class BuildCommand extends WorkerCommand {
   }
 
   Worker createWorker(List params) {
-    return new ProjectBuilder(params, argResults["analyze"]);
+    return new ProjectBuilder(params,
+        argResults["analyze"], argResults["full-directory"]);
   }
 }
 

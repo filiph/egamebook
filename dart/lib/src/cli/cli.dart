@@ -54,6 +54,21 @@ Future runAnalyzer(String path) {
 String getBuiltFileFromEgbFile(String path)  =>
     (path != null) ? "${p.withoutExtension(path)}.dart" : null;
 
+String getEgbFilePathFromPartFile(String path) {
+  List pathSplit = p.basename(path).split("_");
+
+  if (pathSplit.length > 1) {
+    pathSplit.removeLast();
+    String pathParent = pathSplit.join("_");
+    if (new File(pathParent).existsSync()) {
+      return pathParent;
+    }
+  }
+  return null;
+}
+
+bool isPartFile(String path) => getEgbFilePathFromPartFile(path) != null;
+
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
 abstract class Worker {
@@ -144,12 +159,15 @@ class ProjectBuilder implements Worker {
   final String _path;
   /// Should be the built file analyzed
   final bool _analyze;
+  /// Should run the builder on all .egb files in directory
+  final bool _fullDirectory;
 
   ///Constructor
-  ProjectBuilder(List params, this._analyze)
+  ProjectBuilder(List params, this._analyze, this._fullDirectory)
       : _path = (params.isEmpty) ? "." : params.first;
 
-  /// Runs egamebook builder on found .egb files in [_path].
+  /// Runs egamebook builder on found .egb file in [_path].
+  ///
   /// The files are retrieved as a [List] which is then converted to
   /// [ListQueue] and then the build is run on every file in this queue.
   Future run() {
@@ -214,7 +232,9 @@ class ProjectBuilder implements Worker {
   }
 
   /// Returns every .egb file name in the given [path] as [Future].
-  /// If no .egb file is found, build fails.
+  /// If no .egb file is found or more than one file, build fails.
+  ///
+  /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Works also for single file with extension .egb.
   Future getEgbFiles(String path) {
     if (p.extension(path).isNotEmpty) {
@@ -237,12 +257,18 @@ class ProjectBuilder implements Worker {
 
     List files = from.listSync(recursive: true, followLinks: false)
         .where((entity)
-            => entity is File && p.extension(entity.path) == extension)
+            => entity is File && p.extension(entity.path) == extension
+            && !isPartFile(entity.path))
             .toList();
 
     if (files.isEmpty) {
       return new Future.error(
           "BUILD FAILED!\nNo $extension file in this directory.");
+    } else if (!_fullDirectory && files.length > 1) {
+      return new Future.error(
+          "BUILD FAILED!\nMore than one .egb file found in the directory.\n"
+          "To run builder on more .egb files in directory than one .egb file "
+          "use argument --full-directory or -f.");
     }
 
     return new Future.value(files);
