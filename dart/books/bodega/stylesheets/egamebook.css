@@ -268,7 +268,7 @@ h2 {
 .choices-question {
   margin-bottom: 0.68571rem; }
 
-.choices-ol {
+.choices-div {
   margin-bottom: 1.88571rem; }
 
 button {
@@ -297,11 +297,76 @@ ol.choices-ol button span.choice-number {
   text-align: right; }
 
 ol.choices-ol button span.choice-display {
-  display: block;
-  padding-left: 2.5rem; }
+  padding-left: 2.5rem;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  -webkit-box-align: start;
+  -moz-box-align: start;
+  box-align: start;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  -o-align-items: flex-start;
+  align-items: flex-start;
+  -ms-flex-align: start; }
 
 ol.choices-ol button span.choice-text {
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  box-ordinal-group: 1;
+  -webkit-order: 1;
+  -moz-order: 1;
+  order: 1;
+  -ms-flex-order: 1;
   display: block; }
+
+.choice-infochips {
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+  box-ordinal-group: 2;
+  -webkit-order: 2;
+  -moz-order: 2;
+  order: 2;
+  -ms-flex-order: 2; }
+
+.choice-infochip {
+  font-size: 0.72rem;
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.1rem 0.3rem; }
+
+.choices-submenu-buttons {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.submenu-button {
+  margin-top: 0;
+  font-size: 0.54rem;
+  width: auto;
+  margin-right: 1rem; }
+
+.depressed {
+  background: white; }
 
 .form {
   font-size: 1.08rem;

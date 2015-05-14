@@ -276,7 +276,7 @@ h2 {
   margin-bottom: $line-height - $standard-font-size;
 }
 
-.choices-ol {
+.choices-div {
   margin-bottom: $line-height;
 }
 
@@ -298,12 +298,42 @@ ol.choices-ol button span.choice-number {
 }
 
 ol.choices-ol button span.choice-display {
-  display: block;
   padding-left: 2.5rem;
+  @include display(flex);
+  @include justify-content(space-between);
+  @include align-items(flex-start);
 }
 
 ol.choices-ol button span.choice-text {
+  @include order(1);
   display: block;
+}
+
+.choice-infochips {
+  @include order(2);
+}
+
+.choice-infochip {
+  font-size: $sans-serif-font-size / 3 * 2;
+  border: 1px solid #ddd;
+  border-radius: $border-radius;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.1rem 0.3rem;
+}
+
+.choices-submenu-buttons {
+  @include display(flex);
+}
+
+.submenu-button {
+  margin-top: 0;
+  font-size: $sans-serif-font-size / 2;
+  width: auto;
+  margin-right: 1rem;
+}
+
+.depressed {
+  background: white;
 }
 
 // FORMS
