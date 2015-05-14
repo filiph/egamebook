@@ -20,9 +20,9 @@ class PointsAward {
 
   String toString() {
     if (justification != null) {
-      return "+$addition score for $justification";
+      return "score +$addition for $justification";
     } else {
-      return "+$addition score";
+      return "score +$addition";
     }
   }
 
