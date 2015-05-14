@@ -130,7 +130,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void close() {
     super.close();
   }
-  
+
   static const Duration _durationBetweenShowingText = const Duration(
       milliseconds: 100);
 
@@ -370,7 +370,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
   static const Duration _durationBetweenSendingHash = const Duration(
       milliseconds: 100);
-  
+
   // TODO: use onClick.first.then() - no need to unregister listener
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
@@ -541,7 +541,9 @@ class HtmlInterface extends EgbInterfaceBase {
     var completer = new Completer<bool>();
 
     DivElement dialogDiv = new DivElement()..classes.add("dialog");
-    DivElement wrapperDiv = new DivElement();
+    DivElement overlayDiv = new DivElement()..classes.add("overlay");
+    dialogDiv.children.add(overlayDiv);
+    DivElement wrapperDiv = new DivElement()..classes.add("dialog-window");
     HeadingElement titleEl = new HeadingElement.h3()..text = dialog.title;
     wrapperDiv.children.add(titleEl);
     DivElement contentDiv = new DivElement()..classes.add("dialog-content");

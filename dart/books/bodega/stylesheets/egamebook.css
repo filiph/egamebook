@@ -122,6 +122,49 @@ a#points-button {
 .display-none {
   display: none; }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(100, 100, 100, 0.5); }
+
+.dialog-window {
+  background: white;
+  position: fixed;
+  z-index: 500;
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  margin-left: -40vw;
+  max-height: 70vh;
+  margin-top: -35vh;
+  box-shadow: 0 0 0.5rem 0.5rem #fff;
+  box-sizing: border-box;
+  padding: 5vh; }
+
+div.dialog h3 {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem; }
+
+.dialog-content {
+  overflow-y: auto;
+  max-height: 35vh; }
+
+.dialog-buttons {
+  margin-top: 1.5rem; }
+
+div.dialog p {
+  text-align: left;
+  font: 90% "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
+
+div.dialog table td {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  padding-right: 1rem; }
+
 p {
   margin: 1rem 0; }
 

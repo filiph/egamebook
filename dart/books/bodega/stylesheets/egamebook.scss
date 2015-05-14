@@ -1,10 +1,8 @@
 @import "reset";
 
 
-/// Garamond font stack.
-///
-/// @type List
 $garamond: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
+$sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
 
 // $modular-scale-ratio: $golden;
 $modular-scale-base: 1.2rem;
@@ -31,7 +29,7 @@ body {
 
 @mixin button-appearance {
   display: inline-block;
-  font-family: 'Roboto', $helvetica;
+  font-family: $sans-serif;
   font-size: modular-scale(0, $modular-scale-base * 0.9);  // Roboto is a larger font.
   border: 1px solid #ddd;
   border-radius: 0.2rem;
@@ -102,6 +100,58 @@ a#points-button {
 
 .display-none {
   display: none;
+}
+
+// DIALOG
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(100, 100, 100, 0.5);
+}
+
+.dialog-window {
+  background: white;
+  position: fixed;
+  z-index: 500;
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  margin-left: -40vw;
+  max-height: 70vh;
+  margin-top: -35vh;
+  box-shadow: 0 0 0.5rem 0.5rem #fff;
+  box-sizing: border-box;
+  padding: 5vh;
+}
+
+div.dialog h3 {
+  font-family: $sans-serif;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dialog-content {
+  overflow-y: auto;
+  max-height: 35vh;
+}
+
+.dialog-buttons {
+  margin-top: 1.5rem;
+}
+
+div.dialog p {
+  text-align: left;
+  font: 90% $sans-serif;
+}
+
+div.dialog table td {
+  font-family: $sans-serif;
+  padding-right: 1rem;
 }
 
 
