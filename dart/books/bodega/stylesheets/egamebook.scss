@@ -338,7 +338,6 @@ ol.choices-ol button span.choice-text {
 
 // FORMS
 
-// XXX: START HERE
 .form {
   font-size: $sans-serif-font-size;
   font-family: $sans-serif;
@@ -351,6 +350,41 @@ ol.choices-ol button span.choice-text {
     margin-bottom: $line-height / 2;
   }
 }
+
+// Form Section
+
+.form-section-title-wrapper {
+  //border-top: 2px solid #ddd;
+  @include display(flex);
+  @include justify-content(space-between);
+  @include align-items(flex-start);
+  background: white;
+}
+
+.form-section-title {
+  @include order(1);
+  @include flex(1);
+}
+
+.form-section-open-close {
+  @include order(2);
+}
+
+.form-section-children {
+  @include transform(scaleY(1));
+  @include transform-origin(top);
+  @include transition(transform 0.1s ease-out);
+  position: relative;
+  padding: 0 0 $line-height/2 0;
+}
+
+.closed {
+  @include transform(scaleY(0));
+  position: absolute;
+}
+
+
+// Radio buttons
 
 .buttons-and-value {
   @include display(flex);
@@ -366,6 +400,8 @@ ol.choices-ol button span.choice-text {
     margin-left: 2rem;
   }
 }
+
+// Checkbox
 
 .checkbox-input {
   @include clearfix;

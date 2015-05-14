@@ -734,7 +734,6 @@ class HtmlFormSection extends HtmlUiElement {
   Element _openCloseEl;
   DivElement _childrenDiv;
 
-  bool open = false;
 
   HtmlFormSection(FormSection blueprint) : super(blueprint) {
     this.blueprint = blueprint;
@@ -742,25 +741,18 @@ class HtmlFormSection extends HtmlUiElement {
         ..classes.add("form-section")
         ..id = blueprint.id;
 
-    DivElement titleWrapperDiv = new DivElement()
+    ButtonElement titleWrapperDiv = new ButtonElement()
         ..classes.add("form-section-title-wrapper")
         ..onClick.listen((_) {
-          open = !open;
-          if (open) {
-            _childrenDiv.classes.remove("closed");
-            _openCloseEl.text = "<";
-          } else {
-            _childrenDiv.classes.add("closed");
-            _openCloseEl.text = "V";
-          }
+          updateOpenCloseDomState();
         });
 
     _openCloseEl = new DivElement()
         ..classes.add("form-section-open-close")
-        ..text = "V";
+        ..innerHtml = "&#9661;";
     titleWrapperDiv.append(_openCloseEl);
 
-    _headerEl = new HeadingElement.h1()
+    _headerEl = new SpanElement()
         ..classes.add("form-section-title")
         ..text = blueprint.name;
     titleWrapperDiv.append(_headerEl);
@@ -773,6 +765,25 @@ class HtmlFormSection extends HtmlUiElement {
         ..classes.add("form-section-children")
         ..classes.add("closed");
     uiRepresentation.append(_childrenDiv);
+  }
+
+  void updateOpenCloseDomState() {
+    if (_childrenDiv.classes.contains("closed")) {
+      _childrenDiv.classes.remove("closed");
+      _openCloseEl.innerHtml = "&#9665;";
+
+      // Close all others. Must use DOM since we don't keep reference to parent
+      // HtmlFormElement. TODO: profile and fix?
+      uiRepresentation.parent.querySelectorAll(".form-section")
+          .where((Element e) => e != uiRepresentation)
+          .forEach((Element e) {
+        e.querySelector(".form-section-children").classes.add("closed");
+        e.querySelector(".form-section-open-close").innerHtml = "&#9661;";
+      });
+    } else {
+      _childrenDiv.classes.add("closed");
+      _openCloseEl.innerHtml = "&#9661;";
+    }
   }
 
   @override
