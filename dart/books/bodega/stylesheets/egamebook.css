@@ -1,0 +1,161 @@
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  /* color: #999; */ }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+body {
+  font-family: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
+  line-height: 1.6rem;
+  text-align: justify;
+  font-size: 1.2rem; }
+
+.wrapper {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 1rem 1rem 3rem; }
+
+nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10; }
+
+#top-nav {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  background-color: white; }
+
+#bottom-gradient-nav {
+  height: 1rem;
+  background-color: transparent;
+  background-image: -webkit-linear-gradient(top, white 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: linear-gradient(to bottom,white 0%, rgba(255, 255, 255, 0) 100%); }
+
+#left-hand-nav {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1 0 0;
+  -moz-flex: 1 0 0;
+  -ms-flex: 1 0 0;
+  flex: 1 0 0;
+  padding-top: 0.5rem;
+  padding-left: 1rem; }
+
+#right-hand-nav {
+  -webkit-box-flex: 2;
+  -moz-box-flex: 2;
+  box-flex: 2;
+  -webkit-flex: 2 0 0;
+  -moz-flex: 2 0 0;
+  -ms-flex: 2 0 0;
+  flex: 2 0 0;
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+  display: inline;
+  text-align: right; }
+  #right-hand-nav .button {
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem; }
+
+#stats {
+  display: inline;
+  text-align: right; }
+
+a#points-button {
+  font-weight: bold;
+  border-color: gold; }
+
+.button {
+  display: inline-block;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 1.08rem;
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f9f9f9;
+  background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
+  background-image: linear-gradient(#f9f9f9 10%, #ededed);
+  cursor: pointer;
+  color: #666;
+  text-shadow: 1px 1px 0px #ffffff; }
+
+.display-none {
+  display: none; }
+
+p {
+  margin: 1rem 0; }
+
+p img {
+  max-width: 100%; }
+
+button {
+  display: inline-block;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 1.08rem;
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f9f9f9;
+  background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
+  background-image: linear-gradient(#f9f9f9 10%, #ededed);
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0.4rem 0;
+  padding: 0.4em 1.5em; }
+
+ol.choices-ol button span.choice-number {
+  display: block;
+  width: 1.5rem;
+  float: left;
+  text-align: right; }
+
+ol.choices-ol button span.choice-display {
+  display: block;
+  padding-left: 2.5rem; }
+
+ol.choices-ol button span.choice-text {
+  display: block; }
+
+/*# sourceMappingURL=egamebook.css.map */

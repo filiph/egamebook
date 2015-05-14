@@ -6,7 +6,7 @@
   <title>The Bodega Incident</title>
 
   <link href='http://fonts.googleapis.com/css?family=Roboto:700,400&subset=latin' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../packages/egamebook/interfaces/html/assets/egamebook.css" type="text/css">
+  <link rel="stylesheet" href="stylesheets/egamebook.css" type="text/css">
 </head>
 <body>
 
@@ -28,11 +28,15 @@
     <header></header>
 
     <nav>
-      <a class="button" id="book-restart">Restart</a>
-      <div id="right-hand-nav">
-        <a class="button stats" id="points-button"><span class="stats-legend">Points:&nbsp;</span><span id="points-value">0</span></a>
-        <div id="stats"></div>
+      <div id="top-nav">
+        <div id="left-hand-nav">
+          <a class="button" id="book-restart">Restart</a>
+        </div>
+        <div id="right-hand-nav">
+          <a class="button" id="points-button"><span id="points-value">0</span></a><div id="stats"></div>
+        </div>
       </div>
+      <div id="bottom-gradient-nav"></div>
     </nav>
 
     <div id="book-about">

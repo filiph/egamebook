@@ -1,0 +1,144 @@
+@import "reset";
+
+
+/// Garamond font stack.
+///
+/// @type List
+$garamond: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
+
+// $modular-scale-ratio: $golden;
+$modular-scale-base: 1.2rem;
+
+@import "bourbon/bourbon";
+
+body {
+  //@include radial-gradient(#1e5799, #3dc3d1);
+  font-family: $garamond;
+  line-height: 1.6rem;
+  text-align: justify;
+  font-size: modular-scale(0);
+}
+
+.wrapper {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 1rem 1rem 3rem;
+}
+
+// .display-none {
+//   display: none;
+// }
+
+@mixin button-appearance {
+  display: inline-block;
+  font-family: 'Roboto', $helvetica;
+  font-size: modular-scale(0, $modular-scale-base * 0.9);  // Roboto is a larger font.
+  border: 1px solid #ddd;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  // @include radial-gradient(circle at 10% 10%, #f9f9f9 10%, #f1f1f1);
+  // @include linear-gradient(#f9f9f9 10%, #f1f1f1);
+  @include linear-gradient(#f9f9f9 10%, #ededed);
+  cursor: pointer;
+}
+
+// NAV
+
+nav {
+  @include position(fixed, 0 0 null 0);
+  z-index: 10;
+}
+
+#top-nav {
+  @include display(flex);
+  @include justify-content(space-between);
+  background-color: white;
+}
+
+#bottom-gradient-nav {
+  height: 1rem;
+  @include linear-gradient(to bottom,
+                           rgba(255, 255, 255, 1) 0%, 
+                           rgba(255, 255, 255, 0) 100%,
+                           $fallback: transparent)
+}
+
+#left-hand-nav {
+  @include flex(1 0 0);
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+#right-hand-nav {
+  // @include align-self(flex-end);
+  @include flex(2 0 0);
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+
+  display: inline;
+  text-align: right;
+
+  .button {
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+#stats {
+  display: inline;
+  text-align: right;
+}
+
+a#points-button {
+  font-weight: bold;
+  border-color: gold;
+}
+
+.button {
+  @include button-appearance;
+  color: #666;
+  text-shadow: 1px 1px 0px #ffffff;
+}
+
+.display-none {
+  display: none;
+}
+
+
+// TYPOGRAPHY
+
+p {
+  margin: 1rem 0;
+}
+
+p img {
+  max-width: 100%;
+  // margin: 2em 0;
+}
+
+
+button {
+  @include button-appearance;
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0.4rem 0;
+  padding: 0.4em 1.5em;
+  // font-size: modular-scale(0);
+}
+
+ol.choices-ol button span.choice-number {
+  display: block;
+  width: 1.5rem;
+  float: left;
+  text-align: right;
+}
+
+ol.choices-ol button span.choice-display {
+  display: block;
+  padding-left: 2.5rem;
+}
+
+ol.choices-ol button span.choice-text {
+  display: block;
+}
