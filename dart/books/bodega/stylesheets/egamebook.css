@@ -159,11 +159,20 @@ div.dialog h3 {
 
 div.dialog p {
   text-align: left;
-  font: 90% "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
 
-div.dialog table td {
-  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-  padding-right: 1rem; }
+div.dialog table {
+  width: 100%; }
+  div.dialog table td {
+    font-size: 1.08rem;
+    font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+    padding: 0.5rem;
+    padding-left: 0;
+    padding-right: 1rem;
+    border-top: 1px solid lightgray; }
+  div.dialog table tr:first-child td {
+    border-top: 2px solid lightgray; }
 
 p {
   margin: 1rem 0; }

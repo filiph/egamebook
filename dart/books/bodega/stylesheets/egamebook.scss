@@ -146,12 +146,25 @@ div.dialog h3 {
 
 div.dialog p {
   text-align: left;
-  font: 90% $sans-serif;
+  font-size: modular-scale(0, $modular-scale-base * 0.9);
+  font-family: $sans-serif;
 }
 
-div.dialog table td {
-  font-family: $sans-serif;
-  padding-right: 1rem;
+div.dialog table {
+  width: 100%;
+
+  td {
+    font-size: modular-scale(0, $modular-scale-base * 0.9);
+    font-family: $sans-serif;
+    padding: 0.5rem;
+    padding-left: 0;
+    padding-right: 1rem;
+    border-top: 1px solid lightgray;
+  }
+
+  tr:first-child td {
+    border-top: 2px solid lightgray;
+  }
 }
 
 
