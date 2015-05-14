@@ -130,7 +130,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void close() {
     super.close();
   }
-  
+
   static const Duration _durationBetweenShowingText = const Duration(
       milliseconds: 100);
 
@@ -370,7 +370,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
   static const Duration _durationBetweenSendingHash = const Duration(
       milliseconds: 100);
-  
+
   // TODO: use onClick.first.then() - no need to unregister listener
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
@@ -569,7 +569,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
-    html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
+    html.writeln("<tr><td>Score:</td><td>${_currentPoints}</td></tr>");
     for (int i = 0; i < _stats.length; i++) {
       UIStat stat = _stats[i];
       if (stat.show) {
