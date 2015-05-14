@@ -234,6 +234,16 @@ em {
 strong {
   font-weight: bold; }
 
+.meta {
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  text-align: left;
+  background-color: lightyellow;
+  background-image: -webkit-radial-gradient(lightyellow, #f2f2d4);
+  background-image: radial-gradient(  lightyellow, #f2f2d4);
+  padding: 0.5rem 1rem;
+  border-radius: 0.2rem; }
+
 .choices-question {
   margin-bottom: 0.68571rem; }
 

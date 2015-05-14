@@ -8,6 +8,7 @@ $sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-se
 $standard-font-size: 1.2rem;
 $sans-serif-font-size: $standard-font-size * 0.9;
 $line-height: $standard-font-size / 14 * 22;
+$border-radius: 0.2rem;
 
 @import "bourbon/bourbon";
 
@@ -34,7 +35,7 @@ body {
   font-family: $sans-serif;
   font-size: $sans-serif-font-size;  // Roboto is a larger font.
   border: 1px solid #ddd;
-  border-radius: 0.2rem;
+  border-radius: $border-radius;
   padding: 0.4rem 0.8rem;
   // @include radial-gradient(circle at 10% 10%, #f9f9f9 10%, #f1f1f1);
   // @include linear-gradient(#f9f9f9 10%, #f1f1f1);
@@ -139,7 +140,7 @@ p.toast {
 
   @include transition(color 5s);
   color: #999;
-  border-radius: 0.2rem;
+  border-radius: $border-radius;
 }
 
 
@@ -173,7 +174,7 @@ p.toast.non-dimmed {
   box-shadow: 0 0 0.5rem 0.5rem #fff;
   box-sizing: border-box;
   padding: 5vh;
-  border-radius: 0.2rem;
+  border-radius: $border-radius;
 }
 
 div.dialog h3 {
@@ -232,6 +233,15 @@ em {
 
 strong {
   font-weight: bold;
+}
+
+.meta {
+  font-size: $sans-serif-font-size;
+  font-family: $sans-serif;
+  text-align: left;
+  @include radial-gradient(lightyellow, shade(lightyellow, 5%));
+  padding: 0.5rem 1rem;
+  border-radius: $border-radius;
 }
 
 // CHOICES
