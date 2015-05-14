@@ -29,7 +29,7 @@ table {
 
 body {
   font-family: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
-  line-height: 1.6rem;
+  line-height: 1.88571rem;
   text-align: justify;
   font-size: 1.2rem; }
 
@@ -44,6 +44,8 @@ nav {
   right: 0;
   left: 0;
   z-index: 10; }
+  nav button {
+    width: auto; }
 
 #top-nav {
   display: -webkit-box;
@@ -93,7 +95,7 @@ nav {
   padding-right: 1rem;
   display: inline;
   text-align: right; }
-  #right-hand-nav .button {
+  #right-hand-nav button {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem; }
 
@@ -101,11 +103,11 @@ nav {
   display: inline;
   text-align: right; }
 
-a#points-button {
+#points-button {
   font-weight: bold;
   border-color: gold; }
 
-.button {
+nav button {
   display: inline-block;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   font-size: 1.08rem;
@@ -116,11 +118,56 @@ a#points-button {
   background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
   background-image: linear-gradient(#f9f9f9 10%, #ededed);
   cursor: pointer;
+  box-sizing: border-box;
+  min-height: 1.25714rem;
   color: #666;
   text-shadow: 1px 1px 0px #ffffff; }
 
 .display-none {
   display: none; }
+
+.blink {
+  -webkit-animation: highlight 1s;
+  -moz-animation: highlight 1s;
+  animation: highlight 1s; }
+
+@-webkit-keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+@-moz-keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+@keyframes highlight {
+  0% {
+    box-shadow: none; }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue; }
+  100% {
+    box-shadow: none; } }
+p.toast {
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 1.88571rem;
+  -webkit-transition: color 5s;
+  -moz-transition: color 5s;
+  transition: color 5s;
+  color: #999;
+  border-radius: 0.2rem; }
+
+p.toast.non-dimmed {
+  color: inherit;
+  /* TODO: make the transition work */ }
 
 .overlay {
   position: fixed;
@@ -143,7 +190,8 @@ a#points-button {
   margin-top: -35vh;
   box-shadow: 0 0 0.5rem 0.5rem #fff;
   box-sizing: border-box;
-  padding: 5vh; }
+  padding: 5vh;
+  border-radius: 0.2rem; }
 
 div.dialog h3 {
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
@@ -175,10 +223,22 @@ div.dialog table {
     border-top: 2px solid lightgray; }
 
 p {
-  margin: 1rem 0; }
+  margin-bottom: 1.88571rem; }
 
 p img {
   max-width: 100%; }
+
+em {
+  font-style: italic; }
+
+strong {
+  font-weight: bold; }
+
+.choices-question {
+  margin-bottom: 0.68571rem; }
+
+.choices-ol {
+  margin-bottom: 1.88571rem; }
 
 button {
   display: inline-block;
@@ -191,11 +251,13 @@ button {
   background-image: -webkit-linear-gradient(#f9f9f9 10%, #ededed);
   background-image: linear-gradient(#f9f9f9 10%, #ededed);
   cursor: pointer;
+  box-sizing: border-box;
+  min-height: 1.25714rem;
   display: block;
   width: 100%;
   text-align: left;
-  margin: 0.4rem 0;
-  padding: 0.4em 1.5em; }
+  margin-bottom: 0.62857rem;
+  padding: 0.4rem 1.5rem; }
 
 ol.choices-ol button span.choice-number {
   display: block;
@@ -209,5 +271,57 @@ ol.choices-ol button span.choice-display {
 
 ol.choices-ol button span.choice-text {
   display: block; }
+
+.form {
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  margin-top: 1.88571rem;
+  margin-bottom: 1.88571rem;
+  padding: 0 1.88571rem; }
+  .form > div > div {
+    min-height: 1.88571rem;
+    margin-bottom: 0.94286rem; }
+
+.buttons-and-value {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  align-items: center; }
+  .buttons-and-value .buttons input {
+    vertical-align: middle; }
+  .buttons-and-value .current-value {
+    margin: 0;
+    margin-left: 2rem; }
+
+.checkbox-input::after {
+  clear: both;
+  content: "";
+  display: table; }
+.checkbox-input input {
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  transform: scale(1.5);
+  float: left;
+  height: 1.88571rem; }
+.checkbox-input label {
+  display: block;
+  text-align: left;
+  padding-left: 2rem;
+  min-height: 1.88571rem; }
 
 /*# sourceMappingURL=egamebook.css.map */

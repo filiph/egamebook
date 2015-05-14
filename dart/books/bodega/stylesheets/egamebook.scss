@@ -5,16 +5,18 @@ $garamond: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Tim
 $sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
 
 // $modular-scale-ratio: $golden;
-$modular-scale-base: 1.2rem;
+$standard-font-size: 1.2rem;
+$sans-serif-font-size: $standard-font-size * 0.9;
+$line-height: $standard-font-size / 14 * 22;
 
 @import "bourbon/bourbon";
 
 body {
   //@include radial-gradient(#1e5799, #3dc3d1);
   font-family: $garamond;
-  line-height: 1.6rem;
+  line-height: $line-height;
   text-align: justify;
-  font-size: modular-scale(0);
+  font-size: $standard-font-size;
 }
 
 .wrapper {
@@ -30,7 +32,7 @@ body {
 @mixin button-appearance {
   display: inline-block;
   font-family: $sans-serif;
-  font-size: modular-scale(0, $modular-scale-base * 0.9);  // Roboto is a larger font.
+  font-size: $sans-serif-font-size;  // Roboto is a larger font.
   border: 1px solid #ddd;
   border-radius: 0.2rem;
   padding: 0.4rem 0.8rem;
@@ -38,6 +40,8 @@ body {
   // @include linear-gradient(#f9f9f9 10%, #f1f1f1);
   @include linear-gradient(#f9f9f9 10%, #ededed);
   cursor: pointer;
+  box-sizing: border-box;
+  min-height: 2 / 3 * $line-height;
 }
 
 // NAV
@@ -45,6 +49,10 @@ body {
 nav {
   @include position(fixed, 0 0 null 0);
   z-index: 10;
+
+  button {
+    width: auto;
+  }
 }
 
 #top-nav {
@@ -76,7 +84,7 @@ nav {
   display: inline;
   text-align: right;
 
-  .button {
+  button {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
   }
@@ -87,12 +95,12 @@ nav {
   text-align: right;
 }
 
-a#points-button {
+#points-button {
   font-weight: bold;
   border-color: gold;
 }
 
-.button {
+nav button {
   @include button-appearance;
   color: #666;
   text-shadow: 1px 1px 0px #ffffff;
@@ -100,6 +108,44 @@ a#points-button {
 
 .display-none {
   display: none;
+}
+
+.blink {
+  @include animation(highlight 1s)
+}
+
+@include keyframes(highlight) {
+  0% {
+    box-shadow: none;
+  }
+  10% {
+    box-shadow: 0 0 0.5rem 0.5rem lightblue;
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+
+// TOASTS (meta information such as points/score awards)
+
+p.toast {
+  font-size: $sans-serif-font-size;
+  font-family: $sans-serif;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: $line-height;
+
+  @include transition(color 5s);
+  color: #999;
+  border-radius: 0.2rem;
+}
+
+
+p.toast.non-dimmed {
+  color: inherit;
+  /* TODO: make the transition work */
 }
 
 // DIALOG
@@ -127,6 +173,7 @@ a#points-button {
   box-shadow: 0 0 0.5rem 0.5rem #fff;
   box-sizing: border-box;
   padding: 5vh;
+  border-radius: 0.2rem;
 }
 
 div.dialog h3 {
@@ -146,7 +193,7 @@ div.dialog h3 {
 
 div.dialog p {
   text-align: left;
-  font-size: modular-scale(0, $modular-scale-base * 0.9);
+  font-size: $sans-serif-font-size;
   font-family: $sans-serif;
 }
 
@@ -154,7 +201,7 @@ div.dialog table {
   width: 100%;
 
   td {
-    font-size: modular-scale(0, $modular-scale-base * 0.9);
+    font-size: $sans-serif-font-size;
     font-family: $sans-serif;
     padding: 0.5rem;
     padding-left: 0;
@@ -171,7 +218,7 @@ div.dialog table {
 // TYPOGRAPHY
 
 p {
-  margin: 1rem 0;
+  margin-bottom: $line-height;
 }
 
 p img {
@@ -179,14 +226,31 @@ p img {
   // margin: 2em 0;
 }
 
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+// CHOICES
+
+.choices-question {
+  margin-bottom: $line-height - $standard-font-size;
+}
+
+.choices-ol {
+  margin-bottom: $line-height;
+}
 
 button {
   @include button-appearance;
   display: block;
   width: 100%;
   text-align: left;
-  margin: 0.4rem 0;
-  padding: 0.4em 1.5em;
+  margin-bottom: 1 / 3 * $line-height;
+  padding: 0.4rem 1.5rem;
   // font-size: modular-scale(0);
 }
 
@@ -204,4 +268,52 @@ ol.choices-ol button span.choice-display {
 
 ol.choices-ol button span.choice-text {
   display: block;
+}
+
+// FORMS
+
+// XXX: START HERE
+.form {
+  font-size: $sans-serif-font-size;
+  font-family: $sans-serif;
+  margin-top: $line-height;
+  margin-bottom: $line-height;
+  padding: 0 $line-height;
+
+  & > div > div {
+    min-height: $line-height;
+    margin-bottom: $line-height / 2;
+  }
+}
+
+.buttons-and-value {
+  @include display(flex);
+  @include justify-content(space-between);
+  align-items: center;
+
+  .buttons input {
+    vertical-align: middle;
+  }
+
+  .current-value {
+    margin: 0;
+    margin-left: 2rem;
+  }
+}
+
+.checkbox-input {
+  @include clearfix;
+
+  input {
+    @include transform(scale(1.5));
+    float: left;
+    height: $line-height;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    padding-left: 2rem;
+    min-height: $line-height;
+  }
 }
