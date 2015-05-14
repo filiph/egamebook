@@ -419,3 +419,15 @@ ol.choices-ol button span.choice-text {
     min-height: $line-height;
   }
 }
+
+
+// Select
+
+.multiple-choice-input {
+  margin-bottom: $line-height;
+    
+  select {
+    display: block;
+    font-size: $sans-serif-font-size * 2;
+  }
+}
