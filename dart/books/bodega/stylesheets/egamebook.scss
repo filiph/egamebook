@@ -26,10 +26,6 @@ body {
   padding: 1rem 1rem 3rem;
 }
 
-// .display-none {
-//   display: none;
-// }
-
 @mixin button-appearance {
   display: inline-block;
   font-family: $sans-serif;
@@ -77,7 +73,6 @@ nav {
 }
 
 #right-hand-nav {
-  // @include align-self(flex-end);
   @include flex(2 0 0);
   padding-top: 0.5rem;
   padding-right: 1rem;
@@ -148,6 +143,29 @@ p.toast.non-dimmed {
   color: inherit;
   /* TODO: make the transition work */
 }
+
+
+// Footnotes
+
+@mixin badge($color: #999, $badge-font-size: 1rem) {
+  background-color: tint($color, 95%);
+  border-radius: $badge-font-size * 5;
+  color: $color;
+  display: inline-block;
+  font-size: $badge-font-size;
+  font-weight: 600;
+  font-family: $sans-serif;
+  vertical-align: super;
+  line-height: 1;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid tint($color, 80%);
+}
+
+.footnote {
+  @include badge($color: blue, $badge-font-size: 0.7rem);
+  cursor: pointer;
+}
+
 
 // DIALOG
 
@@ -232,6 +250,14 @@ em {
 }
 
 strong {
+  font-weight: bold;
+}
+
+h2 {
+  font-size: $line-height;
+  font-family: $sans-serif;
+  margin: $line-height 0;
+  margin-top: 2 * $line-height;
   font-weight: bold;
 }
 

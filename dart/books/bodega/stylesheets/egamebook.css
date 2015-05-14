@@ -169,6 +169,20 @@ p.toast.non-dimmed {
   color: inherit;
   /* TODO: make the transition work */ }
 
+.footnote {
+  background-color: #f2f2ff;
+  border-radius: 3.5rem;
+  color: blue;
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  vertical-align: super;
+  line-height: 1;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #ccccff;
+  cursor: pointer; }
+
 .overlay {
   position: fixed;
   top: 0;
@@ -232,6 +246,13 @@ em {
   font-style: italic; }
 
 strong {
+  font-weight: bold; }
+
+h2 {
+  font-size: 1.88571rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  margin: 1.88571rem 0;
+  margin-top: 3.77143rem;
   font-weight: bold; }
 
 .meta {
