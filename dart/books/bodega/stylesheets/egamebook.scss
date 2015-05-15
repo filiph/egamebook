@@ -7,6 +7,7 @@ $sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-se
 // $modular-scale-ratio: $golden;
 $standard-font-size: 1.2rem;
 $sans-serif-font-size: $standard-font-size * 0.9;
+$smaller-serif-font-size: $sans-serif-font-size * 0.8;
 $line-height: $standard-font-size / 14 * 22;
 $border-radius: 0.2rem;
 
@@ -176,7 +177,7 @@ nav button {
 // TOASTS (meta information such as points/score awards)
 
 p.toast {
-  font-size: $sans-serif-font-size;
+  font-size: $smaller-serif-font-size;
   font-family: $sans-serif;
   text-align: center;
   margin-left: 10%;
@@ -198,7 +199,7 @@ p.toast.non-dimmed {
 // Footnotes
 
 @mixin badge($color: #999, $badge-font-size: 1rem) {
-  background-color: tint($color, 95%);
+  background-color: tint($color, 99%);
   border-radius: $badge-font-size * 5;
   color: $color;
   display: inline-block;
@@ -207,12 +208,12 @@ p.toast.non-dimmed {
   font-family: $sans-serif;
   vertical-align: super;
   line-height: 1;
-  padding: 0.4rem 0.5rem;
+  padding: 0.2rem 0.3rem;
   border: 1px solid tint($color, 80%);
 }
 
 .footnote {
-  @include badge($color: blue, $badge-font-size: 0.7rem);
+  @include badge($color: blue, $badge-font-size: 0.6rem);
   cursor: pointer;
 }
 
