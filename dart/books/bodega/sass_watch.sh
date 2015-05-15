@@ -1,1 +1,1 @@
-sass --watch stylesheets/egamebook.scss:stylesheets/egamebook.css
+sass --watch --style compressed stylesheets/egamebook.scss:stylesheets/egamebook.css

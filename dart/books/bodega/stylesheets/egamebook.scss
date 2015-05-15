@@ -425,9 +425,10 @@ ol.choices-ol button span.choice-text {
 
 .multiple-choice-input {
   margin-bottom: $line-height;
-    
+
   select {
     display: block;
-    font-size: $sans-serif-font-size * 2;
+    font-size: $sans-serif-font-size;
+    // -webkit-appearance: none;
   }
 }
