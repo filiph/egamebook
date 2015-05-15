@@ -97,7 +97,7 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.text = "START";
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
-      bookDiv.style.display = "block";
+      bookDiv.style.display = "block"; // TODO: necessary?
       new Future(() { // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
         bookDiv.children.last // TODO: first/last according to Continue/Start
