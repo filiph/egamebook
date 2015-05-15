@@ -384,6 +384,13 @@ ol.choices-ol button span.choice-text {
   display: block;
 }
 
+.choices-div.chosen button:not(.chosen) {
+  @include linear-gradient(tint(#f9f9f9, 50%) 10%, tint(#ededed, 50%));
+  color: #ddd;
+}
+
+// Infochips
+
 .choice-infochips {
   @include order(2);
 }
