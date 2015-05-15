@@ -665,8 +665,6 @@ class HtmlForm extends HtmlUiElement {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
 
-    // TODO: Add 'header' to the form?
-
     _childrenContainerDiv = new DivElement();
     uiRepresentation.append(_childrenContainerDiv);
 
