@@ -81,6 +81,16 @@ $bottom-fixed-height: 6rem;
                            $fallback: transparent);
 }
 
+h1 {
+  font-size: 4 / 3 * $line-height;
+  font-family: $sans-serif;
+  font-weight: bold;
+  text-align: left;
+  line-height: 2 * $line-height;
+  margin-top: 5vh;
+  margin-bottom: $line-height;
+}
+
 // NAV
 
 nav {
@@ -309,6 +319,17 @@ h2 {
   padding: 0.5rem 1rem;
   border-radius: $border-radius;
 }
+
+// Below book contents
+
+#loading {
+  text-align: center;
+}
+
+#book-whitespace-footer {
+  height: 10rem;
+}
+
 
 // CHOICES
 
