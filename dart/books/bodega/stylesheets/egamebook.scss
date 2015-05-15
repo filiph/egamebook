@@ -41,6 +41,46 @@ body {
   min-height: 2 / 3 * $line-height;
 }
 
+// SPLASH SCREEN
+
+$bottom-fixed-height: 6rem;
+
+#book-title {
+  background: white;
+  // background: radial-gradient(circle at 10% 10%, #f9f9f9 10%, #f1f1f1);
+  z-index: 9999;
+  top:0;
+  left:0;
+  right: 0;
+  bottom: $bottom-fixed-height;
+  overflow-y: scroll;
+  position: fixed;
+}
+
+.bottom-fixed {
+  position: fixed;
+  z-index: 9999;
+  height: $bottom-fixed-height - (2 * 2rem);
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: white;
+  padding: 2rem 1rem;
+}
+
+.bottom-fixed-gradient {
+  position: fixed;
+  z-index: 10000;
+  bottom: $bottom-fixed-height;
+  left: 0;
+  right: 0; 
+  height: 1rem;
+  @include linear-gradient(to top,
+                           rgba(255, 255, 255, 1) 0%, 
+                           rgba(255, 255, 255, 0) 100%,
+                           $fallback: transparent);
+}
+
 // NAV
 
 nav {

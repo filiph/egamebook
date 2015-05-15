@@ -64,6 +64,7 @@ class HtmlInterface extends EgbInterfaceBase {
     bookTitleDiv = document.querySelector("div#book-title");
     bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
     startButton = document.querySelector("#start-button");
+    startButton.querySelector("#start-button-loading-span").text = "INITIATING";
 
     restartAnchor = document.querySelector("#book-restart");
     restartAnchor.onClick.listen((_) {
