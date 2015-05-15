@@ -1,6 +1,8 @@
 @import "reset";
 
 
+$max-width: 40rem;
+
 $garamond: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
 $sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
 
@@ -22,7 +24,7 @@ body {
 }
 
 .wrapper {
-  max-width: 40rem;
+  max-width: $max-width;
   margin: 2rem auto;
   padding: 1rem 1rem 3rem;
 }
@@ -67,7 +69,14 @@ $bottom-fixed-height: 6rem;
   left: 0;
   background: white;
   padding: 2rem 1rem;
+
+  button {
+    max-width: $max-width;
+    margin: auto;
+  }
 }
+
+
 
 .bottom-fixed-gradient {
   position: fixed;
