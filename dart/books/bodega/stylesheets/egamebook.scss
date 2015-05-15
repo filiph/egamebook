@@ -320,7 +320,11 @@ h2 {
   border-radius: $border-radius;
 }
 
-// Below book contents
+// Above and below book contents
+
+#book-whitespace-header {
+  height: 5rem;
+}
 
 #loading {
   text-align: center;
