@@ -107,11 +107,45 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         targetShip.getPositionTowards(this) - change);
   }
 
+  /// Gets the position towards [targetShip] and returns a human-readable
+  /// string. Optionally wrapped in a `<span>` with a corresponding class when
+  /// [wrapInColor] is true.
+  String getPositionStringTowards(Spaceship targetShip,
+                                  {bool wrapInColor: false}) {
+    int pos = getPositionTowards(targetShip);
+
+    String wrapInColorSpan(String text, String color) {
+      if (!wrapInColor) return text;
+      return "<span class=\"$color\">$text</span>";
+    }
+
+    switch (pos) {
+      case POSITION_HORRIBLE:
+        return wrapInColorSpan(POSITION_HORRIBLE_STRING, "green");
+      case POSITION_BAD:
+        return wrapInColorSpan(POSITION_BAD_STRING, "greenish");
+      case POSITION_BALANCED:
+        return wrapInColorSpan(POSITION_BALANCED_STRING, "black");
+      case POSITION_GOOD:
+        return wrapInColorSpan(POSITION_GOOD_STRING, "orange");
+      case POSITION_GREAT:
+        return wrapInColorSpan(POSITION_GREAT_STRING, "red");
+      default:
+        throw new StateError("Position $pos is not a valid value.");
+    }
+  }
+
   static const int POSITION_HORRIBLE = -2;
   static const int POSITION_BAD = -1;
   static const int POSITION_BALANCED = 0;
   static const int POSITION_GOOD = 1;
   static const int POSITION_GREAT = 2;
+
+  static const String POSITION_HORRIBLE_STRING = "very disadvategeous";
+  static const String POSITION_BAD_STRING = "disadvategeous";
+  static const String POSITION_BALANCED_STRING = "balanced";
+  static const String POSITION_GOOD_STRING = "advategeous";
+  static const String POSITION_GREAT_STRING = "very advategeous";
 
   void update() {
     if (currentMove != null) {

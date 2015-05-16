@@ -14,6 +14,7 @@ class BodegaShip extends Spaceship {
       engine: new Engine(maxHp: 2, maxPowerOutput: 10.0),
       thrusters: [
           new Thruster("main jet", maxHp: 5, maxPowerInput: 5.0,
+                      maxManeuverability: 4,
                       maxForwardlyForce: 100),
           new Thruster("left side thruster", maxHp: 2, maxPowerInput: 1.0,
                       maxManeuverability: 2),
@@ -41,6 +42,7 @@ class MessengerShip extends Spaceship {
       engine: new Engine(maxHp: 10, maxPowerOutput: 2.0),
       thrusters: [
                   new Thruster("main jet", maxHp: 2, maxPowerInput: 1.0,
+                      maxManeuverability: 10,
                       maxForwardlyForce: 10),
                   new Thruster("rotation thrusters", maxHp: 1,
                       maxPowerInput: 0.5, maxManeuverability: 10,

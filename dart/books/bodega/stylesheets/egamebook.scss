@@ -424,6 +424,7 @@ ol.choices-ol button span.choice-text {
 .form {
   font-size: $sans-serif-font-size;
   font-family: $sans-serif;
+  text-align: left;
   margin-top: $line-height;
   margin-bottom: $line-height;
   padding: 0 $line-height;
@@ -431,6 +432,31 @@ ol.choices-ol button span.choice-text {
   & > div > div {
     min-height: $line-height;
     margin-bottom: $line-height / 2;
+  }
+}
+
+// Form table 
+
+.form-table {
+  width: 100%;
+  line-height: $line-height;
+
+  th {
+    width: 30rem;
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    font-size: $smaller-serif-font-size;
+    line-height: $smaller-serif-font-size;
+    padding-bottom: $smaller-serif-font-size;
+    padding-right: 0.5rem;
+  }
+
+  td:first-child {
+    font-weight: bold;
+  }
+
+  td {
+    padding-right: 0.5rem;
   }
 }
 
