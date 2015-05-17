@@ -35,6 +35,11 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 
   bool get isAlive => hp.value > 0;
 
+  /// The percentage at which a ship system ceases to be operational (but still
+  /// isn't destroyed).
+  static const num OPERATIONAL_THRESHOLD = 0.2;
+  bool get isOperational => hp.percentage > OPERATIONAL_THRESHOLD;
+
   /// List of actions that the player can take with this
   /// [ShipSystem].
   List<CombatMove> availableMoves = [];
@@ -133,6 +138,12 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   FormSection createSetupSection() {
     FormSection section = new FormSection(Storyline.capitalize(name));
     TextOutput text = new TextOutput();
+    if (!isOperational) {
+      text.current = "${Storyline.capitalize(name)} is not operational.";
+      section.append(text);
+      return section;
+    }
+
     text.current = "This is $name section.";  // TODO: Status + description.
     section.append(text);
 
@@ -152,6 +163,12 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
           button.name = "${Storyline.capitalize(proto.commandText)} "
               "[$probability]";
         });
+        if (targetShip != null) {
+          text.current = "Aim at ${targetShip.name} is "
+              "${getAimString((this as CanHaveTarget).getAimAt(targetShip))}.";
+        } else {
+          text.current = "No target.";
+        }
       }
     }
 
@@ -185,7 +202,7 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
         ..hidden = targetShip != enemy;
         allTargetSystemInputs.add(targetSystemInput);
 
-        Option noTargetSystem = new Option("Whole ship", (_) {
+        Option noTargetSystem = new Option("ship", (_) {
           targetSystem = enemy.hull;
           recalculateProbabilities();
         }, selected: targetSystem == null || targetSystem == enemy.hull);
@@ -245,15 +262,27 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   }
 }
 
-abstract class CanHaveTarget extends ShipSystem {
+class CanHaveTarget extends ShipSystem {
   Spaceship targetShip;
   ShipSystem targetSystem;
 
-  CanHaveTarget(String name, {int maxHp: 10, IntScale hp, num maxPowerInput: 1.0}) :
-    super(name, maxHp: maxHp, hp: hp, maxPowerInput: maxPowerInput);
+  CanHaveTarget(String name, {maxHp: 1, Pronoun pronoun: Pronoun.IT})
+  : super(name, maxHp: maxHp, pronoun: pronoun);
+
+
+  Map<Spaceship,int> _aimMap = new Map<Spaceship,int>();
+  int getAimAt(Spaceship targetShip) {
+    if (!_aimMap.containsKey(targetShip)) {
+      _aimMap[targetShip] = 0;
+    }
+    return _aimMap[targetShip];
+  }
+  void setAimAt(Spaceship targetShip, int value) {
+    _aimMap[targetShip] = value;
+  }
 }
 
-class Weapon extends ShipSystem implements CanHaveTarget {
+class Weapon extends CanHaveTarget {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
                        this.damage: 1.0, this.shieldPenetration: 0.0,
                        this.accuracyModifier: 1.0,
@@ -289,17 +318,6 @@ class Weapon extends ShipSystem implements CanHaveTarget {
   /// of their energy goes through them.
   num shieldPenetration = 0.0;
   num damage = 1;
-
-  Map<Spaceship,int> _aimMap = new Map<Spaceship,int>();
-  int getAimAt(Spaceship targetShip) {
-    if (!_aimMap.containsKey(targetShip)) {
-      _aimMap[targetShip] = 0;
-    }
-    return _aimMap[targetShip];
-  }
-  void setAimAt(Spaceship targetShip, int value) {
-    _aimMap[targetShip] = value;
-  }
 }
 
 String getAimString(int aim) {

@@ -29,11 +29,7 @@ class NumScale implements Saveable {
   num get value => _value;
 
   set value(num v) {
-    if (v <= min) {
-      v = min;
-    } else if (v >= max) {
-      v = max;
-    }
+    v = _clamp(v);
     if (v == _value) return;
     _lastValue = _value;
     _value = v;
@@ -57,6 +53,21 @@ class NumScale implements Saveable {
         upwardsChangeCallbacks[passedKeys.last](_value);
       }
     }
+  }
+
+  num _clamp(num v) {
+    if (v <= min) {
+      v = min;
+    } else if (v >= max) {
+      v = max;
+    }
+    return v;
+  }
+
+  void setValueWithoutGeneratingEvents(num v) {
+    v = _clamp(v);
+    _value = v;
+    _lastValue = v;
   }
 
   List<num> _getPassedChangeCallbackKeys(Map<num,ChangeCallback> callbackMap,

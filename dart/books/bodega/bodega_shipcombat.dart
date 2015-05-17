@@ -10,7 +10,8 @@ class BodegaShip extends Spaceship {
   BodegaShip() : super("Bodega",
       pilot: playerPilot,
       hull: new Hull(maxHp: 50),
-      shield: new Shield(maxHp: 0, maxPowerInput: 2.0),
+      shield: new Shield(maxHp: 0, maxPowerInput: 2.0)
+              ..isActive = false,
       engine: new Engine(maxHp: 2, maxPowerOutput: 10.0),
       thrusters: [
           new Thruster("main jet", maxHp: 5, maxPowerInput: 5.0,
@@ -27,9 +28,10 @@ class BodegaShip extends Spaceship {
           ..damage = 2,
           new AutoWeapon("defensive turret",
                 projectile: new Entity.withOptions("shot"))
-          ..isActive = false
         ]) {
+    hull.hp.setValueWithoutGeneratingEvents(47);
     turret = weapons[1];
+    turret.hp.setValueWithoutGeneratingEvents(0);
   }
 
   Weapon turret;

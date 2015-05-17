@@ -180,7 +180,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /// can be interacted with during combat.
   List<FormSection> getSystemSetupSections() {
     List<FormSection> sections = <FormSection>[];
-    allSystems.forEach((system) {
+    allSystems.where((system) => system.isActive).forEach((system) {
       FormSection section = system.createSetupSection();
       if (section != null) {
         sections.add(section);
