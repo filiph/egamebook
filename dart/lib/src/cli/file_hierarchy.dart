@@ -28,15 +28,15 @@ class FileHierarchy {
             .toList();
   }
 
-  /// Creates hierarchy of files from [directoryFrom] or parent of [fileFrom].
-  List<File> create({Directory directoryFrom, File fileFrom}) {
+  /// Creates hierarchy of files from [fromDirectory] or parent of [fromFile].
+  List<File> create({Directory fromDirectory, File fromFile}) {
     List<File> filesToRemove = [];
     // If we use exact file we need to still create hierarchy for parent folder
-    if (directoryFrom == null) {
-      directoryFrom = fileFrom.parent;
+    if (fromDirectory == null) {
+      fromDirectory = fromFile.parent;
     }
 
-    List<File> files = listFiles(directoryFrom);
+    List<File> files = listFiles(fromDirectory);
 
     // Builds hierarchy masterFile -> partFile
     for (int i = 0; i < files.length; i++) {
@@ -66,8 +66,8 @@ class FileHierarchy {
 
     // When we are using one particular .egb file to build, we need to know
     // the master
-    if (fileFrom != null) {
-      files = new List.from([getMasterFile(fileFrom)]);
+    if (fromFile != null) {
+      files = new List.from([getMasterFile(fromFile)]);
     }
 
     return files;

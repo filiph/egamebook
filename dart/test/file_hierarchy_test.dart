@@ -44,7 +44,7 @@ void main() {
       file2.createSync();
 
       // Now create a hierarchy
-      hierarchy.create(directoryFrom: directory);
+      hierarchy.create(fromDirectory: directory);
 
       File master = hierarchy.getMasterFile(file2);
       expect(master.path == file1.path, isTrue);
@@ -65,7 +65,7 @@ void main() {
       file2.createSync();
 
       // Now create a hierarchy
-      hierarchy.create(fileFrom: file1);
+      hierarchy.create(fromFile: file1);
 
       File master = hierarchy.getMasterFile(file2);
       expect(master.path == file1.path, isTrue);
@@ -86,7 +86,7 @@ void main() {
       file2.createSync();
 
       // Now create a hierarchy
-      hierarchy.create(fileFrom: file2);
+      hierarchy.create(fromFile: file2);
 
       File master = hierarchy.getMasterFile(file2);
       expect(master.path == file1.path, isTrue);
@@ -107,7 +107,7 @@ void main() {
       file2.createSync();
 
       // Now create a hierarchy
-      hierarchy.create(directoryFrom: directory);
+      hierarchy.create(fromDirectory: directory);
 
       bool isPart = hierarchy.isPartFile(file1);
       expect(isPart, isFalse);

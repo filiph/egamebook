@@ -232,7 +232,7 @@ class ProjectBuilder implements Worker {
         if (!file.existsSync()) {
           return new Future.error("BUILD FAILED!\nFile $path doesn't exist.");
         }
-        files = _hierarchy.create(fileFrom: file);
+        files = _hierarchy.create(fromFile: file);
         return new Future.value(files);
       }
       return new Future.error(
@@ -245,7 +245,7 @@ class ProjectBuilder implements Worker {
       return new Future.error("BUILD FAILED!\nDirectory $path doesn't exist.");
     }
 
-    files = _hierarchy.create(directoryFrom: from);
+    files = _hierarchy.create(fromDirectory: from);
 
     if (files.isEmpty) {
       return new Future.error(
