@@ -28,7 +28,7 @@ import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
 class HtmlInterface extends EgbInterfaceBase {
-  AnchorElement restartAnchor;
+  ButtonElement restartAnchor;
   SpanElement pointsSpan;
 
   DivElement bookDiv;
@@ -63,9 +63,10 @@ class HtmlInterface extends EgbInterfaceBase {
 
     bookTitleDiv = document.querySelector("div#book-title");
     bigBottomButtonDiv = document.querySelector("div#big-bottom-button");
-    startButton = document.querySelector("button#start-button");
+    startButton = document.querySelector("#start-button");
+    startButton.querySelector("#start-button-loading-span").text = "INITIATING";
 
-    restartAnchor = document.querySelector("nav a#book-restart");
+    restartAnchor = document.querySelector("#book-restart");
     restartAnchor.onClick.listen((_) {
       scripterProxy.restart();
       // Clear text and choices
@@ -76,7 +77,7 @@ class HtmlInterface extends EgbInterfaceBase {
     });
 
     pointsSpan = document.querySelector("span#points-value");
-    document.querySelector("a#points-button").onClick.listen(
+    document.querySelector("#points-button").onClick.listen(
         _statsOnClickListener);
 
     // Set up listening for meta elements (for not showing new points before
@@ -96,7 +97,7 @@ class HtmlInterface extends EgbInterfaceBase {
     startButton.text = "START";
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
-      bookDiv.style.display = "block";
+      bookDiv.style.display = "block"; // TODO: necessary?
       new Future(() { // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
         bookDiv.children.last // TODO: first/last according to Continue/Start
@@ -130,7 +131,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void close() {
     super.close();
   }
-  
+
   static const Duration _durationBetweenShowingText = const Duration(
       milliseconds: 100);
 
@@ -370,7 +371,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
   static const Duration _durationBetweenSendingHash = const Duration(
       milliseconds: 100);
-  
+
   // TODO: use onClick.first.then() - no need to unregister listener
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
@@ -444,13 +445,12 @@ class HtmlInterface extends EgbInterfaceBase {
       var stat = stats[i];
       var span = new SpanElement();
       span.text = stat.string;
-      var anchor = new AnchorElement();
-      anchor.classes.add("button");
-      if (!stat.show) anchor.classes.add("display-none");
-      anchor.children.add(span);
-      statsDiv.children.add(anchor);
-      _statsElements[stat.name] = anchor;
-      anchor.onClick.listen(_statsOnClickListener);
+      var button = new ButtonElement();
+      if (!stat.show) button.classes.add("display-none");
+      button.children.add(span);
+      statsDiv.children.add(button);
+      _statsElements[stat.name] = button;
+      button.onClick.listen(_statsOnClickListener);
     }
     return new Future.value();
   }
@@ -541,7 +541,9 @@ class HtmlInterface extends EgbInterfaceBase {
     var completer = new Completer<bool>();
 
     DivElement dialogDiv = new DivElement()..classes.add("dialog");
-    DivElement wrapperDiv = new DivElement();
+    DivElement overlayDiv = new DivElement()..classes.add("overlay");
+    dialogDiv.children.add(overlayDiv);
+    DivElement wrapperDiv = new DivElement()..classes.add("dialog-window");
     HeadingElement titleEl = new HeadingElement.h3()..text = dialog.title;
     wrapperDiv.children.add(titleEl);
     DivElement contentDiv = new DivElement()..classes.add("dialog-content");
@@ -569,7 +571,7 @@ class HtmlInterface extends EgbInterfaceBase {
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
-    html.writeln("<tr><td>Points:</td><td>${_currentPoints}</td></tr>");
+    html.writeln("<tr><td>Score:</td><td>${_currentPoints}</td></tr>");
     for (int i = 0; i < _stats.length; i++) {
       UIStat stat = _stats[i];
       if (stat.show) {
@@ -664,26 +666,22 @@ class HtmlForm extends HtmlUiElement {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
 
-    // TODO: Add 'header' to the form?
-
     _childrenContainerDiv = new DivElement();
     uiRepresentation.append(_childrenContainerDiv);
 
     String submitText = blueprint.submitText;
-    if (submitText == null) {
-      submitText = DEFAULT_SUBMIT_TEXT;
+    if (submitText != null) {
+      submitButton = new ButtonElement()
+          ..classes.add("submit-main")
+          ..text = submitText;
+
+      StreamSubscription subscription;
+      subscription = submitButton.onClick.listen((ev) {
+        _onChangeController.add(ev);
+        subscription.cancel();
+      });
+      uiRepresentation.append(submitButton);
     }
-
-    submitButton = new ButtonElement()
-        ..classes.add("submit-main")
-        ..text = submitText;
-
-    StreamSubscription subscription;
-    subscription = submitButton.onClick.listen((ev) {
-      _onChangeController.add(ev);
-      subscription.cancel();
-    });
-    uiRepresentation.append(submitButton);
   }
 
   @override
@@ -698,7 +696,7 @@ class HtmlForm extends HtmlUiElement {
   @override
   set disabled(bool value) {
     _disabled = value;
-    submitButton.disabled = value;
+    if (submitButton != null) submitButton.disabled = value;
   }
 
   StreamController _onChangeController = new StreamController();
@@ -708,7 +706,7 @@ class HtmlForm extends HtmlUiElement {
   @override
   void update() {
     super.update();
-    submitButton.text = blueprint.submitText;
+    if (submitButton != null) submitButton.text = blueprint.submitText;
   }
 
   @override
@@ -733,7 +731,6 @@ class HtmlFormSection extends HtmlUiElement {
   Element _openCloseEl;
   DivElement _childrenDiv;
 
-  bool open = false;
 
   HtmlFormSection(FormSection blueprint) : super(blueprint) {
     this.blueprint = blueprint;
@@ -741,25 +738,18 @@ class HtmlFormSection extends HtmlUiElement {
         ..classes.add("form-section")
         ..id = blueprint.id;
 
-    DivElement titleWrapperDiv = new DivElement()
+    ButtonElement titleWrapperDiv = new ButtonElement()
         ..classes.add("form-section-title-wrapper")
         ..onClick.listen((_) {
-          open = !open;
-          if (open) {
-            _childrenDiv.classes.remove("closed");
-            _openCloseEl.text = "<";
-          } else {
-            _childrenDiv.classes.add("closed");
-            _openCloseEl.text = "V";
-          }
+          updateOpenCloseDomState();
         });
 
     _openCloseEl = new DivElement()
         ..classes.add("form-section-open-close")
-        ..text = "V";
+        ..innerHtml = "&#9661;";
     titleWrapperDiv.append(_openCloseEl);
 
-    _headerEl = new HeadingElement.h1()
+    _headerEl = new SpanElement()
         ..classes.add("form-section-title")
         ..text = blueprint.name;
     titleWrapperDiv.append(_headerEl);
@@ -772,6 +762,25 @@ class HtmlFormSection extends HtmlUiElement {
         ..classes.add("form-section-children")
         ..classes.add("closed");
     uiRepresentation.append(_childrenDiv);
+  }
+
+  void updateOpenCloseDomState() {
+    if (_childrenDiv.classes.contains("closed")) {
+      _childrenDiv.classes.remove("closed");
+      _openCloseEl.innerHtml = "&#9665;";
+
+      // Close all others. Must use DOM since we don't keep reference to parent
+      // HtmlFormElement. TODO: profile and fix?
+      uiRepresentation.parent.querySelectorAll(".form-section")
+          .where((Element e) => e != uiRepresentation)
+          .forEach((Element e) {
+        e.querySelector(".form-section-children").classes.add("closed");
+        e.querySelector(".form-section-open-close").innerHtml = "&#9661;";
+      });
+    } else {
+      _childrenDiv.classes.add("closed");
+      _openCloseEl.innerHtml = "&#9661;";
+    }
   }
 
   @override

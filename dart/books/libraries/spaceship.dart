@@ -31,8 +31,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     hull.hp.onMin().listen((_) => reportDestroy());
 
     availableMoves.addAll(<CombatMove>[
-        new ImprovePosition(thrusters.first),
-        new RiskyImprovePosition(thrusters.first)
+        new ImprovePosition(),
+        new RiskyImprovePosition()
     ]);
   }
 
@@ -107,11 +107,45 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         targetShip.getPositionTowards(this) - change);
   }
 
+  /// Gets the position towards [targetShip] and returns a human-readable
+  /// string. Optionally wrapped in a `<span>` with a corresponding class when
+  /// [wrapInColor] is true.
+  String getPositionStringTowards(Spaceship targetShip,
+                                  {bool wrapInColor: false}) {
+    int pos = getPositionTowards(targetShip);
+
+    String wrapInColorSpan(String text, String color) {
+      if (!wrapInColor) return text;
+      return "<span class=\"$color\">$text</span>";
+    }
+
+    switch (pos) {
+      case POSITION_HORRIBLE:
+        return wrapInColorSpan(POSITION_HORRIBLE_STRING, "green");
+      case POSITION_BAD:
+        return wrapInColorSpan(POSITION_BAD_STRING, "greenish");
+      case POSITION_BALANCED:
+        return wrapInColorSpan(POSITION_BALANCED_STRING, "black");
+      case POSITION_GOOD:
+        return wrapInColorSpan(POSITION_GOOD_STRING, "orange");
+      case POSITION_GREAT:
+        return wrapInColorSpan(POSITION_GREAT_STRING, "red");
+      default:
+        throw new StateError("Position $pos is not a valid value.");
+    }
+  }
+
   static const int POSITION_HORRIBLE = -2;
   static const int POSITION_BAD = -1;
   static const int POSITION_BALANCED = 0;
   static const int POSITION_GOOD = 1;
   static const int POSITION_GREAT = 2;
+
+  static const String POSITION_HORRIBLE_STRING = "very disadvategeous";
+  static const String POSITION_BAD_STRING = "disadvategeous";
+  static const String POSITION_BALANCED_STRING = "balanced";
+  static const String POSITION_GOOD_STRING = "advategeous";
+  static const String POSITION_GREAT_STRING = "very advategeous";
 
   void update() {
     if (currentMove != null) {
@@ -146,7 +180,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /// can be interacted with during combat.
   List<FormSection> getSystemSetupSections() {
     List<FormSection> sections = <FormSection>[];
-    allSystems.forEach((system) {
+    allSystems.where((system) => system.isActive).forEach((system) {
       FormSection section = system.createSetupSection();
       if (section != null) {
         sections.add(section);
@@ -163,11 +197,12 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     text.current = "This is the maneuvres section.";  // TODO: Status + description.
     section.append(text);
 
-    availableMoves.where((move) => move.isActive).forEach((CombatMove move) {
+    availableMoves.where((move) => move.isActive).forEach((CombatMove proto) {
       // TODO: map from combatmove prototype to instances by cloning. also elsewhere.
       SubmitButton button = new SubmitButton(
-          "${Storyline.capitalize(move.commandText)}",
+          "${Storyline.capitalize(proto.commandText)}",
           () {
+            var move = proto.clone(thrusters.first);
             move.targetShip = targetShip;
             move.currentTimeToSetup = move.timeToSetup;
             currentMove = move;

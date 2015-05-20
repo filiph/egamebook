@@ -9,13 +9,13 @@
 	</array>
 	<key>foldingStartMarker</key>
 	<string>(?x)
-		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|echo|variables|functions|classes)\b.*?&gt;
+		(&lt;(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|echo|declare|init|functions|classes)\b.*?&gt;
 		|&lt;!--(?!.*--&gt;)
 		|\{\s*($|\?&gt;\s*$|//|/\*(.*\*/\s*$|(?!.*?\*/)))
 		)</string>
 	<key>foldingStopMarker</key>
 	<string>(?x)
-		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|echo|variables|functions|classes)&gt;
+		(&lt;/(?i:head|body|table|thead|tbody|tfoot|tr|div|select|fieldset|style|script|ul|ol|form|dl|echo|declare|init|functions|classes)&gt;
 		|^\s*--&gt;
 		|(^|\s)\}
 		)</string>
@@ -25,7 +25,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^\s*(&lt;(script|classes|variables|functions|/echo)&gt;)\s*$</string>
+			<string>^\s*(&lt;(script|classes|declare|init|functions|/echo)&gt;)\s*$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -35,7 +35,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(^\s*&lt;(/script|/classes|/variables|/functions|echo)&gt;\s*$)</string>
+			<string>(^\s*&lt;(/script|/classes|/declare|/init|/functions|echo)&gt;\s*$)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>

@@ -216,6 +216,10 @@ abstract class EgbScripter {
   /// The current position in the current page's blocks list.
   int currentBlockIndex;
 
+  /// Signifies that [currentBlockIndex] should point to the last block on page
+  /// at the next [_goOneStep]. This is just after a savegame [load].
+  int LAST_BLOCK_ON_PAGE = -9999;
+
   /**
    * This Map is filled in ScripterImpl automatically by the Builder.
    * The purpose of [_constructors] is to make it possible to assemble
@@ -375,8 +379,12 @@ abstract class EgbScripter {
       return _STOP;
     }
 
-    bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1;
-    bool atStaticChoiceList = currentBlockIndex != null && currentBlockIndex <
+    // LAST_BLOCK_ON_PAGE here is irrelevant, but we still need to make sure
+    // it doesn't break this. TODO fix: more elegant looping.
+    bool atEndOfPage = currentBlockIndex == currentPage.blocks.length - 1 ||
+        currentBlockIndex == LAST_BLOCK_ON_PAGE;
+    bool atStaticChoiceList = currentBlockIndex != LAST_BLOCK_ON_PAGE &&
+        currentBlockIndex != null && currentBlockIndex <
         currentPage.blocks.length && currentPage.blocks[currentBlockIndex] is List;
     DEBUG_SCR(
         "atEndOfPage = $atEndOfPage, atStaticChoiceList = $atStaticChoiceList");
@@ -447,16 +455,10 @@ abstract class EgbScripter {
 
     // increase currentBlock, but not if previous script called "repeatBlock();"
     if (currentBlockIndex == null) {
-      // we just came to this page
-      // XXX: delete, this should not be even the case, ever
-      //      if (incomingMessage.type == EgbMessage.LOAD_GAME) {
-      //        // SaveGames are always made just before the page's last block
-      //        // (choiceList). Jump there.
-      //        currentBlockIndex = currentPage.blocks.length - 1;
-      //      } else {
-      //        currentBlockIndex = 0;
-      //      }
       currentBlockIndex = 0;
+    } else if (currentBlockIndex == LAST_BLOCK_ON_PAGE) {
+      // Just after load.
+      currentBlockIndex = currentPage.blocks.length - 1;
     } else if (_repeatBlockBit) {
       _repeatBlockBit = false;
     } else {
@@ -694,6 +696,7 @@ abstract class EgbScripter {
           "egamebook.");
     }
     currentPage = pageMap[savegame.currentPageName];
+    currentBlockIndex = LAST_BLOCK_ON_PAGE;
 
     DEBUG_SCR("Importing state from savegame.");
     pageMap.importState(savegame.pageMapState);
