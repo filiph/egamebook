@@ -808,11 +808,11 @@ class HtmlFormSection extends HtmlUiElement {
 }
 
 class HtmlSubmitButton extends HtmlUiElement {
-  InterfaceSubmitButton blueprint;
+  PresenterSubmitButton blueprint;
   ButtonElement uiRepresentation;
   DivElement _childrenDiv;
 
-  HtmlSubmitButton(InterfaceSubmitButton blueprint) : super(blueprint) {
+  HtmlSubmitButton(PresenterSubmitButton blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     _childrenDiv = new DivElement();
 
@@ -1135,18 +1135,18 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     ..onChange.listen((Event ev) {
       if (!_childrenSelectElement.disabled) {
         // TODO: report (html5lib?) bug which throws type exception here
-//        List<InterfaceOption> childOptions = blueprint.children
-//            .where((html5lib.Element element) => element is InterfaceOption)
+//        List<PresenterOption> childOptions = blueprint.children
+//            .where((html5lib.Element element) => element is PresenterOption)
 //            .toList(growable: false);
 
-        List<InterfaceOption> childOptions = new List();
+        List<PresenterOption> childOptions = new List();
         for (html5lib.Element el in blueprint.children) {
-          if (el is InterfaceOption) {
+          if (el is PresenterOption) {
             childOptions.add(el);
           }
         }
 
-        InterfaceOption selectedOption = childOptions[_childrenSelectElement.selectedIndex];
+        PresenterOption selectedOption = childOptions[_childrenSelectElement.selectedIndex];
         HtmlOption htmlOption = selectedOption.uiElement;
         htmlOption.select();
       }
