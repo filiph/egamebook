@@ -76,9 +76,12 @@ void main() {
 
     test("generates valid methods", () {
       String code = """
-        SpaceshipMock bodega;
-        int something;
-        var number;
+        SpaceshipMock bodega = new SpaceshipMock({
+          "config": 42,
+          "array": [1, 2, null]
+        });
+        int something = 5;
+        var number = null;
         """;
 
       String extractMethod = """
@@ -97,12 +100,20 @@ void main() {
   }
 """;
 
+      String initBlock = """
+    bodega = new SpaceshipMock({"config" : 42, "array" : [1, 2, null]});
+    something = 5;
+    number = null;
+""";
+
       var generator = new VarsGenerator();
       generator.addSource(code);
       String generatedExtractMethod = generator.generateExtractMethodCode();
       expect(generatedExtractMethod.trim(), extractMethod.trim());
       String generatedPopulateMethod = generator.generatePopulateMethodCode();
       expect(generatedPopulateMethod.trim(), populateMethod.trim());
+      String generatedInitBlock = generator.generateInitBlockCode();
+      expect(generatedInitBlock.trim(), initBlock.trim());
     });
   });
 

@@ -1015,13 +1015,13 @@ class Builder {
 
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
-          completer.completeError(
-              new Exception("Source file tries to import a file that "
-                    "doesn't exist (${importLibFiles[i]})."));
+          return new Exception("Source file tries to import a file that "
+              "doesn't exist (${importLibFiles[i]}).");
         }
       }
 
     })
+    .catchError((e) => completer.complete(e))
     .then((_) {
       assert(fullPaths.length == importLibFiles.length);
       importLibFilesFullPaths = new Set.from(fullPaths);
@@ -1087,6 +1087,10 @@ class Builder {
    * List of init blocks, such as `<classes>` or `<variables>` blocks.
    */
   List<BuilderInitBlock> initBlocks;
+
+  /// The code generator that analyzes <init> blocks and keeps track of
+  /// variables.
+  VarsGenerator varsGenerator;
 
   /**
    * GraphML representation of the page flow.
@@ -1301,6 +1305,7 @@ class Builder {
                          {int indent: 0}) {
     var completer = new Completer();
 
+    dartOutStream.write(varsGenerator.generateInitBlockCode());
     copyLineRanges(
         initBlocks.where((block) => block.type == initBlockType).toList(),
         inputEgbFile.openRead(),
@@ -1327,10 +1332,10 @@ class Builder {
         inclusive: false, indentLength: indent,
         contentsCopyDestination: contents)
     .then((_) {
-      var generator = new VarsGenerator();
-      generator.addSource(contents.toString());
-      dartOutStream.write(generator.generatePopulateMethodCode());
-      dartOutStream.write(generator.generateExtractMethodCode());
+      varsGenerator = new VarsGenerator();
+      varsGenerator.addSource(contents.toString());
+      dartOutStream.write(varsGenerator.generatePopulateMethodCode());
+      dartOutStream.write(varsGenerator.generateExtractMethodCode());
       completer.complete(true);
     });
 

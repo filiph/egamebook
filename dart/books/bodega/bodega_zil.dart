@@ -9,10 +9,13 @@ import '../libraries/storyline.dart';
 import '../libraries/randomly.dart';
 import 'dart:collection';
 
+import 'bodega.dart' show ScripterImpl;
+
 class BodegaZil {
   BodegaZil(this.goto, this.echo, this.choice, this.showForm,
-      Map<String, Object> vars, EgbScripter scripter)
-      : zil = new Zil(scripter), this.vars = new Vars(vars) {
+      ScripterImpl scripter)
+      : zil = new Zil(scripter),
+        scripter = scripter {
     setupTimeline();
     setupActors();
     setupRooms();
@@ -21,7 +24,7 @@ class BodegaZil {
   void setupTimeline() {
     exploration = zil.timeline;
     exploration.mainLoop = () {
-      vars.clock.value += 1;
+      scripter.clock.value += 1;
       // TODO: Exploration timeline - no jumping, no rescheduling
     };
 
@@ -44,7 +47,7 @@ class BodegaZil {
     });
 
     exploration.schedule(MAX_TIME_BEFORE_NAP, () {
-      vars.roomBeforeOvercameBySleepiness = zil.player.location.name;
+      scripter.roomBeforeOvercameBySleepiness = zil.player.location.name;
       goto("Bridge: OvercomeBySleepiness");
     }, type: TimedEvent.MAJOR);
 
@@ -58,8 +61,8 @@ class BodegaZil {
 
     unityArrivalEvent = exploration.schedule(null, () {
       echo("""The Bodega says: "We have arrived to Space Station Unity." """);
-      vars.justArrivedAtUnity = true;
-      vars.currentlyInJump = false;
+      scripter.justArrivedAtUnity = true;
+      scripter.currentlyInJump = false;
     }, type: TimedEvent.MAJOR);
 
     exploration.schedule(MESSENGER_CONTACT_TIME + 5, () {
@@ -344,7 +347,7 @@ class BodegaZil {
     repairEngineAction = new Action.Goto("Take a look at the engine, "
         "try to bring output from 89% back to 100% [~3 hours]",
         "EngineRoom.RepairEngine",
-        requirement: () => vars.isEngineer && !vars.currentlyInJump,
+        requirement: () => scripter.isEngineer && !scripter.currentlyInJump,
         onlyOnce: true);
 
     // ROOM
@@ -439,17 +442,17 @@ class BodegaZil {
         storyline.add("You pull the banana out of your pocket, peel it, "
             "and eat it. It's delicious. You feel a little bit " "invigorated.");
         // TODO: player.hp++
-        vars.stoleOfficersBanana = true; // TODO: bodega doesn't like this
+        scripter.stoleOfficersBanana = true; // TODO: bodega doesn't like this
         banana.isActive = false;
       }, needsToBeCarried: true, onlyOnce: true, submenu: INVENTORY),
           new Action("give the banana to Gorilla", () {
         storyline.add(
             "You hand the banana to Gorilla. He watches it with amazement, than proceeds to peel it eagerly. Before he takes the first bite, though, he gives you a thankful look.\n\nAfter only a few seconds, the banana is no more. But Gorilla seems very happy."
             );
-        vars.gorillaAttitude += 2;
-        vars.stoleOfficersBanana = true; // TODO: bodega doesn't like this
+        scripter.gorillaAttitude += 2;
+        scripter.stoleOfficersBanana = true; // TODO: bodega doesn't like this
         banana.isActive = false;
-        vars.points.add(5, "making friends");
+        scripter.points.add(5, "making friends");
       }, performerCheck: (actor) => actor.isInSameRoomAs(gorilla), submenu:
           INVENTORY)], takeable: true, isActive: false);
 
@@ -573,16 +576,16 @@ class BodegaZil {
         false, onlyOnce: true);
     askBodegaQuestions = new Action.Goto("ask Bodega some questions",
         "BodegaQuestions: Start",
-        requirement: () => vars.bodegaTopics.length > 0);
+        requirement: () => scripter.bodegaTopics.length > 0);
     takeANap = new Action.Goto("Take a nap", "Bridge: Nap", onlyOnce: true,
         requirement: () => zil.timeline.time < MAX_TIME_BEFORE_NAP);
     waitForJumpToUnity = new Action.Goto("Wait until ready to jump to Unity",
         "Bridge: WaitForJump", onlyOnce: true, requirement: () => zil.timeline.time >=
         MESSENGER_CONTACT_TIME && zil.timeline.time < MAX_TIME_BEFORE_HYPERDRIVE_READY
-        && !vars.jumpedToUnity);
+        && !scripter.jumpedToUnity);
     jumpToSpaceStationUnity = new Action.Goto(
         "initiate the jump to Space Station Unity", "Unity: Jump", isActive: false,
-        requirement: () => !vars.jumpedToUnity);
+        requirement: () => !scripter.jumpedToUnity);
 
     // ROOM
     bridge = new Room(zil, "Explore: Bridge", // corresponds to pagename
@@ -601,7 +604,7 @@ class BodegaZil {
         jumpToSpaceStationUnity, askBodegaQuestions, lookAtHullBreachFromBridge,
         takeANap], onUpdate: () {
       // Check whether we just arrived to Unity.
-      if (vars.justArrivedAtUnity) {
+      if (scripter.justArrivedAtUnity) {
         goto("Unity: Arrival");
         return false;
       }
@@ -644,7 +647,7 @@ class BodegaZil {
   final EchoFunction echo;
   final ChoiceFunction choice;
   final ShowFormFunction showForm;
-  final Vars vars;
+  final ScripterImpl scripter;
   Timeline exploration;
 
   // Utility functions.
@@ -667,8 +670,8 @@ class BodegaZil {
 
   // Returns "John", or "captain" (even for "acting captain").
   String getInformalSalutation() {
-    if (vars.title == "") {
-      return vars.name;
+    if (scripter.title == "") {
+      return scripter.name;
     } else {
       return "captain";
     }
@@ -677,15 +680,15 @@ class BodegaZil {
   /// Returns machinist, medic or spaceman.
   String getInformalRole(String article) {
     var str;
-    if (vars.isEngineer) str = "machinist";
-    if (vars.isMedic) str = "medic";
-    if (vars.isSpaceman) str = "{spaceman|sailor}";
+    if (scripter.isEngineer) str = "machinist";
+    if (scripter.isMedic) str = "medic";
+    if (scripter.isSpaceman) str = "{spaceman|sailor}";
     return Randomly.parse("$article $str");
   }
 
   num computeProductivity(bool skilled) {
     num productivity = 1.0;
-    if (vars.currentlyHighOnShabu) {
+    if (scripter.currentlyHighOnShabu) {
       productivity += 0.3;
     }
     if (skilled) {
@@ -700,6 +703,7 @@ class BodegaZil {
 
   void createTraitsForm() {
     Form traitsForm = new Form();
+    traitsForm.submitText = ">>";
 
     RangeOutput pointsLeft = new RangeOutput("Trait points",
         max: MAX_TRAIT_POINTS,
@@ -730,64 +734,64 @@ class BodegaZil {
     CheckboxInput isHawkeyedInput = new CheckboxInput(
         "You have good eyesight and spotting abilities",
         (bool value) {
-          vars.isHawkeyed = value;
+          scripter.isHawkeyed = value;
           updateTraitPoints(value);
         });
     CheckboxInput isStrongInput = new CheckboxInput(
         "You are physically strong, a good fighter",
         (bool value) {
-          vars.isStrong = value;
+          scripter.isStrong = value;
           updateTraitPoints(value);
         });
     CheckboxInput knowsJapaneseInput = new CheckboxInput(
         "You can speak basic Japanese",
         (bool value) {
-          vars.knowsJapanese = value;
+          scripter.knowsJapanese = value;
           updateTraitPoints(value);
         });
     CheckboxInput understandsAnimalsInput = new CheckboxInput(
         "You are good with animals",
         (bool value) {
-          vars.understandsAnimals = value;
+          scripter.understandsAnimals = value;
           updateTraitPoints(value);
         });
     CheckboxInput understandsAIInput = new CheckboxInput(
         "You have received a psychology training on artificial intelligence",
         (bool value) {
-          vars.understandsAI = value;
+          scripter.understandsAI = value;
           updateTraitPoints(value);
         });
     CheckboxInput understandsElectronicsInput = new CheckboxInput(
         "You understand electronics well and you are proficient in using and "
         "repairing them",
         (bool value) {
-          vars.understandsElectronics = value;
+          scripter.understandsElectronics = value;
           updateTraitPoints(value);
         });
     CheckboxInput hasScienceEducationInput = new CheckboxInput(
         "You have science education",
         (bool value) {
-          vars.hasScienceEducation = value;
+          scripter.hasScienceEducation = value;
           updateTraitPoints(value);
         });
     CheckboxInput isHandyInput = new CheckboxInput(
         "You know your way around a spaceship",
         (bool value) {
-      vars.isHandy = value;
+      scripter.isHandy = value;
       updateTraitPoints(value);
     });
 
-    if (vars.isEngineer) {
+    if (scripter.isEngineer) {
       understandsElectronicsInput
           ..current = true
           ..disabled = true;
     }
-    if (vars.isMedic) {
+    if (scripter.isMedic) {
       hasScienceEducationInput
           ..current = true
           ..disabled = true;
     }
-    if (vars.isSpaceman) {
+    if (scripter.isSpaceman) {
       isHandyInput
           ..current = true
           ..disabled = true;
@@ -805,7 +809,7 @@ class BodegaZil {
         ..append(isHandyInput);
 
     traitsForm.onSubmit = () {
-      vars.pointsToDistribute = pointsLeft.current;
+      scripter.pointsToDistribute = pointsLeft.current;
     };
 
     showForm(traitsForm);
@@ -814,19 +818,19 @@ class BodegaZil {
   void echoTraits() {
     var assets = new Queue<String>();
 
-    if (vars.isHawkeyed) assets.add("good eyesight");
-    if (vars.isStrong) assets.add("a strong hand");
-    if (vars.knowsJapanese) assets.add("an ability to speak Japanese");
-    if (vars.understandsAnimals) assets.add("reasonable animal handling skills");
-    if (vars.understandsAI) assets.add("some AI training");
+    if (scripter.isHawkeyed) assets.add("good eyesight");
+    if (scripter.isStrong) assets.add("a strong hand");
+    if (scripter.knowsJapanese) assets.add("an ability to speak Japanese");
+    if (scripter.understandsAnimals) assets.add("reasonable animal handling skills");
+    if (scripter.understandsAI) assets.add("some AI training");
 
-    if (vars.understandsElectronics && !vars.isEngineer) {
+    if (scripter.understandsElectronics && !scripter.isEngineer) {
       assets.add("decent understanding of electronics");
     }
-    if (vars.hasScienceEducation && !vars.isMedic) {
+    if (scripter.hasScienceEducation && !scripter.isMedic) {
       assets.add("good science education");
     }
-    if (vars.isHandy && !vars.isSpaceman) {
+    if (scripter.isHandy && !scripter.isSpaceman) {
       assets.add("general space savvy");
     }
 
@@ -852,7 +856,7 @@ class BodegaZil {
   }
 
   /// Allows easy creation of choices that let player exert [physicalPoints] or
-  /// [mentalPoints] in exchange for some kind of advantace (faster action,
+  /// [mentalPoints] in exchange for some kind of advantage (faster action,
   /// more information, etc.).
   void createExtraEffortChoiceList(
       String normalChoiceString, Function normalOutcome,
@@ -868,20 +872,20 @@ class BodegaZil {
 
     if (physicalCost > 0) {
       choiceString.write(" [-${physicalCost} P]");
-      if (physicalCost > vars.physicalPoints.value) {
+      if (physicalCost > scripter.physicalPoints.value) {
         choiceString.write(" [DISABLED]"); // TODO: actually disable!
       }
     }
     if (mentalCost > 0) {
       choiceString.write(" [-${mentalCost} M]");
-      if (mentalCost > vars.mentalPoints.value) {
+      if (mentalCost > scripter.mentalPoints.value) {
         choiceString.write(" [DISABLED]"); // TODO: actually disable!
       }
     }
 
     choice(choiceString.toString(), script: () {
-      vars.physicalPoints.value -= physicalCost;
-      vars.mentalPoints.value -= mentalCost;
+      scripter.physicalPoints.value -= physicalCost;
+      scripter.mentalPoints.value -= mentalCost;
       extraEffortOutcome();
     });
   }
