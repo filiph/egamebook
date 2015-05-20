@@ -29,6 +29,8 @@ class FileHierarchy {
   }
 
   /// Creates hierarchy of files from [fromDirectory] or parent of [fromFile].
+  ///
+  /// Returns [List] of only master files.
   List<File> create({Directory fromDirectory, File fromFile}) {
     List<File> filesToRemove = [];
     // If we use exact file we need to still create hierarchy for parent folder
@@ -59,15 +61,15 @@ class FileHierarchy {
       }
     }
 
-    // Remove part files from files
-    for (File file in filesToRemove) {
-      files.remove(file);
-    }
-
     // When we are using one particular .egb file to build, we need to know
     // the master
     if (fromFile != null) {
       files = new List.from([getMasterFile(fromFile)]);
+    } else {
+      // Remove all part files from files in case of using directory
+      for (File file in filesToRemove) {
+        files.remove(file);
+      }
     }
 
     return files;

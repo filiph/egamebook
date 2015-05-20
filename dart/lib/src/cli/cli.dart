@@ -146,7 +146,8 @@ class ProjectBuilder implements Worker {
   final bool _analyze;
   /// Should run the builder on all .egb files in directory
   final bool _fullDirectory;
-  FileHierarchy _hierarchy;
+  /// File hierarchy for getting master file from part file
+  final FileHierarchy _hierarchy;
 
   ///Constructor
   ProjectBuilder(List params, this._analyze, this._fullDirectory)
@@ -293,10 +294,13 @@ class ProjectWatcher implements Worker {
   StreamSubscription _subscription;
   /// Getter for [_subscription]
   StreamSubscription get subscription => _subscription;
+  /// File hierarchy for getting master file from part file
+  final FileHierarchy _hierarchy;
 
   /// Constructor
   ProjectWatcher(List params, this._analyze)
-      : _path = (params.isEmpty) ? "." : params.first;
+      : _path = (params.isEmpty) ? "." : params.first,
+        _hierarchy = new FileHierarchy();
 
   /// Runs builder after each file change.
   /// Builder regenerates files of only valid [extensions] and not from files
@@ -317,17 +321,30 @@ class ProjectWatcher implements Worker {
   /// Every valid event (which wraps changed path) for build is added into
   /// [ListQueue] and built when it's right time for it.
   Future run() {
+    Directory directory = new Directory(_path);
+
+    if (p.extension(_path).isNotEmpty) {
+      return new Future.error(
+          "Watching of files is not supported. Run watcer on directory");
+    } else if (!directory.existsSync()) {
+      return new Future.error(
+          "Given source directory $_path doesn't exist.");
+    }
+
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
-    ListQueue<WatchEvent> queue = new ListQueue();
+    ListQueue<File> queue = new ListQueue(); // queue of files
+    _hierarchy.create(fromDirectory: directory);
 
     _subscription = watcher.events.listen((WatchEvent event) {
-      if (event.type != ChangeType.REMOVE &&
-          !isSourcesDirectory(event.path) &&
-          _isValidBuilderExtension(event.path) &&
-          _actualBuiltFileName != getBuiltFileFromEgbFile(event.path)) {//prevents cycle builds
-        _actualBuiltFileName = getBuiltFileFromEgbFile(event.path);
+      File masterFile = _hierarchy.getMasterFile(new File(event.path));
 
-        queue.add(event);
+      if (event.type != ChangeType.REMOVE &&
+          !isSourcesDirectory(masterFile.path) &&
+          _isValidBuilderExtension(masterFile.path) &&
+          _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path)) {//prevents cycle builds
+        _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path);
+
+        queue.add(masterFile);
         _buildFile(queue);
       }
     }, onError: print);
@@ -340,11 +357,12 @@ class ProjectWatcher implements Worker {
   /// When build is finished, the next file in [queue] is retrieved, built
   /// and corresponding .dart file analyzed.
   void _buildFile(ListQueue queue) {
-  if (!_building && !_analyzing) { //because of streams
+    if (!_building && !_analyzing) { //because of streams
       _building = true;
-      WatchEvent event = queue.removeFirst();
+      // We run builder only on master file
+      File masterFile = queue.removeFirst();
 
-      runBuilder(event.path)
+      runBuilder(masterFile.path)
         .then((process) {
           Future.wait([
             stdout.addStream(process.stdout),
@@ -360,7 +378,7 @@ class ProjectWatcher implements Worker {
                 _actualBuiltFileName = null;
               });
 
-              if (!new File(_actualBuiltFileName).existsSync()) {
+              if (!new File(masterFile.path).existsSync()) {
                 print("BUILD FAILED!\n");
                 _buildFileOrEnd(queue); //but try next one in queue
                 return;
@@ -372,7 +390,7 @@ class ProjectWatcher implements Worker {
               } else {
                 _analyzing = true;
 
-                runAnalyzer(_actualBuiltFileName)
+                runAnalyzer(masterFile.path)
                   .then((process) {
                     Future.wait([
                       stdout.addStream(process.stdout),
