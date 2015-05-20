@@ -2,9 +2,10 @@ library egb_cli;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:collection';
 import 'package:path/path.dart' as p;
 import 'package:watcher/watcher.dart';
-import 'dart:collection';
+import 'file_hierarchy.dart';
 
 /// Returns path to build.dart script in the bin/ folder.
 String getPathToBuildScript() {
@@ -50,24 +51,8 @@ Future runAnalyzer(String path) {
   return Process.start("dartanalyzer", [path]);
 }
 
-/// Returns .dart built file for .egb file on given [path].
 String getBuiltFileFromEgbFile(String path)  =>
     (path != null) ? "${p.withoutExtension(path)}.dart" : null;
-
-String getEgbFilePathFromPartFile(String path) {
-  List pathSplit = p.basename(path).split("_");
-
-  if (pathSplit.length > 1) {
-    pathSplit.removeLast();
-    String pathParent = pathSplit.join("_");
-    if (new File(pathParent).existsSync()) {
-      return pathParent;
-    }
-  }
-  return null;
-}
-
-bool isPartFile(String path) => getEgbFilePathFromPartFile(path) != null;
 
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
@@ -161,10 +146,12 @@ class ProjectBuilder implements Worker {
   final bool _analyze;
   /// Should run the builder on all .egb files in directory
   final bool _fullDirectory;
+  FileHierarchy _hierarchy;
 
   ///Constructor
   ProjectBuilder(List params, this._analyze, this._fullDirectory)
-      : _path = (params.isEmpty) ? "." : params.first;
+      : _path = (params.isEmpty) ? "." : params.first,
+        _hierarchy = new FileHierarchy();
 
   /// Runs egamebook builder on found .egb file in [_path].
   ///
@@ -235,15 +222,18 @@ class ProjectBuilder implements Worker {
   /// If no .egb file is found or more than one file, build fails.
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
-  /// Works also for single file with extension .egb.
+  /// Without that only one .egb file to build in folder is allowed.
   Future getEgbFiles(String path) {
+    List files = [];
+
     if (p.extension(path).isNotEmpty) {
       if (p.extension(path) == extension) {
         File file = new File(path);
         if (!file.existsSync()) {
           return new Future.error("BUILD FAILED!\nFile $path doesn't exist.");
         }
-        return new Future.value(new List.from([file]));
+        files = _hierarchy.create(fileFrom: file);
+        return new Future.value(files);
       }
       return new Future.error(
           "BUILD FAILED!\nFile type of $path is not supported.");
@@ -255,11 +245,7 @@ class ProjectBuilder implements Worker {
       return new Future.error("BUILD FAILED!\nDirectory $path doesn't exist.");
     }
 
-    List files = from.listSync(recursive: true, followLinks: false)
-        .where((entity)
-            => entity is File && p.extension(entity.path) == extension
-            && !isPartFile(entity.path))
-            .toList();
+    files = _hierarchy.create(directoryFrom: from);
 
     if (files.isEmpty) {
       return new Future.error(

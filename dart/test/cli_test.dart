@@ -238,9 +238,55 @@ void main() {
 
       runner.run(["build", "$path${Platform.pathSeparator}test1.other"]).catchError(callback);
     });
+
+    test("fails with more than one .egb file in directory", () {
+      String path = getPath("test_build_egb_file_more");
+      Directory temp = new Directory(path);
+      temp.createSync();
+
+      File file1 = new File(p.join(path, "test1.egb"));
+      file1.writeAsStringSync('Some content of egb file1.');
+      File file2 = new File(p.join(path, "test2.egb"));
+      file2.writeAsStringSync('Some content of egb file2.');
+
+      var callback = expectAsync((message) {
+        List lines = message.split("\n");
+        expect(lines[0], "BUILD FAILED!");
+        expect(lines[1],
+            "More than one .egb file found in the directory.");
+        temp.deleteSync(recursive: true);
+      });
+
+      runner.run(["build", "$path"]).catchError(callback);
+    });
+
+    test("builds more .egb files with -f or --full-directory parameter", () {
+      String path = getPath("test_build_egb_file_more");
+      Directory temp = new Directory(path);
+      temp.createSync();
+
+      File file1 = new File(p.join(path, "test1.egb"));
+      file1.writeAsStringSync('Some content of egb file1.');
+      File file2 = new File(p.join(path, "test2.egb"));
+      file2.writeAsStringSync('Some content of egb file2.');
+
+      var callback = expectAsync((message) {
+        File fileHtmlBuild1 = new File(p.join(path, "test1.html.dart"));
+        File fileDartBuild1 = new File(p.join(path, "test1.dart"));
+        File fileHtmlBuild2 = new File(p.join(path, "test2.html.dart"));
+        File fileDartBuild2 = new File(p.join(path, "test2.dart"));
+        expect(fileHtmlBuild1.existsSync(), isTrue);
+        expect(fileDartBuild1.existsSync(), isTrue);
+        expect(fileHtmlBuild2.existsSync(), isTrue);
+        expect(fileDartBuild2.existsSync(), isTrue);
+        temp.deleteSync(recursive: true);
+      });
+
+      runner.run(["build", "--full-directory", "$path"]).then(callback);
+    });
   });
 
-  group("egamebook build getEgbFiles", () {
+  group("egamebook getEgbFiles", () {
     test("returns correct .egb files", () {
       String path = getPath("test_search_egb");
       Directory temp = new Directory(path);
@@ -253,7 +299,7 @@ void main() {
       File file3 = new File(p.join(path, "test3.egb"));
       file3.createSync();
 
-      ProjectBuilder builder = new ProjectBuilder([], false);
+      ProjectBuilder builder = new ProjectBuilder([], false, true);
 
       var callback = expectAsync((List files) {
         expect(files.length, 3);
