@@ -97,12 +97,10 @@ class FileHierarchy {
   bool isPartFile(File file) {
     bool value = false;
 
-    if (file != null) {
-      for (List partFiles in _files.values) {
-        if (partFiles.contains(file.path)) {
-          value = true;
-          break;
-        }
+    for (List partFiles in _files.values) {
+      if (partFiles.contains(file.path)) {
+        value = true;
+        break;
       }
     }
 
