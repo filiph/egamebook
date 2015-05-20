@@ -244,13 +244,13 @@ class EgbChoiceList extends ListBase<EgbChoice> {
 }
 
 /**
- * [PlayerIntent] is an interaction that is 'out of place' and asynchronous.
+ * [Intent] is an interaction that is 'out of place' and asynchronous.
  * For example, when the interface is showing blocks of text, the player can
  * click on the "Restart" button. The book should then stop everything that
  * it's doing and restart itself.
  */
-class PlayerIntent {
-  PlayerIntent(type) : this.type = type;
+class Intent {
+  Intent(type) : this.type = type;
 
   final int type;
   static const int QUIT = 2;
@@ -258,17 +258,17 @@ class PlayerIntent {
   static const int RESTART = 8;
 }
 
-class QuitIntent extends PlayerIntent {
-  QuitIntent() : super(PlayerIntent.QUIT);
+class QuitIntent extends Intent {
+  QuitIntent() : super(Intent.QUIT);
 }
 
-class RestartIntent extends PlayerIntent {
-  RestartIntent() : super(PlayerIntent.RESTART);
+class RestartIntent extends Intent {
+  RestartIntent() : super(Intent.RESTART);
 }
 
 /// The [LoadIntent] is always providing the exact [uid] of the Savegame that
 /// is supposed to be loaded.
-class LoadIntent extends PlayerIntent {
+class LoadIntent extends Intent {
   String uid;
-  LoadIntent(this.uid) : super(PlayerIntent.LOAD);
+  LoadIntent(this.uid) : super(Intent.LOAD);
 }
