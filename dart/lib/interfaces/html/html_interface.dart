@@ -27,7 +27,7 @@ import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
-class HtmlInterface extends EgbInterfaceBase {
+class HtmlPresenter extends EgbInterfaceBase {
   ButtonElement restartAnchor;
   SpanElement pointsSpan;
 
@@ -54,7 +54,7 @@ class HtmlInterface extends EgbInterfaceBase {
   /**
     Constructor.
     */
-  HtmlInterface() : super();
+  HtmlPresenter() : super();
 
   void setup() {
     // DOM
@@ -597,7 +597,7 @@ class HtmlInterface extends EgbInterfaceBase {
 
   @override
   void log(String text) {
-    print("HtmlInterface.log: $text");
+    print("HtmlPresenter.log: $text");
   }
 
   /// Currently shown [FormProxy].
@@ -1333,7 +1333,7 @@ typedef void Action();
 
 /**
  * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
- * [HtmlInterface]).
+ * [HtmlPresenter]).
  *
  * TODO: either use lawndart or make the following more robust
  */
