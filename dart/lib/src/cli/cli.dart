@@ -276,10 +276,8 @@ class ProjectBuilder implements Worker {
 ///     watch -a .
 ///     watch -a <path>
 class ProjectWatcher implements Worker {
-  /// File extensions watched
-  final List extensions = [".egb", ".dart"];
-  /// Extension which is not valid for building
-  final String invalidExtension = ".html.dart";
+  /// File extension watched
+  final String extension = ".egb";
   /// Path used for watching
   final String _path;
   /// Should be the built file analyzed
@@ -340,7 +338,7 @@ class ProjectWatcher implements Worker {
 
       if (event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(masterFile.path) &&
-          _isValidBuilderExtension(masterFile.path) &&
+          p.extension(masterFile.path) == extension &&
           _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path)) {//prevents cycle builds
         _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path);
 
@@ -413,17 +411,5 @@ class ProjectWatcher implements Worker {
     if (queue.isNotEmpty) {
       _buildFile(queue);
     }
-  }
-
-  /// Returns if the extension of [path] is valid.
-  /// In order to be valid it has to be in [extensions]
-  /// and it can't be [invalidExtension].
-  bool _isValidBuilderExtension(String path) {
-    // .html.dart is not regular extension
-    if (!extensions.contains(p.extension(path)) ||
-        path.endsWith(invalidExtension)) {
-      return false;
-    }
-    return true;
   }
 }
