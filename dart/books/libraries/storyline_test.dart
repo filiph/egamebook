@@ -213,6 +213,22 @@ void main() {
         matches("The enemy's ship aims her guns at you.+ your gun is faster."));
   });
 
+  test("possesive particles works even with <objectOwner's> <object>", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gun = new Actor(name: "gun", team: Actor.FRIEND,
+        pronoun: Pronoun.IT);
+    var enemy = new Actor(name: "enemy", team: Actor.DEFAULT_ENEMY,
+        pronoun: Pronoun.HE);
+    storyline.add("<owner's> <subject> <is> pointed at <object-owner's> "
+                  "<object>",
+                  owner: player, subject: gun, object: enemy, time: 1);
+    storyline.add("<subject> fire<s>",
+                  subject: gun, time: 2);
+    expect(storyline.toString(),
+        matches("Your gun is pointed at *the enemy.+t fires."));
+  });
+
   test("enumeration", () {
     var storyline = new Storyline();
     Entity handkerchief = new Entity.withOptions("handkerchief");

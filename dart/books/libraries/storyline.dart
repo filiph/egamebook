@@ -198,7 +198,7 @@ class Storyline {
       // addParticleToFirstOccurence method (designed for longer texts), use
       // something smaller.
       String articleWithParticle = addParticleToFirstOccurence(article.name,
-          article.name, article);
+          article.name, article, null);
       buf.write(articleWithParticle);
       i++;
       if (i > maxPerSentence - 1 || article == articles.last) {
@@ -428,7 +428,8 @@ class Storyline {
       result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
       result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
 
-      result = addParticleToFirstOccurence(result, SUBJECT_NOUN, subject);
+      result = addParticleToFirstOccurence(result, SUBJECT_NOUN, subject,
+          owner);
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
 
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
@@ -436,7 +437,8 @@ class Storyline {
         // "actor takes his weapon"
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, SUBJECT_POSSESIVE, subject);
+      result = addParticleToFirstOccurence(result, SUBJECT_POSSESIVE, subject,
+          owner);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
@@ -447,7 +449,8 @@ class Storyline {
         result = result.replaceAll(OBJECT, Pronoun.YOU.accusative);
         result = result.replaceAll(OBJECT_POSSESIVE, Pronoun.YOU.genitive);
       } else {
-        result = addParticleToFirstOccurence(result, OBJECT, object);
+        result = addParticleToFirstOccurence(result, OBJECT, object,
+            objectOwner);
         result = result.replaceAll(OBJECT, object.name);
         // TODO: change first to name, next to pronoun?
       }
@@ -455,7 +458,8 @@ class Storyline {
       if (str.contains(new RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) { // "actor takes his weapon"
         result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, OBJECT_POSSESIVE, object);
+      result = addParticleToFirstOccurence(result, OBJECT_POSSESIVE, object,
+          objectOwner);
       result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
       result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
@@ -481,7 +485,7 @@ class Storyline {
             Pronoun.YOU.genitive);
       } else {
         result = addParticleToFirstOccurence(result, OWNER_OR_OBJECT_OWNER,
-            owner);
+            owner, null);
         result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
       }
       result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN,
@@ -493,7 +497,7 @@ class Storyline {
             owner.pronoun.genitive);
       }
       result = addParticleToFirstOccurence(result,
-          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner);
+          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null);
       result = result.replaceFirst(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
           "${owner.name}'s");
       result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
@@ -515,12 +519,13 @@ class Storyline {
   /// [:<subject>:]) in [string]. The next occurences will be automatically
   /// converted to pronouns.
   static String addParticleToFirstOccurence(String string, String SUB_STRING,
-                                            Entity entity) {
+                                            Entity entity, Entity entityOwner) {
     // Make sure we don't add particles to "your car" etc.
-    if (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
+    if (entityOwner != null && (
+        string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
         string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
         string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
+        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1)) {
       return string;
     }
 
