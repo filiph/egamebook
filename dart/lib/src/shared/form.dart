@@ -93,7 +93,7 @@ library egb_form;
  * attached to them. These elements also automatically receive unique
  * [FormElement.id] when they're attached to a [Form].
  *
- * On the [EgbInterface] side, we have [InterfaceRangeInput], a "blueprint"
+ * On the [EgbInterface] side, we have [PresenterRangeInput], a "blueprint"
  * that can't have closures (no way to transport closure from [EgbScripter]
  * to [EgbInterface]) and whose [FormElement.id] is copied from [EgbScripter].
  * From these blueprints, the interface creates and updates [UiElement].
@@ -523,7 +523,7 @@ class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
 }
 
 /**
- * Base class of [RangeInput] and [InterfaceRangeInput].
+ * Base class of [RangeInput] and [PresenterRangeInput].
  */
 class RangeBase extends FormElement {
   String get name => attributes["name"];
@@ -640,7 +640,7 @@ class RangeInput extends RangeInputBase with _NewValueCallback<int>,
 }
 
 /**
- * Base class of [RangeOutput] and [InterfaceRangeOutput].
+ * Base class of [RangeOutput] and [PresenterRangeOutput].
  */
 class RangeOutputBase extends RangeBase implements Output<int> {
   static const String elementClass = "RangeOutput";

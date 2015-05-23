@@ -118,7 +118,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     Stream<CurrentState> get stream => _streamController.stream;
 
   void createElementsFromJsonML(List<Object> jsonml) {
-    InterfaceForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
+    PresenterForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
         unsafe: true);
     id = node.id;
     children.addAll(node.children);
@@ -183,40 +183,40 @@ abstract class UiElement {
 Map<String, CustomTagHandler> customTagHandlers = {
   FormBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceForm(attributes["id"]);
+    return new PresenterForm(attributes["id"]);
   },
   FormSection.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceFormSection(attributes["name"], attributes["id"]);
+    return new PresenterFormSection(attributes["name"], attributes["id"]);
   },
   SubmitButtonBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceSubmitButton(attributes["name"], attributes["id"]);
+    return new PresenterSubmitButton(attributes["name"], attributes["id"]);
   },
   CheckboxInputBase.elementClass: (Object jsonObject) {
       Map attributes = _getAttributesFromJsonML(jsonObject);
-      return new InterfaceCheckboxInput(attributes["name"], attributes["id"]);
+      return new PresenterCheckboxInput(attributes["name"], attributes["id"]);
   },
   RangeInputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceRangeInput(attributes["name"], attributes["id"]);
+    return new PresenterRangeInput(attributes["name"], attributes["id"]);
   },
   RangeOutputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceRangeOutput(attributes["name"], attributes["id"]);
+    return new PresenterRangeOutput(attributes["name"], attributes["id"]);
   },
   TextOutputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceTextOutput(attributes["id"]);
+    return new PresenterTextOutput(attributes["id"]);
   },
   MultipleChoiceInputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceMultipleChoiceInput(attributes["name"],
+    return new PresenterMultipleChoiceInput(attributes["name"],
         attributes["id"]);
   },
   OptionBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new InterfaceOption(attributes["text"],
+    return new PresenterOption(attributes["text"],
         attributes["selected"] == "true", attributes["id"]);
   }
 };
@@ -227,39 +227,39 @@ Map<String, Object> _getAttributesFromJsonML(Object jsonObject) {
   return (jsonObject as List)[1] as Map<String, Object>;
 }
 
-class InterfaceForm extends FormBase {
-  InterfaceForm(String id) {
+class PresenterForm extends FormBase {
+  PresenterForm(String id) {
     this.id = id;
   }
 }
 
-class InterfaceFormSection extends FormSection implements BlueprintWithUiRepresentation {
-  InterfaceFormSection(String name, String id) : super(name) {
-    this.id = id;
-  }
-
-  UiElement uiElement;
-}
-
-class InterfaceSubmitButton extends SubmitButtonBase implements BlueprintWithUiRepresentation {
-  InterfaceSubmitButton(String name, String id) : super(name) {
+class PresenterFormSection extends FormSection implements BlueprintWithUiRepresentation {
+  PresenterFormSection(String name, String id) : super(name) {
     this.id = id;
   }
 
   UiElement uiElement;
 }
 
-class InterfaceCheckboxInput extends CheckboxInputBase
+class PresenterSubmitButton extends SubmitButtonBase implements BlueprintWithUiRepresentation {
+  PresenterSubmitButton(String name, String id) : super(name) {
+    this.id = id;
+  }
+
+  UiElement uiElement;
+}
+
+class PresenterCheckboxInput extends CheckboxInputBase
     implements BlueprintWithUiRepresentation {
-  InterfaceCheckboxInput(String name, String id) : super(name) {
+  PresenterCheckboxInput(String name, String id) : super(name) {
     this.id = id;
   }
 
   UiElement uiElement;
 }
 
-class InterfaceRangeInput extends RangeInputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
-  InterfaceRangeInput(String name, String id) : super(name) {
+class PresenterRangeInput extends RangeInputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+  PresenterRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
   /// The string representation. This is computed on the [EgbScripter] side
@@ -276,8 +276,8 @@ class InterfaceRangeInput extends RangeInputBase implements StringRepresentation
   UiElement uiElement;
 }
 
-class InterfaceRangeOutput extends RangeOutputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
-  InterfaceRangeOutput(String name, String id) : super(name) {
+class PresenterRangeOutput extends RangeOutputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+  PresenterRangeOutput(String name, String id) : super(name) {
     this.id = id;
   }
   String currentStringRepresentation;
@@ -291,24 +291,24 @@ class InterfaceRangeOutput extends RangeOutputBase implements StringRepresentati
   UiElement uiElement;
 }
 
-class InterfaceTextOutput extends TextOutputBase implements BlueprintWithUiRepresentation {
-  InterfaceTextOutput(String id) : super() {
+class PresenterTextOutput extends TextOutputBase implements BlueprintWithUiRepresentation {
+  PresenterTextOutput(String id) : super() {
     this.id = id;
   }
 
   UiElement uiElement;
 }
 
-class InterfaceMultipleChoiceInput extends MultipleChoiceInputBase implements BlueprintWithUiRepresentation {
-  InterfaceMultipleChoiceInput(String name, String id) : super(name) {
+class PresenterMultipleChoiceInput extends MultipleChoiceInputBase implements BlueprintWithUiRepresentation {
+  PresenterMultipleChoiceInput(String name, String id) : super(name) {
     this.id = id;
   }
 
   UiElement uiElement;
 }
 
-class InterfaceOption extends OptionBase implements BlueprintWithUiRepresentation {
-  InterfaceOption(String text, bool selected, String id) :
+class PresenterOption extends OptionBase implements BlueprintWithUiRepresentation {
+  PresenterOption(String text, bool selected, String id) :
     super(text, selected: selected) {
     this.id = id;
   }
