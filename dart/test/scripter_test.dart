@@ -335,7 +335,7 @@ void main() {
           ui.quit();
           return run(mainPath, persistentStorage: storage);
         }).then((MockInterface ui) {
-          ui.choicesToBeTaken = new Queue<int>.from([1, 1, 1, 1, 1, 1]);
+          ui.choicesToBeTaken = new Queue<int>.from([1, 1, 1, 1, 1, 1, 1]);
           return ui.waitForDone();
         }).then(expectAsync((MockInterface ui) {
           expect(ui.latestOutput, contains("Time is now 10."));
