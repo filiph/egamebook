@@ -12,7 +12,7 @@ part of spaceship;
  * [availableMoves] list. When a [CombatMove] is started, it is referenced
  * by the [ShipSystem]'s [currentMove] variable and updated on each turn.
  *
- * When finished, the CombatMove can either [autoRepeat], or it stops (the
+ * When finished, the CombatMove can either [isAutoRepeating], or it stops (the
  * [currentMove] variable is set to [:null:]).
  *
  * Class [CombatMove] can be extended (e.g. by [FireGun] or [RepairSystem])
@@ -39,7 +39,7 @@ abstract class CombatMove {
     clone.stringFailure = orig.stringFailure;
     clone.stringSuccess = orig.stringSuccess;
     clone.stringSuccessFromTarget = orig.stringSuccessFromTarget;
-    clone.autoRepeat = orig.autoRepeat;
+    clone.isAutoRepeating = orig.isAutoRepeating;
     clone.needsTargetShip = orig.needsTargetShip;
     clone.needsTargetSystem = orig.needsTargetSystem;
     clone.defaultSuccessChance = orig.defaultSuccessChance;
@@ -143,10 +143,18 @@ abstract class CombatMove {
     if (str == null || str == "") return;
 
     if (subject == null) {
-      subject = system.getReportingSubject();
+      if (isAutoRepeating) {
+        subject = system;
+      } else {
+        subject = system.getReportingSubject();
+      }
     }
     if (owner == null) {
-      owner = system.getReportingOwner();
+      if (isAutoRepeating && system.spaceship.pilot.isPlayer) {
+        owner = system.spaceship.pilot;
+      } else {
+        owner = system.getReportingOwner();
+      }
     }
 
     if (object == null) {
@@ -204,7 +212,11 @@ abstract class CombatMove {
 
   /// Whether the move is supposed to automatically renew itself after each
   /// run.
-  bool autoRepeat = false;
+  bool isAutoRepeating = false;
+  /// This move [isAutoRepeating] and was started in a previous incarnation.
+  /// It means we won't call [reportSettingUp] again. Example: an automatic
+  /// laser turret goes for another round on the same target.
+  bool isAutoRepeatContinuation = false;
 
   /// Is the move currently eligible to be carried out?
   bool isEligible({Spaceship targetShip, ShipSystem targetSystem}) {
@@ -281,11 +293,12 @@ abstract class CombatMove {
     if (currentTimeToSetup != null) {
       if (currentTimeToSetup == timeToSetup &&
           system.spaceship.pilot != null &&
-          system.spaceship.pilot.isPlayer) {
+          system.spaceship.pilot.isPlayer &&
+          !isAutoRepeatContinuation) {
         // only report setting up for player (TODO: + other people on same ship)
         reportSettingUp();
       }
-      --currentTimeToSetup;
+      currentTimeToSetup -= 1;
       if (currentTimeToSetup <= 0) {
         currentTimeToSetup = null;
         currentTimeToFinish = timeToFinish;
@@ -300,9 +313,15 @@ abstract class CombatMove {
     if (currentTimeToFinish == timeToFinish) reportStarting();
     // delay if system is underpowered proportionally to the power input
     if (Randomly.saveAgainst(system.powerInput.percentage)) {
+      // TODO: make energy about something else than time, for gameplay reasons
       currentTimeToFinish -= 1;
     }
     if (currentTimeToFinish == 0) {
+      // TODO: have a method that returns result, including reason(s) for that
+      // result. Something like {success: true, reasons: ["good aim", "inability
+      // of the enemy to maneuvre"]}. This would report something like "Thanks
+      // to good aim and inability of the enemy to maneuvre, you hit."
+      // Remember, text is great at explaining causal relationships. Use it.
       if (Randomly
           .saveAgainst(calculateSuccessChance(system,
                                               targetShip, targetSystem))) {
@@ -312,13 +331,8 @@ abstract class CombatMove {
         reportFailure();
         onFailure();
       }
-      if (autoRepeat) {
-        reportAutoRepeat();
-        currentTimeToFinish = timeToFinish;
-      } else {
-        _isFinished = true;
-        currentTimeToFinish = null;
-      }
+      _isFinished = true;
+      currentTimeToFinish = null;
     }
   }
 }
@@ -344,7 +358,7 @@ class FireGun extends CombatMove {
   bool needsTargetShip = true;
   bool needsTargetSystem = true;
 
-  bool autoRepeat = false;
+  bool isAutoRepeating = false;
 
   int timeToSetup = 1;
   int timeToFinish = 4;
@@ -380,9 +394,7 @@ class FireGun extends CombatMove {
 //                               "charging";
 
   @override
-  String stringSuccess = null;
-
-  void onSuccess() {
+  reportSuccess() {
     Entity owner, subject;
     if (!system.spaceship.pilot.isPlayer) {
       // Override the normal owner and subject - we need to report the enemy AI
@@ -393,7 +405,11 @@ class FireGun extends CombatMove {
     // For player, use defaults (provide null to _report()).
     _report("<owner's> <subject> {shoot<s>|fire<s>} at "
         "<object-owner's> <object>", subject: subject, owner: owner);
+  }
+  @override
+  String stringSuccess = null;
 
+  void onSuccess() {
     _hit(targetSystem);
   }
 
@@ -648,7 +664,7 @@ class ImproveAim extends CombatMove {
 }
 
 class AutoGunStart extends FireGun {
-  bool autoRepeat = true;
+  bool isAutoRepeating = true;
 
   // TODO: allow stopping
 }

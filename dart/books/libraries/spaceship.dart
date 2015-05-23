@@ -149,6 +149,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
 
   void update() {
     if (currentMove != null) {
+      // These are the spaceship-level moves, such as maneuvres. Most moves
+      // are not spaceship-level, and live within SpaceshipSystems.
       currentMove.update();
       if (currentMove.isFinished) {
         currentMove = null;
@@ -168,7 +170,7 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
             moves.add(move);
           }
         });
-      } else if (system.currentMove.autoRepeat) {
+      } else if (system.currentMove.isAutoRepeating) {
         // add autoRepeating currentMoves so pilot can choose to stop them
         moves.add(system.currentMove);
       }

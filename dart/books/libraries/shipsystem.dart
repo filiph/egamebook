@@ -124,7 +124,15 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     if (currentMove != null) {
       currentMove.update();
       if (currentMove.isFinished) {
-        currentMove = null;
+        if (currentMove.isAutoRepeating) {
+          print("autorepeat");
+          currentMove.reportAutoRepeat();
+          currentMove = currentMove.clone(this);
+          currentMove.isAutoRepeatContinuation = true;
+          currentMove.start();
+        } else {
+          currentMove = null;
+        }
       }
     }
   }

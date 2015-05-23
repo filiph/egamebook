@@ -31,7 +31,7 @@ class BodegaShip extends Spaceship {
         ]) {
     hull.hp.setValueWithoutGeneratingEvents(47);
     turret = weapons[1];
-    turret.hp.setValueWithoutGeneratingEvents(0);
+//    turret.hp.setValueWithoutGeneratingEvents(0);
   }
 
   Weapon turret;
