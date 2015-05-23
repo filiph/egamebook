@@ -75,7 +75,7 @@ class Exit extends Entity {
                                    // he's running away, for example.
           zil.update(cost - 1, describe: false,
                whileString: Storyline.addParticleToFirstOccurence(
-                  "on your way to <object>", Storyline.OBJECT, to)
+                  "on your way to <object>", Storyline.OBJECT, to, null)
           );
         }
         player.report(arriveDescription, object: to);
