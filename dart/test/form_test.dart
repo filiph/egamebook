@@ -171,7 +171,7 @@ void main() {
     });
   });
 
-  group("HtmlInterface", () {
+  group("HtmlPresenter", () {
     Form form;
     RangeInput input1, input2, input3;
     RangeOutput energyGauge;
@@ -205,7 +205,7 @@ void main() {
 
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
-      interface = new HtmlInterface();
+      interface = new HtmlPresenter();
       storage = new MemoryStorage();
       scripterProxyStub = new ScripterProxyStub();
 

@@ -11,7 +11,7 @@ abstract class StatBase {
   /// The name of the stat. Ex.: "energy".
   String get name;
   /// The optional description of the Stat. To be shown when player somehow
-  /// interacts with the stat (e.g. click in HtmlInterface).
+  /// interacts with the stat (e.g. click in HtmlPresenter).
   String get description;
   /// The color associated with this stat. It should be an HTML-recognizable
   /// string (e.g. "blue", or "#ff00ff").
@@ -72,13 +72,13 @@ class StatUpdateCollection {
       _updates[name] = new StatUpdate.fromMap(o as Map<String, Object>);
     });
   }
-  
+
   void forEach(_StatUpdateCollectionForEachCallback function) {
     _updates.forEach(function);
   }
 }
 
-typedef void _StatUpdateCollectionForEachCallback(String name, 
+typedef void _StatUpdateCollectionForEachCallback(String name,
                                                   StatUpdate update);
 
 class UIStat implements StatBase {
@@ -96,7 +96,7 @@ class UIStat implements StatBase {
   /// [Stat._toMessageChangedOnly] and updates the [_stats] from it.
   ///
   /// Returns the list of the changed stats.
-  static List<UIStat> updateStatsList(List<UIStat> statsList, 
+  static List<UIStat> updateStatsList(List<UIStat> statsList,
       StatUpdateCollection updates) {
     List<UIStat> changedStats = new List<UIStat>();
     updates.forEach((String name, StatUpdate update) {
@@ -130,16 +130,16 @@ class UIStat implements StatBase {
  * This class is holding different statistics that are to be shown to the
  * player. These should be visible all the time on the interface alongside
  * [PointCouter]. Thus, it is discouraged to use too many Stats.
- * 
+ *
  * A set of all Stats can always be accessed by the static method Stats.all.
- * 
- * [T] needs to either be [Saveable] or a primitive type. TODO: check 
+ *
+ * [T] needs to either be [Saveable] or a primitive type. TODO: check
  */
 class Stat<T> implements StatBase, Saveable {
   /// The name of the stat. Ex.: "energy".
   final String name;
   /// The optional description of the Stat. To be shown when player somehow
-  /// interacts with the stat (e.g. click in HtmlInterface).
+  /// interacts with the stat (e.g. click in HtmlPresenter).
   final String description;
 
   /// Lambda that takes care of of converting the [value] to a String that
@@ -230,11 +230,11 @@ class Stat<T> implements StatBase, Saveable {
     someChanged = false; // reset the static state to unchanged
     return updates;
   }
-  
+
   /**
-   * Take all Stats, and create a big data structure of them. This is for 
+   * Take all Stats, and create a big data structure of them. This is for
    * sending from [EgbScripter] to [EgbInterface].
-   */ 
+   */
   static List<Map<String, Object>> createStatList() {
     List<Map<String, Object>> list = new List<Map<String, Object>>();
     _stats.values.forEach((Stat stat) {
@@ -253,7 +253,7 @@ class Stat<T> implements StatBase, Saveable {
 
   String className = "Stat";
 
-  /// The [Saveable.toMap] function. 
+  /// The [Saveable.toMap] function.
   Map<String, Object> toMap() => {
       "name": this.name,
       "value": this.value,
