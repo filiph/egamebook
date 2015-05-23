@@ -5,7 +5,7 @@ import '../persistence/saveable.dart';
 
 /**
  * [StatBase] is the common interface of the [Stat] in [EgbScripter] and the
- * limited [UIStat] in interfaces
+ * limited [UIStat] in [EgbPresenter].
  */
 abstract class StatBase {
   /// The name of the stat. Ex.: "energy".
@@ -19,11 +19,11 @@ abstract class StatBase {
   /// The higher the priority, the more prominently (top-side) the Stat will
   /// be shown.
   int get priority;
-  /// Signifies whether to show the Stat in the interface or not. Sometimes,
+  /// Signifies whether to show the Stat in the presenter or not. Sometimes,
   /// it's useful to hide a Stat from player before he can use it.
   bool get show;
   /// When set to [:true:], and when [:show == true:] and
-  /// [:this.changed == true:], the interface should notify the player on
+  /// [:this.changed == true:], the presenter should notify the player on
   /// the change (e.g. by blinking once).
   bool get notifyOnChange;
 
@@ -128,7 +128,7 @@ class UIStat implements StatBase {
 
 /**
  * This class is holding different statistics that are to be shown to the
- * player. These should be visible all the time on the interface alongside
+ * player. These should be visible all the time on the presenter alongside
  * [PointCouter]. Thus, it is discouraged to use too many Stats.
  *
  * A set of all Stats can always be accessed by the static method Stats.all.
@@ -143,7 +143,7 @@ class Stat<T> implements StatBase, Saveable {
   final String description;
 
   /// Lambda that takes care of of converting the [value] to a String that
-  /// can be shown in the interface.
+  /// can be shown in the presenter.
   final ValueToStringLambda valueToString;
 
   /// The color associated with this stat. It should be an HTML-recognizable
@@ -164,7 +164,7 @@ class Stat<T> implements StatBase, Saveable {
   }
   T _value;
 
-  /// Signifies whether to show the Stat in the interface or not. Sometimes,
+  /// Signifies whether to show the Stat in the presenter or not. Sometimes,
   /// it's useful to hide a Stat from player before he can use it.
   bool get show => _show;
   set show(bool value) {
@@ -177,7 +177,7 @@ class Stat<T> implements StatBase, Saveable {
   bool _show;
 
   /// When set to [:true:], and when [:show == true:] and
-  /// [:this.changed == true:], the interface should notify the player on
+  /// [:this.changed == true:], the presenter should notify the player on
   /// the change (e.g. by blinking once).
   bool notifyOnChange = true; // TODO: implement
 

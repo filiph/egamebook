@@ -20,7 +20,7 @@ void main() {
       expect(a.y, "string");
       expect(a.z, true);
     });
-    test("nonexistent fields are MockInterface", () {
+    test("nonexistent fields are MockInstance", () {
       var a = new MockInstance();
       expect(a.x, new isInstanceOf<MockInstance>("MockInstance"));
       expect(a.y, new isInstanceOf<MockInstance>("MockInstance"));

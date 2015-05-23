@@ -1,9 +1,9 @@
-library egb_interface_html;
+library egb_presenter_html;
 
-/// Default implementation of the [EgbInterface] abstract class. It uses
-/// vanilla [:dart:html:] to act as an interface to an [EgbScripter]. This means
-/// no fancy framework is used. It also means there are probably many edge cases
-/// and even bugs, and it's not that extensible.
+/// Default implementation of the [EgbPresenter] abstract class. It uses
+/// vanilla [:dart:html:] to act as an user interface to an [EgbScripter]. This
+/// means no fancy framework is used. It also means there are probably many
+/// edge cases and even bugs, and it's not that extensible.
 
 import 'dart:async';
 import 'dart:html' hide FormElement;
@@ -12,7 +12,7 @@ import 'package:markdown/markdown.dart' as mdown show InlineParser,
     InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
 import '../../interface.dart';
-export '../../interface.dart' show EgbInterface;
+export '../../interface.dart' show EgbPresenter;
 import '../../src/persistence/savegame.dart';
 import '../../src/shared/user_interaction.dart';
 import '../../src/shared/points_award.dart';
@@ -27,7 +27,7 @@ import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
-class HtmlPresenter extends EgbInterfaceBase {
+class HtmlPresenter extends EgbPresenterBase {
   ButtonElement restartAnchor;
   SpanElement pointsSpan;
 

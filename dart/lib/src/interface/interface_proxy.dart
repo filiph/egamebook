@@ -1,4 +1,4 @@
-library egb_interface_proxy;
+library egb_presenter_proxy;
 
 import "dart:async";
 import 'dart:isolate';
@@ -11,10 +11,10 @@ import '../shared/message.dart';
 import '../../scripter.dart';
 
 /**
- * The methods of EgbInterface that are callable by EgbScripter (mostly through
- * a [EgbInterfaceProxy], but conceivably also directly).
+ * The methods of EgbPresenter that are callable by EgbScripter (mostly through
+ * a [EgbPresenterProxy], but conceivably also directly).
  */
-abstract class EgbInterfaceViewedFromScripter {
+abstract class EgbPresenterViewedFromScripter {
   void awardPoints(PointsAward award);
   void endBook();
   void reportError(String title, String text);
@@ -30,10 +30,10 @@ abstract class EgbInterfaceViewedFromScripter {
 }
 
 /**
- * A proxy/view of the Interface that has methods callable from Scripter.
+ * A proxy/view of the Presenter that has methods callable from Scripter.
  * It has direct access to the Scripter object.
  */
-abstract class EgbInterfaceProxy extends EgbInterfaceViewedFromScripter {
+abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
   EgbScripter scripter;
   void setScripter(EgbScripter scripter) {
     this.scripter = scripter;
@@ -41,9 +41,9 @@ abstract class EgbInterfaceProxy extends EgbInterfaceViewedFromScripter {
 }
 
 /**
- * The proxy that deals with Interface in another Isolate.
+ * The proxy that deals with Presenter in another Isolate.
  */
-class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
+class EgbIsolatePresenterProxy extends EgbPresenterProxy {
 
   /// Port of the calling isolate.
   SendPort mainIsolatePort;
@@ -51,7 +51,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   /// Own port for receiving messages from main Isolate.
   ReceivePort port;
 
-  EgbIsolateInterfaceProxy(this.mainIsolatePort) {
+  EgbIsolatePresenterProxy(this.mainIsolatePort) {
     assert(mainIsolatePort != null);
     port = new ReceivePort();
     port.listen(_onMessageFromMainIsolate);
@@ -63,7 +63,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     assert(_message is Map);
     Map<String, Object> messageMap = _message as Map<String, Object>;
     EgbMessage message = new EgbMessage.fromMap(messageMap);
-    
+
     // Handle low-level messages, and either answer them directly, or forward
     // their substance to Scripter.
     switch (message.type) {
@@ -174,7 +174,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
 
   /**
    * Utilify function [_send] sends message through the [_runnerPort] to the
-   * Runner. 
+   * Runner.
    */
   void _send(EgbMessage message) {
     mainIsolatePort.send(message.toMap());
@@ -225,7 +225,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
     _send(new EgbMessage.scripterError("$title: $text"));
     // TODO: Should close port!?
   }
-  
+
   @override
   void log(String text) {
     _send(new EgbMessage.scripterLog(text));
@@ -260,7 +260,7 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   @override
   Future<bool> showText(String text) {
     _send(new EgbMessage.textResult(text));
-    return new Future.value(); // TODO: wait for interface to return
+    return new Future.value(); // TODO: wait for presenter to return
     //       EgbMessage.TEXT_SHOWN
   }
 
@@ -274,14 +274,14 @@ class EgbIsolateInterfaceProxy extends EgbInterfaceProxy {
   void save(EgbSavegame savegame) {
     _send(savegame.toMessage(EgbMessage.SAVE_GAME));
   }
-  
+
   void DEBUG_SCR(String message) {
     //print(message);
     log(message);
   }
 
   StreamController<CurrentState> _formInputStreamController;
-  
+
   @override
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");

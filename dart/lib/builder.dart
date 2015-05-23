@@ -275,7 +275,7 @@ class BuilderInitBlock implements BuilderLineRange {
  * into a new .egb file.
  *
  * After it's been created, you can call [:writeDartFiles:] to create
- * the source files (scripter implementation + 2 user interfaces).
+ * the source files (scripter implementation + user interface (presenter)).
  *
  * You can also export the page structure to a GraphML file using
  * [:writeGraphMLFile:] or update existing structure by
@@ -1125,15 +1125,14 @@ class Builder {
    * Writes following Dart files to disk:
    *
    * - xyz.dart (The Scripter implementation)
-   * - xyz.cmdline.dart (The command line interface)
-   * - xyz.html.dart (The html interface)
+   * - xyz.html.dart (The html presenter)
    **/
   Future<bool> writeDartFiles() {
     var completer = new Completer();
 
     Future.wait([
         writeScripterFile(),
-        writeInterfaceFiles()
+        writePresenterFiles()
     ]).then((_) {
       completer.complete(true);
     });
@@ -1196,13 +1195,13 @@ class Builder {
   }
 
   /**
-   * Creates the interface files. These files are the ones that run
+   * Creates the presenter files. These files are the ones that run
    * the egamebook. They import the scripter file as an Isolate.
    *
-   * There are two interfaces: the command line interface, and the HTML
-   * interface.
+   * There are two presenters (UIs): the command line presenter (deprecated),
+   * and the HTML presenter.
    */
-  Future<bool> writeInterfaceFiles() {
+  Future<bool> writePresenterFiles() {
     var completer = new Completer();
 
     var scriptFilePath = Platform.script;
@@ -2128,9 +2127,9 @@ class ScripterImpl extends EgbScripter {
 
 // The entry point of the isolate.
 void main(List<String> args, SendPort mainIsolatePort) {
-  EgbInterfaceProxy interface = new EgbIsolateInterfaceProxy(mainIsolatePort);
+  EgbPresenterProxy presenter = new EgbIsolatePresenterProxy(mainIsolatePort);
   EgbScripter book = new ScripterImpl();
-  book.setInterface(interface);
+  book.setPresenter(presenter);
 }
 """;
 

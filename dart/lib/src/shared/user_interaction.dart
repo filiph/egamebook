@@ -97,8 +97,8 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   }
 
   /// Creates a Map representation of the choice with only the data needed by
-  /// the interface: [string], [hash] and [submenu].
-  Map<String, Object> toMapForInterface() => {
+  /// the presenter: [string], [hash] and [submenu].
+  Map<String, Object> toMapForPresenter() => {
     "string": string,
     "hash": hash,
     "submenu": submenu
@@ -235,7 +235,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     m.listContent.add(question);
     choicesToSend.forEach((choice) {
       DEBUG_SCR("- $choice");
-      m.listContent.add(choice.toMapForInterface());
+      m.listContent.add(choice.toMapForPresenter());
       choice.shown = true;
     });
 
@@ -245,7 +245,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
 
 /**
  * [Intent] is an interaction that is 'out of place' and asynchronous.
- * For example, when the interface is showing blocks of text, the player can
+ * For example, when the presenter is showing blocks of text, the player can
  * click on the "Restart" button. The book should then stop everything that
  * it's doing and restart itself.
  */

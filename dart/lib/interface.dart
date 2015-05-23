@@ -1,4 +1,4 @@
-library egb_interface;
+library egb_presenter;
 
 import 'dart:async';
 import 'dart:isolate';
@@ -14,7 +14,7 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/interface/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
-abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
+abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   ReceivePort _receivePort;
   SendPort _scripterPort;
 
@@ -24,19 +24,19 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
    */
   String getTextHistory();
 
-  /// Called on startup to create the interface environment.
+  /// Called on startup to create the presenter environment.
   void setup();
 
   /// Either loads the latest savegame or -- if missing -- creates a new one.
   Future continueSavedGameOrCreateNew();
 
   /// Called when there is no more options to take in the book, and so it has
-  /// ended. Interface can choose to show a message, call-to-action, etc.
+  /// ended. Presenter can choose to show a message, call-to-action, etc.
   void endBook();
 
-  /// Called when interface is not needed anymore. This is not necessarily the
+  /// Called when presenter is not needed anymore. This is not necessarily the
   /// same time when the book ends ([endBook()]) -- a player can still choose
-  /// to use the interface to retry (restart or load). But when the game session
+  /// to use the presenter to retry (restart or load). But when the game session
   /// is ending, for example, then this method should be called on the running
   /// user interface.
   void close();
@@ -47,7 +47,7 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   Future<bool> showText(String text);
 
   /**
-   * Interface gets choices, presents them to user. When user selects
+   * Presenter gets choices, presents them to user. When user selects
    * the choice, the returned Future completes with the selected choice's
    * hash.
    *
@@ -62,19 +62,19 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   /// informs the player about the new points.
   Future<bool> awardPoints(PointsAward award);
 
-  /// Sets the stats to be used in the game. The interface should create/retain
+  /// Sets the stats to be used in the game. The presenter should create/retain
   /// the Stat objects for those and show all the stats which have
   /// [:stat.show == true:]. During the game, only the [Stat.value] and the
   /// [Stat.show] will change (via [updateStats]).
   Future<bool> setStats(List<UIStat> stats);
 
-  /// Tells the interface about changed stats. Interface should update the shown
+  /// Tells the presenter about changed stats. Presenter should update the shown
   /// value(s) and show/hide stats according to the [Stat.show] state.
   /// Feed this function with the [EgbMessage.mapContent] of the received
   /// [EgbMessage.UPDATE_STATS] message.
   Future<bool> updateStats(StatUpdateCollection updates);
 
-  /// Shows a form in the interface, set with the initial values. Each time the
+  /// Shows a form in the presenter, set with the initial values. Each time the
   /// user changes a value, the new values are emitted via the returned
   /// [Stream].
   Stream<CurrentState> showForm(FormProxy formProxy);
@@ -86,7 +86,7 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   Future<bool> reportError(String title, String text);
 
   /**
-   * Marks the point at which the gameplay is saved. Interface should relay
+   * Marks the point at which the gameplay is saved. Presenter should relay
    * the information to the player and make it possible to reload the position
    * later. (Communicated to the Runner via [stream].)
    *
@@ -102,14 +102,14 @@ abstract class EgbInterface implements EgbInterfaceViewedFromScripter {
   void setScripter(EgbScripterProxy scripterProxy);
 }
 
-abstract class EgbInterfaceBase implements EgbInterface {
+abstract class EgbPresenterBase implements EgbPresenter {
 
   EgbScripterProxy scripterProxy;
   void setScripter(EgbScripterProxy scripterProxy) {
     this.scripterProxy = scripterProxy;
   }
 
-  Future<EgbInterface> continueSavedGameOrCreateNew() {
+  Future<EgbPresenter> continueSavedGameOrCreateNew() {
     EgbSavegame lastSavegame;
     Set<String> playerChronology;
 
