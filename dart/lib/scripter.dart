@@ -10,8 +10,8 @@ import 'src/shared/page.dart';
 import 'src/shared/points_award.dart';
 import 'src/book/author_script_exception.dart';
 
-import 'src/interface/interface_proxy.dart';
-export 'src/interface/interface_proxy.dart';
+import 'src/presenter/presenter_proxy.dart';
+export 'src/presenter/presenter_proxy.dart';
 
 import 'src/shared/stat.dart';
 export 'src/shared/stat.dart';

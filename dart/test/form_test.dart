@@ -1,8 +1,8 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/shared/form.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
-import 'package:egamebook/interfaces/html/html_interface.dart';
+import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'dart:html' show ButtonElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';

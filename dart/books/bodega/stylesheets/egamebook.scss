@@ -45,6 +45,10 @@ body {
   min-height: 2 / 3 * $line-height;
 }
 
+.hidden {
+  display: none;
+}
+
 // SPLASH SCREEN
 
 $bottom-fixed-height: 6rem;
@@ -76,8 +80,6 @@ $bottom-fixed-height: 6rem;
     margin: auto;
   }
 }
-
-
 
 .bottom-fixed-gradient {
   position: fixed;

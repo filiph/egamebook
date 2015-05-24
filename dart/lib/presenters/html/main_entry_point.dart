@@ -1,5 +1,5 @@
 import 'package:egamebook/runner.dart';
-import 'package:egamebook/interfaces/html/html_interface.dart';
+import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 
 /// This is the entry point of the egamebook app as implemented through

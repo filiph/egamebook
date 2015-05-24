@@ -8,10 +8,10 @@ import 'src/persistence/savegame.dart';
 import 'src/shared/points_award.dart';
 import 'src/shared/stat.dart';
 
-import 'src/interface/interface_proxy.dart';
+import 'src/presenter/presenter_proxy.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
 abstract class EgbPresenter implements EgbPresenterViewedFromScripter {

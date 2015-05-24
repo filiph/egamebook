@@ -8,7 +8,7 @@ library egb_runner;
  */
 
 import 'dart:async';
-import 'package:egamebook/interface.dart';
+import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 

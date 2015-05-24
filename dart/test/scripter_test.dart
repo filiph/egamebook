@@ -10,12 +10,12 @@ import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/persistence/saveable.dart';
 import 'package:egamebook/builder.dart';
-import 'package:egamebook/src/interface/choice_with_infochips.dart';
-import 'package:egamebook/interface.dart';
+import 'package:egamebook/src/presenter/choice_with_infochips.dart';
+import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 
 
-import 'mock_interface.dart';
+import 'mock_presenter.dart';
 
 
 // for Persistence testing

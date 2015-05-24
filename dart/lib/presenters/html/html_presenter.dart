@@ -11,8 +11,8 @@ import 'dart:html' hide FormElement;
 import 'package:markdown/markdown.dart' as mdown show InlineParser,
     InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
-import '../../interface.dart';
-export '../../interface.dart' show EgbPresenter;
+import '../../presenter.dart';
+export '../../presenter.dart' show EgbPresenter;
 import '../../src/persistence/savegame.dart';
 import '../../src/shared/user_interaction.dart';
 import '../../src/shared/points_award.dart';
@@ -22,8 +22,8 @@ import '../../src/shared/stat.dart';
 import '../../src/persistence/storage.dart';
 import '../../src/persistence/player_profile.dart';
 
-import '../../src/interface/choice_with_infochips.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import '../../src/presenter/choice_with_infochips.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
@@ -37,7 +37,7 @@ class HtmlPresenter extends EgbPresenterBase {
   DivElement bookTitleDiv;
   DivElement bigBottomButtonDiv;
 
-  /// The interface shows the title 'activity' (with a big START button on
+  /// The presenter shows the title 'activity' (with a big START button on
   /// the bottom).
   static const int UI_ACTIVITY_TITLE = 1;
   /// The UI is in the play state.
@@ -94,7 +94,12 @@ class HtmlPresenter extends EgbPresenterBase {
    * This is called when the book is ready to be played.
    */
   void _bookReadyHandler() {
-    startButton.text = "START";
+    startButton.querySelector("#start-button-loading-span").classes
+        .add("hidden");
+    startButton.querySelector("#start-button-loading-gif").classes
+        .add("hidden");
+    startButton.querySelector("#start-button-start-text").classes
+        .remove("hidden");
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
       bookDiv.style.display = "block"; // TODO: necessary?

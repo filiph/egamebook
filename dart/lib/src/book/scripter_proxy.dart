@@ -3,13 +3,13 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
-import '../../interface.dart';
+import '../../presenter.dart';
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
 import '../shared/points_award.dart';
 import '../shared/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
 /**
@@ -30,8 +30,8 @@ abstract class EgbScripterViewedFromPresenter {
 }
 
 /**
- * A proxy/view of the Scripter that has methods callable from Interface.
- * It has direct access to the Interface object.
+ * A proxy/view of the Scripter that has methods callable from Presenter.
+ * It has direct access to the Presenter object.
  */
 abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
   EgbPresenter presenter;

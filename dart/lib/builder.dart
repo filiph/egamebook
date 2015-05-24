@@ -1211,7 +1211,7 @@ class Builder {
 //        "../lib/src/cmdline_template.dart");
     var pathToOutputHtml = getPathForExtension("html.dart");
     var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
-        "../lib/interfaces/html/main_entry_point.dart");
+        "../lib/presenters/html/main_entry_point.dart");
 
     var pathToOutputDartFromOutputHtml =
         path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
@@ -1224,12 +1224,12 @@ class Builder {
     var substitutions = {
       "import '../runner.dart';" :
           "import 'package:egamebook/runner.dart';\n",
-      "import 'interface/interface.dart';" :
-          "import 'package:egamebook/src/interface/interface.dart';\n",
-      "import 'interface/interface_cmdline.dart';" :
-          "import 'package:egamebook/src/interface/interface_cmdline.dart';\n",
-      "import 'interface/interface_html.dart';" :
-          "import 'package:egamebook/src/interface/interface_html.dart';\n",
+      "import 'presenter/presenter.dart';" :
+          "import 'package:egamebook/src/presenter/presenter.dart';\n",
+      "import 'presenter/presenter_cmdline.dart';" :
+          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
+      "import 'presenter/presenter_html.dart';" :
+          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
       "import 'persistence/storage.dart';" :
         "import 'package:egamebook/src/persistence/storage.dart';\n",
       "import 'persistence/player_profile.dart';" :
