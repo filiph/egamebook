@@ -1,7 +1,12 @@
 library HTML_Entities;
 
+/// Class [HtmlEntities] stores all HTML entities and provides interface
+/// to convert special characters in text into HTML entities.
+///
+/// This class is probably a duplicate of [HtmlEscape] class from [dart:convert].
 class HtmlEntities {
 
+  /// [Map] of all special characters with corresponding entities
   static final Map<String, String> entities = const {
     // from wikipedia: http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
     "\"" : "&quot;",
@@ -261,6 +266,8 @@ class HtmlEntities {
     // TODO: http://tlt.its.psu.edu/suggestions/international/bylanguage/czechslovak.html#htmlcodes
   };
 
+  /// Converts special characters into HTML entities in given string [s]
+  /// and returns converted string.
   static String toHtml(String s) {
     entities.forEach((charUtf, entity) {
         s = s.replaceAll(charUtf, entity);
