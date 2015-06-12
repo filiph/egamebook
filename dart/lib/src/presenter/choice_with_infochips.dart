@@ -1,7 +1,7 @@
 library choice_with_infochips;
 
 /**
- * Class [ChoiceWithInfochips] stores information for info chips elements
+ * Class ChoiceWithInfochips stores information for info chips elements
  * in the interface.
  *
  * Choice in the format:
@@ -17,7 +17,7 @@ class ChoiceWithInfochips {
   /// List of info chips.
   List<String> infochips;
 
-  /// Creates new [ChoiceWithInfochips] from given string [raw].
+  /// Creates new ChoiceWithInfochips from a given string [raw].
   /// If the given [raw] is null, [ArgumentError] is thrown.
   ///
   /// The given string [raw] is parsed and saved into text of the choice in [text]

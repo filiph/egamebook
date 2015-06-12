@@ -1,6 +1,6 @@
 library HTML_Entities;
 
-/// Class [HtmlEntities] stores all HTML entities and provides interface
+/// Class HtmlEntities stores all HTML entities and provides interface
 /// to convert special characters in text into HTML entities.
 ///
 /// This class is probably a duplicate of [HtmlEscape] class from [dart:convert].
