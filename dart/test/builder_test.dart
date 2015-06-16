@@ -76,6 +76,10 @@ void main() {
             unorderedEquals(["visitOnce"]));
           expect(b.pages[b.pageHandles["run"]].options,
             unorderedEquals(["visitOnce", "showOnce"]));
+          expect(b.pages[b.pageHandles["squash"]].visitOnce, isTrue);
+          expect(b.pages[b.pageHandles["run"]].showOnce, isTrue);
+          expect(b.pages[b.pageHandles["squash"]].toString(),
+              equals("BuilderPage <squash> [10:22]"));
         });
         new Builder().readEgbFile(new File(getPath("simple_3pages.egb"))).then(callback);
       });
@@ -263,7 +267,8 @@ void main() {
           // first page, second part (valid choices in one choiceList)
           var choiceList = b.pages[0].blocks[11];
           expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
-          expect(choiceList.subBlocks.length, 13);
+          expect(choiceList.subBlocks.length, 14);
+          expect(choiceList.subBlocks[13].options["script"], isNull);
 
           // second page
           expect(b.pages[1].blocks[0].type, BuilderBlock.BLK_CHOICE_LIST);

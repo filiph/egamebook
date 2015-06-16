@@ -40,7 +40,7 @@ Normal paragraph of text [0].
 - esd21e [{this script } should; } issue a warning, but is a valid one - the closing bracket could be in a string literal, for example]
 - esd22e [{}}, this is a valid script (thought it won't run, of course]
 - esd22e [{{}, this is a valid script (thought it won't run, of course]
-
+- esd23e [{}, this is an empty script]
 
 ---
 second page
