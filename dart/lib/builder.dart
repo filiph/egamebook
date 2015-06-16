@@ -15,12 +15,19 @@ import 'src/builder/vars_generator.dart';
  * Exception thrown when the input .egb file is badly formatted.
  **/
 class EgbFormatException implements Exception {
-  String msg;
+  /// Message describing the exception.
+  String message;
+  /// Line in the file.
   int line;
+  /// Input file.
   File file;
 
-  EgbFormatException(String this.msg, {this.line, this.file});
+  /// Creates new EgbFormatException with error [message] and optional parameters
+  /// [line] and input [file].
+  EgbFormatException(String this.message, {this.line, this.file});
 
+  /// Returns text describing EgbFormatException with its [message], [line]
+  /// and [file] where the exception appeared.
   String toString() {
     StringBuffer strBuf = new StringBuffer();
     strBuf.write("Format exception");
@@ -31,7 +38,7 @@ class EgbFormatException implements Exception {
       strBuf.write(" in ${file}");
     }
     strBuf.write(": ");
-    strBuf.write(msg);
+    strBuf.write(message);
     return strBuf.toString();
   }
 }
@@ -40,7 +47,9 @@ class EgbFormatException implements Exception {
  * Abstract class defining a "line selection".
  */
 abstract class BuilderLineRange {
+  /// Line start.
   int lineStart;
+  /// Line end.
   int lineEnd;
 }
 
@@ -49,11 +58,16 @@ abstract class BuilderLineRange {
  * (`[isClosed] == true`), it has a `lineStart` and a `lineEnd`.
  **/
 class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super-class of the below, but Dart is broken here
+  /// Line start.
   int lineStart;
+  /// Line end.
   int lineEnd;
 
+  /// Creates new BuilderLineSpan with optional [lineStart].
   BuilderLineSpan({this.lineStart});
 
+  /// Getter returns if the selection is closed. It is closed when not null line
+  /// start is smaller or equal to not null line end.
   get isClosed => lineStart != null && lineEnd != null && lineStart <= lineEnd;
 }
 
@@ -67,9 +81,13 @@ class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super
  * - value: ["Filip Hracek", "John Doe"]
  **/
 class BuilderMetadata {
+  /// Metadata key
   String key;
+  /// Metadata values
   List<String> values;
 
+  /// Creates new BuilderMetadata with [key] and optional [firstValue] which
+  /// will be stored into [values].
   BuilderMetadata(this.key, {String firstValue}) {
     values = new List<String>();
     if (firstValue != null) {
@@ -85,8 +103,11 @@ class BuilderMetadata {
  * BuilderPage also has [options], like `visitOnce`.
  **/
 class BuilderPage extends EgbPage implements BuilderLineRange {
+  /// Page index.
   int index;
+  /// Line start.
   int lineStart;
+  /// Line end.
   int lineEnd;
 
   /**
@@ -94,7 +115,9 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
    */
   Set<String> options;
 
+  /// Getter returns if [:visitOnce:] option is set.
   bool get visitOnce => options.contains("visitOnce");
+  /// Getter returns if [:showOnce:] option is set.
   bool get showOnce => options.contains("showOnce");
 
   /**
@@ -103,9 +126,12 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
    */
   List<String> gotoPageNames;
 
+  /// List of page builder blocks.
   List<BuilderBlock> blocks;
+  /// Page group.
   BuilderPageGroup group;
 
+  /// Creates new BuilderPage with [name], [index] and optional [lineStart].
   BuilderPage(String name, this.index, [this.lineStart]) :
       super(name: name) {
     blocks = new List<BuilderBlock>();
@@ -115,6 +141,8 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
     group = new BuilderPageGroup.fromPage(this);
   }
 
+  /// Returns text describing BuilderPage with its [name], [lineStart] and
+  /// [lineEnd].
   String toString() {
     return "BuilderPage <$name> [$lineStart:$lineEnd]";
   }
@@ -132,14 +160,17 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
  * a page named "Something: xyz" goes to that page.
  **/
 class BuilderPageGroup {
+  /// Page group name.
   String name;
+  /// Pages in the group.
   List<BuilderPage> pages;
 
+  /// Cache of existing page groups.
   static final Map<String, BuilderPageGroup> _cache
                   = new Map<String, BuilderPageGroup>();
 
   /**
-   * Creates group from page. If page has no group, returns null. If group
+   * Creates a group from page. If page has no group, returns null. If group
    * already exists, returns existing group. Also adds the input page
    * to the group.
    */
@@ -158,10 +189,12 @@ class BuilderPageGroup {
     }
   }
 
+  /// Creates new group with [name].
   BuilderPageGroup._internal(this.name) {
     pages = new List<BuilderPage>();
   }
 
+  /// Getter returns list of page groups retrieved from cache sorted by page index.
   static List<BuilderPageGroup> get allGroups {
     List<BuilderPageGroup> list = _cache.values.toList();
     list.sort((a,b) => a.pages[0].index - b.pages[0].index); // TODO: check for empty groups
@@ -174,28 +207,42 @@ class BuilderPageGroup {
  * .egb file. The selection has a type (e.g. BLK_TEXT or BLK_SCRIPT).
  **/
 class BuilderBlock implements BuilderLineRange {
+  /// Line start.
   int lineStart;
+  /// Line end.
   int lineEnd;
+  /// Block type.
   int type = 0;
+  ///List of options.
   Map<String, dynamic> options;
+  /// List of sub blocks.
   List<BuilderBlock> subBlocks;
 
+  /// Block type text.
   static final int BLK_TEXT = 1;
+  /// Block type text with variable.
   static final int BLK_TEXT_WITH_VAR = 8;
 
-  /// Returns [:true:] if block is a text block (no matter if with variable
-  /// or without.
+  /// Getter returns [:true:] if block is a text block (no matter if
+  /// with variable or without.
   bool get isTextBlock => type == BLK_TEXT || type == BLK_TEXT_WITH_VAR;
 
+  /// Block type script.
   static final int BLK_SCRIPT = 2;
+  /// Block type echo.
   static final int BLK_SCRIPT_ECHO = 64;
-
+  /// Block type choice list.
   static final int BLK_CHOICE_LIST = 128;
+  /// Block type choice question.
   static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
+  /// Block type choice.
   static final int BLK_CHOICE = 4;
+  /// Block type choice with script.
   static final int BLK_CHOICE_WITH_SCRIPT = 32;
+  /// Block type multiline choice.
   static final int BLK_CHOICE_MULTILINE = 256;
 
+  /// Creates new BuilderBlock with optional [lineStart] and [type].
   BuilderBlock({this.lineStart, this.type: 0}) {
     options = new Map<String, dynamic>();
     subBlocks = new List<BuilderBlock>();
@@ -207,34 +254,51 @@ class BuilderBlock implements BuilderLineRange {
  * a `<classes>`, a `<functions>` or a `<variables>` block.
  **/
 class BuilderInitBlock implements BuilderLineRange {
+  /// Line start.
   int lineStart;
+  /// Line end.
   int lineEnd;
+  /// Block type.
   int type;
 
+  /// Block type classes.
   @deprecated
   static const int BLK_CLASSES = 1;
+  /// Block type functions.
   @deprecated
   static const int BLK_FUNCTIONS = 2;
+  /// Block type variables.
   @deprecated
   static const int BLK_VARIABLES = 4;
+  /// Block type declaration.
   static const int BLK_DECLARE = 8;
+  /// Block type init.
   static const int BLK_INIT = 16;
 
+  /// String representation of block type classes in [BLK_CLASSES].
   @deprecated
   static const String BLK_CLASSES_STRING = "classes";
+  /// String representation of block type functions in [BLK_FUNCTIONS].
   @deprecated
   static const String BLK_FUNCTIONS_STRING = "functions";
+  /// String representation of block type variables in [BLK_VARIABLES].
   @deprecated
   static const String BLK_VARIABLES_STRING = "variables";
+  /// String representation of block type declaration in [BLK_DECLARE].
   static const String BLK_DECLARE_STRING = "declare";
+  /// String representation of block type init in [BLK_INIT].
   static const String BLK_INIT_STRING = "init";
 
+  /// Creates new BuilderInitBlock with optional [lineStart], block [type]
+  /// or [typeStr] from which the type is extracted.
   BuilderInitBlock({this.lineStart, this.type, String typeStr}) {
     if (typeStr != null) {
       type = typeFromString(typeStr);
     }
   }
 
+  /// Returns block type from its string representation.
+  /// If the string representation doesn't exist, exception is thrown.
   static int typeFromString(String s) {
     switch (s) {
       case BLK_CLASSES_STRING:
@@ -252,6 +316,8 @@ class BuilderInitBlock implements BuilderLineRange {
     }
   }
 
+  /// Returns builder mode according to the block type string representation.
+  /// If the string representation doesn't exist, exception is thrown.
   static int modeFromString(String s) {
     if (s == BLK_CLASSES_STRING) {
       return Builder.MODE_INSIDE_CLASSES;
@@ -270,7 +336,7 @@ class BuilderInitBlock implements BuilderLineRange {
 }
 
 /**
- * Class that represents a full egamebook. Call [:readEgbFile:] to get
+ * Class that represents a full egamebook builder. Call [:readEgbFile:] to get
  * data from an existing .egb file. Call [:writeEgbFile:] to output the data
  * into a new .egb file.
  *
@@ -328,6 +394,7 @@ class Builder {
     return completer.future;
   }
 
+  /// Reads the given [inputStream] for the contents of the file.
   Future<Builder> readInputStream(Stream<List<int>> inputStream) {
     var completer = new Completer();
 
@@ -1055,26 +1122,28 @@ class Builder {
     }
   }
 
+  /// Returns new EgbFormatException with [msg].
   EgbFormatException newFormatException(String msg) {
     return new EgbFormatException(msg, line:_lineNumber, file:inputEgbFile);
   }
 
-  // input file given by readFile()
+  /// Input file given by readFile().
   File inputEgbFile;
+  /// Full path to input file.
   String inputEgbFileFullPath;
+  /// List of imported library files.
   List<File> importLibFiles;
+  /// List of imported library full paths.
   Set<String> importLibFilesFullPaths;
-
+  /// List of builder metadata.
   List<BuilderMetadata> metadata;
   bool _newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
-
+  /// List of synopsis line numbers.
   List<int> synopsisLineNumbers;
 
-  /**
-   * List of pages.
-   */
+  /// List of pages.
   List<BuilderPage> pages;
-
+  /// Getter returns list of all page groups.
   List<BuilderPageGroup> get pageGroups => BuilderPageGroup.allGroups;
 
   /**
@@ -1097,6 +1166,7 @@ class Builder {
    **/
   //GraphML graphML;
 
+  /// Regular expressions.
   static final RegExp blankLine = new RegExp(r"^\s*$");
   static final RegExp hr = new RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
   static final RegExp validPageName = new RegExp(r"^\s{0,3}(.+)\s*$");
@@ -1183,6 +1253,7 @@ class Builder {
     return completer.future;
   }
 
+  /// Writes library imports into [dartOutStream].
   void _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
     assert(importLibFilesFullPaths != null);
     dartOutStream.write("\n");
@@ -2135,18 +2206,28 @@ void main(List<String> args, SendPort mainIsolatePort) {
 
 
   // These are available modes for the [mode] variable.
+  /// Builder mode normal.
   static int MODE_NORMAL = 1;
+  /// Builder mode inside classes.
   @deprecated
   static int MODE_INSIDE_CLASSES = 2;
+  /// Builder mode inside functions.
   @deprecated
   static int MODE_INSIDE_FUNCTIONS = 4;
+  /// Builder mode inside variables.
   @deprecated
   static int MODE_INSIDE_VARIABLES = 8;
+  /// Builder mode inside echo.
   static int MODE_INSIDE_SCRIPT_ECHO = 16;
+  /// Builder mode inside script.
   static int MODE_INSIDE_SCRIPT_TAG = 32;
+  /// Builder mode metadata.
   static int MODE_METADATA = 64;
+  /// Builder mode inside choice.
   static int MODE_INSIDE_CHOICE = 128;
+  /// Builder mode inside declaration.
   static int MODE_INSIDE_DECLARE = 256;
+  /// Builder mode inside init.
   static int MODE_INSIDE_INIT = 512;
 
   /// This makes sure the parser remembers where it is during reading the file.
@@ -2167,6 +2248,7 @@ void main(List<String> args, SendPort mainIsolatePort) {
   /** used to communicate problems to caller */
   List<String> warningLines;
 
+  /// Prints warning message on its line.
   void WARNING(String msg, {int line: null}) {
     if (line == null) {
       line = _lineNumber;
