@@ -1,17 +1,27 @@
 library choice_with_infochips;
 
 /**
+ * Class ChoiceWithInfochips stores information for info chips elements
+ * in the interface.
+ *
  * Choice in the format:
- * 
+ *
  *     - Fire at hull [~45%] [Laser] [Fire at hull]
- * 
+ *
  * Will be shown with chips [:~45%:] and [:Laser:] in the interface. This is
  * an easy way to convey information to the player.
  */
 class ChoiceWithInfochips {
+  /// Text of the choice.
   String text;
+  /// List of info chips.
   List<String> infochips;
-  
+
+  /// Creates new ChoiceWithInfochips from a given string [raw].
+  /// If the given [raw] is null, [ArgumentError] is thrown.
+  ///
+  /// The given string [raw] is parsed and saved into text of the choice in [text]
+  /// and list of info chips in [infochips].
   ChoiceWithInfochips(String raw) {
     if (raw == null) {
       throw new ArgumentError("Cannot create ChoiceWithInfochips "
