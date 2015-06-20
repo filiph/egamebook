@@ -1269,20 +1269,31 @@ class Submenu {
   Submenu(this.name);
 }
 
+/// Class Dialog wraps dialog with title, html text and buttons.
 class Dialog {
+  /// Dialog title.
   String title;
+  /// Dialog html text.
   String html;
+  /// List of dialog buttons.
   List<DialogButton> buttons;
 
+  /// Creates new Dialog with [title], [html] text and optional [buttons].
+  ///
+  /// If the dialog [buttons] are not set, the simple close button is created.
   Dialog(this.title, this.html, [this.buttons = const
       [const DialogButton.justClose("Close")]]);
 }
 
+/// Class DialogButton wraps dialog button with label and some behaviour.
 class DialogButton {
+  /// Dialog button label.
   final String label;
-
+  /// Dialog button behaviour.
   final ClickBehaviour _behaviour;
+  /// Used as a default behaviour if no behaviour is set. Returns [:true:].
   static final ClickBehaviour NO_BEHAVIOUR = () => true;
+  /// Getter for behaviour. If no behaviour is set, the [NO_BEHAVIOUR] is used.
   ClickBehaviour get behaviour {
     if (_behaviour == null) {
       return NO_BEHAVIOUR;
@@ -1290,11 +1301,14 @@ class DialogButton {
       return _behaviour;
     }
   }
+
+  /// Creates new DialogButton with [label] and [behaviour].
   const DialogButton(this.label, this._behaviour);
+  /// Creates new DialogButton with [label] and without [behaviour].
   const DialogButton.justClose(this.label) : _behaviour = null;
 }
 
-/// Returns true if dialog can be closed.
+/// Typedef returns [:true:] if dialog can be closed.
 typedef bool ClickBehaviour();
 
 
