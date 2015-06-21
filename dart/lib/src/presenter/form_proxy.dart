@@ -138,6 +138,7 @@ abstract class UiElement {
   /// FormElement subtype. This is just convenience, and probably could be
   /// solved more elegantly.
   FormElement _blueprint;
+  /// Creates new UiElement with form element [_blueprint].
   UiElement(this._blueprint);
 
   /// Updates the UiElement after the blueprint is changed. Sets
@@ -151,10 +152,14 @@ abstract class UiElement {
   /// Fired every time user interacts with Element and changes something.
   Stream get onChange;
 
+  /// Setter for disabled.
   set disabled(bool value);
+  /// Getter for disabled.
   bool get disabled;
 
+  /// Setter for hidden.
   set hidden(bool value);
+  /// Getter for hidden.
   bool get hidden;
 
   /// This is set to [:true:] after the user has interacted with the form and
@@ -175,6 +180,7 @@ abstract class UiElement {
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
   /// that materializes the [TextOutput].
   Object get uiRepresentation;
+  /// Append child method.
   void appendChild(Object childUiRepresentation);
 }
 

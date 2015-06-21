@@ -61,12 +61,14 @@ class HtmlPresenter extends EgbPresenterBase {
   final StringBuffer _textHistory = new StringBuffer();
   /// Getter returns text history - the text that has been shown to the player
   /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
+  @override
   String getTextHistory() => _textHistory.toString();
 
   /// Creates new HtmlPresenter.
   HtmlPresenter() : super();
 
-  /// Creates basic setup for HtmlPresenter's html elements etc.
+  /// Creates basic setup on startup for HtmlPresenter's html elements etc.
+  @override
   void setup() {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
@@ -140,12 +142,13 @@ class HtmlPresenter extends EgbPresenterBase {
     _loadingElVisible = show;
   }
 
-  /// Called when book has ended.
+  /// Prints into console that the book has ended.
+  @override
   void endBook() {
     print("The book has ended.");
   }
 
-  /// Called on close.
+  @override
   void close() {
     super.close();
   }
@@ -160,6 +163,7 @@ class HtmlPresenter extends EgbPresenterBase {
    *
    * Returns [Future] when complete.
    */
+  @override
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
     Completer completer = new Completer<bool>();
@@ -268,11 +272,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return (bookDivBottom < currentBottom - 20);
   }
 
-  /// Shows choices from a given [choiceList] as [:button:] elements
-  /// in [:ol:] list. Choices are also having a question which is shown
-  /// in a [:p:] element above the list of choices.
-  ///
-  /// Choices can also have a submenu.
+  @override
   Future<int> showChoices(EgbChoiceList choiceList) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
@@ -440,10 +440,8 @@ class HtmlPresenter extends EgbPresenterBase {
 
   /// Current points.
   int _currentPoints;
-  /// Awards points to the user with visual highlight blink of toast message
-  /// and points span.
-  ///
-  /// Points are awarded by [EgbScripter].
+
+  @override
   Future<bool> awardPoints(PointsAward award) {
     _currentPoints = award.result;
     if (award.addition == 0) {
@@ -482,7 +480,7 @@ class HtmlPresenter extends EgbPresenterBase {
   /// Map of stats HTML elements used in navigation.
   final Map<String, Element> _statsElements = new Map();
 
-  /// Sets UI stats from [stats] parameter and adds them to navigation.
+  @override
   Future setStats(List<UIStat> stats) {
     _stats = stats;
     _printStats(); // DEBUG
@@ -502,9 +500,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return new Future.value();
   }
 
-  /// Updates stats with new [updates]. Also updates them in navagation.
-  ///
-  /// Points are updated by [EgbScripter].
+  @override
   Future updateStats(StatUpdateCollection updates) {
     UIStat.updateStatsList(_stats, updates
         )// Returns only the changed stats.
@@ -569,7 +565,7 @@ class HtmlPresenter extends EgbPresenterBase {
    */
   EgbSavegame _savegameToBe;
 
-  /// Adds savegame bookmark from [savegame].
+  @override
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _savegameToBe = savegame;
@@ -653,7 +649,7 @@ class HtmlPresenter extends EgbPresenterBase {
     addSavegameBookmark(savegame);
   }
 
-  /// Simple logger.
+  /// Simple HTML presenter logger.
   @override
   void log(String text) {
     print("HtmlPresenter.log: $text");
@@ -661,7 +657,6 @@ class HtmlPresenter extends EgbPresenterBase {
 
   /// Currently shown [FormProxy].
   FormProxy _formProxy;
-  /// Builds [HtmlForm] from [formProxy] and shows it.
   @override
   Stream<CurrentState> showForm(FormProxy formProxy) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
@@ -675,13 +670,13 @@ class HtmlPresenter extends EgbPresenterBase {
     return _formProxy.stream;
   }
 
-  /// Updates all form elements with new form configuration [values].
   @override
   void updateForm(FormConfiguration values) {
     _formProxy.update(values);
   }
 }
 
+/// Map of element builders for creating of form elements.
 Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
@@ -695,12 +690,22 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   OptionBase.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
+/// Abstract class HtmlUiElement wraps UI representation of basic HTML
+/// (in fact [FormElement]) element.
+///
+/// It is a base class for all form elements (for example [HtmlForm],
+/// [HtmlFormSection] or [HtmlSubmitButton]).
 abstract class HtmlUiElement extends UiElement {
+  /// Creates new HtmlUiElement with [blueprint] form element.
   HtmlUiElement(FormElement blueprint) : super(blueprint);
-
+  /// UI representation as an [Element].
   Element uiRepresentation;
 
+  /// If is hidden.
   bool _hidden = false;
+
+  /// Setter for hidden. If the element is hidden, it's still present in HTML
+  /// but it's not visible (is hidden with css).
   @override
   set hidden(bool value) {
     if (value == true) {
@@ -715,14 +720,21 @@ abstract class HtmlUiElement extends UiElement {
   bool get hidden => _hidden;
 }
 
+/// Class HtmlForm wraps representation of basic html form in HTML.
 class HtmlForm extends HtmlUiElement {
+  /// Default text for submit buttons.
   static const String DEFAULT_SUBMIT_TEXT = ">>";
 
+  /// Form proxy blueprint element.
   FormProxy blueprint;
+  /// UI representation [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:].
   DivElement _childrenContainerDiv;
+  /// Form submit button.
   ButtonElement submitButton;
 
+  /// Creates new HtmlForm and its UI from form proxy [blueprint].
   HtmlForm(FormProxy blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
@@ -745,25 +757,35 @@ class HtmlForm extends HtmlUiElement {
     }
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenContainerDiv.append(childUiRepresentation);
   }
 
+  /// If is disabled.
   bool _disabled = false;
+  /// Getter for disabled. When the HTML form disabled is [:true:],
+  /// the submit button is not clickable.
   @override
   bool get disabled => _disabled;
 
+  /// Setter for disabled.
   @override
   set disabled(bool value) {
     _disabled = value;
     if (submitButton != null) submitButton.disabled = value;
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlForm] after the blueprint is changed. Also the text on existing
+  /// [submitButton] is updated with the text from [blueprint] submit text.
   @override
   void update() {
     super.update();
@@ -779,6 +801,7 @@ class HtmlForm extends HtmlUiElement {
   @override
   bool get waitingForUpdate => null;
 
+  /// Current value of HTML form. In this case it returns [:null:].
   @override
   Object get current => null;
 }
