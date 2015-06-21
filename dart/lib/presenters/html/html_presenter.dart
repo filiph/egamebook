@@ -27,14 +27,23 @@ import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
+/// Class HtmlPresenter wraps HTML presenter for the application.
+///
+/// It contains all HTML interface elements ([:button:], [:span:] etc.) used
+/// in gamebook for user interaction and displaying information.
 class HtmlPresenter extends EgbPresenterBase {
+  /// Restart [:button:].
   ButtonElement restartAnchor;
+  /// [:span:] where points are displayed.
   SpanElement pointsSpan;
-
+  /// Main wrapper [:div:] where the content of the book is displayed.
   DivElement bookDiv;
 
+  /// Start [:button:].
   ButtonElement startButton;
+  /// Book's title [:div:].
   DivElement bookTitleDiv;
+  /// Main book's start button [:div:].
   DivElement bigBottomButtonDiv;
 
   /// The presenter shows the title 'activity' (with a big START button on
@@ -42,6 +51,7 @@ class HtmlPresenter extends EgbPresenterBase {
   static const int UI_ACTIVITY_TITLE = 1;
   /// The UI is in the play state.
   static const int UI_ACTIVITY_BOOK = 2;
+  /// Current activity visible.
   int currentActivity = UI_ACTIVITY_TITLE;
 
   /**
@@ -49,13 +59,14 @@ class HtmlPresenter extends EgbPresenterBase {
    * (Markdown format, pre-HTMLization.)
    */
   final StringBuffer _textHistory = new StringBuffer();
+  /// Getter returns text history - the text that has been shown to the player
+  /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
   String getTextHistory() => _textHistory.toString();
 
-  /**
-    Constructor.
-    */
+  /// Creates new HtmlPresenter.
   HtmlPresenter() : super();
 
+  /// Creates basic setup for HtmlPresenter's html elements etc.
   void setup() {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
@@ -91,7 +102,7 @@ class HtmlPresenter extends EgbPresenterBase {
   }
 
   /**
-   * This is called when the book is ready to be played.
+   * This method is called when the book is ready to be played.
    */
   void _bookReadyHandler() {
     startButton.querySelector("#start-button-loading-span").classes
@@ -114,12 +125,12 @@ class HtmlPresenter extends EgbPresenterBase {
     });
   }
 
+  /// Paragraph where the loading gizmo is visible.
   ParagraphElement _loadingEl;
-  /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
+  /// If loading is visible. It is used to store [_loadingEl]'s state outside
+  /// the DOM (i.e. in memory).
   bool _loadingElVisible;
-  /**
-   * Sets visibility of the loading gizmo.
-   */
+  /// Sets visibility of the loading gizmo.
   void _showLoading(bool show) {
     if (_loadingElVisible != null && show ==
         _loadingElVisible) {
@@ -129,20 +140,25 @@ class HtmlPresenter extends EgbPresenterBase {
     _loadingElVisible = show;
   }
 
+  /// Called when book has ended.
   void endBook() {
     print("The book has ended.");
   }
 
+  /// Called on close.
   void close() {
     super.close();
   }
 
+  /// Duration between showing text. It is used in delaying of text showing.
   static const Duration _durationBetweenShowingText = const Duration(
       milliseconds: 100);
 
   /**
-   * Converts [s] to HTML elements (via markdown) and shows them one by one
-   * on page. Returns when complete.
+   * Converts string [s] to HTML elements (via markdown) and shows them
+   * one by one on a page.
+   *
+   * Returns [Future] when complete.
    */
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
@@ -184,7 +200,7 @@ class HtmlPresenter extends EgbPresenterBase {
   }
 
   /// Search for footnotes in [el] and attach click listeners on them. Clicking
-  /// on a footnote creates a [Dialog] with the [Element.title] as its
+  /// on a footnote creates and shows a [Dialog] with the [Element.title] as its
   /// text content.
   void _attachFootnoteClickListeners(Element el) {
     // Search for footnotes and attach click listeners on them.
@@ -196,16 +212,22 @@ class HtmlPresenter extends EgbPresenterBase {
     });
   }
 
+  /// If animation for text showing is used.
   static const bool USE_SHOWTEXT_ANIMATION = false;
+  /// Duration between showing elements.
+  /// It is used in delaying of elements showing.
   static const Duration _durationBetweenShowingElements = const Duration(
       milliseconds: 200);
+  /// Duration between checking presence of meta elements in view.
   static const Duration _durationBetweenCheckingForMetaElements =
       const Duration(milliseconds: 1000);
+  /// Periodic [Stream] for checking presence of meta elements in view.
   final Stream _periodic = new Stream.periodic(
       _durationBetweenCheckingForMetaElements);
+  /// [StreamSubscription] for [_periodic].
   StreamSubscription _periodicSubscription;
 
-  /// A list of elements and their associated actions and data. When a
+  /// A list of meta elements and their associated actions and data. When a
   /// _metaElement comes into view, its [doAction()] function is called.
   final List<EgbMetaElement> _metaElements = new List<EgbMetaElement>();
 
@@ -246,6 +268,11 @@ class HtmlPresenter extends EgbPresenterBase {
     return (bookDivBottom < currentBottom - 20);
   }
 
+  /// Shows choices from a given [choiceList] as [:button:] elements
+  /// in [:ol:] list. Choices are also having a question which is shown
+  /// in a [:p:] element above the list of choices.
+  ///
+  /// Choices can also have a submenu.
   Future<int> showChoices(EgbChoiceList choiceList) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
@@ -332,6 +359,9 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// Creates new choice button in form of HTML [:button:] with index and text.
+  ///
+  /// Choice button can also have info chips.
   ButtonElement _createChoiceButton(String index, EgbChoice choice, Completer
       completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
@@ -374,10 +404,14 @@ class HtmlPresenter extends EgbPresenterBase {
     return btn;
   }
 
+  /// Duration between sending hash. It is used in delaying of hash sending.
   static const Duration _durationBetweenSendingHash = const Duration(
       milliseconds: 100);
 
   // TODO: use onClick.first.then() - no need to unregister listener
+  /// Click listener for a choice.
+  ///
+  /// Choice hash is sent asynchronously back to Scripter and bookmark is set.
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
       clickSubscriptions) {
@@ -404,7 +438,12 @@ class HtmlPresenter extends EgbPresenterBase {
     event.stopPropagation();
   }
 
+  /// Current points.
   int _currentPoints;
+  /// Awards points to the user with visual highlight blink of toast message
+  /// and points span.
+  ///
+  /// Points are awarded by [EgbScripter].
   Future<bool> awardPoints(PointsAward award) {
     _currentPoints = award.result;
     if (award.addition == 0) {
@@ -438,9 +477,12 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// List of UI stats.
   List<UIStat> _stats;
+  /// Map of stats HTML elements used in navigation.
   final Map<String, Element> _statsElements = new Map();
 
+  /// Sets UI stats from [stats] parameter and adds them to navigation.
   Future setStats(List<UIStat> stats) {
     _stats = stats;
     _printStats(); // DEBUG
@@ -460,6 +502,9 @@ class HtmlPresenter extends EgbPresenterBase {
     return new Future.value();
   }
 
+  /// Updates stats with new [updates]. Also updates them in navagation.
+  ///
+  /// Points are updated by [EgbScripter].
   Future updateStats(StatUpdateCollection updates) {
     UIStat.updateStatsList(_stats, updates
         )// Returns only the changed stats.
@@ -475,6 +520,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return new Future.value();
   }
 
+  /// Prints visible UI stats into console.
   void _printStats() {
     print("Stats:");
     _stats.where((stat) => stat.show == true).forEach((stat) {
@@ -491,6 +537,8 @@ class HtmlPresenter extends EgbPresenterBase {
 
   /**
    * What happens when user clicks on a savegame bookmark.
+   *
+   * The confirm dialog is shown to user to select if he/she wants to come back.
    */
   void _handleSavegameBookmarkClick(String savegameUid) {
     // TODO: make more elegant, with confirmation appearing on page,
@@ -521,6 +569,7 @@ class HtmlPresenter extends EgbPresenterBase {
    */
   EgbSavegame _savegameToBe;
 
+  /// Adds savegame bookmark from [savegame].
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _savegameToBe = savegame;
@@ -539,9 +588,7 @@ class HtmlPresenter extends EgbPresenterBase {
     //    bookmarkDiv.append(bookmarkAnchor);
   }
 
-  /**
-   * Shows a dialog.
-   */
+  /// Shows a [dialog] with overlay over content.
   Future<bool> showDialog(Dialog dialog) {
     var completer = new Completer<bool>();
 
@@ -573,6 +620,10 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// Stats on click listener.
+  ///
+  /// New [Dialog] with title "Stats" is shown with a current score
+  /// and all stats printed in a table.
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
@@ -588,11 +639,13 @@ class HtmlPresenter extends EgbPresenterBase {
     showDialog(dialog);
   }
 
+  /// Creates a simple error dialog with [title] and [text].
   Future<bool> reportError(String title, String text) {
     Dialog errorDialog = new Dialog(title, "<p>$text</p>");
     return showDialog(errorDialog);
   }
 
+  /// Saves game [savegame] and adds savegame bookmark.
   @override
   void save(EgbSavegame savegame) {
     _textHistory.clear();
@@ -600,6 +653,7 @@ class HtmlPresenter extends EgbPresenterBase {
     addSavegameBookmark(savegame);
   }
 
+  /// Simple logger.
   @override
   void log(String text) {
     print("HtmlPresenter.log: $text");
@@ -607,6 +661,7 @@ class HtmlPresenter extends EgbPresenterBase {
 
   /// Currently shown [FormProxy].
   FormProxy _formProxy;
+  /// Builds [HtmlForm] from [formProxy] and shows it.
   @override
   Stream<CurrentState> showForm(FormProxy formProxy) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
@@ -620,6 +675,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return _formProxy.stream;
   }
 
+  /// Updates all form elements with new form configuration [values].
   @override
   void updateForm(FormConfiguration values) {
     _formProxy.update(values);
