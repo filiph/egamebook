@@ -438,7 +438,7 @@ class HtmlPresenter extends EgbPresenterBase {
     event.stopPropagation();
   }
 
-  /// Current points.
+  /// Current points awarded.
   int _currentPoints;
 
   @override
@@ -475,7 +475,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
-  /// List of UI stats.
+  /// List of actual UI stats.
   List<UIStat> _stats;
   /// Map of stats HTML elements used in navigation.
   final Map<String, Element> _statsElements = new Map();
@@ -720,21 +720,21 @@ abstract class HtmlUiElement extends UiElement {
   bool get hidden => _hidden;
 }
 
-/// Class HtmlForm wraps representation of basic html form in HTML.
+/// Class HtmlForm represents html form in HTML.
 class HtmlForm extends HtmlUiElement {
-  /// Default text for submit buttons.
+  /// Default text for a submit button.
   static const String DEFAULT_SUBMIT_TEXT = ">>";
 
   /// Form proxy blueprint element.
   FormProxy blueprint;
-  /// UI representation [:div:].
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
-  /// Children container [:div:].
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenContainerDiv;
   /// Form submit button.
   ButtonElement submitButton;
 
-  /// Creates new HtmlForm and its UI from form proxy [blueprint].
+  /// Creates new HtmlForm and its UI representation from form proxy [blueprint].
   HtmlForm(FormProxy blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
@@ -785,7 +785,7 @@ class HtmlForm extends HtmlUiElement {
   Stream get onChange => _onChangeController.stream;
 
   /// Updates [HtmlForm] after the blueprint is changed. Also the text on existing
-  /// [submitButton] is updated with the text from [blueprint] submit text.
+  /// [submitButton] is updated with the text from [blueprint]'s submit text.
   @override
   void update() {
     super.update();
@@ -806,16 +806,21 @@ class HtmlForm extends HtmlUiElement {
   Object get current => null;
 }
 
+/// Class HtmlFormSection represents form section in HTML.
 class HtmlFormSection extends HtmlUiElement {
-
+  /// Form section blueprint.
   FormSection blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Header element used to display section name.
   Element _headerEl;
   /// The element which opens or closes the FormSection contents when clicked.
   Element _openCloseEl;
+  /// Children container [:div:] used for appending child elements..
   DivElement _childrenDiv;
 
-
+  /// Creates new HtmlFormSection and its UI representation from form
+  /// section [blueprint].
   HtmlFormSection(FormSection blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -848,6 +853,9 @@ class HtmlFormSection extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Updates state of who from all form sections is opened and who is closed.
+  /// Only one form section can be opened at time, the others are closed.
+  /// The open/close indicator in every form section is updated accordingly.
   void updateOpenCloseDomState() {
     if (_childrenDiv.classes.contains("closed")) {
       _childrenDiv.classes.remove("closed");
@@ -867,11 +875,14 @@ class HtmlFormSection extends HtmlUiElement {
     }
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case text in header.
   @override
   Object get current => _headerEl.text;
 
@@ -881,6 +892,8 @@ class HtmlFormSection extends HtmlUiElement {
   @override
   Stream get onChange => null;
 
+  /// Updates [HtmlFormSection] after the blueprint is changed. Also the text
+  /// in header is updated with [blueprint]'s name.
   @override
   void update() {
     super.update();
@@ -891,11 +904,17 @@ class HtmlFormSection extends HtmlUiElement {
   bool waitingForUpdate = false;
 }
 
+/// Class HtmlSubmitButton represents submit button in HTML.
 class HtmlSubmitButton extends HtmlUiElement {
+  /// Presenter submit button blueprint.
   PresenterSubmitButton blueprint;
+  /// UI representation as a [:button:].
   ButtonElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements..
   DivElement _childrenDiv;
 
+  /// Creates new HtmlSubmitButton and its UI representation from a presenter
+  /// submit button [blueprint].
   HtmlSubmitButton(PresenterSubmitButton blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     _childrenDiv = new DivElement();
@@ -911,11 +930,14 @@ class HtmlSubmitButton extends HtmlUiElement {
     update();
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case [:null:].
   @override
   Object get current => null;
 
@@ -929,16 +951,22 @@ class HtmlSubmitButton extends HtmlUiElement {
     _disabled = value;
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlSubmitButton] after the blueprint is changed. Also the text
+  /// on [uiRepresentation] is updated with [blueprint]'s name.
   void update() {
     super.update();
     uiRepresentation.text = blueprint.name;
   }
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
@@ -949,13 +977,21 @@ class HtmlSubmitButton extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
+/// Class HtmlCheckboxInput represents checkbox input in HTML.
 class HtmlCheckboxInput extends HtmlUiElement {
+  /// Checkbox input base blueprint.
   CheckboxInputBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Actual checkbox element.
   CheckboxInputElement _checkboxEl;
+  /// Label element for displaying information.
   LabelElement _labelEl;
+  /// Children container [:div:] used for appending child elements..
   DivElement _childrenDiv;
 
+  /// Creates new HtmlCheckboxInput and its UI representation from checkbox
+  /// input base [blueprint].
   HtmlCheckboxInput(CheckboxInputBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     print(this.blueprint.name);
@@ -979,17 +1015,23 @@ class HtmlCheckboxInput extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case [:true:] if checkbox element is checked.
   @override
   Object get current => _checkboxEl.checked;
 
+  /// Returns [Stream] from checkbox element [onChange].
   @override
   Stream get onChange => _checkboxEl.onChange;
 
+  /// Updates [HtmlCheckboxInput] after the blueprint is changed. Also the checked
+  /// attribute on checkbox element is updated with [blueprint]'s current value.
   @override
   void update() {
     super.update();
@@ -999,22 +1041,35 @@ class HtmlCheckboxInput extends HtmlUiElement {
   @override
   bool waitingForUpdate = false;
 
+  /// Returns if checkbox element is disabled.
   @override
   bool get disabled => _checkboxEl.disabled;
 
+  /// Sets if checkbox element is disabled.
   @override
   set disabled(bool value) {
     _checkboxEl.disabled = value;
   }
 }
 
+/// Abstract class HtmlRangeBase represents base html range.
+///
+/// It is base class for [HtmlRangeOuput] and [HtmlRangeInput].
 abstract class HtmlRangeBase extends HtmlUiElement {
+  /// Range base blueprint.
   RangeBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements..
   DivElement _childrenDiv;
+  /// Radio buttons container [:div:].
   DivElement _radioButtonsDiv;
+  /// Paragraph used for a text.
   ParagraphElement _currentValueP;
 
+  /// Creates new HtmlRangeBase and its UI representation from range base
+  /// [blueprint] and with [divClass] used as a css class on [uiRepresentation].
+  /// This css class is used to differentiate between input and output elements.
   HtmlRangeBase(RangeBase blueprint, String divClass) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1044,8 +1099,11 @@ abstract class HtmlRangeBase extends HtmlUiElement {
     update();
   }
 
+  /// Map of radio buttons.
   Map<int, RadioButtonInputElement> _radioButtons =
       new Map<int, RadioButtonInputElement>();
+  /// Creates radio buttons with given constraints on [blueprint]
+  /// (min, max and step size).
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = _createRadioButton(i);
@@ -1056,6 +1114,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   RadioButtonInputElement _createRadioButton(int i);
 
+  /// Update on all radio buttons.
   void _updateRadioButtons() {
     _radioButtons.forEach((int i, RadioButtonInputElement e) =>
         _updateRadioButton(i, e));
@@ -1063,6 +1122,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   void _updateRadioButton(int i, RadioButtonInputElement radioButton);
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
@@ -1072,13 +1133,17 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   @override
   bool get disabled => _disabled;
 
+  /// When the disabled state with [value] is set, the radio buttons are also
+  /// updated.
   @override
   set disabled(bool value) {
     _disabled = value;
     _updateRadioButtons();
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
@@ -1086,6 +1151,9 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   @override
   int get current => _current;
 
+  /// Updates [HtmlRangeBase] after the blueprint is changed. Also the [current]
+  /// attribute is updated with [blueprint]'s current value, text in paragraph
+  /// is set to current string representation and radio buttons are updated.
   @override
   void update() {
     super.update();
@@ -1106,9 +1174,12 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
+/// Class HtmlRangeOuput represents range output in HTML.
 class HtmlRangeOuput extends HtmlRangeBase {
+  /// Creates new HtmlRangeOuput and its UI from range output base [blueprint].
   HtmlRangeOuput(RangeOutputBase blueprint) : super(blueprint, "range-output");
 
+  /// Creates new radio button element and updates it.
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
@@ -1119,18 +1190,23 @@ class HtmlRangeOuput extends HtmlRangeBase {
     return radioButton;
   }
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;
 
+  /// Updates radio button's [checked] attribute.
   @override
   void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
     radioButton.checked = i == blueprint.current;
   }
 }
 
+/// Class HtmlRangeInput represents range input in HTML.
 class HtmlRangeInput extends HtmlRangeBase {
+  /// Creates new HtmlRangeInput and its UI from range input base [blueprint].
   HtmlRangeInput(RangeInputBase blueprint) : super(blueprint, "range-input");
 
+  /// Creates new radio button element and updates it.
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
@@ -1148,6 +1224,7 @@ class HtmlRangeInput extends HtmlRangeBase {
     return radioButton;
   }
 
+  /// Updates radio button's [checked] and [disabled] attributes.
   @override
   void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
     radioButton.checked = i == blueprint.current;
@@ -1157,11 +1234,17 @@ class HtmlRangeInput extends HtmlRangeBase {
   }
 }
 
+/// Class HtmlTextOuput represents text output in HTML.
 class HtmlTextOuput extends HtmlUiElement {
+  /// Text base blueprint.
   TextBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements..
   DivElement _childrenDiv;
 
+  /// Creates new HtmlTextOuput and its UI representation from text base
+  /// [blueprint].
   HtmlTextOuput(TextBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1174,20 +1257,26 @@ class HtmlTextOuput extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Getter returns current value. In this case text from [uiRepresentation].
   @override
   Object get current => uiRepresentation.text;
 
   @override
   bool disabled = false;
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;
 
+  /// Updates [HtmlTextOuput] after the blueprint is changed. Also the inner
+  /// html on [uiRepresentation] is updated with [blueprint]'s html.
   @override
   void update() {
     super.update();
@@ -1198,13 +1287,19 @@ class HtmlTextOuput extends HtmlUiElement {
   bool waitingForUpdate = false;
 }
 
+/// Class HtmlMultipleChoiceInput represents multiple choice input in HTML.
 class HtmlMultipleChoiceInput extends HtmlUiElement {
-
+  /// Multiple choice input base blueprint.
   MultipleChoiceInputBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Label element for displaying information.
   LabelElement _labelElement;
+  /// Children [:select:] element used for appending [:option:] elements..
   SelectElement _childrenSelectElement;
 
+  /// Creates new HtmlMultipleChoiceInput and its UI representation from
+  /// multple choice input base [blueprint].
   HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint) :
       super(blueprint) {
     this.blueprint = blueprint;
@@ -1241,6 +1336,8 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     update();
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:]. The is instance of [OptionElement].
   @override
   void appendChild(Object childUiRepresentation) {
     assert(childUiRepresentation is OptionElement);
@@ -1248,6 +1345,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   }
 
   // TODO: implement current
+  /// Returns current value. In this case [:null:].
   @override
   Object get current => null;
 
@@ -1261,10 +1359,13 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     _disabled = value;
   }
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;  // All the "changes" happen below, on options.
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the select element
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     _childrenSelectElement.disabled = value;
@@ -1275,11 +1376,15 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
-
+/// Class HtmlOption represents HTML option.
 class HtmlOption extends HtmlUiElement {
+  /// Option base blueprint.
   OptionBase blueprint;
+  /// UI representation as an [:option:].
   OptionElement uiRepresentation;
 
+  /// Creates new HtmlOption and its UI representation from option base
+  /// [blueprint].
   HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
@@ -1288,11 +1393,14 @@ class HtmlOption extends HtmlUiElement {
     update();
   }
 
+  /// Throws with error. [:option:] element can't have children.
   @override
   void appendChild(Object childUiRepresentation) {
     throw "Not implemented: adding children to Option";
   }
 
+  /// Returns current value. In this case [:true:] if [uiRepresentation] is
+  /// selected.
   @override
   Object get current => uiRepresentation.selected;
 
@@ -1308,6 +1416,8 @@ class HtmlOption extends HtmlUiElement {
 
   @override
   bool get hidden => false;
+  /// If [value] is [:true:] throws with error. [:option:] element can't
+  /// be hidden.
   @override  // <option> in <select> can't be hidden by CSS
   set hidden(bool value) {
     if (value == true) {
@@ -1315,14 +1425,20 @@ class HtmlOption extends HtmlUiElement {
     }
   }
 
+  /// When this method is called, the [_onChangeController] gets new [Event].
   void select() {
     _onChangeController.add(new Event("select"));
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlOption] after the blueprint is changed. Also the [selected]
+  /// attribute on [uiRepresentation] is updated with [blueprint]'s current
+  /// value.
   @override
   void update() {
     super.update();
@@ -1330,6 +1446,8 @@ class HtmlOption extends HtmlUiElement {
   }
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
@@ -1340,15 +1458,19 @@ class HtmlOption extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
-/// A menu with choices in it – like for example an inventory menu.
+/// Class Submenu represents menu with choices in it – like for example
+/// an inventory menu.
 class Submenu {
+  /// Submenu's name.
   final String name;
+  /// List of choices being displayed in submenu.
   final List<EgbChoice> choices = new List<EgbChoice>();
 
+  /// Creates new Submenu with [name].
   Submenu(this.name);
 }
 
-/// Class Dialog wraps dialog with title, html text and buttons.
+/// Class Dialog represents dialog with title, html text and buttons.
 class Dialog {
   /// Dialog title.
   String title;
@@ -1364,7 +1486,7 @@ class Dialog {
       [const DialogButton.justClose("Close")]]);
 }
 
-/// Class DialogButton wraps dialog button with label and some behaviour.
+/// Class DialogButton represents dialog button with label and some behaviour.
 class DialogButton {
   /// Dialog button label.
   final String label;
@@ -1392,19 +1514,27 @@ typedef bool ClickBehaviour();
 
 
 /**
- * A special class for storing information about a PointsAward together
- * with its meta element.
+ * PointsAwardElement is a special class for storing information about
+ * a PointsAward together with its meta element.
  */
 class PointsAwardElement extends PointsAward implements EgbMetaElement {
+  /// Meta element.
   final Element element;
+  /// Creates new PointsAwardElement with [element] and [PointsAward]'s
+  /// points to be awarded [addition], resulting sum of points [result] and
+  /// optional [justification] message.
   PointsAwardElement(this.element, int addition, int result, [String
       justification]) : super(addition, result, justification);
 
+  /// Creates new PointsAwardElement from [pointsAward] and [element].
   PointsAwardElement.fromPointsAward(PointsAward pointsAward, this.element)
       : super(pointsAward.addition, pointsAward.result,
           pointsAward.justification);
 
+  /// Action which will be called.
   Action action;
+  /// Do action on meta element if [action] is not [:null:].
+  /// If action is done, set [done] to [:true:].
   void doAction() {
     if (action != null && action is Action) {
       action();
@@ -1416,12 +1546,18 @@ class PointsAwardElement extends PointsAward implements EgbMetaElement {
   bool done = false;
 }
 
+/// Abstract class EgbMetaElement wraps meta element with its [Action].
 abstract class EgbMetaElement {
+  /// Element.
   final Element element;
+  /// Action which will be called.
   Action action;
+  /// Do action on meta element.
   void doAction();
+  /// If is action done.
   bool done;
 
+  /// Creates new EgbMetaElement from [element].
   EgbMetaElement(this.element);
 }
 
@@ -1433,24 +1569,28 @@ typedef void Action();
  * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
  * [HtmlPresenter]).
  *
- * TODO: either use lawndart or make the following more robust
+ * TODO: either use lawndart or make the following more robust.
  */
 class LocalStorage implements EgbStorage {
+  /// Saves [value] on [key] into local storage.
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;
     return new Future.value(true);
   }
 
+  /// Returns value on [key] from local storage.
   Future<String> load(String key) {
     var result = window.localStorage[key];
     return new Future.value(result);
   }
 
+  /// Deletes value on [key] from local storage.
   Future<bool> delete(String key) {
     window.localStorage.remove(key);
     return new Future.value(true);
   }
 
+  /// Returns default player profile from storage.
   EgbPlayerProfile getDefaultPlayerProfile() {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, this);
   }
@@ -1459,17 +1599,21 @@ class LocalStorage implements EgbStorage {
 /// Custom syntax that allows `<sup>` tags with titles to act as footnotes.
 /// This just forces [mdown] not to escape HTML of a <sup> tag.
 class FootnoteSupTagSyntax extends mdown.TagSyntax {
+  /// Title for a footnote.
   String title;
 
+  /// Creates new FootnoteSupTagSyntax.
   FootnoteSupTagSyntax()
       : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', tag:
           'sup');
 
+  @override
   bool onMatch(mdown.InlineParser parser, Match match) {
     title = match.group(1);
     return super.onMatch(parser, match);
   }
 
+  @override
   bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state)
       {
     mdown.Element element = new mdown.Element(tag, state.children);
