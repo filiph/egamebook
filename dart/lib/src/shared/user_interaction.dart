@@ -6,7 +6,11 @@ import 'utils.dart';
 import 'message.dart';
 import '../book/author_script_exception.dart';
 
+/// This class wraps user interaction and its attributes.
+///
+/// It is a base class of [EgbChoice].
 class EgbUserInteraction {
+  /// If the user interaction is shown.
   bool shown = false;
   /// The user interaction shouldn't be shown before we are at the end of the
   /// page.
@@ -14,16 +18,20 @@ class EgbUserInteraction {
   /// The user interaction shouldn't be shown before there is an actual choice
   /// list in the .egb.
   bool deferToChoiceList;
+  /// User interaction hash used for sending.
   int hash;
 }
 
+/// Class EgbChoice wraps user interaction choice.
 class EgbChoice extends EgbUserInteraction implements Comparable {
   /// The text of the choice (what user clicks on when picking it). It is always
   /// defined. When [string] is an empty string ([:"":]), the choice is
   /// automatic (nothing is shown to the player and the scripter automatically
   /// selects the choice.
   String string;
+  /// Script function.
   Function f;
+  /// On which page name it should go to.
   String goto;
 
   /// When set, this choice will be accessible in a sub menu called [submenu].
@@ -39,7 +47,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
   bool get isAutomatic => string.isEmpty;
 
   /**
-   * Returns true if this choice is currently actionable (ie. should be
+   * Returns [:true:] if this choice is currently actionable (ie. should be
    * actively shown to the player). That means that it hasn't been shown,
    * is not automatic, is not waiting for end of page.
    *
@@ -66,6 +74,9 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     return true;
   }
 
+  /// Creates new EgbChoice with the text of the choice [string] and optional
+  /// attributes on which page name it should [goto], [script] function,
+  /// [submenu], if [deferToEndOfPage] and if [deferToChoiceList].
   EgbChoice(String string, {this.goto, Function script, this.submenu: null,
         bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
       super() {
@@ -79,6 +90,7 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     this.deferToChoiceList = deferToChoiceList;
   }
 
+  /// Creates new EgbChoice from a Map [map].
   EgbChoice.fromMap(Map<String, dynamic> map) : super() {
     string = map["string"].trim();
     if (map.containsKey("hash")) {
@@ -104,13 +116,19 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
     "submenu": submenu
   };
 
+  /// Sets script function to [_f] and returns actual object.
+  ///
+  /// Defines what [Function] should do then, for example call [:echo:].
   EgbChoice then(Function _f) {
     f = _f;
     return this;
   }
 
+  /// Compares actual object's [string] with [other.string].
   int compareTo(EgbChoice other) => this.string.compareTo(other.string);
 
+  /// Returns String representation of EgbChoice with its [string] and [goto]
+  /// page.
   String toString() {
     return "Choice: $string [$goto]";
   }
@@ -129,20 +147,27 @@ class EgbChoice extends EgbUserInteraction implements Comparable {
  * behaves like a normal (dynamic) list.
  */
 class EgbChoiceList extends ListBase<EgbChoice> {
+  /// Question for choice list.
   String question;  // TODO: implement
 
+  /// List of [EgbChoice].
   List<EgbChoice> _choices = new List<EgbChoice>();
+  /// Returns length of choice list.
   int get length => _choices.length;
+  /// Changes length of choices to some [value].
   set length(int value) => _choices.length = value;
   operator[](int index) => _choices[index];
   operator[]=(int index, EgbChoice value) => _choices[index] = value;
 
+  /// Creates new EgbChoiceList with no [question] and empty list of choices.
   EgbChoiceList();
 
+  /// Creates new EgbChoiceList with list of [_choices] and [question].
   EgbChoiceList.fromList(this._choices, this.question);
 
   /**
-   * Takes list from Scripter page data and adds the contents to this.
+   * Takes list from Scripter page data and fills/creates choices list with this
+   * retrieved data.
    */
   void addFromScripterList(List list) {
     if (list[0] != null && list[0] is Function) {
@@ -175,6 +200,11 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
   }
 
+  /// Adds new EgbChoice into local choices list. If [element] is instance of
+  /// [EgbChoice], the choice is simply added to the list. If the element is
+  /// instance of String, the new [EgbChoice] is created from given optional
+  /// parameters [script], [goto], [submenu], [deferToEndOfPage] and
+  /// [deferToChoiceList]. In other case the [ArgumentError] is thrown.
   void add(Object element, {Function script, String goto, String submenu,
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
     if (element is EgbChoice) {
@@ -191,6 +221,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
   }
 
+  /// Creates new EgbChoiceList from a given [EgbMessage].
   EgbChoiceList.fromMessage(EgbMessage m) {
     if (m.listContent.length < 3) {
       throw "Message with choices doesn't have enough data: ${m.listContent}.";
@@ -203,7 +234,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
   }
 
   /**
-   * Takes care of converting the current [EgbChoiceList] to a Message.
+   * Takes care of converting the current [EgbChoiceList] to [EgbMessage].
    *
    * By providing [filterOut()], one can force to not show choices that
    * satisfy [:filterOut(choice) == true:].
@@ -250,25 +281,38 @@ class EgbChoiceList extends ListBase<EgbChoice> {
  * it's doing and restart itself.
  */
 class Intent {
+  /// Creates new Intent of [type].
   Intent(type) : this.type = type;
 
+  /// Actual intent type.
   final int type;
+  /// Intent type quit.
   static const int QUIT = 2;
+  /// Intent type load.
   static const int LOAD = 4;
+  /// Intent type restart.
   static const int RESTART = 8;
 }
 
+/// Intent which is type of [Intent.QUIT].
 class QuitIntent extends Intent {
+  /// Creates new QuitIntent of type of [Intent.QUIT].
   QuitIntent() : super(Intent.QUIT);
 }
 
+/// Intent which is type of [Intent.RESTART].
 class RestartIntent extends Intent {
+  /// Creates new RestartIntent of type of [Intent.RESTART].
   RestartIntent() : super(Intent.RESTART);
 }
 
+/// Intent which is type of [Intent.LOAD].
+///
 /// The [LoadIntent] is always providing the exact [uid] of the Savegame that
 /// is supposed to be loaded.
 class LoadIntent extends Intent {
+  /// uid of the Savegame that will be loaded.
   String uid;
+  /// Creates new LoadIntent of type of [Intent.LOAD] and with Savegame [uid].
   LoadIntent(this.uid) : super(Intent.LOAD);
 }
