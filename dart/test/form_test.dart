@@ -252,6 +252,24 @@ void main() {
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
+      expect((formProxy.children.first as PresenterCheckboxInput)
+                .disabled, true);
+      expect((formProxy.children.first as PresenterCheckboxInput)
+          .uiElement.disabled, true);
+    });
+
+    test("creates hidden checkbox", () {
+      checkboxInput.hidden = true;
+      form.children.add(checkboxInput);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
+      CheckboxInputElement checkboxEl =
+          querySelector("#${formProxy.children.first.id} input");
+      expect(checkboxEl.parent.classes.contains("display-none"), true);
+      expect((formProxy.children.first as PresenterCheckboxInput)
+                .hidden, true);
+      expect((formProxy.children.first as PresenterCheckboxInput)
+          .uiElement.hidden, true);
     });
 
     test("sends updated values", () {
