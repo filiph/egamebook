@@ -816,7 +816,7 @@ class HtmlFormSection extends HtmlUiElement {
   Element _headerEl;
   /// The element which opens or closes the FormSection contents when clicked.
   Element _openCloseEl;
-  /// Children container [:div:] used for appending child elements..
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
   /// Creates new HtmlFormSection and its UI representation from form
@@ -910,7 +910,7 @@ class HtmlSubmitButton extends HtmlUiElement {
   PresenterSubmitButton blueprint;
   /// UI representation as a [:button:].
   ButtonElement uiRepresentation;
-  /// Children container [:div:] used for appending child elements..
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
   /// Creates new HtmlSubmitButton and its UI representation from a presenter
@@ -987,7 +987,7 @@ class HtmlCheckboxInput extends HtmlUiElement {
   CheckboxInputElement _checkboxEl;
   /// Label element for displaying information.
   LabelElement _labelEl;
-  /// Children container [:div:] used for appending child elements..
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
   /// Creates new HtmlCheckboxInput and its UI representation from checkbox
@@ -1060,7 +1060,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   RangeBase blueprint;
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
-  /// Children container [:div:] used for appending child elements..
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
   /// Radio buttons container [:div:].
   DivElement _radioButtonsDiv;
@@ -1240,7 +1240,7 @@ class HtmlTextOuput extends HtmlUiElement {
   TextBase blueprint;
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
-  /// Children container [:div:] used for appending child elements..
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
   /// Creates new HtmlTextOuput and its UI representation from text base
@@ -1295,7 +1295,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   DivElement uiRepresentation;
   /// Label element for displaying information.
   LabelElement _labelElement;
-  /// Children [:select:] element used for appending [:option:] elements..
+  /// Children [:select:] element used for appending [:option:] elements.
   SelectElement _childrenSelectElement;
 
   /// Creates new HtmlMultipleChoiceInput and its UI representation from
