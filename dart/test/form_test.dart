@@ -4,7 +4,7 @@ import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-import 'dart:html' show ButtonElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'dart:html' show Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -116,6 +116,7 @@ void main() {
       form.children.add(section);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
+      expect((formProxy.children.single as FormSection).disabled, true);
       expect((formProxy.children.single.children.single as FormElement)
           .disabledOrInsideDisabledParent, true);
     });
@@ -173,11 +174,13 @@ void main() {
 
   group("HtmlPresenter", () {
     Form form;
+    FormSection formSection1, formSection2, formSection3;
     RangeInput input1, input2, input3;
     RangeOutput energyGauge;
     RangeInput weapons, shields;
     CheckboxInput checkboxInput;
     TextOutput textOutput;
+    SubmitButton submitButton;
     int age, money, freetime;
     EgbPresenter presenter;
     EgbStorage storage;
@@ -191,6 +194,14 @@ void main() {
           step: 100);
       input3 = new RangeInput("Free time", (value) => freetime = value, max: 10,
           maxEnabled: 5);
+      submitButton = new SubmitButton("SUBMIT BUTTON", null,
+          helpMessage: "Submit help message");
+      formSection1 = new FormSection("My form section 1")
+          ..children.add(input1);
+      formSection2 = new FormSection("My form section 2")
+          ..children.add(input2);
+      formSection3 = new FormSection("My form section 3")
+          ..children.add(input3);
 
       Function updateEnergyGauges = (_) {
         energyGauge.current = 10 - weapons.current - shields.current;
@@ -242,6 +253,15 @@ void main() {
         expect(checked, true);
       }));
       checkboxEl.click();
+    });
+
+    test("creates submit button", () {
+      form.children.add(submitButton);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
+      ButtonElement buttonEl = querySelector("button.submit-button");
+      expect(buttonEl, isNotNull);
+      expect(buttonEl.text, submitButton.name);
     });
 
     test("creates disabled checkbox", () {
@@ -407,10 +427,14 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = presenter.showForm(formProxy);
 
+      expect((formProxy.children.first as PresenterTextOutput).current,
+          textOutput.html);
+      /*expect((formProxy.children.first as PresenterTextOutput).uiElement.current,
+          textOutput.html);*/
+
       stream.listen((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
-
 
         ParagraphElement textOutputParagraph = querySelector(
             "#${formProxy.children.first.id} p");
@@ -423,13 +447,81 @@ void main() {
       ageButton.click();
     });
 
+    test("creates form section", () {
+      form.children.add(formSection1);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
+      expect(querySelector("#${formProxy.children.first.id}"), isNotNull);
+      expect(querySelector(".form-section"), isNotNull);
+      ButtonElement buttonEl =
+          querySelector("#${formProxy.children.first.id} button");
+      expect((formProxy.children.first as PresenterFormSection).uiElement.current,
+          formSection1.name);
+      expect(buttonEl.text.contains(
+          (formProxy.children.first as PresenterFormSection).uiElement.current),
+          isTrue); // There is the ▽ character.
+    });
+
+    test("creates form section and tests opening/closing", () {
+      ButtonElement buttonElFirst, buttonElSecond, buttonElThird;
+      form.children.add(formSection1);
+      form.children.add(formSection2);
+      form.children.add(formSection3);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
+
+      expect(formProxy.children.length, form.children.length);
+
+      buttonElFirst =
+          querySelector("#${formProxy.children[0].id} button");
+      buttonElSecond =
+          querySelector("#${formProxy.children[1].id} button");
+      buttonElThird =
+          querySelector("#${formProxy.children[2].id} button");
+      expect(buttonElFirst, isNotNull);
+      expect(buttonElSecond, isNotNull);
+      expect(buttonElThird, isNotNull);
+
+      buttonElFirst.click();
+      var arrow = buttonElFirst.querySelector(".form-section-open-close");
+      expect(arrow.text, "◁");
+      arrow = buttonElSecond.querySelector(".form-section-open-close");
+      expect(arrow.text, "▽");
+      arrow = buttonElThird.querySelector(".form-section-open-close");
+      expect(arrow.text, "▽");
+
+      buttonElSecond.click();
+      arrow = buttonElFirst.querySelector(".form-section-open-close");
+      expect(arrow.text, "▽");
+      arrow = buttonElSecond.querySelector(".form-section-open-close");
+      expect(arrow.text, "◁");
+      arrow = buttonElThird.querySelector(".form-section-open-close");
+      expect(arrow.text, "▽");
+    });
+
     test("creates MultipleChoice", () {
       MultipleChoiceInput moveChoice = new MultipleChoiceInput("Action", null);
       Option a = new Option("Zvolit A", null, selected: true);
       Option b = new Option("Zvolit B", null);
       moveChoice.children.addAll([a, b]);
+      form.children.add(moveChoice);
 
-      form.append(moveChoice);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
+
+      DivElement divEl = querySelector("#${formProxy.children[0].id}");
+      expect(divEl, isNotNull);
+
+      OptionElement optionEl1 = divEl.querySelectorAll("option")[0];
+      OptionElement optionEl2 = divEl.querySelectorAll("option")[1];
+      SelectElement selectEl = divEl.querySelector("select");
+
+
+      expect(querySelector(".multiple-choice-input"), isNotNull);
+      expect(optionEl1.selected, isTrue);
+      selectEl.value = optionEl2.value;
+      selectEl.dispatchEvent(new Event("change"));
+      expect(optionEl2.selected, isTrue);
     });
   });
 }
