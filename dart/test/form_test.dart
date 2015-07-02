@@ -185,6 +185,7 @@ void main() {
     EgbPresenter presenter;
     EgbStorage storage;
     EgbScripterProxy scripterProxyStub;
+    ButtonElement startButton, restartButton;
 
     setUp(() {
       form = new Form();
@@ -202,6 +203,9 @@ void main() {
           ..children.add(input2);
       formSection3 = new FormSection("My form section 3")
           ..children.add(input3);
+
+      startButton = querySelector("#start-button");
+      restartButton = querySelector("#book-restart");
 
       Function updateEnergyGauges = (_) {
         energyGauge.current = 10 - weapons.current - shields.current;
@@ -227,6 +231,35 @@ void main() {
       scripterProxyStub.quit();
       presenter.close();
       //      querySelector("#book-wrapper").children.clear();
+    });
+
+    test("tests start button", () async {
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
+
+      expect(querySelector("div#book-title").style.display == "none", isFalse);
+      expect(querySelector("div#big-bottom-button").style.display == "none",
+        isFalse);
+
+      startButton.click();
+
+      await new Future.delayed(new Duration(milliseconds: 200), (){
+        expect(querySelector("div#book-title").style.display == "none", isTrue);
+        expect(querySelector("div#big-bottom-button").style.display == "none",
+            isTrue);
+      });
+    });
+
+    test("tests restart button", () async {
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
+
+      restartButton.click();
+
+      await new Future.delayed(new Duration(milliseconds: 200), (){
+        expect(presenter.getTextHistory() == "", isTrue);
+        expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
+      });
     });
 
     test("creates DOM elements", () {
@@ -515,7 +548,6 @@ void main() {
       OptionElement optionEl1 = divEl.querySelectorAll("option")[0];
       OptionElement optionEl2 = divEl.querySelectorAll("option")[1];
       SelectElement selectEl = divEl.querySelector("select");
-
 
       expect(querySelector(".multiple-choice-input"), isNotNull);
       expect(optionEl1.selected, isTrue);
