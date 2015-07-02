@@ -1,10 +1,11 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/shared/form.dart';
+import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-import 'dart:html' show Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'dart:html' show SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -554,6 +555,44 @@ void main() {
       selectEl.value = optionEl2.value;
       selectEl.dispatchEvent(new Event("change"));
       expect(optionEl2.selected, isTrue);
+    });
+
+    test("Show simple dummy choices", () {
+      EgbChoice choice1 = new EgbChoice("Yes");
+      EgbChoice choice2 = new EgbChoice("No");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1, choice2], "Is it cool?");
+      presenter.showChoices(choices).then(expectAsync((_) {
+        expect(querySelector(".choices-div"), isNotNull);
+        expect(querySelector(".choices-div ol").children[0]
+        .text.contains(choice1.string), isTrue);
+      }));
+    });
+
+    test("Show simple choices with submenu", () {
+      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
+      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1, choice2], "Is it cool?");
+      presenter.showChoices(choices).then(expectAsync((_) {
+        expect(querySelector(".choices-submenus"), isNotNull);
+        expect(querySelector(".choices-submenu-buttons").children.length,
+            2); //2 submenus
+        expect(querySelector(".choices-submenu-buttons").children[1].text,
+            choice2.submenu);
+      }));
+    });
+
+    test("Show simple choice with infochips", () {
+      EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1], "Is it cool?");
+      presenter.showChoices(choices).then(expectAsync((_) {
+        SpanElement chipsSpan = querySelector(".choice-infochips");
+        expect(chipsSpan, isNotNull);
+        expect(chipsSpan.children.length, 2); //2 infochips
+        expect(chipsSpan.children[0].text, "infochip1");
+      }));
     });
   });
 }
