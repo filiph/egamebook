@@ -1,11 +1,13 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
+import 'package:egamebook/src/shared/points_award.dart';
+import 'package:egamebook/src/shared/stat.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-import 'dart:html' show SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'dart:html' show HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -163,6 +165,46 @@ void main() {
       expect((formProxy.children.single.parent as FormElement)
           .allFormElementsBelowThisOne.length,
           form.children.length + multipleChoiceInput.children.length);
+    });
+
+    test("Choice attributes", () {
+      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu",
+          goto: "Go to some place");
+      expect(choice.isAutomatic, isFalse);
+      expect(choice.isActionable(), isTrue);
+    });
+
+    test("Choice toMap and fromMap", () {
+      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu",
+          goto: "Go to some place");
+      Map choiceMap = choice.toMapForPresenter();
+      EgbChoice choiceFromMap = new EgbChoice.fromMap(choiceMap);
+      //expect(choice.goto, choiceFromMap.goto);
+      expect(choice.string, choiceFromMap.string);
+      expect(choice.submenu, choiceFromMap.submenu);
+      expect(choice.toString(), "Choice: ${choice.string} [${choice.goto}]");
+    });
+
+    test("Choice list", () {
+      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
+      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1, choice2], "Is it cool?");
+      expect(choices.length, 2);
+      expect(choices[0], choice1);
+
+      EgbChoice choice3 = new EgbChoice("Maybe", submenu: "Maybe submenu");
+      choices.add(choice3);
+      expect(choices.length, 3);
+      expect(choices[2], choice3);
+
+      String choice4String = "No comment";
+      String choice4Submenu = "No comment submenu";
+      choices.add(choice4String, submenu: choice4Submenu);
+      expect(choices[3].string, choice4String);
+      expect(choices[3].submenu, choice4Submenu);
+
+      expect(() => choices.add(1), throwsA(new isInstanceOf<ArgumentError>()));
     });
 
     test("FormElements are instances (implement) of UpdatableByMap", () {
@@ -557,17 +599,23 @@ void main() {
       expect(optionEl2.selected, isTrue);
     });
 
-    test("Show simple dummy choices", () {
+    /*test("Show simple dummy choices", () async {
       EgbChoice choice1 = new EgbChoice("Yes");
       EgbChoice choice2 = new EgbChoice("No");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
+      await presenter.showChoices(choices).then(expectAsync((_) async {
         expect(querySelector(".choices-div"), isNotNull);
         expect(querySelector(".choices-div ol").children[0]
-        .text.contains(choice1.string), isTrue);
+            .text.contains(choice1.string), isTrue);
+        ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
+        buttonEl.click();
+        expect(buttonEl.classes.contains("chosen"), isTrue);
+        expect(querySelector(".choices-div").classes.contains("chosen"),
+            isTrue);
+        expect(buttonEl.disabled, isTrue);
       }));
-    });
+    });*/
 
     test("Show simple choices with submenu", () {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
@@ -580,6 +628,19 @@ void main() {
             2); //2 submenus
         expect(querySelector(".choices-submenu-buttons").children[1].text,
             choice2.submenu);
+        expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
+            .length, 2);
+
+        ButtonElement buttonEl =
+            querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
+        bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
+          .classes.contains("display-none");
+        bool isDepresed = buttonEl.classes.contains("depressed");
+        buttonEl.click();
+
+        expect(querySelectorAll(".choices-submenus .choices-ol")[1]
+            .classes.contains("display-none"), !isNotDisplayed); // class toggled
+        expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
       }));
     });
 
@@ -592,6 +653,117 @@ void main() {
         expect(chipsSpan, isNotNull);
         expect(chipsSpan.children.length, 2); //2 infochips
         expect(chipsSpan.children[0].text, "infochip1");
+      }));
+    });
+
+    test("Show text", () {
+      String text = "This is some funny text";
+      presenter.showText(text).then(expectAsync((_) {
+        expect(querySelectorAll("p").any((el) => el.text == text), isTrue);
+      }));
+    });
+
+    test("Award points with zero addition", () {
+      SpanElement pointsSpan = querySelector("span#points-value");
+      PointsAward pointsAward = new PointsAward(0, 10, "for bravery");
+      expect(pointsSpan.text.contains("${pointsAward.result}"), isFalse);
+
+      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+        expect(pointsSpan.text.contains("${pointsAward.result}"), isTrue);
+      }));
+    });
+
+    test("Award points with addition", () {
+      PointsAward pointsAward = new PointsAward(10, 20, "for bravery");
+
+      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+        ParagraphElement pointsParagraph = querySelectorAll("p.toast").last;
+        expect(pointsParagraph, isNotNull);
+        expect(pointsParagraph.text, pointsAward.toString());
+      }));
+    });
+
+    test("Award points with addition and no justification message", () {
+      PointsAward pointsAward = new PointsAward(1, 21);
+
+      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+        ParagraphElement pointsParagraph = querySelectorAll("p.toast").last;
+        expect(pointsParagraph.text, pointsAward.toString());
+        expect(pointsParagraph.text, "Score +${pointsAward.addition}.");
+      }));
+    });
+
+    test("Set stats", () {
+      UIStat stat1 = new UIStat(
+          "energy", "Description of energy stat", "#ff00ff", 1, true, false, "10");
+      UIStat stat2 = new UIStat(
+          "bravery", "Description of bravery stat", "#ffff00", 2, false, false, "50");
+      List uiStats = [stat1, stat2];
+
+      presenter.setStats(uiStats).then(expectAsync((_) {
+        DivElement statsDiv = querySelector("nav div#stats");
+        List statsButtons = statsDiv.querySelectorAll("button");
+        expect(statsButtons.length, uiStats.length);
+        expect(statsButtons[0].text, uiStats[0].string);
+        expect(statsButtons[1].classes.contains("display-none"), isTrue);
+        expect(statsButtons[0].querySelector("span"), isNotNull);
+      }));
+    });
+
+    test("Show dialog with default button", () {
+      Dialog dialog = new Dialog("Dialogs title", "Some text");
+
+      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
+        DivElement dialogDiv = querySelectorAll(".dialog").last;
+        DivElement overlayDiv = querySelectorAll(".overlay").last;
+        expect(dialogDiv, isNotNull);
+        expect(overlayDiv, isNotNull);
+        expect(dialogDiv.childNodes.indexOf(overlayDiv), isNonNegative);
+        HeadingElement titleHeading = dialogDiv.querySelector("h3");
+        expect(titleHeading, isNotNull);
+        expect(titleHeading.text, dialog.title);
+        expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
+        ButtonElement button = dialogDiv.querySelector("button");
+        expect(button, isNotNull);
+        expect(button.text, "Close");
+      }));
+    });
+
+    test("Show dialog with html and custom button with behaviour", () {
+      ClickBehaviour behaviour = () {
+        print("Hello from Hello dialog");
+        return false;
+      };
+      DialogButton dialogButton = new DialogButton("Say Hello", behaviour);
+      Dialog dialog = new Dialog("Hello dialog",
+          "<p class='extra-text'>Some hello text</p>", [dialogButton]);
+
+      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
+        DivElement dialogDiv = querySelectorAll(".dialog").last;
+        expect(dialogDiv, isNotNull);
+        expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
+            "Some hello text");
+        ButtonElement button = dialogDiv.querySelector("button");
+        expect(button.text, dialogButton.label);
+        button.click();
+      }));
+    });
+
+    test("Show error dialog", () {
+      String title = "Error";
+      String text = "You made a mistake!";
+
+      (presenter as HtmlPresenter).reportError(title, text)
+        .then(expectAsync((_) {
+          DivElement dialogDiv = querySelectorAll(".dialog").last;
+          expect(dialogDiv, isNotNull);
+          HeadingElement titleHeading = dialogDiv.querySelector("h3");
+          expect(titleHeading, isNotNull);
+          expect(titleHeading.text, title);
+          expect(dialogDiv.querySelector(".dialog-content > div > p").text, text);
+          ButtonElement button = dialogDiv.querySelector("button");
+          expect(button, isNotNull);
+          expect(button.text, "Close");
       }));
     });
   });
