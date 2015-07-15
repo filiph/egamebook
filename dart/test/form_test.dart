@@ -7,7 +7,8 @@ import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-import 'dart:html' show HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'package:egamebook/scripter.dart';
+import 'dart:html' show window, HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -765,6 +766,85 @@ void main() {
           expect(button, isNotNull);
           expect(button.text, "Close");
       }));
+    });
+  });
+
+  group("HtmlPresenter Savegame", () {
+    EgbPresenter presenter;
+    EgbStorage storage;
+    EgbScripterProxy scripterProxyStub;
+    EgbSavegame savegame;
+    var vars;
+    var pageMapState;
+
+    setUp(() {
+      vars = new Map<String, Object>();
+      vars["points"] = new PointsCounter()
+        ..add(20, "for bravery");
+      vars["isEngineer"] = false;
+      vars["isStrong"] = false;
+
+      pageMapState = new Map<String, dynamic>();
+      pageMapState["Start"] = {"visitCount": 0};
+      pageMapState["Start: Funeral"] = {"visitCount": 10};
+
+      savegame = new EgbSavegame("Start", vars, pageMapState);
+
+      presenter = new HtmlPresenter();
+      storage = new LocalStorage();
+      scripterProxyStub = new ScripterProxyStub();
+
+      return runDirectly(scripterProxyStub, presenter, storage);
+    });
+
+    test("Save", () {
+      //clear all before saving
+      window.localStorage.clear();
+
+      presenter.showText("Some saving text").then(expectAsync((_) {
+        expect(presenter.getTextHistory().isEmpty, isFalse); //contains "Some testing text"
+        presenter.save(savegame);
+        expect(presenter.getTextHistory().isEmpty, isTrue);
+        String playerUid = presenter.playerProfile.playerUid;
+        String currentEgamebookUid = presenter.playerProfile.currentEgamebookUid;
+
+        // savegame is in localstorage
+        String storedSavegame = "$playerUid::$currentEgamebookUid::${savegame.uid}";
+        expect(window.localStorage[storedSavegame],
+            isNotNull);
+        print(window.localStorage[storedSavegame]);
+        expect(JSON.decode(window.localStorage[storedSavegame])["vars"],
+            isNotNull);
+        expect(JSON.decode(window.localStorage[storedSavegame])["vars"]["points"],
+            isNotNull);
+
+        // chronology is in localstorage
+        String storedChronology ="$playerUid::$currentEgamebookUid::_storyChronology";
+        expect(window.localStorage[storedChronology],
+            isNotNull);
+        expect(JSON.decode(window.localStorage[storedChronology]),
+            presenter.playerProfile.storyChronology);
+      }));
+    });
+  });
+
+  group("Local storage", () {
+    EgbPresenter presenter;
+    EgbStorage storage;
+    EgbScripterProxy scripterProxyStub;
+
+    setUp(() {
+      presenter = new HtmlPresenter();
+      storage = new LocalStorage();
+      scripterProxyStub = new ScripterProxyStub();
+
+      return runDirectly(scripterProxyStub, presenter, storage);
+    });
+
+    test("Save", () {
+      //clear all before saving
+      window.localStorage.clear();
+      //TODO
     });
   });
 }
