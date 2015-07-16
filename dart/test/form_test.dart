@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/runner.dart';
+import 'package:egamebook/src/persistence/player_profile.dart';
 
 
 class ScripterProxyStub extends EgbScripterProxy {
@@ -797,10 +798,12 @@ void main() {
       return runDirectly(scripterProxyStub, presenter, storage);
     });
 
-    test("Save", () {
-      //clear all before saving
+    tearDown(() {
+      //clear all
       window.localStorage.clear();
+    });
 
+    test("Save", () {
       presenter.showText("Some saving text").then(expectAsync((_) {
         expect(presenter.getTextHistory().isEmpty, isFalse); //contains "Some testing text"
         presenter.save(savegame);
@@ -832,6 +835,8 @@ void main() {
     EgbPresenter presenter;
     EgbStorage storage;
     EgbScripterProxy scripterProxyStub;
+    String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
+    Map values = {"uid":"1234567","currentPageName":"Start"};
 
     setUp(() {
       presenter = new HtmlPresenter();
@@ -841,10 +846,44 @@ void main() {
       return runDirectly(scripterProxyStub, presenter, storage);
     });
 
-    test("Save", () {
-      //clear all before saving
+    tearDown(() {
+      //clear all
       window.localStorage.clear();
-      //TODO
+    });
+
+    test("Save", () {
+      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        expect(value, isTrue);
+
+        // We use HTML local storage implementation to retrieve value
+        String valuesFromStorage = window.localStorage[STORAGE_NAME];
+        expect(valuesFromStorage, isNotNull);
+        expect(JSON.decode(valuesFromStorage), values);
+      }));
+    });
+
+    test("Save and load", () {
+      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        storage.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
+          expect(valueFromStorage, isNotNull);
+          expect(JSON.decode(valueFromStorage), values);
+        }));
+      }));
+    });
+
+    test("Delete", () {
+      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        storage.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+          expect(boolValue, isTrue);
+          expect(window.localStorage[STORAGE_NAME], isNull);
+        }));
+      }));
+    });
+
+    test("Get default player profile", () {
+      EgbPlayerProfile profile = storage.getDefaultPlayerProfile();
+      expect(profile, isNotNull);
+      expect(profile.playerUid, EgbStorage.DEFAULT_PLAYER_UID);
     });
   });
 }
