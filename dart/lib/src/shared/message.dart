@@ -12,7 +12,7 @@ class EgbMessage {
   String strContent;
   int intContent;
   Map<String, Object> mapContent;
-  
+
   // Messages from Scripter to Runner.
   static const int SEND_BOOK_UID = 10;
   static const int NO_RESULT = 20;
@@ -64,24 +64,24 @@ class EgbMessage {
       default: return "Unknown type=$type";
     }
   }
-  
+
   String toString() => "EgbMessage $typeString${isAsync ? ' (async)' : ''}";
-  
+
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
   bool get isAsync => (type == SAVE_GAME) || (type == SAVE_PLAYER_CHRONOLOGY) ||
-      (type == SET_STATS) || (type == UPDATE_STATS) || 
+      (type == SET_STATS) || (type == UPDATE_STATS) ||
       (type == SCRIPTER_ERROR) || (type == SCRIPTER_LOG);
-  
+
   /*
    * The correct handshake looks like this:
-   * 
+   *
    * Runner                 Scripter
    * GET_BOOK_UID
    *                        SEND_BOOK_UID
    * LOAD_GAME/START (incl. player chronology)
    *                        NO_RESULT/TEXT_RESULT/SHOW_CHOICES
-   * 
+   *
    */
 
   EgbMessage(this.type, {bool needsAnswer: true});
@@ -95,75 +95,75 @@ class EgbMessage {
   }
 
   EgbMessage.start() : type = START;
-  
+
   EgbMessage.bookUid(this.strContent) : type = SEND_BOOK_UID;
-  
+
   EgbMessage.requestBookUid() : type = REQUEST_BOOK_UID;
 
   EgbMessage.endOfBook() : type = END_OF_BOOK;
 
-  // EgbMessage containing ChoiceList is created in EgbChoiceList.toMessage(). 
-  
-  EgbMessage.choiceSelected(int hash) 
+  // EgbMessage containing ChoiceList is created in EgbChoiceList.toMessage().
+
+  EgbMessage.choiceSelected(int hash)
       : type = CHOICE_SELECTED {
     intContent = hash;
   }
-  
-  EgbMessage.statUpdates(StatUpdateCollection updates) 
+
+  EgbMessage.statUpdates(StatUpdateCollection updates)
       : type = UPDATE_STATS {
     mapContent = updates.toMap();
   }
-  
-  EgbMessage.statsInit(List<Map<String, Object>> list) 
+
+  EgbMessage.statsInit(List<Map<String, Object>> list)
       : type = SET_STATS {
     listContent = list;
   }
 
   EgbMessage.noResult() : type = NO_RESULT;
-  
+
   EgbMessage.saveGame(String json) : type = SAVE_GAME {
     strContent = json;
   }
-  
+
   EgbMessage.loadGame(String json) : type = LOAD_GAME {
     strContent = json;
   }
-  
+
   // PointsAward messages are made and deconstructed in points_award.dart.
-  
+
   // Stats messages are made and deconstructed in stat.dart.
-  
-  EgbMessage.savePlayerChronology(Set<String> playerChronology) 
+
+  EgbMessage.savePlayerChronology(Set<String> playerChronology)
       : type = SAVE_PLAYER_CHRONOLOGY {
     listContent = playerChronology.toList();
   }
-  
+
   EgbMessage.showForm(Form form) : type = SHOW_FORM {
     mapContent = form.toMap();
   }
-  
-  EgbMessage.updateForm(FormConfiguration formConfiguration) 
+
+  EgbMessage.updateForm(FormConfiguration formConfiguration)
       : type = UPDATE_FORM {
     mapContent = formConfiguration.toMap();
   }
-  
+
   EgbMessage.formInput(CurrentState state) : type = FORM_INPUT {
     mapContent = state.toMap();
   }
-  
+
   EgbMessage.scripterError(String message) : type = SCRIPTER_ERROR {
     strContent = message;
   }
-  
+
   EgbMessage.scripterLog(String message) : type = SCRIPTER_LOG {
     strContent = message;
   }
-  
+
   /**
     Ctor that creates the Message object from a JSON string.
     */
   EgbMessage.fromJson(String json) : this.fromMap(JSON.decode(json));
-  
+
   EgbMessage.fromMap(Map<String, Object> map) : type = map["type"] {
     if (map.containsKey("strContent")) {
       strContent = map["strContent"];
@@ -185,7 +185,7 @@ class EgbMessage {
   String toJson() {
     return JSON.encode(toMap());
   }
-  
+
   Map<String, Object> toMap() {
     Map<String, Object> map = new Map<String, Object>();
 
@@ -203,7 +203,7 @@ class EgbMessage {
     if (mapContent != null) {
       map["mapContent"] = mapContent;
     }
-    
+
     return map;
   }
 }

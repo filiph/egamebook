@@ -76,7 +76,7 @@ library egb_form;
  *     form.onInputListener = (_) {
  *       energyAvailableEl.value = energyAvailable - energyToManeuvresEl.value;
  *       // ...
- *       form.update();  // Sends the new setup to interface.
+ *       form.update();  // Sends the new setup to presenter.
  *     };
  *
  *     showForm(form);
@@ -86,17 +86,17 @@ library egb_form;
  *
  * All form elements have a base class (e.g. [RangeInputBase]) which
  * has the methods and contructors shared by both [EgbScripter] and
- * [EgbInterface].
+ * [EgbPresenter].
  *
  * On the [EgbScripter] side, we have [RangeInput], for example,
  * which is the class used by the author. These classes can have closures
  * attached to them. These elements also automatically receive unique
  * [FormElement.id] when they're attached to a [Form].
  *
- * On the [EgbInterface] side, we have [InterfaceRangeInput], a "blueprint"
+ * On the [EgbPresenter] side, we have [PresenterRangeInput], a "blueprint"
  * that can't have closures (no way to transport closure from [EgbScripter]
- * to [EgbInterface]) and whose [FormElement.id] is copied from [EgbScripter].
- * From these blueprints, the interface creates and updates [UiElement].
+ * to [EgbPresenter]) and whose [FormElement.id] is copied from [EgbScripter].
+ * From these blueprints, the presenter creates and updates [UiElement].
  */
 
 import "package:html5lib/dom.dart" as html5lib;
@@ -339,7 +339,7 @@ class FormConfiguration {
 
   Map<String, Object> getById(String id) => _valuesMap[id];
 
-  Map<String, Map<String, Object>> toMap() => _valuesMap;
+  Map<String, Map<String, Object>> toMap() => new Map.from(_valuesMap);
 }
 
 /**
@@ -373,7 +373,7 @@ class CurrentState {
 
   Object getById(String id) => _valuesMap[id];
 
-  Map<String, Object> toMap() => _valuesMap;
+  Map<String, Object> toMap() => new Map.from(_valuesMap);
 
   String toString() => "<CurrentState submitted=$submitted>";
 }
@@ -409,7 +409,7 @@ typedef String StringifyFunction(Object current);
 /**
  * This interface is for UI blueprints that need to show a value as a string.
  * That value is created via [StringRepresentationCreator.stringifyFunction]
- * in [EgbInterface] each time a value is updated.
+ * in [EgbPresenter] each time a value is updated.
  */
 abstract class StringRepresentationHolder {
   String currentStringRepresentation;
@@ -523,7 +523,7 @@ class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
 }
 
 /**
- * Base class of [RangeInput] and [InterfaceRangeInput].
+ * Base class of [RangeInput] and [PresenterRangeInput].
  */
 class RangeBase extends FormElement {
   String get name => attributes["name"];
@@ -640,7 +640,7 @@ class RangeInput extends RangeInputBase with _NewValueCallback<int>,
 }
 
 /**
- * Base class of [RangeOutput] and [InterfaceRangeOutput].
+ * Base class of [RangeOutput] and [PresenterRangeOutput].
  */
 class RangeOutputBase extends RangeBase implements Output<int> {
   static const String elementClass = "RangeOutput";

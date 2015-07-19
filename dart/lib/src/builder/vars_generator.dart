@@ -49,7 +49,8 @@ class VarsGenerator {
 
     for (TypedVariable newVar in visitor.vars) {
       if (_vars.map((variable) => variable.name).contains(newVar.name)) {
-        throw new ArgumentError("Variable $newVar already defined.");
+        throw new ArgumentError("Variable $newVar already defined in previous "
+            "code blocks.");
       }
     }
     _vars.addAll(visitor.vars);
@@ -104,6 +105,17 @@ class VarsGenerator {
     out.writeln("  }");
     return out.toString();
   }
+
+  /// Generates the code to be added to initBlock in order to initialize all
+  /// the variables that are otherwise only initialized when Scripter is
+  /// constructed.
+  String generateInitBlockCode() {
+    final StringBuffer out = new StringBuffer();
+    for (TypedVariable variable in _vars) {
+      out.write("    ${variable.name} = ${variable.initializer};\n");
+    }
+    return out.toString();
+  }
 }
 
 /// A simple struct holding a variable's [name], and [type] (which is
@@ -111,7 +123,8 @@ class VarsGenerator {
 class TypedVariable {
   final String type;
   final String name;
-  TypedVariable(this.name, this.type);
+  final String initializer;
+  TypedVariable(this.name, this.type, this.initializer);
   toString() => "$name ($type)";
 }
 
@@ -124,9 +137,12 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
     if (node is TopLevelVariableDeclaration) {
       final VariableDeclarationList varList = node.variables;
       varList.variables.forEach((VariableDeclaration variable) {
+        String initializer = variable.initializer != null ?
+            variable.initializer.toSource() : null;
         // TODO: varList.keyword == final : do not add or raise error?
         vars.add(new TypedVariable(variable.name.name,
-            varList.type != null ? varList.type.name.name : null));
+            varList.type != null ? varList.type.name.name : null,
+            initializer));
       });
     }
     return super.visitNode(node);

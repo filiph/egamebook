@@ -6,30 +6,33 @@ part 'storyline_pronoun.dart';
 part 'storyline_entity.dart';
 
 /**
- * The global instance of storyline which can be used for reporting. The 
- * contents are output to Scripter's [:textBuffer:] either manualy or 
+ * The global instance of storyline which can be used for reporting. The
+ * contents are output to Scripter's [:textBuffer:] either manualy or
  * automatically by LoopedEvent (before each player interaction).
+ * TODO: remove and use by reference
  */
 final Storyline storyline = new Storyline();
 
 /**
  * A single report about an event, atomic part of a story. It can be "John
  * picks up a shovel", "John approaches Jack" or "Jack is dead".
- * 
+ *
  * These events are stringed together by [Storyline] to create a coherent,
  * naturally sounding narrative.
  */
 class Report {
-  Report(this.string, {this.subject, this.object, this.owner, this.objectOwner, 
-      this.but: false, this.positive: false, this.negative: false, 
-      this.endSentence: false, this.startSentence: false, 
-      this.wholeSentence: false, this.time});
-  
+  Report(this.string, {this.subject, this.object, this.owner, this.objectOwner,
+      this.but: false, this.positive: false, this.negative: false,
+      this.endSentence: false, this.startSentence: false,
+      this.wholeSentence: false, this.actionThread,
+      this.isSupportiveActionInThread: false, this.time});
+
   Report.empty() : string = "", subject = null, object = null, owner = null,
       objectOwner = null,
       but = false, positive = false, negative = false, endSentence = false,
-      startSentence = false, wholeSentence = false, time = null;
-  
+      startSentence = false, wholeSentence = false, actionThread = null,
+      isSupportiveActionInThread = false, time = null;
+
   final String string;
   final Entity subject;
   final Entity object;
@@ -41,12 +44,26 @@ class Report {
   final bool endSentence;
   final bool startSentence;
   final bool wholeSentence;
+
+  /// A unique identifier of a thread of events that belong together. This is
+  /// used with [isSupportiveActionInThread] but can also work as a hint for
+  /// the document planner.
+  final int actionThread;
+
+  /// This report will not be shown when report with same [actionThread] is
+  /// right next to this one.
+  ///
+  /// This is useful when you have a report such as "You start aiming at the
+  /// enemy" and another one that says "You shoot at the enemy". When there is
+  /// additional action between those two reports, it makes sense to keep both.
+  /// But when they're reported side by side, it doesn't read well.
+  final bool isSupportiveActionInThread;
   final int time;
-  
+
   operator [](key) {
     // TODO: get rid of Report field accessed via inefficient [] operator
     switch (key) {
-      case 'string': 
+      case 'string':
         return string;
       case 'subject':
         return subject;
@@ -72,7 +89,7 @@ class Report {
         throw new ArgumentError("Invalid key $key.");
     }
   }
-  
+
   // TODO: startOfAction - if there is no report before startOfAction and
   // endOfAction, don't report startOfAction.
   // Prevents: "You set up the laser. The laser is now set up to fire at target."
@@ -110,49 +127,51 @@ class Storyline {
   static const String VERB_DO = "<does>";
   static const String VERB_BE = "<is>";
   static const String VERB_HAVE = "<has>";
-  
-  static final RegExp QUOTE_INTERPUNCTION_DUPLICATION = 
+
+  static final RegExp QUOTE_INTERPUNCTION_DUPLICATION =
       new RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
-  
+
   /**
    * Add another event to the story.
-   * 
+   *
    * When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
    * letter, [wholeSentence] will automatically be [:true:] for convenience.
    */
-  void add(String str, {Entity subject, Entity object, Entity owner, 
+  void add(String str, {Entity subject, Entity object, Entity owner,
     Entity objectOwner,
-    bool but: false, bool positive: false, bool negative: false, 
-    bool endSentence: false, bool startSentence: false, 
-    bool wholeSentence: false, int time}) {
-    
+    bool but: false, bool positive: false, bool negative: false,
+    bool endSentence: false, bool startSentence: false,
+    bool wholeSentence: false, int actionThread,
+    bool isSupportiveActionInThread: false, int time}) {
+
     if (str == null || str == "") {
-      return;  // Ignore empty records. 
+      return;  // Ignore empty records.
     }
-    
+
     if (time != null) {
       this.time = time;
     }
-    
+
     if ((str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
         str.startsWith(new RegExp("[A-Z]"))) {
       wholeSentence = true;
     }
-    
+
     reports.add(new Report(str, subject: subject, object: object, owner: owner,
         objectOwner: objectOwner,
-        but: but, positive: positive, negative: negative, 
-        endSentence: endSentence, startSentence: startSentence, 
-        wholeSentence: wholeSentence, time: time));
+        but: but, positive: positive, negative: negative,
+        endSentence: endSentence, startSentence: startSentence,
+        wholeSentence: wholeSentence, actionThread: actionThread,
+        isSupportiveActionInThread: isSupportiveActionInThread, time: time));
   }
-  
+
   /**
    * Add a sentence (or more) enumerating several things ([articles]) at once.
    * Example: "You can see a handkerchief, a brush and a mirror here."
    * You can provide "<also>" for a more human-like enumeration.
    */
-  void addEnumeration(String start, Iterable<Entity> articles, String end, 
-                      {Entity subject, Entity object, Entity owner, 
+  void addEnumeration(String start, Iterable<Entity> articles, String end,
+                      {Entity subject, Entity object, Entity owner,
                        int maxPerSentence: 3, String conjuction: "and"}) {
     assert(start != null);
     assert(articles != null);
@@ -178,8 +197,8 @@ class Storyline {
       // Adds 'the', 'a', or nothing. TODO: instead of using the
       // addParticleToFirstOccurence method (designed for longer texts), use
       // something smaller.
-      String articleWithParticle = addParticleToFirstOccurence(article.name, 
-          article.name, article);
+      String articleWithParticle = addParticleToFirstOccurence(article.name,
+          article.name, article, null);
       buf.write(articleWithParticle);
       i++;
       if (i > maxPerSentence - 1 || article == articles.last) {
@@ -188,7 +207,7 @@ class Storyline {
           buf.write(end.replaceAll("<also>", "also"));
         }
         buf.write(".");
-        add(buf.toString(), subject: subject, object: object, owner: owner, 
+        add(buf.toString(), subject: subject, object: object, owner: owner,
             wholeSentence: true);
         i = 0;
         buf.clear();
@@ -197,7 +216,7 @@ class Storyline {
       }
     }
   }
-  
+
   void addParagraph() => add("\n\n", wholeSentence: true);
 
   static String capitalize(String str) {
@@ -206,24 +225,24 @@ class Storyline {
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1)
       return firstLetter;
-    else 
+    else
       return "$firstLetter${str.substring(1)}";
   }
-  
+
   String string(int i) {
     if (i < 0 || i >= reports.length)
       return null;
     else
       return reports[i].string;
   }
-  
+
   Entity subject(int i) {
     if (i < 0 || i >= reports.length)
       return null;
     else
       return reports[i].subject;
   }
-  
+
   Entity object(int i) {
     if (i < 0 || i >= reports.length)
       return null;
@@ -312,50 +331,50 @@ class Storyline {
     }
     return false;
   }
-  
+
   bool _sameTeam(Entity a, Entity b) {
     if (a == null || b == null) return false;
     return a.team == b.team;
   }
 
-  /// makes sure the sentence flows well with the previous sentence(s), then 
+  /// makes sure the sentence flows well with the previous sentence(s), then
   /// calls getString to do in-sentence substitution
-  String substitute(int i, String str, {bool useSubjectPronoun: false, 
+  String substitute(int i, String str, {bool useSubjectPronoun: false,
       bool useObjectPronoun: false}) {
     String result = str.replaceAll(ACTION, string(i));
     if ((useObjectPronoun || same('object', i, i-1)) &&
-        !(object(i).pronoun == Pronoun.IT && 
-          subject(i).pronoun == Pronoun.IT)) { 
+        !(object(i).pronoun == Pronoun.IT &&
+          subject(i).pronoun == Pronoun.IT)) {
       // if doing something to someone in succession, use pronoun
-      // but not if the pronoun is "it" for both subject and object, 
+      // but not if the pronoun is "it" for both subject and object,
       // that makes sentences like "it makes it"
-      
+
       // Never show "the guard's it".
-      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", 
+      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT",
         object(i).pronoun.accusative);
-      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", 
+      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT",
         object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
     if (useSubjectPronoun || same('subject', i, i-1)) {
       // Never show "the guard's it".
-      result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", 
+      result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT",
           subject(i).pronoun.nominative);
-      result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT", 
+      result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT",
           subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
       result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
     }
-    // if someone who was object last sentence is now subject 
+    // if someone who was object last sentence is now subject
     // (and it's not misleading), use pronoun
     if (object(i-1) != null && subject(i) != null && subject(i-1) != null
         && object(i-1) == subject(i) && subject(i-1).pronoun != subject(i).pronoun) {
-      
+
        // Never show "the guard's it".
-       result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", 
+       result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT",
            subject(i).pronoun.nominative);
-       result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT", 
+       result = result.replaceAll("$OWNER_PRONOUN_POSSESIVE $SUBJECT",
            subject(i).pronoun.nominative);
        result = result.replaceAll(SUBJECT, subject(i).pronoun.nominative);
        result = result.replaceAll(SUBJECT_POSSESIVE, subject(i).pronoun.genitive);
@@ -363,22 +382,22 @@ class Storyline {
     // same as previous, but with object-subject reversed
     if (subject(i-1) != null && object(i) != null && subject(i-1) != null
         && subject(i-1) == object(i) && subject(i-1).pronoun != subject(i).pronoun) {
-      
+
       // Never show "the guard's it".
-      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", 
+      result = result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT",
         object(i).pronoun.nominative);
-      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", 
+      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT",
         object(i).pronoun.nominative);
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
-    return getString(result, subject: reports[i].subject, 
-        object: reports[i].object, owner: reports[i].owner, 
+    return getString(result, subject: reports[i].subject,
+        object: reports[i].object, owner: reports[i].owner,
         objectOwner: reports[i].objectOwner);
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
-  static String getString(String str, {Entity subject, Entity object, 
+  static String getString(String str, {Entity subject, Entity object,
       Entity owner, Entity objectOwner}) {
     String result = str;
     if (subject != null) {
@@ -387,7 +406,7 @@ class Storyline {
         result = result.replaceAll(SUBJECT, Pronoun.YOU.nominative);
         result = result.replaceAll(SUBJECT_POSSESIVE, Pronoun.YOU.genitive);
       }
-      
+
       if (subject.pronoun == Pronoun.YOU || subject.pronoun == Pronoun.THEY) {
         // "you fly there", "they pick up the bananas" ...
         result = result.replaceAll(VERB_S, "");
@@ -396,7 +415,7 @@ class Storyline {
         result = result.replaceAll(VERB_DO, "do");
         result = result.replaceAll(VERB_BE, "are");
         result = result.replaceAll(VERB_HAVE, "have");
-      } else { 
+      } else {
         // "he flies there", "it picks up the bananas" ...
         result = result.replaceAll(VERB_S, "s");
         result = result.replaceAll(VERB_ES, "es");
@@ -405,30 +424,33 @@ class Storyline {
         result = result.replaceAll(VERB_BE, "is");
         result = result.replaceAll(VERB_HAVE, "has");
       }
-      
+
       result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
       result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
-      
-      result = addParticleToFirstOccurence(result, SUBJECT_NOUN, subject);
+
+      result = addParticleToFirstOccurence(result, SUBJECT_NOUN, subject,
+          owner);
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
-      
+
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       if (str.contains(new RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, SUBJECT_POSSESIVE, subject);
+      result = addParticleToFirstOccurence(result, SUBJECT_POSSESIVE, subject,
+          owner);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
     }
-    
+
     if (object != null) {
       if (object.isPlayer) {
         result = result.replaceAll(OBJECT, Pronoun.YOU.accusative);
         result = result.replaceAll(OBJECT_POSSESIVE, Pronoun.YOU.genitive);
       } else {
-        result = addParticleToFirstOccurence(result, OBJECT, object);
+        result = addParticleToFirstOccurence(result, OBJECT, object,
+            objectOwner);
         result = result.replaceAll(OBJECT, object.name);
         // TODO: change first to name, next to pronoun?
       }
@@ -436,50 +458,51 @@ class Storyline {
       if (str.contains(new RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) { // "actor takes his weapon"
         result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, OBJECT_POSSESIVE, object);
+      result = addParticleToFirstOccurence(result, OBJECT_POSSESIVE, object,
+          objectOwner);
       result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
       result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
     result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESIVE,
         OWNER_PRONOUN, OWNER_PRONOUN_POSSESIVE);
-    result = _realizeOwner(objectOwner, result, str, OBJECT_OWNER, 
-        OBJECT_OWNER_POSSESIVE, OBJECT_OWNER_PRONOUN, 
+    result = _realizeOwner(objectOwner, result, str, OBJECT_OWNER,
+        OBJECT_OWNER_POSSESIVE, OBJECT_OWNER_PRONOUN,
         OBJECT_OWNER_PRONOUN_POSSESIVE);
 
     return Randomly.parse(result);
   }
 
-  static String _realizeOwner(Entity owner, String result, String str, 
+  static String _realizeOwner(Entity owner, String result, String str,
         String OWNER_OR_OBJECT_OWNER, String OWNER_OR_OBJECT_OWNER_POSSESSIVE,
-        String OWNER_OR_OBJECT_OWNER_PRONOUN, 
+        String OWNER_OR_OBJECT_OWNER_PRONOUN,
         String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE) {
     if (owner != null) {
-      if (owner.isPlayer) { 
-        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, 
+      if (owner.isPlayer) {
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER,
             Pronoun.YOU.accusative);
-        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
             Pronoun.YOU.genitive);
       } else {
-        result = addParticleToFirstOccurence(result, OWNER_OR_OBJECT_OWNER, 
-            owner);
+        result = addParticleToFirstOccurence(result, OWNER_OR_OBJECT_OWNER,
+            owner, null);
         result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
       }
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN, 
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN,
           owner.pronoun.nominative);
       if (str.contains(new RegExp("$OWNER_OR_OBJECT_OWNER.+"
           "$OWNER_OR_OBJECT_OWNER_POSSESSIVE"))) {
         // "the ship and her gun"
-        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
             owner.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(result, 
-          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner);
-      result = result.replaceFirst(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+      result = addParticleToFirstOccurence(result,
+          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null);
+      result = result.replaceFirst(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
           "${owner.name}'s");
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, 
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE,
           owner.pronoun.genitive);
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE, 
+      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE,
           owner.pronoun.genitive);
     } else {
       // owner == null
@@ -492,24 +515,25 @@ class Storyline {
     return result;
   }
 
-  /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like 
+  /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like
   /// [:<subject>:]) in [string]. The next occurences will be automatically
-  /// converted to pronouns. 
-  static String addParticleToFirstOccurence(String string, String SUB_STRING, 
-                                            Entity entity) {
+  /// converted to pronouns.
+  static String addParticleToFirstOccurence(String string, String SUB_STRING,
+                                            Entity entity, Entity entityOwner) {
     // Make sure we don't add particles to "your car" etc.
-    if (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
+    if (entityOwner != null && (
+        string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
         string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
         string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
+        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1)) {
       return string;
     }
-    
+
     if (!entity.nameIsProperNoun) {
       if (entity.alreadyMentioned) {
         string = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
       } else {
-        if (entity.name.startsWith(new RegExp(r"[aeiouy]", 
+        if (entity.name.startsWith(new RegExp(r"[aeiouy]",
             caseSensitive: false))) {
           string = string.replaceFirst(SUB_STRING, "an $SUB_STRING");
         } else {
@@ -520,7 +544,7 @@ class Storyline {
     }
     return string;
   }
-  
+
   Storyline();
 
   void clear() {
@@ -531,6 +555,20 @@ class Storyline {
   /// The main function that strings reports together into a coherent story.
   String toString() {
     reports.removeWhere((report) => report.string == "");
+    List<Report> cleanedReports = reports.fold(
+        [], (List<Report> list, Report report) {
+      Report previousReport = list.isNotEmpty ? list.last : null;
+      if (previousReport != null && previousReport.isSupportiveActionInThread &&
+          report.actionThread == previousReport.actionThread) {
+        // Skip the Report that is supportive and is next to another report
+        // of the same actionThread.
+        list[list.length - 1] = report;
+      } else {
+        list.add(report);
+      }
+      return list;
+    });
+    reports.retainWhere((Report report) => cleanedReports.contains(report));
     final int length = reports.length;
     if (length < 1)
       return "";
@@ -540,20 +578,20 @@ class Storyline {
     bool endThisSentence = false; // this sentence needs to be ended
     bool but = false; // this next sentence needs to start with but
     for (int i=0; i < length; i++) {
-      // TODO: look into future - make sentences like "Although __, __" 
+      // TODO: look into future - make sentences like "Although __, __"
       // TODO: ^^ can be done by 2 for loops
       // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
       // TODO: glue sentences together first (look ahead, optimize)
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchanged('subject', 'object', i-1, i);
-        but = (reports[i].but || oppositeSentiment(i, i-1)) 
+        but = (reports[i].but || oppositeSentiment(i, i-1))
               && !reports[i-1].but;
         reports[i].but = but;
-        endPreviousSentence = 
-          (i - lastEndSentence >= MAX_SENTENCE_LENGTH) 
+        endPreviousSentence =
+          (i - lastEndSentence >= MAX_SENTENCE_LENGTH)
           || endThisSentence
-          || reports[i].startSentence 
+          || reports[i].startSentence
           || reports[i-1].endSentence
           || reports[i].wholeSentence
           || !(same('subject', i, i-1) || objectSubjectSwitch)
@@ -568,7 +606,7 @@ class Storyline {
           else
             strBuf.write(". ");
           if (but && !reports[i].wholeSentence)
-            strBuf.write(Randomly.choose(["But ", "But ", "However, ", 
+            strBuf.write(Randomly.choose(["But ", "But ", "However, ",
                                        "Nonetheless, ", "Nevertheless, "]));
         } else { // let's try and glue [i-1] and [i] into one sentence
           if (but) {
@@ -614,9 +652,9 @@ class Storyline {
     // add last dot
     if (!reports[length-1].wholeSentence)
       strBuf.write(".");
-    
+
     String s = strBuf.toString();
-    
+
     // Fix extra dots after quotes.
     s = s.replaceAllMapped(QUOTE_INTERPUNCTION_DUPLICATION, (Match m) {
       return "${m[1]}${m[2]}${m[3]}";

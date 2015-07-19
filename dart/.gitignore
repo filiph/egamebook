@@ -26,4 +26,4 @@ packages
 **/*.tmLanguage.cache
 **/*.tmPreferences.cache
 **/.idea/*
-
+docs/dev/*

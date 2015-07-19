@@ -1,8 +1,8 @@
 import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/shared/form.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
-import 'package:egamebook/interfaces/html/html_interface.dart';
+import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'dart:html' show ButtonElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
@@ -17,7 +17,7 @@ class ScripterProxyStub extends EgbScripterProxy {
     return new Future.value();
   }
 
-  EgbInterface interface;
+  EgbPresenter presenter;
 
   @override
   void load(EgbSavegame savegame, [Set<String> playerChronology]) {
@@ -38,6 +38,15 @@ class ScripterProxyStub extends EgbScripterProxy {
 void main() {
   unittestConfiguration.timeout = new Duration(seconds: 5);
 
+  group("Basic setup", () {
+    test("defines the same builder closures for "
+        "FormProxy and HtmlPresenter", () {
+      Set<String> proxyBuilders = customTagHandlers.keys.toSet();
+      Set<String> presenterBuilders = ELEMENT_BUILDERS.keys.toSet();
+      expect(proxyBuilders, equals(presenterBuilders));
+    });
+  });
+
   group("Pure", () {
     Form form;
     RangeInput input1, input2;
@@ -45,7 +54,7 @@ void main() {
     MultipleChoiceInput multipleChoiceInput;
     Option option1, option2, option3;
     TextOutput textOutput;
-    
+
     int age, money;
 
     setUp(() {
@@ -70,7 +79,7 @@ void main() {
       expect(input1.id, isNotNull);
     });
 
-    test("Form from Scripter is recreated in interface", () {
+    test("Form from Scripter is recreated in presenter", () {
       form.children.add(input1);
       form.children.add(input2);
       form.children.add(checkboxInput);
@@ -110,7 +119,7 @@ void main() {
       expect((formProxy.children.single.children.single as FormElement)
           .disabledOrInsideDisabledParent, true);
     });
-    
+
     test("Options in MultipleChoice", () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -118,18 +127,18 @@ void main() {
       form.children.add(multipleChoiceInput);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
-      expect(formProxy.children.single.children.length, 
+      expect(formProxy.children.single.children.length,
           multipleChoiceInput.children.length);
-      expect((formProxy.children.single.children[0] as OptionBase).current, 
+      expect((formProxy.children.single.children[0] as OptionBase).current,
           (multipleChoiceInput.children[0] as OptionBase).current);
-      expect((formProxy.children.single.children[1] as OptionBase).current, 
+      expect((formProxy.children.single.children[1] as OptionBase).current,
           true); //we are setting selected as true
-      expect((formProxy.children.single.children[2] as FormElement).helpMessage, 
+      expect((formProxy.children.single.children[2] as FormElement).helpMessage,
           isNotNull);
-      expect((formProxy.children.single.children[2] as FormElement).helpMessage, 
+      expect((formProxy.children.single.children[2] as FormElement).helpMessage,
              (multipleChoiceInput.children[2] as FormElement).helpMessage);
     });
-    
+
     test("formElementChildren in MultipleChoice", () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -140,8 +149,8 @@ void main() {
       expect((formProxy.children.single as FormElement)
           .formElementChildren.length, multipleChoiceInput.children.length);
     });
-    
-    test("allFormElementsBelowThisOne for Form, MultipleChoice and Options", 
+
+    test("allFormElementsBelowThisOne for Form, MultipleChoice and Options",
       () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
@@ -150,19 +159,19 @@ void main() {
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect((formProxy.children.single.parent as FormElement)
-          .allFormElementsBelowThisOne.length, 
+          .allFormElementsBelowThisOne.length,
           form.children.length + multipleChoiceInput.children.length);
     });
-    
-    test("FormElements are instances (implement) of UpdatableByMap", () {      
+
+    test("FormElements are instances (implement) of UpdatableByMap", () {
       expect(input1, new isInstanceOf<UpdatableByMap>());
-      expect(checkboxInput, new isInstanceOf<UpdatableByMap>());  
+      expect(checkboxInput, new isInstanceOf<UpdatableByMap>());
       expect(textOutput, new isInstanceOf<UpdatableByMap>());
       expect(option1, new isInstanceOf<UpdatableByMap>());
     });
   });
 
-  group("HtmlInterface", () {
+  group("HtmlPresenter", () {
     Form form;
     RangeInput input1, input2, input3;
     RangeOutput energyGauge;
@@ -170,7 +179,7 @@ void main() {
     CheckboxInput checkboxInput;
     TextOutput textOutput;
     int age, money, freetime;
-    EgbInterface interface;
+    EgbPresenter presenter;
     EgbStorage storage;
     EgbScripterProxy scripterProxyStub;
 
@@ -196,16 +205,16 @@ void main() {
 
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
-      interface = new HtmlInterface();
+      presenter = new HtmlPresenter();
       storage = new MemoryStorage();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, interface, storage);
+      return runDirectly(scripterProxyStub, presenter, storage);
     });
 
     tearDown(() {
       scripterProxyStub.quit();
-      interface.close();
+      presenter.close();
       //      querySelector("#book-wrapper").children.clear();
     });
 
@@ -213,7 +222,7 @@ void main() {
       form.children.add(input1);
       form.children.add(input2);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      interface.showForm(formProxy);
+      presenter.showForm(formProxy);
       expect(querySelector("#${formProxy.children.first.id}"), isNotNull);
     });
 
@@ -222,7 +231,7 @@ void main() {
       checkboxInput.onInput = (bool value) => checked = value;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxInput.current, false);
@@ -239,7 +248,7 @@ void main() {
       checkboxInput.disabled = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
@@ -249,7 +258,7 @@ void main() {
       form.children.add(input1);
       form.children.add(input2);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
       // Select the second radio button of the first RangeInput -> age = 25.
       RadioButtonInputElement radioButton = querySelector(
           "#${formProxy.children.first.id} div.buttons input:nth-child(2)");
@@ -265,8 +274,9 @@ void main() {
     test("sends and closes after being submitted", () {
       form.children.add(input1);
       form.children.add(input2);
+      form.submitText = ">>";
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
       ButtonElement submitButton = querySelectorAll("button.submit-main").last;
       stream.listen(expectAsync((CurrentState values) {
         expect(values.submitted, true, reason: "not submitted");
@@ -291,7 +301,7 @@ void main() {
         }
       };
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
 
       RadioButtonInputElement freeTimeButton = querySelector(
           "#${formProxy.children[2].id} div.buttons input:nth-child(8)");
@@ -299,7 +309,7 @@ void main() {
 
       stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
-        interface.updateForm(changedConfig);
+        presenter.updateForm(changedConfig);
         // Make sure the free time buttons have been un-disabled.
         RadioButtonInputElement freeTimeButton = querySelector(
             "#${formProxy.children[2].id} div.buttons input:nth-child(8)");
@@ -321,11 +331,11 @@ void main() {
       form.children.add(inputPercentage);
 
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
 
       stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
-        interface.updateForm(changedConfig);
+        presenter.updateForm(changedConfig);
         var percentageStringElement = querySelector(
             "#${formProxy.children.last.id} p.current-value");
         expect(percentageStringElement.text, "100 %");
@@ -346,11 +356,11 @@ void main() {
       print(JSON.encode(map));
 
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
 
       stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
-        interface.updateForm(changedConfig);
+        presenter.updateForm(changedConfig);
 
         RadioButtonInputElement onlyTwoAvailableButton = querySelector(
             "#${formProxy.children.first.id} div.buttons input:nth-child(3)");
@@ -377,11 +387,11 @@ void main() {
       print(JSON.encode(map));
 
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = interface.showForm(formProxy);
+      Stream<CurrentState> stream = presenter.showForm(formProxy);
 
       stream.listen((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
-        interface.updateForm(changedConfig);
+        presenter.updateForm(changedConfig);
 
 
         ParagraphElement textOutputParagraph = querySelector(

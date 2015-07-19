@@ -19,7 +19,8 @@ final List docgenParams = [
   "-v",
   "--no-include-dependent-packages",
   "--no-include-sdk",
-  "--start-page=egamebook"
+  "--start-page=egamebook",
+  "--out=docs/dev"
 ];
 
 /// If we want to serve the output

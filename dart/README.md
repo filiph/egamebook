@@ -467,17 +467,17 @@ Now Skippy's state will persist between play sessions.
 
 ## Development
 
-On the most basic level, egamebook is a pair of two classes which are talking to each other. One of them is the Interface and handles everything user-facing. The other one is the so-called Scripter, which contains the book and all its logic.
+On the most basic level, egamebook is a pair of two classes which are talking to each other. One of them is the Presenter and handles everything user-facing. The other one is the so-called Scripter, which contains the book and all its logic.
 
-### Interface
+### Presenter
 
-The default (and currently only) interface is the HtmlInterface. It lives in the browser and shows the output of Scripter as (mostly) paragraphs of text in DOM. When Scripter calls for user input (choice), HtmlInterface creates a bunch of buttons to click on.
+The default (and currently only) user presenter is the HtmlPresenter. It lives in the browser and shows the output of Scripter as (mostly) paragraphs of text in DOM. When Scripter calls for user input (choice), HtmlPresenter creates a bunch of buttons to click on.
 
-The interface also interfaces with Storage (or, more precisely, PlayerProfile), which is where each player's savegames and preferences are stored (one storage can support more than one player).
+The presenter also interfaces with Storage (or, more precisely, PlayerProfile), which is where each player's savegames and preferences are stored (one storage can support more than one player).
 
 ### Scripter
 
-Scripter is a class that encapsulates all the functionality related to communication with the Interface. Egamebooks extend this class with the actual content of the book.
+Scripter is a class that encapsulates all the functionality related to communication with the Presenter. Egamebooks extend this class with the actual content of the book.
 
 This is what the book can then look like after being converted from `.egb` to a Dart file. Egamebook authors *shouldn't* need to know the structure of such Dart files. This is what we're shielding them from by the `.egb` format.
 
@@ -555,11 +555,11 @@ This is what the book can then look like after being converted from `.egb` to a 
 
 ### Scripter in an isolate
 
-A naive implementation of the Interface-Scripter pair would be to just have them talk to each other as two classes in the main isolate (main application thread).
+A naive implementation of the Presenter-Scripter pair would be to just have them talk to each other as two classes in the main isolate (main application thread).
 
 Since we want to encourage large computations inside the Scripter, we don't want to do that. We want to run the Scripter in its own Isolate.
 
-To hide the complexity of sending messages between Isolates, we have ScripterProxy and InterfaceProxy. These classes forward calls through Isolate boundaries.
+To hide the complexity of sending messages between Isolates, we have ScripterProxy and PresenterProxy. These classes forward calls through Isolate boundaries.
 
                         +-Isolate--------------+
                         |                      |
@@ -570,7 +570,7 @@ To hide the complexity of sending messages between Isolates, we have ScripterPro
      |                  |         +---------++ |
     ++----------+       |                   |  |
     |           |       |                   |  |
-    | Interface <---------+ InterfaceProxy <+  |
+    | Presenter <---------+ PresenterProxy <+  |
     |           |       |                      |
     +-----------+       +----------------------+
 
@@ -584,14 +584,14 @@ The application's `main()` then looks like this:
       // This will be rewritten with the actual file.
       var scripterPath = '[[PathToEgbScripterImplementation]]';
       
-      // create the interface
-      EgbInterface interface = new HtmlInterface();
+      // create the presenter
+      EgbPresenter presenter = new HtmlPresenter();
       // open storage
       EgbStorage storage = new LocalStorage();
       // set player profile
-      interface.setPlayerProfile(storage.getDefaultPlayerProfile());
+      presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
       // run
-      runFromIsolate(scripterPath, interface, storage);
+      runFromIsolate(scripterPath, presenter, storage);
     }
 
 ### Builder

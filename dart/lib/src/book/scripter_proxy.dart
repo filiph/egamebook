@@ -3,45 +3,45 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
-import '../../interface.dart';
+import '../../presenter.dart';
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
 import '../shared/points_award.dart';
 import '../shared/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
-import 'package:egamebook/src/interface/form_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
 /**
- * The methods of Scripter that are callable by Interface.
+ * The methods of Scripter that are callable by Presenter.
  */
-abstract class EgbScripterViewedFromInterface {
+abstract class EgbScripterViewedFromPresenter {
   String get uid;
-  
+
   /**
    * Initializes the Scripter. In case of a Scripter in its own Isolate, this
    * creates the Isolate and waits for the UID. The returned Future completes
    * only after that.
    */
-  Future init();  
+  Future init();
   void restart();
   void load(EgbSavegame savegame, [Set<String> playerChronology]);
   void quit();
 }
 
 /**
- * A proxy/view of the Scripter that has methods callable from Interface.
- * It has direct access to the Interface object.
+ * A proxy/view of the Scripter that has methods callable from Presenter.
+ * It has direct access to the Presenter object.
  */
-abstract class EgbScripterProxy extends EgbScripterViewedFromInterface {
-  EgbInterface interface;
-  
-  void setInterface(EgbInterface interface) {
-    this.interface = interface;
+abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
+  EgbPresenter presenter;
+
+  void setPresenter(EgbPresenter presenter) {
+    this.presenter = presenter;
     if (uid != null) {
-      interface.playerProfile.currentEgamebookUid = uid;
+      presenter.playerProfile.currentEgamebookUid = uid;
     } else {
-      throw "Setting interface before we have uid (before initialization).";
+      throw "Setting presenter before we have uid (before initialization).";
     }
   }
 }
@@ -90,7 +90,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
 
     switch (message.type) {
       case EgbMessage.END_OF_BOOK:
-        interface.endBook();
+        presenter.endBook();
         return;
       case EgbMessage.SEND_BOOK_UID:
         INT_DEBUG("Book UID received ('${message.strContent}')");
@@ -99,15 +99,15 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.SAVE_GAME:
         EgbSavegame savegame = new EgbSavegame.fromMessage(message);
-        savegame.textHistory = interface.getTextHistory();
-        interface.save(savegame);
+        savegame.textHistory = presenter.getTextHistory();
+        presenter.save(savegame);
         return;
       case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
-        interface.playerProfile.savePlayerChronology(message.listContent.toSet()
+        presenter.playerProfile.savePlayerChronology(message.listContent.toSet()
             );
         return;
       case EgbMessage.TEXT_RESULT:
-        interface.showText(message.strContent).then((_) {
+        presenter.showText(message.strContent).then((_) {
           _send(new EgbMessage.proceed());
         });
         return;
@@ -116,22 +116,22 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         _send(new EgbMessage.proceed());
         return;
       case EgbMessage.POINTS_AWARD:
-        interface.awardPoints(new PointsAward.fromMessage(message)).then((_) {
+        presenter.awardPoints(new PointsAward.fromMessage(message)).then((_) {
           _send(new EgbMessage.proceed());
         });
         return;
       case EgbMessage.SET_STATS:
-        interface.setStats(UIStat.overwriteStatsListFromDataStructure(
+        presenter.setStats(UIStat.overwriteStatsListFromDataStructure(
             message.listContent));
         return;
       case EgbMessage.UPDATE_STATS:
         print("RUN: Received updated stats.");
-        interface.updateStats(new StatUpdateCollection.fromMap(
+        presenter.updateStats(new StatUpdateCollection.fromMap(
             message.mapContent));
         return;
       case EgbMessage.SHOW_CHOICES:
         INT_DEBUG("Showing choices.");
-        interface.showChoices(new EgbChoiceList.fromMessage(message)).then((int
+        presenter.showChoices(new EgbChoiceList.fromMessage(message)).then((int
             hash) {
           if (hash != null) {
             _send(new EgbMessage.choiceSelected(hash));
@@ -143,8 +143,8 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.SHOW_FORM:
         INT_DEBUG("Showing form.");
-        FormProxy formProxy = new FormProxy.fromMap(message.mapContent);
-        interface.showForm(formProxy).listen((CurrentState state) {
+        FormProxy formProxy = new FormProxy.fromMessage(message);
+        presenter.showForm(formProxy).listen((CurrentState state) {
           INT_DEBUG("Form updated or submitted by player.");
           _send(new EgbMessage.formInput(state));
         });
@@ -153,11 +153,11 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         INT_DEBUG("Updating form.");
         FormConfiguration changedConfig = new FormConfiguration.fromMap(
             message.mapContent);
-        interface.updateForm(changedConfig);
+        presenter.updateForm(changedConfig);
         return;
       case EgbMessage.SCRIPTER_ERROR:
         INT_DEBUG("SCRIPTER ERROR: ${message.strContent}");
-        interface.reportError("Scripter Error", message.strContent);
+        presenter.reportError("Scripter Error", message.strContent);
         return;
       case EgbMessage.SCRIPTER_LOG:
         INT_DEBUG("Scripter: ${message.strContent}");
