@@ -38,17 +38,23 @@ void main(List<String> args) {
   }
 
   if (results["help"]) {
-    print(parser.getUsage());
+    print(parser.usage);
     return;
   }
 
   String pathToScript = Platform.script.toFilePath();
   Directory parent = new Directory(path.dirname(pathToScript)).parent;
   Directory lib = new Directory(path.join(parent.path, "lib"));
+  Directory docViewer = new Directory(path.join(parent.path, "dartdoc-viewer"));
 
   if (!lib.existsSync()) {
     print("The folder lib/ doesn't exist. Canceling generation.");
     return;
+  }
+
+  // dartdoc-viewer has to be deleted before generation
+  if (docViewer.existsSync()) {
+    docViewer.deleteSync(recursive: true);
   }
 
   List fileNames = [];
