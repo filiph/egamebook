@@ -278,33 +278,37 @@ void main() {
       //      querySelector("#book-wrapper").children.clear();
     });
 
-    test("tests start button", () async {
-      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      presenter.showForm(formProxy);
+    test("tests start button", () {
+      return new Future(expectAsync(() {
+        FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+        presenter.showForm(formProxy);
 
-      expect(querySelector("div#book-title").style.display == "none", isFalse);
-      expect(querySelector("div#big-bottom-button").style.display == "none",
+        expect(querySelector("div#book-title").style.display == "none", isFalse);
+        expect(querySelector("div#big-bottom-button").style.display == "none",
         isFalse);
 
-      startButton.click();
+        startButton.click();
 
-      await new Future.delayed(new Duration(milliseconds: 200), (){
-        expect(querySelector("div#book-title").style.display == "none", isTrue);
-        expect(querySelector("div#big-bottom-button").style.display == "none",
-            isTrue);
-      });
+        return new Future.delayed(new Duration(milliseconds: 200), (){
+          expect(querySelector("div#book-title").style.display == "none", isTrue);
+          expect(querySelector("div#big-bottom-button").style.display == "none",
+          isTrue);
+        });
+      }));
     });
 
-    test("tests restart button", () async {
-      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      presenter.showForm(formProxy);
+    test("tests restart button", () {
+      return new Future(expectAsync(() {
+        FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+        presenter.showForm(formProxy);
 
-      restartButton.click();
+        restartButton.click();
 
-      await new Future.delayed(new Duration(milliseconds: 200), (){
-        expect(presenter.getTextHistory() == "", isTrue);
-        expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
-      });
+        return new Future.delayed(new Duration(milliseconds: 200), (){
+          expect(presenter.getTextHistory() == "", isTrue);
+          expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
+        });
+      }));
     });
 
     test("creates DOM elements", () {
@@ -601,23 +605,23 @@ void main() {
       expect(optionEl2.selected, isTrue);
     });
 
-    /*test("Show simple dummy choices", () async {
+    test("Show simple dummy choices", () {
       EgbChoice choice1 = new EgbChoice("Yes");
       EgbChoice choice2 = new EgbChoice("No");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      await presenter.showChoices(choices).then(expectAsync((_) async {
+      presenter.showChoices(choices).then(expectAsync((_) {
         expect(querySelector(".choices-div"), isNotNull);
         expect(querySelector(".choices-div ol").children[0]
             .text.contains(choice1.string), isTrue);
         ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
-        buttonEl.click();
-        expect(buttonEl.classes.contains("chosen"), isTrue);
-        expect(querySelector(".choices-div").classes.contains("chosen"),
-            isTrue);
-        expect(buttonEl.disabled, isTrue);
+        //buttonEl.click();
+        //expect(buttonEl.classes.contains("chosen"), isTrue);
+        //expect(querySelector(".choices-div").classes.contains("chosen"),
+        //    isTrue);
+        //expect(buttonEl.disabled, isTrue);
       }));
-    });*/
+    });
 
     test("Show simple choices with submenu", () {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
