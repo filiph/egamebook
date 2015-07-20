@@ -20,13 +20,17 @@ import 'storage.dart';
  * memory, a file, a database, or – more specifically – HTML5 localStorage.
  */
 class EgbPlayerProfile {
-
+  /// Is used as a part of name for shared preferences key.
   static const String PREFERENCES_KEY = "prefs";
 
+  /// Creates new EgbPlayerProfile with given Uid of player [playerUid] and
+  /// instance of EgbStorage [_storage].
   EgbPlayerProfile(this.playerUid, this._storage) {
     _loadPreferences();
   }
 
+  /// Called to close player profile. Saves story chronology and preferences
+  /// to the storage.
   void close() {
     if (storyChronology != null) _saveStoryChronology();
     _savePreferences();
@@ -36,7 +40,7 @@ class EgbPlayerProfile {
   String playerUid;
   /// Uid of current gamebook. *Must* be set for saving and loading to work.
   /// TODO: get rid of this. All calls to playerProfile should explicitly state
-  ///       the UID.
+  /// the UID.
   String currentEgamebookUid;
 
   /**
@@ -44,7 +48,7 @@ class EgbPlayerProfile {
    */
   Map<String, dynamic> preferences;
 
-  /// Saves preferences for the player into the storage.
+  /// Saves preferences for the player to the storage.
   Future<bool> _savePreferences() {
     return _storage.save("$playerUid::$PREFERENCES_KEY",
                          JSON.encode(preferences));
@@ -75,23 +79,25 @@ class EgbPlayerProfile {
   EgbStorage _storage;
 
   /**
-   * Number of savegames to keep in storage per given egamebook and player.
+   * Number of maximum savegames to keep in storage per given egamebook and player.
    */
   int _maxSaves = 10;
+  /// Getter returns maximum number of savegames.
   get maxSaves => _maxSaves;
+  /// Setter sets [value] to maximum number of savegames.
   set maxSaves(int value) => _maxSaves = value; // TODO fix queue etc.
 
   /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
-  /// the key, then saves to the storage.
-  /// Throws if [currentEgamebookUid] is not set.
+  /// the [key], then saves to the storage.
+  /// Throws if [currentEgamebookUid] is [:null:].
   Future<bool> _save(String key, String value) {
     if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
     return _storage.save("$playerUid::$currentEgamebookUid::$key", value);
   }
 
   /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
-  /// the key, then loads from the storage.
-  /// Throws if [currentEgamebookUid] is not set.
+  /// the [key], then loads from the storage.
+  /// Throws if [currentEgamebookUid] is [:null:].
   Future<String> _load(String key) {
     if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
     return _storage.load("$playerUid::$currentEgamebookUid::$key");
@@ -99,16 +105,18 @@ class EgbPlayerProfile {
 
   /// Helper function that prepends [playerUid] and [currentEgamebookUid] to
   /// the key, then deletes the key-value pair from the storage.
-  /// Throws if [currentEgamebookUid] is not set.
+  /// Throws if [currentEgamebookUid] is [:null:].
   Future<bool> _delete(String key) {
     if (currentEgamebookUid == null) throw "currentEgamebookUid not set"; //TODO
     return _storage.delete("$playerUid::$currentEgamebookUid::$key");
   }
 
+  /// Saves a story chronology to the storage.
   Future<bool> _saveStoryChronology() {
     return _save("_storyChronology", JSON.encode(storyChronology.toList()));
   }
 
+  /// Loads a story chronology and saves it to the [storyChronology].
   Future<bool> _loadStoryChronology() {
     return _load("_storyChronology").then((json) {
       if (json != null) {
@@ -120,23 +128,25 @@ class EgbPlayerProfile {
       return true;
     });
   }
-  
+
+  /// Saves a player chronology from a given [playerChronology] to the storage.
   Future<bool> savePlayerChronology(Set<String> playerChronology) {
-    return _save("_playerChronology", 
+    return _save("_playerChronology",
         JSON.encode(playerChronology.toList(growable: false)));
   }
-  
+
+  /// Loads a player chronology as a Set from the storage.
   Future<Set<String>> loadPlayerChronology() {
     return _load("_playerChronology")
         .then((String s) => (JSON.decode(s) as List<String>).toSet());
   }
 
   /**
-   * Saves the [savegame] to the storage. 
-   * Files it under the [currentEgamebookUid] and [playerUid].
+   * Saves the [savegame] to the storage.
+   * Files it to the storage under the [currentEgamebookUid] and [playerUid].
    *
    * Gets rid of old savegames if there is more than [maxSaves] present in
-   * the storage.
+   * the story chronology.
    */
   Future<bool> save(EgbSavegame savegame) {
     if (storyChronology == null) {
@@ -160,7 +170,7 @@ class EgbPlayerProfile {
     return _save(savegame.uid, savegame.toJson());
   }
 
-  /// Loads the savegame by [:uid:]. Returns [:null:] when there is
+  /// Loads the savegame by [uid]. Returns [:null:] when there is
   /// no savegame with that [uid] in memory.
   Future<EgbSavegame> load(String uid) {
     var completer = new Completer<EgbSavegame>();
@@ -179,7 +189,7 @@ class EgbPlayerProfile {
     return completer.future;
   }
 
-  /// Loads the latest savegame. Returns [:null:] when there are
+  /// Loads the most recent savegame. Returns [:null:] when there are
   /// no savegames.
   Future<EgbSavegame> loadMostRecent() {
     if (storyChronology == null) {

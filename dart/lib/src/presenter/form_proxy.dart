@@ -11,6 +11,7 @@ import 'package:egamebook/src/shared/message.dart';
  * by adding DOM elements to page) and listening to user input.
  */
 class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
+  /// Creates new FormProxy from a [map].
   FormProxy.fromMap(Map<String, Object> map) {
     assert((map["jsonml"] as List)[0] == "Form");
     submitText = (map["jsonml"] as List)[1]["submitText"];
@@ -24,9 +25,12 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     });
   }
 
+  /// Creates new FormProxy from [EgbMessage].
   FormProxy.fromMessage(EgbMessage msg)
   : this.fromMap(msg.mapContent);
 
+  /// Recursively creates [UiElement] from a given map of [UiElementBuilder]
+  /// builders.
   UiElement buildUiElements(Map<String, UiElementBuilder> builders) {
     return _recursiveCreateUiElement(builders, this);
   }
@@ -34,6 +38,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// Mapping from [FormElement] (blueprint) to actual UI representations.
   UiElement uiElement;
 
+  /// Recursively creates [UiElement] from a given map of [UiElementBuilder]
+  /// builders with help of [BlueprintWithUiRepresentation] element.
   UiElement _recursiveCreateUiElement(Map<String, UiElementBuilder> builders,
                         BlueprintWithUiRepresentation element) {
     if (!builders.containsKey(element.localName)) {
@@ -79,10 +85,10 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     }
   }
 
-  /// Utility function that gathers values from the form. When [submitted] is
-  /// [:true:], the form gets disabled. When [setWaitingForUpdate] is [:true:],
-  /// all elements are temporarily 'disabled' in order to wait for update from
-  /// Scripter.
+  /// Utility function that gathers [CurrentState] values from the form.
+  /// When [submitted] is [:true:], the form gets disabled. When
+  /// [setWaitingForUpdate] is [:true:], all elements are temporarily 'disabled'
+  /// in order to wait for update from Scripter.
   CurrentState _createCurrentState(BlueprintWithUiRepresentation elementTouched,
                                    [bool setWaitingForUpdate=true]) {
     CurrentState state = new CurrentState();
@@ -107,16 +113,22 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     return state;
   }
 
+  /// Set of on change [StreamSubscription]s.
   Set<StreamSubscription> _onChangeSubscriptions =
       new Set<StreamSubscription>();
+  /// Cancels all [_onChangeSubscriptions].
   void _cancelSubscriptions() {
     _onChangeSubscriptions.forEach((StreamSubscription s) => s.cancel());
   }
 
+  /// [CurrentState] stream controller.
   StreamController<CurrentState> _streamController =
         new StreamController<CurrentState>();
-    Stream<CurrentState> get stream => _streamController.stream;
+  /// Getter for a [Stream] from stream controller.
+  Stream<CurrentState> get stream => _streamController.stream;
 
+  /// Creates [PresenterForm] from provided [jsonml] and adds its children
+  /// elements into FormProxy [children] elements.
   void createElementsFromJsonML(List<Object> jsonml) {
     PresenterForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
         unsafe: true);
@@ -125,19 +137,28 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   }
 }
 
+/// UI element builder typedef.
 typedef UiElement UiElementBuilder(FormElement elementBlueprint);
 
+/// It is an abstract blueprint class which contains also the UI representation
+/// of Element - [UiElement].
 abstract class BlueprintWithUiRepresentation extends FormElement {
+  /// UI representation of element.
   UiElement uiElement;
 
+  /// Creates new BlueprintWithUiRepresentation of given [elementClass].
   BlueprintWithUiRepresentation(String elementClass) : super(elementClass);
 }
 
+/// Base class for UI elements. It is a UI representation of element.
+///
+/// This class is used as a base class for [HtmlUiElement].
 abstract class UiElement {
   /// The same as the subclass's blueprint, but not typed to a particular
   /// FormElement subtype. This is just convenience, and probably could be
   /// solved more elegantly.
   FormElement _blueprint;
+  /// Creates new UiElement with form element [_blueprint].
   UiElement(this._blueprint);
 
   /// Updates the UiElement after the blueprint is changed. Sets
@@ -151,10 +172,14 @@ abstract class UiElement {
   /// Fired every time user interacts with Element and changes something.
   Stream get onChange;
 
+  /// Setter for disabled.
   set disabled(bool value);
+  /// Getter for disabled.
   bool get disabled;
 
+  /// Setter for hidden.
   set hidden(bool value);
+  /// Getter for hidden.
   bool get hidden;
 
   /// This is set to [:true:] after the user has interacted with the form and
@@ -175,6 +200,7 @@ abstract class UiElement {
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
   /// that materializes the [TextOutput].
   Object get uiRepresentation;
+  /// Append child method. Concrete implementation is in subclass.
   void appendChild(Object childUiRepresentation);
 }
 
@@ -221,97 +247,148 @@ Map<String, CustomTagHandler> customTagHandlers = {
   }
 };
 
+/// Returns Map of attributes from provided JsonML.
 Map<String, Object> _getAttributesFromJsonML(Object jsonObject) {
   // A JsonML element has it's attribute on the second position. Ex.:
   // <a href="#"></a> is ["a", {"href": "#"}].
   return (jsonObject as List)[1] as Map<String, Object>;
 }
 
+/// Class PresenterForm is a [FormBase] which wraps presenter form element.
+///
+/// It is used for setting of [FormProxy.children] elements to its
+/// [PresenterForm.children] elements when retrieved and decoded from JsonML
+/// in [FormProxy.createElementsFromJsonML].
 class PresenterForm extends FormBase {
+  /// Creates new PresenterForm with [id].
   PresenterForm(String id) {
     this.id = id;
   }
 }
 
-class PresenterFormSection extends FormSection implements BlueprintWithUiRepresentation {
+/// Class PresenterFormSection is a [FormSection] which contains also the UI
+/// representation of element [UiElement].
+class PresenterFormSection extends FormSection
+    implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterFormSection with a given [name] and [id].
   PresenterFormSection(String name, String id) : super(name) {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterSubmitButton extends SubmitButtonBase implements BlueprintWithUiRepresentation {
+/// Class PresenterSubmitButton is a [SubmitButtonBase] which contains also the
+/// UI representation of element [UiElement].
+class PresenterSubmitButton extends SubmitButtonBase
+    implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterSubmitButton with a given [name] and [id].
   PresenterSubmitButton(String name, String id) : super(name) {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
+/// Class PresenterCheckboxInput is a [CheckboxInputBase] which contains also
+/// the UI representation of element [UiElement].
 class PresenterCheckboxInput extends CheckboxInputBase
     implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterCheckboxInput with a given [name] and [id].
   PresenterCheckboxInput(String name, String id) : super(name) {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterRangeInput extends RangeInputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+/// Class PresenterRangeInput is a [RangeInputBase] which contains also the UI
+/// representation of element [UiElement] and its String representation
+/// [currentStringRepresentation].
+class PresenterRangeInput extends RangeInputBase
+    implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+  /// Creates new PresenterRangeInput with a given [name] and [id].
   PresenterRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
-  /// The string representation. This is computed on the [EgbScripter] side
+  /// The String representation. This is computed on the [EgbScripter] side
   /// and can be, for example, something like "90%" for [:0.9:] (percentage) or
   /// "intelligent" for [:120:] (IQ).
   String currentStringRepresentation;
 
+  /// Updates from a Map representation in a [map].
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterRangeOutput extends RangeOutputBase implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+/// Class PresenterRangeOutput is a [RangeOutputBase] which contains also the UI
+/// representation of element [UiElement] and its String representation
+/// [currentStringRepresentation].
+class PresenterRangeOutput extends RangeOutputBase
+    implements StringRepresentationHolder, BlueprintWithUiRepresentation {
+  /// Creates new PresenterRangeOutput with a given [name] and [id].
   PresenterRangeOutput(String name, String id) : super(name) {
     this.id = id;
   }
+  /// Current String representation.
   String currentStringRepresentation;
 
+  /// Updates from a Map representation in a [map].
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
     currentStringRepresentation = map["__string__"];
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterTextOutput extends TextOutputBase implements BlueprintWithUiRepresentation {
+/// Class PresenterTextOutput is a [TextOutputBase] which contains also the UI
+/// representation of element [UiElement].
+class PresenterTextOutput extends TextOutputBase
+    implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterTextOutput with a given [id].
   PresenterTextOutput(String id) : super() {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterMultipleChoiceInput extends MultipleChoiceInputBase implements BlueprintWithUiRepresentation {
+/// Class PresenterMultipleChoiceInput is a [MultipleChoiceInputBase] which
+/// contains also the UI representation of element [UiElement].
+class PresenterMultipleChoiceInput extends MultipleChoiceInputBase
+    implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterMultipleChoiceInput with a given [name] and [id].
   PresenterMultipleChoiceInput(String name, String id) : super(name) {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }
 
-class PresenterOption extends OptionBase implements BlueprintWithUiRepresentation {
+/// Class PresenterOption is an [OptionBase] which contains also the UI
+/// representation of element [UiElement].
+class PresenterOption extends OptionBase
+    implements BlueprintWithUiRepresentation {
+  /// Creates new PresenterOption with a given [text], if [selected] and [id].
   PresenterOption(String text, bool selected, String id) :
     super(text, selected: selected) {
     this.id = id;
   }
 
+  /// UI representation of element.
   UiElement uiElement;
 }

@@ -27,14 +27,23 @@ import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import "package:html5lib/dom.dart" as html5lib;
 
+/// Class HtmlPresenter wraps HTML presenter for the application.
+///
+/// It contains all HTML interface elements ([:button:], [:span:] etc.) used
+/// in gamebook for user interaction and displaying information.
 class HtmlPresenter extends EgbPresenterBase {
+  /// Restart [:button:].
   ButtonElement restartAnchor;
+  /// [:span:] where points are displayed.
   SpanElement pointsSpan;
-
+  /// Main wrapper [:div:] where the content of the book is displayed.
   DivElement bookDiv;
 
+  /// Start [:button:].
   ButtonElement startButton;
+  /// Book's title [:div:].
   DivElement bookTitleDiv;
+  /// Main book's start button [:div:].
   DivElement bigBottomButtonDiv;
 
   /// The presenter shows the title 'activity' (with a big START button on
@@ -42,6 +51,7 @@ class HtmlPresenter extends EgbPresenterBase {
   static const int UI_ACTIVITY_TITLE = 1;
   /// The UI is in the play state.
   static const int UI_ACTIVITY_BOOK = 2;
+  /// Current activity visible.
   int currentActivity = UI_ACTIVITY_TITLE;
 
   /**
@@ -49,13 +59,16 @@ class HtmlPresenter extends EgbPresenterBase {
    * (Markdown format, pre-HTMLization.)
    */
   final StringBuffer _textHistory = new StringBuffer();
+  /// Getter returns text history - the text that has been shown to the player
+  /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
+  @override
   String getTextHistory() => _textHistory.toString();
 
-  /**
-    Constructor.
-    */
+  /// Creates new HtmlPresenter.
   HtmlPresenter() : super();
 
+  /// Creates basic setup on startup for HtmlPresenter's html elements etc.
+  @override
   void setup() {
     // DOM
     bookDiv = document.querySelector("div#book-wrapper");
@@ -91,7 +104,7 @@ class HtmlPresenter extends EgbPresenterBase {
   }
 
   /**
-   * This is called when the book is ready to be played.
+   * This method is called when the book is ready to be played.
    */
   void _bookReadyHandler() {
     startButton.querySelector("#start-button-loading-span").classes
@@ -114,12 +127,12 @@ class HtmlPresenter extends EgbPresenterBase {
     });
   }
 
+  /// Paragraph where the loading gizmo is visible.
   ParagraphElement _loadingEl;
-  /// Used to store [_loadingEl]'s state outside the DOM (i.e. in memory).
+  /// If loading is visible. It is used to store [_loadingEl]'s state outside
+  /// the DOM (i.e. in memory).
   bool _loadingElVisible;
-  /**
-   * Sets visibility of the loading gizmo.
-   */
+  /// Sets visibility of the loading gizmo.
   void _showLoading(bool show) {
     if (_loadingElVisible != null && show ==
         _loadingElVisible) {
@@ -129,21 +142,28 @@ class HtmlPresenter extends EgbPresenterBase {
     _loadingElVisible = show;
   }
 
+  /// Prints into console that the book has ended.
+  @override
   void endBook() {
     print("The book has ended.");
   }
 
+  @override
   void close() {
     super.close();
   }
 
+  /// Duration between showing text. It is used in delaying of text showing.
   static const Duration _durationBetweenShowingText = const Duration(
       milliseconds: 100);
 
   /**
-   * Converts [s] to HTML elements (via markdown) and shows them one by one
-   * on page. Returns when complete.
+   * Converts string [s] to HTML elements (via markdown) and shows them
+   * one by one on a page.
+   *
+   * Returns [Future] when complete.
    */
+  @override
   Future<bool> showText(String s) {
     if (s == null) return new Future.value(false);
     Completer completer = new Completer<bool>();
@@ -184,7 +204,7 @@ class HtmlPresenter extends EgbPresenterBase {
   }
 
   /// Search for footnotes in [el] and attach click listeners on them. Clicking
-  /// on a footnote creates a [Dialog] with the [Element.title] as its
+  /// on a footnote creates and shows a [Dialog] with the [Element.title] as its
   /// text content.
   void _attachFootnoteClickListeners(Element el) {
     // Search for footnotes and attach click listeners on them.
@@ -196,16 +216,22 @@ class HtmlPresenter extends EgbPresenterBase {
     });
   }
 
+  /// If animation for text showing is used.
   static const bool USE_SHOWTEXT_ANIMATION = false;
+  /// Duration between showing elements.
+  /// It is used in delaying of elements showing.
   static const Duration _durationBetweenShowingElements = const Duration(
       milliseconds: 200);
+  /// Duration between checking presence of meta elements in view.
   static const Duration _durationBetweenCheckingForMetaElements =
       const Duration(milliseconds: 1000);
+  /// Periodic [Stream] for checking presence of meta elements in view.
   final Stream _periodic = new Stream.periodic(
       _durationBetweenCheckingForMetaElements);
+  /// [StreamSubscription] for [_periodic].
   StreamSubscription _periodicSubscription;
 
-  /// A list of elements and their associated actions and data. When a
+  /// A list of meta elements and their associated actions and data. When a
   /// _metaElement comes into view, its [doAction()] function is called.
   final List<EgbMetaElement> _metaElements = new List<EgbMetaElement>();
 
@@ -246,6 +272,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return (bookDivBottom < currentBottom - 20);
   }
 
+  @override
   Future<int> showChoices(EgbChoiceList choiceList) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
@@ -332,6 +359,9 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// Creates new choice button in form of HTML [:button:] with index and text.
+  ///
+  /// Choice button can also have info chips.
   ButtonElement _createChoiceButton(String index, EgbChoice choice, Completer
       completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
@@ -374,10 +404,14 @@ class HtmlPresenter extends EgbPresenterBase {
     return btn;
   }
 
+  /// Duration between sending hash. It is used in delaying of hash sending.
   static const Duration _durationBetweenSendingHash = const Duration(
       milliseconds: 100);
 
   // TODO: use onClick.first.then() - no need to unregister listener
+  /// Click listener for a choice.
+  ///
+  /// Choice hash is sent asynchronously back to Scripter and bookmark is set.
   void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
       clickSubscriptions) {
@@ -404,7 +438,10 @@ class HtmlPresenter extends EgbPresenterBase {
     event.stopPropagation();
   }
 
+  /// Current points awarded.
   int _currentPoints;
+
+  @override
   Future<bool> awardPoints(PointsAward award) {
     _currentPoints = award.result;
     if (award.addition == 0) {
@@ -438,9 +475,12 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// List of actual UI stats.
   List<UIStat> _stats;
+  /// Map of stats HTML elements used in navigation.
   final Map<String, Element> _statsElements = new Map();
 
+  @override
   Future setStats(List<UIStat> stats) {
     _stats = stats;
     _printStats(); // DEBUG
@@ -460,6 +500,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return new Future.value();
   }
 
+  @override
   Future updateStats(StatUpdateCollection updates) {
     UIStat.updateStatsList(_stats, updates
         )// Returns only the changed stats.
@@ -475,6 +516,7 @@ class HtmlPresenter extends EgbPresenterBase {
     return new Future.value();
   }
 
+  /// Prints visible UI stats into console.
   void _printStats() {
     print("Stats:");
     _stats.where((stat) => stat.show == true).forEach((stat) {
@@ -491,6 +533,8 @@ class HtmlPresenter extends EgbPresenterBase {
 
   /**
    * What happens when user clicks on a savegame bookmark.
+   *
+   * The confirm dialog is shown to user to select if he/she wants to come back.
    */
   void _handleSavegameBookmarkClick(String savegameUid) {
     // TODO: make more elegant, with confirmation appearing on page,
@@ -521,6 +565,7 @@ class HtmlPresenter extends EgbPresenterBase {
    */
   EgbSavegame _savegameToBe;
 
+  @override
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _savegameToBe = savegame;
@@ -539,9 +584,7 @@ class HtmlPresenter extends EgbPresenterBase {
     //    bookmarkDiv.append(bookmarkAnchor);
   }
 
-  /**
-   * Shows a dialog.
-   */
+  /// Shows a [dialog] with overlay over content.
   Future<bool> showDialog(Dialog dialog) {
     var completer = new Completer<bool>();
 
@@ -573,6 +616,10 @@ class HtmlPresenter extends EgbPresenterBase {
     return completer.future;
   }
 
+  /// Stats on click listener.
+  ///
+  /// New [Dialog] with title "Stats" is shown with a current score
+  /// and all stats printed in a table.
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
@@ -588,11 +635,13 @@ class HtmlPresenter extends EgbPresenterBase {
     showDialog(dialog);
   }
 
+  /// Creates a simple error dialog with [title] and [text].
   Future<bool> reportError(String title, String text) {
     Dialog errorDialog = new Dialog(title, "<p>$text</p>");
     return showDialog(errorDialog);
   }
 
+  /// Saves game [savegame] and adds savegame bookmark.
   @override
   void save(EgbSavegame savegame) {
     _textHistory.clear();
@@ -600,6 +649,7 @@ class HtmlPresenter extends EgbPresenterBase {
     addSavegameBookmark(savegame);
   }
 
+  /// Simple HTML presenter logger.
   @override
   void log(String text) {
     print("HtmlPresenter.log: $text");
@@ -626,6 +676,7 @@ class HtmlPresenter extends EgbPresenterBase {
   }
 }
 
+/// Map of element builders for creating of form elements.
 Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   FormBase.elementClass: (FormElement e) => new HtmlForm(e),
   FormSection.elementClass: (FormElement e) => new HtmlFormSection(e),
@@ -639,12 +690,22 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
   OptionBase.elementClass: (FormElement e) => new HtmlOption(e)
 };
 
+/// Abstract class HtmlUiElement wraps UI representation of basic HTML
+/// (in fact [FormElement]) element.
+///
+/// It is a base class for all form elements (for example [HtmlForm],
+/// [HtmlFormSection] or [HtmlSubmitButton]).
 abstract class HtmlUiElement extends UiElement {
+  /// Creates new HtmlUiElement with [blueprint] form element.
   HtmlUiElement(FormElement blueprint) : super(blueprint);
-
+  /// UI representation as an [Element].
   Element uiRepresentation;
 
+  /// If is hidden.
   bool _hidden = false;
+
+  /// Setter for hidden. If the element is hidden, it's still present in HTML
+  /// but it's not visible (is hidden with css).
   @override
   set hidden(bool value) {
     if (value == true) {
@@ -659,14 +720,21 @@ abstract class HtmlUiElement extends UiElement {
   bool get hidden => _hidden;
 }
 
+/// Class HtmlForm represents html form in HTML.
 class HtmlForm extends HtmlUiElement {
+  /// Default text for a submit button.
   static const String DEFAULT_SUBMIT_TEXT = ">>";
 
+  /// Form proxy blueprint element.
   FormProxy blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenContainerDiv;
+  /// Form submit button.
   ButtonElement submitButton;
 
+  /// Creates new HtmlForm and its UI representation from form proxy [blueprint].
   HtmlForm(FormProxy blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()..classes.add("form");
@@ -689,25 +757,35 @@ class HtmlForm extends HtmlUiElement {
     }
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenContainerDiv.append(childUiRepresentation);
   }
 
+  /// If is disabled.
   bool _disabled = false;
+  /// Getter for disabled. When the HTML form disabled is [:true:],
+  /// the submit button is not clickable.
   @override
   bool get disabled => _disabled;
 
+  /// Setter for disabled.
   @override
   set disabled(bool value) {
     _disabled = value;
     if (submitButton != null) submitButton.disabled = value;
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlForm] after the blueprint is changed. Also the text on existing
+  /// [submitButton] is updated with the text from [blueprint]'s submit text.
   @override
   void update() {
     super.update();
@@ -723,20 +801,26 @@ class HtmlForm extends HtmlUiElement {
   @override
   bool get waitingForUpdate => null;
 
+  /// Current value of HTML form. In this case it returns [:null:].
   @override
   Object get current => null;
 }
 
+/// Class HtmlFormSection represents form section in HTML.
 class HtmlFormSection extends HtmlUiElement {
-
+  /// Form section blueprint.
   FormSection blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Header element used to display section name.
   Element _headerEl;
   /// The element which opens or closes the FormSection contents when clicked.
   Element _openCloseEl;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
-
+  /// Creates new HtmlFormSection and its UI representation from form
+  /// section [blueprint].
   HtmlFormSection(FormSection blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -769,6 +853,9 @@ class HtmlFormSection extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Updates state of who from all form sections is opened and who is closed.
+  /// Only one form section can be opened at time, the others are closed.
+  /// The open/close indicator in every form section is updated accordingly.
   void updateOpenCloseDomState() {
     if (_childrenDiv.classes.contains("closed")) {
       _childrenDiv.classes.remove("closed");
@@ -788,11 +875,14 @@ class HtmlFormSection extends HtmlUiElement {
     }
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case text in header.
   @override
   Object get current => _headerEl.text;
 
@@ -802,6 +892,8 @@ class HtmlFormSection extends HtmlUiElement {
   @override
   Stream get onChange => null;
 
+  /// Updates [HtmlFormSection] after the blueprint is changed. Also the text
+  /// in header is updated with [blueprint]'s name.
   @override
   void update() {
     super.update();
@@ -812,11 +904,17 @@ class HtmlFormSection extends HtmlUiElement {
   bool waitingForUpdate = false;
 }
 
+/// Class HtmlSubmitButton represents submit button in HTML.
 class HtmlSubmitButton extends HtmlUiElement {
+  /// Presenter submit button blueprint.
   PresenterSubmitButton blueprint;
+  /// UI representation as a [:button:].
   ButtonElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
+  /// Creates new HtmlSubmitButton and its UI representation from a presenter
+  /// submit button [blueprint].
   HtmlSubmitButton(PresenterSubmitButton blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     _childrenDiv = new DivElement();
@@ -832,11 +930,14 @@ class HtmlSubmitButton extends HtmlUiElement {
     update();
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case [:null:].
   @override
   Object get current => null;
 
@@ -850,16 +951,22 @@ class HtmlSubmitButton extends HtmlUiElement {
     _disabled = value;
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlSubmitButton] after the blueprint is changed. Also the text
+  /// on [uiRepresentation] is updated with [blueprint]'s name.
   void update() {
     super.update();
     uiRepresentation.text = blueprint.name;
   }
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
@@ -870,13 +977,21 @@ class HtmlSubmitButton extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
+/// Class HtmlCheckboxInput represents checkbox input in HTML.
 class HtmlCheckboxInput extends HtmlUiElement {
+  /// Checkbox input base blueprint.
   CheckboxInputBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Actual checkbox element.
   CheckboxInputElement _checkboxEl;
+  /// Label element for displaying information.
   LabelElement _labelEl;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
+  /// Creates new HtmlCheckboxInput and its UI representation from checkbox
+  /// input base [blueprint].
   HtmlCheckboxInput(CheckboxInputBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     print(this.blueprint.name);
@@ -900,17 +1015,23 @@ class HtmlCheckboxInput extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Returns current value. In this case [:true:] if checkbox element is checked.
   @override
   Object get current => _checkboxEl.checked;
 
+  /// Returns [Stream] from checkbox element [onChange].
   @override
   Stream get onChange => _checkboxEl.onChange;
 
+  /// Updates [HtmlCheckboxInput] after the blueprint is changed. Also the checked
+  /// attribute on checkbox element is updated with [blueprint]'s current value.
   @override
   void update() {
     super.update();
@@ -920,22 +1041,35 @@ class HtmlCheckboxInput extends HtmlUiElement {
   @override
   bool waitingForUpdate = false;
 
+  /// Returns if checkbox element is disabled.
   @override
   bool get disabled => _checkboxEl.disabled;
 
+  /// Sets if checkbox element is disabled.
   @override
   set disabled(bool value) {
     _checkboxEl.disabled = value;
   }
 }
 
+/// Abstract class HtmlRangeBase represents base html range.
+///
+/// It is base class for [HtmlRangeOuput] and [HtmlRangeInput].
 abstract class HtmlRangeBase extends HtmlUiElement {
+  /// Range base blueprint.
   RangeBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
+  /// Radio buttons container [:div:].
   DivElement _radioButtonsDiv;
+  /// Paragraph used for a text.
   ParagraphElement _currentValueP;
 
+  /// Creates new HtmlRangeBase and its UI representation from range base
+  /// [blueprint] and with [divClass] used as a css class on [uiRepresentation].
+  /// This css class is used to differentiate between input and output elements.
   HtmlRangeBase(RangeBase blueprint, String divClass) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -965,8 +1099,11 @@ abstract class HtmlRangeBase extends HtmlUiElement {
     update();
   }
 
+  /// Map of radio buttons.
   Map<int, RadioButtonInputElement> _radioButtons =
       new Map<int, RadioButtonInputElement>();
+  /// Creates radio buttons with given constraints on [blueprint]
+  /// (min, max and step size).
   void _createRadioButtons() {
     for (int i = blueprint.min; i <= blueprint.max; i += blueprint.step) {
       RadioButtonInputElement radioButton = _createRadioButton(i);
@@ -977,6 +1114,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   RadioButtonInputElement _createRadioButton(int i);
 
+  /// Update on all radio buttons.
   void _updateRadioButtons() {
     _radioButtons.forEach((int i, RadioButtonInputElement e) =>
         _updateRadioButton(i, e));
@@ -984,6 +1122,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   void _updateRadioButton(int i, RadioButtonInputElement radioButton);
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
@@ -993,13 +1133,17 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   @override
   bool get disabled => _disabled;
 
+  /// When the disabled state with [value] is set, the radio buttons are also
+  /// updated.
   @override
   set disabled(bool value) {
     _disabled = value;
     _updateRadioButtons();
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
@@ -1007,6 +1151,9 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   @override
   int get current => _current;
 
+  /// Updates [HtmlRangeBase] after the blueprint is changed. Also the [current]
+  /// attribute is updated with [blueprint]'s current value, text in paragraph
+  /// is set to current string representation and radio buttons are updated.
   @override
   void update() {
     super.update();
@@ -1027,9 +1174,12 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
+/// Class HtmlRangeOuput represents range output in HTML.
 class HtmlRangeOuput extends HtmlRangeBase {
+  /// Creates new HtmlRangeOuput and its UI from range output base [blueprint].
   HtmlRangeOuput(RangeOutputBase blueprint) : super(blueprint, "range-output");
 
+  /// Creates new radio button element and updates it.
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
@@ -1040,18 +1190,23 @@ class HtmlRangeOuput extends HtmlRangeBase {
     return radioButton;
   }
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;
 
+  /// Updates radio button's [checked] attribute.
   @override
   void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
     radioButton.checked = i == blueprint.current;
   }
 }
 
+/// Class HtmlRangeInput represents range input in HTML.
 class HtmlRangeInput extends HtmlRangeBase {
+  /// Creates new HtmlRangeInput and its UI from range input base [blueprint].
   HtmlRangeInput(RangeInputBase blueprint) : super(blueprint, "range-input");
 
+  /// Creates new radio button element and updates it.
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
@@ -1069,6 +1224,7 @@ class HtmlRangeInput extends HtmlRangeBase {
     return radioButton;
   }
 
+  /// Updates radio button's [checked] and [disabled] attributes.
   @override
   void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
     radioButton.checked = i == blueprint.current;
@@ -1078,11 +1234,17 @@ class HtmlRangeInput extends HtmlRangeBase {
   }
 }
 
+/// Class HtmlTextOuput represents text output in HTML.
 class HtmlTextOuput extends HtmlUiElement {
+  /// Text base blueprint.
   TextBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
+  /// Creates new HtmlTextOuput and its UI representation from text base
+  /// [blueprint].
   HtmlTextOuput(TextBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
@@ -1095,20 +1257,26 @@ class HtmlTextOuput extends HtmlUiElement {
     uiRepresentation.append(_childrenDiv);
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:].
   @override
   void appendChild(Object childUiRepresentation) {
     _childrenDiv.append(childUiRepresentation);
   }
 
+  /// Getter returns current value. In this case text from [uiRepresentation].
   @override
   Object get current => uiRepresentation.text;
 
   @override
   bool disabled = false;
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;
 
+  /// Updates [HtmlTextOuput] after the blueprint is changed. Also the inner
+  /// html on [uiRepresentation] is updated with [blueprint]'s html.
   @override
   void update() {
     super.update();
@@ -1119,13 +1287,19 @@ class HtmlTextOuput extends HtmlUiElement {
   bool waitingForUpdate = false;
 }
 
+/// Class HtmlMultipleChoiceInput represents multiple choice input in HTML.
 class HtmlMultipleChoiceInput extends HtmlUiElement {
-
+  /// Multiple choice input base blueprint.
   MultipleChoiceInputBase blueprint;
+  /// UI representation as a [:div:].
   DivElement uiRepresentation;
+  /// Label element for displaying information.
   LabelElement _labelElement;
+  /// Children [:select:] element used for appending [:option:] elements.
   SelectElement _childrenSelectElement;
 
+  /// Creates new HtmlMultipleChoiceInput and its UI representation from
+  /// multple choice input base [blueprint].
   HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint) :
       super(blueprint) {
     this.blueprint = blueprint;
@@ -1162,6 +1336,8 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     update();
   }
 
+  /// Appends child element [childUiRepresentation] into children
+  /// container [:div:]. The is instance of [OptionElement].
   @override
   void appendChild(Object childUiRepresentation) {
     assert(childUiRepresentation is OptionElement);
@@ -1169,6 +1345,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   }
 
   // TODO: implement current
+  /// Returns current value. In this case [:null:].
   @override
   Object get current => null;
 
@@ -1182,10 +1359,13 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
     _disabled = value;
   }
 
+  /// Getter onChange returns in this case [:null:].
   @override
   Stream get onChange => null;  // All the "changes" happen below, on options.
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the select element
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     _childrenSelectElement.disabled = value;
@@ -1196,11 +1376,15 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
-
+/// Class HtmlOption represents HTML option.
 class HtmlOption extends HtmlUiElement {
+  /// Option base blueprint.
   OptionBase blueprint;
+  /// UI representation as an [:option:].
   OptionElement uiRepresentation;
 
+  /// Creates new HtmlOption and its UI representation from option base
+  /// [blueprint].
   HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new OptionElement(value: blueprint.id, selected:
@@ -1209,11 +1393,14 @@ class HtmlOption extends HtmlUiElement {
     update();
   }
 
+  /// Throws with error. [:option:] element can't have children.
   @override
   void appendChild(Object childUiRepresentation) {
     throw "Not implemented: adding children to Option";
   }
 
+  /// Returns current value. In this case [:true:] if [uiRepresentation] is
+  /// selected.
   @override
   Object get current => uiRepresentation.selected;
 
@@ -1229,6 +1416,8 @@ class HtmlOption extends HtmlUiElement {
 
   @override
   bool get hidden => false;
+  /// If [value] is [:true:] throws with error. [:option:] element can't
+  /// be hidden.
   @override  // <option> in <select> can't be hidden by CSS
   set hidden(bool value) {
     if (value == true) {
@@ -1236,14 +1425,20 @@ class HtmlOption extends HtmlUiElement {
     }
   }
 
+  /// When this method is called, the [_onChangeController] gets new [Event].
   void select() {
     _onChangeController.add(new Event("select"));
   }
 
+  /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+  /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
 
+  /// Updates [HtmlOption] after the blueprint is changed. Also the [selected]
+  /// attribute on [uiRepresentation] is updated with [blueprint]'s current
+  /// value.
   @override
   void update() {
     super.update();
@@ -1251,6 +1446,8 @@ class HtmlOption extends HtmlUiElement {
   }
 
   bool _waitingForUpdate = false;
+  /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
+  /// is disabled.
   @override
   void set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
@@ -1261,28 +1458,43 @@ class HtmlOption extends HtmlUiElement {
   bool get waitingForUpdate => _waitingForUpdate;
 }
 
-/// A menu with choices in it – like for example an inventory menu.
+/// Class Submenu represents menu with choices in it – like for example
+/// an inventory menu.
 class Submenu {
+  /// Submenu's name.
   final String name;
+  /// List of choices being displayed in submenu.
   final List<EgbChoice> choices = new List<EgbChoice>();
 
+  /// Creates new Submenu with [name].
   Submenu(this.name);
 }
 
+/// Class Dialog represents dialog with title, html text and buttons.
 class Dialog {
+  /// Dialog title.
   String title;
+  /// Dialog html text.
   String html;
+  /// List of dialog buttons.
   List<DialogButton> buttons;
 
+  /// Creates new Dialog with [title], [html] text and optional [buttons].
+  ///
+  /// If the dialog [buttons] are not set, the simple close button is created.
   Dialog(this.title, this.html, [this.buttons = const
       [const DialogButton.justClose("Close")]]);
 }
 
+/// Class DialogButton represents dialog button with label and some behaviour.
 class DialogButton {
+  /// Dialog button label.
   final String label;
-
+  /// Dialog button behaviour.
   final ClickBehaviour _behaviour;
+  /// Used as a default behaviour if no behaviour is set. Returns [:true:].
   static final ClickBehaviour NO_BEHAVIOUR = () => true;
+  /// Getter for behaviour. If no behaviour is set, the [NO_BEHAVIOUR] is used.
   ClickBehaviour get behaviour {
     if (_behaviour == null) {
       return NO_BEHAVIOUR;
@@ -1290,28 +1502,39 @@ class DialogButton {
       return _behaviour;
     }
   }
+
+  /// Creates new DialogButton with [label] and [behaviour].
   const DialogButton(this.label, this._behaviour);
+  /// Creates new DialogButton with [label] and without [behaviour].
   const DialogButton.justClose(this.label) : _behaviour = null;
 }
 
-/// Returns true if dialog can be closed.
+/// Typedef returns [:true:] if dialog can be closed.
 typedef bool ClickBehaviour();
 
 
 /**
- * A special class for storing information about a PointsAward together
- * with its meta element.
+ * PointsAwardElement is a special class for storing information about
+ * a PointsAward together with its meta element.
  */
 class PointsAwardElement extends PointsAward implements EgbMetaElement {
+  /// Meta element.
   final Element element;
+  /// Creates new PointsAwardElement with [element] and [PointsAward]'s
+  /// points to be awarded [addition], resulting sum of points [result] and
+  /// optional [justification] message.
   PointsAwardElement(this.element, int addition, int result, [String
       justification]) : super(addition, result, justification);
 
+  /// Creates new PointsAwardElement from [pointsAward] and [element].
   PointsAwardElement.fromPointsAward(PointsAward pointsAward, this.element)
       : super(pointsAward.addition, pointsAward.result,
           pointsAward.justification);
 
+  /// Action which will be called.
   Action action;
+  /// Do action on meta element if [action] is not [:null:].
+  /// If action is done, set [done] to [:true:].
   void doAction() {
     if (action != null && action is Action) {
       action();
@@ -1323,12 +1546,18 @@ class PointsAwardElement extends PointsAward implements EgbMetaElement {
   bool done = false;
 }
 
+/// Abstract class EgbMetaElement wraps meta element with its [Action].
 abstract class EgbMetaElement {
+  /// Element.
   final Element element;
+  /// Action which will be called.
   Action action;
+  /// Do action on meta element.
   void doAction();
+  /// If is action done.
   bool done;
 
+  /// Creates new EgbMetaElement from [element].
   EgbMetaElement(this.element);
 }
 
@@ -1340,24 +1569,28 @@ typedef void Action();
  * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
  * [HtmlPresenter]).
  *
- * TODO: either use lawndart or make the following more robust
+ * TODO: either use lawndart or make the following more robust.
  */
 class LocalStorage implements EgbStorage {
+  /// Saves [value] on [key] into local storage.
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;
     return new Future.value(true);
   }
 
+  /// Returns value on [key] from local storage.
   Future<String> load(String key) {
     var result = window.localStorage[key];
     return new Future.value(result);
   }
 
+  /// Deletes value on [key] from local storage.
   Future<bool> delete(String key) {
     window.localStorage.remove(key);
     return new Future.value(true);
   }
 
+  /// Returns default player profile from storage.
   EgbPlayerProfile getDefaultPlayerProfile() {
     return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, this);
   }
@@ -1366,17 +1599,21 @@ class LocalStorage implements EgbStorage {
 /// Custom syntax that allows `<sup>` tags with titles to act as footnotes.
 /// This just forces [mdown] not to escape HTML of a <sup> tag.
 class FootnoteSupTagSyntax extends mdown.TagSyntax {
+  /// Title for a footnote.
   String title;
 
+  /// Creates new FootnoteSupTagSyntax.
   FootnoteSupTagSyntax()
       : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', tag:
           'sup');
 
+  @override
   bool onMatch(mdown.InlineParser parser, Match match) {
     title = match.group(1);
     return super.onMatch(parser, match);
   }
 
+  @override
   bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state)
       {
     mdown.Element element = new mdown.Element(tag, state.children);

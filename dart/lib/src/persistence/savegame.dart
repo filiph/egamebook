@@ -39,14 +39,15 @@ class EgbSavegame {
   /// since Epoch.
   int timestamp;
   
-  /// Constructor.
+  /// Creates new EgbSavegame with [currentPageName], Map of [_vars]
+  /// and information about visited pages [pageMapState].
   EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
     timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
   
-  /// Constructor creates savegame from JSON. The JSON has to contain either
+  /// Creates new EgbSavegame from JSON. The JSON has to contain either
   /// key for [currentPageName] or for [vars], or both. If there are no keys
   /// like that, [InvalidSavegameException] is thrown.
   EgbSavegame.fromJson(String json) {
@@ -67,7 +68,7 @@ class EgbSavegame {
     }
   }
   
-  /// Constructor creates savegame from [EgbMessage]. It uses its String
+  /// Creates new EgbSavegame from [EgbMessage]. It uses its String
   /// content saved as JSON.
   factory EgbSavegame.fromMessage(EgbMessage message) {
     return new EgbSavegame.fromJson(message.strContent);
@@ -103,10 +104,13 @@ class EgbSavegame {
     return JSON.encode(saveMap);
   }
 
+  /// Returns String representation of savegame.
+  /// It is current savegame as JSON string.
   String toString() => toJson();
 
   /**
-   * Returns true if [variable] is [Saveable] or a primitive type.
+   * Returns true if [variable] is [Saveable] or a primitive type ([:null:],
+   * [:String:], [:int:], [:num:], [:bool:], [:List:], [:Map:])
    */
   static bool _isSaveable(variable) {
     bool primitivelySaveable = (variable == null || variable is String || 
@@ -116,7 +120,7 @@ class EgbSavegame {
     return _isCustomSaveableClass(variable);
   }
   
-  /// Returns true if [variable] is [Saveable].
+  /// Returns true if [variable] is instance of [Saveable].
   static bool _isCustomSaveableClass(variable) {
     return variable is Saveable; // TODO cease to use if this really works
 
@@ -134,8 +138,8 @@ class EgbSavegame {
 
   /**
    * Takes a variable and copies it to a variable that only contains
-   * primitive types (null, String, int, num, bool, List, Map) ready
-   * to be JSONified.
+   * primitive types ([:null:], [:String:], [:int:], [:num:], [:bool:], [:List:],
+   * [:Map:]) ready to be JSONified.
    *
    * When a non-primitive type is detected and it supports the toMap()
    * function, it will be included. Everything else will be ignored.
@@ -243,16 +247,24 @@ class EgbSavegame {
   }
 }
 
-/// An [Exception] thrown in case of incompatible savegame.
+/// IncompatibleSavegameException is an [Exception] thrown in case
+/// of incompatible savegame.
 class IncompatibleSavegameException implements Exception {
+  /// Message describing the exception.
   final String message;
+  /// Creates new IncompatibleSavegameException with error [message].
   const IncompatibleSavegameException(this.message);
+  /// Returns text describing IncompatibleSavegameException with its [message].
   String toString() => "IncompatibleSavegameException: $message";
 }
 
-/// An [Exception] thrown in case of loading of invalid savegame.
+/// InvalidSavegameException is an [Exception] thrown in case
+/// of loading of invalid savegame.
 class InvalidSavegameException implements Exception {
+  /// Message describing the exception.
   final String message;
+  /// Creates new InvalidSavegameException with error [message].
   const InvalidSavegameException(this.message);
+  /// Returns text describing InvalidSavegameException with its [message].
   String toString() => "InvalidSavegameException: $message";
 }

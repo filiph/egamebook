@@ -602,5 +602,9 @@ Builder is the class that converts `.egb` files and their surroundings into Scri
 
 Run unit tests:
 
-    tools/unit_test_run.sh
+    tool/unit_test_run.sh
+
+or
+
+    dart tool/tester.dart
 

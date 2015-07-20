@@ -4,7 +4,7 @@ library egb_saveable;
 /// saveable classes.
 abstract class Saveable {
   /**
-   * When serializing a custom class and when it's Saveable, the Scripter
+   * When serializing a custom class and when it's [Saveable], the Scripter
    * will call this method to get a Map describing this instance using 
    * primitives. The class should be able to recreate its instance state from 
    * the contents of this Map alone.

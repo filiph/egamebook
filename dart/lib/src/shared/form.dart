@@ -103,27 +103,38 @@ import "package:html5lib/dom.dart" as html5lib;
 import "package:jsonml/html5lib2jsonml.dart";
 import 'dart:math' as math;
 
+/// Class FormElement wraps basic form element.
+///
+/// It is a base class of form's base classes (e.g. [FormBase],
+/// [FormSection] etc.)
 class FormElement extends html5lib.Element implements UpdatableByMap {
+  /// Creates new FormElement of an [elementClass] class (tag).
   FormElement(String elementClass) : super.tag(elementClass);
 
-  /// Every form element can have a help button that shows a text message.
+  /// Getter returns a help message. Every form element can have a help button
+  /// that shows a text message.
   String get helpMessage => attributes["helpMessage"];
+  /// Setter for form's help message.
   set helpMessage(String value) => attributes["helpMessage"] = value;
 
-  /// Sets the visibility of the element. This works like CSS [:display:],
-  /// meaning that when set to [:false:], the element will not occupy its
+  /// Getter for the visibility of the element. This works like CSS [:display:],
+  /// meaning that when set to [:true:], the element will not occupy its
   /// space (there will be no 'white rectange' in the place of a hidden element
   /// like with CSS [:visibility:]).
   bool get hidden => attributes["hidden"] == "true";
+  /// Setter for the visibility of the element.
   set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
 
-  /// Whether or not the element should be disabled. Disabled elements are still
-  /// visible, but cannot be clicked or changed, and are clearly marked as such.
+  /// Getter for whether or not the element is disabled.
+  /// Disabled elements are still visible, but cannot be clicked or changed,
+  /// and are clearly marked as such.
   bool get disabled => attributes["disabled"] == "true";
+  /// Setter for whether or not the element is disabled.
   set disabled(bool value) => attributes["disabled"] = value ? "true" : "false";
 
-  /// Returns whether this element is disabled. It differs from [disabled] in
-  /// that it also checks whether any parent in the hierarchy is disabled.
+  /// Getter returns whether this element is disabled. It differs from [disabled]
+  /// in that it also checks whether any [FormElement] parent in the hierarchy
+  /// is disabled.
   bool get disabledOrInsideDisabledParent {
     if (parent != null &&
         (parent as FormElement).disabledOrInsideDisabledParent) {
@@ -132,10 +143,13 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
     return disabled;
   }
 
+  /// Returns attributes [hidden] and [disabled] as a map representation.
   Map<String, Object> toMap() => {
     "hidden": hidden,
     "disabled": disabled
   };
+
+  /// Sets attributes [hidden] and [disabled] from a given [map].
   void updateFromMap(Map<String, Object> map) {
     hidden = map["hidden"];
     disabled = map["disabled"];
@@ -166,6 +180,8 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /**
    * Deep set of all elements that are of class [FormElement] and below this
    * element.
+   *
+   * Returns this set.
    */
   Set<FormElement> get allFormElementsBelowThisOne {
     Set<FormElement> set = new Set<FormElement>();
@@ -175,39 +191,53 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
 }
 
 /**
- * Interface shared by all form elements that can be updated on the fly (i.e.
- * their content/state is not set in stone, but can be either changed by user
- * or by script).
+ * Abstract class UpdatableByMap is an interface shared by all form elements
+ * that can be updated on the fly (i.e. their content/state is not set in stone,
+ * but can be either changed by user or by script).
+ *
+ * This class is implemented by [FormElement].
  */
 abstract class UpdatableByMap {
+  /// Returns a map representation.
   Map<String, Object> toMap();
+  /// Updates from a map representation in a [map].
   void updateFromMap(Map<String, Object> map);
 }
 
+/// Class FormBase wraps base form element.
+///
+/// It is a base class of [Form] element.
 class FormBase extends FormElement {
+  /// Element class.
   static const String elementClass = "Form";
+  /// Creates new FormBase element of [elementClass].
   FormBase() : super(elementClass);
 
-  /// The text to be on the submit button. Defaults to [:null:], in which case
-  /// the button will just have a generic graphic (such as an arrow or a check
-  /// mark).
+  /// Getter for a text to be on the submit button.
+  /// Defaults to [:null:], in which case the button will just have a generic
+  /// graphic (such as an arrow or a check mark).
   String get submitText => attributes["submitText"];
+  /// Setter for a text to be on the submit button.
   set submitText(String value) => attributes["submitText"] = value;
 }
 
 /**
- * The top level element of a form, containing all other elements.
+ * Class Form is the top level element of a form, containing all other elements.
  * Author-facing.
  */
 class Form extends FormBase implements _NewValueCallback {
+  /// Random.
   static math.Random _random = new math.Random();
-
+  /// Creates new Form with optional [submitText]. Form has also randomly
+  /// generated [id].
   Form({String submitText}) {
     this.submitText = submitText;
     id = "${_random.nextInt((1<<16))}"; // Assuming this is enough.
   }
 
+  /// Submit callback.
   SubmitCallback onSubmit;
+  /// Input callback.
   InputCallback onInput;
 
   /**
@@ -277,6 +307,7 @@ class Form extends FormBase implements _NewValueCallback {
   }
 
   bool _uniqueIdsGiven = false;
+  /// Gives form children unique id.
   void _giveChildrenUniqueIds() {
     int id = 0;
     allFormElementsBelowThisOne.forEach((FormElement element) {
@@ -285,6 +316,8 @@ class Form extends FormBase implements _NewValueCallback {
     _uniqueIdsGiven = true;
   }
 
+  /// Returns a map representation of current [Form] object encoded into JsonML
+  /// and its form configuration.
   @override
   Map<String, Object> toMap() {
     if (!_uniqueIdsGiven) {
@@ -297,6 +330,9 @@ class Form extends FormBase implements _NewValueCallback {
     return map;
   }
 
+  /// Returns form configuration for current [Form] which contains
+  /// information about all elements below this one ([:toMap:] representation
+  /// together with its string representation).
   FormConfiguration _createConfiguration() {
     FormConfiguration values = new FormConfiguration();
     for (UpdatableByMap element in allFormElementsBelowThisOne.where((element)
@@ -323,71 +359,100 @@ class Form extends FormBase implements _NewValueCallback {
 }
 
 /**
- * The 'struct' that is being sent from [EgbScripter] to [EgbInterface] when
- * form is created and after it is updated.
+ * FormConfiguration class wraps form configuration.
+ *
+ * It is the 'struct' that is being sent from [EgbScripter] to [EgbInterface]
+ * when form is created and after it is updated.
  */
 class FormConfiguration {
+  /// Map of values.
   Map<String, Map<String, Object>> _valuesMap;
 
+  /// Creates new FormConfiguration with empty map of values.
   FormConfiguration() : _valuesMap = new Map<String, Map<String, Object>>();
+  /// Creates new FormConfiguration from already existing [map] of values.
   FormConfiguration.fromMap(Map<String, Map<String, Object>> map) : _valuesMap =
       map;
 
+  /// Adds new value [attributesMap] on key [id] into map of values.
   void add(String id, Map<String, Object> attributesMap) {
     _valuesMap[id] = attributesMap;
   }
 
+  /// Returns value by [id] from map of values.
   Map<String, Object> getById(String id) => _valuesMap[id];
 
+  /// Returns new map representation of map of values.
   Map<String, Map<String, Object>> toMap() => new Map.from(_valuesMap);
 }
 
 /**
+ * CurrentState class wraps current configuration.
  * The 'struct' that is send from [EgbInterface] to [EgbScripter] after each
  * user interaction.
  */
 class CurrentState {
+  /// Map of values.
   Map<String, Object> _valuesMap;
   /**
-   * Whether or not this form is being submitted. This information is stored
-   * in a 'magic' key-value pair.
+   * Getter for whether or not this form is being submitted.
+   * This information is stored in a 'magic' key-value pair.
    */
   bool get submitted => _valuesMap["__submitted__"];
+  /// Setter for whether or not this form is being submitted.
   set submitted(bool value) => _valuesMap["__submitted__"] = value;
 
+  /// Getter for a submitter id stored in values map.
   String get submitterId => _valuesMap["__submitterId__"];
+  /// Setter for a submitter id stored in values map.
   set submitterId(String value) => _valuesMap["__submitterId__"] = value;
 
+  /// Creates new CurrentState with empty values map.
+  /// The [submitted] attribute is set to [:false:] by default.
   CurrentState() : _valuesMap = new Map<String, Object>() {
     submitted = false;
   }
+  /// Creates new CurrentState from existing values [map].
+  /// If the given values map doesn't contain the [:__submitted__:] key,
+  /// the [submitted] attribute is set to [:false:].
   CurrentState.fromMap(Map<String, Object> map) : _valuesMap = map {
     if (!_valuesMap.containsKey("__submitted__")) {
       submitted = false;
     }
   }
 
+  /// Adds new value [current] on key [id] into map of values.
   void add(String id, Object current) {
     _valuesMap[id] = current;
   }
 
+  /// Returns value by [id] from map of values.
   Object getById(String id) => _valuesMap[id];
 
+  /// Returns new map representation of map of values.
   Map<String, Object> toMap() => new Map.from(_valuesMap);
 
+  /// Returns string representation of CurrentState with [submitted] attribute.
   String toString() => "<CurrentState submitted=$submitted>";
 }
 
+/// FormSection wraps section of a form element.
 class FormSection extends FormElement {
+  /// Getter returns a name.
   String get name => attributes["name"];
+  /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
+  /// Element class.
   static const String elementClass = "FormSection";
+  ///Creates new FormSection with [name] and of [elementClass].
   FormSection(String name) : super(elementClass) {
     this.name = name;
   }
 }
 
+/// Class _NewValueCallback wraps functionality which is called when
+/// an element has a new value.
 class _NewValueCallback<T> {
   /**
    * The function to be called when the element has a new value. The value is
@@ -396,30 +461,37 @@ class _NewValueCallback<T> {
   InputCallback onInput;
 }
 
+/// InputCallback typedef.
 typedef void InputCallback(Object value);
 
+/// Class StringRepresentationCreator wraps functionality which turns [Object]
+/// into its string representation.
 class StringRepresentationCreator {
   /// The function that takes the value of current and returns its [String]
   /// representation. Such as (42) => "42 %".
   StringifyFunction stringifyFunction = (Object value) => "$value";
 }
 
+/// StringifyFunction typedef.
 typedef String StringifyFunction(Object current);
 
 /**
- * This interface is for UI blueprints that need to show a value as a string.
- * That value is created via [StringRepresentationCreator.stringifyFunction]
- * in [EgbPresenter] each time a value is updated.
+ * Abstract class StringRepresentationHolder is an interface for UI blueprints
+ * that need to show a value as a string. That value is created
+ * via [StringRepresentationCreator.stringifyFunction] in [EgbPresenter]
+ * each time a value is updated.
  */
 abstract class StringRepresentationHolder {
+  /// Current string representation.
   String currentStringRepresentation;
 }
 
 /**
- * Interface shared by all inputs. All inputs have a [current] value and
- * they provide [sanitizeCurrent] method.
+ * Abstract class Input is an interface shared by all inputs.
+ * All inputs have a [current] value and they provide [sanitizeCurrent] method.
  */
 abstract class Input<T> {
+  /// Curent value of type [T].
   T current;
 
   /// Called to ensure that the current value is valid. This method will
@@ -427,24 +499,40 @@ abstract class Input<T> {
   void sanitizeCurrent();
 }
 
+/**
+ * Abstract class Output is an interface shared by all output elements.
+ * All output elements have a [current] value.
+ */
 abstract class Output<T> {
+  /// Curent value of type [T].
   T current;
 }
 
+/// Class SubmitButtonBase wraps base submit button element.
+///
+/// It is a base class of [SubmitButton] element.
 class SubmitButtonBase extends FormElement {
+  /// Getter returns a name.
   String get name => attributes["name"];
+  /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
+  /// Element class.
   static const String elementClass = "SubmitButton";
 
+  /// Creates new SubmitButtonBase with [name], optional [helpMessage]
+  /// and of [elementClass].
   SubmitButtonBase(String name, {String helpMessage}) : super(elementClass) {
     this.name = name;
     this.helpMessage = helpMessage;
   }
 
+  /// Creates new SubmitButtonBase with [name] and mandatory [helpMessage].
   SubmitButtonBase.noOptional(String name, String helpMessage) : this(name,
       helpMessage: helpMessage);
 
+  /// Returns a map representation of object which contains
+  /// also the [name] attribute.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
@@ -454,6 +542,8 @@ class SubmitButtonBase extends FormElement {
     return map;
   }
 
+  /// Updates actual object from a map representation in a [map].
+  /// The [name] attribute is also set.
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
@@ -461,10 +551,15 @@ class SubmitButtonBase extends FormElement {
   }
 }
 
+/// SubmitCallback typedef.
 typedef void SubmitCallback();
 
+/// Class SubmitButton wraps submit button element.
 class SubmitButton extends SubmitButtonBase  {
+  /// Callback called on submit.
   SubmitCallback onSubmit;
+  /// Creates new SubmitButton with [name] and [onSubmit] callback.
+  /// SubmitButton can also have optional [helpMessage].
   SubmitButton(String name, this.onSubmit, {String helpMessage}) :
     super.noOptional(name, helpMessage);
 }
@@ -472,11 +567,16 @@ class SubmitButton extends SubmitButtonBase  {
 // TODO: SkillSubmitButton - allows player to have better results according
 // to skill (acumen)
 
-
+/// Class CheckboxBase wraps base checkbox element.
+///
+/// It is a base class of [CheckboxInputBase].
 class CheckboxBase extends FormElement {
+  /// Getter returns a name.
   String get name => attributes["name"];
+  /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
+  /// Creates new CheckboxBase with [name] and of [elementClass].
   CheckboxBase(String elementClass, String name)
       : super(elementClass) {
     this.name = name;
@@ -485,6 +585,8 @@ class CheckboxBase extends FormElement {
   /// Checked or not.
   bool current;
 
+  /// Returns a map representation of object which contains
+  /// also the [current] attribute.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
@@ -494,6 +596,8 @@ class CheckboxBase extends FormElement {
     return map;
   }
 
+  /// Updates actual object from a map representation in a [map].
+  /// The [current] attribute is also set.
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
@@ -501,11 +605,19 @@ class CheckboxBase extends FormElement {
   }
 }
 
+/// Class CheckboxInputBase wraps base checkbox input element.
+///
+/// It is a base class of [CheckboxInput].
 class CheckboxInputBase extends CheckboxBase implements Input<bool> {
+  /// Element class.
   static const String elementClass = "CheckboxInput";
+
+  /// Creates new CheckboxInputBase with [name] and of [elementClass].
   CheckboxInputBase(String name)
     : super(elementClass, name);
 
+  /// Sets sanitization on a [current] atribute. If is it [:null:],
+  /// the [StateError] is thrown.
   @override
   void sanitizeCurrent() {
     if (current == null) {
@@ -514,7 +626,10 @@ class CheckboxInputBase extends CheckboxBase implements Input<bool> {
   }
 }
 
+/// Class CheckboxInput wraps element of checkbox input.
 class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
+  /// Creates new CheckboxInput with [name], input callback [onInput] and
+  /// optional [checked].
   CheckboxInput(String name, InputCallback onInput, {bool checked: false})
       : super(name) {
     this.onInput = onInput;
@@ -523,15 +638,24 @@ class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
 }
 
 /**
- * Base class of [RangeInput] and [PresenterRangeInput].
+ * RangeBase class wraps base range element.
+ *
+ * It is a base class of [RangeInputBase] and [RangeOutputBase].
  */
 class RangeBase extends FormElement {
+  /// Getter returns a name.
   String get name => attributes["name"];
+  /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
+  /// Creates new RangeBase of a given [elementClass] and with a [name].
   RangeBase(String elementClass, String name) : super(elementClass) {
     this.name = name;
   }
+  /// Creates new RangeBase of a given [elementClass] and with a [name].
+  /// and constraints. Constraints are [current] value selected on the range
+  /// input, [min] value, [max] value, [step] size and [minEnabled] and
+  /// [maxEnabled] values.
   RangeBase.withConstraints(String elementClass, String
       name, this.current, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
       : super(elementClass) {
@@ -561,6 +685,7 @@ class RangeBase extends FormElement {
   /// Same as [minEnabled], but for values _above_ this number.
   int maxEnabled;
 
+  /// Returns a map representation of object with constraints included.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
@@ -575,6 +700,8 @@ class RangeBase extends FormElement {
     return map;
   }
 
+  /// Updates actual object from a map representation in a [map].
+  /// The constraints are also set.
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
@@ -587,13 +714,22 @@ class RangeBase extends FormElement {
   }
 }
 
+/// Class RangeInputBase wraps base range input element.
+///
+/// It is a base class of [RangeInput].
 class RangeInputBase extends RangeBase implements Input<int> {
+  /// Element class.
   static const String elementClass = "RangeInput";
+  /// Creates new RangeInputBase with [name], of [elementClass] and constraints.
+  /// Constraints are [current] value selected on the range
+  /// input, [min] value, [max] value, [step] size and [minEnabled] and
+  /// [maxEnabled] values.
   RangeInputBase.withConstraints(String name, int current, int min, int max, int
       step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
           minEnabled, maxEnabled);
 
+  /// Creates new RangeInputBase with [name] and of [elementClass].
   RangeInputBase(String name) : super(elementClass, name);
 
   /// Makes sure [current] is in range (not above [maxEnabled], [max] or below
@@ -623,11 +759,16 @@ class RangeInputBase extends RangeBase implements Input<int> {
 }
 
 /**
- * The author-facing class of the range input element. It works only with
- * integers
+ * Class RangeInput wraps range input element.
+ *
+ * It is the author-facing class of the range input element. It works only with
+ * integers.
  */
 class RangeInput extends RangeInputBase with _NewValueCallback<int>,
     StringRepresentationCreator {
+  /// Creates new RangeInput with [name], input callback [onInput] and optional
+  /// constraints [value], stringify function [stringifyFunction], [min] and [max]
+  /// values, [step] size and [minEnabled] and [maxEnabled] values.
   RangeInput(String name, InputCallback onInput, {int value:
       0, StringifyFunction stringifyFunction, int min: 0, int max: 10, int step:
       1, int minEnabled, int maxEnabled}) : super.withConstraints(name, value, min,
@@ -640,25 +781,37 @@ class RangeInput extends RangeInputBase with _NewValueCallback<int>,
 }
 
 /**
- * Base class of [RangeOutput] and [PresenterRangeOutput].
+ * Class RangeOutputBase wraps base range output element.
+ *
+ * It is a base class of [RangeOutput].
  */
 class RangeOutputBase extends RangeBase implements Output<int> {
+  /// Element class.
   static const String elementClass = "RangeOutput";
 
+  /// Creates new RangeOutputBase with [name], of [elementClass] and given
+  /// constraints. Constraints are [current] value, [min] and [max] value,
+  /// [step] size and [minEnabled] and [maxEnabled] values.
   RangeOutputBase.withConstraints(String name, int current, int min, int
       max, int step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
           minEnabled, maxEnabled);
 
+  /// Creates new RangeOutputBase with [name] and of [elementClass].
   RangeOutputBase(String name) : super(elementClass, name);
 }
 
 /**
- * An element of the [Form] that looks almost identical to [RangeInput], but
- * isn't meant for input. It can show, for example, the remaining 'resources'
+ * Class RangeOutput wraps range output element.
+ *
+ * It is an element of the [Form] that looks almost identical to [RangeInput],
+ * but isn't meant for input. It can show, for example, the remaining 'resources'
  * to distribute to RangeInputs.
  */
 class RangeOutput extends RangeOutputBase with StringRepresentationCreator {
+  /// Creates new RangeOutput with [name] and constraints [value], stringify
+  /// function [stringifyFunction], [min] and [max] values, [step] size and
+  /// [minEnabled] and [maxEnabled] values.
   RangeOutput(String name, {int value: 0, StringifyFunction
       stringifyFunction, int min: 0, int max: 10, int step: 1, int minEnabled, int
       maxEnabled}) : super.withConstraints(name, value, min, max, step, minEnabled,
@@ -669,11 +822,16 @@ class RangeOutput extends RangeOutputBase with StringRepresentationCreator {
   }
 }
 
+/// Class TextBase wraps base text element.
+///
+/// It is a base class of [TextOutputBase].
 class TextBase extends FormElement {
+  /// Creates new TextBase of a given [elementClass].
   TextBase(String elementClass) : super(elementClass);
-
+  /// HTML text
   String html;
 
+  /// Returns a map representation of object with [html] attribute included.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
@@ -683,6 +841,8 @@ class TextBase extends FormElement {
     return map;
   }
 
+  /// Updates actual object from a map representation in a [map].
+  /// The [html] attribute is also set.
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
@@ -690,33 +850,48 @@ class TextBase extends FormElement {
   }
 }
 
+/// Class TextOutputBase is a base text output element.
+///
+/// It is a base class of [TextOutput].
 class TextOutputBase extends TextBase with Output<String> {
+  /// Element class.
   static const String elementClass = "TextOutput";
+  /// Creates new TextOutputBase of [elementClass].
   TextOutputBase() : super(elementClass);
 
+  /// Returns current value in [html].
   @override
   String get current => html;
+  /// Sets value to [html] attribute.
   @override
   set current(String value) {
     html = value;
   }
 }
 
+/// Class TextOutput wraps text output element.
 class TextOutput extends TextOutputBase {
   // No need to implement anything. This is here in case we need to attach
   // closures to the scripter-facing representation.
 }
 
+/// Class MultipleChoiceInputBase wraps base multiple choice input element.
+///
+/// It is a base class of [MultipleChoiceInput].
 class MultipleChoiceInputBase extends FormElement {
   //    with UpdatableByMap
+  /// Getter returns a name.
   String get name => attributes["name"];
+  /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
     //List<OptionBase> options = new List<OptionBase>();
     //void add(OptionBase option) => options.add(option);
     //void addAll(Iterable<OptionBase> options) => this.options.addAll(options);
 
+  /// Element class.
   static const String elementClass = "MultipleChoiceInput";
+  /// Creates new MultipleChoiceInputBase with [name] and of [elementClass].
   MultipleChoiceInputBase(String name) : super(elementClass) {
     this.name = name;
   }
@@ -741,19 +916,29 @@ class MultipleChoiceInputBase extends FormElement {
   //  }
 }
 
+/// Class MultipleChoiceInput wraps multiple choice input element.
 class MultipleChoiceInput extends MultipleChoiceInputBase with
     _NewValueCallback<int> {
+  /// Creates new MultipleChoiceInput with [name] and input callback [onInput].
   MultipleChoiceInput(String name, InputCallback onInput) : super(name) {
     this.onInput = onInput;
   }
 }
 
-/// Base class for a single element to choose in a [MultipleChoiceInput].
+/// Class OptionBase wraps base option element.
+///
+/// It is a base class for a single element to choose in a [MultipleChoiceInput]
+/// and base class of [Option] element.
 class OptionBase extends FormElement implements Input<bool> {
+  /// Getter returns a text.
   String get text => attributes["text"];
+  /// Setter for a text.
   set text(String value) => attributes["text"] = value;
 
+  /// Element class.
   static const String elementClass = "Option";
+  /// Creates new OptionBase with [text] and optional [selected] attribute
+  /// and [helpMessage] text. The [selected] attribute is stored into [current].
   OptionBase(String text, {bool selected: false, String helpMessage}) :
       super(elementClass) {
     this.text = text;
@@ -762,9 +947,13 @@ class OptionBase extends FormElement implements Input<bool> {
   }
 
   // This exists because of https://code.google.com/p/dart/issues/detail?id=15101
+  /// Creates new OptionBase with [text], [selected] attribute and [helpMessage]
+  /// text. The [selected] attribute is stored into [current].
   OptionBase.noOptional(String text, bool selected, String helpMessage) :
     this(text, selected: selected, helpMessage: helpMessage);
 
+  /// Returns a map representation of object which contains also [text]
+  /// and [current] value which describes if an element is selected or not.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
@@ -775,6 +964,8 @@ class OptionBase extends FormElement implements Input<bool> {
     return map;
   }
 
+  /// Updates actual object from a map representation in a [map].
+  /// The [text] and [current] attributes are also set.
   @override
   void updateFromMap(Map<String, Object> map) {
     super.updateFromMap(map);
@@ -782,14 +973,20 @@ class OptionBase extends FormElement implements Input<bool> {
     current = map["current"];
   }
 
+  /// If element is currently selected.
   @override
   bool current = false;
 
+  /// Called to ensure that the current value is valid.
   @override
   void sanitizeCurrent() {}
 }
 
+/// Class Option wraps option element.
 class Option extends OptionBase with _NewValueCallback<bool> {
+  /// Creates new Option with [text], [onSelect] input callback and optional
+  /// [selected] value and [helpMessage] text.
+  ///
   /// The [onSelect] callback is only triggered when the option has just been
   /// selected (not when it was deselected).
   Option(String text, InputCallback onSelect, {bool
