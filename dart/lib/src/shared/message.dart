@@ -121,21 +121,24 @@ class EgbMessage {
   EgbMessage(this.type, {bool needsAnswer: true});
 
   /// Creates new EgbMessage of type [QUIT].
+  /// Used during the [:EgbIsolateScripterProxy quit():].
   EgbMessage.quit() : type = QUIT;
 
   /// Creates new EgbMessage of type [PROCEED].
   EgbMessage.proceed() : type = PROCEED;
 
-  /// Creates new EgbMessage of type [TEXT_RESULT] with String content [str].
+  /// Creates new EgbMessage of type [TEXT_RESULT] with String
+  /// content [str]. Used during the [:EgbIsolatePresenterProxy showText():].
   EgbMessage.textResult(String str) : type = TEXT_RESULT {
     strContent = str;
   }
 
   /// Creates new EgbMessage of type [START].
+  /// Used during the [:EgbIsolatePresenterProxy restart():]
   EgbMessage.start() : type = START;
 
-  /// Creates new EgbMessage of type [SEND_BOOK_UID] with String content
-  /// [strContent].
+  /// Creates new EgbMessage of type [SEND_BOOK_UID]
+  /// with String content [strContent].
   EgbMessage.bookUid(this.strContent) : type = SEND_BOOK_UID;
 
   /// Creates new EgbMessage of type [REQUEST_BOOK_UID].
