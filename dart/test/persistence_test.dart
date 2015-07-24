@@ -3,6 +3,12 @@ import 'package:unittest/unittest.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
+import 'package:egamebook/src/shared/message.dart';
+import 'package:egamebook/scripter.dart';
+
+// Removes all white space from a String.
+String removeWhiteSpace(String string)
+  => string.replaceAll(new RegExp(r"\s+"), "");
 
 void main() {
   group("Memory storage", () {
@@ -81,7 +87,51 @@ void main() {
       savegame = new EgbSavegame.fromJson(exampleJson);
       String savegameJson = savegame.toJson();
       expect(savegameJson, isNotNull);
-      //TODO
+      expect(removeWhiteSpace(savegameJson), removeWhiteSpace(exampleJson));
+    });
+
+    test("toMessage", () {
+      savegame = new EgbSavegame.fromJson(exampleJson);
+      EgbMessage message = savegame.toMessage(EgbMessage.SAVE_GAME);
+      expect(message, isNotNull);
+      expect(message.type, EgbMessage.SAVE_GAME);
+      expect(message.strContent, isNotNull);
+      expect(message.strContent, savegame.toJson());
+    });
+
+    test("toMessage throws", () {
+      savegame = new EgbSavegame.fromJson(exampleJson);
+      expect(() => savegame.toMessage(EgbMessage.QUIT), throws);
+    });
+
+    test("fromMessage", () {
+      EgbMessage message = new EgbMessage.saveGame(exampleJson);
+      savegame = new EgbSavegame.fromMessage(message);
+      expect(savegame, isNotNull);
+      expect(savegame.uid, "a253e70");
+      expect(savegame.vars, new isInstanceOf<Map>());
+      expect(savegame.vars["isEngineer"], false);
+      expect(savegame.timestamp, 1437059264436);
+    });
+
+    test("importSavegameToVars", () {
+      Map vars = {
+        "points": new PointsCounter()
+            ..add(10),
+        "isEngineer": true,
+        "isStrong": true
+      };
+      savegame = new EgbSavegame.fromJson(exampleJson);
+      expect(savegame.vars, isNotNull);
+      expect(savegame.vars.isNotEmpty, isTrue);
+      expect(vars["points"].sum, 10);
+      expect(vars["isEngineer"], true);
+      expect(vars["isStrong"], true);
+
+      EgbSavegame.importSavegameToVars(savegame, vars);
+      expect(vars["points"].sum, 20);
+      expect(vars["isEngineer"], false);
+      expect(vars["isStrong"], false);
     });
   });
 }
