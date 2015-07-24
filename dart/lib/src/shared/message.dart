@@ -166,7 +166,8 @@ class EgbMessage {
     mapContent = updates.toMap();
   }
 
-  /// Creates new EgbMessage of type [SET_STATS] with List content [list].
+  /// Creates new EgbMessage of type [SET_STATS] with provided [list] used as
+  /// a [listContent].
   /// It is also used during the [EgbIsolatePresenterProxy]'s [:setStats():].
   EgbMessage.statsInit(List<Map<String, Object>> list)
       : type = SET_STATS {
@@ -223,7 +224,8 @@ class EgbMessage {
 
   /// Creates new EgbMessage of type [SCRIPTER_ERROR] with provided
   /// [message] used as [strContent].
-  /// It is also used during the [EgbIsolatePresenterProxy]'s [:reportError():].
+  /// This message is used when some error appears. and is also used during
+  /// the [EgbIsolatePresenterProxy]'s [:reportError():].
   EgbMessage.scripterError(String message) : type = SCRIPTER_ERROR {
     strContent = message;
   }

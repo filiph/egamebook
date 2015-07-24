@@ -34,7 +34,9 @@ abstract class EgbPresenterViewedFromScripter {
  * It has direct access to the Scripter object.
  */
 abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
+  /// Instance of Scripter.
   EgbScripter scripter;
+  /// Sets scripter to [scripter].
   void setScripter(EgbScripter scripter) {
     this.scripter = scripter;
   }
@@ -51,6 +53,8 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// Own port for receiving messages from main Isolate.
   ReceivePort port;
 
+  /// Creates new EgbIsolatePresenterProxy with provided [mainIsolatePort] used
+  /// for sending messages.
   EgbIsolatePresenterProxy(this.mainIsolatePort) {
     assert(mainIsolatePort != null);
     port = new ReceivePort();
@@ -58,6 +62,10 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     mainIsolatePort.send(port.sendPort);
   }
 
+  /// Called when message from main Isolate is received.
+  /// The received message has to be instance of [Map]. The [EgbMessage]
+  /// is then created from a given Map and according to its type the
+  /// functionality is run.
   void _onMessageFromMainIsolate(Object _message) {
     // Convert primitive Map to message.
     assert(_message is Map);
@@ -169,12 +177,12 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
   final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
-      // TODO: get rid of this (no ZipMessage!)
+  /// Message backglog. TODO solve.
   EgbMessage _messageBacklog; // TODO: get rid of this (no ZipMessage!)
 
   /**
-   * Utilify function [_send] sends message through the [_runnerPort] to the
-   * Runner.
+   * Utility function [_send] sends [EgbMessage] message as a [Map] representation
+   * through the [mainIsolatePort] to the Scripter.
    */
   void _send(EgbMessage message) {
     mainIsolatePort.send(message.toMap());
@@ -210,37 +218,44 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
 
+  /// Sends [PointsAward] as a message to Scripter.
   @override
   void awardPoints(PointsAward award) {
     _send(award.toMessage());
   }
 
+  /// Sends end of book message to Scripter.
   @override
   void endBook() {
     _send(new EgbMessage.endOfBook());
   }
 
+  /// Sends scripter error message with provided [title] and [text] to Scripter.
   @override
   void reportError(String title, String text) {
     _send(new EgbMessage.scripterError("$title: $text"));
     // TODO: Should close port!?
   }
 
+  /// Sends scripter log message with provided [text] to Scripter.
   @override
   void log(String text) {
     _send(new EgbMessage.scripterLog(text));
   }
 
+  /// Sends [playerChronology] as a message to Scripter.
   @override
   void savePlayerChronology(Set<String> playerChronology) {
     _send(new EgbMessage.savePlayerChronology(playerChronology));
   }
 
+  /// Sends List of UIStat [stats] as a message to Scripter.
   @override
   void setStats(List<UIStat> stats) {
     _send(new EgbMessage.statsInit(Stat.createStatList()));
   }
 
+  /// Completer for showing of choices.
   Completer<int> _choiceSelectedCompleter;
 
   @override
