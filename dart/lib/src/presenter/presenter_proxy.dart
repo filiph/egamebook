@@ -46,7 +46,7 @@ abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
  * The proxy that deals with Presenter in another Isolate.
  */
 class EgbIsolatePresenterProxy extends EgbPresenterProxy {
-  /// Port of the calling isolate.
+  /// Port of the calling Isolate.
   SendPort mainIsolatePort;
 
   /// Own port for receiving messages from main Isolate.
@@ -181,7 +181,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
 
   /**
    * Utility function [_send] sends [EgbMessage] message as a [Map] representation
-   * through the [mainIsolatePort] to the Scripter.
+   * through the [mainIsolatePort] to the Scripter proxy.
    */
   void _send(EgbMessage message) {
     mainIsolatePort.send(message.toMap());
@@ -217,19 +217,20 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
 
-  /// Sends [PointsAward] as a message to Scripter.
+  /// Sends [PointsAward] as a message to Scripter proxy.
   @override
   void awardPoints(PointsAward award) {
     _send(award.toMessage());
   }
 
-  /// Sends end of book message to Scripter.
+  /// Sends end of book message to Scripter proxy.
   @override
   void endBook() {
     _send(new EgbMessage.endOfBook());
   }
 
-  /// Sends scripter error message with provided [title] and [text] to Scripter.
+  /// Sends scripter error message with provided [title] and [text]
+  /// to Scripter proxy.
   @override
   void reportError(String title, String text) {
     _send(new EgbMessage.scripterError("$title: $text"));
@@ -243,13 +244,14 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
   /// Sends save player chronology message from provided [playerChronology]
-  /// to Scripter.
+  /// to Scripter proxy.
   @override
   void savePlayerChronology(Set<String> playerChronology) {
     _send(new EgbMessage.savePlayerChronology(playerChronology));
   }
 
-  /// Sends set stats message from provided List of UIStat [stats] to Scripter.
+  /// Sends set stats message from provided List of UIStat [stats]
+  /// to Scripter proxy.
   @override
   void setStats(List<UIStat> stats) {
     _send(new EgbMessage.statsInit(Stat.createStatList()));
@@ -259,7 +261,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   Completer<int> _choiceSelectedCompleter;
 
   /// Sends show choices message from provided EgbChoiceList [choices]
-  /// to Scripter.
+  /// to Scripter proxy.
   @override
   Future<int> showChoices(EgbChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
@@ -274,7 +276,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     return _choiceSelectedCompleter.future;
   }
 
-  /// Sends text result message from provided [text] to Scripter.
+  /// Sends text result message from provided [text] to Scripter proxy.
   @override
   Future<bool> showText(String text) {
     _send(new EgbMessage.textResult(text));
@@ -283,7 +285,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
   /// Sends update stats message from provided StatUpdateCollection [updates]
-  /// to Scripter.
+  /// to Scripter proxy.
   @override
   Future<bool> updateStats(StatUpdateCollection updates) {
     _send(new EgbMessage.statUpdates(updates));
@@ -291,7 +293,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
   /// Sends save game message from provided EgbSavegame [savegame]
-  /// to Scripter.
+  /// to Scripter proxy.
   @override
   void save(EgbSavegame savegame) {
     _send(savegame.toMessage(EgbMessage.SAVE_GAME));
@@ -306,7 +308,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// Form input stream controller.
   StreamController<CurrentState> _formInputStreamController;
 
-  /// Sends show form message from provided FormBase [form] to Scripter.
+  /// Sends show form message from provided FormBase [form] to Scripter proxy.
   @override
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");
