@@ -243,13 +243,14 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     _send(new EgbMessage.scripterLog(text));
   }
 
-  /// Sends [playerChronology] as a message to Scripter.
+  /// Sends save player chronology message from provided [playerChronology]
+  /// to Scripter.
   @override
   void savePlayerChronology(Set<String> playerChronology) {
     _send(new EgbMessage.savePlayerChronology(playerChronology));
   }
 
-  /// Sends List of UIStat [stats] as a message to Scripter.
+  /// Sends set stats message from provided List of UIStat [stats] to Scripter.
   @override
   void setStats(List<UIStat> stats) {
     _send(new EgbMessage.statsInit(Stat.createStatList()));
@@ -258,6 +259,8 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// Completer for showing of choices.
   Completer<int> _choiceSelectedCompleter;
 
+  /// Sends show choices message from provided EgbChoiceList [choices]
+  /// to Scripter.
   @override
   Future<int> showChoices(EgbChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
@@ -272,6 +275,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     return _choiceSelectedCompleter.future;
   }
 
+  /// Sends text result message from provided [text] to Scripter.
   @override
   Future<bool> showText(String text) {
     _send(new EgbMessage.textResult(text));
@@ -279,24 +283,31 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     //       EgbMessage.TEXT_SHOWN
   }
 
+  /// Sends update stats message from provided StatUpdateCollection [updates]
+  /// to Scripter.
   @override
   Future<bool> updateStats(StatUpdateCollection updates) {
     _send(new EgbMessage.statUpdates(updates));
     return new Future.value(true);
   }
 
+  /// Sends save game message from provided EgbSavegame [savegame]
+  /// to Scripter.
   @override
   void save(EgbSavegame savegame) {
     _send(savegame.toMessage(EgbMessage.SAVE_GAME));
   }
 
+  /// Sends debug [message].
   void DEBUG_SCR(String message) {
     //print(message);
     log(message);
   }
 
+  /// Form input stream controller.
   StreamController<CurrentState> _formInputStreamController;
 
+  /// Sends show form message from provided FormBase [form] to Scripter.
   @override
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");
@@ -305,6 +316,8 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     return _formInputStreamController.stream;
   }
 
+  /// Sends update form message from provided FormConfiguration [values]
+  /// to Scripter.
   @override
   void updateForm(FormConfiguration values) {
     DEBUG_SCR("Scripter sends newly updated values.");
@@ -312,8 +325,16 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 }
 
+/// EgbAsyncOperationOverridenException wraps around exceptions that are
+/// generated when some event happens before expected operation.
+///
+/// For example Book Quit before choice was selected.
 class EgbAsyncOperationOverridenException implements Exception {
+  /// Message describing the exception.
   final String message;
+  /// Creates new EgbAsyncOperationOverridenException with error [message].
   const EgbAsyncOperationOverridenException(this.message);
+  /// Returns text describing EgbAsyncOperationOverridenException with its
+  /// [message].
   String toString() => "EgbAsyncOperationOverridenException: $message.";
 }
