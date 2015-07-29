@@ -46,7 +46,6 @@ abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
  * The proxy that deals with Presenter in another Isolate.
  */
 class EgbIsolatePresenterProxy extends EgbPresenterProxy {
-
   /// Port of the calling isolate.
   SendPort mainIsolatePort;
 
