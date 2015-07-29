@@ -36,7 +36,7 @@ final StringBuffer textBuffer = new StringBuffer();
 
 /**
  * The top level function that can be called from script blocks or library
- * functions.
+ * functions. It writes [str] to [textBuffer].
  */
 void echo(String str) {
   if (textBuffer.length > 0) {
@@ -51,9 +51,11 @@ void echo(String str) {
  * seldom access this field. Instead, they should use the [goto] function.
  *
  * The variable is automatically reset to [:null:] by Scripter once the jump
- * has been done.
+ * to this page name has been done.
  */
 String gotoPageName;
+/// Returns [:true:] if [goto] was called recently - e.g. [gotoPageName]
+/// is not [:null:].
 bool get gotoCalledRecently => gotoPageName != null;
 
 /**
@@ -107,10 +109,12 @@ EgbChoice choice(String string, {String goto, ScriptBlock script, String
   return choice;
 }
 
+/// Current form.
 Form _currentForm;
+/// Getter returns current form.
 Form get currentForm => _currentForm;
 /**
- * Show the [form].
+ * Show the [form]. Sets current form.
  */
 void showForm(Form form) {
   _currentForm = form;
@@ -138,8 +142,8 @@ void repeatBlock() {
 }
 
 /**
-When a block/script/choice call for a script to be called afterwards,
-it ends up on this FILO stack.
+ * When a block/script/choice call for a script to be called afterwards,
+ * it ends up on this FILO stack.
  */
 final Queue<ScriptBlock> _nextScriptStack = new Queue<ScriptBlock>();
 
@@ -187,6 +191,7 @@ abstract class EgbScripter {
   /// The ChoiceList to be shown on next occasion.
   EgbSavegame _choicesToShow;
 
+  /// Getter returns awarded points to player.
   PointsCounter get points => _points;
 
   /// Goto links (page1 -> page 2) that have been shown to the player, but
@@ -238,15 +243,19 @@ abstract class EgbScripter {
   Map<String, Function> _constructors;
 
   /// Port for communication with the Runner (and through it, the Presenter,
-  /// and the player).
+  /// and the player). The message is sent through this port.
   SendPort _runnerPort;
 
+  /// Port where the message is received.
   ReceivePort port;
 
+  /// Creates new EgbScripter.
   EgbScripter();
 
+  /// Presenter proxy.
   EgbPresenterProxy presenter;
 
+  /// Sets Presenter and Scripter to given [presenter].
   void setPresenter(EgbPresenterProxy presenter) {
     this.presenter = presenter;
     presenter.setScripter(this);
@@ -309,7 +318,7 @@ abstract class EgbScripter {
   }
 
   /**
-   * Handles the Runner's reply to MSG_SHOW_CHOICES (i.e. the choice picked).
+   * Handles the Runner's reply to SHOW_CHOICES message (i.e. the choice picked).
    */
   void _handleChoiceSelected(int choiceHash) {
     EgbChoice pickedChoice;
@@ -668,6 +677,8 @@ abstract class EgbScripter {
     }
   }
 
+  /// Creates and returns save game from actual [currentPage], [vars]
+  /// and [pageMap].
   EgbSavegame _createSaveGame() {
     populateVarsFromState();
     try {
@@ -719,11 +730,13 @@ abstract class EgbScripter {
     DEBUG_SCR("loadFromSaveGame() done.");
   }
 
+  /// Logs debug [message].
   void DEBUG_SCR(String message) {
     presenter.log(message);
     //print("SCR: $message");
   }
 
+  /// Returns actual points.
   PointsCounter getPoints() {
     return _points;
   }

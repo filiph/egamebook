@@ -13,9 +13,10 @@ import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
 /**
- * The methods of Scripter that are callable by Presenter.
+ * The methods of EgbScripter that are callable by EgbPresenter.
  */
 abstract class EgbScripterViewedFromPresenter {
+  /// Getter returns Uid.
   String get uid;
 
   /**
@@ -34,8 +35,11 @@ abstract class EgbScripterViewedFromPresenter {
  * It has direct access to the Presenter object.
  */
 abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
+  /// Instance of Presenter.
   EgbPresenter presenter;
 
+  /// Sets Presenter and also sets Presenter player profile's
+  /// [:currentEgamebookUid:] to [uid] if is not [:null:].
   void setPresenter(EgbPresenter presenter) {
     this.presenter = presenter;
     if (uid != null) {
@@ -50,16 +54,23 @@ abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
  * The proxy that deals with Scripter in another Isolate.
  */
 class EgbIsolateScripterProxy extends EgbScripterProxy {
+  /// Isolate URI.
   Uri _isolateUri;
+  /// Own port for receiving messages from Isolate.
   ReceivePort _receivePort;
+  /// Port of the calling Isolate.
   SendPort _scripterPort;
+  /// Unique id.
   String _uid;
 
+  /// Getter returns unique id.
   @override
   String get uid => _uid;
 
+  /// Init completer.
   Completer _initCompleter;
 
+  /// Creates new EgbIsolateScripterProxy with provided Isolate URI [_isolateUri].
   EgbIsolateScripterProxy(this._isolateUri);
 
   @override
@@ -72,6 +83,10 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     return _initCompleter.future;
   }
 
+  /// Called when message from Scripter Isolate is received.
+  /// The received message has to be instance of [SendPort] or [Map].
+  /// In case of Map the [EgbMessage] is then created from a given Map and
+  /// according to its type the functionality is run.
   void _onMessageFromScripterIsolate(Object _message) {
     if (_message is SendPort) {
       INT_DEBUG("Received SendPort from Isolate");
@@ -168,7 +183,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   }
 
   /**
-   * Utility function that sends message to the scripter.
+   * Utility function that sends message through the Scripter port.
    */
   void _send(EgbMessage message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
@@ -176,6 +191,8 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     _scripterPort.send(message.toMap());
   }
 
+  /// Sends load game message from provided [savegame] to Presenter proxy.
+  /// If [playerChronology] is present, it is also contained in the message.
   @override
   void load(EgbSavegame savegame, [Set<String> playerChronology]) {
     EgbMessage loadMessage = savegame.toMessage(EgbMessage.LOAD_GAME);
@@ -187,6 +204,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     _send(loadMessage);
   }
 
+  /// Sends quit message to Presenter proxy and closes receive port.
   @override
   void quit() {
     if (_scripterPort != null) {
@@ -195,12 +213,14 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
     _receivePort.close();
   }
 
+  /// Sends start message to Presenter proxy.
   @override
   void restart() {
     _send(new EgbMessage.start());
   }
 }
 
+/// Prints debug message.
 void INT_DEBUG(String message) {
   print("INT: $message");
 }
