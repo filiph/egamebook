@@ -205,7 +205,7 @@ abstract class UiElement {
 }
 
 /// Maps [FormElement.elementClass] name to a function that takes the JSON
-/// objects and returns
+/// objects and returns.
 Map<String, CustomTagHandler> customTagHandlers = {
   FormBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
