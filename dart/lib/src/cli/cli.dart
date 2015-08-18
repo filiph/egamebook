@@ -9,7 +9,7 @@ import 'file_hierarchy.dart';
 
 /// Returns path to build.dart script in the bin/ folder.
 String getPathToBuildScript() {
-  /// For the pub run
+  // For the pub run
   if (Platform.script.scheme.startsWith("http")) {
     return Platform.script.resolve("build.dart").toString();
   }
@@ -18,12 +18,12 @@ String getPathToBuildScript() {
     return getPath("build.dart");
   }
 
-  /// For the test folder
+  // For the test folder
   return getPath(
       "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
 }
 
-/// Gets path relative to the running script in bin/.
+/// Returns path relative to the running script in bin/.
 ///
 /// TODO this will not work with pub run.
 String getPath(String path)
@@ -51,27 +51,29 @@ Future runAnalyzer(String path) {
   return Process.start("dartanalyzer", [path]);
 }
 
+/// Returns built file name from .egb file or [:null:].
 String getBuiltFileFromEgbFile(String path)  =>
     (path != null) ? "${p.withoutExtension(path)}.dart" : null;
 
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
 abstract class Worker {
+  /// Runs processing of the command.
   Future run();
 }
 
 /// Class [ProjectCreator] creates new egamebook project by copying files
 /// from templates directory.
 class ProjectCreator implements Worker {
-  /// Directory with template files
+  /// Directory with template files.
   final String templates = getPath("../books${Platform.pathSeparator}bodega");
-  /// Path where the project is created
+  /// Path where the project is created.
   final String _path;
 
-  /// Constructor
+  /// Creates new ProjectCreator with List of [params].
   ProjectCreator(List params) : _path = params.first;
 
-  /// Runs creating of new project
+  /// Runs creating of new project.
   Future run() {
     print("Creating new project...");
     return _copyProjectFilesSync(templates, _path);
@@ -89,7 +91,6 @@ class ProjectCreator implements Worker {
     }
 
     Directory to = new Directory(pathTo);
-
     if (!to.existsSync()) {
       to.createSync(recursive: true);
     } else {
@@ -138,18 +139,19 @@ class ProjectCreator implements Worker {
 ///     build -a <path>
 ///     build -a <egb_file>
 class ProjectBuilder implements Worker {
-  /// File extension which is searched
+  /// File extension which is searched.
   final String extension = ".egb";
-  /// Path used for search
+  /// Path used for search.
   final String _path;
-  /// Should be the built file analyzed
+  /// If the built file should be analyzed.
   final bool _analyze;
-  /// Should run the builder on all .egb files in directory
+  /// If the builder should run on all .egb files in directory.
   final bool _fullDirectory;
-  /// File hierarchy for getting master file from part file
+  /// File hierarchy for getting master file from part file.
   final FileHierarchy _hierarchy;
 
-  ///Constructor
+  /// Creates new ProjectBuilder with List of [params] and if [_analyze] and
+  /// [_fullDirectory].
   ProjectBuilder(List params, this._analyze, this._fullDirectory)
       : _path = (params.isEmpty) ? "." : params.first,
         _hierarchy = new FileHierarchy();
@@ -276,26 +278,26 @@ class ProjectBuilder implements Worker {
 ///     watch -a .
 ///     watch -a <path>
 class ProjectWatcher implements Worker {
-  /// File extension watched
+  /// File extension watched.
   final String extension = ".egb";
-  /// Path used for watching
+  /// Path used for watching.
   final String _path;
-  /// Should be the built file analyzed
+  /// If the built file should be analyzed.
   final bool _analyze;
-  /// Filename of last built file
+  /// Filename of last built file.
   String _actualBuiltFileName;
-  /// If builder is building at the moment
+  /// If builder is building at the moment.
   bool _building = false;
-  /// If analyzer is analyzing at the moment
+  /// If analyzer is analyzing at the moment.
   bool _analyzing = false;
-  /// Subscription to watcher events. Can be used to cancel watching
+  /// Subscription to watcher events. Can be used to cancel watching.
   StreamSubscription _subscription;
-  /// Getter for [_subscription]
+  /// Getter returns [_subscription].
   StreamSubscription get subscription => _subscription;
-  /// File hierarchy for getting master file from part file
+  /// File hierarchy for getting master file from part file.
   final FileHierarchy _hierarchy;
 
-  /// Constructor
+  /// Creates new ProjectWatcher with List of [params] and if [_analyze].
   ProjectWatcher(List params, this._analyze)
       : _path = (params.isEmpty) ? "." : params.first,
         _hierarchy = new FileHierarchy();
