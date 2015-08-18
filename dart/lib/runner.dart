@@ -29,6 +29,10 @@ Future<EgbPresenter> runFromIsolate(String dartFilename, EgbPresenter
   });
 }
 
+/**
+ * Does the required work to run it directly, set it up, tie it with the
+ * provided [presenter], and try to load a saved game or create a new one.
+ */
 Future<EgbPresenter> runDirectly(EgbScripterProxy bookProxy, EgbPresenter
     presenter, EgbStorage storage) {
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
