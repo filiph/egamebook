@@ -5,7 +5,7 @@ void main() {
   
   group("Save Against", () {
     test("tossCoin returns as expected", () {
-      expect(Randomly.tossCoin(), new isInstanceOf<bool>("bool"));
+      expect(Randomly.tossCoin(), new isInstanceOf<bool>());
       final int n = 10000;
       int result = 0;
       for (int i = 0; i < n; i++) {
