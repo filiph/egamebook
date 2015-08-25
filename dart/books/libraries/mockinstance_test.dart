@@ -22,9 +22,9 @@ void main() {
     });
     test("nonexistent fields are MockInstance", () {
       var a = new MockInstance();
-      expect(a.x, new isInstanceOf<MockInstance>("MockInstance"));
-      expect(a.y, new isInstanceOf<MockInstance>("MockInstance"));
-      expect(a.z, new isInstanceOf<MockInstance>("MockInstance"));
+      expect(a.x, new isInstanceOf<MockInstance>());
+      expect(a.y, new isInstanceOf<MockInstance>());
+      expect(a.z, new isInstanceOf<MockInstance>());
     });
     test("arithmetic works", () {
       var a = new MockInstance();

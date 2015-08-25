@@ -44,7 +44,7 @@ void main() {
       test("new instance is empty", () {
         var b = new Builder();
         expect(b,
-          new isInstanceOf<Builder>("Builder"));
+          new isInstanceOf<Builder>());
         expect(b.pages,
           allOf([isNotNull, isEmpty]));
       });

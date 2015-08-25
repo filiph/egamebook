@@ -146,6 +146,11 @@ class HtmlPresenter extends EgbPresenterBase {
   @override
   void endBook() {
     print("The book has ended.");
+    if (currentActivity == UI_ACTIVITY_TITLE) {
+      // We loaded a book which immediately ran through to the end.
+      bookDiv.children.clear();
+      scripterProxy.restart();
+    }
   }
 
   @override
