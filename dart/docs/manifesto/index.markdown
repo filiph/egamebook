@@ -56,12 +56,12 @@ All this starts to feel like a lot of BS. It looks good in theory, yes, but is t
 >
 > Already, it can do all the basic stuff and much more, but it doesn’t make sense to release it just yet. The world doesn’t need another ‘okay’ electronic gamebook system. It needs a polished system, with a shining example of a gamebook.
 
-It looks like you can sign up for a mailing list at this point (in case you’re interested in playing – or creating – an egamebook in the future).
+It looks like you join a mailing list at this point (in case you’re interested in playing – or creating – an egamebook in the future).
 
 <ul class="choices">
-	<li class="button preferred"><a href="signup.html"><strong>Sign up</strong> (and receive no more than one email a month).</a></li>
+  <li class="button preferred"><a href="https://plus.google.com/communities/117415708119099457420"><strong>Join</strong> the discussion/mailing list.</a></li>
 	<li class="button"><a href="https://plus.google.com/communities/117415708119099457420">Join the Google+ Community.</a></li>
-	<li class="button"><a href="http://www.youtube.com/watch?v=oHg5SJYRHA0">“I don’t want to ever hear about this thing again.”</a></li>
+  <li class="button"><a href="signup.html">Sign up for no more than one email announcement a month.</a></li>
 </ul>
 
 [egamebook]: http://www.egamebook.com

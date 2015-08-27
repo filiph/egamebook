@@ -95,3 +95,28 @@
 p.meta {
 	font-size: 70%;
 }
+
+.footnotes {
+	font-size: 90%;
+	margin-top: 3rem;
+	margin-bottom: 3rem;
+}
+
+#disqus_thread {
+	margin-top: 3rem;
+	margin-bottom: 3rem;
+}
+
+.next-post a, .prev-post a {
+	font-size: 70%;
+	text-decoration: none;
+}
+
+.prev-post {
+	margin-bottom: 0;
+}
+
+.next-post {
+	margin-top: 0;
+	text-align: right;
+}

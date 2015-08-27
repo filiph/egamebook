@@ -10,6 +10,6 @@ I have built about 10 prototypes, written thousands lines of code in 3 different
 
 So I'm starting this blog.
 
-You can put it into your RSS reader if you're into that kind of thing (the url is <a href="{{ site.url}}/feed.xml">`{{ site.url}}/feed.xml`</a>), or you can <a href="{{ site.url }}/signup.html">sign up</a> for the mailing list.
+You can put it into your RSS reader if you're into that kind of thing (the url is <a href="{{ site.url}}/feed.xml">`{{ site.url}}/feed.xml`</a>), or you can <a href="https://groups.google.com/forum/#!forum/egamebook">join the mailing list</a>.
 
 [egamebook]: http://egamebook.com/

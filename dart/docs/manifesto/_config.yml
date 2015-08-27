@@ -5,7 +5,7 @@ timezone: Europe/Prague
 
 markdown: redcarpet
 redcarpet:
-    extensions: ["smart"]
+    extensions: [smart, footnotes]
 highlighter: pygments
 
 permalink: /blog/:title
