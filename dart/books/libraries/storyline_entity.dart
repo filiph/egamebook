@@ -3,7 +3,7 @@ part of storyline;
 /**
  * Entity is a thing, a creature, a robot, or a person that is an interactive
  * part of the gamebook environment.
- * 
+ *
  * They have a [name], they are referred to by a [pronoun] and more often
  * than not they are at a [location].
  */
@@ -70,11 +70,13 @@ class Entity {
   final bool isPlayer;
 
   final Pronoun pronoun;
+
   // TODO: needsArticle (handkerchief does, Gorilla doesn't, captain's gun doesn't)
   // TODO: alreadyReferredTo (false? article = a. true? article = the)
 
   void report(String text, {Entity object}) {
-    storyline.add(text, subject: this, object: object); // TODO: add stuff
+    storyline.add(text, subject: this, object: object);
+    // TODO: add stuff
   }
 
   Report createReport(String text, {Entity object}) {
@@ -83,13 +85,13 @@ class Entity {
 }
 
 /**
- * Actor is a game [Entity] that is (often) capable of _acting_ on its own. 
+ * Actor is a game [Entity] that is (often) capable of _acting_ on its own.
  * Player is just one instance of an actor. A friendly NPC is another one.
- * On a higher level of abstraction, a spaceship (populated by people) is 
+ * On a higher level of abstraction, a spaceship (populated by people) is
  * an Actor.
- * 
+ *
  * Each actor is a part of a [team]. This affects whether they are hostile
- * or not towards other actors. 
+ * or not towards other actors.
  */
 class Actor extends Entity {
   Actor({String name, bool nameIsProperNoun: false, int team: NEUTRAL,
@@ -102,6 +104,7 @@ class Actor extends Entity {
 
   /// True if Actor is alive, i.e. not destroyed or dead.
   bool get isAlive => true;
+
   bool get isAliveAndActive => isAlive && isActive;
 }
 

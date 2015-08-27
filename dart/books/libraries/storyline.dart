@@ -100,9 +100,9 @@ class Report {
     }
   }
 
-  // TODO: startOfAction - if there is no report before startOfAction and
-  // endOfAction, don't report startOfAction.
-  // Prevents: "You set up the laser. The laser is now set up to fire at target."
+// TODO: startOfAction - if there is no report before startOfAction and
+// endOfAction, don't report startOfAction.
+// Prevents: "You set up the laser. The laser is now set up to fire at target."
 }
 
 /**
@@ -133,8 +133,10 @@ class Storyline {
       "<object-ownerPronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
-  static const String VERB_ES = "<es>"; // e.g. in "goes"
-  static const String VERB_IES = "<ies>"; // e.g. in "tries", "flies"
+  // e.g. in "goes"
+  static const String VERB_ES = "<es>";
+  // e.g. in "tries", "flies"
+  static const String VERB_IES = "<ies>";
   static const String VERB_DO = "<does>";
   static const String VERB_BE = "<is>";
   static const String VERB_HAVE = "<has>";
@@ -154,7 +156,8 @@ class Storyline {
       bool wholeSentence: false, int actionThread,
       bool isSupportiveActionInThread: false, int time}) {
     if (str == null || str == "") {
-      return; // Ignore empty records.
+      // Ignore empty records.
+      return;
     }
 
     if (time != null) {
@@ -193,15 +196,19 @@ class Storyline {
     assert(start != null);
     assert(articles != null);
     if (articles.length == 0) {
-      return; // Don't create any report.
+      // Don't create any report.
+      return;
     }
     StringBuffer buf = new StringBuffer();
-    buf.write(start
-        .replaceAll("<also>", "")
-        .replaceAll("  ", " ")
-        .trim()); // TODO: less hacky
+
+    String removeAlso(String s) =>
+        s.replaceAll("<also> ", "").replaceAll("  ", " ").trim();
+    // TODO: less hacky
+
+    buf.write(removeAlso(start)); // TODO: less hacky
     buf.write(" ");
     int i = 0;
+    int sentenceCount = 0;
     for (Entity article in articles) {
       if (i > 0) {
         if (i == 1 && article == articles.last) {
@@ -224,7 +231,11 @@ class Storyline {
       if (i > maxPerSentence - 1 || article == articles.last) {
         if (end != null) {
           buf.write(" ");
-          buf.write(end.replaceAll("<also>", "also"));
+          if (sentenceCount == 0) {
+            buf.write(removeAlso(end));
+          } else {
+            buf.write(end.replaceAll("<also>", "also"));
+          }
         }
         buf.write(".");
         add(buf.toString(),
@@ -232,6 +243,7 @@ class Storyline {
             object: object,
             owner: owner,
             wholeSentence: true);
+        sentenceCount++;
         i = 0;
         buf.clear();
         buf.write(start.replaceAll("<also>", "also"));
@@ -240,10 +252,14 @@ class Storyline {
     }
   }
 
-  void addParagraph() => add("\n\n", wholeSentence: true);
+  static const String PARAGRAPH_NEWLINES = "\n\n";
+
+  void addParagraph() => add(PARAGRAPH_NEWLINES, wholeSentence: true);
 
   static String capitalize(String str) {
-    str = str.trimLeft();
+    if (!str.contains(PARAGRAPH_NEWLINES)) {
+      str = str.trimLeft();
+    }
     if (str.isEmpty) return str;
     String firstLetter = str[0].toUpperCase();
     if (str.length == 1) return firstLetter;
@@ -267,6 +283,7 @@ class Storyline {
 
   static const int SHORT_TIME = 4;
   static const int VERY_LONG_TIME = 1000;
+
   int timeSincePrevious(int i) {
     if (reports[i].time == null ||
         !valid(i - 1) ||

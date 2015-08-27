@@ -24,4 +24,5 @@ class Pronoun {
   static const Pronoun IT = const Pronoun("it", "it", "its", "itself");
   static const Pronoun THEY =
       const Pronoun("they", "them", "their", "themselves");
+  static const Pronoun WE = const Pronoun("we", "us", "our", "ourselves");
 }

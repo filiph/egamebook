@@ -25,6 +25,23 @@ void main() {
         "uns towards the engine room\."));
   });
 
+  test("storyline.addParagraph", () {
+    var storyline = new Storyline();
+    var player = new Player();
+    var gorilla = new Actor(
+        name: "Gorilla",
+        nameIsProperNoun: true,
+        team: Actor.FRIEND,
+        pronoun: Pronoun.IT);
+    storyline.add(
+        "The ship trembles. There is something wrong with the engines.",
+        wholeSentence: true);
+    storyline.addParagraph();
+    storyline.add("<subject> gesture<s> to <subject's> <object>",
+        subject: player, object: gorilla);
+    expect(storyline.toString(), contains("\n\n"));
+  });
+
   test("fixing .\". in sentences", () {
     var storyline = new Storyline();
     var player = new Player();
