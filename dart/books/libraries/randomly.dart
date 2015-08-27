@@ -4,7 +4,7 @@ import 'dart:math';
 
 class Randomly {
   static Random _random = new Random();
-  
+
   /**
    * Resolve a 'coin toss' of the given probability.
    */
@@ -16,9 +16,9 @@ class Randomly {
     if (probability == 1.0) return true;
     return _random.nextDouble() < probability;
   }
-  
+
   static bool tossCoin() => saveAgainst(0.5);
-  
+
   /**
    * Function gets a list of choices, picks one of them randomly.
    */
@@ -30,7 +30,7 @@ class Randomly {
     }
     return choices[_random.nextInt(number)];
   }
-  
+
   /**
    * Function gets a String in the format 'something {is fishy|doesn't add up}' 
    * and outputs either 'something is fishy' or 'something doesn't add up'. This
@@ -64,14 +64,14 @@ class Randomly {
           }
         }
       }
-  
+
       int numOptions = indexes.length - 1;
       if (numOptions > 1) {
         int choice = _random.nextInt(numOptions);
-  
+
         StringBuffer strBuf = new StringBuffer();
         strBuf.write(str.substring(0, startTagIndex));
-        String choiceString = 
+        String choiceString =
             str.substring(indexes[choice] + 1, indexes[choice + 1]);
         strBuf.write(parse(choiceString));
         strBuf.write(str.substring(endTagIndex + 1, str.length));
@@ -86,27 +86,26 @@ class Randomly {
           return str;
         } else {
           return "${str.substring(0,lastIndex + 1)}"
-                 "${parse(str.substring(lastIndex + 1))}";
+              "${parse(str.substring(lastIndex + 1))}";
         }
       }
-    } else { 
+    } else {
       // no startTag ("{") found
       return str;
     }
   }
-  
-  /// Returns the probability in "rounded" by [precisionSteps]. So, if 
+
+  /// Returns the probability in "rounded" by [precisionSteps]. So, if
   /// [precisionSteps] is [:10:], a [probability] of [:0.46:] becomes "50%".
   /// When [precisionSteps] is [:5:], then it becomes "45%".
-  static String humanStringifyProbability(num probability, 
-                   {int precisionSteps: 10, 
-                    String prefix: "", String postfix: "%"}) {
-    probability *= 100 / precisionSteps;    // ex. 6.4
-    probability = probability.round();  // ex. 6.0
-    probability *= precisionSteps;  // ex. 60
+  static String humanStringifyProbability(num probability,
+      {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
+    probability *= 100 / precisionSteps; // ex. 6.4
+    probability = probability.round(); // ex. 6.0
+    probability *= precisionSteps; // ex. 60
     return "$prefix${probability.toStringAsFixed(0)}$postfix";
   }
-  
+
   static String humanDescribeProbability(num probability) {
     if (probability >= 1.0) {
       return "sure";
@@ -140,5 +139,4 @@ class Randomly {
     }
     return "impossible";
   }
-
 }

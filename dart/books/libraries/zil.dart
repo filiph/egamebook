@@ -61,7 +61,15 @@
  */
 library zil;
 
-import 'package:egamebook/scripter.dart' show EgbScripter, Saveable, choice, echo, goto, gotoCalledRecently, throwIfNotInInitOrDeclareBlock; 
+import 'package:egamebook/scripter.dart'
+    show
+        EgbScripter,
+        Saveable,
+        choice,
+        echo,
+        goto,
+        gotoCalledRecently,
+        throwIfNotInInitOrDeclareBlock;
 import 'storyline.dart';
 import 'dart:collection';
 import 'package:a_star/a_star.dart';
@@ -83,7 +91,7 @@ part 'zil_saveable.dart';
 
 class Zil implements Saveable {
   EgbScripter _scripter;
-  
+
   /**
    * The global instance of [RoomNetwork]. Most games will only utilize one
    * RoomNetwork.
@@ -91,19 +99,19 @@ class Zil implements Saveable {
   RoomNetwork rooms;
 
   /// The player.
-  ZilPlayer player; 
+  ZilPlayer player;
 
   /// All other actors.
   ActorSociety actors;
-  
+
   /// All the items.
   ItemPool items;
-  
+
   /// Timeline
   Timeline timeline;
-  
+
   /// Create Zil with a pointer to the [EgbScripter] instance and, optionally,
-  /// a pre-existing [Timeline]. 
+  /// a pre-existing [Timeline].
   Zil(this._scripter, [this.timeline]) {
     items = new ItemPool(this);
     rooms = new RoomNetwork(this);
@@ -111,44 +119,44 @@ class Zil implements Saveable {
     player = new ZilPlayer(this, "player");
     if (timeline == null) timeline = new Timeline();
   }
-  
+
   /// Move time forward by [ticks]-amount of time units. When [describe] is
   /// [:true:], the method will generate text output. Otherwise, it will just
   /// silently simulate.
-  /// 
-  /// If [interactive] is [:true:] (default), the last tick is considered 
-  /// interactive, which means that [TimedEvent.MAJOR] events from [timeline] 
-  /// can occur on the last tick. Otherwise, these events (and every other 
+  ///
+  /// If [interactive] is [:true:] (default), the last tick is considered
+  /// interactive, which means that [TimedEvent.MAJOR] events from [timeline]
+  /// can occur on the last tick. Otherwise, these events (and every other
   /// events that are scheduled after them) are shifted until just after
   /// [Timeline.time] + [ticks]. Set to [:false:] when inside a 'scripted'
   /// event that you don't want to be interrupted by major events.
-  /// 
+  ///
   /// The [timeline] output is always shown.
-  void update(int ticks, {bool describe: true, bool interactive: true,
-      String whileString}) {
+  void update(int ticks,
+      {bool describe: true, bool interactive: true, String whileString}) {
     rooms._checkNetworkReady();
     if (_scripter != null) {
       try {
         player.setLocationFromCurrentPage();
       } on PageNotDefinedInZilException catch (e) {
-        // zil.update was called on a ScripterPage that doesn't have an 
+        // zil.update was called on a ScripterPage that doesn't have an
         // associated Room. This can be just the author trying to elapse
         // time during an Action.Goto (okay), but it could also be that
         // they forgot to instantiate the Room or the pagenames don't match.
         if (player.location == null) {
-          throw e;  // Throw only if no location has not been set yet, ever. 
-                    // Otherwise, we assume the location set previously still 
-                    // applies.
+          throw e; // Throw only if no location has not been set yet, ever.
+          // Otherwise, we assume the location set previously still
+          // applies.
         }
       }
     }
-    player.location.update(ticks, 
+    player.location.update(ticks,
         describe: describe, interactive: interactive, whileString: whileString);
   }
-  
+
   /// Creates choices for the [player] in the current [Room] and given the
   /// present [Item]s and [AIActor]s.
-  /// 
+  ///
   /// Call this from a separate [:<script>:] block than [update] --- while
   /// [update] can change state, a script block that generates choices can not
   /// be changing any state. It would break the save/load contract. (Because
@@ -161,7 +169,7 @@ class Zil implements Saveable {
 
   String get className => "Zil";
   Map<String, dynamic> toMap() {
-    Map<String,dynamic> map = new Map<String,dynamic>();
+    Map<String, dynamic> map = new Map<String, dynamic>();
     map["timeline"] = timeline;
     map["items"] = items.toMap();
     map["actors"] = actors.toMap();

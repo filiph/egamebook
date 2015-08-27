@@ -71,12 +71,12 @@ class Exit extends Entity {
       choice(Storyline.getString(Storyline.capitalize(descriptionInfinitive),
           subject: player, object: this), script: () {
         if (cost > 1) {
-          player.location = null;  // So that nothing will harm the player when
-                                   // he's running away, for example.
-          zil.update(cost - 1, describe: false,
-               whileString: Storyline.addParticleToFirstOccurence(
-                  "on your way to <object>", Storyline.OBJECT, to, null)
-          );
+          player.location = null; // So that nothing will harm the player when
+          // he's running away, for example.
+          zil.update(cost - 1,
+              describe: false,
+              whileString: Storyline.addParticleToFirstOccurence(
+                  "on your way to <object>", Storyline.OBJECT, to, null));
         }
         player.report(arriveDescription, object: to);
         echo(storyline.toString());
@@ -89,23 +89,21 @@ class Exit extends Entity {
   int get _uniqueIdentifier => "$destinationPageName>>$descriptionInfinitive"
       ">>$arriveDescription".hashCode;
 
-  static Map<String,dynamic> iterableToMap(Iterable<Exit> exits) {
-    Map<String,dynamic> map = new Map<String,dynamic>();
+  static Map<String, dynamic> iterableToMap(Iterable<Exit> exits) {
+    Map<String, dynamic> map = new Map<String, dynamic>();
     exits.forEach((Exit exit) {
       // Duplicate exit unique identifiers?
       assert(!map.containsKey("${exit._uniqueIdentifier}"));
-      map["${exit._uniqueIdentifier}"] = {
-          "isActive": exit.isActive
-      };
+      map["${exit._uniqueIdentifier}"] = {"isActive": exit.isActive};
     });
     return map;
   }
 
-  static void updateIterableFromMap(Map<String,dynamic> map,
-                                    Iterable<Exit> exits) {
+  static void updateIterableFromMap(
+      Map<String, dynamic> map, Iterable<Exit> exits) {
     map.forEach((key, Map exitMap) {
-      Exit exit = exits.singleWhere((exit) =>
-          exit._uniqueIdentifier == int.parse(key));
+      Exit exit =
+          exits.singleWhere((exit) => exit._uniqueIdentifier == int.parse(key));
       exit.isActive = exitMap["isActive"];
     });
   }

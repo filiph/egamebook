@@ -2,17 +2,20 @@ part of spaceship;
 
 class Pilot extends Actor {
   Pilot({name: "pilot", team: Actor.DEFAULT_ENEMY, isPlayer: false,
-    pronoun: Pronoun.HE})
-      : super(name: name, team: team, isPlayer: isPlayer,
-              pronoun: pronoun) {
+      pronoun: Pronoun.HE})
+      : super(name: name, team: team, isPlayer: isPlayer, pronoun: pronoun) {}
 
-  }
+  Pilot.player() : super(
+          name: "player",
+          pronoun: Pronoun.YOU,
+          team: Actor.FRIEND,
+          isPlayer: true);
 
-  Pilot.player() : super(name: "player", pronoun: Pronoun.YOU,
-      team: Actor.FRIEND, isPlayer: true);
-
-  Pilot.ai(this.spaceship) : super(name: "pilot", team: Actor.DEFAULT_ENEMY,
-                    isPlayer: false, pronoun: Pronoun.HE);
+  Pilot.ai(this.spaceship) : super(
+          name: "pilot",
+          team: Actor.DEFAULT_ENEMY,
+          isPlayer: false,
+          pronoun: Pronoun.HE);
 
   Spaceship spaceship;
   int timeToNextInteraction = 0;
@@ -58,7 +61,8 @@ class Pilot extends Actor {
         "<th>Position to ${spaceship.name}</th></tr>");
     buf.write(_createTableRowForShip(spaceship, null));
     spaceship.currentCombat.spaceships
-        .where((ship) => ship != spaceship).forEach((otherShip) {
+        .where((ship) => ship != spaceship)
+        .forEach((otherShip) {
       buf.write(_createTableRowForShip(otherShip, spaceship));
     });
     buf.write("</table>");
@@ -86,7 +90,8 @@ class Pilot extends Actor {
 
   // TODO author can subclass Pilot and pre-program AI to pick moves
   void _aiChooseMove(FormSection maneuvres, List<FormSection> sections) {
-    List<SubmitButton> allButtons = [[maneuvres], sections].expand((e) => e)
+    List<SubmitButton> allButtons = [[maneuvres], sections]
+        .expand((e) => e)
         .expand((FormSection s) => s.children.where((el) => el is SubmitButton))
         .toList(growable: false);
 
@@ -97,4 +102,3 @@ class Pilot extends Actor {
   // TODO _aiUpdate - add
   // TODO _playerUpdate
 }
-

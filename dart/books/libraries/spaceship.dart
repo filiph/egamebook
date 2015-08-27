@@ -15,8 +15,9 @@ part 'pilot.dart';
 
 class Spaceship extends Actor /*TODO: implements Saveable*/ {
   Spaceship(String name, {this.shield, this.engine, this.hull,
-             this.thrusters: const [], this.weapons: const[],
-             this.systems: const [], this.pilot}) : super(name: name) {
+      this.thrusters: const [], this.weapons: const [], this.systems: const [],
+      this.pilot})
+      : super(name: name) {
     if (pilot == null) pilot = new Pilot.ai(this);
     pilot.spaceship = this;
     team = pilot.team;
@@ -30,10 +31,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     }
     hull.hp.onMin().listen((_) => reportDestroy());
 
-    availableMoves.addAll(<CombatMove>[
-        new ImprovePosition(),
-        new RiskyImprovePosition()
-    ]);
+    availableMoves.addAll(
+        <CombatMove>[new ImprovePosition(), new RiskyImprovePosition()]);
   }
 
   /// The combat situation this ship is currently involved in.
@@ -70,22 +69,24 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /// Life support, mining equipment, hyperdrive ...
   final List<SpecialSystems> systems;
 
-  Iterable<ShipSystem> get allTargettableSystems =>
-      allSystems.where((ShipSystem system) => system.isOutsideHull &&
-                                              system.isAliveAndActive);
+  Iterable<ShipSystem> get allTargettableSystems => allSystems.where(
+      (ShipSystem system) => system.isOutsideHull && system.isAliveAndActive);
 
   /// Return the list of all the ship's systems, including engine, weapons, etc.
-  Iterable<ShipSystem> get allSystems =>
-      <List<ShipSystem>>[weapons, thrusters, systems, [shield, engine, hull]]
-      .expand((s) => s).where((system) => system != null);
+  Iterable<ShipSystem> get allSystems => <List<ShipSystem>>[
+    weapons,
+    thrusters,
+    systems,
+    [shield, engine, hull]
+  ].expand((s) => s).where((system) => system != null);
 
   /// The current combined maneuverability of the ship's thrusters.
-  int get maneuverability =>
-    thrusters.fold(0,
-        (num prevValue, thruster) => prevValue + thruster.maneuverability)
-        .toInt();
+  int get maneuverability => thrusters
+      .fold(
+          0, (num prevValue, thruster) => prevValue + thruster.maneuverability)
+      .toInt();
 
-  Map<Spaceship,int> _positionMap = new Map<Spaceship,int>();
+  Map<Spaceship, int> _positionMap = new Map<Spaceship, int>();
   int getPositionTowards(Spaceship targetShip) {
     if (!_positionMap.containsKey(targetShip)) {
       _positionMap[targetShip] = 0;
@@ -103,15 +104,15 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
     // Change for this ship.
     setPositionTowards(targetShip, getPositionTowards(targetShip) + change);
     // Change for the other ship.
-    targetShip.setPositionTowards(this,
-        targetShip.getPositionTowards(this) - change);
+    targetShip.setPositionTowards(
+        this, targetShip.getPositionTowards(this) - change);
   }
 
   /// Gets the position towards [targetShip] and returns a human-readable
   /// string. Optionally wrapped in a `<span>` with a corresponding class when
   /// [wrapInColor] is true.
   String getPositionStringTowards(Spaceship targetShip,
-                                  {bool wrapInColor: false}) {
+      {bool wrapInColor: false}) {
     int pos = getPositionTowards(targetShip);
 
     String wrapInColorSpan(String text, String color) {
@@ -156,8 +157,9 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
         currentMove = null;
       }
     }
-    allSystems.where((system) => system.isAliveAndActive)
-      .forEach((system) => system.update());
+    allSystems
+        .where((system) => system.isAliveAndActive)
+        .forEach((system) => system.update());
     pilot.update();
   }
 
@@ -196,20 +198,20 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   FormSection getManeuvreSetupSection() {
     FormSection section = new FormSection("Maneuvres");
     TextOutput text = new TextOutput();
-    text.current = "This is the maneuvres section.";  // TODO: Status + description.
+    text.current =
+        "This is the maneuvres section."; // TODO: Status + description.
     section.append(text);
 
     availableMoves.where((move) => move.isActive).forEach((CombatMove proto) {
       // TODO: map from combatmove prototype to instances by cloning. also elsewhere.
       SubmitButton button = new SubmitButton(
-          "${Storyline.capitalize(proto.commandText)}",
-          () {
-            var move = proto.clone(thrusters.first);
-            move.targetShip = targetShip;
-            move.currentTimeToSetup = move.timeToSetup;
-            currentMove = move;
-            move.start();
-            pilot.timeToNextInteraction = move.timeToSetup + move.timeToFinish;
+          "${Storyline.capitalize(proto.commandText)}", () {
+        var move = proto.clone(thrusters.first);
+        move.targetShip = targetShip;
+        move.currentTimeToSetup = move.timeToSetup;
+        currentMove = move;
+        move.start();
+        pilot.timeToNextInteraction = move.timeToSetup + move.timeToFinish;
       });
       button.disabled = targetShip == null;
       section.append(button);
@@ -220,8 +222,8 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
   /// This is called by the ship automatically when it's hull is destroyed.
   ///
   void reportDestroy() {
-    storyline.add(stringReportDestroy, subject: this, negative: true,
-        time: currentCombat.timeline.time);
+    storyline.add(stringReportDestroy,
+        subject: this, negative: true, time: currentCombat.timeline.time);
   }
   String stringReportDestroy =
       "<subject> {{violently|} explode<s>|blow<s> {up|apart} {violently|}|"
@@ -238,4 +240,3 @@ class Spaceship extends Actor /*TODO: implements Saveable*/ {
    */
 
 }
-

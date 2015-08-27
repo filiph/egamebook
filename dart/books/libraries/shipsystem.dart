@@ -2,7 +2,8 @@ part of spaceship;
 
 class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   ShipSystem(this.name, {int maxHp: 10, NumScale hp, num maxPowerInput: 1.0,
-    Pronoun pronoun: Pronoun.IT}) : super(pronoun: pronoun) {
+      Pronoun pronoun: Pronoun.IT})
+      : super(pronoun: pronoun) {
     if (hp == null) hp = new NumScale(max: maxHp);
     this.hp = hp;
     hp.upwardsChangeCallbacks[1.0] = (_) {
@@ -59,7 +60,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   }
 
   void reportFullRepair() => _report(stringFullRepair, positive: true);
-  String stringFullRepair = "<owner's> <subject> <is> now {{fully|} repaired|fully operational}";
+  String stringFullRepair =
+      "<owner's> <subject> <is> now {{fully|} repaired|fully operational}";
 
   void reportDestroy() => _report(stringDestroy, negative: true);
   String stringDestroy = "<owner's> <subject> {blow<s> {up|apart}|"
@@ -71,16 +73,13 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 
     if (percentage >= 0.5) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
-          "{heavy|substantial|devastating} damage",
-          negative: true);
+          "{heavy|substantial|devastating} damage", negative: true);
     } else if (percentage >= 0.3) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
-          "{quite a|hefty|quite heavy} damage",
-          negative: true);
+          "{quite a|hefty|quite heavy} damage", negative: true);
     } else if (percentage >= 0.05) {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
-          "{some|minor|slight} damage",
-          negative: true);
+          "{some|minor|slight} damage", negative: true);
     } else {
       _report("<owner's> <subject> {take<s>|receive<s>|sustain<s>} "
           "{{only|merely} {a dent|negligible damage}|"
@@ -90,8 +89,12 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
   }
 
   void _report(String str, {bool negative: false, bool positive: false}) {
-    storyline.add(str, subject: this, owner: spaceship, negative: negative,
-        positive: positive, time: spaceship.currentCombat.timeline.time);
+    storyline.add(str,
+        subject: this,
+        owner: spaceship,
+        negative: negative,
+        positive: positive,
+        time: spaceship.currentCombat.timeline.time);
   }
 
   /// Returns a natural entity for reporting of a [CombatMove] performed
@@ -152,11 +155,11 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       return section;
     }
 
-    text.current = "This is $name section.";  // TODO: Status + description.
+    text.current = "This is $name section."; // TODO: Status + description.
     section.append(text);
 
-    Map<CombatMove,SubmitButton> allMoveSubmitButtons =
-        <CombatMove,SubmitButton>{};
+    Map<CombatMove, SubmitButton> allMoveSubmitButtons =
+        <CombatMove, SubmitButton>{};
 
     Spaceship targetShip;
     ShipSystem targetSystem;
@@ -165,8 +168,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
     void recalculateProbabilities() {
       if (this is CanHaveTarget) {
         allMoveSubmitButtons.forEach((proto, button) {
-          num chance = proto.calculateSuccessChance(this,
-              targetShip, targetSystem);
+          num chance =
+              proto.calculateSuccessChance(this, targetShip, targetSystem);
           String probability = Randomly.humanDescribeProbability(chance);
           button.name = "${Storyline.capitalize(proto.commandText)} "
               "[$probability]";
@@ -199,15 +202,13 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
       }, selected: targetShip == null);
       targetShipInput.append(noTargetShip);
 
-      Iterable<Spaceship> enemySpaceships =
-          spaceship.currentCombat.spaceships
-          .where((Spaceship other) => spaceship.isEnemyOf(other) &&
-                                      other.isAliveAndActive);
+      Iterable<Spaceship> enemySpaceships = spaceship.currentCombat.spaceships
+          .where((Spaceship other) =>
+              spaceship.isEnemyOf(other) && other.isAliveAndActive);
 
       enemySpaceships.forEach((Spaceship enemy) {
-        MultipleChoiceInput targetSystemInput =
-                  new MultipleChoiceInput("Target system:", (_) {})
-        ..hidden = targetShip != enemy;
+        MultipleChoiceInput targetSystemInput = new MultipleChoiceInput(
+            "Target system:", (_) {})..hidden = targetShip != enemy;
         allTargetSystemInputs.add(targetSystemInput);
 
         Option noTargetSystem = new Option("ship", (_) {
@@ -227,8 +228,8 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 
         Option shipOption = new Option(enemy.name, (_) {
           targetShip = enemy;
-          allMoveSubmitButtons.forEach((_, SubmitButton b) =>
-              b.disabled = false);
+          allMoveSubmitButtons
+              .forEach((_, SubmitButton b) => b.disabled = false);
           allTargetSystemInputs.forEach((i) => i.hidden = true);
           targetSystemInput.hidden = false;
           recalculateProbabilities();
@@ -243,24 +244,22 @@ class ShipSystem extends Actor /* TODO: implements Saveable*/ {
 
     availableMoves.where((move) => move.isActive).forEach((CombatMove proto) {
       SubmitButton button = new SubmitButton(
-          "${Storyline.capitalize(proto.commandText)}",
-          () {
-            if (targetShip != null && targetSystem == null) {
-              targetSystem = targetShip.hull;
-            }
-            var move = proto.clone(this);
-            move.targetShip = targetShip;
-            move.targetSystem = targetSystem;
-            if (this is CanHaveTarget) {
-              (this as CanHaveTarget).targetShip = targetShip;
-              (this as CanHaveTarget).targetSystem = targetSystem;
-            }
-            currentMove = move;
-            move.start();
-            spaceship.pilot.timeToNextInteraction =
-                move.timeToSetup + move.timeToFinish;
-          }
-      );
+          "${Storyline.capitalize(proto.commandText)}", () {
+        if (targetShip != null && targetSystem == null) {
+          targetSystem = targetShip.hull;
+        }
+        var move = proto.clone(this);
+        move.targetShip = targetShip;
+        move.targetSystem = targetSystem;
+        if (this is CanHaveTarget) {
+          (this as CanHaveTarget).targetShip = targetShip;
+          (this as CanHaveTarget).targetSystem = targetSystem;
+        }
+        currentMove = move;
+        move.start();
+        spaceship.pilot.timeToNextInteraction =
+            move.timeToSetup + move.timeToFinish;
+      });
       button.disabled = targetShip == null;
       allMoveSubmitButtons[proto] = button;
       section.append(button);
@@ -275,10 +274,9 @@ class CanHaveTarget extends ShipSystem {
   ShipSystem targetSystem;
 
   CanHaveTarget(String name, {maxHp: 1, Pronoun pronoun: Pronoun.IT})
-  : super(name, maxHp: maxHp, pronoun: pronoun);
+      : super(name, maxHp: maxHp, pronoun: pronoun);
 
-
-  Map<Spaceship,int> _aimMap = new Map<Spaceship,int>();
+  Map<Spaceship, int> _aimMap = new Map<Spaceship, int>();
   int getAimAt(Spaceship targetShip) {
     if (!_aimMap.containsKey(targetShip)) {
       _aimMap[targetShip] = 0;
@@ -292,12 +290,10 @@ class CanHaveTarget extends ShipSystem {
 
 class Weapon extends CanHaveTarget {
   Weapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
-                       this.damage: 1.0, this.shieldPenetration: 0.0,
-                       this.accuracyModifier: 1.0,
-                       Pronoun pronoun: Pronoun.IT,
-                       Entity projectile})
+      this.damage: 1.0, this.shieldPenetration: 0.0, this.accuracyModifier: 1.0,
+      Pronoun pronoun: Pronoun.IT, Entity projectile})
       : super(name, maxHp: maxHp, pronoun: pronoun) {
-    if (ammo == null) ammo = new IntScale(max: maxAmmo);  // TODO: unlimited
+    if (ammo == null) ammo = new IntScale(max: maxAmmo); // TODO: unlimited
     ammo.onMin().listen((_) {
       _report("<subject> is out of ammo", negative: true);
     });
@@ -306,9 +302,8 @@ class Weapon extends CanHaveTarget {
     }
     this.projectile.team = team;
 
-    availableMoves.addAll(<CombatMove>[
-        new FireGun(), new QuickFireGun(), new ImproveAim()
-    ]);
+    availableMoves.addAll(
+        <CombatMove>[new FireGun(), new QuickFireGun(), new ImproveAim()]);
   }
 
   bool isOutsideHull = true;
@@ -345,19 +340,19 @@ String getAimString(int aim) {
 /// Autonomous weapon system (such as defensive turret).
 class AutoWeapon extends Weapon {
   AutoWeapon(String name, {int maxAmmo: 1000, IntScale ammo, maxHp: 1,
-                       num damage: 1.0, num shieldPenetration: 0.0,
-                       num accuracyModifier: 1.0,
-                       Pronoun pronoun: Pronoun.IT,
-                       Entity projectile})
-      : super(name, ammo: ammo, maxHp: maxHp, damage: damage,
+      num damage: 1.0, num shieldPenetration: 0.0, num accuracyModifier: 1.0,
+      Pronoun pronoun: Pronoun.IT, Entity projectile})
+      : super(name,
+          ammo: ammo,
+          maxHp: maxHp,
+          damage: damage,
           shieldPenetration: shieldPenetration,
-          accuracyModifier: accuracyModifier, pronoun: pronoun,
+          accuracyModifier: accuracyModifier,
+          pronoun: pronoun,
           projectile: projectile) {
 
     // Exchange direct weapon moves with autonomous moves.
-    availableMoves = <CombatMove>[
-        new AutoGunStart()
-    ];
+    availableMoves = <CombatMove>[new AutoGunStart()];
   }
 }
 
@@ -383,9 +378,8 @@ class AutoWeapon extends Weapon {
 
 class Engine extends ShipSystem {
   Engine({String name: "engine", maxHp: 10, this.maxPowerOutput,
-    Pronoun pronoun: Pronoun.IT})
-      : super(name, maxHp: maxHp, pronoun: pronoun) {
-  }
+      Pronoun pronoun: Pronoun.IT})
+      : super(name, maxHp: maxHp, pronoun: pronoun) {}
 
   // TODO: priority list of ship systems for power input
 
@@ -397,16 +391,17 @@ class Engine extends ShipSystem {
 
 class Thruster extends ShipSystem {
   Thruster(String name, {int maxHp: 10, hp, num maxPowerInput: 1.0,
-           this.maxForwardlyForce: 0, this.maxManeuverability: 0,
-           Pronoun pronoun: Pronoun.IT})
-           : super(name, maxHp: maxHp, hp: hp,
-                   maxPowerInput: maxPowerInput, pronoun: pronoun) {
-
+      this.maxForwardlyForce: 0, this.maxManeuverability: 0,
+      Pronoun pronoun: Pronoun.IT})
+      : super(name,
+          maxHp: maxHp,
+          hp: hp,
+          maxPowerInput: maxPowerInput,
+          pronoun: pronoun) {
     this.hp.downwardsChangeCallbacks[0.5] = (_) {
       _report("<owner's> <subject> start<s> spewing sparks from its internals",
           negative: true);
-      _report("<subject> lose<s> most of <subject's> thrust",
-          negative: true);
+      _report("<subject> lose<s> most of <subject's> thrust", negative: true);
     };
     this.hp.downwardsChangeCallbacks[0.2] = (_) {
       _report("<owner's> <subject> <is> {now|} "
@@ -429,13 +424,11 @@ class Thruster extends ShipSystem {
   int get maneuverability => (hp.percentage * maxManeuverability).toInt();
 
   @override
-  FormSection createSetupSection() => null;  // Thrusters are not setup-able.
+  FormSection createSetupSection() => null; // Thrusters are not setup-able.
 }
 
 class Hull extends ShipSystem {
-  Hull({String name: "hull", maxHp: 10})
-      : super(name, maxHp: maxHp) {
-
+  Hull({String name: "hull", maxHp: 10}) : super(name, maxHp: maxHp) {
     hp.downwardsChangeCallbacks[0.80] = (_) {
       reportEightyPercentHP();
     };
@@ -456,8 +449,7 @@ class Hull extends ShipSystem {
   }
 
   void reportSixtyPercentHP() {
-    _report("<owner's> <subject> <is> now torn on many places",
-        negative: true);
+    _report("<owner's> <subject> <is> now torn on many places", negative: true);
   }
 
   void reportFortyPercentHP() {
@@ -468,27 +460,25 @@ class Hull extends ShipSystem {
   void reportTwentyPercentHP() {
     _report("<owner's> <subject> <is> now full of gaping holes",
         negative: true);
-    _report("<owner's> <subject> <is> {horribly |}deformed",
-        negative: true);
+    _report("<owner's> <subject> <is> {horribly |}deformed", negative: true);
   }
 
-  bool isOutsideHull = false;  // Hull is not, technically, _outside_ hull.
+  bool isOutsideHull = false; // Hull is not, technically, _outside_ hull.
 
   @override
-  FormSection createSetupSection() => null;  // Hull is not setup-able.
+  FormSection createSetupSection() => null; // Hull is not setup-able.
 
   @override
-  String stringDestroy = null;  // When hull is destroyed, so is the ship.
+  String stringDestroy = null; // When hull is destroyed, so is the ship.
 }
 
 // TODO: class BigHull extends Hull // with tailored reporting
 
-
 class Shield extends ShipSystem {
   Shield({String name: "shields", maxHp: 5, maxSp: 10, NumScale sp,
-          maxPowerInput: 1.0, Pronoun pronoun: Pronoun.THEY})
-      : super(name, maxHp: maxHp, maxPowerInput: maxPowerInput,
-          pronoun: pronoun) {
+      maxPowerInput: 1.0, Pronoun pronoun: Pronoun.THEY})
+      : super(name,
+          maxHp: maxHp, maxPowerInput: maxPowerInput, pronoun: pronoun) {
     if (sp == null) sp = new NumScale(max: maxSp);
     this.sp = sp;
   }
@@ -508,10 +498,9 @@ class Shield extends ShipSystem {
 
 class SpecialSystems extends ShipSystem {
   SpecialSystems(String name, {int maxHp: 2, NumScale hp, maxPowerInput: 1.0,
-    Pronoun pronoun: Pronoun.IT})
-    : super(name, maxHp: maxHp, hp: hp,
-        maxPowerInput: maxPowerInput, pronoun: pronoun);
+      Pronoun pronoun: Pronoun.IT})
+      : super(name,
+          maxHp: maxHp, hp: hp, maxPowerInput: maxPowerInput, pronoun: pronoun);
 
   bool isOutsideHull = false;
 }
-

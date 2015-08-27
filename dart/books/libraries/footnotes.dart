@@ -1,6 +1,6 @@
 library footnotes;
 
-Map<String,String> _footnotes = new Map<String,String>();
+Map<String, String> _footnotes = new Map<String, String>();
 
 void addFootnote(String name, String text) {
   _footnotes[name] = text;

@@ -5,7 +5,7 @@ abstract class Goal {
   static final int ACTIVE = 1;
   static final int FAILED = 2;
   static final int COMPLETED = 3;
-  
+
   int status = INACTIVE;
   bool get _activated => status != INACTIVE;
   set _activated(bool value) => status = (value ? ACTIVE : INACTIVE);
@@ -20,39 +20,39 @@ abstract class Goal {
   set failed(bool value) => status = (value ? FAILED : status);
   bool get completed => status == COMPLETED;
   set completed(bool value) {
-    if (status == FAILED) return;  // Ignore if goal already failed.
+    if (status == FAILED) return; // Ignore if goal already failed.
     status = COMPLETED;
   }
-  
+
   AIActor performer;
-  
+
   /// The String that gets reported when player sees an [AIActor] while he/she's
   /// performing the Goal.
-  /// 
+  ///
   /// Example: "<subject> <is> just standing around"
   String get inProgressReport;
   /// Called when player sees [performer] while he's performing this Goal.
   Report createReportGoalInProgress() =>
-    performer.createReport(inProgressReport);
-  
+      performer.createReport(inProgressReport);
+
   Goal(this.performer);
-  
+
   /// Planning phase. Gets called when the goal is starting to be executed.
   List<Report> onActivate();
   /// Execution. The method is run periodically each turn until the goal is
   /// finished or failed.
   List<Report> onUpdate();
-  /// End. Gets called when goal is finished successfully. 
+  /// End. Gets called when goal is finished successfully.
   List<Report> onTerminate();
   /// Fail. Gets called after the [fail] method.
   List<Report> onFail();
-  
+
   /// Fail.
   List<Report> fail() {
     status = FAILED;
     return onFail();
   }
-  
+
   List<Report> _processInternal() {
     List<Report> reports = <Report>[];
     if (!_activated) {
@@ -61,8 +61,8 @@ abstract class Goal {
     }
     if (this is CompositeGoal) {
       reports.addAll((this as CompositeGoal)._processSubgoals());
-      if (failed) return reports;  // Stop from running onProcess if any subgoal
-                                   // has failed.
+      if (failed) return reports; // Stop from running onProcess if any subgoal
+      // has failed.
     }
     reports.addAll(onUpdate());
     return reports;
@@ -72,9 +72,10 @@ abstract class Goal {
 abstract class AtomicGoal extends Goal {
   /// Time needed to complete the goal.
   final int time;
-  
-  AtomicGoal(AIActor performer, int time) 
-      : this.time = time, super(performer);
+
+  AtomicGoal(AIActor performer, int time)
+      : this.time = time,
+        super(performer);
 }
 
 abstract class TimedAtomicGoal extends AtomicGoal {
@@ -83,9 +84,9 @@ abstract class TimedAtomicGoal extends AtomicGoal {
   num get progress {
     if (time == 0) return 1.0;
     return currentTime / time;
-  } 
+  }
   TimedAtomicGoal(AIActor performer, int time) : super(performer, time);
-  
+
   List<Report> onUpdate() {
     if (currentTime >= time) {
       completed = true;
@@ -98,11 +99,11 @@ abstract class TimedAtomicGoal extends AtomicGoal {
 
 abstract class CompositeGoal extends Goal {
   final Queue<Goal> subgoals = new Queue<Goal>();
-  int get time => 
+  int get time =>
       subgoals.fold(0, (int sum, component) => sum + component.time);
-  
+
   CompositeGoal(AIActor performer) : super(performer);
-  
+
   Report createReportGoalInProgress() {
     if (inProgressReport == "" && _currentlyActiveSubgoal != null) {
       // Defer inProgressReport to subgoals.
@@ -110,9 +111,9 @@ abstract class CompositeGoal extends Goal {
     }
     return performer.createReport(inProgressReport);
   }
-  
+
   Goal _currentlyActiveSubgoal;
-  
+
   List<Report> _processSubgoals() {
     List<Report> reports = <Report>[];
     if (subgoals.isEmpty) {
@@ -136,7 +137,7 @@ abstract class CompositeGoal extends Goal {
       } else {
         // Next subgoal not completed. Let it live at least until next update.
         _currentlyActiveSubgoal = next;
-        return reports;  
+        return reports;
       }
     }
     completed = true;
@@ -146,12 +147,14 @@ abstract class CompositeGoal extends Goal {
 
 class Wait extends TimedAtomicGoal {
   Wait(AIActor performer) : super(performer, 3);
-  
-  final String inProgressReport = 
+
+  final String inProgressReport =
       "<subject> {<is> {just |}waiting|do<es>n't do anything in particular}";
 
-  List<Report> onActivate() => [/*performer.createReport("<subject> start<s> waiting")*/];
-  List<Report> onTerminate() => [/*performer.createReport("<subject> finish<es> waiting")*/];
+  List<Report> onActivate() =>
+      [/*performer.createReport("<subject> start<s> waiting")*/];
+  List<Report> onTerminate() =>
+      [/*performer.createReport("<subject> finish<es> waiting")*/];
   List<Report> onFail() => [];
 }
 
@@ -174,10 +177,10 @@ class Wait extends TimedAtomicGoal {
 class TestPickUpAndComment extends CompositeGoal {
   Item item;
   TestPickUpAndComment(AIActor performer, this.item) : super(performer);
-  
-  final String inProgressReport = 
+
+  final String inProgressReport =
       "<subject> {<is> {just |}waiting|do<es>n't do anything in particular}";
-  
+
   List<Report> onActivate() {
     subgoals.add(new Say(performer, "I'm gonna pick this ${item.name} up."));
     subgoals.add(new PickUpInRoom(performer, item));
@@ -187,38 +190,42 @@ class TestPickUpAndComment extends CompositeGoal {
 
   List<Report> onUpdate() => [];
   List<Report> onTerminate() => [];
-  List<Report> onFail() => [performer.createReport("<subject> say<s>: \"Oh crap.\"")];
+  List<Report> onFail() =>
+      [performer.createReport("<subject> say<s>: \"Oh crap.\"")];
 }
 
 class Say extends TimedAtomicGoal {
   String message;
   Say(AIActor performer, this.message) : super(performer, 1);
-  
+
   final String inProgressReport = "";
 
   List<Report> onActivate() => [];
-  List<Report> onTerminate() => [performer.createReport("<subject> say<s>: \"$message\"")];
+  List<Report> onTerminate() =>
+      [performer.createReport("<subject> say<s>: \"$message\"")];
   List<Report> onFail() => [];
 }
 
 class PickUpInRoom extends TimedAtomicGoal {
   Item item;
-  
+
   PickUpInRoom(AIActor performer, this.item) : super(performer, 1);
-  
+
   final String inProgressReport = "";
 
   List<Report> onActivate() => [];
   List<Report> onTerminate() {
     var reports = <Report>[];
     if (!item.isInSameRoomAs(performer)) {
-      return fail(); 
+      return fail();
     }
     if (!item.takeable) {
       return fail();
     }
     item.carrier = performer;
-    return [performer.createReport("<subject> pick<s> up <object>", object: item)];
+    return [
+      performer.createReport("<subject> pick<s> up <object>", object: item)
+    ];
   }
 
   List<Report> onFail() => [];
@@ -226,11 +233,11 @@ class PickUpInRoom extends TimedAtomicGoal {
 
 class TraverseToRoom extends TimedAtomicGoal {
   Room from, to;
-  TraverseToRoom(AIActor performer, Room to) 
-    : from = performer.location,
-      super(performer, 
-        // Gets travel cost.
-        performer.location.exits.fold(null, (num bestCost, Exit exit) {
+  TraverseToRoom(AIActor performer, Room to)
+      : from = performer.location,
+        super(performer,
+            // Gets travel cost.
+            performer.location.exits.fold(null, (num bestCost, Exit exit) {
           if (exit.to == to) {
             if (bestCost == null || bestCost > exit.cost) {
               return exit.cost;
@@ -240,16 +247,17 @@ class TraverseToRoom extends TimedAtomicGoal {
         })) {
     this.to = to;
   }
-  
-  String get inProgressReport => 
+
+  String get inProgressReport =>
       "<subject> <is> walking towards ${to.description}";
-  
-  List<Report> onActivate() => 
+
+  List<Report> onActivate() =>
       [performer.createReport("<subject> leave<s> towards ${to.description}")];
   List<Report> onTerminate() {
     performer.location = to;
-    return [performer.createReport(
-        "<subject> arrive<s> from ${from.description}")];
+    return [
+      performer.createReport("<subject> arrive<s> from ${from.description}")
+    ];
   }
   List<Report> onFail() => [];
 }
@@ -262,14 +270,13 @@ class GoToRoom extends CompositeGoal {
   /// executing before failing.
   final num MAX_TIME_FACTOR = 2;
   int counter = 0;
-  GoToRoom(AIActor performer, this.targetRoom, this.rooms) 
-      : super(performer);
-  
-  final String inProgressReport = "";  // Don't report progress of higher level
-                                       // goals like this one.
-  
+  GoToRoom(AIActor performer, this.targetRoom, this.rooms) : super(performer);
+
+  final String inProgressReport = ""; // Don't report progress of higher level
+  // goals like this one.
+
   List<Report> onActivate() {
-    distanceHeuristic = 
+    distanceHeuristic =
         Math.max(rooms.getHeuristicDistance(performer.location, targetRoom), 1);
     List<Report> reports = <Report>[];
     Queue<Room> path = rooms.findPath(performer.location, targetRoom);
@@ -284,7 +291,7 @@ class GoToRoom extends CompositeGoal {
     while (path.isNotEmpty) {
       Room nextRoom = path.removeFirst();
       assert(currentRoom.exits.any((Exit exit) => exit.to == nextRoom));
-      subgoals.add(new TraverseToRoom(performer, nextRoom));      
+      subgoals.add(new TraverseToRoom(performer, nextRoom));
       currentRoom = nextRoom;
     }
     return [];
@@ -309,14 +316,14 @@ class GoToRoom extends CompositeGoal {
 }
 
 class ArbitrarySetOfGoals extends CompositeGoal {
-  ArbitrarySetOfGoals(AIActor performer, Iterable<Goal> subgoals) 
-  : super(performer) {
+  ArbitrarySetOfGoals(AIActor performer, Iterable<Goal> subgoals)
+      : super(performer) {
     this.subgoals.addAll(subgoals);
   }
-  
-  final String inProgressReport = "";  // Don't report progress of higher level
-                                       // goals like this one.
-  
+
+  final String inProgressReport = ""; // Don't report progress of higher level
+  // goals like this one.
+
   List<Report> onActivate() => [];
   List<Report> onFail() => [];
   List<Report> onUpdate() => [];
@@ -326,9 +333,9 @@ class ArbitrarySetOfGoals extends CompositeGoal {
 class Think extends CompositeGoal {
   Think(AIActor performer) : super(performer);
 
-  final String inProgressReport = "";  // Don't report progress of higher level
-                                       // goals like this one.
-  
+  final String inProgressReport = ""; // Don't report progress of higher level
+  // goals like this one.
+
   List<Report> onActivate() {
     completed = false;
     subgoals.clear();

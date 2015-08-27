@@ -6,27 +6,28 @@ part of zil;
  */
 class RoomNetwork implements Graph<Room>, ZilSaveable {
   final Zil _zil;
-  Map<String,Room> _rooms = new Map<String,Room>();
-  
+  Map<String, Room> _rooms = new Map<String, Room>();
+
   AStar aStar;
-  
+
   RoomNetwork(this._zil) {
     // Nothing to do here.
   }
-  
+
   void add(Room room) {
-    throwIfNotInInitOrDeclareBlock("Author can only set up room network on init.");
+    throwIfNotInInitOrDeclareBlock(
+        "Author can only set up room network on init.");
     assert(!_rooms.keys.contains(room.name));
     _rooms[room.name] = room;
   }
-  
+
   Room getFromPageName(String pageName) {
     if (!_rooms.containsKey(pageName)) {
       throw new PageNotDefinedInZilException(pageName);
     }
     return _rooms[pageName];
   }
-  
+
   /**
    * This is run after initialization of the room network and before the network
    * is used for the first time. It will connect the [Exit]s to their 
@@ -48,7 +49,7 @@ class RoomNetwork implements Graph<Room>, ZilSaveable {
       });
     });
   }
-  
+
   /**
    * This is also run after initialization and before first use. It sets up
    * the [aStar] instance for finding paths.
@@ -76,12 +77,12 @@ class RoomNetwork implements Graph<Room>, ZilSaveable {
   }
 
   // TODO: take into account exit prerequisites - different paths for different actors
-  
+
   Iterable<Room> get allNodes => _rooms.values;
 
   num getDistance(Room a, Room b) {
-    Exit exitToB = a.exits.firstWhere((Exit exit) => exit.to == b, 
-        orElse: null);
+    Exit exitToB =
+        a.exits.firstWhere((Exit exit) => exit.to == b, orElse: null);
     if (exitToB == null) return null;
     if (!exitToB.isActive) return null;
     return exitToB.cost;
@@ -91,17 +92,17 @@ class RoomNetwork implements Graph<Room>, ZilSaveable {
     assert(a.coordinates.length == 3);
     assert(b.coordinates.length == 3);
     if (a == b) return 0;
-    num xd = b.coordinates[0]-a.coordinates[0];
-    num yd = b.coordinates[1]-a.coordinates[1];
-    num zd = b.coordinates[2]-a.coordinates[2];
-    return Math.sqrt(xd*xd + yd*yd + zd*zd);
+    num xd = b.coordinates[0] - a.coordinates[0];
+    num yd = b.coordinates[1] - a.coordinates[1];
+    num zd = b.coordinates[2] - a.coordinates[2];
+    return Math.sqrt(xd * xd + yd * yd + zd * zd);
   }
 
   Iterable<Room> getNeighboursOf(Room room) =>
       room.exits.map((Exit exit) => exit.to);
 
   Map<String, dynamic> toMap() {
-    Map<String,dynamic> map = new Map<String,dynamic>();
+    Map<String, dynamic> map = new Map<String, dynamic>();
     _rooms.forEach((name, room) {
       map[name] = room.toMap();
     });

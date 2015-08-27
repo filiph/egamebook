@@ -8,8 +8,7 @@ import 'package:egamebook/src/persistence/saveable.dart';
  */
 class NumScale implements Saveable {
   NumScale({this.min: 0, this.max: 100, initialValue,
-    this.downwardsChangeCallbacks,
-    this.upwardsChangeCallbacks}) {
+      this.downwardsChangeCallbacks, this.upwardsChangeCallbacks}) {
     if (initialValue != null) {
       _value = initialValue;
     } else {
@@ -36,19 +35,17 @@ class NumScale implements Saveable {
     _streamController.add(v);
     if (_value < _lastValue) {
       // Downwards change.
-      List<num> passedKeys =
-          _getPassedChangeCallbackKeys(downwardsChangeCallbacks,
-              (k) => k >= _computePercentage(_value) &&
-                     k < _computePercentage(_lastValue));
+      List<num> passedKeys = _getPassedChangeCallbackKeys(
+          downwardsChangeCallbacks, (k) => k >= _computePercentage(_value) &&
+              k < _computePercentage(_lastValue));
       if (passedKeys.isNotEmpty) {
         downwardsChangeCallbacks[passedKeys.first](_value);
       }
     } else {
       // Upwards change.
-      List<num> passedKeys =
-          _getPassedChangeCallbackKeys(upwardsChangeCallbacks,
-              (k) => k > _computePercentage(_lastValue) &&
-                     k <= _computePercentage(_value));
+      List<num> passedKeys = _getPassedChangeCallbackKeys(
+          upwardsChangeCallbacks, (k) => k > _computePercentage(_lastValue) &&
+              k <= _computePercentage(_value));
       if (passedKeys.isNotEmpty) {
         upwardsChangeCallbacks[passedKeys.last](_value);
       }
@@ -70,11 +67,9 @@ class NumScale implements Saveable {
     _lastValue = v;
   }
 
-  List<num> _getPassedChangeCallbackKeys(Map<num,ChangeCallback> callbackMap,
-      Function rangeChecker) {
-    List<num> passedKeys = callbackMap.keys
-        .where(rangeChecker)
-        .toList();
+  List<num> _getPassedChangeCallbackKeys(
+      Map<num, ChangeCallback> callbackMap, Function rangeChecker) {
+    List<num> passedKeys = callbackMap.keys.where(rangeChecker).toList();
     passedKeys.sort();
     return passedKeys;
   }
@@ -93,10 +88,10 @@ class NumScale implements Saveable {
   ///
   /// ... and the value goes from [:5:] to [:2:], only the inoperational message
   /// is printed out.
-  Map<num,ChangeCallback> downwardsChangeCallbacks;
+  Map<num, ChangeCallback> downwardsChangeCallbacks;
 
   /// Same as [downwardsChangeCallbacks], but upwards.
-  Map<num,ChangeCallback> upwardsChangeCallbacks;
+  Map<num, ChangeCallback> upwardsChangeCallbacks;
 
   final num min;
   final num max;
@@ -115,8 +110,7 @@ class NumScale implements Saveable {
     if (max - min == 0) return 1.0;
     return _computePercentage(_value);
   }
-  set percentage(num percentage) =>
-        value = min + percentage * (max - min);
+  set percentage(num percentage) => value = min + percentage * (max - min);
 
   String get percentageString {
     return "${(percentage * 100).round()}%";
@@ -137,9 +131,8 @@ class NumScale implements Saveable {
   Stream<num> onMax() {
     return _stream.where((v) => v == max);
   }
-  Stream<num> onPass(num passValue) =>
-      _stream.where((v) =>
-          v <= passValue && passValue < _lastValue ||
+  Stream<num> onPass(num passValue) => _stream.where(
+      (v) => v <= passValue && passValue < _lastValue ||
           _lastValue < passValue && passValue <= v);
   Stream<num> onPassDownwards(num passValue) =>
       _stream.where((v) => v <= passValue && passValue < _lastValue);
@@ -148,8 +141,7 @@ class NumScale implements Saveable {
 
   /// Same as [_stream], but instead of reporting values, it reports _changes_
   /// in values;
-  Stream<num> get changesStream =>
-      _stream.map((num v) => v - _lastValue);
+  Stream<num> get changesStream => _stream.map((num v) => v - _lastValue);
 
   Stream<num> onChangeBy(num percentage) {
     return _stream.where((v) => (v - _lastValue).abs() / range > percentage);
