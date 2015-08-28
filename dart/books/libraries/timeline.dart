@@ -341,4 +341,13 @@ class Timeline implements Saveable {
     if (maxTime != null && t > maxTime) t = maxTime;
     elapse(t - time, interactive: interactive);
   }
+
+  /// Returns true if the provided [t] is the same as current value of [time].
+  bool currentlyAtTime(int t) => t == time;
+
+  /// Returns true if the provided [t] is one less than [time]. This means that
+  /// an action that happened at time [t] happened "just a second ago".
+  ///
+  /// Returns false if [t] is null.
+  bool oneTickAheadOf(int t) => (t == null) ? false : t == time - 1;
 }
