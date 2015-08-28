@@ -18,28 +18,28 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
     if (timeline == null) timeline = new Timeline();
 //    actors.forEach((actor) => actor.participateIn(this));
   }
-  
+
   bool finished = false;
   /// The page to jump to when combat is finished.
   String onFinishedGoto;
   void update();
-  
+
   Timeline timeline;
   List<Actor> actors;
-  
+
   /**
    * Runs the update loop until user interaction is needed or until LoopedEvent
    * is finished.
    */
   void run() {
     if (onFinishedGoto == null) throw new StateError("Cannot run a LoopedEvent "
-                                  "before onFinishedGoto is defined.");
+        "before onFinishedGoto is defined.");
     if (finished) {
       choices.clear();
       goto(onFinishedGoto);
       return;
     }
-    
+
     while (!finished && choices.isEmpty && currentForm == null) {
       update();
     }

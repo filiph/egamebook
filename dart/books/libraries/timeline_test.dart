@@ -2,7 +2,6 @@ import 'package:unittest/unittest.dart';
 import 'package:egamebook/scripter.dart';
 import 'timeline.dart';
 
-
 void main() {
   test("mainLoop works", () {
     textBuffer.clear();
@@ -140,8 +139,10 @@ void main() {
     timeline.mainLoop = () {
       echo("Time: ${timeline.time}.");
     };
-    var stringEv = timeline.schedule(null, "String event.", type: TimedEvent.INFO);
-    var functionEv = timeline.schedule(null, () => echo("Closure event."), type: TimedEvent.INFO);
+    var stringEv =
+        timeline.schedule(null, "String event.", type: TimedEvent.INFO);
+    var functionEv = timeline.schedule(null, () => echo("Closure event."),
+        type: TimedEvent.INFO);
     timeline.schedule(7, "Bam.", type: TimedEvent.INFO);
     timeline.schedule(7, "Bim.", priority: 10, type: TimedEvent.INFO);
     isInInitOrDeclareBlock = false;
@@ -168,7 +169,7 @@ void main() {
           "is ${timeline.time}."), type: TimedEvent.INFO);
       timeline.schedule(15, "String event on 15.", type: TimedEvent.INFO);
 
-      timeline.elapse(10);  // Only the last tick is considered interactive.
+      timeline.elapse(10); // Only the last tick is considered interactive.
       timeline.elapse(10);
 
       var str = textBuffer.toString();
@@ -298,9 +299,6 @@ void main() {
       str = textBuffer.toString();
       expect(str, matches("Singular action on 3."));
     });
-
-
-
   });
 
   group("whileString", () {
@@ -327,7 +325,7 @@ void main() {
     test("works also through generateWhileOutput", () {
       timeline.schedule(2, () {
         echo(timeline.generateWhileOutput("While <whileString> the Bodega "
-                                          "makes another anouncement.", ""));
+            "makes another anouncement.", ""));
         echo("\"My hyperdrive seems to be ready\", the Bodega says.");
       });
       isInInitOrDeclareBlock = false;
@@ -342,7 +340,7 @@ void main() {
     test("works also through generateWhileOutput when whileString is null", () {
       timeline.schedule(2, () {
         echo(timeline.generateWhileOutput("While <whileString> the Bodega "
-                                          "makes another anouncement.", ""));
+            "makes another anouncement.", ""));
         echo("\"My hyperdrive seems to be ready\", the Bodega says.");
       });
       isInInitOrDeclareBlock = false;
@@ -376,8 +374,10 @@ void main() {
       timeline.mainLoop = () {
         echo("Time: ${timeline.time}.");
       };
-      stringEv = timeline.schedule(null, "String event.", type: TimedEvent.INFO);
-      functionEv = timeline.schedule(null, () => echo("Closure event."), type: TimedEvent.INFO);
+      stringEv =
+          timeline.schedule(null, "String event.", type: TimedEvent.INFO);
+      functionEv = timeline.schedule(null, () => echo("Closure event."),
+          type: TimedEvent.INFO);
       timeline.schedule(7, "Bam.", type: TimedEvent.INFO);
       timeline.schedule(7, "Bim.", priority: 10, type: TimedEvent.INFO);
       isInInitOrDeclareBlock = false;
@@ -401,5 +401,4 @@ void main() {
         "Time: 5. Time: 6. Time: 7. Bim. Bam. Time: 8. Time: 9. Time: 10. "
         "Closure event.");
   });
-
 }

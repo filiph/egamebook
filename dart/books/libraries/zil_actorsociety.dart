@@ -8,16 +8,16 @@ class ActorSociety implements ZilSaveable {
   final Zil _zil;
   List<AIActor> npcs = new List<AIActor>();
   ZilActor player;
-  
+
   RoomNetwork rooms;
-  
+
   ActorSociety(this._zil);
-  
+
   void add(AIActor npc) {
     throwIfNotInInitOrDeclareBlock();
     npcs.add(npc);
   }
-  
+
   void updateAll(int ticks, {Room currentRoom: null, bool describe: true}) {
     for (int i = 0; i < ticks; i++) {
       for (AIActor npc in npcs) {
@@ -26,7 +26,7 @@ class ActorSociety implements ZilSaveable {
       }
     }
   }
-  
+
   ZilActor findByName(String name) {
     if (name == player.name) {
       return player;
@@ -40,7 +40,7 @@ class ActorSociety implements ZilSaveable {
   };
 
   void updateFromMap(Map<String, dynamic> map) {
-    List<Map<String,dynamic>> list = map["npcs"];
+    List<Map<String, dynamic>> list = map["npcs"];
     assert(list.length == npcs.length);
     for (int i = 0; i < npcs.length; i++) {
       npcs[i].updateFromMap(list[i]);

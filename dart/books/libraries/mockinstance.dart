@@ -1,4 +1,5 @@
 library mock_instance;
+
 import 'dart:mirrors';
 
 /**
@@ -21,20 +22,21 @@ import 'dart:mirrors';
 @proxy
 class MockInstance {
   Map vars = new Map();
-  
+
   dynamic noSuchMethod(Invocation invocation) {
     String memberName = MirrorSystem.getName(invocation.memberName);
     if (invocation.isGetter) {
       if (vars[memberName] == null) {
         vars[memberName] = new MockInstance();
-      }      
+      }
       return vars[memberName];
     } else if (invocation.isSetter) {
-      memberName = memberName.replaceAll("=", ""); // fix bug in Dart that sets memberName to "variable=" when setter
+      memberName = memberName.replaceAll("=",
+          ""); // fix bug in Dart that sets memberName to "variable=" when setter
       vars[memberName] = invocation.positionalArguments[0];
       return null;
     } else if (memberName == "[]=") {
-      vars[invocation.positionalArguments[0]] = 
+      vars[invocation.positionalArguments[0]] =
           invocation.positionalArguments[1];
       return null;
     } else if (memberName == "[]") {
@@ -44,8 +46,7 @@ class MockInstance {
       return vars[invocation.positionalArguments[0]];
     } else {
       throw new NoSuchMethodError(this, invocation.memberName,
-          invocation.positionalArguments, 
-          null //TODO: invocation.namedArguments
+          invocation.positionalArguments, null //TODO: invocation.namedArguments
           );
     }
   }

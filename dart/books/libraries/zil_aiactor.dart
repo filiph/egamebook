@@ -2,9 +2,9 @@ part of zil;
 
 class AIActor extends ZilActor {
   Goal currentGoal;
-  
+
   void update({Room currentRoom: null, bool describe: true}) {
-    if (currentGoal == null || currentGoal.completed || currentGoal.failed) {      
+    if (currentGoal == null || currentGoal.completed || currentGoal.failed) {
       // When nothing else is going on, switch to autonomous thinking mode.
       currentGoal = new Think(this);
     }
@@ -14,10 +14,13 @@ class AIActor extends ZilActor {
       storyline.reports.addAll(reports);
     }
   }
-  
-  AIActor(Zil zil, String name, {bool nameIsProperNoun: false, 
-    int team: Actor.NEUTRAL, bool isPlayer: false, Pronoun pronoun: Pronoun.IT})
-    : super(zil, name, nameIsProperNoun: nameIsProperNoun, team: team, 
-        isPlayer: isPlayer, pronoun: pronoun);
-  
+
+  AIActor(Zil zil, String name, {bool nameIsProperNoun: false,
+      int team: Actor.NEUTRAL, bool isPlayer: false,
+      Pronoun pronoun: Pronoun.IT})
+      : super(zil, name,
+          nameIsProperNoun: nameIsProperNoun,
+          team: team,
+          isPlayer: isPlayer,
+          pronoun: pronoun);
 }

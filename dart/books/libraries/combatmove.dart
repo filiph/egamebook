@@ -243,8 +243,8 @@ abstract class CombatMove {
 
   /// Can be overridden with more involved mathemathics (incl. things like
   /// maneuverability of targetShip, etc.).
-  num calculateSuccessChance(ShipSystem originSystem,
-                             Spaceship targetShip, ShipSystem targetSystem) {
+  num calculateSuccessChance(
+      ShipSystem originSystem, Spaceship targetShip, ShipSystem targetSystem) {
     return defaultSuccessChance;
   }
   num defaultSuccessChance = 1.0;
@@ -322,9 +322,8 @@ abstract class CombatMove {
       // of the enemy to maneuvre"]}. This would report something like "Thanks
       // to good aim and inability of the enemy to maneuvre, you hit."
       // Remember, text is great at explaining causal relationships. Use it.
-      if (Randomly
-          .saveAgainst(calculateSuccessChance(system,
-                                              targetShip, targetSystem))) {
+      if (Randomly.saveAgainst(
+          calculateSuccessChance(system, targetShip, targetSystem))) {
         reportSuccess();
         onSuccess();
       } else {
@@ -458,8 +457,10 @@ class FireGun extends CombatMove {
       if (collateral) {
         assert(targetSystem is Hull);
         _report("<subject> land<s> on <object-owner's> <object> instead",
-            subject: weapon.projectile, objectOwner: targetSystem.spaceship,
-            object: targetSystem, positive: true);
+            subject: weapon.projectile,
+            objectOwner: targetSystem.spaceship,
+            object: targetSystem,
+            positive: true);
       } else if (relativePosition >= Spaceship.POSITION_GREAT) {
         damage *= 1.5;
         _report("<subject> hit<s> <object's> weakest spot",
@@ -525,7 +526,9 @@ class FireGun extends CombatMove {
         _hit(targetShip.hull, collateral: true);
       } else {
         _report("<subject> completely {miss<es>|go<es> wide of} <object>, too",
-            subject: weapon.projectile, object: targetShip, negative: true,
+            subject: weapon.projectile,
+            object: targetShip,
+            negative: true,
             endSentence: true);
       }
     }
@@ -559,8 +562,8 @@ class FireGun extends CombatMove {
     return true;
   }
 
-  num calculateSuccessChance(ShipSystem originSystem,
-                             Spaceship targetShip, ShipSystem targetSystem) {
+  num calculateSuccessChance(
+      ShipSystem originSystem, Spaceship targetShip, ShipSystem targetSystem) {
     var weapon = originSystem as Weapon;
     if (targetSystem == null) targetSystem = this.targetSystem;
     if (targetSystem == null && targetShip != null) {
@@ -637,8 +640,8 @@ class ImproveAim extends CombatMove {
   String stringSettingUp = null;
 
   @override
-  void reportStarting() => _report(stringStarting, preferShipAsObject: true,
-      isSupportiveActionInThread: true);
+  void reportStarting() => _report(stringStarting,
+      preferShipAsObject: true, isSupportiveActionInThread: true);
   String stringStarting = "<subject> {start<s> "
       "{aiming at|taking aim at|fixing on|zeroing in on}|"
       "begin<s> to {{take |}aim at|fix on|zero in on}} <object>";
@@ -690,8 +693,8 @@ abstract class SpaceshipCombatMove extends CombatMove {
   bool needsTargetSystem = false;
 
   @override
-  void reportStarting() => _report(stringStarting, preferShipAsObject: true,
-      isSupportiveActionInThread: true);
+  void reportStarting() => _report(stringStarting,
+      preferShipAsObject: true, isSupportiveActionInThread: true);
   @override
   void reportSuccess() =>
       _report(stringSuccess, preferShipAsObject: true, positive: true);

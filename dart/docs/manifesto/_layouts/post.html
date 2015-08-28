@@ -15,4 +15,19 @@ layout: minimal
 
 {% include disqus.html %}
 
-<a class="back-to-homepage" href="{{ site.url }}">&larr; Back to egamebook.com</a>
+{% if page.previous.url %}
+  <p class="prev-post">
+    <a href="{{page.previous.url}}">&laquo; {{page.previous.title}}</a>
+  </p>
+{% endif %}
+
+
+{% if page.next.url %}
+  <p class="next-post">
+    <a href="{{page.next.url}}">{{page.next.title}} &raquo;</a>
+  </p>
+{% endif %}
+
+<p>
+  <a class="back-to-homepage" href="{{ site.url }}">&larr; Back to egamebook.com</a>
+</p>

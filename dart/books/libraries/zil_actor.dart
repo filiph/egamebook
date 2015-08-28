@@ -1,43 +1,47 @@
 part of zil;
 
 class ZilActor extends Actor implements Located, ZilSaveable {
-  ZilActor(this._zil, String name, {bool nameIsProperNoun: false, 
-    int team: Actor.NEUTRAL, bool isPlayer: false, Pronoun pronoun: Pronoun.IT,
-    Iterable<Item> items: const [], this.actions: const []})
-    : super(name: name, nameIsProperNoun: nameIsProperNoun, team: team, 
-        isPlayer: isPlayer, pronoun: pronoun) {
+  ZilActor(this._zil, String name, {bool nameIsProperNoun: false,
+      int team: Actor.NEUTRAL, bool isPlayer: false,
+      Pronoun pronoun: Pronoun.IT, Iterable<Item> items: const [],
+      this.actions: const []})
+      : super(
+          name: name,
+          nameIsProperNoun: nameIsProperNoun,
+          team: team,
+          isPlayer: isPlayer,
+          pronoun: pronoun) {
     throwIfNotInInitOrDeclareBlock();
     actions.forEach((action) {
       if (action == null) {
-        throw new NullInOptionalParametersList("ZilActor", name, "actions"); 
+        throw new NullInOptionalParametersList("ZilActor", name, "actions");
       }
       action.actor = this;
-    }); 
+    });
     items.forEach((item) {
       if (item == null) {
-        throw new NullInOptionalParametersList("ZilActor", name, "items"); 
+        throw new NullInOptionalParametersList("ZilActor", name, "items");
       }
       item.carrier = this;
     });
     if (this is AIActor) {
       _zil.actors.add(this);
     } else if (this is ZilPlayer) {
-      _zil.actors.player = this;  // TODO: guard against overwriting player
+      _zil.actors.player = this; // TODO: guard against overwriting player
     }
   }
-  
+
   bool isAlive = true;
-  
+
   final Zil _zil;
-  
+
   /// The [Room] this actor is currently in.
   Room location;
-  
+
   final Iterable<Action> actions;
-  
-  Iterable<Item> get items => 
-      _zil.items.items.where((item) => has(item));
-  
+
+  Iterable<Item> get items => _zil.items.items.where((item) => has(item));
+
   /**
    * Sets this ZilActor's location to the one described by the Scripter's
    * [currentPage]'s name. Alternately, when the optional [pageName] argument
@@ -55,20 +59,20 @@ class ZilActor extends Actor implements Located, ZilSaveable {
   }
 
   bool isIn(Room room) => location == room && isActive;
-  bool isInOneOf(Iterable<Room> rooms) => 
+  bool isInOneOf(Iterable<Room> rooms) =>
       rooms.any((room) => location == room) && isActive;
-  bool isInSameRoomAs(ZilActor actor) => location == actor.location &&
-      isActive && actor.isActive;
-  
+  bool isInSameRoomAs(ZilActor actor) =>
+      location == actor.location && isActive && actor.isActive;
+
   bool has(Item item) => item.carrier == this && item.isActive && isActive;
-  
+
   void createChoicesForPlayer(ZilPlayer player) {
     assert(player.location == this.location);
     actions.forEach((Action action) {
       action.createChoiceForPlayer(player);
     });
   }
-  
+
   Map<String, dynamic> toMap() => {
     "isActive": isActive,
     "team": team,
@@ -94,14 +98,14 @@ class ZilActor extends Actor implements Located, ZilSaveable {
  * This is the player's instance in the ZIL world.
  */
 class ZilPlayer extends ZilActor {
-  ZilPlayer(Zil zil, String name) : super(zil, name, pronoun: Pronoun.YOU,
-      team: Actor.FRIEND, isPlayer: true);
-  
+  ZilPlayer(Zil zil, String name) : super(zil, name,
+          pronoun: Pronoun.YOU, team: Actor.FRIEND, isPlayer: true);
+
   /// The room this actor was the last time we checked. This is used for
   /// [justArrived].
   Room _lastTickLocation;
   bool get justArrived => location != _lastTickLocation;
-  
+
   /**
    * For the player in his current [location], create all relevant choices from
    * available [Action]s.

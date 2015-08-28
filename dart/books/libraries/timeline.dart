@@ -68,11 +68,11 @@ class FunctionTimedEvent extends TimedEvent {
   final int priority;
   String text;
 
-  FunctionTimedEvent(this.action, {this.priority: 0,
-      this.type: TimedEvent.INFO}) {
+  FunctionTimedEvent(this.action,
+      {this.priority: 0, this.type: TimedEvent.INFO}) {
     if (action == null || priority == null) {
       throw new ArgumentError("Timed event needs to have function "
-                              "and priority set.");
+          "and priority set.");
     }
   }
 
@@ -145,7 +145,7 @@ class Timeline implements Saveable {
   /// This can change (and therefore, the whole [Timeline] is [Saveable] even
   /// though times of events can differ from playthrough to playthrough and
   /// can be edited in runtime).
-  final Map<int,int> _schedule = new Map<int,int>();
+  final Map<int, int> _schedule = new Map<int, int>();
 
   Function _mainLoop;
   Function get mainLoop => _mainLoop;
@@ -171,8 +171,8 @@ class Timeline implements Saveable {
    * will stop prematurely (at [:time == 20:]). Any next call to [elapse] will
    * continue from time 20.
    */
-  TimedEvent schedule(int time, Object action, {int priority: 0,
-      int type: TimedEvent.SINGULAR}) {
+  TimedEvent schedule(int time, Object action,
+      {int priority: 0, int type: TimedEvent.SINGULAR}) {
     throwIfNotInInitOrDeclareBlock();
     TimedEvent event;
     if (action is String) {
@@ -205,10 +205,10 @@ class Timeline implements Saveable {
   }
 
   String className = "Timeline";
-  Map<String,Object> toMap() {
-    Map<String,Object> map = new Map<String,Object>();
+  Map<String, Object> toMap() {
+    Map<String, Object> map = new Map<String, Object>();
     map["time"] = time;
-    Map s = map["schedule"] = new Map<String,int>();
+    Map s = map["schedule"] = new Map<String, int>();
     _schedule.forEach((int key, int value) {
       // Need to do this because Map keys need to be String for JSON to work
       // (not int).
@@ -219,7 +219,7 @@ class Timeline implements Saveable {
   updateFromMap(Map map) {
     time = map["time"];
     _schedule.clear();
-    Map s = (map["schedule"] as Map<String,int>);
+    Map s = (map["schedule"] as Map<String, int>);
     s.forEach((String key, int value) {
       _schedule[int.parse(key)] = value;
     });
@@ -264,8 +264,8 @@ class Timeline implements Saveable {
       }
     }
 
-    bool waitingForInteractivity = !interactive &&
-        currentEvents.any((TimedEvent e) => e.isMajor);
+    bool waitingForInteractivity =
+        !interactive && currentEvents.any((TimedEvent e) => e.isMajor);
     bool waitingBecauseOfSingularEvent = _singularAlreadyFired &&
         currentEvents.any((TimedEvent e) => e.isSingular);
 
@@ -275,9 +275,10 @@ class Timeline implements Saveable {
       _schedule.forEach((int eventIndex, int eventTime) {
         if (eventTime > time ||
             // Move only major events, the rest can stay and be run below.
-            (waitingForInteractivity && eventTime == time &&
-             _events[eventIndex].isMajor) ||
-             waitingBecauseOfSingularEvent && eventTime >= time) {
+            (waitingForInteractivity &&
+                eventTime == time &&
+                _events[eventIndex].isMajor) ||
+            waitingBecauseOfSingularEvent && eventTime >= time) {
           indexesToPush.add(eventIndex);
           currentEvents.remove(_events[eventIndex]);
         }
@@ -341,4 +342,3 @@ class Timeline implements Saveable {
     elapse(t - time, interactive: interactive);
   }
 }
-
