@@ -181,6 +181,8 @@ void main() {
               .then(expectAsync((_) {
             expect(mockPresenter.latestOutput, startsWith(
                 "Welcome (back?) to dddeee."));
+            expect(mockPresenter.choicesToBeTaken.length, 0);
+            mockPresenter.quit();
           }));
 
           bookProxy.init().then((_) {
@@ -224,6 +226,7 @@ void main() {
           expect(ui.latestChoices.length, 4);
           expect(ui.latestChoices.first.string, "That's okay.");
           expect(ui.latestChoices.last.string, "Many people do!");
+          expect(ui.latestChoices.question, null);
           ui.quit();
         }));
       });
@@ -379,6 +382,7 @@ void main() {
           expect(ui.latestChoices, hasLength(3));
           expect(ui.latestChoices[0].string, isNot("Get dressed"));
           expect(ui.latestChoices[0].string, "Call the police");
+          expect(ui.latestChoices.question, "What do you do?");
 
           ui.quit();
         }));
