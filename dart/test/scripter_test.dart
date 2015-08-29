@@ -214,6 +214,29 @@ void main() {
             bookProxy.restart();
           });
         });
+
+        test("custom classes from libraries work", () {
+          var mockPresenter = new MockPresenter();
+          mockPresenter.choicesToBeTaken = new Queue<int>.from([0, 1, 0]);
+          var storage = new MemoryStorage();
+          mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+              "files/scripter_test_alternate_6.dart"));
+
+          mockPresenter.playerQuit.first
+          .then(expectAsync((_) {
+            expect(mockPresenter.latestOutput, contains("Time is now 1."));
+            expect(mockPresenter.latestOutput, contains("customInstance.i is now 11."));
+
+            mockPresenter.quit();
+          }));
+
+          bookProxy.init().then((_) {
+            mockPresenter.setScripter(bookProxy);
+            bookProxy.setPresenter(mockPresenter);
+            bookProxy.restart();
+          });
+        });
       });
     });
 
@@ -260,6 +283,16 @@ void main() {
           expect(ui.latestOutput, contains(
               "You tried to do something about it, but to no avail."));
           expect(ui.currentlyShownPoints, 42);
+          ui.quit();
+        }));
+      });
+      test("works with silent choices", () {
+        build("choices_silent.egb").then((mainPath) => run(mainPath)).then(
+            (MockPresenter ui) {
+          return ui.waitForDone();
+        }).then(expectAsync((MockPresenter ui) {
+          expect(ui.latestOutput, contains(
+              "So you are now here."));
           ui.quit();
         }));
       });
