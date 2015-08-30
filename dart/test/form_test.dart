@@ -1,3 +1,5 @@
+@TestOn("browser")
+
 import 'package:test/test.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
