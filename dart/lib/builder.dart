@@ -389,7 +389,7 @@ class Builder {
         readInputStream(inputStream).then((b) => completer.complete(b),
             onError: (e, stackTrace) => completer.completeError(e, stackTrace));
       }
-    });
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1203,9 +1203,9 @@ class Builder {
     Future.wait([
         writeScripterFile(),
         writePresenterFiles()
-    ]).then((_) {
+    ], eagerError: true).then((_) {
       completer.complete(true);
-    });
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1230,25 +1230,27 @@ class Builder {
     .then((_) {
       dartOutStream.write(implStartCtor);
       dartOutStream.write(implStartPages);
-      writePagesToScripter(dartOutStream)
-      .then((_) {
-        dartOutStream.write(implEndPages);
-        dartOutStream.write(implEndCtor);
-        dartOutStream.write(implStartInit);
-        writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT, indent:4)
-        .then((_) {
-          dartOutStream.write(implEndInit);
-          dartOutStream.write(implEndClass);
-          dartOutStream.write(implEndFile);
+      writePagesToScripter(dartOutStream);
+    })
+    .then((_) {
+      dartOutStream.write(implEndPages);
+      dartOutStream.write(implEndCtor);
+      dartOutStream.write(implStartInit);
+      writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT, indent:4);
+    })
+    .then((_) {
+      dartOutStream.write(implEndInit);
+      dartOutStream.write(implEndClass);
+      dartOutStream.write(implEndFile);
 
-          // Close and complete
-          dartOutStream.close();
-          dartOutStream.done.then((_) {
-            completer.complete(true);
-          });
-        });
-      });
-    });
+      // Close and complete
+      dartOutStream.close();
+      return dartOutStream.done;
+    })
+    .then((_) {
+      completer.complete(true);
+    })
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }

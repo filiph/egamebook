@@ -1,5 +1,6 @@
+library vars_generator_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import '../lib/src/builder/vars_generator.dart';
 
