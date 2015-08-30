@@ -1,0 +1,25 @@
+My friend and I are developing a gamebook application for the Android platform (the "google phone"). The core idea is that mobile phones are the future of gamebooks – and a bright future at that.
+
+Because I kind of grew up with the Lone Wolf series, I was thrilled to find out that there is an online project rewriting these books into HTML. HTML + JavaScript is incidentally the technology of choice for our project, too.
+
+I'd love to incorporate the Lone Wolf adventures into the App. Do you think this would be possible? Who should I contact? Is there any way to contact Joe Dever himself?
+
+Thanks a zillion!
+Filip Hracek
+
+
+
+Hi,
+
+My friend and I are developing a gamebook application for the Android platform (the "google phone"). The core idea is that mobile phones are the future of gamebooks and Choose-Your-Own-Adventure – and a bright future at that. I've already played an online CYOA or two on my Android and I loved the experience. The only thing I didn't like were the internet connection lags. That's when I realized that what the world needs is an offline gamebook app for mobile phones.
+
+The main technology that will be used for writing the gamebooks is good ol' HTML + JavaScript. Thanks to a JavaScript API, the author will be able to store data (inventory, story status, XP points and such) and also present them in a user friendly manner.
+
+I tried some of the interactive stories on this site and was thrilled by the quality. I'd love to incorporate some (or all) of your stories on this site into the App and make it available to mobile users for offline reading. Do you think this would be possible? I know ChooseYourStory.com uses a custom scripting format, but I am sure it wouldn't be a big problem for us to convert your adventures for mobile use.
+
+There is no business model behind the app, and we'd like to keep it free. It's just a fan project right now and it'll most probably stay that way.
+
+If you are interested, please reply to this thread or email me – filip.hracek (at) gmail.com.
+
+Thanks a zillion!
+Filip Hracek
