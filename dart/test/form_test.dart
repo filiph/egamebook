@@ -276,6 +276,7 @@ void main() {
       //      querySelector("#book-wrapper").children.clear();
     });
 
+    final Duration DEFAULT_WAIT_FOR_DOM_UPDATE = new Duration(milliseconds: 200);
     test("tests start button", () {
       return new Future(expectAsync(() {
         FormProxy formProxy = new FormProxy.fromMap(form.toMap());
@@ -287,7 +288,7 @@ void main() {
 
         startButton.click();
 
-        return new Future.delayed(new Duration(milliseconds: 200), (){
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
           expect(querySelector("div#book-title").style.display == "none", isTrue);
           expect(querySelector("div#big-bottom-button").style.display == "none",
           isTrue);
@@ -302,7 +303,7 @@ void main() {
 
         restartButton.click();
 
-        return new Future.delayed(new Duration(milliseconds: 200), (){
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
           expect(presenter.getTextHistory() == "", isTrue);
           expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
         });
@@ -603,23 +604,25 @@ void main() {
       expect(optionEl2.selected, isTrue);
     });
 
-    test("Show simple dummy choices", () {
+    test("Show simple dummy choices", () async {
       EgbChoice choice1 = new EgbChoice("Yes");
       EgbChoice choice2 = new EgbChoice("No");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
+      presenter.showChoices(choices);
+      await new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE);
+
         expect(querySelector(".choices-div"), isNotNull);
         expect(querySelector(".choices-div ol").children[0]
             .text.contains(choice1.string), isTrue);
-        ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
-        //buttonEl.click();
+//        ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
+//        buttonEl.click();
         //expect(buttonEl.classes.contains("chosen"), isTrue);
         //expect(querySelector(".choices-div").classes.contains("chosen"),
         //    isTrue);
         //expect(buttonEl.disabled, isTrue);
-      }));
-    }, skip: true);
+//      }));
+    });
 
     test("Show simple choices with submenu", () {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
