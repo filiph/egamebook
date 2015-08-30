@@ -1,3 +1,4 @@
+library vars_generator_test;
 
 import 'package:test/test.dart';
 

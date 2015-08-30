@@ -562,7 +562,7 @@ void main() {
             equals(true));
         });
         new File(getPath("full_project.dart")).delete()
-        .whenComplete(() {
+        .then((_) {
           new Builder().readEgbFile(new File(getPath("full_project.egb")))
           .then((var b) {
             b.writeDartFiles()

@@ -1,3 +1,5 @@
+library persistence_test;
+
 import 'dart:convert';
 import 'package:test/test.dart';
 import 'package:egamebook/src/persistence/storage.dart';
