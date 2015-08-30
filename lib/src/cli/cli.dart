@@ -174,7 +174,7 @@ class ProjectBuilder implements Worker {
   /// Builds recursively all files in [queue].
   /// If the queue is already empty, it competes with success.
   /// If analyzer option is set, the analyzer is run after build.
-  Future _buildFile(ListQueue queue, Completer completer){
+  Future _buildFile(ListQueue queue, Completer completer) {
     File file = queue.removeFirst();
     runBuilder(file.path)
       .then((process) {
@@ -325,10 +325,17 @@ class ProjectWatcher implements Worker {
 
     if (p.extension(_path).isNotEmpty) {
       return new Future.error(
-          "Watching of files is not supported. Run watcer on directory");
+          "Watching of files is not supported. Run watcher on directory");
     } else if (!directory.existsSync()) {
       return new Future.error(
           "Given source directory $_path doesn't exist.");
+    }
+
+    // Sanity check.
+    if (!new Directory(p.join(_path, "web")).existsSync()) {
+      return new Future.error("Must run watcher on a directory that is a "
+          "Dart web applications package (it must have web/, pubspec.yaml and "
+          "all that).");
     }
 
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
