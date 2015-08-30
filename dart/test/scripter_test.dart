@@ -1,4 +1,4 @@
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
@@ -317,7 +317,6 @@ void main() {
         var s1 = new EgbSavegame("blah", vars1, {
           "blah": null
         });
-        logMessage(s1.vars.toString());
         expect(s1.vars, contains("saveable"));
         expect(s1.vars["saveable"], contains("m"));
       });
@@ -340,7 +339,6 @@ void main() {
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput, contains("Time is now 10."));
           expect(ui.latestOutput, contains("customInstance.i is now 20."));
-          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
@@ -362,7 +360,6 @@ void main() {
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestChoices[0].string, "Another chance to die.");
           expect(ui.latestChoices[1].string, "Win it!");
-          logMessage(ui.choicesToBeTaken.toString());
           ui.quit();
         }));
       });
@@ -388,7 +385,6 @@ void main() {
     group("Scripter test helpers", () {
       test("build() works", () {
         build("scripter_test_alternate_6.egb").then(expectAsync((mainPath) {
-          logMessage(mainPath);
           expect(mainPath, endsWith("scripter_test_alternate_6.dart"));
         }));
       });
@@ -423,7 +419,6 @@ void main() {
     group("PointsAwards", () {
       test("successfully awards", () {
         build("points_awards.egb").then((mainPath) {
-          logMessage(mainPath);
           return run(mainPath);
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.currentlyShownPoints, 0);
@@ -440,7 +435,6 @@ void main() {
     group("Stats", () {
       test("successfully shows on start", () {
         build("stats.egb").then((mainPath) {
-          logMessage(mainPath);
           return run(mainPath);
         }).then((MockPresenter ui) {
           return ui.waitForDone();
@@ -499,7 +493,6 @@ void main() {
     //          return ui.waitForDone();
     //        }))
     //        .then(expectAsync((MockPresenter ui) {
-    //          logMessage(ui.latestOutput);
     //          ui.quit();
     //        }));
     //      });

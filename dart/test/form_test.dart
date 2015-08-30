@@ -1,3 +1,5 @@
+@TestOn("browser")
+
 import 'package:test/test.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
@@ -276,6 +278,7 @@ void main() {
       //      querySelector("#book-wrapper").children.clear();
     });
 
+    final Duration DEFAULT_WAIT_FOR_DOM_UPDATE = new Duration(milliseconds: 200);
     test("tests start button", () {
       return new Future(expectAsync(() {
         FormProxy formProxy = new FormProxy.fromMap(form.toMap());
@@ -287,7 +290,7 @@ void main() {
 
         startButton.click();
 
-        return new Future.delayed(new Duration(milliseconds: 200), (){
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
           expect(querySelector("div#book-title").style.display == "none", isTrue);
           expect(querySelector("div#big-bottom-button").style.display == "none",
           isTrue);
@@ -302,7 +305,7 @@ void main() {
 
         restartButton.click();
 
-        return new Future.delayed(new Duration(milliseconds: 200), (){
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
           expect(presenter.getTextHistory() == "", isTrue);
           expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
         });
@@ -603,61 +606,62 @@ void main() {
       expect(optionEl2.selected, isTrue);
     });
 
-    test("Show simple dummy choices", () {
+    test("Show simple dummy choices", () async {
       EgbChoice choice1 = new EgbChoice("Yes");
       EgbChoice choice2 = new EgbChoice("No");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
-        expect(querySelector(".choices-div"), isNotNull);
-        expect(querySelector(".choices-div ol").children[0]
-            .text.contains(choice1.string), isTrue);
-        ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
-        //buttonEl.click();
-        //expect(buttonEl.classes.contains("chosen"), isTrue);
-        //expect(querySelector(".choices-div").classes.contains("chosen"),
-        //    isTrue);
-        //expect(buttonEl.disabled, isTrue);
-      }));
+      presenter.showChoices(choices);
+
+      expect(querySelector(".choices-div"), isNotNull);
+      expect(querySelector(".choices-div ol").children[0]
+          .text.contains(choice1.string), isTrue);
+
+      ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
+      buttonEl.click();
+
+      expect(buttonEl.classes.contains("chosen"), isTrue);
+      expect(querySelector(".choices-div").classes.contains("chosen"),
+          isTrue);
+      expect(buttonEl.disabled, isTrue);
     });
 
-    test("Show simple choices with submenu", () {
+    test("Show simple choices with submenu", () async {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
       EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
-        expect(querySelector(".choices-submenus"), isNotNull);
-        expect(querySelector(".choices-submenu-buttons").children.length,
-            2); //2 submenus
-        expect(querySelector(".choices-submenu-buttons").children[1].text,
-            choice2.submenu);
-        expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
-            .length, 2);
+      presenter.showChoices(choices);
 
-        ButtonElement buttonEl =
-            querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
-        bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
-          .classes.contains("display-none");
-        bool isDepresed = buttonEl.classes.contains("depressed");
-        buttonEl.click();
+      expect(querySelector(".choices-submenus"), isNotNull);
+      expect(querySelector(".choices-submenu-buttons").children.length,
+          2); //2 submenus
+      expect(querySelector(".choices-submenu-buttons").children[1].text,
+          choice2.submenu);
+      expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
+          .length, 2);
 
-        expect(querySelectorAll(".choices-submenus .choices-ol")[1]
-            .classes.contains("display-none"), !isNotDisplayed); // class toggled
-        expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
-      }));
+      ButtonElement buttonEl =
+          querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
+      bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
+        .classes.contains("display-none");
+      bool isDepresed = buttonEl.classes.contains("depressed");
+      buttonEl.click();
+
+      expect(querySelectorAll(".choices-submenus .choices-ol")[1]
+          .classes.contains("display-none"), !isNotDisplayed); // class toggled
+      expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
     });
 
-    test("Show simple choice with infochips", () {
+    test("Show simple choice with infochips", () async {
       EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
-        SpanElement chipsSpan = querySelector(".choice-infochips");
-        expect(chipsSpan, isNotNull);
-        expect(chipsSpan.children.length, 2); //2 infochips
-        expect(chipsSpan.children[0].text, "infochip1");
-      }));
+      presenter.showChoices(choices);
+      SpanElement chipsSpan = querySelector(".choice-infochips");
+      expect(chipsSpan, isNotNull);
+      expect(chipsSpan.children.length, 2); //2 infochips
+      expect(chipsSpan.children[0].text, "infochip1");
     });
 
     test("Show text", () {
@@ -717,20 +721,20 @@ void main() {
     test("Show dialog with default button", () {
       Dialog dialog = new Dialog("Dialogs title", "Some text");
 
-      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
-        DivElement dialogDiv = querySelectorAll(".dialog").last;
-        DivElement overlayDiv = querySelectorAll(".overlay").last;
-        expect(dialogDiv, isNotNull);
-        expect(overlayDiv, isNotNull);
-        expect(dialogDiv.childNodes.indexOf(overlayDiv), isNonNegative);
-        HeadingElement titleHeading = dialogDiv.querySelector("h3");
-        expect(titleHeading, isNotNull);
-        expect(titleHeading.text, dialog.title);
-        expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
-        ButtonElement button = dialogDiv.querySelector("button");
-        expect(button, isNotNull);
-        expect(button.text, "Close");
-      }));
+      (presenter as HtmlPresenter).showDialog(dialog);
+
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      DivElement overlayDiv = querySelectorAll(".overlay").last;
+      expect(dialogDiv, isNotNull);
+      expect(overlayDiv, isNotNull);
+      expect(dialogDiv.childNodes.indexOf(overlayDiv), isNonNegative);
+      HeadingElement titleHeading = dialogDiv.querySelector("h3");
+      expect(titleHeading, isNotNull);
+      expect(titleHeading.text, dialog.title);
+      expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button, isNotNull);
+      expect(button.text, "Close");
     });
 
     test("Show dialog with html and custom button with behaviour", () {
@@ -742,33 +746,31 @@ void main() {
       Dialog dialog = new Dialog("Hello dialog",
           "<p class='extra-text'>Some hello text</p>", [dialogButton]);
 
-      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
-        DivElement dialogDiv = querySelectorAll(".dialog").last;
-        expect(dialogDiv, isNotNull);
-        expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
-            "Some hello text");
-        ButtonElement button = dialogDiv.querySelector("button");
-        expect(button.text, dialogButton.label);
-        button.click();
-      }));
+      (presenter as HtmlPresenter).showDialog(dialog);
+
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      expect(dialogDiv, isNotNull);
+      expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
+          "Some hello text");
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button.text, dialogButton.label);
+      button.click();
     });
 
     test("Show error dialog", () {
       String title = "Error";
       String text = "You made a mistake!";
 
-      (presenter as HtmlPresenter).reportError(title, text)
-        .then(expectAsync((_) {
-          DivElement dialogDiv = querySelectorAll(".dialog").last;
-          expect(dialogDiv, isNotNull);
-          HeadingElement titleHeading = dialogDiv.querySelector("h3");
-          expect(titleHeading, isNotNull);
-          expect(titleHeading.text, title);
-          expect(dialogDiv.querySelector(".dialog-content > div > p").text, text);
-          ButtonElement button = dialogDiv.querySelector("button");
-          expect(button, isNotNull);
-          expect(button.text, "Close");
-      }));
+      (presenter as HtmlPresenter).reportError(title, text);
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      expect(dialogDiv, isNotNull);
+      HeadingElement titleHeading = dialogDiv.querySelector("h3");
+      expect(titleHeading, isNotNull);
+      expect(titleHeading.text, title);
+      expect(dialogDiv.querySelector(".dialog-content > div > p").text, text);
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button, isNotNull);
+      expect(button.text, "Close");
     });
   });
 
