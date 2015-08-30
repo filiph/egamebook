@@ -3,7 +3,7 @@ version: 0.0.1
 author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   a_star: any
-  analyzer: any
+  analyzer: "0.25.0+1"
   args: any
   browser: any
   html5lib: any
