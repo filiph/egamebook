@@ -222,7 +222,7 @@ void main() {
       createTemporaryDir(path);
 
       File file = new File(p.join(path, "test1.egb"));
-      file.writeAsStringSync('Some content of egb file.');
+      file.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
       var callback = expectAsync((message) {
         File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
@@ -260,9 +260,9 @@ void main() {
       createTemporaryDir(path);
 
       File file1 = new File(p.join(path, "test1.egb"));
-      file1.writeAsStringSync('Some content of egb file1.');
+      file1.writeAsStringSync(SIMPLE_EGB_CONTENT);
       File file2 = new File(p.join(path, "test2.egb"));
-      file2.writeAsStringSync('Some content of egb file2.');
+      file2.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
@@ -280,9 +280,9 @@ void main() {
       createTemporaryDir(path);
 
       File file1 = new File(p.join(path, "test1.egb"));
-      file1.writeAsStringSync('Some content of egb file1.');
+      file1.writeAsStringSync(SIMPLE_EGB_CONTENT);
       File file2 = new File(p.join(path, "test2.egb"));
-      file2.writeAsStringSync('Some content of egb file2.');
+      file2.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
       var callback = expectAsync((message) {
         File fileHtmlBuild1 = new File(p.join(path, "web/test1.html.dart"));
@@ -337,7 +337,7 @@ void main() {
       var callback = expectAsync((fileName) {
         // Starts watching
         new Future.delayed(new Duration(seconds: 1), () {
-          file.writeAsStringSync('Some updated content.');
+          file.writeAsStringSync(SIMPLE_EGB_CONTENT);
           // Waiting for builder which build file
           new Future.delayed(new Duration(seconds: 2), () {
             File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
