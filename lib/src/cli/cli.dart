@@ -6,6 +6,10 @@ import 'dart:collection';
 import 'package:path/path.dart' as p;
 import 'package:watcher/watcher.dart';
 import 'file_hierarchy.dart';
+import 'package:egamebook/builder.dart';
+
+
+const String DART_FILES_OUTPUT_SUBDIR = "web";
 
 /// Returns path to build.dart script in the bin/ folder.
 String getPathToBuildScript() {
@@ -40,9 +44,11 @@ bool isSourcesDirectory(String path) {
 }
 
 /// Runs build.dart command line tool on given [path].
-Future runBuilder(String path) {
+Future runBuilder(String path) async {
   print("Building $path...");
-  return Process.start("dart", [getPathToBuildScript(), path]);
+
+  return new Builder().readEgbFile(new File(path))
+  .then((b) => b.writeDartFiles(subdirectory: DART_FILES_OUTPUT_SUBDIR));
 }
 
 /// Runs dartanalyzer command line tool on given [path].
@@ -52,8 +58,10 @@ Future runAnalyzer(String path) {
 }
 
 /// Returns built file name from .egb file or [:null:].
-String getBuiltFileFromEgbFile(String path)  =>
-    (path != null) ? "${p.withoutExtension(path)}.dart" : null;
+String getBuiltFileFromEgbFile(String path, String subdirectory) {
+  return Builder.getExtensionPathFromEgbPath(path, "dart",
+      subdirectory: subdirectory);
+}
 
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
@@ -174,38 +182,31 @@ class ProjectBuilder implements Worker {
   /// Builds recursively all files in [queue].
   /// If the queue is already empty, it competes with success.
   /// If analyzer option is set, the analyzer is run after build.
-  Future _buildFile(ListQueue queue, Completer completer) {
+  Future _buildFile(ListQueue queue, Completer completer) async {
     File file = queue.removeFirst();
-    runBuilder(file.path)
-      .then((process) {
-        Future.wait([
+
+    await runBuilder(file.path);
+    String pathDart = getBuiltFileFromEgbFile(file.path,
+        DART_FILES_OUTPUT_SUBDIR);
+
+    if (!new File(pathDart).existsSync()) {
+      print("BUILD FAILED!\n");
+      return _buildFileOrComplete(queue, completer); //but move to next
+    }
+
+    if (!_analyze) {
+      print("BUILD SUCCESSFULL!\n");
+      return _buildFileOrComplete(queue, completer);
+    } else {
+      var process = await runAnalyzer(pathDart);
+
+      await Future.wait([
           stdout.addStream(process.stdout),
-          stderr.addStream(process.stderr)])
-            .then((_) {
-              String pathDart = getBuiltFileFromEgbFile(file.path);
+          stderr.addStream(process.stderr)]);
 
-              if (!new File(pathDart).existsSync()) {
-                print("BUILD FAILED!\n");
-                return _buildFileOrComplete(queue, completer); //but move to next
-              }
-
-              if (!_analyze) {
-                print("BUILD SUCCESSFULL!\n");
-                return _buildFileOrComplete(queue, completer);
-              } else {
-                runAnalyzer(pathDart)
-                  .then((process) {
-                    Future.wait([
-                      stdout.addStream(process.stdout),
-                      stderr.addStream(process.stderr)])
-                        .then((_) {
-                          print("BUILD SUCCESSFULL!\n");
-                          return _buildFileOrComplete(queue, completer);
-                        });
-                  });
-               }
-            }).catchError(completer.completeError);
-    });
+      print("BUILD SUCCESSFULL!\n");
+      return _buildFileOrComplete(queue, completer);
+    }
 
     return completer.future;
   }
@@ -332,10 +333,10 @@ class ProjectWatcher implements Worker {
     }
 
     // Sanity check.
-    if (!new Directory(p.join(_path, "web")).existsSync()) {
+    if (!new Directory(p.join(_path, DART_FILES_OUTPUT_SUBDIR)).existsSync()) {
       return new Future.error("Must run watcher on a directory that is a "
-          "Dart web applications package (it must have web/, pubspec.yaml and "
-          "all that).");
+          "Dart web applications package (it must have "
+          "$DART_FILES_OUTPUT_SUBDIR/, pubspec.yaml and all that).");
     }
 
     DirectoryWatcher watcher = new DirectoryWatcher(_path);
@@ -348,8 +349,8 @@ class ProjectWatcher implements Worker {
       if (event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(masterFile.path) &&
           p.extension(masterFile.path) == extension &&
-          _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path)) {//prevents cycle builds
-        _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path);
+          _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path, DART_FILES_OUTPUT_SUBDIR)) {//prevents cycle builds
+        _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path, DART_FILES_OUTPUT_SUBDIR);
 
         queue.add(masterFile);
         _buildFile(queue);
@@ -363,56 +364,47 @@ class ProjectWatcher implements Worker {
   /// moment.
   /// When build is finished, the next file in [queue] is retrieved, built
   /// and corresponding .dart file analyzed.
-  void _buildFile(ListQueue queue) {
+  Future _buildFile(ListQueue queue) async {
     if (!_building && !_analyzing) { //because of streams
       _building = true;
       // We run builder only on master file
       File masterFile = queue.removeFirst();
 
-      runBuilder(masterFile.path)
-        .then((process) {
-          Future.wait([
-            stdout.addStream(process.stdout),
-            stderr.addStream(process.stderr)])
-            .then((_) {
-              _building = false;
+      await runBuilder(masterFile.path);
 
-              new Future.delayed(new Duration(milliseconds: 500), () {
-                // The value is saved only for small amount of time to prevent
-                // repeating builds on same file.
-                // But we want to also have the possibility to update the file
-                // again and again by editing manually so it needs to be reseted.
-                _actualBuiltFileName = null;
-              });
+      _building = false;
 
-              if (!new File(masterFile.path).existsSync()) {
-                print("BUILD FAILED!\n");
-                _buildFileOrEnd(queue); //but try next one in queue
-                return;
-              }
+      new Future.delayed(new Duration(milliseconds: 500), () {
+        // The value is saved only for small amount of time to prevent
+        // repeating builds on same file.
+        // But we want to also have the possibility to update the file
+        // again and again by editing manually so it needs to be reseted.
+        _actualBuiltFileName = null;
+      });
 
-              if (!_analyze) {
-                print("BUILD SUCCESSFULL!\n");
-                _buildFileOrEnd(queue);
-              } else {
-                _analyzing = true;
-
-                runAnalyzer(masterFile.path)
-                  .then((process) {
-                    Future.wait([
-                      stdout.addStream(process.stdout),
-                      stderr.addStream(process.stderr)])
-                        .then((_) {
-                          _analyzing = false;
-
-                          print("BUILD SUCCESSFULL!\n");
-                          _buildFileOrEnd(queue);
-                        });
-                    });
-                }
-              });
-            });
+      if (!new File(masterFile.path).existsSync()) {
+        print("BUILD FAILED!\n");
+        _buildFileOrEnd(queue); //but try next one in queue
+        return;
       }
+
+      if (!_analyze) {
+        print("BUILD SUCCESSFULL!\n");
+        _buildFileOrEnd(queue);
+      } else {
+        _analyzing = true;
+
+        var process = await runAnalyzer(masterFile.path);
+        await Future.wait([
+          stdout.addStream(process.stdout),
+          stderr.addStream(process.stderr)]);
+
+        _analyzing = false;
+
+        print("BUILD SUCCESSFULL!\n");
+        _buildFileOrEnd(queue);
+      }
+    }
   }
 
   /// Builds actual file path in [queue] or ends.

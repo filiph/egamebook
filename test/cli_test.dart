@@ -17,6 +17,19 @@ String getPath(String fileName) {
   return p.join(p.dirname(pathToScript), fileName);
 }
 
+void createTemporaryDir(String path) {
+  Directory temp = new Directory(path);
+  temp.createSync();
+
+  Directory tempWeb = new Directory(p.join(path, DART_FILES_OUTPUT_SUBDIR));
+  tempWeb.createSync();
+}
+
+void deleteTemporaryDir(String path) {
+  Directory temp = new Directory(path);
+  temp.deleteSync(recursive: true);
+}
+
 /// Returns number of valid files in [path].
 /// Valid file is either [File] or [Directory].
 /// Symlinks are not counted.
@@ -53,6 +66,13 @@ class CreateCommandStub extends CreateCommand {
   }
 }
 
+const String SIMPLE_EGB_CONTENT = """
+---
+start
+
+Some content of bodega .egb file.
+""";
+
 void main() {
   CommandRunner runner =
       new CommandRunner("egamebooktest", "Egamebook test builder.")
@@ -64,17 +84,16 @@ void main() {
 
     setUp(() {
       String path = getPath(templateFiles);
-      Directory directory = new Directory(path);
-      directory.createSync();
 
-      File bodega = new File(p.join(directory.path, "bodega.egb"));
-      bodega.writeAsStringSync('Some content of bodega .egb file.');
+      createTemporaryDir(path);
+
+      File bodega = new File(p.join(path, "bodega.egb"));
+      bodega.writeAsStringSync(SIMPLE_EGB_CONTENT);
     });
 
     tearDown(() {
       String path = getPath(templateFiles);
-      Directory directory = new Directory(path);
-      directory.deleteSync(recursive: true);
+      deleteTemporaryDir(path);
     });
 
     test("fails with no parameters", () {
@@ -109,12 +128,11 @@ void main() {
 
     test("fails on existing folder", () {
       String path = getPath("egbtemp");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       var callback = expectAsync((message) {
         expect(message.contains("Folder $path already exists."), isTrue);
-        temp.deleteSync();
+        deleteTemporaryDir(path);
       });
 
       runner.run(["create", path]).catchError(callback);
@@ -139,23 +157,22 @@ void main() {
 
       runner.run(["create", path]).then(callback);
     });
-  });
+  }, skip: "egamebook create is now on hold");
 
   group("egamebook build", () {
 
     setUp(() {
       String path = getPath(templateFiles);
-      Directory directory = new Directory(path);
-      directory.createSync();
+      createTemporaryDir(path);
 
-      File bodega = new File(p.join(directory.path, "bodega.egb"));
-      bodega.writeAsStringSync('Some content of bodega .egb file.');
+      File bodega = new File(p.join(path, "bodega.egb"));
+      bodega.writeAsStringSync(SIMPLE_EGB_CONTENT);
     });
 
     tearDown(() {
       String path = getPath(templateFiles);
       Directory directory = new Directory(path);
-      directory.deleteSync(recursive: true);
+      deleteTemporaryDir(path);
     });
 
     test("fails with two parameters", () {
@@ -188,14 +205,13 @@ void main() {
 
     test("builds project with no .egb files", () {
       String path = getPath("no_egb");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
         expect(lines[0], "BUILD FAILED!");
         expect(lines[1], "No .egb file in this directory.");
-        temp.deleteSync();
+        deleteTemporaryDir(path);
       });
 
       runner.run(["build", path]).catchError(callback);
@@ -203,20 +219,19 @@ void main() {
 
     test("builds with .egb file as parameter", () {
       String path = getPath("test_build_egb_file");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file = new File(p.join(path, "test1.egb"));
       file.writeAsStringSync('Some content of egb file.');
 
       var callback = expectAsync((message) {
-        File fileHtmlBuild = new File(p.join(path, "test1.html.dart"));
-        File fileDartBuild = new File(p.join(path, "test1.dart"));
+        File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
+        File fileDartBuild = new File(p.join(path, "web/test1.dart"));
 
         expect(message.contains("DONE."), isTrue);
         expect(fileHtmlBuild.existsSync(), isTrue);
         expect(fileDartBuild.existsSync(), isTrue);
-        temp.deleteSync(recursive: true);
+        deleteTemporaryDir(path);
       });
 
       runner.run(["build", "$path${Platform.pathSeparator}test1.egb"]).then(callback);
@@ -224,8 +239,7 @@ void main() {
 
     test("fails with .other file as parameter", () {
       String path = getPath("test_build_other_file");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file = new File(p.join(path, "test1.other"));
       file.writeAsStringSync('Not supported file!');
@@ -235,7 +249,7 @@ void main() {
         expect(lines[0], "BUILD FAILED!");
         expect(lines[1],
             "File type of $path${Platform.pathSeparator}test1.other is not supported.");
-        temp.deleteSync(recursive: true);
+        deleteTemporaryDir(path);
       });
 
       runner.run(["build", "$path${Platform.pathSeparator}test1.other"]).catchError(callback);
@@ -243,8 +257,7 @@ void main() {
 
     test("fails with more than one .egb file in directory", () {
       String path = getPath("test_build_egb_file_more");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file1 = new File(p.join(path, "test1.egb"));
       file1.writeAsStringSync('Some content of egb file1.');
@@ -256,7 +269,7 @@ void main() {
         expect(lines[0], "BUILD FAILED!");
         expect(lines[1],
             "More than one .egb file found in the directory.");
-        temp.deleteSync(recursive: true);
+        deleteTemporaryDir(path);
       });
 
       runner.run(["build", "$path"]).catchError(callback);
@@ -264,8 +277,7 @@ void main() {
 
     test("builds more .egb files with -f or --full-directory parameter", () {
       String path = getPath("test_build_egb_file_more");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file1 = new File(p.join(path, "test1.egb"));
       file1.writeAsStringSync('Some content of egb file1.');
@@ -273,15 +285,15 @@ void main() {
       file2.writeAsStringSync('Some content of egb file2.');
 
       var callback = expectAsync((message) {
-        File fileHtmlBuild1 = new File(p.join(path, "test1.html.dart"));
-        File fileDartBuild1 = new File(p.join(path, "test1.dart"));
-        File fileHtmlBuild2 = new File(p.join(path, "test2.html.dart"));
-        File fileDartBuild2 = new File(p.join(path, "test2.dart"));
+        File fileHtmlBuild1 = new File(p.join(path, "web/test1.html.dart"));
+        File fileDartBuild1 = new File(p.join(path, "web/test1.dart"));
+        File fileHtmlBuild2 = new File(p.join(path, "web/test2.html.dart"));
+        File fileDartBuild2 = new File(p.join(path, "web/test2.dart"));
         expect(fileHtmlBuild1.existsSync(), isTrue);
         expect(fileDartBuild1.existsSync(), isTrue);
         expect(fileHtmlBuild2.existsSync(), isTrue);
         expect(fileDartBuild2.existsSync(), isTrue);
-        temp.deleteSync(recursive: true);
+        deleteTemporaryDir(path);
       });
 
       runner.run(["build", "--full-directory", "$path"]).then(callback);
@@ -291,8 +303,7 @@ void main() {
   group("egamebook getEgbFiles", () {
     test("returns correct .egb files", () {
       String path = getPath("test_search_egb");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file1 = new File(p.join(path, "test1.egb"));
       file1.createSync();
@@ -308,7 +319,7 @@ void main() {
         expect(p.basename(files[0].path), "test1.egb");
         expect(p.basename(files[1].path), "test2.egb");
         expect(p.basename(files[2].path), "test3.egb");
-        temp.deleteSync(recursive: true);
+        deleteTemporaryDir(path);
       });
 
       builder.getEgbFiles(path).then(callback);
@@ -319,8 +330,7 @@ void main() {
 
     test("builds .egb file after change", () {
       String path = getPath("test_watch");
-      Directory temp = new Directory(path);
-      temp.createSync();
+      createTemporaryDir(path);
 
       File file = new File(p.join(path, "test1.egb"));
 
@@ -330,11 +340,11 @@ void main() {
           file.writeAsStringSync('Some updated content.');
           // Waiting for builder which build file
           new Future.delayed(new Duration(seconds: 2), () {
-            File fileHtmlBuild = new File(p.join(path, "test1.html.dart"));
-            File fileDartBuild = new File(p.join(path, "test1.dart"));
+            File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
+            File fileDartBuild = new File(p.join(path, "web/test1.dart"));
             expect(fileHtmlBuild.existsSync(), isTrue);
             expect(fileDartBuild.existsSync(), isTrue);
-            temp.deleteSync(recursive: true);
+            deleteTemporaryDir(path);
           });
         });
       });
