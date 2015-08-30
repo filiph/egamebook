@@ -651,17 +651,16 @@ void main() {
       expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
     });
 
-    test("Show simple choice with infochips", () {
+    test("Show simple choice with infochips", () async {
       EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
-        SpanElement chipsSpan = querySelector(".choice-infochips");
-        expect(chipsSpan, isNotNull);
-        expect(chipsSpan.children.length, 2); //2 infochips
-        expect(chipsSpan.children[0].text, "infochip1");
-      }));
-    }, skip: true);
+      presenter.showChoices(choices);
+      SpanElement chipsSpan = querySelector(".choice-infochips");
+      expect(chipsSpan, isNotNull);
+      expect(chipsSpan.children.length, 2); //2 infochips
+      expect(chipsSpan.children[0].text, "infochip1");
+    });
 
     test("Show text", () {
       String text = "This is some funny text";
