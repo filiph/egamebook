@@ -58,9 +58,9 @@ Future runAnalyzer(String path) {
 }
 
 /// Returns built file name from .egb file or [:null:].
-String getBuiltFileFromEgbFile(String path, String subdirectory) {
+String getBuiltFileFromEgbFile(String path) {
   return Builder.getExtensionPathFromEgbPath(path, "dart",
-      subdirectory: subdirectory);
+      subdirectory: DART_FILES_OUTPUT_SUBDIR);
 }
 
 /// Abstract class [Worker] is an interface for all worker classes
@@ -186,8 +186,7 @@ class ProjectBuilder implements Worker {
     File file = queue.removeFirst();
 
     await runBuilder(file.path);
-    String pathDart = getBuiltFileFromEgbFile(file.path,
-        DART_FILES_OUTPUT_SUBDIR);
+    String pathDart = getBuiltFileFromEgbFile(file.path);
 
     if (!new File(pathDart).existsSync()) {
       print("BUILD FAILED!\n");
@@ -349,8 +348,8 @@ class ProjectWatcher implements Worker {
       if (event.type != ChangeType.REMOVE &&
           !isSourcesDirectory(masterFile.path) &&
           p.extension(masterFile.path) == extension &&
-          _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path, DART_FILES_OUTPUT_SUBDIR)) {//prevents cycle builds
-        _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path, DART_FILES_OUTPUT_SUBDIR);
+          _actualBuiltFileName != getBuiltFileFromEgbFile(masterFile.path)) {//prevents cycle builds
+        _actualBuiltFileName = getBuiltFileFromEgbFile(masterFile.path);
 
         queue.add(masterFile);
         _buildFile(queue);
@@ -371,6 +370,7 @@ class ProjectWatcher implements Worker {
       File masterFile = queue.removeFirst();
 
       await runBuilder(masterFile.path);
+      String pathDart = getBuiltFileFromEgbFile(masterFile.path);
 
       _building = false;
 
@@ -382,7 +382,7 @@ class ProjectWatcher implements Worker {
         _actualBuiltFileName = null;
       });
 
-      if (!new File(masterFile.path).existsSync()) {
+      if (!new File(pathDart).existsSync()) {
         print("BUILD FAILED!\n");
         _buildFileOrEnd(queue); //but try next one in queue
         return;
@@ -394,7 +394,7 @@ class ProjectWatcher implements Worker {
       } else {
         _analyzing = true;
 
-        var process = await runAnalyzer(masterFile.path);
+        var process = await runAnalyzer(pathDart);
         await Future.wait([
           stdout.addStream(process.stdout),
           stderr.addStream(process.stderr)]);
