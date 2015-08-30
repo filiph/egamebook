@@ -759,19 +759,17 @@ void main() {
       String title = "Error";
       String text = "You made a mistake!";
 
-      (presenter as HtmlPresenter).reportError(title, text)
-        .then(expectAsync((_) {
-          DivElement dialogDiv = querySelectorAll(".dialog").last;
-          expect(dialogDiv, isNotNull);
-          HeadingElement titleHeading = dialogDiv.querySelector("h3");
-          expect(titleHeading, isNotNull);
-          expect(titleHeading.text, title);
-          expect(dialogDiv.querySelector(".dialog-content > div > p").text, text);
-          ButtonElement button = dialogDiv.querySelector("button");
-          expect(button, isNotNull);
-          expect(button.text, "Close");
-      }));
-    }, skip: true);
+      (presenter as HtmlPresenter).reportError(title, text);
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      expect(dialogDiv, isNotNull);
+      HeadingElement titleHeading = dialogDiv.querySelector("h3");
+      expect(titleHeading, isNotNull);
+      expect(titleHeading.text, title);
+      expect(dialogDiv.querySelector(".dialog-content > div > p").text, text);
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button, isNotNull);
+      expect(button.text, "Close");
+    });
   });
 
   group("HtmlPresenter Savegame", () {
