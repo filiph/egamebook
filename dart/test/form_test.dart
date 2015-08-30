@@ -610,7 +610,6 @@ void main() {
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
       presenter.showChoices(choices);
-      await new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE);
 
       expect(querySelector(".choices-div"), isNotNull);
       expect(querySelector(".choices-div ol").children[0]
@@ -619,39 +618,38 @@ void main() {
       ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
       buttonEl.click();
 
-      await new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE);
       expect(buttonEl.classes.contains("chosen"), isTrue);
       expect(querySelector(".choices-div").classes.contains("chosen"),
           isTrue);
       expect(buttonEl.disabled, isTrue);
     });
 
-    test("Show simple choices with submenu", () {
+    test("Show simple choices with submenu", () async {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
       EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
       EgbChoiceList choices = new EgbChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      presenter.showChoices(choices).then(expectAsync((_) {
-        expect(querySelector(".choices-submenus"), isNotNull);
-        expect(querySelector(".choices-submenu-buttons").children.length,
-            2); //2 submenus
-        expect(querySelector(".choices-submenu-buttons").children[1].text,
-            choice2.submenu);
-        expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
-            .length, 2);
+      presenter.showChoices(choices);
 
-        ButtonElement buttonEl =
-            querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
-        bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
-          .classes.contains("display-none");
-        bool isDepresed = buttonEl.classes.contains("depressed");
-        buttonEl.click();
+      expect(querySelector(".choices-submenus"), isNotNull);
+      expect(querySelector(".choices-submenu-buttons").children.length,
+          2); //2 submenus
+      expect(querySelector(".choices-submenu-buttons").children[1].text,
+          choice2.submenu);
+      expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
+          .length, 2);
 
-        expect(querySelectorAll(".choices-submenus .choices-ol")[1]
-            .classes.contains("display-none"), !isNotDisplayed); // class toggled
-        expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
-      }));
-    }, skip: true);
+      ButtonElement buttonEl =
+          querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
+      bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
+        .classes.contains("display-none");
+      bool isDepresed = buttonEl.classes.contains("depressed");
+      buttonEl.click();
+
+      expect(querySelectorAll(".choices-submenus .choices-ol")[1]
+          .classes.contains("display-none"), !isNotDisplayed); // class toggled
+      expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
+    });
 
     test("Show simple choice with infochips", () {
       EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
