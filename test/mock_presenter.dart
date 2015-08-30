@@ -3,6 +3,8 @@ library mock_presenter;
 import 'dart:collection';
 import 'dart:async';
 
+import "package:logging/logging.dart";
+
 import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -51,6 +53,8 @@ class MockPresenter extends EgbPresenterBase {
 
   static final String PLAYER_QUIT_EVENT = "PLAYER_QUIT";
 
+  final Logger _log = new Logger('MockPresenter');
+
   MockPresenter({bool this.waitForChoicesToBeTaken: false})
       : choicesToBeTaken = new Queue<int>(),
       choicesToBeTakenByString = new Queue<String>(), super() {
@@ -63,7 +67,7 @@ class MockPresenter extends EgbPresenterBase {
   }
 
   void endBook() {
-    print("MockPresenter: End of Book");
+    _log.info("MockPresenter: End of Book");
     _debugStreamController.add(BOOK_ENDED_EVENT);
   }
 
@@ -78,7 +82,7 @@ class MockPresenter extends EgbPresenterBase {
   }
 
   Future<bool> showText(String s) {
-    print("MockPresenter output: $s");
+    _log.fine("MockPresenter output: $s");
     if (s.trim() != "") {
       latestOutput = s.split("\n\n").last;
       _debugStreamController.add(TEXTBLOCK_SHOWN_EVENT);
@@ -90,11 +94,11 @@ class MockPresenter extends EgbPresenterBase {
                              "MockPresenter.";
 
   Future<int> showChoices(EgbChoiceList choiceList) {
-    choiceList.forEach((choice) => print("MockPresenter choice: '${choice.string}'"));
+    choiceList.forEach((choice) => _log.fine("MockPresenter choice: '${choice.string}'"));
     _latestChoices = choiceList;
     if (choicesToBeTaken.length > 0) {
       int choiceNumber = choicesToBeTaken.removeFirst();
-      print("MockPresenter pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
+      _log.info("MockPresenter pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
                                 "-> ${choiceList[choiceNumber].hash}");
       return new Future.value(choiceList[choiceNumber].hash);
     } else if (choicesToBeTakenByString.length > 0) {
@@ -109,7 +113,7 @@ class MockPresenter extends EgbPresenterBase {
         return _currentChoicesCompleter.future;
       } else {
         // No predefined choices and no waiting - let's quit.
-        print("MockPresenter pick: NONE, Quitting");
+        _log.info("MockPresenter pick: NONE, Quitting");
         quit();
         return new Future.value(null);
       }
@@ -125,7 +129,7 @@ class MockPresenter extends EgbPresenterBase {
       }
     }
     if (choiceNumber == null) throw "Choice $str not available.";
-    print("MockPresenter pick: $choiceNumber) '$str' "
+    _log.fine("MockPresenter pick: $choiceNumber) '$str' "
         "-> ${list[choiceNumber].hash}");
     return list[choiceNumber].hash;
   }
@@ -136,7 +140,7 @@ class MockPresenter extends EgbPresenterBase {
   void choose(String choiceString) {
     if (_currentChoices == null) {
       choicesToBeTakenByString.addLast(choiceString);
-      print("MockPresenter will choose '$choiceString' on next choiceList.");
+      _log.fine("MockPresenter will choose '$choiceString' on next choiceList.");
     } else {
       int hash = _getChoiceHashFromString(choiceString, _currentChoices);
       _currentChoices = null;
@@ -146,14 +150,14 @@ class MockPresenter extends EgbPresenterBase {
   }
 
   void quit() {
-    print("MockPresenter.quit() called.");
+    _log.info("MockPresenter.quit() called.");
     playerProfile.close();
     scripterProxy.quit();
     _debugStreamController.add(PLAYER_QUIT_EVENT);
   }
 
   void restart() {
-    print("MockPresenter.restart() called.");
+    _log.info("MockPresenter.restart() called.");
     scripterProxy.restart();
   }
 
@@ -165,7 +169,7 @@ class MockPresenter extends EgbPresenterBase {
         .then((_) => this);
 
   Future<bool> awardPoints(PointsAward award) {
-    print("MockPresenter: *** $award ***");
+    _log.fine("MockPresenter: *** $award ***");
     _debugStreamController.add(POINTS_AWARDED_EVENT);
     _currentlyShownPoints = award.result;
     return new Future.value(true);
@@ -189,19 +193,19 @@ class MockPresenter extends EgbPresenterBase {
   }
 
   void _printStats() {
-    print("Stats:");
+    _log.fine("Stats:");
     _statsList.where((stat) => stat.show == true).forEach((stat) {
-      print("- $stat");
+      _log.fine("- $stat");
     });
   }
 
   Future<bool> addSavegameBookmark(EgbSavegame savegame) {
-    print("==> savegame created (${savegame.uid})");
+    _log.info("==> savegame created (${savegame.uid})");
     return new Future.value(true);
   }
 
   Future<bool> reportError(String title, String text) {
-    print("ERROR: $title\n$text");
+    _log.error("ERROR: $title\n$text");
     return new Future.value(true);
   }
 

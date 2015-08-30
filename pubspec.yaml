@@ -12,5 +12,6 @@ dependencies:
   path: any
   test: any
   watcher: any
+  logging: any
 executables:
   egamebook:

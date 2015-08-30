@@ -3,6 +3,7 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
+import "package:logging/logging.dart";
 import '../../presenter.dart';
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
@@ -69,6 +70,8 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
 
   /// Init completer.
   Completer _initCompleter;
+
+  final Logger _log = new Logger('EgbIsolateScripterProxy');
 
   /// Creates new EgbIsolateScripterProxy with provided Isolate URI [_isolateUri].
   EgbIsolateScripterProxy(this._isolateUri);
@@ -218,9 +221,8 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   void restart() {
     _send(new EgbMessage.start());
   }
-}
 
-/// Prints debug message.
-void INT_DEBUG(String message) {
-  print("INT: $message");
+  void INT_DEBUG(String msg) {
+    _log.fine(msg);
+  }
 }
