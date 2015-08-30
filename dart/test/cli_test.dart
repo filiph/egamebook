@@ -1,3 +1,5 @@
+library cli_test;
+
 import 'dart:io';
 import 'dart:async';
 import 'package:test/test.dart';
