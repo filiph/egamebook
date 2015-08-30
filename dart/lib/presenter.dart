@@ -14,8 +14,12 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
+/// EgbPresenter is an interface for all presenters in application.
+/// It has information about player profile and Scripter.
 abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
+  /// Port where the message is received.
   ReceivePort _receivePort;
+  /// Port where the message is sent.
   SendPort _scripterPort;
 
   /**
@@ -42,7 +46,7 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   void close();
 
   /**
-   * Displays the markdown-formated text.
+   * Displays the markdown-formatted text.
    */
   Future<bool> showText(String text);
 
@@ -51,8 +55,8 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
    * the choice, the returned Future completes with the selected choice's
    * hash.
    *
-   * This also displays the HTML-formated question, if it is set in ChoiceList.
-   * The question hould disappear after one of the choices is picked.
+   * This also displays the HTML-formatted question, if it is set in ChoiceList.
+   * The question should disappear after one of the choices is picked.
    *
    * Completes with null when user wants to quit.
    */
@@ -83,6 +87,8 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   void updateForm(FormConfiguration values);
 
   // TODO: toast() ?
+  /// Reports error in the presenter with [title] and [text]. For example shows
+  /// an error dialog.
   Future<bool> reportError(String title, String text);
 
   /**
@@ -95,15 +101,20 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   @deprecated
   Future<bool> addSavegameBookmark(EgbSavegame savegame);
 
+  /// Getter returns player profile.
   EgbPlayerProfile get playerProfile;
 
+  /// Sets player profile to [playerProfile].
   void setPlayerProfile(EgbPlayerProfile playerProfile);
 
+  /// Sets scripter to [scripterProxy].
   void setScripter(EgbScripterProxy scripterProxy);
 }
 
+/// EgbPresenterBase is base class for all presenters.
+/// It is a base class of [HtmlPresenter].
 abstract class EgbPresenterBase implements EgbPresenter {
-
+  /// Scripter proxy.
   EgbScripterProxy scripterProxy;
   void setScripter(EgbScripterProxy scripterProxy) {
     this.scripterProxy = scripterProxy;
@@ -140,6 +151,7 @@ abstract class EgbPresenterBase implements EgbPresenter {
   @override
   EgbPlayerProfile get playerProfile => _playerProfile;
 
+  /// Player profile.
   EgbPlayerProfile _playerProfile;
   void setPlayerProfile(EgbPlayerProfile playerProfile) {
     _playerProfile = playerProfile;

@@ -30,14 +30,14 @@ abstract class WorkerCommand extends Command {
 
 /// Class [CreateCommand] wraps command for creating of new project.
 class CreateCommand extends WorkerCommand {
-  /// Name of the command
+  /// Name of the command.
   final String name = "create";
-  /// Description of the command
+  /// Description of the command.
   final String description = "Create new egamebook project.";
-  /// Error message used with usage
+  /// Error message used with usage.
   final String error = "Please specify valid name of the project.";
 
-  /// Constructor
+  /// Creates new CreateCommand.
   CreateCommand();
 
   /// Returns if params have length of 1 and the name of the project is not ".".
@@ -52,13 +52,14 @@ class CreateCommand extends WorkerCommand {
 
 /// Class [BuildCommand] wraps command for building of selected project.
 class BuildCommand extends WorkerCommand {
-  /// Name of the command
+  /// Name of the command.
   final String name = "build";
-  /// Description of the command
+  /// Description of the command.
   final String description = "Build egamebook project.";
-  /// Error message used with usage
+  /// Error message used with usage.
   final String error = "Please specify one project folder.";
 
+  /// Creates new BuildCommand.
   BuildCommand() {
     argParser.addFlag("analyze", abbr: "a",
         help: "Runs analyzer on built file.", negatable: false);
@@ -66,6 +67,7 @@ class BuildCommand extends WorkerCommand {
         help: "Runs builder on all .egb files in directory.", negatable: false);
   }
 
+  /// Returns if params have length smaller or equal to 1.
   bool paramsValid(List params) {
     return params.length <= 1;
   }
@@ -78,18 +80,20 @@ class BuildCommand extends WorkerCommand {
 
 /// Class [WatchCommand] wraps command for watching of selected project.
 class WatchCommand extends WorkerCommand {
-  /// Name of the command
+  /// Name of the command.
   final String name = "watch";
-  /// Description of the command
+  /// Description of the command.
   final String description = "Watch egamebook project for changes.";
-  /// Error message used with usage
+  /// Error message used with usage.
   final String error = "Please specify one project folder.";
 
+  /// Creates new WatchCommand.
   WatchCommand() {
     argParser.addFlag("analyze", abbr: "a",
             help: "Runs analyzer on built file.", negatable: false);
   }
 
+  /// Returns if params have length smaller or equal to 1.
   bool paramsValid(List params) {
     return params.length <= 1;
   }

@@ -8,12 +8,14 @@ import 'dart:collection';
 /// [generatePopulateMethodCode] generate code for use in [ScripterImpl] that
 /// substitutes [:dart:mirrors:].
 class VarsGenerator {
+  /// List of [TypedVariable]s.
   final List<TypedVariable> _vars = new List<TypedVariable>();
   UnmodifiableListView _varsView;
 
   /// Unmodifiable view of the variables present in the code.
   List<TypedVariable> get variables => _varsView;
 
+  /// Creates new VarsGenerator.
   VarsGenerator() {
     _varsView = new UnmodifiableListView(_vars);
   }
@@ -121,16 +123,22 @@ class VarsGenerator {
 /// A simple struct holding a variable's [name], and [type] (which is
 /// [:null:] when the variable is dynamic).
 class TypedVariable {
+  /// Variable type.
   final String type;
+  /// Variable name.
   final String name;
+  /// Variable initializer.
   final String initializer;
+  /// Creates new TypedVariable with [name], [type] and [initializer].
   TypedVariable(this.name, this.type, this.initializer);
-  toString() => "$name ($type)";
+  /// Returns String representation of TypedVariable with its [name] and [type].
+  String toString() => "$name ($type)";
 }
 
 /// A simple visitor that keeps track of top level variable declarations
 /// and puts them into [vars].
 class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
+  /// List of [TypedVariable]s.
   List<TypedVariable> vars = new List<TypedVariable>();
 
   visitNode(AstNode node) {
@@ -151,7 +159,10 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
 
 /// Simple class which keeps track of errors.
 class _ErrorCollector extends AnalysisErrorListener {
+  /// List of errors.
   List<AnalysisError> errors;
+  /// Creates new _ErrorCollector.
   _ErrorCollector() : errors = new List<AnalysisError>();
+  /// Called on [error].
   onError(error) => errors.add(error);
 }

@@ -10,13 +10,13 @@ import 'package:path/path.dart' as p;
 /// always run on their master file. So if we try to build part file, the master
 /// file is searched and built.
 ///
-/// Hierarchy is saved as [Map] [_files] where the key is always master file path
-/// and value is [List] of part file paths. We are storing full paths as Strings
-/// because it's easy to reconstruct back the [File] from full path.
+/// Hierarchy is saved as [Map] of [_files] where the key is always master file
+/// path and value is a [List] of part file paths. We are storing full path as
+/// String because it's easy to reconstruct back the [File] from full path.
 class FileHierarchy {
-  /// Allowed fileType
+  /// Allowed fileType.
   String fileType = ".egb";
-  /// Saved hierarchy of master and part files as a Map
+  /// Saved hierarchy of master and part files as a Map.
   Map<String, List<String>> _files = {};
 
   /// Returns list of files of type [File] and extension [fileType]

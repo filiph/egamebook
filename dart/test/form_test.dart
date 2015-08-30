@@ -5,12 +5,13 @@ import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/src/shared/message.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/scripter.dart';
-import 'dart:html' show window, HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'dart:html' show window, DocumentFragment, HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -567,19 +568,19 @@ void main() {
 
       buttonElFirst.click();
       var arrow = buttonElFirst.querySelector(".form-section-open-close");
-      expect(arrow.text, "◁");
+      expect(arrow.text, new DocumentFragment.html("&#9665;").text);
       arrow = buttonElSecond.querySelector(".form-section-open-close");
-      expect(arrow.text, "▽");
+      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
       arrow = buttonElThird.querySelector(".form-section-open-close");
-      expect(arrow.text, "▽");
+      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
 
       buttonElSecond.click();
       arrow = buttonElFirst.querySelector(".form-section-open-close");
-      expect(arrow.text, "▽");
+      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
       arrow = buttonElSecond.querySelector(".form-section-open-close");
-      expect(arrow.text, "◁");
+      expect(arrow.text,  new DocumentFragment.html("&#9665;").text);
       arrow = buttonElThird.querySelector(".form-section-open-close");
-      expect(arrow.text, "▽");
+      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
     });
 
     test("creates MultipleChoice", () {
@@ -888,6 +889,103 @@ void main() {
       EgbPlayerProfile profile = storage.getDefaultPlayerProfile();
       expect(profile, isNotNull);
       expect(profile.playerUid, EgbStorage.DEFAULT_PLAYER_UID);
+    });
+  });
+
+  // Maybe will be moved to presenter_proxy test.
+  group("Other", () {
+    test("Award points toMessage", () {
+      PointsAward pointsAward = new PointsAward(10, 20, "for bravery");
+      EgbMessage message = pointsAward.toMessage();
+      expect(message, isNotNull);
+      expect(message.type, EgbMessage.POINTS_AWARD);
+      expect(message.listContent, isNotNull);
+      expect(message.listContent[0], pointsAward.addition);
+      expect(message.listContent[1], pointsAward.result);
+      expect(message.strContent, pointsAward.justification);
+    });
+
+    test("Award points fromMessage", () {
+      Map map = {
+        "listContent": [10, 20],
+        "strContent": "for bravery"
+      };
+      EgbMessage message = new EgbMessage.fromMap(map);
+      expect(message, isNotNull);
+      expect(message.listContent, isNotNull);
+      expect(message.listContent[0], map["listContent"][0]);
+      expect(message.listContent[1], map["listContent"][1]);
+      expect(message.strContent, map["strContent"]);
+
+      PointsAward pointsAward = new PointsAward.fromMessage(message);
+      expect(pointsAward, isNotNull);
+      expect(pointsAward.addition, message.listContent[0]);
+      expect(pointsAward.result, message.listContent[1]);
+      expect(pointsAward.justification, message.strContent);
+    });
+
+    test("Choice list toMessage", () {
+      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
+      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1, choice2], "Is it cool?");
+      EgbMessage message = choices.toMessage();
+      expect(message, isNotNull);
+      expect(message.type, EgbMessage.SHOW_CHOICES);
+      expect(message.listContent[0], isNull); //prepend text
+      expect(message.listContent[1], choices.question);
+      expect(message.listContent[2], choice1.toMapForPresenter());
+      expect(message.listContent[3], choice2.toMapForPresenter());
+    });
+
+    test("Choice list toMessage throws with filterOut", () {
+      String text = "Some text";
+      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
+      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      EgbChoiceList choices = new EgbChoiceList.fromList(
+          [choice1, choice2], "Is it cool?");
+      expect(() => choices.toMessage(prependText: text, filterOut: (choice) => true), throws);
+    });
+
+    test("Choice list fromMessage", () {
+      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
+      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      String question = "Is it cool?";
+      Map map = {
+        "listContent": [null, question, choice1.toMapForPresenter(), choice2.toMapForPresenter()],
+      };
+      EgbMessage message = new EgbMessage.fromMap(map);
+      expect(message, isNotNull);
+      expect(message.listContent, isNotNull);
+      expect(message.listContent.length, 4);
+
+      EgbChoiceList choices = new EgbChoiceList.fromMessage(message);
+      expect(choices, isNotNull);
+      expect(choices.question, question);
+      expect(choices.length, 2);
+      expect(choices[0].string, choice1.string);
+      expect(choices[0].hash, choice1.hash);
+      expect(choices[1].string, choice2.string);
+      expect(choices[1].hash, choice2.hash);
+    });
+
+    test("Choice list fromMessage throws with no listContent", () {
+      Map map = {};
+      EgbMessage message = new EgbMessage.fromMap(map);
+      expect(message, isNotNull);
+      expect(message.listContent, isNull);
+
+      expect(() => new EgbChoiceList.fromMessage(message), throws);
+    });
+
+    test("Choice toMapForPresenter", () {
+      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu");
+      Map map = choice.toMapForPresenter();
+      expect(map, isNotNull);
+      expect(map.length, 3);
+      expect(map["string"], choice.string);
+      expect(map["hash"], choice.hash);
+      expect(map["submenu"], choice.submenu);
     });
   });
 }

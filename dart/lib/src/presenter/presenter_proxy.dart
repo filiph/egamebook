@@ -34,7 +34,9 @@ abstract class EgbPresenterViewedFromScripter {
  * It has direct access to the Scripter object.
  */
 abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
+  /// Instance of Scripter.
   EgbScripter scripter;
+  /// Sets scripter to [scripter].
   void setScripter(EgbScripter scripter) {
     this.scripter = scripter;
   }
@@ -44,13 +46,14 @@ abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
  * The proxy that deals with Presenter in another Isolate.
  */
 class EgbIsolatePresenterProxy extends EgbPresenterProxy {
-
-  /// Port of the calling isolate.
+  /// Port of the calling Isolate.
   SendPort mainIsolatePort;
 
   /// Own port for receiving messages from main Isolate.
   ReceivePort port;
 
+  /// Creates new EgbIsolatePresenterProxy with provided [mainIsolatePort] used
+  /// for sending messages.
   EgbIsolatePresenterProxy(this.mainIsolatePort) {
     assert(mainIsolatePort != null);
     port = new ReceivePort();
@@ -58,6 +61,10 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     mainIsolatePort.send(port.sendPort);
   }
 
+  /// Called when message from main Isolate is received.
+  /// The received message has to be instance of [Map]. The [EgbMessage]
+  /// is then created from a given Map and according to its type the
+  /// functionality is run.
   void _onMessageFromMainIsolate(Object _message) {
     // Convert primitive Map to message.
     assert(_message is Map);
@@ -169,12 +176,12 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
   final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
-      // TODO: get rid of this (no ZipMessage!)
+  /// Message backglog. TODO solve.
   EgbMessage _messageBacklog; // TODO: get rid of this (no ZipMessage!)
 
   /**
-   * Utilify function [_send] sends message through the [_runnerPort] to the
-   * Runner.
+   * Utility function [_send] sends [EgbMessage] message as a [Map] representation
+   * through the [mainIsolatePort] to the Scripter proxy.
    */
   void _send(EgbMessage message) {
     mainIsolatePort.send(message.toMap());
@@ -210,39 +217,51 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
 
+  /// Sends [PointsAward] as a message to Scripter proxy.
   @override
   void awardPoints(PointsAward award) {
     _send(award.toMessage());
   }
 
+  /// Sends end of book message to Scripter proxy.
   @override
   void endBook() {
     _send(new EgbMessage.endOfBook());
   }
 
+  /// Sends scripter error message with provided [title] and [text]
+  /// to Scripter proxy.
   @override
   void reportError(String title, String text) {
     _send(new EgbMessage.scripterError("$title: $text"));
     // TODO: Should close port!?
   }
 
+  /// Sends scripter log message with provided [text] to Scripter.
   @override
   void log(String text) {
     _send(new EgbMessage.scripterLog(text));
   }
 
+  /// Sends save player chronology message from provided [playerChronology]
+  /// to Scripter proxy.
   @override
   void savePlayerChronology(Set<String> playerChronology) {
     _send(new EgbMessage.savePlayerChronology(playerChronology));
   }
 
+  /// Sends set stats message from provided List of UIStat [stats]
+  /// to Scripter proxy.
   @override
   void setStats(List<UIStat> stats) {
     _send(new EgbMessage.statsInit(Stat.createStatList()));
   }
 
+  /// Completer for showing of choices.
   Completer<int> _choiceSelectedCompleter;
 
+  /// Sends show choices message from provided EgbChoiceList [choices]
+  /// to Scripter proxy.
   @override
   Future<int> showChoices(EgbChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
@@ -257,6 +276,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     return _choiceSelectedCompleter.future;
   }
 
+  /// Sends text result message from provided [text] to Scripter proxy.
   @override
   Future<bool> showText(String text) {
     _send(new EgbMessage.textResult(text));
@@ -264,24 +284,31 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     //       EgbMessage.TEXT_SHOWN
   }
 
+  /// Sends update stats message from provided StatUpdateCollection [updates]
+  /// to Scripter proxy.
   @override
   Future<bool> updateStats(StatUpdateCollection updates) {
     _send(new EgbMessage.statUpdates(updates));
     return new Future.value(true);
   }
 
+  /// Sends save game message from provided EgbSavegame [savegame]
+  /// to Scripter proxy.
   @override
   void save(EgbSavegame savegame) {
     _send(savegame.toMessage(EgbMessage.SAVE_GAME));
   }
 
+  /// Sends debug [message].
   void DEBUG_SCR(String message) {
     //print(message);
     log(message);
   }
 
+  /// Form input stream controller.
   StreamController<CurrentState> _formInputStreamController;
 
+  /// Sends show form message from provided FormBase [form] to Scripter proxy.
   @override
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");
@@ -290,6 +317,8 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     return _formInputStreamController.stream;
   }
 
+  /// Sends update form message from provided FormConfiguration [values]
+  /// to Scripter.
   @override
   void updateForm(FormConfiguration values) {
     DEBUG_SCR("Scripter sends newly updated values.");
@@ -297,8 +326,16 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 }
 
+/// EgbAsyncOperationOverridenException wraps around exceptions that are
+/// generated when some event happens before expected operation.
+///
+/// For example Book Quit before choice was selected.
 class EgbAsyncOperationOverridenException implements Exception {
+  /// Message describing the exception.
   final String message;
+  /// Creates new EgbAsyncOperationOverridenException with error [message].
   const EgbAsyncOperationOverridenException(this.message);
+  /// Returns text describing EgbAsyncOperationOverridenException with its
+  /// [message].
   String toString() => "EgbAsyncOperationOverridenException: $message.";
 }
