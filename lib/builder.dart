@@ -1245,8 +1245,7 @@ class Builder {
       dartOutStream.write(implEndFile);
 
       // Close and complete
-      dartOutStream.close();
-      return dartOutStream.done;
+      return dartOutStream.close();
     })
     .then((_) {
       completer.complete(true);
@@ -1354,15 +1353,16 @@ class Builder {
                   outStream.write("$line\n");
                 }
               }, onDone: () {
-                outStream.close();
-                outStream.done.then((_) {
+                outStream.close().then((_) {
                   completer.complete(true);
-                });
+                })
+                .catchError((e) => completer.completeError(e));
               }, onError: (e) {
                 completer.completeError(e);
               });
       }
-    });
+    })
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
