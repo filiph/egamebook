@@ -51,6 +51,9 @@ class BarBrawl extends LoopedEvent {
         getAvailability: () =>
             timeline.currentlyAtTime(whyDoThat.timeLastFired),
         onSuccessOrFailure: () {
+
+//          XXX START HERE = MAKE EVERYTHING INTO NON-FATAL, gather points
+
       echo("Another punch in the face. This time it landed so hard it knocked "
           "you off.");
       finished = true;
@@ -118,7 +121,7 @@ class BarBrawl extends LoopedEvent {
       echo("You guessed wrong. You sidestepped right into his blow. The impact "
           "almost sent you to the ground.");
     });
-    var behindPilot = new BarBrawlOption("Hide behind the pilot",
+    var behindPilot = new BarBrawlOption("Put the pilot between you and him",
         getAvailability: () => timeline.time > 0, onSetup: () {
       echo("A heavily built guy in a pilot overall backed into your field "
           "of vision. He had probably got hit by someone and looked a bit disoriented. "
