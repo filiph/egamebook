@@ -719,21 +719,21 @@ void main() {
     test("Show dialog with default button", () {
       Dialog dialog = new Dialog("Dialogs title", "Some text");
 
-      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
-        DivElement dialogDiv = querySelectorAll(".dialog").last;
-        DivElement overlayDiv = querySelectorAll(".overlay").last;
-        expect(dialogDiv, isNotNull);
-        expect(overlayDiv, isNotNull);
-        expect(dialogDiv.childNodes.indexOf(overlayDiv), isNonNegative);
-        HeadingElement titleHeading = dialogDiv.querySelector("h3");
-        expect(titleHeading, isNotNull);
-        expect(titleHeading.text, dialog.title);
-        expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
-        ButtonElement button = dialogDiv.querySelector("button");
-        expect(button, isNotNull);
-        expect(button.text, "Close");
-      }));
-    }, skip: true);
+      (presenter as HtmlPresenter).showDialog(dialog);
+
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      DivElement overlayDiv = querySelectorAll(".overlay").last;
+      expect(dialogDiv, isNotNull);
+      expect(overlayDiv, isNotNull);
+      expect(dialogDiv.childNodes.indexOf(overlayDiv), isNonNegative);
+      HeadingElement titleHeading = dialogDiv.querySelector("h3");
+      expect(titleHeading, isNotNull);
+      expect(titleHeading.text, dialog.title);
+      expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button, isNotNull);
+      expect(button.text, "Close");
+    });
 
     test("Show dialog with html and custom button with behaviour", () {
       ClickBehaviour behaviour = () {
@@ -744,16 +744,16 @@ void main() {
       Dialog dialog = new Dialog("Hello dialog",
           "<p class='extra-text'>Some hello text</p>", [dialogButton]);
 
-      (presenter as HtmlPresenter).showDialog(dialog).then(expectAsync((_) {
-        DivElement dialogDiv = querySelectorAll(".dialog").last;
-        expect(dialogDiv, isNotNull);
-        expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
-            "Some hello text");
-        ButtonElement button = dialogDiv.querySelector("button");
-        expect(button.text, dialogButton.label);
-        button.click();
-      }));
-    }, skip: true);
+      (presenter as HtmlPresenter).showDialog(dialog);
+
+      DivElement dialogDiv = querySelectorAll(".dialog").last;
+      expect(dialogDiv, isNotNull);
+      expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
+          "Some hello text");
+      ButtonElement button = dialogDiv.querySelector("button");
+      expect(button.text, dialogButton.label);
+      button.click();
+    });
 
     test("Show error dialog", () {
       String title = "Error";
