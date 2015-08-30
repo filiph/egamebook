@@ -1,4 +1,4 @@
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/shared/points_award.dart';
@@ -41,8 +41,6 @@ class ScripterProxyStub extends EgbScripterProxy {
 }
 
 void main() {
-  unittestConfiguration.timeout = new Duration(seconds: 5);
-
   group("Basic setup", () {
     test("defines the same builder closures for "
         "FormProxy and HtmlPresenter", () {

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
 import 'package:egamebook/command.dart';
