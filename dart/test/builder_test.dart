@@ -100,7 +100,7 @@ void main() {
               isNull);
         });
         new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
-      });
+      }, skip: "TODO(filiph): fix Singleton pattern in pageGroups");
 
       test("reads UTF8 pages", () {
         var callback = expectAsync((var b) {
