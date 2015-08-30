@@ -104,9 +104,6 @@ Future<EgbPresenter> run(String dartFilename,
 }
 
 void main() {
-  // create [ReceivePort] for this isolate: TODO: delete
-  ReceivePort receivePort;
-
   // Build the scripter .dart files, but not if we've already done so during
   // execution of this test file.
   bool _isolateScriptsAlreadyBuilt = false;
@@ -133,9 +130,6 @@ void main() {
     });
 
     group("alternate_6", () {
-      setUp(() {
-        //          receivePort = new ReceivePort();
-      });
 
       test("runner initial values correct", () {
         var mockPresenter = new MockPresenter();
