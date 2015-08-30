@@ -619,7 +619,7 @@ void main() {
         //    isTrue);
         //expect(buttonEl.disabled, isTrue);
       }));
-    });
+    }, skip: true);
 
     test("Show simple choices with submenu", () {
       EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
@@ -646,7 +646,7 @@ void main() {
             .classes.contains("display-none"), !isNotDisplayed); // class toggled
         expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
       }));
-    });
+    }, skip: true);
 
     test("Show simple choice with infochips", () {
       EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
@@ -658,7 +658,7 @@ void main() {
         expect(chipsSpan.children.length, 2); //2 infochips
         expect(chipsSpan.children[0].text, "infochip1");
       }));
-    });
+    }, skip: true);
 
     test("Show text", () {
       String text = "This is some funny text";
@@ -731,7 +731,7 @@ void main() {
         expect(button, isNotNull);
         expect(button.text, "Close");
       }));
-    });
+    }, skip: true);
 
     test("Show dialog with html and custom button with behaviour", () {
       ClickBehaviour behaviour = () {
@@ -751,7 +751,7 @@ void main() {
         expect(button.text, dialogButton.label);
         button.click();
       }));
-    });
+    }, skip: true);
 
     test("Show error dialog", () {
       String title = "Error";
@@ -769,7 +769,7 @@ void main() {
           expect(button, isNotNull);
           expect(button.text, "Close");
       }));
-    });
+    }, skip: true);
   });
 
   group("HtmlPresenter Savegame", () {
