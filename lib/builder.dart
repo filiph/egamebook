@@ -131,14 +131,13 @@ class BuilderPage extends EgbPage implements BuilderLineRange {
   /// Page group.
   BuilderPageGroup group;
 
-  /// Creates new BuilderPage with [name], [index] and optional [lineStart].
-  BuilderPage(String name, this.index, [this.lineStart]) :
+  /// Creates new BuilderPage with [name], [index] and [lineStart]. Adds the
+  /// pages [group] to [pageGroups].
+  BuilderPage(String name, this.index, this.lineStart) :
       super(name: name) {
     blocks = new List<BuilderBlock>();
     options = new Set<String>();
     gotoPageNames = new List<String>();
-
-    group = new BuilderPageGroup.fromPage(this);
   }
 
   /// Returns text describing BuilderPage with its [name], [lineStart] and
@@ -163,43 +162,37 @@ class BuilderPageGroup {
   /// Page group name.
   String name;
   /// Pages in the group.
-  List<BuilderPage> pages;
+  List<BuilderPage> pages = new List<BuilderPage>();
 
-  /// Cache of existing page groups.
-  static final Map<String, BuilderPageGroup> _cache
-                  = new Map<String, BuilderPageGroup>();
+  /// Creates a group from [page] (if it doesn't exist already) and adds it
+  /// to [allGroups]. Also links group to page by [BuilderPage.group]
+  /// and vice versa by [BuilderPageGroup.pages].
+  static void addToAllGroupsFromPage(List<BuilderPageGroup> allGroups,
+                                     BuilderPage page) {
+    String groupName = page.groupName;
+    if (groupName == null) return;
 
-  /**
-   * Creates a group from page. If page has no group, returns null. If group
-   * already exists, returns existing group. Also adds the input page
-   * to the group.
-   */
-  factory BuilderPageGroup.fromPage(BuilderPage page) {
-    String name = page.groupName;
-    if (name == null) {
-      return null;
-    } else if (_cache.containsKey(name)) {
-      _cache[name].pages.add(page);
-      return _cache[name];
+    BuilderPageGroup group;
+    Iterable<BuilderPageGroup> candidateGroups =
+        allGroups.where((g) => g.name == groupName);
+
+    if (candidateGroups.length > 1) {
+      throw new StateError("Duplicate groups (with name $groupName) "
+          "in allGroups");
+    } else if (candidateGroups.length == 1) {
+      group = candidateGroups.single;
     } else {
-      final group = new BuilderPageGroup._internal(name);
-      group.pages.add(page);
-      _cache[name] = group;
-      return group;
+      group = new BuilderPageGroup._internal(groupName);
+      allGroups.add(group);
     }
+    page.group = group;
+    group.pages.add(page);
   }
 
   /// Creates new group with [name].
-  BuilderPageGroup._internal(this.name) {
-    pages = new List<BuilderPage>();
-  }
+  BuilderPageGroup._internal(this.name);
 
-  /// Getter returns list of page groups retrieved from cache sorted by page index.
-  static List<BuilderPageGroup> get allGroups {
-    List<BuilderPageGroup> list = _cache.values.toList();
-    list.sort((a,b) => a.pages[0].index - b.pages[0].index); // TODO: check for empty groups
-    return list;
-  }
+  toString() => "BuilderPageGroup<$name>";
 }
 
 /**
@@ -622,7 +615,9 @@ class Builder {
       // add the new page
       var name = validPageName.firstMatch(line).group(1);
       pageHandles[name] = _pageNumber;
-      pages.add(new BuilderPage(name, _pageNumber++, number));
+      BuilderPage page = new BuilderPage(name, _pageNumber++, number);
+      pages.add(page);
+      BuilderPageGroup.addToAllGroupsFromPage(pageGroups, page);
       _mode = MODE_NORMAL;
       _newPageCandidate = false;
       return true;
@@ -1145,7 +1140,7 @@ class Builder {
   /// List of pages.
   List<BuilderPage> pages;
   /// Getter returns list of all page groups.
-  List<BuilderPageGroup> get pageGroups => BuilderPageGroup.allGroups;
+  List<BuilderPageGroup> pageGroups = new List<BuilderPageGroup>();
 
   /**
    * A map of pageHandles -> pageIndex. For use of the `goto("something")`

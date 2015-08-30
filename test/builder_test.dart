@@ -100,7 +100,7 @@ void main() {
               isNull);
         });
         new Builder().readEgbFile(new File(getPath("page_group.egb"))).then(callback);
-      }, skip: "TODO(filiph): fix Singleton pattern in pageGroups");
+      });
 
       test("reads UTF8 pages", () {
         var callback = expectAsync((var b) {
@@ -562,7 +562,7 @@ void main() {
             equals(true));
         });
         new File(getPath("full_project.dart")).delete()
-        .then((_) {
+        .whenComplete(() {
           new Builder().readEgbFile(new File(getPath("full_project.egb")))
           .then((var b) {
             b.writeDartFiles()
@@ -571,7 +571,10 @@ void main() {
               .then(callback);
             });
           });
-        });
+        })
+        .catchError((e) {
+          // Ignore error when deleting non-existent file.
+        }, test: (e) => e is FileSystemException);
       });
 
     });
@@ -630,7 +633,7 @@ void main() {
           new Builder().readEgbFile(new File(getPath("update_egb_file.egb")))
           .then((Builder b) {
             b.pages.add(new BuilderPage("Programatically added page",
-                b.pages.last.index + 1));
+                b.pages.last.index + 1, null));
             b.pageHandles["Programatically added page"] = b.pages.last.index;
             b.pages[3].gotoPageNames.add("Programatically added page");
             return b.updateEgbFile();
