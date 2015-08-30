@@ -612,16 +612,18 @@ void main() {
       presenter.showChoices(choices);
       await new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE);
 
-        expect(querySelector(".choices-div"), isNotNull);
-        expect(querySelector(".choices-div ol").children[0]
-            .text.contains(choice1.string), isTrue);
-//        ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
-//        buttonEl.click();
-        //expect(buttonEl.classes.contains("chosen"), isTrue);
-        //expect(querySelector(".choices-div").classes.contains("chosen"),
-        //    isTrue);
-        //expect(buttonEl.disabled, isTrue);
-//      }));
+      expect(querySelector(".choices-div"), isNotNull);
+      expect(querySelector(".choices-div ol").children[0]
+          .text.contains(choice1.string), isTrue);
+
+      ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
+      buttonEl.click();
+
+      await new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE);
+      expect(buttonEl.classes.contains("chosen"), isTrue);
+      expect(querySelector(".choices-div").classes.contains("chosen"),
+          isTrue);
+      expect(buttonEl.disabled, isTrue);
     });
 
     test("Show simple choices with submenu", () {
