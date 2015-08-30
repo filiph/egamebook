@@ -12,7 +12,8 @@ import 'package:path/path.dart' as path;
 
 /// Files which are ignored.
 final List ignoredFileNames = [
-  "form_test.dart" //needs to rund with form_test.html
+  "form_test.dart", //needs to rund with form_test.html
+  "test_coverage.dart"
 ];
 
 /// Params for running test.
