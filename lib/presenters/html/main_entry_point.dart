@@ -1,3 +1,9 @@
+library html_main_entry_point;
+
+/// This is the basis of [:example.html.dart:]. It is the entry point of
+/// the egamebook app as implemented through [HtmlPresenter]. It's a template,
+/// to be rewritten by [EgbBuilder].
+const String HTML_ENTRY_POINT_DART_FILE = """
 import 'package:egamebook/runner.dart';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
@@ -18,3 +24,4 @@ void main() {
   // run
   runFromIsolate(scripterPath, presenter, storage);
 }
+""";

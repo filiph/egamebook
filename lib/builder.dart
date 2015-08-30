@@ -2,14 +2,18 @@ library egb_builder;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as path;
 import 'dart:convert';
+
+import 'package:path/path.dart' as path;
+import 'package:logging/logging.dart';
 //import 'package:graphml/dart_graphml.dart';
 
 import 'src/shared/page.dart';
 import 'src/shared/user_interaction.dart';
-
 import 'src/builder/vars_generator.dart';
+
+import 'package:egamebook/presenters/html/main_entry_point.dart'
+    show HTML_ENTRY_POINT_DART_FILE;
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -989,9 +993,14 @@ class Builder {
       // Get rid of enclosing "" / ''.
       importFilePath = importFilePath.substring(1, importFilePath.length - 1);
 
-      //var inputFilePath = new Path(inputEgbFileFullPath);
-      var pathToImport = path.join(
-          path.dirname(inputEgbFileFullPath), importFilePath);
+      String pathToImport;
+      if (!importFilePath.startsWith("package:")) {
+        // Unless this is a package: import, add directory information.
+        pathToImport = path.join(
+            path.dirname(inputEgbFileFullPath), importFilePath);
+      } else {
+        pathToImport = importFilePath;
+      }
 
       importLibFiles.add(new File(pathToImport));
       return true;
@@ -1068,14 +1077,21 @@ class Builder {
     List<String> fullPaths = new List<String>();
 
     for (File f in importLibFiles) {
-      fullPaths.add(path.normalize(path.absolute(f.path)));
-      existsFutures.add(f.exists());
+      _log.finest("Normalizing library import $f.");
+
+      if (f.path.startsWith("package:")) {
+        _log.fine("Skipping normalization of library import ${f.path} since "
+            "it appears to be a package import. This will not check its "
+            "existence.");
+        fullPaths.add(f.path);
+      } else {
+        fullPaths.add(path.normalize(path.absolute(f.path)));
+        existsFutures.add(f.exists());
+      }
     }
 
     Future.wait(existsFutures)
     .then((List<bool> existsBools) {
-      assert(existsBools.length == importLibFiles.length);
-
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           return new Exception("Source file tries to import a file that "
@@ -1084,7 +1100,6 @@ class Builder {
       }
 
     })
-    .catchError((e) => completer.completeError(e))
     .then((_) {
       assert(fullPaths.length == importLibFiles.length);
       importLibFilesFullPaths = new Set.from(fullPaths);
@@ -1100,7 +1115,8 @@ class Builder {
       // remove the nulls
       importLibFiles = importLibFiles.where((f) => f != null).toList();
       completer.complete(true);
-    });
+    })
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1187,6 +1203,8 @@ class Builder {
   static final RegExp multiLineChoiceEnd = new RegExp(r"^\s{0,3}\{\s*(.*)\s*\}[\s,]*([^\{].+)?\s*\]\s*$");  // {i++;} somepage]
   static final RegExp variableInText = new RegExp(r"(^|[^\\])\$[a-zA-Z_][a-zA-Z0-9_]*|(^|[^\\])\${[^}]+}");
 
+  final Logger _log = new Logger("Builder");
+
   /**
    * Writes following Dart files to disk:
    *
@@ -1260,7 +1278,7 @@ class Builder {
     assert(importLibFilesFullPaths != null);
     dartOutStream.write("\n");
     for (var importPath in importLibFilesFullPaths) {
-      if (relativeToPath != null) {
+      if (relativeToPath != null && !importPath.startsWith("package:")) {
         importPath = path.relative(importPath, from: relativeToPath);
       }
       dartOutStream.write("import '$importPath';\n");
@@ -1280,21 +1298,13 @@ class Builder {
     var scriptFilePath = Platform.script;
     var pathToOutputDart = getExtensionPath("dart",
         subdirectory: subdirectory);
-//    var pathToOutputCmd = getPathForExtension("cmdline.dart");
-//    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath.path),
-//        "../lib/src/cmdline_template.dart");
     var pathToOutputHtml = getExtensionPath("html.dart",
         subdirectory: subdirectory);
-    var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
-        "../lib/presenters/html/main_entry_point.dart");
 
     var pathToOutputDartFromOutputHtml =
         path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
 
-//    File cmdLineOutputFile = new File(pathToOutputCmd);
-//    File cmdLineTemplateFile = new File(pathToInputTemplateCmd);
     File htmlOutputFile = new File(pathToOutputHtml);
-    File htmlTemplateFile = new File(pathToInputTemplateHtml);
 
     var substitutions = {
       "import '../runner.dart';" :
@@ -1315,9 +1325,9 @@ class Builder {
 
     Future.wait([
 //        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
-        _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
+        _fileFromTemplate(HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
     ])
-    .then((List<bool> bools) => completer.complete(bools.every((b) => b)))
+    .then((_) => completer.complete(true))
     .catchError((e) => completer.completeError(e));
 
     return completer.future;
@@ -1327,46 +1337,26 @@ class Builder {
    * Helper function copies contents of the template to a new file,
    * substituting strings as specified by [substitutions].
    *
-   * @param inFile  The template file.
+   * @param inFile  The template string.
    * @param outFile File to be created.
    * @param substitutions A map of String->String substitutions.
    */
-  Future<bool> _fileFromTemplate(File inFile, File outFile,
+  Future _fileFromTemplate(String template, File outFile,
       [Map<String, String> substitutions]) {
     if (substitutions == null) {
       substitutions = new Map();
     }
-    Completer completer = new Completer();
 
-    inFile.exists()
-    .then((bool exists) {
-      if (!exists) {
-        WARNING("Cmd line template ${inFile} doesn't exist in current directory. Skipping.");
-        completer.complete(false);
+    IOSink outStream = outFile.openWrite();
+    template.split("\n").forEach((String line) {
+      if (substitutions.containsKey(line)) {
+        outStream.write("${substitutions[line]}\n");
       } else {
-        IOSink outStream = outFile.openWrite();
-        inFile.openRead()
-              .transform(UTF8.decoder)
-              .transform(new LineSplitter())
-              .listen((line) {
-                if (substitutions.containsKey(line)) {
-                  outStream.write("${substitutions[line]}\n");
-                } else {
-                  outStream.write("$line\n");
-                }
-              }, onDone: () {
-                outStream.close().then((_) {
-                  completer.complete(true);
-                })
-                .catchError((e) => completer.completeError(e));
-              }, onError: (e) {
-                completer.completeError(e);
-              });
+        outStream.write("$line\n");
       }
-    })
-    .catchError((e) => completer.completeError(e));
+    });
 
-    return completer.future;
+    return outStream.close();
   }
 
   /**
@@ -2167,7 +2157,6 @@ class Builder {
       return false;
     }
   }
-
 
   final String implStartFile = """
 library Scripter_Implementation;

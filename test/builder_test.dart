@@ -537,6 +537,16 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("import_2tags_plus1redundant.egb"))).then(callback);
       });
+
+      test("doesn't touch package: imports", () {
+        var callback = expectAsync((var b) {
+          expect(b.importLibFiles,
+            hasLength(1));
+          expect(b.importLibFiles[0].path,
+            startsWith("package:"));
+        });
+        new Builder().readEgbFile(new File(getPath("import_package_path.egb"))).then(callback);
+      });
     });
 
     group('synopsis', () {
