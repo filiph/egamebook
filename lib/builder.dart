@@ -386,8 +386,9 @@ class Builder {
         print("Reading input file $f.");
 
         var inputStream = f.openRead();
-        readInputStream(inputStream).then((b) => completer.complete(b),
-            onError: (e, stackTrace) => completer.completeError(e, stackTrace));
+        readInputStream(inputStream)
+        .then((b) => completer.complete(b))
+        .catchError((e) => completer.completeError(e));
       }
     }).catchError((e) => completer.completeError(e));
 
@@ -1088,7 +1089,7 @@ class Builder {
       }
 
     })
-    .catchError((e) => completer.complete(e))
+    .catchError((e) => completer.completeError(e))
     .then((_) {
       assert(fullPaths.length == importLibFiles.length);
       importLibFilesFullPaths = new Set.from(fullPaths);
@@ -1230,13 +1231,13 @@ class Builder {
     .then((_) {
       dartOutStream.write(implStartCtor);
       dartOutStream.write(implStartPages);
-      writePagesToScripter(dartOutStream);
+      return writePagesToScripter(dartOutStream);
     })
     .then((_) {
       dartOutStream.write(implEndPages);
       dartOutStream.write(implEndCtor);
       dartOutStream.write(implStartInit);
-      writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT, indent:4);
+      return writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT, indent:4);
     })
     .then((_) {
       dartOutStream.write(implEndInit);
@@ -1314,7 +1315,9 @@ class Builder {
     Future.wait([
 //        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
         _fileFromTemplate(htmlTemplateFile, htmlOutputFile, substitutions),
-    ]).then((List<bool> bools) => completer.complete(bools.every((b) => b)));
+    ])
+    .then((List<bool> bools) => completer.complete(bools.every((b) => b)))
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1385,7 +1388,8 @@ class Builder {
         inclusive:false, indentLength:indent)
     .then((_) {
       completer.complete(true);
-    });
+    })
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1409,7 +1413,8 @@ class Builder {
       dartOutStream.write(varsGenerator.generatePopulateMethodCode());
       dartOutStream.write(varsGenerator.generateExtractMethodCode());
       completer.complete(true);
-    });
+    })
+    .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -2098,7 +2103,7 @@ class Builder {
           completer.completeError(e);
         });
       }
-    });
+    }, onError: (e) => completer.completeError(e));
 
     return completer.future;
   }

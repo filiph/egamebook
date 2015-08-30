@@ -10,6 +10,6 @@ main() {
   cli.main();
   file_hierarchy.main();
   persistence.main();
-//  scripter.main();
+  scripter.main();
   vars_generator.main();
 }
