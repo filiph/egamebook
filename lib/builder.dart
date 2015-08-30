@@ -1192,13 +1192,17 @@ class Builder {
    *
    * - xyz.dart (The Scripter implementation)
    * - xyz.html.dart (The html presenter)
+   *
+   * When [subdirectory] is provided, the dart files will be generated
+   * in a subdirectory of the egb file's directory. This subdirectory
+   * will _not_ be created and the call will fail if it doesn't exist.
    **/
-  Future<bool> writeDartFiles() {
+  Future<bool> writeDartFiles({String subdirectory}) {
     var completer = new Completer();
 
     Future.wait([
-        writeScripterFile(),
-        writePresenterFiles()
+        writeScripterFile(subdirectory: subdirectory),
+        writePresenterFiles(subdirectory: subdirectory)
     ], eagerError: true).then((_) {
       completer.complete(true);
     }).catchError((e) => completer.completeError(e));
@@ -1210,10 +1214,11 @@ class Builder {
    * Creates the scripter implementation file. This file includes the
    * whole egamebooks content.
    */
-  Future<bool> writeScripterFile() {
+  Future<bool> writeScripterFile({String subdirectory}) {
     var completer = new Completer();
 
-    var pathToOutputDart = getPathForExtension("dart");
+    var pathToOutputDart = getExtensionPath("dart",
+          subdirectory: subdirectory);
 
     // write the .dart file
     File dartFile = new File(pathToOutputDart);
@@ -1269,15 +1274,17 @@ class Builder {
    * There are two presenters (UIs): the command line presenter (deprecated),
    * and the HTML presenter.
    */
-  Future<bool> writePresenterFiles() {
+  Future<bool> writePresenterFiles({String subdirectory}) {
     var completer = new Completer();
 
     var scriptFilePath = Platform.script;
-    var pathToOutputDart = getPathForExtension("dart");
+    var pathToOutputDart = getExtensionPath("dart",
+        subdirectory: subdirectory);
 //    var pathToOutputCmd = getPathForExtension("cmdline.dart");
 //    var pathToInputTemplateCmd = path.join(path.dirname(scriptFilePath.path),
 //        "../lib/src/cmdline_template.dart");
-    var pathToOutputHtml = getPathForExtension("html.dart");
+    var pathToOutputHtml = getExtensionPath("html.dart",
+        subdirectory: subdirectory);
     var pathToInputTemplateHtml = path.join(path.dirname(scriptFilePath.path),
         "../lib/presenters/html/main_entry_point.dart");
 
@@ -1800,10 +1807,19 @@ class Builder {
    * [:getPathFor('graphml'):] for [:path/to/example.egb:] will return
    * [:path/to/example.graphml:].
    */
-  String getPathForExtension(String extension) {
-    //Path inputFilePath = new Path(inputEgbFileFullPath);
-    return path.join(path.dirname(inputEgbFileFullPath),
-        "${path.basenameWithoutExtension(inputEgbFileFullPath)}.$extension");
+  String getExtensionPath(String extension, {String subdirectory}) {
+    return getExtensionPathFromEgbPath(inputEgbFileFullPath, extension,
+        subdirectory: subdirectory);
+  }
+
+  static String getExtensionPathFromEgbPath(String egbPath, String extension,
+                                            {String subdirectory}) {
+    String dirPath = path.dirname(egbPath);
+    if (subdirectory != null) {
+      dirPath = path.join(dirPath, subdirectory);
+    }
+    return path.join(dirPath,
+        "${path.basenameWithoutExtension(egbPath)}.$extension");
   }
 
   /**
@@ -1984,7 +2000,7 @@ class Builder {
   Future<Builder> updateEgbFile() {
     var completer = new Completer();
 
-    var tempFile = new File(getPathForExtension("egb~"));
+    var tempFile = new File(getExtensionPath("egb~"));
     File outputEgbFile;
 
     var tempInStream = inputEgbFile.openRead();
