@@ -8,15 +8,16 @@ Or how to be a published interactive fiction writer in 8 easy steps!
 
 Note: This is **not** implemented yet. The converter from .egb to .dart is done and works, but the workflow is only a vision.
 
-1.  Download Dart Editor and install it.
-2.  On the command line, run `pub global activate egamebook`. This will install the `egamebook` command line tool.
-3.  Create a folder (`mkdir mybook`).
-4.  Inside that folder (`cd mybook`), run `egamebook create`. This will create a project scaffold that you can edit.
-5.  Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
-6.  Edit the `.egb` file. This is the main source of your book.
-7.  Open `build/index.html` in your favorite browser to test the egamebook in action.
+1. [Install Dart](https://www.dartlang.org/downloads/).
+2. On the command line, run `pub global activate egamebook`. This will install the `egamebook` command line tool.
+4. Go to a folder where you want your egamebook project to live (for example, `cd ~/projects`).
+4. Run `egamebook create name` where `name` is the name of your egamebook project. This will create a new subdirectory in the current directory with that name.
+4. Go to the newly created directory (for example, `cd name`).
+5. Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
+6. Edit the `egb` file (for example, file `name.egb` in the project's directory). This is the main source of your book. Any edit will rebuild what's necessary.
+7. Open `web/index.html` in your favorite browser to test the egamebook in action.
 
-<!-- XXX: The following is currently on hold, but some of the GraphML <-> egb code is done.
+<!-- XXX: The following is currently on hold, but some of the GraphML-egb code is done.
 
 ### Graphing your egamebook
 
