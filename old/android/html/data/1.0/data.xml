@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ebooks>
+	<ebook>
+		<id>egamebook-welcome</id>
+		<category>test</category>
+		<name>Welcome to eGameBook</name>
+		<rating>5</rating>
+		<icon>onebit_06.png</icon>
+		<description>Read about the application itself and learn how you can contribute your own stories or ideas. It's super easy!</description>
+		<lang>eng</lang>
+		<url>egamebook-welcome.eb</url>
+	</ebook>
+	<ebook>
+		<id>ulysses</id>
+		<category>scifi</category>
+		<name>Ulysses</name>
+		<rating>5</rating>
+		<icon>onebit_03.png</icon>
+		<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id justo vel dui porta tristique at luctus purus. Etiam lacus augue, pellentesque in sagittis quis, malesuada ac nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras quis nisl a massa vestibulum suscipit. Ut quis mollis dolor. Morbi mollis, mauris varius pretium faucibus, metus magna pretium erat, a egestas nunc massa eu sapien.</description>
+		<lang>eng</lang>
+		<url>ulysses.eb</url>
+	</ebook>
+	<ebook>
+		<id>revisions</id>
+		<category>scifi</category>
+		<name>Revisions</name>
+		<rating>5</rating>
+		<icon>onebit_02.png</icon>
+		<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id justo vel dui porta tristique at luctus purus. Etiam lacus augue, pellentesque in sagittis quis, malesuada ac nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras quis nisl a massa vestibulum suscipit. Ut quis mollis dolor. Morbi mollis, mauris varius pretium faucibus, metus magna pretium erat, a egestas nunc massa eu sapien.</description>
+		<lang>eng</lang>
+		<url>revisions.eb</url>
+	</ebook>
+	<ebook>
+		<id>revisions</id>
+		<category>history</category>
+		<name>Revisions</name>
+		<rating>5</rating>
+		<icon>onebit_06.png</icon>
+		<description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id justo vel dui porta tristique at luctus purus. Etiam lacus augue, pellentesque in sagittis quis, malesuada ac nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras quis nisl a massa vestibulum suscipit. Ut quis mollis dolor. Morbi mollis, mauris varius pretium faucibus, metus magna pretium erat, a egestas nunc massa eu sapien.</description>
+		<lang>eng</lang>
+		<url>revisions.eb</url>
+	</ebook>
+	<ebook>
+		<id>test</id>
+		<category>test</category>
+		<name>Test fonts</name>
+		<rating>5</rating>
+		<icon>onebit_06.png</icon>
+		<description>Lorem ipsum dolor sit amet.</description>
+		<lang>eng</lang>
+		<url>test.eb</url>
+	</ebook>
+</ebooks>
