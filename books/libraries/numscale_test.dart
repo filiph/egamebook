@@ -1,4 +1,4 @@
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'numscale.dart';
 
 void main() {
