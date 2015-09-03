@@ -16,7 +16,7 @@ echo "Bodega build complete. Analyzing..."
 # Run analyzer
 # You can change to bodega.html.dart for longer check in case there are any strange interferences.
 # But checking just bodega.dart should suffice.
-/Applications/dart/dart-sdk/bin/dartanalyzer --format=machine -p $DIR/../../packages/ $DIR/bodega.dart
+dartanalyzer --format=machine -p $DIR/../../packages/ $DIR/bodega.dart
 ANALYZER_EXIT_CODE=$?
 echo "Exit code = $ANALYZER_EXIT_CODE"
 if [ $ANALYZER_EXIT_CODE -eq 3 ]; then
