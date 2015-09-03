@@ -665,11 +665,12 @@ class HtmlPresenter extends EgbPresenter {
   /// Currently shown [FormProxy].
   FormProxy _formProxy;
   @override
-  Stream<CurrentState> showForm(FormBase form) {
+  Stream<CurrentState> showForm(FormProxy form) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
-    _formProxy = new FormProxy.fromMap(form.toMap());
+//    _formProxy = new FormProxy.fromMap(form.toMap());
+    _formProxy = form;
     HtmlForm htmlForm = _formProxy.buildUiElements(ELEMENT_BUILDERS);
     bookDiv.append(htmlForm.uiRepresentation);
     _attachFootnoteClickListeners(htmlForm.uiRepresentation);

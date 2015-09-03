@@ -10,6 +10,7 @@ import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 
 /**
  * The methods of EgbPresenter that are callable by EgbScripter (mostly through
@@ -26,7 +27,7 @@ abstract class EgbPresenterViewedFromScripter {
   void updateStats(StatUpdateCollection updates);
   void savePlayerChronology(Set<String> playerChronology);
   void save(EgbSavegame savegame);
-  Stream<CurrentState> showForm(FormBase form);
+  Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
 
   /// Instance of Scripter.

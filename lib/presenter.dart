@@ -75,7 +75,7 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   /// Shows a form in the presenter, set with the initial values. Each time the
   /// user changes a value, the new values are emitted via the returned
   /// [Stream].
-  Stream<CurrentState> showForm(FormBase formProxy);
+  Stream<CurrentState> showForm(FormProxy formProxy);
 
   /// Updates the values and setup of the form with given [values].
   void updateForm(FormConfiguration values);
