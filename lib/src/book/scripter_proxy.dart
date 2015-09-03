@@ -124,7 +124,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.TEXT_RESULT:
         presenter.showText(message.strContent).then((_) {
-          _send(new EgbMessage.proceed());
+          // Do nothing.
         });
         return;
       case EgbMessage.NO_RESULT:
@@ -133,7 +133,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.POINTS_AWARD:
         presenter.awardPoints(new PointsAward.fromMessage(message)).then((_) {
-          _send(new EgbMessage.proceed());
+          // Do nothing.
         });
         return;
       case EgbMessage.SET_STATS:

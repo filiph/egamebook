@@ -359,7 +359,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
     });
     if (pickedChoice == null) {
       throw new ArgumentError("The sent choice hash ($choiceHash) is not one "
-          "of those offered.");
+          "of those offered ($choices)");
     }
     _pickChoice(pickedChoice);
     walk();
