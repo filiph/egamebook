@@ -3,9 +3,9 @@ library egb_cli;
 import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
+import 'file_hierarchy.dart';
 import 'package:path/path.dart' as p;
 import 'package:watcher/watcher.dart';
-import 'file_hierarchy.dart';
 import 'package:egamebook/builder.dart';
 
 
@@ -18,6 +18,7 @@ String getPathToBuildScript() {
     return Platform.script.resolve("build.dart").toString();
   }
 
+  // TODO potential problem on Windows.
   if (Platform.script.toFilePath().endsWith("bin/")) {
     return getPath("build.dart");
   }
@@ -36,6 +37,7 @@ String getPath(String path)
 /// Returns if the path is within bin/, lib/ or web/ directory.
 ///
 /// TODO maybe also test/.
+/// TODO add to constants
 bool isSourcesDirectory(String path) {
   List segments = p.split(path);
 
@@ -46,9 +48,12 @@ bool isSourcesDirectory(String path) {
 /// Runs build.dart command line tool on given [path].
 Future runBuilder(String path) async {
   print("Building $path...");
-
-  return new Builder().readEgbFile(new File(path))
-  .then((b) => b.writeDartFiles(subdirectory: DART_FILES_OUTPUT_SUBDIR));
+  try {
+    Builder builder = await new Builder().readEgbFile(new File(path));
+    return builder.writeDartFiles(subdirectory: DART_FILES_OUTPUT_SUBDIR);
+  } catch (e) {
+    return new Future.error(e);
+  }
 }
 
 /// Runs dartanalyzer command line tool on given [path].
@@ -168,13 +173,16 @@ class ProjectBuilder implements Worker {
   ///
   /// The files are retrieved as a [List] which is then converted to
   /// [ListQueue] and then the build is run on every file in this queue.
-  Future run() {
+  Future run() async {
     Completer completer = new Completer();
 
-    getEgbFiles(_path).then((List files) {
+    try {
+      List files = await getEgbFiles(_path);
       ListQueue<File> queue = new ListQueue.from(files);
-      return _buildFile(queue, completer);
-    }).catchError(completer.completeError);
+      _buildFile(queue, completer);
+    } catch(e) {
+      completer.completeError;
+    }
 
     return completer.future;
   }
