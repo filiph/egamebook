@@ -2207,7 +2207,7 @@ class ScripterImpl extends EgbScripter {
 void main(List<String> args, SendPort mainIsolatePort) {
   EgbPresenterProxy presenter = new EgbIsolatePresenterProxy(mainIsolatePort);
   EgbScripter book = new ScripterImpl();
-  book.setPresenter(presenter);
+  presenter.setScripter(book);
 }
 """;
 

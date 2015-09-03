@@ -31,7 +31,7 @@ import "package:html5lib/dom.dart" as html5lib;
 ///
 /// It contains all HTML interface elements ([:button:], [:span:] etc.) used
 /// in gamebook for user interaction and displaying information.
-class HtmlPresenter extends EgbPresenterBase {
+class HtmlPresenter extends EgbPresenter {
   /// Restart [:button:].
   ButtonElement restartAnchor;
   /// [:span:] where points are displayed.
@@ -81,7 +81,7 @@ class HtmlPresenter extends EgbPresenterBase {
 
     restartAnchor = document.querySelector("#book-restart");
     restartAnchor.onClick.listen((_) {
-      scripterProxy.restart();
+      scripter.restart();
       // Clear text and choices
       bookDiv.children.clear();
       _textHistory.clear();
@@ -149,7 +149,7 @@ class HtmlPresenter extends EgbPresenterBase {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       // We loaded a book which immediately ran through to the end.
       bookDiv.children.clear();
-      scripterProxy.restart();
+      scripter.restart();
     }
   }
 
@@ -170,6 +170,7 @@ class HtmlPresenter extends EgbPresenterBase {
    */
   @override
   Future<bool> showText(String s) {
+    log("Showing: $s");
     if (s == null) return new Future.value(false);
     Completer completer = new Completer<bool>();
 
@@ -279,6 +280,7 @@ class HtmlPresenter extends EgbPresenterBase {
 
   @override
   Future<int> showChoices(EgbChoiceList choiceList) {
+    log("Showing choices");
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
@@ -556,7 +558,7 @@ class HtmlPresenter extends EgbPresenterBase {
           // TODO: provide solutions, feedback, etc.
         } else {
           showText(savegame.textHistory).then((_) {
-            scripterProxy.load(savegame);
+            scripter.load(savegame);
           });
         }
       });
@@ -663,14 +665,15 @@ class HtmlPresenter extends EgbPresenterBase {
   /// Currently shown [FormProxy].
   FormProxy _formProxy;
   @override
-  Stream<CurrentState> showForm(FormProxy formProxy) {
+  Stream<CurrentState> showForm(FormProxy form) {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
-    _formProxy = formProxy;
-    HtmlForm form = _formProxy.buildUiElements(ELEMENT_BUILDERS);
-    bookDiv.append(form.uiRepresentation);
-    _attachFootnoteClickListeners(form.uiRepresentation);
+//    _formProxy = new FormProxy.fromMap(form.toMap());
+    _formProxy = form;
+    HtmlForm htmlForm = _formProxy.buildUiElements(ELEMENT_BUILDERS);
+    bookDiv.append(htmlForm.uiRepresentation);
+    _attachFootnoteClickListeners(htmlForm.uiRepresentation);
     _showLoading(false);
     return _formProxy.stream;
   }

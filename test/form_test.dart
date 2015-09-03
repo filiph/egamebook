@@ -185,7 +185,7 @@ void main() {
       //expect(choice.goto, choiceFromMap.goto);
       expect(choice.string, choiceFromMap.string);
       expect(choice.submenu, choiceFromMap.submenu);
-      expect(choice.toString(), "Choice: ${choice.string} [${choice.goto}]");
+      expect(choice.toString(), startsWith("Choice: ${choice.string} [${choice.goto}]"));
     });
 
     test("Choice list", () {
