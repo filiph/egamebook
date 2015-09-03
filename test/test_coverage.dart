@@ -7,7 +7,7 @@ import "scripter_test.dart" as scripter;
 import "vars_generator_test.dart" as vars_generator;
 
 main() {
-  Logger.root.level = Level.WARNING;
+  Logger.root.level = Level.SEVERE;
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
