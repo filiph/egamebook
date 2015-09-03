@@ -9,13 +9,15 @@ import '../shared/stat.dart';
 import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/src/presenter/form_proxy.dart';
 
 /**
  * The methods of EgbPresenter that are callable by EgbScripter (mostly through
  * a [EgbPresenterProxy], but conceivably also directly).
  */
 abstract class EgbPresenterViewedFromScripter {
-  void awardPoints(PointsAward award);
+  Future awardPoints(PointsAward award);
   void endBook();
   void reportError(String title, String text);
   void log(String text);
@@ -25,8 +27,13 @@ abstract class EgbPresenterViewedFromScripter {
   void updateStats(StatUpdateCollection updates);
   void savePlayerChronology(Set<String> playerChronology);
   void save(EgbSavegame savegame);
-  Stream<CurrentState> showForm(FormBase form);
+  Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
+
+  /// Instance of Scripter.
+  EgbScripter scripter;
+  /// Sets scripter to [scripter].
+  void setScripter(EgbScripter scripter);
 }
 
 /**
@@ -34,12 +41,7 @@ abstract class EgbPresenterViewedFromScripter {
  * It has direct access to the Scripter object.
  */
 abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
-  /// Instance of Scripter.
-  EgbScripter scripter;
-  /// Sets scripter to [scripter].
-  void setScripter(EgbScripter scripter) {
-    this.scripter = scripter;
-  }
+
 }
 
 /**
@@ -59,6 +61,13 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
     port = new ReceivePort();
     port.listen(_onMessageFromMainIsolate);
     mainIsolatePort.send(port.sendPort);
+  }
+
+  /// Sets scripter to [scripterProxy].
+  EgbScripter scripter;
+  void setScripter(EgbScripter scripter) {
+    this.scripter = scripter;
+    scripter.setPresenter(this);
   }
 
   /// Called when message from main Isolate is received.
@@ -129,11 +138,11 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
         }
         try {
           var savegame = new EgbSavegame.fromMessage(message);
-          var playerChronology = message.listContent;
+          var playerChronology = message.listContent.toSet();
           if (playerChronology != null) {
-            scripter.loadFromSaveGame(savegame, playerChronology);
+            scripter.load(savegame, playerChronology);
           } else {
-            scripter.loadFromSaveGame(savegame);
+            scripter.load(savegame);
           }
         } on IncompatibleSavegameException catch (e, stacktrace) {
           // don't
@@ -219,8 +228,9 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
 
   /// Sends [PointsAward] as a message to Scripter proxy.
   @override
-  void awardPoints(PointsAward award) {
+  Future awardPoints(PointsAward award) {
     _send(award.toMessage());
+    return new Future.value();
   }
 
   /// Sends end of book message to Scripter proxy.

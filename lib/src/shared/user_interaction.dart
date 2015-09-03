@@ -123,7 +123,7 @@ class EgbChoice implements Comparable {
   /// Returns String representation of EgbChoice with its [string] and [goto]
   /// page.
   String toString() {
-    return "Choice: $string [$goto]";
+    return "Choice: $string [$goto] ($hash)";
   }
 
   /**
@@ -265,6 +265,8 @@ class EgbChoiceList extends ListBase<EgbChoice> {
 
     return m;
   }
+
+  toString() => _choices.map((ch) => "$ch").join(", ");
 }
 
 /**

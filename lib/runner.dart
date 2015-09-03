@@ -11,6 +11,7 @@ import 'dart:async';
 import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/scripter.dart';
 
 /**
  * Does the required work to start an Isolate wrapped in an
@@ -40,6 +41,15 @@ Future<EgbPresenter> runDirectly(EgbScripterProxy bookProxy, EgbPresenter
     presenter.setup();
     presenter.continueSavedGameOrCreateNew();
   });
+}
+
+Future<EgbPresenter> run(EgbScripter scripter, EgbPresenter presenter,
+    EgbStorage storage) {
+  presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+  presenter.setScripter(scripter);
+  presenter.setup();
+  presenter.continueSavedGameOrCreateNew();
+  return new Future.value(presenter);
 }
 
 /**
