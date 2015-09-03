@@ -6,24 +6,17 @@ import 'utils.dart';
 import 'message.dart';
 import '../book/author_script_exception.dart';
 
-/// This class wraps user interaction and its attributes.
-///
-/// It is a base class of [EgbChoice].
-class EgbUserInteraction {
-  /// If the user interaction is shown.
-  bool shown = false;
-  /// The user interaction shouldn't be shown before we are at the end of the
-  /// page.
-  bool deferToEndOfPage;
-  /// The user interaction shouldn't be shown before there is an actual choice
-  /// list in the .egb.
-  bool deferToChoiceList;
-  /// User interaction hash used for sending.
-  int hash;
-}
-
 /// Class EgbChoice wraps user interaction choice.
-class EgbChoice extends EgbUserInteraction implements Comparable {
+class EgbChoice implements Comparable {
+  /// If the choice is shown.
+  bool shown = false;
+  /// The choice shouldn't be shown before we are at the end of the page.
+  bool deferToEndOfPage;
+  /// The choice shouldn't be shown before there is an actual choice list
+  /// in the .egb.
+  bool deferToChoiceList;
+  /// The choice hash used for sending.
+  int hash;
   /// The text of the choice (what user clicks on when picking it). It is always
   /// defined. When [string] is an empty string ([:"":]), the choice is
   /// automatic (nothing is shown to the player and the scripter automatically
