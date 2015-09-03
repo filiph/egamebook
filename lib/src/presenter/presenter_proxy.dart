@@ -137,7 +137,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
         }
         try {
           var savegame = new EgbSavegame.fromMessage(message);
-          var playerChronology = message.listContent;
+          var playerChronology = message.listContent.toSet();
           if (playerChronology != null) {
             scripter.load(savegame, playerChronology);
           } else {
