@@ -1,0 +1,60 @@
+Ignore this synopsis.
+
+- Yes, like this should not get picked up as a choice [dont]
+
+---
+startPage
+
+Normal paragraph of text [0].
+
+- 1all these don't count as choices!
+
+- e2rgergerge r
+
+- eg3ergerg [gerge] egerge
+
+- erg4e re [ergerg]r
+
+- erer5te re[ergerr]
+
+- grgeg6 [gergerg
+
+- e7rteter [{]
+
+- th8ey all render as one paragraph of text
+
+- erg9ergeg [{erge ergerg]
+
+- erg10ergeg ]
+
+ - e11rgerg [regerger]   
+- ert12erg er reg [regerg ergerg a e]
+- grge13g [{this.new = "egerger" }   ,   gergerg]  
+- g14rgeg [{this.new = "egerger" }   ,   gergerg ]  
+- [e15gerger]
+- esd16e [{ergerg = "3252"}]
+- g17eg [ { this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }   ,   gergerg]  
+- gr18g [{this.new = "egerger"; for (var i = 0; i < 100; i++) {{echo(i);}} }   ,   gergerg]  
+- esd19e [{for (;;) { print("hi!")}}]
+- esd20e [this { might issue a warning, but is a valid choice - this all is a goto despite the bracket]
+- esd21e [{this script } should; } issue a warning, but is a valid one - the closing bracket could be in a string literal, for example]
+- esd22e [{}}, this is a valid script (thought it won't run, of course]
+- esd22e [{{}, this is a valid script (thought it won't run, of course]
+- esd23e [{}, this is an empty script]
+
+---
+second page
+
+- abcdefg 123456 [ abc _ xyz ]
+- something [ { abcd[]1234; }, xyz]
+- choice with a block inside [{for (;;) { print("hi!")}}]
+- choice with a block inside and goto [{for (;;) { print("hi!")}}, start]
+- esd20e [{this script } should; } issue a warning, but is a valid one - the closing bracket could be in a string literal, for example]
+
+---
+third page
+
+- Normal choice [startPage]
+- Empty choice []
+
+This is the end.

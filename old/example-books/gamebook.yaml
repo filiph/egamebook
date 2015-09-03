@@ -1,0 +1,38 @@
+---
+- page: Start
+- introduction: >
+    You woke up in the middle of the night,
+    thinking: "Hey!" But then you realized
+    there's nothing to be amazed about.
+  
+    Everything was normal.
+- options:
+    DoNothing: Continue with your normal life.
+    Scream: Start screaming hysterically.
+
+...
+---
+- page: DoNothing
+- introduction: >
+    You decided to do absolutely nothing.
+    Good for you!
+- options:
+    Scream: You can also start screaming.
+
+...
+---
+- page: SmallHouse
+- introduction: >
+    You entered a small house.
+- print: You see a key on the floor. You pick it up.
+- addItem: small key
+- print: ... some time has elapsed ...
+- if:
+    playerHas: small key
+    then:
+      - print: You remember you have that key!
+      - addOption: 
+          OpenDoor: Open the door with your key
+    else:
+      - print: Unfortunately, you don't seem to have a key that fits.
+- print: You stand before that house. What do you do?
