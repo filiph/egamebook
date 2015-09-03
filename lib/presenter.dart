@@ -17,11 +17,6 @@ import 'package:egamebook/src/shared/form.dart';
 /// EgbPresenter is an interface for all presenters in application.
 /// It has information about player profile and Scripter.
 abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
-  /// Port where the message is received.
-  ReceivePort _receivePort;
-  /// Port where the message is sent.
-  SendPort _scripterPort;
-
   /**
    * Outputs the text (in it's pure, non-HTMLified form) that has been shown
    * so far since the last savegame (or beginning of book).
@@ -30,9 +25,6 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
 
   /// Called on startup to create the presenter environment.
   void setup();
-
-  /// Either loads the latest savegame or -- if missing -- creates a new one.
-  Future continueSavedGameOrCreateNew();
 
   /// Called when there is no more options to take in the book, and so it has
   /// ended. Presenter can choose to show a message, call-to-action, etc.
@@ -43,7 +35,9 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   /// to use the presenter to retry (restart or load). But when the game session
   /// is ending, for example, then this method should be called on the running
   /// user interface.
-  void close();
+  void close() {
+    playerProfile.close();
+  }
 
   /**
    * Displays the markdown-formatted text.
@@ -81,7 +75,7 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   /// Shows a form in the presenter, set with the initial values. Each time the
   /// user changes a value, the new values are emitted via the returned
   /// [Stream].
-  Stream<CurrentState> showForm(FormProxy formProxy);
+  Stream<CurrentState> showForm(FormBase formProxy);
 
   /// Updates the values and setup of the form with given [values].
   void updateForm(FormConfiguration values);
@@ -101,58 +95,41 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   @deprecated
   Future<bool> addSavegameBookmark(EgbSavegame savegame);
 
-  /// Getter returns player profile.
-  EgbPlayerProfile get playerProfile;
-
-  /// Sets player profile to [playerProfile].
-  void setPlayerProfile(EgbPlayerProfile playerProfile);
-
   /// Sets scripter to [scripterProxy].
-  void setScripter(EgbScripterProxy scripterProxy);
-}
-
-/// EgbPresenterBase is base class for all presenters.
-/// It is a base class of [HtmlPresenter].
-abstract class EgbPresenterBase implements EgbPresenter {
-  /// Scripter proxy.
-  EgbScripterProxy scripterProxy;
-  void setScripter(EgbScripterProxy scripterProxy) {
-    this.scripterProxy = scripterProxy;
+  EgbScripterViewedFromPresenter scripter;
+  void setScripter(EgbScripterViewedFromPresenter scripter) {
+    this.scripter = scripter;
+    assert(scripter.uid != null);
+    playerProfile.currentEgamebookUid = scripter.uid;
+    scripter.setPresenter(this);
   }
 
-  Future<EgbPresenter> continueSavedGameOrCreateNew() {
+  /// Either loads the latest savegame or -- if missing -- creates a new one.
+  Future<EgbPresenter> continueSavedGameOrCreateNew() async {
     EgbSavegame lastSavegame;
     Set<String> playerChronology;
 
-    return playerProfile.loadMostRecent()
-    .then((EgbSavegame savegame) {
-      lastSavegame = savegame;
+    EgbSavegame savegame = await playerProfile.loadMostRecent();
 
-      if (lastSavegame == null) {
-        return new Set<String>();
-      } else {
-        return playerProfile.loadPlayerChronology();
-      }
-    })
-    .then((Set<String> chronology) {
-      playerChronology = chronology;
-
-      if (lastSavegame != null) {
-        showText(lastSavegame.textHistory);
-        scripterProxy.load(lastSavegame, playerChronology);
-      } else {
-        scripterProxy.restart();
-      }
-
-      return this;
-    });
+    Set<String> chronology = new Set<String>();
+    if (savegame != null) {
+      chronology = await playerProfile.loadPlayerChronology();
+      scripter.load(savegame, chronology);
+      log("Loaded a savegame.");
+    } else {
+      scripter.restart();
+      log("No savegame found, restarting.");
+    }
+    return this;
   }
 
-  @override
+  /// Getter returns player profile.
   EgbPlayerProfile get playerProfile => _playerProfile;
 
   /// Player profile.
   EgbPlayerProfile _playerProfile;
+
+  /// Sets player profile to [playerProfile].
   void setPlayerProfile(EgbPlayerProfile playerProfile) {
     _playerProfile = playerProfile;
   }
@@ -160,9 +137,5 @@ abstract class EgbPresenterBase implements EgbPresenter {
   @override
   void savePlayerChronology(Set<String> playerChronology) {
     playerProfile.savePlayerChronology(playerChronology);
-  }
-
-  void close() {
-    playerProfile.close();
   }
 }
