@@ -1576,7 +1576,7 @@ typedef void Action();
  *
  * TODO: either use lawndart or make the following more robust.
  */
-class LocalStorage implements EgbStorage {
+class LocalStorage extends EgbStorage {
   /// Saves [value] on [key] into local storage.
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;
@@ -1593,11 +1593,6 @@ class LocalStorage implements EgbStorage {
   Future<bool> delete(String key) {
     window.localStorage.remove(key);
     return new Future.value(true);
-  }
-
-  /// Returns default player profile from storage.
-  EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, this);
   }
 }
 

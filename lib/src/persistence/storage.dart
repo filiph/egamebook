@@ -21,14 +21,16 @@ abstract class EgbStorage {
   Future<bool> delete(String key);
 
   /// Returns default player [EgbPlayerProfile] for the storage.
-  EgbPlayerProfile getDefaultPlayerProfile();
+  EgbPlayerProfile getDefaultPlayerProfile() {
+    return new EgbPlayerProfile(DEFAULT_PLAYER_UID, this);
+  }
 }
 
 /**
  * MemoryStorage is the most primitive, mock-level storage.
  * It only stores into memory (RAM), no persistence.
  */
-class MemoryStorage implements EgbStorage {
+class MemoryStorage extends EgbStorage {
   /// Memory storage
   Map<String, String> memory;
 
@@ -51,9 +53,4 @@ class MemoryStorage implements EgbStorage {
     memory.remove(key);
     return new Future.value(true);
   }
-  
-  EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(EgbStorage.DEFAULT_PLAYER_UID, 
-                                             this);
-  }  
 }
