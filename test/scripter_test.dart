@@ -69,13 +69,11 @@ String getPath(String filename) {
 ///     TODO: add generated files to a list to be deleted afterwards?
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
-  String dartFilename =
-      canonicalEgbPath.replaceFirst(new RegExp(r"\.egb$"), ".dart");
-  return new Builder()
-      .readEgbFile(new File(canonicalEgbPath))
+  var builder = new Builder();
+  return builder.readEgbFile(new File(canonicalEgbPath))
       .then((Builder b) => b.writeDartFiles())
       .then((_) {
-    return dartFilename;
+    return builder.scripterDartPath;
   });
 }
 
@@ -137,13 +135,13 @@ void main() {
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-              Uri.parse("files/scripter_test_alternate_6.dart"));
+              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
           bookProxy.init()
               // Spawns the Isolate (if needed) and asks for BookUid
               .then(expectAsync((_) {
             mockPresenter.setScripter(bookProxy);
             bookProxy.setPresenter(mockPresenter);
-            expect(bookProxy.uid, isNotNull);
+            expect(bookProxy.uid, "test.example.1");
 
             mockPresenter.quit();
           }));
@@ -155,7 +153,7 @@ void main() {
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-              Uri.parse("files/scripter_test_alternate_6.dart"));
+              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           bookProxy.init().then((_) {
             mockPresenter.setScripter(bookProxy);
@@ -177,7 +175,7 @@ void main() {
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-              Uri.parse("files/scripter_test_alternate_6.dart"));
+              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput,
@@ -200,7 +198,7 @@ void main() {
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-              Uri.parse("files/scripter_test_alternate_6.dart"));
+              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput, contains("Time is now 10."));
@@ -221,7 +219,7 @@ void main() {
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-              Uri.parse("files/scripter_test_alternate_6.dart"));
+              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput, contains("Time is now 1."));
@@ -309,7 +307,7 @@ void main() {
         var storage = new MemoryStorage();
         mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
         EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
-            Uri.parse("files/scripter_test_save.dart"));
+            Uri.parse("files/lib/scripter_test_save.dart"));
 
         bookProxy.init().then((_) {
           mockPresenter.setScripter(bookProxy);
@@ -396,7 +394,7 @@ void main() {
 
     group("Page options", () {
       test("prevents user from visiting visitOnce page twice", () {
-        run("files/scripter_page_visitonce.dart").then((MockPresenter ui) {
+        run("files/lib/scripter_page_visitonce.dart").then((MockPresenter ui) {
           ui.choose("Get dressed");
           return ui.waitForDone();
         }).then(expectAsync((MockPresenter ui) {

@@ -430,6 +430,20 @@ class Builder {
           pages.last.blocks.last.lineEnd = _lineNumber;
         }
 
+        // Find UID from metadata.
+        var uidCandidates = metadata.where((m) => m.key == UNIQUE_ID_METADATA_KEY);
+        if (uidCandidates.length == 0) {
+          WARNING("No UID defined for this egamebook. This might lead to save "
+              "data clashes. Please define 'UniqueID' in the metadata section "
+              "of the .egb file.");
+        } else if (uidCandidates.length == 1) {
+          var m = uidCandidates.single;
+          uid = m.values[0];
+        } else {
+          throw new EgbFormatException("Two or more UniqueID metadata found. "
+              "Please define only one UniqueID.");
+        }
+
         for (var page in pages) {
           // check for duplicate pages
           if (pages.where((BuilderPage otherPage) =>
@@ -1153,6 +1167,12 @@ class Builder {
   /// List of synopsis line numbers.
   List<int> synopsisLineNumbers;
 
+  /// The unique identifier of the book. Used for saves.
+  String uid;
+
+  /// The key used to define [uid] in .egb metadata section.
+  static const String UNIQUE_ID_METADATA_KEY = "UniqueID";
+
   /// List of pages.
   List<BuilderPage> pages;
   /// Getter returns list of all page groups.
@@ -1228,6 +1248,9 @@ class Builder {
     return completer.future;
   }
 
+  /// The path of the scripter file.
+  String scripterDartPath;
+
   /**
    * Creates the scripter implementation file. This file includes the
    * whole egamebooks content.
@@ -1240,6 +1263,8 @@ class Builder {
                               HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
     var pathToOutputDart = path.join(pathToLib, "${getProjectName()}.dart");
 
+    scripterDartPath = pathToOutputDart;
+
     // write the .dart file
     File dartFile = new File(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
@@ -1247,6 +1272,7 @@ class Builder {
     _writeLibImports(dartOutStream,
         relativeToPath: path.dirname(dartFile.path));
     dartOutStream.write(implStartClass);
+    writeUid(dartOutStream);
     writeDeclarations(dartOutStream, indent: 2)
     .then((_) {
       dartOutStream.write(implStartCtor);
@@ -1275,6 +1301,14 @@ class Builder {
     return completer.future;
   }
 
+  void writeUid(IOSink dartOutStream) {
+    if (uid != null) {
+      dartOutStream.writeln("  String uid = \"$uid\";");
+    } else {
+      dartOutStream.writeln("  String uid = \"DEFAULT_EGB_UID\";");
+    }
+  }
+
   /// Writes library imports into [dartOutStream].
   void _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
     assert(importLibFilesFullPaths != null);
@@ -1286,6 +1320,9 @@ class Builder {
       dartOutStream.write("import '$importPath';\n");
     }
   }
+
+  /// The path of the presenter file.
+  String presenterDartPath;
 
   /**
    * Creates the presenter files. These files are the ones that run
@@ -1300,6 +1337,8 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var pathToOutputHtml = path.join(pathToPresenter,
                                      "${getProjectName()}.html.dart");
+
+    presenterDartPath = pathToOutputHtml;
 
     File htmlOutputFile = new File(pathToOutputHtml);
 
@@ -1385,6 +1424,8 @@ class Builder {
   /// [BuilderInitBlock.BLK_DECLARE] blocks.
   Future writeDeclarations(IOSink dartOutStream, {int indent}) {
     var completer = new Completer();
+
+    dartOutStream.write(implStartLibrary);
 
     StringBuffer contents = new StringBuffer();
     copyLineRanges(
@@ -2179,6 +2220,9 @@ import 'dart:isolate';
   final String implStartClass = """
 
 class ScripterImpl extends EgbScripter {
+""";
+
+  final String implStartLibrary = """
 
   /* LIBRARY */
 """;

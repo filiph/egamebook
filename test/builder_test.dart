@@ -527,6 +527,13 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
       });
+
+      test("extracts book UID", () {
+        var callback = expectAsync((var b) {
+          expect(b.uid, "example.uid.1");
+        });
+        new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
+      });
     });
 
     group('import', () {

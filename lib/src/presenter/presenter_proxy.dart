@@ -97,7 +97,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
         DEBUG_SCR("GET_BOOK_UID received.");
-        _send(new EgbMessage.bookUid("DEFAULT_BOOK_UID"));
+        _send(new EgbMessage.bookUid(scripter.uid));
         return;
       case EgbMessage.CHOICE_SELECTED:
         int choiceHash = message.intContent;
