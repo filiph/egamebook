@@ -13,7 +13,7 @@ import 'src/shared/user_interaction.dart';
 import 'src/builder/vars_generator.dart';
 
 import 'package:egamebook/presenters/html/main_entry_point.dart'
-    show HTML_ENTRY_POINT_DART_FILE;
+show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH, HTML_ENTRY_POINT_DART_FILE;
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -1215,12 +1215,12 @@ class Builder {
    * in a subdirectory of the egb file's directory. This subdirectory
    * will _not_ be created and the call will fail if it doesn't exist.
    **/
-  Future<bool> writeDartFiles({String subdirectory}) {
+  Future<bool> writeDartFiles() {
     var completer = new Completer();
 
     Future.wait([
-        writeScripterFile(subdirectory: subdirectory),
-        writePresenterFiles(subdirectory: subdirectory)
+        writeScripterFile(),
+        writePresenterFiles()
     ], eagerError: true).then((_) {
       completer.complete(true);
     }).catchError((e) => completer.completeError(e));
@@ -1232,16 +1232,18 @@ class Builder {
    * Creates the scripter implementation file. This file includes the
    * whole egamebooks content.
    */
-  Future<bool> writeScripterFile({String subdirectory}) {
+  Future<bool> writeScripterFile() {
     var completer = new Completer();
 
-    var pathToOutputDart = getExtensionPath("dart",
-          subdirectory: subdirectory);
+    var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var pathToLib = path.join(pathToPresenter,
+                              HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
+    var pathToOutputDart = path.join(pathToLib, "${getProjectName()}.dart");
 
     // write the .dart file
     File dartFile = new File(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
-    dartOutStream.write(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+    dartOutStream.write(implStartFile);
     _writeLibImports(dartOutStream,
         relativeToPath: path.dirname(dartFile.path));
     dartOutStream.write(implStartClass);
@@ -1292,35 +1294,29 @@ class Builder {
    * There are two presenters (UIs): the command line presenter (deprecated),
    * and the HTML presenter.
    */
-  Future<bool> writePresenterFiles({String subdirectory}) {
+  Future<bool> writePresenterFiles() {
     var completer = new Completer();
 
-    var scriptFilePath = Platform.script;
-    var pathToOutputDart = getExtensionPath("dart",
-        subdirectory: subdirectory);
-    var pathToOutputHtml = getExtensionPath("html.dart",
-        subdirectory: subdirectory);
-
-    var pathToOutputDartFromOutputHtml =
-        path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
+    var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var pathToOutputHtml = path.join(pathToPresenter,
+                                     "${getProjectName()}.html.dart");
 
     File htmlOutputFile = new File(pathToOutputHtml);
 
     var substitutions = {
-      "import '../runner.dart';" :
-          "import 'package:egamebook/runner.dart';\n",
-      "import 'presenter/presenter.dart';" :
-          "import 'package:egamebook/src/presenter/presenter.dart';\n",
-      "import 'presenter/presenter_cmdline.dart';" :
-          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
-      "import 'presenter/presenter_html.dart';" :
-          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
-      "import 'persistence/storage.dart';" :
-        "import 'package:egamebook/src/persistence/storage.dart';\n",
-      "import 'persistence/player_profile.dart';" :
-        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
-      "  var scripterPath = '[[PathToEgbScripterImplementation]]';" :
-          "  var scripterPath = '$pathToOutputDartFromOutputHtml';"
+//      "import '../runner.dart';" :
+//          "import 'package:egamebook/runner.dart';\n",
+//      "import 'presenter/presenter.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter.dart';\n",
+//      "import 'presenter/presenter_cmdline.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
+//      "import 'presenter/presenter_html.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
+//      "import 'persistence/storage.dart';" :
+//        "import 'package:egamebook/src/persistence/storage.dart';\n",
+//      "import 'persistence/player_profile.dart';" :
+//        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
+      "[[NAME]]": getProjectName()
     };
 
     Future.wait([
@@ -1349,11 +1345,10 @@ class Builder {
 
     IOSink outStream = outFile.openWrite();
     template.split("\n").forEach((String line) {
-      if (substitutions.containsKey(line)) {
-        outStream.write("${substitutions[line]}\n");
-      } else {
-        outStream.write("$line\n");
-      }
+      substitutions.forEach((orig, sub) {
+        line = line.replaceAll(orig, sub);
+      });
+      outStream.write("$line\n");
     });
 
     return outStream.close();
@@ -1802,15 +1797,31 @@ class Builder {
         subdirectory: subdirectory);
   }
 
-  static String getExtensionPathFromEgbPath(String egbPath, String extension,
-                                            {String subdirectory}) {
+  String getSubdirectoryPath(String subdirectory) =>
+      getSubdirectoryPathFromEgbPath(inputEgbFileFullPath,
+                                     subdirectory: subdirectory);
+
+  static String getSubdirectoryPathFromEgbPath(String egbPath,
+                                               {String subdirectory}) {
     String dirPath = path.dirname(egbPath);
     if (subdirectory != null) {
       dirPath = path.join(dirPath, subdirectory);
     }
-    return path.join(dirPath,
-        "${path.basenameWithoutExtension(egbPath)}.$extension");
+    return dirPath;
   }
+
+  static String getExtensionPathFromEgbPath(String egbPath, String extension,
+                                            {String subdirectory}) {
+    String dirPath = getSubdirectoryPathFromEgbPath(egbPath,
+        subdirectory: subdirectory);
+    return path.join(dirPath,
+        "${getProjectNameFromEgbPath(egbPath)}.$extension");
+  }
+
+  String getProjectName() => getProjectNameFromEgbPath(inputEgbFileFullPath);
+
+  static String getProjectNameFromEgbPath(String egbPath) =>
+      path.basenameWithoutExtension(egbPath);
 
   /**
    * Writes GraphML file from current Builder object.
