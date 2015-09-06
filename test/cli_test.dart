@@ -7,6 +7,7 @@ import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
 import 'package:egamebook/command.dart';
 import 'package:egamebook/src/cli/cli.dart';
+import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
 /// Where the template files for tests are located.
 String templateFiles = "template_files";
@@ -21,8 +22,10 @@ void createTemporaryDir(String path) {
   Directory temp = new Directory(path);
   temp.createSync();
 
-  Directory tempWeb = new Directory(p.join(path, DART_FILES_OUTPUT_SUBDIR));
+  Directory tempWeb = new Directory(p.join(path, HTML_BOOK_ENTRYPOINT_PATH));
   tempWeb.createSync();
+  Directory tempLib = new Directory(p.join(tempWeb.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
+  tempLib.createSync();
 }
 
 void deleteTemporaryDir(String path) {
@@ -226,7 +229,7 @@ void main() {
 
       var callback = expectAsync((message) {
         File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
-        File fileDartBuild = new File(p.join(path, "web/test1.dart"));
+        File fileDartBuild = new File(p.join(path, "lib/test1.dart"));
 
         expect(message.contains("DONE."), isTrue);
         expect(fileHtmlBuild.existsSync(), isTrue);
@@ -286,9 +289,9 @@ void main() {
 
       var callback = expectAsync((message) {
         File fileHtmlBuild1 = new File(p.join(path, "web/test1.html.dart"));
-        File fileDartBuild1 = new File(p.join(path, "web/test1.dart"));
+        File fileDartBuild1 = new File(p.join(path, "lib/test1.dart"));
         File fileHtmlBuild2 = new File(p.join(path, "web/test2.html.dart"));
-        File fileDartBuild2 = new File(p.join(path, "web/test2.dart"));
+        File fileDartBuild2 = new File(p.join(path, "lib/test2.dart"));
         expect(fileHtmlBuild1.existsSync(), isTrue);
         expect(fileDartBuild1.existsSync(), isTrue);
         expect(fileHtmlBuild2.existsSync(), isTrue);
@@ -341,7 +344,7 @@ void main() {
           // Waiting for builder which build file
           new Future.delayed(new Duration(seconds: 2), () {
             File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
-            File fileDartBuild = new File(p.join(path, "web/test1.dart"));
+            File fileDartBuild = new File(p.join(path, "lib/test1.dart"));
             expect(fileHtmlBuild.existsSync(), isTrue);
             expect(fileDartBuild.existsSync(), isTrue);
             deleteTemporaryDir(path);

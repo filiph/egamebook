@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 // importing files to test
 import "package:egamebook/src/shared/html_entities.dart";
 import "package:egamebook/builder.dart";
+import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
 /**
  * Returns path to the file inside the [:/files:] subdirectory with filename
@@ -17,8 +18,24 @@ String getPath(String filename) {
   return path.join(path.dirname(pathToScript), "files", filename);
 }
 
-void main() {
+final dir = path.dirname(Platform.script.toFilePath());
+final filesDir = path.join(dir, "files");
+final webSubdir = new Directory(path.join(filesDir, HTML_BOOK_ENTRYPOINT_PATH));
+final libSubdir = new Directory(path.join(webSubdir.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
 
+void createSubdirs() {
+  webSubdir.createSync();
+  print("$webSubdir created");
+  libSubdir.createSync();
+  print("$libSubdir created");
+}
+
+void deleteSubdirs() {
+  libSubdir.deleteSync(recursive: true);
+  webSubdir.deleteSync(recursive: true);
+}
+
+void main() {
   group("HTML Entities", () {
     test("ignores basic ASCII", () {
       expect(HtmlEntities.toHtml("abcdefg12345 []/?"),
@@ -510,6 +527,13 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
       });
+
+      test("extracts book UID", () {
+        var callback = expectAsync((var b) {
+          expect(b.uid, "example.uid.1");
+        });
+        new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
+      });
     });
 
     group('import', () {
@@ -565,6 +589,8 @@ void main() {
     });
 
     group('writeFiles', () {
+      setUp(createSubdirs);
+      tearDown(deleteSubdirs);
 
       test("creates a file", () {
         var callback = expectAsync((bool exists) {
@@ -577,7 +603,7 @@ void main() {
           .then((var b) {
             b.writeDartFiles()
             .then((_) {
-              new File(getPath("full_project.dart")).exists()
+              new File(getPath("lib/full_project.dart")).exists()
               .then(callback);
             });
           });
