@@ -15,16 +15,16 @@ import 'package:path/path.dart' as p;
 /// String because it's easy to reconstruct back the [File] from full path.
 class FileHierarchy {
   /// Allowed fileType.
-  String fileType = ".egb";
+  static const String FILE_TYPE = ".egb";
   /// Saved hierarchy of master and part files as a Map.
-  Map<String, List<String>> _files = {};
+  Map<String, List<String>> _filesHierarchy = {};
 
   /// Returns list of files of type [File] and extension [fileType]
   /// from [directoryFrom].
-  List<File> listFiles(Directory directoryFrom) {
+  List<File> _listFiles(Directory directoryFrom) {
     return directoryFrom.listSync(recursive: true, followLinks: false)
         .where((entity)
-            => entity is File && p.extension(entity.path) == fileType)
+            => entity is File && p.extension(entity.path) == FILE_TYPE)
             .toList();
   }
 
@@ -38,7 +38,7 @@ class FileHierarchy {
       fromDirectory = fromFile.parent;
     }
 
-    List<File> files = listFiles(fromDirectory);
+    List<File> files = _listFiles(fromDirectory);
 
     // Builds hierarchy masterFile -> partFile
     for (int i = 0; i < files.length; i++) {
@@ -52,11 +52,8 @@ class FileHierarchy {
         // so the files can be nested differently
         if (p.basenameWithoutExtension(part.path)
             .startsWith("${p.basenameWithoutExtension(master.path)}_")) {
-          _add(master, part);
+          add(master, part);
           filesToRemove.add(part);
-          /*if (!files.contains(master)) { // add master file of the part file to files
-            files.add(master);
-          }*/
         }
       }
     }
@@ -78,16 +75,16 @@ class FileHierarchy {
   /// Adds full path from File [part] into the [_files] map on [master] path key.
   ///
   /// The method also validates, if files have correct extension.
-  void _add(File master, File part) {
+  void add(File master, File part) {
     String masterPath = master.path;
     String partPath = part.path;
 
-    if (p.extension(masterPath) == fileType &&
-        p.extension(partPath) == fileType) {
-      if (_files[masterPath] == null) {// the key is not in the map
-        _files[masterPath] = []; // creates empty list for adding of parts
+    if (p.extension(masterPath) == FILE_TYPE &&
+        p.extension(partPath) == FILE_TYPE) {
+      if (_filesHierarchy[masterPath] == null) {// the key is not in the map
+        _filesHierarchy[masterPath] = []; // creates empty list for adding of parts
       }
-      _files[masterPath].add(partPath);
+      _filesHierarchy[masterPath].add(partPath);
     } else {
       throw new ArgumentError("File name provided is not an .egb file.");
     }
@@ -97,7 +94,7 @@ class FileHierarchy {
   bool isPartFile(File file) {
     bool value = false;
 
-    for (List partFiles in _files.values) {
+    for (List partFiles in _filesHierarchy.values) {
       if (partFiles.contains(file.path)) {
         value = true;
         break;
@@ -107,14 +104,14 @@ class FileHierarchy {
     return value;
   }
 
-  /// Returns master file from given [file]. The master file is searched using
+  /// Returns master file from a given [file]. The master file is searched using
   /// the [_files] map which has to be created before;
   ///
   /// If the [file] is already a master file, it returns itself.
   File getMasterFile(File file) {
     File value = file;
 
-    _files.forEach((String masterFile, List partFiles) {
+    _filesHierarchy.forEach((String masterFile, List partFiles) {
       if (partFiles.contains(file.path)) {
         value = new File(masterFile);
       }
