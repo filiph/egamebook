@@ -128,7 +128,7 @@ void main() {
           expect(b.pages[1].name,
             equals("おはよう"));
         });
-        new Builder().readEgbFile(new File(getPath("simple_3pages_utf8.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("simple_utf8.egb"))).then(callback);
       });
 
       test("reads page at EOF", () {
@@ -205,11 +205,17 @@ void main() {
 
     group('advanced files', () {
 
-      // TODO unit test async throws
-//      test("throws on unclosed tag", () {
-//        expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
-//          throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));
-//      });
+      test("throws on unclosed tag", () async {
+        expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
+          throwsA(new isInstanceOf<EgbFormatException>()));
+      });
+
+      test("multipart egb file", () {
+        var callback = expectAsync((Builder b) {
+          expect(b.pages.length, 2);
+        });
+        new Builder().readEgbFile(new File(getPath("with_parts.egb"))).then(callback);
+      });
 
       test("detects blocks with vars", () {
         var callback = expectAsync((var b) {
@@ -239,7 +245,7 @@ void main() {
 //                     "is not actually a valid option and should be not recognized as such."*/);
 //          }
 //        });
-//        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
+//        new Builder().readEgbFile(new File(getPath("choices_simple.egb"))).then(callback);
 //      });
 
       test("detects individual choiceBlocks", () {
@@ -325,7 +331,7 @@ void main() {
           expect(b.pages[2].blocks[0].subBlocks[1].options["goto"],
             isNull);
         });
-        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("choices_simple.egb"))).then(callback);
       });
 
       test("detects multiline choices", () {
@@ -659,7 +665,7 @@ void main() {
     group('egb writer', () {
 
       test("updates egb file from builder instance", () {
-        File orig = new File(getPath("update_egb_file_original.egb"));
+        File orig = new File(getPath("update_egb_original.egb"));
         File egb = new File(getPath("update_egb_file.egb"));
 
         var inputStream = orig.openRead();

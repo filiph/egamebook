@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:path/path.dart' as path;
 import 'package:logging/logging.dart';
 //import 'package:graphml/dart_graphml.dart';
+import 'package:quiver/streams.dart' as quiver_streams;
 
 import 'src/shared/page.dart';
 import 'src/shared/user_interaction.dart';
@@ -14,6 +15,7 @@ import 'src/builder/vars_generator.dart';
 
 import 'package:egamebook/presenters/html/main_entry_point.dart'
 show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH, HTML_ENTRY_POINT_DART_FILE;
+import 'package:egamebook/src/cli/file_hierarchy.dart';
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -376,6 +378,8 @@ class Builder {
     warningLines = new List<String>();
   }
 
+  final FileHierarchy _fileHierarchy = new FileHierarchy();
+
   /**
     * Main workhorse, reads and parses file to intermediary structure.
     * When the returning Future is ready, use can call [writeDartFiles()],
@@ -397,7 +401,18 @@ class Builder {
         inputEgbFileFullPath = f.path;
         print("Reading input file $f.");
 
-        var inputStream = f.openRead();
+        _fileHierarchy.create(fromFile: f);
+        var partFiles = _fileHierarchy.getPartFiles(f);
+
+        List<File> files = <File>[f];
+        files.addAll(partFiles);
+
+        // Concatenate the master file [f] with all part files.
+        var inputStream = quiver_streams.concat(files.map((file) =>
+            file.openRead()
+                .transform(UTF8.decoder)
+                .transform(const LineSplitter())));
+
         readInputStream(inputStream)
         .then((b) => completer.complete(b))
         .catchError((e) => completer.completeError(e));
@@ -408,12 +423,8 @@ class Builder {
   }
 
   /// Reads the given [inputStream] for the contents of the file.
-  Future<Builder> readInputStream(Stream<List<int>> inputStream) {
+  Future<Builder> readInputStream(Stream<String> inputStream) {
     var completer = new Completer();
-
-    var strInputStream = inputStream
-                        .transform(UTF8.decoder)
-                        .transform(new LineSplitter());
 
     // The top of the file can be metadata. This will be changed to
     // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
@@ -425,7 +436,7 @@ class Builder {
 
     StreamSubscription subscription;
 
-    subscription = strInputStream.listen((String line) {
+    subscription = inputStream.listen((String line) {
       _lineNumber++;
       try {
         _check(_lineNumber, line);
@@ -2269,7 +2280,7 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implEndPages = """
-    
+
 """;
 
   final String implEndCtor = """
