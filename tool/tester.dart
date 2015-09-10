@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:collection';
 import 'dart:async';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 /// Script for running all tests in test/ folder.
 /// This script finds all .dart files inside test/ folder with name containing
@@ -24,8 +24,8 @@ final List testParams = [
 
 void main() {
   String pathToScript = Platform.script.toFilePath();
-  Directory parent = new Directory(path.dirname(pathToScript)).parent;
-  Directory test = new Directory(path.join(parent.path, "test"));
+  Directory parent = new Directory(p.dirname(pathToScript)).parent;
+  Directory test = new Directory(p.join(parent.path, "test"));
 
   if (!test.existsSync()) {
     print("The folder test/ doesn't exist. Cancelling tests running.");
@@ -35,23 +35,23 @@ void main() {
   List fileNames = [];
   test.list(recursive: true, followLinks: false)
     .listen((FileSystemEntity entity) {
-    String fileName = path.basename(entity.path);
+    String fileName = p.basename(entity.path);
 
-    if (path.extension(entity.path) == ".dart" &&
-        path.basenameWithoutExtension(entity.path).endsWith("_test") &&
+    if (p.extension(entity.path) == ".dart" &&
+        p.basenameWithoutExtension(entity.path).endsWith("_test") &&
         !ignoredFileNames.contains(fileName)) {
       fileNames.add(entity.path);
     }
-  }, onDone: () => _runTests(fileNames));
+  }, onDone: () => _runTests(fileNames, parent));
 }
 
 /// Starts tests using queue.
-Future _runTests(List fileNames) async {
+Future _runTests(List fileNames, Directory parent) async {
   ListQueue queue = new ListQueue.from(fileNames);
 
   while(queue.isNotEmpty) {
     String path = queue.removeFirst();
-    await _runTestProcess(path);
+    await _runTestProcess(path, parent);
   }
 
   print("\nFINAL STATS:");
@@ -59,8 +59,10 @@ Future _runTests(List fileNames) async {
 }
 
 /// Starts actual process of running test in [path].
-Future _runTestProcess(String path) async {
-  List params = new List.from(testParams)..add(path);
+Future _runTestProcess(String path, Directory parent) async {
+  List params = new List.from(testParams)
+    ..add("--package-root=${p.join(parent.path, "packages")}")
+    ..add(path);
 
   print("\nRunning test in $path");
   print("-----------------------");
