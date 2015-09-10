@@ -48,6 +48,21 @@ class EgbFormatException implements Exception {
 }
 
 /**
+ * Exception thrown when there is an unrecoverable problem with the file system.
+ * For example, a missing directory that really should be there.
+ **/
+class EgbFileSystemException implements Exception {
+  /// Message describing the exception.
+  final String message;
+
+  /// Creates new EgbFileSystemException with error [message].
+  EgbFileSystemException(String this.message);
+
+  /// Returns text describing EgbFileSystemException with its [message].
+  String toString() => message;
+}
+
+/**
  * Abstract class defining a "line selection".
  */
 abstract class BuilderLineRange {
@@ -1259,8 +1274,20 @@ class Builder {
     var completer = new Completer();
 
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var webDir = new Directory(pathToPresenter);
+    if (!webDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required web/ directory. It should be located in "
+        "${path.normalize(webDir.absolute.path)}."));
+    }
     var pathToLib = path.join(pathToPresenter,
                               HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
+    var libDir = new Directory(pathToLib);
+    if (!libDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required lib/ directory. It should be located in "
+        "${path.normalize(libDir.absolute.path)}."));
+    }
     var pathToOutputDart = path.join(pathToLib, "${getProjectName()}.dart");
 
     scripterDartPath = pathToOutputDart;
@@ -1335,6 +1362,12 @@ class Builder {
     var completer = new Completer();
 
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var presenterDir = new Directory(pathToPresenter);
+    if (!presenterDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required web/ directory. It should be located in "
+        "${path.normalize(presenterDir.absolute.path)}."));
+    }
     var pathToOutputHtml = path.join(pathToPresenter,
                                      "${getProjectName()}.html.dart");
 
