@@ -325,7 +325,7 @@ void main() {
         deleteTemporaryDir(path);
       });
 
-      builder.getEgbFiles(path).then(callback);
+      builder._getEgbFiles(path).then(callback);
     });
   });
 

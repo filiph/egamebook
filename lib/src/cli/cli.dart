@@ -9,24 +9,6 @@ import 'package:watcher/watcher.dart';
 import 'package:egamebook/builder.dart';
 import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
-
-/// Returns path to build.dart script in the bin/ folder.
-String getPathToBuildScript() {
-  // For the pub run
-  if (Platform.script.scheme.startsWith("http")) {
-    return Platform.script.resolve("build.dart").toString();
-  }
-
-  // TODO potential problem on Windows.
-  if (Platform.script.toFilePath().endsWith("bin/")) {
-    return getPath("build.dart");
-  }
-
-  // For the test folder
-  return getPath(
-      "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
-}
-
 /// Returns path relative to the running script in bin/.
 ///
 /// TODO this will not work with pub run.
@@ -44,7 +26,8 @@ bool isSourcesDirectory(String path) {
       segments.contains("web");
 }
 
-class OutputMessage {
+/// Class _OutputMessage formats String messages into console.
+class _OutputMessage {
   static String buildFailed([String message]) {
     return _buildMessage("BUILD FAILED!");
   }
@@ -126,7 +109,7 @@ class ProjectCreator implements Worker {
 
 /// Class [ProjectBuilder] starts running of the builder from command line.
 /// Before building, the .egb file is searched and when it is found,
-/// the build proccess is started.
+/// the build process is started.
 ///
 /// It's also possible to run command with -a or --analyze to run analyzer
 /// after each build.
@@ -166,7 +149,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     Completer completer = new Completer();
 
     try {
-      List files = await getEgbFiles(_path);
+      List files = await _getEgbFiles(_path);
       ListQueue<File> queue = new ListQueue.from(files);
       buildFile(queue, completer);
     } catch(error) {
@@ -181,37 +164,37 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Without that only one .egb file to build in folder is allowed.
-  Future getEgbFiles(String path) {
+  Future _getEgbFiles(String path) {
     List files = [];
 
     if (p.extension(path).isNotEmpty) { //running on file
       if (p.extension(path) == EXTENSION) {
         File file = new File(path);
         if (!file.existsSync()) {
-          return new Future.error(OutputMessage.buildFailed("File $path doesn't exist."));
+          return new Future.error(_OutputMessage.buildFailed("File $path doesn't exist."));
         }
 
         files = _hierarchy.create(fromFile: file);
         return new Future.value(files);
       } else {
         return new Future.error(
-            OutputMessage.buildFailed("File type of $path is not supported."));
+            _OutputMessage.buildFailed("File type of $path is not supported."));
       }
     }
 
     Directory from = new Directory(path);
 
     if (!from.existsSync()) {
-      return new Future.error(OutputMessage.buildFailed("Directory $path doesn't exist."));
+      return new Future.error(_OutputMessage.buildFailed("Directory $path doesn't exist."));
     }
 
     files = _hierarchy.create(fromDirectory: from);
 
     if (files.isEmpty) {
       return new Future.error(
-          OutputMessage.buildFailed("No $EXTENSION file in this directory."));
+          _OutputMessage.buildFailed("No $EXTENSION file in this directory."));
     } else if (!_fullDirectory && files.length > 1) {
-      return new Future.error(OutputMessage.buildFailed(
+      return new Future.error(_OutputMessage.buildFailed(
           "More than one .egb file found in the directory.\n"
           "To run builder on more .egb files in directory than one .egb file "
           "use argument --full-directory or -f."));
@@ -256,8 +239,7 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
   }
 
   /// Runs builder after each file change.
-  /// Builder regenerates files of only valid [extensions] and not from files
-  /// in sources directory (bin/, lib/, web/).
+  /// Builder regenerates files of only valid [extensions].
   ///
   /// The flow of builder is follows:
   ///
@@ -313,13 +295,7 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
         queue.add(masterFile);
         Completer completer = new Completer();
         buildFile(queue, completer).then((_) {
-          new Future.delayed(new Duration(milliseconds: 500), () {
-            // The value is saved only for small amount of time to prevent
-            // repeating builds on same file.
-            // But we want to also have the possibility to update the file
-            // again and again by editing manually so it needs to be reseted.
-            _actualBuiltFileName = null;
-          });
+          _actualBuiltFileName = null;
         });
       }
     }, onError: print);
@@ -339,6 +315,7 @@ class BuilderInterface {
   /// If analyzer option is set, the analyzer is run after build.
   Future buildFile(ListQueue queue, Completer completer) async {
     if (!_building && !_analyzing) {
+      bool isError = false;
       File file = queue.removeFirst();
       _building = true;
       String pathDart;
@@ -348,15 +325,14 @@ class BuilderInterface {
         await Future.wait([
           stdout.addStream(process.stdout),
           stderr.addStream(process.stderr)]);
+        _building = false;
         pathDart = _getBuiltFileFromEgbFile(file.path);
       } catch(error) {
-        print(error);
+        isError = true;
       }
 
-      _building = false;
-
-      if (!new File(pathDart).existsSync()) {
-        print(OutputMessage.buildFailed());
+      if (!new File(pathDart).existsSync() || isError) {
+        print(_OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
         if (analyze) {
@@ -368,7 +344,7 @@ class BuilderInterface {
             stderr.addStream(process.stderr)]);
           _analyzing = false;
         }
-        print(OutputMessage.buildSuccessfull());
+        print(_OutputMessage.buildSuccessfull());
       }
 
       return _buildFileOrComplete(queue, completer);
@@ -378,7 +354,7 @@ class BuilderInterface {
   /// Builds next file in [queue] or completes with success.
   Future _buildFileOrComplete(ListQueue queue, Completer completer) {
     if (queue.isEmpty) {
-      completer.complete("DONE.");
+      completer.complete();
     } else {
       buildFile(queue, completer);
     }
@@ -395,7 +371,7 @@ class BuilderInterface {
     } catch (e) {
       return new Future.error(e);
     }*/
-    return Process.start("dart", [getPathToBuildScript(), path]);
+    return Process.start("dart", [_getPathToBuildScript(), path]);
   }
 
   /// Runs dartanalyzer command line tool on given [path].
@@ -408,5 +384,22 @@ class BuilderInterface {
   String _getBuiltFileFromEgbFile(String path) {
     return Builder.getExtensionPathFromEgbPath(path, "dart",
     subdirectory: p.join(HTML_BOOK_ENTRYPOINT_PATH, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
+  }
+
+  /// Returns path to build.dart script in the bin/ folder.
+  String _getPathToBuildScript() {
+    // For the pub run
+    if (Platform.script.scheme.startsWith("http")) {
+      return Platform.script.resolve("build.dart").toString();
+    }
+
+    // TODO potential problem on Windows.
+    if (Platform.script.toFilePath().endsWith("bin/")) {
+      return getPath("build.dart");
+    }
+
+    // For the test folder
+    return getPath(
+        "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
   }
 }
