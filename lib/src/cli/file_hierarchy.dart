@@ -121,10 +121,10 @@ class FileHierarchy {
   }
 
   List<File> getPartFiles(File master) {
-    if (!_files.containsKey(master.path)) {
+    if (!_filesHierarchy.containsKey(master.path)) {
       return [];
     }
-    return _files[master.path].map((path) => new File(path))
+    return _filesHierarchy[master.path].map((path) => new File(path))
         .toList(growable: false);
   }
 }
