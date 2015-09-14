@@ -33,6 +33,11 @@ class FileHierarchy {
   /// Returns [List] of only master files.
   List<File> create({Directory fromDirectory, File fromFile}) {
     List<File> filesToRemove = [];
+
+    if (fromDirectory == null && fromFile == null) {
+      throw new ArgumentError("Hierarchy has to be created from either directory or a file.");
+    }
+
     // If we use exact file we need to still create hierarchy for parent folder
     if (fromDirectory == null) {
       fromDirectory = fromFile.parent;
