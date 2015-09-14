@@ -35,7 +35,7 @@ class FileHierarchy {
     List<File> filesToRemove = [];
 
     if (fromDirectory == null && fromFile == null) {
-      throw new ArgumentError("Hierarchy has to be created from either directory or a file.");
+      throw new ArgumentError("Hierarchy has to be created either from directory or file.");
     }
 
     // If we use exact file we need to still create hierarchy for parent folder
