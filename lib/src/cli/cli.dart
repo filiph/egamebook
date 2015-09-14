@@ -309,23 +309,31 @@ class BuilderInterface {
   /// If analyzer option is set, the analyzer is run after build.
   Future build(ListQueue queue, Completer completer) async {
     if (!_building && !_analyzing) {
+      String pathDart;
+      DateTime lastModified;
       bool isError = false;
       File file = queue.removeFirst();
       _building = true;
-      String pathDart;
 
       try {
+        pathDart = _getBuiltFileFromEgbFile(file.path);
+        if (new File(pathDart).existsSync()) {
+          lastModified = new File(pathDart).lastModifiedSync();
+        }
+
         var process = await _runBuilder(file.path);
         await Future.wait([
           stdout.addStream(process.stdout),
           stderr.addStream(process.stderr)]);
         _building = false;
-        pathDart = _getBuiltFileFromEgbFile(file.path);
+
       } catch(error) {
         isError = true;
       }
 
-      if (isError || !new File(pathDart).existsSync()) {
+      DateTime currentModified = new File(pathDart).lastModifiedSync();
+      if (isError || !new File(pathDart).existsSync() ||
+        (lastModified != null && currentModified.compareTo(lastModified) == 0)) {
         print(_OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
