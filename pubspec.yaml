@@ -13,5 +13,6 @@ dependencies:
   test: any
   watcher: any
   logging: any
+  quiver: any
 executables:
   egamebook:
