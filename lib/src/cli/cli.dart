@@ -15,17 +15,6 @@ import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_
 String getPath(String path)
   => Platform.script.resolve(path).toFilePath();
 
-/// Returns if the path is within bin/, lib/ or web/ directory.
-///
-/// TODO maybe also test/.
-/// TODO add to constants
-bool isSourcesDirectory(String path) {
-  List segments = p.split(path);
-
-  return segments.contains("bin") || segments.contains("lib") ||
-      segments.contains("web");
-}
-
 /// Class _OutputMessage formats String messages into console.
 class _OutputMessage {
   static String buildFailed([String message]) {
@@ -151,7 +140,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     try {
       List files = await _getEgbFiles(_path);
       ListQueue<File> queue = new ListQueue.from(files);
-      buildFile(queue, completer);
+      build(queue, completer);
     } catch(error) {
       completer.completeError(error);
     }
@@ -222,8 +211,6 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
   static const String EXTENSION = ".egb";
   /// Path used for watching.
   final String _path;
-  /// Filename of last built file.
-  String _actualBuiltFileName;
   /// Subscription to watcher events. Can be used to cancel watching.
   StreamSubscription _subscription;
   /// Getter returns [_subscription].
@@ -288,17 +275,24 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
       File masterFile = _hierarchy.getMasterFile(new File(event.path));
 
       if (event.type != ChangeType.REMOVE &&
-        !isSourcesDirectory(masterFile.path) &&
-        p.extension(masterFile.path) == EXTENSION &&
-        _actualBuiltFileName != _getBuiltFileFromEgbFile(masterFile.path)) {//prevents cycle builds
-        _actualBuiltFileName = _getBuiltFileFromEgbFile(masterFile.path);
+        !_isSourcesDirectory(masterFile.path) &&
+        p.extension(masterFile.path) == EXTENSION) {
         queue.add(masterFile);
         Completer completer = new Completer();
-        buildFile(queue, completer).then((_) {
-          _actualBuiltFileName = null;
-        });
+        build(queue, completer);
       }
     }, onError: print);
+  }
+
+  /// Returns if the path is within bin/, lib/ or web/ directory.
+  ///
+  /// TODO maybe also test/.
+  /// TODO add to constants
+  bool _isSourcesDirectory(String path) {
+    List segments = p.split(path);
+
+    return segments.contains("bin") || segments.contains("lib") ||
+    segments.contains("web");
   }
 }
 
@@ -313,7 +307,7 @@ class BuilderInterface {
   /// Builds recursively all files in [queue].
   /// If the queue is already empty, it completes with success.
   /// If analyzer option is set, the analyzer is run after build.
-  Future buildFile(ListQueue queue, Completer completer) async {
+  Future build(ListQueue queue, Completer completer) async {
     if (!_building && !_analyzing) {
       bool isError = false;
       File file = queue.removeFirst();
@@ -331,7 +325,7 @@ class BuilderInterface {
         isError = true;
       }
 
-      if (!new File(pathDart).existsSync() || isError) {
+      if (isError || !new File(pathDart).existsSync()) {
         print(_OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
@@ -347,16 +341,16 @@ class BuilderInterface {
         print(_OutputMessage.buildSuccessfull());
       }
 
-      return _buildFileOrComplete(queue, completer);
+      return _buildOrComplete(queue, completer);
     }
   }
 
   /// Builds next file in [queue] or completes with success.
-  Future _buildFileOrComplete(ListQueue queue, Completer completer) {
+  Future _buildOrComplete(ListQueue queue, Completer completer) {
     if (queue.isEmpty) {
       completer.complete();
     } else {
-      buildFile(queue, completer);
+      build(queue, completer);
     }
 
     return completer.future;
