@@ -15,7 +15,7 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
-class MockPresenter extends EgbPresenterBase {
+class MockPresenter extends EgbPresenter {
   Queue<int> choicesToBeTaken;
   Queue<String> choicesToBeTakenByString;
   String latestOutput;
@@ -152,13 +152,13 @@ class MockPresenter extends EgbPresenterBase {
   void quit() {
     _log.info("MockPresenter.quit() called.");
     playerProfile.close();
-    scripterProxy.quit();
+    scripter.quit();
     _debugStreamController.add(PLAYER_QUIT_EVENT);
   }
 
   void restart() {
     _log.info("MockPresenter.restart() called.");
-    scripterProxy.restart();
+    scripter.restart();
   }
 
   /// Completes the future when Presenter waits for input or when the book is
@@ -205,7 +205,7 @@ class MockPresenter extends EgbPresenterBase {
   }
 
   Future<bool> reportError(String title, String text) {
-    _log.error("ERROR: $title\n$text");
+    _log.severe("ERROR: $title\n$text");
     return new Future.value(true);
   }
 

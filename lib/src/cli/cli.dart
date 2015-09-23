@@ -7,9 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:watcher/watcher.dart';
 import 'file_hierarchy.dart';
 import 'package:egamebook/builder.dart';
+import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
-
-const String DART_FILES_OUTPUT_SUBDIR = "web";
 
 /// Returns path to build.dart script in the bin/ folder.
 String getPathToBuildScript() {
@@ -48,7 +47,7 @@ Future runBuilder(String path) async {
   print("Building $path...");
 
   return new Builder().readEgbFile(new File(path))
-  .then((b) => b.writeDartFiles(subdirectory: DART_FILES_OUTPUT_SUBDIR));
+  .then((b) => b.writeDartFiles());
 }
 
 /// Runs dartanalyzer command line tool on given [path].
@@ -60,7 +59,7 @@ Future runAnalyzer(String path) {
 /// Returns built file name from .egb file or [:null:].
 String getBuiltFileFromEgbFile(String path) {
   return Builder.getExtensionPathFromEgbPath(path, "dart",
-      subdirectory: DART_FILES_OUTPUT_SUBDIR);
+      subdirectory: p.join(HTML_BOOK_ENTRYPOINT_PATH, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
 }
 
 /// Abstract class [Worker] is an interface for all worker classes
@@ -332,10 +331,11 @@ class ProjectWatcher implements Worker {
     }
 
     // Sanity check.
-    if (!new Directory(p.join(_path, DART_FILES_OUTPUT_SUBDIR)).existsSync()) {
+    if (!new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH)).existsSync() ||
+        !new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT)).existsSync()) {
       return new Future.error("Must run watcher on a directory that is a "
           "Dart web applications package (it must have "
-          "$DART_FILES_OUTPUT_SUBDIR/, pubspec.yaml and all that).");
+          "lib/, web/, pubspec.yaml and all that).");
     }
 
     DirectoryWatcher watcher = new DirectoryWatcher(_path);

@@ -12,13 +12,14 @@ import '../shared/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
+import 'package:egamebook/scripter.dart';
 
 /**
  * The methods of EgbScripter that are callable by EgbPresenter.
  */
 abstract class EgbScripterViewedFromPresenter {
   /// Getter returns Uid.
-  String get uid;
+  String uid;
 
   /**
    * Initializes the Scripter. In case of a Scripter in its own Isolate, this
@@ -29,6 +30,15 @@ abstract class EgbScripterViewedFromPresenter {
   void restart();
   void load(EgbSavegame savegame, [Set<String> playerChronology]);
   void quit();
+
+  /// Instance of Presenter.
+  EgbPresenter presenter;
+
+  /// Sets Presenter and also sets Presenter player profile's
+  /// [:currentEgamebookUid:] to [uid] if is not [:null:].
+  void setPresenter(EgbPresenterViewedFromScripter presenter) {
+    this.presenter = presenter;
+  }
 }
 
 /**
@@ -36,19 +46,7 @@ abstract class EgbScripterViewedFromPresenter {
  * It has direct access to the Presenter object.
  */
 abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
-  /// Instance of Presenter.
-  EgbPresenter presenter;
 
-  /// Sets Presenter and also sets Presenter player profile's
-  /// [:currentEgamebookUid:] to [uid] if is not [:null:].
-  void setPresenter(EgbPresenter presenter) {
-    this.presenter = presenter;
-    if (uid != null) {
-      presenter.playerProfile.currentEgamebookUid = uid;
-    } else {
-      throw "Setting presenter before we have uid (before initialization).";
-    }
-  }
 }
 
 /**
@@ -126,7 +124,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.TEXT_RESULT:
         presenter.showText(message.strContent).then((_) {
-          _send(new EgbMessage.proceed());
+          // Do nothing.
         });
         return;
       case EgbMessage.NO_RESULT:
@@ -135,7 +133,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
         return;
       case EgbMessage.POINTS_AWARD:
         presenter.awardPoints(new PointsAward.fromMessage(message)).then((_) {
-          _send(new EgbMessage.proceed());
+          // Do nothing.
         });
         return;
       case EgbMessage.SET_STATS:

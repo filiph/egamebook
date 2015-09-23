@@ -5,7 +5,8 @@ Author:     Filip Hracek
 Web:        http://filiph.net/  
 Email:      abc@example.com  
 Keywords:   crimi, thriller  
-Copyright:  Creative Commons  
+Copyright:  Creative Commons
+UniqueID:   test.example.1
 
 <import 'scripter_test_alternate_6_lib.dart' />
 

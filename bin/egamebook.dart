@@ -35,7 +35,7 @@ main(List<String> args) {
     .then((message) =>
         (message != null && message.isNotEmpty) ? print(message) : "")
     .catchError((error) {
-      print(error);
+      print("ERROR: $error");
       exit(64); // Exit code 64 indicates a usage error.
     });
 }

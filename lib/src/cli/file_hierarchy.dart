@@ -122,4 +122,12 @@ class FileHierarchy {
 
     return value; //it is a master file
   }
+
+  List<File> getPartFiles(File master) {
+    if (!_files.containsKey(master.path)) {
+      return [];
+    }
+    return _files[master.path].map((path) => new File(path))
+        .toList(growable: false);
+  }
 }

@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 // importing files to test
 import "package:egamebook/src/shared/html_entities.dart";
 import "package:egamebook/builder.dart";
+import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
 /**
  * Returns path to the file inside the [:/files:] subdirectory with filename
@@ -17,8 +18,24 @@ String getPath(String filename) {
   return path.join(path.dirname(pathToScript), "files", filename);
 }
 
-void main() {
+final dir = path.dirname(Platform.script.toFilePath());
+final filesDir = path.join(dir, "files");
+final webSubdir = new Directory(path.join(filesDir, HTML_BOOK_ENTRYPOINT_PATH));
+final libSubdir = new Directory(path.join(webSubdir.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
 
+void createSubdirs() {
+  webSubdir.createSync();
+  print("$webSubdir created");
+  libSubdir.createSync();
+  print("$libSubdir created");
+}
+
+void deleteSubdirs() {
+  libSubdir.deleteSync(recursive: true);
+  webSubdir.deleteSync(recursive: true);
+}
+
+void main() {
   group("HTML Entities", () {
     test("ignores basic ASCII", () {
       expect(HtmlEntities.toHtml("abcdefg12345 []/?"),
@@ -111,7 +128,7 @@ void main() {
           expect(b.pages[1].name,
             equals("おはよう"));
         });
-        new Builder().readEgbFile(new File(getPath("simple_3pages_utf8.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("simple_utf8.egb"))).then(callback);
       });
 
       test("reads page at EOF", () {
@@ -188,11 +205,17 @@ void main() {
 
     group('advanced files', () {
 
-      // TODO unit test async throws
-//      test("throws on unclosed tag", () {
-//        expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
-//          throwsA(new isInstanceOf<EgbFormatException>("EgbFormatException")));
-//      });
+      test("throws on unclosed tag", () async {
+        expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
+          throwsA(new isInstanceOf<EgbFormatException>()));
+      });
+
+      test("multipart egb file", () {
+        var callback = expectAsync((Builder b) {
+          expect(b.pages.length, 2);
+        });
+        new Builder().readEgbFile(new File(getPath("with_parts.egb"))).then(callback);
+      });
 
       test("detects blocks with vars", () {
         var callback = expectAsync((var b) {
@@ -222,7 +245,7 @@ void main() {
 //                     "is not actually a valid option and should be not recognized as such."*/);
 //          }
 //        });
-//        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
+//        new Builder().readEgbFile(new File(getPath("choices_simple.egb"))).then(callback);
 //      });
 
       test("detects individual choiceBlocks", () {
@@ -308,7 +331,7 @@ void main() {
           expect(b.pages[2].blocks[0].subBlocks[1].options["goto"],
             isNull);
         });
-        new Builder().readEgbFile(new File(getPath("choices.egb"))).then(callback);
+        new Builder().readEgbFile(new File(getPath("choices_simple.egb"))).then(callback);
       });
 
       test("detects multiline choices", () {
@@ -510,6 +533,13 @@ void main() {
         });
         new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
       });
+
+      test("extracts book UID", () {
+        var callback = expectAsync((var b) {
+          expect(b.uid, "example.uid.1");
+        });
+        new Builder().readEgbFile(new File(getPath("metadata_9keys.egb"))).then(callback);
+      });
     });
 
     group('import', () {
@@ -565,6 +595,8 @@ void main() {
     });
 
     group('writeFiles', () {
+      setUp(createSubdirs);
+      tearDown(deleteSubdirs);
 
       test("creates a file", () {
         var callback = expectAsync((bool exists) {
@@ -577,7 +609,7 @@ void main() {
           .then((var b) {
             b.writeDartFiles()
             .then((_) {
-              new File(getPath("full_project.dart")).exists()
+              new File(getPath("lib/full_project.dart")).exists()
               .then(callback);
             });
           });
@@ -633,7 +665,7 @@ void main() {
     group('egb writer', () {
 
       test("updates egb file from builder instance", () {
-        File orig = new File(getPath("update_egb_file_original.egb"));
+        File orig = new File(getPath("update_egb_original.egb"));
         File egb = new File(getPath("update_egb_file.egb"));
 
         var inputStream = orig.openRead();

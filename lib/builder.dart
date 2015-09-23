@@ -7,13 +7,15 @@ import 'dart:convert';
 import 'package:path/path.dart' as path;
 import 'package:logging/logging.dart';
 //import 'package:graphml/dart_graphml.dart';
+import 'package:quiver/streams.dart' as quiver_streams;
 
 import 'src/shared/page.dart';
 import 'src/shared/user_interaction.dart';
 import 'src/builder/vars_generator.dart';
 
 import 'package:egamebook/presenters/html/main_entry_point.dart'
-    show HTML_ENTRY_POINT_DART_FILE;
+show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH, HTML_ENTRY_POINT_DART_FILE;
+import 'package:egamebook/src/cli/file_hierarchy.dart';
 
 /**
  * Exception thrown when the input .egb file is badly formatted.
@@ -45,6 +47,21 @@ class EgbFormatException implements Exception {
     strBuf.write(message);
     return strBuf.toString();
   }
+}
+
+/**
+ * Exception thrown when there is an unrecoverable problem with the file system.
+ * For example, a missing directory that really should be there.
+ **/
+class EgbFileSystemException implements Exception {
+  /// Message describing the exception.
+  final String message;
+
+  /// Creates new EgbFileSystemException with error [message].
+  EgbFileSystemException(String this.message);
+
+  /// Returns text describing EgbFileSystemException with its [message].
+  String toString() => message;
 }
 
 /**
@@ -361,6 +378,8 @@ class Builder {
     warningLines = new List<String>();
   }
 
+  final FileHierarchy _fileHierarchy = new FileHierarchy();
+
   /**
     * Main workhorse, reads and parses file to intermediary structure.
     * When the returning Future is ready, use can call [writeDartFiles()],
@@ -382,7 +401,18 @@ class Builder {
         inputEgbFileFullPath = f.path;
         print("Reading input file $f.");
 
-        var inputStream = f.openRead();
+        _fileHierarchy.create(fromFile: f);
+        var partFiles = _fileHierarchy.getPartFiles(f);
+
+        List<File> files = <File>[f];
+        files.addAll(partFiles);
+
+        // Concatenate the master file [f] with all part files.
+        var inputStream = quiver_streams.concat(files.map((file) =>
+            file.openRead()
+                .transform(UTF8.decoder)
+                .transform(const LineSplitter())));
+
         readInputStream(inputStream)
         .then((b) => completer.complete(b))
         .catchError((e) => completer.completeError(e));
@@ -393,12 +423,8 @@ class Builder {
   }
 
   /// Reads the given [inputStream] for the contents of the file.
-  Future<Builder> readInputStream(Stream<List<int>> inputStream) {
+  Future<Builder> readInputStream(Stream<String> inputStream) {
     var completer = new Completer();
-
-    var strInputStream = inputStream
-                        .transform(UTF8.decoder)
-                        .transform(new LineSplitter());
 
     // The top of the file can be metadata. This will be changed to
     // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
@@ -410,7 +436,7 @@ class Builder {
 
     StreamSubscription subscription;
 
-    subscription = strInputStream.listen((String line) {
+    subscription = inputStream.listen((String line) {
       _lineNumber++;
       try {
         _check(_lineNumber, line);
@@ -428,6 +454,20 @@ class Builder {
         if (pages.last.blocks != null && !pages.last.blocks.isEmpty
             && pages.last.blocks.last.lineEnd == null) {
           pages.last.blocks.last.lineEnd = _lineNumber;
+        }
+
+        // Find UID from metadata.
+        var uidCandidates = metadata.where((m) => m.key == UNIQUE_ID_METADATA_KEY);
+        if (uidCandidates.length == 0) {
+          WARNING("No UID defined for this egamebook. This might lead to save "
+              "data clashes. Please define 'UniqueID' in the metadata section "
+              "of the .egb file.");
+        } else if (uidCandidates.length == 1) {
+          var m = uidCandidates.single;
+          uid = m.values[0];
+        } else {
+          throw new EgbFormatException("Two or more UniqueID metadata found. "
+              "Please define only one UniqueID.");
         }
 
         for (var page in pages) {
@@ -1153,6 +1193,12 @@ class Builder {
   /// List of synopsis line numbers.
   List<int> synopsisLineNumbers;
 
+  /// The unique identifier of the book. Used for saves.
+  String uid;
+
+  /// The key used to define [uid] in .egb metadata section.
+  static const String UNIQUE_ID_METADATA_KEY = "UniqueID";
+
   /// List of pages.
   List<BuilderPage> pages;
   /// Getter returns list of all page groups.
@@ -1215,12 +1261,12 @@ class Builder {
    * in a subdirectory of the egb file's directory. This subdirectory
    * will _not_ be created and the call will fail if it doesn't exist.
    **/
-  Future<bool> writeDartFiles({String subdirectory}) {
+  Future<bool> writeDartFiles() {
     var completer = new Completer();
 
     Future.wait([
-        writeScripterFile(subdirectory: subdirectory),
-        writePresenterFiles(subdirectory: subdirectory)
+        writeScripterFile(),
+        writePresenterFiles()
     ], eagerError: true).then((_) {
       completer.complete(true);
     }).catchError((e) => completer.completeError(e));
@@ -1228,23 +1274,43 @@ class Builder {
     return completer.future;
   }
 
+  /// The path of the scripter file.
+  String scripterDartPath;
+
   /**
    * Creates the scripter implementation file. This file includes the
    * whole egamebooks content.
    */
-  Future<bool> writeScripterFile({String subdirectory}) {
+  Future<bool> writeScripterFile() {
     var completer = new Completer();
 
-    var pathToOutputDart = getExtensionPath("dart",
-          subdirectory: subdirectory);
+    var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var webDir = new Directory(pathToPresenter);
+    if (!webDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required web/ directory. It should be located in "
+        "${path.normalize(webDir.absolute.path)}."));
+    }
+    var pathToLib = path.join(pathToPresenter,
+                              HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
+    var libDir = new Directory(pathToLib);
+    if (!libDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required lib/ directory. It should be located in "
+        "${path.normalize(libDir.absolute.path)}."));
+    }
+    var pathToOutputDart = path.join(pathToLib, "${getProjectName()}.dart");
+
+    scripterDartPath = pathToOutputDart;
 
     // write the .dart file
     File dartFile = new File(pathToOutputDart);
     IOSink dartOutStream = dartFile.openWrite();
-    dartOutStream.write(implStartFile); // TODO: fix path to #import('../egb_library.dart');
+    dartOutStream.write(implStartFile);
     _writeLibImports(dartOutStream,
         relativeToPath: path.dirname(dartFile.path));
     dartOutStream.write(implStartClass);
+    writeUid(dartOutStream);
     writeDeclarations(dartOutStream, indent: 2)
     .then((_) {
       dartOutStream.write(implStartCtor);
@@ -1273,6 +1339,14 @@ class Builder {
     return completer.future;
   }
 
+  void writeUid(IOSink dartOutStream) {
+    if (uid != null) {
+      dartOutStream.writeln("  String uid = \"$uid\";");
+    } else {
+      dartOutStream.writeln("  String uid = \"DEFAULT_EGB_UID\";");
+    }
+  }
+
   /// Writes library imports into [dartOutStream].
   void _writeLibImports(IOSink dartOutStream, {String relativeToPath}) {
     assert(importLibFilesFullPaths != null);
@@ -1285,6 +1359,9 @@ class Builder {
     }
   }
 
+  /// The path of the presenter file.
+  String presenterDartPath;
+
   /**
    * Creates the presenter files. These files are the ones that run
    * the egamebook. They import the scripter file as an Isolate.
@@ -1292,35 +1369,37 @@ class Builder {
    * There are two presenters (UIs): the command line presenter (deprecated),
    * and the HTML presenter.
    */
-  Future<bool> writePresenterFiles({String subdirectory}) {
+  Future<bool> writePresenterFiles() {
     var completer = new Completer();
 
-    var scriptFilePath = Platform.script;
-    var pathToOutputDart = getExtensionPath("dart",
-        subdirectory: subdirectory);
-    var pathToOutputHtml = getExtensionPath("html.dart",
-        subdirectory: subdirectory);
+    var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
+    var presenterDir = new Directory(pathToPresenter);
+    if (!presenterDir.existsSync()) {
+      return new Future.error(new EgbFileSystemException("Couldn't find the "
+        "required web/ directory. It should be located in "
+        "${path.normalize(presenterDir.absolute.path)}."));
+    }
+    var pathToOutputHtml = path.join(pathToPresenter,
+                                     "${getProjectName()}.html.dart");
 
-    var pathToOutputDartFromOutputHtml =
-        path.relative(pathToOutputDart, from: path.dirname(pathToOutputHtml));
+    presenterDartPath = pathToOutputHtml;
 
     File htmlOutputFile = new File(pathToOutputHtml);
 
     var substitutions = {
-      "import '../runner.dart';" :
-          "import 'package:egamebook/runner.dart';\n",
-      "import 'presenter/presenter.dart';" :
-          "import 'package:egamebook/src/presenter/presenter.dart';\n",
-      "import 'presenter/presenter_cmdline.dart';" :
-          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
-      "import 'presenter/presenter_html.dart';" :
-          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
-      "import 'persistence/storage.dart';" :
-        "import 'package:egamebook/src/persistence/storage.dart';\n",
-      "import 'persistence/player_profile.dart';" :
-        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
-      "  var scripterPath = '[[PathToEgbScripterImplementation]]';" :
-          "  var scripterPath = '$pathToOutputDartFromOutputHtml';"
+//      "import '../runner.dart';" :
+//          "import 'package:egamebook/runner.dart';\n",
+//      "import 'presenter/presenter.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter.dart';\n",
+//      "import 'presenter/presenter_cmdline.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
+//      "import 'presenter/presenter_html.dart';" :
+//          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
+//      "import 'persistence/storage.dart';" :
+//        "import 'package:egamebook/src/persistence/storage.dart';\n",
+//      "import 'persistence/player_profile.dart';" :
+//        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
+      "[[NAME]]": getProjectName()
     };
 
     Future.wait([
@@ -1349,11 +1428,10 @@ class Builder {
 
     IOSink outStream = outFile.openWrite();
     template.split("\n").forEach((String line) {
-      if (substitutions.containsKey(line)) {
-        outStream.write("${substitutions[line]}\n");
-      } else {
-        outStream.write("$line\n");
-      }
+      substitutions.forEach((orig, sub) {
+        line = line.replaceAll(orig, sub);
+      });
+      outStream.write("$line\n");
     });
 
     return outStream.close();
@@ -1390,6 +1468,8 @@ class Builder {
   /// [BuilderInitBlock.BLK_DECLARE] blocks.
   Future writeDeclarations(IOSink dartOutStream, {int indent}) {
     var completer = new Completer();
+
+    dartOutStream.write(implStartLibrary);
 
     StringBuffer contents = new StringBuffer();
     copyLineRanges(
@@ -1802,15 +1882,31 @@ class Builder {
         subdirectory: subdirectory);
   }
 
-  static String getExtensionPathFromEgbPath(String egbPath, String extension,
-                                            {String subdirectory}) {
+  String getSubdirectoryPath(String subdirectory) =>
+      getSubdirectoryPathFromEgbPath(inputEgbFileFullPath,
+                                     subdirectory: subdirectory);
+
+  static String getSubdirectoryPathFromEgbPath(String egbPath,
+                                               {String subdirectory}) {
     String dirPath = path.dirname(egbPath);
     if (subdirectory != null) {
       dirPath = path.join(dirPath, subdirectory);
     }
-    return path.join(dirPath,
-        "${path.basenameWithoutExtension(egbPath)}.$extension");
+    return dirPath;
   }
+
+  static String getExtensionPathFromEgbPath(String egbPath, String extension,
+                                            {String subdirectory}) {
+    String dirPath = getSubdirectoryPathFromEgbPath(egbPath,
+        subdirectory: subdirectory);
+    return path.join(dirPath,
+        "${getProjectNameFromEgbPath(egbPath)}.$extension");
+  }
+
+  String getProjectName() => getProjectNameFromEgbPath(inputEgbFileFullPath);
+
+  static String getProjectNameFromEgbPath(String egbPath) =>
+      path.basenameWithoutExtension(egbPath);
 
   /**
    * Writes GraphML file from current Builder object.
@@ -2168,6 +2264,9 @@ import 'dart:isolate';
   final String implStartClass = """
 
 class ScripterImpl extends EgbScripter {
+""";
+
+  final String implStartLibrary = """
 
   /* LIBRARY */
 """;
@@ -2181,7 +2280,7 @@ class ScripterImpl extends EgbScripter {
 """;
 
   final String implEndPages = """
-    
+
 """;
 
   final String implEndCtor = """
@@ -2207,7 +2306,7 @@ class ScripterImpl extends EgbScripter {
 void main(List<String> args, SendPort mainIsolatePort) {
   EgbPresenterProxy presenter = new EgbIsolatePresenterProxy(mainIsolatePort);
   EgbScripter book = new ScripterImpl();
-  book.setPresenter(presenter);
+  presenter.setScripter(book);
 }
 """;
 
