@@ -21,7 +21,7 @@ main() async {
   // create the presenter
   Presenter presenter = new HtmlPresenter();
   // open storage
-  Storage storage = new LocalStorage();
+  Store storage = new LocalStorage();
   // set player profile
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
   // run

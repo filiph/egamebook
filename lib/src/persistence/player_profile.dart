@@ -24,7 +24,7 @@ class PlayerProfile {
   static const String PREFERENCES_KEY = "prefs";
 
   /// Creates new PlayerProfile with given Uid of player [playerUid] and
-  /// instance of Storage [_storage].
+  /// instance of Store [_storage].
   PlayerProfile(this.playerUid, this._storage) {
     _loadPreferences();
   }
@@ -75,8 +75,8 @@ class PlayerProfile {
   /// Updated automatically on each save.
   Queue<String> storyChronology;
 
-  /// Instance of Storage to use.
-  Storage _storage;
+  /// Instance of Store to use.
+  Store _storage;
 
   /**
    * Number of maximum savegames to keep in storage per given egamebook and player.

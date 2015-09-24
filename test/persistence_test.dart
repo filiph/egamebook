@@ -14,7 +14,7 @@ String removeWhiteSpace(String string)
 
 void main() {
   group("Memory storage", () {
-    Storage storage;
+    Store storage;
     String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 
@@ -55,7 +55,7 @@ void main() {
     test("Get default player profile", () {
       PlayerProfile profile = storage.getDefaultPlayerProfile();
       expect(profile, isNotNull);
-      expect(profile.playerUid, Storage.DEFAULT_PLAYER_UID);
+      expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });
   });
 

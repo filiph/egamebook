@@ -79,9 +79,9 @@ Future<String> build(String egbFilename) {
 
 /// Runs the built project and returns the [MockPresenter] instance.
 Future<Presenter> run(String dartFilename,
-    {Storage persistentStorage: null}) {
+    {Store persistentStorage: null}) {
   var mockPresenter = new MockPresenter(waitForChoicesToBeTaken: true);
-  Storage storage;
+  Store storage;
   if (persistentStorage != null) {
     storage = persistentStorage;
   } else {

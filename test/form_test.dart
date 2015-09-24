@@ -229,7 +229,7 @@ void main() {
     SubmitButton submitButton;
     int age, money, freetime;
     Presenter presenter;
-    Storage storage;
+    Store storage;
     ScripterProxy scripterProxyStub;
     ButtonElement startButton, restartButton;
 
@@ -777,7 +777,7 @@ void main() {
 
   group("HtmlPresenter Savegame", () {
     Presenter presenter;
-    Storage storage;
+    Store storage;
     ScripterProxy scripterProxyStub;
     Savegame savegame;
     var vars;
@@ -838,7 +838,7 @@ void main() {
 
   group("Local storage", () {
     Presenter presenter;
-    Storage storage;
+    Store storage;
     ScripterProxy scripterProxyStub;
     String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid":"1234567","currentPageName":"Start"};
@@ -888,7 +888,7 @@ void main() {
     test("Get default player profile", () {
       PlayerProfile profile = storage.getDefaultPlayerProfile();
       expect(profile, isNotNull);
-      expect(profile.playerUid, Storage.DEFAULT_PLAYER_UID);
+      expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });
   });
 

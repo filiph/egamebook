@@ -4,12 +4,12 @@ import 'dart:async';
 import 'player_profile.dart';
 
 /**
- * Storage is the abstract class that can be implemented via any kind of 
+ * Store is the abstract class that can be implemented via any kind of
  * actual storage mechanism (file i/o, HTML5 localStorage, cloud).
  * 
- * Storage is used to save and load player profile and savegames.
+ * Store is used to save and load player profile and savegames.
  */
-abstract class Storage {
+abstract class Store {
   /// Default player uid. Used for creating of a new [PlayerProfile].
   static const String DEFAULT_PLAYER_UID = "default";
 
@@ -30,7 +30,7 @@ abstract class Storage {
  * MemoryStorage is the most primitive, mock-level storage.
  * It only stores into memory (RAM), no persistence.
  */
-class MemoryStorage extends Storage {
+class MemoryStorage extends Store {
   /// Memory storage
   Map<String, String> memory;
 
