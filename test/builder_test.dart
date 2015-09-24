@@ -207,7 +207,7 @@ void main() {
 
       test("throws on unclosed tag", () async {
         expect(new Builder().readEgbFile(new File(getPath("unclosed_tag.egb"))),
-          throwsA(new isInstanceOf<FormatException>()));
+          throwsA(new isInstanceOf<BuilderFormatException>()));
       });
 
       test("multipart egb file", () {

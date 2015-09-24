@@ -20,7 +20,7 @@ import 'package:egamebook/src/cli/file_hierarchy.dart';
 /**
  * Exception thrown when the input .egb file is badly formatted.
  **/
-class FormatException implements Exception {
+class BuilderFormatException implements Exception {
   /// Message describing the exception.
   String message;
   /// Line in the file.
@@ -28,11 +28,11 @@ class FormatException implements Exception {
   /// Input file.
   File file;
 
-  /// Creates new FormatException with error [message] and optional parameters
+  /// Creates new BuilderFormatException with error [message] and optional parameters
   /// [line] and input [file].
-  FormatException(String this.message, {this.line, this.file});
+  BuilderFormatException(String this.message, {this.line, this.file});
 
-  /// Returns text describing FormatException with its [message], [line]
+  /// Returns text describing BuilderFormatException with its [message], [line]
   /// and [file] where the exception appeared.
   String toString() {
     StringBuffer strBuf = new StringBuffer();
@@ -440,7 +440,7 @@ class Builder {
       _lineNumber++;
       try {
         _check(_lineNumber, line);
-      } on FormatException catch (e) {
+      } on BuilderFormatException catch (e) {
         completer.completeError(e);
         subscription.cancel();
       }
@@ -466,7 +466,7 @@ class Builder {
           var m = uidCandidates.single;
           uid = m.values[0];
         } else {
-          throw new FormatException("Two or more UniqueID metadata found. "
+          throw new BuilderFormatException("Two or more UniqueID metadata found. "
               "Please define only one UniqueID.");
         }
 
@@ -1174,9 +1174,9 @@ class Builder {
     }
   }
 
-  /// Returns new FormatException with [msg].
-  FormatException newFormatException(String msg) {
-    return new FormatException(msg, line:_lineNumber, file:inputEgbFile);
+  /// Returns new BuilderFormatException with [msg].
+  BuilderFormatException newFormatException(String msg) {
+    return new BuilderFormatException(msg, line:_lineNumber, file:inputEgbFile);
   }
 
   /// Input file given by readFile().
