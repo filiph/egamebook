@@ -15,20 +15,20 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
-class MockPresenter extends EgbPresenter {
+class MockPresenter extends Presenter {
   Queue<int> choicesToBeTaken;
   Queue<String> choicesToBeTakenByString;
   String latestOutput;
-  EgbChoiceList _latestChoices;
+  ChoiceList _latestChoices;
   /// The choices that have been shown most recently.
-  EgbChoiceList get latestChoices => _latestChoices;
+  ChoiceList get latestChoices => _latestChoices;
   bool started = false;
   bool closed = false;
   List<UIStat> get visibleStats =>
       _statsList.where((stat) => stat.show == true).toList(growable: false);
 
   /// Choices that are being shown now.
-  EgbChoiceList _currentChoices;
+  ChoiceList _currentChoices;
   Completer<int> _currentChoicesCompleter;
 
   /// If set to [:false:] (default), when [MockPresenter] meets choices without
@@ -93,7 +93,7 @@ class MockPresenter extends EgbPresenter {
   String getTextHistory() => "Method getTextHistory() not implemented on "
                              "MockPresenter.";
 
-  Future<int> showChoices(EgbChoiceList choiceList) {
+  Future<int> showChoices(ChoiceList choiceList) {
     choiceList.forEach((choice) => _log.fine("MockPresenter choice: '${choice.string}'"));
     _latestChoices = choiceList;
     if (choicesToBeTaken.length > 0) {
@@ -120,7 +120,7 @@ class MockPresenter extends EgbPresenter {
     }
   }
 
-  int _getChoiceHashFromString(String str, EgbChoiceList list) {
+  int _getChoiceHashFromString(String str, ChoiceList list) {
     int choiceNumber = null;
     for (int i = 0; i < list.length; i++) {
       if (list[i].string == str) {
@@ -163,7 +163,7 @@ class MockPresenter extends EgbPresenter {
 
   /// Completes the future when Presenter waits for input or when the book is
   /// ended.
-  Future<EgbPresenter> waitForDone() =>
+  Future<Presenter> waitForDone() =>
     debugStream.firstWhere((value) =>
         value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
         .then((_) => this);
@@ -199,7 +199,7 @@ class MockPresenter extends EgbPresenter {
     });
   }
 
-  Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+  Future<bool> addSavegameBookmark(Savegame savegame) {
     _log.info("==> savegame created (${savegame.uid})");
     return new Future.value(true);
   }
@@ -210,7 +210,7 @@ class MockPresenter extends EgbPresenter {
   }
 
   @override
-  void save(EgbSavegame savegame) {
+  void save(Savegame savegame) {
     playerProfile.save(savegame);
   }
 

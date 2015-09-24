@@ -19,13 +19,13 @@ import 'storage.dart';
  * Allows the Runner to save and load games from/to a storage. This can be
  * memory, a file, a database, or – more specifically – HTML5 localStorage.
  */
-class EgbPlayerProfile {
+class PlayerProfile {
   /// Is used as a part of name for shared preferences key.
   static const String PREFERENCES_KEY = "prefs";
 
-  /// Creates new EgbPlayerProfile with given Uid of player [playerUid] and
-  /// instance of EgbStorage [_storage].
-  EgbPlayerProfile(this.playerUid, this._storage) {
+  /// Creates new PlayerProfile with given Uid of player [playerUid] and
+  /// instance of Storage [_storage].
+  PlayerProfile(this.playerUid, this._storage) {
     _loadPreferences();
   }
 
@@ -76,7 +76,7 @@ class EgbPlayerProfile {
   Queue<String> storyChronology;
 
   /// Instance of Storage to use.
-  EgbStorage _storage;
+  Storage _storage;
 
   /**
    * Number of maximum savegames to keep in storage per given egamebook and player.
@@ -148,7 +148,7 @@ class EgbPlayerProfile {
    * Gets rid of old savegames if there is more than [maxSaves] present in
    * the story chronology.
    */
-  Future<bool> save(EgbSavegame savegame) {
+  Future<bool> save(Savegame savegame) {
     if (storyChronology == null) {
       // We haven't retrieved savegamesChronology from the _storage yet.
       // This code goes fetch it, re-runs the save() method, then forwards the
@@ -172,8 +172,8 @@ class EgbPlayerProfile {
 
   /// Loads the savegame by [uid]. Returns [:null:] when there is
   /// no savegame with that [uid] in memory.
-  Future<EgbSavegame> load(String uid) {
-    var completer = new Completer<EgbSavegame>();
+  Future<Savegame> load(String uid) {
+    var completer = new Completer<Savegame>();
 
     _load(uid)
     .then((json) {
@@ -181,7 +181,7 @@ class EgbPlayerProfile {
         completer.complete(null);
       } else {
         // extract savegame from JSON
-        var savegame = new EgbSavegame.fromJson(json);
+        var savegame = new Savegame.fromJson(json);
         completer.complete(savegame);
       }
     });
@@ -191,7 +191,7 @@ class EgbPlayerProfile {
 
   /// Loads the most recent savegame. Returns [:null:] when there are
   /// no savegames.
-  Future<EgbSavegame> loadMostRecent() {
+  Future<Savegame> loadMostRecent() {
     if (storyChronology == null) {
       // We haven't retrieved savegamesChronology from the _storage yet.
       // This code goes fetch it, re-runs the loadMostRecent() method, then

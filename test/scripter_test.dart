@@ -78,20 +78,20 @@ Future<String> build(String egbFilename) {
 }
 
 /// Runs the built project and returns the [MockPresenter] instance.
-Future<EgbPresenter> run(String dartFilename,
-    {EgbStorage persistentStorage: null}) {
+Future<Presenter> run(String dartFilename,
+    {Storage persistentStorage: null}) {
   var mockPresenter = new MockPresenter(waitForChoicesToBeTaken: true);
-  EgbStorage storage;
+  Storage storage;
   if (persistentStorage != null) {
     storage = persistentStorage;
   } else {
     storage = new MemoryStorage();
   }
   mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-  EgbScripterProxy bookProxy =
-      new EgbIsolateScripterProxy(Uri.parse(dartFilename));
+  ScripterProxy bookProxy =
+      new IsolateScripterProxy(Uri.parse(dartFilename));
 
-  EgbSavegame lastSavegame;
+  Savegame lastSavegame;
   Set<String> playerChronology;
 
   return bookProxy.init().then((_) {
@@ -134,7 +134,7 @@ void main() {
           var mockPresenter = new MockPresenter();
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+          ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
           bookProxy.init()
               // Spawns the Isolate (if needed) and asks for BookUid
@@ -152,7 +152,7 @@ void main() {
           mockPresenter.choicesToBeTaken.addAll([0, 1, 0, 1, 0, 1]);
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+          ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           bookProxy.init().then((_) {
@@ -174,7 +174,7 @@ void main() {
               new Queue<int>.from([0, 1, 0, 1, 0, 0]);
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+          ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
@@ -197,7 +197,7 @@ void main() {
               new Queue<int>.from([0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+          ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
@@ -218,7 +218,7 @@ void main() {
           mockPresenter.choicesToBeTaken = new Queue<int>.from([0, 1, 0]);
           var storage = new MemoryStorage();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-          EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+          ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
@@ -306,7 +306,7 @@ void main() {
         mockPresenter.choicesToBeTaken = new Queue<int>.from([0]);
         var storage = new MemoryStorage();
         mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-        EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(
+        ScripterProxy bookProxy = new IsolateScripterProxy(
             Uri.parse("files/lib/scripter_test_save.dart"));
 
         bookProxy.init().then((_) {
@@ -316,7 +316,7 @@ void main() {
           return mockPresenter.endOfBookReached.first;
         }).then((_) {
           return mockPresenter.playerProfile.loadMostRecent();
-        }).then(expectAsync((EgbSavegame savegame) {
+        }).then(expectAsync((Savegame savegame) {
           expect(mockPresenter.latestOutput,
               contains("Scripter should still have all variables"));
 
@@ -343,7 +343,7 @@ void main() {
         saveableInstance.s = "Universal truth";
         saveableInstance.i = 42;
         var vars1 = {"saveable": saveableInstance, "primitive": 8};
-        var s1 = new EgbSavegame("blah", vars1, {"blah": null});
+        var s1 = new Savegame("blah", vars1, {"blah": null});
         expect(s1.vars, contains("saveable"));
         expect(s1.vars["saveable"], contains("m"));
       });

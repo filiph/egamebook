@@ -2,7 +2,7 @@ library html_main_entry_point;
 
 /// This is the basis of [:example.html.dart:]. It is the entry point of
 /// the egamebook app as implemented through [HtmlPresenter]. It's a template,
-/// to be rewritten by [EgbBuilder].
+/// to be rewritten by [Builder].
 const String HTML_ENTRY_POINT_DART_FILE = """
 import 'package:egamebook/runner.dart';
 import 'package:egamebook/presenters/html/html_presenter.dart';
@@ -15,13 +15,13 @@ import 'package:[[NAME]]/[[NAME]].dart' as book;
 /* #endif */
 
 /// This is the entry point of the egamebook app as implemented through
-/// [HtmlPresenter]. It's a template, to be rewritten by [EgbBuilder].
+/// [HtmlPresenter]. It's a template, to be rewritten by [Builder].
 
 main() async {
   // create the presenter
-  EgbPresenter presenter = new HtmlPresenter();
+  Presenter presenter = new HtmlPresenter();
   // open storage
-  EgbStorage storage = new LocalStorage();
+  Storage storage = new LocalStorage();
   // set player profile
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
   // run

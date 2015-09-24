@@ -4,8 +4,8 @@ import 'message.dart';
 import '../persistence/saveable.dart';
 
 /**
- * [StatBase] is the common interface of the [Stat] in [EgbScripter] and the
- * limited [UIStat] in [EgbPresenter].
+ * [StatBase] is the common interface of the [Stat] in [Scripter] and the
+ * limited [UIStat] in [Presenter].
  */
 abstract class StatBase {
   /// The name of the stat. Ex.: "energy".
@@ -40,7 +40,7 @@ abstract class StatBase {
 
 /**
  * Only the part of the [Stat] that can be updated during gameplay. (The rest
- * stays the same.) This is sent from [EgbScripter] to [EgbInterface].
+ * stays the same.) This is sent from [Scripter] to [EgbInterface].
  */
 class StatUpdate {
   /// Creates new StatUpdate with [show] and short [string].
@@ -114,8 +114,8 @@ class UIStat implements StatBase {
   UIStat(this.name, this.description, this.color, this.priority, this.show,
       this.notifyOnChange, this.string);
 
-  /// Gets the Map from [EgbMessage.mapContent] of the received
-  /// [EgbMessage.UPDATE_STATS] message transferred to StatUpdateCollection
+  /// Gets the Map from [Message.mapContent] of the received
+  /// [Message.UPDATE_STATS] message transferred to StatUpdateCollection
   /// [updates] via [StatUpdateCollection.fromMap] and updates the stats from it.
   ///
   /// Returns the list of the changed stats.
@@ -131,8 +131,8 @@ class UIStat implements StatBase {
     return changedStats;
   }
 
-  /// Creates and returns a list of [UIStat] objects from an EgbMessage
-  /// of type [EgbMessage.SET_STATS].
+  /// Creates and returns a list of [UIStat] objects from an Message
+  /// of type [Message.SET_STATS].
   ///
   /// The list is sorted by [priority].
   static List<UIStat> overwriteStatsListFromDataStructure(List<Map<String,
@@ -278,7 +278,7 @@ class Stat<T> implements StatBase, Saveable {
 
   /**
    * Take all Stats, and create a big data structure of them. This is for
-   * sending from [EgbScripter] to [EgbInterface].
+   * sending from [Scripter] to [EgbInterface].
    */
   static List<Map<String, Object>> createStatList() {
     List<Map<String, Object>> list = new List<Map<String, Object>>();

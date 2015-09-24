@@ -15,13 +15,13 @@ import 'package:egamebook/scripter.dart';
 
 /**
  * Does the required work to start an Isolate wrapped in an
- * [EgbIsolateScripterProxy], set it up, tie it with the provided [presenter],
+ * [IsolateScripterProxy], set it up, tie it with the provided [presenter],
  * and try to load a saved game or create a new one.
  */
-Future<EgbPresenter> runFromIsolate(String dartFilename, EgbPresenter
-    presenter, EgbStorage storage) {
+Future<Presenter> runFromIsolate(String dartFilename, Presenter
+    presenter, Storage storage) {
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
-  EgbScripterProxy bookProxy = new EgbIsolateScripterProxy(Uri.parse(
+  ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(
       dartFilename));
 
   return init(bookProxy, presenter).then((_) {
@@ -34,8 +34,8 @@ Future<EgbPresenter> runFromIsolate(String dartFilename, EgbPresenter
  * Does the required work to run it directly, set it up, tie it with the
  * provided [presenter], and try to load a saved game or create a new one.
  */
-Future<EgbPresenter> runDirectly(EgbScripterProxy bookProxy, EgbPresenter
-    presenter, EgbStorage storage) {
+Future<Presenter> runDirectly(ScripterProxy bookProxy, Presenter
+    presenter, Storage storage) {
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
   return init(bookProxy, presenter).then((_) {
     presenter.setup();
@@ -43,8 +43,8 @@ Future<EgbPresenter> runDirectly(EgbScripterProxy bookProxy, EgbPresenter
   });
 }
 
-Future<EgbPresenter> run(EgbScripter scripter, EgbPresenter presenter,
-    EgbStorage storage) {
+Future<Presenter> run(Scripter scripter, Presenter presenter,
+    Storage storage) {
   presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
   presenter.setScripter(scripter);
   presenter.setup();
@@ -53,9 +53,9 @@ Future<EgbPresenter> run(EgbScripter scripter, EgbPresenter presenter,
 }
 
 /**
- * Initializes the [EgbScripter], and ties [EgbPresenter] with it.
+ * Initializes the [Scripter], and ties [Presenter] with it.
  */
-Future<EgbPresenter> init(EgbScripterProxy bookProxy, EgbPresenter presenter) {
+Future<Presenter> init(ScripterProxy bookProxy, Presenter presenter) {
   return bookProxy.init().then((_) {
     presenter.setScripter(bookProxy);
     bookProxy.setPresenter(presenter);

@@ -13,50 +13,50 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 
 /**
- * The methods of EgbPresenter that are callable by EgbScripter (mostly through
- * a [EgbPresenterProxy], but conceivably also directly).
+ * The methods of Presenter that are callable by Scripter (mostly through
+ * a [PresenterProxy], but conceivably also directly).
  */
-abstract class EgbPresenterViewedFromScripter {
+abstract class PresenterViewedFromScripter {
   Future awardPoints(PointsAward award);
   void endBook();
   void reportError(String title, String text);
   void log(String text);
   void setStats(List<UIStat> stats);
-  Future<int> showChoices(EgbChoiceList choices);
+  Future<int> showChoices(ChoiceList choices);
   Future<bool> showText(String text);
   void updateStats(StatUpdateCollection updates);
   void savePlayerChronology(Set<String> playerChronology);
-  void save(EgbSavegame savegame);
+  void save(Savegame savegame);
   Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
 
   /// Instance of Scripter.
-  EgbScripter scripter;
+  Scripter scripter;
   /// Sets scripter to [scripter].
-  void setScripter(EgbScripter scripter);
+  void setScripter(Scripter scripter);
 }
 
 /**
  * A proxy/view of the Presenter that has methods callable from Scripter.
  * It has direct access to the Scripter object.
  */
-abstract class EgbPresenterProxy extends EgbPresenterViewedFromScripter {
+abstract class PresenterProxy extends PresenterViewedFromScripter {
 
 }
 
 /**
  * The proxy that deals with Presenter in another Isolate.
  */
-class EgbIsolatePresenterProxy extends EgbPresenterProxy {
+class IsolatePresenterProxy extends PresenterProxy {
   /// Port of the calling Isolate.
   SendPort mainIsolatePort;
 
   /// Own port for receiving messages from main Isolate.
   ReceivePort port;
 
-  /// Creates new EgbIsolatePresenterProxy with provided [mainIsolatePort] used
+  /// Creates new IsolatePresenterProxy with provided [mainIsolatePort] used
   /// for sending messages.
-  EgbIsolatePresenterProxy(this.mainIsolatePort) {
+  IsolatePresenterProxy(this.mainIsolatePort) {
     assert(mainIsolatePort != null);
     port = new ReceivePort();
     port.listen(_onMessageFromMainIsolate);
@@ -64,80 +64,80 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   }
 
   /// Sets scripter to [scripterProxy].
-  EgbScripter scripter;
-  void setScripter(EgbScripter scripter) {
+  Scripter scripter;
+  void setScripter(Scripter scripter) {
     this.scripter = scripter;
     scripter.setPresenter(this);
   }
 
   /// Called when message from main Isolate is received.
-  /// The received message has to be instance of [Map]. The [EgbMessage]
+  /// The received message has to be instance of [Map]. The [Message]
   /// is then created from a given Map and according to its type the
   /// functionality is run.
   void _onMessageFromMainIsolate(Object _message) {
     // Convert primitive Map to message.
     assert(_message is Map);
     Map<String, Object> messageMap = _message as Map<String, Object>;
-    EgbMessage message = new EgbMessage.fromMap(messageMap);
+    Message message = new Message.fromMap(messageMap);
 
     // Handle low-level messages, and either answer them directly, or forward
     // their substance to Scripter.
     switch (message.type) {
-      case EgbMessage.QUIT:
+      case Message.QUIT:
         // Just close the book, no need to answer.
         if (_choiceSelectedCompleter != null) {
           _choiceSelectedCompleter.completeError(
-              new EgbAsyncOperationOverridenException("Book Quit before choice "
+              new AsyncOperationOverridenException("Book Quit before choice "
                   "was selected."));
           _choiceSelectedCompleter = null;
         }
         port.close();
         return;
-      case EgbMessage.REQUEST_BOOK_UID:
+      case Message.REQUEST_BOOK_UID:
         // Identify this egamebook by UID.
         // TODO: get UID from meta information
         DEBUG_SCR("GET_BOOK_UID received.");
-        _send(new EgbMessage.bookUid(scripter.uid));
+        _send(new Message.bookUid(scripter.uid));
         return;
-      case EgbMessage.CHOICE_SELECTED:
+      case Message.CHOICE_SELECTED:
         int choiceHash = message.intContent;
         assert(_choiceSelectedCompleter != null);
         _choiceSelectedCompleter.complete(choiceHash);
         _choiceSelectedCompleter = null;
         return;
-      case EgbMessage.FORM_INPUT:
+      case Message.FORM_INPUT:
         DEBUG_SCR("New form state from player received.");
         CurrentState state = new CurrentState.fromMap(message.mapContent);
         _formInputStreamController.add(state);
         return;
-      case EgbMessage.START:
+      case Message.START:
         DEBUG_SCR("Starting book from scratch.");
         if (_choiceSelectedCompleter != null) {
           _choiceSelectedCompleter.completeError(
-              new EgbAsyncOperationOverridenException("Book Restart before "
+              new AsyncOperationOverridenException("Book Restart before "
                   "choice was selected."));
           _choiceSelectedCompleter = null;
         }
         try {
           scripter.restart();
         } catch (e, stacktrace) {
-          _send(new EgbMessage.scripterError(
+          _send(new Message.scripterError(
               "An error occured when initializing: $e.\n" "$stacktrace"));
           throw e;
         }
-        _send(new EgbMessage.statsInit(Stat.createStatList()));
+        _send(new Message.statsInit(Stat.createStatList()));
         _send(new PointsAward(0, 0).toMessage());
         return;
-      case EgbMessage.LOAD_GAME:
+      case Message.LOAD_GAME:
         DEBUG_SCR("Loading a saved game.");
         if (_choiceSelectedCompleter != null) {
           _choiceSelectedCompleter.completeError(
-              new EgbAsyncOperationOverridenException("Book Load before choice "
+              new AsyncOperationOverridenException("Book Load before choice "
                   "was selected."));
           _choiceSelectedCompleter = null;
         }
         try {
-          var savegame = new EgbSavegame.fromMessage(message);
+          var savegame = new Savegame.fromMessage(message);
           var playerChronology = message.listContent.toSet();
           if (playerChronology != null) {
             scripter.load(savegame, playerChronology);
@@ -146,26 +146,26 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
           }
         } on IncompatibleSavegameException catch (e, stacktrace) {
           // don't
-          _send(new EgbMessage.scripterError(
+          _send(new Message.scripterError(
               "Load failed due to incompatibility: $e.\n" "$stacktrace"));
           scripter.restart();
         } catch (e, stacktrace) {
           // XXX: get rid of this once all possible errors are encapsulated in SavegameExpceptions?
-          _send(new EgbMessage.scripterError(
+          _send(new Message.scripterError(
               "Load failed for unknown reason: $e.\n" "$stacktrace"));
           scripter.restart();
         }
         try {
-          _send(new EgbMessage.statsInit(Stat.createStatList()));
+          _send(new Message.statsInit(Stat.createStatList()));
         } catch (e, stacktrace) {
-          _send(new EgbMessage.scripterError(
+          _send(new Message.scripterError(
               "Sending Stats failed for unknown reason: $e.\n" "$stacktrace"));
           throw e;
         }
         int pointSum = scripter.getPoints().sum;
         _send(new PointsAward(0, pointSum).toMessage());
         return;
-      case EgbMessage.PROCEED:
+      case Message.PROCEED:
         // Solve backlog. TODO: do better or drop completely
         if (_messageBacklog != null) {
           _send(_messageBacklog);
@@ -175,34 +175,34 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
         scripter.walk();
         return;
       default:
-        _send(new EgbMessage.scripterError("Wrong message type received by "
+        _send(new Message.scripterError("Wrong message type received by "
             "Scripter - ${message.type}."));
-//        throw new EgbMessageException("Wrong message type received by "
+//        throw new MessageException("Wrong message type received by "
 //            "Scripter - ${message.type}.");
     }
   }
 
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
-  final List<EgbMessage> _textMessageCache = new List<EgbMessage>();
+  final List<Message> _textMessageCache = new List<Message>();
   /// Message backglog. TODO solve.
-  EgbMessage _messageBacklog; // TODO: get rid of this (no ZipMessage!)
+  Message _messageBacklog; // TODO: get rid of this (no ZipMessage!)
 
   /**
-   * Utility function [_send] sends [EgbMessage] message as a [Map] representation
+   * Utility function [_send] sends [Message] message as a [Map] representation
    * through the [mainIsolatePort] to the Scripter proxy.
    */
-  void _send(EgbMessage message) {
+  void _send(Message message) {
     mainIsolatePort.send(message.toMap());
 //    if (message.isAsync) {
 //      //DEBUG_SCR("Sending nonText async message (${message.type})");
 //      mainIsolatePort.send(message.toMap());
 //      return;
 //    }
-//    if (message.type == EgbMessage.TEXT_RESULT) {
+//    if (message.type == Message.TEXT_RESULT) {
 //      // Put text result into the _textMessageCache.
 //      if (message.strContent != "") _textMessageCache.add(message);
-//      mainIsolatePort.send(new EgbMessage.NoResult().toMap());
+//      mainIsolatePort.send(new Message.noResult().toMap());
 //      // TODO: this is here just because we need to keep the loop going – get rid of it
 //    } else if (_textMessageCache.isEmpty) {
 //      DEBUG_SCR("Sending nonText message ($message)");
@@ -217,7 +217,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
 //        if (stringBuffer.isNotEmpty) stringBuffer.write("\n\n");
 //        stringBuffer.write(_textMessageCache.removeAt(0).strContent);
 //      }
-//      var zipMessage = new EgbMessage.TextResult(stringBuffer.toString());
+//      var zipMessage = new Message.textResult(stringBuffer.toString());
 //      DEBUG_SCR("Sending a zip message ($zipMessage)");
 //      mainIsolatePort.send(zipMessage.toMap());
 //      DEBUG_SCR("Adding message ($message) to the backlog.");
@@ -236,48 +236,48 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// Sends end of book message to Scripter proxy.
   @override
   void endBook() {
-    _send(new EgbMessage.endOfBook());
+    _send(new Message.endOfBook());
   }
 
   /// Sends scripter error message with provided [title] and [text]
   /// to Scripter proxy.
   @override
   void reportError(String title, String text) {
-    _send(new EgbMessage.scripterError("$title: $text"));
+    _send(new Message.scripterError("$title: $text"));
     // TODO: Should close port!?
   }
 
   /// Sends scripter log message with provided [text] to Scripter.
   @override
   void log(String text) {
-    _send(new EgbMessage.scripterLog(text));
+    _send(new Message.scripterLog(text));
   }
 
   /// Sends save player chronology message from provided [playerChronology]
   /// to Scripter proxy.
   @override
   void savePlayerChronology(Set<String> playerChronology) {
-    _send(new EgbMessage.savePlayerChronology(playerChronology));
+    _send(new Message.savePlayerChronology(playerChronology));
   }
 
   /// Sends set stats message from provided List of UIStat [stats]
   /// to Scripter proxy.
   @override
   void setStats(List<UIStat> stats) {
-    _send(new EgbMessage.statsInit(Stat.createStatList()));
+    _send(new Message.statsInit(Stat.createStatList()));
   }
 
   /// Completer for showing of choices.
   Completer<int> _choiceSelectedCompleter;
 
-  /// Sends show choices message from provided EgbChoiceList [choices]
+  /// Sends show choices message from provided ChoiceList [choices]
   /// to Scripter proxy.
   @override
-  Future<int> showChoices(EgbChoiceList choices) {
+  Future<int> showChoices(ChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
     if (_choiceSelectedCompleter != null) {
       _choiceSelectedCompleter.completeError(
-          new EgbAsyncOperationOverridenException("Showing new "
+          new AsyncOperationOverridenException("Showing new "
           "choice before previous one was selected."));
       _choiceSelectedCompleter = null;
     }
@@ -289,24 +289,24 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   /// Sends text result message from provided [text] to Scripter proxy.
   @override
   Future<bool> showText(String text) {
-    _send(new EgbMessage.textResult(text));
+    _send(new Message.textResult(text));
     return new Future.value(); // TODO: wait for presenter to return
-    //       EgbMessage.TEXT_SHOWN
+    //       Message.TEXT_SHOWN
   }
 
   /// Sends update stats message from provided StatUpdateCollection [updates]
   /// to Scripter proxy.
   @override
   Future<bool> updateStats(StatUpdateCollection updates) {
-    _send(new EgbMessage.statUpdates(updates));
+    _send(new Message.statUpdates(updates));
     return new Future.value(true);
   }
 
-  /// Sends save game message from provided EgbSavegame [savegame]
+  /// Sends save game message from provided Savegame [savegame]
   /// to Scripter proxy.
   @override
-  void save(EgbSavegame savegame) {
-    _send(savegame.toMessage(EgbMessage.SAVE_GAME));
+  void save(Savegame savegame) {
+    _send(savegame.toMessage(Message.SAVE_GAME));
   }
 
   /// Sends debug [message].
@@ -323,7 +323,7 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   Stream<CurrentState> showForm(FormBase form) {
     DEBUG_SCR("Scripter asks to show form.");
     _formInputStreamController = new StreamController<CurrentState>();
-    _send(new EgbMessage.showForm(form));
+    _send(new Message.showForm(form));
     return _formInputStreamController.stream;
   }
 
@@ -332,20 +332,20 @@ class EgbIsolatePresenterProxy extends EgbPresenterProxy {
   @override
   void updateForm(FormConfiguration values) {
     DEBUG_SCR("Scripter sends newly updated values.");
-    _send(new EgbMessage.updateForm(values));
+    _send(new Message.updateForm(values));
   }
 }
 
-/// EgbAsyncOperationOverridenException wraps around exceptions that are
+/// AsyncOperationOverridenException wraps around exceptions that are
 /// generated when some event happens before expected operation.
 ///
 /// For example Book Quit before choice was selected.
-class EgbAsyncOperationOverridenException implements Exception {
+class AsyncOperationOverridenException implements Exception {
   /// Message describing the exception.
   final String message;
-  /// Creates new EgbAsyncOperationOverridenException with error [message].
-  const EgbAsyncOperationOverridenException(this.message);
-  /// Returns text describing EgbAsyncOperationOverridenException with its
+  /// Creates new AsyncOperationOverridenException with error [message].
+  const AsyncOperationOverridenException(this.message);
+  /// Returns text describing AsyncOperationOverridenException with its
   /// [message].
-  String toString() => "EgbAsyncOperationOverridenException: $message.";
+  String toString() => "AsyncOperationOverridenException: $message.";
 }

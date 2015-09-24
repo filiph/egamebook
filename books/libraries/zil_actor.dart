@@ -128,7 +128,7 @@ class ZilPlayer extends ZilActor {
     // Exits from the room.
     location.exits.forEach((exit) {
       exit.createChoiceForPlayer(_zil, this);
-      // TODO: gather the [EgbChoice]s first. This will allow for first checking
+      // TODO: gather the [Choice]s first. This will allow for first checking
       //       whether the destination room even allows for any action (except
       //       going back to the origin), in which case that option might not
       //       be even shown.

@@ -7,7 +7,7 @@ import 'package:egamebook/src/book/scripter_typedefs.dart';
 import 'package:egamebook/scripter.dart'
     show
         CheckboxInput,
-        EgbScripter,
+        Scripter,
         Form,
         FormElement,
         PointsCounter,
@@ -750,7 +750,7 @@ class BodegaZil {
 
   AIActor gorilla;
 
-  // Pointers to EgbScripter objects and functions.
+  // Pointers to Scripter objects and functions.
   final Zil zil;
   final GotoFunction goto;
   final EchoFunction echo;

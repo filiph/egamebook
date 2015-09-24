@@ -9,8 +9,8 @@ import 'player_profile.dart';
  * 
  * Storage is used to save and load player profile and savegames.
  */
-abstract class EgbStorage {
-  /// Default player uid. Used for creating of a new [EgbPlayerProfile].
+abstract class Storage {
+  /// Default player uid. Used for creating of a new [PlayerProfile].
   static const String DEFAULT_PLAYER_UID = "default";
 
   /// Saves the [value] under [key] to the storage.
@@ -20,9 +20,9 @@ abstract class EgbStorage {
   /// Deletes value under [key] from the storage.
   Future<bool> delete(String key);
 
-  /// Returns default player [EgbPlayerProfile] for the storage.
-  EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(DEFAULT_PLAYER_UID, this);
+  /// Returns default player [PlayerProfile] for the storage.
+  PlayerProfile getDefaultPlayerProfile() {
+    return new PlayerProfile(DEFAULT_PLAYER_UID, this);
   }
 }
 
@@ -30,7 +30,7 @@ abstract class EgbStorage {
  * MemoryStorage is the most primitive, mock-level storage.
  * It only stores into memory (RAM), no persistence.
  */
-class MemoryStorage extends EgbStorage {
+class MemoryStorage extends Storage {
   /// Memory storage
   Map<String, String> memory;
 

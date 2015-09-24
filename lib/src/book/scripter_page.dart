@@ -2,10 +2,10 @@ part of egb_scripter;
 
 
 /**
- * In the context of [EgbScripter], we also have the actual data + logic of
+ * In the context of [Scripter], we also have the actual data + logic of
  * the page in the [blocks] list.
  */
-class EgbScripterPage extends EgbPage {
+class ScripterPage extends Page {
   /// The text and/or logic of each block inside this page.
   final List blocks;
 
@@ -15,12 +15,12 @@ class EgbScripterPage extends EgbPage {
   bool get visited => visitCount > 0;
 
   /**
-   * Creates new EgbScripterPage and takes only blocks List, and optionally
+   * Creates new ScripterPage and takes only blocks List, and optionally
    * page options. Page options are [visitOnce] and [showOnce].
    *
-   * Name is copied from Map key when added to [EgbScripterPageMap].
+   * Name is copied from Map key when added to [ScripterPageMap].
    */
-  EgbScripterPage(
+  ScripterPage(
       this.blocks,
       {bool visitOnce: false, bool showOnce: false}) :
         super(visitOnce: visitOnce, showOnce: showOnce);
@@ -30,32 +30,32 @@ class EgbScripterPage extends EgbPage {
  * Class used to store information about an exact point in the book -- page and
  * block. 
  */
-class EgbScripterBlockPointer {
+class ScripterBlockPointer {
   /// Scripter page.
-  final EgbScripterPage page;
+  final ScripterPage page;
   /// Block index.
   final int blockIndex;
 
-  /// Creates new EgbScripterBlockPointer with [page] and [blockIndex].
-  EgbScripterBlockPointer(this.page, this.blockIndex); 
+  /// Creates new ScripterBlockPointer with [page] and [blockIndex].
+  ScripterBlockPointer(this.page, this.blockIndex);
 }
 
 /**
- * [EgbScripterPageMap] is the container for the whole of the text and logic
+ * [ScripterPageMap] is the container for the whole of the text and logic
  * content of each book.
  *
- * It contains a Map of [EgbScripterPage]s which are accessible through
+ * It contains a Map of [ScripterPage]s which are accessible through
  * their names.
  */
-class EgbScripterPageMap {
+class ScripterPageMap {
   /// A Map of page name -> page object.
-  final Map<String, EgbScripterPage> pages = new Map<String, EgbScripterPage>();
+  final Map<String, ScripterPage> pages = new Map<String, ScripterPage>();
 
-  /// Creates new EgbScripterPageMap.
-  EgbScripterPageMap();
+  /// Creates new ScripterPageMap.
+  ScripterPageMap();
 
   /// Returns page of exactly the name [key].
-  EgbScripterPage operator [](String key) => pages[key];
+  ScripterPage operator [](String key) => pages[key];
 
   /**
    * Returns page with name [name]. If [currentGroupName] is given, then 
@@ -63,7 +63,7 @@ class EgbScripterPageMap {
    *
    * Returns [:null:] if there is no page of any compatible name.
    */
-  EgbScripterPage getPage(String name, {String currentGroupName: null}) {
+  ScripterPage getPage(String name, {String currentGroupName: null}) {
     if (currentGroupName != null &&
         pages.containsKey(_getCurrentGroupName(name, currentGroupName))) {
       return pages[_getCurrentGroupName(name, currentGroupName)];
@@ -78,9 +78,9 @@ class EgbScripterPageMap {
   String _getCurrentGroupName(String name, String currentGroupName) 
       => "$currentGroupName: $name";
 
-  /// Saves EgbScripterPage [newPage] on [key] to the Map of [pages].
+  /// Saves ScripterPage [newPage] on [key] to the Map of [pages].
   /// Also sets a [key] as a name for the given page.
-  operator []=(String key, EgbScripterPage newPage) {
+  operator []=(String key, ScripterPage newPage) {
     pages[key] = newPage;
     // Copy the "key" to the name of the page. This is here so that we don't
     // need to duplicate the page name in the scripter data.
@@ -111,7 +111,7 @@ class EgbScripterPageMap {
   /**
    * Clears play state of the page map. (Play state is the data that change
    * while the egamebook is played by the player, e.g. the 
-   * [EgbScripterPage.visitCount] of every page. The actual texts and scripts 
+   * [ScripterPage.visitCount] of every page. The actual texts and scripts
    * stay.)
    * 
    * Useful when restarting an egamebook from scratch.
