@@ -53,14 +53,14 @@ class FormatException implements Exception {
  * Exception thrown when there is an unrecoverable problem with the file system.
  * For example, a missing directory that really should be there.
  **/
-class FileSystemException implements Exception {
+class BuilderFileSystemException implements Exception {
   /// Message describing the exception.
   final String message;
 
-  /// Creates new FileSystemException with error [message].
-  FileSystemException(String this.message);
+  /// Creates new BuilderFileSystemException with error [message].
+  BuilderFileSystemException(String this.message);
 
-  /// Returns text describing FileSystemException with its [message].
+  /// Returns text describing BuilderFileSystemException with its [message].
   String toString() => message;
 }
 
@@ -1287,7 +1287,7 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var webDir = new Directory(pathToPresenter);
     if (!webDir.existsSync()) {
-      return new Future.error(new FileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required web/ directory. It should be located in "
         "${path.normalize(webDir.absolute.path)}."));
     }
@@ -1295,7 +1295,7 @@ class Builder {
                               HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
     var libDir = new Directory(pathToLib);
     if (!libDir.existsSync()) {
-      return new Future.error(new FileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required lib/ directory. It should be located in "
         "${path.normalize(libDir.absolute.path)}."));
     }
@@ -1375,7 +1375,7 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var presenterDir = new Directory(pathToPresenter);
     if (!presenterDir.existsSync()) {
-      return new Future.error(new FileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required web/ directory. It should be located in "
         "${path.normalize(presenterDir.absolute.path)}."));
     }
