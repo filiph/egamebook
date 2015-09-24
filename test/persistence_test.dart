@@ -14,29 +14,29 @@ String removeWhiteSpace(String string)
 
 void main() {
   group("Memory storage", () {
-    Store storage;
+    Store store;
     String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 
     setUp(() {
-      storage = new MemoryStorage();
+      store = new MemoryStorage();
     });
 
     test("Save", () {
-      expect(storage.memory, isNotNull);
+      expect(store.memory, isNotNull);
 
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
-        String valuesFromStorage = storage.memory[STORAGE_NAME];
+        String valuesFromStorage = store.memory[STORAGE_NAME];
         expect(valuesFromStorage, isNotNull);
         expect(JSON.decode(valuesFromStorage), values);
       }));
     });
 
     test("Save and load", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
           expect(valueFromStorage, isNotNull);
           expect(JSON.decode(valueFromStorage), values);
         }));
@@ -44,16 +44,16 @@ void main() {
     });
 
     test("Delete", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORAGE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
-          expect(storage.memory[STORAGE_NAME], isNull);
+          expect(store.memory[STORAGE_NAME], isNull);
         }));
       }));
     });
 
     test("Get default player profile", () {
-      PlayerProfile profile = storage.getDefaultPlayerProfile();
+      PlayerProfile profile = store.getDefaultPlayerProfile();
       expect(profile, isNotNull);
       expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });

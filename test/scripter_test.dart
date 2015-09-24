@@ -79,15 +79,15 @@ Future<String> build(String egbFilename) {
 
 /// Runs the built project and returns the [MockPresenter] instance.
 Future<Presenter> run(String dartFilename,
-    {Store persistentStorage: null}) {
+    {Store persistentStore: null}) {
   var mockPresenter = new MockPresenter(waitForChoicesToBeTaken: true);
-  Store storage;
-  if (persistentStorage != null) {
-    storage = persistentStorage;
+  Store store;
+  if (persistentStore != null) {
+    store = persistentStore;
   } else {
-    storage = new MemoryStorage();
+    store = new MemoryStorage();
   }
-  mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+  mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy =
       new IsolateScripterProxy(Uri.parse(dartFilename));
 
@@ -353,13 +353,13 @@ void main() {
         String mainPath;
         build("scripter_test_alternate_6.egb").then((path) {
           mainPath = path;
-          return run(mainPath, persistentStorage: storage);
+          return run(mainPath, persistentStore: storage);
         }).then((MockPresenter ui) {
           ui.choicesToBeTaken = new Queue<int>.from([0, 1, 0, 1, 1]);
           return ui.waitForDone();
         }).then((MockPresenter ui) {
           ui.quit();
-          return run(mainPath, persistentStorage: storage);
+          return run(mainPath, persistentStore: storage);
         }).then((MockPresenter ui) {
           ui.choicesToBeTaken = new Queue<int>.from([1, 1, 1, 1, 1, 1, 1]);
           return ui.waitForDone();
@@ -375,13 +375,13 @@ void main() {
         var mainPath;
         build("scriptchoices.egb").then((path) {
           mainPath = path;
-          return run(mainPath, persistentStorage: storage);
+          return run(mainPath, persistentStore: storage);
         }).then((MockPresenter ui) {
           ui.choose("Live!");
           return ui.waitForDone();
         }).then((MockPresenter ui) {
           ui.quit();
-          return run(mainPath, persistentStorage: storage);
+          return run(mainPath, persistentStore: storage);
         }).then((MockPresenter ui) {
           return ui.waitForDone();
         }).then(expectAsync((MockPresenter ui) {

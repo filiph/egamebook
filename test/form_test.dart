@@ -229,7 +229,7 @@ void main() {
     SubmitButton submitButton;
     int age, money, freetime;
     Presenter presenter;
-    Store storage;
+    Store store;
     ScripterProxy scripterProxyStub;
     ButtonElement startButton, restartButton;
 
@@ -267,10 +267,10 @@ void main() {
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
       presenter = new HtmlPresenter();
-      storage = new MemoryStorage();
+      store = new MemoryStorage();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -777,7 +777,7 @@ void main() {
 
   group("HtmlPresenter Savegame", () {
     Presenter presenter;
-    Store storage;
+    Store store;
     ScripterProxy scripterProxyStub;
     Savegame savegame;
     var vars;
@@ -797,10 +797,10 @@ void main() {
       savegame = new Savegame("Start", vars, pageMapState);
 
       presenter = new HtmlPresenter();
-      storage = new LocalStorage();
+      store = new LocalStorage();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -838,17 +838,17 @@ void main() {
 
   group("Local storage", () {
     Presenter presenter;
-    Store storage;
+    Store store;
     ScripterProxy scripterProxyStub;
     String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid":"1234567","currentPageName":"Start"};
 
     setUp(() {
       presenter = new HtmlPresenter();
-      storage = new LocalStorage();
+      store = new LocalStorage();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -857,7 +857,7 @@ void main() {
     });
 
     test("Save", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
         // We use HTML local storage implementation to retrieve value
@@ -868,8 +868,8 @@ void main() {
     });
 
     test("Save and load", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
           expect(valueFromStorage, isNotNull);
           expect(JSON.decode(valueFromStorage), values);
         }));
@@ -877,8 +877,8 @@ void main() {
     });
 
     test("Delete", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORAGE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
           expect(window.localStorage[STORAGE_NAME], isNull);
         }));
@@ -886,7 +886,7 @@ void main() {
     });
 
     test("Get default player profile", () {
-      PlayerProfile profile = storage.getDefaultPlayerProfile();
+      PlayerProfile profile = store.getDefaultPlayerProfile();
       expect(profile, isNotNull);
       expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });

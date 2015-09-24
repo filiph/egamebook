@@ -19,8 +19,8 @@ import 'package:egamebook/scripter.dart';
  * and try to load a saved game or create a new one.
  */
 Future<Presenter> runFromIsolate(String dartFilename, Presenter
-    presenter, Store storage) {
-  presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+    presenter, Store store) {
+  presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(
       dartFilename));
 
@@ -35,8 +35,8 @@ Future<Presenter> runFromIsolate(String dartFilename, Presenter
  * provided [presenter], and try to load a saved game or create a new one.
  */
 Future<Presenter> runDirectly(ScripterProxy bookProxy, Presenter
-    presenter, Store storage) {
-  presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+    presenter, Store store) {
+  presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   return init(bookProxy, presenter).then((_) {
     presenter.setup();
     presenter.continueSavedGameOrCreateNew();
@@ -44,8 +44,8 @@ Future<Presenter> runDirectly(ScripterProxy bookProxy, Presenter
 }
 
 Future<Presenter> run(Scripter scripter, Presenter presenter,
-    Store storage) {
-  presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+    Store store) {
+  presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   presenter.setScripter(scripter);
   presenter.setup();
   presenter.continueSavedGameOrCreateNew();
