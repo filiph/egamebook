@@ -1574,12 +1574,12 @@ abstract class MetaElement {
 typedef void Action();
 
 /**
- * LocalStorage is the HTML5 implementation of Store (only runs in
+ * LocalStorageStore is the HTML5 implementation of Store (only runs in
  * [HtmlPresenter]).
  *
  * TODO: either use lawndart or make the following more robust.
  */
-class LocalStorage extends Store {
+class LocalStorageStore extends Store {
   /// Saves [value] on [key] into local storage.
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;

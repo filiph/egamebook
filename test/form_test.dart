@@ -797,7 +797,7 @@ void main() {
       savegame = new Savegame("Start", vars, pageMapState);
 
       presenter = new HtmlPresenter();
-      store = new LocalStorage();
+      store = new LocalStorageStore();
       scripterProxyStub = new ScripterProxyStub();
 
       return runDirectly(scripterProxyStub, presenter, store);
@@ -845,7 +845,7 @@ void main() {
 
     setUp(() {
       presenter = new HtmlPresenter();
-      store = new LocalStorage();
+      store = new LocalStorageStore();
       scripterProxyStub = new ScripterProxyStub();
 
       return runDirectly(scripterProxyStub, presenter, store);
