@@ -20,15 +20,15 @@ import 'package:[[NAME]]/[[NAME]].dart' as book;
 main() async {
   // create the presenter
   Presenter presenter = new HtmlPresenter();
-  // open storage
-  Store storage = new LocalStorageStore();
+  // open store
+  Store store = new LocalStorageStore();
   // set player profile
-  presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+  presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   // run
   /* #if RELEASE *//*
   var _ = await book.loadLibrary();
   *//* #endif */
-  run(new book.ScripterImpl(), presenter, storage);
+  run(new book.ScripterImpl(), presenter, store);
 }
 """;
 

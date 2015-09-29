@@ -836,11 +836,11 @@ void main() {
     });
   });
 
-  group("Local storage", () {
+  group("Local storage store", () {
     Presenter presenter;
     Store store;
     ScripterProxy scripterProxyStub;
-    String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
+    String STORE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid":"1234567","currentPageName":"Start"};
 
     setUp(() {
@@ -857,30 +857,30 @@ void main() {
     });
 
     test("Save", () {
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
         // We use HTML local storage implementation to retrieve value
-        String valuesFromStorage = window.localStorage[STORAGE_NAME];
-        expect(valuesFromStorage, isNotNull);
-        expect(JSON.decode(valuesFromStorage), values);
+        String valuesFromStore = window.localStorage[STORE_NAME];
+        expect(valuesFromStore, isNotNull);
+        expect(JSON.decode(valuesFromStore), values);
       }));
     });
 
     test("Save and load", () {
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
-          expect(valueFromStorage, isNotNull);
-          expect(JSON.decode(valueFromStorage), values);
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+          expect(valueFromStore, isNotNull);
+          expect(JSON.decode(valueFromStore), values);
         }));
       }));
     });
 
     test("Delete", () {
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
-          expect(window.localStorage[STORAGE_NAME], isNull);
+          expect(window.localStorage[STORE_NAME], isNull);
         }));
       }));
     });

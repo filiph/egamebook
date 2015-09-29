@@ -13,9 +13,9 @@ String removeWhiteSpace(String string)
   => string.replaceAll(new RegExp(r"\s+"), "");
 
 void main() {
-  group("Memory storage", () {
+  group("Memory store", () {
     Store store;
-    String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
+    String STORE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 
     setUp(() {
@@ -25,29 +25,29 @@ void main() {
     test("Save", () {
       expect(store.memory, isNotNull);
 
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
-        String valuesFromStorage = store.memory[STORAGE_NAME];
-        expect(valuesFromStorage, isNotNull);
-        expect(JSON.decode(valuesFromStorage), values);
+        String valuesFromStore = store.memory[STORE_NAME];
+        expect(valuesFromStore, isNotNull);
+        expect(JSON.decode(valuesFromStore), values);
       }));
     });
 
     test("Save and load", () {
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
-          expect(valueFromStorage, isNotNull);
-          expect(JSON.decode(valueFromStorage), values);
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+          expect(valueFromStore, isNotNull);
+          expect(JSON.decode(valueFromStore), values);
         }));
       }));
     });
 
     test("Delete", () {
-      store.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
-          expect(store.memory[STORAGE_NAME], isNull);
+          expect(store.memory[STORE_NAME], isNull);
         }));
       }));
     });
