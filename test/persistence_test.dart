@@ -19,7 +19,7 @@ void main() {
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 
     setUp(() {
-      store = new MemoryStorage();
+      store = new MemoryStore();
     });
 
     test("Save", () {

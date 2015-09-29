@@ -267,7 +267,7 @@ void main() {
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
       presenter = new HtmlPresenter();
-      store = new MemoryStorage();
+      store = new MemoryStore();
       scripterProxyStub = new ScripterProxyStub();
 
       return runDirectly(scripterProxyStub, presenter, store);

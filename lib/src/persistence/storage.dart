@@ -27,15 +27,15 @@ abstract class Store {
 }
 
 /**
- * MemoryStorage is the most primitive, mock-level storage.
+ * MemoryStore is the most primitive, mock-level storage.
  * It only stores into memory (RAM), no persistence.
  */
-class MemoryStorage extends Store {
+class MemoryStore extends Store {
   /// Memory storage
   Map<String, String> memory;
 
-  /// Creates new MemoryStorage.
-  MemoryStorage() {
+  /// Creates new MemoryStore.
+  MemoryStore() {
     memory = new Map();
   }
 

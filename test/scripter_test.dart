@@ -85,7 +85,7 @@ Future<Presenter> run(String dartFilename,
   if (persistentStore != null) {
     store = persistentStore;
   } else {
-    store = new MemoryStorage();
+    store = new MemoryStore();
   }
   mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy =
@@ -132,7 +132,7 @@ void main() {
 
         test("runner initial values correct", () {
           var mockPresenter = new MockPresenter();
-          var storage = new MemoryStorage();
+          var storage = new MemoryStore();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
@@ -150,7 +150,7 @@ void main() {
         test("walks through when it should", () {
           var mockPresenter = new MockPresenter();
           mockPresenter.choicesToBeTaken.addAll([0, 1, 0, 1, 0, 1]);
-          var storage = new MemoryStorage();
+          var storage = new MemoryStore();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
@@ -172,7 +172,7 @@ void main() {
           var mockPresenter = new MockPresenter();
           mockPresenter.choicesToBeTaken =
               new Queue<int>.from([0, 1, 0, 1, 0, 0]);
-          var storage = new MemoryStorage();
+          var storage = new MemoryStore();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
@@ -195,7 +195,7 @@ void main() {
           var mockPresenter = new MockPresenter();
           mockPresenter.choicesToBeTaken =
               new Queue<int>.from([0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-          var storage = new MemoryStorage();
+          var storage = new MemoryStore();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
@@ -216,7 +216,7 @@ void main() {
         test("custom classes from libraries work", () {
           var mockPresenter = new MockPresenter();
           mockPresenter.choicesToBeTaken = new Queue<int>.from([0, 1, 0]);
-          var storage = new MemoryStorage();
+          var storage = new MemoryStore();
           mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
               Uri.parse("files/lib/scripter_test_alternate_6.dart"));
@@ -304,7 +304,7 @@ void main() {
       test("works for saveables and doesn't for non-saveables", () {
         var mockPresenter = new MockPresenter();
         mockPresenter.choicesToBeTaken = new Queue<int>.from([0]);
-        var storage = new MemoryStorage();
+        var storage = new MemoryStore();
         mockPresenter.setPlayerProfile(storage.getDefaultPlayerProfile());
         ScripterProxy bookProxy = new IsolateScripterProxy(
             Uri.parse("files/lib/scripter_test_save.dart"));
@@ -349,7 +349,7 @@ void main() {
       });
 
       test("works between 2 independent runs", () {
-        var storage = new MemoryStorage();
+        var storage = new MemoryStore();
         String mainPath;
         build("scripter_test_alternate_6.egb").then((path) {
           mainPath = path;
@@ -371,7 +371,7 @@ void main() {
       });
 
       test("script choices", () {
-        var storage = new MemoryStorage();
+        var storage = new MemoryStore();
         var mainPath;
         build("scriptchoices.egb").then((path) {
           mainPath = path;
