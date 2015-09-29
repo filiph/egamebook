@@ -40,7 +40,7 @@ abstract class StatBase {
 
 /**
  * Only the part of the [Stat] that can be updated during gameplay. (The rest
- * stays the same.) This is sent from [Scripter] to [EgbInterface].
+ * stays the same.) This is sent from [Scripter] to [Presenter].
  */
 class StatUpdate {
   /// Creates new StatUpdate with [show] and short [string].
@@ -278,7 +278,7 @@ class Stat<T> implements StatBase, Saveable {
 
   /**
    * Take all Stats, and create a big data structure of them. This is for
-   * sending from [Scripter] to [EgbInterface].
+   * sending from [Scripter] to [Presenter].
    */
   static List<Map<String, Object>> createStatList() {
     List<Map<String, Object>> list = new List<Map<String, Object>>();

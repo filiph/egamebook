@@ -25,7 +25,7 @@ library egb_form;
  *
  * When presented to the user, and after each user input, the form is
  * temporarily disabled (no user input allowed) and a callback is fired. This
- * callback goes from [EgbInterface] to [Scripter] (therefore, sometimes it
+ * callback goes from [Presenter] to [Scripter] (therefore, sometimes it
  * has to go into another Isolate or even to a server).
  *
  * Each node of the Form structure is given a unique ID. This makes it easy
@@ -361,7 +361,7 @@ class Form extends FormBase implements _NewValueCallback {
 /**
  * FormConfiguration class wraps form configuration.
  *
- * It is the 'struct' that is being sent from [Scripter] to [EgbInterface]
+ * It is the 'struct' that is being sent from [Scripter] to [Presenter]
  * when form is created and after it is updated.
  */
 class FormConfiguration {
@@ -388,7 +388,7 @@ class FormConfiguration {
 
 /**
  * CurrentState class wraps current configuration.
- * The 'struct' that is send from [EgbInterface] to [Scripter] after each
+ * The 'struct' that is send from [Presenter] to [Scripter] after each
  * user interaction.
  */
 class CurrentState {
