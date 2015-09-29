@@ -1,4 +1,4 @@
-library egb_storage;
+library egb_store;
 
 import 'dart:async';
 import 'player_profile.dart';
