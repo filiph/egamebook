@@ -14,7 +14,7 @@ String removeWhiteSpace(String string)
 
 void main() {
   group("Memory store", () {
-    Store store;
+    MemoryStore store;
     String STORE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 

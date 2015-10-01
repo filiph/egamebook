@@ -174,7 +174,6 @@ void main() {
 
     tearDown(() {
       String path = getPath(templateFiles);
-      Directory directory = new Directory(path);
       deleteTemporaryDir(path);
     });
 
