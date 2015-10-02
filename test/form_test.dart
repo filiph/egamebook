@@ -19,16 +19,16 @@ import 'package:egamebook/runner.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 
 
-class ScripterProxyStub extends EgbScripterProxy {
+class ScripterProxyStub extends ScripterProxy {
   @override
   Future init() {
     return new Future.value();
   }
 
-  EgbPresenter presenter;
+  Presenter presenter;
 
   @override
-  void load(EgbSavegame savegame, [Set<String> playerChronology]) {
+  void load(Savegame savegame, [Set<String> playerChronology]) {
   }
 
   @override
@@ -171,17 +171,17 @@ void main() {
     });
 
     test("Choice attributes", () {
-      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu",
+      Choice choice = new Choice("Yes", submenu: "Yes submenu",
           goto: "Go to some place");
       expect(choice.isAutomatic, isFalse);
       expect(choice.isActionable(), isTrue);
     });
 
     test("Choice toMap and fromMap", () {
-      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu",
+      Choice choice = new Choice("Yes", submenu: "Yes submenu",
           goto: "Go to some place");
       Map choiceMap = choice.toMapForPresenter();
-      EgbChoice choiceFromMap = new EgbChoice.fromMap(choiceMap);
+      Choice choiceFromMap = new Choice.fromMap(choiceMap);
       //expect(choice.goto, choiceFromMap.goto);
       expect(choice.string, choiceFromMap.string);
       expect(choice.submenu, choiceFromMap.submenu);
@@ -189,14 +189,14 @@ void main() {
     });
 
     test("Choice list", () {
-      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
-      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
+      Choice choice2 = new Choice("No", submenu: "No submenu");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
       expect(choices.length, 2);
       expect(choices[0], choice1);
 
-      EgbChoice choice3 = new EgbChoice("Maybe", submenu: "Maybe submenu");
+      Choice choice3 = new Choice("Maybe", submenu: "Maybe submenu");
       choices.add(choice3);
       expect(choices.length, 3);
       expect(choices[2], choice3);
@@ -228,9 +228,9 @@ void main() {
     TextOutput textOutput;
     SubmitButton submitButton;
     int age, money, freetime;
-    EgbPresenter presenter;
-    EgbStorage storage;
-    EgbScripterProxy scripterProxyStub;
+    Presenter presenter;
+    Store store;
+    ScripterProxy scripterProxyStub;
     ButtonElement startButton, restartButton;
 
     setUp(() {
@@ -267,10 +267,10 @@ void main() {
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
 
       presenter = new HtmlPresenter();
-      storage = new MemoryStorage();
+      store = new MemoryStore();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -608,9 +608,9 @@ void main() {
     });
 
     test("Show simple dummy choices", () async {
-      EgbChoice choice1 = new EgbChoice("Yes");
-      EgbChoice choice2 = new EgbChoice("No");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes");
+      Choice choice2 = new Choice("No");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
       presenter.showChoices(choices);
 
@@ -628,9 +628,9 @@ void main() {
     });
 
     test("Show simple choices with submenu", () async {
-      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
-      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
+      Choice choice2 = new Choice("No", submenu: "No submenu");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
       presenter.showChoices(choices);
 
@@ -655,8 +655,8 @@ void main() {
     });
 
     test("Show simple choice with infochips", () async {
-      EgbChoice choice1 = new EgbChoice("Yes [infochip1] [infochip2]");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes [infochip1] [infochip2]");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1], "Is it cool?");
       presenter.showChoices(choices);
       SpanElement chipsSpan = querySelector(".choice-infochips");
@@ -776,10 +776,10 @@ void main() {
   });
 
   group("HtmlPresenter Savegame", () {
-    EgbPresenter presenter;
-    EgbStorage storage;
-    EgbScripterProxy scripterProxyStub;
-    EgbSavegame savegame;
+    Presenter presenter;
+    Store store;
+    ScripterProxy scripterProxyStub;
+    Savegame savegame;
     var vars;
     var pageMapState;
 
@@ -794,13 +794,13 @@ void main() {
       pageMapState["Start"] = {"visitCount": 0};
       pageMapState["Start: Funeral"] = {"visitCount": 10};
 
-      savegame = new EgbSavegame("Start", vars, pageMapState);
+      savegame = new Savegame("Start", vars, pageMapState);
 
       presenter = new HtmlPresenter();
-      storage = new LocalStorage();
+      store = new LocalStorageStore();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -836,19 +836,19 @@ void main() {
     });
   });
 
-  group("Local storage", () {
-    EgbPresenter presenter;
-    EgbStorage storage;
-    EgbScripterProxy scripterProxyStub;
-    String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
+  group("Local storage store", () {
+    Presenter presenter;
+    Store store;
+    ScripterProxy scripterProxyStub;
+    String STORE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid":"1234567","currentPageName":"Start"};
 
     setUp(() {
       presenter = new HtmlPresenter();
-      storage = new LocalStorage();
+      store = new LocalStorageStore();
       scripterProxyStub = new ScripterProxyStub();
 
-      return runDirectly(scripterProxyStub, presenter, storage);
+      return runDirectly(scripterProxyStub, presenter, store);
     });
 
     tearDown(() {
@@ -857,38 +857,38 @@ void main() {
     });
 
     test("Save", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
         // We use HTML local storage implementation to retrieve value
-        String valuesFromStorage = window.localStorage[STORAGE_NAME];
-        expect(valuesFromStorage, isNotNull);
-        expect(JSON.decode(valuesFromStorage), values);
+        String valuesFromStore = window.localStorage[STORE_NAME];
+        expect(valuesFromStore, isNotNull);
+        expect(JSON.decode(valuesFromStore), values);
       }));
     });
 
     test("Save and load", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
-          expect(valueFromStorage, isNotNull);
-          expect(JSON.decode(valueFromStorage), values);
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+          expect(valueFromStore, isNotNull);
+          expect(JSON.decode(valueFromStore), values);
         }));
       }));
     });
 
     test("Delete", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
-          expect(window.localStorage[STORAGE_NAME], isNull);
+          expect(window.localStorage[STORE_NAME], isNull);
         }));
       }));
     });
 
     test("Get default player profile", () {
-      EgbPlayerProfile profile = storage.getDefaultPlayerProfile();
+      PlayerProfile profile = store.getDefaultPlayerProfile();
       expect(profile, isNotNull);
-      expect(profile.playerUid, EgbStorage.DEFAULT_PLAYER_UID);
+      expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });
   });
 
@@ -896,9 +896,9 @@ void main() {
   group("Other", () {
     test("Award points toMessage", () {
       PointsAward pointsAward = new PointsAward(10, 20, "for bravery");
-      EgbMessage message = pointsAward.toMessage();
+      Message message = pointsAward.toMessage();
       expect(message, isNotNull);
-      expect(message.type, EgbMessage.POINTS_AWARD);
+      expect(message.type, Message.POINTS_AWARD);
       expect(message.listContent, isNotNull);
       expect(message.listContent[0], pointsAward.addition);
       expect(message.listContent[1], pointsAward.result);
@@ -910,7 +910,7 @@ void main() {
         "listContent": [10, 20],
         "strContent": "for bravery"
       };
-      EgbMessage message = new EgbMessage.fromMap(map);
+      Message message = new Message.fromMap(map);
       expect(message, isNotNull);
       expect(message.listContent, isNotNull);
       expect(message.listContent[0], map["listContent"][0]);
@@ -925,13 +925,13 @@ void main() {
     });
 
     test("Choice list toMessage", () {
-      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
-      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
+      Choice choice2 = new Choice("No", submenu: "No submenu");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
-      EgbMessage message = choices.toMessage();
+      Message message = choices.toMessage();
       expect(message, isNotNull);
-      expect(message.type, EgbMessage.SHOW_CHOICES);
+      expect(message.type, Message.SHOW_CHOICES);
       expect(message.listContent[0], isNull); //prepend text
       expect(message.listContent[1], choices.question);
       expect(message.listContent[2], choice1.toMapForPresenter());
@@ -940,26 +940,26 @@ void main() {
 
     test("Choice list toMessage throws with filterOut", () {
       String text = "Some text";
-      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
-      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
-      EgbChoiceList choices = new EgbChoiceList.fromList(
+      Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
+      Choice choice2 = new Choice("No", submenu: "No submenu");
+      ChoiceList choices = new ChoiceList.fromList(
           [choice1, choice2], "Is it cool?");
       expect(() => choices.toMessage(prependText: text, filterOut: (choice) => true), throws);
     });
 
     test("Choice list fromMessage", () {
-      EgbChoice choice1 = new EgbChoice("Yes", submenu: "Yes submenu");
-      EgbChoice choice2 = new EgbChoice("No", submenu: "No submenu");
+      Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
+      Choice choice2 = new Choice("No", submenu: "No submenu");
       String question = "Is it cool?";
       Map map = {
         "listContent": [null, question, choice1.toMapForPresenter(), choice2.toMapForPresenter()],
       };
-      EgbMessage message = new EgbMessage.fromMap(map);
+      Message message = new Message.fromMap(map);
       expect(message, isNotNull);
       expect(message.listContent, isNotNull);
       expect(message.listContent.length, 4);
 
-      EgbChoiceList choices = new EgbChoiceList.fromMessage(message);
+      ChoiceList choices = new ChoiceList.fromMessage(message);
       expect(choices, isNotNull);
       expect(choices.question, question);
       expect(choices.length, 2);
@@ -971,15 +971,15 @@ void main() {
 
     test("Choice list fromMessage throws with no listContent", () {
       Map map = {};
-      EgbMessage message = new EgbMessage.fromMap(map);
+      Message message = new Message.fromMap(map);
       expect(message, isNotNull);
       expect(message.listContent, isNull);
 
-      expect(() => new EgbChoiceList.fromMessage(message), throws);
+      expect(() => new ChoiceList.fromMessage(message), throws);
     });
 
     test("Choice toMapForPresenter", () {
-      EgbChoice choice = new EgbChoice("Yes", submenu: "Yes submenu");
+      Choice choice = new Choice("Yes", submenu: "Yes submenu");
       Map map = choice.toMapForPresenter();
       expect(map, isNotNull);
       expect(map.length, 3);

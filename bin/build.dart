@@ -43,7 +43,7 @@ void main(List<String> args) {
   
   if (results.rest.length < 1) {
     print("Script called without file argument. Please provide file to work on.");
-    print(parser.getUsage());
+    print(parser.usage);
     return;
   }
   var filename = results.rest[0];

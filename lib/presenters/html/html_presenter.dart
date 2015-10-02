@@ -1,7 +1,7 @@
 library egb_presenter_html;
 
-/// Default implementation of the [EgbPresenter] abstract class. It uses
-/// vanilla [:dart:html:] to act as an user interface to an [EgbScripter]. This
+/// Default implementation of the [Presenter] abstract class. It uses
+/// vanilla [:dart:html:] to act as an user interface to an [Scripter]. This
 /// means no fancy framework is used. It also means there are probably many
 /// edge cases and even bugs, and it's not that extensible.
 
@@ -12,7 +12,7 @@ import 'package:markdown/markdown.dart' as mdown show InlineParser,
     InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
 
 import '../../presenter.dart';
-export '../../presenter.dart' show EgbPresenter;
+export '../../presenter.dart' show Presenter;
 import '../../src/persistence/savegame.dart';
 import '../../src/shared/user_interaction.dart';
 import '../../src/shared/points_award.dart';
@@ -31,7 +31,7 @@ import "package:html5lib/dom.dart" as html5lib;
 ///
 /// It contains all HTML interface elements ([:button:], [:span:] etc.) used
 /// in gamebook for user interaction and displaying information.
-class HtmlPresenter extends EgbPresenter {
+class HtmlPresenter extends Presenter {
   /// Restart [:button:].
   ButtonElement restartAnchor;
   /// [:span:] where points are displayed.
@@ -239,7 +239,7 @@ class HtmlPresenter extends EgbPresenter {
 
   /// A list of meta elements and their associated actions and data. When a
   /// _metaElement comes into view, its [doAction()] function is called.
-  final List<EgbMetaElement> _metaElements = new List<EgbMetaElement>();
+  final List<MetaElement> _metaElements = new List<MetaElement>();
 
   /**
    * Checks if one of the meta elements is in view. If so, runs their
@@ -279,7 +279,7 @@ class HtmlPresenter extends EgbPresenter {
   }
 
   @override
-  Future<int> showChoices(EgbChoiceList choiceList) {
+  Future<int> showChoices(ChoiceList choiceList) {
     log("Showing choices");
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
@@ -369,7 +369,7 @@ class HtmlPresenter extends EgbPresenter {
   /// Creates new choice button in form of HTML [:button:] with index and text.
   ///
   /// Choice button can also have info chips.
-  ButtonElement _createChoiceButton(String index, EgbChoice choice, Completer
+  ButtonElement _createChoiceButton(String index, Choice choice, Completer
       completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
 
@@ -419,7 +419,7 @@ class HtmlPresenter extends EgbPresenter {
   /// Click listener for a choice.
   ///
   /// Choice hash is sent asynchronously back to Scripter and bookmark is set.
-  void _choiceClickListener(MouseEvent event, Completer completer, EgbChoice
+  void _choiceClickListener(MouseEvent event, Completer completer, Choice
       choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
       clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
@@ -551,7 +551,7 @@ class HtmlPresenter extends EgbPresenter {
     if (confirm) {
       bookDiv.children.clear();
       // TODO: retain scroll position
-      playerProfile.load(savegameUid).then((EgbSavegame savegame) {
+      playerProfile.load(savegameUid).then((Savegame savegame) {
         if (savegame == null) {
           // no savegames for this egamebook savegame uid
           reportError("Bad gamesave", "That savegame is missing.");
@@ -570,10 +570,10 @@ class HtmlPresenter extends EgbPresenter {
   /**
    * Stored savegame which wait for the next choiceList to be appended to it.
    */
-  EgbSavegame _savegameToBe;
+  Savegame _savegameToBe;
 
   @override
-  Future<bool> addSavegameBookmark(EgbSavegame savegame) {
+  Future<bool> addSavegameBookmark(Savegame savegame) {
     print("Creating savegame bookmark for ${savegame.uid}");
     _savegameToBe = savegame;
     return new Future.value(true);
@@ -650,7 +650,7 @@ class HtmlPresenter extends EgbPresenter {
 
   /// Saves game [savegame] and adds savegame bookmark.
   @override
-  void save(EgbSavegame savegame) {
+  void save(Savegame savegame) {
     _textHistory.clear();
     playerProfile.save(savegame);
     addSavegameBookmark(savegame);
@@ -1472,7 +1472,7 @@ class Submenu {
   /// Submenu's name.
   final String name;
   /// List of choices being displayed in submenu.
-  final List<EgbChoice> choices = new List<EgbChoice>();
+  final List<Choice> choices = new List<Choice>();
 
   /// Creates new Submenu with [name].
   Submenu(this.name);
@@ -1525,7 +1525,7 @@ typedef bool ClickBehaviour();
  * PointsAwardElement is a special class for storing information about
  * a PointsAward together with its meta element.
  */
-class PointsAwardElement extends PointsAward implements EgbMetaElement {
+class PointsAwardElement extends PointsAward implements MetaElement {
   /// Meta element.
   final Element element;
   /// Creates new PointsAwardElement with [element] and [PointsAward]'s
@@ -1554,8 +1554,8 @@ class PointsAwardElement extends PointsAward implements EgbMetaElement {
   bool done = false;
 }
 
-/// Abstract class EgbMetaElement wraps meta element with its [Action].
-abstract class EgbMetaElement {
+/// Abstract class MetaElement wraps meta element with its [Action].
+abstract class MetaElement {
   /// Element.
   final Element element;
   /// Action which will be called.
@@ -1565,8 +1565,8 @@ abstract class EgbMetaElement {
   /// If is action done.
   bool done;
 
-  /// Creates new EgbMetaElement from [element].
-  EgbMetaElement(this.element);
+  /// Creates new MetaElement from [element].
+  MetaElement(this.element);
 }
 
 /// A simple callback closure for use with metaElements (called when element
@@ -1574,12 +1574,12 @@ abstract class EgbMetaElement {
 typedef void Action();
 
 /**
- * LocalStorage is the HTML5 implementation of EgbStorage (only runs in
+ * LocalStorageStore is the HTML5 implementation of Store (only runs in
  * [HtmlPresenter]).
  *
  * TODO: either use lawndart or make the following more robust.
  */
-class LocalStorage extends EgbStorage {
+class LocalStorageStore extends Store {
   /// Saves [value] on [key] into local storage.
   Future<bool> save(String key, String value) {
     window.localStorage[key] = value;

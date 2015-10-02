@@ -13,54 +13,54 @@ String removeWhiteSpace(String string)
   => string.replaceAll(new RegExp(r"\s+"), "");
 
 void main() {
-  group("Memory storage", () {
-    EgbStorage storage;
-    String STORAGE_NAME = "default::ProxyStubBOOK::1234567";
+  group("Memory store", () {
+    MemoryStore store;
+    String STORE_NAME = "default::ProxyStubBOOK::1234567";
     Map values = {"uid": "1234567", "currentPageName": "Start"};
 
     setUp(() {
-      storage = new MemoryStorage();
+      store = new MemoryStore();
     });
 
     test("Save", () {
-      expect(storage.memory, isNotNull);
+      expect(store.memory, isNotNull);
 
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
         expect(value, isTrue);
 
-        String valuesFromStorage = storage.memory[STORAGE_NAME];
-        expect(valuesFromStorage, isNotNull);
-        expect(JSON.decode(valuesFromStorage), values);
+        String valuesFromStore = store.memory[STORE_NAME];
+        expect(valuesFromStore, isNotNull);
+        expect(JSON.decode(valuesFromStore), values);
       }));
     });
 
     test("Save and load", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.load(STORAGE_NAME).then(expectAsync((valueFromStorage) {
-          expect(valueFromStorage, isNotNull);
-          expect(JSON.decode(valueFromStorage), values);
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+          expect(valueFromStore, isNotNull);
+          expect(JSON.decode(valueFromStore), values);
         }));
       }));
     });
 
     test("Delete", () {
-      storage.save(STORAGE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        storage.delete(STORAGE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+        store.delete(STORE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
-          expect(storage.memory[STORAGE_NAME], isNull);
+          expect(store.memory[STORE_NAME], isNull);
         }));
       }));
     });
 
     test("Get default player profile", () {
-      EgbPlayerProfile profile = storage.getDefaultPlayerProfile();
+      PlayerProfile profile = store.getDefaultPlayerProfile();
       expect(profile, isNotNull);
-      expect(profile.playerUid, EgbStorage.DEFAULT_PLAYER_UID);
+      expect(profile.playerUid, Store.DEFAULT_PLAYER_UID);
     });
   });
 
   group("Savegame", () {
-    EgbSavegame savegame;
+    Savegame savegame;
     String exampleJson =
     '''
     {
@@ -79,36 +79,36 @@ void main() {
     }''';
 
     test("From JSON", () {
-      savegame = new EgbSavegame.fromJson(exampleJson);
+      savegame = new Savegame.fromJson(exampleJson);
       expect(savegame.uid, "a253e70");
       expect(savegame.vars, new isInstanceOf<Map>());
       expect(savegame.vars.length, 3);
     });
 
     test("From and to JSON", () {
-      savegame = new EgbSavegame.fromJson(exampleJson);
+      savegame = new Savegame.fromJson(exampleJson);
       String savegameJson = savegame.toJson();
       expect(savegameJson, isNotNull);
       expect(removeWhiteSpace(savegameJson), removeWhiteSpace(exampleJson));
     });
 
     test("toMessage", () {
-      savegame = new EgbSavegame.fromJson(exampleJson);
-      EgbMessage message = savegame.toMessage(EgbMessage.SAVE_GAME);
+      savegame = new Savegame.fromJson(exampleJson);
+      Message message = savegame.toMessage(Message.SAVE_GAME);
       expect(message, isNotNull);
-      expect(message.type, EgbMessage.SAVE_GAME);
+      expect(message.type, Message.SAVE_GAME);
       expect(message.strContent, isNotNull);
       expect(message.strContent, savegame.toJson());
     });
 
     test("toMessage throws", () {
-      savegame = new EgbSavegame.fromJson(exampleJson);
-      expect(() => savegame.toMessage(EgbMessage.QUIT), throws);
+      savegame = new Savegame.fromJson(exampleJson);
+      expect(() => savegame.toMessage(Message.QUIT), throws);
     });
 
     test("fromMessage", () {
-      EgbMessage message = new EgbMessage.saveGame(exampleJson);
-      savegame = new EgbSavegame.fromMessage(message);
+      Message message = new Message.saveGame(exampleJson);
+      savegame = new Savegame.fromMessage(message);
       expect(savegame, isNotNull);
       expect(savegame.uid, "a253e70");
       expect(savegame.vars, new isInstanceOf<Map>());
@@ -123,14 +123,14 @@ void main() {
         "isEngineer": true,
         "isStrong": true
       };
-      savegame = new EgbSavegame.fromJson(exampleJson);
+      savegame = new Savegame.fromJson(exampleJson);
       expect(savegame.vars, isNotNull);
       expect(savegame.vars.isNotEmpty, isTrue);
       expect(vars["points"].sum, 10);
       expect(vars["isEngineer"], true);
       expect(vars["isStrong"], true);
 
-      EgbSavegame.importSavegameToVars(savegame, vars);
+      Savegame.importSavegameToVars(savegame, vars);
       expect(vars["points"].sum, 20);
       expect(vars["isEngineer"], false);
       expect(vars["isStrong"], false);

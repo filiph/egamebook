@@ -66,7 +66,7 @@ bool get gotoCalledRecently => gotoPageName != null;
  *
  * This is a global, author-facing function. It will store
  * the name of the page in a variable that is later used to get the actual
- * page inside [EgbScripter].
+ * page inside [Scripter].
  */
 void goto(String pageName) {
   gotoPageName = pageName;
@@ -93,7 +93,7 @@ final PointsCounter _points = new PointsCounter();
 /**
  * List of choices to be shown to the player.
  */
-final EgbChoiceList choices = new EgbChoiceList();
+final ChoiceList choices = new ChoiceList();
 
 /**
  * Utility shortcut for creating new choices.
@@ -101,9 +101,9 @@ final EgbChoiceList choices = new EgbChoiceList();
  * When [deferToChoiceList] is set to [:true:], the choice will not be shown
  * until there is a choiceList on the page.
  */
-EgbChoice choice(String string, {String goto, ScriptBlock script, String
+Choice choice(String string, {String goto, ScriptBlock script, String
     submenu, bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
-  EgbChoice choice = new EgbChoice(string, goto: goto, script: script, submenu:
+  Choice choice = new Choice(string, goto: goto, script: script, submenu:
       submenu, deferToEndOfPage: deferToEndOfPage, deferToChoiceList:
       deferToChoiceList);
   choices.add(choice);
@@ -172,25 +172,25 @@ bool isInInitOrDeclareBlock = true;
  * the Presenter through Runner. It is subclassed by ScripterImpl, which is
  * built from .egb file by egb_builder.
  */
-abstract class EgbScripter extends EgbScripterViewedFromPresenter {
+abstract class Scripter extends ScripterViewedFromPresenter {
   /// The unique id of this particular gamebook. Used for saving.
   String uid;
 
   /// Information about all pages, their visit counts, and more.
-  final EgbScripterPageMap pageMap = new EgbScripterPageMap();
+  final ScripterPageMap pageMap = new ScripterPageMap();
   /// The starting page of the book.
-  EgbScripterPage firstPage;
+  ScripterPage firstPage;
   /// The page and block that called goto() that resulted in jumping to
   /// currentPage.
-  EgbScripterBlockPointer _preGotoPosition;
+  ScripterBlockPointer _preGotoPosition;
   /// The page visited previously.
-  EgbScripterPage get previousPage => _preGotoPosition == null ? null :
+  ScripterPage get previousPage => _preGotoPosition == null ? null :
       _preGotoPosition.page;
   /// Page that is currently being read.
-  EgbScripterPage currentPage;
+  ScripterPage currentPage;
 
   /// The ChoiceList to be shown on next occasion.
-  EgbSavegame _choicesToShow;
+  Savegame _choicesToShow;
 
   /// Getter returns awarded points to player.
   PointsCounter get points => _points;
@@ -206,13 +206,13 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
   bool _playerChronologyChanged = false;
 
   /// Create a unique hash that identifies a path from one page to another.
-  String _createLinkHash(EgbScripterPage from, EgbScripterPage to) =>
+  String _createLinkHash(ScripterPage from, ScripterPage to) =>
       "${from.name}>>${to.name}"; // TODO: make this better
 
   /// Checks whether this choice has already been presented to the player
   /// but wasn't picked. This means we shouldn't add any points on this
   /// page. (No points for second guessing.)
-  bool _alreadyOffered(EgbScripterPage from, EgbScripterPage to) =>
+  bool _alreadyOffered(ScripterPage from, ScripterPage to) =>
       _playerChronology.contains(_createLinkHash(from, to));
 
   /// The block in which variables are set (it corresponds to the <variables>
@@ -220,11 +220,11 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
   void initBlock();
 
   /// Initializes the scripter. In this particular case, since this is
-  /// [EgbScripter] proper (and not a proxy behind an isolate or anything),
+  /// [Scripter] proper (and not a proxy behind an isolate or anything),
   /// we don't do anything and return an immediate Future.
   Future init() => new Future.value();
 
-  /// As with [init], since this is [EgbScripter] proper, we don't really need
+  /// As with [init], since this is [Scripter] proper, we don't really need
   /// to destroy anything.
   void quit() {
     // Do nothing.
@@ -254,14 +254,14 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
    */
   Map<String, Function> _constructors;
 
-  /// Creates new EgbScripter.
-  EgbScripter();
+  /// Creates new Scripter.
+  Scripter();
 
   /// Presenter proxy.
-  EgbPresenterViewedFromScripter presenter;
+  PresenterViewedFromScripter presenter;
 
   /// Sets Presenter and Scripter to given [presenter].
-  void setPresenter(EgbPresenterViewedFromScripter presenter) {
+  void setPresenter(PresenterViewedFromScripter presenter) {
     this.presenter = presenter;
   }
 
@@ -328,7 +328,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
    * Handles the Runner's reply to SHOW_CHOICES message (i.e. the choice picked).
    */
   void _handleChoiceSelected(int choiceHash) {
-    EgbChoice pickedChoice;
+    Choice pickedChoice;
     choices.forEach((choice) {
       choice.shown = true;
       if (choice.hash == choiceHash) {
@@ -342,8 +342,8 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
         // be put there after the player walked through the page till
         // the end (otherwise, no points would ever be awarded).
         if (choice.goto != null) {
-          EgbScripterPage toPage;
-          if (EgbChoice.GO_BACK.hasMatch(choice.goto)) {
+          ScripterPage toPage;
+          if (Choice.GO_BACK.hasMatch(choice.goto)) {
             toPage = _preGotoPosition.page;
           } else {
             toPage = pageMap.getPage(choice.goto, currentGroupName:
@@ -368,7 +368,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
   /**
    * Picks the given [choice], i.e. runs the script and performs the goto.
    */
-  void _pickChoice(EgbChoice choice) {
+  void _pickChoice(Choice choice) {
     if (choice.f != null) {
       nextScript(choice.f); // Wait for next iteration before running the
       // script.
@@ -410,18 +410,18 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
         );
     if (!choices.isEmpty) {
       DEBUG_SCR("We have choices.");
-      EgbChoiceList actionableChoices = new EgbChoiceList.fromList(
-          choices.where((EgbChoice choice) => choice.isActionable(atEndOfPage:
+      ChoiceList actionableChoices = new ChoiceList.fromList(
+          choices.where((Choice choice) => choice.isActionable(atEndOfPage:
           atEndOfPage, atChoiceList: atStaticChoiceList)).toList(),
           choices.question);
       if (actionableChoices.isNotEmpty) {
         presenter.showChoices(actionableChoices)
         .then(_handleChoiceSelected)
         .catchError((e) => DEBUG_SCR("$e"),
-                    test: (e) => e is EgbAsyncOperationOverridenException);
+                    test: (e) => e is AsyncOperationOverridenException);
         return _STOP;
       } else {
-        EgbChoice autoChoice = choices.firstWhere((choice) =>
+        Choice autoChoice = choices.firstWhere((choice) =>
             choice.isAutomatic, orElse: () => null);
         if (autoChoice != null) {
           _pickChoice(autoChoice);
@@ -527,7 +527,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
       // TODO: create _textMessageCache here and not in _send()
-      EgbSavegame savegame = null;
+      Savegame savegame = null;
       if (currentBlockIndex == currentPage.blocks.length - 1) {
         // Last block on page. Save the game before any changes are made during
         // the script block.
@@ -539,7 +539,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
           atChoiceList: true, filterOut: _leadsToIllegalPage)) && currentBlockIndex ==
           currentPage.blocks.length - 1) {
         assert(savegame != null);
-        // TODO deep compare assert((savegame as EgbSavegame).vars == _createSaveGame().vars);
+        // TODO deep compare assert((savegame as Savegame).vars == _createSaveGame().vars);
         presenter.save(savegame);
       }
       return canContinue;
@@ -550,18 +550,18 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
   }
 
   /**
-   * Takes the [dest] string and converts it to an actual [EgbScripterPage].
+   * Takes the [dest] string and converts it to an actual [ScripterPage].
    * Solves for special goto destination [:<<<:] (i.e. go back) and for when
    * the page groupName is omitted.
    */
   void _performGoto(String dest) {
-    EgbScripterPage _gotoPage;
+    ScripterPage _gotoPage;
     int _gotoBlockIndex;
 
-    if (EgbChoice.GO_BACK.hasMatch(dest)) {
+    if (Choice.GO_BACK.hasMatch(dest)) {
       // A [<<<] goto.
       if (_preGotoPosition == null) {
-        throw new StateError("Cannot use [${EgbChoice.GO_BACK}] when there is "
+        throw new StateError("Cannot use [${Choice.GO_BACK}] when there is "
             "no _preGotoPosition.");
       }
       _gotoPage = _preGotoPosition.page;
@@ -608,7 +608,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
 
     DEBUG_SCR("Points embargo = $_pointsEmbargo");
 
-    _preGotoPosition = new EgbScripterBlockPointer(currentPage,
+    _preGotoPosition = new ScripterBlockPointer(currentPage,
         currentBlockIndex);
     currentPage = _gotoPage;
     currentBlockIndex = _gotoBlockIndex;
@@ -669,9 +669,9 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
    * visited, then it's an illegal page to visit. This helper function
    * checks for this.
    */
-  bool _leadsToIllegalPage(EgbChoice choice) {
+  bool _leadsToIllegalPage(Choice choice) {
     if (choice.goto == null) return false;
-    if (EgbChoice.GO_BACK.hasMatch(choice.goto)) return false;
+    if (Choice.GO_BACK.hasMatch(choice.goto)) return false;
     var targetPage = pageMap.getPage(choice.goto, currentGroupName:
         currentPage.groupName);
     if (targetPage == null) {
@@ -689,10 +689,10 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
 
   /// Creates and returns save game from actual [currentPage], [vars]
   /// and [pageMap].
-  EgbSavegame _createSaveGame() {
+  Savegame _createSaveGame() {
     populateVarsFromState();
     try {
-      return new EgbSavegame(currentPage.name, vars, pageMap.exportState());
+      return new Savegame(currentPage.name, vars, pageMap.exportState());
     } catch (e, stacktrace) {
       presenter.reportError("Error when creating savegame", "$e\n$stacktrace");
       throw e;
@@ -700,7 +700,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
   }
 
   /**
-   * Take EgbMessage of type LOAD_GAME and populate the current game
+   * Take Message of type LOAD_GAME and populate the current game
    * state with its contents. This includes both the Story Chronology (where
    * the story is right now) and the Player Chronology (what the player has
    * seen already, including blind alleys and consecutive reloads).
@@ -708,7 +708,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
    * Player Chronology need only provided at the start of player session. It is
    * not overwritten by loading or saving games.
    */
-  void load(EgbSavegame savegame, [Set<String> playerChronology]) {
+  void load(Savegame savegame, [Set<String> playerChronology]) {
     _initScriptEnvironment();
 
     if (pageMap[savegame.currentPageName] == null) {
@@ -734,7 +734,7 @@ abstract class EgbScripter extends EgbScripterViewedFromPresenter {
 
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");
-    EgbSavegame.importSavegameToVars(savegame, vars, constructors: _constructors
+    Savegame.importSavegameToVars(savegame, vars, constructors: _constructors
         ); // TODO
     extractStateFromVars();
     DEBUG_SCR("loadFromSaveGame() done.");

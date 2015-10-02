@@ -6,7 +6,7 @@ part of zil;
  * saved inside the Zil object. This class merely helps with that.
  * 
  * If all Zil objects (such as [Room] and [Item]) were [Saveable], than any
- * helper variable (in [EgbScripter.vars]) used by the author would have its 
+ * helper variable (in [Scripter.vars]) used by the author would have its
  * state saved automatically, thus duplicating the effort (and the memory used)
  * by [Zil.toMap].
  */

@@ -20,7 +20,7 @@ import 'package:egamebook/src/cli/file_hierarchy.dart';
 /**
  * Exception thrown when the input .egb file is badly formatted.
  **/
-class EgbFormatException implements Exception {
+class BuilderFormatException implements Exception {
   /// Message describing the exception.
   String message;
   /// Line in the file.
@@ -28,11 +28,11 @@ class EgbFormatException implements Exception {
   /// Input file.
   File file;
 
-  /// Creates new EgbFormatException with error [message] and optional parameters
+  /// Creates new BuilderFormatException with error [message] and optional parameters
   /// [line] and input [file].
-  EgbFormatException(String this.message, {this.line, this.file});
+  BuilderFormatException(String this.message, {this.line, this.file});
 
-  /// Returns text describing EgbFormatException with its [message], [line]
+  /// Returns text describing BuilderFormatException with its [message], [line]
   /// and [file] where the exception appeared.
   String toString() {
     StringBuffer strBuf = new StringBuffer();
@@ -53,14 +53,14 @@ class EgbFormatException implements Exception {
  * Exception thrown when there is an unrecoverable problem with the file system.
  * For example, a missing directory that really should be there.
  **/
-class EgbFileSystemException implements Exception {
+class BuilderFileSystemException implements Exception {
   /// Message describing the exception.
   final String message;
 
-  /// Creates new EgbFileSystemException with error [message].
-  EgbFileSystemException(String this.message);
+  /// Creates new BuilderFileSystemException with error [message].
+  BuilderFileSystemException(String this.message);
 
-  /// Returns text describing EgbFileSystemException with its [message].
+  /// Returns text describing BuilderFileSystemException with its [message].
   String toString() => message;
 }
 
@@ -123,7 +123,7 @@ class BuilderMetadata {
  *
  * BuilderPage also has [options], like `visitOnce`.
  **/
-class BuilderPage extends EgbPage implements BuilderLineRange {
+class BuilderPage extends Page implements BuilderLineRange {
   /// Page index.
   int index;
   /// Line start.
@@ -440,7 +440,7 @@ class Builder {
       _lineNumber++;
       try {
         _check(_lineNumber, line);
-      } on EgbFormatException catch (e) {
+      } on BuilderFormatException catch (e) {
         completer.completeError(e);
         subscription.cancel();
       }
@@ -466,7 +466,7 @@ class Builder {
           var m = uidCandidates.single;
           uid = m.values[0];
         } else {
-          throw new EgbFormatException("Two or more UniqueID metadata found. "
+          throw new BuilderFormatException("Two or more UniqueID metadata found. "
               "Please define only one UniqueID.");
         }
 
@@ -488,7 +488,7 @@ class Builder {
                   "${page.groupName}: $gotoPageName";
             } else if (pageHandles.containsKey(gotoPageName)) {
               // great, already done
-            } else if (EgbChoice.GO_BACK.hasMatch(gotoPageName)) {
+            } else if (Choice.GO_BACK.hasMatch(gotoPageName)) {
               // great, it's just going back
             } else {
               WARNING("Page ${page.name} specifies a choice that goes "
@@ -1174,9 +1174,9 @@ class Builder {
     }
   }
 
-  /// Returns new EgbFormatException with [msg].
-  EgbFormatException newFormatException(String msg) {
-    return new EgbFormatException(msg, line:_lineNumber, file:inputEgbFile);
+  /// Returns new BuilderFormatException with [msg].
+  BuilderFormatException newFormatException(String msg) {
+    return new BuilderFormatException(msg, line:_lineNumber, file:inputEgbFile);
   }
 
   /// Input file given by readFile().
@@ -1287,7 +1287,7 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var webDir = new Directory(pathToPresenter);
     if (!webDir.existsSync()) {
-      return new Future.error(new EgbFileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required web/ directory. It should be located in "
         "${path.normalize(webDir.absolute.path)}."));
     }
@@ -1295,7 +1295,7 @@ class Builder {
                               HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
     var libDir = new Directory(pathToLib);
     if (!libDir.existsSync()) {
-      return new Future.error(new EgbFileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required lib/ directory. It should be located in "
         "${path.normalize(libDir.absolute.path)}."));
     }
@@ -1375,7 +1375,7 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var presenterDir = new Directory(pathToPresenter);
     if (!presenterDir.existsSync()) {
-      return new Future.error(new EgbFileSystemException("Couldn't find the "
+      return new Future.error(new BuilderFileSystemException("Couldn't find the "
         "required web/ directory. It should be located in "
         "${path.normalize(presenterDir.absolute.path)}."));
     }
@@ -1529,7 +1529,7 @@ class Builder {
         curPage = pages[pageIndex];
         blockIndex = 0;
         indent = _getIndent(4);
-        write("pageMap[r\"\"\"${curPage.name}\"\"\"] = new EgbScripterPage(\n");
+        write("pageMap[r\"\"\"${curPage.name}\"\"\"] = new ScripterPage(\n");
         write("  [\n");
       }
 
@@ -1612,7 +1612,7 @@ class Builder {
 //            }
 //          } else {
 //            // ex: "- Go to there [{{time++}} page]"
-//            write("  choices.add(new EgbChoice(\n");
+//            write("  choices.add(new Choice(\n");
 //            write("      \"\"\"$string \"\"\",\n");
 //            var commaAfterGoto = ( script != null ) ? "," : "";
 //            write("      goto:r\"\"\"$goto\"\"\"$commaAfterGoto\n");
@@ -2263,7 +2263,7 @@ import 'dart:isolate';
 
   final String implStartClass = """
 
-class ScripterImpl extends EgbScripter {
+class ScripterImpl extends Scripter {
 """;
 
   final String implStartLibrary = """
@@ -2304,8 +2304,8 @@ class ScripterImpl extends EgbScripter {
 
 // The entry point of the isolate.
 void main(List<String> args, SendPort mainIsolatePort) {
-  EgbPresenterProxy presenter = new EgbIsolatePresenterProxy(mainIsolatePort);
-  EgbScripter book = new ScripterImpl();
+  PresenterProxy presenter = new IsolatePresenterProxy(mainIsolatePort);
+  Scripter book = new ScripterImpl();
   presenter.setScripter(book);
 }
 """;

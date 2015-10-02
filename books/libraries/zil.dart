@@ -31,7 +31,7 @@
  * * Rooms have their own pages with no text and only two script blocks.
  * * First script block includes the [:zil.update():] call (things happen).
  * * Second script block only includes [:zil.createChoices():]. This is 
- *   important because we want [EgbScripter] to be able to save state 
+ *   important because we want [Scripter] to be able to save state
  *   ([:zil.update():] could invalidate that save by changing state).
  * * The preferred style is to include a [:<variables>:] block on the page where
  *   the actual Zil implementation of the room is instantiated.
@@ -63,7 +63,7 @@ library zil;
 
 import 'package:egamebook/scripter.dart'
     show
-        EgbScripter,
+        Scripter,
         Saveable,
         choice,
         echo,
@@ -90,7 +90,7 @@ part 'zil_exception.dart';
 part 'zil_saveable.dart';
 
 class Zil implements Saveable {
-  EgbScripter _scripter;
+  Scripter _scripter;
 
   /**
    * The global instance of [RoomNetwork]. Most games will only utilize one
@@ -110,7 +110,7 @@ class Zil implements Saveable {
   /// Timeline
   Timeline timeline;
 
-  /// Create Zil with a pointer to the [EgbScripter] instance and, optionally,
+  /// Create Zil with a pointer to the [Scripter] instance and, optionally,
   /// a pre-existing [Timeline].
   Zil(this._scripter, [this.timeline]) {
     items = new ItemPool(this);

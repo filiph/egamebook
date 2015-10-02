@@ -20,7 +20,7 @@ abstract class Saveable {
   /**
    * Update the instance from a Map. Typically, the Map is a one that was
    * earlier set by the [toMap()] method and that was saved by the Runner
-   * to a Storage.
+   * to a Store.
    */
   void updateFromMap(Map<String, dynamic> map);
 }

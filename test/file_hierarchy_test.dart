@@ -1,12 +1,8 @@
 library file_hierarchy_test;
 
 import 'dart:io';
-import 'dart:async';
 import 'package:test/test.dart';
-import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
-import 'package:egamebook/command.dart';
-import 'package:egamebook/src/cli/cli.dart';
 import 'package:egamebook/src/cli/file_hierarchy.dart';
 
 /// Returns full path to the desired [fileName].

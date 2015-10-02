@@ -6,8 +6,8 @@ import 'utils.dart';
 import 'message.dart';
 import '../book/author_script_exception.dart';
 
-/// Class EgbChoice wraps user interaction choice.
-class EgbChoice implements Comparable {
+/// Class Choice wraps user interaction choice.
+class Choice implements Comparable {
   /// If the choice is shown.
   bool shown = false;
   /// The choice shouldn't be shown before we are at the end of the page.
@@ -54,7 +54,7 @@ class EgbChoice implements Comparable {
    * [:filterOut(ch) == true:].
    */
   bool isActionable({bool atEndOfPage, bool atChoiceList,
-      bool filterOut(EgbChoice choice)}) {
+      bool filterOut(Choice choice)}) {
     if (shown) return false;  // choice shown before
     if (isAutomatic) return false;
     if (atEndOfPage != null && !atEndOfPage && deferToEndOfPage) {
@@ -67,10 +67,10 @@ class EgbChoice implements Comparable {
     return true;
   }
 
-  /// Creates new EgbChoice with the text of the choice [string] and optional
+  /// Creates new Choice with the text of the choice [string] and optional
   /// attributes on which page name it should [goto], [script] function,
   /// [submenu], if [deferToEndOfPage] and if [deferToChoiceList].
-  EgbChoice(String string, {this.goto, Function script, this.submenu: null,
+  Choice(String string, {this.goto, Function script, this.submenu: null,
         bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
       super() {
     if (string == null) {
@@ -83,8 +83,8 @@ class EgbChoice implements Comparable {
     this.deferToChoiceList = deferToChoiceList;
   }
 
-  /// Creates new EgbChoice from a Map [map].
-  EgbChoice.fromMap(Map<String, dynamic> map) : super() {
+  /// Creates new Choice from a Map [map].
+  Choice.fromMap(Map<String, dynamic> map) : super() {
     string = map["string"].trim();
     if (map.containsKey("hash")) {
       hash = map["hash"];
@@ -112,15 +112,15 @@ class EgbChoice implements Comparable {
   /// Sets script function to [_f] and returns actual object.
   ///
   /// Defines what [Function] should do then, for example call [:echo:].
-  EgbChoice then(Function _f) {
+  Choice then(Function _f) {
     f = _f;
     return this;
   }
 
   /// Compares actual object's [string] with [other.string].
-  int compareTo(EgbChoice other) => this.string.compareTo(other.string);
+  int compareTo(Choice other) => this.string.compareTo(other.string);
 
-  /// Returns String representation of EgbChoice with its [string] and [goto]
+  /// Returns String representation of Choice with its [string] and [goto]
   /// page.
   String toString() {
     return "Choice: $string [$goto] ($hash)";
@@ -139,24 +139,24 @@ class EgbChoice implements Comparable {
  * A group of choices to be picked from. This class extends [ListBase], so it
  * behaves like a normal (dynamic) list.
  */
-class EgbChoiceList extends ListBase<EgbChoice> {
+class ChoiceList extends ListBase<Choice> {
   /// Question for choice list.
   String question;  // TODO: implement
 
-  /// List of [EgbChoice].
-  List<EgbChoice> _choices = new List<EgbChoice>();
+  /// List of [Choice].
+  List<Choice> _choices = new List<Choice>();
   /// Returns length of choice list.
   int get length => _choices.length;
   /// Changes length of choices to some [value].
   set length(int value) => _choices.length = value;
   operator[](int index) => _choices[index];
-  operator[]=(int index, EgbChoice value) => _choices[index] = value;
+  operator[]=(int index, Choice value) => _choices[index] = value;
 
-  /// Creates new EgbChoiceList with no [question] and empty list of choices.
-  EgbChoiceList();
+  /// Creates new ChoiceList with no [question] and empty list of choices.
+  ChoiceList();
 
-  /// Creates new EgbChoiceList with list of [_choices] and [question].
-  EgbChoiceList.fromList(this._choices, this.question);
+  /// Creates new ChoiceList with list of [_choices] and [question].
+  ChoiceList.fromList(this._choices, this.question);
 
   /**
    * Takes list from Scripter page data and fills/creates choices list with this
@@ -184,7 +184,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
       } else {
         string = "";
       }
-      var choice = new EgbChoice(
+      var choice = new Choice(
                             string,
                             goto: map["goto"],
                             script: map["script"],
@@ -193,51 +193,51 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
   }
 
-  /// Adds new EgbChoice into local choices list. If [element] is instance of
-  /// [EgbChoice], the choice is simply added to the list. If the element is
-  /// instance of String, the new [EgbChoice] is created from given optional
+  /// Adds new Choice into local choices list. If [element] is instance of
+  /// [Choice], the choice is simply added to the list. If the element is
+  /// instance of String, the new [Choice] is created from given optional
   /// parameters [script], [goto], [submenu], [deferToEndOfPage] and
   /// [deferToChoiceList]. In other case the [ArgumentError] is thrown.
   void add(Object element, {Function script, String goto, String submenu,
       bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
-    if (element is EgbChoice) {
+    if (element is Choice) {
       _choices.add(element);
     } else if (element is String) {
-      var choice = new EgbChoice(element, goto: goto, script: script,
+      var choice = new Choice(element, goto: goto, script: script,
           submenu: submenu,
           deferToEndOfPage: deferToEndOfPage,
           deferToChoiceList: deferToChoiceList);
       _choices.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
-                              "either a new EgbChoice element or a String.");
+                              "either a new Choice element or a String.");
     }
   }
 
-  /// Creates new EgbChoiceList from a given [EgbMessage].
-  EgbChoiceList.fromMessage(EgbMessage m) {
+  /// Creates new ChoiceList from a given [Message].
+  ChoiceList.fromMessage(Message m) {
     if (m.listContent.length < 3) {
       throw "Message with choices doesn't have enough data: ${m.listContent}.";
     } else {
       question = m.listContent[1];
       for (int i = 2; i < m.listContent.length; i++) {
-        _choices.add(new EgbChoice.fromMap(m.listContent[i]));
+        _choices.add(new Choice.fromMap(m.listContent[i]));
       }
     }
   }
 
   /**
-   * Takes care of converting the current [EgbChoiceList] to [EgbMessage].
+   * Takes care of converting the current [ChoiceList] to [Message].
    *
    * By providing [filterOut()], one can force to not show choices that
    * satisfy [:filterOut(choice) == true:].
    */
-  EgbMessage toMessage({
+  Message toMessage({
       String prependText,
       bool atEndOfPage,
       bool atChoiceList,
-      bool filterOut(EgbChoice choice)}) {
-    List<EgbChoice> choicesToSend;
+      bool filterOut(Choice choice)}) {
+    List<Choice> choicesToSend;
 
     // filter out choices we don't want to show
     choicesToSend = _choices.where(
@@ -252,7 +252,7 @@ class EgbChoiceList extends ListBase<EgbChoice> {
     }
 
     DEBUG_SCR("Sending choices.");
-    EgbMessage m = new EgbMessage(EgbMessage.SHOW_CHOICES);
+    Message m = new Message(Message.SHOW_CHOICES);
 
     m.listContent = new List<dynamic>();
     m.listContent.add(prependText);

@@ -1,16 +1,16 @@
-library egb_storage;
+library egb_store;
 
 import 'dart:async';
 import 'player_profile.dart';
 
 /**
- * Storage is the abstract class that can be implemented via any kind of 
+ * Store is the abstract class that can be implemented via any kind of
  * actual storage mechanism (file i/o, HTML5 localStorage, cloud).
  * 
- * Storage is used to save and load player profile and savegames.
+ * Store is used to save and load player profile and savegames.
  */
-abstract class EgbStorage {
-  /// Default player uid. Used for creating of a new [EgbPlayerProfile].
+abstract class Store {
+  /// Default player uid. Used for creating of a new [PlayerProfile].
   static const String DEFAULT_PLAYER_UID = "default";
 
   /// Saves the [value] under [key] to the storage.
@@ -20,22 +20,22 @@ abstract class EgbStorage {
   /// Deletes value under [key] from the storage.
   Future<bool> delete(String key);
 
-  /// Returns default player [EgbPlayerProfile] for the storage.
-  EgbPlayerProfile getDefaultPlayerProfile() {
-    return new EgbPlayerProfile(DEFAULT_PLAYER_UID, this);
+  /// Returns default player [PlayerProfile] for the storage.
+  PlayerProfile getDefaultPlayerProfile() {
+    return new PlayerProfile(DEFAULT_PLAYER_UID, this);
   }
 }
 
 /**
- * MemoryStorage is the most primitive, mock-level storage.
+ * MemoryStore is the most primitive, mock-level storage.
  * It only stores into memory (RAM), no persistence.
  */
-class MemoryStorage extends EgbStorage {
+class MemoryStore extends Store {
   /// Memory storage
   Map<String, String> memory;
 
-  /// Creates new MemoryStorage.
-  MemoryStorage() {
+  /// Creates new MemoryStore.
+  MemoryStore() {
     memory = new Map();
   }
 

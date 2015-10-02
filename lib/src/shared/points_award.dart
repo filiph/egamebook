@@ -31,16 +31,16 @@ class PointsAward {
     }
   }
 
-  /// Returns PointsAward as an [EgbMessage].
-  EgbMessage toMessage() {
-    var message = new EgbMessage(EgbMessage.POINTS_AWARD);
+  /// Returns PointsAward as an [Message].
+  Message toMessage() {
+    var message = new Message(Message.POINTS_AWARD);
     message.listContent = [addition, result];
     message.strContent = justification;
     return message;
   }
 
-  /// Creates and returns new PointsAward from [EgbMessage].
-  factory PointsAward.fromMessage(EgbMessage message) {
+  /// Creates and returns new PointsAward from [Message].
+  factory PointsAward.fromMessage(Message message) {
     int addition = message.listContent[0];
     int result = message.listContent[1];
     String justification = message.strContent;

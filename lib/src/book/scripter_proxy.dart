@@ -15,9 +15,9 @@ import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/scripter.dart';
 
 /**
- * The methods of EgbScripter that are callable by EgbPresenter.
+ * The methods of Scripter that are callable by Presenter.
  */
-abstract class EgbScripterViewedFromPresenter {
+abstract class ScripterViewedFromPresenter {
   /// Getter returns Uid.
   String uid;
 
@@ -28,15 +28,15 @@ abstract class EgbScripterViewedFromPresenter {
    */
   Future init();
   void restart();
-  void load(EgbSavegame savegame, [Set<String> playerChronology]);
+  void load(Savegame savegame, [Set<String> playerChronology]);
   void quit();
 
   /// Instance of Presenter.
-  EgbPresenter presenter;
+  Presenter presenter;
 
   /// Sets Presenter and also sets Presenter player profile's
   /// [:currentEgamebookUid:] to [uid] if is not [:null:].
-  void setPresenter(EgbPresenterViewedFromScripter presenter) {
+  void setPresenter(PresenterViewedFromScripter presenter) {
     this.presenter = presenter;
   }
 }
@@ -45,14 +45,14 @@ abstract class EgbScripterViewedFromPresenter {
  * A proxy/view of the Scripter that has methods callable from Presenter.
  * It has direct access to the Presenter object.
  */
-abstract class EgbScripterProxy extends EgbScripterViewedFromPresenter {
+abstract class ScripterProxy extends ScripterViewedFromPresenter {
 
 }
 
 /**
  * The proxy that deals with Scripter in another Isolate.
  */
-class EgbIsolateScripterProxy extends EgbScripterProxy {
+class IsolateScripterProxy extends ScripterProxy {
   /// Isolate URI.
   Uri _isolateUri;
   /// Own port for receiving messages from Isolate.
@@ -69,10 +69,10 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   /// Init completer.
   Completer _initCompleter;
 
-  final Logger _log = new Logger('EgbIsolateScripterProxy');
+  final Logger _log = new Logger('IsolateScripterProxy');
 
-  /// Creates new EgbIsolateScripterProxy with provided Isolate URI [_isolateUri].
-  EgbIsolateScripterProxy(this._isolateUri);
+  /// Creates new IsolateScripterProxy with provided Isolate URI [_isolateUri].
+  IsolateScripterProxy(this._isolateUri);
 
   @override
   Future init() {
@@ -86,96 +86,96 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
 
   /// Called when message from Scripter Isolate is received.
   /// The received message has to be instance of [SendPort] or [Map].
-  /// In case of Map the [EgbMessage] is then created from a given Map and
+  /// In case of Map the [Message] is then created from a given Map and
   /// according to its type the functionality is run.
   void _onMessageFromScripterIsolate(Object _message) {
     if (_message is SendPort) {
       INT_DEBUG("Received SendPort from Isolate");
       _scripterPort = _message;
-      _send(new EgbMessage.requestBookUid());
+      _send(new Message.requestBookUid());
       return;
     }
 
     assert(_message is Map);
     Map<String, Object> messageMap = _message as Map<String, Object>;
-    EgbMessage message = new EgbMessage.fromMap(messageMap);
+    Message message = new Message.fromMap(messageMap);
 
-    if (message.type != EgbMessage.SCRIPTER_LOG) {
+    if (message.type != Message.SCRIPTER_LOG) {
       INT_DEBUG("Received: $message");
     }
 
     switch (message.type) {
-      case EgbMessage.END_OF_BOOK:
+      case Message.END_OF_BOOK:
         presenter.endBook();
         return;
-      case EgbMessage.SEND_BOOK_UID:
+      case Message.SEND_BOOK_UID:
         INT_DEBUG("Book UID received ('${message.strContent}')");
         _uid = message.strContent;
         _initCompleter.complete();
         return;
-      case EgbMessage.SAVE_GAME:
-        EgbSavegame savegame = new EgbSavegame.fromMessage(message);
+      case Message.SAVE_GAME:
+        Savegame savegame = new Savegame.fromMessage(message);
         savegame.textHistory = presenter.getTextHistory();
         presenter.save(savegame);
         return;
-      case EgbMessage.SAVE_PLAYER_CHRONOLOGY:
+      case Message.SAVE_PLAYER_CHRONOLOGY:
         presenter.playerProfile.savePlayerChronology(message.listContent.toSet()
             );
         return;
-      case EgbMessage.TEXT_RESULT:
+      case Message.TEXT_RESULT:
         presenter.showText(message.strContent).then((_) {
           // Do nothing.
         });
         return;
-      case EgbMessage.NO_RESULT:
+      case Message.NO_RESULT:
         // No visible result from Scripter. Proceeding.
-        _send(new EgbMessage.proceed());
+        _send(new Message.proceed());
         return;
-      case EgbMessage.POINTS_AWARD:
+      case Message.POINTS_AWARD:
         presenter.awardPoints(new PointsAward.fromMessage(message)).then((_) {
           // Do nothing.
         });
         return;
-      case EgbMessage.SET_STATS:
+      case Message.SET_STATS:
         presenter.setStats(UIStat.overwriteStatsListFromDataStructure(
             message.listContent));
         return;
-      case EgbMessage.UPDATE_STATS:
+      case Message.UPDATE_STATS:
         print("RUN: Received updated stats.");
         presenter.updateStats(new StatUpdateCollection.fromMap(
             message.mapContent));
         return;
-      case EgbMessage.SHOW_CHOICES:
+      case Message.SHOW_CHOICES:
         INT_DEBUG("Showing choices.");
-        presenter.showChoices(new EgbChoiceList.fromMessage(message)).then((int
+        presenter.showChoices(new ChoiceList.fromMessage(message)).then((int
             hash) {
           if (hash != null) {
-            _send(new EgbMessage.choiceSelected(hash));
+            _send(new Message.choiceSelected(hash));
           } else {
             // User wants to quit (hash == null).
             quit();
           }
         });
         return;
-      case EgbMessage.SHOW_FORM:
+      case Message.SHOW_FORM:
         INT_DEBUG("Showing form.");
         FormProxy formProxy = new FormProxy.fromMessage(message);
         presenter.showForm(formProxy).listen((CurrentState state) {
           INT_DEBUG("Form updated or submitted by player.");
-          _send(new EgbMessage.formInput(state));
+          _send(new Message.formInput(state));
         });
         return;
-      case EgbMessage.UPDATE_FORM:
+      case Message.UPDATE_FORM:
         INT_DEBUG("Updating form.");
         FormConfiguration changedConfig = new FormConfiguration.fromMap(
             message.mapContent);
         presenter.updateForm(changedConfig);
         return;
-      case EgbMessage.SCRIPTER_ERROR:
+      case Message.SCRIPTER_ERROR:
         INT_DEBUG("SCRIPTER ERROR: ${message.strContent}");
         presenter.reportError("Scripter Error", message.strContent);
         return;
-      case EgbMessage.SCRIPTER_LOG:
+      case Message.SCRIPTER_LOG:
         INT_DEBUG("Scripter: ${message.strContent}");
         return;
       default:
@@ -186,7 +186,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   /**
    * Utility function that sends message through the Scripter port.
    */
-  void _send(EgbMessage message) {
+  void _send(Message message) {
     if (_scripterPort == null) throw new StateError("Cannot send message "
         "when _scripterPort is null.");
     _scripterPort.send(message.toMap());
@@ -195,8 +195,8 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   /// Sends load game message from provided [savegame] to Presenter proxy.
   /// If [playerChronology] is present, it is also contained in the message.
   @override
-  void load(EgbSavegame savegame, [Set<String> playerChronology]) {
-    EgbMessage loadMessage = savegame.toMessage(EgbMessage.LOAD_GAME);
+  void load(Savegame savegame, [Set<String> playerChronology]) {
+    Message loadMessage = savegame.toMessage(Message.LOAD_GAME);
     if (playerChronology != null) {
       loadMessage.listContent = playerChronology.toList(growable: false);
     } else {
@@ -209,7 +209,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   @override
   void quit() {
     if (_scripterPort != null) {
-      _send(new EgbMessage.quit());
+      _send(new Message.quit());
     }
     _receivePort.close();
   }
@@ -217,7 +217,7 @@ class EgbIsolateScripterProxy extends EgbScripterProxy {
   /// Sends start message to Presenter proxy.
   @override
   void restart() {
-    _send(new EgbMessage.start());
+    _send(new Message.start());
   }
 
   void INT_DEBUG(String msg) {

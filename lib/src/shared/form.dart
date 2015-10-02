@@ -2,7 +2,7 @@ library egb_form;
 
 /**
  * A container of a 'form' - a specialized type of choice when you need more
- * than simple choice ([EgbChoice]).
+ * than simple choice ([Choice]).
  *
  * Forms materialize as something very similar to a standard HTML Form, with
  * input fields (such as text fields, sliders, multiple-choice, checkboxes),
@@ -25,7 +25,7 @@ library egb_form;
  *
  * When presented to the user, and after each user input, the form is
  * temporarily disabled (no user input allowed) and a callback is fired. This
- * callback goes from [EgbInterface] to [EgbScripter] (therefore, sometimes it
+ * callback goes from [Presenter] to [Scripter] (therefore, sometimes it
  * has to go into another Isolate or even to a server).
  *
  * Each node of the Form structure is given a unique ID. This makes it easy
@@ -85,17 +85,17 @@ library egb_form;
  * ## A bit about the classes.
  *
  * All form elements have a base class (e.g. [RangeInputBase]) which
- * has the methods and contructors shared by both [EgbScripter] and
- * [EgbPresenter].
+ * has the methods and contructors shared by both [Scripter] and
+ * [Presenter].
  *
- * On the [EgbScripter] side, we have [RangeInput], for example,
+ * On the [Scripter] side, we have [RangeInput], for example,
  * which is the class used by the author. These classes can have closures
  * attached to them. These elements also automatically receive unique
  * [FormElement.id] when they're attached to a [Form].
  *
- * On the [EgbPresenter] side, we have [PresenterRangeInput], a "blueprint"
- * that can't have closures (no way to transport closure from [EgbScripter]
- * to [EgbPresenter]) and whose [FormElement.id] is copied from [EgbScripter].
+ * On the [Presenter] side, we have [PresenterRangeInput], a "blueprint"
+ * that can't have closures (no way to transport closure from [Scripter]
+ * to [Presenter]) and whose [FormElement.id] is copied from [Scripter].
  * From these blueprints, the presenter creates and updates [UiElement].
  */
 
@@ -361,7 +361,7 @@ class Form extends FormBase implements _NewValueCallback {
 /**
  * FormConfiguration class wraps form configuration.
  *
- * It is the 'struct' that is being sent from [EgbScripter] to [EgbInterface]
+ * It is the 'struct' that is being sent from [Scripter] to [Presenter]
  * when form is created and after it is updated.
  */
 class FormConfiguration {
@@ -388,7 +388,7 @@ class FormConfiguration {
 
 /**
  * CurrentState class wraps current configuration.
- * The 'struct' that is send from [EgbInterface] to [EgbScripter] after each
+ * The 'struct' that is send from [Presenter] to [Scripter] after each
  * user interaction.
  */
 class CurrentState {
@@ -478,7 +478,7 @@ typedef String StringifyFunction(Object current);
 /**
  * Abstract class StringRepresentationHolder is an interface for UI blueprints
  * that need to show a value as a string. That value is created
- * via [StringRepresentationCreator.stringifyFunction] in [EgbPresenter]
+ * via [StringRepresentationCreator.stringifyFunction] in [Presenter]
  * each time a value is updated.
  */
 abstract class StringRepresentationHolder {

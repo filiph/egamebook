@@ -14,9 +14,9 @@ import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 
-/// EgbPresenter is an interface for all presenters in application.
+/// Presenter is an interface for all presenters in application.
 /// It has information about player profile and Scripter.
-abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
+abstract class Presenter implements PresenterViewedFromScripter {
   /**
    * Outputs the text (in it's pure, non-HTMLified form) that has been shown
    * so far since the last savegame (or beginning of book).
@@ -54,7 +54,7 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
    *
    * Completes with null when user wants to quit.
    */
-  Future<int> showChoices(EgbChoiceList choices);
+  Future<int> showChoices(ChoiceList choices);
 
   /// Updates the points count and, when [award.addition] is non-zero, it also
   /// informs the player about the new points.
@@ -68,8 +68,8 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
 
   /// Tells the presenter about changed stats. Presenter should update the shown
   /// value(s) and show/hide stats according to the [Stat.show] state.
-  /// Feed this function with the [EgbMessage.mapContent] of the received
-  /// [EgbMessage.UPDATE_STATS] message.
+  /// Feed this function with the [Message.mapContent] of the received
+  /// [Message.UPDATE_STATS] message.
   Future<bool> updateStats(StatUpdateCollection updates);
 
   /// Shows a form in the presenter, set with the initial values. Each time the
@@ -93,11 +93,11 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
    * The naming is deprecated - should just be 'save'.
    */
   @deprecated
-  Future<bool> addSavegameBookmark(EgbSavegame savegame);
+  Future<bool> addSavegameBookmark(Savegame savegame);
 
   /// Sets scripter to [scripterProxy].
-  EgbScripterViewedFromPresenter scripter;
-  void setScripter(EgbScripterViewedFromPresenter scripter) {
+  ScripterViewedFromPresenter scripter;
+  void setScripter(ScripterViewedFromPresenter scripter) {
     this.scripter = scripter;
     assert(scripter.uid != null);
     playerProfile.currentEgamebookUid = scripter.uid;
@@ -105,11 +105,11 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   }
 
   /// Either loads the latest savegame or -- if missing -- creates a new one.
-  Future<EgbPresenter> continueSavedGameOrCreateNew() async {
-    EgbSavegame lastSavegame;
+  Future<Presenter> continueSavedGameOrCreateNew() async {
+    Savegame lastSavegame;
     Set<String> playerChronology;
 
-    EgbSavegame savegame = await playerProfile.loadMostRecent();
+    Savegame savegame = await playerProfile.loadMostRecent();
 
     Set<String> chronology = new Set<String>();
     if (savegame != null) {
@@ -124,13 +124,13 @@ abstract class EgbPresenter implements EgbPresenterViewedFromScripter {
   }
 
   /// Getter returns player profile.
-  EgbPlayerProfile get playerProfile => _playerProfile;
+  PlayerProfile get playerProfile => _playerProfile;
 
   /// Player profile.
-  EgbPlayerProfile _playerProfile;
+  PlayerProfile _playerProfile;
 
   /// Sets player profile to [playerProfile].
-  void setPlayerProfile(EgbPlayerProfile playerProfile) {
+  void setPlayerProfile(PlayerProfile playerProfile) {
     _playerProfile = playerProfile;
   }
 
