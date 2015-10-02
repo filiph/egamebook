@@ -371,16 +371,12 @@ class BuilderInterface {
   Future build(ListQueue queue, Completer completer) async {
     if (!_building && !_analyzing) {
       String pathDart;
-      DateTime lastModified;
       bool isError = false;
       File file = queue.removeFirst();
       _building = true;
 
       try {
         pathDart = _getBuiltFileFromEgbFile(file.path);
-        if (new File(pathDart).existsSync()) {
-          lastModified = new File(pathDart).lastModifiedSync();
-        }
 
         await _runBuilder(file.path);
         _building = false;
@@ -388,11 +384,7 @@ class BuilderInterface {
         isError = true;
       }
 
-      DateTime currentModified = new File(pathDart).lastModifiedSync();
-      if (isError ||
-          !new File(pathDart).existsSync() ||
-          (lastModified != null &&
-              currentModified.compareTo(lastModified) == 0)) {
+      if (isError || !new File(pathDart).existsSync()) {
         print(_OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
