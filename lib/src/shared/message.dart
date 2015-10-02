@@ -4,9 +4,9 @@ import 'dart:convert' show JSON;
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/stat.dart';
 
-/// Class EgbMessage wraps messages used for communication between Presenter
+/// Class Message wraps messages used for communication between Presenter
 /// and Scripter parts.
-class EgbMessage {
+class Message {
   /// Type of the message.
   final int type;
 
@@ -93,9 +93,9 @@ class EgbMessage {
     }
   }
 
-  /// Returns String representation of EgbMessage with its String as a type
+  /// Returns String representation of Message with its String as a type
   /// [typeString] and if [isAsync] is [:true:].
-  String toString() => "EgbMessage $typeString${isAsync ? ' (async)' : ''}";
+  String toString() => "Message $typeString${isAsync ? ' (async)' : ''}";
 
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
@@ -117,75 +117,75 @@ class EgbMessage {
    *
    */
 
-  /// Creates new EgbMessage with [type] and optional if it [needsAnswer].
-  EgbMessage(this.type, {bool needsAnswer: true});
+  /// Creates new Message with [type] and optional if it [needsAnswer].
+  Message(this.type, {bool needsAnswer: true});
 
-  /// Creates new EgbMessage of type [QUIT].
-  /// It is used during the [EgbIsolateScripterProxy]'s [:quit():].
-  EgbMessage.quit() : type = QUIT;
+  /// Creates new Message of type [QUIT].
+  /// It is used during the [IsolateScripterProxy]'s [:quit():].
+  Message.quit() : type = QUIT;
 
-  /// Creates new EgbMessage of type [PROCEED].
-  EgbMessage.proceed() : type = PROCEED;
+  /// Creates new Message of type [PROCEED].
+  Message.proceed() : type = PROCEED;
 
-  /// Creates new EgbMessage of type [TEXT_RESULT] with String
+  /// Creates new Message of type [TEXT_RESULT] with String
   /// content [str].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:showText():].
-  EgbMessage.textResult(String str) : type = TEXT_RESULT {
+  /// It is used during the [IsolatePresenterProxy]'s [:showText():].
+  Message.textResult(String str) : type = TEXT_RESULT {
     strContent = str;
   }
 
-  /// Creates new EgbMessage of type [START].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:restart():].
-  EgbMessage.start() : type = START;
+  /// Creates new Message of type [START].
+  /// It is used during the [IsolatePresenterProxy]'s [:restart():].
+  Message.start() : type = START;
 
-  /// Creates new EgbMessage of type [SEND_BOOK_UID]
+  /// Creates new Message of type [SEND_BOOK_UID]
   /// with String content [strContent].
-  EgbMessage.bookUid(this.strContent) : type = SEND_BOOK_UID;
+  Message.bookUid(this.strContent) : type = SEND_BOOK_UID;
 
-  /// Creates new EgbMessage of type [REQUEST_BOOK_UID].
-  EgbMessage.requestBookUid() : type = REQUEST_BOOK_UID;
+  /// Creates new Message of type [REQUEST_BOOK_UID].
+  Message.requestBookUid() : type = REQUEST_BOOK_UID;
 
-  /// Creates new EgbMessage of type [END_OF_BOOK].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:endBook():].
-  EgbMessage.endOfBook() : type = END_OF_BOOK;
+  /// Creates new Message of type [END_OF_BOOK].
+  /// It is used during the [IsolatePresenterProxy]'s [:endBook():].
+  Message.endOfBook() : type = END_OF_BOOK;
 
-  // EgbMessage containing ChoiceList is created in EgbChoiceList.toMessage().
+  // Message containing ChoiceList is created in ChoiceList.toMessage().
 
-  /// Creates new EgbMessage of type [CHOICE_SELECTED] with provided [hash]
+  /// Creates new Message of type [CHOICE_SELECTED] with provided [hash]
   /// used as [intContent].
-  EgbMessage.choiceSelected(int hash)
+  Message.choiceSelected(int hash)
       : type = CHOICE_SELECTED {
     intContent = hash;
   }
 
-  /// Creates new EgbMessage of type [UPDATE_STATS] with provided
+  /// Creates new Message of type [UPDATE_STATS] with provided
   /// StatUpdateCollection [updates] used as a [mapContent].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:updateStats():].
-  EgbMessage.statUpdates(StatUpdateCollection updates)
+  /// It is used during the [IsolatePresenterProxy]'s [:updateStats():].
+  Message.statUpdates(StatUpdateCollection updates)
       : type = UPDATE_STATS {
     mapContent = updates.toMap();
   }
 
-  /// Creates new EgbMessage of type [SET_STATS] with provided [list] used as
+  /// Creates new Message of type [SET_STATS] with provided [list] used as
   /// a [listContent].
-  /// It is also used during the [EgbIsolatePresenterProxy]'s [:setStats():].
-  EgbMessage.statsInit(List<Map<String, Object>> list)
+  /// It is also used during the [IsolatePresenterProxy]'s [:setStats():].
+  Message.statsInit(List<Map<String, Object>> list)
       : type = SET_STATS {
     listContent = list;
   }
 
-  /// Creates new EgbMessage of type [NO_RESULT].
-  EgbMessage.noResult() : type = NO_RESULT;
+  /// Creates new Message of type [NO_RESULT].
+  Message.noResult() : type = NO_RESULT;
 
-  /// Creates new EgbMessage of type [SAVE_GAME] with provided [json] used
+  /// Creates new Message of type [SAVE_GAME] with provided [json] used
   /// as [strContent].
-  EgbMessage.saveGame(String json) : type = SAVE_GAME {
+  Message.saveGame(String json) : type = SAVE_GAME {
     strContent = json;
   }
 
-  /// Creates new EgbMessage of type [LOAD_GAME] with provided [json] used
+  /// Creates new Message of type [LOAD_GAME] with provided [json] used
   /// as [strContent].
-  EgbMessage.loadGame(String json) : type = LOAD_GAME {
+  Message.loadGame(String json) : type = LOAD_GAME {
     strContent = json;
   }
 
@@ -193,57 +193,57 @@ class EgbMessage {
 
   // Stats messages are made and deconstructed in stat.dart.
 
-  /// Creates new EgbMessage of type [SAVE_PLAYER_CHRONOLOGY] with provided
+  /// Creates new Message of type [SAVE_PLAYER_CHRONOLOGY] with provided
   /// [playerChronology] used as [listContent].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:savePlayerChronology():].
-  EgbMessage.savePlayerChronology(Set<String> playerChronology)
+  /// It is used during the [IsolatePresenterProxy]'s [:savePlayerChronology():].
+  Message.savePlayerChronology(Set<String> playerChronology)
       : type = SAVE_PLAYER_CHRONOLOGY {
     listContent = playerChronology.toList();
   }
 
-  /// Creates new EgbMessage of type [SHOW_FORM] with provided [form]
+  /// Creates new Message of type [SHOW_FORM] with provided [form]
   /// used as [mapContent].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:showForm():].
-  EgbMessage.showForm(Form form) : type = SHOW_FORM {
+  /// It is used during the [IsolatePresenterProxy]'s [:showForm():].
+  Message.showForm(Form form) : type = SHOW_FORM {
     mapContent = form.toMap();
   }
 
-  /// Creates new EgbMessage of type [UPDATE_FORM] with provided
+  /// Creates new Message of type [UPDATE_FORM] with provided
   /// [formConfiguration] used as [mapContent].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:updateForm():].
-  EgbMessage.updateForm(FormConfiguration formConfiguration)
+  /// It is used during the [IsolatePresenterProxy]'s [:updateForm():].
+  Message.updateForm(FormConfiguration formConfiguration)
       : type = UPDATE_FORM {
     mapContent = formConfiguration.toMap();
   }
 
-  /// Creates new EgbMessage of type [FORM_INPUT] with provided
+  /// Creates new Message of type [FORM_INPUT] with provided
   /// [state] used as [mapContent].
-  EgbMessage.formInput(CurrentState state) : type = FORM_INPUT {
+  Message.formInput(CurrentState state) : type = FORM_INPUT {
     mapContent = state.toMap();
   }
 
-  /// Creates new EgbMessage of type [SCRIPTER_ERROR] with provided
+  /// Creates new Message of type [SCRIPTER_ERROR] with provided
   /// [message] used as [strContent].
   /// This message is used when some error appears. and is also used during
-  /// the [EgbIsolatePresenterProxy]'s [:reportError():].
-  EgbMessage.scripterError(String message) : type = SCRIPTER_ERROR {
+  /// the [IsolatePresenterProxy]'s [:reportError():].
+  Message.scripterError(String message) : type = SCRIPTER_ERROR {
     strContent = message;
   }
 
-  /// Creates new EgbMessage of type [SCRIPTER_LOG] with provided
+  /// Creates new Message of type [SCRIPTER_LOG] with provided
   /// [message] used as [strContent].
-  /// It is used during the [EgbIsolatePresenterProxy]'s [:log():].
-  EgbMessage.scripterLog(String message) : type = SCRIPTER_LOG {
+  /// It is used during the [IsolatePresenterProxy]'s [:log():].
+  Message.scripterLog(String message) : type = SCRIPTER_LOG {
     strContent = message;
   }
 
-  /// Creates new EgbMessage from provided [json] String.
-  EgbMessage.fromJson(String json) : this.fromMap(JSON.decode(json));
+  /// Creates new Message from provided [json] String.
+  Message.fromJson(String json) : this.fromMap(JSON.decode(json));
 
-  /// Creates new EgbMessage from provided [map].
-  /// It fills all the parts of [EgbMessage] - [type], [strContent],
+  /// Creates new Message from provided [map].
+  /// It fills all the parts of [Message] - [type], [strContent],
   /// [listContent], [intContent] and [mapContent] if provided.
-  EgbMessage.fromMap(Map<String, Object> map) : type = map["type"] {
+  Message.fromMap(Map<String, Object> map) : type = map["type"] {
     if (map.containsKey("strContent")) {
       strContent = map["strContent"];
     }
@@ -288,12 +288,12 @@ class EgbMessage {
   }
 }
 
-/// Class EgbMessageException wraps exception for EgbMessage.
-class EgbMessageException implements Exception {
+/// Class MessageException wraps exception for Message.
+class MessageException implements Exception {
   /// Message describing the exception.
   final String message;
-  /// Creates new EgbMessageException with error [message].
-  const EgbMessageException(this.message);
-  /// Returns text describing EgbMessageException with its [message].
-  String toString() => "EgbMessageException: $message";
+  /// Creates new MessageException with error [message].
+  const MessageException(this.message);
+  /// Returns text describing MessageException with its [message].
+  String toString() => "MessageException: $message";
 }

@@ -3,7 +3,7 @@ part of zil;
 /**
  * Action is something that the [ZilPlayer] (or, alternately, an eligible
  * [AIActor]) can do given requirements. For the player, when all requirements
- * are met, the [Action] is presented as a [EgbChoice] with [name]. When this
+ * are met, the [Action] is presented as a [Choice] with [name]. When this
  * choice is picked by the player, [function] is executed.
  * 
  * Actions cannot exist by themselves, they need to be attached either to a

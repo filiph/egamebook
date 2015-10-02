@@ -474,7 +474,7 @@ On the most basic level, egamebook is a pair of two classes which are talking to
 
 The default (and currently only) user presenter is the HtmlPresenter. It lives in the browser and shows the output of Scripter as (mostly) paragraphs of text in DOM. When Scripter calls for user input (choice), HtmlPresenter creates a bunch of buttons to click on.
 
-The presenter also interfaces with Storage (or, more precisely, PlayerProfile), which is where each player's savegames and preferences are stored (one storage can support more than one player).
+The presenter also interfaces with Store (or, more precisely, PlayerProfile), which is where each player's savegames and preferences are stored (one store can support more than one player).
 
 ### Scripter
 
@@ -482,7 +482,7 @@ Scripter is a class that encapsulates all the functionality related to communica
 
 This is what the book can then look like after being converted from `.egb` to a Dart file. Egamebook authors *shouldn't* need to know the structure of such Dart files. This is what we're shielding them from by the `.egb` format.
 
-    class ScripterImpl extends EgbScripter {
+    class ScripterImpl extends Scripter {
 
       /* These are the contents of the `<declare>` blocks. */
       int time;
@@ -492,7 +492,7 @@ This is what the book can then look like after being converted from `.egb` to a 
 
       ScripterImpl() : super() {
         /* These are the pages, and the blocks of texts and the script blocks inside them. */
-        pageMap[r"""Day1.WakeUp"""] = new EgbScripterPage(
+        pageMap[r"""Day1.WakeUp"""] = new ScripterPage(
           [
             """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot." """,
             """You have a minute at most before the pigs kick the door in.""",
@@ -507,7 +507,7 @@ This is what the book can then look like after being converted from `.egb` to a 
             ]
           ]
         );
-        pageMap[r"""Day1.wakeupDilemma"""] = new EgbScripterPage(
+        pageMap[r"""Day1.wakeupDilemma"""] = new ScripterPage(
           [
             () {
                 if (time >= 45) {
@@ -586,13 +586,13 @@ The application's `main()` then looks like this:
       var scripterPath = '[[PathToEgbScripterImplementation]]';
       
       // create the presenter
-      EgbPresenter presenter = new HtmlPresenter();
-      // open storage
-      EgbStorage storage = new LocalStorage();
+      Presenter presenter = new HtmlPresenter();
+      // open store
+      Store store = new LocalStorageStore();
       // set player profile
-      presenter.setPlayerProfile(storage.getDefaultPlayerProfile());
+      presenter.setPlayerProfile(store.getDefaultPlayerProfile());
       // run
-      runFromIsolate(scripterPath, presenter, storage);
+      runFromIsolate(scripterPath, presenter, store);
     }
 
 ### Builder

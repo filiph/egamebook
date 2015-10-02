@@ -20,6 +20,7 @@ books/bodega/bodega.*
 books/bodega/part.js*
 test/files/*.dart
 packages
+.packages
 */packages
 */packages/*
 */*/packages

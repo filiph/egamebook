@@ -11,7 +11,7 @@ class A {
   int i;
 }
 
-class ScripterImpl extends EgbScripter {
+class ScripterImpl extends Scripter {
 
   /* LIBRARY */
 
@@ -20,8 +20,8 @@ class ScripterImpl extends EgbScripter {
   }
 
   ScripterImpl(SendPort mainIsolatePort) : super(mainIsolatePort) {
-    pageMap = new EgbScripterPageMap();
-    pageMap[r"""handle"""] = new EgbScripterPage(
+    pageMap = new ScripterPageMap();
+    pageMap[r"""handle"""] = new ScripterPage(
         [
          """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
          """You have a minute at most before the pigs kick the door in. """,
@@ -66,7 +66,7 @@ class ScripterImpl extends EgbScripter {
 since you opened your eyes. """);
         },
         () {
-          choices.add(new EgbChoice(
+          choices.add(new Choice(
               """Get dressed (30 seconds) """,
               goto:r"""getDressed""",
               then:() { {echo("Ladyboy!");;}; }

@@ -10,7 +10,7 @@ import 'saveable.dart';
  * includes the [currentPageName], information about visited pages
  * ([pageMapState] and [vars] defined by author.
  */
-class EgbSavegame {
+class Savegame {
   /// The page on which this savegame was created. Savegames are always created
   /// at the very end of the page, just before the player is presented with
   /// choices.
@@ -39,22 +39,22 @@ class EgbSavegame {
   /// since Epoch.
   int timestamp;
   
-  /// Creates new EgbSavegame with [currentPageName], Map of [_vars]
+  /// Creates new Savegame with [currentPageName], Map of [_vars]
   /// and information about visited pages [pageMapState].
-  EgbSavegame(String this.currentPageName, Map _vars, this.pageMapState) {
+  Savegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
     timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
   }
   
-  /// Creates new EgbSavegame from JSON. The JSON has to contain either
+  /// Creates new Savegame from JSON. The JSON has to contain either
   /// key for [currentPageName] or for [vars], or both. If there are no keys
   /// like that, [InvalidSavegameException] is thrown.
-  EgbSavegame.fromJson(String json) {
+  Savegame.fromJson(String json) {
     Map<String, dynamic> saveMap = JSON.decode(json);
     if (!saveMap.containsKey("currentPageName")
         || !saveMap.containsKey("vars")) {
-      throw new InvalidSavegameException("Invalid JSON for EgbSavegame. "
+      throw new InvalidSavegameException("Invalid JSON for Savegame. "
           "Doesn't contain required fields 'currentPageName' or 'vars'. "
           "JSON='$json'.");
     }
@@ -68,23 +68,23 @@ class EgbSavegame {
     }
   }
   
-  /// Creates new EgbSavegame from [EgbMessage]. It uses its String
+  /// Creates new Savegame from [Message]. It uses its String
   /// content saved as JSON.
-  factory EgbSavegame.fromMessage(EgbMessage message) {
-    return new EgbSavegame.fromJson(message.strContent);
+  factory Savegame.fromMessage(Message message) {
+    return new Savegame.fromJson(message.strContent);
   }
   
-  /// Returns current savegame as [EgbMessage]. 
+  /// Returns current savegame as [Message].
   /// 
-  /// Parameter [type] has to match either type [EgbMessage.SAVE_GAME] 
-  /// or [EgbMessage.LOAD_GAME].
-  EgbMessage toMessage(int type) {
-    if (type != EgbMessage.SAVE_GAME && type != EgbMessage.LOAD_GAME) {
-      throw "Cannot create EgbMessage of type $type. Can only be MSG_SAVE_GAME "
-            "(${EgbMessage.SAVE_GAME}) or MSG_LOAD_GAME "
-            "(${EgbMessage.LOAD_GAME}).";
+  /// Parameter [type] has to match either type [Message.SAVE_GAME]
+  /// or [Message.LOAD_GAME].
+  Message toMessage(int type) {
+    if (type != Message.SAVE_GAME && type != Message.LOAD_GAME) {
+      throw "Cannot create Message of type $type. Can only be MSG_SAVE_GAME "
+            "(${Message.SAVE_GAME}) or MSG_LOAD_GAME "
+            "(${Message.LOAD_GAME}).";
     }
-    EgbMessage message = new EgbMessage(type);
+    Message message = new Message(type);
     message.strContent = toJson();
     return message;
   }
@@ -229,8 +229,8 @@ class EgbSavegame {
     }
   }
   
-  /// Imports vars from [EgbSavegame] and copies them over existing [vars].
-  static void importSavegameToVars(EgbSavegame savegame, 
+  /// Imports vars from [Savegame] and copies them over existing [vars].
+  static void importSavegameToVars(Savegame savegame,
                                    Map<String, dynamic> vars,
                                    {Map<String, Function> constructors}) {
     // assemble and copy / update saved variables over vars

@@ -2,7 +2,7 @@ part of zil;
 
 /**
  * A [Room] is the a location in the game space. It's [name] must correspond to
- * an [EgbPage] name.
+ * an [Page] name.
  */
 class Room extends Entity with Node implements Described, ZilSaveable {
   /// The 3D coordinates of the room in the game world. The are given by
@@ -34,17 +34,17 @@ class Room extends Entity with Node implements Described, ZilSaveable {
 
   /// Whether or not this room has been visited by the player.
   ///
-  /// Must be separate from [EgbScripterPage.visitCount] because we can be
-  /// currently on a different [EgbScripterPage] than is associated with the
+  /// Must be separate from [ScripterPage.visitCount] because we can be
+  /// currently on a different [ScripterPage] than is associated with the
   /// [Room] (for example, when an [Action] is described on a separate page
-  /// but still needs to update time, the EgbScripterPage could (correctly)
+  /// but still needs to update time, the ScripterPage could (correctly)
   /// report visitCount to be 0).
   bool visited = false;
 
   String toString() => "Room<$name>";
 
   /**
-   * Create a room whose [name] corresponds to an [EgbPage] name.
+   * Create a room whose [name] corresponds to an [Page] name.
    */
   Room(this._zil, String pageName, this.description, Iterable exits,
       {this.descriptionPage, bool nameIsProperNoun: false,

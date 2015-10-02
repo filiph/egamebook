@@ -34,7 +34,7 @@ class Exit extends Entity {
 
   /// The string that will be added to the [storyline] when player uses this
   /// exit. It should describe the process of _arriving_ to the destination.
-  /// (The process of leaving is obvious from choosing the [EgbChoice]. The
+  /// (The process of leaving is obvious from choosing the [Choice]. The
   /// description of the destination [Room] comes after that -- and only if
   /// it is visited for the first time.)
   ///
@@ -44,7 +44,7 @@ class Exit extends Entity {
 
   /**
    * Create an exit to a room as defined by [pageName] (because each [Room]
-   * needs to correspond to a [EgbPage]).
+   * needs to correspond to a [Page]).
    */
   Exit(this.destinationPageName, this.descriptionInfinitive,
       this.arriveDescription, {this.requirement: null, this.cost: 1})

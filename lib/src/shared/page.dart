@@ -4,9 +4,9 @@ library egb_page;
  *  Base class for a page in an egamebook. A page has a unique [name] and some
  *  options.
  *
- *  It is a base class for [BuilderPage] and [EgbScripterPage].
+ *  It is a base class for [BuilderPage] and [ScripterPage].
  */
-class EgbPage {
+class Page {
   /// Name of the page.
   String name;
   /// If the page will be visited only once.
@@ -14,10 +14,10 @@ class EgbPage {
   /// If the page will be shown only once.
   bool showOnce;
 
-  /// Creates new EgbPage with optional [name], [visitOnce] and [showOnce].
-  EgbPage({this.name, this.visitOnce: false, this.showOnce: false});
+  /// Creates new Page with optional [name], [visitOnce] and [showOnce].
+  Page({this.name, this.visitOnce: false, this.showOnce: false});
 
-  /// Returns string representation of EgbPage - its [name].
+  /// Returns string representation of Page - its [name].
   String toString() => name;
   
   /**
@@ -33,7 +33,7 @@ class EgbPage {
    *  Throws in case of name equal to [:null:].
    */
   String get groupName {
-    if (name == null) throw "Accessed groupName EgbPage has name = null.";
+    if (name == null) throw "Accessed groupName Page has name = null.";
     
     int index = name.indexOf(": ");
     if (index > 0) {
@@ -48,7 +48,7 @@ class EgbPage {
   ///
   /// Throws in case of name equal to [:null:].
   String get nameWithoutGroup {
-    if (name == null) throw "Accessed nameWithoutGroup EgbPage has name = null.";
+    if (name == null) throw "Accessed nameWithoutGroup Page has name = null.";
     
     int index = name.indexOf(": ");
     if (index > 0 && index < name.length - 2) {
