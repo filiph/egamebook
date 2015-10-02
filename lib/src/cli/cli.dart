@@ -11,11 +11,6 @@ import 'package:egamebook/presenters/html/main_entry_point.dart'
     show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 import 'package:ansicolor/ansicolor.dart';
 
-/// Returns path relative to the running script in bin/.
-///
-/// TODO this will not work with pub run.
-String getPath(String path) => Platform.script.resolve(path).toFilePath();
-
 //For changing colors in console;
 AnsiPen success = new AnsiPen()..green();
 AnsiPen failure = new AnsiPen()..red();
@@ -189,7 +184,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     Completer completer = new Completer();
 
     try {
-      List files = await _getEgbFiles(_path);
+      List files = await getEgbFiles(_path);
       ListQueue<File> queue = new ListQueue.from(files);
       build(queue, completer);
     } catch (error) {
@@ -204,7 +199,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Without that only one .egb file to build in folder is allowed.
-  Future _getEgbFiles(String path) {
+  Future getEgbFiles(String path) {
     List files = [];
 
     if (p.extension(path).isNotEmpty) {
@@ -434,22 +429,5 @@ class BuilderInterface {
     return Builder.getExtensionPathFromEgbPath(path, "dart",
         subdirectory: p.join(
             HTML_BOOK_ENTRYPOINT_PATH, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
-  }
-
-  /// Returns path to build.dart script in the bin/ folder.
-  String _getPathToBuildScript() {
-    // For the pub run
-    if (Platform.script.scheme.startsWith("http")) {
-      return Platform.script.resolve("build.dart").toString();
-    }
-
-    // TODO potential problem on Windows.
-    if (Platform.script.toFilePath().endsWith("bin/")) {
-      return getPath("build.dart");
-    }
-
-    // For the test folder
-    return getPath(
-        "..${Platform.pathSeparator}bin${Platform.pathSeparator}build.dart");
   }
 }
