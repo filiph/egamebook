@@ -382,11 +382,7 @@ class BuilderInterface {
           lastModified = new File(pathDart).lastModifiedSync();
         }
 
-        var process = await _runBuilder(file.path);
-        await Future.wait([
-          stdout.addStream(process.stdout),
-          stderr.addStream(process.stderr)
-        ]);
+        await _runBuilder(file.path);
         _building = false;
       } catch (error) {
         isError = true;
@@ -431,13 +427,8 @@ class BuilderInterface {
   /// Runs build.dart command line tool on given [path].
   Future _runBuilder(String path) async {
     print("Building $path...");
-    /*try {
-      Builder builder = await new Builder().readEgbFile(new File(path));
-      return builder.writeDartFiles();
-    } catch (e) {
-      return new Future.error(e);
-    }*/
-    return Process.start("dart", [_getPathToBuildScript(), path]);
+    Builder builder = await new Builder().readEgbFile(new File(path));
+    return builder.writeDartFiles();
   }
 
   /// Runs dartanalyzer command line tool on given [path].
