@@ -46,10 +46,6 @@ class CreateCommand extends WorkerCommand {
   }
 
   Worker createWorker(List params) {
-    throw new UnimplementedError("TODO(filiph) egamebook create needs new "
-        "version. Copying from books/bodega creates an invalid project "
-        "right now. Plus we need to find a way around the 'Cannot extract "
-        "a file path from a http URI' error.");
     return new ProjectCreator(params);
   }
 }
