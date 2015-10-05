@@ -11,26 +11,6 @@ import 'package:egamebook/presenters/html/main_entry_point.dart'
     show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 import 'package:ansicolor/ansicolor.dart';
 
-//For changing colors in console;
-AnsiPen success = new AnsiPen()..green();
-AnsiPen failure = new AnsiPen()..red();
-
-/// Class _OutputMessage formats String messages into console.
-class _OutputMessage {
-  static String buildFailed([String message]) {
-    return failure(_buildMessage("BUILD FAILED!"));
-  }
-
-  static String buildSuccessfull([String message]) {
-    return success(_buildMessage("BUILD SUCCESSFULL!"));
-  }
-
-  static String _buildMessage(String buildMessage, [String message]) {
-    message = (message == null) ? "" : "\n$message";
-    return "$buildMessage$message";
-  }
-}
-
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.
 abstract class Worker {
@@ -38,17 +18,21 @@ abstract class Worker {
   Future run();
 }
 
-/// Class [ProjectCreator] creates new egamebook project by copying files
-/// from templates directory.
+/// Class [ProjectCreator] creates new egamebook project by generating files
+/// from templates in templates directory.
 class ProjectCreator implements Worker {
+  /// Name of the example .egb book which will be copied into new project.
   static final String _nameOfExampleBook = "example.egb";
-  /// Files and directories to be created.
+
+  /// Map of files and directories to be created.
   final Map _templateFiles = {
     "directory": ["web", "lib"],
     "file": [_nameOfExampleBook, "pubspec.yaml", "README.md", "LICENSE"]
   };
+
   /// Path to the template source files in package.
   final String _templateResourcePath = "package:egamebook/example/";
+
   /// Path where the project is created.
   final String _path;
 
@@ -74,54 +58,59 @@ class ProjectCreator implements Worker {
       print("Creating new project in $pathTo...");
       await to.create(recursive: true);
     } else {
-      return new Future.error(failure(
+      return new Future.error(OutputMessage.outputFailed(
           "Folder $pathTo already exists. Please use different folder name."));
     }
 
-    await Future.forEach(_templateFiles.keys, ((String type) async {
-      Directory directory;
-      File file;
-      Resource resource;
-      String text;
+    await Future.forEach(
+        _templateFiles.keys,
+        ((String type) async {
+          Directory directory;
+          File file;
+          Resource resource;
+          String text;
 
-      await Future.forEach(_templateFiles[type], ((String name) async {
-        String path = p.join(pathTo, name);
+          await Future.forEach(
+              _templateFiles[type],
+              ((String name) async {
+                String path = p.join(pathTo, name);
 
-        if (type == "directory") {
-          directory = new Directory(path);
-          await directory.create(recursive: true);
-        } else if (type == "file") {
-          try {
-            //load resource and read the text from it.
-            resource = new Resource("$resourcePath$name");
-            text = await resource.readAsString();
-            file = new File(path);
-            await file.writeAsString(text);
-          } catch (e) {//when the resource doesn't exist.
-            //pubspec.yaml and example.egb are mandatory for the project
-            //so we need to copy them from template files to be able to proceed.
-            //When they do not exist, the errors is filled with messages.
-            if (name == "pubspec.yaml" || name == _nameOfExampleBook) {
-              errors.writeln("File $name doesn't exist in template files.");
-            }
-          }
-        }
-      }));
-    }));
+                if (type == "directory") {
+                  directory = new Directory(path);
+                  await directory.create(recursive: true);
+                } else if (type == "file") {
+                  try {
+                    //load resource and read the text from it.
+                    resource = new Resource("$resourcePath$name");
+                    text = await resource.readAsString();
+                    file = new File(path);
+                    await file.writeAsString(text);
+                  } catch (e) {
+                    //when the resource doesn't exist.
+                    //pubspec.yaml and example.egb are mandatory for the project
+                    //so we need to copy them from template files to be able to proceed.
+                    //When they do not exist, the errors is filled with messages.
+                    if (name == "pubspec.yaml" || name == _nameOfExampleBook) {
+                      errors.writeln(
+                          "File $name doesn't exist in template files.");
+                    }
+                  }
+                }
+              }));
+        }));
 
     //The project creation is unsuccessful in case of errors.
     if (errors.isNotEmpty) {
       to.deleteSync(recursive: true);
-      return new Future.error(failure(errors.toString()));
+      return new Future.error(OutputMessage.outputFailed(errors.toString()));
     }
 
     var process = await _runPubGet(pathTo);
-    await Future.wait([
-      stdout.addStream(process.stdout),
-      stderr.addStream(process.stderr)]);
+    await Future.wait(
+        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
 
     return new Future.value(
-        success("New project in $_path successfully created."));
+        OutputMessage.outputSuccessful("New project in $_path successfully created."));
   }
 
   /// Synchronously copies file from [pathFrom] to [pathTo].
@@ -208,14 +197,14 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
         File file = new File(path);
         if (!file.existsSync()) {
           return new Future.error(
-              _OutputMessage.buildFailed("File $path doesn't exist."));
+              OutputMessage.buildFailed("File $path doesn't exist."));
         }
 
         files = _hierarchy.create(fromFile: file);
         return new Future.value(files);
       } else {
         return new Future.error(
-            _OutputMessage.buildFailed("File type of $path is not supported."));
+            OutputMessage.buildFailed("File type of $path is not supported."));
       }
     }
 
@@ -223,16 +212,16 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
 
     if (!from.existsSync()) {
       return new Future.error(
-          _OutputMessage.buildFailed("Directory $path doesn't exist."));
+          OutputMessage.buildFailed("Directory $path doesn't exist."));
     }
 
     files = _hierarchy.create(fromDirectory: from);
 
     if (files.isEmpty) {
       return new Future.error(
-          _OutputMessage.buildFailed("No $EXTENSION file in this directory."));
+          OutputMessage.buildFailed("No $EXTENSION file in this directory."));
     } else if (!_fullDirectory && files.length > 1) {
-      return new Future.error(_OutputMessage.buildFailed(
+      return new Future.error(OutputMessage.buildFailed(
           "More than one .egb file found in the directory.\n"
           "To run builder on more .egb files in directory than one .egb file "
           "use argument --full-directory or -f."));
@@ -380,7 +369,7 @@ class BuilderInterface {
       }
 
       if (isError || !new File(pathDart).existsSync()) {
-        print(_OutputMessage.buildFailed());
+        print(OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
         if (analyze) {
@@ -393,7 +382,7 @@ class BuilderInterface {
           ]);
           _analyzing = false;
         }
-        print(_OutputMessage.buildSuccessfull());
+        print(OutputMessage.buildSuccessful());
       }
 
       return _buildOrComplete(queue, completer);
@@ -430,4 +419,29 @@ class BuilderInterface {
         subdirectory: p.join(
             HTML_BOOK_ENTRYPOINT_PATH, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
   }
+}
+
+/// Class OutputMessage formats build String messages with colored output.
+class OutputMessage {
+  /// For changing colors in console.
+  static AnsiPen _successPen = new AnsiPen()..green();
+  static AnsiPen _failurePen = new AnsiPen()..red();
+
+  /// Returns build failed message with [message] and optional [coloredOutput].
+  static String buildFailed([String message, bool coloredOutput = true]) {
+    message = (message == null) ? "" : "$message\n";
+    return outputFailed("${message}BUILD FAILED!", coloredOutput);
+  }
+
+  /// Returns build successful message with [message] and optional [coloredOutput].
+  static String buildSuccessful([String message, bool coloredOutput = true]) {
+    message = (message == null) ? "" : "$message\n";
+    return outputSuccessful("${message}BUILD SUCCESSFUL!", coloredOutput);
+  }
+
+  static String outputFailed(String message, [bool coloredOutput = true]) =>
+  (coloredOutput) ? _failurePen(message) : message;
+
+  static String outputSuccessful(String message, [bool coloredOutput = true]) =>
+  (coloredOutput) ? _successPen(message) : message;
 }
