@@ -22,16 +22,16 @@ abstract class Worker {
 /// from templates in templates directory.
 class ProjectCreator implements Worker {
   /// Name of the example .egb book which will be copied into new project.
-  static final String _nameOfExampleBook = "example.egb";
-
-  /// Map of files and directories to be created.
-  final Map _templateFiles = {
-    "directory": ["web", "lib"],
-    "file": [_nameOfExampleBook, "pubspec.yaml", "README.md", "LICENSE"]
-  };
+  static const String NAME_OF_EXAMPLE_BOOK = "example.egb";
 
   /// Path to the template source files in package.
-  final String _templateResourcePath = "package:egamebook/example/";
+  static const String RESOURCE_PATH = "package:egamebook/example/";
+
+  /// Map of files and directories to be created in new project.
+  final Map _templateFiles = {
+    "directory": ["web", "lib"],
+    "file": [NAME_OF_EXAMPLE_BOOK, "pubspec.yaml", "README.md", "LICENSE"]
+  };
 
   /// Path where the project is created.
   final String _path;
@@ -41,56 +41,62 @@ class ProjectCreator implements Worker {
 
   /// Runs creating of new project.
   Future run() {
-    return _createProjectFiles(_templateResourcePath, _templateFiles, _path);
+    return createProject();
   }
 
-  /// Creates new project files from template into [pathTo] destination.
-  /// If [pathTo] already exists, copying fails and user should select
+  /// Creates new project files from template into desired destination.
+  /// If desired destination already exists, copying fails and user should select
   /// new destination.
   ///
-  /// After successful creation of the project, the [:pub get:] is then run.
-  Future _createProjectFiles(
-      String resourcePath, Map files, String pathTo) async {
-    StringBuffer errors = new StringBuffer();
-
-    Directory to = new Directory(pathTo);
+  /// After successful creation of project, the [:pub get:] is run.
+  Future createProject() async {
+    Directory to = new Directory(_path);
     if (!await to.exists()) {
-      print("Creating new project in $pathTo...");
+      print("Creating new project in $_path...");
       await to.create(recursive: true);
     } else {
       return new Future.error(OutputMessage.outputFailed(
-          "Folder $pathTo already exists. Please use different folder name."));
+          "Folder $_path already exists. Please use different folder name."));
     }
+
+    await _createProjectFiles(to);
+    await _runPubGet(_path);
+
+    return new Future.value(OutputMessage
+        .outputSuccessful("New project in $_path successfully created."));
+  }
+
+  /// Creates project files and directories from [_templateFiles] Map.
+  Future _createProjectFiles(Directory to) async {
+    StringBuffer errors = new StringBuffer();
 
     await Future.forEach(
         _templateFiles.keys,
         ((String type) async {
-          Directory directory;
-          File file;
-          Resource resource;
-          String text;
-
           await Future.forEach(
               _templateFiles[type],
               ((String name) async {
-                String path = p.join(pathTo, name);
+                String resourcePath = p.join(_path, name);
 
                 if (type == "directory") {
-                  directory = new Directory(path);
+                  Directory directory = new Directory(resourcePath);
                   await directory.create(recursive: true);
                 } else if (type == "file") {
                   try {
                     //load resource and read the text from it.
-                    resource = new Resource("$resourcePath$name");
-                    text = await resource.readAsString();
-                    file = new File(path);
+                    Resource resource = new Resource("$RESOURCE_PATH$name");
+                    String text = await resource.readAsString();
+                    File file = new File(resourcePath);
+                    //we are writing text files only at the moment.
                     await file.writeAsString(text);
                   } catch (e) {
                     //when the resource doesn't exist.
                     //pubspec.yaml and example.egb are mandatory for the project
-                    //so we need to copy them from template files to be able to proceed.
+                    //so we need to copy them from template files to be able to
+                    //proceed.
                     //When they do not exist, the errors is filled with messages.
-                    if (name == "pubspec.yaml" || name == _nameOfExampleBook) {
+                    if (name == "pubspec.yaml" ||
+                        name == NAME_OF_EXAMPLE_BOOK) {
                       errors.writeln(
                           "File $name doesn't exist in template files.");
                     }
@@ -99,32 +105,21 @@ class ProjectCreator implements Worker {
               }));
         }));
 
-    //The project creation is unsuccessful in case of errors.
+    //The project creation is unsuccessful in case of any errors and
+    //the project directory is then deleted.
     if (errors.isNotEmpty) {
-      to.deleteSync(recursive: true);
-      return new Future.error(OutputMessage.outputFailed(errors.toString()));
+      await to.delete(recursive: true);
+      return new Future.error(
+          OutputMessage.outputFailed(errors.toString().trim()));
     }
-
-    var process = await _runPubGet(pathTo);
-    await Future.wait(
-        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
-
-    return new Future.value(
-        OutputMessage.outputSuccessful("New project in $_path successfully created."));
-  }
-
-  /// Synchronously copies file from [pathFrom] to [pathTo].
-  void _copyFileSync(String pathFrom, String pathTo) {
-    File from = new File(pathFrom);
-    File to = new File(pathTo);
-
-    to.writeAsBytesSync(from.readAsBytesSync());
   }
 
   /// Runs pub get command line tool on given [path].
-  Future _runPubGet(String path) {
+  Future _runPubGet(String path) async {
     print("Running pub get...");
-    return Process.start("pub", ["get"], workingDirectory: path);
+    var process = await Process.start("pub", ["get"], workingDirectory: path);
+    return Future.wait(
+        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
   }
 }
 
@@ -165,17 +160,21 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     analyze = _analyze;
   }
 
-  /// Runs egamebook builder on found .egb file in [_path].
+  /// Runs building of project.
+  Future run() {
+    return buildProject();
+  }
+
+  /// Runs egamebook builder on found .egb file(s) in [_path].
   ///
   /// The files are retrieved as a [List] which is then converted to
   /// [ListQueue] and then the build is run on every file in this queue.
-  Future run() async {
+  Future buildProject() async {
     Completer completer = new Completer();
 
     try {
-      List files = await getEgbFiles(_path);
-      ListQueue<File> queue = new ListQueue.from(files);
-      build(queue, completer);
+      ListQueue<File> files = await _getEgbFiles();
+      build(files, completer);
     } catch (error) {
       completer.completeError(error);
     }
@@ -183,51 +182,48 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     return completer.future;
   }
 
-  /// Returns every .egb file name in the given [path] as [Future].
+  /// Returns every .egb file name from path in [ListQueue].
   /// If no .egb file is found or more than one file, build fails.
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Without that only one .egb file to build in folder is allowed.
-  Future getEgbFiles(String path) {
-    List files = [];
+  Future _getEgbFiles() async {
+    ListQueue<File> queue;
 
-    if (p.extension(path).isNotEmpty) {
-      //running on file
-      if (p.extension(path) == EXTENSION) {
-        File file = new File(path);
-        if (!file.existsSync()) {
+    //running on a single .egb file
+    if (p.extension(_path).isNotEmpty) {
+      if (p.extension(_path) == EXTENSION) {
+        File file = new File(_path);
+        if (!await file.exists()) {
           return new Future.error(
-              OutputMessage.buildFailed("File $path doesn't exist."));
+              OutputMessage.buildFailed("File $_path doesn't exist."));
         }
-
-        files = _hierarchy.create(fromFile: file);
-        return new Future.value(files);
+        queue = new ListQueue.from(_hierarchy.create(fromFile: file));
+        return new Future.value(queue);
       } else {
         return new Future.error(
-            OutputMessage.buildFailed("File type of $path is not supported."));
+            OutputMessage.buildFailed("File type of $_path is not supported."));
       }
     }
 
-    Directory from = new Directory(path);
-
-    if (!from.existsSync()) {
+    Directory from = new Directory(_path);
+    if (!await from.exists()) {
       return new Future.error(
-          OutputMessage.buildFailed("Directory $path doesn't exist."));
+          OutputMessage.buildFailed("Directory $_path doesn't exist."));
     }
 
-    files = _hierarchy.create(fromDirectory: from);
-
-    if (files.isEmpty) {
+    queue = new ListQueue.from(_hierarchy.create(fromDirectory: from));
+    if (queue.isEmpty) {
       return new Future.error(
           OutputMessage.buildFailed("No $EXTENSION file in this directory."));
-    } else if (!_fullDirectory && files.length > 1) {
-      return new Future.error(OutputMessage.buildFailed(
-          "More than one .egb file found in the directory.\n"
-          "To run builder on more .egb files in directory than one .egb file "
-          "use argument --full-directory or -f."));
+    } else if (!_fullDirectory && queue.length > 1) {
+      return new Future.error(OutputMessage
+          .buildFailed("More than one .egb file found in the directory.\n"
+              "To run builder on more .egb files in directory "
+              "use argument --full-directory or -f."));
     }
 
-    return new Future.value(files);
+    return new Future.value(queue);
   }
 }
 
@@ -267,40 +263,37 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
     analyze = _analyze;
   }
 
-  /// Runs builder after each file change.
-  /// Builder regenerates files of only valid [extensions].
-  ///
-  /// The flow of builder is follows:
-  ///
-  /// When .egb file is changed, we don't want to rebuild also new (or updated)
-  /// .dart and .html.dart files.
-  ///
-  /// When .dart file is changed, we don't want it to rebuild again and
-  /// we don't want to rebuild also .html.dart file.
-  ///
-  /// When .html.dart file is changed, we don't want to rebuild anything.
+  /// Runs watching of project.
+  Future run() {
+    return watchProject();
+  }
+
+  /// Runs builder after each .egb file change.
   ///
   /// When file is removed, we don't want to rebuild.
   ///
   /// Every valid event (which wraps changed path) for build is added into
   /// [ListQueue] and built when it's right time for it.
-  Future run() {
+  Future watchProject() async {
     Directory directory = new Directory(_path);
 
     if (p.extension(_path).isNotEmpty) {
-      return new Future.error(
-          "Watching of files is not supported. Run watcher on directory");
-    } else if (!directory.existsSync()) {
-      return new Future.error("Given source directory $_path doesn't exist.");
+      return new Future.error(OutputMessage.outputFailed(
+          "Watching of files is not supported. Run watcher on directory"));
+    } else if (!await directory.exists()) {
+      return new Future.error(OutputMessage
+          .outputFailed("Given source directory $_path doesn't exist."));
     }
 
     // Sanity check.
-    if (!new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH)).existsSync() ||
-        !new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH,
-            HTML_BOOK_DART_PATH_FROM_ENTRYPOINT)).existsSync()) {
-      return new Future.error("Must run watcher on a directory that is a "
-          "Dart web applications package (it must have "
-          "lib/, web/, pubspec.yaml and all that).");
+    if (!await new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH))
+            .exists() ||
+        !await new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH,
+            HTML_BOOK_DART_PATH_FROM_ENTRYPOINT)).exists()) {
+      return new Future.error(OutputMessage
+          .outputFailed("Must run watcher on a directory that is a "
+              "Dart web applications package (it must have "
+              "lib/, web/, pubspec.yaml and all that)."));
     }
 
     _watch(directory);
@@ -317,7 +310,6 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
       File masterFile = _hierarchy.getMasterFile(new File(event.path));
 
       if (event.type != ChangeType.REMOVE &&
-          !_isSourcesDirectory(masterFile.path) &&
           p.extension(masterFile.path) == EXTENSION) {
         queue.add(masterFile);
         Completer completer = new Completer();
@@ -325,20 +317,10 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
       }
     }, onError: print);
   }
-
-  /// Returns if the path is within bin/, lib/ or web/ directory.
-  ///
-  /// TODO maybe also test/.
-  /// TODO add to constants
-  bool _isSourcesDirectory(String path) {
-    List segments = p.split(path);
-
-    return segments.contains("bin") ||
-        segments.contains("lib") ||
-        segments.contains("web");
-  }
 }
 
+/// Class [BuilderInterface] wraps the functionality around building of .egb
+/// files with possibility of running Dart analyzer.
 class BuilderInterface {
   /// If the built file should be analyzed.
   bool analyze;
@@ -357,29 +339,23 @@ class BuilderInterface {
       String pathDart;
       bool isError = false;
       File file = queue.removeFirst();
-      _building = true;
 
       try {
         pathDart = _getBuiltFileFromEgbFile(file.path);
-
+        _building = true;
         await _runBuilder(file.path);
         _building = false;
       } catch (error) {
         isError = true;
       }
 
-      if (isError || !new File(pathDart).existsSync()) {
+      if (isError || !await new File(pathDart).exists()) {
         print(OutputMessage.buildFailed());
         //failed but still try to build next one.
       } else {
         if (analyze) {
           _analyzing = true;
-
-          var process = await _runAnalyzer(pathDart);
-          await Future.wait([
-            stdout.addStream(process.stdout),
-            stderr.addStream(process.stderr)
-          ]);
+          await _runAnalyzer(pathDart);
           _analyzing = false;
         }
         print(OutputMessage.buildSuccessful());
@@ -408,9 +384,11 @@ class BuilderInterface {
   }
 
   /// Runs dartanalyzer command line tool on given [path].
-  Future _runAnalyzer(String path) {
+  Future _runAnalyzer(String path) async {
     print("Running analyzer on $path...");
-    return Process.start("dartanalyzer", [path]);
+    var process = await Process.start("dartanalyzer", [path]);
+    return Future.wait(
+        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
   }
 
   /// Returns built file name from .egb file or [:null:].
@@ -423,7 +401,7 @@ class BuilderInterface {
 
 /// Class OutputMessage formats build String messages with colored output.
 class OutputMessage {
-  /// For changing colors in console.
+  /// Pens for changing text color in console.
   static AnsiPen _successPen = new AnsiPen()..green();
   static AnsiPen _failurePen = new AnsiPen()..red();
 
@@ -440,8 +418,8 @@ class OutputMessage {
   }
 
   static String outputFailed(String message, [bool coloredOutput = true]) =>
-  (coloredOutput) ? _failurePen(message) : message;
+      (coloredOutput) ? _failurePen(message) : message;
 
   static String outputSuccessful(String message, [bool coloredOutput = true]) =>
-  (coloredOutput) ? _successPen(message) : message;
+      (coloredOutput) ? _successPen(message) : message;
 }
