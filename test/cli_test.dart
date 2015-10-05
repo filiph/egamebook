@@ -2,15 +2,18 @@ library cli_test;
 
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
 import 'package:test/test.dart';
 import 'package:args/command_runner.dart';
 import 'package:path/path.dart' as p;
 import 'package:egamebook/command.dart';
 import 'package:egamebook/src/cli/cli.dart';
-import 'package:egamebook/presenters/html/main_entry_point.dart' show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
+import 'package:egamebook/presenters/html/main_entry_point.dart'
+    show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
 /// Where the template files for tests are located.
-String templateFiles = "template_files";
+const String TEMPLATE_FILES = "template_files";
+const String TEMPLATE_BOOK_NAME = "bodega.egb";
 
 /// Returns full path to the desired [fileName].
 String getPath(String fileName) {
@@ -18,55 +21,23 @@ String getPath(String fileName) {
   return p.join(p.dirname(pathToScript), fileName);
 }
 
+/// Creates temporary dir on [path] with all needed assets
+/// to be able to build it.
 void createTemporaryDir(String path) {
   Directory temp = new Directory(path);
   temp.createSync();
 
   Directory tempWeb = new Directory(p.join(path, HTML_BOOK_ENTRYPOINT_PATH));
   tempWeb.createSync();
-  Directory tempLib = new Directory(p.join(tempWeb.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
+  Directory tempLib =
+      new Directory(p.join(tempWeb.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
   tempLib.createSync();
 }
 
+/// Deletes temporary dir on [path].
 void deleteTemporaryDir(String path) {
   Directory temp = new Directory(path);
   temp.deleteSync(recursive: true);
-}
-
-/// Returns number of valid files in [path].
-/// Valid file is either [File] or [Directory].
-/// Symlinks are not counted.
-int getNumberOfFilesInPath(String path) {
-  Directory directory = new Directory(path);
-  int validFiles = 0;
-
-  if (!directory.existsSync()) {
-    return -1;
-  }
-
-  directory.listSync(recursive: true, followLinks: false)
-    .forEach((FileSystemEntity entity) {
-      if (entity is File || entity is Directory) { //no symlinks
-        validFiles++;
-      }
-  });
-
-  return validFiles;
-}
-
-/// Class [ProjectCreatorStub] is a [ProjectCreator] which
-/// uses testing templates.
-class ProjectCreatorStub extends ProjectCreator {
-  final String templates = getPath(templateFiles);
-  ProjectCreatorStub(List params) : super(params);
-}
-
-/// Class [CreateCommandStub] is a [CreateCommand] which
-/// uses [ProjectCreatorStub].
-class CreateCommandStub extends CreateCommand {
-  Worker createWorker(List params) {
-    return new ProjectCreatorStub(params);
-  }
 }
 
 const String SIMPLE_EGB_CONTENT = """
@@ -75,30 +46,28 @@ start
 
 Some content of bodega .egb file.
 """;
+const String SIMPLE_PUBSPEC = """
+name: 'example test'
+version: 0.0.1
+description: The first full-featured egamebook for test.
+author: <author@example.com>
+homepage: http://www.example.com
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dependencies:
+  browser: '>=0.10.0 <0.11.0'
+""";
 
 void main() {
   CommandRunner runner =
       new CommandRunner("egamebooktest", "Egamebook test builder.")
-      ..addCommand(new CreateCommandStub())
-      ..addCommand(new BuildCommand())
-      ..addCommand(new WatchCommand());
+        ..addCommand(new CreateCommand())
+        ..addCommand(new BuildCommand())
+        ..addCommand(new WatchCommand());
 
   group("egamebook create", () {
-
-    setUp(() {
-      String path = getPath(templateFiles);
-
-      createTemporaryDir(path);
-
-      File bodega = new File(p.join(path, "bodega.egb"));
-      bodega.writeAsStringSync(SIMPLE_EGB_CONTENT);
-    });
-
-    tearDown(() {
-      String path = getPath(templateFiles);
-      deleteTemporaryDir(path);
-    });
-
     test("fails with no parameters", () {
       var callback = expectAsync((message) {
         List lines = message.split("\n");
@@ -130,7 +99,7 @@ void main() {
     });
 
     test("fails on existing folder", () {
-      String path = getPath("egbtemp");
+      String path = getPath("folder_exists");
       createTemporaryDir(path);
 
       var callback = expectAsync((message) {
@@ -145,35 +114,39 @@ void main() {
       String path = getPath("project_name");
       Directory temp = new Directory(path);
 
-      if (temp.existsSync()) { //fixes it it remained from previous failed test.
+      if (temp.existsSync()) {
+        //fixes it it remained from previous failed test.
         temp.deleteSync(recursive: true);
       }
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
-        expect(lines[0], "New project in $path successfully created.");
+        expect(lines[0].contains("New project in $path successfully created."),
+            isTrue);
         expect(temp.existsSync(), isTrue);
-        expect(getNumberOfFilesInPath(path),
-            getNumberOfFilesInPath(getPath(templateFiles)));
+        expect(new File(p.join(path, "pubspec.yaml")).existsSync(), isTrue);
+        expect(
+            new File(p.join(path, ProjectCreator.NAME_OF_EXAMPLE_BOOK))
+                .existsSync(),
+            isTrue);
         temp.deleteSync(recursive: true);
       });
 
       runner.run(["create", path]).then(callback);
     });
-  }, skip: "egamebook create is now on hold");
+  });
 
   group("egamebook build", () {
-
     setUp(() {
-      String path = getPath(templateFiles);
+      String path = getPath(TEMPLATE_FILES);
       createTemporaryDir(path);
 
-      File bodega = new File(p.join(path, "bodega.egb"));
+      File bodega = new File(p.join(path, TEMPLATE_BOOK_NAME));
       bodega.writeAsStringSync(SIMPLE_EGB_CONTENT);
     });
 
     tearDown(() {
-      String path = getPath(templateFiles);
+      String path = getPath(TEMPLATE_FILES);
       deleteTemporaryDir(path);
     });
 
@@ -187,22 +160,20 @@ void main() {
       runner.run(["build", "test1", "test2"]).catchError(callback);
     });
 
-    // TODO stupid - builds all files in test - also files/ - how to?
-    // TODO commented to not build all files/
-    /*test("builds with no parameters", () {
-      var callback = expectAsync((message) {
-        expect(message.contains("BUILD SUCCESSFULL!"), isTrue);
+    test("builds template project", () {
+      String path = getPath(TEMPLATE_FILES);
+
+      var callback = expectAsync((_) {
+        File fileHtmlBuild = new File(p.join(
+            path, "web/${p.withoutExtension(TEMPLATE_BOOK_NAME)}.html.dart"));
+        File fileDartBuild = new File(
+            p.join(path, "lib/${p.withoutExtension(TEMPLATE_BOOK_NAME)}.dart"));
+
+        expect(fileHtmlBuild.existsSync(), isTrue);
+        expect(fileDartBuild.existsSync(), isTrue);
       });
 
-      runner.run(["build"]).then(callback);
-    });*/
-
-    test("builds test project", () {
-      var callback = expectAsync((message) {
-        expect(message.contains("DONE."), isTrue);
-      });
-
-      runner.run(["build", getPath(templateFiles)]).then(callback);
+      runner.run(["build", path]).then(callback);
     });
 
     test("builds project with no .egb files", () {
@@ -211,8 +182,8 @@ void main() {
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
-        expect(lines[0], "BUILD FAILED!");
-        expect(lines[1], "No .egb file in this directory.");
+        expect(lines[0].contains("No .egb file in this directory."), isTrue);
+        expect(lines[1].contains("BUILD FAILED!"), isTrue);
         deleteTemporaryDir(path);
       });
 
@@ -230,13 +201,13 @@ void main() {
         File fileHtmlBuild = new File(p.join(path, "web/test1.html.dart"));
         File fileDartBuild = new File(p.join(path, "lib/test1.dart"));
 
-        expect(message.contains("DONE."), isTrue);
         expect(fileHtmlBuild.existsSync(), isTrue);
         expect(fileDartBuild.existsSync(), isTrue);
         deleteTemporaryDir(path);
       });
 
-      runner.run(["build", "$path${Platform.pathSeparator}test1.egb"]).then(callback);
+      runner.run(["build", "$path${Platform.pathSeparator}test1.egb"])
+          .then(callback);
     });
 
     test("fails with .other file as parameter", () {
@@ -248,13 +219,16 @@ void main() {
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
-        expect(lines[0], "BUILD FAILED!");
-        expect(lines[1],
-            "File type of $path${Platform.pathSeparator}test1.other is not supported.");
+        expect(lines[1].contains("BUILD FAILED!"), isTrue);
+        expect(
+            lines[0].contains(
+                "File type of $path${Platform.pathSeparator}test1.other is not supported."),
+            isTrue);
         deleteTemporaryDir(path);
       });
 
-      runner.run(["build", "$path${Platform.pathSeparator}test1.other"]).catchError(callback);
+      runner.run(["build", "$path${Platform.pathSeparator}test1.other"])
+          .catchError(callback);
     });
 
     test("fails with more than one .egb file in directory", () {
@@ -268,13 +242,19 @@ void main() {
 
       var callback = expectAsync((message) {
         List lines = message.split("\n");
-        expect(lines[0], "BUILD FAILED!");
-        expect(lines[1],
-            "More than one .egb file found in the directory.");
+        expect(
+            lines[0]
+                .contains("More than one .egb file found in the directory."),
+            isTrue);
+        expect(
+            lines[1].contains(
+                "To run builder on more .egb files in directory use argument --full-directory or -f."),
+            isTrue);
+        expect(lines[2].contains("BUILD FAILED!"), isTrue);
         deleteTemporaryDir(path);
       });
 
-      runner.run(["build", "$path"]).catchError(callback);
+      runner.run(["build", path]).catchError(callback);
     });
 
     test("builds more .egb files with -f or --full-directory parameter", () {
@@ -302,6 +282,7 @@ void main() {
     });
   });
 
+/*
   group("egamebook getEgbFiles", () {
     test("returns correct .egb files", () {
       String path = getPath("test_search_egb");
@@ -324,12 +305,11 @@ void main() {
         deleteTemporaryDir(path);
       });
 
-      builder.getEgbFiles(path).then(callback);
+      builder._getEgbFiles(path).then(callback);
     });
   });
 
   group("egamebook watch", () {
-
     test("builds .egb file after change", () {
       String path = getPath("test_watch");
       createTemporaryDir(path);
@@ -353,5 +333,5 @@ void main() {
 
       runner.run(["watch", path]).then(callback);
     });
-  });
+  });*/
 }
