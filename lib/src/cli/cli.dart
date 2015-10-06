@@ -173,7 +173,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
     Completer completer = new Completer();
 
     try {
-      ListQueue<File> files = await _getEgbFiles();
+      ListQueue<File> files = await getEgbFiles(_path);
       build(files, completer);
     } catch (error) {
       completer.completeError(error);
@@ -187,29 +187,29 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Without that only one .egb file to build in folder is allowed.
-  Future _getEgbFiles() async {
+  Future getEgbFiles(String path) async {
     ListQueue<File> queue;
 
     //running on a single .egb file
-    if (p.extension(_path).isNotEmpty) {
-      if (p.extension(_path) == EXTENSION) {
-        File file = new File(_path);
+    if (p.extension(path).isNotEmpty) {
+      if (p.extension(path) == EXTENSION) {
+        File file = new File(path);
         if (!await file.exists()) {
           return new Future.error(
-              OutputMessage.buildFailed("File $_path doesn't exist."));
+              OutputMessage.buildFailed("File $path doesn't exist."));
         }
         queue = new ListQueue.from(_hierarchy.create(fromFile: file));
         return new Future.value(queue);
       } else {
         return new Future.error(
-            OutputMessage.buildFailed("File type of $_path is not supported."));
+            OutputMessage.buildFailed("File type of $path is not supported."));
       }
     }
 
-    Directory from = new Directory(_path);
+    Directory from = new Directory(path);
     if (!await from.exists()) {
       return new Future.error(
-          OutputMessage.buildFailed("Directory $_path doesn't exist."));
+          OutputMessage.buildFailed("Directory $path doesn't exist."));
     }
 
     queue = new ListQueue.from(_hierarchy.create(fromDirectory: from));
