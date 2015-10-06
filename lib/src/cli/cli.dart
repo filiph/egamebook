@@ -117,9 +117,9 @@ class ProjectCreator implements Worker {
   /// Runs pub get command line tool on given [path].
   Future _runPubGet(String path) async {
     print("Running pub get...");
-    var process = await Process.start("pub", ["get"], workingDirectory: path);
-    return Future.wait(
-        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
+    var result = await Process.run("pub", ["get"], workingDirectory: path);
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
   }
 }
 
@@ -386,9 +386,9 @@ class BuilderInterface {
   /// Runs dartanalyzer command line tool on given [path].
   Future _runAnalyzer(String path) async {
     print("Running analyzer on $path...");
-    var process = await Process.start("dartanalyzer", [path]);
-    return Future.wait(
-        [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
+    var result = await Process.run("dartanalyzer", [path]);
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
   }
 
   /// Returns built file name from .egb file or [:null:].
