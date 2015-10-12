@@ -1,0 +1,44 @@
+Title:      Test Gamebook #1  
+Subtitle:   The Adventures of a Guy with a Gun  
+Author:     Filip Hracek  
+            John Doe  
+Web:        http://filiph.net/  
+Email:      abc@example.com  
+Keywords:   crimi, thriller  
+Copyright:  Creative Commons
+UniqueID:   test.example.2
+
+<import 'scripter_test_save_lib.dart'/>
+
+<declare>
+  var nullified, integer, numeric, string, nonSaveable, list1, list2,
+      map1, map2, saveable;
+</declare>
+
+---
+aaa
+
+Starting and setting variables.
+
+<script>
+  nullified = null;
+  integer = 0;
+  numeric = 3.14;
+  string = "Řeřicha UTF-8 String";
+  nonSaveable = new A();
+  list1 = ["a", "b", "ř"];
+  list2 = [integer, numeric, list1, nonSaveable];
+  map1 = {"a":integer,"b":numeric,"c":nullified};
+  map2 = {"x":map1,"y":list2,"z":nonSaveable};
+  saveable = new ClassWithMapMethods();
+  saveable.i = 42;
+  saveable.s = "Řeřicha";
+</script>
+
+- Jump [bbb]
+
+---
+bbb
+
+Scripter should still have all variables, but only Saveable types were
+sent to Runner.

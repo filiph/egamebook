@@ -1,0 +1,49 @@
+Name:   Example
+Author: John Doe
+
+<script>
+  this should not be recognized as a script!
+</script>
+
+This is a synopsis.
+
+<import "package:egamebook/egamebook.dart">
+
+-------------
+start
+
+You are in a room full of spiders. The spiders look annoyed.
+
+<script>
+  <import "this should not be picked up">
+</script>
+---
+squash
+[[ visitOnce]]
+
+You try to squash the spiders, but there's too many of them. Oh god,
+they're eating your face off now!
+
+<import "this is malformed, unmatching quotes'>
+
+ ---
+run
+ [[ visitOnce, showOnce ]]
+
+You managed to get out of the room before the spiders got to you, but now you're in a room full of giant worms.
+
+<script
+
+
+This is also not a <script>, of course!
+
+---
+exit
+
+
+<variables>
+  class D {
+    D() {
+    }
+  }
+</VARIABLES>

@@ -1,0 +1,27 @@
+Title:      Test Gamebook #1  
+Subtitle:   The Adventures of a Guy with a Gun  
+Author:     Filip Hracek  
+            John Doe  
+Web:        http://filiph.net/  
+Email:      abc@example.com
+Keywords:   crimi, thriller  
+UniqueID:   example.uid.1
+Three word key:   value
+Copyright:	Creative Commons  
+
+Invalid Metadata: this is not valid
+
+---
+Day1.WakeUp
+
+You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot." 
+
+You have a minute at most before the pigs kick the door in.
+
+<declare>
+  int time;
+</declare>
+
+<script>
+  time = 0;
+</script>

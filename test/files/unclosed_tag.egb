@@ -1,0 +1,35 @@
+Synopsis. There should be no $vars here!
+
+-------------
+start
+
+First paragraph is text without vars.
+It's pretty long, too!
+
+This paragraph has a $variable on the first line!
+But there is also a second one.
+
+This paragraph is really long.  This paragraph is really long.  This paragraph is really long.  This paragraph is really long.
+This paragraph is really long.  This paragraph is really long.  This paragraph is really long.
+This paragraph is really long.  This paragraph is really long.  This paragraph is really long.  This paragraph is really long.  This paragraph is really long.
+And on the last line, there's a $variable.
+
+Variable can look like $_this! (This is blocks[3], btw.)
+
+Variables in text can also look ${like._this}.
+
+- Squash the spiders [squash]
+- Run! [run]
+
+---     
+squash
+
+You try to squash the spiders, but there's too many of them. Oh god,
+they're eating your face off now!
+
+<declare>
+
+---
+run
+
+You managed to get out of the room before the spiders got to you, but now you're in a room full of giant worms.

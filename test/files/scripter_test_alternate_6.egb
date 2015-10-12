@@ -1,0 +1,92 @@
+Title:      Test Gamebook #1  
+Subtitle:   The Adventures of a Guy with a Gun  
+Author:     Filip Hracek  
+            John Doe  
+Web:        http://filiph.net/  
+Email:      abc@example.com  
+Keywords:   crimi, thriller  
+Copyright:  Creative Commons
+UniqueID:   test.example.1
+
+<import 'scripter_test_alternate_6_lib.dart' />
+
+<declare>
+  int time;
+  ClassWithMapMethods customInstance;
+</declare>
+
+---
+aaa
+
+Starting. Setting time to 0.
+
+<script>
+  time = 0;
+  ClassWithMapMethods customInstance;
+</script>
+
+- ABC [bbb]
+- CDE [xxx]
+
+---
+bbb
+
+Blah.
+
+<init>
+  customInstance = new ClassWithMapMethods();
+  customInstance.i = 10;
+  customInstance.s = "Hello World";
+</init>
+
+- efger [zzz]
+- gegreg [ccc]
+
+---
+xxx
+
+Shouldn't reach this!
+
+---
+zzz
+
+Shouldn't reach this, neither!
+
+---
+ccc
+
+Increasing time by 1 to ${++time}.
+
+Also increasing customInstance.i by one.
+
+<script>
+customInstance.i++;
+</script>
+
+- egreger [dddeee]
+- ervfvcx [zzz]
+
+---
+dddeee
+
+Welcome (back?) to dddeee. Time is now $time. customInstance.i is now ${customInstance.i}. Increasing both by 1.
+
+<script>
+time++;
+customInstance.i++;
+</script>
+
+- evdfvdv [fff]
+- loop [dddeee]
+
+
+---
+fff
+
+- back [dddeee]
+- end [ggg]
+
+---
+ggg
+
+End of book.
