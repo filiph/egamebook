@@ -6,8 +6,6 @@ A system which automatically creates playable electronic gamebooks from .egb fil
 
 Or how to be a published interactive fiction writer in 8 easy steps!
 
-Note: This is **not** implemented yet. The converter from .egb to .dart is done and works, but the workflow is only a vision.
-
 1. [Install Dart](https://www.dartlang.org/downloads/).
 2. On the command line, run `pub global activate egamebook`. This will install the `egamebook` command line tool.
 4. Go to a folder where you want your egamebook project to live (for example, `cd ~/projects`).
@@ -16,6 +14,8 @@ Note: This is **not** implemented yet. The converter from .egb to .dart is done 
 5. Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
 6. Edit the `egb` file (for example, file `name.egb` in the project's directory). This is the main source of your book. Any edit will rebuild what's necessary.
 7. Open `web/index.html` in your favorite browser to test the egamebook in action.
+8. If you want to build the folder or file manually, run `egamebook build`. By default only one master egb file in directory can be built.
+9. Find more options with `egamebook --help` or `egamebook <command_name> --help`.
 
 <!-- XXX: The following is currently on hold, but some of the GraphML-egb code is done.
 
@@ -609,3 +609,11 @@ or
 
     dart tool/tester.dart
 
+### Documentation
+Generate documentation into docs/ folder:
+
+    dart bin/docgen.dart
+    
+Generate documentation into docs/ folder and serve it in the web browser:
+
+    dart bin/docgen.dart --serve
