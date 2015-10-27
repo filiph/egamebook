@@ -16,22 +16,6 @@ void main() {
 
   group("file hierarchy", () {
 
-    test("returns correct number of .egb files in directory", () {
-      Directory directory = new Directory(getPath("project_egb_files"));
-      directory.createSync();
-
-      File file1 = new File(p.join(directory.path, "file1.txt"));
-      file1.createSync();
-      File file2 = new File(p.join(directory.path, "file2.egb"));
-      file2.createSync();
-
-      List files = hierarchy.listFiles(directory);
-      expect(files.length, 1);
-      expect(p.basename(files[0].path) == "file2.egb", isTrue);
-
-      directory.deleteSync(recursive: true);
-    });
-
     test("gets master file for part file", () {
       Directory directory = new Directory(getPath("project_master_part"));
       directory.createSync();

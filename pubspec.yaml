@@ -14,5 +14,6 @@ dependencies:
   watcher: any
   logging: any
   quiver: any
+  ansicolor: "^0.0.9"
 executables:
   egamebook:
