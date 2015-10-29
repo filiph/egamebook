@@ -688,6 +688,28 @@ void main() {
           }));
         }));
       });
+
+      test("assigns to firstPage", () async {
+        var b = await new Builder().readEgbFile(new File(getPath("choices_simple.egb")));
+        var webDir = new Directory(path.join(path.dirname(getPath("choices_simple.egb")), "web"));
+        var libDir = new Directory(path.join(path.dirname(getPath("choices_simple.egb")), "lib"));
+        await webDir.create();
+        await libDir.create();
+        await b.writeScripterFile();
+        var f = new File(b.scripterDartPath);
+        bool found = false;
+        for (String line in await f.readAsLines()) {
+          if (line.contains("firstPage")) {
+            found = true;
+          }
+        }
+        if (!found) {
+          fail("firstPage not found in $f");
+        }
+        await webDir.delete(recursive: true);
+        await libDir.delete(recursive: true);
+      });
+
     });
   });
 
