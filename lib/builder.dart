@@ -1462,7 +1462,7 @@ class Builder {
     dartOutStream.write(varsGenerator.generateInitBlockCode());
     copyLineRanges(
         initBlocks.where((block) => block.type == initBlockType).toList(),
-        inputEgbFile.openRead(),
+        _createInputStreamFromMasterFile(inputEgbFile),
         dartOutStream,
         inclusive:false, indentLength:indent)
     .then((_) {
@@ -1484,7 +1484,7 @@ class Builder {
     copyLineRanges(
         initBlocks.where((block) => block.type == BuilderInitBlock.BLK_DECLARE)
           .toList(),
-        inputEgbFile.openRead(),
+        _createInputStreamFromMasterFile(inputEgbFile),
         dartOutStream,
         inclusive: false, indentLength: indent,
         contentsCopyDestination: contents)
@@ -1848,7 +1848,7 @@ class Builder {
    * @return  Future of bool. Always true.
    */
   Future<bool> copyLineRanges(List<BuilderLineRange> lineRanges,
-      Stream<List<int>> inStream, IOSink outStream,
+      Stream<String> inStream, IOSink outStream,
       {bool inclusive: true, int indentLength: 0,
         StringBuffer contentsCopyDestination}) {
     var completer = new Completer();
@@ -1857,8 +1857,6 @@ class Builder {
 
     int lineNumber = 0;
     inStream
-        .transform(UTF8.decoder)
-        .transform(new LineSplitter())
         .listen((line) {
           lineNumber++;
 
