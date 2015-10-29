@@ -401,17 +401,7 @@ class Builder {
         inputEgbFileFullPath = f.path;
         print("Reading input file $f.");
 
-        _fileHierarchy.create(fromFile: f);
-        var partFiles = _fileHierarchy.getPartFiles(f);
-
-        List<File> files = <File>[f];
-        files.addAll(partFiles);
-
-        // Concatenate the master file [f] with all part files.
-        var inputStream = quiver_streams.concat(files.map((file) =>
-            file.openRead()
-                .transform(UTF8.decoder)
-                .transform(const LineSplitter())));
+        var inputStream = _createInputStreamFromMasterFile(f);
 
         readInputStream(inputStream)
         .then((b) => completer.complete(b))
@@ -420,6 +410,25 @@ class Builder {
     }).catchError((e) => completer.completeError(e));
 
     return completer.future;
+  }
+
+  /// Takes the master file ("bodega.egb"), finds all the part files
+  /// ("bodega_part1.egb", ...) and returns a concatenated input stream as if
+  /// all the files were just one.
+  Stream<String> _createInputStreamFromMasterFile(File f) {
+    _fileHierarchy.create(fromFile: f);
+    var partFiles = _fileHierarchy.getPartFiles(f);
+
+    List<File> files = <File>[f];
+    files.addAll(partFiles);
+
+    // Concatenate the master file [f] with all part files.
+    var inputStream = quiver_streams.concat(files.map((file) =>
+        file.openRead()
+            .transform(UTF8.decoder)
+            .transform(const LineSplitter())));
+
+    return inputStream;
   }
 
   /// Reads the given [inputStream] for the contents of the file.
@@ -1512,7 +1521,7 @@ class Builder {
       dartOutStream.write("$indent$msg");
     };
 
-    var inStream = inputEgbFile.openRead();
+    var inStream = _createInputStreamFromMasterFile(inputEgbFile);
     int lineNumber = 0;
     BuilderPage curPage;
     int pageIndex = 0;
@@ -1795,9 +1804,7 @@ class Builder {
 
     };
 
-    inStream.transform(UTF8.decoder)
-            .transform(new LineSplitter())
-            .listen((String line) {
+    inStream.listen((String line) {
               lineNumber++;
               handleLine(line);
             }, onDone: () {

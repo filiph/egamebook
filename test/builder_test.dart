@@ -663,6 +663,12 @@ void main() {
 //    });
 
     group('egb writer', () {
+      setUpAll(() {
+        createSubdirs();
+      });
+      tearDownAll(() {
+        deleteSubdirs();
+      });
 
       test("updates egb file from builder instance", () {
         File orig = new File(getPath("update_egb_original.egb"));
@@ -690,11 +696,8 @@ void main() {
       });
 
       test("assigns to firstPage", () async {
-        var b = await new Builder().readEgbFile(new File(getPath("choices_simple.egb")));
-        var webDir = new Directory(path.join(path.dirname(getPath("choices_simple.egb")), "web"));
-        var libDir = new Directory(path.join(path.dirname(getPath("choices_simple.egb")), "lib"));
-        await webDir.create();
-        await libDir.create();
+        var filename = getPath("choices_simple.egb");
+        var b = await new Builder().readEgbFile(new File(filename));
         await b.writeScripterFile();
         var f = new File(b.scripterDartPath);
         bool found = false;
@@ -706,9 +709,44 @@ void main() {
         if (!found) {
           fail("firstPage not found in $f");
         }
-        await webDir.delete(recursive: true);
-        await libDir.delete(recursive: true);
       });
+
+      group("with parts", () {
+        List<String> outputLines;
+        setUpAll(() async {
+          var filename = getPath("with_parts.egb");
+          var b = await new Builder().readEgbFile(new File(filename));
+          await b.writeScripterFile();
+          var f = new File(b.scripterDartPath);
+          outputLines = await f.readAsLines();
+        });
+
+        test("assigns to firstPage", () {
+          bool found = false;
+          for (String line in outputLines) {
+            if (line.contains("firstPage")) {
+              found = true;
+            }
+          }
+          if (!found) {
+            fail("firstPage not found in with_parts.dart");
+          }
+        });
+
+        test("copies the contents of the part files", () {
+          bool found = false;
+          for (String line in outputLines) {
+            if (line.contains("This is the second part.")) {
+              found = true;
+            }
+          }
+          if (!found) {
+            fail("The second part of the book not found in with_parts.dart");
+          }
+        });
+      });
+
+
 
     });
   });
