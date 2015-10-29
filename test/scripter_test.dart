@@ -116,8 +116,8 @@ void main() {
   }
 
   group("Scripter", () {
-    setUp(buildScripterIsolates);
-    tearDown(deleteSubdirs);
+    setUpAll(buildScripterIsolates);
+    tearDownAll(deleteSubdirs);
 
 
     group("Scripter basic", () {
