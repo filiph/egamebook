@@ -1,5 +1,4 @@
 @TestOn("browser")
-
 import 'package:test/test.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
@@ -11,13 +10,27 @@ import 'dart:convert';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/scripter.dart';
-import 'dart:html' show window, DocumentFragment, HeadingElement, SpanElement, Event, ButtonElement, SelectElement, OptionElement, DivElement, CheckboxInputElement, ParagraphElement, RadioButtonInputElement, querySelector, querySelectorAll;
+import 'dart:html'
+    show
+        window,
+        DocumentFragment,
+        HeadingElement,
+        SpanElement,
+        Event,
+        ButtonElement,
+        SelectElement,
+        OptionElement,
+        DivElement,
+        CheckboxInputElement,
+        ParagraphElement,
+        RadioButtonInputElement,
+        querySelector,
+        querySelectorAll;
 import 'dart:async';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/runner.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
-
 
 class ScripterProxyStub extends ScripterProxy {
   @override
@@ -28,16 +41,13 @@ class ScripterProxyStub extends ScripterProxy {
   Presenter presenter;
 
   @override
-  void load(Savegame savegame, [Set<String> playerChronology]) {
-  }
+  void load(Savegame savegame, [Set<String> playerChronology]) {}
 
   @override
-  void quit() {
-  }
+  void quit() {}
 
   @override
-  void restart() {
-  }
+  void restart() {}
 
   @override
   String get uid => "ProxyStubBOOK";
@@ -45,7 +55,8 @@ class ScripterProxyStub extends ScripterProxy {
 
 void main() {
   group("Basic setup", () {
-    test("defines the same builder closures for "
+    test(
+        "defines the same builder closures for "
         "FormProxy and HtmlPresenter", () {
       Set<String> proxyBuilders = customTagHandlers.keys.toSet();
       Set<String> presenterBuilders = ELEMENT_BUILDERS.keys.toSet();
@@ -65,10 +76,10 @@ void main() {
 
     setUp(() {
       form = new Form();
-      input1 = new RangeInput("Age", (value) => age = value, min: 20, max: 100,
-          value: 30, step: 1, maxEnabled: 40);
-      input2 = new RangeInput("Money", (value) => money = value, max: 1000,
-          step: 100);
+      input1 = new RangeInput("Age", (value) => age = value,
+          min: 20, max: 100, value: 30, step: 1, maxEnabled: 40);
+      input2 = new RangeInput("Money", (value) => money = value,
+          max: 1000, step: 100);
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
       multipleChoiceInput = new MultipleChoiceInput("Multiple Choice", (_) {});
       option1 = new Option("Option 1", (_) {});
@@ -93,8 +104,8 @@ void main() {
       // print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.length, form.children.length);
-      expect((form.children[0] as RangeBase).max, (formProxy.children[0] as
-          RangeBase).max);
+      expect((form.children[0] as RangeBase).max,
+          (formProxy.children[0] as RangeBase).max);
     });
 
     test("Elements get parents", () {
@@ -117,14 +128,16 @@ void main() {
 
     test("disabledOrInsideDisabledParent works with FormSection", () {
       FormSection section = new FormSection("Test")
-          ..children.add(input1)
-          ..disabled = true;
+        ..children.add(input1)
+        ..disabled = true;
       form.children.add(section);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect((formProxy.children.single as FormSection).disabled, true);
-      expect((formProxy.children.single.children.single as FormElement)
-          .disabledOrInsideDisabledParent, true);
+      expect(
+          (formProxy.children.single.children.single as FormElement)
+              .disabledOrInsideDisabledParent,
+          true);
     });
 
     test("Options in MultipleChoice", () {
@@ -143,7 +156,7 @@ void main() {
       expect((formProxy.children.single.children[2] as FormElement).helpMessage,
           isNotNull);
       expect((formProxy.children.single.children[2] as FormElement).helpMessage,
-             (multipleChoiceInput.children[2] as FormElement).helpMessage);
+          (multipleChoiceInput.children[2] as FormElement).helpMessage);
     });
 
     test("formElementChildren in MultipleChoice", () {
@@ -153,46 +166,50 @@ void main() {
       form.children.add(multipleChoiceInput);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
-      expect((formProxy.children.single as FormElement)
-          .formElementChildren.length, multipleChoiceInput.children.length);
+      expect(
+          (formProxy.children.single as FormElement).formElementChildren.length,
+          multipleChoiceInput.children.length);
     });
 
     test("allFormElementsBelowThisOne for Form, MultipleChoice and Options",
-      () {
+        () {
       multipleChoiceInput.children.add(option1);
       multipleChoiceInput.children.add(option2);
       multipleChoiceInput.children.add(option3);
       form.children.add(multipleChoiceInput);
       Map map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
-      expect((formProxy.children.single.parent as FormElement)
-          .allFormElementsBelowThisOne.length,
+      expect(
+          (formProxy.children.single.parent as FormElement)
+              .allFormElementsBelowThisOne
+              .length,
           form.children.length + multipleChoiceInput.children.length);
     });
 
     test("Choice attributes", () {
-      Choice choice = new Choice("Yes", submenu: "Yes submenu",
-          goto: "Go to some place");
+      Choice choice =
+          new Choice("Yes", submenu: "Yes submenu", goto: "Go to some place");
       expect(choice.isAutomatic, isFalse);
       expect(choice.isActionable(), isTrue);
     });
 
     test("Choice toMap and fromMap", () {
-      Choice choice = new Choice("Yes", submenu: "Yes submenu",
-          goto: "Go to some place");
+      Choice choice =
+          new Choice("Yes", submenu: "Yes submenu", goto: "Go to some place");
       Map choiceMap = choice.toMapForPresenter();
       Choice choiceFromMap = new Choice.fromMap(choiceMap);
       //expect(choice.goto, choiceFromMap.goto);
       expect(choice.string, choiceFromMap.string);
       expect(choice.submenu, choiceFromMap.submenu);
-      expect(choice.toString(), startsWith("Choice: ${choice.string} [${choice.goto}]"));
+      expect(choice.toString(),
+          startsWith("Choice: ${choice.string} [${choice.goto}]"));
     });
 
     test("Choice list", () {
       Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
       Choice choice2 = new Choice("No", submenu: "No submenu");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1, choice2], "Is it cool?");
+      ChoiceList choices =
+          new ChoiceList.fromList([choice1, choice2], "Is it cool?");
       expect(choices.length, 2);
       expect(choices[0], choice1);
 
@@ -235,20 +252,22 @@ void main() {
 
     setUp(() {
       form = new Form();
-      input1 = new RangeInput("Age", (value) => age = value, min: 20, max: 100,
-          value: 30, step: 5, minEnabled: 25, maxEnabled: 40);
-      input2 = new RangeInput("Money", (value) => money = value, max: 1000,
-          step: 100);
-      input3 = new RangeInput("Free time", (value) => freetime = value, max: 10,
-          maxEnabled: 5);
+      input1 = new RangeInput("Age", (value) => age = value,
+          min: 20,
+          max: 100,
+          value: 30,
+          step: 5,
+          minEnabled: 25,
+          maxEnabled: 40);
+      input2 = new RangeInput("Money", (value) => money = value,
+          max: 1000, step: 100);
+      input3 = new RangeInput("Free time", (value) => freetime = value,
+          max: 10, maxEnabled: 5);
       submitButton = new SubmitButton("SUBMIT BUTTON", null,
           helpMessage: "Submit help message");
-      formSection1 = new FormSection("My form section 1")
-          ..children.add(input1);
-      formSection2 = new FormSection("My form section 2")
-          ..children.add(input2);
-      formSection3 = new FormSection("My form section 3")
-          ..children.add(input3);
+      formSection1 = new FormSection("My form section 1")..children.add(input1);
+      formSection2 = new FormSection("My form section 2")..children.add(input2);
+      formSection3 = new FormSection("My form section 3")..children.add(input3);
 
       startButton = querySelector("#start-button");
       restartButton = querySelector("#book-restart");
@@ -279,22 +298,25 @@ void main() {
       //      querySelector("#book-wrapper").children.clear();
     });
 
-    final Duration DEFAULT_WAIT_FOR_DOM_UPDATE = new Duration(milliseconds: 200);
+    final Duration DEFAULT_WAIT_FOR_DOM_UPDATE =
+        new Duration(milliseconds: 200);
     test("tests start button", () {
       return new Future(expectAsync(() {
         FormProxy formProxy = new FormProxy.fromMap(form.toMap());
         presenter.showForm(formProxy);
 
-        expect(querySelector("div#book-title").style.display == "none", isFalse);
+        expect(
+            querySelector("div#book-title").style.display == "none", isFalse);
         expect(querySelector("div#big-bottom-button").style.display == "none",
-        isFalse);
+            isFalse);
 
         startButton.click();
 
-        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
-          expect(querySelector("div#book-title").style.display == "none", isTrue);
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, () {
+          expect(
+              querySelector("div#book-title").style.display == "none", isTrue);
           expect(querySelector("div#big-bottom-button").style.display == "none",
-          isTrue);
+              isTrue);
         });
       }));
     });
@@ -306,7 +328,7 @@ void main() {
 
         restartButton.click();
 
-        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, (){
+        return new Future.delayed(DEFAULT_WAIT_FOR_DOM_UPDATE, () {
           expect(presenter.getTextHistory() == "", isTrue);
           expect(querySelector("div#book-wrapper").children.isEmpty, isTrue);
         });
@@ -356,10 +378,13 @@ void main() {
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
-      expect((formProxy.children.first as PresenterCheckboxInput)
-                .disabled, true);
-      expect((formProxy.children.first as PresenterCheckboxInput)
-          .uiElement.disabled, true);
+      expect(
+          (formProxy.children.first as PresenterCheckboxInput).disabled, true);
+      expect(
+          (formProxy.children.first as PresenterCheckboxInput)
+              .uiElement
+              .disabled,
+          true);
     });
 
     test("creates hidden checkbox", () {
@@ -370,10 +395,10 @@ void main() {
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.parent.classes.contains("display-none"), true);
-      expect((formProxy.children.first as PresenterCheckboxInput)
-                .hidden, true);
-      expect((formProxy.children.first as PresenterCheckboxInput)
-          .uiElement.hidden, true);
+      expect((formProxy.children.first as PresenterCheckboxInput).hidden, true);
+      expect(
+          (formProxy.children.first as PresenterCheckboxInput).uiElement.hidden,
+          true);
     });
 
     test("sends updated values", () {
@@ -447,8 +472,8 @@ void main() {
     test("values update", () {
       var inputMoney = new RangeInput("Money", (value) => money = value,
           stringifyFunction: (int value) => "\$$value", max: 1000, step: 100);
-      var inputPercentage = new RangeInput("Thrust", (value) {}, max: 100, step:
-          10, stringifyFunction: (int value) => "$value %");
+      var inputPercentage = new RangeInput("Thrust", (value) {},
+          max: 100, step: 10, stringifyFunction: (int value) => "$value %");
       form.children.add(inputMoney);
       form.children.add(inputPercentage);
 
@@ -458,8 +483,8 @@ void main() {
       stream.listen(expectAsync((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
-        var percentageStringElement = querySelector(
-            "#${formProxy.children.last.id} p.current-value");
+        var percentageStringElement =
+            querySelector("#${formProxy.children.last.id} p.current-value");
         expect(percentageStringElement.text, "100 %");
       }));
 
@@ -520,8 +545,8 @@ void main() {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
 
-        ParagraphElement textOutputParagraph = querySelector(
-            "#${formProxy.children.first.id} p");
+        ParagraphElement textOutputParagraph =
+            querySelector("#${formProxy.children.first.id} p");
         expect(textOutputParagraph.text, "You are currently 35 years old.");
       });
 
@@ -539,10 +564,14 @@ void main() {
       expect(querySelector(".form-section"), isNotNull);
       ButtonElement buttonEl =
           querySelector("#${formProxy.children.first.id} button");
-      expect((formProxy.children.first as PresenterFormSection).uiElement.current,
+      expect(
+          (formProxy.children.first as PresenterFormSection).uiElement.current,
           formSection1.name);
-      expect(buttonEl.text.contains(
-          (formProxy.children.first as PresenterFormSection).uiElement.current),
+      expect(
+          buttonEl.text.contains(
+              (formProxy.children.first as PresenterFormSection)
+                  .uiElement
+                  .current),
           isTrue); // There is the ▽ character.
     });
 
@@ -556,12 +585,9 @@ void main() {
 
       expect(formProxy.children.length, form.children.length);
 
-      buttonElFirst =
-          querySelector("#${formProxy.children[0].id} button");
-      buttonElSecond =
-          querySelector("#${formProxy.children[1].id} button");
-      buttonElThird =
-          querySelector("#${formProxy.children[2].id} button");
+      buttonElFirst = querySelector("#${formProxy.children[0].id} button");
+      buttonElSecond = querySelector("#${formProxy.children[1].id} button");
+      buttonElThird = querySelector("#${formProxy.children[2].id} button");
       expect(buttonElFirst, isNotNull);
       expect(buttonElSecond, isNotNull);
       expect(buttonElThird, isNotNull);
@@ -570,17 +596,17 @@ void main() {
       var arrow = buttonElFirst.querySelector(".form-section-open-close");
       expect(arrow.text, new DocumentFragment.html("&#9665;").text);
       arrow = buttonElSecond.querySelector(".form-section-open-close");
-      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
+      expect(arrow.text, new DocumentFragment.html("&#9661;").text);
       arrow = buttonElThird.querySelector(".form-section-open-close");
-      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
+      expect(arrow.text, new DocumentFragment.html("&#9661;").text);
 
       buttonElSecond.click();
       arrow = buttonElFirst.querySelector(".form-section-open-close");
-      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
+      expect(arrow.text, new DocumentFragment.html("&#9661;").text);
       arrow = buttonElSecond.querySelector(".form-section-open-close");
-      expect(arrow.text,  new DocumentFragment.html("&#9665;").text);
+      expect(arrow.text, new DocumentFragment.html("&#9665;").text);
       arrow = buttonElThird.querySelector(".form-section-open-close");
-      expect(arrow.text,  new DocumentFragment.html("&#9661;").text);
+      expect(arrow.text, new DocumentFragment.html("&#9661;").text);
     });
 
     test("creates MultipleChoice", () {
@@ -610,28 +636,31 @@ void main() {
     test("Show simple dummy choices", () async {
       Choice choice1 = new Choice("Yes");
       Choice choice2 = new Choice("No");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1, choice2], "Is it cool?");
+      ChoiceList choices =
+          new ChoiceList.fromList([choice1, choice2], "Is it cool?");
       presenter.showChoices(choices);
 
       expect(querySelector(".choices-div"), isNotNull);
-      expect(querySelector(".choices-div ol").children[0]
-          .text.contains(choice1.string), isTrue);
+      expect(
+          querySelector(".choices-div ol")
+              .children[0]
+              .text
+              .contains(choice1.string),
+          isTrue);
 
       ButtonElement buttonEl = querySelectorAll(".choices-div ol button")[0];
       buttonEl.click();
 
       expect(buttonEl.classes.contains("chosen"), isTrue);
-      expect(querySelector(".choices-div").classes.contains("chosen"),
-          isTrue);
+      expect(querySelector(".choices-div").classes.contains("chosen"), isTrue);
       expect(buttonEl.disabled, isTrue);
     });
 
     test("Show simple choices with submenu", () async {
       Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
       Choice choice2 = new Choice("No", submenu: "No submenu");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1, choice2], "Is it cool?");
+      ChoiceList choices =
+          new ChoiceList.fromList([choice1, choice2], "Is it cool?");
       presenter.showChoices(choices);
 
       expect(querySelector(".choices-submenus"), isNotNull);
@@ -639,25 +668,30 @@ void main() {
           2); //2 submenus
       expect(querySelector(".choices-submenu-buttons").children[1].text,
           choice2.submenu);
-      expect(querySelectorAll(".choices-submenu-buttons .submenu-button")
-          .length, 2);
+      expect(
+          querySelectorAll(".choices-submenu-buttons .submenu-button").length,
+          2);
 
       ButtonElement buttonEl =
           querySelectorAll(".choices-submenu-buttons .submenu-button")[1];
       bool isNotDisplayed = querySelectorAll(".choices-submenus .choices-ol")[1]
-        .classes.contains("display-none");
+          .classes
+          .contains("display-none");
       bool isDepresed = buttonEl.classes.contains("depressed");
       buttonEl.click();
 
-      expect(querySelectorAll(".choices-submenus .choices-ol")[1]
-          .classes.contains("display-none"), !isNotDisplayed); // class toggled
-      expect(buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
+      expect(
+          querySelectorAll(".choices-submenus .choices-ol")[1]
+              .classes
+              .contains("display-none"),
+          !isNotDisplayed); // class toggled
+      expect(
+          buttonEl.classes.contains("depressed"), !isDepresed); // class toggled
     });
 
     test("Show simple choice with infochips", () async {
       Choice choice1 = new Choice("Yes [infochip1] [infochip2]");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1], "Is it cool?");
+      ChoiceList choices = new ChoiceList.fromList([choice1], "Is it cool?");
       presenter.showChoices(choices);
       SpanElement chipsSpan = querySelector(".choice-infochips");
       expect(chipsSpan, isNotNull);
@@ -703,10 +737,10 @@ void main() {
     });
 
     test("Set stats", () {
-      UIStat stat1 = new UIStat(
-          "energy", "Description of energy stat", "#ff00ff", 1, true, false, "10");
-      UIStat stat2 = new UIStat(
-          "bravery", "Description of bravery stat", "#ffff00", 2, false, false, "50");
+      UIStat stat1 = new UIStat("energy", "Description of energy stat",
+          "#ff00ff", 1, true, false, "10");
+      UIStat stat2 = new UIStat("bravery", "Description of bravery stat",
+          "#ffff00", 2, false, false, "50");
       List uiStats = [stat1, stat2];
 
       presenter.setStats(uiStats).then(expectAsync((_) {
@@ -732,7 +766,8 @@ void main() {
       HeadingElement titleHeading = dialogDiv.querySelector("h3");
       expect(titleHeading, isNotNull);
       expect(titleHeading.text, dialog.title);
-      expect(dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
+      expect(
+          dialogDiv.querySelector(".dialog-content > div").text, dialog.html);
       ButtonElement button = dialogDiv.querySelector("button");
       expect(button, isNotNull);
       expect(button.text, "Close");
@@ -751,7 +786,8 @@ void main() {
 
       DivElement dialogDiv = querySelectorAll(".dialog").last;
       expect(dialogDiv, isNotNull);
-      expect(dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
+      expect(
+          dialogDiv.querySelector(".dialog-content > div > p.extra-text").text,
           "Some hello text");
       ButtonElement button = dialogDiv.querySelector("button");
       expect(button.text, dialogButton.label);
@@ -785,8 +821,7 @@ void main() {
 
     setUp(() {
       vars = new Map<String, Object>();
-      vars["points"] = new PointsCounter()
-        ..add(20, "for bravery");
+      vars["points"] = new PointsCounter()..add(20, "for bravery");
       vars["isEngineer"] = false;
       vars["isStrong"] = false;
 
@@ -810,26 +845,29 @@ void main() {
 
     test("Save", () {
       presenter.showText("Some saving text").then(expectAsync((_) {
-        expect(presenter.getTextHistory().isEmpty, isFalse); //contains "Some testing text"
+        expect(presenter.getTextHistory().isEmpty,
+            isFalse); //contains "Some testing text"
         presenter.save(savegame);
         expect(presenter.getTextHistory().isEmpty, isTrue);
         String playerUid = presenter.playerProfile.playerUid;
-        String currentEgamebookUid = presenter.playerProfile.currentEgamebookUid;
+        String currentEgamebookUid =
+            presenter.playerProfile.currentEgamebookUid;
 
         // savegame is in localstorage
-        String storedSavegame = "$playerUid::$currentEgamebookUid::${savegame.uid}";
-        expect(window.localStorage[storedSavegame],
-            isNotNull);
+        String storedSavegame =
+            "$playerUid::$currentEgamebookUid::${savegame.uid}";
+        expect(window.localStorage[storedSavegame], isNotNull);
         print(window.localStorage[storedSavegame]);
         expect(JSON.decode(window.localStorage[storedSavegame])["vars"],
             isNotNull);
-        expect(JSON.decode(window.localStorage[storedSavegame])["vars"]["points"],
+        expect(
+            JSON.decode(window.localStorage[storedSavegame])["vars"]["points"],
             isNotNull);
 
         // chronology is in localstorage
-        String storedChronology ="$playerUid::$currentEgamebookUid::_storyChronology";
-        expect(window.localStorage[storedChronology],
-            isNotNull);
+        String storedChronology =
+            "$playerUid::$currentEgamebookUid::_storyChronology";
+        expect(window.localStorage[storedChronology], isNotNull);
         expect(JSON.decode(window.localStorage[storedChronology]),
             presenter.playerProfile.storyChronology);
       }));
@@ -841,7 +879,7 @@ void main() {
     Store store;
     ScripterProxy scripterProxyStub;
     String STORE_NAME = "default::ProxyStubBOOK::1234567";
-    Map values = {"uid":"1234567","currentPageName":"Start"};
+    Map values = {"uid": "1234567", "currentPageName": "Start"};
 
     setUp(() {
       presenter = new HtmlPresenter();
@@ -927,8 +965,8 @@ void main() {
     test("Choice list toMessage", () {
       Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
       Choice choice2 = new Choice("No", submenu: "No submenu");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1, choice2], "Is it cool?");
+      ChoiceList choices =
+          new ChoiceList.fromList([choice1, choice2], "Is it cool?");
       Message message = choices.toMessage();
       expect(message, isNotNull);
       expect(message.type, Message.SHOW_CHOICES);
@@ -942,9 +980,12 @@ void main() {
       String text = "Some text";
       Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
       Choice choice2 = new Choice("No", submenu: "No submenu");
-      ChoiceList choices = new ChoiceList.fromList(
-          [choice1, choice2], "Is it cool?");
-      expect(() => choices.toMessage(prependText: text, filterOut: (choice) => true), throws);
+      ChoiceList choices =
+          new ChoiceList.fromList([choice1, choice2], "Is it cool?");
+      expect(
+          () =>
+              choices.toMessage(prependText: text, filterOut: (choice) => true),
+          throws);
     });
 
     test("Choice list fromMessage", () {
@@ -952,7 +993,12 @@ void main() {
       Choice choice2 = new Choice("No", submenu: "No submenu");
       String question = "Is it cool?";
       Map map = {
-        "listContent": [null, question, choice1.toMapForPresenter(), choice2.toMapForPresenter()],
+        "listContent": [
+          null,
+          question,
+          choice1.toMapForPresenter(),
+          choice2.toMapForPresenter()
+        ],
       };
       Message message = new Message.fromMap(map);
       expect(message, isNotNull);

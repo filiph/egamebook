@@ -10,20 +10,26 @@ import '../book/author_script_exception.dart';
 class Choice implements Comparable {
   /// If the choice is shown.
   bool shown = false;
+
   /// The choice shouldn't be shown before we are at the end of the page.
   bool deferToEndOfPage;
+
   /// The choice shouldn't be shown before there is an actual choice list
   /// in the .egb.
   bool deferToChoiceList;
+
   /// The choice hash used for sending.
   int hash;
+
   /// The text of the choice (what user clicks on when picking it). It is always
   /// defined. When [string] is an empty string ([:"":]), the choice is
   /// automatic (nothing is shown to the player and the scripter automatically
   /// selects the choice.
   String string;
+
   /// Script function.
   Function f;
+
   /// On which page name it should go to.
   String goto;
 
@@ -53,9 +59,9 @@ class Choice implements Comparable {
    * can provide a function that will filter out the choice [:ch:] if
    * [:filterOut(ch) == true:].
    */
-  bool isActionable({bool atEndOfPage, bool atChoiceList,
-      bool filterOut(Choice choice)}) {
-    if (shown) return false;  // choice shown before
+  bool isActionable(
+      {bool atEndOfPage, bool atChoiceList, bool filterOut(Choice choice)}) {
+    if (shown) return false; // choice shown before
     if (isAutomatic) return false;
     if (atEndOfPage != null && !atEndOfPage && deferToEndOfPage) {
       return false;
@@ -70,13 +76,18 @@ class Choice implements Comparable {
   /// Creates new Choice with the text of the choice [string] and optional
   /// attributes on which page name it should [goto], [script] function,
   /// [submenu], if [deferToEndOfPage] and if [deferToChoiceList].
-  Choice(String string, {this.goto, Function script, this.submenu: null,
-        bool deferToEndOfPage: false, bool deferToChoiceList: false}) :
-      super() {
+  Choice(String string,
+      {this.goto,
+      Function script,
+      this.submenu: null,
+      bool deferToEndOfPage: false,
+      bool deferToChoiceList: false})
+      : super() {
     if (string == null) {
       throw new ArgumentError("String given to choice cannot be null.");
     }
-    this.string = string.trim();  // string is defined with a trailing space because of quadruple quotes problem
+    this.string = string
+        .trim(); // string is defined with a trailing space because of quadruple quotes problem
     hash = string.hashCode;
     f = script;
     this.deferToEndOfPage = deferToEndOfPage;
@@ -103,11 +114,8 @@ class Choice implements Comparable {
 
   /// Creates a Map representation of the choice with only the data needed by
   /// the presenter: [string], [hash] and [submenu].
-  Map<String, Object> toMapForPresenter() => {
-    "string": string,
-    "hash": hash,
-    "submenu": submenu
-  };
+  Map<String, Object> toMapForPresenter() =>
+      {"string": string, "hash": hash, "submenu": submenu};
 
   /// Sets script function to [_f] and returns actual object.
   ///
@@ -141,16 +149,18 @@ class Choice implements Comparable {
  */
 class ChoiceList extends ListBase<Choice> {
   /// Question for choice list.
-  String question;  // TODO: implement
+  String question; // TODO: implement
 
   /// List of [Choice].
   List<Choice> _choices = new List<Choice>();
+
   /// Returns length of choice list.
   int get length => _choices.length;
+
   /// Changes length of choices to some [value].
   set length(int value) => _choices.length = value;
-  operator[](int index) => _choices[index];
-  operator[]=(int index, Choice value) => _choices[index] = value;
+  operator [](int index) => _choices[index];
+  operator []=(int index, Choice value) => _choices[index] = value;
 
   /// Creates new ChoiceList with no [question] and empty list of choices.
   ChoiceList();
@@ -184,11 +194,8 @@ class ChoiceList extends ListBase<Choice> {
       } else {
         string = "";
       }
-      var choice = new Choice(
-                            string,
-                            goto: map["goto"],
-                            script: map["script"],
-                            submenu: map["submenu"]);
+      var choice = new Choice(string,
+          goto: map["goto"], script: map["script"], submenu: map["submenu"]);
       _choices.add(choice);
     }
   }
@@ -198,19 +205,25 @@ class ChoiceList extends ListBase<Choice> {
   /// instance of String, the new [Choice] is created from given optional
   /// parameters [script], [goto], [submenu], [deferToEndOfPage] and
   /// [deferToChoiceList]. In other case the [ArgumentError] is thrown.
-  void add(Object element, {Function script, String goto, String submenu,
-      bool deferToEndOfPage: false, bool deferToChoiceList: false}) {
+  void add(Object element,
+      {Function script,
+      String goto,
+      String submenu,
+      bool deferToEndOfPage: false,
+      bool deferToChoiceList: false}) {
     if (element is Choice) {
       _choices.add(element);
     } else if (element is String) {
-      var choice = new Choice(element, goto: goto, script: script,
+      var choice = new Choice(element,
+          goto: goto,
+          script: script,
           submenu: submenu,
           deferToEndOfPage: deferToEndOfPage,
           deferToChoiceList: deferToChoiceList);
       _choices.add(choice);
     } else {
       throw new ArgumentError("To add a choice to choices, one must provide "
-                              "either a new Choice element or a String.");
+          "either a new Choice element or a String.");
     }
   }
 
@@ -232,20 +245,20 @@ class ChoiceList extends ListBase<Choice> {
    * By providing [filterOut()], one can force to not show choices that
    * satisfy [:filterOut(choice) == true:].
    */
-  Message toMessage({
-      String prependText,
+  Message toMessage(
+      {String prependText,
       bool atEndOfPage,
       bool atChoiceList,
       bool filterOut(Choice choice)}) {
     List<Choice> choicesToSend;
 
     // filter out choices we don't want to show
-    choicesToSend = _choices.where(
-        (choice) => choice.isActionable(
+    choicesToSend = _choices
+        .where((choice) => choice.isActionable(
             atEndOfPage: atEndOfPage,
             atChoiceList: atChoiceList,
-            filterOut: filterOut)
-    ).toList();
+            filterOut: filterOut))
+        .toList();
 
     if (choicesToSend.isEmpty) {
       throw "Choices is empty, but still choices.toMessage was called.";
@@ -281,10 +294,13 @@ class Intent {
 
   /// Actual intent type.
   final int type;
+
   /// Intent type quit.
   static const int QUIT = 2;
+
   /// Intent type load.
   static const int LOAD = 4;
+
   /// Intent type restart.
   static const int RESTART = 8;
 }
@@ -308,6 +324,7 @@ class RestartIntent extends Intent {
 class LoadIntent extends Intent {
   /// uid of the Savegame that will be loaded.
   String uid;
+
   /// Creates new LoadIntent of type of [Intent.LOAD] and with Savegame [uid].
   LoadIntent(this.uid) : super(Intent.LOAD);
 }

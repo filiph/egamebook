@@ -14,6 +14,7 @@ library choice_with_infochips;
 class ChoiceWithInfochips {
   /// Text of the choice.
   String text;
+
   /// List of info chips.
   List<String> infochips;
 
@@ -43,7 +44,8 @@ class ChoiceWithInfochips {
         continue;
       }
       if (raw[i] == "]") {
-        if (level == 1) {  // Ignore brackets that are nested.
+        if (level == 1) {
+          // Ignore brackets that are nested.
           if (i - lastOpenBracketIndex > 1) {
             var chipText = raw.substring(lastOpenBracketIndex + 1, i);
             infochips.add(chipText);

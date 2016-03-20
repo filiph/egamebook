@@ -8,8 +8,14 @@ library egb_presenter_html;
 import 'dart:async';
 import 'dart:html' hide FormElement;
 
-import 'package:markdown/markdown.dart' as mdown show InlineParser,
-    InlineSyntax, TagSyntax, TagState, markdownToHtml, Element;
+import 'package:markdown/markdown.dart' as mdown
+    show
+        InlineParser,
+        InlineSyntax,
+        TagSyntax,
+        TagState,
+        markdownToHtml,
+        Element;
 
 import '../../presenter.dart';
 export '../../presenter.dart' show Presenter;
@@ -34,23 +40,29 @@ import "package:html5lib/dom.dart" as html5lib;
 class HtmlPresenter extends Presenter {
   /// Restart [:button:].
   ButtonElement restartAnchor;
+
   /// [:span:] where points are displayed.
   SpanElement pointsSpan;
+
   /// Main wrapper [:div:] where the content of the book is displayed.
   DivElement bookDiv;
 
   /// Start [:button:].
   ButtonElement startButton;
+
   /// Book's title [:div:].
   DivElement bookTitleDiv;
+
   /// Main book's start button [:div:].
   DivElement bigBottomButtonDiv;
 
   /// The presenter shows the title 'activity' (with a big START button on
   /// the bottom).
   static const int UI_ACTIVITY_TITLE = 1;
+
   /// The UI is in the play state.
   static const int UI_ACTIVITY_BOOK = 2;
+
   /// Current activity visible.
   int currentActivity = UI_ACTIVITY_TITLE;
 
@@ -59,6 +71,7 @@ class HtmlPresenter extends Presenter {
    * (Markdown format, pre-HTMLization.)
    */
   final StringBuffer _textHistory = new StringBuffer();
+
   /// Getter returns text history - the text that has been shown to the player
   /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
   @override
@@ -90,8 +103,10 @@ class HtmlPresenter extends Presenter {
     });
 
     pointsSpan = document.querySelector("span#points-value");
-    document.querySelector("#points-button").onClick.listen(
-        _statsOnClickListener);
+    document
+        .querySelector("#points-button")
+        .onClick
+        .listen(_statsOnClickListener);
 
     // Set up listening for meta elements (for not showing new points before
     // user scrolls to the appropriate place in the text, for example).
@@ -107,19 +122,26 @@ class HtmlPresenter extends Presenter {
    * This method is called when the book is ready to be played.
    */
   void _bookReadyHandler() {
-    startButton.querySelector("#start-button-loading-span").classes
+    startButton
+        .querySelector("#start-button-loading-span")
+        .classes
         .add("hidden");
-    startButton.querySelector("#start-button-loading-gif").classes
+    startButton
+        .querySelector("#start-button-loading-gif")
+        .classes
         .add("hidden");
-    startButton.querySelector("#start-button-start-text").classes
+    startButton
+        .querySelector("#start-button-start-text")
+        .classes
         .remove("hidden");
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
       bookDiv.style.display = "block"; // TODO: necessary?
-      new Future(() { // Give the browser time to switch scrolling on.
+      new Future(() {
+        // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
         bookDiv.children.last // TODO: first/last according to Continue/Start
-        .scrollIntoView();
+            .scrollIntoView();
         bookTitleDiv.style.display = "none";
         bigBottomButtonDiv.style.display = "none";
         currentActivity = UI_ACTIVITY_BOOK;
@@ -129,13 +151,14 @@ class HtmlPresenter extends Presenter {
 
   /// Paragraph where the loading gizmo is visible.
   ParagraphElement _loadingEl;
+
   /// If loading is visible. It is used to store [_loadingEl]'s state outside
   /// the DOM (i.e. in memory).
   bool _loadingElVisible;
+
   /// Sets visibility of the loading gizmo.
   void _showLoading(bool show) {
-    if (_loadingElVisible != null && show ==
-        _loadingElVisible) {
+    if (_loadingElVisible != null && show == _loadingElVisible) {
       return; // Don't do anything if the show state is the same already.
     }
     _loadingEl.style.visibility = (show ? "visible" : "hidden");
@@ -159,8 +182,8 @@ class HtmlPresenter extends Presenter {
   }
 
   /// Duration between showing text. It is used in delaying of text showing.
-  static const Duration _durationBetweenShowingText = const Duration(
-      milliseconds: 100);
+  static const Duration _durationBetweenShowingText =
+      const Duration(milliseconds: 100);
 
   /**
    * Converts string [s] to HTML elements (via markdown) and shows them
@@ -178,8 +201,9 @@ class HtmlPresenter extends Presenter {
 
     new Future.delayed(_durationBetweenShowingText, () {
       _textHistory.write("$s\n\n");
-      final List<mdown.InlineSyntax> syntaxes =
-          <mdown.InlineSyntax>[new FootnoteSupTagSyntax()];
+      final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
+        new FootnoteSupTagSyntax()
+      ];
       String html = mdown.markdownToHtml(s, inlineSyntaxes: syntaxes);
       DocumentFragment container = new DocumentFragment();
       container.innerHtml = html;
@@ -189,7 +213,8 @@ class HtmlPresenter extends Presenter {
           count++;
           el.classes.add("hidden");
           num transitionDelay = _durationBetweenShowingElements.inMilliseconds *
-              (count - 1) / 1000;
+              (count - 1) /
+              1000;
           el.style.transitionDelay = "${transitionDelay}s";
           new Future(() {
             el.classes.remove("hidden");
@@ -202,8 +227,8 @@ class HtmlPresenter extends Presenter {
       container.remove();
       // TODO: find out if necessary to avoid leaks
 
-      new Future.delayed(_durationBetweenShowingElements * count, () =>
-          completer.complete(true));
+      new Future.delayed(_durationBetweenShowingElements * count,
+          () => completer.complete(true));
     });
 
     return completer.future;
@@ -224,16 +249,20 @@ class HtmlPresenter extends Presenter {
 
   /// If animation for text showing is used.
   static const bool USE_SHOWTEXT_ANIMATION = false;
+
   /// Duration between showing elements.
   /// It is used in delaying of elements showing.
-  static const Duration _durationBetweenShowingElements = const Duration(
-      milliseconds: 200);
+  static const Duration _durationBetweenShowingElements =
+      const Duration(milliseconds: 200);
+
   /// Duration between checking presence of meta elements in view.
   static const Duration _durationBetweenCheckingForMetaElements =
       const Duration(milliseconds: 1000);
+
   /// Periodic [Stream] for checking presence of meta elements in view.
-  final Stream _periodic = new Stream.periodic(
-      _durationBetweenCheckingForMetaElements);
+  final Stream _periodic =
+      new Stream.periodic(_durationBetweenCheckingForMetaElements);
+
   /// [StreamSubscription] for [_periodic].
   StreamSubscription _periodicSubscription;
 
@@ -292,8 +321,8 @@ class HtmlPresenter extends Presenter {
 
     if (choiceList.question != null) {
       var choicesQuestionP = new ParagraphElement();
-      choicesQuestionP.innerHtml = mdown.markdownToHtml(choiceList.question,
-          inlineOnly: true);
+      choicesQuestionP.innerHtml =
+          mdown.markdownToHtml(choiceList.question, inlineOnly: true);
       choicesQuestionP.classes.add("choices-question");
       choicesDiv.append(choicesQuestionP);
     }
@@ -317,32 +346,32 @@ class HtmlPresenter extends Presenter {
     // Now let's see if there are any submenus we need to show.
     Map<String, Submenu> submenus = new Map<String, Submenu>();
     choiceList.where((choice) => choice.submenu != null).forEach((choice) {
-      Submenu sub = submenus.putIfAbsent(choice.submenu, () => new Submenu(
-          choice.submenu));
+      Submenu sub = submenus.putIfAbsent(
+          choice.submenu, () => new Submenu(choice.submenu));
       sub.choices.add(choice);
     });
 
     if (submenus.isNotEmpty) {
-      DivElement submenusDiv = new DivElement()..classes.add("choices-submenus"
-          );
+      DivElement submenusDiv = new DivElement()
+        ..classes.add("choices-submenus");
 
-      DivElement submenuButtonsDiv = new DivElement()..classes.add(
-          "choices-submenu-buttons");
+      DivElement submenuButtonsDiv = new DivElement()
+        ..classes.add("choices-submenu-buttons");
       submenusDiv.append(submenuButtonsDiv);
 
       submenus.forEach((name, submenu) {
         ButtonElement submenuButton = new ButtonElement()
-            ..classes.add("submenu-button")
-            ..text = submenu.name;
+          ..classes.add("submenu-button")
+          ..text = submenu.name;
 
         submenuButtonsDiv.append(submenuButton);
 
-        OListElement submenuChoicesOl = new OListElement()..classes.addAll(
-            ["choices-ol", "display-none"]);
+        OListElement submenuChoicesOl = new OListElement()
+          ..classes.addAll(["choices-ol", "display-none"]);
 
         submenu.choices.forEach((choice) {
-          ButtonElement btn = _createChoiceButton("", choice, completer,
-              choicesDiv, clickSubscriptions);
+          ButtonElement btn = _createChoiceButton(
+              "", choice, completer, choicesDiv, clickSubscriptions);
 
           submenuChoicesOl.append(btn);
         });
@@ -369,8 +398,12 @@ class HtmlPresenter extends Presenter {
   /// Creates new choice button in form of HTML [:button:] with index and text.
   ///
   /// Choice button can also have info chips.
-  ButtonElement _createChoiceButton(String index, Choice choice, Completer
-      completer, DivElement choicesDiv, Set<StreamSubscription> clickSubscriptions) {
+  ButtonElement _createChoiceButton(
+      String index,
+      Choice choice,
+      Completer completer,
+      DivElement choicesDiv,
+      Set<StreamSubscription> clickSubscriptions) {
     ButtonElement btn = new ButtonElement();
 
     var numberSpan = new SpanElement();
@@ -395,15 +428,15 @@ class HtmlPresenter extends Presenter {
     }
 
     var textSpan = new SpanElement();
-    textSpan.innerHtml = mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly:
-        true);
+    textSpan.innerHtml =
+        mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly: true);
 //  textSpan.text = _exchangeChars(textSpan.text, "▒");
     textSpan.classes.add("choice-text");
     choiceDisplaySpan.append(textSpan);
 
     var subscription = btn.onClick.listen((MouseEvent event) =>
-        _choiceClickListener(event, completer, choice, btn, choicesDiv,
-        clickSubscriptions));
+        _choiceClickListener(
+            event, completer, choice, btn, choicesDiv, clickSubscriptions));
     clickSubscriptions.add(subscription);
 
     btn.append(numberSpan);
@@ -412,34 +445,39 @@ class HtmlPresenter extends Presenter {
   }
 
   /// Duration between sending hash. It is used in delaying of hash sending.
-  static const Duration _durationBetweenSendingHash = const Duration(
-      milliseconds: 100);
+  static const Duration _durationBetweenSendingHash =
+      const Duration(milliseconds: 100);
 
   // TODO: use onClick.first.then() - no need to unregister listener
   /// Click listener for a choice.
   ///
   /// Choice hash is sent asynchronously back to Scripter and bookmark is set.
-  void _choiceClickListener(MouseEvent event, Completer completer, Choice
-      choice, ButtonElement btn, DivElement choicesDiv, Set<StreamSubscription>
-      clickSubscriptions) {
+  void _choiceClickListener(
+      MouseEvent event,
+      Completer completer,
+      Choice choice,
+      ButtonElement btn,
+      DivElement choicesDiv,
+      Set<StreamSubscription> clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
-    new Future.delayed(_durationBetweenSendingHash, () =>
-        completer.complete(choice.hash));
+    new Future.delayed(
+        _durationBetweenSendingHash, () => completer.complete(choice.hash));
     _showLoading(true);
     // Mark this element as chosen.
     btn.classes.add("chosen");
     choicesDiv.classes.add("chosen");
     // Unregister listeners.
-    choicesDiv.querySelectorAll("button").forEach((ButtonElement b) =>
-        b.disabled = true);
+    choicesDiv
+        .querySelectorAll("button")
+        .forEach((ButtonElement b) => b.disabled = true);
     clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
     clickSubscriptions.clear();
     // Show bookmark.
     if (_savegameToBe != null) {
       choicesDiv.classes.add("bookmark");
       String savegameUid = _savegameToBe.uid;
-      choicesDiv.onClick.listen((_) => _handleSavegameBookmarkClick(savegameUid)
-          );
+      choicesDiv.onClick
+          .listen((_) => _handleSavegameBookmarkClick(savegameUid));
       _savegameToBe = null;
     }
     event.stopPropagation();
@@ -484,6 +522,7 @@ class HtmlPresenter extends Presenter {
 
   /// List of actual UI stats.
   List<UIStat> _stats;
+
   /// Map of stats HTML elements used in navigation.
   final Map<String, Element> _statsElements = new Map();
 
@@ -509,9 +548,8 @@ class HtmlPresenter extends Presenter {
 
   @override
   Future updateStats(StatUpdateCollection updates) {
-    UIStat.updateStatsList(_stats, updates
-        )// Returns only the changed stats.
-    .forEach((UIStat stat) {
+    UIStat.updateStatsList(_stats, updates) // Returns only the changed stats.
+        .forEach((UIStat stat) {
       var anchor = _statsElements[stat.name];
       anchor.children.single.text = stat.string;
       if (stat.show) {
@@ -534,8 +572,8 @@ class HtmlPresenter extends Presenter {
   /// Blinks the [el] element via CSS transitions.
   void _blink(Element el) {
     el.classes.add("blink");
-    new Future.delayed(new Duration(milliseconds: 1000), () =>
-        el.classes.remove("blink"));
+    new Future.delayed(
+        new Duration(milliseconds: 1000), () => el.classes.remove("blink"));
   }
 
   /**
@@ -634,7 +672,8 @@ class HtmlPresenter extends Presenter {
     for (int i = 0; i < _stats.length; i++) {
       UIStat stat = _stats[i];
       if (stat.show) {
-        html.writeln("<tr><td>${stat.name}:</td>" "<td>${stat.string}</td></tr>");
+        html.writeln(
+            "<tr><td>${stat.name}:</td>" "<td>${stat.string}</td></tr>");
       }
     }
     html.writeln("</table>");
@@ -706,6 +745,7 @@ Map<String, UiElementBuilder> ELEMENT_BUILDERS = {
 abstract class HtmlUiElement extends UiElement {
   /// Creates new HtmlUiElement with [blueprint] form element.
   HtmlUiElement(FormElement blueprint) : super(blueprint);
+
   /// UI representation as an [Element].
   Element uiRepresentation;
 
@@ -735,10 +775,13 @@ class HtmlForm extends HtmlUiElement {
 
   /// Form proxy blueprint element.
   FormProxy blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenContainerDiv;
+
   /// Form submit button.
   ButtonElement submitButton;
 
@@ -753,8 +796,8 @@ class HtmlForm extends HtmlUiElement {
     String submitText = blueprint.submitText;
     if (submitText != null) {
       submitButton = new ButtonElement()
-          ..classes.add("submit-main")
-          ..text = submitText;
+        ..classes.add("submit-main")
+        ..text = submitText;
 
       StreamSubscription subscription;
       subscription = submitButton.onClick.listen((ev) {
@@ -774,6 +817,7 @@ class HtmlForm extends HtmlUiElement {
 
   /// If is disabled.
   bool _disabled = false;
+
   /// Getter for disabled. When the HTML form disabled is [:true:],
   /// the submit button is not clickable.
   @override
@@ -788,6 +832,7 @@ class HtmlForm extends HtmlUiElement {
 
   /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+
   /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
@@ -818,12 +863,16 @@ class HtmlForm extends HtmlUiElement {
 class HtmlFormSection extends HtmlUiElement {
   /// Form section blueprint.
   FormSection blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Header element used to display section name.
   Element _headerEl;
+
   /// The element which opens or closes the FormSection contents when clicked.
   Element _openCloseEl;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
@@ -832,23 +881,23 @@ class HtmlFormSection extends HtmlUiElement {
   HtmlFormSection(FormSection blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
-        ..classes.add("form-section")
-        ..id = blueprint.id;
+      ..classes.add("form-section")
+      ..id = blueprint.id;
 
     ButtonElement titleWrapperDiv = new ButtonElement()
-        ..classes.add("form-section-title-wrapper")
-        ..onClick.listen((_) {
-          updateOpenCloseDomState();
-        });
+      ..classes.add("form-section-title-wrapper")
+      ..onClick.listen((_) {
+        updateOpenCloseDomState();
+      });
 
     _openCloseEl = new DivElement()
-        ..classes.add("form-section-open-close")
-        ..innerHtml = "&#9661;";
+      ..classes.add("form-section-open-close")
+      ..innerHtml = "&#9661;";
     titleWrapperDiv.append(_openCloseEl);
 
     _headerEl = new SpanElement()
-        ..classes.add("form-section-title")
-        ..text = blueprint.name;
+      ..classes.add("form-section-title")
+      ..text = blueprint.name;
     titleWrapperDiv.append(_headerEl);
 
     uiRepresentation.append(titleWrapperDiv);
@@ -856,8 +905,8 @@ class HtmlFormSection extends HtmlUiElement {
     update();
 
     _childrenDiv = new DivElement()
-        ..classes.add("form-section-children")
-        ..classes.add("closed");
+      ..classes.add("form-section-children")
+      ..classes.add("closed");
     uiRepresentation.append(_childrenDiv);
   }
 
@@ -871,7 +920,8 @@ class HtmlFormSection extends HtmlUiElement {
 
       // Close all others. Must use DOM since we don't keep reference to parent
       // HtmlFormElement. TODO: profile and fix?
-      uiRepresentation.parent.querySelectorAll(".form-section")
+      uiRepresentation.parent
+          .querySelectorAll(".form-section")
           .where((Element e) => e != uiRepresentation)
           .forEach((Element e) {
         e.querySelector(".form-section-children").classes.add("closed");
@@ -916,8 +966,10 @@ class HtmlFormSection extends HtmlUiElement {
 class HtmlSubmitButton extends HtmlUiElement {
   /// Presenter submit button blueprint.
   PresenterSubmitButton blueprint;
+
   /// UI representation as a [:button:].
   ButtonElement uiRepresentation;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
@@ -928,12 +980,12 @@ class HtmlSubmitButton extends HtmlUiElement {
     _childrenDiv = new DivElement();
 
     uiRepresentation = new ButtonElement()
-    ..text = blueprint.name
-    ..classes.add("submit-button")
-    ..append(_childrenDiv)
-    ..onClick.listen((ev) {
-      _onChangeController.add(ev);
-    });
+      ..text = blueprint.name
+      ..classes.add("submit-button")
+      ..append(_childrenDiv)
+      ..onClick.listen((ev) {
+        _onChangeController.add(ev);
+      });
 
     update();
   }
@@ -961,6 +1013,7 @@ class HtmlSubmitButton extends HtmlUiElement {
 
   /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+
   /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
@@ -973,6 +1026,7 @@ class HtmlSubmitButton extends HtmlUiElement {
   }
 
   bool _waitingForUpdate = false;
+
   /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
   /// is disabled.
   @override
@@ -989,12 +1043,16 @@ class HtmlSubmitButton extends HtmlUiElement {
 class HtmlCheckboxInput extends HtmlUiElement {
   /// Checkbox input base blueprint.
   CheckboxInputBase blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Actual checkbox element.
   CheckboxInputElement _checkboxEl;
+
   /// Label element for displaying information.
   LabelElement _labelEl;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
@@ -1005,15 +1063,14 @@ class HtmlCheckboxInput extends HtmlUiElement {
     print(this.blueprint.name);
 
     uiRepresentation = new DivElement()
-        ..classes.add("checkbox-input")
-        ..id = blueprint.id;
+      ..classes.add("checkbox-input")
+      ..id = blueprint.id;
 
     String checkboxId = "${blueprint.id}-checkbox";
-    _checkboxEl = new CheckboxInputElement()
-        ..id = checkboxId;
+    _checkboxEl = new CheckboxInputElement()..id = checkboxId;
     _labelEl = new LabelElement()
-        ..htmlFor = checkboxId
-        ..innerHtml = blueprint.name;
+      ..htmlFor = checkboxId
+      ..innerHtml = blueprint.name;
     uiRepresentation.append(_checkboxEl);
     uiRepresentation.append(_labelEl);
 
@@ -1066,12 +1123,16 @@ class HtmlCheckboxInput extends HtmlUiElement {
 abstract class HtmlRangeBase extends HtmlUiElement {
   /// Range base blueprint.
   RangeBase blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
+
   /// Radio buttons container [:div:].
   DivElement _radioButtonsDiv;
+
   /// Paragraph used for a text.
   ParagraphElement _currentValueP;
 
@@ -1081,16 +1142,16 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   HtmlRangeBase(RangeBase blueprint, String divClass) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
-        ..classes.add(divClass)
-        ..id = blueprint.id;
+      ..classes.add(divClass)
+      ..id = blueprint.id;
 
     LabelElement label = new LabelElement()
-        ..htmlFor = blueprint.id
-        ..innerHtml = blueprint.name;
+      ..htmlFor = blueprint.id
+      ..innerHtml = blueprint.name;
     uiRepresentation.append(label);
 
-    DivElement buttonsAndValueDiv = new DivElement()..classes.add(
-        "buttons-and-value");
+    DivElement buttonsAndValueDiv = new DivElement()
+      ..classes.add("buttons-and-value");
     uiRepresentation.append(buttonsAndValueDiv);
 
     _radioButtonsDiv = new DivElement()..classes.add("buttons");
@@ -1110,6 +1171,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
   /// Map of radio buttons.
   Map<int, RadioButtonInputElement> _radioButtons =
       new Map<int, RadioButtonInputElement>();
+
   /// Creates radio buttons with given constraints on [blueprint]
   /// (min, max and step size).
   void _createRadioButtons() {
@@ -1124,8 +1186,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   /// Update on all radio buttons.
   void _updateRadioButtons() {
-    _radioButtons.forEach((int i, RadioButtonInputElement e) =>
-        _updateRadioButton(i, e));
+    _radioButtons.forEach(
+        (int i, RadioButtonInputElement e) => _updateRadioButton(i, e));
   }
 
   void _updateRadioButton(int i, RadioButtonInputElement radioButton);
@@ -1151,6 +1213,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+
   /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
@@ -1167,8 +1230,8 @@ abstract class HtmlRangeBase extends HtmlUiElement {
     super.update();
     _current = blueprint.current;
     _updateRadioButtons();
-    _currentValueP.text = (blueprint as
-        StringRepresentationHolder).currentStringRepresentation;
+    _currentValueP.text =
+        (blueprint as StringRepresentationHolder).currentStringRepresentation;
   }
 
   bool _waitingForUpdate = false;
@@ -1191,9 +1254,9 @@ class HtmlRangeOuput extends HtmlRangeBase {
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
-        ..name = blueprint.id
-        ..value = "$i"
-        ..disabled = true;
+      ..name = blueprint.id
+      ..value = "$i"
+      ..disabled = true;
     _updateRadioButton(i, radioButton);
     return radioButton;
   }
@@ -1218,9 +1281,9 @@ class HtmlRangeInput extends HtmlRangeBase {
   @override
   RadioButtonInputElement _createRadioButton(int i) {
     RadioButtonInputElement radioButton = new RadioButtonInputElement()
-        ..name = blueprint.id
-        ..checked = i == blueprint.current
-        ..value = "$i";
+      ..name = blueprint.id
+      ..checked = i == blueprint.current
+      ..value = "$i";
     _updateRadioButton(i, radioButton);
 
     StreamSubscription subscription = radioButton.onClick.listen((ev) {
@@ -1236,9 +1299,11 @@ class HtmlRangeInput extends HtmlRangeBase {
   @override
   void _updateRadioButton(int i, RadioButtonInputElement radioButton) {
     radioButton.checked = i == blueprint.current;
-    radioButton.disabled = (blueprint.minEnabled != null && i < blueprint.minEnabled)
-        || (blueprint.maxEnabled != null && i > blueprint.maxEnabled) || disabled ||
-        waitingForUpdate;
+    radioButton.disabled =
+        (blueprint.minEnabled != null && i < blueprint.minEnabled) ||
+            (blueprint.maxEnabled != null && i > blueprint.maxEnabled) ||
+            disabled ||
+            waitingForUpdate;
   }
 }
 
@@ -1246,8 +1311,10 @@ class HtmlRangeInput extends HtmlRangeBase {
 class HtmlTextOuput extends HtmlUiElement {
   /// Text base blueprint.
   TextBase blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Children container [:div:] used for appending child elements.
   DivElement _childrenDiv;
 
@@ -1256,8 +1323,8 @@ class HtmlTextOuput extends HtmlUiElement {
   HtmlTextOuput(TextBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
-        ..classes.add("text-output")
-        ..id = blueprint.id;
+      ..classes.add("text-output")
+      ..id = blueprint.id;
 
     update();
 
@@ -1299,45 +1366,49 @@ class HtmlTextOuput extends HtmlUiElement {
 class HtmlMultipleChoiceInput extends HtmlUiElement {
   /// Multiple choice input base blueprint.
   MultipleChoiceInputBase blueprint;
+
   /// UI representation as a [:div:].
   DivElement uiRepresentation;
+
   /// Label element for displaying information.
   LabelElement _labelElement;
+
   /// Children [:select:] element used for appending [:option:] elements.
   SelectElement _childrenSelectElement;
 
   /// Creates new HtmlMultipleChoiceInput and its UI representation from
   /// multple choice input base [blueprint].
-  HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint) :
-      super(blueprint) {
+  HtmlMultipleChoiceInput(MultipleChoiceInputBase blueprint)
+      : super(blueprint) {
     this.blueprint = blueprint;
     uiRepresentation = new DivElement()
-        ..classes.add("multiple-choice-input")
-        ..id = blueprint.id;
+      ..classes.add("multiple-choice-input")
+      ..id = blueprint.id;
 
     _labelElement = new LabelElement()..text = blueprint.name;
     uiRepresentation.append(_labelElement);
 
     _childrenSelectElement = new SelectElement()
-    ..onChange.listen((Event ev) {
-      if (!_childrenSelectElement.disabled) {
-        // TODO: report (html5lib?) bug which throws type exception here
+      ..onChange.listen((Event ev) {
+        if (!_childrenSelectElement.disabled) {
+          // TODO: report (html5lib?) bug which throws type exception here
 //        List<PresenterOption> childOptions = blueprint.children
 //            .where((html5lib.Element element) => element is PresenterOption)
 //            .toList(growable: false);
 
-        List<PresenterOption> childOptions = new List();
-        for (html5lib.Element el in blueprint.children) {
-          if (el is PresenterOption) {
-            childOptions.add(el);
+          List<PresenterOption> childOptions = new List();
+          for (html5lib.Element el in blueprint.children) {
+            if (el is PresenterOption) {
+              childOptions.add(el);
+            }
           }
-        }
 
-        PresenterOption selectedOption = childOptions[_childrenSelectElement.selectedIndex];
-        HtmlOption htmlOption = selectedOption.uiElement;
-        htmlOption.select();
-      }
-    });
+          PresenterOption selectedOption =
+              childOptions[_childrenSelectElement.selectedIndex];
+          HtmlOption htmlOption = selectedOption.uiElement;
+          htmlOption.select();
+        }
+      });
 
     uiRepresentation.append(_childrenSelectElement);
 
@@ -1369,9 +1440,10 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 
   /// Getter onChange returns in this case [:null:].
   @override
-  Stream get onChange => null;  // All the "changes" happen below, on options.
+  Stream get onChange => null; // All the "changes" happen below, on options.
 
   bool _waitingForUpdate = false;
+
   /// Implementation of waiting for update. When [:true:], the select element
   /// is disabled.
   @override
@@ -1388,6 +1460,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
 class HtmlOption extends HtmlUiElement {
   /// Option base blueprint.
   OptionBase blueprint;
+
   /// UI representation as an [:option:].
   OptionElement uiRepresentation;
 
@@ -1395,8 +1468,9 @@ class HtmlOption extends HtmlUiElement {
   /// [blueprint].
   HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
-    uiRepresentation = new OptionElement(value: blueprint.id, selected:
-        blueprint.current)..text = blueprint.text;
+    uiRepresentation = new OptionElement(
+        value: blueprint.id,
+        selected: blueprint.current)..text = blueprint.text;
 
     update();
   }
@@ -1424,9 +1498,10 @@ class HtmlOption extends HtmlUiElement {
 
   @override
   bool get hidden => false;
+
   /// If [value] is [:true:] throws with error. [:option:] element can't
   /// be hidden.
-  @override  // <option> in <select> can't be hidden by CSS
+  @override // <option> in <select> can't be hidden by CSS
   set hidden(bool value) {
     if (value == true) {
       throw "Can't hide a <option> in a select";
@@ -1440,6 +1515,7 @@ class HtmlOption extends HtmlUiElement {
 
   /// On change stream controller.
   StreamController _onChangeController = new StreamController();
+
   /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
@@ -1454,6 +1530,7 @@ class HtmlOption extends HtmlUiElement {
   }
 
   bool _waitingForUpdate = false;
+
   /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
   /// is disabled.
   @override
@@ -1471,6 +1548,7 @@ class HtmlOption extends HtmlUiElement {
 class Submenu {
   /// Submenu's name.
   final String name;
+
   /// List of choices being displayed in submenu.
   final List<Choice> choices = new List<Choice>();
 
@@ -1482,26 +1560,31 @@ class Submenu {
 class Dialog {
   /// Dialog title.
   String title;
+
   /// Dialog html text.
   String html;
+
   /// List of dialog buttons.
   List<DialogButton> buttons;
 
   /// Creates new Dialog with [title], [html] text and optional [buttons].
   ///
   /// If the dialog [buttons] are not set, the simple close button is created.
-  Dialog(this.title, this.html, [this.buttons = const
-      [const DialogButton.justClose("Close")]]);
+  Dialog(this.title, this.html,
+      [this.buttons = const [const DialogButton.justClose("Close")]]);
 }
 
 /// Class DialogButton represents dialog button with label and some behaviour.
 class DialogButton {
   /// Dialog button label.
   final String label;
+
   /// Dialog button behaviour.
   final ClickBehaviour _behaviour;
+
   /// Used as a default behaviour if no behaviour is set. Returns [:true:].
   static final ClickBehaviour NO_BEHAVIOUR = () => true;
+
   /// Getter for behaviour. If no behaviour is set, the [NO_BEHAVIOUR] is used.
   ClickBehaviour get behaviour {
     if (_behaviour == null) {
@@ -1513,13 +1596,13 @@ class DialogButton {
 
   /// Creates new DialogButton with [label] and [behaviour].
   const DialogButton(this.label, this._behaviour);
+
   /// Creates new DialogButton with [label] and without [behaviour].
   const DialogButton.justClose(this.label) : _behaviour = null;
 }
 
 /// Typedef returns [:true:] if dialog can be closed.
 typedef bool ClickBehaviour();
-
 
 /**
  * PointsAwardElement is a special class for storing information about
@@ -1528,19 +1611,22 @@ typedef bool ClickBehaviour();
 class PointsAwardElement extends PointsAward implements MetaElement {
   /// Meta element.
   final Element element;
+
   /// Creates new PointsAwardElement with [element] and [PointsAward]'s
   /// points to be awarded [addition], resulting sum of points [result] and
   /// optional [justification] message.
-  PointsAwardElement(this.element, int addition, int result, [String
-      justification]) : super(addition, result, justification);
+  PointsAwardElement(this.element, int addition, int result,
+      [String justification])
+      : super(addition, result, justification);
 
   /// Creates new PointsAwardElement from [pointsAward] and [element].
   PointsAwardElement.fromPointsAward(PointsAward pointsAward, this.element)
       : super(pointsAward.addition, pointsAward.result,
-          pointsAward.justification);
+            pointsAward.justification);
 
   /// Action which will be called.
   Action action;
+
   /// Do action on meta element if [action] is not [:null:].
   /// If action is done, set [done] to [:true:].
   void doAction() {
@@ -1551,6 +1637,7 @@ class PointsAwardElement extends PointsAward implements MetaElement {
       throw new StateError("Called doAction() although action is null.");
     }
   }
+
   bool done = false;
 }
 
@@ -1558,10 +1645,13 @@ class PointsAwardElement extends PointsAward implements MetaElement {
 abstract class MetaElement {
   /// Element.
   final Element element;
+
   /// Action which will be called.
   Action action;
+
   /// Do action on meta element.
   void doAction();
+
   /// If is action done.
   bool done;
 
@@ -1607,8 +1697,8 @@ class FootnoteSupTagSyntax extends mdown.TagSyntax {
 
   /// Creates new FootnoteSupTagSyntax.
   FootnoteSupTagSyntax()
-      : super(r'<sup class="footnote" title="(.*?)">', end: r'</sup>', tag:
-          'sup');
+      : super(r'<sup class="footnote" title="(.*?)">',
+            end: r'</sup>', tag: 'sup');
 
   @override
   bool onMatch(mdown.InlineParser parser, Match match) {
@@ -1617,8 +1707,8 @@ class FootnoteSupTagSyntax extends mdown.TagSyntax {
   }
 
   @override
-  bool onMatchEnd(mdown.InlineParser parser, Match match, mdown.TagState state)
-      {
+  bool onMatchEnd(
+      mdown.InlineParser parser, Match match, mdown.TagState state) {
     mdown.Element element = new mdown.Element(tag, state.children);
     element.attributes["class"] = "footnote";
     element.attributes["title"] = title;

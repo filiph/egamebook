@@ -38,6 +38,7 @@ class PlayerProfile {
 
   /// Uid of the player this profile is associated with.
   String playerUid;
+
   /// Uid of current gamebook. *Must* be set for saving and loading to work.
   /// TODO: get rid of this. All calls to playerProfile should explicitly state
   /// the UID.
@@ -50,15 +51,14 @@ class PlayerProfile {
 
   /// Saves preferences for the player to the storage.
   Future<bool> _savePreferences() {
-    return _store.save("$playerUid::$PREFERENCES_KEY",
-                         JSON.encode(preferences));
+    return _store.save(
+        "$playerUid::$PREFERENCES_KEY", JSON.encode(preferences));
   }
 
   /// Loads preferences for the player from the storage.
   Future<bool> _loadPreferences() {
     var completer = new Completer();
-    _store.load("$playerUid::$PREFERENCES_KEY")
-    .then((json) {
+    _store.load("$playerUid::$PREFERENCES_KEY").then((json) {
       if (json == null || json == "") {
         preferences = new Map();
       } else {
@@ -82,8 +82,10 @@ class PlayerProfile {
    * Number of maximum savegames to keep in storage per given egamebook and player.
    */
   int _maxSaves = 10;
+
   /// Getter returns maximum number of savegames.
   get maxSaves => _maxSaves;
+
   /// Setter sets [value] to maximum number of savegames.
   set maxSaves(int value) => _maxSaves = value; // TODO fix queue etc.
 
@@ -154,9 +156,9 @@ class PlayerProfile {
       // This code goes fetch it, re-runs the save() method, then forwards the
       // result to the caller of this function.
       var completer = new Completer();
-      _loadStoryChronology()
-      .then((_) => save(savegame)
-        .then((value) {completer.complete(value);}));
+      _loadStoryChronology().then((_) => save(savegame).then((value) {
+            completer.complete(value);
+          }));
       return completer.future;
     }
 
@@ -175,8 +177,7 @@ class PlayerProfile {
   Future<Savegame> load(String uid) {
     var completer = new Completer<Savegame>();
 
-    _load(uid)
-    .then((json) {
+    _load(uid).then((json) {
       if (json == null) {
         completer.complete(null);
       } else {
@@ -198,9 +199,9 @@ class PlayerProfile {
       // forwards the result to the caller of this function.
       // TODO: dry with save() ?
       var completer = new Completer();
-      _loadStoryChronology()
-      .then((_) => loadMostRecent()
-        .then((value) {completer.complete(value);}));
+      _loadStoryChronology().then((_) => loadMostRecent().then((value) {
+            completer.complete(value);
+          }));
       return completer.future;
     }
 

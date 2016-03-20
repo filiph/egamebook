@@ -114,6 +114,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /// Getter returns a help message. Every form element can have a help button
   /// that shows a text message.
   String get helpMessage => attributes["helpMessage"];
+
   /// Setter for form's help message.
   set helpMessage(String value) => attributes["helpMessage"] = value;
 
@@ -122,6 +123,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /// space (there will be no 'white rectange' in the place of a hidden element
   /// like with CSS [:visibility:]).
   bool get hidden => attributes["hidden"] == "true";
+
   /// Setter for the visibility of the element.
   set hidden(bool value) => attributes["hidden"] = value ? "true" : "false";
 
@@ -129,6 +131,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   /// Disabled elements are still visible, but cannot be clicked or changed,
   /// and are clearly marked as such.
   bool get disabled => attributes["disabled"] == "true";
+
   /// Setter for whether or not the element is disabled.
   set disabled(bool value) => attributes["disabled"] = value ? "true" : "false";
 
@@ -144,10 +147,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
   }
 
   /// Returns attributes [hidden] and [disabled] as a map representation.
-  Map<String, Object> toMap() => {
-    "hidden": hidden,
-    "disabled": disabled
-  };
+  Map<String, Object> toMap() => {"hidden": hidden, "disabled": disabled};
 
   /// Sets attributes [hidden] and [disabled] from a given [map].
   void updateFromMap(Map<String, Object> map) {
@@ -170,8 +170,8 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
     // Normally, this should be possible through children.where, but this
     // fails with typecasting Iterable<Element> to Iterable<FormElement>.
     List<FormElement> result = new List<FormElement>();
-    for (FormElement child in
-        children.where((html5lib.Element child) => child is FormElement)) {
+    for (FormElement child
+        in children.where((html5lib.Element child) => child is FormElement)) {
       result.add(child);
     }
     return result;
@@ -200,6 +200,7 @@ class FormElement extends html5lib.Element implements UpdatableByMap {
 abstract class UpdatableByMap {
   /// Returns a map representation.
   Map<String, Object> toMap();
+
   /// Updates from a map representation in a [map].
   void updateFromMap(Map<String, Object> map);
 }
@@ -210,6 +211,7 @@ abstract class UpdatableByMap {
 class FormBase extends FormElement {
   /// Element class.
   static const String elementClass = "Form";
+
   /// Creates new FormBase element of [elementClass].
   FormBase() : super(elementClass);
 
@@ -217,6 +219,7 @@ class FormBase extends FormElement {
   /// Defaults to [:null:], in which case the button will just have a generic
   /// graphic (such as an arrow or a check mark).
   String get submitText => attributes["submitText"];
+
   /// Setter for a text to be on the submit button.
   set submitText(String value) => attributes["submitText"] = value;
 }
@@ -228,6 +231,7 @@ class FormBase extends FormElement {
 class Form extends FormBase implements _NewValueCallback {
   /// Random.
   static math.Random _random = new math.Random();
+
   /// Creates new Form with optional [submitText]. Form has also randomly
   /// generated [id].
   Form({String submitText}) {
@@ -237,6 +241,7 @@ class Form extends FormBase implements _NewValueCallback {
 
   /// Submit callback.
   SubmitCallback onSubmit;
+
   /// Input callback.
   InputCallback onInput;
 
@@ -248,13 +253,13 @@ class Form extends FormBase implements _NewValueCallback {
   FormConfiguration receiveUserInput(CurrentState newValues) {
     Set<_NewValueCallback> parentsOfUpdatedElements =
         new Set<_NewValueCallback>();
-    for (FormElement element in allFormElementsBelowThisOne.where((element) =>
-        element is UpdatableByMap && element is Input)) {
+    for (FormElement element in allFormElementsBelowThisOne
+        .where((element) => element is UpdatableByMap && element is Input)) {
       Object newCurrent = newValues.getById(element.id);
       if (newCurrent != null && newCurrent != (element as Input).current) {
         (element as Input).current = newCurrent;
-        if (element is _NewValueCallback && (element as
-            _NewValueCallback).onInput != null) {
+        if (element is _NewValueCallback &&
+            (element as _NewValueCallback).onInput != null) {
           (element as _NewValueCallback).onInput(newCurrent);
         }
 
@@ -262,8 +267,8 @@ class Form extends FormBase implements _NewValueCallback {
         FormElement parent = element;
         do {
           parent = parent.parent;
-          if (parent is _NewValueCallback && (parent as
-              _NewValueCallback).onInput != null) {
+          if (parent is _NewValueCallback &&
+              (parent as _NewValueCallback).onInput != null) {
             parentsOfUpdatedElements.add(parent as _NewValueCallback);
           }
         } while (parent.parent != null);
@@ -279,8 +284,9 @@ class Form extends FormBase implements _NewValueCallback {
       parent.onInput(value);
     });
 
-    allFormElementsBelowThisOne.where((element) => element is Input).forEach(
-        (FormElement element) {
+    allFormElementsBelowThisOne
+        .where((element) => element is Input)
+        .forEach((FormElement element) {
       (element as Input).sanitizeCurrent();
     });
 
@@ -291,11 +297,11 @@ class Form extends FormBase implements _NewValueCallback {
         callback = this.onSubmit;
       } else {
         // It wasn't a click on the main submit button.
-        callback = (allFormElementsBelowThisOne
-            .singleWhere((element) =>
-                (element is SubmitButton) &&
-                (element as FormElement).id == newValues.submitterId)
-                as SubmitButton).onSubmit;
+        callback = (allFormElementsBelowThisOne.singleWhere((element) =>
+                    (element is SubmitButton) &&
+                    (element as FormElement).id == newValues.submitterId)
+                as SubmitButton)
+            .onSubmit;
       }
       if (callback != null) {
         callback();
@@ -307,6 +313,7 @@ class Form extends FormBase implements _NewValueCallback {
   }
 
   bool _uniqueIdsGiven = false;
+
   /// Gives form children unique id.
   void _giveChildrenUniqueIds() {
     int id = 0;
@@ -335,8 +342,8 @@ class Form extends FormBase implements _NewValueCallback {
   /// together with its string representation).
   FormConfiguration _createConfiguration() {
     FormConfiguration values = new FormConfiguration();
-    for (UpdatableByMap element in allFormElementsBelowThisOne.where((element)
-        => element is UpdatableByMap)) {
+    for (UpdatableByMap element in allFormElementsBelowThisOne
+        .where((element) => element is UpdatableByMap)) {
       Map<String, Object> map = element.toMap();
       if (element is StringRepresentationCreator) {
         Object elementCurrent;
@@ -349,8 +356,8 @@ class Form extends FormBase implements _NewValueCallback {
               "StringRepresentationCreator when it doesn't have a current "
               "value. (Element: $element)");
         }
-        map["__string__"] = (element as
-            StringRepresentationCreator).stringifyFunction(elementCurrent);
+        map["__string__"] = (element as StringRepresentationCreator)
+            .stringifyFunction(elementCurrent);
       }
       values.add((element as FormElement).id, map);
     }
@@ -370,9 +377,10 @@ class FormConfiguration {
 
   /// Creates new FormConfiguration with empty map of values.
   FormConfiguration() : _valuesMap = new Map<String, Map<String, Object>>();
+
   /// Creates new FormConfiguration from already existing [map] of values.
-  FormConfiguration.fromMap(Map<String, Map<String, Object>> map) : _valuesMap =
-      map;
+  FormConfiguration.fromMap(Map<String, Map<String, Object>> map)
+      : _valuesMap = map;
 
   /// Adds new value [attributesMap] on key [id] into map of values.
   void add(String id, Map<String, Object> attributesMap) {
@@ -399,11 +407,13 @@ class CurrentState {
    * This information is stored in a 'magic' key-value pair.
    */
   bool get submitted => _valuesMap["__submitted__"];
+
   /// Setter for whether or not this form is being submitted.
   set submitted(bool value) => _valuesMap["__submitted__"] = value;
 
   /// Getter for a submitter id stored in values map.
   String get submitterId => _valuesMap["__submitterId__"];
+
   /// Setter for a submitter id stored in values map.
   set submitterId(String value) => _valuesMap["__submitterId__"] = value;
 
@@ -412,6 +422,7 @@ class CurrentState {
   CurrentState() : _valuesMap = new Map<String, Object>() {
     submitted = false;
   }
+
   /// Creates new CurrentState from existing values [map].
   /// If the given values map doesn't contain the [:__submitted__:] key,
   /// the [submitted] attribute is set to [:false:].
@@ -440,11 +451,13 @@ class CurrentState {
 class FormSection extends FormElement {
   /// Getter returns a name.
   String get name => attributes["name"];
+
   /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
   /// Element class.
   static const String elementClass = "FormSection";
+
   ///Creates new FormSection with [name] and of [elementClass].
   FormSection(String name) : super(elementClass) {
     this.name = name;
@@ -514,6 +527,7 @@ abstract class Output<T> {
 class SubmitButtonBase extends FormElement {
   /// Getter returns a name.
   String get name => attributes["name"];
+
   /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
@@ -528,17 +542,15 @@ class SubmitButtonBase extends FormElement {
   }
 
   /// Creates new SubmitButtonBase with [name] and mandatory [helpMessage].
-  SubmitButtonBase.noOptional(String name, String helpMessage) : this(name,
-      helpMessage: helpMessage);
+  SubmitButtonBase.noOptional(String name, String helpMessage)
+      : this(name, helpMessage: helpMessage);
 
   /// Returns a map representation of object which contains
   /// also the [name] attribute.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
-    map.addAll({
-      "name": name
-    });
+    map.addAll({"name": name});
     return map;
   }
 
@@ -555,13 +567,14 @@ class SubmitButtonBase extends FormElement {
 typedef void SubmitCallback();
 
 /// Class SubmitButton wraps submit button element.
-class SubmitButton extends SubmitButtonBase  {
+class SubmitButton extends SubmitButtonBase {
   /// Callback called on submit.
   SubmitCallback onSubmit;
+
   /// Creates new SubmitButton with [name] and [onSubmit] callback.
   /// SubmitButton can also have optional [helpMessage].
-  SubmitButton(String name, this.onSubmit, {String helpMessage}) :
-    super.noOptional(name, helpMessage);
+  SubmitButton(String name, this.onSubmit, {String helpMessage})
+      : super.noOptional(name, helpMessage);
 }
 
 // TODO: SkillSubmitButton - allows player to have better results according
@@ -573,12 +586,12 @@ class SubmitButton extends SubmitButtonBase  {
 class CheckboxBase extends FormElement {
   /// Getter returns a name.
   String get name => attributes["name"];
+
   /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
   /// Creates new CheckboxBase with [name] and of [elementClass].
-  CheckboxBase(String elementClass, String name)
-      : super(elementClass) {
+  CheckboxBase(String elementClass, String name) : super(elementClass) {
     this.name = name;
   }
 
@@ -590,9 +603,7 @@ class CheckboxBase extends FormElement {
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
-    map.addAll({
-      "current": current
-    });
+    map.addAll({"current": current});
     return map;
   }
 
@@ -613,8 +624,7 @@ class CheckboxInputBase extends CheckboxBase implements Input<bool> {
   static const String elementClass = "CheckboxInput";
 
   /// Creates new CheckboxInputBase with [name] and of [elementClass].
-  CheckboxInputBase(String name)
-    : super(elementClass, name);
+  CheckboxInputBase(String name) : super(elementClass, name);
 
   /// Sets sanitization on a [current] atribute. If is it [:null:],
   /// the [StateError] is thrown.
@@ -645,6 +655,7 @@ class CheckboxInput extends CheckboxInputBase with _NewValueCallback<bool> {
 class RangeBase extends FormElement {
   /// Getter returns a name.
   String get name => attributes["name"];
+
   /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
@@ -652,12 +663,13 @@ class RangeBase extends FormElement {
   RangeBase(String elementClass, String name) : super(elementClass) {
     this.name = name;
   }
+
   /// Creates new RangeBase of a given [elementClass] and with a [name].
   /// and constraints. Constraints are [current] value selected on the range
   /// input, [min] value, [max] value, [step] size and [minEnabled] and
   /// [maxEnabled] values.
-  RangeBase.withConstraints(String elementClass, String
-      name, this.current, this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
+  RangeBase.withConstraints(String elementClass, String name, this.current,
+      this.min, this.max, this.step, this.minEnabled, this.maxEnabled)
       : super(elementClass) {
     this.name = name;
     if ((max - min) % step != 0) {
@@ -670,18 +682,23 @@ class RangeBase extends FormElement {
   /// [:0:]. We use `current` because `value` is the [String] value of any
   /// HTML5 element (although it's deprecated in html5lib).
   int current = 0;
+
   /// Minimal value on the range input. Defaults to [:0:].
   int min = 0;
+
   /// Maximal value on the range input. Defaults to [:10:].
   int max = 10;
+
   /// Allows for the range values to be in steps larger than [:1:] (the
   /// default).
   int step = 1;
+
   /// Numbers below this value will be visible to player, but disabled for
   /// choosing. This can communicate to the player that those values could be
   /// possible to choose in other circumstances. When set to [:null:] (default),
   /// all numbers are possible.
   int minEnabled;
+
   /// Same as [minEnabled], but for values _above_ this number.
   int maxEnabled;
 
@@ -720,14 +737,15 @@ class RangeBase extends FormElement {
 class RangeInputBase extends RangeBase implements Input<int> {
   /// Element class.
   static const String elementClass = "RangeInput";
+
   /// Creates new RangeInputBase with [name], of [elementClass] and constraints.
   /// Constraints are [current] value selected on the range
   /// input, [min] value, [max] value, [step] size and [minEnabled] and
   /// [maxEnabled] values.
-  RangeInputBase.withConstraints(String name, int current, int min, int max, int
-      step, int minEnabled, int maxEnabled)
+  RangeInputBase.withConstraints(String name, int current, int min, int max,
+      int step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
-          minEnabled, maxEnabled);
+            minEnabled, maxEnabled);
 
   /// Creates new RangeInputBase with [name] and of [elementClass].
   RangeInputBase(String name) : super(elementClass, name);
@@ -764,15 +782,21 @@ class RangeInputBase extends RangeBase implements Input<int> {
  * It is the author-facing class of the range input element. It works only with
  * integers.
  */
-class RangeInput extends RangeInputBase with _NewValueCallback<int>,
-    StringRepresentationCreator {
+class RangeInput extends RangeInputBase
+    with _NewValueCallback<int>, StringRepresentationCreator {
   /// Creates new RangeInput with [name], input callback [onInput] and optional
   /// constraints [value], stringify function [stringifyFunction], [min] and [max]
   /// values, [step] size and [minEnabled] and [maxEnabled] values.
-  RangeInput(String name, InputCallback onInput, {int value:
-      0, StringifyFunction stringifyFunction, int min: 0, int max: 10, int step:
-      1, int minEnabled, int maxEnabled}) : super.withConstraints(name, value, min,
-      max, step, minEnabled, maxEnabled) {
+  RangeInput(String name, InputCallback onInput,
+      {int value: 0,
+      StringifyFunction stringifyFunction,
+      int min: 0,
+      int max: 10,
+      int step: 1,
+      int minEnabled,
+      int maxEnabled})
+      : super.withConstraints(
+            name, value, min, max, step, minEnabled, maxEnabled) {
     this.onInput = onInput;
     if (stringifyFunction != null) {
       this.stringifyFunction = stringifyFunction;
@@ -792,10 +816,10 @@ class RangeOutputBase extends RangeBase implements Output<int> {
   /// Creates new RangeOutputBase with [name], of [elementClass] and given
   /// constraints. Constraints are [current] value, [min] and [max] value,
   /// [step] size and [minEnabled] and [maxEnabled] values.
-  RangeOutputBase.withConstraints(String name, int current, int min, int
-      max, int step, int minEnabled, int maxEnabled)
+  RangeOutputBase.withConstraints(String name, int current, int min, int max,
+      int step, int minEnabled, int maxEnabled)
       : super.withConstraints(elementClass, name, current, min, max, step,
-          minEnabled, maxEnabled);
+            minEnabled, maxEnabled);
 
   /// Creates new RangeOutputBase with [name] and of [elementClass].
   RangeOutputBase(String name) : super(elementClass, name);
@@ -812,10 +836,16 @@ class RangeOutput extends RangeOutputBase with StringRepresentationCreator {
   /// Creates new RangeOutput with [name] and constraints [value], stringify
   /// function [stringifyFunction], [min] and [max] values, [step] size and
   /// [minEnabled] and [maxEnabled] values.
-  RangeOutput(String name, {int value: 0, StringifyFunction
-      stringifyFunction, int min: 0, int max: 10, int step: 1, int minEnabled, int
-      maxEnabled}) : super.withConstraints(name, value, min, max, step, minEnabled,
-      maxEnabled) {
+  RangeOutput(String name,
+      {int value: 0,
+      StringifyFunction stringifyFunction,
+      int min: 0,
+      int max: 10,
+      int step: 1,
+      int minEnabled,
+      int maxEnabled})
+      : super.withConstraints(
+            name, value, min, max, step, minEnabled, maxEnabled) {
     if (stringifyFunction != null) {
       this.stringifyFunction = stringifyFunction;
     }
@@ -828,6 +858,7 @@ class RangeOutput extends RangeOutputBase with StringRepresentationCreator {
 class TextBase extends FormElement {
   /// Creates new TextBase of a given [elementClass].
   TextBase(String elementClass) : super(elementClass);
+
   /// HTML text
   String html;
 
@@ -835,9 +866,7 @@ class TextBase extends FormElement {
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
-    map.addAll({
-      "html": html
-    });
+    map.addAll({"html": html});
     return map;
   }
 
@@ -856,12 +885,14 @@ class TextBase extends FormElement {
 class TextOutputBase extends TextBase with Output<String> {
   /// Element class.
   static const String elementClass = "TextOutput";
+
   /// Creates new TextOutputBase of [elementClass].
   TextOutputBase() : super(elementClass);
 
   /// Returns current value in [html].
   @override
   String get current => html;
+
   /// Sets value to [html] attribute.
   @override
   set current(String value) {
@@ -882,15 +913,17 @@ class MultipleChoiceInputBase extends FormElement {
   //    with UpdatableByMap
   /// Getter returns a name.
   String get name => attributes["name"];
+
   /// Setter for a name.
   set name(String value) => attributes["name"] = value;
 
-    //List<OptionBase> options = new List<OptionBase>();
-    //void add(OptionBase option) => options.add(option);
-    //void addAll(Iterable<OptionBase> options) => this.options.addAll(options);
+  //List<OptionBase> options = new List<OptionBase>();
+  //void add(OptionBase option) => options.add(option);
+  //void addAll(Iterable<OptionBase> options) => this.options.addAll(options);
 
   /// Element class.
   static const String elementClass = "MultipleChoiceInput";
+
   /// Creates new MultipleChoiceInputBase with [name] and of [elementClass].
   MultipleChoiceInputBase(String name) : super(elementClass) {
     this.name = name;
@@ -917,8 +950,8 @@ class MultipleChoiceInputBase extends FormElement {
 }
 
 /// Class MultipleChoiceInput wraps multiple choice input element.
-class MultipleChoiceInput extends MultipleChoiceInputBase with
-    _NewValueCallback<int> {
+class MultipleChoiceInput extends MultipleChoiceInputBase
+    with _NewValueCallback<int> {
   /// Creates new MultipleChoiceInput with [name] and input callback [onInput].
   MultipleChoiceInput(String name, InputCallback onInput) : super(name) {
     this.onInput = onInput;
@@ -932,15 +965,17 @@ class MultipleChoiceInput extends MultipleChoiceInputBase with
 class OptionBase extends FormElement implements Input<bool> {
   /// Getter returns a text.
   String get text => attributes["text"];
+
   /// Setter for a text.
   set text(String value) => attributes["text"] = value;
 
   /// Element class.
   static const String elementClass = "Option";
+
   /// Creates new OptionBase with [text] and optional [selected] attribute
   /// and [helpMessage] text. The [selected] attribute is stored into [current].
-  OptionBase(String text, {bool selected: false, String helpMessage}) :
-      super(elementClass) {
+  OptionBase(String text, {bool selected: false, String helpMessage})
+      : super(elementClass) {
     this.text = text;
     this.current = selected;
     this.helpMessage = helpMessage;
@@ -949,18 +984,15 @@ class OptionBase extends FormElement implements Input<bool> {
   // This exists because of https://code.google.com/p/dart/issues/detail?id=15101
   /// Creates new OptionBase with [text], [selected] attribute and [helpMessage]
   /// text. The [selected] attribute is stored into [current].
-  OptionBase.noOptional(String text, bool selected, String helpMessage) :
-    this(text, selected: selected, helpMessage: helpMessage);
+  OptionBase.noOptional(String text, bool selected, String helpMessage)
+      : this(text, selected: selected, helpMessage: helpMessage);
 
   /// Returns a map representation of object which contains also [text]
   /// and [current] value which describes if an element is selected or not.
   @override
   Map<String, Object> toMap() {
     Map<String, Object> map = super.toMap();
-    map.addAll({
-      "text": text,
-      "current": current
-    });
+    map.addAll({"text": text, "current": current});
     return map;
   }
 
@@ -989,9 +1021,9 @@ class Option extends OptionBase with _NewValueCallback<bool> {
   ///
   /// The [onSelect] callback is only triggered when the option has just been
   /// selected (not when it was deselected).
-  Option(String text, InputCallback onSelect, {bool
-      selected, String helpMessage}) : super.noOptional(text, selected,
-      helpMessage) {
+  Option(String text, InputCallback onSelect,
+      {bool selected, String helpMessage})
+      : super.noOptional(text, selected, helpMessage) {
     this.onInput = (bool selected) {
       if (selected) {
         onSelect(selected);

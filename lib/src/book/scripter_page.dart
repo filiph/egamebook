@@ -1,6 +1,5 @@
 part of egb_scripter;
 
-
 /**
  * In the context of [Scripter], we also have the actual data + logic of
  * the page in the [blocks] list.
@@ -11,6 +10,7 @@ class ScripterPage extends Page {
 
   /// Number of times this page has been visited by player.
   int visitCount = 0;
+
   /// Getter for whether or not this page has been visited by player.
   bool get visited => visitCount > 0;
 
@@ -20,19 +20,18 @@ class ScripterPage extends Page {
    *
    * Name is copied from Map key when added to [ScripterPageMap].
    */
-  ScripterPage(
-      this.blocks,
-      {bool visitOnce: false, bool showOnce: false}) :
-        super(visitOnce: visitOnce, showOnce: showOnce);
+  ScripterPage(this.blocks, {bool visitOnce: false, bool showOnce: false})
+      : super(visitOnce: visitOnce, showOnce: showOnce);
 }
 
 /**
  * Class used to store information about an exact point in the book -- page and
- * block. 
+ * block.
  */
 class ScripterBlockPointer {
   /// Scripter page.
   final ScripterPage page;
+
   /// Block index.
   final int blockIndex;
 
@@ -58,7 +57,7 @@ class ScripterPageMap {
   ScripterPage operator [](String key) => pages[key];
 
   /**
-   * Returns page with name [name]. If [currentGroupName] is given, then 
+   * Returns page with name [name]. If [currentGroupName] is given, then
    * the function will first search for key in a format [:groupName: name:].
    *
    * Returns [:null:] if there is no page of any compatible name.
@@ -73,10 +72,10 @@ class ScripterPageMap {
       return null;
     }
   }
-  
+
   /// Returns current group name string in a format [:groupName: name:].
-  String _getCurrentGroupName(String name, String currentGroupName) 
-      => "$currentGroupName: $name";
+  String _getCurrentGroupName(String name, String currentGroupName) =>
+      "$currentGroupName: $name";
 
   /// Saves ScripterPage [newPage] on [key] to the Map of [pages].
   /// Also sets a [key] as a name for the given page.
@@ -91,9 +90,7 @@ class ScripterPageMap {
   Map<String, dynamic> exportState() {
     var pageMapState = new Map<String, dynamic>();
     pages.forEach((name, page) {
-      pageMapState[name] = {
-          "visitCount": page.visitCount
-      };
+      pageMapState[name] = {"visitCount": page.visitCount};
     });
     return pageMapState;
   }
@@ -110,10 +107,10 @@ class ScripterPageMap {
 
   /**
    * Clears play state of the page map. (Play state is the data that change
-   * while the egamebook is played by the player, e.g. the 
+   * while the egamebook is played by the player, e.g. the
    * [ScripterPage.visitCount] of every page. The actual texts and scripts
    * stay.)
-   * 
+   *
    * Useful when restarting an egamebook from scratch.
    */
   void clearState() {

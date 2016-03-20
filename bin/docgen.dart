@@ -10,17 +10,15 @@ import 'package:args/args.dart';
 
 final String OUTPUT_PATH = "docs${path.separator}dev";
 
-final List params = [
-  "--output=$OUTPUT_PATH"
-];
+final List params = ["--output=$OUTPUT_PATH"];
 
 /// If we want to serve the output
 bool serve = false;
 
 void main(List<String> args) {
   ArgParser parser = new ArgParser()
-    ..addFlag("serve", negatable: false,
-        help: "After generating, open docs in the browser.")
+    ..addFlag("serve",
+        negatable: false, help: "After generating, open docs in the browser.")
     ..addFlag("help", abbr: "h", negatable: false, help: "Display help.");
   ArgResults results = parser.parse(args);
 
@@ -33,8 +31,8 @@ void main(List<String> args) {
     return;
   }
 
-  Directory parent = new Directory(
-      path.dirname(Platform.script.toFilePath())).parent;
+  Directory parent =
+      new Directory(path.dirname(Platform.script.toFilePath())).parent;
   Directory lib = new Directory(path.join(parent.path, "lib"));
 
   if (!lib.existsSync()) {
@@ -47,16 +45,17 @@ void main(List<String> args) {
 
 /// Start dartdoc with parameters.
 _runDartDoc() async {
-   ProcessResult results = await Process.run('dartdoc', params, runInShell: true);
-   print(results.stdout);
-   print(results.stderr);
+  ProcessResult results =
+      await Process.run('dartdoc', params, runInShell: true);
+  print(results.stdout);
+  print(results.stderr);
 
-   //Opens a file in browser if serve is true
-   File indexFile = new File.fromUri(
-       Platform.script.resolve("..${path.separator}$OUTPUT_PATH${path.separator}index.html"));
-   if (serve && indexFile.existsSync()) {
-     _serveDoc("${indexFile.absolute.path}");
-   }
+  //Opens a file in browser if serve is true
+  File indexFile = new File.fromUri(Platform.script
+      .resolve("..${path.separator}$OUTPUT_PATH${path.separator}index.html"));
+  if (serve && indexFile.existsSync()) {
+    _serveDoc("${indexFile.absolute.path}");
+  }
 }
 
 /// Serves documentation in the web browser.

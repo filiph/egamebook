@@ -32,8 +32,10 @@ abstract class WorkerCommand extends Command {
 class CreateCommand extends WorkerCommand {
   /// Name of the command.
   final String name = "create";
+
   /// Description of the command.
   final String description = "Create new egamebook project.";
+
   /// Error message used with usage.
   final String error = "Please specify valid name of the project.";
 
@@ -54,17 +56,21 @@ class CreateCommand extends WorkerCommand {
 class BuildCommand extends WorkerCommand {
   /// Name of the command.
   final String name = "build";
+
   /// Description of the command.
   final String description = "Build egamebook project.";
+
   /// Error message used with usage.
   final String error = "Please specify one project folder.";
 
   /// Creates new BuildCommand.
   BuildCommand() {
-    argParser.addFlag("analyze", abbr: "a",
-        help: "Runs analyzer on built file.", negatable: false);
-    argParser.addFlag("full-directory", abbr: "f",
-        help: "Runs builder on all .egb files in directory.", negatable: false);
+    argParser.addFlag("analyze",
+        abbr: "a", help: "Runs analyzer on built file.", negatable: false);
+    argParser.addFlag("full-directory",
+        abbr: "f",
+        help: "Runs builder on all .egb files in directory.",
+        negatable: false);
   }
 
   /// Returns if params have length smaller or equal to 1.
@@ -73,8 +79,8 @@ class BuildCommand extends WorkerCommand {
   }
 
   Worker createWorker(List params) {
-    return new ProjectBuilder(params,
-        argResults["analyze"], argResults["full-directory"]);
+    return new ProjectBuilder(
+        params, argResults["analyze"], argResults["full-directory"]);
   }
 }
 
@@ -82,15 +88,17 @@ class BuildCommand extends WorkerCommand {
 class WatchCommand extends WorkerCommand {
   /// Name of the command.
   final String name = "watch";
+
   /// Description of the command.
   final String description = "Watch egamebook project for changes.";
+
   /// Error message used with usage.
   final String error = "Please specify one project folder.";
 
   /// Creates new WatchCommand.
   WatchCommand() {
-    argParser.addFlag("analyze", abbr: "a",
-            help: "Runs analyzer on built file.", negatable: false);
+    argParser.addFlag("analyze",
+        abbr: "a", help: "Runs analyzer on built file.", negatable: false);
   }
 
   /// Returns if params have length smaller or equal to 1.

@@ -32,6 +32,7 @@ abstract class PresenterViewedFromScripter {
 
   /// Instance of Scripter.
   Scripter scripter;
+
   /// Sets scripter to [scripter].
   void setScripter(Scripter scripter);
 }
@@ -40,9 +41,7 @@ abstract class PresenterViewedFromScripter {
  * A proxy/view of the Presenter that has methods callable from Scripter.
  * It has direct access to the Scripter object.
  */
-abstract class PresenterProxy extends PresenterViewedFromScripter {
-
-}
+abstract class PresenterProxy extends PresenterViewedFromScripter {}
 
 /**
  * The proxy that deals with Presenter in another Isolate.
@@ -185,6 +184,7 @@ class IsolatePresenterProxy extends PresenterProxy {
   /// A cache of text messages so we can send them all together instead of
   /// one by one.
   final List<Message> _textMessageCache = new List<Message>();
+
   /// Message backglog. TODO solve.
   Message _messageBacklog; // TODO: get rid of this (no ZipMessage!)
 
@@ -224,7 +224,6 @@ class IsolatePresenterProxy extends PresenterProxy {
 //      _messageBacklog = message;
 //    }
   }
-
 
   /// Sends [PointsAward] as a message to Scripter proxy.
   @override
@@ -276,9 +275,9 @@ class IsolatePresenterProxy extends PresenterProxy {
   Future<int> showChoices(ChoiceList choices) {
     // Make sure we aren't still waiting for another choice to be picked.
     if (_choiceSelectedCompleter != null) {
-      _choiceSelectedCompleter.completeError(
-          new AsyncOperationOverridenException("Showing new "
-          "choice before previous one was selected."));
+      _choiceSelectedCompleter
+          .completeError(new AsyncOperationOverridenException("Showing new "
+              "choice before previous one was selected."));
       _choiceSelectedCompleter = null;
     }
     _choiceSelectedCompleter = new Completer<int>();
@@ -343,8 +342,10 @@ class IsolatePresenterProxy extends PresenterProxy {
 class AsyncOperationOverridenException implements Exception {
   /// Message describing the exception.
   final String message;
+
   /// Creates new AsyncOperationOverridenException with error [message].
   const AsyncOperationOverridenException(this.message);
+
   /// Returns text describing AsyncOperationOverridenException with its
   /// [message].
   String toString() => "AsyncOperationOverridenException: $message.";

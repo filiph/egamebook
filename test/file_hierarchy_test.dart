@@ -15,7 +15,6 @@ void main() {
   FileHierarchy hierarchy = new FileHierarchy();
 
   group("file hierarchy", () {
-
     test("gets master file for part file", () {
       Directory directory = new Directory(getPath("project_master_part"));
       directory.createSync();

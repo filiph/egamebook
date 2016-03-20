@@ -9,8 +9,8 @@ import 'package:egamebook/src/shared/message.dart';
 import 'package:egamebook/scripter.dart';
 
 // Removes all white space from a String.
-String removeWhiteSpace(String string)
-  => string.replaceAll(new RegExp(r"\s+"), "");
+String removeWhiteSpace(String string) =>
+    string.replaceAll(new RegExp(r"\s+"), "");
 
 void main() {
   group("Memory store", () {
@@ -61,8 +61,7 @@ void main() {
 
   group("Savegame", () {
     Savegame savegame;
-    String exampleJson =
-    '''
+    String exampleJson = '''
     {
       "uid": "a253e70",
       "currentPageName": "Start",
@@ -118,8 +117,7 @@ void main() {
 
     test("importSavegameToVars", () {
       Map vars = {
-        "points": new PointsCounter()
-            ..add(10),
+        "points": new PointsCounter()..add(10),
         "isEngineer": true,
         "isStrong": true
       };

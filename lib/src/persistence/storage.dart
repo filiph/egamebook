@@ -6,7 +6,7 @@ import 'player_profile.dart';
 /**
  * Store is the abstract class that can be implemented via any kind of
  * actual storage mechanism (file i/o, HTML5 localStorage, cloud).
- * 
+ *
  * Store is used to save and load player profile and savegames.
  */
 abstract class Store {
@@ -15,8 +15,10 @@ abstract class Store {
 
   /// Saves the [value] under [key] to the storage.
   Future<bool> save(String key, String value);
+
   /// Loads the String value under [key] from the storage.
   Future<String> load(String key);
+
   /// Deletes value under [key] from the storage.
   Future<bool> delete(String key);
 
@@ -43,12 +45,12 @@ class MemoryStore extends Store {
     memory[key] = value;
     return new Future.value(true);
   }
-  
+
   Future<String> load(String key) {
     var result = memory[key];
     return new Future.value(result);
   }
-  
+
   Future<bool> delete(String key) {
     memory.remove(key);
     return new Future.value(true);

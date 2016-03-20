@@ -15,8 +15,10 @@ class Savegame {
   /// at the very end of the page, just before the player is presented with
   /// choices.
   String currentPageName;
+
   /// Holds information about visited pages and potentially other info.
   Map<String, dynamic> pageMapState;
+
   /// The serializable part of the [:vars:] map.
   Map<String, Object> vars;
   // TODO: points -- NO!! points are per playthrough, but shouldn't be saved with savegame (i think)
@@ -38,22 +40,22 @@ class Savegame {
   /// Timestamp of the moment when this savegame was created, in milliseconds
   /// since Epoch.
   int timestamp;
-  
+
   /// Creates new Savegame with [currentPageName], Map of [_vars]
   /// and information about visited pages [pageMapState].
   Savegame(String this.currentPageName, Map _vars, this.pageMapState) {
     vars = _dissolveToPrimitives(_vars);
     timestamp = new DateTime.now().millisecondsSinceEpoch;
-    uid = this.hashCode.toRadixString(16);  // TODO: is this unique enough?
+    uid = this.hashCode.toRadixString(16); // TODO: is this unique enough?
   }
-  
+
   /// Creates new Savegame from JSON. The JSON has to contain either
   /// key for [currentPageName] or for [vars], or both. If there are no keys
   /// like that, [InvalidSavegameException] is thrown.
   Savegame.fromJson(String json) {
     Map<String, dynamic> saveMap = JSON.decode(json);
-    if (!saveMap.containsKey("currentPageName")
-        || !saveMap.containsKey("vars")) {
+    if (!saveMap.containsKey("currentPageName") ||
+        !saveMap.containsKey("vars")) {
       throw new InvalidSavegameException("Invalid JSON for Savegame. "
           "Doesn't contain required fields 'currentPageName' or 'vars'. "
           "JSON='$json'.");
@@ -67,36 +69,36 @@ class Savegame {
       textHistory = saveMap["previousText"];
     }
   }
-  
+
   /// Creates new Savegame from [Message]. It uses its String
   /// content saved as JSON.
   factory Savegame.fromMessage(Message message) {
     return new Savegame.fromJson(message.strContent);
   }
-  
+
   /// Returns current savegame as [Message].
-  /// 
+  ///
   /// Parameter [type] has to match either type [Message.SAVE_GAME]
   /// or [Message.LOAD_GAME].
   Message toMessage(int type) {
     if (type != Message.SAVE_GAME && type != Message.LOAD_GAME) {
       throw "Cannot create Message of type $type. Can only be MSG_SAVE_GAME "
-            "(${Message.SAVE_GAME}) or MSG_LOAD_GAME "
-            "(${Message.LOAD_GAME}).";
+          "(${Message.SAVE_GAME}) or MSG_LOAD_GAME "
+          "(${Message.LOAD_GAME}).";
     }
     Message message = new Message(type);
     message.strContent = toJson();
     return message;
   }
-  
+
   /// Returns current savegame as JSON string.
   String toJson() {
     Map<String, dynamic> saveMap = new Map<String, dynamic>();
     saveMap["uid"] = uid;
     saveMap["currentPageName"] = currentPageName;
     saveMap["pageMapState"] = pageMapState;
-    saveMap["vars"] = vars;  // This has been already dissolved to primitives
-                             // in the contructor.
+    saveMap["vars"] = vars; // This has been already dissolved to primitives
+    // in the contructor.
     saveMap["timestamp"] = timestamp;
     if (textHistory != null) {
       saveMap["previousText"] = textHistory;
@@ -113,13 +115,17 @@ class Savegame {
    * [:String:], [:int:], [:num:], [:bool:], [:List:], [:Map:])
    */
   static bool _isSaveable(variable) {
-    bool primitivelySaveable = (variable == null || variable is String || 
-        variable is int || variable is num || variable is bool || 
-        variable is List || variable is Map);
+    bool primitivelySaveable = (variable == null ||
+        variable is String ||
+        variable is int ||
+        variable is num ||
+        variable is bool ||
+        variable is List ||
+        variable is Map);
     if (primitivelySaveable) return true;
     return _isCustomSaveableClass(variable);
   }
-  
+
   /// Returns true if [variable] is instance of [Saveable].
   static bool _isCustomSaveableClass(variable) {
     return variable is Saveable; // TODO cease to use if this really works
@@ -147,8 +153,11 @@ class Savegame {
    * Works recursively, so a Map of Maps is a valid input.
    */
   static dynamic _dissolveToPrimitives(input) {
-    if (input == null || input is String || input is int || input is num 
-        || input is bool) {
+    if (input == null ||
+        input is String ||
+        input is int ||
+        input is num ||
+        input is bool) {
       return input;
     } else if (input is List) {
       List outputList = new List();
@@ -173,7 +182,7 @@ class Savegame {
       return _dissolveToPrimitives(saveableMap);
     } else {
       throw "Function _dissolveToPrimitivess called with a non-saveable "
-            "argument type.";
+          "argument type.";
     }
   }
 
@@ -185,23 +194,26 @@ class Savegame {
    * of created anew. This only applies to custom classes, all primitives
    * will be overwritten.
    */
-  static dynamic _assembleFromPrimitives(input,
-                                         Map<String,Function> constructors,
-                                         {updateExisting}) {
-    if (input == null || input is String || input is int || input is num 
-        || input is bool) {
+  static dynamic _assembleFromPrimitives(
+      input, Map<String, Function> constructors,
+      {updateExisting}) {
+    if (input == null ||
+        input is String ||
+        input is int ||
+        input is num ||
+        input is bool) {
       return input;
     } else if (input is List) {
       List outputList = new List();
       for (int i = 0; i < (input as List).length; i++) {
-        outputList.add(
-            _assembleFromPrimitives((input as List)[i], constructors));
+        outputList
+            .add(_assembleFromPrimitives((input as List)[i], constructors));
       }
       return outputList;
     } else if (input is Map && !(input as Map).containsKey("_class")) {
       Map outputMap = new Map();
       (input as Map).forEach((key, value) {
-          outputMap[key] = _assembleFromPrimitives(value, constructors);
+        outputMap[key] = _assembleFromPrimitives(value, constructors);
       });
       return outputMap;
     } else if (input is Map && (input as Map).containsKey("_class")) {
@@ -225,14 +237,13 @@ class Savegame {
       //return _dissolveToPrimitives(input.toMap());
     } else {
       throw "Function _assembleFromPrimitives called with a non-primitive "
-            "argument type.";
+          "argument type.";
     }
   }
-  
+
   /// Imports vars from [Savegame] and copies them over existing [vars].
-  static void importSavegameToVars(Savegame savegame,
-                                   Map<String, dynamic> vars,
-                                   {Map<String, Function> constructors}) {
+  static void importSavegameToVars(Savegame savegame, Map<String, dynamic> vars,
+      {Map<String, Function> constructors}) {
     // assemble and copy / update saved variables over vars
     savegame.vars.forEach((String key, value) {
       //print("$key - $value");
@@ -241,7 +252,7 @@ class Savegame {
         vars[key] = _assembleFromPrimitives(value, constructors);
       } else {
         vars[key] = _assembleFromPrimitives(value, constructors,
-                                            updateExisting: existingValue);
+            updateExisting: existingValue);
       }
     });
   }
@@ -252,8 +263,10 @@ class Savegame {
 class IncompatibleSavegameException implements Exception {
   /// Message describing the exception.
   final String message;
+
   /// Creates new IncompatibleSavegameException with error [message].
   const IncompatibleSavegameException(this.message);
+
   /// Returns text describing IncompatibleSavegameException with its [message].
   String toString() => "IncompatibleSavegameException: $message";
 }
@@ -263,8 +276,10 @@ class IncompatibleSavegameException implements Exception {
 class InvalidSavegameException implements Exception {
   /// Message describing the exception.
   final String message;
+
   /// Creates new InvalidSavegameException with error [message].
   const InvalidSavegameException(this.message);
+
   /// Returns text describing InvalidSavegameException with its [message].
   String toString() => "InvalidSavegameException: $message";
 }

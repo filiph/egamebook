@@ -43,8 +43,8 @@ class VarsGenerator {
               "${error.message} (${error.offset} ${error.errorCode})")}");
     }
 
-    List<String> varNames = visitor.vars.map((variable) => variable.name)
-        .toList();
+    List<String> varNames =
+        visitor.vars.map((variable) => variable.name).toList();
     if (varNames.toSet().length < varNames.length) {
       throw new ArgumentError("Duplicate variables defined.");
     }
@@ -125,12 +125,16 @@ class VarsGenerator {
 class TypedVariable {
   /// Variable type.
   final String type;
+
   /// Variable name.
   final String name;
+
   /// Variable initializer.
   final String initializer;
+
   /// Creates new TypedVariable with [name], [type] and [initializer].
   TypedVariable(this.name, this.type, this.initializer);
+
   /// Returns String representation of TypedVariable with its [name] and [type].
   String toString() => "$name ($type)";
 }
@@ -145,12 +149,12 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
     if (node is TopLevelVariableDeclaration) {
       final VariableDeclarationList varList = node.variables;
       varList.variables.forEach((VariableDeclaration variable) {
-        String initializer = variable.initializer != null ?
-            variable.initializer.toSource() : null;
+        String initializer = variable.initializer != null
+            ? variable.initializer.toSource()
+            : null;
         // TODO: varList.keyword == final : do not add or raise error?
         vars.add(new TypedVariable(variable.name.name,
-            varList.type != null ? varList.type.name.name : null,
-            initializer));
+            varList.type != null ? varList.type.name.name : null, initializer));
       });
     }
     return super.visitNode(node);
@@ -161,8 +165,10 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
 class _ErrorCollector extends AnalysisErrorListener {
   /// List of errors.
   List<AnalysisError> errors;
+
   /// Creates new _ErrorCollector.
   _ErrorCollector() : errors = new List<AnalysisError>();
+
   /// Called on [error].
   onError(error) => errors.add(error);
 }

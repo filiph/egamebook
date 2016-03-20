@@ -17,10 +17,7 @@ final List ignoredFileNames = [
 ];
 
 /// Params for running test.
-final List testParams = [
-  "--enable_type_checks",
-  "--enable_asserts"
-];
+final List testParams = ["--enable_type_checks", "--enable_asserts"];
 
 void main() {
   String pathToScript = Platform.script.toFilePath();
@@ -33,8 +30,8 @@ void main() {
   }
 
   List fileNames = [];
-  test.list(recursive: true, followLinks: false)
-    .listen((FileSystemEntity entity) {
+  test.list(recursive: true, followLinks: false).listen(
+      (FileSystemEntity entity) {
     String fileName = p.basename(entity.path);
 
     if (p.extension(entity.path) == ".dart" &&
@@ -49,7 +46,7 @@ void main() {
 Future _runTests(List fileNames, Directory parent) async {
   ListQueue queue = new ListQueue.from(fileNames);
 
-  while(queue.isNotEmpty) {
+  while (queue.isNotEmpty) {
     String path = queue.removeFirst();
     await _runTestProcess(path, parent);
   }
@@ -67,7 +64,6 @@ Future _runTestProcess(String path, Directory parent) async {
   print("\nRunning test in $path");
   print("-----------------------");
   var process = await Process.start('dart', params, runInShell: true);
-  return await Future.wait([
-    stdout.addStream(process.stdout),
-    stderr.addStream(process.stderr)]);
+  return await Future.wait(
+      [stdout.addStream(process.stdout), stderr.addStream(process.stderr)]);
 }

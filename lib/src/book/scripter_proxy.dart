@@ -45,9 +45,7 @@ abstract class ScripterViewedFromPresenter {
  * A proxy/view of the Scripter that has methods callable from Presenter.
  * It has direct access to the Presenter object.
  */
-abstract class ScripterProxy extends ScripterViewedFromPresenter {
-
-}
+abstract class ScripterProxy extends ScripterViewedFromPresenter {}
 
 /**
  * The proxy that deals with Scripter in another Isolate.
@@ -55,10 +53,13 @@ abstract class ScripterProxy extends ScripterViewedFromPresenter {
 class IsolateScripterProxy extends ScripterProxy {
   /// Isolate URI.
   Uri _isolateUri;
+
   /// Own port for receiving messages from Isolate.
   ReceivePort _receivePort;
+
   /// Port of the calling Isolate.
   SendPort _scripterPort;
+
   /// Unique id.
   String _uid;
 
@@ -119,8 +120,8 @@ class IsolateScripterProxy extends ScripterProxy {
         presenter.save(savegame);
         return;
       case Message.SAVE_PLAYER_CHRONOLOGY:
-        presenter.playerProfile.savePlayerChronology(message.listContent.toSet()
-            );
+        presenter.playerProfile
+            .savePlayerChronology(message.listContent.toSet());
         return;
       case Message.TEXT_RESULT:
         presenter.showText(message.strContent).then((_) {
@@ -137,18 +138,19 @@ class IsolateScripterProxy extends ScripterProxy {
         });
         return;
       case Message.SET_STATS:
-        presenter.setStats(UIStat.overwriteStatsListFromDataStructure(
-            message.listContent));
+        presenter.setStats(
+            UIStat.overwriteStatsListFromDataStructure(message.listContent));
         return;
       case Message.UPDATE_STATS:
         print("RUN: Received updated stats.");
-        presenter.updateStats(new StatUpdateCollection.fromMap(
-            message.mapContent));
+        presenter
+            .updateStats(new StatUpdateCollection.fromMap(message.mapContent));
         return;
       case Message.SHOW_CHOICES:
         INT_DEBUG("Showing choices.");
-        presenter.showChoices(new ChoiceList.fromMessage(message)).then((int
-            hash) {
+        presenter
+            .showChoices(new ChoiceList.fromMessage(message))
+            .then((int hash) {
           if (hash != null) {
             _send(new Message.choiceSelected(hash));
           } else {
@@ -167,8 +169,8 @@ class IsolateScripterProxy extends ScripterProxy {
         return;
       case Message.UPDATE_FORM:
         INT_DEBUG("Updating form.");
-        FormConfiguration changedConfig = new FormConfiguration.fromMap(
-            message.mapContent);
+        FormConfiguration changedConfig =
+            new FormConfiguration.fromMap(message.mapContent);
         presenter.updateForm(changedConfig);
         return;
       case Message.SCRIPTER_ERROR:
@@ -187,8 +189,9 @@ class IsolateScripterProxy extends ScripterProxy {
    * Utility function that sends message through the Scripter port.
    */
   void _send(Message message) {
-    if (_scripterPort == null) throw new StateError("Cannot send message "
-        "when _scripterPort is null.");
+    if (_scripterPort == null)
+      throw new StateError("Cannot send message "
+          "when _scripterPort is null.");
     _scripterPort.send(message.toMap());
   }
 

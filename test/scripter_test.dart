@@ -70,7 +70,8 @@ String getPath(String filename) {
 Future<String> build(String egbFilename) {
   String canonicalEgbPath = getPath(egbFilename);
   var builder = new Builder();
-  return builder.readEgbFile(new File(canonicalEgbPath))
+  return builder
+      .readEgbFile(new File(canonicalEgbPath))
       .then((Builder b) => b.writeDartFiles())
       .then((_) {
     return builder.scripterDartPath;
@@ -78,8 +79,7 @@ Future<String> build(String egbFilename) {
 }
 
 /// Runs the built project and returns the [MockPresenter] instance.
-Future<Presenter> run(String dartFilename,
-    {Store persistentStore: null}) {
+Future<Presenter> run(String dartFilename, {Store persistentStore: null}) {
   var mockPresenter = new MockPresenter(waitForChoicesToBeTaken: true);
   Store store;
   if (persistentStore != null) {
@@ -88,8 +88,7 @@ Future<Presenter> run(String dartFilename,
     store = new MemoryStore();
   }
   mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
-  ScripterProxy bookProxy =
-      new IsolateScripterProxy(Uri.parse(dartFilename));
+  ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(dartFilename));
 
   Savegame lastSavegame;
   Set<String> playerChronology;
@@ -107,8 +106,7 @@ void main() {
   // execution of this test file.
   Future buildScripterIsolates() {
     createSubdirs();
-    return Future
-        .wait([
+    return Future.wait([
       build("scripter_test_alternate_6.egb"),
       build("scripter_test_save.egb"),
       build("scripter_page_visitonce.egb"),
@@ -119,9 +117,7 @@ void main() {
     setUpAll(buildScripterIsolates);
     tearDownAll(deleteSubdirs);
 
-
     group("Scripter basic", () {
-
       test("presenter initial values correct", () {
         var presenter = new MockPresenter();
         expect(presenter.started, false);
@@ -129,7 +125,6 @@ void main() {
       });
 
       group("alternate_6", () {
-
         test("runner initial values correct", () {
           var mockPresenter = new MockPresenter();
           var store = new MemoryStore();
@@ -327,7 +322,11 @@ void main() {
           expect(savegame.vars["string"], "Řeřicha UTF-8 String");
           expect(savegame.vars.containsKey("nonSaveable"), false);
           expect(savegame.vars["list1"], ["a", "b", "ř"]);
-          expect(savegame.vars["list2"], [0, 3.14, ["a", "b", "ř"]]);
+          expect(savegame.vars["list2"], [
+            0,
+            3.14,
+            ["a", "b", "ř"]
+          ]);
           expect(savegame.vars["map1"], {"c": null, "a": 0, "b": 3.14});
           expect(savegame.vars["map2"] as Map, hasLength(2));
           expect(savegame.vars["saveable"] as Map, hasLength(4));

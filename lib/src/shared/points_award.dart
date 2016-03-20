@@ -11,8 +11,10 @@ import 'message.dart';
 class PointsAward {
   /// The value of points to be awarded.
   final int addition;
+
   /// The resulting sum of points after this award.
   final int result;
+
   /// The (optional) justification message for the award.
   final String justification;
 

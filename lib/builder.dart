@@ -14,7 +14,10 @@ import 'src/shared/user_interaction.dart';
 import 'src/builder/vars_generator.dart';
 
 import 'package:egamebook/presenters/html/main_entry_point.dart'
-show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH, HTML_ENTRY_POINT_DART_FILE;
+    show
+        HTML_BOOK_DART_PATH_FROM_ENTRYPOINT,
+        HTML_BOOK_ENTRYPOINT_PATH,
+        HTML_ENTRY_POINT_DART_FILE;
 import 'package:egamebook/src/cli/file_hierarchy.dart';
 
 /**
@@ -23,8 +26,10 @@ import 'package:egamebook/src/cli/file_hierarchy.dart';
 class BuilderFormatException implements Exception {
   /// Message describing the exception.
   String message;
+
   /// Line in the file.
   int line;
+
   /// Input file.
   File file;
 
@@ -70,6 +75,7 @@ class BuilderFileSystemException implements Exception {
 abstract class BuilderLineRange {
   /// Line start.
   int lineStart;
+
   /// Line end.
   int lineEnd;
 }
@@ -78,9 +84,11 @@ abstract class BuilderLineRange {
  * BuilderLineSpan is a "selection" in the input file. In a complete form
  * (`[isClosed] == true`), it has a `lineStart` and a `lineEnd`.
  **/
-class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super-class of the below, but Dart is broken here
+class BuilderLineSpan implements BuilderLineRange {
+  // XXX: this should be super-class of the below, but Dart is broken here
   /// Line start.
   int lineStart;
+
   /// Line end.
   int lineEnd;
 
@@ -104,6 +112,7 @@ class BuilderLineSpan implements BuilderLineRange { // XXX: this should be super
 class BuilderMetadata {
   /// Metadata key
   String key;
+
   /// Metadata values
   List<String> values;
 
@@ -126,8 +135,10 @@ class BuilderMetadata {
 class BuilderPage extends Page implements BuilderLineRange {
   /// Page index.
   int index;
+
   /// Line start.
   int lineStart;
+
   /// Line end.
   int lineEnd;
 
@@ -138,6 +149,7 @@ class BuilderPage extends Page implements BuilderLineRange {
 
   /// Getter returns if [:visitOnce:] option is set.
   bool get visitOnce => options.contains("visitOnce");
+
   /// Getter returns if [:showOnce:] option is set.
   bool get showOnce => options.contains("showOnce");
 
@@ -149,13 +161,13 @@ class BuilderPage extends Page implements BuilderLineRange {
 
   /// List of page builder blocks.
   List<BuilderBlock> blocks;
+
   /// Page group.
   BuilderPageGroup group;
 
   /// Creates new BuilderPage with [name], [index] and [lineStart]. Adds the
   /// pages [group] to [pageGroups].
-  BuilderPage(String name, this.index, this.lineStart) :
-      super(name: name) {
+  BuilderPage(String name, this.index, this.lineStart) : super(name: name) {
     blocks = new List<BuilderBlock>();
     options = new Set<String>();
     gotoPageNames = new List<String>();
@@ -182,14 +194,15 @@ class BuilderPage extends Page implements BuilderLineRange {
 class BuilderPageGroup {
   /// Page group name.
   String name;
+
   /// Pages in the group.
   List<BuilderPage> pages = new List<BuilderPage>();
 
   /// Creates a group from [page] (if it doesn't exist already) and adds it
   /// to [allGroups]. Also links group to page by [BuilderPage.group]
   /// and vice versa by [BuilderPageGroup.pages].
-  static void addToAllGroupsFromPage(List<BuilderPageGroup> allGroups,
-                                     BuilderPage page) {
+  static void addToAllGroupsFromPage(
+      List<BuilderPageGroup> allGroups, BuilderPage page) {
     String groupName = page.groupName;
     if (groupName == null) return;
 
@@ -223,17 +236,22 @@ class BuilderPageGroup {
 class BuilderBlock implements BuilderLineRange {
   /// Line start.
   int lineStart;
+
   /// Line end.
   int lineEnd;
+
   /// Block type.
   int type = 0;
+
   ///List of options.
   Map<String, dynamic> options;
+
   /// List of sub blocks.
   List<BuilderBlock> subBlocks;
 
   /// Block type text.
   static final int BLK_TEXT = 1;
+
   /// Block type text with variable.
   static final int BLK_TEXT_WITH_VAR = 8;
 
@@ -243,16 +261,21 @@ class BuilderBlock implements BuilderLineRange {
 
   /// Block type script.
   static final int BLK_SCRIPT = 2;
+
   /// Block type echo.
   static final int BLK_SCRIPT_ECHO = 64;
+
   /// Block type choice list.
   static final int BLK_CHOICE_LIST = 128;
+
   /// Block type choice question.
   static final int BLK_CHOICE_QUESTION = 16; // TODO deprecate
   /// Block type choice.
   static final int BLK_CHOICE = 4;
+
   /// Block type choice with script.
   static final int BLK_CHOICE_WITH_SCRIPT = 32;
+
   /// Block type multiline choice.
   static final int BLK_CHOICE_MULTILINE = 256;
 
@@ -270,36 +293,46 @@ class BuilderBlock implements BuilderLineRange {
 class BuilderInitBlock implements BuilderLineRange {
   /// Line start.
   int lineStart;
+
   /// Line end.
   int lineEnd;
+
   /// Block type.
   int type;
 
   /// Block type classes.
   @deprecated
   static const int BLK_CLASSES = 1;
+
   /// Block type functions.
   @deprecated
   static const int BLK_FUNCTIONS = 2;
+
   /// Block type variables.
   @deprecated
   static const int BLK_VARIABLES = 4;
+
   /// Block type declaration.
   static const int BLK_DECLARE = 8;
+
   /// Block type init.
   static const int BLK_INIT = 16;
 
   /// String representation of block type classes in [BLK_CLASSES].
   @deprecated
   static const String BLK_CLASSES_STRING = "classes";
+
   /// String representation of block type functions in [BLK_FUNCTIONS].
   @deprecated
   static const String BLK_FUNCTIONS_STRING = "functions";
+
   /// String representation of block type variables in [BLK_VARIABLES].
   @deprecated
   static const String BLK_VARIABLES_STRING = "variables";
+
   /// String representation of block type declaration in [BLK_DECLARE].
   static const String BLK_DECLARE_STRING = "declare";
+
   /// String representation of block type init in [BLK_INIT].
   static const String BLK_INIT_STRING = "init";
 
@@ -393,8 +426,7 @@ class Builder {
 
     inputEgbFile = f;
 
-    f.exists()
-    .then((exists) {
+    f.exists().then((exists) {
       if (!exists) {
         completer.completeError(new Exception("File $f doesn't exist."));
       } else {
@@ -404,8 +436,8 @@ class Builder {
         var inputStream = _createInputStreamFromMasterFile(f);
 
         readInputStream(inputStream)
-        .then((b) => completer.complete(b))
-        .catchError((e) => completer.completeError(e));
+            .then((b) => completer.complete(b))
+            .catchError((e) => completer.completeError(e));
       }
     }).catchError((e) => completer.completeError(e));
 
@@ -423,10 +455,10 @@ class Builder {
     files.addAll(partFiles);
 
     // Concatenate the master file [f] with all part files.
-    var inputStream = quiver_streams.concat(files.map((file) =>
-        file.openRead()
-            .transform(UTF8.decoder)
-            .transform(const LineSplitter())));
+    var inputStream = quiver_streams.concat(files.map((file) => file
+        .openRead()
+        .transform(UTF8.decoder)
+        .transform(const LineSplitter())));
 
     return inputStream;
   }
@@ -460,13 +492,15 @@ class Builder {
       if (!pages.isEmpty) {
         // end the last page
         pages.last.lineEnd = _lineNumber;
-        if (pages.last.blocks != null && !pages.last.blocks.isEmpty
-            && pages.last.blocks.last.lineEnd == null) {
+        if (pages.last.blocks != null &&
+            !pages.last.blocks.isEmpty &&
+            pages.last.blocks.last.lineEnd == null) {
           pages.last.blocks.last.lineEnd = _lineNumber;
         }
 
         // Find UID from metadata.
-        var uidCandidates = metadata.where((m) => m.key == UNIQUE_ID_METADATA_KEY);
+        var uidCandidates =
+            metadata.where((m) => m.key == UNIQUE_ID_METADATA_KEY);
         if (uidCandidates.length == 0) {
           WARNING("No UID defined for this egamebook. This might lead to save "
               "data clashes. Please define 'UniqueID' in the metadata section "
@@ -475,14 +509,17 @@ class Builder {
           var m = uidCandidates.single;
           uid = m.values[0];
         } else {
-          throw new BuilderFormatException("Two or more UniqueID metadata found. "
+          throw new BuilderFormatException(
+              "Two or more UniqueID metadata found. "
               "Please define only one UniqueID.");
         }
 
         for (var page in pages) {
           // check for duplicate pages
-          if (pages.where((BuilderPage otherPage) =>
-              page.name == otherPage.name).length != 1) {
+          if (pages
+                  .where((BuilderPage otherPage) => page.name == otherPage.name)
+                  .length !=
+              1) {
             completer.completeError(
                 newFormatException("Duplicate page name ('${page.name}')."));
             return;
@@ -491,32 +528,32 @@ class Builder {
           // fully specify gotoPageNames of every page
           for (int i = 0; i < page.gotoPageNames.length; i++) {
             var gotoPageName = page.gotoPageNames[i];
-            if (pageHandles.containsKey(
-                                        "${page.groupName}: $gotoPageName")) {
-              page.gotoPageNames[i] =
-                  "${page.groupName}: $gotoPageName";
+            if (pageHandles.containsKey("${page.groupName}: $gotoPageName")) {
+              page.gotoPageNames[i] = "${page.groupName}: $gotoPageName";
             } else if (pageHandles.containsKey(gotoPageName)) {
               // great, already done
             } else if (Choice.GO_BACK.hasMatch(gotoPageName)) {
               // great, it's just going back
             } else {
-              WARNING("Page ${page.name} specifies a choice that goes "
-              "to a non-existing page ($gotoPageName).",
-              line:null);
+              WARNING(
+                  "Page ${page.name} specifies a choice that goes "
+                  "to a non-existing page ($gotoPageName).",
+                  line: null);
             }
           }
         }
       } else {
-        WARNING("There are no pages in this egb. If you want it to be playable, "
+        WARNING(
+            "There are no pages in this egb. If you want it to be playable, "
             "you will need to include page starts in the form of a line "
             "containing exclusively dashes (`-`, three or more) and "
             "an immediately following line with the name of the page.",
-            line:null);
+            line: null);
       }
 
       if (_mode != MODE_NORMAL) {
-        completer.completeError(
-            newFormatException("Corrupt file, didn't close a tag (_mode = ${_mode})."));
+        completer.completeError(newFormatException(
+            "Corrupt file, didn't close a tag (_mode = ${_mode})."));
       } else {
         _checkForDoubleImports().then((bool passed) {
           if (passed) {
@@ -540,22 +577,21 @@ class Builder {
     // start finding patterns in the line
     // try every pattern at once, in a non-blocking way, using futures
     List<bool> checkValues = [
-        _checkBlankLine(number, line),
-        _checkNewPage(number, line),
-        _checkPageOptions(number, line),
-        _checkChoiceList(number, line),
-        _checkInitBlockTags(number, line),
-        _checkScriptTags(number, line),
-        _checkGotoInsideScript(number, line),
-        _checkMetadataLine(number, line),
-        _checkImportTag(number, line)
+      _checkBlankLine(number, line),
+      _checkNewPage(number, line),
+      _checkPageOptions(number, line),
+      _checkChoiceList(number, line),
+      _checkInitBlockTags(number, line),
+      _checkScriptTags(number, line),
+      _checkGotoInsideScript(number, line),
+      _checkMetadataLine(number, line),
+      _checkImportTag(number, line)
     ];
 
     if (checkValues.every((value) => value == false)) {
       _checkNormalParagraph(number, line);
     }
   }
-
 
   /*
   Checkers.
@@ -610,7 +646,7 @@ class Builder {
       // first line of a metadata record
       var key = m.group(1).trim();
       var value = m.group(2).trim();
-      metadata.add(new BuilderMetadata(key, firstValue:value));
+      metadata.add(new BuilderMetadata(key, firstValue: value));
       return true;
     } else {
       m = metadataLineAdd.firstMatch(line);
@@ -623,7 +659,7 @@ class Builder {
       } else {
         // we have hit the first non-metadata line. Quit metadata mode.
         _mode = MODE_NORMAL;
-        return false;  // let it be checked by _checkNormalParagraph, too
+        return false; // let it be checked by _checkNormalParagraph, too
       }
     }
   }
@@ -674,12 +710,11 @@ class Builder {
       _mode = MODE_NORMAL;
       _newPageCandidate = false;
       return true;
-
     } else {
       // no page, but let's check if this line isn't a "---" (next line could confirm a new page)
       if (hr.hasMatch(line)) {
         _newPageCandidate = true;
-        return false;  // let it be checked by _checkNormalParagraph, too
+        return false; // let it be checked by _checkNormalParagraph, too
       } else {
         _newPageCandidate = false;
         return false;
@@ -698,8 +733,9 @@ class Builder {
       return false;
     }
 
-    if (!pages.isEmpty && pages.last.lineStart == number - 1
-        && pageOptions.hasMatch(line)) {
+    if (!pages.isEmpty &&
+        pages.last.lineStart == number - 1 &&
+        pageOptions.hasMatch(line)) {
       Match m = pageOptions.firstMatch(line);
       var lastpage = pages.last;
       for (var i = 1; i <= m.groupCount; i += 2) {
@@ -726,7 +762,7 @@ class Builder {
 
     Match m = oneLineChoice.firstMatch(line);
     /*for (int i = 1; i <= m.groupCount; i++) {*/
-      /*print("$i - \"${m.group(i)}\"");*/
+    /*print("$i - \"${m.group(i)}\"");*/
     /*}*/
     choiceBlock.options["string"] = m.group(1);
     choiceBlock.options["script"] = m.group(2);
@@ -753,17 +789,16 @@ class Builder {
 //      return null;
 //    }
 
-    if (choiceBlock.options["script"] != null
-        && (new RegExp(r"^[^{]*}").hasMatch(choiceBlock.options["script"])
-            || new RegExp(r"{[^}]*$").hasMatch(choiceBlock.options["script"]))) {
-      WARNING("Inline script `${choiceBlock.options['script']}` in choice appears to have "
-            "an unmatched bracket. This could be an error. Actual format used: `$line`.");
+    if (choiceBlock.options["script"] != null &&
+        (new RegExp(r"^[^{]*}").hasMatch(choiceBlock.options["script"]) ||
+            new RegExp(r"{[^}]*$").hasMatch(choiceBlock.options["script"]))) {
+      WARNING(
+          "Inline script `${choiceBlock.options['script']}` in choice appears to have "
+          "an unmatched bracket. This could be an error. Actual format used: `$line`.");
     }
 
     return choiceBlock;
   }
-
-
 
   /**
    * Checks if current line is choice. Acts accordingly.
@@ -772,8 +807,9 @@ class Builder {
    **/
   bool _checkChoiceList(int number, String line) {
     // TODO: check even inside ECHO tags, add to script
-    if (line == null || pages.isEmpty
-        || (_mode != MODE_NORMAL && _mode != MODE_INSIDE_CHOICE
+    if (line == null ||
+        pages.isEmpty ||
+        (_mode != MODE_NORMAL && _mode != MODE_INSIDE_CHOICE
         /* && _mode != MODE_INSIDE_SCRIPT_ECHO // TODO: implement */)) {
       return false;
     }
@@ -794,7 +830,7 @@ class Builder {
       if (m != null) {
         // End of multiline choice.
         var strBuf = new StringBuffer(choiceSubBlock.options["script"]);
-        strBuf.writeln("\"\"\");");  // end of echo()
+        strBuf.writeln("\"\"\");"); // end of echo()
         strBuf.writeln(m.group(1));
         choiceSubBlock.options["script"] = strBuf.toString();
         choiceSubBlock.options["goto"] = m.group(2);
@@ -803,7 +839,8 @@ class Builder {
         return true;
       } else {
         // A normal line inside the multiline choice.
-        var textLine = line.replaceFirst(new RegExp(r"^\s{4}"), "");  // de-indent
+        var textLine =
+            line.replaceFirst(new RegExp(r"^\s{4}"), ""); // de-indent
         choiceSubBlock.options["script"] += "$textLine\n";
         return true;
       }
@@ -813,7 +850,7 @@ class Builder {
         // A new multiline choice.
         choiceSubBlock = new BuilderBlock(type: BuilderBlock.BLK_CHOICE);
         choiceSubBlock.options["string"] = m.group(1);
-        choiceSubBlock.options["script"] = "echo(\"\"\"\n";  // start of echo
+        choiceSubBlock.options["script"] = "echo(\"\"\"\n"; // start of echo
         choiceSubBlock.lineStart = number;
         _mode = MODE_INSIDE_CHOICE;
       }
@@ -822,7 +859,7 @@ class Builder {
     if (choiceSubBlock == null) {
       choiceSubBlock = parseOneLineChoice(line);
       if (choiceSubBlock == null) {
-        return false;  // No luck.
+        return false; // No luck.
       } else {
         choiceSubBlock.lineStart = choiceSubBlock.lineEnd = number;
       }
@@ -858,13 +895,14 @@ class Builder {
       lastpage.blocks.add(choiceList);
     }
 
-    bool hasVarInString = (choiceSubBlock.options["string"] != null
-        && variableInText.hasMatch(choiceSubBlock.options["string"]));
+    bool hasVarInString = (choiceSubBlock.options["string"] != null &&
+        variableInText.hasMatch(choiceSubBlock.options["string"]));
 
     if (_mode == MODE_INSIDE_SCRIPT_ECHO) {
       // TODO: just add a _choiceToScript(block) to the current script flow
-    } else if (_mode == MODE_NORMAL && choiceSubBlock.options["script"] == null &&
-               !hasVarInString) {
+    } else if (_mode == MODE_NORMAL &&
+        choiceSubBlock.options["script"] == null &&
+        !hasVarInString) {
       // we have a simple choice (i.e. no scripts needed)
       choiceSubBlock.type = BuilderBlock.BLK_CHOICE;
     } else if (_mode == MODE_INSIDE_CHOICE) {
@@ -896,31 +934,36 @@ class Builder {
     Match m = initBlockTag.firstMatch(line);
 
     if (m != null) {
-      bool closing =  m.group(1) == "/";
+      bool closing = m.group(1) == "/";
       var blocktype = m.group(2).toLowerCase();
 
-      if (!closing) {  // opening a new tag
+      if (!closing) {
+        // opening a new tag
         if (_mode == MODE_NORMAL || _mode == MODE_METADATA) {
           _mode = BuilderInitBlock.modeFromString(blocktype);
-          initBlocks.add(new BuilderInitBlock(lineStart:number, typeStr:blocktype));
+          initBlocks
+              .add(new BuilderInitBlock(lineStart: number, typeStr: blocktype));
           _closeLastBlock(number - 1);
           return true;
         } else {
           throw newFormatException("Invalid appearance of of an init "
-                  "opening tag `<$blocktype>`. We are already inside "
-                  "another tag (mode = $_mode).");
+              "opening tag `<$blocktype>`. We are already inside "
+              "another tag (mode = $_mode).");
         }
-      } else {  // closing a tag
-        if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_FUNCTIONS
-            || _mode == MODE_INSIDE_VARIABLES || _mode == MODE_INSIDE_DECLARE ||
+      } else {
+        // closing a tag
+        if (_mode == MODE_INSIDE_CLASSES ||
+            _mode == MODE_INSIDE_FUNCTIONS ||
+            _mode == MODE_INSIDE_VARIABLES ||
+            _mode == MODE_INSIDE_DECLARE ||
             _mode == MODE_INSIDE_INIT) {
           _mode = MODE_NORMAL;
           initBlocks.last.lineEnd = number;
           return true;
         } else {
           throw newFormatException("Invalid appearance of of an init "
-                  "closing tag `</$blocktype>`. We are not inside any "
-                  "other tag (mode = $_mode).");
+              "closing tag `</$blocktype>`. We are not inside any "
+              "other tag (mode = $_mode).");
         }
       }
     } else {
@@ -935,9 +978,12 @@ class Builder {
    * @return    bool, indicating the result of the check.
    **/
   bool _checkScriptTags(int number, String line) {
-    if (_mode == MODE_INSIDE_CLASSES || _mode == MODE_INSIDE_VARIABLES
-        || _mode == MODE_INSIDE_FUNCTIONS || _mode == MODE_INSIDE_DECLARE ||
-            _mode == MODE_INSIDE_INIT || line == null) {
+    if (_mode == MODE_INSIDE_CLASSES ||
+        _mode == MODE_INSIDE_VARIABLES ||
+        _mode == MODE_INSIDE_FUNCTIONS ||
+        _mode == MODE_INSIDE_DECLARE ||
+        _mode == MODE_INSIDE_INIT ||
+        line == null) {
       return false;
     }
 
@@ -946,33 +992,33 @@ class Builder {
     if (pages.isEmpty) {
       if (m != null) {
         WARNING("No <script> or <echo> blocks will be recognized as such "
-                "in the synopsis (i.e. outside a page). Ignoring.");
+            "in the synopsis (i.e. outside a page). Ignoring.");
       }
       return false;
     }
     var lastpage = pages.last;
 
     if (m != null) {
-      bool closing =  m.group(1) == "/";
+      bool closing = m.group(1) == "/";
       var type = m.group(2).toLowerCase();
       bool tagIsEcho = type == "echo";
       bool tagIsScript = type == "script";
 
-      if (!closing) {  // opening a new tag
+      if (!closing) {
+        // opening a new tag
         if (_mode == MODE_NORMAL && tagIsScript) {
           _closeLastBlock(number - 1);
           _mode = MODE_INSIDE_SCRIPT_TAG;
-          var block = new BuilderBlock(lineStart:number);
+          var block = new BuilderBlock(lineStart: number);
           block.type = BuilderBlock.BLK_SCRIPT;
           lastpage.blocks.add(block);
           return true;
         } else if (_mode == MODE_INSIDE_SCRIPT_TAG && tagIsEcho) {
           _mode = MODE_INSIDE_SCRIPT_ECHO;
-          if (!lastpage.blocks.isEmpty
-              && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT) {
-            lastpage.blocks.last.subBlocks.add(
-                new BuilderBlock(lineStart: number,
-                                 type: BuilderBlock.BLK_SCRIPT_ECHO));
+          if (!lastpage.blocks.isEmpty &&
+              lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT) {
+            lastpage.blocks.last.subBlocks.add(new BuilderBlock(
+                lineStart: number, type: BuilderBlock.BLK_SCRIPT_ECHO));
             return true;
           } else {
             throw newFormatException("Echo tags must be inside <script> tags.");
@@ -981,21 +1027,25 @@ class Builder {
           throw newFormatException("Starting a <$type> tag outside NORMAL "
               "is illegal. We are now in mode=$_mode.");
         }
-      } else {  // closing a tag
-        if (_mode == MODE_INSIDE_SCRIPT_TAG && !tagIsEcho && !lastpage.blocks.isEmpty) {
+      } else {
+        // closing a tag
+        if (_mode == MODE_INSIDE_SCRIPT_TAG &&
+            !tagIsEcho &&
+            !lastpage.blocks.isEmpty) {
           _mode = MODE_NORMAL;
           lastpage.blocks.last.lineEnd = number;
           return true;
-        } else if (_mode == MODE_INSIDE_SCRIPT_ECHO && !lastpage.blocks.isEmpty
-              && lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT
-              && !lastpage.blocks.last.subBlocks.isEmpty) {
+        } else if (_mode == MODE_INSIDE_SCRIPT_ECHO &&
+            !lastpage.blocks.isEmpty &&
+            lastpage.blocks.last.type == BuilderBlock.BLK_SCRIPT &&
+            !lastpage.blocks.last.subBlocks.isEmpty) {
           _mode = MODE_INSIDE_SCRIPT_TAG;
           lastpage.blocks.last.subBlocks.last.lineEnd = number;
           return true;
         } else {
           throw newFormatException("Invalid appearance of of a `</$type>` "
-                  "closing tag. We are not inside any $type tag to be"
-                  "closed (mode = $_mode).");
+              "closing tag. We are not inside any $type tag to be"
+              "closed (mode = $_mode).");
         }
       }
     } else {
@@ -1045,8 +1095,8 @@ class Builder {
       String pathToImport;
       if (!importFilePath.startsWith("package:")) {
         // Unless this is a package: import, add directory information.
-        pathToImport = path.join(
-            path.dirname(inputEgbFileFullPath), importFilePath);
+        pathToImport =
+            path.join(path.dirname(inputEgbFileFullPath), importFilePath);
       } else {
         pathToImport = importFilePath;
       }
@@ -1098,7 +1148,7 @@ class Builder {
 
       if (!appending) {
         // we create a new block
-        var block = new BuilderBlock(lineStart:number);
+        var block = new BuilderBlock(lineStart: number);
         if (variableInText.hasMatch(line)) {
           block.type = BuilderBlock.BLK_TEXT_WITH_VAR;
         } else {
@@ -1139,24 +1189,21 @@ class Builder {
       }
     }
 
-    Future.wait(existsFutures)
-    .then((List<bool> existsBools) {
+    Future.wait(existsFutures).then((List<bool> existsBools) {
       for (int i = 0; i < existsBools.length; i++) {
         if (existsBools[i] == false) {
           return new Exception("Source file tries to import a file that "
               "doesn't exist (${importLibFiles[i]}).");
         }
       }
-
-    })
-    .then((_) {
+    }).then((_) {
       assert(fullPaths.length == importLibFiles.length);
       importLibFilesFullPaths = new Set.from(fullPaths);
       for (int i = 0; i < fullPaths.length; i++) {
         for (int j = 0; j < i; j++) {
           if (fullPaths[i] == fullPaths[j]) {
             WARNING("File '${fullPaths[i]}' has already been imported. "
-            "Ignoring the redundant <import> tag.");
+                "Ignoring the redundant <import> tag.");
             importLibFiles[i] = null;
           }
         }
@@ -1164,8 +1211,7 @@ class Builder {
       // remove the nulls
       importLibFiles = importLibFiles.where((f) => f != null).toList();
       completer.complete(true);
-    })
-    .catchError((e) => completer.completeError(e));
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1185,20 +1231,26 @@ class Builder {
 
   /// Returns new BuilderFormatException with [msg].
   BuilderFormatException newFormatException(String msg) {
-    return new BuilderFormatException(msg, line:_lineNumber, file:inputEgbFile);
+    return new BuilderFormatException(msg,
+        line: _lineNumber, file: inputEgbFile);
   }
 
   /// Input file given by readFile().
   File inputEgbFile;
+
   /// Full path to input file.
   String inputEgbFileFullPath;
+
   /// List of imported library files.
   List<File> importLibFiles;
+
   /// List of imported library full paths.
   Set<String> importLibFilesFullPaths;
+
   /// List of builder metadata.
   List<BuilderMetadata> metadata;
-  bool _newPageCandidate = false;  // when last page was "---", there's a chance of a newpage
+  bool _newPageCandidate =
+      false; // when last page was "---", there's a chance of a newpage
   /// List of synopsis line numbers.
   List<int> synopsisLineNumbers;
 
@@ -1210,6 +1262,7 @@ class Builder {
 
   /// List of pages.
   List<BuilderPage> pages;
+
   /// Getter returns list of all page groups.
   List<BuilderPageGroup> pageGroups = new List<BuilderPageGroup>();
 
@@ -1237,12 +1290,16 @@ class Builder {
   static final RegExp blankLine = new RegExp(r"^\s*$");
   static final RegExp hr = new RegExp(r"^\s{0,3}\-\-\-+\s*$"); // ----
   static final RegExp validPageName = new RegExp(r"^\s{0,3}(.+)\s*$");
-  static final RegExp pageOptions = new RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
+  static final RegExp pageOptions =
+      new RegExp(r"^\s{0,3}\[\[\s*(\w+)([\s,]+(\w+))*\s*]\]\s*$");
   static final RegExp metadataLine = new RegExp(r"^(\w.+):\s*(\w.*)\s*$");
   static final RegExp metadataLineAdd = new RegExp(r"^\s+(\w.*)\s*$");
   /*static final RegExp scriptTag = new RegExp(@"^\s{0,3}<\s*(/?)\s*script\s*>\s*$", ignoreCase:true);*/
-  static final RegExp scriptOrEchoTag = new RegExp(r"^\s{0,}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$", caseSensitive: false);
-  static final RegExp gotoInsideScript = new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
+  static final RegExp scriptOrEchoTag = new RegExp(
+      r"^\s{0,}<\s*(/?)\s*((?:script)|(?:echo))\s*>\s*$",
+      caseSensitive: false);
+  static final RegExp gotoInsideScript =
+      new RegExp(r"""goto\s*\(\s*(\"|\'|\"\"\")(.+?)\1\s*\)\s*;""");
   /*static final RegExp scriptTagStart = new RegExp(@"^\s{0,3}<script>\s*$");*/
   /*static final RegExp scriptTagEnd = new RegExp(@"^\s{0,3}</script>\s*$");*/
   /*static final RegExp initTagStart = new RegExp(@"^\s{0,3}<init>\s*$");*/
@@ -1251,12 +1308,20 @@ class Builder {
   /*static final RegExp libraryTagEnd = new RegExp(@"^\s{0,3}</library>\s*$");*/
   /*static final RegExp classesTagStart = new RegExp(@"^\s{0,3}<classes>\s*$");*/
   /*static final RegExp classesTagEnd = new RegExp(@"^\s{0,3}</classes>\s*$");*/
-  static final RegExp initBlockTag = new RegExp(r"^\s{0,3}<\s*(/?)\s*((?:declare)|(?:init))\s*>\s*$", caseSensitive: false);
-  static final RegExp importTag = new RegExp(r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""", caseSensitive: false);
-  static final RegExp oneLineChoice = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
-  static final RegExp multiLineChoiceStart = new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*$");  // - Something [
-  static final RegExp multiLineChoiceEnd = new RegExp(r"^\s{0,3}\{\s*(.*)\s*\}[\s,]*([^\{].+)?\s*\]\s*$");  // {i++;} somepage]
-  static final RegExp variableInText = new RegExp(r"(^|[^\\])\$[a-zA-Z_][a-zA-Z0-9_]*|(^|[^\\])\${[^}]+}");
+  static final RegExp initBlockTag = new RegExp(
+      r"^\s{0,3}<\s*(/?)\s*((?:declare)|(?:init))\s*>\s*$",
+      caseSensitive: false);
+  static final RegExp importTag = new RegExp(
+      r"""^\s{0,3}<\s*import\s+((?:\"(?:.+)\")|(?:\'(?:.+)\'))\s*/?>\s*$""",
+      caseSensitive: false);
+  static final RegExp oneLineChoice = new RegExp(
+      r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*(?:\{\s*(.*)\s*\})?[\s,]*([^\{].+)?\s*\]\s*$");
+  static final RegExp multiLineChoiceStart =
+      new RegExp(r"^\s{0,3}\-\s+(?:(.+)\s+)?\[\s*$"); // - Something [
+  static final RegExp multiLineChoiceEnd = new RegExp(
+      r"^\s{0,3}\{\s*(.*)\s*\}[\s,]*([^\{].+)?\s*\]\s*$"); // {i++;} somepage]
+  static final RegExp variableInText =
+      new RegExp(r"(^|[^\\])\$[a-zA-Z_][a-zA-Z0-9_]*|(^|[^\\])\${[^}]+}");
 
   final Logger _log = new Logger("Builder");
 
@@ -1273,10 +1338,8 @@ class Builder {
   Future<bool> writeDartFiles() {
     var completer = new Completer();
 
-    Future.wait([
-        writeScripterFile(),
-        writePresenterFiles()
-    ], eagerError: true).then((_) {
+    Future.wait([writeScripterFile(), writePresenterFiles()],
+        eagerError: true).then((_) {
       completer.complete(true);
     }).catchError((e) => completer.completeError(e));
 
@@ -1296,17 +1359,19 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var webDir = new Directory(pathToPresenter);
     if (!webDir.existsSync()) {
-      return new Future.error(new BuilderFileSystemException("Couldn't find the "
-        "required web/ directory. It should be located in "
-        "${path.normalize(webDir.absolute.path)}."));
+      return new Future.error(
+          new BuilderFileSystemException("Couldn't find the "
+              "required web/ directory. It should be located in "
+              "${path.normalize(webDir.absolute.path)}."));
     }
-    var pathToLib = path.join(pathToPresenter,
-                              HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
+    var pathToLib =
+        path.join(pathToPresenter, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT);
     var libDir = new Directory(pathToLib);
     if (!libDir.existsSync()) {
-      return new Future.error(new BuilderFileSystemException("Couldn't find the "
-        "required lib/ directory. It should be located in "
-        "${path.normalize(libDir.absolute.path)}."));
+      return new Future.error(
+          new BuilderFileSystemException("Couldn't find the "
+              "required lib/ directory. It should be located in "
+              "${path.normalize(libDir.absolute.path)}."));
     }
     var pathToOutputDart = path.join(pathToLib, "${getProjectName()}.dart");
 
@@ -1320,30 +1385,26 @@ class Builder {
         relativeToPath: path.dirname(dartFile.path));
     dartOutStream.write(implStartClass);
     writeUid(dartOutStream);
-    writeDeclarations(dartOutStream, indent: 2)
-    .then((_) {
+    writeDeclarations(dartOutStream, indent: 2).then((_) {
       dartOutStream.write(implStartCtor);
       dartOutStream.write(implStartPages);
       return writePagesToScripter(dartOutStream);
-    })
-    .then((_) {
+    }).then((_) {
       dartOutStream.write(implEndPages);
       dartOutStream.write(implEndCtor);
       dartOutStream.write(implStartInit);
-      return writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT, indent:4);
-    })
-    .then((_) {
+      return writeInitBlocks(dartOutStream, BuilderInitBlock.BLK_INIT,
+          indent: 4);
+    }).then((_) {
       dartOutStream.write(implEndInit);
       dartOutStream.write(implEndClass);
       dartOutStream.write(implEndFile);
 
       // Close and complete
       return dartOutStream.close();
-    })
-    .then((_) {
+    }).then((_) {
       completer.complete(true);
-    })
-    .catchError((e) => completer.completeError(e));
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1384,12 +1445,13 @@ class Builder {
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var presenterDir = new Directory(pathToPresenter);
     if (!presenterDir.existsSync()) {
-      return new Future.error(new BuilderFileSystemException("Couldn't find the "
-        "required web/ directory. It should be located in "
-        "${path.normalize(presenterDir.absolute.path)}."));
+      return new Future.error(
+          new BuilderFileSystemException("Couldn't find the "
+              "required web/ directory. It should be located in "
+              "${path.normalize(presenterDir.absolute.path)}."));
     }
-    var pathToOutputHtml = path.join(pathToPresenter,
-                                     "${getProjectName()}.html.dart");
+    var pathToOutputHtml =
+        path.join(pathToPresenter, "${getProjectName()}.html.dart");
 
     presenterDartPath = pathToOutputHtml;
 
@@ -1411,12 +1473,14 @@ class Builder {
       "[[NAME]]": getProjectName()
     };
 
-    Future.wait([
+    Future
+        .wait([
 //        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
-        _fileFromTemplate(HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
-    ])
-    .then((_) => completer.complete(true))
-    .catchError((e) => completer.completeError(e));
+          _fileFromTemplate(
+              HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
+        ])
+        .then((_) => completer.complete(true))
+        .catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1456,7 +1520,7 @@ class Builder {
    * @return    Future of bool. Always true.
    */
   Future<bool> writeInitBlocks(IOSink dartOutStream, int initBlockType,
-                         {int indent: 0}) {
+      {int indent: 0}) {
     var completer = new Completer();
 
     dartOutStream.write(varsGenerator.generateInitBlockCode());
@@ -1464,11 +1528,10 @@ class Builder {
         initBlocks.where((block) => block.type == initBlockType).toList(),
         _createInputStreamFromMasterFile(inputEgbFile),
         dartOutStream,
-        inclusive:false, indentLength:indent)
-    .then((_) {
+        inclusive: false,
+        indentLength: indent).then((_) {
       completer.complete(true);
-    })
-    .catchError((e) => completer.completeError(e));
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1482,20 +1545,20 @@ class Builder {
 
     StringBuffer contents = new StringBuffer();
     copyLineRanges(
-        initBlocks.where((block) => block.type == BuilderInitBlock.BLK_DECLARE)
-          .toList(),
+        initBlocks
+            .where((block) => block.type == BuilderInitBlock.BLK_DECLARE)
+            .toList(),
         _createInputStreamFromMasterFile(inputEgbFile),
         dartOutStream,
-        inclusive: false, indentLength: indent,
-        contentsCopyDestination: contents)
-    .then((_) {
+        inclusive: false,
+        indentLength: indent,
+        contentsCopyDestination: contents).then((_) {
       varsGenerator = new VarsGenerator();
       varsGenerator.addSource(contents.toString());
       dartOutStream.write(varsGenerator.generatePopulateMethodCode());
       dartOutStream.write(varsGenerator.generateExtractMethodCode());
       completer.complete(true);
-    })
-    .catchError((e) => completer.completeError(e));
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -1514,7 +1577,7 @@ class Builder {
 
     if (pages.isEmpty) {
       return new Future.value(true);
-    }  // TODO: unit test this
+    } // TODO: unit test this
 
     String indent = "";
     Function write = (String msg) {
@@ -1528,13 +1591,13 @@ class Builder {
     BuilderBlock curBlock;
     int blockIndex;
     int subBlockIndex;
-    int subBlockIndent;  // echo block indent
+    int subBlockIndent; // echo block indent
 
     // this is the main looping function
     Function handleLine = (String line) {
       // start page
-      if (pageIndex < pages.length
-          && lineNumber == pages[pageIndex].lineStart) {
+      if (pageIndex < pages.length &&
+          lineNumber == pages[pageIndex].lineStart) {
         curPage = pages[pageIndex];
         blockIndex = 0;
         indent = _getIndent(4);
@@ -1543,8 +1606,10 @@ class Builder {
       }
 
       // start of block
-      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
-          && lineNumber == curPage.blocks[blockIndex].lineStart) {
+      if (curPage != null &&
+          !curPage.blocks.isEmpty &&
+          blockIndex < curPage.blocks.length &&
+          lineNumber == curPage.blocks[blockIndex].lineStart) {
         indent = _getIndent(10);
         curBlock = curPage.blocks[blockIndex];
         subBlockIndex = 0;
@@ -1572,7 +1637,8 @@ class Builder {
           var question = curBlock.options["question"];
           if (curBlock.lineStart == curBlock.lineEnd) {
             write("{\n");
-            write("  \"question\": r\"\"\"${handleTrailingQuotes(line)}\"\"\"\n");
+            write(
+                "  \"question\": r\"\"\"${handleTrailingQuotes(line)}\"\"\"\n");
             write("}$commaOrNot\n");
           } else {
             write("{\n");
@@ -1635,50 +1701,54 @@ class Builder {
         if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
           write("() {\n");
         }
-
       }
 
       // block line
-      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
-          && _insideLineRange(lineNumber, curPage.blocks[blockIndex])) {
+      if (curPage != null &&
+          !curPage.blocks.isEmpty &&
+          blockIndex < curPage.blocks.length &&
+          _insideLineRange(lineNumber, curPage.blocks[blockIndex])) {
         curBlock = curPage.blocks[blockIndex];
 
-        if ((curBlock.type == BuilderBlock.BLK_TEXT
-            || curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR)
-            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+        if ((curBlock.type == BuilderBlock.BLK_TEXT ||
+                curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) &&
+            _insideLineRange(lineNumber, curBlock, inclusive: false)) {
           indent = _getIndent(0);
           write("$line\n");
         }
 
         if (curBlock.type == BuilderBlock.BLK_CHOICE_LIST &&
             _insideLineRange(lineNumber, curBlock, inclusive: true)) {
-
           if (lineNumber < curBlock.subBlocks.first.lineStart) {
             // we are still in Question territory
             if (lineNumber > curBlock.lineStart) {
               write("$line\n");
               if (lineNumber == curBlock.subBlocks.first.lineStart - 1) {
-                write("\"\"\",\n");  // end multiline question
+                write("\"\"\",\n"); // end multiline question
               }
             }
           } else {
-            var choiceSubBlock = curBlock.subBlocks.firstWhere((block) =>
-                  _insideLineRange(lineNumber, block, inclusive: true),
-                  orElse: () => null);
+            var choiceSubBlock = curBlock.subBlocks.firstWhere(
+                (block) => _insideLineRange(lineNumber, block, inclusive: true),
+                orElse: () => null);
 
             if (choiceSubBlock != null &&
-                choiceSubBlock.lineStart == lineNumber /* don't duplicate multiline blocks */) {
+                choiceSubBlock.lineStart ==
+                    lineNumber /* don't duplicate multiline blocks */) {
               write("{\n");
               var lines = new List<String>();
               if (choiceSubBlock.options["string"] != null) {
                 // TODO: don't use when not needed (no variable)
-                lines.add("  \"string\": () => \"\"\"${handleTrailingQuotes(choiceSubBlock.options["string"])}\"\"\"");
+                lines.add(
+                    "  \"string\": () => \"\"\"${handleTrailingQuotes(choiceSubBlock.options["string"])}\"\"\"");
               }
               if (choiceSubBlock.options["goto"] != null) {
-                lines.add("  \"goto\": r\"\"\"${handleTrailingQuotes(choiceSubBlock.options["goto"])}\"\"\"");
+                lines.add(
+                    "  \"goto\": r\"\"\"${handleTrailingQuotes(choiceSubBlock.options["goto"])}\"\"\"");
               }
               if (choiceSubBlock.options["script"] != null) {
-                lines.add("  \"script\": () {${choiceSubBlock.options["script"]};}");
+                lines.add(
+                    "  \"script\": () {${choiceSubBlock.options["script"]};}");
               }
               write(lines.join(",\n"));
               write("}${lineNumber != curBlock.lineEnd ? "," : ""}\n");
@@ -1686,23 +1756,21 @@ class Builder {
           }
         }
 
-
-
-        if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION
-            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+        if (curBlock.type == BuilderBlock.BLK_CHOICE_QUESTION &&
+            _insideLineRange(lineNumber, curBlock, inclusive: false)) {
           indent = _getIndent(0);
           write("$line\n");
         }
 
-        if (curBlock.type == BuilderBlock.BLK_SCRIPT
-            && _insideLineRange(lineNumber, curBlock, inclusive:false)) {
+        if (curBlock.type == BuilderBlock.BLK_SCRIPT &&
+            _insideLineRange(lineNumber, curBlock, inclusive: false)) {
           indent = _getIndent(0);
 
           bool needsToBeHandled = true;
           // check for <echo>
           if (subBlockIndex < curBlock.subBlocks.length) {
             var curSubBlock = curBlock.subBlocks[subBlockIndex];
-            if (_insideLineRange(lineNumber, curSubBlock, inclusive:true)) {
+            if (_insideLineRange(lineNumber, curSubBlock, inclusive: true)) {
               if (lineNumber == curSubBlock.lineStart) {
                 // ignore the <echo> line, but get indenting
                 subBlockIndent = line.indexOf("<");
@@ -1730,8 +1798,10 @@ class Builder {
       }
 
       // end of block
-      if (curPage != null && !curPage.blocks.isEmpty && blockIndex < curPage.blocks.length
-          && lineNumber == curPage.blocks[blockIndex].lineEnd) {
+      if (curPage != null &&
+          !curPage.blocks.isEmpty &&
+          blockIndex < curPage.blocks.length &&
+          lineNumber == curPage.blocks[blockIndex].lineEnd) {
         String commaOrNot = blockIndex < curPage.blocks.length - 1 ? "," : "";
 
         if (curBlock.type == BuilderBlock.BLK_TEXT) {
@@ -1764,8 +1834,7 @@ class Builder {
           }
         }
 
-        if (curBlock.type == BuilderBlock.BLK_CHOICE) {
-        }
+        if (curBlock.type == BuilderBlock.BLK_CHOICE) {}
 
         if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
           indent = _getIndent(8);
@@ -1776,7 +1845,6 @@ class Builder {
         curBlock = null;
       }
 
-
       // end page
       if (pageIndex < pages.length && lineNumber == pages[pageIndex].lineEnd) {
         // end blocks
@@ -1784,10 +1852,7 @@ class Builder {
           write("]\n");
         } else {
           write("],\n");
-          write(
-              curPage.options.map((optName) => "$optName: true")
-              .join(", ")
-          );
+          write(curPage.options.map((optName) => "$optName: true").join(", "));
         }
         indent = _getIndent(4);
         write(");\n");
@@ -1801,17 +1866,16 @@ class Builder {
         pageIndex++;
         curPage = null;
       }
-
     };
 
     inStream.listen((String line) {
-              lineNumber++;
-              handleLine(line);
-            }, onDone: () {
-              completer.complete(true);
-            }, onError: (e) {
-              completer.completeError(e);
-            });
+      lineNumber++;
+      handleLine(line);
+    }, onDone: () {
+      completer.complete(true);
+    }, onError: (e) {
+      completer.completeError(e);
+    });
 
     return completer.future;
   }
@@ -1849,30 +1913,31 @@ class Builder {
    */
   Future<bool> copyLineRanges(List<BuilderLineRange> lineRanges,
       Stream<String> inStream, IOSink outStream,
-      {bool inclusive: true, int indentLength: 0,
-        StringBuffer contentsCopyDestination}) {
+      {bool inclusive: true,
+      int indentLength: 0,
+      StringBuffer contentsCopyDestination}) {
     var completer = new Completer();
     outStream.write("\n");
     var indent = _getIndent(indentLength);
 
     int lineNumber = 0;
-    inStream
-        .listen((line) {
-          lineNumber++;
+    inStream.listen((line) {
+      lineNumber++;
 
-          // if lineNumber is in one of the ranges, write
-          if (lineRanges.any((var range) => _insideLineRange(lineNumber, range, inclusive:inclusive))) {
-            outStream.write("$indent$line\n");
-            if (contentsCopyDestination != null) {
-              contentsCopyDestination.writeln(line);
-            }
-          }
-        }, onDone: () {
-          outStream.write("\n");
-          completer.complete(true);
-        }, onError: (e) {
-          completer.completeError(e);
-        });
+      // if lineNumber is in one of the ranges, write
+      if (lineRanges.any((var range) =>
+          _insideLineRange(lineNumber, range, inclusive: inclusive))) {
+        outStream.write("$indent$line\n");
+        if (contentsCopyDestination != null) {
+          contentsCopyDestination.writeln(line);
+        }
+      }
+    }, onDone: () {
+      outStream.write("\n");
+      completer.complete(true);
+    }, onError: (e) {
+      completer.completeError(e);
+    });
 
     return completer.future;
   }
@@ -1889,10 +1954,10 @@ class Builder {
 
   String getSubdirectoryPath(String subdirectory) =>
       getSubdirectoryPathFromEgbPath(inputEgbFileFullPath,
-                                     subdirectory: subdirectory);
+          subdirectory: subdirectory);
 
   static String getSubdirectoryPathFromEgbPath(String egbPath,
-                                               {String subdirectory}) {
+      {String subdirectory}) {
     String dirPath = path.dirname(egbPath);
     if (subdirectory != null) {
       dirPath = path.join(dirPath, subdirectory);
@@ -1901,11 +1966,11 @@ class Builder {
   }
 
   static String getExtensionPathFromEgbPath(String egbPath, String extension,
-                                            {String subdirectory}) {
-    String dirPath = getSubdirectoryPathFromEgbPath(egbPath,
-        subdirectory: subdirectory);
-    return path.join(dirPath,
-        "${getProjectNameFromEgbPath(egbPath)}.$extension");
+      {String subdirectory}) {
+    String dirPath =
+        getSubdirectoryPathFromEgbPath(egbPath, subdirectory: subdirectory);
+    return path.join(
+        dirPath, "${getProjectNameFromEgbPath(egbPath)}.$extension");
   }
 
   String getProjectName() => getProjectNameFromEgbPath(inputEgbFileFullPath);
@@ -2095,8 +2160,7 @@ class Builder {
     File outputEgbFile;
 
     var tempInStream = inputEgbFile.openRead();
-    tempInStream.pipe(tempFile.openWrite())
-    .then((_) {
+    tempInStream.pipe(tempFile.openWrite()).then((_) {
       outputEgbFile = inputEgbFile;
       inputEgbFile = tempFile;
       var rawInputStream = inputEgbFile.openRead();
@@ -2107,8 +2171,8 @@ class Builder {
         rawInputStream.pipe(outStream);
       } else {
         var inStream = rawInputStream
-                       .transform(UTF8.decoder)
-                       .transform(new LineSplitter());
+            .transform(UTF8.decoder)
+            .transform(new LineSplitter());
 
         // TODO: rewrite based on logical structure (i.e. insert new pages where they belong)
 
@@ -2123,8 +2187,7 @@ class Builder {
             // add remaining gotos
             bool addingPages = !gotoPageNamesToAdd.isEmpty;
             for (var gotoPageName in gotoPageNamesToAdd) {
-              outStream.write(
-                  "- $gotoPageName (AUTO) [$gotoPageName]\n");
+              outStream.write("- $gotoPageName (AUTO) [$gotoPageName]\n");
             }
             if (addingPages) outStream.write("\n");
             page = null;
@@ -2155,11 +2218,11 @@ class Builder {
               }
             }
             if (goto != null) {
-              if (page.gotoPageNames.any((gotoPageName) => gotoPageName == goto)
-                  || page.gotoPageNames.any((gotoPageName) => gotoPageName == "${page.groupName}: $goto")) {
-                outStream
-                  ..write(line)
-                  ..write("\n");
+              if (page.gotoPageNames
+                      .any((gotoPageName) => gotoPageName == goto) ||
+                  page.gotoPageNames.any((gotoPageName) =>
+                      gotoPageName == "${page.groupName}: $goto")) {
+                outStream..write(line)..write("\n");
                 gotoPageNamesToAdd.remove(goto);
                 gotoPageNamesToAdd.remove("${page.groupName}: $goto");
               } else {
@@ -2167,27 +2230,18 @@ class Builder {
               }
             } else {
               // normal line, just copy
-              outStream
-                ..write(line)
-                ..write("\n");
+              outStream..write(line)..write("\n");
             }
           } else {
             // outside any page - just copy
-            outStream
-              ..write(line)
-              ..write("\n");
+            outStream..write(line)..write("\n");
           }
-
         }, onDone: () {
           for (var page in pagesToAdd) {
-            outStream
-            ..write("\n---\n")
-            ..write(page.name)
-            ..write("\n\n");
+            outStream..write("\n---\n")..write(page.name)..write("\n\n");
 
             for (var gotoPageName in page.gotoPageNames) {
-              outStream.write(
-                  "- $gotoPageName (AUTO) [$gotoPageName]\n");
+              outStream.write("- $gotoPageName (AUTO) [$gotoPageName]\n");
             }
           }
 
@@ -2198,7 +2252,8 @@ class Builder {
             inputEgbFile = outputEgbFile;
 
             new Builder().readEgbFile(inputEgbFile).then((Builder b) {
-              completer.complete(b);;
+              completer.complete(b);
+              ;
             });
           });
         }, onError: (e) {
@@ -2236,20 +2291,18 @@ class Builder {
    *                  lineEnd.
    */
   bool _insideLineRange(int lineNumber, BuilderLineRange range,
-                        {bool inclusive: true}) {
+      {bool inclusive: true}) {
     if (range.lineStart == null && range.lineEnd == null) {
       return false;
     }
     if (range.lineEnd == null) {
       throw "Range with lineStart == ${range.lineStart} has lineEnd == null "
-            "in file $inputEgbFileFullPath.";
+          "in file $inputEgbFileFullPath.";
     }
-    if (lineNumber >= range.lineStart
-        && lineNumber <= range.lineEnd) {
+    if (lineNumber >= range.lineStart && lineNumber <= range.lineEnd) {
       if (inclusive) {
         return true;
-      } else if (lineNumber != range.lineStart
-              && lineNumber != range.lineEnd) {
+      } else if (lineNumber != range.lineStart && lineNumber != range.lineEnd) {
         return true;
       } else {
         return false;
@@ -2315,29 +2368,37 @@ void main(List<String> args, SendPort mainIsolatePort) {
 }
 """;
 
-
   // These are available modes for the [mode] variable.
   /// Builder mode normal.
   static int MODE_NORMAL = 1;
+
   /// Builder mode inside classes.
   @deprecated
   static int MODE_INSIDE_CLASSES = 2;
+
   /// Builder mode inside functions.
   @deprecated
   static int MODE_INSIDE_FUNCTIONS = 4;
+
   /// Builder mode inside variables.
   @deprecated
   static int MODE_INSIDE_VARIABLES = 8;
+
   /// Builder mode inside echo.
   static int MODE_INSIDE_SCRIPT_ECHO = 16;
+
   /// Builder mode inside script.
   static int MODE_INSIDE_SCRIPT_TAG = 32;
+
   /// Builder mode metadata.
   static int MODE_METADATA = 64;
+
   /// Builder mode inside choice.
   static int MODE_INSIDE_CHOICE = 128;
+
   /// Builder mode inside declaration.
   static int MODE_INSIDE_DECLARE = 256;
+
   /// Builder mode inside init.
   static int MODE_INSIDE_INIT = 512;
 
@@ -2346,11 +2407,12 @@ void main(List<String> args, SendPort mainIsolatePort) {
 
   /// Public getter for _mode.
   int get mode => _mode;
+
   /// Public setter for _mode. This is here for unit testing only.
   set mode(int value) => _mode = value;
 
-  int _lineNumber;  // TODO: Because checking is async right now, this
-                    // is only an _unreliable_ way of getting actual line number
+  int _lineNumber; // TODO: Because checking is async right now, this
+  // is only an _unreliable_ way of getting actual line number
   int _pageNumber;
   int _blockNumber;
 

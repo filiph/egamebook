@@ -9,8 +9,10 @@ library egb_page;
 class Page {
   /// Name of the page.
   String name;
+
   /// If the page will be visited only once.
   bool visitOnce;
+
   /// If the page will be shown only once.
   bool showOnce;
 
@@ -19,7 +21,7 @@ class Page {
 
   /// Returns string representation of Page - its [name].
   String toString() => name;
-  
+
   /**
    *  Returns group name.
    *
@@ -27,14 +29,14 @@ class Page {
    *  the group this page belongs to. This is important so that pages in
    *  one group can easily link to each other without repeating the group
    *  prefix all the time.
-   *  
+   *
    *  Returns [:null:] when page has no group ([name] doesn't contain ": ").
    *
    *  Throws in case of name equal to [:null:].
    */
   String get groupName {
     if (name == null) throw "Accessed groupName Page has name = null.";
-    
+
     int index = name.indexOf(": ");
     if (index > 0) {
       return name.substring(0, index);
@@ -49,7 +51,7 @@ class Page {
   /// Throws in case of name equal to [:null:].
   String get nameWithoutGroup {
     if (name == null) throw "Accessed nameWithoutGroup Page has name = null.";
-    
+
     int index = name.indexOf(": ");
     if (index > 0 && index < name.length - 2) {
       return name.substring(index + 2);
@@ -58,4 +60,3 @@ class Page {
     }
   }
 }
-

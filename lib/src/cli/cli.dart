@@ -289,7 +289,8 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
     if (!await new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH))
             .exists() ||
         !await new Directory(p.join(_path, HTML_BOOK_ENTRYPOINT_PATH,
-            HTML_BOOK_DART_PATH_FROM_ENTRYPOINT)).exists()) {
+                HTML_BOOK_DART_PATH_FROM_ENTRYPOINT))
+            .exists()) {
       return new Future.error(OutputMessage
           .outputFailed("Must run watcher on a directory that is a "
               "Dart web applications package (it must have "

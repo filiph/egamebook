@@ -12,7 +12,6 @@ class A {
 }
 
 class ScripterImpl extends Scripter {
-
   /* LIBRARY */
 
   void scream() {
@@ -21,20 +20,14 @@ class ScripterImpl extends Scripter {
 
   ScripterImpl(SendPort mainIsolatePort) : super(mainIsolatePort) {
     pageMap = new ScripterPageMap();
-    pageMap[r"""handle"""] = new ScripterPage(
-        [
-         """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
-         """You have a minute at most before the pigs kick the door in. """,
-         () {
-           time = 0;
-         },
-         {
-           "string": r""" """,
-           "goto": r"""wakeupDilemma"""
-         }
-        ],   
-        visitOnce: true
-    );
+    pageMap[r"""handle"""] = new ScripterPage([
+      """You woke up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You idiot."  """,
+      """You have a minute at most before the pigs kick the door in. """,
+      () {
+        time = 0;
+      },
+      {"string": r""" """, "goto": r"""wakeupDilemma"""}
+    ], visitOnce: true);
 
     pages = [
       /* PAGES & BLOCKS */
@@ -45,18 +38,14 @@ class ScripterImpl extends Scripter {
         () {
           time = 0;
         },
-        {
-          "string": r""" """,
-          "goto": r"""wakeupDilemma"""
-        }
+        {"string": r""" """, "goto": r"""wakeupDilemma"""}
       ],
       // Day1.wakeupDilemma
       [
         () {
           if (time >= 45) {
             goto("policeBreakIn");
-          } else if (time >= 30) {
-          }
+          } else if (time >= 30) {}
         },
         () {
           echo("""It is $time seconds since you woke up. """);
@@ -66,28 +55,27 @@ class ScripterImpl extends Scripter {
 since you opened your eyes. """);
         },
         () {
-          choices.add(new Choice(
-              """Get dressed (30 seconds) """,
-              goto:r"""getDressed""",
-              then:() { {echo("Ladyboy!");;}; }
-          ));
+          choices.add(new Choice("""Get dressed (30 seconds) """,
+              goto: r"""getDressed""", then: () {
+            {
+              echo("Ladyboy!");
+              ;
+            }
+            ;
+          }));
         },
         [
           "What do you do now?",
-          {
-            "string": r"""Get the gun (15 seconds) """,
-            "goto": r"""getGun"""
-          },
+          {"string": r"""Get the gun (15 seconds) """, "goto": r"""getGun"""},
           {
             "string": () => """Wait another second, even though it's $time""",
             "goto": r"""getGun""",
-            "script": () { time++; }
-          }  
+            "script": () {
+              time++;
+            }
+          }
         ],
-        {
-          "string": r"""Get the gun (15 seconds) """,
-          "goto": r"""getGun"""
-        },
+        {"string": r"""Get the gun (15 seconds) """, "goto": r"""getGun"""},
         {
           "string": r"""Warn Amy by phone (30 seconds) """,
           "goto": r"""warnAmy"""
@@ -100,10 +88,7 @@ Good! """,
         () {
           time += 20;
         },
-        {
-          "string": r""" """,
-          "goto": r"""wakeupDilemma"""
-        }
+        {"string": r""" """, "goto": r"""wakeupDilemma"""}
       ],
       // Day1.getGun
       [
@@ -112,10 +97,7 @@ Good! """,
           weapon = "gun";
           time += 15;
         },
-        {
-          "string": r""" """,
-          "goto": r"""wakeupDilemma"""
-        }
+        {"string": r""" """, "goto": r"""wakeupDilemma"""}
       ],
       // Day1.warnAmy
       [
@@ -125,7 +107,10 @@ Good! """,
         """"What?" """,
         """You hang up, hoping she got all that. You know you can't lose any more time now. """,
         () {
-          {time+=30;};
+          {
+            time += 30;
+          }
+          ;
           goto(r"""wakeupDilemma""");
         }
       ],
@@ -134,10 +119,12 @@ Good! """,
         """There's a sudden, loud crash _right in the room_ and a man in black overall jumps into the room, through the window, like some sort of a freaking ninja. Everything slows down. He's holding a gun and starts turning it towards you. """,
         () {
           if (weapon == "gun") {
-            echo("""You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.""");
+            echo(
+                """You react instinctively. There's a loud gunshot and the man falls to the ground. You shot him in the stomach and you know he's wearing an armor, but the sheer shock and power of the impact will incapacitate this guy for some time.""");
             goto("""runOutTheWindow""");
           } else {
-            echo("""You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.""");
+            echo(
+                """You realize you don't have the gun yet, so you instinctively move towards the bed (to which it's taped from below). Though the policeman can't know what you're after, he acts as instinctively as you do -- he shoots you in the right clavicle area. You fall to the ground, screaming with pain.""");
             goto("""wasted""");
           }
         }
@@ -145,10 +132,7 @@ Good! """,
       // Day1.runOutTheWindow
       [
         """You jump through the window, catch hold of some branches of the backyard tree and fall down on the grass with a thump. You hear "Shit!" from the side, so you send a blind shot there, and start running towards the white fence. The adventure begins. """,
-        {
-          "string": r""" """,
-          "goto": r"""theAdventureBegins"""
-        }
+        {"string": r""" """, "goto": r"""theAdventureBegins"""}
       ],
       // wasted
       [
@@ -159,10 +143,8 @@ Good! """,
   }
   /* INIT */
   void initBlock() {
-
     name = "Filip";
     age = 30;
-    surname="Hracek";
-
+    surname = "Hracek";
   }
 }

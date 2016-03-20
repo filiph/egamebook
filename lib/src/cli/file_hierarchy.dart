@@ -16,16 +16,18 @@ import 'package:path/path.dart' as p;
 class FileHierarchy {
   /// Allowed fileType.
   static const String FILE_TYPE = ".egb";
+
   /// Saved hierarchy of master and part files as a Map.
   Map<String, List<String>> _filesHierarchy = {};
 
   /// Returns list of files of type [File] and extension [fileType]
   /// from [directoryFrom].
   List<File> _listFiles(Directory directoryFrom) {
-    return directoryFrom.listSync(recursive: true, followLinks: false)
-        .where((entity)
-            => entity is File && p.extension(entity.path) == FILE_TYPE)
-            .toList();
+    return directoryFrom
+        .listSync(recursive: true, followLinks: false)
+        .where(
+            (entity) => entity is File && p.extension(entity.path) == FILE_TYPE)
+        .toList();
   }
 
   /// Creates hierarchy of files from [fromDirectory] or parent of [fromFile].
@@ -35,7 +37,8 @@ class FileHierarchy {
     List<File> filesToRemove = [];
 
     if (fromDirectory == null && fromFile == null) {
-      throw new ArgumentError("Hierarchy has to be created either from directory or file.");
+      throw new ArgumentError(
+          "Hierarchy has to be created either from directory or file.");
     }
 
     // If we use exact file we need to still create hierarchy for parent folder
@@ -55,7 +58,8 @@ class FileHierarchy {
 
         // TODO we are not comparing full path,
         // so the files can be nested differently
-        if (p.basenameWithoutExtension(part.path)
+        if (p
+            .basenameWithoutExtension(part.path)
             .startsWith("${p.basenameWithoutExtension(master.path)}_")) {
           add(master, part);
           filesToRemove.add(part);
@@ -86,8 +90,10 @@ class FileHierarchy {
 
     if (p.extension(masterPath) == FILE_TYPE &&
         p.extension(partPath) == FILE_TYPE) {
-      if (_filesHierarchy[masterPath] == null) {// the key is not in the map
-        _filesHierarchy[masterPath] = []; // creates empty list for adding of parts
+      if (_filesHierarchy[masterPath] == null) {
+        // the key is not in the map
+        _filesHierarchy[masterPath] =
+            []; // creates empty list for adding of parts
       }
       _filesHierarchy[masterPath].add(partPath);
     } else {
@@ -129,7 +135,8 @@ class FileHierarchy {
     if (!_filesHierarchy.containsKey(master.path)) {
       return [];
     }
-    return _filesHierarchy[master.path].map((path) => new File(path))
+    return _filesHierarchy[master.path]
+        .map((path) => new File(path))
         .toList(growable: false);
   }
 }

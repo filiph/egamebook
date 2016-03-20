@@ -1,4 +1,5 @@
 library scripter_typedefs;
+
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/shared/form.dart';
 
@@ -17,8 +18,12 @@ typedef void GotoFunction(String pageName);
 typedef void EchoFunction(String str);
 
 /// Corresponds to [Scripter.choice].
-typedef Choice ChoiceFunction(String string, {String goto, Function script,
-    String submenu, bool deferToEndOfPage, bool deferToChoiceList});
+typedef Choice ChoiceFunction(String string,
+    {String goto,
+    Function script,
+    String submenu,
+    bool deferToEndOfPage,
+    bool deferToChoiceList});
 
 /// Corresponds to [Scripter.showForm].
 typedef void ShowFormFunction(Form form);

@@ -9,7 +9,7 @@ void main() {
     test("extracts without throwing", () {
       String code = """
         /// Comment.
-        SpaceshipMock bodega; 
+        SpaceshipMock bodega;
         bool isEngineer, isMedic;// Another comment.
         /* Third comment. */
         int maxPhysicalPoints;
@@ -23,7 +23,7 @@ void main() {
 
     test("extracts all variables", () {
       String code = """
-        SpaceshipMock bodega; 
+        SpaceshipMock bodega;
         bool isEngineer, isMedic;
         int maxPhysicalPoints;
         var number;
@@ -35,7 +35,7 @@ void main() {
 
     test("extracts type", () {
       String code = """
-        SpaceshipMock bodega; 
+        SpaceshipMock bodega;
         var number;
         """;
       var generator = new VarsGenerator();
@@ -117,5 +117,4 @@ void main() {
       expect(generatedInitBlock.trim(), initBlock.trim());
     });
   });
-
 }

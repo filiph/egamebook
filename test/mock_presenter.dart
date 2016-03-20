@@ -20,6 +20,7 @@ class MockPresenter extends Presenter {
   Queue<String> choicesToBeTakenByString;
   String latestOutput;
   ChoiceList _latestChoices;
+
   /// The choices that have been shown most recently.
   ChoiceList get latestChoices => _latestChoices;
   bool started = false;
@@ -39,6 +40,7 @@ class MockPresenter extends Presenter {
 
   StreamController<String> _debugStreamController;
   Stream<String> _debugStream;
+
   /// The public stream of events that the unit tests might care about (but
   /// the generic presenter shouldn't need), like new choiceLists, new toasts,
   /// etc.
@@ -57,7 +59,8 @@ class MockPresenter extends Presenter {
 
   MockPresenter({bool this.waitForChoicesToBeTaken: false})
       : choicesToBeTaken = new Queue<int>(),
-      choicesToBeTakenByString = new Queue<String>(), super() {
+        choicesToBeTakenByString = new Queue<String>(),
+        super() {
     _debugStreamController = new StreamController();
     _debugStream = _debugStreamController.stream.asBroadcastStream();
   }
@@ -72,10 +75,10 @@ class MockPresenter extends Presenter {
   }
 
   Stream<String> get endOfBookReached =>
-        debugStream.where((value) => value == BOOK_ENDED_EVENT);
+      debugStream.where((value) => value == BOOK_ENDED_EVENT);
 
   Stream<String> get playerQuit =>
-          debugStream.where((value) => value == PLAYER_QUIT_EVENT);
+      debugStream.where((value) => value == PLAYER_QUIT_EVENT);
 
   void close() {
     closed = true;
@@ -91,15 +94,17 @@ class MockPresenter extends Presenter {
   }
 
   String getTextHistory() => "Method getTextHistory() not implemented on "
-                             "MockPresenter.";
+      "MockPresenter.";
 
   Future<int> showChoices(ChoiceList choiceList) {
-    choiceList.forEach((choice) => _log.fine("MockPresenter choice: '${choice.string}'"));
+    choiceList.forEach(
+        (choice) => _log.fine("MockPresenter choice: '${choice.string}'"));
     _latestChoices = choiceList;
     if (choicesToBeTaken.length > 0) {
       int choiceNumber = choicesToBeTaken.removeFirst();
-      _log.info("MockPresenter pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
-                                "-> ${choiceList[choiceNumber].hash}");
+      _log.info(
+          "MockPresenter pick: $choiceNumber) '${choiceList[choiceNumber].string}' "
+          "-> ${choiceList[choiceNumber].hash}");
       return new Future.value(choiceList[choiceNumber].hash);
     } else if (choicesToBeTakenByString.length > 0) {
       String choiceString = choicesToBeTakenByString.removeFirst();
@@ -140,7 +145,8 @@ class MockPresenter extends Presenter {
   void choose(String choiceString) {
     if (_currentChoices == null) {
       choicesToBeTakenByString.addLast(choiceString);
-      _log.fine("MockPresenter will choose '$choiceString' on next choiceList.");
+      _log.fine(
+          "MockPresenter will choose '$choiceString' on next choiceList.");
     } else {
       int hash = _getChoiceHashFromString(choiceString, _currentChoices);
       _currentChoices = null;
@@ -163,10 +169,10 @@ class MockPresenter extends Presenter {
 
   /// Completes the future when Presenter waits for input or when the book is
   /// ended.
-  Future<Presenter> waitForDone() =>
-    debugStream.firstWhere((value) =>
-        value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
-        .then((_) => this);
+  Future<Presenter> waitForDone() => debugStream
+      .firstWhere((value) =>
+          value == WAITING_FOR_INPUT_EVENT || value == BOOK_ENDED_EVENT)
+      .then((_) => this);
 
   Future<bool> awardPoints(PointsAward award) {
     _log.fine("MockPresenter: *** $award ***");
@@ -175,7 +181,7 @@ class MockPresenter extends Presenter {
     return new Future.value(true);
   }
 
-  int _currentlyShownPoints = 0;  // TODO: use for unittesting
+  int _currentlyShownPoints = 0; // TODO: use for unittesting
   int get currentlyShownPoints => _currentlyShownPoints;
 
   List<UIStat> _statsList;

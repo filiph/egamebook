@@ -16,7 +16,8 @@ import 'package:egamebook/presenters/html/main_entry_point.dart'
 const String TEMPLATE_FILES = "template_files";
 const String TEMPLATE_BOOK_NAME = "bodega.egb";
 
-String getTemplateBookNameWithoutExtension() => p.basenameWithoutExtension(TEMPLATE_BOOK_NAME);
+String getTemplateBookNameWithoutExtension() =>
+    p.basenameWithoutExtension(TEMPLATE_BOOK_NAME);
 
 /// Returns full path to the desired [fileName].
 String getPath(String fileName) {
@@ -198,15 +199,16 @@ void main() {
 
       var callback = expectAsync((message) {
         String templateFileName = getTemplateBookNameWithoutExtension();
-        File fileHtmlBuild = new File(p.join(path, "web/${templateFileName}.html.dart"));
-        File fileDartBuild = new File(p.join(path, "lib/${templateFileName}.dart"));
+        File fileHtmlBuild =
+            new File(p.join(path, "web/${templateFileName}.html.dart"));
+        File fileDartBuild =
+            new File(p.join(path, "lib/${templateFileName}.dart"));
 
         expect(fileHtmlBuild.existsSync(), isTrue);
         expect(fileDartBuild.existsSync(), isTrue);
       });
 
-      runner.run(["build", p.join(path, TEMPLATE_BOOK_NAME)])
-          .then(callback);
+      runner.run(["build", p.join(path, TEMPLATE_BOOK_NAME)]).then(callback);
     });
 
     test("fails with .other file as parameter", () {
@@ -224,8 +226,10 @@ void main() {
             isTrue);
       });
 
-      runner.run(["build", "$path${Platform.pathSeparator}test1.other"])
-          .catchError(callback);
+      runner.run([
+        "build",
+        "$path${Platform.pathSeparator}test1.other"
+      ]).catchError(callback);
     });
 
     test("fails with more than one .egb file in directory", () {
@@ -258,10 +262,14 @@ void main() {
 
       var callback = expectAsync((message) {
         String templateFileName = getTemplateBookNameWithoutExtension();
-        File fileHtmlBuild1 = new File(p.join(path, "web/${templateFileName}.html.dart"));
-        File fileDartBuild1 = new File(p.join(path, "lib/${templateFileName}.dart"));
-        File fileHtmlBuild2 = new File(p.join(path, "web/someotherbodega.html.dart"));
-        File fileDartBuild2 = new File(p.join(path, "lib/someotherbodega.dart"));
+        File fileHtmlBuild1 =
+            new File(p.join(path, "web/${templateFileName}.html.dart"));
+        File fileDartBuild1 =
+            new File(p.join(path, "lib/${templateFileName}.dart"));
+        File fileHtmlBuild2 =
+            new File(p.join(path, "web/someotherbodega.html.dart"));
+        File fileDartBuild2 =
+            new File(p.join(path, "lib/someotherbodega.dart"));
         expect(fileHtmlBuild1.existsSync(), isTrue);
         expect(fileDartBuild1.existsSync(), isTrue);
         expect(fileHtmlBuild2.existsSync(), isTrue);
@@ -271,7 +279,6 @@ void main() {
       runner.run(["build", "--full-directory", "$path"]).then(callback);
     });
   });
-
 
   group("egamebook getEgbFiles", () {
     setUp(() {
@@ -364,8 +371,10 @@ void main() {
           // Waiting for builder which builds file
           new Future.delayed(new Duration(seconds: 2), () {
             String templateFileName = getTemplateBookNameWithoutExtension();
-            File fileHtmlBuild = new File(p.join(path, "web/${templateFileName}.html.dart"));
-            File fileDartBuild = new File(p.join(path, "lib/${templateFileName}.dart"));
+            File fileHtmlBuild =
+                new File(p.join(path, "web/${templateFileName}.html.dart"));
+            File fileDartBuild =
+                new File(p.join(path, "lib/${templateFileName}.dart"));
             expect(fileHtmlBuild.existsSync(), isTrue);
             expect(fileDartBuild.existsSync(), isTrue);
             deleteTemporaryDir(path);

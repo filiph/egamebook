@@ -7,8 +7,10 @@ part of egb_scripter;
 class PointsCounter implements Saveable {
   /// Actual sum of points.
   int _points = 0;
+
   /// Getter returns the current sum of points.
   int get sum => _points;
+
   /// Queue of points to be awarded.
   Queue<PointsAward> pointsAwards;
 
@@ -41,6 +43,7 @@ class PointsCounter implements Saveable {
 
   /// Class name.
   String className = "PointsCounter";
+
   /// Returns Map representation of PointsCounter.
   Map toMap() => {"points": _points};
 
@@ -56,4 +59,3 @@ class PointsCounter implements Saveable {
     pointsAwards.clear();
   }
 }
-

@@ -26,8 +26,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   }
 
   /// Creates new FormProxy from [Message].
-  FormProxy.fromMessage(Message msg)
-  : this.fromMap(msg.mapContent);
+  FormProxy.fromMessage(Message msg) : this.fromMap(msg.mapContent);
 
   /// Recursively creates [UiElement] from a given map of [UiElementBuilder]
   /// builders.
@@ -41,7 +40,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// Recursively creates [UiElement] from a given map of [UiElementBuilder]
   /// builders with help of [BlueprintWithUiRepresentation] element.
   UiElement _recursiveCreateUiElement(Map<String, UiElementBuilder> builders,
-                        BlueprintWithUiRepresentation element) {
+      BlueprintWithUiRepresentation element) {
     if (!builders.containsKey(element.localName)) {
       throw new UnimplementedError("The tag '${element.localName}' is not "
           "among the implemented presenter builders "
@@ -68,8 +67,9 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// [unsetWaitingForUpdate] is not [:true:] (default), the elements will stay
   /// in the [UiElement.waitingForUpdate] state (i.e., disabled).
   void update(FormConfiguration config, {bool unsetWaitingForUpdate: true}) {
-    allFormElementsBelowThisOne.where((element) => element is UpdatableByMap)
-    .forEach((FormElement element) {
+    allFormElementsBelowThisOne
+        .where((element) => element is UpdatableByMap)
+        .forEach((FormElement element) {
       Map<String, Object> map = config.getById(element.id);
       if (map != null) {
         element.updateFromMap(map);
@@ -77,8 +77,9 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
       }
     });
     if (unsetWaitingForUpdate) {
-      allFormElementsBelowThisOne.where((element) => element is Input)
-      .forEach((element) {
+      allFormElementsBelowThisOne
+          .where((element) => element is Input)
+          .forEach((element) {
         (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate =
             false;
       });
@@ -90,13 +91,16 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// [setWaitingForUpdate] is [:true:], all elements are temporarily 'disabled'
   /// in order to wait for update from Scripter.
   CurrentState _createCurrentState(BlueprintWithUiRepresentation elementTouched,
-                                   [bool setWaitingForUpdate=true]) {
+      [bool setWaitingForUpdate = true]) {
     CurrentState state = new CurrentState();
-    allFormElementsBelowThisOne.where((element) => element is Input)
-    .forEach((element) {
-      state.add(element.id, (element as BlueprintWithUiRepresentation).uiElement.current);
+    allFormElementsBelowThisOne
+        .where((element) => element is Input)
+        .forEach((element) {
+      state.add(element.id,
+          (element as BlueprintWithUiRepresentation).uiElement.current);
       if (setWaitingForUpdate) {
-        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate = true;
+        (element as BlueprintWithUiRepresentation).uiElement.waitingForUpdate =
+            true;
       }
     });
     if (setWaitingForUpdate) {
@@ -104,7 +108,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     }
     // Events from the Form UiElement itself are Submit events. And events from
     // submit buttons are also Submit events.
-    state.submitted = elementTouched is SubmitButtonBase || elementTouched is FormBase;
+    state.submitted =
+        elementTouched is SubmitButtonBase || elementTouched is FormBase;
     if (state.submitted) {
       this.uiElement.disabled = true;
       state.submitterId = elementTouched.id;
@@ -116,6 +121,7 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
   /// Set of on change [StreamSubscription]s.
   Set<StreamSubscription> _onChangeSubscriptions =
       new Set<StreamSubscription>();
+
   /// Cancels all [_onChangeSubscriptions].
   void _cancelSubscriptions() {
     _onChangeSubscriptions.forEach((StreamSubscription s) => s.cancel());
@@ -123,15 +129,16 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
 
   /// [CurrentState] stream controller.
   StreamController<CurrentState> _streamController =
-        new StreamController<CurrentState>();
+      new StreamController<CurrentState>();
+
   /// Getter for a [Stream] from stream controller.
   Stream<CurrentState> get stream => _streamController.stream;
 
   /// Creates [PresenterForm] from provided [jsonml] and adds its children
   /// elements into FormProxy [children] elements.
   void createElementsFromJsonML(List<Object> jsonml) {
-    PresenterForm node = decodeToHtml5Lib(jsonml, customTags: customTagHandlers,
-        unsafe: true);
+    PresenterForm node =
+        decodeToHtml5Lib(jsonml, customTags: customTagHandlers, unsafe: true);
     id = node.id;
     children.addAll(node.children);
   }
@@ -158,6 +165,7 @@ abstract class UiElement {
   /// FormElement subtype. This is just convenience, and probably could be
   /// solved more elegantly.
   FormElement _blueprint;
+
   /// Creates new UiElement with form element [_blueprint].
   UiElement(this._blueprint);
 
@@ -174,11 +182,13 @@ abstract class UiElement {
 
   /// Setter for disabled.
   set disabled(bool value);
+
   /// Getter for disabled.
   bool get disabled;
 
   /// Setter for hidden.
   set hidden(bool value);
+
   /// Getter for hidden.
   bool get hidden;
 
@@ -193,13 +203,16 @@ abstract class UiElement {
   /// has had a chance to react to player's input. It shouldn't override
   /// [disabled] state.
   bool waitingForUpdate;
+
   /// The current value of the UiElement. Only getter, because the values are
   /// set through element blueprint and by calling [update].
   Object get current;
+
   /// This is the representation of the object in the UI. For HTML, this would
   /// be the [DivElement] that encompasses the [Form], or the [ParagraphElement]
   /// that materializes the [TextOutput].
   Object get uiRepresentation;
+
   /// Append child method. Concrete implementation is in subclass.
   void appendChild(Object childUiRepresentation);
 }
@@ -220,8 +233,8 @@ Map<String, CustomTagHandler> customTagHandlers = {
     return new PresenterSubmitButton(attributes["name"], attributes["id"]);
   },
   CheckboxInputBase.elementClass: (Object jsonObject) {
-      Map attributes = _getAttributesFromJsonML(jsonObject);
-      return new PresenterCheckboxInput(attributes["name"], attributes["id"]);
+    Map attributes = _getAttributesFromJsonML(jsonObject);
+    return new PresenterCheckboxInput(attributes["name"], attributes["id"]);
   },
   RangeInputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
@@ -237,13 +250,13 @@ Map<String, CustomTagHandler> customTagHandlers = {
   },
   MultipleChoiceInputBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new PresenterMultipleChoiceInput(attributes["name"],
-        attributes["id"]);
+    return new PresenterMultipleChoiceInput(
+        attributes["name"], attributes["id"]);
   },
   OptionBase.elementClass: (Object jsonObject) {
     Map attributes = _getAttributesFromJsonML(jsonObject);
-    return new PresenterOption(attributes["text"],
-        attributes["selected"] == "true", attributes["id"]);
+    return new PresenterOption(
+        attributes["text"], attributes["selected"] == "true", attributes["id"]);
   }
 };
 
@@ -314,6 +327,7 @@ class PresenterRangeInput extends RangeInputBase
   PresenterRangeInput(String name, String id) : super(name) {
     this.id = id;
   }
+
   /// The String representation. This is computed on the [Scripter] side
   /// and can be, for example, something like "90%" for [:0.9:] (percentage) or
   /// "intelligent" for [:120:] (IQ).
@@ -339,6 +353,7 @@ class PresenterRangeOutput extends RangeOutputBase
   PresenterRangeOutput(String name, String id) : super(name) {
     this.id = id;
   }
+
   /// Current String representation.
   String currentStringRepresentation;
 
@@ -384,8 +399,8 @@ class PresenterMultipleChoiceInput extends MultipleChoiceInputBase
 class PresenterOption extends OptionBase
     implements BlueprintWithUiRepresentation {
   /// Creates new PresenterOption with a given [text], if [selected] and [id].
-  PresenterOption(String text, bool selected, String id) :
-    super(text, selected: selected) {
+  PresenterOption(String text, bool selected, String id)
+      : super(text, selected: selected) {
     this.id = id;
   }
 
