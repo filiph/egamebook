@@ -21,8 +21,8 @@ Or how to be a published interactive fiction writer in 8 easy steps!
 
 ### Graphing your egamebook
 
-Also included with the quick_start project is a GraphML file. GraphML is editable in 
-the free, cross-platform [yEd](http://www.yworks.com/en/products_yed_about.html) 
+Also included with the quick_start project is a GraphML file. GraphML is editable in
+the free, cross-platform [yEd](http://www.yworks.com/en/products_yed_about.html)
 editor. In this way, you have a much more visual way of designing the
 flow of your egamebook.
 
@@ -40,7 +40,7 @@ Your .egb file will be updated with the new pages and choices.
 
 ## egb file format
 
-The .egb (read: _egg_) file is the main source of your egamebook. 
+The .egb (read: _egg_) file is the main source of your egamebook.
 
 The `egb` format is basically a [Markdown](http://daringfireball.net/projects/markdown/) file with an optional MultiMarkdown-style [metadata header](https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide#metadata), and some custom gamebook-specific syntax.
 
@@ -63,7 +63,7 @@ A basic one can look like this:
     ---
     run
 
-    You managed to get out of the room before the spiders got to you, 
+    You managed to get out of the room before the spiders got to you,
     but now you're in a room full of giant worms.
 
 This will create an egamebook that starts in the first room (conveniently named _start_ in this case) and gives the player two choices. These lead to the other two sections: _squash_ and _run_. Both these sections don't contain any choices, so they're the end of this 'book'.
@@ -87,18 +87,18 @@ Let's go through some more complex examples while showing advanced features. Ple
 
     These two paragraphs are above the first page, so they will be the 'welcome' message (Synopsis). This is what players read before the game is loaded.
 
-    <declarations>
+    <declare>
       int time;
       String weapon;
-    </declarations>
+    </declare>
 
     ---
     Day1.WakeUp
-    
-    You wake up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You backstabbing idiot." 
+
+    You wake up and quickly realize the house is surrounded by the police. "Oh Rick," you sigh. "You backstabbing idiot."
 
     You have a minute at most before the pigs kick the door in.
-    
+
     <script>
       time = 0;
     </script>
@@ -197,7 +197,7 @@ Let's go through some more complex examples while showing advanced features. Ple
     You jump through the window, catch hold of some branches of the backyard tree and fall down on the grass with a thump. You hear "Shit!" from the side, so you send a blind shot there, and start running towards the white fence. The adventure begins.
 
     - [theAdventureBegins]
-  
+
     ---
     wasted
 
@@ -231,7 +231,7 @@ Lastly, you can have **empty choices** that do nothing. It's for when you want t
 
     - Pick up the shovel [{hasShovel = true;}]
     - Leave it alone [{}]
-    
+
 You probably don't want to use an empty choice at the end of a page, unless you want that to be the last choice the player takes (with no feedback).
 
 #### Simple text results
@@ -239,12 +239,12 @@ You probably don't want to use an empty choice at the end of a page, unless you 
 Sometimes, you want to have a choice inside the page that just shows some text and you don't want to use something like `[{echo("blah blah")}]` nor do you want to create separate pages for the given options. For these cases, we have this:
 
     - Enter through the doorway [
-        You walk through the doorway and enter the living room. 
+        You walk through the doorway and enter the living room.
         Nobody's here.
       {}]
     - Enter through the window [
-        You stealthily crawl down the porch and make it into the 
-        living room through the window. It turns out nobody's 
+        You stealthily crawl down the porch and make it into the
+        living room through the window. It turns out nobody's
         here, so your spy move was wasted.
       {}]
 
@@ -316,9 +316,9 @@ You can use scripts inside the pages. You start them by putting `<script>` on a 
 Note: The scripts are written in the [Dart programming language](http://dartlang.org). It's very similar to JavaScript, but more consistent and easier to use. It's also designed from the ground up to handle huge projects.
 
 The variables you use in scripts can be also accessed in normal text blocks. For example, after you have the `coins` variable defined, you can write something like this (note that there is no `<script>` tag):
-  
+
     You check your moneybag and and find out you have $coins coins.
-    
+
 The `$coins` is a standard Dart way to paste a variable into text. You can also use all the advanced ways to access variables using [Dart string interpolation](http://www.dartlang.org/docs/dart-up-and-running/contents/ch02.html#strings "Chapter 2. A Tour of the Dart Language from Dart: Up and Running | Dart: Structured web apps"), if you're into that kind of thing.
 
 There are a few special functions that you can always use inside any script. They are:
@@ -343,7 +343,7 @@ Every `<script>` block is actually a function (closure), so variables initialize
       // This variable was declared above and will stay.
       b = "World!";
     </script>
-    
+
 The `b` variable will also be automatically saved _between_ play sessions. When the player closes the browser and opens it later, your variables will be still there without you needing to worry about it.
 
 <!--Technical note: This is made possible by Dart's noSuchMethod functionality. Non-initialized variables (like `b` above) are automaticaly saved into the magic `vars` Map. So the `b` above is accessible and assignable both through `b` as well as through `vars["b"]`, and its value will persist between play session.-->
@@ -364,7 +364,7 @@ You can put this line anywhere in your file. It will be automatically hoisted to
 
 #### Declare block(s)
 
-In this block, you declare the variables that you will use throughout the book. Those are the variables that describe player's progress and the game world's state. They will persist during gameplay and between play sessions.
+In this block, you declare the variables that you will use throughout the book. Those are the variables that describe the player's progress and the game world's state. They will persist during gameplay and between play sessions.
 
     <declare>
       // Player's coins and experience points.
@@ -385,20 +385,31 @@ You can type your variables for better code structure and easier debugging.
 
 With typing, the compiler will warn you if you try to, for example, assign `1.5` to `coins` (should be integer) or `"yes"` to `isMagicUser` (should be either `true` or `false`). This can save you headaches.
 
-But you're still free not to use typing. Just use `var`.
+But you're still free not to use typing.
 
 #### Init blocks
 
-The init block is called every time the player opens the book _and_ before he/she loads a savegame. It should contain initializations of the variables that you define in `<declare>` but can't initialize there. This is relatively rare but important. For example:
+The init block is called every time the player opens the book _and_ before he/she loads a savegame. It should contain initializations of the variables that you define in `<declare>`.
+
+This should be only needed for instances that need some work to get initialized. These are things that, in a Dart program, would either be initialized in the constructor, or in some kind of `init()` method.
+
+This is relatively rare but important. For example:
 
     <declare>
       CustomSimulationClass simulation;
+      List<int> levels = [];
     </declare>
 
     <init>
-      // The CustomSimulationClass takes [this] in order to be able to do its work.
+      // The CustomSimulationClass takes [this] (Scripter) in order to be able to do its work.
       // The line below wouldn't work in <declare>.
       simulation = new CustomSimulationClass(this);
+
+      // You can execute any Dart code in <init>. (This is in contrast to
+      // <declare> where you can only declare variables.)
+      for (int i = 0; i < 1000; i++) {
+        levels.add(i);
+      }
     </init>
 
 Remember that the init block is run _before_ any savegame is loaded. This means that when the player saves a game after `time` has been incremented to 42, when he loads again, time will equal 42 (and not 0).
@@ -451,13 +462,13 @@ The Spider class above could look like this:
         if (name == null)
           name = "horrible unnamed spider";
       }
-    
+
       torture() {
         legs -= 1;
       }
-      
+
       toMap() => {"legs": legs, "name": name};
-      
+
       updateFromMap(map) {
         legs = map["legs"];
         name = map["name"];
@@ -542,7 +553,7 @@ This is what the book can then look like after being converted from `.egb` to a 
         );
 
         // ... snip other pages ...
-        
+
         firstPage = pageMap[r"""Day1.WakeUp"""];    
       }
 
@@ -584,7 +595,7 @@ The application's `main()` then looks like this:
     void main() {
       // This will be rewritten with the actual file.
       var scripterPath = '[[PathToEgbScripterImplementation]]';
-      
+
       // create the presenter
       Presenter presenter = new HtmlPresenter();
       // open store
@@ -613,7 +624,7 @@ or
 Generate documentation into docs/ folder:
 
     dart bin/docgen.dart
-    
+
 Generate documentation into docs/ folder and serve it in the web browser:
 
     dart bin/docgen.dart --serve
