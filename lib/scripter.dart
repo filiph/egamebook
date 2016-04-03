@@ -22,6 +22,7 @@ import 'dart:async';
 export 'src/persistence/saveable.dart';
 
 import "src/book/scripter_proxy.dart";
+import 'package:egamebook/src/presenter/form_proxy.dart';
 
 part 'src/book/scripter_page.dart';
 part 'src/book/points_counter.dart';
@@ -451,7 +452,10 @@ abstract class Scripter extends ScripterViewedFromPresenter {
 
     if (_currentForm != null) {
       DEBUG_SCR("We have a form.");
-      Stream<CurrentState> stream = presenter.showForm(_currentForm);
+      // XXX: we shouldn't need to convert Form to Map only to convert it
+      // to FormProxy. Maybe getting rid of FormProxy altogether?
+      FormProxy proxy = new FormProxy.fromMap(_currentForm.toMap());
+      Stream<CurrentState> stream = presenter.showForm(proxy);
       StreamSubscription subscription;
       subscription = stream.listen((CurrentState values) {
         DEBUG_SCR("New values = $values.");
