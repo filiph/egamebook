@@ -6,8 +6,7 @@ import 'dart:convert';
 
 import 'package:path/path.dart' as path;
 import 'package:logging/logging.dart';
-//import 'package:graphml/dart_graphml.dart';
-import 'package:quiver/streams.dart' as quiver_streams;
+import 'package:quiver/async.dart' as quiver_streams;
 
 import 'src/shared/page.dart';
 import 'src/shared/user_interaction.dart';
