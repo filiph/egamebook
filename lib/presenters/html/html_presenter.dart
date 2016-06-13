@@ -136,7 +136,7 @@ class HtmlPresenter extends Presenter {
         .remove("hidden");
     startButton.disabled = false;
     startButton.onClick.first.then((_) {
-      bookDiv.style.display = "block"; // TODO: necessary?
+      document.body.classes.remove("title-open");
       new Future(() {
         // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
