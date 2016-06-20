@@ -23,11 +23,11 @@ class FileHierarchy {
   /// Returns list of files of type [File] and extension [fileType]
   /// from [directoryFrom].
   List<File> _listFiles(Directory directoryFrom) {
-    return directoryFrom
-        .listSync(recursive: true, followLinks: false)
-        .where(
-            (entity) => entity is File && p.extension(entity.path) == FILE_TYPE)
-        .toList();
+    var contents = directoryFrom.listSync(recursive: true, followLinks: false);
+
+    var files = new List<File>.from(contents.where((entity) => entity is File));
+
+    return files.where((file) => p.extension(file.path) == FILE_TYPE).toList();
   }
 
   /// Creates hierarchy of files from [fromDirectory] or parent of [fromFile].
@@ -137,6 +137,6 @@ class FileHierarchy {
     }
     return _filesHierarchy[master.path]
         .map((path) => new File(path))
-        .toList(growable: false);
+        .toList(growable: false) as List<File>;
   }
 }

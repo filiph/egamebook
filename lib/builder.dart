@@ -420,27 +420,23 @@ class Builder {
     * @return   A Future. On completion, the future returns `this` for
     *           convenience.
     */
-  Future<Builder> readEgbFile(File f) {
+  Future<Builder> readEgbFile(File f) async {
     var completer = new Completer();
 
     inputEgbFile = f;
 
-    f.exists().then((exists) {
-      if (!exists) {
-        completer.completeError(new Exception("File $f doesn't exist."));
-      } else {
-        inputEgbFileFullPath = f.path;
-        print("Reading input file $f.");
+    bool exists = await f.exists();
 
-        var inputStream = _createInputStreamFromMasterFile(f);
+    if (!exists) {
+      throw new Exception("File $f doesn't exist.");
+    }
 
-        readInputStream(inputStream)
-            .then((b) => completer.complete(b))
-            .catchError((e) => completer.completeError(e));
-      }
-    }).catchError((e) => completer.completeError(e));
+    inputEgbFileFullPath = f.path;
+    print("Reading input file $f.");
 
-    return completer.future;
+    var inputStream = _createInputStreamFromMasterFile(f);
+
+    return await readInputStream(inputStream);
   }
 
   /// Takes the master file ("bodega.egb"), finds all the part files
