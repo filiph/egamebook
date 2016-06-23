@@ -26,12 +26,11 @@ import '../../src/shared/stat.dart';
 
 // because we're defining localStorage here
 import '../../src/persistence/storage.dart';
-import '../../src/persistence/player_profile.dart';
 
 import '../../src/presenter/choice_with_infochips.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
-import "package:html5lib/dom.dart" as html5lib;
+import "package:html/dom.dart" as html5lib;
 
 /// Class HtmlPresenter wraps HTML presenter for the application.
 ///
@@ -294,17 +293,6 @@ class HtmlPresenter extends Presenter {
     }
     // Remove _metaElements whose actions have already been triggered.
     _metaElements.removeWhere((metaEl) => metaEl.done);
-  }
-
-  /**
-   * Checks if user scrolled past the end of [bookDiv].
-   */
-  bool _isScrolledPastToEnd() {
-    var currentBottom = window.pageYOffset + window.innerHeight;
-    var bookDivBottom = bookDiv.offsetTop + bookDiv.offsetHeight;
-    print("checking scroll: bookdiv = ${bookDivBottom}, "
-        "currentBottom =  ${currentBottom}");
-    return (bookDivBottom < currentBottom - 20);
   }
 
   @override
@@ -1286,7 +1274,7 @@ class HtmlRangeInput extends HtmlRangeBase {
       ..value = "$i";
     _updateRadioButton(i, radioButton);
 
-    StreamSubscription subscription = radioButton.onClick.listen((ev) {
+    radioButton.onClick.listen((ev) {
       if (!radioButton.disabled) {
         _current = i;
         _onChangeController.add(ev);
@@ -1715,9 +1703,4 @@ class FootnoteSupTagSyntax extends mdown.TagSyntax {
     parser.addNode(element);
     return true;
   }
-}
-
-String _exchangeChars(String input, String char) {
-  final RegExp re = new RegExp(r"\w");
-  return input.replaceAll(re, char);
 }

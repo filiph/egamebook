@@ -1,12 +1,12 @@
 name: egamebook
-version: 0.0.2
+version: 0.1.0
 author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   a_star: any
   analyzer: "0.25.0+1"
   args: any
   browser: any
-  html5lib: any
+  html: any
   jsonml: any
   markdown: any
   path: any
@@ -15,5 +15,6 @@ dependencies:
   logging: any
   quiver: any
   ansicolor: "^0.0.9"
+  resource: any
 executables:
   egamebook:

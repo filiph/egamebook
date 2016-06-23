@@ -202,9 +202,6 @@ abstract class Scripter extends ScripterViewedFromPresenter {
   /// Page that is currently being read.
   ScripterPage currentPage;
 
-  /// The ChoiceList to be shown on next occasion.
-  Savegame _choicesToShow;
-
   /// Getter returns awarded points to player.
   PointsCounter get points => _points;
 

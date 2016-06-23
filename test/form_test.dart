@@ -72,13 +72,11 @@ void main() {
     Option option1, option2, option3;
     TextOutput textOutput;
 
-    int age, money;
-
     setUp(() {
       form = new Form();
-      input1 = new RangeInput("Age", (value) => age = value,
+      input1 = new RangeInput("Age", (_) {},
           min: 20, max: 100, value: 30, step: 1, maxEnabled: 40);
-      input2 = new RangeInput("Money", (value) => money = value,
+      input2 = new RangeInput("Money", (_) {},
           max: 1000, step: 100);
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
       multipleChoiceInput = new MultipleChoiceInput("Multiple Choice", (_) {});
@@ -244,7 +242,7 @@ void main() {
     CheckboxInput checkboxInput;
     TextOutput textOutput;
     SubmitButton submitButton;
-    int age, money, freetime;
+    int age;
     Presenter presenter;
     Store store;
     ScripterProxy scripterProxyStub;
@@ -259,9 +257,9 @@ void main() {
           step: 5,
           minEnabled: 25,
           maxEnabled: 40);
-      input2 = new RangeInput("Money", (value) => money = value,
+      input2 = new RangeInput("Money", (_) {},
           max: 1000, step: 100);
-      input3 = new RangeInput("Free time", (value) => freetime = value,
+      input3 = new RangeInput("Free time", (_) {},
           max: 10, maxEnabled: 5);
       submitButton = new SubmitButton("SUBMIT BUTTON", null,
           helpMessage: "Submit help message");
@@ -363,8 +361,6 @@ void main() {
 
     test("creates submit button", () {
       form.children.add(submitButton);
-      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = presenter.showForm(formProxy);
       ButtonElement buttonEl = querySelector("button.submit-button");
       expect(buttonEl, isNotNull);
       expect(buttonEl.text, submitButton.name);
@@ -374,7 +370,6 @@ void main() {
       checkboxInput.disabled = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
@@ -391,7 +386,6 @@ void main() {
       checkboxInput.hidden = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
-      Stream<CurrentState> stream = presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.parent.classes.contains("display-none"), true);
@@ -470,7 +464,7 @@ void main() {
     });
 
     test("values update", () {
-      var inputMoney = new RangeInput("Money", (value) => money = value,
+      var inputMoney = new RangeInput("Money", (_) {},
           stringifyFunction: (int value) => "\$$value", max: 1000, step: 100);
       var inputPercentage = new RangeInput("Thrust", (value) {},
           max: 100, step: 10, stringifyFunction: (int value) => "$value %");

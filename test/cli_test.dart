@@ -2,7 +2,6 @@ library cli_test;
 
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
 import 'dart:collection';
 import 'package:test/test.dart';
 import 'package:args/command_runner.dart';

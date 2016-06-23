@@ -1,7 +1,6 @@
 library egb_presenter;
 
 import 'dart:async';
-import 'dart:isolate';
 
 import 'src/shared/user_interaction.dart';
 import 'src/persistence/savegame.dart';
@@ -106,9 +105,6 @@ abstract class Presenter implements PresenterViewedFromScripter {
 
   /// Either loads the latest savegame or -- if missing -- creates a new one.
   Future<Presenter> continueSavedGameOrCreateNew() async {
-    Savegame lastSavegame;
-    Set<String> playerChronology;
-
     Savegame savegame = await playerProfile.loadMostRecent();
 
     Set<String> chronology = new Set<String>();

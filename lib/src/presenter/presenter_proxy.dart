@@ -9,7 +9,6 @@ import '../shared/stat.dart';
 import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
-import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 
 /**
@@ -180,10 +179,6 @@ class IsolatePresenterProxy extends PresenterProxy {
 //            "Scripter - ${message.type}.");
     }
   }
-
-  /// A cache of text messages so we can send them all together instead of
-  /// one by one.
-  final List<Message> _textMessageCache = new List<Message>();
 
   /// Message backglog. TODO solve.
   Message _messageBacklog; // TODO: get rid of this (no ZipMessage!)
