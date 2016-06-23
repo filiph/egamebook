@@ -1,14 +1,18 @@
 # egamebook
 
-A system which automatically creates playable electronic gamebooks from .egb files.
+A system which automatically creates playable electronic gamebooks from `.egb` files.
 
 ## Quick Start
 
-Or how to be a published interactive fiction writer in 8 easy steps!
+Or how to be a published interactive fiction writer in X easy steps!
 
 1. [Install Dart](https://www.dartlang.org/downloads/).
+2. Download this repository to your machine. You can do this in 2 ways:
+  * By opening the terminal (command line), going to a directory where you want your egamebook projects to be (for example, `cd ~/projects`), and running `git clone https://github.com/filiph/egamebook.git` (you'll need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) for this).
+  * Or, by downloading this repository as a zip file (see the green button above) and decompressing it in a directory of your choosing (for example, `~/projects`).
+2. In terminal (a.k.a. the command line), go to the directory with your local copy of egamebook. 
 2. On the command line, run `pub global activate egamebook`. This will install the `egamebook` command line tool.
-4. Go to a folder where you want your egamebook project to live (for example, `cd ~/projects`).
+4. Go to the folder containing your local copy of egamebook (for example, `cd ~/projects`).
 4. Run `egamebook create name` where `name` is the name of your egamebook project. This will create a new subdirectory in the current directory with that name.
 4. Go to the newly created directory (for example, `cd name`).
 5. Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
@@ -323,10 +327,10 @@ The `$coins` is a standard Dart way to paste a variable into text. You can also 
 
 There are a few special functions that you can always use inside any script. They are:
 
-* `**echo**("Hello world.")` -- This will print "Hello world." in the book. With this, you can have deep, algorithmic control over what gets printed.
-* `**goto**("squash")` -- This will go to the section called _squash_ after the execution of the current script block has completed. Especially useful in conjunction with `if-else` control structures.
-* `**nextScript**(() { echo("Belated greetings."); })` -- This will call the provided function (which in this case prints "Belated greetings.") right after the execution of the current script has ended. You can string unlimited number of scripts to be executed one after another.
-* `**repeatBlock**()` -- This will repeat the current script block after it's done, creating a loop. This is great for iterative minigames - you repeat something until the game (puzzle, combat, ...) is resolved.
+* `echo("Hello world.")` -- This will print "Hello world." in the book. With this, you can have deep, algorithmic control over what gets printed.
+* `goto("squash")` -- This will go to the section called _squash_ after the execution of the current script block has completed. Especially useful in conjunction with `if-else` control structures.
+* `nextScript(() { echo("Belated greetings."); })` -- This will call the provided function (which in this case prints "Belated greetings.") right after the execution of the current script has ended. You can string unlimited number of scripts to be executed one after another.
+* `repeatBlock()` -- This will repeat the current script block after it's done, creating a loop. This is great for iterative minigames - you repeat something until the game (puzzle, combat, ...) is resolved.
 
 #### Variable persistence
 
