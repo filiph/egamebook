@@ -17,7 +17,7 @@ Or how to be a published interactive fiction writer in X easy steps!
 4. Go to the newly created directory (for example, `cd name`).
 5. Run `egamebook watch`. This will watch the current directory for changes and will re-build the project any time you change anything.
 6. Edit the `egb` file (for example, file `name.egb` in the project's directory). This is the main source of your book. Any edit will rebuild what's necessary.
-7. Open `web/index.html` in your favorite browser to test the egamebook in action.
+7. Run pub serve in the project folder and then open http://localhost:8080/ in your favorite browser to test the egamebook in action.
 8. If you want to build the folder or file manually, run `egamebook build`. By default only one master egb file in directory can be built.
 9. Find more options with `egamebook --help` or `egamebook <command_name> --help`.
 
