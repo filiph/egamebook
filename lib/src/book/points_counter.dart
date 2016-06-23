@@ -18,7 +18,7 @@ class PointsCounter implements Saveable {
   /// In order to not break possible arithmetics inside scripts the PointsCounter
   /// should look like it's adding the points even though it's not.
   /// TODO
-  int _embargoedPoints;
+  //  int _embargoedPoints;
 
   /// Creates new PointsCounter.
   PointsCounter() {

@@ -1,5 +1,6 @@
 library egb_cli;
 
+import 'dart:core' hide Resource;
 import 'dart:async';
 import 'dart:io';
 import 'dart:collection';
@@ -10,6 +11,7 @@ import 'package:egamebook/builder.dart';
 import 'package:egamebook/presenters/html/main_entry_point.dart'
     show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 import 'package:ansicolor/ansicolor.dart';
+import 'package:resource/resource.dart';
 
 /// Abstract class [Worker] is an interface for all worker classes
 /// which process the commands.

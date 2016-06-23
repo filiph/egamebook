@@ -317,18 +317,6 @@ class BuilderInitBlock implements BuilderLineRange {
   /// Block type init.
   static const int BLK_INIT = 16;
 
-  /// String representation of block type classes in [BLK_CLASSES].
-  @deprecated
-  static const String BLK_CLASSES_STRING = "classes";
-
-  /// String representation of block type functions in [BLK_FUNCTIONS].
-  @deprecated
-  static const String BLK_FUNCTIONS_STRING = "functions";
-
-  /// String representation of block type variables in [BLK_VARIABLES].
-  @deprecated
-  static const String BLK_VARIABLES_STRING = "variables";
-
   /// String representation of block type declaration in [BLK_DECLARE].
   static const String BLK_DECLARE_STRING = "declare";
 
@@ -347,12 +335,6 @@ class BuilderInitBlock implements BuilderLineRange {
   /// If the string representation doesn't exist, exception is thrown.
   static int typeFromString(String s) {
     switch (s) {
-      case BLK_CLASSES_STRING:
-        return BLK_CLASSES;
-      case BLK_FUNCTIONS_STRING:
-        return BLK_FUNCTIONS;
-      case BLK_VARIABLES_STRING:
-        return BLK_VARIABLES;
       case BLK_DECLARE_STRING:
         return BLK_DECLARE;
       case BLK_INIT_STRING:
@@ -365,13 +347,7 @@ class BuilderInitBlock implements BuilderLineRange {
   /// Returns builder mode according to the block type string representation.
   /// If the string representation doesn't exist, exception is thrown.
   static int modeFromString(String s) {
-    if (s == BLK_CLASSES_STRING) {
-      return Builder.MODE_INSIDE_CLASSES;
-    } else if (s == BLK_FUNCTIONS_STRING) {
-      return Builder.MODE_INSIDE_FUNCTIONS;
-    } else if (s == BLK_VARIABLES_STRING) {
-      return Builder.MODE_INSIDE_VARIABLES;
-    } else if (s == BLK_DECLARE_STRING) {
+    if (s == BLK_DECLARE_STRING) {
       return Builder.MODE_INSIDE_DECLARE;
     } else if (s == BLK_INIT_STRING) {
       return Builder.MODE_INSIDE_INIT;
@@ -421,8 +397,6 @@ class Builder {
     *           convenience.
     */
   Future<Builder> readEgbFile(File f) async {
-    var completer = new Completer();
-
     inputEgbFile = f;
 
     bool exists = await f.exists();
@@ -468,7 +442,6 @@ class Builder {
 
     _lineNumber = 0;
     _pageNumber = 0;
-    _blockNumber = 0;
 
     StreamSubscription subscription;
 
@@ -947,11 +920,7 @@ class Builder {
         }
       } else {
         // closing a tag
-        if (_mode == MODE_INSIDE_CLASSES ||
-            _mode == MODE_INSIDE_FUNCTIONS ||
-            _mode == MODE_INSIDE_VARIABLES ||
-            _mode == MODE_INSIDE_DECLARE ||
-            _mode == MODE_INSIDE_INIT) {
+        if (_mode == MODE_INSIDE_DECLARE || _mode == MODE_INSIDE_INIT) {
           _mode = MODE_NORMAL;
           initBlocks.last.lineEnd = number;
           return true;
@@ -973,10 +942,7 @@ class Builder {
    * @return    bool, indicating the result of the check.
    **/
   bool _checkScriptTags(int number, String line) {
-    if (_mode == MODE_INSIDE_CLASSES ||
-        _mode == MODE_INSIDE_VARIABLES ||
-        _mode == MODE_INSIDE_FUNCTIONS ||
-        _mode == MODE_INSIDE_DECLARE ||
+    if (_mode == MODE_INSIDE_DECLARE ||
         _mode == MODE_INSIDE_INIT ||
         line == null) {
       return false;
@@ -1974,177 +1940,6 @@ class Builder {
       path.basenameWithoutExtension(egbPath);
 
   /**
-   * Writes GraphML file from current Builder object.
-   **/
-//  Future<bool> writeGraphMLFile() {
-//    var completer = new Completer();
-//
-//    var pathToOutputGraphML = getPathFor("graphml");
-//    File graphmlOutputFile = new File.fromPath(pathToOutputGraphML);
-//    IOSink graphmlOutStream = graphmlOutputFile.openWrite();
-//
-//    try {
-//      updateGraphML();
-//      graphmlOutStream.write(graphML.toString());
-//    } on Exception catch (e) {
-//      throw e;
-//    } finally {
-//      graphmlOutStream.close();
-//      graphmlOutStream.done.then((_) {
-//        completer.complete(true);
-//      });
-//    }
-//
-//    return completer.future;
-//  }
-
-  /**
-   * Builds the [graphML] structure from the current Builder instance.
-   **/
-//  void updateGraphML() {
-//    graphML = new GraphML();
-//
-//    // create group nodes
-//    Map<String, Node> pageGroupNodes = new Map<String, Node>();
-//    for (int i = 0; i < pageGroups.length; i++) {
-//      var node = new Node(pageGroups[i].name);
-//      pageGroupNodes[pageGroups[i].name] = node;
-//      graphML.addGroupNode(node);
-//    }
-//
-//    // create nodes
-//    Map<String, Node> pageNodes = new Map<String, Node>();
-//    for (int i = 0; i < pages.length; i++) {
-//      var node = new Node(pages[i].nameWithoutGroup);
-//      pageNodes[pages[i].name] = node;
-//      if (pages[i].group != null) {
-//        node.parent = pageGroupNodes[pages[i].groupName];
-//      }
-//      graphML.addNode(node);
-//    }
-//
-//    // create graph edges
-//    for (int i = 0; i < pages.length; i++) {
-//      BuilderPage page = pages[i];
-//      for (int j = 0; j < page.gotoPageNames.length; j++) {
-//        String gotoHandle = page.gotoPageNames[j];
-//
-//        if (pageHandles.containsKey("${page.groupName}: $gotoHandle")) {
-//          graphML.addEdge(
-//              pageNodes[page.name],
-//              pageNodes["${page.groupName}: $gotoHandle"]);
-//        } else if (pageHandles.containsKey(gotoHandle)) {
-//            graphML.addEdge(
-//                pageNodes[page.name],
-//                pageNodes[gotoHandle]);
-//        } else {
-//          WARNING( "Choice links to a non-existent page ('$gotoHandle')"
-//                " in page ${page.name}. Creating new page/node.");
-//
-//          var newPage = new BuilderPage(gotoHandle, pages.length);
-//          var node = new Node(newPage.nameWithoutGroup);
-//          pageNodes[newPage.name] = node;
-//          if (newPage.group != null) {
-//            node.parent = pageGroupNodes[newPage.groupName];
-//          }
-//          graphML.addNode(node);
-//
-//          graphML.addEdge(
-//              pageNodes[page.name],
-//              pageNodes[newPage.name]);
-//        }
-//      }
-//    }
-//
-//    graphML.updateXml();
-//  }
-
-  /**
-   * Opens the .graphml file, updates [graphML] from it, then calls
-   * [updateFromGraphML()].
-   */
-//  Future<bool> updateFromGraphMLFile() {
-////    Completer completer = new Completer();
-//
-//    var pathToInputGraphML = getPathFor("graphml");
-//    File graphmlInputFile = new File.fromPath(pathToInputGraphML);
-//
-//    graphML = new GraphML.fromFile(graphmlInputFile); // TODO: make async!
-//
-//    updateFromGraphML();
-//    return new Future.immediate(true);
-//  }
-//
-//  /**
-//   * Updates the Builder instance from the current state of [graphML].
-//   */
-//  void updateFromGraphML() {
-//    // populate map of all nodes in graph
-//    Map<String, Node> nodesToAdd = new Map<String, Node>();
-//    for (var node in graphML.nodes) {
-//      nodesToAdd[node.fullText] = node;
-//    }
-//
-//    // walk the existing Builder instance
-//    for (int i = 0; i < pages.length; i++) {
-//      BuilderPage page = pages[i];
-//      bool pageStays = nodesToAdd.containsKey(page.name);
-//      if (pageStays) {
-//        Node node = nodesToAdd[page.name];
-//
-//        // populate map of all linked nodes in graphml
-//        Set<Node> linkedNodesToAdd = new Set<Node>.from(node.linkedNodes);
-//        Map<String, Node> linkedPageFullNamesToAdd = new Map<String, Node>();
-//        for (var node in linkedNodesToAdd) {
-//          linkedPageFullNamesToAdd[node.fullText] = node;
-//        }
-//
-//        // create set of gotoPageNames to be deleted
-//        Set<String> gotoPageNamesToDelete = new Set<String>();
-//
-//        // walk through goto links in egb
-//        for (var gotoPageName in page.gotoPageNames) {
-//          // make sure
-//          bool linkStays = linkedPageFullNamesToAdd.containsKey(gotoPageName);
-//          if (linkStays) {
-//            var linkedNode = linkedPageFullNamesToAdd[gotoPageName];
-//            linkedNodesToAdd.remove(linkedNode);
-//          } else {
-//            gotoPageNamesToDelete.add(gotoPageName);
-//          }
-//        }
-//
-//        // delete excesive gotos
-//        page.gotoPageNames = page.gotoPageNames
-//                       .where((name) => !gotoPageNamesToDelete.contains(name)).toList();
-//
-//        // add remaining linked nodes
-//        for (var linkedNode in linkedNodesToAdd) {
-//          page.gotoPageNames.add(linkedNode.fullText);
-//        }
-//      } else {
-//        page.commentOut = true;
-//      }
-//
-//      // remove the node from "stack" if it's there
-//      nodesToAdd.remove(page.name);
-//    }
-//
-//    // TODO: add new groupNodes
-//
-//    // add remaining nodes
-//    nodesToAdd.forEach((String fullText, Node node) {
-//
-//      int newIndex = pages.last.index + 1;
-//      var newPage = new BuilderPage(fullText, newIndex);
-//      pageHandles[fullText] = newIndex;
-//      node.linkedNodes.forEach(
-//          (linkedPage) => newPage.gotoPageNames.add(linkedPage.fullText)); // TODO: no need to fully qualify sometimes
-//      pages.add(newPage);
-//    });
-//  }
-
-  /**
    * Updates the .egb file according to the current state of the Builder
    * instance.
    */
@@ -2409,7 +2204,6 @@ void main(List<String> args, SendPort mainIsolatePort) {
   int _lineNumber; // TODO: Because checking is async right now, this
   // is only an _unreliable_ way of getting actual line number
   int _pageNumber;
-  int _blockNumber;
 
   //String _thisLine;
 

@@ -6,7 +6,6 @@ import 'package:path/path.dart' as path;
 
 import 'dart:collection';
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:egamebook/src/persistence/storage.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
@@ -89,9 +88,6 @@ Future<Presenter> run(String dartFilename, {Store persistentStore: null}) {
   }
   mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(dartFilename));
-
-  Savegame lastSavegame;
-  Set<String> playerChronology;
 
   return bookProxy.init().then((_) {
     mockPresenter.setScripter(bookProxy);

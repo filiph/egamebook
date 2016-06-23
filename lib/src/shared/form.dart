@@ -99,7 +99,7 @@ library egb_form;
  * From these blueprints, the presenter creates and updates [UiElement].
  */
 
-import "package:html5lib/dom.dart" as html5lib;
+import "package:html/dom.dart" as html5lib;
 import "package:jsonml/html5lib2jsonml.dart";
 import 'dart:math' as math;
 
