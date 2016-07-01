@@ -361,6 +361,8 @@ void main() {
 
     test("creates submit button", () {
       form.children.add(submitButton);
+      FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
       ButtonElement buttonEl = querySelector("button.submit-button");
       expect(buttonEl, isNotNull);
       expect(buttonEl.text, submitButton.name);
@@ -370,6 +372,7 @@ void main() {
       checkboxInput.disabled = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.disabled, true);
@@ -386,6 +389,7 @@ void main() {
       checkboxInput.hidden = true;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
+      presenter.showForm(formProxy);
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxEl.parent.classes.contains("display-none"), true);
