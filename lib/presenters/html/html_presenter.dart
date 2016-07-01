@@ -791,6 +791,7 @@ class HtmlForm extends HtmlUiElement {
       StreamSubscription subscription;
       subscription = submitButton.onClick.listen((ev) {
         _onChangeController.add(ev);
+        destroy();
         subscription.cancel();
       });
       uiRepresentation.append(submitButton);
@@ -825,6 +826,10 @@ class HtmlForm extends HtmlUiElement {
   /// Getter [onChange] returns [Stream] of its on change [StreamController].
   @override
   Stream get onChange => _onChangeController.stream;
+
+  void destroy() {
+    _onChangeController.close();
+  }
 
   /// Updates [HtmlForm] after the blueprint is changed. Also the text on existing
   /// [submitButton] is updated with the text from [blueprint]'s submit text.
