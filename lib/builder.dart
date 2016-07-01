@@ -2044,7 +2044,6 @@ class Builder {
 
             new Builder().readEgbFile(inputEgbFile).then((Builder b) {
               completer.complete(b);
-              ;
             });
           });
         }, onError: (e) {
