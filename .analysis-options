@@ -1,2 +1,49 @@
 analyzer:
   strong-mode: true
+  exclude:
+    - books/**
+    - test/files/**
+linter:
+  rules:
+    - always_declare_return_types
+    # - avoid_as  # TODO
+    - avoid_empty_else
+    - avoid_init_to_null
+    - avoid_return_types_on_setters
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions
+    # - close_sinks  # TODO: Pertains to Forms, need to make Forms destroyable
+    # - comment_references
+    # - constant_identifier_names  # TODO: breaking changes, 47 instances
+    - control_flow_in_finally
+    - empty_constructor_bodies
+    - empty_statements
+    - hash_and_equals
+    # - implementation_imports  # TODO: vars generator depends on analyzer
+    - iterable_contains_unrelated_type
+    - library_names
+    - library_prefixes
+    # - non_constant_identifier_names # TODO: will need cleanup, 31 issues
+    # - one_member_abstracts # Worker class probably shouldn't be a function
+    # - only_throw_errors # TODO
+    # - overridden_fields # TODO: snafu around PresenterViewedFromScripter
+
+    # TODO: all below
+    # - package_api_docs
+    # - package_names
+    # - package_prefixed_library_names
+    # - prefer_is_not_empty
+    # - public_member_api_docs
+    # - slash_for_doc_comments
+    # - sort_constructors_first
+    # - sort_unnamed_constructors_first
+    # - super_goes_last
+    # - test_types_in_equals
+    # - throw_in_finally
+    # - type_annotate_public_apis
+    # - type_init_formals
+    # - unawaited_futures
+    # - unnecessary_brace_in_string_interp
+    # - unnecessary_getters_setters
+    # - unrelated_type_equality_checks
