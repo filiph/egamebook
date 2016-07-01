@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:path/path.dart' as path;
 import 'package:logging/logging.dart';
-import 'package:quiver/async.dart' as quiver_streams;
 
 import 'src/shared/page.dart';
 import 'src/shared/user_interaction.dart';
@@ -411,20 +410,21 @@ class Builder {
   /// Takes the master file ("bodega.egb"), finds all the part files
   /// ("bodega_part1.egb", ...) and returns a concatenated input stream as if
   /// all the files were just one.
-  Stream<String> _createInputStreamFromMasterFile(File f) {
+  Stream<String> _createInputStreamFromMasterFile(File f) async* {
     _fileHierarchy.create(fromFile: f);
+
+    // First, return the master file lines.
+    for (var line in await f.readAsLines()) {
+      yield line;
+    }
+
+    // Add all part files.
     var partFiles = _fileHierarchy.getPartFiles(f);
-
-    List<File> files = <File>[f];
-    files.addAll(partFiles);
-
-    // Concatenate the master file [f] with all part files.
-    var inputStream = quiver_streams.concat(files.map((file) => file
-        .openRead()
-        .transform(UTF8.decoder)
-        .transform(const LineSplitter())));
-
-    return inputStream;
+    for (var part in partFiles) {
+      for (var line in await part.readAsLines()) {
+        yield line;
+      }
+    }
   }
 
   /// Reads the given [inputStream] for the contents of the file.
