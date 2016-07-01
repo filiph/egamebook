@@ -88,8 +88,10 @@ void main() {
               unorderedEquals(["visitOnce"]));
           expect(b.pages[b.pageHandles["run"]].options,
               unorderedEquals(["visitOnce", "showOnce"]));
-          expect(b.pages[b.pageHandles["squash"]].visitOnce, isTrue);
-          expect(b.pages[b.pageHandles["run"]].showOnce, isTrue);
+          expect(b.pages[b.pageHandles["squash"]].options.contains("visitOnce"),
+              isTrue);
+          expect(b.pages[b.pageHandles["run"]].options.contains("showOnce"),
+              isTrue);
           expect(b.pages[b.pageHandles["squash"]].toString(),
               equals("BuilderPage <squash> [10:22]"));
         });

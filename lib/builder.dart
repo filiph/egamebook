@@ -147,12 +147,6 @@ class BuilderPage extends Page implements BuilderLineRange {
    */
   Set<String> options;
 
-  /// Getter returns if [:visitOnce:] option is set.
-  bool get visitOnce => options.contains("visitOnce");
-
-  /// Getter returns if [:showOnce:] option is set.
-  bool get showOnce => options.contains("showOnce");
-
   /**
    * List of linked page names. Builder makes sure they are specified in
    * their full version (i.e. "Group 1: Something").
