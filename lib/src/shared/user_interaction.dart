@@ -7,7 +7,7 @@ import 'message.dart';
 import '../book/author_script_exception.dart';
 
 /// Class Choice wraps user interaction choice.
-class Choice implements Comparable {
+class Choice implements Comparable<Choice> {
   /// If the choice is shown.
   bool shown = false;
 
