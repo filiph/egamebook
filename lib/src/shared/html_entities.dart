@@ -1,4 +1,4 @@
-library HTML_Entities;
+library html_entities;
 
 /// Class HtmlEntities stores all HTML entities and provides interface
 /// to convert special characters in text into HTML entities.

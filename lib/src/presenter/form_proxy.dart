@@ -202,7 +202,8 @@ abstract class UiElement {
   /// called on all elements and is meant to be set to false after [Scripter]
   /// has had a chance to react to player's input. It shouldn't override
   /// [disabled] state.
-  bool waitingForUpdate;
+  bool get waitingForUpdate;
+  set waitingForUpdate(bool value);
 
   /// The current value of the UiElement. Only getter, because the values are
   /// set through element blueprint and by calling [update].

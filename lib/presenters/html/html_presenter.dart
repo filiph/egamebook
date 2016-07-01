@@ -736,7 +736,7 @@ abstract class HtmlUiElement extends UiElement {
   HtmlUiElement(FormElement blueprint) : super(blueprint);
 
   /// UI representation as an [Element].
-  Element uiRepresentation;
+  Element get uiRepresentation;
 
   /// If is hidden.
   bool _hidden = false;

@@ -183,7 +183,7 @@ bool isInInitOrDeclareBlock = true;
  */
 abstract class Scripter extends ScripterViewedFromPresenter {
   /// The unique id of this particular gamebook. Used for saving.
-  String uid;
+  String get uid;
 
   /// Information about all pages, their visit counts, and more.
   final ScripterPageMap pageMap = new ScripterPageMap();

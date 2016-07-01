@@ -61,8 +61,6 @@ class IsolatePresenterProxy extends PresenterProxy {
     mainIsolatePort.send(port.sendPort);
   }
 
-  /// Sets scripter to [scripterProxy].
-  Scripter scripter;
   void setScripter(Scripter scripter) {
     this.scripter = scripter;
     scripter.setPresenter(this);
