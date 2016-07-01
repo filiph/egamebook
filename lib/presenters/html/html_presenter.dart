@@ -177,6 +177,7 @@ class HtmlPresenter extends Presenter {
 
   @override
   void close() {
+    _periodicSubscription.cancel();
     super.close();
   }
 

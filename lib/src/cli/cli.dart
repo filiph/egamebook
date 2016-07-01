@@ -249,12 +249,6 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
   /// Path used for watching.
   final String _path;
 
-  /// Subscription to watcher events. Can be used to cancel watching.
-  StreamSubscription _subscription;
-
-  /// Getter returns [_subscription].
-  StreamSubscription get subscription => _subscription;
-
   /// File hierarchy for getting master file from part file.
   final FileHierarchy _hierarchy;
 
@@ -309,7 +303,7 @@ class ProjectWatcher extends Object with BuilderInterface implements Worker {
     ListQueue<File> queue = new ListQueue(); // queue of files
     _hierarchy.create(fromDirectory: directory);
 
-    _subscription = watcher.events.listen((WatchEvent event) {
+    watcher.events.listen((WatchEvent event) {
       File masterFile = _hierarchy.getMasterFile(new File(event.path));
 
       if (event.type != ChangeType.REMOVE &&
