@@ -834,7 +834,7 @@ class HtmlForm extends HtmlUiElement {
   }
 
   @override
-  void set waitingForUpdate(bool _waitingForUpdate) {
+  set waitingForUpdate(bool _waitingForUpdate) {
     // TODO: implement waitingForUpdate
   }
 
@@ -1018,7 +1018,7 @@ class HtmlSubmitButton extends HtmlUiElement {
   /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
   /// is disabled.
   @override
-  void set waitingForUpdate(bool value) {
+  set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
     _waitingForUpdate = value;
   }
@@ -1224,7 +1224,7 @@ abstract class HtmlRangeBase extends HtmlUiElement {
 
   bool _waitingForUpdate = false;
   @override
-  void set waitingForUpdate(bool value) {
+  set waitingForUpdate(bool value) {
     _waitingForUpdate = value;
     _updateRadioButtons();
   }
@@ -1435,7 +1435,7 @@ class HtmlMultipleChoiceInput extends HtmlUiElement {
   /// Implementation of waiting for update. When [:true:], the select element
   /// is disabled.
   @override
-  void set waitingForUpdate(bool value) {
+  set waitingForUpdate(bool value) {
     _childrenSelectElement.disabled = value;
     _waitingForUpdate = value;
   }
@@ -1522,7 +1522,7 @@ class HtmlOption extends HtmlUiElement {
   /// Implementation of waiting for update. When [:true:], the [uiRepresentation]
   /// is disabled.
   @override
-  void set waitingForUpdate(bool value) {
+  set waitingForUpdate(bool value) {
     uiRepresentation.disabled = value;
     _waitingForUpdate = value;
   }
