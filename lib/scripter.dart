@@ -551,7 +551,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
     } else if (currentPage.blocks[currentBlockIndex] is ScriptBlock) {
       // A script block.
       // TODO: create _textMessageCache here and not in _send()
-      Savegame savegame = null;
+      Savegame savegame;
       if (currentBlockIndex == currentPage.blocks.length - 1) {
         // Last block on page. Save the game before any changes are made during
         // the script block.

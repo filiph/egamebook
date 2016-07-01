@@ -277,7 +277,7 @@ class Form extends FormBase implements _NewValueCallback {
 
     // Also fire onInput on all parent elements.
     parentsOfUpdatedElements.forEach((_NewValueCallback parent) {
-      Object value = null;
+      Object value;
       if (parent is Input) {
         value = (parent as Input).current;
       }

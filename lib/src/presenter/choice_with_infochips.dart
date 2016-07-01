@@ -31,7 +31,7 @@ class ChoiceWithInfochips {
     text = raw;
     infochips = new List<String>();
     int level = 0;
-    int lastOpenBracketIndex = null;
+    int lastOpenBracketIndex;
     bool encounteredFirstChip = false;
     for (int i = 0; i < raw.length; i++) {
       if (raw[i] == "[") {
