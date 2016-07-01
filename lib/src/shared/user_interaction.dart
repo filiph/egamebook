@@ -159,8 +159,10 @@ class ChoiceList extends ListBase<Choice> {
 
   /// Changes length of choices to some [value].
   set length(int value) => _choices.length = value;
-  operator [](int index) => _choices[index];
-  operator []=(int index, Choice value) => _choices[index] = value;
+  Choice operator [](int index) => _choices[index];
+  void operator []=(int index, Choice value) {
+    _choices[index] = value;
+  }
 
   /// Creates new ChoiceList with no [question] and empty list of choices.
   ChoiceList();
@@ -279,7 +281,7 @@ class ChoiceList extends ListBase<Choice> {
     return m;
   }
 
-  toString() => _choices.map((ch) => "$ch").join(", ");
+  String toString() => _choices.map((ch) => "$ch").join(", ");
 }
 
 /**

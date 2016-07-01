@@ -141,11 +141,11 @@ class TypedVariable {
 
 /// A simple visitor that keeps track of top level variable declarations
 /// and puts them into [vars].
-class _TopLevelVariableHarvester extends GeneralizingAstVisitor {
+class _TopLevelVariableHarvester extends GeneralizingAstVisitor<Object> {
   /// List of [TypedVariable]s.
   List<TypedVariable> vars = new List<TypedVariable>();
 
-  visitNode(AstNode node) {
+  Object visitNode(AstNode node) {
     if (node is TopLevelVariableDeclaration) {
       final VariableDeclarationList varList = node.variables;
       varList.variables.forEach((VariableDeclaration variable) {
@@ -170,5 +170,5 @@ class _ErrorCollector extends AnalysisErrorListener {
   _ErrorCollector() : errors = new List<AnalysisError>();
 
   /// Called on [error].
-  onError(error) => errors.add(error);
+  void onError(error) => errors.add(error);
 }

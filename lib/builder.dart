@@ -96,7 +96,8 @@ class BuilderLineSpan implements BuilderLineRange {
 
   /// Getter returns if the selection is closed. It is closed when not null line
   /// start is smaller or equal to not null line end.
-  get isClosed => lineStart != null && lineEnd != null && lineStart <= lineEnd;
+  bool get isClosed =>
+      lineStart != null && lineEnd != null && lineStart <= lineEnd;
 }
 
 /**
@@ -225,7 +226,7 @@ class BuilderPageGroup {
   /// Creates new group with [name].
   BuilderPageGroup._internal(this.name);
 
-  toString() => "BuilderPageGroup<$name>";
+  String toString() => "BuilderPageGroup<$name>";
 }
 
 /**

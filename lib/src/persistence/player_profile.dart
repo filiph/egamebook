@@ -84,7 +84,7 @@ class PlayerProfile {
   int _maxSaves = 10;
 
   /// Getter returns maximum number of savegames.
-  get maxSaves => _maxSaves;
+  int get maxSaves => _maxSaves;
 
   /// Setter sets [value] to maximum number of savegames.
   set maxSaves(int value) => _maxSaves = value; // TODO fix queue etc.

@@ -79,7 +79,7 @@ class ScripterPageMap {
 
   /// Saves ScripterPage [newPage] on [key] to the Map of [pages].
   /// Also sets a [key] as a name for the given page.
-  operator []=(String key, ScripterPage newPage) {
+  void operator []=(String key, ScripterPage newPage) {
     pages[key] = newPage;
     // Copy the "key" to the name of the page. This is here so that we don't
     // need to duplicate the page name in the scripter data.
