@@ -245,10 +245,10 @@ class Stat<T> implements StatBase, Saveable {
       int priority: 0,
       num initialValue: 0,
       bool show: true}) {
-    Stat stat;
+    Stat<T> stat;
     if (_stats.containsKey(name)) {
       //print("Warning: A Stat with name '$name' already exists.");
-      stat = _stats[name];
+      stat = _stats[name] as Stat<T>;
       assert(stat.description == description);
       assert(stat.color == color);
       assert(stat.priority == priority);
@@ -256,7 +256,7 @@ class Stat<T> implements StatBase, Saveable {
       stat =
           new Stat._internal(name, description, valueToString, color, priority);
     }
-    stat._value = initialValue;
+    stat._value = initialValue as T;
     stat._show = show;
     _stats[name] = stat;
     return stat;
@@ -334,7 +334,7 @@ class Stat<T> implements StatBase, Saveable {
   /// Updates actual Stat with values from [map].
   void updateFromMap(Map<String, Object> map) {
     assert(map["name"] == this.name);
-    this.value = map["value"];
+    this.value = map["value"] as T;
     this.show = map["show"];
   }
 }

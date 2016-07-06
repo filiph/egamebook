@@ -282,7 +282,8 @@ class Message {
   }
 
   /// Creates new Message from provided [json] String.
-  Message.fromJson(String json) : this.fromMap(JSON.decode(json));
+  Message.fromJson(String json)
+      : this.fromMap(JSON.decode(json) as Map<String, Object>);
 
   /// Creates new Message from provided [map].
   /// It fills all the parts of [Message] - [type], [strContent],
@@ -298,7 +299,7 @@ class Message {
       intContent = map["intContent"];
     }
     if (map.containsKey("mapContent")) {
-      mapContent = map["mapContent"];
+      mapContent = map["mapContent"] as Map<String, Object>;
     }
   }
 

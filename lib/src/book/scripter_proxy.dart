@@ -19,7 +19,7 @@ import 'package:egamebook/scripter.dart';
  */
 abstract class ScripterViewedFromPresenter {
   /// Getter returns Uid.
-  String uid;
+  String get uid;
 
   /**
    * Initializes the Scripter. In case of a Scripter in its own Isolate, this

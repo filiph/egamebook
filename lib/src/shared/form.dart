@@ -298,9 +298,8 @@ class Form extends FormBase implements _NewValueCallback {
       } else {
         // It wasn't a click on the main submit button.
         callback = (allFormElementsBelowThisOne.singleWhere((element) =>
-                    (element is SubmitButton) &&
-                    (element as FormElement).id == newValues.submitterId)
-                as SubmitButton)
+                (element is SubmitButton) &&
+                element.id == newValues.submitterId) as SubmitButton)
             .onSubmit;
       }
       if (callback != null) {
@@ -518,7 +517,8 @@ abstract class Input<T> {
  */
 abstract class Output<T> {
   /// Curent value of type [T].
-  T current;
+  T get current;
+  set current(T value);
 }
 
 /// Class SubmitButtonBase wraps base submit button element.

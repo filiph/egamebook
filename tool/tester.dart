@@ -57,7 +57,7 @@ Future _runTests(List fileNames, Directory parent) async {
 
 /// Starts actual process of running test in [path].
 Future _runTestProcess(String path, Directory parent) async {
-  List params = new List.from(testParams)
+  List<String> params = new List.from(testParams)
     ..add("--package-root=${p.join(parent.path, "packages")}")
     ..add(path);
 

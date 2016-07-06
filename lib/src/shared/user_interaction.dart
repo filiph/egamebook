@@ -236,7 +236,8 @@ class ChoiceList extends ListBase<Choice> {
     } else {
       question = m.listContent[1];
       for (int i = 2; i < m.listContent.length; i++) {
-        _choices.add(new Choice.fromMap(m.listContent[i]));
+        _choices
+            .add(new Choice.fromMap(m.listContent[i] as Map<String, Object>));
       }
     }
   }
