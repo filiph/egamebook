@@ -762,6 +762,8 @@ abstract class Scripter extends ScripterViewedFromPresenter {
     Savegame.importSavegameToVars(savegame, vars,
         constructors: _constructors); // TODO
     extractStateFromVars();
+    presenter.setStats(
+        UIStat.overwriteStatsListFromDataStructure(Stat.createStatList()));
     DEBUG_SCR("loadFromSaveGame() done.");
     walk();
   }
