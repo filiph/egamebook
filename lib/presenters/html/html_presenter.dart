@@ -483,7 +483,7 @@ class HtmlPresenter extends Presenter {
       pointsSpan.text = "${award.result}";
       return new Future.value(true);
     }
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     ParagraphElement paragraph = new ParagraphElement();
     paragraph.text = "$award";
@@ -516,7 +516,7 @@ class HtmlPresenter extends Presenter {
   final Map<String, Element> _statsElements = new Map();
 
   @override
-  Future setStats(List<UIStat> stats) {
+  Future<bool> setStats(List<UIStat> stats) {
     _stats = stats;
     _printStats(); // DEBUG
     var statsDiv = document.querySelector("nav div#stats");
@@ -536,7 +536,7 @@ class HtmlPresenter extends Presenter {
   }
 
   @override
-  Future updateStats(StatUpdateCollection updates) {
+  Future<bool> updateStats(StatUpdateCollection updates) {
     UIStat.updateStatsList(_stats, updates) // Returns only the changed stats.
         .forEach((UIStat stat) {
       var anchor = _statsElements[stat.name];
@@ -547,7 +547,7 @@ class HtmlPresenter extends Presenter {
         anchor.classes.add("display-none");
       }
     });
-    return new Future.value();
+    return new Future.value(true);
   }
 
   /// Prints visible UI stats into console.
