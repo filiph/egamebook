@@ -134,7 +134,7 @@ class IsolatePresenterProxy extends PresenterProxy {
         }
         try {
           var savegame = new Savegame.fromMessage(message);
-          var playerChronology = message.listContent.toSet();
+          var playerChronology = message.listContent.toSet() as Set<String>;
           if (playerChronology != null) {
             scripter.load(savegame, playerChronology);
           } else {

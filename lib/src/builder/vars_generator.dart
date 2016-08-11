@@ -10,14 +10,14 @@ import 'dart:collection';
 class VarsGenerator {
   /// List of [TypedVariable]s.
   final List<TypedVariable> _vars = new List<TypedVariable>();
-  UnmodifiableListView _varsView;
+  UnmodifiableListView<TypedVariable> _varsView;
 
   /// Unmodifiable view of the variables present in the code.
   List<TypedVariable> get variables => _varsView;
 
   /// Creates new VarsGenerator.
   VarsGenerator() {
-    _varsView = new UnmodifiableListView(_vars);
+    _varsView = new UnmodifiableListView<TypedVariable>(_vars);
   }
 
   /// Receives and analyzes [src] and looks for top level variable declarations,

@@ -1024,8 +1024,8 @@ class Option extends OptionBase with _NewValueCallback<bool> {
   Option(String text, InputCallback onSelect,
       {bool selected, String helpMessage})
       : super.noOptional(text, selected, helpMessage) {
-    this.onInput = (bool selected) {
-      if (selected) {
+    this.onInput = (Object selected) {
+      if (selected is bool && selected) {
         onSelect(selected);
       }
     };

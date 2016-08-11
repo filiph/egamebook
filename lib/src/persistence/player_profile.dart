@@ -57,12 +57,12 @@ class PlayerProfile {
 
   /// Loads preferences for the player from the storage.
   Future<bool> _loadPreferences() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
     _store.load("$playerUid::$PREFERENCES_KEY").then((json) {
       if (json == null || json == "") {
         preferences = new Map();
       } else {
-        preferences = JSON.decode(json);
+        preferences = JSON.decode(json) as Map<String, dynamic>;
       }
       completer.complete(true);
     });
@@ -122,7 +122,7 @@ class PlayerProfile {
   Future<bool> _loadStoryChronology() {
     return _load("_storyChronology").then((json) {
       if (json != null) {
-        List<String> list = JSON.decode(json);
+        List<String> list = JSON.decode(json) as List<String>;
         storyChronology = new Queue<String>.from(list);
       } else {
         storyChronology = new Queue<String>();
@@ -155,7 +155,7 @@ class PlayerProfile {
       // We haven't retrieved savegamesChronology from the _store yet.
       // This code goes fetch it, re-runs the save() method, then forwards the
       // result to the caller of this function.
-      var completer = new Completer();
+      var completer = new Completer<bool>();
       _loadStoryChronology().then((_) => save(savegame).then((value) {
             completer.complete(value);
           }));
@@ -198,7 +198,7 @@ class PlayerProfile {
       // This code goes fetch it, re-runs the loadMostRecent() method, then
       // forwards the result to the caller of this function.
       // TODO: dry with save() ?
-      var completer = new Completer();
+      var completer = new Completer<Savegame>();
       _loadStoryChronology().then((_) => loadMostRecent().then((value) {
             completer.complete(value);
           }));

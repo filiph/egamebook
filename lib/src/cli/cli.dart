@@ -189,7 +189,7 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
   ///
   /// If [_fullDirectory] is true, builder is run on all .ebg files in directory.
   /// Without that only one .egb file to build in folder is allowed.
-  Future getEgbFiles(String path) async {
+  Future<ListQueue<File>> getEgbFiles(String path) async {
     ListQueue<File> queue;
 
     //running on a single .egb file
@@ -197,35 +197,35 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
       if (p.extension(path) == EXTENSION) {
         File file = new File(path);
         if (!await file.exists()) {
-          return new Future.error(
+          throw new StateError(
               OutputMessage.buildFailed("File $path doesn't exist."));
         }
         queue = new ListQueue.from(_hierarchy.create(fromFile: file));
-        return new Future.value(queue);
+        return queue;
       } else {
-        return new Future.error(
+        throw new StateError(
             OutputMessage.buildFailed("File type of $path is not supported."));
       }
     }
 
     Directory from = new Directory(path);
     if (!await from.exists()) {
-      return new Future.error(
+      throw new StateError(
           OutputMessage.buildFailed("Directory $path doesn't exist."));
     }
 
     queue = new ListQueue.from(_hierarchy.create(fromDirectory: from));
     if (queue.isEmpty) {
-      return new Future.error(
+      throw new StateError(
           OutputMessage.buildFailed("No $EXTENSION file in this directory."));
     } else if (!_fullDirectory && queue.length > 1) {
-      return new Future.error(OutputMessage
+      throw new StateError(OutputMessage
           .buildFailed("More than one .egb file found in the directory.\n"
               "To run builder on more .egb files in directory "
               "use argument --full-directory or -f."));
     }
 
-    return new Future.value(queue);
+    return queue;
   }
 }
 

@@ -44,7 +44,7 @@ class Savegame {
   /// Creates new Savegame with [currentPageName], Map of [_vars]
   /// and information about visited pages [pageMapState].
   Savegame(String this.currentPageName, Map _vars, this.pageMapState) {
-    vars = _dissolveToPrimitives(_vars);
+    vars = _dissolveToPrimitives(_vars) as Map<String, Object>;
     timestamp = new DateTime.now().millisecondsSinceEpoch;
     uid = this.hashCode.toRadixString(16); // TODO: is this unique enough?
   }
@@ -53,7 +53,7 @@ class Savegame {
   /// key for [currentPageName] or for [vars], or both. If there are no keys
   /// like that, [InvalidSavegameException] is thrown.
   Savegame.fromJson(String json) {
-    Map<String, dynamic> saveMap = JSON.decode(json);
+    Map<String, Object> saveMap = JSON.decode(json) as Map<String, Object>;
     if (!saveMap.containsKey("currentPageName") ||
         !saveMap.containsKey("vars")) {
       throw new InvalidSavegameException("Invalid JSON for Savegame. "
@@ -63,8 +63,8 @@ class Savegame {
     uid = saveMap["uid"];
     currentPageName = saveMap["currentPageName"];
     timestamp = saveMap["timestamp"];
-    pageMapState = saveMap["pageMapState"];
-    vars = saveMap["vars"];
+    pageMapState = saveMap["pageMapState"] as Map<String, Object>;
+    vars = saveMap["vars"] as Map<String, Object>;
     if (saveMap.containsKey("previousText")) {
       textHistory = saveMap["previousText"];
     }

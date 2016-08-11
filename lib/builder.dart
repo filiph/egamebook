@@ -429,7 +429,7 @@ class Builder {
 
   /// Reads the given [inputStream] for the contents of the file.
   Future<Builder> readInputStream(Stream<String> inputStream) {
-    var completer = new Completer();
+    var completer = new Completer<Builder>();
 
     // The top of the file can be metadata. This will be changed to
     // MODE_NORMAL in [_checkMetadataLine()] when there is no metadata.
@@ -1126,7 +1126,7 @@ class Builder {
    * @return    Future of bool, always true.
    **/
   Future<bool> _checkForDoubleImports() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     List<Future<bool>> existsFutures = new List<Future<bool>>();
     List<String> fullPaths = new List<String>();
@@ -1292,7 +1292,7 @@ class Builder {
    * will _not_ be created and the call will fail if it doesn't exist.
    **/
   Future<bool> writeDartFiles() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     Future.wait([writeScripterFile(), writePresenterFiles()],
         eagerError: true).then((_) {
@@ -1310,7 +1310,7 @@ class Builder {
    * whole egamebooks content.
    */
   Future<bool> writeScripterFile() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var webDir = new Directory(pathToPresenter);
@@ -1396,7 +1396,7 @@ class Builder {
    * and the HTML presenter.
    */
   Future<bool> writePresenterFiles() {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     var pathToPresenter = getSubdirectoryPath(HTML_BOOK_ENTRYPOINT_PATH);
     var presenterDir = new Directory(pathToPresenter);
@@ -1477,7 +1477,7 @@ class Builder {
    */
   Future<bool> writeInitBlocks(IOSink dartOutStream, int initBlockType,
       {int indent: 0}) {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
 
     dartOutStream.write(varsGenerator.generateInitBlockCode());
     copyLineRanges(
@@ -1872,7 +1872,7 @@ class Builder {
       {bool inclusive: true,
       int indentLength: 0,
       StringBuffer contentsCopyDestination}) {
-    var completer = new Completer();
+    var completer = new Completer<bool>();
     outStream.write("\n");
     var indent = _getIndent(indentLength);
 
@@ -1939,7 +1939,7 @@ class Builder {
    * instance.
    */
   Future<Builder> updateEgbFile() {
-    var completer = new Completer();
+    var completer = new Completer<Builder>();
 
     var tempFile = new File(getExtensionPath("egb~"));
     File outputEgbFile;

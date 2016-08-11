@@ -28,7 +28,7 @@ class Choice implements Comparable<Choice> {
   String string;
 
   /// Script function.
-  Function f;
+  VoidFunction f;
 
   /// On which page name it should go to.
   String goto;
@@ -78,7 +78,7 @@ class Choice implements Comparable<Choice> {
   /// [submenu], if [deferToEndOfPage] and if [deferToChoiceList].
   Choice(String string,
       {this.goto,
-      Function script,
+      VoidFunction script,
       this.submenu: null,
       bool deferToEndOfPage: false,
       bool deferToChoiceList: false})
@@ -107,7 +107,7 @@ class Choice implements Comparable<Choice> {
     if (map.containsKey("showNow")) {
       deferToEndOfPage = !map["showNow"];
     }
-    f = map["then"];
+    f = map["then"] as VoidFunction;
 
     submenu = map["submenu"];
   }
@@ -120,7 +120,7 @@ class Choice implements Comparable<Choice> {
   /// Sets script function to [_f] and returns actual object.
   ///
   /// Defines what [Function] should do then, for example call [:echo:].
-  Choice then(Function _f) {
+  Choice then(VoidFunction _f) {
     f = _f;
     return this;
   }
@@ -197,7 +197,9 @@ class ChoiceList extends ListBase<Choice> {
         string = "";
       }
       var choice = new Choice(string,
-          goto: map["goto"], script: map["script"], submenu: map["submenu"]);
+          goto: map["goto"],
+          script: map["script"] as VoidFunction,
+          submenu: map["submenu"]);
       _choices.add(choice);
     }
   }
@@ -208,7 +210,7 @@ class ChoiceList extends ListBase<Choice> {
   /// parameters [script], [goto], [submenu], [deferToEndOfPage] and
   /// [deferToChoiceList]. In other case the [ArgumentError] is thrown.
   void add(Object element,
-      {Function script,
+      {VoidFunction script,
       String goto,
       String submenu,
       bool deferToEndOfPage: false,
@@ -284,6 +286,8 @@ class ChoiceList extends ListBase<Choice> {
 
   String toString() => _choices.map((ch) => "$ch").join(", ");
 }
+
+typedef void VoidFunction();
 
 /**
  * [Intent] is an interaction that is 'out of place' and asynchronous.

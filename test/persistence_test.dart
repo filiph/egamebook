@@ -31,7 +31,7 @@ void main() {
         String valuesFromStore = store.memory[STORE_NAME];
         expect(valuesFromStore, isNotNull);
         expect(JSON.decode(valuesFromStore), values);
-      }));
+      }) as BoolCallback);
     });
 
     test("Save and load", () {
@@ -39,8 +39,8 @@ void main() {
         store.load(STORE_NAME).then(expectAsync((valueFromStore) {
           expect(valueFromStore, isNotNull);
           expect(JSON.decode(valueFromStore), values);
-        }));
-      }));
+        }) as StringCallback);
+      }) as BoolCallback);
     });
 
     test("Delete", () {
@@ -48,8 +48,8 @@ void main() {
         store.delete(STORE_NAME).then(expectAsync((boolValue) {
           expect(boolValue, isTrue);
           expect(store.memory[STORE_NAME], isNull);
-        }));
-      }));
+        }) as BoolCallback);
+      }) as BoolCallback);
     });
 
     test("Get default player profile", () {
@@ -128,10 +128,13 @@ void main() {
       expect(vars["isEngineer"], true);
       expect(vars["isStrong"], true);
 
-      Savegame.importSavegameToVars(savegame, vars);
+      Savegame.importSavegameToVars(savegame, vars as Map<String, Object>);
       expect(vars["points"].sum, 20);
       expect(vars["isEngineer"], false);
       expect(vars["isStrong"], false);
     });
   });
 }
+
+typedef void BoolCallback(bool value);
+typedef void StringCallback(String value);

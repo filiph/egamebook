@@ -195,7 +195,7 @@ class HtmlPresenter extends Presenter {
   Future<bool> showText(String s) {
     log("Showing: $s");
     if (s == null) return new Future.value(false);
-    Completer completer = new Completer<bool>();
+    var completer = new Completer<bool>();
 
     _showLoading(false);
 
@@ -303,7 +303,7 @@ class HtmlPresenter extends Presenter {
       _bookReadyHandler();
     }
 
-    var completer = new Completer();
+    var completer = new Completer<int>();
 
     var choicesDiv = new DivElement();
     choicesDiv.classes.add("choices-div");
@@ -458,7 +458,7 @@ class HtmlPresenter extends Presenter {
     // Unregister listeners.
     choicesDiv
         .querySelectorAll("button")
-        .forEach((ButtonElement b) => b.disabled = true);
+        .forEach((var b) => (b as ButtonElement).disabled = true);
     clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
     clickSubscriptions.clear();
     // Show bookmark.

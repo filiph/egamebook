@@ -37,6 +37,8 @@ void deleteSubdirs() {
   webSubdir.deleteSync(recursive: true);
 }
 
+typedef dynamic BuilderCallback(Builder b);
+
 void main() {
   group("HTML Entities", () {
     test("ignores basic ASCII", () {
@@ -77,7 +79,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("no_pages.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads pages", () {
@@ -97,7 +99,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("simple_3pages.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads pageGroups", () {
@@ -110,7 +112,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("page_group.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads UTF8 pages", () {
@@ -121,7 +123,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("simple_utf8.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads page at EOF", () {
@@ -131,7 +133,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("page_at_eof.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads text blocks", () {
@@ -140,7 +142,7 @@ void main() {
           for (var page in b.pages) {
             numBlocks += page.blocks.length;
           }
-          ;
+
           expect(numBlocks, equals(8));
           expect(b.pages[b.pageHandles["run"]].blocks, hasLength(2));
           expect(b.pages[b.pageHandles["exit"]].blocks, hasLength(0));
@@ -151,7 +153,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("simple_8textblocks.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("reads text block at end of file", () {
@@ -164,7 +166,7 @@ void main() {
         };
         new Builder()
             .readEgbFile(new File(getPath("simple_textblock_eof.egb")))
-            .then(expectAsync(callback));
+            .then(expectAsync(callback) as BuilderCallback);
       });
 
       test("reads last text block at end of bigger file", () {
@@ -177,7 +179,7 @@ void main() {
         };
         new Builder()
             .readEgbFile(new File(getPath("full_project.egb")))
-            .then(expectAsync(callback));
+            .then(expectAsync(callback) as BuilderCallback);
       });
 
       test("throws on duplicate pagenames", () {
@@ -202,7 +204,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("with_parts.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("detects blocks with vars", () {
@@ -221,7 +223,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("variables_in_text.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
 //      test("detects non-choices (illegally formated) and leaves them alone", () {
@@ -319,7 +321,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("choices_simple.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("detects multiline choices", () {
@@ -347,7 +349,7 @@ void main() {
           expect(choiceList.subBlocks[3].options["string"], "Many people do!");
           expect(choiceList.subBlocks[3].options["goto"], isNull);
           expect(choiceList.subBlocks[3].options["script"], isNotNull);
-        }));
+        }) as BuilderCallback);
       });
 
       test("detects choices as pageHandlers in pages", () {
@@ -359,7 +361,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("full_project.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("detects <declare>", () {
@@ -371,7 +373,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("declare.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("detects different init blocks", () {
@@ -389,7 +391,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("initblocks_all.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("plays well around text blocks", () {
@@ -409,7 +411,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("textblock_initblock_proximity.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       // TODO: check throws
@@ -439,7 +441,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("script_2tags.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("detects <echo>", () {
@@ -459,7 +461,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("echo_2tags.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
     });
 
@@ -479,7 +481,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("metadata_9keys.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("extracts book UID", () {
@@ -488,7 +490,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("metadata_9keys.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
     });
 
@@ -502,7 +504,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("import_1tag.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("is detected with redundancies covered", () {
@@ -517,7 +519,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("import_2tags_plus1redundant.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
 
       test("doesn't touch package: imports", () {
@@ -527,7 +529,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("import_package_path.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
     });
 
@@ -540,7 +542,7 @@ void main() {
         });
         new Builder()
             .readEgbFile(new File(getPath("synopsis.egb")))
-            .then(callback);
+            .then(callback as BuilderCallback);
       });
     });
 
@@ -559,7 +561,7 @@ void main() {
             b.writeDartFiles().then((_) {
               new File(getPath("lib/full_project.dart"))
                   .exists()
-                  .then(callback);
+                  .then(callback as BoolTakingVoidFunction);
             });
           });
         }).catchError((e) {
@@ -621,6 +623,12 @@ void main() {
         File orig = new File(getPath("update_egb_original.egb"));
         File egb = new File(getPath("update_egb_file.egb"));
 
+        var callback = expectAsync((Builder b) {
+          expect(b.pages.last.name, "Programatically added page");
+          expect(b.pages[3].gotoPageNames,
+              contains("Programatically added page"));
+        });
+
         var inputStream = orig.openRead();
         var ioSink = egb.openWrite();
         inputStream.pipe(ioSink).then(expectAsync((_) {
@@ -632,11 +640,7 @@ void main() {
             b.pageHandles["Programatically added page"] = b.pages.last.index;
             b.pages[3].gotoPageNames.add("Programatically added page");
             return b.updateEgbFile();
-          }).then(expectAsync((Builder b) {
-            expect(b.pages.last.name, "Programatically added page");
-            expect(b.pages[3].gotoPageNames,
-                contains("Programatically added page"));
-          }));
+          }).then(callback as BuilderCallback);
         }));
       });
 
@@ -693,3 +697,5 @@ void main() {
     });
   });
 }
+
+typedef dynamic BoolTakingVoidFunction(bool value);

@@ -124,7 +124,7 @@ class MockPresenter extends Presenter {
   }
 
   int _getChoiceHashFromString(String str, ChoiceList list) {
-    int choiceNumber = null;
+    int choiceNumber;
     for (int i = 0; i < list.length; i++) {
       if (list[i].string == str) {
         choiceNumber = i;

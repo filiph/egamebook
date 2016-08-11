@@ -68,7 +68,7 @@ class IsolateScripterProxy extends ScripterProxy {
   String get uid => _uid;
 
   /// Init completer.
-  Completer _initCompleter;
+  Completer<Null> _initCompleter;
 
   final Logger _log = new Logger('IsolateScripterProxy');
 
@@ -76,9 +76,9 @@ class IsolateScripterProxy extends ScripterProxy {
   IsolateScripterProxy(this._isolateUri);
 
   @override
-  Future init() {
+  Future<Null> init() {
     INT_DEBUG("Initializing the isolate at $_isolateUri");
-    _initCompleter = new Completer();
+    _initCompleter = new Completer<Null>();
     _receivePort = new ReceivePort();
     Isolate.spawnUri(_isolateUri, [], _receivePort.sendPort);
     _receivePort.listen(_onMessageFromScripterIsolate);
@@ -121,7 +121,7 @@ class IsolateScripterProxy extends ScripterProxy {
         return;
       case Message.SAVE_PLAYER_CHRONOLOGY:
         presenter.playerProfile
-            .savePlayerChronology(message.listContent.toSet());
+            .savePlayerChronology(message.listContent.toSet() as Set<String>);
         return;
       case Message.TEXT_RESULT:
         presenter.showText(message.strContent).then((_) {
@@ -138,8 +138,8 @@ class IsolateScripterProxy extends ScripterProxy {
         });
         return;
       case Message.SET_STATS:
-        presenter.setStats(
-            UIStat.overwriteStatsListFromDataStructure(message.listContent));
+        presenter.setStats(UIStat.overwriteStatsListFromDataStructure(
+            message.listContent as List<Map<String, Object>>));
         return;
       case Message.UPDATE_STATS:
         print("RUN: Received updated stats.");

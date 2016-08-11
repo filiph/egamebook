@@ -45,7 +45,7 @@ class PointsCounter implements Saveable {
   String className = "PointsCounter";
 
   /// Returns Map representation of PointsCounter.
-  Map toMap() => {"points": _points};
+  Map<String, dynamic> toMap() => {"points": _points};
 
   /// Updates current PointsCounter from a given [map] and clears [pointsAwards].
   void updateFromMap(Map map) {

@@ -557,7 +557,8 @@ abstract class Scripter extends ScripterViewedFromPresenter {
         // the script block.
         savegame = _createSaveGame();
       }
-      bool canContinue = _runScriptBlock(currentPage.blocks[currentBlockIndex]);
+      bool canContinue = _runScriptBlock(
+          currentPage.blocks[currentBlockIndex] as VoidFunction);
 
       if (choices.any((choice) => choice.isActionable(
               atEndOfPage: atEndOfPage,
@@ -755,7 +756,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
       _playerChronology.addAll(playerChronology);
     }
 
-    var _constructors = {};
+    var _constructors = <String, Function>{};
 
     // copy saved variables over vars
     DEBUG_SCR("Copying save variables into vars.");

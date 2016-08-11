@@ -16,7 +16,8 @@ class FormProxy extends FormBase implements BlueprintWithUiRepresentation {
     assert((map["jsonml"] as List)[0] == "Form");
     submitText = (map["jsonml"] as List)[1]["submitText"];
     createElementsFromJsonML(map["jsonml"]);
-    FormConfiguration values = new FormConfiguration.fromMap(map["values"]);
+    FormConfiguration values = new FormConfiguration.fromMap(
+        map["values"] as Map<String, Map<String, Object>>);
     allFormElementsBelowThisOne.forEach((FormElement element) {
       Map<String, Object> elementValues = values.getById(element.id);
       if (elementValues != null) {

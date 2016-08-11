@@ -311,7 +311,7 @@ void main() {
         expect(p.basename(files[2].path), "${TEMPLATE_BOOK_NAME}3.egb");
       });
 
-      builder.getEgbFiles(path).then(callback);
+      builder.getEgbFiles(path).then(callback as FilesCallback);
     });
 
     test("returns correct .egb files with part files", () {
@@ -333,7 +333,7 @@ void main() {
         expect(p.basename(files[0].path), TEMPLATE_BOOK_NAME);
       });
 
-      builder.getEgbFiles(path).then(callback);
+      builder.getEgbFiles(path).then(callback as FilesCallback);
     });
 
     test("returns correct .egb files from file", () {
@@ -352,7 +352,7 @@ void main() {
         expect(p.basename(files[0].path), TEMPLATE_BOOK_NAME);
       });
 
-      builder.getEgbFiles(pathFile).then(callback);
+      builder.getEgbFiles(pathFile).then(callback as FilesCallback);
     });
   });
 
@@ -385,3 +385,5 @@ void main() {
     });
   });
 }
+
+typedef void FilesCallback(ListQueue<File> files);

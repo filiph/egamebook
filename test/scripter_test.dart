@@ -25,15 +25,15 @@ class ClassWithMapMethods implements Saveable {
   Map m = const {"a": 1, "b": 2};
 
   String className = "ClassWithMapMethods";
-  toMap() => {"i": i, "s": s, "m": m};
+  Map<String, Object> toMap() => {"i": i, "s": s, "m": m};
 
   ClassWithMapMethods();
 
-  ClassWithMapMethods.fromMap(map) {
+  ClassWithMapMethods.fromMap(Map<String, Object> map) {
     updateFromMap(map);
   }
 
-  updateFromMap(map) {
+  void updateFromMap(Map<String, Object> map) {
     i = map["i"];
     s = map["s"];
   }
@@ -78,7 +78,8 @@ Future<String> build(String egbFilename) {
 }
 
 /// Runs the built project and returns the [MockPresenter] instance.
-Future<Presenter> run(String dartFilename, {Store persistentStore: null}) {
+Future<Presenter> run(String dartFilename,
+    {Store persistentStore: null}) async {
   var mockPresenter = new MockPresenter(waitForChoicesToBeTaken: true);
   Store store;
   if (persistentStore != null) {
@@ -89,12 +90,12 @@ Future<Presenter> run(String dartFilename, {Store persistentStore: null}) {
   mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(dartFilename));
 
-  return bookProxy.init().then((_) {
-    mockPresenter.setScripter(bookProxy);
-    bookProxy.setPresenter(mockPresenter);
+  await bookProxy.init();
 
-    return mockPresenter.continueSavedGameOrCreateNew();
-  });
+  mockPresenter.setScripter(bookProxy);
+  bookProxy.setPresenter(mockPresenter);
+
+  return mockPresenter.continueSavedGameOrCreateNew();
 }
 
 void main() {
@@ -156,7 +157,7 @@ void main() {
             expect(mockPresenter.choicesToBeTaken.length, 0);
 
             mockPresenter.quit();
-          }));
+          }) as StringCallback);
         });
 
         test("doesn't walk through when it shouldn't", () {
@@ -173,7 +174,7 @@ void main() {
                 startsWith("Welcome (back?) to dddeee."));
             expect(mockPresenter.choicesToBeTaken.length, 0);
             mockPresenter.quit();
-          }));
+          }) as StringCallback);
 
           bookProxy.init().then((_) {
             mockPresenter.setScripter(bookProxy);
@@ -195,7 +196,7 @@ void main() {
             expect(mockPresenter.latestOutput, contains("Time is now 10."));
 
             mockPresenter.quit();
-          }));
+          }) as StringCallback);
 
           bookProxy.init().then((_) {
             mockPresenter.setScripter(bookProxy);
@@ -218,7 +219,7 @@ void main() {
                 contains("customInstance.i is now 11."));
 
             mockPresenter.quit();
-          }));
+          }) as StringCallback);
 
           bookProxy.init().then((_) {
             mockPresenter.setScripter(bookProxy);
@@ -233,61 +234,61 @@ void main() {
       test("are shown", () {
         build("choices_multiline.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          return ui.waitForDone();
+            .then((var ui) {
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestChoices.length, 4);
           expect(ui.latestChoices.first.string, "That's okay.");
           expect(ui.latestChoices.last.string, "Many people do!");
           expect(ui.latestChoices.question, null);
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
       test("works with scripts", () {
         build("choices_multiline.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          ui.choose("Many people do!");
-          return ui.waitForDone();
+            .then((var ui) {
+          (ui as MockPresenter).choose("Many people do!");
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput, contains("No it doesn't."));
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
       test("works with gotos", () {
         build("choices_multiline.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          ui.choose("I need to do something about it.");
-          return ui.waitForDone();
+            .then((var ui) {
+          (ui as MockPresenter).choose("I need to do something about it.");
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput,
               contains("You tried to do something about it, but to no avail."));
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
       test("works with gotos and scripts", () {
         build("choices_multiline.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          ui.choose("That's okay.");
-          return ui.waitForDone();
+            .then((var ui) {
+          (ui as MockPresenter).choose("That's okay.");
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput,
               contains("You tried to do something about it, but to no avail."));
           expect(ui.currentlyShownPoints, 42);
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
       test("works with silent choices", () {
         build("choices_silent.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          return ui.waitForDone();
+            .then((var ui) {
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput, contains("So you are now here."));
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
     });
 
@@ -330,7 +331,7 @@ void main() {
           expect((savegame.vars["saveable"] as Map)["m"], hasLength(2));
 
           mockPresenter.quit();
-        }));
+        }) as SavegameCallback);
       });
 
       test("works on classes with toMap and fromMap", () {
@@ -349,20 +350,22 @@ void main() {
         build("scripter_test_alternate_6.egb").then((path) {
           mainPath = path;
           return run(mainPath, persistentStore: store);
-        }).then((MockPresenter ui) {
-          ui.choicesToBeTaken = new Queue<int>.from([0, 1, 0, 1, 1]);
-          return ui.waitForDone();
-        }).then((MockPresenter ui) {
-          ui.quit();
+        }).then((var ui) {
+          (ui as MockPresenter).choicesToBeTaken =
+              new Queue<int>.from([0, 1, 0, 1, 1]);
+          return (ui as MockPresenter).waitForDone();
+        }).then((var ui) {
+          (ui as MockPresenter).quit();
           return run(mainPath, persistentStore: store);
-        }).then((MockPresenter ui) {
-          ui.choicesToBeTaken = new Queue<int>.from([1, 1, 1, 1, 1, 1, 1]);
-          return ui.waitForDone();
+        }).then((var ui) {
+          (ui as MockPresenter).choicesToBeTaken =
+              new Queue<int>.from([1, 1, 1, 1, 1, 1, 1]);
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput, contains("Time is now 10."));
           expect(ui.latestOutput, contains("customInstance.i is now 20."));
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
 
       test("script choices", () {
@@ -371,35 +374,35 @@ void main() {
         build("scriptchoices.egb").then((path) {
           mainPath = path;
           return run(mainPath, persistentStore: store);
-        }).then((MockPresenter ui) {
-          ui.choose("Live!");
-          return ui.waitForDone();
-        }).then((MockPresenter ui) {
-          ui.quit();
+        }).then((var ui) {
+          (ui as MockPresenter).choose("Live!");
+          return (ui as MockPresenter).waitForDone();
+        }).then((var ui) {
+          (ui as MockPresenter).quit();
           return run(mainPath, persistentStore: store);
-        }).then((MockPresenter ui) {
-          return ui.waitForDone();
+        }).then((var ui) {
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestChoices[0].string, "Another chance to die.");
           expect(ui.latestChoices[1].string, "Win it!");
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
     });
 
     group("Page options", () {
       test("prevents user from visiting visitOnce page twice", () {
-        run("files/lib/scripter_page_visitonce.dart").then((MockPresenter ui) {
-          ui.choose("Get dressed");
-          return ui.waitForDone();
-        }).then(expectAsync((MockPresenter ui) {
+        run("files/lib/scripter_page_visitonce.dart").then((var ui) {
+          (ui as MockPresenter).choose("Get dressed");
+          return (ui as MockPresenter).waitForDone();
+        }).then(expectAsync((var ui) {
           expect(ui.latestChoices, hasLength(3));
           expect(ui.latestChoices[0].string, isNot("Get dressed"));
           expect(ui.latestChoices[0].string, "Call the police");
           expect(ui.latestChoices.question, "What do you do?");
 
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
     });
 
@@ -407,51 +410,56 @@ void main() {
       test("build() works", () {
         build("scripter_test_alternate_6.egb").then(expectAsync((mainPath) {
           expect(mainPath, endsWith("scripter_test_alternate_6.dart"));
-        }));
+        }) as StringCallback);
       });
 
       test("run() and ui.choose() works", () {
         build("scripter_test_alternate_6.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          ui.choose("ABC");
-          return ui.waitForDone();
+            .then((var ui) {
+          (ui as MockPresenter).choose("ABC");
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.latestOutput, "Blah.");
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
 
       test("ui.restart() works", () {
         build("scripter_test_alternate_6.egb")
             .then((mainPath) => run(mainPath))
-            .then((MockPresenter ui) {
-          ui.choose("ABC");
-          return ui.waitForDone();
-        }).then(expectAsync((MockPresenter ui) {
-          expect(ui.latestOutput, "Blah.");
-          ui.restart();
-          return ui.waitForDone();
-        })).then(expectAsync((MockPresenter ui) {
-          expect(ui.latestOutput, "Starting. Setting time to 0.");
-          ui.quit();
-        }));
+            .then((var ui) {
+              (ui as MockPresenter).choose("ABC");
+              return (ui as MockPresenter).waitForDone();
+            })
+            .then(expectAsync((MockPresenter ui) {
+              expect(ui.latestOutput, "Blah.");
+              ui.restart();
+              return ui.waitForDone();
+            }) as PresenterCallback)
+            .then(expectAsync((MockPresenter ui) {
+              expect(ui.latestOutput, "Starting. Setting time to 0.");
+              ui.quit();
+            }));
       });
     });
 
     group("PointsAwards", () {
       test("successfully awards", () {
-        build("points_awards.egb").then((mainPath) {
-          return run(mainPath);
-        }).then(expectAsync((MockPresenter ui) {
-          expect(ui.currentlyShownPoints, 0);
-          ui.choose("Go to next");
-          ui.choose("Do something stupid");
-          return ui.waitForDone();
-        })).then(expectAsync((MockPresenter ui) {
-          expect(ui.currentlyShownPoints, 1);
-          ui.quit();
-        }));
+        build("points_awards.egb")
+            .then((mainPath) {
+              return run(mainPath);
+            })
+            .then(expectAsync((MockPresenter ui) {
+              expect(ui.currentlyShownPoints, 0);
+              ui.choose("Go to next");
+              ui.choose("Do something stupid");
+              return ui.waitForDone();
+            }) as PresenterCallback)
+            .then(expectAsync((MockPresenter ui) {
+              expect(ui.currentlyShownPoints, 1);
+              ui.quit();
+            }));
       });
     });
 
@@ -459,13 +467,13 @@ void main() {
       test("successfully shows on start", () {
         build("stats.egb").then((mainPath) {
           return run(mainPath);
-        }).then((MockPresenter ui) {
-          return ui.waitForDone();
+        }).then((var ui) {
+          return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((MockPresenter ui) {
           expect(ui.visibleStats, hasLength(1));
           expect(ui.visibleStats[0].name, "HP");
           ui.quit();
-        }));
+        }) as PresenterCallback);
       });
       // TODO test persistence
     });
@@ -507,3 +515,7 @@ void main() {
     });
   });
 }
+
+typedef void StringCallback(String value);
+typedef void PresenterCallback(Presenter value);
+typedef void SavegameCallback(Savegame value);
