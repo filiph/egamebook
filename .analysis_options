@@ -24,10 +24,11 @@ linter:
     - iterable_contains_unrelated_type
     - library_names
     - library_prefixes
+    - super_goes_last
     # - non_constant_identifier_names # TODO: will need cleanup, 31 issues
     # - one_member_abstracts # Worker class probably shouldn't be a function
     # - only_throw_errors # TODO
-    # - overridden_fields # TODO: snafu around PresenterViewedFromScripter
+    - overridden_fields # TODO: snafu around PresenterViewedFromScripter
 
     # TODO: all below
     # - package_api_docs
@@ -38,7 +39,6 @@ linter:
     # - slash_for_doc_comments
     # - sort_constructors_first
     # - sort_unnamed_constructors_first
-    # - super_goes_last
     # - test_types_in_equals
     # - throw_in_finally
     # - type_annotate_public_apis

@@ -343,7 +343,7 @@ void main() {
 
     test("creates checkbox", () {
       bool checked = false;
-      checkboxInput.onInput = (bool value) => checked = value;
+      checkboxInput.onInput = (var value) => checked = value;
       form.children.add(checkboxInput);
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = presenter.showForm(formProxy);
@@ -469,9 +469,9 @@ void main() {
 
     test("values update", () {
       var inputMoney = new RangeInput("Money", (_) {},
-          stringifyFunction: (int value) => "\$$value", max: 1000, step: 100);
+          stringifyFunction: (var value) => "\$$value", max: 1000, step: 100);
       var inputPercentage = new RangeInput("Thrust", (value) {},
-          max: 100, step: 10, stringifyFunction: (int value) => "$value %");
+          max: 100, step: 10, stringifyFunction: (var value) => "$value %");
       form.children.add(inputMoney);
       form.children.add(inputPercentage);
 

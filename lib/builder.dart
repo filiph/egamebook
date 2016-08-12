@@ -1125,9 +1125,7 @@ class Builder {
    *
    * @return    Future of bool, always true.
    **/
-  Future<bool> _checkForDoubleImports() {
-    var completer = new Completer<bool>();
-
+  Future<bool> _checkForDoubleImports() async {
     List<Future<bool>> existsFutures = new List<Future<bool>>();
     List<String> fullPaths = new List<String>();
 
@@ -1145,31 +1143,29 @@ class Builder {
       }
     }
 
-    Future.wait(existsFutures).then((List<bool> existsBools) {
-      for (int i = 0; i < existsBools.length; i++) {
-        if (existsBools[i] == false) {
-          return new Exception("Source file tries to import a file that "
-              "doesn't exist (${importLibFiles[i]}).");
-        }
-      }
-    }).then((_) {
-      assert(fullPaths.length == importLibFiles.length);
-      importLibFilesFullPaths = new Set.from(fullPaths);
-      for (int i = 0; i < fullPaths.length; i++) {
-        for (int j = 0; j < i; j++) {
-          if (fullPaths[i] == fullPaths[j]) {
-            WARNING("File '${fullPaths[i]}' has already been imported. "
-                "Ignoring the redundant <import> tag.");
-            importLibFiles[i] = null;
-          }
-        }
-      }
-      // remove the nulls
-      importLibFiles = importLibFiles.where((f) => f != null).toList();
-      completer.complete(true);
-    }).catchError((e) => completer.completeError(e));
+    List<bool> existsBools = await Future.wait(existsFutures) as List<bool>;
 
-    return completer.future;
+    for (int i = 0; i < existsBools.length; i++) {
+      if (existsBools[i] == false) {
+        throw new Exception("Source file tries to import a file that "
+            "doesn't exist (${importLibFiles[i]}).");
+      }
+    }
+
+    assert(fullPaths.length == importLibFiles.length);
+    importLibFilesFullPaths = new Set.from(fullPaths);
+    for (int i = 0; i < fullPaths.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (fullPaths[i] == fullPaths[j]) {
+          WARNING("File '${fullPaths[i]}' has already been imported. "
+              "Ignoring the redundant <import> tag.");
+          importLibFiles[i] = null;
+        }
+      }
+    }
+    // remove the nulls
+    importLibFiles = importLibFiles.where((f) => f != null).toList();
+    return true;
   }
 
   /**

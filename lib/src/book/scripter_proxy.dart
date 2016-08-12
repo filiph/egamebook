@@ -4,7 +4,6 @@ import "dart:async";
 import 'dart:isolate';
 
 import "package:logging/logging.dart";
-import '../../presenter.dart';
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
 import '../shared/points_award.dart';
