@@ -57,8 +57,8 @@ class ProjectCreator implements Worker {
       print("Creating new project in $_path...");
       await to.create(recursive: true);
     } else {
-      return new Future.error(OutputMessage.outputFailed(
-          "Folder $_path already exists. Please use different folder name."));
+      return new Future.error(new StateError(OutputMessage.outputFailed(
+          "Folder $_path already exists. Please use different folder name.")));
     }
 
     await _createProjectFiles(to);

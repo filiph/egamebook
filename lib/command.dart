@@ -15,7 +15,8 @@ abstract class WorkerCommand extends Command {
     List params = argResults.rest;
 
     if (!paramsValid(params)) {
-      return new Future.error("$error\n\n${runner.commands[name].usage}");
+      return new Future.error(
+          new ArgumentError("$error\n\n${runner.commands[name].usage}"));
     }
 
     return createWorker(params).run();

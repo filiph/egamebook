@@ -72,30 +72,30 @@ void main() {
 
   group("egamebook create", () {
     test("fails with no parameters", () {
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
-        expect(message.contains("Usage:"), isTrue);
+        expect(error.message.contains("Usage:"), isTrue);
       });
 
       runner.run(["create"]).catchError(callback);
     });
 
     test("fails with two parameters", () {
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
-        expect(message.contains("Usage:"), isTrue);
+        expect(error.message.contains("Usage:"), isTrue);
       });
 
       runner.run(["create", "test1", "test2"]).catchError(callback);
     });
 
     test("fails with . as a parameter", () {
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
-        expect(message.contains("Usage:"), isTrue);
+        expect(error.message.contains("Usage:"), isTrue);
       });
 
       runner.run(["create", "."]).catchError(callback);
@@ -105,8 +105,8 @@ void main() {
       String path = getPath("folder_exists");
       createTemporaryDir(path);
 
-      var callback = expectAsync((message) {
-        expect(message.contains("Folder $path already exists."), isTrue);
+      var callback = expectAsync((error) {
+        expect(error.message.contains("Folder $path already exists."), isTrue);
         deleteTemporaryDir(path);
       });
 
@@ -154,10 +154,10 @@ void main() {
     });
 
     test("fails with two parameters", () {
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[0], "Please specify one project folder.");
-        expect(message.contains("Usage:"), isTrue);
+        expect(error.message.contains("Usage:"), isTrue);
       });
 
       runner.run(["build", "test1", "test2"]).catchError(callback);
@@ -183,8 +183,8 @@ void main() {
       String path = getPath("no_egb");
       createTemporaryDir(path);
 
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[0].contains("No .egb file in this directory."), isTrue);
         expect(lines[1].contains("BUILD FAILED!"), isTrue);
         deleteTemporaryDir(path);
@@ -216,8 +216,8 @@ void main() {
       File file = new File(p.join(path, "test1.other"));
       file.writeAsStringSync('Not supported file!');
 
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(lines[1].contains("BUILD FAILED!"), isTrue);
         expect(
             lines[0].contains(
@@ -237,8 +237,8 @@ void main() {
       File file1 = new File(p.join(path, "someotherbodega.egb"));
       file1.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
-      var callback = expectAsync((message) {
-        List lines = message.split("\n");
+      var callback = expectAsync((error) {
+        List lines = error.message.split("\n");
         expect(
             lines[0]
                 .contains("More than one .egb file found in the directory."),
