@@ -96,6 +96,7 @@ abstract class Presenter implements PresenterViewedFromScripter {
 
   /// Sets scripter to [scripterProxy].
   ScripterViewedFromPresenter scripter;
+
   void setScripter(ScripterViewedFromPresenter scripter) {
     this.scripter = scripter;
     assert(scripter.uid != null);

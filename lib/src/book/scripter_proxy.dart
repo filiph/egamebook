@@ -32,7 +32,8 @@ abstract class ScripterViewedFromPresenter {
   void quit();
 
   /// Instance of Presenter.
-  Presenter presenter;
+  PresenterViewedFromScripter get presenter;
+  set presenter(PresenterViewedFromScripter value);
 
   /// Sets Presenter and also sets Presenter player profile's
   /// [:currentEgamebookUid:] to [uid] if is not [:null:].
@@ -226,4 +227,7 @@ class IsolateScripterProxy extends ScripterProxy {
   void INT_DEBUG(String msg) {
     _log.fine(msg);
   }
+
+  @override
+  PresenterViewedFromScripter presenter;
 }

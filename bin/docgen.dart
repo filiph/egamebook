@@ -10,7 +10,7 @@ import 'package:args/args.dart';
 
 final String OUTPUT_PATH = "docs${path.separator}dev";
 
-final List params = ["--output=$OUTPUT_PATH"];
+final List<String> params = ["--output=$OUTPUT_PATH"];
 
 /// If we want to serve the output
 bool serve = false;

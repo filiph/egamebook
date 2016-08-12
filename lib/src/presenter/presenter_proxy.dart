@@ -10,12 +10,17 @@ import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
+import 'package:egamebook/src/book/scripter_proxy.dart';
+import 'package:egamebook/src/persistence/player_profile.dart';
 
 /**
  * The methods of Presenter that are callable by Scripter (mostly through
  * a [PresenterProxy], but conceivably also directly).
  */
 abstract class PresenterViewedFromScripter {
+  PlayerProfile get playerProfile =>
+      throw new UnimplementedError("playerProfile");
+
   Future awardPoints(PointsAward award);
   void endBook();
   void reportError(String title, String text);
@@ -30,10 +35,12 @@ abstract class PresenterViewedFromScripter {
   void updateForm(FormConfiguration values);
 
   /// Instance of Scripter.
-  Scripter scripter;
+  ScripterViewedFromPresenter get scripter;
 
   /// Sets scripter to [scripter].
   void setScripter(Scripter scripter);
+
+  String getTextHistory();
 }
 
 /**
@@ -51,6 +58,8 @@ class IsolatePresenterProxy extends PresenterProxy {
 
   /// Own port for receiving messages from main Isolate.
   ReceivePort port;
+
+  Scripter scripter;
 
   /// Creates new IsolatePresenterProxy with provided [mainIsolatePort] used
   /// for sending messages.
@@ -325,6 +334,11 @@ class IsolatePresenterProxy extends PresenterProxy {
   void updateForm(FormConfiguration values) {
     DEBUG_SCR("Scripter sends newly updated values.");
     _send(new Message.updateForm(values));
+  }
+
+  @override
+  String getTextHistory() {
+    throw new UnimplementedError("getTextHistory");
   }
 }
 
