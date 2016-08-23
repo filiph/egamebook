@@ -13,6 +13,8 @@ import 'package:stranded/team.dart';
 import 'package:stranded/situation.dart';
 import 'package:stranded/storyline/randomly.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'dart:async';
+import 'dart:html';
 
 class EdgeheadGame extends LoopedEvent {
   EdgeheadGame(StringTakingVoidFunction echo, StringTakingVoidFunction goto,
@@ -84,14 +86,18 @@ class EdgeheadGame extends LoopedEvent {
   }
 
   @override
-  void update() {
+  Future<Null> update() async {
     if (world.situations.isEmpty) {
       finished = true;
 
       storyline.addParagraph();
       if (world.getActorById(filip.id).isAlive) {
-        storyline.add("You look behind and see the giant worm's hideous head "
-            "approaching. You start sprinting again.", wholeSentence: true);
+        storyline.add(
+            "You look behind and see the giant worm's hideous head "
+            "approaching. You start sprinting again.",
+            wholeSentence: true);
+        storyline.addParagraph();
+        storyline.add("TO BE CONTINUED.", wholeSentence: true);
       } else {
         storyline.add("You will soon be the giant worm's food.",
             wholeSentence: true);
@@ -106,7 +112,11 @@ class EdgeheadGame extends LoopedEvent {
     var actor = situation.state.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
-    planner.plan(maxOrder: 7);
+    await planner.plan(
+        maxOrder: 7,
+        waitFunction: () async {
+          await window.animationFrame;
+        });
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
@@ -142,7 +152,6 @@ class EdgeheadGame extends LoopedEvent {
           max: PlannerRecommendation.weightsResolution)];
       _applySelected(selected, actor, storyline);
     }
-
   }
 
   void _applySelected(ActorAction selected, Actor actor, Storyline storyline) {

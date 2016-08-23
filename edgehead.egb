@@ -26,7 +26,7 @@ Suddenly, an **orc** and a **goblin** jump at you from a slimy crevice, swords i
 gameLoop
 
 <script>
-  game.run();
+  await game.run();
 </script>
 
 - [gameLoop]

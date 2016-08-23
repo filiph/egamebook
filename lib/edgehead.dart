@@ -33,8 +33,8 @@ class ScripterImpl extends Scripter {
     );
     pageMap[r"""gameLoop"""] = new ScripterPage(
       [
-          () {
-  game.run();
+          () async {
+  await game.run();
         },
           [
             null,
