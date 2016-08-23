@@ -1,0 +1,40 @@
+Title:    Edgehead
+Author:   Filip Hracek
+UniqueID: net.filiph.edgehead.0.0.1
+
+<import 'package:edgehead/edgehead_lib.dart'/>
+
+<declare>
+    EdgeheadGame game;
+</declare>
+
+<init>
+    game = new EdgeheadGame(echo, goto, choices, choice);
+    game.onFinishedGoto = "endGame";
+</init>
+
+---
+start
+
+You and Briana sprint through the giant worm’s tunnel.
+
+Suddenly, an **orc** and a **goblin** jump at you from a slimy crevice, swords in hands.
+
+- [gameLoop]
+
+---
+gameLoop
+
+<script>
+  game.run();
+</script>
+
+- [gameLoop]
+
+---
+endGame
+
+<p class="meta">
+  Hit <strong>Restart</strong> if you want to play again. It will be different.
+</p>
+

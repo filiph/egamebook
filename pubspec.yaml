@@ -1,25 +1,26 @@
-name: egamebook
-version: 1.0.0-dev.1
+name: edgehead
+version: 0.0.1
+description: A demo of fractal_stories.
 author: Filip Hracek <filip.hracek@gmail.com>
+homepage: https://www.egamebook.com
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
-  analyzer: ">=0.25.0+1 <1.0.0"
-  ansicolor: ^0.0.9
-  args: ^0.13.5
-  browser: ^0.10.0+2
-  gtag_analytics: ^0.1.5
-  html: ^0.12.2+2
-  logging: ^0.11.3
-  markdown: ^0.10.1
-  path: ^1.3.9
-  resource: ^1.1.0
-  slot_machine:
-    path: ../slot_machine
-  test: ^0.12.15+3
-  watcher: ^0.9.7+3
+  browser: '>=0.10.0 <0.11.0'
+  dart_to_js_script_rewriter: '^0.1.0'
+  sass: '^0.4.2'
+  built_collection: any
+  egamebook:
+    path: ../egamebook
+  stranded:
+    path: ../stranded
 
 dev_dependencies:
-  a_star: ^0.3.0
+  simple_preprocessor: any
 
-executables:
-  egamebook:
+transformers:
+- simple_preprocessor
+- dart_to_js_script_rewriter
+- sass
