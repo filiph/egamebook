@@ -1576,7 +1576,7 @@ class Builder {
         }
 
         if (curBlock.type == BuilderBlock.BLK_TEXT_WITH_VAR) {
-          write("() {\n");
+          write("() async {\n");
           if (curBlock.lineStart == curBlock.lineEnd) {
             write("  echo(\"\"\"${handleTrailingQuotes(line)}\"\"\");\n");
             write("}$commaOrNot\n");
@@ -1651,7 +1651,7 @@ class Builder {
 //        }
 
         if (curBlock.type == BuilderBlock.BLK_SCRIPT) {
-          write("() {\n");
+          write("() async {\n");
         }
       }
 
@@ -1700,7 +1700,7 @@ class Builder {
               }
               if (choiceSubBlock.options["script"] != null) {
                 lines.add(
-                    "  \"script\": () {${choiceSubBlock.options["script"]};}");
+                    "  \"script\": () async {${choiceSubBlock.options["script"]};}");
               }
               write(lines.join(",\n"));
               write("}${lineNumber != curBlock.lineEnd ? "," : ""}\n");

@@ -5,6 +5,7 @@ import 'dart:collection';
 import 'utils.dart';
 import 'message.dart';
 import '../book/author_script_exception.dart';
+import 'dart:async';
 
 /// Class Choice wraps user interaction choice.
 class Choice implements Comparable<Choice> {
@@ -28,7 +29,7 @@ class Choice implements Comparable<Choice> {
   String string;
 
   /// Script function.
-  VoidFunction f;
+  AsyncVoidFunction f;
 
   /// On which page name it should go to.
   String goto;
@@ -78,7 +79,7 @@ class Choice implements Comparable<Choice> {
   /// [submenu], if [deferToEndOfPage] and if [deferToChoiceList].
   Choice(String string,
       {this.goto,
-      VoidFunction script,
+      AsyncVoidFunction script,
       this.submenu: null,
       bool deferToEndOfPage: false,
       bool deferToChoiceList: false})
@@ -107,7 +108,7 @@ class Choice implements Comparable<Choice> {
     if (map.containsKey("showNow")) {
       deferToEndOfPage = !map["showNow"];
     }
-    f = map["then"] as VoidFunction;
+    f = map["then"] as AsyncVoidFunction;
 
     submenu = map["submenu"];
   }
@@ -120,7 +121,7 @@ class Choice implements Comparable<Choice> {
   /// Sets script function to [_f] and returns actual object.
   ///
   /// Defines what [Function] should do then, for example call [:echo:].
-  Choice then(VoidFunction _f) {
+  Choice then(AsyncVoidFunction _f) {
     f = _f;
     return this;
   }
@@ -198,7 +199,7 @@ class ChoiceList extends ListBase<Choice> {
       }
       var choice = new Choice(string,
           goto: map["goto"],
-          script: map["script"] as VoidFunction,
+          script: map["script"] as AsyncVoidFunction,
           submenu: map["submenu"]);
       _choices.add(choice);
     }
@@ -210,7 +211,7 @@ class ChoiceList extends ListBase<Choice> {
   /// parameters [script], [goto], [submenu], [deferToEndOfPage] and
   /// [deferToChoiceList]. In other case the [ArgumentError] is thrown.
   void add(Object element,
-      {VoidFunction script,
+      {AsyncVoidFunction script,
       String goto,
       String submenu,
       bool deferToEndOfPage: false,
@@ -287,7 +288,7 @@ class ChoiceList extends ListBase<Choice> {
   String toString() => _choices.map((ch) => "$ch").join(", ");
 }
 
-typedef void VoidFunction();
+typedef Future<Null> AsyncVoidFunction();
 
 /**
  * [Intent] is an interaction that is 'out of place' and asynchronous.

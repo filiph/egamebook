@@ -290,7 +290,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
    * Scripter. Goes through the blocks on the page or processes previously
    * registered actions.
    */
-  void walk() {
+  Future<Null> walk() async {
     if (Stat.someChanged) {
       DEBUG_SCR("Sending updated stats.");
       presenter.updateStats(Stat.createUpdates());
@@ -307,7 +307,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
     do {
       DEBUG_SCR("Calling _goOneStep().");
       try {
-        loop = _goOneStep();
+        loop = await _goOneStep();
       } on AuthorScriptException catch (e, stacktrace) {
         presenter.reportError(
             "AuthorScriptException", "$e\nStacktrace: $stacktrace");
@@ -398,7 +398,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
    * Returns [bool] which is either [:true:] when the execution needs to stop,
    * or [:false:] when the method can be called another time.
    */
-  bool _goOneStep() {
+  Future<bool> _goOneStep() async {
     if (!_points.pointsAwards.isEmpty) {
       DEBUG_SCR("Awarding points.");
       var award = _points.pointsAwards.removeFirst();
@@ -480,7 +480,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
     if (!_nextScriptStack.isEmpty) {
       // previous script asked for nextScript()
       ScriptBlock script = _nextScriptStack.removeLast();
-      return _runScriptBlock(script);
+      return await _runScriptBlock(script);
     }
 
     if (gotoPageName != null) {
@@ -557,8 +557,8 @@ abstract class Scripter extends ScripterViewedFromPresenter {
         // the script block.
         savegame = _createSaveGame();
       }
-      bool canContinue = _runScriptBlock(
-          currentPage.blocks[currentBlockIndex] as VoidFunction);
+      bool canContinue = await _runScriptBlock(
+          currentPage.blocks[currentBlockIndex] as AsyncVoidFunction);
 
       if (choices.any((choice) => choice.isActionable(
               atEndOfPage: atEndOfPage,
@@ -669,13 +669,13 @@ abstract class Scripter extends ScripterViewedFromPresenter {
 
   /// Runs the specified script block, catches exceptions and returns generated
   /// text.
-  bool _runScriptBlock(ScriptBlock script) {
+  Future<bool> _runScriptBlock(ScriptBlock script) async {
     // clean up
     textBuffer.clear();
 
     // run the actual script
     try {
-      script();
+      await script();
     } catch (e, stacktrace) {
       textBuffer.write("<code><pre>ERROR: $e\n\n$stacktrace</pre></code>");
       throw new AuthorScriptException.withPageName(
@@ -783,4 +783,4 @@ abstract class Scripter extends ScripterViewedFromPresenter {
 
 /// A [ScriptBlock] (the Dart code between [:<script>:] and [:</script>:])
 /// takes no arguments and doesn't return value.
-typedef void ScriptBlock();
+typedef Future<Null> ScriptBlock();
