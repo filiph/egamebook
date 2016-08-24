@@ -56,7 +56,7 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "orc"
       ..nameIsProperNoun = false
       ..pronoun = Pronoun.HE
-      ..currentWeapon = new Sword("scimitar")
+      ..currentWeapon = new Sword()
       ..team = defaultEnemyTeam);
 
     goblin = new Actor((b) => b
@@ -64,7 +64,7 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "goblin"
       ..nameIsProperNoun = false
       ..pronoun = Pronoun.HE
-      ..currentWeapon = new Sword()
+      ..currentWeapon = new Sword("scimitar")
       ..team = defaultEnemyTeam);
 
     initialSituation = new Situation.withState(new FightSituation((b) => b
@@ -94,11 +94,21 @@ class EdgeheadGame extends LoopedEvent {
       finished = true;
 
       storyline.addParagraph();
-      if (world.getActorById(filip.id).isAlive) {
+      var player = world.getActorById(filip.id);
+      if (player.isAlive) {
+        String both = world.getActorById(briana.id).isAlive ? 'both ' : '';
         storyline.add(
-            "You look behind and see the giant worm's hideous head "
-            "approaching. You start sprinting again.",
-            wholeSentence: true);
+            "<subject> look<s> behind and see<s> the giant worm's hideous head "
+            "approaching",
+            subject: player);
+        if (world.getActorById(briana.id).isAlive) {
+          storyline.add("You both start sprinting again.", wholeSentence: true);
+        } else {
+          storyline.add("<subject> take<s> a last look at Briana",
+              subject: player);
+          storyline.add("<subject> start<s> sprinting again, alone.",
+              subject: player, endSentence: true);
+        }
         storyline.addParagraph();
         storyline.add("TO BE CONTINUED.", wholeSentence: true);
       } else {

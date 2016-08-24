@@ -17,6 +17,7 @@ var slashGroundedEnemy = new EnemyTargetActionGenerator("swing at <object>",
   s.add("<subject> {cuts|slashes|slits} <object's> {throat|neck|side}",
       subject: a.currentWeapon, object: enemy);
   enemy.report(s, "<subject> die<s>", negative: true);
+  s.addParagraph();
   w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
   return "${a.name} kills ${enemy.name} on the ground";
 }, failure: (a, enemy, w, s) {
