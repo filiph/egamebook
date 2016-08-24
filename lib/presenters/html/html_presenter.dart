@@ -99,6 +99,7 @@ class HtmlPresenter extends Presenter {
       _textHistory.clear();
       _savegameToBe = null;
       // TODO: clear meta elements
+      _showLoading(true);
     });
 
     pointsSpan = document.querySelector("span#points-value");
@@ -167,6 +168,7 @@ class HtmlPresenter extends Presenter {
   @override
   void endBook() {
     print("The book has ended.");
+    _showLoading(false);
     if (currentActivity == UI_ACTIVITY_TITLE) {
       // We loaded a book which immediately ran through to the end.
       bookDiv.children.clear();
@@ -195,8 +197,6 @@ class HtmlPresenter extends Presenter {
     log("Showing: $s");
     if (s == null) return new Future.value(false);
     var completer = new Completer<bool>();
-
-    _showLoading(false);
 
     new Future.delayed(_durationBetweenShowingText, () {
       _textHistory.write("$s\n\n");
