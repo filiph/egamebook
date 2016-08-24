@@ -34,6 +34,8 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
+  static const maxChoicesCount = 4;
+
   void setup() {
     filip = new Actor((b) => b
       ..id = 1
@@ -140,7 +142,12 @@ class EdgeheadGame extends LoopedEvent {
       storyline.clear();
 
       planner.generateTable().forEach(print);
-      for (ActorAction action in recs.actions) {
+
+      // Take only the first few best actions.
+      List<ActorAction> actions =
+          new List.from(recs.actions.take(maxChoicesCount));
+      actions.sort((a, b) => a.name.compareTo(b.name));
+      for (ActorAction action in actions) {
         choiceFunction(action.name, script: () {
           _applySelected(action, actor, storyline);
         });
