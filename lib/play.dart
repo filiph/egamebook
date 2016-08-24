@@ -22,6 +22,7 @@ main() async {
     ..pronoun = Pronoun.YOU
     ..name = "Filip"
     ..currentWeapon = new Sword()
+    ..hitpoints = 2
     ..initiative = 1000);
   var briana = new Actor((b) => b
     ..id = 100
