@@ -46,7 +46,7 @@ class ScripterImpl extends Scripter {
     pageMap[r"""endGame"""] = new ScripterPage(
       [
           """<p class="meta">
-  Hit <strong>Restart</strong> if you want to play again. It will be different.
+  Hit <strong>Restart</strong> to play again. It will be different.
 </p>"""
 ]
     );

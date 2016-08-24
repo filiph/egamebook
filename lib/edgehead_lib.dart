@@ -41,6 +41,7 @@ class EdgeheadGame extends LoopedEvent {
       ..pronoun = Pronoun.YOU
       ..name = "Filip"
       ..currentWeapon = new Sword()
+      ..hitpoints = 2
       ..initiative = 1000);
     briana = new Actor((b) => b
       ..id = 100
@@ -102,7 +103,7 @@ class EdgeheadGame extends LoopedEvent {
         storyline.add("You will soon be the giant worm's food.",
             wholeSentence: true);
       }
-      echo(storyline.toString());
+      echo(storyline.realize());
 
       return;
     }
@@ -113,7 +114,7 @@ class EdgeheadGame extends LoopedEvent {
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        maxOrder: 7,
+        maxOrder: 6,
         waitFunction: () async {
           await window.animationFrame;
         });
@@ -135,7 +136,7 @@ class EdgeheadGame extends LoopedEvent {
         _applySelected(selected, actor, storyline);
         return;
       }
-      echo(storyline.toString());
+      echo(storyline.realize());
       storyline.clear();
 
       planner.generateTable().forEach(print);
@@ -151,6 +152,11 @@ class EdgeheadGame extends LoopedEvent {
       selected = recs.actions[Randomly.chooseWeightedPrecise(recs.weights,
           max: PlannerRecommendation.weightsResolution)];
       _applySelected(selected, actor, storyline);
+    }
+
+    if (storyline.hasManyParagraphs) {
+      echo(storyline.realize(onlyFirstParagraph: true));
+      storyline.removeFirstParagraph();
     }
   }
 

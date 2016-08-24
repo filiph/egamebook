@@ -1,12 +1,8 @@
 import 'package:stranded/action.dart';
 import 'package:stranded/actor.dart';
 import 'package:stranded/item.dart';
-import 'package:stranded/situation.dart';
 import 'package:stranded/storyline/storyline.dart';
 import 'package:stranded/world.dart';
-
-import 'fight_situation.dart';
-import 'slash_situation.dart';
 
 var slashGroundedEnemy = new EnemyTargetActionGenerator("swing at <object>",
     valid: (Actor a, enemy, w) =>
@@ -21,7 +17,7 @@ var slashGroundedEnemy = new EnemyTargetActionGenerator("swing at <object>",
   s.add("<subject> {cuts|slashes|slits} <object's> {throat|neck|side}",
       subject: a.currentWeapon, object: enemy);
   enemy.report(s, "<subject> die<s>", negative: true);
-  w.updateActorById(enemy.id, (b) => b..isAlive = false);
+  w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
   return "${a.name} kills ${enemy.name} on the ground";
 }, failure: (a, enemy, w, s) {
   a.report(

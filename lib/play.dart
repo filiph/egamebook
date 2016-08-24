@@ -15,7 +15,7 @@ import 'package:stranded/storyline/storyline.dart';
 
 import 'src/fight/fight_situation.dart';
 
-main() {
+main() async {
   var filip = new Actor((b) => b
     ..id = 1
     ..isPlayer = true
@@ -82,7 +82,7 @@ main() {
     var actor = situation.state.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
-    planner.plan(maxOrder: 7);
+    await planner.plan(maxOrder: 7);
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
@@ -99,7 +99,7 @@ main() {
         // Only one option, select by default.
         selected = recs.actions.single;
       } else {
-        print(storyline.toString());
+        print(storyline.realize());
         storyline.clear();
 
         planner.generateTable().forEach(print);
@@ -117,7 +117,7 @@ main() {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
   }
-  print(storyline.toString());
+  print(storyline.realize());
 
   if (world.getActorById(filip.id).isAlive) {
     print("You start sprinting again.");

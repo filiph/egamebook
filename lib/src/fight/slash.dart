@@ -5,9 +5,9 @@ import 'package:stranded/situation.dart';
 import 'package:stranded/storyline/storyline.dart';
 import 'package:stranded/world.dart';
 
-import 'fight_situation.dart';
 import 'slash_situation.dart';
 import 'slash_defense_situation.dart';
+import 'package:edgehead/src/fight/damage_reports.dart';
 
 var startSlash = new EnemyTargetActionGenerator("swing at <object>",
     valid: (Actor a, enemy, w) =>
@@ -32,15 +32,23 @@ var startSlash = new EnemyTargetActionGenerator("swing at <object>",
 var finishSlash = new EnemyTargetActionGenerator("kill <object>",
     valid: (Actor a, enemy, w) => a.wields(ItemType.SWORD),
     chance: 1.0, success: (a, enemy, WorldState w, Storyline s) {
-  a.report(
-      s,
-      "<subject> {slash<es>|cut<s>} {across|through} <object's> "
-      "{neck|abdomen|lower body}",
-      object: enemy,
-      positive: true);
-  enemy.report(s, "<subject> fall<s> to the ground, dead",
-      negative: true, endSentence: true);
-  s.addParagraph();
-  w.updateActorById(enemy.id, (b) => b.isAlive = false);
+      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+      if (w.getActorById(enemy.id).isAlive) {
+        a.report(
+            s,
+            "<subject> {slash<es>|cut<s>} <object's> "
+                "{shoulder|abdomen|thigh}",
+            object: enemy,
+            positive: true);
+        reportPain(s, enemy);
+      } else {
+        a.report(
+            s,
+            "<subject> {slash<es>|cut<s>} {across|through} <object's> "
+                "{neck|abdomen|lower body}",
+            object: enemy,
+            positive: true);
+        reportDeath(s, enemy);
+      }
   return "${a.name} slains ${enemy.name}";
 });

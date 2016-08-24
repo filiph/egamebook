@@ -1,8 +1,5 @@
 import 'package:stranded/action.dart';
 import 'package:stranded/actor.dart';
-import 'package:stranded/world.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'off_balance_opportunity_situation.dart';
 import 'kick.dart';
 
 var regainBalance = new ClosureActorAction(
