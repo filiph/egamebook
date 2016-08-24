@@ -59,7 +59,7 @@ All this starts to feel like a lot of BS. It looks good in theory, yes, but is t
 It looks like you join a mailing list at this point (in case you’re interested in playing – or creating – an egamebook in the future).
 
 <ul class="choices">
-  <li class="button preferred"><a href="signup.html"><strong>Join</strong> the discussion/mailing list.</a></li>
+  <li class="button preferred"><a href="https://groups.google.com/forum/#!forum/egamebook"><strong>Join</strong> the discussion/mailing list.</a></li>
 	<li class="button"><a href="https://plus.google.com/communities/117415708119099457420">Join the Google+ Community.</a></li>
   <li class="button"><a href="signup.html">Sign up for no more than one email announcement a month.</a></li>
 </ul>
