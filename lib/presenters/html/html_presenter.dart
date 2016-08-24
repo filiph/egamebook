@@ -139,8 +139,7 @@ class HtmlPresenter extends Presenter {
       new Future(() {
         // Give the browser time to switch scrolling on.
         assert(bookDiv.children.length > 0);
-        bookDiv.children.last // TODO: first/last according to Continue/Start
-            .scrollIntoView();
+        // TODO: scroll first/last element (.scrollIntoView) according to Continue/Start
         bookTitleDiv.style.display = "none";
         bigBottomButtonDiv.style.display = "none";
         currentActivity = UI_ACTIVITY_BOOK;
