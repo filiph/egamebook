@@ -456,7 +456,7 @@ m=new Y.ah(H.d([],[Y.ay]),0)
 m.b=p.f
 l=new G.jY(n,new B.ci(p,null,m,1,1,!0,!1,!1,0),0,!1,o)
 z=3
-return P.z(l.d2(5,new O.kX()),$async$dc,y)
+return P.z(l.d2(4,new O.kX()),$async$dc,y)
 case 3:k=G.nc(o)
 p=k.b
 if(p.length===0){u.cx.hp(t.gF(r),new O.kY())
@@ -1890,4 +1890,4 @@ z=$.$get$bu()
 y=H.d([],[P.h])
 z==null
 return new Y.bI(!0,"balance",y,!0,z,!0,!1,C.j)},$,"f1","$get$f1",function(){return new Q.bh("stab <object>",new A.td(),new A.te(),new A.tg(),0.5)},$,"j4","$get$j4",function(){return new Q.bh("parry it",new G.t0(),new G.t1(),new G.t2(),0.6)},$,"j5","$get$j5",function(){return Q.dU("Stand firm.",new F.th(),new F.ti(),new F.tj(),1)},$,"bl","$get$bl",function(){return P.ee(null)},$,"j9","$get$j9",function(){return Q.dU("Regain balance.",new B.tn(),new B.to(),new B.tp(),1)},$,"je","$get$je",function(){return new Q.bh("swing at <object>",new Y.rY(),new Y.rZ(),null,1)},$,"iX","$get$iX",function(){return new Q.bh("kill <object>",new Y.t8(),new Y.t9(),null,1)},$,"jb","$get$jb",function(){return new Q.bh("swing at <object>",new T.tD(),new T.rV(),new T.rW(),0.8)},$,"jc","$get$jc",function(){return Q.dU("Stand up.",new Q.tk(),new Q.tl(),new Q.tm(),1)},$,"hK","$get$hK",function(){return P.ab("(\\w)([\\.\\?\\!])([\"'])\\.(?=$|\\s)",!0,!1)},$,"dQ","$get$dQ",function(){return P.kC()},$,"eO","$get$eO",function(){return P.ee(null)},$,"bu","$get$bu",function(){return L.ep(new L.tz())},$,"f2","$get$f2",function(){return L.ep(new L.tC())},$,"eU","$get$eU",function(){return L.ep(new L.tA())},$])}
-$dart_deferred_initializers$["lG1i/Cy0mBjb+lTolId5dsjz3jg="]=$dart_deferred_initializers$.current
+$dart_deferred_initializers$["hPER8+p6SMHyXSZJ5i+1Te+a5Dc="]=$dart_deferred_initializers$.current
