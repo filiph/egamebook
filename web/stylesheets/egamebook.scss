@@ -108,6 +108,17 @@ h1 {
   margin-bottom: $line-height;
 }
 
+.title__illustration {
+  float: right;
+  width: 40%;
+  margin-left: 1em;
+  margin-bottom: 1em;
+
+  @media screen and (min-width: 600px) {
+    width: 50%;
+  }
+}
+
 // NAV
 
 nav {
