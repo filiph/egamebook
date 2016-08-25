@@ -97,16 +97,16 @@ class EdgeheadGame extends LoopedEvent {
       var player = world.getActorById(filip.id);
       if (player.isAlive) {
         String both = world.getActorById(briana.id).isAlive ? 'both ' : '';
+        storyline.add("<subject> look<s> behind", subject: player);
         storyline.add(
-            "<subject> look<s> behind and see<s> the giant worm's hideous head "
-            "approaching",
+            "<subject> see<s> the giant worm's hideous head approaching",
             subject: player);
         if (world.getActorById(briana.id).isAlive) {
           storyline.add("You both start sprinting again.", wholeSentence: true);
         } else {
           storyline.add("<subject> take<s> a last look at Briana",
               subject: player);
-          storyline.add("<subject> start<s> sprinting again, alone.",
+          storyline.add("<subject> start<s> sprinting again, alone",
               subject: player, endSentence: true);
         }
         storyline.addParagraph();
