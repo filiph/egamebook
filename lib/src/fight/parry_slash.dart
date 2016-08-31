@@ -16,10 +16,7 @@ var parrySlash = new EnemyTargetActionGenerator("parry and counter",
       "meet<s> it with <subject's> ${a.currentWeapon.name}|"
       "fend<s> it off}",
       positive: true);
-  // Pop slash_defense_situation.
-  w.popSituation();
-  // Pop slash_situation.
-  w.popSituation();
+  w.popSituationsUntil("FightSituation");
   if (a.isPlayer) {
     s.add("this opens an opportunity for a counter attack");
   }

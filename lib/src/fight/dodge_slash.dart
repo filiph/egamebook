@@ -15,10 +15,7 @@ var dodgeSlash = new EnemyTargetActionGenerator("dodge and counter",
         endSentence: true);
     w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
   }
-  // Pop slash_defense_situation.
-  w.popSituation();
-  // Pop slash_situation.
-  w.popSituation();
+  w.popSituationsUntil("FightSituation");
   if (a.isPlayer) {
     s.add("this opens an opportunity for a counter attack");
   }

@@ -183,8 +183,7 @@ class EdgeheadGame extends LoopedEvent {
 
   void _applySelected(ActorAction selected, Actor actor, Storyline storyline) {
     var consequences = selected.apply(actor, consequence, world).toList();
-    int index = Randomly.chooseWeighted(
-        consequences.map((c) => c.probability) as Iterable<num>);
+    int index = Randomly.chooseWeighted(consequences.map((c) => c.probability));
     consequence = consequences[index];
     storyline.concatenate(consequence.storyline);
     world = consequence.world;

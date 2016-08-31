@@ -14,6 +14,7 @@ part 'counter_attack_situation.g.dart';
 abstract class CounterAttackSituation extends SituationState
     with ElapsingTime<CounterAttackSituation, CounterAttackSituationBuilder>
     implements Built<CounterAttackSituation, CounterAttackSituationBuilder> {
+  String get name => "CounterAttackSituation";
   int get time;
   int get counterAttacker;
   int get target;

@@ -21,6 +21,7 @@ part 'fight_situation.g.dart';
 abstract class FightSituation extends SituationState
     with ElapsingTime<FightSituation, FightSituationBuilder>
     implements Built<FightSituation, FightSituationBuilder> {
+  String get name => "FightSituation";
   int get time;
   BuiltList<int> get playerTeamIds;
   BuiltList<int> get enemyTeamIds;

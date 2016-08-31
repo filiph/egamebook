@@ -16,6 +16,7 @@ part 'slash_defense_situation.g.dart';
 abstract class SlashDefenseSituation extends SituationState
     with ElapsingTime<SlashDefenseSituation, SlashDefenseSituationBuilder>
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
+  String get name => "SlashDefenseSituation";
   int get time;
   int get attacker;
   int get target;

@@ -14,6 +14,7 @@ part 'slash_situation.g.dart';
 abstract class SlashSituation extends SituationState
     with ElapsingTime<SlashSituation, SlashSituationBuilder>
     implements Built<SlashSituation, SlashSituationBuilder> {
+  String get name => "SlashSituation";
   int get time;
   int get attacker; // TODO: use id instead
   int get target;

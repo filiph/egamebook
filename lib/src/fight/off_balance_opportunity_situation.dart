@@ -18,6 +18,7 @@ abstract class OffBalanceOpportunitySituation extends SituationState
     implements
         Built<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
+  String get name => "OffBalanceOpportunitySituation";
   int get time;
 
   /// The actor who is off balance.
