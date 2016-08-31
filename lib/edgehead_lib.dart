@@ -126,7 +126,7 @@ class EdgeheadGame extends LoopedEvent {
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        maxOrder: 6,
+        maxOrder: 5,
         waitFunction: () async {
           await window.animationFrame;
         });
