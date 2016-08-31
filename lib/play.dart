@@ -112,8 +112,8 @@ main() async {
           max: PlannerRecommendation.weightsResolution)];
     }
     var consequences = selected.apply(actor, consequence, world).toList();
-    int index = Randomly
-        .chooseWeighted(consequences.map/*<num>*/((c) => c.probability));
+    int index = Randomly.chooseWeighted(
+        consequences.map((c) => c.probability) as Iterable<num>);
     consequence = consequences[index];
     storyline.concatenate(consequence.storyline);
     world = consequence.world;

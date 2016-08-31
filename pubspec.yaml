@@ -18,7 +18,11 @@ dependencies:
     path: ../stranded
 
 dev_dependencies:
+  build: any
+  built_value_generator: any
   simple_preprocessor: any
+  source_gen: any
+  test: any
 
 transformers:
 - simple_preprocessor

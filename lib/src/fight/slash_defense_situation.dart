@@ -9,6 +9,7 @@ import 'package:stranded/action.dart';
 import 'package:stranded/world.dart';
 import 'dodge_slash.dart';
 import 'parry_slash.dart';
+import 'package:edgehead/src/fight/defensive_parry_slash.dart';
 
 part 'slash_defense_situation.g.dart';
 
@@ -16,7 +17,7 @@ abstract class SlashDefenseSituation extends SituationState
     with ElapsingTime<SlashDefenseSituation, SlashDefenseSituationBuilder>
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
   int get time;
-  int get attacker; // TODO: use id instead
+  int get attacker;
   int get target;
 
   SlashDefenseSituation._();
@@ -29,7 +30,8 @@ abstract class SlashDefenseSituation extends SituationState
         ..target = target.id
         ..time = time);
 
-  List<ActionGenerator> get actionGenerators => [dodgeSlash, parrySlash];
+  List<ActionGenerator> get actionGenerators =>
+      [dodgeSlash, parrySlash, defensiveParrySlash];
 
   @override
   Actor getActorAtTime(int time, WorldState w) {

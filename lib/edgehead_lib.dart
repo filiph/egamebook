@@ -101,7 +101,6 @@ class EdgeheadGame extends LoopedEvent {
       storyline.addParagraph();
       var player = world.getActorById(filip.id);
       if (player.isAlive) {
-        String both = world.getActorById(briana.id).isAlive ? 'both ' : '';
         storyline.add("<subject> look<s> behind", subject: player);
         storyline.add(
             "<subject> see<s> the giant worm's hideous head approaching",
@@ -184,8 +183,8 @@ class EdgeheadGame extends LoopedEvent {
 
   void _applySelected(ActorAction selected, Actor actor, Storyline storyline) {
     var consequences = selected.apply(actor, consequence, world).toList();
-    int index = Randomly
-        .chooseWeighted(consequences.map/*<num>*/((c) => c.probability));
+    int index = Randomly.chooseWeighted(
+        consequences.map((c) => c.probability) as Iterable<num>);
     consequence = consequences[index];
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
@@ -198,10 +197,10 @@ num carelessScoringFunction(Actor monster, WorldState world) {
   int score = 0;
 
   var friends = world.actors.where((a) => a.team == monster.team);
-  score += friends.fold/*<int>*/(0, (sum, a) => sum + a.hitpoints);
+  score += friends.fold(0, (sum, a) => sum + a.hitpoints);
 
   var enemies = world.actors.where((a) => a.isEnemyOf(monster));
-  score -= enemies.fold/*<int>*/(0, (sum, a) => sum + a.hitpoints);
+  score -= enemies.fold(0, (sum, a) => sum + a.hitpoints);
 
   return score;
 }

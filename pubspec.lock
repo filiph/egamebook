@@ -12,7 +12,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.25.0+1"
+    version: "0.27.6"
   ansicolor:
     description:
       name: ansicolor
@@ -49,6 +49,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+2"
+  build:
+    description:
+      name: build
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0+6"
   built_collection:
     description:
       name: built_collection
@@ -60,13 +66,31 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
+  built_value_generator:
+    description:
+      name: built_value_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   charcode:
     description:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  cli_util:
+    description:
+      name: cli_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+2"
+  code_transformers:
+    description:
+      name: code_transformers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2+2"
   collection:
     description:
       name: collection
@@ -91,6 +115,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.13.2"
+  dart_style:
+    description:
+      name: dart_style
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.9+1"
   dart_to_js_script_rewriter:
     description:
       name: dart_to_js_script_rewriter
@@ -102,7 +132,7 @@ packages:
       path: "../egamebook"
       relative: true
     source: path
-    version: "0.1.4"
+    version: "0.2.0"
   glob:
     description:
       name: glob
@@ -139,6 +169,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  isolate:
+    description:
+      name: isolate
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.3"
   jsonml:
     description:
       name: jsonml
@@ -186,13 +222,19 @@ packages:
       name: package_resolver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   path:
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.9"
+  plugin:
+    description:
+      name: plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   pool:
     description:
       name: pool
@@ -228,7 +270,7 @@ packages:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.5+2"
+    version: "0.6.5+3"
   shelf_packages_handler:
     description:
       name: shelf_packages_handler
@@ -253,6 +295,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2"
+  source_gen:
+    description:
+      name: source_gen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
   source_map_stack_trace:
     description:
       name: source_map_stack_trace
@@ -300,7 +348,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.15+3"
+    version: "0.12.15+6"
   typed_data:
     description:
       name: typed_data
@@ -325,6 +373,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  when:
+    description:
+      name: when
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
+  which:
+    description:
+      name: which
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   yaml:
     description:
       name: yaml
