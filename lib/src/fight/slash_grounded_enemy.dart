@@ -4,16 +4,18 @@ import 'package:stranded/item.dart';
 import 'package:stranded/storyline/storyline.dart';
 import 'package:stranded/world.dart';
 
-var slashGroundedEnemy = new EnemyTargetActionGenerator("swing at <object>",
+var slashGroundedEnemy = new EnemyTargetActionGenerator(
+    "strike down at <object>",
     valid: (Actor a, enemy, w) =>
         enemy.pose == Pose.onGround && a.wields(ItemType.SWORD),
     chance: 0.8, success: (a, enemy, WorldState w, Storyline s) {
   a.report(
       s,
-      "<subject> swing<s> "
-      "{<subject's> ${a.currentWeapon.name} |}at <object>",
+      "<subject> strike<s> down "
+      "{with <subject's> ${a.currentWeapon.name} |}at <object>",
       object: enemy);
-  enemy.report(s, "<subject> can't roll out of the way");
+  enemy.report(s, "<subject> tr<ies> to roll out of the way");
+  enemy.report(s, "<subject> can't", but: true);
   s.add("<subject> {cuts|slashes|slits} <object's> {throat|neck|side}",
       subject: a.currentWeapon, object: enemy);
   enemy.report(s, "<subject> die<s>", negative: true);
@@ -23,8 +25,8 @@ var slashGroundedEnemy = new EnemyTargetActionGenerator("swing at <object>",
 }, failure: (a, enemy, w, s) {
   a.report(
       s,
-      "<subject> swing<s> "
-      "{<subject's> ${a.currentWeapon.name} |}at <object>",
+      "<subject> strike<s> down "
+      "{with <subject's> ${a.currentWeapon.name} |}at <object>",
       object: enemy);
   enemy.report(s, "<subject> <is> able to roll out of the way", but: true);
   return "${a.name} fails to kill ${enemy.name} on the ground";

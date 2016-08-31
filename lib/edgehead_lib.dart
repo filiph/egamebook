@@ -45,11 +45,13 @@ class EdgeheadGame extends LoopedEvent {
       ..currentWeapon = new Sword()
       ..hitpoints = 2
       ..initiative = 1000);
+
     briana = new Actor((b) => b
       ..id = 100
       ..pronoun = Pronoun.SHE
       ..name = "Briana"
-      ..currentWeapon = new Sword("longsword"));
+      ..currentWeapon = new Sword("longsword")
+      ..hitpoints = 2);
 
     orc = new Actor((b) => b
       ..id = 1000
@@ -57,7 +59,9 @@ class EdgeheadGame extends LoopedEvent {
       ..nameIsProperNoun = false
       ..pronoun = Pronoun.HE
       ..currentWeapon = new Sword()
-      ..team = defaultEnemyTeam);
+      ..hitpoints = 2
+      ..team = defaultEnemyTeam
+      ..worldScoringFunction = carelessScoringFunction);
 
     goblin = new Actor((b) => b
       ..id = 1001
@@ -65,7 +69,8 @@ class EdgeheadGame extends LoopedEvent {
       ..nameIsProperNoun = false
       ..pronoun = Pronoun.HE
       ..currentWeapon = new Sword("scimitar")
-      ..team = defaultEnemyTeam);
+      ..team = defaultEnemyTeam
+      ..worldScoringFunction = carelessScoringFunction);
 
     initialSituation = new Situation.withState(new FightSituation((b) => b
       ..playerTeamIds = new BuiltList<int>([filip.id, briana.id])
@@ -185,4 +190,18 @@ class EdgeheadGame extends LoopedEvent {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
   }
+}
+
+/// Lesser self-worth than normal scoring function as monsters should
+/// kind of carelessly attack to make fights more action-packed.
+num carelessScoringFunction(Actor monster, WorldState world) {
+  int score = 0;
+
+  var friends = world.actors.where((a) => a.team == monster.team);
+  score += friends.fold/*<int>*/(0, (sum, a) => sum + a.hitpoints);
+
+  var enemies = world.actors.where((a) => a.isEnemyOf(monster));
+  score -= enemies.fold/*<int>*/(0, (sum, a) => sum + a.hitpoints);
+
+  return score;
 }
