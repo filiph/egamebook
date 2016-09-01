@@ -4,10 +4,15 @@ import 'package:stranded/world.dart';
 import 'package:stranded/storyline/storyline.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
 import 'package:stranded/situation.dart';
+import 'package:stranded/storyline/randomly.dart';
 
 var dodgeSlash = new EnemyTargetActionGenerator("dodge and counter",
     valid: (Actor a, enemy, WorldState w) => a.pose != Pose.onGround,
-    chance: 0.5, success: (Actor a, Actor enemy, WorldState w, Storyline s) {
+    chance: (a, enemy, w) {
+  num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+  if (a.isPlayer) return 0.7 - outOfBalancePenalty;
+  return 0.4 - outOfBalancePenalty;
+}, success: (Actor a, Actor enemy, WorldState w, Storyline s) {
   a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
       object: enemy, positive: true);
   if (enemy.pose == Pose.standing) {
@@ -25,6 +30,14 @@ var dodgeSlash = new EnemyTargetActionGenerator("dodge and counter",
   return "${a.name} dodges ${enemy.name}";
 }, failure: (Actor a, Actor enemy, WorldState w, Storyline s) {
   a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
-  a.report(s, "<subject> {can't|fail<s>}", but: true);
+  if (a.pose == Pose.offBalance) {
+    a.report(s, "<subject> <is> out of balance", but: true);
+  } else {
+    Randomly.run(
+        () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
+            but: true),
+        () => enemy.report(s, "<subject> <is> too quick for <object>",
+            object: a, but: true));
+  }
   return "${a.name} fails to dodge ${enemy.name}";
 });

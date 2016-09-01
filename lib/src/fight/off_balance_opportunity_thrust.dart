@@ -11,7 +11,10 @@ var offBalanceOpportunityThrust = new EnemyTargetActionGenerator(
         a.pose == Pose.standing &&
         enemy.pose == Pose.offBalance &&
         a.wields(ItemType.SWORD),
-    chance: 0.5, success: (a, enemy, WorldState w, Storyline s) {
+    chance: (a, enemy, w) {
+      if (a.isPlayer) return 0.6;
+      return 0.5;
+    }, success: (a, enemy, WorldState w, Storyline s) {
   w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
   if (w.getActorById(enemy.id).isAlive) {
     a.report(

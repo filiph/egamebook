@@ -10,7 +10,8 @@ import 'package:edgehead/src/fight/slash_defense_situation.dart';
 
 var counterSlash = new EnemyTargetActionGenerator("swing back at <object>",
     valid: (Actor a, enemy, w) => a.wields(ItemType.SWORD),
-    chance: 0.7, success: (Actor a, Actor enemy, WorldState w, Storyline s) {
+    chance: (_, enemy, ___) => enemy.pose == Pose.standing ? 0.7 : 0.9,
+    success: (Actor a, Actor enemy, WorldState w, Storyline s) {
   a.report(s, "<subject> swing<s> back at <object>", object: enemy);
   var slashSituation =
       new Situation.withState(new SlashSituation.withValues(a, enemy));

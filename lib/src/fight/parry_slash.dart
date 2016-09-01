@@ -9,7 +9,11 @@ import 'package:stranded/situation.dart';
 
 var parrySlash = new EnemyTargetActionGenerator("parry and counter",
     valid: (Actor a, enemy, WorldState w) => a.wields(ItemType.SWORD),
-    chance: 0.6, success: (a, enemy, WorldState w, Storyline s) {
+    chance: (a, enemy, w) {
+  num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+  if (a.isPlayer) return 0.6 - outOfBalancePenalty;
+  return 0.3 - outOfBalancePenalty;
+}, success: (a, enemy, WorldState w, Storyline s) {
   a.report(
       s,
       "<subject> {parr<ies> it|"
@@ -30,9 +34,13 @@ var parrySlash = new EnemyTargetActionGenerator("parry and counter",
       "<subject> tr<ies> to {parry|deflect it|"
       "meet it with <subject's> ${a.currentWeapon.name}|"
       "fend it off}");
-  Randomly.run(
-      () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-      () => enemy.report(s, "<subject> <is> too quick for <object>",
-          object: a, but: true));
+  if (a.pose == Pose.offBalance) {
+    a.report(s, "<subject> <is> out of balance", but: true);
+  } else {
+    Randomly.run(
+        () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
+        () => enemy.report(s, "<subject> <is> too quick for <object>",
+            object: a, but: true));
+  }
   return "${a.name} fails to dodge ${enemy.name}";
 });

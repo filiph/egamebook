@@ -14,7 +14,8 @@ var startSlash = new EnemyTargetActionGenerator("swing at <object>",
         a.pose == Pose.standing &&
         enemy.pose != Pose.onGround &&
         a.wields(ItemType.SWORD),
-    chance: 1.0, success: (a, enemy, WorldState w, Storyline s) {
+    chance: (_, __, ___) => 1.0,
+    success: (a, enemy, WorldState w, Storyline s) {
   a.report(
       s,
       "<subject> swing<s> "
@@ -31,24 +32,25 @@ var startSlash = new EnemyTargetActionGenerator("swing at <object>",
 
 var finishSlash = new EnemyTargetActionGenerator("kill <object>",
     valid: (Actor a, enemy, w) => a.wields(ItemType.SWORD),
-    chance: 1.0, success: (a, enemy, WorldState w, Storyline s) {
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
-      if (w.getActorById(enemy.id).isAlive) {
-        a.report(
-            s,
-            "<subject> {slash<es>|cut<s>} <object's> "
-                "{shoulder|abdomen|thigh}",
-            object: enemy,
-            positive: true);
-        reportPain(s, enemy);
-      } else {
-        a.report(
-            s,
-            "<subject> {slash<es>|cut<s>} {across|through} <object's> "
-                "{neck|abdomen|lower body}",
-            object: enemy,
-            positive: true);
-        reportDeath(s, enemy);
-      }
+    chance: (_, __, ___) => 1.0,
+    success: (a, enemy, WorldState w, Storyline s) {
+  w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+  if (w.getActorById(enemy.id).isAlive) {
+    a.report(
+        s,
+        "<subject> {slash<es>|cut<s>} <object's> "
+        "{shoulder|abdomen|thigh}",
+        object: enemy,
+        positive: true);
+    reportPain(s, enemy);
+  } else {
+    a.report(
+        s,
+        "<subject> {slash<es>|cut<s>} {across|through} <object's> "
+        "{neck|abdomen|lower body}",
+        object: enemy,
+        positive: true);
+    reportDeath(s, enemy);
+  }
   return "${a.name} slains ${enemy.name}";
 });

@@ -8,7 +8,11 @@ var slashGroundedEnemy = new EnemyTargetActionGenerator(
     "strike down at <object>",
     valid: (Actor a, enemy, w) =>
         enemy.pose == Pose.onGround && a.wields(ItemType.SWORD),
-    chance: 0.8, success: (a, enemy, WorldState w, Storyline s) {
+    chance: (a, enemy, w) {
+      num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+      if (a.isPlayer) return 0.8 - outOfBalancePenalty;
+      return 0.7 - outOfBalancePenalty;
+    }, success: (a, enemy, WorldState w, Storyline s) {
   a.report(
       s,
       "<subject> strike<s> down "

@@ -10,7 +10,11 @@ import 'package:stranded/storyline/randomly.dart';
 
 var kickOffBalance = new EnemyTargetActionGenerator("kick <object>",
     valid: (Actor a, enemy, w) => a.pose == Pose.standing,
-    chance: 0.5, success: (a, enemy, WorldState w, Storyline s) {
+    chance: (a, enemy, w) {
+      num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+      if (a.isPlayer) return 0.7 - outOfBalancePenalty;
+      return 0.5 - outOfBalancePenalty;
+    }, success: (a, enemy, WorldState w, Storyline s) {
   if (enemy.pose == Pose.standing || enemy.pose == Pose.offBalance) {
     Randomly.run(() {
       a.report(s, "<subject> kick<s> <object>", object: enemy);
