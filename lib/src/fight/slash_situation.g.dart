@@ -8,13 +8,13 @@ part of stranded.fight.slash_situation;
 // **************************************************************************
 
 class _$SlashSituation extends SlashSituation {
-  final int time;
   final int attacker;
   final int target;
-  _$SlashSituation._({this.time, this.attacker, this.target}) : super._() {
-    if (time == null) throw new ArgumentError('null time');
+  final int time;
+  _$SlashSituation._({this.attacker, this.target, this.time}) : super._() {
     if (attacker == null) throw new ArgumentError('null attacker');
     if (target == null) throw new ArgumentError('null target');
+    if (time == null) throw new ArgumentError('null time');
   }
   factory _$SlashSituation([updates(SlashSituationBuilder b)]) =>
       (new SlashSituationBuilder()..update(updates)).build();
@@ -24,20 +24,20 @@ class _$SlashSituation extends SlashSituation {
       new _$SlashSituationBuilder()..replace(this);
   bool operator ==(other) {
     if (other is! SlashSituation) return false;
-    return time == other.time &&
-        attacker == other.attacker &&
-        target == other.target;
+    return attacker == other.attacker &&
+        target == other.target &&
+        time == other.time;
   }
 
   int get hashCode {
-    return hashObjects([time, attacker, target]);
+    return hashObjects([attacker, target, time]);
   }
 
   String toString() {
     return 'SlashSituation {'
-        'time=${time.toString()}\n'
         'attacker=${attacker.toString()}\n'
         'target=${target.toString()}\n'
+        'time=${time.toString()}\n'
         '}';
   }
 }
@@ -45,9 +45,9 @@ class _$SlashSituation extends SlashSituation {
 class _$SlashSituationBuilder extends SlashSituationBuilder {
   _$SlashSituationBuilder() : super._();
   void replace(SlashSituation other) {
-    super.time = other.time;
     super.attacker = other.attacker;
     super.target = other.target;
+    super.time = other.time;
   }
 
   void update(updates(SlashSituationBuilder b)) {
@@ -55,10 +55,10 @@ class _$SlashSituationBuilder extends SlashSituationBuilder {
   }
 
   SlashSituation build() {
-    if (time == null) throw new ArgumentError('null time');
     if (attacker == null) throw new ArgumentError('null attacker');
     if (target == null) throw new ArgumentError('null target');
+    if (time == null) throw new ArgumentError('null time');
     return new _$SlashSituation._(
-        time: time, attacker: attacker, target: target);
+        attacker: attacker, target: target, time: time);
   }
 }
