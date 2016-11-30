@@ -1,5 +1,6 @@
 import 'package:analyzer/analyzer.dart';
-import 'package:analyzer/src/generated/scanner.dart';
+import 'package:analyzer/src/dart/scanner/reader.dart';
+import 'package:analyzer/src/dart/scanner/scanner.dart';
 import 'package:analyzer/src/generated/parser.dart';
 import 'dart:collection';
 
