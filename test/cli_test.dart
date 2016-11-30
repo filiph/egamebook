@@ -11,18 +11,14 @@ import 'package:egamebook/src/cli/cli.dart';
 import 'package:egamebook/presenters/html/main_entry_point.dart'
     show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
+import 'builder_test.dart' show getPath;
+
 /// Where the template files for tests are located.
 const String TEMPLATE_FILES = "template_files";
 const String TEMPLATE_BOOK_NAME = "bodega.egb";
 
 String getTemplateBookNameWithoutExtension() =>
     p.basenameWithoutExtension(TEMPLATE_BOOK_NAME);
-
-/// Returns full path to the desired [fileName].
-String getPath(String fileName) {
-  var pathToScript = Platform.script.toFilePath();
-  return p.join(p.dirname(pathToScript), fileName);
-}
 
 /// Creates temporary dir on [path] with all needed assets
 /// to be able to build it.

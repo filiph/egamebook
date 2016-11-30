@@ -2,7 +2,6 @@ library scripter_test;
 
 import 'package:test/test.dart';
 import 'dart:io';
-import 'package:path/path.dart' as path;
 
 import 'dart:collection';
 import 'dart:async';
@@ -16,7 +15,7 @@ import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 
 import 'mock_presenter.dart';
-import 'builder_test.dart' show createSubdirs, deleteSubdirs;
+import 'builder_test.dart' show createSubdirs, deleteSubdirs, getPath;
 
 // for Persistence testing
 class ClassWithMapMethods implements Saveable {
@@ -44,15 +43,6 @@ class ClassWithoutMapMethods {
   String s;
 
   ClassWithoutMapMethods();
-}
-
-/**
- * Returns path to the file inside the [:/files:] subdirectory with filename
- * [filename]. Convenience function.
- */
-String getPath(String filename) {
-  var pathToScript = Platform.script.toFilePath();
-  return path.join(path.dirname(pathToScript), "files", filename);
 }
 
 /// Builds the given .egb file, returns the path to the file to be given to
@@ -127,7 +117,7 @@ void main() {
           var store = new MemoryStore();
           mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
-              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
+              Uri.parse("../test/files/lib/scripter_test_alternate_6.dart"));
           bookProxy.init()
               // Spawns the Isolate (if needed) and asks for BookUid
               .then(expectAsync((_) {
@@ -145,7 +135,7 @@ void main() {
           var store = new MemoryStore();
           mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
-              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
+              Uri.parse("../test/files/lib/scripter_test_alternate_6.dart"));
 
           bookProxy.init().then((_) {
             mockPresenter.setScripter(bookProxy);
@@ -167,7 +157,7 @@ void main() {
           var store = new MemoryStore();
           mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
-              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
+              Uri.parse("../test/files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput,
@@ -190,7 +180,7 @@ void main() {
           var store = new MemoryStore();
           mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
-              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
+              Uri.parse("../test/files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput, contains("Time is now 10."));
@@ -211,7 +201,7 @@ void main() {
           var store = new MemoryStore();
           mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
           ScripterProxy bookProxy = new IsolateScripterProxy(
-              Uri.parse("files/lib/scripter_test_alternate_6.dart"));
+              Uri.parse("../test/files/lib/scripter_test_alternate_6.dart"));
 
           mockPresenter.playerQuit.first.then(expectAsync((_) {
             expect(mockPresenter.latestOutput, contains("Time is now 1."));
@@ -299,7 +289,7 @@ void main() {
         var store = new MemoryStore();
         mockPresenter.setPlayerProfile(store.getDefaultPlayerProfile());
         ScripterProxy bookProxy = new IsolateScripterProxy(
-            Uri.parse("files/lib/scripter_test_save.dart"));
+            Uri.parse("../test/files/lib/scripter_test_save.dart"));
 
         bookProxy.init().then((_) {
           mockPresenter.setScripter(bookProxy);
@@ -392,7 +382,7 @@ void main() {
 
     group("Page options", () {
       test("prevents user from visiting visitOnce page twice", () {
-        run("files/lib/scripter_page_visitonce.dart").then((var ui) {
+        run("../test/files/lib/scripter_page_visitonce.dart").then((var ui) {
           (ui as MockPresenter).choose("Get dressed");
           return (ui as MockPresenter).waitForDone();
         }).then(expectAsync((var ui) {

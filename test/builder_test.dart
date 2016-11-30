@@ -11,16 +11,21 @@ import 'package:egamebook/presenters/html/main_entry_point.dart'
     show HTML_BOOK_DART_PATH_FROM_ENTRYPOINT, HTML_BOOK_ENTRYPOINT_PATH;
 
 /**
- * Returns path to the file inside the [:/files:] subdirectory with filename
- * [filename]. Convenience function.
+ * Returns path to the file inside the [:/test/files:] subdirectory with
+ * filename [filename]. Convenience function.
  */
 String getPath(String filename) {
-  var pathToScript = Platform.script.toFilePath();
-  return path.join(path.dirname(pathToScript), "files", filename);
+  return path.join(filesDir, filename);
 }
 
-final dir = path.dirname(Platform.script.toFilePath());
-final filesDir = path.join(dir, "files");
+final pathToScript = Platform.script.toFilePath();
+
+/// Path to the `/test` directory.
+///
+/// Since this script can be run both from `test/builder_test` and
+/// `tool/test_coverage`, we go up a directory first.
+final testDir = path.join(path.dirname(pathToScript), "..", "test");
+final filesDir = path.join(testDir, "files");
 final webSubdir = new Directory(path.join(filesDir, HTML_BOOK_ENTRYPOINT_PATH));
 final libSubdir = new Directory(
     path.join(webSubdir.path, HTML_BOOK_DART_PATH_FROM_ENTRYPOINT));
@@ -328,28 +333,29 @@ void main() {
         new Builder()
             .readEgbFile(new File(getPath("choices_multiline.egb")))
             .then(expectAsync((Builder b) {
-          var choiceList = b.pages[0].blocks[1];
-          expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
-          expect(choiceList.subBlocks.length, 4);
-          expect(choiceList.subBlocks[0].options["string"], "That's okay.");
-          expect(choiceList.subBlocks[0].options["goto"],
-              """The "Do something about it" Page""");
-          expect(choiceList.subBlocks[0].options["script"], isNotNull);
-          expect(choiceList.subBlocks[1].options["string"],
-              "I need to do something about it.");
-          expect(choiceList.subBlocks[1].options["goto"],
-              """The "Do something about it" Page""");
-          expect(choiceList.subBlocks[1].options["script"],
-              isNotNull); // Multiline choices' text is rewriten as a echo()
-          // and added to the script block. So there's script
-          // even though it's not in the egb file.
-          expect(choiceList.subBlocks[2].options["string"], "Meh.");
-          expect(choiceList.subBlocks[2].options["goto"], isNull);
-          expect(choiceList.subBlocks[2].options["script"], isNull);
-          expect(choiceList.subBlocks[3].options["string"], "Many people do!");
-          expect(choiceList.subBlocks[3].options["goto"], isNull);
-          expect(choiceList.subBlocks[3].options["script"], isNotNull);
-        }) as BuilderCallback);
+              var choiceList = b.pages[0].blocks[1];
+              expect(choiceList.type, BuilderBlock.BLK_CHOICE_LIST);
+              expect(choiceList.subBlocks.length, 4);
+              expect(choiceList.subBlocks[0].options["string"], "That's okay.");
+              expect(choiceList.subBlocks[0].options["goto"],
+                  """The "Do something about it" Page""");
+              expect(choiceList.subBlocks[0].options["script"], isNotNull);
+              expect(choiceList.subBlocks[1].options["string"],
+                  "I need to do something about it.");
+              expect(choiceList.subBlocks[1].options["goto"],
+                  """The "Do something about it" Page""");
+              expect(choiceList.subBlocks[1].options["script"],
+                  isNotNull); // Multiline choices' text is rewriten as a echo()
+              // and added to the script block. So there's script
+              // even though it's not in the egb file.
+              expect(choiceList.subBlocks[2].options["string"], "Meh.");
+              expect(choiceList.subBlocks[2].options["goto"], isNull);
+              expect(choiceList.subBlocks[2].options["script"], isNull);
+              expect(
+                  choiceList.subBlocks[3].options["string"], "Many people do!");
+              expect(choiceList.subBlocks[3].options["goto"], isNull);
+              expect(choiceList.subBlocks[3].options["script"], isNotNull);
+            }) as BuilderCallback);
       });
 
       test("detects choices as pageHandlers in pages", () {
@@ -625,8 +631,8 @@ void main() {
 
         var callback = expectAsync((Builder b) {
           expect(b.pages.last.name, "Programatically added page");
-          expect(b.pages[3].gotoPageNames,
-              contains("Programatically added page"));
+          expect(
+              b.pages[3].gotoPageNames, contains("Programatically added page"));
         });
 
         var inputStream = orig.openRead();
