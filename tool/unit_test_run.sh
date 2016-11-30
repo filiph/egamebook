@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-dart --enable_type_checks --enable_asserts $DIR/../test/test_coverage.dart
+dart --enable_type_checks --enable_asserts $DIR/test_coverage.dart
 if [ $? -gt 0 ]; then
   exit
 fi
