@@ -373,7 +373,7 @@ class BuilderInterface {
     return completer.future;
   }
 
-  /// Runs build.dart command line tool on given [path].
+  /// Runs [Builder] on path on given [path].
   Future _runBuilder(String path) async {
     print("Building $path...");
     Builder builder = await new Builder().readEgbFile(new File(path));
