@@ -107,13 +107,15 @@ Choice choice(String string,
     ScriptBlock script,
     String submenu,
     bool deferToEndOfPage: false,
-    bool deferToChoiceList: false}) {
+    bool deferToChoiceList: false,
+    String helpMessage}) {
   Choice choice = new Choice(string,
       goto: goto,
       script: script,
       submenu: submenu,
       deferToEndOfPage: deferToEndOfPage,
-      deferToChoiceList: deferToChoiceList);
+      deferToChoiceList: deferToChoiceList,
+      helpMessage: helpMessage);
   choices.add(choice);
   return choice;
 }

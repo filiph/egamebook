@@ -378,6 +378,27 @@ void main() {
           ui.quit();
         }) as PresenterCallback);
       });
+
+      test("choices helpMessage", () {
+        var store = new MemoryStore();
+        var mainPath;
+        build("choice_helpmessage.egb").then((path) {
+          mainPath = path;
+          return run(mainPath, persistentStore: store);
+        }).then((var ui) {
+          (ui as MockPresenter).choose("Live!");
+          return (ui as MockPresenter).waitForDone();
+        }).then((var ui) {
+          (ui as MockPresenter).quit();
+          return run(mainPath, persistentStore: store);
+        }).then((var ui) {
+          return (ui as MockPresenter).waitForDone();
+        }).then(expectAsync1((ui) {
+          expect(ui.latestChoices[0].helpMessage, "This will kill you.");
+          expect(ui.latestChoices[1].helpMessage, "An easy way to win.");
+          ui.quit();
+        }) as PresenterCallback);
+      });
     });
 
     group("Page options", () {

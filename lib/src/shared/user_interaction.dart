@@ -28,6 +28,10 @@ class Choice implements Comparable<Choice> {
   /// selects the choice.
   String string;
 
+  /// If not `null`, this choice should show a question mark (?) and,
+  /// upon clicking, show the contents of [helpMessage].
+  String helpMessage;
+
   /// Script function.
   AsyncVoidFunction f;
 
@@ -82,7 +86,8 @@ class Choice implements Comparable<Choice> {
       AsyncVoidFunction script,
       this.submenu: null,
       bool deferToEndOfPage: false,
-      bool deferToChoiceList: false})
+      bool deferToChoiceList: false,
+      this.helpMessage})
       : super() {
     if (string == null) {
       throw new ArgumentError("String given to choice cannot be null.");
@@ -111,12 +116,18 @@ class Choice implements Comparable<Choice> {
     f = map["then"] as AsyncVoidFunction;
 
     submenu = map["submenu"];
+
+    helpMessage = map["helpMessage"];
   }
 
   /// Creates a Map representation of the choice with only the data needed by
-  /// the presenter: [string], [hash] and [submenu].
-  Map<String, Object> toMapForPresenter() =>
-      {"string": string, "hash": hash, "submenu": submenu};
+  /// the presenter: [string], [hash], [submenu], and [helpMessage].
+  Map<String, Object> toMapForPresenter() => {
+        "string": string,
+        "hash": hash,
+        "submenu": submenu,
+        "helpMessage": helpMessage
+      };
 
   /// Sets script function to [_f] and returns actual object.
   ///
