@@ -175,7 +175,7 @@ void main() {
       multipleChoiceInput.children.add(option2);
       multipleChoiceInput.children.add(option3);
       form.children.add(multipleChoiceInput);
-      Map map = form.toMap();
+      var map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(
           (formProxy.children.single.parent as FormElement)
@@ -194,7 +194,7 @@ void main() {
     test("Choice toMap and fromMap", () {
       Choice choice =
           new Choice("Yes", submenu: "Yes submenu", goto: "Go to some place");
-      Map choiceMap = choice.toMapForPresenter();
+      var choiceMap = choice.toMapForPresenter();
       Choice choiceFromMap = new Choice.fromMap(choiceMap);
       //expect(choice.goto, choiceFromMap.goto);
       expect(choice.string, choiceFromMap.string);
