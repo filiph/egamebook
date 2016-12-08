@@ -401,6 +401,17 @@ class HtmlPresenter extends Presenter {
     var choiceDisplaySpan = new SpanElement();
     choiceDisplaySpan.classes.add("choice-display");
 
+    if (choice.helpMessage != null) {
+      var helpButton = new SpanElement()
+        ..text = "?"
+        ..classes.add("choice-help-button");
+      choiceDisplaySpan.append(helpButton);
+      helpButton.onClick.listen((event) {
+        showDialog(new Dialog(choice.string, "<p>${choice.helpMessage}</p>"));
+        event.stopImmediatePropagation();
+      });
+    }
+
     var choiceWithInfochips = new ChoiceWithInfochips(choice.string);
     if (!choiceWithInfochips.infochips.isEmpty) {
       var infochipsSpan = new SpanElement();
@@ -418,7 +429,6 @@ class HtmlPresenter extends Presenter {
     var textSpan = new SpanElement();
     textSpan.innerHtml =
         mdown.markdownToHtml(choiceWithInfochips.text, inlineOnly: true);
-//  textSpan.text = _exchangeChars(textSpan.text, "▒");
     textSpan.classes.add("choice-text");
     choiceDisplaySpan.append(textSpan);
 
