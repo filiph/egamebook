@@ -289,6 +289,28 @@ void main() {
     expect(storyline.realize(), contains("swings at her"));
   });
 
+  test("definitive (the) article after first use", () {
+    var storyline = new Storyline();
+    Entity sword = new Entity(name: "sword");
+    storyline.markEntityAsUnmentioned(sword);
+    Entity shield = new Entity(name: "shield");
+    storyline.markEntityAsUnmentioned(shield);
+
+    storyline.add("<subject> l<ies> on the table", subject: sword, time: 0);
+    storyline.add("<subject> <is> propped up on the wall next to it", subject: shield, time: 1);
+    storyline.add("<subject> <is> rusty", subject: sword, time: 3);
+
+    var first = storyline.realize();
+
+    expect(first, startsWith("A sword lies"));
+    expect(first, contains("The sword is rusty"));
+
+    var second = storyline.realize();
+
+    expect(second, startsWith("A sword lies"));
+    expect(second, contains("The sword is rusty"));
+  });
+
   test("enumeration", () {
     var storyline = new Storyline();
     Entity handkerchief = new Entity(name: "handkerchief");
@@ -298,11 +320,11 @@ void main() {
     Entity crateOfTnt = new Entity(name: "crate of TNT");
 
     void resetAlreadyMentioned() {
-      handkerchief.alreadyMentioned = false;
-      brush.alreadyMentioned = false;
-      mirror.alreadyMentioned = false;
-      lipstick.alreadyMentioned = false;
-      crateOfTnt.alreadyMentioned = false;
+      storyline.markEntityAsUnmentioned(handkerchief);
+      storyline.markEntityAsUnmentioned(brush);
+      storyline.markEntityAsUnmentioned(mirror);
+      storyline.markEntityAsUnmentioned(lipstick);
+      storyline.markEntityAsUnmentioned(crateOfTnt);
     }
 
     // 0
@@ -374,8 +396,10 @@ void main() {
       test("shows normally when apart", () {
         storyline.add("you aim at the sky",
             actionThread: threadA, isSupportiveActionInThread: true);
+        var bigbang = new Entity(name: "big bang");
+        storyline.markEntityAsUnmentioned(bigbang);
         storyline.add("<subject> <is> heard from the distance",
-            subject: new Entity(name: "big bang", alreadyMentioned: false));
+            subject: bigbang);
         storyline.add("you shoot a duck", actionThread: threadA);
         expect(storyline.realize(), contains("aim at the sky"));
         expect(storyline.realize(), contains("shoot a duck"));

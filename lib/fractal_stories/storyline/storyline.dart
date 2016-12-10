@@ -241,11 +241,12 @@ class Storyline {
         }
         buf.write(" ");
       }
+
       // Adds 'the', 'a', or nothing. TODO: instead of using the
       // addParticleToFirstOccurence method (designed for longer texts), use
       // something smaller.
       String articleWithParticle = addParticleToFirstOccurence(
-          article.name, article.name, article, null);
+          article.name, article.name, article, null, time);
       buf.write(articleWithParticle);
       i++;
       if (i > maxPerSentence - 1 || article == articles.last) {
@@ -441,16 +442,16 @@ class Storyline {
       result = result.replaceAll(OBJECT, object(i).pronoun.accusative);
       result = result.replaceAll(OBJECT_POSSESIVE, object(i).pronoun.genitive);
     }
-    return getString(result,
-        subject: reports[i].subject,
-        object: reports[i].object,
-        owner: reports[i].owner,
-        objectOwner: reports[i].objectOwner);
+    return getString(result, reports[i]);
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
-  static String getString(String str,
-      {Entity subject, Entity object, Entity owner, Entity objectOwner}) {
+  String getString(String str, Report report) {
+    Entity subject = report.subject;
+    Entity object = report.object;
+    Entity owner = report.owner;
+    Entity objectOwner = report.objectOwner;
+
     String result = str;
     if (subject != null) {
       if (subject.isPlayer) {
@@ -480,8 +481,8 @@ class Storyline {
       result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
       result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
 
-      result =
-          addParticleToFirstOccurence(result, SUBJECT_NOUN, subject, owner);
+      result = addParticleToFirstOccurence(
+          result, SUBJECT_NOUN, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
 
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
@@ -490,7 +491,7 @@ class Storyline {
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
       result = addParticleToFirstOccurence(
-          result, SUBJECT_POSSESIVE, subject, owner);
+          result, SUBJECT_POSSESIVE, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(
@@ -502,8 +503,8 @@ class Storyline {
         result = result.replaceAll(OBJECT, Pronoun.YOU.accusative);
         result = result.replaceAll(OBJECT_POSSESIVE, Pronoun.YOU.genitive);
       } else {
-        result =
-            addParticleToFirstOccurence(result, OBJECT, object, objectOwner);
+        result = addParticleToFirstOccurence(
+            result, OBJECT, object, objectOwner, report.time);
         result = result.replaceAll(OBJECT, object.name);
         // TODO: change first to name, next to pronoun?
       }
@@ -513,14 +514,14 @@ class Storyline {
         result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       }
       result = addParticleToFirstOccurence(
-          result, OBJECT_POSSESIVE, object, objectOwner);
+          result, OBJECT_POSSESIVE, object, objectOwner, report.time);
       result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
       result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       result =
           result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
     }
     result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESIVE,
-        OWNER_PRONOUN, OWNER_PRONOUN_POSSESIVE);
+        OWNER_PRONOUN, OWNER_PRONOUN_POSSESIVE, report.time);
     result = _realizeOwner(
         objectOwner,
         result,
@@ -528,19 +529,25 @@ class Storyline {
         OBJECT_OWNER,
         OBJECT_OWNER_POSSESIVE,
         OBJECT_OWNER_PRONOUN,
-        OBJECT_OWNER_PRONOUN_POSSESIVE);
+        OBJECT_OWNER_PRONOUN_POSSESIVE,
+        report.time);
 
     return Randomly.parse(result);
   }
 
-  static String _realizeOwner(
+  /// Applies the logic of needed for `<owner>` and `<owner's>` to work.
+  ///
+  /// While [result] is the text (with stopwords) to work on, [str] is the
+  /// original text (with all the stopwords still in).
+  String _realizeOwner(
       Entity owner,
       String result,
       String str,
       String OWNER_OR_OBJECT_OWNER,
       String OWNER_OR_OBJECT_OWNER_POSSESSIVE,
       String OWNER_OR_OBJECT_OWNER_PRONOUN,
-      String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE) {
+      String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE,
+      int reportTime) {
     if (owner != null) {
       if (owner.isPlayer) {
         result =
@@ -549,7 +556,7 @@ class Storyline {
             OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.YOU.genitive);
       } else {
         result = addParticleToFirstOccurence(
-            result, OWNER_OR_OBJECT_OWNER, owner, null);
+            result, OWNER_OR_OBJECT_OWNER, owner, null, reportTime);
         result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
       }
       result = result.replaceAll(
@@ -561,7 +568,7 @@ class Storyline {
             OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner.pronoun.genitive);
       }
       result = addParticleToFirstOccurence(
-          result, OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null);
+          result, OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null, reportTime);
       result = result.replaceFirst(
           OWNER_OR_OBJECT_OWNER_POSSESSIVE, "${owner.name}'s");
       result = result.replaceAll(
@@ -582,8 +589,12 @@ class Storyline {
   /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like
   /// [:<subject>:]) in [string]. The next occurences will be automatically
   /// converted to pronouns.
-  static String addParticleToFirstOccurence(
-      String string, String SUB_STRING, Entity entity, Entity entityOwner) {
+  ///
+  /// The [reportTime] should correspond to the time this report is being said.
+  /// Storyline tracks when different entities were first mentioned so it
+  /// can apply either definitive (the) or indefinite (a) article.
+  String addParticleToFirstOccurence(String string, String SUB_STRING,
+      Entity entity, Entity entityOwner, int reportTime) {
     // Make sure we don't add particles to "your car" etc.
     if (entityOwner != null &&
         (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
@@ -595,7 +606,7 @@ class Storyline {
     }
 
     if (!entity.nameIsProperNoun) {
-      if (entity.alreadyMentioned) {
+      if (_hasBeenMentioned(entity, reportTime)) {
         string = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
       } else {
         if (entity.name
@@ -604,7 +615,7 @@ class Storyline {
         } else {
           string = string.replaceFirst(SUB_STRING, "a $SUB_STRING");
         }
-        entity.alreadyMentioned = true;
+        _firstMentions[entity.id] = reportTime;
       }
     }
     return string;
@@ -633,6 +644,45 @@ class Storyline {
 
   @deprecated
   String toString() => realize();
+
+  /// This map tracks the times when each entity (its [Entity.id]) was first
+  /// mentioned. If this is lower than the current report's [time], the entity
+  /// can use a definitive artice (the book), otherwise it needs an indefinite
+  /// article (a book).
+  ///
+  /// Why not just [bool] instead of [int]? Because we want to be able to
+  /// correctly realize a [Storyline] several times in a row. If we kept
+  /// track of first mentions as booleans, once an entity was mentioned, it
+  /// would then forever appear as "mentioned from the beginning".
+  Map<int, int> _firstMentions = {};
+
+  static const _beginningOfTime = -1;
+  static const _endOfTime = 9999999;
+
+  /// Returns whether or not the [entity] has been mentioned by time of the
+  /// report ([reportTime]).
+  bool _hasBeenMentioned(Entity entity, int reportTime) {
+    return (_firstMentions[entity.id] ?? _beginningOfTime) < reportTime;
+  }
+
+  /// When an entity should start the storyline as unmentioned, call this
+  /// method.
+  ///
+  /// Unmentioned entities get the indefinite article ('a book') the first
+  /// time they are mentioned.
+  ///
+  /// By default, all entities start as mentioned. This is because very often
+  /// you want to introduce entities in custom prose, and then refer to them
+  /// later in [Storyline].
+  ///
+  /// For example, you want to say "There is a book on the table." Then,
+  /// when [Storyline] refers to the book, it should probably say something like
+  /// "take the book" (and not "take a book"). It is only in rare circumstances
+  /// that you want to _start_ talking about an entity in Storyline. And for
+  /// that there is this method.
+  void markEntityAsUnmentioned(Entity entity) {
+    _firstMentions[entity.id] = _endOfTime;
+  }
 
   /// The main function that strings reports together into a coherent story.
   ///

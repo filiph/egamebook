@@ -43,25 +43,14 @@ class Entity extends Object with EntityBehavior {
   /// in one sentence, only the non-overlapping ones are used.
   final List<String> categories = new List<String>();
 
-  /// When an entity is [alreadyMentioned], it will be used with the definite
-  /// article ("the"). Otherwise, the indefinitey article ("a") will be used.
-  ///
-  /// The articles won't be used woth [nameIsProperNoun].
-  ///
-  /// This field is by default set to [:true:]. The reason behind this is that
-  /// in most cases, the entities in the simulation have been described in
-  /// text, or are understood to be known to the player character ("You take
-  /// the gun and walk out of the room.").
-  bool alreadyMentioned = true;
-
-  Team team = neutralTeam;
+  final Team team;
 
   /**
    * Whether or not this entity should be shown to the player. This can be useful
    * for entities that are only relevant later in the game (i.e. after player
    * does something else) or items that become irrelevant after use.
    */
-  bool isActive = true;
+  bool get isActive => true;
 
   final bool isPlayer;
 
@@ -72,8 +61,7 @@ class Entity extends Object with EntityBehavior {
       this.pronoun: Pronoun.IT,
       Team team,
       this.isPlayer: false,
-      this.nameIsProperNoun: false,
-      this.alreadyMentioned: true})
+      this.nameIsProperNoun: false})
       : this.team = team ?? neutralTeam;
 
   Entity._(

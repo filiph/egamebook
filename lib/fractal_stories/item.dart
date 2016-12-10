@@ -64,9 +64,6 @@ class Sword extends Item {
   final num luxuryScore = 10;
 
   @override
-  bool alreadyMentioned = true;
-
-  @override
   bool isActive = true;
 
   @override
