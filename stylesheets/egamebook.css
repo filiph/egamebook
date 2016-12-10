@@ -411,6 +411,20 @@ ol.choices-ol button span.choice-text {
   background-image: linear-gradient(#fcfcfc 10%, #f6f6f6);
   color: #ddd; }
 
+.choice-help-button {
+  -webkit-box-ordinal-group: 3;
+  -moz-box-ordinal-group: 3;
+  box-ordinal-group: 3;
+  -webkit-order: 3;
+  -moz-order: 3;
+  order: 3;
+  -ms-flex-order: 3;
+  font-size: 0.72rem;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.1rem 0.3rem; }
+
 .choice-infochips {
   -webkit-box-ordinal-group: 2;
   -moz-box-ordinal-group: 2;
