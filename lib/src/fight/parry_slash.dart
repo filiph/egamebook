@@ -1,11 +1,11 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/item.dart';
-import 'package:stranded/world.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'package:stranded/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
-import 'package:stranded/situation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 
 var parrySlash = new EnemyTargetActionGenerator("parry and counter",
     valid: (Actor a, enemy, WorldState w) => a.wields(ItemType.SWORD),

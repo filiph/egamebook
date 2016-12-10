@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 
-import 'package:stranded/actor.dart';
-import 'package:stranded/world.dart';
-import 'package:stranded/planner.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/item.dart';
-import 'package:stranded/plan_consequence.dart';
-import 'package:stranded/team.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/storyline/randomly.dart';
-import 'package:stranded/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/planner.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/plan_consequence.dart';
+import 'package:edgehead/fractal_stories/team.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
-import 'src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 
 main() async {
   var filip = new Actor((b) => b

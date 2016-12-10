@@ -1,7 +1,7 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'package:stranded/world.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
 var rollOutOfWay = new EnemyTargetActionGenerator("roll out of way",
     valid: (Actor a, enemy, WorldState w) => true, chance: (a, enemy, w) {

@@ -1,6 +1,6 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'package:stranded/actor.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 
 ClosureActorAction pass = new ClosureActorAction("Stand off.", (_, __) => true,
     (Actor a, w, Storyline s) {

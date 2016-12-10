@@ -8,58 +8,122 @@ part of stranded.fight.slash_defense_situation;
 // **************************************************************************
 
 class _$SlashDefenseSituation extends SlashDefenseSituation {
+  @override
   final int time;
+  @override
   final int attacker;
+  @override
   final int target;
-  _$SlashDefenseSituation._({this.time, this.attacker, this.target})
-      : super._() {
-    if (time == null) throw new ArgumentError('null time');
-    if (attacker == null) throw new ArgumentError('null attacker');
-    if (target == null) throw new ArgumentError('null target');
-  }
+
   factory _$SlashDefenseSituation([updates(SlashDefenseSituationBuilder b)]) =>
       (new SlashDefenseSituationBuilder()..update(updates)).build();
+
+  _$SlashDefenseSituation._({this.time, this.attacker, this.target})
+      : super._() {
+    if (time == null) throw new ArgumentError.notNull('time');
+    if (attacker == null) throw new ArgumentError.notNull('attacker');
+    if (target == null) throw new ArgumentError.notNull('target');
+  }
+
+  @override
   SlashDefenseSituation rebuild(updates(SlashDefenseSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
+
+  @override
   _$SlashDefenseSituationBuilder toBuilder() =>
       new _$SlashDefenseSituationBuilder()..replace(this);
-  bool operator ==(other) {
+
+  @override
+  bool operator ==(dynamic other) {
     if (other is! SlashDefenseSituation) return false;
     return time == other.time &&
         attacker == other.attacker &&
         target == other.target;
   }
 
+  @override
   int get hashCode {
-    return hashObjects([time, attacker, target]);
+    return $jf(
+        $jc($jc($jc(0, time.hashCode), attacker.hashCode), target.hashCode));
   }
 
+  @override
   String toString() {
     return 'SlashDefenseSituation {'
-        'time=${time.toString()}\n'
-        'attacker=${attacker.toString()}\n'
-        'target=${target.toString()}\n'
+        'time=${time.toString()},\n'
+        'attacker=${attacker.toString()},\n'
+        'target=${target.toString()},\n'
         '}';
   }
 }
 
 class _$SlashDefenseSituationBuilder extends SlashDefenseSituationBuilder {
-  _$SlashDefenseSituationBuilder() : super._();
-  void replace(SlashDefenseSituation other) {
-    super.time = other.time;
-    super.attacker = other.attacker;
-    super.target = other.target;
+  SlashDefenseSituation _$v;
+
+  @override
+  int get time {
+    _$this;
+    return super.time;
   }
 
+  @override
+  set time(int time) {
+    _$this;
+    super.time = time;
+  }
+
+  @override
+  int get attacker {
+    _$this;
+    return super.attacker;
+  }
+
+  @override
+  set attacker(int attacker) {
+    _$this;
+    super.attacker = attacker;
+  }
+
+  @override
+  int get target {
+    _$this;
+    return super.target;
+  }
+
+  @override
+  set target(int target) {
+    _$this;
+    super.target = target;
+  }
+
+  _$SlashDefenseSituationBuilder() : super._();
+
+  SlashDefenseSituationBuilder get _$this {
+    if (_$v != null) {
+      super.time = _$v.time;
+      super.attacker = _$v.attacker;
+      super.target = _$v.target;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(SlashDefenseSituation other) {
+    _$v = other;
+  }
+
+  @override
   void update(updates(SlashDefenseSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
+  @override
   SlashDefenseSituation build() {
-    if (time == null) throw new ArgumentError('null time');
-    if (attacker == null) throw new ArgumentError('null attacker');
-    if (target == null) throw new ArgumentError('null target');
-    return new _$SlashDefenseSituation._(
-        time: time, attacker: attacker, target: target);
+    final result = _$v ??
+        new _$SlashDefenseSituation._(
+            time: time, attacker: attacker, target: target);
+    replace(result);
+    return result;
   }
 }

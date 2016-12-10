@@ -1,11 +1,11 @@
 library stranded.fight.slash_situation;
 
 import 'package:built_value/built_value.dart';
-import 'package:quiver/core.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/world.dart';
+import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
 import 'slash.dart';
 
@@ -22,8 +22,7 @@ abstract class SlashSituation extends SituationState
         ..target = target.id
         ..time = time);
   SlashSituation._();
-  List<ActionGenerator> get actionGenerators =>
-      [finishSlash];
+  List<ActionGenerator> get actionGenerators => [finishSlash];
 
   int get attacker;
   String get name => "SlashSituation";
@@ -46,8 +45,11 @@ abstract class SlashSituationBuilder
     implements
         Builder<SlashSituation, SlashSituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   int attacker;
+  @virtual
   int target;
 
   factory SlashSituationBuilder() = _$SlashSituationBuilder;

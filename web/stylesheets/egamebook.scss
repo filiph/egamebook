@@ -407,6 +407,18 @@ ol.choices-ol button span.choice-text {
   color: #ddd;
 }
 
+// helpMessage
+
+.choice-help-button {
+  @include order(3);
+
+  font-size: $sans-serif-font-size / 3 * 2;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.1rem 0.3rem;
+}
+
 // Infochips
 
 .choice-infochips {

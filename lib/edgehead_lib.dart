@@ -1,17 +1,17 @@
 import 'package:built_collection/built_collection.dart';
 
-import 'package:stranded/looped_event/looped_event.dart';
-import 'package:stranded/storyline/storyline.dart';
+import 'fractal_stories/looped_event/looped_event.dart';
+import 'fractal_stories/storyline/storyline.dart';
 
-import 'package:stranded/actor.dart';
-import 'package:stranded/world.dart';
-import 'package:stranded/planner.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/item.dart';
-import 'package:stranded/plan_consequence.dart';
-import 'package:stranded/team.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/storyline/randomly.dart';
+import 'fractal_stories/actor.dart';
+import 'fractal_stories/world.dart';
+import 'fractal_stories/planner.dart';
+import 'fractal_stories/action.dart';
+import 'fractal_stories/item.dart';
+import 'fractal_stories/plan_consequence.dart';
+import 'fractal_stories/team.dart';
+import 'fractal_stories/situation.dart';
+import 'fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'dart:async';
 import 'dart:html';
@@ -130,13 +130,14 @@ class EdgeheadGame extends LoopedEvent {
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        maxOrder: 5,
+        maxOrder: 4,
         waitFunction: () async {
           await window.animationFrame;
         });
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
+      // TODO: maybe this should remove the currentSituation from stack?
       world.updateSituationById(
           situation.id, (b) => b.state = b.state.elapseTime());
       world.time += 1;

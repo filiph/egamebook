@@ -2,11 +2,11 @@ library stranded.fight.slash_defense_situation;
 
 import 'package:built_value/built_value.dart';
 
-import 'package:stranded/situation.dart';
-import 'package:stranded/actor.dart';
-import 'package:quiver/core.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/world.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 import 'dodge_slash.dart';
 import 'parry_slash.dart';
 import 'package:edgehead/src/fight/defensive_parry_slash.dart';
@@ -49,8 +49,11 @@ abstract class SlashDefenseSituationBuilder
     implements
         Builder<SlashDefenseSituation, SlashDefenseSituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   int attacker;
+  @virtual
   int target;
 
   SlashDefenseSituationBuilder._();

@@ -1,5 +1,5 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 
 var standUp = new ClosureActorAction(
     "Stand up.", (Actor a, w) => a.pose == Pose.onGround, (a, w, s) {

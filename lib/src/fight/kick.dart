@@ -1,20 +1,20 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/world.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
 import 'off_balance_opportunity_situation.dart';
-import 'package:stranded/team.dart';
-import 'package:stranded/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/team.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 
 var kickOffBalance = new EnemyTargetActionGenerator("kick <object>",
     valid: (Actor a, enemy, w) => a.pose == Pose.standing,
     chance: (a, enemy, w) {
-      num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
-      if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-      return 0.5 - outOfBalancePenalty;
-    }, success: (a, enemy, WorldState w, Storyline s) {
+  num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+  if (a.isPlayer) return 0.7 - outOfBalancePenalty;
+  return 0.5 - outOfBalancePenalty;
+}, success: (a, enemy, WorldState w, Storyline s) {
   if (enemy.pose == Pose.standing || enemy.pose == Pose.offBalance) {
     Randomly.run(() {
       a.report(s, "<subject> kick<s> <object>", object: enemy);

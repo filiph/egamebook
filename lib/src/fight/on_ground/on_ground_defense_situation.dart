@@ -3,11 +3,11 @@ library stranded.fight.on_ground_defense_situation;
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/src/fight/on_ground/on_ground_parry.dart';
 import 'package:edgehead/src/fight/on_ground/roll_out_of_way.dart';
-import 'package:quiver/core.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/world.dart';
+import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
 part 'on_ground_defense_situation.g.dart';
 
@@ -26,8 +26,7 @@ abstract class OnGroundDefenseSituation extends SituationState
         ..targetOnGround = targetOnGround.id
         ..time = time);
   OnGroundDefenseSituation._();
-  List<ActionGenerator> get actionGenerators =>
-      [onGroundParry, rollOutOfWay];
+  List<ActionGenerator> get actionGenerators => [onGroundParry, rollOutOfWay];
 
   int get attacker;
   String get name => "OnGroundDefenseSituation";
@@ -50,8 +49,11 @@ abstract class OnGroundDefenseSituationBuilder
     implements
         Builder<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   int attacker;
+  @virtual
   int targetOnGround;
 
   factory OnGroundDefenseSituationBuilder() = _$OnGroundDefenseSituationBuilder;

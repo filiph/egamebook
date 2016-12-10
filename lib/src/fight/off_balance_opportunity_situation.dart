@@ -2,10 +2,10 @@ library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';
 
-import 'package:stranded/situation.dart';
-import 'package:stranded/actor.dart';
-import 'package:quiver/core.dart';
-import 'package:stranded/world.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 import 'off_balance_opportunity_thrust.dart';
 import 'pass.dart';
 
@@ -46,7 +46,7 @@ abstract class OffBalanceOpportunitySituation extends SituationState
     if (time > 0) return null;
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
-        .where((a) =>
+        .where((Actor a) =>
             a.isAliveAndActive && a.isEnemyOf(actor) && a.id != culpritId)
         .toList();
     // TODO: sort by distance, cut off if too far
@@ -73,9 +73,12 @@ abstract class OffBalanceOpportunitySituationBuilder
         Builder<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   int actorId;
   @nullable
+  @virtual
   int culpritId;
 
   OffBalanceOpportunitySituationBuilder._();

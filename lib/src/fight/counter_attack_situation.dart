@@ -2,12 +2,13 @@ library stranded.fight.counter_attack_situation;
 
 import 'package:built_value/built_value.dart';
 
-import 'package:stranded/situation.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/world.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/pass.dart';
 import 'package:edgehead/src/fight/counter_slash.dart';
+import 'package:meta/meta.dart';
 
 part 'counter_attack_situation.g.dart';
 
@@ -47,8 +48,11 @@ abstract class CounterAttackSituationBuilder
     implements
         Builder<CounterAttackSituation, CounterAttackSituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   int counterAttacker;
+  @virtual
   int target;
 
   CounterAttackSituationBuilder._();

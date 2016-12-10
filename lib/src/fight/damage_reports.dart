@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:stranded/actor.dart';
-import 'package:stranded/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
 final Random _random = new Random();
 

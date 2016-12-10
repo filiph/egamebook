@@ -1,11 +1,11 @@
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/item.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'package:stranded/world.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
 import 'package:edgehead/src/fight/slash_situation.dart';
-import 'package:stranded/situation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/slash_defense_situation.dart';
 
 var counterSlash = new EnemyTargetActionGenerator("swing back at <object>",

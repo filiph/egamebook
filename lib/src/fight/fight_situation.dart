@@ -2,13 +2,13 @@ library stranded.fight.fight_situation;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:quiver/core.dart';
-import 'package:stranded/action.dart';
-import 'package:stranded/actor.dart';
-import 'package:stranded/situation.dart';
-import 'package:stranded/storyline/storyline.dart';
-import 'package:stranded/util/alternate_iterables.dart';
-import 'package:stranded/world.dart';
+import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
 import 'kick.dart';
 import 'on_ground/slash_grounded_enemy.dart';
@@ -26,8 +26,8 @@ abstract class FightSituation extends SituationState
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
   FightSituation._();
   List<ActionGenerator> get actionGenerators =>
-      [kickOffBalance, startSlash, slashGroundedEnemy];
-  get actions => [regainBalance, standUp];
+      <ActionGenerator>[kickOffBalance, startSlash, slashGroundedEnemy];
+  get actions => <ActorAction>[regainBalance, standUp];
   BuiltList<int> get enemyTeamIds;
 
   BuiltMap<int, TimedEventCallback> get events;
@@ -73,6 +73,7 @@ abstract class FightSituation extends SituationState
       var actor = world.getActorById(id);
       return actor.isPlayer && actor.isAliveAndActive;
     }
+
     return canFight(playerTeamIds) &&
         canFight(enemyTeamIds) &&
         playerTeamIds.any(isPlayerAndAlive);
@@ -83,9 +84,13 @@ abstract class FightSituationBuilder
     implements
         Builder<FightSituation, FightSituationBuilder>,
         SituationStateBuilderBase {
+  @virtual
   int time = 0;
+  @virtual
   BuiltList<int> playerTeamIds;
+  @virtual
   BuiltList<int> enemyTeamIds;
+  @virtual
   MapBuilder<int, TimedEventCallback> events =
       new MapBuilder<int, TimedEventCallback>();
 
