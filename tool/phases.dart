@@ -6,8 +6,7 @@ final phases = new PhaseGroup.singleAction(
     new GeneratorBuilder([new BuiltValueGenerator()]),
     new InputSet('edgehead', const [
       'lib/fractal_stories/actor.dart',
-      'lib/fractal_stories/situation.dart',
       'lib/fractal_stories/team.dart',
       'lib/src/fight/*_situation.dart',
-      'lib/src/fight/on_ground/*_situation.dart'
+      'lib/src/fight/on_ground/*_situation.dart',
     ]));

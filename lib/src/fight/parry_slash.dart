@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 
 var parrySlash = new EnemyTargetActionGenerator("parry and counter",
     valid: (Actor a, enemy, WorldState w) => a.wields(ItemType.SWORD),
@@ -24,8 +23,7 @@ var parrySlash = new EnemyTargetActionGenerator("parry and counter",
   if (a.isPlayer) {
     s.add("this opens an opportunity for a counter attack");
   }
-  var counterAttackSituation =
-      new Situation.withState(new CounterAttackSituation.withValues(a, enemy));
+  var counterAttackSituation = new CounterAttackSituation.initialized(a, enemy);
   w.pushSituation(counterAttackSituation);
   return "${a.name} parries ${enemy.name}";
 }, failure: (Actor a, Actor enemy, WorldState w, Storyline s) {

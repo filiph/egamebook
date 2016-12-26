@@ -9,20 +9,24 @@ part of stranded.fight.off_balance_situation;
 
 class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   @override
-  final int time;
-  @override
   final int actorId;
   @override
   final int culpritId;
+  @override
+  final int id;
+  @override
+  final int time;
 
   factory _$OffBalanceOpportunitySituation(
           [updates(OffBalanceOpportunitySituationBuilder b)]) =>
       (new OffBalanceOpportunitySituationBuilder()..update(updates)).build();
 
-  _$OffBalanceOpportunitySituation._({this.time, this.actorId, this.culpritId})
+  _$OffBalanceOpportunitySituation._(
+      {this.actorId, this.culpritId, this.id, this.time})
       : super._() {
-    if (time == null) throw new ArgumentError.notNull('time');
     if (actorId == null) throw new ArgumentError.notNull('actorId');
+    if (id == null) throw new ArgumentError.notNull('id');
+    if (time == null) throw new ArgumentError.notNull('time');
   }
 
   @override
@@ -31,80 +35,66 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$OffBalanceOpportunitySituationBuilder toBuilder() =>
-      new _$OffBalanceOpportunitySituationBuilder()..replace(this);
+  OffBalanceOpportunitySituationBuilder toBuilder() =>
+      new OffBalanceOpportunitySituationBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (other is! OffBalanceOpportunitySituation) return false;
-    return time == other.time &&
-        actorId == other.actorId &&
-        culpritId == other.culpritId;
+    return actorId == other.actorId &&
+        culpritId == other.culpritId &&
+        id == other.id &&
+        time == other.time;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, time.hashCode), actorId.hashCode), culpritId.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, actorId.hashCode), culpritId.hashCode), id.hashCode),
+        time.hashCode));
   }
 
   @override
   String toString() {
     return 'OffBalanceOpportunitySituation {'
-        'time=${time.toString()},\n'
         'actorId=${actorId.toString()},\n'
         'culpritId=${culpritId.toString()},\n'
+        'id=${id.toString()},\n'
+        'time=${time.toString()},\n'
         '}';
   }
 }
 
-class _$OffBalanceOpportunitySituationBuilder
-    extends OffBalanceOpportunitySituationBuilder {
+class OffBalanceOpportunitySituationBuilder
+    implements
+        Builder<OffBalanceOpportunitySituation,
+            OffBalanceOpportunitySituationBuilder> {
   OffBalanceOpportunitySituation _$v;
 
-  @override
-  int get time {
-    _$this;
-    return super.time;
-  }
+  int _actorId;
+  int get actorId => _$this._actorId;
+  set actorId(int actorId) => _$this._actorId = actorId;
 
-  @override
-  set time(int time) {
-    _$this;
-    super.time = time;
-  }
+  int _culpritId;
+  int get culpritId => _$this._culpritId;
+  set culpritId(int culpritId) => _$this._culpritId = culpritId;
 
-  @override
-  int get actorId {
-    _$this;
-    return super.actorId;
-  }
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
-  @override
-  set actorId(int actorId) {
-    _$this;
-    super.actorId = actorId;
-  }
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
 
-  @override
-  int get culpritId {
-    _$this;
-    return super.culpritId;
-  }
-
-  @override
-  set culpritId(int culpritId) {
-    _$this;
-    super.culpritId = culpritId;
-  }
-
-  _$OffBalanceOpportunitySituationBuilder() : super._();
+  OffBalanceOpportunitySituationBuilder();
 
   OffBalanceOpportunitySituationBuilder get _$this {
     if (_$v != null) {
-      super.time = _$v.time;
-      super.actorId = _$v.actorId;
-      super.culpritId = _$v.culpritId;
+      _actorId = _$v.actorId;
+      _culpritId = _$v.culpritId;
+      _id = _$v.id;
+      _time = _$v.time;
       _$v = null;
     }
     return this;
@@ -124,7 +114,7 @@ class _$OffBalanceOpportunitySituationBuilder
   OffBalanceOpportunitySituation build() {
     final result = _$v ??
         new _$OffBalanceOpportunitySituation._(
-            time: time, actorId: actorId, culpritId: culpritId);
+            actorId: actorId, culpritId: culpritId, id: id, time: time);
     replace(result);
     return result;
   }

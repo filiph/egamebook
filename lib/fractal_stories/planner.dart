@@ -209,7 +209,7 @@ class ActorPlanner {
       }
 
       var currentActor =
-          current.world.currentSituation.state.getCurrentActor(current.world);
+          current.world.currentSituation.getCurrentActor(current.world);
       assert(currentActor != null);
 
       // This actor is the one we originally started planning for.
@@ -226,7 +226,7 @@ class ActorPlanner {
         var score = mainActor.scoreWorld(current.world);
         print("----");
         print(
-            "SITUATION = ${current.world.currentSituation.state.runtimeType}");
+            "SITUATION = ${current.world.currentSituation.runtimeType}");
         print("MAIN_ACTOR = ${mainActor.name}");
         print("ACTOR = ${currentActor.name} ($currentActorIsMain)");
         print(

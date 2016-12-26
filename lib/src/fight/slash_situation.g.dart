@@ -11,6 +11,8 @@ class _$SlashSituation extends SlashSituation {
   @override
   final int attacker;
   @override
+  final int id;
+  @override
   final int target;
   @override
   final int time;
@@ -18,8 +20,10 @@ class _$SlashSituation extends SlashSituation {
   factory _$SlashSituation([updates(SlashSituationBuilder b)]) =>
       (new SlashSituationBuilder()..update(updates)).build();
 
-  _$SlashSituation._({this.attacker, this.target, this.time}) : super._() {
+  _$SlashSituation._({this.attacker, this.id, this.target, this.time})
+      : super._() {
     if (attacker == null) throw new ArgumentError.notNull('attacker');
+    if (id == null) throw new ArgumentError.notNull('id');
     if (target == null) throw new ArgumentError.notNull('target');
     if (time == null) throw new ArgumentError.notNull('time');
   }
@@ -29,79 +33,64 @@ class _$SlashSituation extends SlashSituation {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$SlashSituationBuilder toBuilder() =>
-      new _$SlashSituationBuilder()..replace(this);
+  SlashSituationBuilder toBuilder() =>
+      new SlashSituationBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (other is! SlashSituation) return false;
     return attacker == other.attacker &&
+        id == other.id &&
         target == other.target &&
         time == other.time;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, attacker.hashCode), target.hashCode), time.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, attacker.hashCode), id.hashCode), target.hashCode),
+        time.hashCode));
   }
 
   @override
   String toString() {
     return 'SlashSituation {'
         'attacker=${attacker.toString()},\n'
+        'id=${id.toString()},\n'
         'target=${target.toString()},\n'
         'time=${time.toString()},\n'
         '}';
   }
 }
 
-class _$SlashSituationBuilder extends SlashSituationBuilder {
+class SlashSituationBuilder
+    implements Builder<SlashSituation, SlashSituationBuilder> {
   SlashSituation _$v;
 
-  @override
-  int get attacker {
-    _$this;
-    return super.attacker;
-  }
+  int _attacker;
+  int get attacker => _$this._attacker;
+  set attacker(int attacker) => _$this._attacker = attacker;
 
-  @override
-  set attacker(int attacker) {
-    _$this;
-    super.attacker = attacker;
-  }
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
-  @override
-  int get target {
-    _$this;
-    return super.target;
-  }
+  int _target;
+  int get target => _$this._target;
+  set target(int target) => _$this._target = target;
 
-  @override
-  set target(int target) {
-    _$this;
-    super.target = target;
-  }
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
 
-  @override
-  int get time {
-    _$this;
-    return super.time;
-  }
-
-  @override
-  set time(int time) {
-    _$this;
-    super.time = time;
-  }
-
-  _$SlashSituationBuilder() : super._();
+  SlashSituationBuilder();
 
   SlashSituationBuilder get _$this {
     if (_$v != null) {
-      super.attacker = _$v.attacker;
-      super.target = _$v.target;
-      super.time = _$v.time;
+      _attacker = _$v.attacker;
+      _id = _$v.id;
+      _target = _$v.target;
+      _time = _$v.time;
       _$v = null;
     }
     return this;
@@ -120,7 +109,8 @@ class _$SlashSituationBuilder extends SlashSituationBuilder {
   @override
   SlashSituation build() {
     final result = _$v ??
-        new _$SlashSituation._(attacker: attacker, target: target, time: time);
+        new _$SlashSituation._(
+            attacker: attacker, id: id, target: target, time: time);
     replace(result);
     return result;
   }

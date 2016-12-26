@@ -73,11 +73,16 @@ abstract class ActorAction {
     int hashCode = worldCopy.hashCode;
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
     if (worldCopy.hashCode != hashCode) {
+      // TODO: change this into an assert with message, #perfmatters
+      // assert(worldCopy.hashCode == hashCode, "Please don't change the world in onBeforeAction");
       throw new StateError("Please don't change the world in onBeforeAction");
     }
     _description = applyFunction(actorInWorldCopy, worldCopy, storyline);
-    worldCopy.updateSituationById(
-        situationId, (b) => b..state = b.state.elapseTime());
+    if (worldCopy.situationExists(situationId)) {
+      // The current situation could have been removed by [applyFunction].
+      // If not, let's update its time.
+      worldCopy.elapseSituationTime(situationId);
+    }
     worldCopy.elapseTime();
     worldCopy
         .getSituationById(situationId)
@@ -85,9 +90,8 @@ abstract class ActorAction {
 
     // Remove ended situations: the ones that don't return an actor anymore,
     // and the ones that return shouldContinue(world) == true.
-    while (worldCopy.currentSituation?.state?.getCurrentActor(worldCopy) ==
-            null ||
-        worldCopy.currentSituation?.state?.shouldContinue(worldCopy) != true) {
+    while (worldCopy.currentSituation?.getCurrentActor(worldCopy) == null ||
+        worldCopy.currentSituation?.shouldContinue(worldCopy) != true) {
       if (worldCopy.currentSituation == null) break;
       worldCopy.popSituation();
     }
@@ -126,6 +130,8 @@ abstract class ActorAction {
   }
 }
 
+//XXX START HERE: put the below to the above (only one action), then make it abstract (force action types to be defined as classes)
+
 class ClosureActorAction extends ActorAction {
   final String name;
   final Function _isApplicable;
@@ -152,10 +158,10 @@ class ClosureActorAction extends ActorAction {
   toString() => name;
 }
 
-/// Builder generates multiple [ActorAction] instances given a [world] and
+/// Generator generates multiple [ActorAction] instances given a [world] and
 /// an [actor].
 ///
-/// For example, an action builder called `hitWithStick` can take the current
+/// For example, an action generator called `hitWithStick` can take the current
 /// world and output as many actions as there are things to hit with a stick.
 /// Each generated action will encapsulate the thing to hit.
 abstract class ActionGenerator {
@@ -177,8 +183,7 @@ class EnemyTargetActionGenerator extends ActionGenerator {
 
   @override
   Iterable<ActorAction> build(Actor actor, WorldState world) {
-    var situationActors =
-        world.currentSituation.state.getActors(world.actors, world);
+    var situationActors = world.currentSituation.getActors(world.actors, world);
     var enemies =
         situationActors.where((other) => other.team.isEnemyWith(actor.team));
     return enemies.map/*<ActorAction>*/((Actor enemy) => new EnemyTargetAction(

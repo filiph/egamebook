@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 
 var dodgeSlash = new EnemyTargetActionGenerator("dodge and counter",
@@ -24,8 +23,7 @@ var dodgeSlash = new EnemyTargetActionGenerator("dodge and counter",
   if (a.isPlayer) {
     s.add("this opens an opportunity for a counter attack");
   }
-  var counterAttackSituation =
-      new Situation.withState(new CounterAttackSituation.withValues(a, enemy));
+  var counterAttackSituation = new CounterAttackSituation.initialized(a, enemy);
   w.pushSituation(counterAttackSituation);
   return "${a.name} dodges ${enemy.name}";
 }, failure: (Actor a, Actor enemy, WorldState w, Storyline s) {

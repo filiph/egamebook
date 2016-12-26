@@ -2,39 +2,54 @@ library stranded.fight.fight_situation;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
-import 'package:meta/meta.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
-import 'kick.dart';
-import 'on_ground/slash_grounded_enemy.dart';
-import 'on_ground/stand_up.dart';
-import 'regain_balance.dart';
-import 'slash.dart';
+import 'package:edgehead/src/fight/kick.dart';
+import 'package:edgehead/src/fight/on_ground/slash_grounded_enemy.dart';
+import 'package:edgehead/src/fight/on_ground/stand_up.dart';
+import 'package:edgehead/src/fight/regain_balance.dart';
+import 'package:edgehead/src/fight/slash.dart';
 
 part 'fight_situation.g.dart';
 
 typedef void TimedEventCallback(WorldState world, Storyline storyline);
 
-abstract class FightSituation extends SituationState
-    with ElapsingTime<FightSituation, FightSituationBuilder>
+abstract class FightSituation extends Situation
     implements Built<FightSituation, FightSituationBuilder> {
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
+
+  factory FightSituation.initialized(
+          Iterable<int> playerTeamIds, Iterable<int> enemyTeamIds) =>
+      new FightSituation((b) => b
+        ..id = getRandomId()
+        ..time = 0
+        ..playerTeamIds.replace(playerTeamIds)
+        ..enemyTeamIds.replace(enemyTeamIds));
   FightSituation._();
+
   List<ActionGenerator> get actionGenerators =>
       <ActionGenerator>[kickOffBalance, startSlash, slashGroundedEnemy];
+
   get actions => <ActorAction>[regainBalance, standUp];
+
   BuiltList<int> get enemyTeamIds;
 
   BuiltMap<int, TimedEventCallback> get events;
+
+  int get id;
+
   String get name => "FightSituation";
 
   BuiltList<int> get playerTeamIds;
+
   int get time;
+
+  @override
+  FightSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
   Actor getActorAtTime(int i, WorldState world) {
@@ -78,22 +93,4 @@ abstract class FightSituation extends SituationState
         canFight(enemyTeamIds) &&
         playerTeamIds.any(isPlayerAndAlive);
   }
-}
-
-abstract class FightSituationBuilder
-    implements
-        Builder<FightSituation, FightSituationBuilder>,
-        SituationStateBuilderBase {
-  @virtual
-  int time = 0;
-  @virtual
-  BuiltList<int> playerTeamIds;
-  @virtual
-  BuiltList<int> enemyTeamIds;
-  @virtual
-  MapBuilder<int, TimedEventCallback> events =
-      new MapBuilder<int, TimedEventCallback>();
-
-  factory FightSituationBuilder() = _$FightSituationBuilder;
-  FightSituationBuilder._();
 }

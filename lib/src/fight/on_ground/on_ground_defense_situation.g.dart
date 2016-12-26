@@ -11,6 +11,8 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   @override
   final int attacker;
   @override
+  final int id;
+  @override
   final int targetOnGround;
   @override
   final int time;
@@ -19,9 +21,11 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
           [updates(OnGroundDefenseSituationBuilder b)]) =>
       (new OnGroundDefenseSituationBuilder()..update(updates)).build();
 
-  _$OnGroundDefenseSituation._({this.attacker, this.targetOnGround, this.time})
+  _$OnGroundDefenseSituation._(
+      {this.attacker, this.id, this.targetOnGround, this.time})
       : super._() {
     if (attacker == null) throw new ArgumentError.notNull('attacker');
+    if (id == null) throw new ArgumentError.notNull('id');
     if (targetOnGround == null)
       throw new ArgumentError.notNull('targetOnGround');
     if (time == null) throw new ArgumentError.notNull('time');
@@ -33,20 +37,23 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$OnGroundDefenseSituationBuilder toBuilder() =>
-      new _$OnGroundDefenseSituationBuilder()..replace(this);
+  OnGroundDefenseSituationBuilder toBuilder() =>
+      new OnGroundDefenseSituationBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (other is! OnGroundDefenseSituation) return false;
     return attacker == other.attacker &&
+        id == other.id &&
         targetOnGround == other.targetOnGround &&
         time == other.time;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, attacker.hashCode), targetOnGround.hashCode),
+    return $jf($jc(
+        $jc($jc($jc(0, attacker.hashCode), id.hashCode),
+            targetOnGround.hashCode),
         time.hashCode));
   }
 
@@ -54,59 +61,43 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   String toString() {
     return 'OnGroundDefenseSituation {'
         'attacker=${attacker.toString()},\n'
+        'id=${id.toString()},\n'
         'targetOnGround=${targetOnGround.toString()},\n'
         'time=${time.toString()},\n'
         '}';
   }
 }
 
-class _$OnGroundDefenseSituationBuilder
-    extends OnGroundDefenseSituationBuilder {
+class OnGroundDefenseSituationBuilder
+    implements
+        Builder<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
   OnGroundDefenseSituation _$v;
 
-  @override
-  int get attacker {
-    _$this;
-    return super.attacker;
-  }
+  int _attacker;
+  int get attacker => _$this._attacker;
+  set attacker(int attacker) => _$this._attacker = attacker;
 
-  @override
-  set attacker(int attacker) {
-    _$this;
-    super.attacker = attacker;
-  }
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
-  @override
-  int get targetOnGround {
-    _$this;
-    return super.targetOnGround;
-  }
+  int _targetOnGround;
+  int get targetOnGround => _$this._targetOnGround;
+  set targetOnGround(int targetOnGround) =>
+      _$this._targetOnGround = targetOnGround;
 
-  @override
-  set targetOnGround(int targetOnGround) {
-    _$this;
-    super.targetOnGround = targetOnGround;
-  }
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
 
-  @override
-  int get time {
-    _$this;
-    return super.time;
-  }
-
-  @override
-  set time(int time) {
-    _$this;
-    super.time = time;
-  }
-
-  _$OnGroundDefenseSituationBuilder() : super._();
+  OnGroundDefenseSituationBuilder();
 
   OnGroundDefenseSituationBuilder get _$this {
     if (_$v != null) {
-      super.attacker = _$v.attacker;
-      super.targetOnGround = _$v.targetOnGround;
-      super.time = _$v.time;
+      _attacker = _$v.attacker;
+      _id = _$v.id;
+      _targetOnGround = _$v.targetOnGround;
+      _time = _$v.time;
       _$v = null;
     }
     return this;
@@ -126,7 +117,10 @@ class _$OnGroundDefenseSituationBuilder
   OnGroundDefenseSituation build() {
     final result = _$v ??
         new _$OnGroundDefenseSituation._(
-            attacker: attacker, targetOnGround: targetOnGround, time: time);
+            attacker: attacker,
+            id: id,
+            targetOnGround: targetOnGround,
+            time: time);
     replace(result);
     return result;
   }

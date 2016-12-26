@@ -1,7 +1,6 @@
 library stranded.fight.slash_situation;
 
 import 'package:built_value/built_value.dart';
-import 'package:meta/meta.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -11,24 +10,33 @@ import 'slash.dart';
 
 part 'slash_situation.g.dart';
 
-abstract class SlashSituation extends SituationState
-    with ElapsingTime<SlashSituation, SlashSituationBuilder>
+abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
   factory SlashSituation([updates(SlashSituationBuilder b)]) = _$SlashSituation;
-  factory SlashSituation.withValues(Actor attacker, Actor target,
-          {int time: 0}) =>
+
+  factory SlashSituation.initialized(Actor attacker, Actor target) =>
       new SlashSituation((b) => b
+        ..id = getRandomId()
+        ..time = 0
         ..attacker = attacker.id
-        ..target = target.id
-        ..time = time);
+        ..target = target.id);
+
   SlashSituation._();
+
   List<ActionGenerator> get actionGenerators => [finishSlash];
 
   int get attacker;
+
+  int get id;
+
   String get name => "SlashSituation";
+
   int get target;
 
   int get time;
+
+  @override
+  SlashSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
   Actor getActorAtTime(int time, WorldState w) {
@@ -39,19 +47,4 @@ abstract class SlashSituation extends SituationState
   @override
   Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
       actors.where((actor) => actor.id == attacker || actor.id == target);
-}
-
-abstract class SlashSituationBuilder
-    implements
-        Builder<SlashSituation, SlashSituationBuilder>,
-        SituationStateBuilderBase {
-  @virtual
-  int time = 0;
-  @virtual
-  int attacker;
-  @virtual
-  int target;
-
-  factory SlashSituationBuilder() = _$SlashSituationBuilder;
-  SlashSituationBuilder._();
 }

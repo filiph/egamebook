@@ -1,25 +1,36 @@
 library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';
-
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:meta/meta.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+
 import 'off_balance_opportunity_thrust.dart';
 import 'pass.dart';
 
 part 'off_balance_opportunity_situation.g.dart';
 
-abstract class OffBalanceOpportunitySituation extends SituationState
-    with
-        ElapsingTime<OffBalanceOpportunitySituation,
-            OffBalanceOpportunitySituationBuilder>
+abstract class OffBalanceOpportunitySituation extends Situation
     implements
         Built<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
-  String get name => "OffBalanceOpportunitySituation";
-  int get time;
+  factory OffBalanceOpportunitySituation(
+          [updates(OffBalanceOpportunitySituationBuilder b)]) =
+      _$OffBalanceOpportunitySituation;
+
+  factory OffBalanceOpportunitySituation.initialized(Actor actor,
+          {Actor culprit}) =>
+      new OffBalanceOpportunitySituation((b) => b
+        ..id = getRandomId()
+        ..time = 0
+        ..actorId = actor.id
+        ..culpritId = culprit?.id);
+
+  OffBalanceOpportunitySituation._();
+
+  get actionGenerators => [offBalanceOpportunityThrust];
+
+  get actions => [pass];
 
   /// The actor who is off balance.
   int get actorId;
@@ -28,18 +39,14 @@ abstract class OffBalanceOpportunitySituation extends SituationState
   @nullable
   int get culpritId;
 
-  OffBalanceOpportunitySituation._();
-  factory OffBalanceOpportunitySituation(
-          [updates(OffBalanceOpportunitySituationBuilder b)]) =
-      _$OffBalanceOpportunitySituation;
-  factory OffBalanceOpportunitySituation.withValues(Actor actor,
-          {int time: 0}) =>
-      new OffBalanceOpportunitySituation((b) => b
-        ..actorId = actor.id
-        ..time = time);
+  int get id;
 
-  get actions => [pass];
-  get actionGenerators => [offBalanceOpportunityThrust];
+  String get name => "OffBalanceOpportunitySituation";
+
+  int get time;
+
+  @override
+  OffBalanceOpportunitySituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
   Actor getActorAtTime(int time, WorldState world) {
@@ -66,22 +73,4 @@ abstract class OffBalanceOpportunitySituation extends SituationState
     var actor = world.getActorById(actorId);
     return actors.where((a) => a == actor || a.isEnemyOf(actor));
   }
-}
-
-abstract class OffBalanceOpportunitySituationBuilder
-    implements
-        Builder<OffBalanceOpportunitySituation,
-            OffBalanceOpportunitySituationBuilder>,
-        SituationStateBuilderBase {
-  @virtual
-  int time = 0;
-  @virtual
-  int actorId;
-  @nullable
-  @virtual
-  int culpritId;
-
-  OffBalanceOpportunitySituationBuilder._();
-  factory OffBalanceOpportunitySituationBuilder() =
-      _$OffBalanceOpportunitySituationBuilder;
 }

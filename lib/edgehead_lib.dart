@@ -1,5 +1,3 @@
-import 'package:built_collection/built_collection.dart';
-
 import 'fractal_stories/looped_event/looped_event.dart';
 import 'fractal_stories/storyline/storyline.dart';
 
@@ -72,9 +70,8 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..worldScoringFunction = carelessScoringFunction);
 
-    initialSituation = new Situation.withState(new FightSituation((b) => b
-      ..playerTeamIds = new BuiltList<int>([filip.id, briana.id])
-      ..enemyTeamIds = new BuiltList<int>([orc.id, goblin.id])
+    initialSituation = new FightSituation.initialized(
+        [filip.id, briana.id], [orc.id, goblin.id]).rebuild((b) => b
       ..events[2] = (w, s) {
         s.addParagraph();
         s.add("You hear a horrible growling sound from behind.");
@@ -85,7 +82,7 @@ class EdgeheadGame extends LoopedEvent {
         s.addParagraph();
         s.add("The earth shatters and there's that sound again.");
         s.addParagraph();
-      }));
+      });
 
     world = new WorldState(
         new Set.from([filip, briana, orc, goblin]), initialSituation);
@@ -126,7 +123,7 @@ class EdgeheadGame extends LoopedEvent {
 //    _choiceFunction("Do something", script: () => finished = true);
 
     var situation = world.currentSituation;
-    var actor = situation.state.getCurrentActor(world);
+    var actor = situation.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
@@ -138,8 +135,7 @@ class EdgeheadGame extends LoopedEvent {
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?
-      world.updateSituationById(
-          situation.id, (b) => b.state = b.state.elapseTime());
+      world.elapseSituationTime(situation.id);
       world.time += 1;
       return;
     }

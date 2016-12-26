@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 
 import 'package:edgehead/src/fight/on_ground/strike_down_situation.dart';
 import 'package:edgehead/src/fight/on_ground/on_ground_defense_situation.dart';
@@ -19,11 +18,10 @@ var slashGroundedEnemy = new EnemyTargetActionGenerator(
       "<subject> strike<s> down "
       "{with <subject's> ${a.currentWeapon.name} |}at <object>",
       object: enemy);
-  var strikeDownSituation =
-      new Situation.withState(new StrikeDownSituation.withValues(a, enemy));
+  var strikeDownSituation = new StrikeDownSituation.initialized(a, enemy);
   w.pushSituation(strikeDownSituation);
-  var onGroundDefenseSituation = new Situation.withState(
-      new OnGroundDefenseSituation.withValues(a, enemy));
+  var onGroundDefenseSituation =
+      new OnGroundDefenseSituation.initialized(a, enemy);
   w.pushSituation(onGroundDefenseSituation);
   return "${a.name} strikes down at ${enemy.name} on the ground";
 });

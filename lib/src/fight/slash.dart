@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
@@ -21,11 +20,9 @@ var startSlash = new EnemyTargetActionGenerator("swing at <object>",
       "<subject> swing<s> "
       "{<subject's> ${a.currentWeapon.name} |}at <object>",
       object: enemy);
-  var slashSituation =
-      new Situation.withState(new SlashSituation.withValues(a, enemy));
+  var slashSituation = new SlashSituation.initialized(a, enemy);
   w.pushSituation(slashSituation);
-  var slashDefenseSituation =
-      new Situation.withState(new SlashDefenseSituation.withValues(a, enemy));
+  var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
   w.pushSituation(slashDefenseSituation);
   return "${a.name} slashes at ${enemy.name}";
 });

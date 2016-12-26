@@ -46,9 +46,7 @@ var kickOffBalance = new EnemyTargetActionGenerator("kick <object>",
 
   if (w.getActorById(enemy.id).pose == Pose.offBalance) {
     var situation =
-        new Situation.withState(new OffBalanceOpportunitySituation((b) => b
-          ..actorId = enemy.id
-          ..culpritId = a.id));
+        new OffBalanceOpportunitySituation.initialized(enemy, culprit: a);
     w.pushSituation(situation);
   }
   return "${a.name} kicks ${enemy.name} off balance";

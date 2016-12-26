@@ -13,6 +13,8 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltMap<int, TimedEventCallback> events;
   @override
+  final int id;
+  @override
   final BuiltList<int> playerTeamIds;
   @override
   final int time;
@@ -21,10 +23,11 @@ class _$FightSituation extends FightSituation {
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
-      {this.enemyTeamIds, this.events, this.playerTeamIds, this.time})
+      {this.enemyTeamIds, this.events, this.id, this.playerTeamIds, this.time})
       : super._() {
     if (enemyTeamIds == null) throw new ArgumentError.notNull('enemyTeamIds');
     if (events == null) throw new ArgumentError.notNull('events');
+    if (id == null) throw new ArgumentError.notNull('id');
     if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
     if (time == null) throw new ArgumentError.notNull('time');
   }
@@ -34,14 +37,15 @@ class _$FightSituation extends FightSituation {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$FightSituationBuilder toBuilder() =>
-      new _$FightSituationBuilder()..replace(this);
+  FightSituationBuilder toBuilder() =>
+      new FightSituationBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (other is! FightSituation) return false;
     return enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
+        id == other.id &&
         playerTeamIds == other.playerTeamIds &&
         time == other.time;
   }
@@ -49,7 +53,9 @@ class _$FightSituation extends FightSituation {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+        $jc(
+            $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+                id.hashCode),
             playerTeamIds.hashCode),
         time.hashCode));
   }
@@ -59,71 +65,52 @@ class _$FightSituation extends FightSituation {
     return 'FightSituation {'
         'enemyTeamIds=${enemyTeamIds.toString()},\n'
         'events=${events.toString()},\n'
+        'id=${id.toString()},\n'
         'playerTeamIds=${playerTeamIds.toString()},\n'
         'time=${time.toString()},\n'
         '}';
   }
 }
 
-class _$FightSituationBuilder extends FightSituationBuilder {
+class FightSituationBuilder
+    implements Builder<FightSituation, FightSituationBuilder> {
   FightSituation _$v;
 
-  @override
-  BuiltList<int> get enemyTeamIds {
-    _$this;
-    return super.enemyTeamIds;
-  }
+  ListBuilder<int> _enemyTeamIds;
+  ListBuilder<int> get enemyTeamIds =>
+      _$this._enemyTeamIds ??= new ListBuilder<int>();
+  set enemyTeamIds(ListBuilder<int> enemyTeamIds) =>
+      _$this._enemyTeamIds = enemyTeamIds;
 
-  @override
-  set enemyTeamIds(BuiltList<int> enemyTeamIds) {
-    _$this;
-    super.enemyTeamIds = enemyTeamIds;
-  }
+  MapBuilder<int, TimedEventCallback> _events;
+  MapBuilder<int, TimedEventCallback> get events =>
+      _$this._events ??= new MapBuilder<int, TimedEventCallback>();
+  set events(MapBuilder<int, TimedEventCallback> events) =>
+      _$this._events = events;
 
-  @override
-  MapBuilder<int, TimedEventCallback> get events {
-    _$this;
-    return super.events ??= new MapBuilder<int, TimedEventCallback>();
-  }
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
-  @override
-  set events(MapBuilder<int, TimedEventCallback> events) {
-    _$this;
-    super.events = events;
-  }
+  ListBuilder<int> _playerTeamIds;
+  ListBuilder<int> get playerTeamIds =>
+      _$this._playerTeamIds ??= new ListBuilder<int>();
+  set playerTeamIds(ListBuilder<int> playerTeamIds) =>
+      _$this._playerTeamIds = playerTeamIds;
 
-  @override
-  BuiltList<int> get playerTeamIds {
-    _$this;
-    return super.playerTeamIds;
-  }
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
 
-  @override
-  set playerTeamIds(BuiltList<int> playerTeamIds) {
-    _$this;
-    super.playerTeamIds = playerTeamIds;
-  }
-
-  @override
-  int get time {
-    _$this;
-    return super.time;
-  }
-
-  @override
-  set time(int time) {
-    _$this;
-    super.time = time;
-  }
-
-  _$FightSituationBuilder() : super._();
+  FightSituationBuilder();
 
   FightSituationBuilder get _$this {
     if (_$v != null) {
-      super.enemyTeamIds = _$v.enemyTeamIds;
-      super.events = _$v.events?.toBuilder();
-      super.playerTeamIds = _$v.playerTeamIds;
-      super.time = _$v.time;
+      _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
+      _events = _$v.events?.toBuilder();
+      _id = _$v.id;
+      _playerTeamIds = _$v.playerTeamIds?.toBuilder();
+      _time = _$v.time;
       _$v = null;
     }
     return this;
@@ -143,9 +130,10 @@ class _$FightSituationBuilder extends FightSituationBuilder {
   FightSituation build() {
     final result = _$v ??
         new _$FightSituation._(
-            enemyTeamIds: enemyTeamIds,
+            enemyTeamIds: enemyTeamIds?.build(),
             events: events?.build(),
-            playerTeamIds: playerTeamIds,
+            id: id,
+            playerTeamIds: playerTeamIds?.build(),
             time: time);
     replace(result);
     return result;

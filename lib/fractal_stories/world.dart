@@ -19,9 +19,6 @@ class WorldState {
   /// This is a push-down automaton.
   final List<Situation> situations;
 
-  Situation get currentSituation =>
-      situations.isNotEmpty ? situations.last : null;
-
   /// The age of this WorldState. Every 'turn', this number increases by one.
   int time;
 
@@ -51,25 +48,8 @@ class WorldState {
     time = other.time;
   }
 
-  Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
-
-  void updateActorById(int id, updates(ActorBuilder b)) {
-    var original = getActorById(id);
-    var updated = original.rebuild(updates);
-    actors.remove(original);
-    actors.add(updated);
-  }
-
-  void updateSituationById(int id, updates(SituationBuilder b)) {
-    int index = _findSituationIndex(id);
-    if (index == null) return;
-
-    situations[index] = situations[index].rebuild(updates);
-  }
-
-  void elapseTime() {
-    time += 1;
-  }
+  Situation get currentSituation =>
+      situations.isNotEmpty ? situations.last : null;
 
   @override
   int get hashCode {
@@ -79,10 +59,26 @@ class WorldState {
 
   bool operator ==(o) => o is WorldState && hashCode == o.hashCode;
 
-  toString() => "World<${actors.toSet()}>";
+  void elapseSituationTime(int situationId) {
+    int index = _findSituationIndex(situationId);
+    if (index == null) {
+      throw new StateError("Tried to elapseSituationTime of situation "
+          "id=$situationId that doesn't exist in situations ($situations).");
+    }
 
-  void pushSituation(Situation situation) {
-    situations.add(situation);
+    situations[index] = situations[index].elapseTime();
+  }
+
+  void elapseTime() {
+    time += 1;
+  }
+
+  Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
+
+  Situation getSituationById(int situationId) {
+    int index = _findSituationIndex(situationId);
+    if (index == null) return null;
+    return situations[index];
   }
 
   void popSituation() {
@@ -90,14 +86,29 @@ class WorldState {
   }
 
   void popSituationsUntil(String situationName) {
-    while (
-        situations.isNotEmpty && situations.last.state.name != situationName) {
+    while (situations.isNotEmpty && situations.last.name != situationName) {
       situations.removeLast();
     }
     if (situations.isEmpty) {
       throw new ArgumentError("Tried to pop situations until $situationName "
           "but none was found in stack.");
     }
+  }
+
+  void pushSituation(Situation situation) {
+    situations.add(situation);
+  }
+
+  bool situationExists(int situationId) =>
+      _findSituationIndex(situationId) != null;
+
+  toString() => "World<${actors.toSet()}>";
+
+  void updateActorById(int id, updates(ActorBuilder b)) {
+    var original = getActorById(id);
+    var updated = original.rebuild(updates);
+    actors.remove(original);
+    actors.add(updated);
   }
 
   /// Returns the index at which the [Situation] with [situationId] resides
@@ -111,11 +122,5 @@ class WorldState {
       }
     }
     return index;
-  }
-
-  Situation getSituationById(int situationId) {
-    int index = _findSituationIndex(situationId);
-    if (index == null) return null;
-    return situations[index];
   }
 }

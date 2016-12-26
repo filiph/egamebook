@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:built_collection/built_collection.dart';
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
@@ -9,7 +7,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
@@ -51,9 +48,8 @@ main() async {
     ..currentWeapon = new Sword()
     ..team = defaultEnemyTeam);
 
-  var initialSituation = new Situation.withState(new FightSituation((b) => b
-    ..playerTeamIds = new BuiltList<int>([filip.id, briana.id])
-    ..enemyTeamIds = new BuiltList<int>([orc.id, goblin.id])
+  var initialSituation = new FightSituation.initialized(
+      [filip.id, briana.id], [orc.id, goblin.id]).rebuild((b) => b
     ..events[2] = (w, s) {
       s.addParagraph();
       s.add("You hear a horrible growling sound from behind.");
@@ -64,7 +60,7 @@ main() async {
       s.addParagraph();
       s.add("The earth shatters and there's that sound again.");
       s.addParagraph();
-    }));
+    });
 
   WorldState world = new WorldState(
       new Set.from([filip, briana, orc, goblin]), initialSituation);
@@ -80,15 +76,14 @@ main() async {
 
   while (world.situations.isNotEmpty) {
     var situation = world.currentSituation;
-    var actor = situation.state.getCurrentActor(world);
+    var actor = situation.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(maxOrder: 7);
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
-      world.updateSituationById(
-          situation.id, (b) => b.state = b.state.elapseTime());
+      world.elapseSituationTime(situation.id);
       world.time += 1;
       continue;
     }

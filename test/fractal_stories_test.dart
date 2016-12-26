@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:test/test.dart';
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -23,5 +24,16 @@ void main() {
         expect(filip.hashCode, isNot(filip2.hashCode));
       });
     });
+    group("FightSituation", () {
+      test("initializes with random id", () {
+        var a = new FightSituation.initialized([], []);
+        var b = new FightSituation.initialized([], []);
+        expect(a.id, isNot(b.id));
+        var c = a.elapseTime();
+        expect(a.id, equals(c.id));
+        expect(c.time, equals(a.time + 1));
+      });
+    });
+    // TODO: all situations initialize with random ID and time = 0
   });
 }
