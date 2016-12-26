@@ -49,7 +49,7 @@ main() async {
     ..team = defaultEnemyTeam);
 
   var initialSituation = new FightSituation.initialized(
-      [filip.id, briana.id], [orc.id, goblin.id]).rebuild((b) => b
+      [filip, briana], [orc, goblin]).rebuild((b) => b
     ..events[2] = (w, s) {
       s.addParagraph();
       s.add("You hear a horrible growling sound from behind.");

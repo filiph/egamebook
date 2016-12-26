@@ -23,12 +23,12 @@ abstract class FightSituation extends Situation
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
   factory FightSituation.initialized(
-          Iterable<int> playerTeamIds, Iterable<int> enemyTeamIds) =>
+          Iterable<Actor> playerTeam, Iterable<Actor> enemyTeam) =>
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
-        ..playerTeamIds.replace(playerTeamIds)
-        ..enemyTeamIds.replace(enemyTeamIds));
+        ..playerTeamIds.replace(playerTeam.map((a) => a.id))
+        ..enemyTeamIds.replace(enemyTeam.map((a) => a.id)));
   FightSituation._();
 
   List<ActionGenerator> get actionGenerators =>
