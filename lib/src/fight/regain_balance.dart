@@ -1,13 +1,35 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+
 import 'kick.dart';
 
-var regainBalance = new ClosureActorAction(
-    "Regain balance.", (Actor a, w) => a.pose == Pose.offBalance, (a, w, s) {
-  if (a.isPlayer) {
-    a.report(s, "<subject> regain<s> <object>",
-        object: balance, positive: true);
+RegainBalance regainBalance = new RegainBalance();
+
+class RegainBalance extends ActorAction {
+
+  @override
+  String get name => "Regain balance.";
+
+  @override
+  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
+    throw new UnimplementedError();
   }
-  w.updateActorById(a.id, (b) => b.pose = Pose.standing);
-  return "${a.name} regains balance";
-}, (_, __, ___) {}, 1.0);
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    if (a.isPlayer) {
+      a.report(s, "<subject> regain<s> <object>",
+          object: balance, positive: true);
+    }
+    w.updateActorById(a.id, (b) => b.pose = Pose.standing);
+    return "${a.name} regains balance";
+  }
+
+  @override
+  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+
+  @override
+  bool isApplicable(Actor a, WorldState world) => a.pose == Pose.offBalance;
+}

@@ -130,34 +130,6 @@ abstract class ActorAction {
   }
 }
 
-//XXX START HERE: put the below to the above (only one action), then make it abstract (force action types to be defined as classes)
-
-class ClosureActorAction extends ActorAction {
-  final String name;
-  final Function _isApplicable;
-  final _ActorActionFunction _applySuccess;
-  final _ActorActionFunction _applyFailure;
-  final num successChance;
-  final bool failureModifiesWorld;
-
-  ClosureActorAction(this.name, this._isApplicable, this._applySuccess,
-      _ActorActionFunction applyFailure, this.successChance)
-      : _applyFailure = applyFailure,
-        failureModifiesWorld = applyFailure != null;
-
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) =>
-      _applyFailure(actor, world, storyline);
-
-  String applySuccess(Actor actor, WorldState world, Storyline storyline) =>
-      _applySuccess(actor, world, storyline);
-
-  num getSuccessChance(Actor actor, WorldState world) => successChance;
-  bool isApplicable(Actor actor, WorldState world) =>
-      _isApplicable(actor, world);
-
-  toString() => name;
-}
-
 /// Generator generates multiple [ActorAction] instances given a [world] and
 /// an [actor].
 ///

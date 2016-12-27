@@ -1,9 +1,29 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
 
-var standUp = new ClosureActorAction(
-    "Stand up.", (Actor a, w) => a.pose == Pose.onGround, (a, w, s) {
-  a.report(s, "<subject> stand<s> up");
-  w.updateActorById(a.id, (b) => b.pose = Pose.standing);
-  return "${a.name} stands up";
-}, (_, __, ___) {}, 1.0);
+StandUp standUp = new StandUp();
+
+class StandUp extends ActorAction {
+  @override
+  String get name => "Stand up.";
+
+  @override
+  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
+    throw new UnimplementedError();
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    a.report(s, "<subject> stand<s> up");
+    w.updateActorById(a.id, (b) => b.pose = Pose.standing);
+    return "${a.name} stands up";
+  }
+
+  @override
+  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+
+  @override
+  bool isApplicable(Actor a, WorldState world) => a.pose == Pose.onGround;
+}
