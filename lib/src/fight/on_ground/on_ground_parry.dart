@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-class OnGroundParry extends EnemyTargetActorAction {
+class OnGroundParry extends EnemyTargetAction {
   OnGroundParry(Actor enemy) : super(enemy);
 
   @override
@@ -44,6 +44,6 @@ class OnGroundParry extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState world) => a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) =>
+  static EnemyTargetAction builder(Actor enemy) =>
       new OnGroundParry(enemy);
 }

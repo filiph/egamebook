@@ -10,7 +10,7 @@ import 'off_balance_opportunity_situation.dart';
 final balance =
     new Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
-class Kick extends EnemyTargetActorAction {
+class Kick extends EnemyTargetAction {
   Kick(Actor enemy) : super(enemy);
 
   @override
@@ -68,5 +68,5 @@ class Kick extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState world) => a.pose == Pose.standing;
 
-  static EnemyTargetActorAction builder(Actor enemy) => new Kick(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new Kick(enemy);
 }

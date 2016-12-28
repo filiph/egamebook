@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
 
-class OffBalanceOpportunityThrust extends EnemyTargetActorAction {
+class OffBalanceOpportunityThrust extends EnemyTargetAction {
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
 
   @override
@@ -53,6 +53,6 @@ class OffBalanceOpportunityThrust extends EnemyTargetActorAction {
       enemy.pose == Pose.offBalance &&
       a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) =>
+  static EnemyTargetAction builder(Actor enemy) =>
       new OffBalanceOpportunityThrust(enemy);
 }

@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 
 import 'kick.dart';
 
-class RegainBalance extends ActorAction {
+class RegainBalance extends Action {
   static final RegainBalance singleton = new RegainBalance();
 
   @override

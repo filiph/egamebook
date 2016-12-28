@@ -8,14 +8,14 @@ import 'plan_consequence.dart';
 import 'storyline/storyline.dart';
 import 'world.dart';
 
-/// Generator generates multiple [ActorAction] instances given a [world] and
+/// Generator generates multiple [Action] instances given a [world] and
 /// an [actor] and a [builder].
 ///
 /// For example, a builder called `hitWithStick` can take the current
 /// world and output as many actions as there are enemies to hit with a stick.
 /// Each generated action will encapsulate the enemy to hit.
-Iterable<EnemyTargetActorAction> generateEnemyTargetActions(Actor actor,
-    WorldState world, EnemyTargetActorActionBuilder builder) sync* {
+Iterable<EnemyTargetAction> generateEnemyTargetActions(Actor actor,
+    WorldState world, EnemyTargetActionBuilder builder) sync* {
   var situationActors = world.currentSituation.getActors(world.actors, world);
   var enemies =
       situationActors.where((other) => other.team.isEnemyWith(actor.team));
@@ -27,10 +27,10 @@ Iterable<EnemyTargetActorAction> generateEnemyTargetActions(Actor actor,
 }
 
 /// Builder takes an enemy actor and generates an instance of
-/// [EnemyTargetActorAction] with the given [enemy].
-typedef EnemyTargetActorAction EnemyTargetActorActionBuilder(Actor enemy);
+/// [EnemyTargetAction] with the given [enemy].
+typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
 
-abstract class ActorAction {
+abstract class Action {
   String _description;
 
   String get name;
@@ -131,16 +131,16 @@ abstract class ActorAction {
         ..markBeforeAction(world);
 }
 
-/// This [ActorAction] requires an [enemy].
+/// This [Action] requires an [enemy].
 ///
-/// Every [EnemyTargetActorAction] should contain a static builder like this:
+/// Every [EnemyTargetAction] should contain a static builder like this:
 ///
-///     static EnemyTargetActorAction builder(Actor enemy) => new Kick(enemy);
-abstract class EnemyTargetActorAction extends ActorAction {
+///     static EnemyTargetAction builder(Actor enemy) => new Kick(enemy);
+abstract class EnemyTargetAction extends Action {
   final Actor enemy;
 
   @mustCallSuper
-  EnemyTargetActorAction(this.enemy);
+  EnemyTargetAction(this.enemy);
 
   @override
   String get name =>
@@ -148,5 +148,5 @@ abstract class EnemyTargetActorAction extends ActorAction {
 
   String get nameTemplate;
 
-  String toString() => "EnemyTargetActorAction<$nameTemplate::$enemy>";
+  String toString() => "EnemyTargetAction<$nameTemplate::$enemy>";
 }

@@ -24,13 +24,13 @@ class ActorPlanner {
   int planConsequencesComputed = 0;
   bool _resultsReady = false;
 
-  final Map<ActorAction, num> firstActionScores = new Map();
+  final Map<Action, num> firstActionScores = new Map();
 
   ActorPlanner(Actor actor, WorldState initialWorld)
       : actorId = actor.id,
         _initial = new PlanConsequence.initial(initialWorld);
 
-  ActorAction getBest() {
+  Action getBest() {
     assert(_resultsReady);
 
     num bestScore = firstActionScores.values.reduce((a, b) => a > b ? a : b);
@@ -53,11 +53,11 @@ class ActorPlanner {
     }
   }
 
-  Iterable<ActorAction> _generateAllActions(
+  Iterable<Action> _generateAllActions(
       Actor actor, WorldState world) sync* {
     yield* world.currentSituation.actions;
     for (var builder in world.currentSituation.actionGenerators) {
-      assert(builder is EnemyTargetActorActionBuilder);
+      assert(builder is EnemyTargetActionBuilder);
       yield* generateEnemyTargetActions(actor, world, builder);
     }
   }
@@ -152,7 +152,7 @@ class ActorPlanner {
   /// applying [firstAction] and then up to [maxOrder] other steps.
   Stream<ConsequenceStats> _getConsequenceStats(
       PlanConsequence initial,
-      ActorAction firstAction,
+      Action firstAction,
       int maxOrder,
       Future<Null> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
@@ -240,7 +240,7 @@ class ActorPlanner {
 
       }
 
-      for (ActorAction action
+      for (Action action
           in _generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, current.world)) continue;
         var consequences = action.apply(currentActor, current, current.world);
@@ -270,7 +270,7 @@ class ActorPlanner {
 
 class PlannerRecommendation {
   final List<int> weights;
-  final List<ActorAction> actions;
+  final List<Action> actions;
 
   /// The [weights] have to add up to this number.
   ///
@@ -288,7 +288,7 @@ class PlannerRecommendation {
     // TODO: assert that it's a gradient from best to worst
   }
 
-  factory PlannerRecommendation.fromScores(Map<ActorAction, num> scores) {
+  factory PlannerRecommendation.fromScores(Map<Action, num> scores) {
     if (scores.isEmpty) {
       print("WARNING: no recommendations");
       return new PlannerRecommendation([], []);

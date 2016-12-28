@@ -141,7 +141,7 @@ class EdgeheadGame extends LoopedEvent {
       return;
     }
 
-    ActorAction selected;
+    Action selected;
     if (actor.isPlayer) {
       // Player
       if (recs.actions.length == 1) {
@@ -156,10 +156,10 @@ class EdgeheadGame extends LoopedEvent {
       planner.generateTable().forEach(print);
 
       // Take only the first few best actions.
-      List<ActorAction> actions =
+      List<Action> actions =
           new List.from(recs.actions.take(maxChoicesCount));
       actions.sort((a, b) => a.name.compareTo(b.name));
-      for (ActorAction action in actions) {
+      for (Action action in actions) {
         choiceFunction(action.name, script: () {
           _applySelected(action, actor, storyline);
         });
@@ -179,7 +179,7 @@ class EdgeheadGame extends LoopedEvent {
     }
   }
 
-  void _applySelected(ActorAction selected, Actor actor, Storyline storyline) {
+  void _applySelected(Action selected, Actor actor, Storyline storyline) {
     var consequences = selected.apply(actor, consequence, world).toList();
     int index = Randomly.chooseWeighted(consequences.map((c) => c.probability));
     consequence = consequences[index];

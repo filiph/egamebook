@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-class RollOutOfWay extends EnemyTargetActorAction {
+class RollOutOfWay extends EnemyTargetAction {
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override
@@ -37,5 +37,5 @@ class RollOutOfWay extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor actor, WorldState world) => true;
 
-  static EnemyTargetActorAction builder(Actor enemy) => new RollOutOfWay(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new RollOutOfWay(enemy);
 }

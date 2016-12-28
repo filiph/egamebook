@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
 
-class DodgeSlash extends EnemyTargetActorAction {
+class DodgeSlash extends EnemyTargetAction {
   DodgeSlash(Actor enemy) : super(enemy);
 
   @override
@@ -55,5 +55,5 @@ class DodgeSlash extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState w) => a.pose != Pose.onGround;
 
-  static EnemyTargetActorAction builder(Actor enemy) => new DodgeSlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new DodgeSlash(enemy);
 }

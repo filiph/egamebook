@@ -34,7 +34,7 @@ abstract class FightSituation extends Situation
   get actionGenerators =>
       [Kick.builder, StartSlash.builder, StartSlashGroundedEnemy.builder];
 
-  get actions => <ActorAction>[RegainBalance.singleton, StandUp.singleton];
+  get actions => <Action>[RegainBalance.singleton, StandUp.singleton];
 
   BuiltList<int> get enemyTeamIds;
 

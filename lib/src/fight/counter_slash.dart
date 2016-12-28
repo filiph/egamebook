@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash_situation.dart';
 
-class CounterSlash extends EnemyTargetActorAction {
+class CounterSlash extends EnemyTargetAction {
   CounterSlash(Actor enemy) : super(enemy);
 
   @override
@@ -41,5 +41,5 @@ class CounterSlash extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) => new CounterSlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new CounterSlash(enemy);
 }

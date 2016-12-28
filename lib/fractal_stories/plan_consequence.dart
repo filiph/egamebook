@@ -7,7 +7,7 @@ import 'storyline/storyline.dart';
 
 class PlanConsequence {
   final WorldState world;
-  final ActorAction action;
+  final Action action;
   final Storyline storyline;
   final num probability;
   final num cumulativeProbability;

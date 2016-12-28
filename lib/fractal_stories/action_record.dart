@@ -13,7 +13,7 @@ int _extractId(Actor actor) => actor.id;
 /// changed everyone's worldScore (or _would have changed_ worldScore if that
 /// person knew about it).
 ///
-/// SpecialEvent (monkeys steal food) is a type of ActorAction (where
+/// SpecialEvent (monkeys steal food) is a type of Action (where
 /// `performers == null`) that also get ActionRecords.
 ///
 /// Everyone's stance (gratitude <-> dislike) towards everyone else is computed

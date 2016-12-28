@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/on_ground/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/on_ground/strike_down_situation.dart';
 
-class FinishSlashGroundedEnemy extends EnemyTargetActorAction {
+class FinishSlashGroundedEnemy extends EnemyTargetAction {
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
@@ -34,11 +34,11 @@ class FinishSlashGroundedEnemy extends EnemyTargetActorAction {
   bool isApplicable(Actor a, WorldState world) =>
       enemy.pose == Pose.onGround && a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) =>
+  static EnemyTargetAction builder(Actor enemy) =>
       new FinishSlashGroundedEnemy(enemy);
 }
 
-class StartSlashGroundedEnemy extends EnemyTargetActorAction {
+class StartSlashGroundedEnemy extends EnemyTargetAction {
   StartSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
@@ -72,6 +72,6 @@ class StartSlashGroundedEnemy extends EnemyTargetActorAction {
   bool isApplicable(Actor a, WorldState world) =>
       enemy.pose == Pose.onGround && a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) =>
+  static EnemyTargetAction builder(Actor enemy) =>
       new StartSlashGroundedEnemy(enemy);
 }

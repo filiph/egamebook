@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
 
-class ParrySlash extends EnemyTargetActorAction {
+class ParrySlash extends EnemyTargetAction {
   ParrySlash(Actor enemy) : super(enemy);
 
   @override
@@ -58,5 +58,5 @@ class ParrySlash extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) => new ParrySlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new ParrySlash(enemy);
 }

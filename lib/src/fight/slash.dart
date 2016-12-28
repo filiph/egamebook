@@ -8,7 +8,7 @@ import 'package:edgehead/src/fight/damage_reports.dart';
 import 'slash_defense_situation.dart';
 import 'slash_situation.dart';
 
-class FinishSlash extends EnemyTargetActorAction {
+class FinishSlash extends EnemyTargetAction {
   FinishSlash(Actor enemy) : super(enemy);
 
   @override
@@ -48,10 +48,10 @@ class FinishSlash extends EnemyTargetActorAction {
   @override
   bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) => new FinishSlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new FinishSlash(enemy);
 }
 
-class StartSlash extends EnemyTargetActorAction {
+class StartSlash extends EnemyTargetAction {
   StartSlash(Actor enemy) : super(enemy);
 
   @override
@@ -85,5 +85,5 @@ class StartSlash extends EnemyTargetActorAction {
       enemy.pose != Pose.onGround &&
       a.wields(ItemType.SWORD);
 
-  static EnemyTargetActorAction builder(Actor enemy) => new StartSlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new StartSlash(enemy);
 }

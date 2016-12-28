@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-class Pass extends ActorAction {
+class Pass extends Action {
   static final Pass singleton = new Pass();
 
   @override
