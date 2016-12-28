@@ -25,9 +25,9 @@ abstract class CounterAttackSituation extends Situation
 
   CounterAttackSituation._();
 
-  List<ActionGenerator> get actionGenerators => [counterSlash];
+  get actionGenerators => [CounterSlash.builder];
 
-  List<ActorAction> get actions => [pass];
+  List<ActorAction> get actions => [Pass.singleton];
 
   int get counterAttacker;
 

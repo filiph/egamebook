@@ -3,9 +3,9 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-StandUp standUp = new StandUp();
-
 class StandUp extends ActorAction {
+  static final StandUp singleton = new StandUp();
+
   @override
   String get name => "Stand up.";
 

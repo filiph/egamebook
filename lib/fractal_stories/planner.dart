@@ -46,9 +46,9 @@ class ActorPlanner {
   }
 
   Iterable<String> generateTable() sync* {
-    int i = 0;
+    int i = 1;
     for (var key in firstActionScores.keys) {
-      yield "$i) $key\t${firstActionScores[key].toStringAsFixed(2)}";
+      yield "$i) ${key.name}\t${firstActionScores[key].toStringAsFixed(2)}";
       i += 1;
     }
   }
@@ -56,9 +56,9 @@ class ActorPlanner {
   Iterable<ActorAction> _generateAllActions(
       Actor actor, WorldState world) sync* {
     yield* world.currentSituation.actions;
-    for (var generator in world.currentSituation.actionGenerators) {
-      assert(generator is ActionGenerator);
-      yield* generator.build(actor, world);
+    for (var builder in world.currentSituation.actionGenerators) {
+      assert(builder is EnemyTargetActorActionBuilder);
+      yield* generateEnemyTargetActions(actor, world, builder);
     }
   }
 
@@ -160,7 +160,7 @@ class ActorPlanner {
 
     // DEBUG TODO: remove
     bool DEBUG = false;
-    if (DEBUG && (firstAction as EnemyTargetAction).name.contains(" ")) {
+    if (DEBUG && firstAction.name.contains(" ")) {
       print("INITIAL - $firstAction");
       print(
           "adding: score=${mainActor.scoreWorld(initial.world)} * cumProb=${initial
@@ -222,7 +222,7 @@ class ActorPlanner {
           score, current.cumulativeProbability, current.order);
 
       // DEBUG TODO: remove
-      if (DEBUG && (firstAction as EnemyTargetAction).name.contains(" ")) {
+      if (DEBUG && firstAction.name.contains(" ")) {
         var score = mainActor.scoreWorld(current.world);
         print("----");
         print(

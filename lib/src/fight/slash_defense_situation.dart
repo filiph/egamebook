@@ -1,7 +1,6 @@
 library stranded.fight.slash_defense_situation;
 
 import 'package:built_value/built_value.dart';
-import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -14,7 +13,6 @@ part 'slash_defense_situation.g.dart';
 
 abstract class SlashDefenseSituation extends Situation
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
-
   factory SlashDefenseSituation([updates(SlashDefenseSituationBuilder b)]) =
       _$SlashDefenseSituation;
 
@@ -27,8 +25,8 @@ abstract class SlashDefenseSituation extends Situation
 
   SlashDefenseSituation._();
 
-  List<ActionGenerator> get actionGenerators =>
-      [dodgeSlash, parrySlash, defensiveParrySlash];
+  get actionGenerators =>
+      [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
 
   int get attacker;
 

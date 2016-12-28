@@ -31,10 +31,10 @@ abstract class FightSituation extends Situation
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id)));
   FightSituation._();
 
-  List<ActionGenerator> get actionGenerators =>
-      <ActionGenerator>[kickOffBalance, startSlash, slashGroundedEnemy];
+  get actionGenerators =>
+      [Kick.builder, StartSlash.builder, StartSlashGroundedEnemy.builder];
 
-  get actions => <ActorAction>[regainBalance, standUp];
+  get actions => <ActorAction>[RegainBalance.singleton, StandUp.singleton];
 
   BuiltList<int> get enemyTeamIds;
 

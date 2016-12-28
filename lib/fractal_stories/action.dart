@@ -2,26 +2,38 @@ library stranded.action;
 
 import 'package:meta/meta.dart';
 
-import 'actor.dart';
-import 'world.dart';
-import 'plan_consequence.dart';
 import 'action_record.dart';
+import 'actor.dart';
+import 'plan_consequence.dart';
 import 'storyline/storyline.dart';
+import 'world.dart';
 
-typedef String _ActorActionFunction(
-    Actor actor, WorldState world, Storyline storyline);
+/// Generator generates multiple [ActorAction] instances given a [world] and
+/// an [actor] and a [builder].
+///
+/// For example, a builder called `hitWithStick` can take the current
+/// world and output as many actions as there are enemies to hit with a stick.
+/// Each generated action will encapsulate the enemy to hit.
+Iterable<EnemyTargetActorAction> generateEnemyTargetActions(Actor actor,
+    WorldState world, EnemyTargetActorActionBuilder builder) sync* {
+  var situationActors = world.currentSituation.getActors(world.actors, world);
+  var enemies =
+      situationActors.where((other) => other.team.isEnemyWith(actor.team));
+  for (var enemy in enemies) {
+    var action = builder(enemy);
+    assert(action.enemy == enemy);
+    yield action;
+  }
+}
 
-// TODO: use this to have more than 2 outcomes
-//class Consequence {
-//  num weight;
-//  ActorActionFunction applyFunction;
-//}
-//
-//typedef void ActorActionFunction(Actor actor, WorldState worldCopy, Storyline story);
+/// Builder takes an enemy actor and generates an instance of
+/// [EnemyTargetActorAction] with the given [enemy].
+typedef EnemyTargetActorAction EnemyTargetActorActionBuilder(Actor enemy);
 
 abstract class ActorAction {
-  String get name;
   String _description;
+
+  String get name;
 
   Iterable<PlanConsequence> apply(
       Actor actor, PlanConsequence current, WorldState world) sync* {
@@ -40,13 +52,6 @@ abstract class ActorAction {
           isSuccess: true);
     }
     if (successChance < 1) {
-      if (!failureModifiesWorld) {
-        yield new PlanConsequence(
-            world, current, this, new Storyline(), 1 - successChance,
-            isFailure: true);
-        return;
-      }
-
       var worldCopy = new WorldState.duplicate(world);
       Storyline storyline =
           _applyToWorldCopy(worldCopy, actor, world, applyFailure);
@@ -55,6 +60,26 @@ abstract class ActorAction {
           worldCopy, current, this, storyline, 1 - successChance,
           isFailure: true);
     }
+  }
+
+  /// Changes the [world].
+  String applyFailure(Actor a, WorldState w, Storyline s);
+  String applySuccess(Actor a, WorldState w, Storyline s);
+
+  /// Success chance of the action given the actor and the state of the world.
+  num getSuccessChance(Actor a, WorldState w);
+
+  bool isApplicable(Actor a, WorldState w);
+
+  void _addWorldRecord(ActionRecordBuilder builder, WorldState world) {
+    if (_description == null) {
+      throw new StateError("No description given when executing $this. You "
+          "should return it from your world-modifying function.");
+    }
+    builder.markAfterAction(world);
+    builder.description = _description;
+    builder.time = world.time;
+    world.actionRecords.add(builder.build());
   }
 
   Storyline _applyToWorldCopy(
@@ -99,119 +124,29 @@ abstract class ActorAction {
     return storyline;
   }
 
-  /// Changes the [world].
-  String applyFailure(Actor actor, WorldState world, Storyline storyline);
-  String applySuccess(Actor actor, WorldState world, Storyline storyline);
-
-  /// Success chance of the action given the actor and the state of the world.
-  num getSuccessChance(Actor actor, WorldState world);
-
-  bool isApplicable(Actor actor, WorldState world);
-
-  /// This is `false` when failure to do this action just results in nothing.
-  /// This means we can skip creating a new [WorldState] copy.
-  bool get failureModifiesWorld => throw new UnimplementedError();
-
   ActionRecordBuilder _prepareWorldRecord(Actor actor, WorldState world) =>
       new ActionRecordBuilder()
         ..actionName = name
         ..protagonist = actor
         ..markBeforeAction(world);
-
-  void _addWorldRecord(ActionRecordBuilder builder, WorldState world) {
-    if (_description == null) {
-      throw new StateError("No description given when executing $this. You "
-          "should return it from your world-modifying function.");
-    }
-    builder.markAfterAction(world);
-    builder.description = _description;
-    builder.time = world.time;
-    world.actionRecords.add(builder.build());
-  }
 }
 
-/// Generator generates multiple [ActorAction] instances given a [world] and
-/// an [actor].
+/// This [ActorAction] requires an [enemy].
 ///
-/// For example, an action generator called `hitWithStick` can take the current
-/// world and output as many actions as there are things to hit with a stick.
-/// Each generated action will encapsulate the thing to hit.
-abstract class ActionGenerator {
-  Iterable<ActorAction> build(Actor actor, WorldState world);
-}
-
-class EnemyTargetActionGenerator extends ActionGenerator {
-  final String name;
-  final EnemyTargetApplicabilityFunction valid;
-  final EnemyTargetActionFunction success;
-  final EnemyTargetActionFunction failure;
-  final EnemyTargetChanceFunction chance;
-
-  EnemyTargetActionGenerator(this.name,
-      {@required this.valid,
-      this.success,
-      this.failure,
-      @required this.chance});
-
-  @override
-  Iterable<ActorAction> build(Actor actor, WorldState world) {
-    var situationActors = world.currentSituation.getActors(world.actors, world);
-    var enemies =
-        situationActors.where((other) => other.team.isEnemyWith(actor.team));
-    return enemies.map/*<ActorAction>*/((Actor enemy) => new EnemyTargetAction(
-        (new Storyline()..add(name, object: enemy)).realize(),
-        enemy: enemy,
-        valid: valid,
-        success: success,
-        failure: failure,
-        chance: chance));
-  }
-
-  String toString() => "EnemyTargetActionBuilder<$name>";
-}
-
-class EnemyTargetAction extends ActorAction {
-  final String name;
-  final EnemyTargetApplicabilityFunction valid;
-  final EnemyTargetActionFunction success;
-  final EnemyTargetActionFunction failure;
-  final EnemyTargetChanceFunction chance;
+/// Every [EnemyTargetActorAction] should contain a static builder like this:
+///
+///     static EnemyTargetActorAction builder(Actor enemy) => new Kick(enemy);
+abstract class EnemyTargetActorAction extends ActorAction {
   final Actor enemy;
 
-  EnemyTargetAction(this.name,
-      {@required this.enemy,
-      @required this.valid,
-      this.success,
-      this.failure,
-      @required this.chance});
+  @mustCallSuper
+  EnemyTargetActorAction(this.enemy);
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) =>
-      failure(actor, enemy, world, storyline);
+  String get name =>
+      (new Storyline()..add(nameTemplate, object: enemy)).realize();
 
-  @override
-  String applySuccess(Actor actor, WorldState world, Storyline storyline) =>
-      success(actor, enemy, world, storyline);
+  String get nameTemplate;
 
-  @override
-  bool get failureModifiesWorld => failure != null;
-
-  @override
-  num getSuccessChance(Actor actor, WorldState world) =>
-      chance(actor, enemy, world);
-
-  @override
-  bool isApplicable(Actor actor, WorldState world) =>
-      valid(actor, enemy, world);
-
-  String toString() => name;
+  String toString() => "EnemyTargetActorAction<$nameTemplate::$enemy>";
 }
-
-typedef bool EnemyTargetApplicabilityFunction(
-    Actor actor, Actor enemy, WorldState world);
-
-typedef String EnemyTargetActionFunction(
-    Actor actor, Actor enemy, WorldState world, Storyline storyline);
-
-typedef num EnemyTargetChanceFunction(
-    Actor actor, Actor enemy, WorldState world);

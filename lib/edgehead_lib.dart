@@ -12,7 +12,7 @@ import 'fractal_stories/situation.dart';
 import 'fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'dart:async';
-import 'dart:html';
+// import 'dart:html';
 
 class EdgeheadGame extends LoopedEvent {
   EdgeheadGame(StringTakingVoidFunction echo, StringTakingVoidFunction goto,
@@ -129,7 +129,8 @@ class EdgeheadGame extends LoopedEvent {
     await planner.plan(
         maxOrder: 4,
         waitFunction: () async {
-          await window.animationFrame;
+          // await window.animationFrame;
+          await new Future.delayed(const Duration(milliseconds: 5));
         });
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {

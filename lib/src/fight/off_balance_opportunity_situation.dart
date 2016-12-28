@@ -28,9 +28,9 @@ abstract class OffBalanceOpportunitySituation extends Situation
 
   OffBalanceOpportunitySituation._();
 
-  get actionGenerators => [offBalanceOpportunityThrust];
+  get actionGenerators => [OffBalanceOpportunityThrust.builder];
 
-  get actions => [pass];
+  get actions => [Pass.singleton];
 
   /// The actor who is off balance.
   int get actorId;
@@ -58,12 +58,15 @@ abstract class OffBalanceOpportunitySituation extends Situation
         .toList();
     // TODO: sort by distance, cut off if too far
 
-    if (enemies.isNotEmpty) {
-      var candidate = enemies.first;
-      // Only change the situation when the candidate can actually pull it off.
-      if (offBalanceOpportunityThrust.valid(candidate, actor, world)) {
-        return candidate;
-      }
+    if (enemies.isEmpty) return null;
+
+    var candidate = enemies.first;
+    var offBalanceOpportunityThrust =
+        OffBalanceOpportunityThrust.builder(actor);
+
+    // Only change the situation when the candidate can actually pull it off.
+    if (offBalanceOpportunityThrust.isApplicable(candidate, world)) {
+      return candidate;
     }
     return null;
   }

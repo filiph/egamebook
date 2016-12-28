@@ -3,9 +3,9 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-Pass pass = new Pass();
-
 class Pass extends ActorAction {
+  static final Pass singleton = new Pass();
+
   @override
   String get name => "Stand off.";
 

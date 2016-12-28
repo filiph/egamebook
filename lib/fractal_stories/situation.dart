@@ -44,7 +44,7 @@ abstract class Situation {
   ///
   /// For example, an action generator called 'pick up {something}' might
   /// generate two actions: 'pick up lamp' and 'pick up sword'.
-  List<ActionGenerator> get actionGenerators => const [];
+  List<EnemyTargetActorActionBuilder> get actionGenerators => const [];
 
   /// The actions available to the actors.
   ///
