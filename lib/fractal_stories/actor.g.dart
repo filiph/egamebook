@@ -15,10 +15,6 @@ class _$Actor extends Actor {
   @override
   final Item currentWeapon;
   @override
-  final Item shield;
-  @override
-  final Pose pose;
-  @override
   final int hitpoints;
   @override
   final int id;
@@ -35,7 +31,11 @@ class _$Actor extends Actor {
   @override
   final bool nameIsProperNoun;
   @override
+  final Pose pose;
+  @override
   final Pronoun pronoun;
+  @override
+  final Item shield;
   @override
   final Team team;
   @override
@@ -48,8 +48,6 @@ class _$Actor extends Actor {
       {this.alreadyMentioned,
       this.categories,
       this.currentWeapon,
-      this.shield,
-      this.pose,
       this.hitpoints,
       this.id,
       this.initiative,
@@ -58,14 +56,15 @@ class _$Actor extends Actor {
       this.items,
       this.name,
       this.nameIsProperNoun,
+      this.pose,
       this.pronoun,
+      this.shield,
       this.team,
       this.worldScoringFunction})
       : super._() {
     if (alreadyMentioned == null)
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
-    if (pose == null) throw new ArgumentError.notNull('pose');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
@@ -75,6 +74,7 @@ class _$Actor extends Actor {
     if (name == null) throw new ArgumentError.notNull('name');
     if (nameIsProperNoun == null)
       throw new ArgumentError.notNull('nameIsProperNoun');
+    if (pose == null) throw new ArgumentError.notNull('pose');
     if (pronoun == null) throw new ArgumentError.notNull('pronoun');
     if (team == null) throw new ArgumentError.notNull('team');
   }
@@ -92,8 +92,6 @@ class _$Actor extends Actor {
     return alreadyMentioned == other.alreadyMentioned &&
         categories == other.categories &&
         currentWeapon == other.currentWeapon &&
-        shield == other.shield &&
-        pose == other.pose &&
         hitpoints == other.hitpoints &&
         id == other.id &&
         initiative == other.initiative &&
@@ -102,7 +100,9 @@ class _$Actor extends Actor {
         items == other.items &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
+        pose == other.pose &&
         pronoun == other.pronoun &&
+        shield == other.shield &&
         team == other.team &&
         worldScoringFunction == other.worldScoringFunction;
   }
@@ -132,17 +132,17 @@ class _$Actor extends Actor {
                                                                     .hashCode),
                                                             currentWeapon
                                                                 .hashCode),
-                                                        shield.hashCode),
-                                                    pose.hashCode),
-                                                hitpoints.hashCode),
-                                            id.hashCode),
-                                        initiative.hashCode),
-                                    isActive.hashCode),
-                                isPlayer.hashCode),
-                            items.hashCode),
-                        name.hashCode),
-                    nameIsProperNoun.hashCode),
-                pronoun.hashCode),
+                                                        hitpoints.hashCode),
+                                                    id.hashCode),
+                                                initiative.hashCode),
+                                            isActive.hashCode),
+                                        isPlayer.hashCode),
+                                    items.hashCode),
+                                name.hashCode),
+                            nameIsProperNoun.hashCode),
+                        pose.hashCode),
+                    pronoun.hashCode),
+                shield.hashCode),
             team.hashCode),
         worldScoringFunction.hashCode));
   }
@@ -153,8 +153,6 @@ class _$Actor extends Actor {
         'alreadyMentioned=${alreadyMentioned.toString()},\n'
         'categories=${categories.toString()},\n'
         'currentWeapon=${currentWeapon.toString()},\n'
-        'shield=${shield.toString()},\n'
-        'pose=${pose.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
@@ -163,7 +161,9 @@ class _$Actor extends Actor {
         'items=${items.toString()},\n'
         'name=${name.toString()},\n'
         'nameIsProperNoun=${nameIsProperNoun.toString()},\n'
+        'pose=${pose.toString()},\n'
         'pronoun=${pronoun.toString()},\n'
+        'shield=${shield.toString()},\n'
         'team=${team.toString()},\n'
         'worldScoringFunction=${worldScoringFunction.toString()},\n'
         '}';
@@ -207,30 +207,6 @@ class _$ActorBuilder extends ActorBuilder {
   set currentWeapon(Item currentWeapon) {
     _$this;
     super.currentWeapon = currentWeapon;
-  }
-
-  @override
-  Item get shield {
-    _$this;
-    return super.shield;
-  }
-
-  @override
-  set shield(Item shield) {
-    _$this;
-    super.shield = shield;
-  }
-
-  @override
-  Pose get pose {
-    _$this;
-    return super.pose;
-  }
-
-  @override
-  set pose(Pose pose) {
-    _$this;
-    super.pose = pose;
   }
 
   @override
@@ -330,6 +306,18 @@ class _$ActorBuilder extends ActorBuilder {
   }
 
   @override
+  Pose get pose {
+    _$this;
+    return super.pose;
+  }
+
+  @override
+  set pose(Pose pose) {
+    _$this;
+    super.pose = pose;
+  }
+
+  @override
   Pronoun get pronoun {
     _$this;
     return super.pronoun;
@@ -339,6 +327,18 @@ class _$ActorBuilder extends ActorBuilder {
   set pronoun(Pronoun pronoun) {
     _$this;
     super.pronoun = pronoun;
+  }
+
+  @override
+  Item get shield {
+    _$this;
+    return super.shield;
+  }
+
+  @override
+  set shield(Item shield) {
+    _$this;
+    super.shield = shield;
   }
 
   @override
@@ -372,8 +372,6 @@ class _$ActorBuilder extends ActorBuilder {
       super.alreadyMentioned = _$v.alreadyMentioned;
       super.categories = _$v.categories;
       super.currentWeapon = _$v.currentWeapon;
-      super.shield = _$v.shield;
-      super.pose = _$v.pose;
       super.hitpoints = _$v.hitpoints;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
@@ -382,7 +380,9 @@ class _$ActorBuilder extends ActorBuilder {
       super.items = _$v.items;
       super.name = _$v.name;
       super.nameIsProperNoun = _$v.nameIsProperNoun;
+      super.pose = _$v.pose;
       super.pronoun = _$v.pronoun;
+      super.shield = _$v.shield;
       super.team = _$v.team;
       super.worldScoringFunction = _$v.worldScoringFunction;
       _$v = null;
@@ -407,8 +407,6 @@ class _$ActorBuilder extends ActorBuilder {
             alreadyMentioned: alreadyMentioned,
             categories: categories,
             currentWeapon: currentWeapon,
-            shield: shield,
-            pose: pose,
             hitpoints: hitpoints,
             id: id,
             initiative: initiative,
@@ -417,7 +415,9 @@ class _$ActorBuilder extends ActorBuilder {
             items: items,
             name: name,
             nameIsProperNoun: nameIsProperNoun,
+            pose: pose,
             pronoun: pronoun,
+            shield: shield,
             team: team,
             worldScoringFunction: worldScoringFunction);
     replace(result);

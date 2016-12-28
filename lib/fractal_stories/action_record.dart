@@ -1,6 +1,7 @@
 library stranded.action_record;
 
 import 'package:quiver/core.dart';
+
 import 'actor.dart';
 import 'world.dart';
 
@@ -102,14 +103,14 @@ class ActionRecordBuilder {
   KnownToMode _knownToMode = KnownToMode.ALL;
   WorldState _afterWorld;
 
-  String get description => _description;
+  String actionName;
 
+  int time = null;
+
+  String get description => _description;
   set description(String value) {
     _description = value;
   }
-
-  String actionName;
-  int time = null;
 
   KnownToMode get knownToMode => _knownToMode;
   set knownToMode(KnownToMode value) {

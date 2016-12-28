@@ -14,13 +14,6 @@ class Entity extends Object with EntityBehavior {
   /// nothing/nobody).
   static final Entity NOTHING = new Entity(name: "__NOTHING__");
 
-  /// An entity's [id] is the only constant thing. All other things, including
-  /// [name] can change during play. ID cannot.
-  ///
-  /// By default, id is the same as hashCode. But for classes that override
-  /// hashCode (for example, immutable ones), this should be overridden.
-  int get id => hashCode;
-
   /// A proper noun of an entity is a unique name: like "John" for a character
   /// or "Sun" for our star, or "Painless" for the gun in the movie Predator.
   /// http://en.wikipedia.org/wiki/Proper_noun
@@ -45,13 +38,6 @@ class Entity extends Object with EntityBehavior {
 
   final Team team;
 
-  /**
-   * Whether or not this entity should be shown to the player. This can be useful
-   * for entities that are only relevant later in the game (i.e. after player
-   * does something else) or items that become irrelevant after use.
-   */
-  bool get isActive => true;
-
   final bool isPlayer;
 
   final Pronoun pronoun;
@@ -67,6 +53,20 @@ class Entity extends Object with EntityBehavior {
   Entity._(
       this.name, this.nameIsProperNoun, this.pronoun, Team team, this.isPlayer)
       : this.team = team ?? neutralTeam;
+
+  /// An entity's [id] is the only constant thing. All other things, including
+  /// [name] can change during play. ID cannot.
+  ///
+  /// By default, id is the same as hashCode. But for classes that override
+  /// hashCode (for example, immutable ones), this should be overridden.
+  int get id => hashCode;
+
+  /**
+   * Whether or not this entity should be shown to the player. This can be useful
+   * for entities that are only relevant later in the game (i.e. after player
+   * does something else) or items that become irrelevant after use.
+   */
+  bool get isActive => true;
 
   /// True if Actor is alive, i.e. not destroyed or dead.
   bool get isAlive => true;

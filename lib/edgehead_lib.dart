@@ -1,25 +1,36 @@
-import 'fractal_stories/looped_event/looped_event.dart';
-import 'fractal_stories/storyline/storyline.dart';
+import 'dart:async';
 
-import 'fractal_stories/actor.dart';
-import 'fractal_stories/world.dart';
-import 'fractal_stories/planner.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
+
 import 'fractal_stories/action.dart';
+import 'fractal_stories/actor.dart';
 import 'fractal_stories/item.dart';
+import 'fractal_stories/looped_event/looped_event.dart';
 import 'fractal_stories/plan_consequence.dart';
-import 'fractal_stories/team.dart';
+import 'fractal_stories/planner.dart';
 import 'fractal_stories/situation.dart';
 import 'fractal_stories/storyline/randomly.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
-import 'dart:async';
+import 'fractal_stories/storyline/storyline.dart';
+import 'fractal_stories/team.dart';
+import 'fractal_stories/world.dart';
 // import 'dart:html';
 
+/// Lesser self-worth than normal scoring function as monsters should
+/// kind of carelessly attack to make fights more action-packed.
+num carelessScoringFunction(Actor monster, WorldState world) {
+  int score = 0;
+
+  var friends = world.actors.where((a) => a.team == monster.team);
+  score += friends.fold(0, (sum, a) => sum + a.hitpoints);
+
+  var enemies = world.actors.where((a) => a.isEnemyOf(monster));
+  score -= enemies.fold(0, (sum, a) => sum + a.hitpoints);
+
+  return score;
+}
+
 class EdgeheadGame extends LoopedEvent {
-  EdgeheadGame(StringTakingVoidFunction echo, StringTakingVoidFunction goto,
-      choices, ChoiceFunction choiceFunction)
-      : super(echo, goto, choices, choiceFunction) {
-    setup();
-  }
+  static const maxChoicesCount = 4;
 
   Actor filip;
   Actor briana;
@@ -32,7 +43,11 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
-  static const maxChoicesCount = 4;
+  EdgeheadGame(StringTakingVoidFunction echo, StringTakingVoidFunction goto,
+      choices, ChoiceFunction choiceFunction)
+      : super(echo, goto, choices, choiceFunction) {
+    setup();
+  }
 
   void setup() {
     filip = new Actor((b) => b
@@ -70,19 +85,20 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..worldScoringFunction = carelessScoringFunction);
 
-    initialSituation = new FightSituation.initialized(
-        [filip, briana], [orc, goblin]).rebuild((b) => b
-      ..events[2] = (w, s) {
-        s.addParagraph();
-        s.add("You hear a horrible growling sound from behind.");
-        s.add("The worm must be near.");
-        s.addParagraph();
-      }
-      ..events[6] = (w, s) {
-        s.addParagraph();
-        s.add("The earth shatters and there's that sound again.");
-        s.addParagraph();
-      });
+    initialSituation =
+        new FightSituation.initialized([filip, briana], [orc, goblin])
+            .rebuild((b) => b
+              ..events[2] = (w, s) {
+                s.addParagraph();
+                s.add("You hear a horrible growling sound from behind.");
+                s.add("The worm must be near.");
+                s.addParagraph();
+              }
+              ..events[6] = (w, s) {
+                s.addParagraph();
+                s.add("The earth shatters and there's that sound again.");
+                s.addParagraph();
+              });
 
     world = new WorldState(
         new Set.from([filip, briana, orc, goblin]), initialSituation);
@@ -156,8 +172,7 @@ class EdgeheadGame extends LoopedEvent {
       planner.generateTable().forEach(print);
 
       // Take only the first few best actions.
-      List<Action> actions =
-          new List.from(recs.actions.take(maxChoicesCount));
+      List<Action> actions = new List.from(recs.actions.take(maxChoicesCount));
       actions.sort((a, b) => a.name.compareTo(b.name));
       for (Action action in actions) {
         choiceFunction(action.name, script: () {
@@ -186,18 +201,4 @@ class EdgeheadGame extends LoopedEvent {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
   }
-}
-
-/// Lesser self-worth than normal scoring function as monsters should
-/// kind of carelessly attack to make fights more action-packed.
-num carelessScoringFunction(Actor monster, WorldState world) {
-  int score = 0;
-
-  var friends = world.actors.where((a) => a.team == monster.team);
-  score += friends.fold(0, (sum, a) => sum + a.hitpoints);
-
-  var enemies = world.actors.where((a) => a.isEnemyOf(monster));
-  score -= enemies.fold(0, (sum, a) => sum + a.hitpoints);
-
-  return score;
 }

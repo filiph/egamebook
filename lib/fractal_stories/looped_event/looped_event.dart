@@ -1,5 +1,15 @@
 import 'dart:async';
 
+/// Mock of the signature of `choice()` in EgbScripter.
+typedef dynamic ChoiceFunction(String string,
+    {String goto,
+    Future<Null> script(),
+    String submenu,
+    bool deferToEndOfPage,
+    bool deferToChoiceList});
+
+typedef void StringTakingVoidFunction(String arg);
+
 /**
  * LoopedEvent is any event that gets executed in a loop, waiting for
  * a) resolution and b) need of player input. It is intended for 'minigames'
@@ -10,24 +20,23 @@ import 'dart:async';
  */
 
 abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
-  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction) {}
-
   final StringTakingVoidFunction _goto;
+
   final StringTakingVoidFunction _echo;
   final ChoiceFunction choiceFunction;
   final dynamic _choices;
-
   final StringBuffer _strbuf = new StringBuffer();
-  void echo(String message) {
-    _strbuf.write(message);
-  }
 
   bool finished = false;
 
   /// The page to jump to when combat is finished.
   String onFinishedGoto;
 
-  Future<Null> update();
+  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction) {}
+
+  void echo(String message) {
+    _strbuf.write(message);
+  }
 
   /**
    * Runs the update loop until user interaction is needed or until LoopedEvent
@@ -51,14 +60,6 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       _strbuf.clear();
     }
   }
+
+  Future<Null> update();
 }
-
-typedef void StringTakingVoidFunction(String arg);
-
-/// Mock of the signature of `choice()` in EgbScripter.
-typedef dynamic ChoiceFunction(String string,
-    {String goto,
-    Future<Null> script(),
-    String submenu,
-    bool deferToEndOfPage,
-    bool deferToChoiceList});

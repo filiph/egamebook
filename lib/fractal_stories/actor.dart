@@ -4,12 +4,15 @@ import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
+
 import 'item.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
 import 'world.dart';
 
 part 'actor.g.dart';
+
+typedef num WorldScoringFunction(Actor actor, WorldState world);
 
 abstract class Actor extends Object
     with EntityBehavior
@@ -26,11 +29,6 @@ abstract class Actor extends Object
   /// Changing a weapon should ordinarily take a turn.
   @nullable
   Item get currentWeapon;
-
-  @nullable
-  Item get shield;
-
-  Pose get pose;
 
   int get hitpoints;
 
@@ -69,7 +67,12 @@ abstract class Actor extends Object
 
   bool get nameIsProperNoun;
 
+  Pose get pose;
+
   Pronoun get pronoun;
+
+  @nullable
+  Item get shield;
 
   Team get team;
 
@@ -228,7 +231,5 @@ class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
 
   bool operator ==(o) => o is ActorMap && hashCode == o.hashCode;
 }
-
-typedef num WorldScoringFunction(Actor actor, WorldState world);
 
 enum Pose { standing, offBalance, onGround }

@@ -1,5 +1,6 @@
 library stranded.planner;
 
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math' as math;
 
@@ -7,7 +8,6 @@ import 'action.dart';
 import 'actor.dart';
 import 'plan_consequence.dart';
 import 'world.dart';
-import 'dart:async';
 
 class ActorPlanner {
   /// We will stop processing a plan path once its leaf node has lower
@@ -18,10 +18,12 @@ class ActorPlanner {
   /// will be considered for best cases.
   static const num bestCaseProbabilityThreshold = 0.3;
 
+  static DateTime _latestWait = new DateTime.now();
   final int actorId;
-  final PlanConsequence _initial;
 
+  final PlanConsequence _initial;
   int planConsequencesComputed = 0;
+
   bool _resultsReady = false;
 
   final Map<Action, num> firstActionScores = new Map();
@@ -29,75 +31,6 @@ class ActorPlanner {
   ActorPlanner(Actor actor, WorldState initialWorld)
       : actorId = actor.id,
         _initial = new PlanConsequence.initial(initialWorld);
-
-  Action getBest() {
-    assert(_resultsReady);
-
-    num bestScore = firstActionScores.values.reduce((a, b) => a > b ? a : b);
-
-    for (var action in firstActionScores.keys) {
-      if (firstActionScores[action] == bestScore) {
-        return action;
-      }
-    }
-
-    throw new StateError("No best action found in $firstActionScores "
-        "(bestScore = $bestScore)");
-  }
-
-  Iterable<String> generateTable() sync* {
-    int i = 1;
-    for (var key in firstActionScores.keys) {
-      yield "$i) ${key.name}\t${firstActionScores[key].toStringAsFixed(2)}";
-      i += 1;
-    }
-  }
-
-  Iterable<Action> _generateAllActions(
-      Actor actor, WorldState world) sync* {
-    yield* world.currentSituation.actions;
-    for (var builder in world.currentSituation.actionGenerators) {
-      assert(builder is EnemyTargetActionBuilder);
-      yield* generateEnemyTargetActions(actor, world, builder);
-    }
-  }
-
-  Future<Null> plan({int maxOrder: 3, Future<Null> waitFunction()}) async {
-    firstActionScores.clear();
-
-    var currentActor =
-        _initial.world.actors.singleWhere((a) => a.id == actorId);
-    var initialScore = currentActor.scoreWorld(_initial.world);
-
-    for (var action in _generateAllActions(currentActor, _initial.world)) {
-      if (!action.isApplicable(currentActor, _initial.world)) {
-        // Bail early if action isn't possible at all.
-        continue;
-      }
-      var consequenceStats =
-          await _getConsequenceStats(_initial, action, maxOrder, waitFunction)
-              .toList();
-
-      if (consequenceStats.isEmpty) {
-        // This action is possible but we couldn't get to any outcomes while
-        // planning.
-        firstActionScores[action] = double.NEGATIVE_INFINITY;
-        continue;
-      }
-
-      var score = combineScores(consequenceStats, initialScore, maxOrder);
-      assert(!score.isNaN);
-
-      firstActionScores[action] = score;
-    }
-
-    _resultsReady = true;
-  }
-
-  PlannerRecommendation getRecommendations() {
-    assert(_resultsReady);
-    return new PlannerRecommendation.fromScores(firstActionScores);
-  }
 
   /// Computes the combined score for a bunch of consequences.
   ///
@@ -146,15 +79,78 @@ class ActorPlanner {
     return result;
   }
 
-  static DateTime _latestWait = new DateTime.now();
+  Iterable<String> generateTable() sync* {
+    int i = 1;
+    for (var key in firstActionScores.keys) {
+      yield "$i) ${key.name}\t${firstActionScores[key].toStringAsFixed(2)}";
+      i += 1;
+    }
+  }
+
+  Action getBest() {
+    assert(_resultsReady);
+
+    num bestScore = firstActionScores.values.reduce((a, b) => a > b ? a : b);
+
+    for (var action in firstActionScores.keys) {
+      if (firstActionScores[action] == bestScore) {
+        return action;
+      }
+    }
+
+    throw new StateError("No best action found in $firstActionScores "
+        "(bestScore = $bestScore)");
+  }
+
+  PlannerRecommendation getRecommendations() {
+    assert(_resultsReady);
+    return new PlannerRecommendation.fromScores(firstActionScores);
+  }
+
+  Future<Null> plan({int maxOrder: 3, Future<Null> waitFunction()}) async {
+    firstActionScores.clear();
+
+    var currentActor =
+        _initial.world.actors.singleWhere((a) => a.id == actorId);
+    var initialScore = currentActor.scoreWorld(_initial.world);
+
+    for (var action in _generateAllActions(currentActor, _initial.world)) {
+      if (!action.isApplicable(currentActor, _initial.world)) {
+        // Bail early if action isn't possible at all.
+        continue;
+      }
+      var consequenceStats =
+          await _getConsequenceStats(_initial, action, maxOrder, waitFunction)
+              .toList();
+
+      if (consequenceStats.isEmpty) {
+        // This action is possible but we couldn't get to any outcomes while
+        // planning.
+        firstActionScores[action] = double.NEGATIVE_INFINITY;
+        continue;
+      }
+
+      var score = combineScores(consequenceStats, initialScore, maxOrder);
+      assert(!score.isNaN);
+
+      firstActionScores[action] = score;
+    }
+
+    _resultsReady = true;
+  }
+
+  Iterable<Action> _generateAllActions(Actor actor, WorldState world) sync* {
+    yield* world.currentSituation.actions;
+    for (var builder in world.currentSituation.actionGenerators) {
+      assert(builder is EnemyTargetActionBuilder);
+      yield* generateEnemyTargetActions(actor, world, builder);
+    }
+  }
 
   /// Returns the stats for consequences of a given [initial] state after
   /// applying [firstAction] and then up to [maxOrder] other steps.
-  Stream<ConsequenceStats> _getConsequenceStats(
-      PlanConsequence initial,
-      Action firstAction,
-      int maxOrder,
-      Future<Null> waitFunction()) async* {
+  Stream<ConsequenceStats> _getConsequenceStats(PlanConsequence initial,
+      Action firstAction, int maxOrder, Future<Null> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
 
@@ -225,8 +221,7 @@ class ActorPlanner {
       if (DEBUG && firstAction.name.contains(" ")) {
         var score = mainActor.scoreWorld(current.world);
         print("----");
-        print(
-            "SITUATION = ${current.world.currentSituation.runtimeType}");
+        print("SITUATION = ${current.world.currentSituation.runtimeType}");
         print("MAIN_ACTOR = ${mainActor.name}");
         print("ACTOR = ${currentActor.name} ($currentActorIsMain)");
         print(
@@ -240,8 +235,7 @@ class ActorPlanner {
 
       }
 
-      for (Action action
-          in _generateAllActions(currentActor, current.world)) {
+      for (Action action in _generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, current.world)) continue;
         var consequences = action.apply(currentActor, current, current.world);
 
@@ -269,9 +263,6 @@ class ActorPlanner {
 }
 
 class PlannerRecommendation {
-  final List<int> weights;
-  final List<Action> actions;
-
   /// The [weights] have to add up to this number.
   ///
   /// We're using [int] instead of [num] for weights because we want to
@@ -280,7 +271,8 @@ class PlannerRecommendation {
   static const int weightsResolution = 1000;
   static const num _worstOptionWeight = 0.1;
 
-  static num _sum(num a, num b) => a + b;
+  final List<int> weights;
+  final List<Action> actions;
 
   PlannerRecommendation(this.actions, this.weights) {
     assert(actions.length == weights.length);
@@ -336,4 +328,6 @@ class PlannerRecommendation {
   }
 
   bool get isEmpty => actions.isEmpty;
+
+  static num _sum(num a, num b) => a + b;
 }

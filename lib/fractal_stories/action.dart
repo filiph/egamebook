@@ -14,8 +14,8 @@ import 'world.dart';
 /// For example, a builder called `hitWithStick` can take the current
 /// world and output as many actions as there are enemies to hit with a stick.
 /// Each generated action will encapsulate the enemy to hit.
-Iterable<EnemyTargetAction> generateEnemyTargetActions(Actor actor,
-    WorldState world, EnemyTargetActionBuilder builder) sync* {
+Iterable<EnemyTargetAction> generateEnemyTargetActions(
+    Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
   var situationActors = world.currentSituation.getActors(world.actors, world);
   var enemies =
       situationActors.where((other) => other.team.isEnemyWith(actor.team));

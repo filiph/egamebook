@@ -1,9 +1,18 @@
 library stranded.plan_consequence;
 
 import 'package:quiver/core.dart';
+
 import 'action.dart';
-import 'world.dart';
 import 'storyline/storyline.dart';
+import 'world.dart';
+
+/// A container for statistics for a [PlanConsequence].
+class ConsequenceStats {
+  final num score;
+  final num cumulativeProbability;
+  final int order;
+  const ConsequenceStats(this.score, this.cumulativeProbability, this.order);
+}
 
 class PlanConsequence {
   final WorldState world;
@@ -50,12 +59,4 @@ class PlanConsequence {
   toString() =>
       "PlanConsequence<${world.hashCode}, $world, $action, $probability, "
       "$order, ${isSuccess ? 'isSuccess' : ''}>";
-}
-
-/// A container for statistics for a [PlanConsequence].
-class ConsequenceStats {
-  final num score;
-  final num cumulativeProbability;
-  final int order;
-  const ConsequenceStats(this.score, this.cumulativeProbability, this.order);
 }

@@ -1,9 +1,32 @@
 import 'dart:io';
 
+import 'package:edgehead/edgehead_lib.dart';
 import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 
-import 'package:edgehead/edgehead_lib.dart';
+main() async {
+  String gotoPage = null;
+
+  var game = new EdgeheadGame(
+      print, (String goto) => gotoPage = goto, choices, choice);
+  game.onFinishedGoto = "endGame";
+
+  while (gotoPage == null) {
+    await game.run();
+
+    if (choices.isEmpty) continue;
+
+    for (int i = 0; i < choices.length; i++) {
+      print("${i+1}");
+      print(choices[i].string);
+      print(choices[i].helpMessage);
+    }
+
+    int option = int.parse(stdin.readLineSync());
+    choices[option - 1].f();
+    choices.clear();
+  }
+}
 
 final ChoiceList choices = new ChoiceList();
 
@@ -23,27 +46,4 @@ Choice choice(String string,
       helpMessage: helpMessage);
   choices.add(choice);
   return choice;
-}
-
-main() async {
-  String gotoPage = null;
-
-  var game = new EdgeheadGame(print, (String goto) => gotoPage = goto, choices, choice);
-  game.onFinishedGoto = "endGame";
-
-  while (gotoPage == null) {
-    await game.run();
-
-    if (choices.isEmpty) continue;
-
-    for (int i = 0; i < choices.length; i++) {
-      print("${i+1}");
-      print(choices[i].string);
-      print(choices[i].helpMessage);
-    }
-
-    int option = int.parse(stdin.readLineSync());
-    choices[option - 1].f();
-    choices.clear();
-  }
 }

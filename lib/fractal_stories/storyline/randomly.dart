@@ -6,19 +6,16 @@ class Randomly {
   static Random _random = new Random();
 
   /**
-   * Resolve a 'coin toss' of the given probability.
+   * Function gets a list of choices, picks one of them randomly.
    */
-  static bool saveAgainst(num probability) {
-    if (probability < 0 || probability > 1.0) {
-      throw new RangeError.range(
-          probability, 0, 1, "Probability needs to be within <0,1>.");
+  static dynamic choose(List choices) {
+    if (choices == null) throw new ArgumentError("Cannot choose from null.");
+    num number = choices.length;
+    if (number == 0) {
+      throw new ArgumentError("Cannot randomly choose from an empty set.");
     }
-    if (probability == 0) return false;
-    if (probability == 1.0) return true;
-    return _random.nextDouble() < probability;
+    return choices[_random.nextInt(number)];
   }
-
-  static bool tossCoin() => saveAgainst(0.5);
 
   /// Returns random index, biased by weight.
   ///
@@ -53,24 +50,57 @@ class Randomly {
     throw new ArgumentError("The weights do not add up to total=$max");
   }
 
-  /**
-   * Function gets a list of choices, picks one of them randomly.
-   */
-  static dynamic choose(List choices) {
-    if (choices == null) throw new ArgumentError("Cannot choose from null.");
-    num number = choices.length;
-    if (number == 0) {
-      throw new ArgumentError("Cannot randomly choose from an empty set.");
+  static String humanDescribeProbability(num probability) {
+    if (probability >= 1.0) {
+      return "sure";
     }
-    return choices[_random.nextInt(number)];
+    if (probability >= 0.8) {
+      return "almost sure";
+    }
+    if (probability >= 0.7) {
+      return "very probable";
+    }
+    if (probability >= 0.6) {
+      return "quite likely";
+    }
+    if (probability >= 0.5) {
+      return "quite possible";
+    }
+    if (probability >= 0.4) {
+      return "possible";
+    }
+    if (probability >= 0.3) {
+      return "improbable";
+    }
+    if (probability >= 0.2) {
+      return "quite unlikely";
+    }
+    if (probability >= 0.1) {
+      return "very unlikely";
+    }
+    if (probability > 0.0) {
+      return "almost impossible";
+    }
+    return "impossible";
+  }
+
+  /// Returns the probability in "rounded" by [precisionSteps]. So, if
+  /// [precisionSteps] is [:10:], a [probability] of [:0.46:] becomes "50%".
+  /// When [precisionSteps] is [:5:], then it becomes "45%".
+  static String humanStringifyProbability(num probability,
+      {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
+    probability *= 100 / precisionSteps; // ex. 6.4
+    probability = probability.round(); // ex. 6.0
+    probability *= precisionSteps; // ex. 60
+    return "$prefix${probability.toStringAsFixed(0)}$postfix";
   }
 
   /**
-   * Function gets a String in the format 'something {is fishy|doesn't add up}' 
+   * Function gets a String in the format 'something {is fishy|doesn't add up}'
    * and outputs either 'something is fishy' or 'something doesn't add up'. This
    * works even recursively ('{I {think|guess}|Maybe} it will work.') and
    * also with empty choices ('This is {very|} interesting').
-   * 
+   *
    * When creating messaging that the user/player will likely see often, this will
    * make sure that they see some 'natural' variance.
    */
@@ -150,48 +180,18 @@ class Randomly {
     }
   }
 
-  /// Returns the probability in "rounded" by [precisionSteps]. So, if
-  /// [precisionSteps] is [:10:], a [probability] of [:0.46:] becomes "50%".
-  /// When [precisionSteps] is [:5:], then it becomes "45%".
-  static String humanStringifyProbability(num probability,
-      {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
-    probability *= 100 / precisionSteps; // ex. 6.4
-    probability = probability.round(); // ex. 6.0
-    probability *= precisionSteps; // ex. 60
-    return "$prefix${probability.toStringAsFixed(0)}$postfix";
+  /**
+   * Resolve a 'coin toss' of the given probability.
+   */
+  static bool saveAgainst(num probability) {
+    if (probability < 0 || probability > 1.0) {
+      throw new RangeError.range(
+          probability, 0, 1, "Probability needs to be within <0,1>.");
+    }
+    if (probability == 0) return false;
+    if (probability == 1.0) return true;
+    return _random.nextDouble() < probability;
   }
 
-  static String humanDescribeProbability(num probability) {
-    if (probability >= 1.0) {
-      return "sure";
-    }
-    if (probability >= 0.8) {
-      return "almost sure";
-    }
-    if (probability >= 0.7) {
-      return "very probable";
-    }
-    if (probability >= 0.6) {
-      return "quite likely";
-    }
-    if (probability >= 0.5) {
-      return "quite possible";
-    }
-    if (probability >= 0.4) {
-      return "possible";
-    }
-    if (probability >= 0.3) {
-      return "improbable";
-    }
-    if (probability >= 0.2) {
-      return "quite unlikely";
-    }
-    if (probability >= 0.1) {
-      return "very unlikely";
-    }
-    if (probability > 0.0) {
-      return "almost impossible";
-    }
-    return "impossible";
-  }
+  static bool tossCoin() => saveAgainst(0.5);
 }

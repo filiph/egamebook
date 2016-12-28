@@ -6,7 +6,7 @@ import 'actor.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
 
-enum ItemType { SPEAR, BRANCH, TENT, SWORD }
+Random _random = new Random();
 
 String typeToDescription(ItemType type) {
   switch (type) {
@@ -23,18 +23,13 @@ String typeToDescription(ItemType type) {
   }
 }
 
-Random _random = new Random();
-
 abstract class Item<T extends Item> extends Object
     with EntityBehavior
     implements Entity {
   final ItemType type;
-  String get description => typeToDescription(type);
-
   Item(this.type);
 
-  /// Makes a copy of instance. To be overridden by subclasses.
-  T copy();
+  String get description => typeToDescription(type);
 
   /// When `true`, having more of [this] makes the person happier.
   ///
@@ -53,21 +48,26 @@ abstract class Item<T extends Item> extends Object
   /// value to be wanted. Branch in itself doesn't help you, but it does get
   /// you to traps, which get you to food.
   num get luxuryScore;
+
+  /// Makes a copy of instance. To be overridden by subclasses.
+  T copy();
 }
 
+enum ItemType { SPEAR, BRANCH, TENT, SWORD }
+
 class Sword extends Item {
-  Sword([this.name = "sword"]) : super(ItemType.SWORD);
-
-  Sword copy() => new Sword();
-
   final bool luxuryIsCumulative = false;
+
   final num luxuryScore = 10;
 
   @override
   bool isActive = true;
-
   @override
   Team team = neutralTeam;
+
+  final String name;
+
+  Sword([this.name = "sword"]) : super(ItemType.SWORD);
 
   @override
   List<String> get categories => const [];
@@ -81,11 +81,11 @@ class Sword extends Item {
   @override
   bool get isPlayer => false;
 
-  final String name;
-
   @override
   bool get nameIsProperNoun => false;
 
   @override
   Pronoun get pronoun => Pronoun.IT;
+
+  Sword copy() => new Sword();
 }
