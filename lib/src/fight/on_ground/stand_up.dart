@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/kick.dart';
 
 class StandUp extends Action {
   static final StandUp singleton = new StandUp();
@@ -25,5 +26,15 @@ class StandUp extends Action {
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState world) => a.pose == Pose.onGround;
+  bool isApplicable(Actor a, WorldState world) {
+    if (a.pose != Pose.onGround) return false;
+    // If this actor just fell, do not let him stand up.
+    if (world.actionRecords.last.actionClass ==
+            Kick.builder(a).runtimeType.toString() &&
+        world.actionRecords.last.sufferers.contains(a.id) &&
+        world.actionRecords.last.wasSuccess) {
+      return false;
+    }
+    return true;
+  }
 }

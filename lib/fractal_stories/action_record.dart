@@ -29,6 +29,8 @@ class ActionRecord {
 
   final String actionName;
 
+  final String actionClass;
+
   final int time;
 
   /// The [Actor.id] of the protagonist. The single person responsible for
@@ -44,11 +46,21 @@ class ActionRecord {
   /// IMPLEMENTATION DETAIL: Currently, there can be no accomplices.
   final Set<int> accomplices = new Set<int>();
 
+  /// The actors that have been subjected to this action as targets.
+  ///
+  /// IMPLEMENTATION DETAIL: Currently, maximum one sufferer is ever added.
+  /// In the future, we want to be able to have actions with broad effects.
+  final Set<int> sufferers;
+
   /// The actors who know about this.
   ///
   /// Actors are represented by their [Actor.id] since we only care about
   /// their identity, not their state at the time of action.
   final Set<int> knownTo;
+
+  final bool wasSuccess;
+
+  final bool wasFailure;
 
   /// The changes to worldScore of the different people, regardless whether they
   /// know about it or not (we pretend they do, and see how that affects
@@ -58,32 +70,65 @@ class ActionRecord {
   /// their identity, not their state at the time of action.
   final ActorMap<num> scoreChange;
 
-  ActionRecord(int time, String actionName, String description,
-      Actor protagonist, Iterable<Actor> knownTo, ActorMap<num> scoreChanges)
+  ActionRecord(
+      int time,
+      String actionName,
+      String actionClass,
+      String description,
+      Actor protagonist,
+      Iterable<Actor> sufferers,
+      Iterable<Actor> knownTo,
+      bool wasSuccess,
+      bool wasFailure,
+      ActorMap<num> scoreChanges)
       : this._(
             time,
             actionName,
+            actionClass,
             description,
             protagonist.id,
+            sufferers.map(_extractId).toSet(),
             knownTo.map(_extractId).toSet(),
+            wasSuccess,
+            wasFailure,
             new ActorMap<num>.from(scoreChanges));
 
   ActionRecord.duplicate(ActionRecord other)
       : this._(
             other.time,
             other.actionName,
+            other.actionClass,
             other.description,
             other.protagonist,
+            new Set<int>.from(other.sufferers),
             new Set<int>.from(other.knownTo),
+            other.wasSuccess,
+            other.wasFailure,
             new ActorMap<num>.from(other.scoreChange));
 
-  ActionRecord._(this.time, this.actionName, this.description, this.protagonist,
-      this.knownTo, this.scoreChange);
+  ActionRecord._(
+      this.time,
+      this.actionName,
+      this.actionClass,
+      this.description,
+      this.protagonist,
+      this.sufferers,
+      this.knownTo,
+      this.wasSuccess,
+      this.wasFailure,
+      this.scoreChange);
 
   @override
   int get hashCode {
-    return hash4(
-        time, description, hashObjects(performers), hashObjects(knownTo));
+    return hashObjects([
+      time,
+      description,
+      hashObjects(performers),
+      hashObjects(sufferers),
+      hashObjects(knownTo),
+      wasSuccess,
+      wasFailure
+    ]);
   }
 
   /// The actors responsible for this action, or an empty set if this is an
@@ -93,7 +138,7 @@ class ActionRecord {
 
   bool operator ==(o) => o is ActionRecord && hashCode == o.hashCode;
 
-  String toString() => "ActionRecord<$actionName, $description>";
+  String toString() => "ActionRecord<$actionClass, $actionName, $description>";
 }
 
 class ActionRecordBuilder {
@@ -103,7 +148,15 @@ class ActionRecordBuilder {
   KnownToMode _knownToMode = KnownToMode.ALL;
   WorldState _afterWorld;
 
+  Set<Actor> sufferers;
+
   String actionName;
+
+  String actionClass;
+
+  bool wasSuccess;
+
+  bool wasFailure;
 
   int time = null;
 
@@ -128,6 +181,8 @@ class ActionRecordBuilder {
     assert(_actorScoresBefore != null);
     assert(_knownToMode != null);
     assert(_afterWorld != null);
+    assert(wasSuccess != null);
+    assert(wasFailure != null);
 
     Set<Actor> knownTo;
 
@@ -150,8 +205,17 @@ class ActionRecordBuilder {
           actor.scoreWorld(_afterWorld) - _actorScoresBefore[actor];
     }
 
-    return new ActionRecord._(time, actionName, _description, _protagonist.id,
-        knownTo.map(_extractId).toSet(), scoreChanges);
+    return new ActionRecord._(
+        time,
+        actionName,
+        actionClass,
+        _description,
+        _protagonist.id,
+        sufferers.map(_extractId).toSet(),
+        knownTo.map(_extractId).toSet(),
+        wasSuccess,
+        wasFailure,
+        scoreChanges);
   }
 
   void markAfterAction(WorldState world) {

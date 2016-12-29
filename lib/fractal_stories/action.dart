@@ -44,8 +44,9 @@ abstract class Action {
 
     if (successChance > 0) {
       var worldCopy = new WorldState.duplicate(world);
-      Storyline storyline =
-          _applyToWorldCopy(worldCopy, actor, world, applySuccess);
+      Storyline storyline = _applyToWorldCopy(
+          worldCopy, actor, world, applySuccess,
+          isSuccess: true);
 
       yield new PlanConsequence(
           worldCopy, current, this, storyline, successChance,
@@ -53,8 +54,9 @@ abstract class Action {
     }
     if (successChance < 1) {
       var worldCopy = new WorldState.duplicate(world);
-      Storyline storyline =
-          _applyToWorldCopy(worldCopy, actor, world, applyFailure);
+      Storyline storyline = _applyToWorldCopy(
+          worldCopy, actor, world, applyFailure,
+          isFailure: true);
 
       yield new PlanConsequence(
           worldCopy, current, this, storyline, 1 - successChance,
@@ -86,12 +88,13 @@ abstract class Action {
       WorldState worldCopy,
       Actor actor,
       WorldState world,
-      String applyFunction(
-          Actor actor, WorldState world, Storyline storyline)) {
+      String applyFunction(Actor actor, WorldState world, Storyline storyline),
+      {bool isSuccess: false,
+      bool isFailure: false}) {
     // Find actor by id.
     var actorInWorldCopy =
         worldCopy.actors.singleWhere((a) => a.id == actor.id);
-    var builder = _prepareWorldRecord(actor, world);
+    var builder = _prepareWorldRecord(actor, world, isSuccess, isFailure);
     // Remember situation as it can be changed during applySuccess.
     var storyline = new Storyline();
     var situationId = worldCopy.currentSituation.id;
@@ -124,10 +127,17 @@ abstract class Action {
     return storyline;
   }
 
-  ActionRecordBuilder _prepareWorldRecord(Actor actor, WorldState world) =>
+  ActionRecordBuilder _prepareWorldRecord(
+          Actor actor, WorldState world, bool isSuccess, isFailure) =>
       new ActionRecordBuilder()
+        ..actionClass = this.runtimeType.toString()
         ..actionName = name
         ..protagonist = actor
+        ..sufferers = new Set.from((this is EnemyTargetAction)
+            ? [(this as EnemyTargetAction).enemy]
+            : [])
+        ..wasSuccess = isSuccess
+        ..wasFailure = isFailure
         ..markBeforeAction(world);
 }
 
