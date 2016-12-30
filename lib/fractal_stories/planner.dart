@@ -6,10 +6,13 @@ import 'dart:math' as math;
 
 import 'action.dart';
 import 'actor.dart';
+import 'package:logging/logging.dart';
 import 'plan_consequence.dart';
 import 'world.dart';
 
 class ActorPlanner {
+  final Logger log = new Logger('ActorPlanner');
+
   /// We will stop processing a plan path once its leaf node has lower
   /// cumulative probability than this.
   static const minimumCumulativeProbability = 0.05;
@@ -52,11 +55,16 @@ class ActorPlanner {
 //    assert(!result.isInfinite);
 //    return result;
 
+    log.finest("...");
+    log.finest("combining scores");
+
     var uplifts = <num>[];
 
     ConsequenceStats _bestCase;
 
     for (var consequence in stats) {
+      log.finest(() => "  - consequence: score=${consequence.score}, "
+          "cumProb=${consequence.cumulativeProbability}");
       if (consequence.cumulativeProbability > bestCaseProbabilityThreshold) {
         if (_bestCase == null) {
           _bestCase = consequence;
@@ -67,13 +75,19 @@ class ActorPlanner {
 
       var uplift = (consequence.score - initialScore) *
           consequence.cumulativeProbability;
+      log.finest(() => "    - uplift = $uplift");
       uplifts.add(uplift);
     }
 
     var average = uplifts.fold(0, (a, b) => a + b) / uplifts.length;
     var best = _bestCase == null ? 0 : _bestCase.score / _bestCase.order;
 
+    log.finest("- uplifts average = $average");
+    log.finest("- best = $best");
+
     var result = best + average;
+
+    log.finest("- result = $result");
     assert(!result.isNaN);
     assert(!result.isInfinite);
     return result;
@@ -104,18 +118,28 @@ class ActorPlanner {
 
   PlannerRecommendation getRecommendations() {
     assert(_resultsReady);
+    if (firstActionScores.isEmpty) {
+      log.warning("There are no actions available for "
+          "actorId=$actorId.");
+      log.fine("Actions not available for $actorId and $_initial.");
+    }
     return new PlannerRecommendation.fromScores(firstActionScores);
   }
 
-  Future<Null> plan({int maxOrder: 3, Future<Null> waitFunction()}) async {
+  Future<Null> plan({int maxOrder: 4, Future<Null> waitFunction()}) async {
     firstActionScores.clear();
 
     var currentActor =
         _initial.world.actors.singleWhere((a) => a.id == actorId);
     var initialScore = currentActor.scoreWorld(_initial.world);
 
+    log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
+
     for (var action in _generateAllActions(currentActor, _initial.world)) {
+      log.finer("Evaluating action '${action.name}' for ${currentActor.name}");
+
       if (!action.isApplicable(currentActor, _initial.world)) {
+        log.finer("- action '${action.name}' isn't applicable");
         // Bail early if action isn't possible at all.
         continue;
       }
@@ -124,16 +148,20 @@ class ActorPlanner {
               .toList();
 
       if (consequenceStats.isEmpty) {
-        // This action is possible but we couldn't get to any outcomes while
-        // planning.
+        log.finer("- action '${action.name}' is possible but we couldn't get "
+            "to any outcomes while planning. Scoring with negative infinity.");
         firstActionScores[action] = double.NEGATIVE_INFINITY;
         continue;
       }
 
+      log.finer("- action '${action.name}' leads to ${consequenceStats.length} "
+          "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
       assert(!score.isNaN);
 
       firstActionScores[action] = score;
+
+      log.finer("- action '${action.name}' was scored $score");
     }
 
     _resultsReady = true;
@@ -154,17 +182,17 @@ class ActorPlanner {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
 
-    // DEBUG TODO: remove
-    bool DEBUG = false;
-    if (DEBUG && firstAction.name.contains(" ")) {
-      print("INITIAL - $firstAction");
-      print(
-          "adding: score=${mainActor.scoreWorld(initial.world)} * cumProb=${initial
-          .cumulativeProbability} (prob=${initial.probability}, ord=${initial
-          .order})");
-      print("${' ' * initial.order}- ${initial.action}");
-      print("-----");
-    }
+    log.finer("=====");
+    log.finer("_getConsequenceStats for firstAction '${firstAction.name}'"
+        "of ${mainActor.name}");
+    log.finer("- initial action == $firstAction");
+    log.finer(() => "- current: score=${mainActor.scoreWorld(initial.world)} * "
+        "cumProb=${initial.cumulativeProbability} "
+        "(prob=${initial.probability}, "
+        "ord=${initial.order})");
+    log.finer(() => "- initial action: "
+        "${' ' * initial.order}- ${initial.action}");
+
     num initialScore = mainActor.scoreWorld(initial.world);
 
     Queue<PlanConsequence> open = new Queue<PlanConsequence>();
@@ -210,31 +238,29 @@ class ActorPlanner {
 
       // This actor is the one we originally started planning for.
       var mainActor = current.world.actors.singleWhere((a) => a.id == actorId);
-      assert(mainActor != null);
       bool currentActorIsMain = currentActor == mainActor;
 
       var score = mainActor.scoreWorld(current.world);
       yield new ConsequenceStats(
           score, current.cumulativeProbability, current.order);
 
-      // DEBUG TODO: remove
-      if (DEBUG && firstAction.name.contains(" ")) {
-        var score = mainActor.scoreWorld(current.world);
-        print("----");
-        print("SITUATION = ${current.world.currentSituation.runtimeType}");
-        print("MAIN_ACTOR = ${mainActor.name}");
-        print("ACTOR = ${currentActor.name} ($currentActorIsMain)");
-        print(
-            "score=${score - initialScore} * cumProb=${current.cumulativeProbability} "
-            "(prob=${current.probability}, ord=${current.order})");
+      log.finest("----");
+      log.finest("evaluating a PlanConsequence of '${current.action.name}'");
+      log.finest("situation == ${current.world.currentSituation.runtimeType}");
+      log.finest("mainActor == ${mainActor.name}");
+      log.finest("actor == ${currentActor.name} (isMain==$currentActorIsMain)");
+      log.finest(() => "mainActor's score=$score initial=$initialScore "
+          "cumProb=${current.cumulativeProbability} "
+          "(prob=${current.probability}, ord=${current.order})");
+      log.finest(() {
         var ars = current.world.actionRecords.toList()
           ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
-        print(ars.map((a) => a.description).join(' <- '));
-        //${' ' * current.order}
-        // ${current.action} |
+        String path = ars.map((a) => a.description).join(' <- ');
+        return "how we got here: $path";
+      });
 
-      }
-
+      log.finest("generating all actions for ${currentActor.name}");
+      var originalCount = open.length;
       for (Action action in _generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, current.world)) continue;
         var consequences = action.apply(currentActor, current, current.world);
@@ -250,6 +276,7 @@ class ActorPlanner {
 
           // Ignore consequences that have already been visited.
           if (closed.contains(next.world)) {
+            // TODO: is this a bug? shouldn't we add score even for visited worlds?
             continue;
           }
 
@@ -257,12 +284,16 @@ class ActorPlanner {
         }
       }
 
+      log.finest("- added ${open.length - originalCount} new PlanConsequences");
+
       closed.add(current.world);
     }
   }
 }
 
 class PlannerRecommendation {
+  static final Logger log = new Logger('PlannerRecommendation');
+
   /// The [weights] have to add up to this number.
   ///
   /// We're using [int] instead of [num] for weights because we want to
@@ -282,7 +313,7 @@ class PlannerRecommendation {
 
   factory PlannerRecommendation.fromScores(Map<Action, num> scores) {
     if (scores.isEmpty) {
-      print("WARNING: no recommendations");
+      log.warning("Created with no recommendations.");
       return new PlannerRecommendation([], []);
     }
     var actions = scores.keys.toList();

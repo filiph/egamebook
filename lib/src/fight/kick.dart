@@ -60,7 +60,7 @@ class Kick extends EnemyTargetAction {
     } else {
       a.report(s, "<subject> kick<s> <object> on the ground", object: enemy);
     }
-    return "${a.name} kicks ${enemy.name}";
+    return "${a.name} kicks ${enemy.name} to ground";
   }
 
   @override

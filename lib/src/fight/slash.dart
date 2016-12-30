@@ -13,7 +13,7 @@ class FinishSlash extends EnemyTargetAction {
 
   @override
   String get nameTemplate => "kill <object> "
-      "(WARNING: should not be user-visible)";
+      "(WARNING should not be user-visible)";
 
   @override
   final String helpMessage = null;

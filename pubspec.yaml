@@ -16,6 +16,8 @@ dependencies:
   egamebook:
     path: ../egamebook
   meta: any
+  logging: any
+  path: any
 
 dev_dependencies:
   build: any

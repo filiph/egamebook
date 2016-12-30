@@ -160,5 +160,6 @@ abstract class EnemyTargetAction extends Action {
 
   String get nameTemplate;
 
-  String toString() => "EnemyTargetAction<$nameTemplate::$enemy>";
+  String toString() => "EnemyTargetAction<$nameTemplate::"
+      "enemy=${enemy.id}/${enemy.name}>";
 }

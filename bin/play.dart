@@ -5,11 +5,22 @@ import 'dart:math';
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
+import 'package:logging/logging.dart';
 
 main(List<String> args) async {
   var automated = args.contains("--automated");
+  var logged = args.contains("--log");
 
-  await run(automated, automated);
+  IOSink fileLogSink;
+  try {
+    if (logged) {
+      var file = new File("edgehead.log");
+      fileLogSink = file.openWrite();
+    }
+    await run(automated, automated, logged ? fileLogSink : null);
+  } finally {
+    await fileLogSink?.close();
+  }
 }
 
 final ChoiceList choices = new ChoiceList();
@@ -34,14 +45,24 @@ Choice choice(String string,
   return choice;
 }
 
-Future<StringBuffer> run(bool automated, bool silent) async {
-  String gotoPage = null;
+Future<Null> run(bool automated, bool silent, StringSink logSink) async {
+  if (logSink != null) {
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((LogRecord rec) {
+      logSink.writeln('${rec.time.toIso8601String()} - '
+          '[${rec.loggerName}] - '
+          '[${rec.level.name}] - '
+          '${rec.message}');
+    });
+  }
 
-  var printBuf = new StringBuffer();
+  final Logger log = new Logger("play_run");
   void hijackedPrint(Object msg) {
-    printBuf.writeln(msg);
+    log.info(msg);
     if (!silent) print(msg);
   }
+
+  String gotoPage = null;
 
   var game = new EdgeheadGame(
       hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
@@ -72,6 +93,4 @@ Future<StringBuffer> run(bool automated, bool silent) async {
   }
 
   assert(gotoPage == "endGame");
-
-  return printBuf;
 }

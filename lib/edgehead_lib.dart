@@ -13,6 +13,7 @@ import 'fractal_stories/storyline/randomly.dart';
 import 'fractal_stories/storyline/storyline.dart';
 import 'fractal_stories/team.dart';
 import 'fractal_stories/world.dart';
+import 'package:logging/logging.dart';
 // import 'dart:html';
 
 /// Lesser self-worth than normal scoring function as monsters should
@@ -31,6 +32,8 @@ num carelessScoringFunction(Actor monster, WorldState world) {
 
 class EdgeheadGame extends LoopedEvent {
   static const maxChoicesCount = 4;
+
+  final Logger log = new Logger('EdgeheadGame');
 
   Actor filip;
   Actor briana;
@@ -169,7 +172,7 @@ class EdgeheadGame extends LoopedEvent {
       echo(storyline.realize());
       storyline.clear();
 
-      planner.generateTable().forEach(print);
+      planner.generateTable().forEach((line) => log.fine(line));
 
       // Take only the first few best actions.
       List<Action> actions = new List.from(recs.actions.take(maxChoicesCount));

@@ -10,7 +10,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "kill <object> (WARNING: should not be "
+  String get nameTemplate => "kill <object> (WARNING should not be "
       "user-visible)";
 
   @override
