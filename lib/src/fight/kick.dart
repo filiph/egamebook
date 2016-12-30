@@ -17,7 +17,9 @@ class Kick extends EnemyTargetAction {
   String get nameTemplate => "kick <object>";
 
   @override
-  String helpMessage = "";
+  String helpMessage = "Kicking opponents doesn't deal much damage but it can "
+      "put them off balance or even to the ground. Such opponents are much "
+      "easier targets for you and your allies.";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
