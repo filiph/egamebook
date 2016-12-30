@@ -12,6 +12,10 @@ class RegainBalance extends Action {
   String get name => "Regain balance.";
 
   @override
+  final String helpMessage = "Most moves are easier and more effective when "
+      "you are firmly in balance.";
+
+  @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
     throw new UnimplementedError();
   }

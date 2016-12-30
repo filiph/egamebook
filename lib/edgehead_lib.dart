@@ -175,7 +175,8 @@ class EdgeheadGame extends LoopedEvent {
       List<Action> actions = new List.from(recs.actions.take(maxChoicesCount));
       actions.sort((a, b) => a.name.compareTo(b.name));
       for (Action action in actions) {
-        choiceFunction(action.name, script: () {
+        choiceFunction(action.name, helpMessage: action.helpMessage,
+            script: () {
           _applySelected(action, actor, storyline);
         });
       }

@@ -13,6 +13,13 @@ class ParrySlash extends EnemyTargetAction {
   String get nameTemplate => "parry and counter";
 
   @override
+  final String helpMessage = "Parrying means deflecting your opponent's move "
+      "with your weapon. When successful, "
+      "it will give you an opportunity for a counter attack. It won't "
+      "throw your opponent off balance like dodging does, but it's also "
+      "slightly easier to do.";
+
+  @override
   String applyFailure(Actor a, WorldState _, Storyline s) {
     a.report(
         s,

@@ -10,6 +10,10 @@ class Pass extends Action {
   String get name => "Stand off.";
 
   @override
+  final String helpMessage = "Sometimes, patience pays off. Especially when "
+      "the other option is potentially dangerous.";
+
+  @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
     throw new UnimplementedError();
   }

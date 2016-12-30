@@ -11,6 +11,9 @@ class StandUp extends Action {
   String get name => "Stand up.";
 
   @override
+  final String helpMessage = null; // TODO: explanation?
+
+  @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
     throw new UnimplementedError();
   }

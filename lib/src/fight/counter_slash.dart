@@ -13,6 +13,11 @@ class CounterSlash extends EnemyTargetAction {
   String get nameTemplate => "swing back at <object>";
 
   @override
+  final String helpMessage = "You can deal serious damage when countering "
+      "because your opponent is often caught off guard. On the other hand, "
+      "counters require fast reaction and could throw you out of balance.";
+
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> tr<ies> to swing back");
     a.report(s, "<subject> {go<es> wide|miss<es>}", but: true);

@@ -12,6 +12,12 @@ class DodgeSlash extends EnemyTargetAction {
   String get nameTemplate => "dodge and counter";
 
   @override
+  final String helpMessage = "Dodging means moving your body out of harm's "
+      "way. When done correctly, it will throw your opponent off balance and "
+      "it will open an opportunity for a counter attack. When botched, it "
+      "can get you killed.";
+
+  @override
   String applyFailure(Actor a, WorldState _, Storyline s) {
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
     if (a.pose == Pose.offBalance) {

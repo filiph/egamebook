@@ -12,6 +12,10 @@ class DefensiveParrySlash extends EnemyTargetAction {
   String get nameTemplate => "step back and parry";
 
   @override
+  final String helpMessage = "Stepping back is the safest way to get out of "
+      "harm's way.";
+
+  @override
   String applyFailure(Actor a, WorldState _, Storyline s) {
     a.report(
         s,
@@ -26,7 +30,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    return "${a.name} fails to dodge ${enemy.name}";
+    return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override

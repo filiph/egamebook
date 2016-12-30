@@ -12,6 +12,10 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String get nameTemplate => "stab <object>";
 
   @override
+  final String helpMessage = "When an opponent is out of balance they are the "
+      "most vulnerable.";
+
+  @override
   String applyFailure(Actor a, WorldState _, Storyline s) {
     a.report(s, "<subject> tr<ies> to stab <object>", object: enemy);
     a.report(s, "<subject> {go<es> wide|fail<s>|miss<es>}", but: true);

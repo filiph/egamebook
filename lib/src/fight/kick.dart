@@ -17,6 +17,9 @@ class Kick extends EnemyTargetAction {
   String get nameTemplate => "kick <object>";
 
   @override
+  String helpMessage = "";
+
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> kick<s> <object>", object: enemy);
     if (enemy.pose == Pose.standing) {

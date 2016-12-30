@@ -12,7 +12,11 @@ class FinishSlash extends EnemyTargetAction {
   FinishSlash(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "kill <object>";
+  String get nameTemplate => "kill <object> "
+      "(WARNING: should not be user-visible)";
+
+  @override
+  final String helpMessage = null;
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
@@ -56,6 +60,10 @@ class StartSlash extends EnemyTargetAction {
 
   @override
   String get nameTemplate => "swing at <object>";
+
+  @override
+  final String helpMessage = "The basic swordfighting move is also often the "
+      "most effective.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

@@ -9,7 +9,7 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 main(List<String> args) async {
   var automated = args.contains("--automated");
 
-  await run(automated);
+  await run(automated, automated);
 }
 
 final ChoiceList choices = new ChoiceList();
@@ -34,11 +34,17 @@ Choice choice(String string,
   return choice;
 }
 
-Future run(bool automated) async {
+Future<StringBuffer> run(bool automated, bool silent) async {
   String gotoPage = null;
 
+  var printBuf = new StringBuffer();
+  void hijackedPrint(Object msg) {
+    printBuf.writeln(msg);
+    if (!silent) print(msg);
+  }
+
   var game = new EdgeheadGame(
-      print, (String goto) => gotoPage = goto, choices, choice);
+      hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
   game.onFinishedGoto = "endGame";
 
   while (gotoPage == null) {
@@ -46,10 +52,12 @@ Future run(bool automated) async {
 
     if (choices.isEmpty) continue;
 
-    for (int i = 0; i < choices.length; i++) {
-      print("${i+1}");
-      print(choices[i].string);
-      print(choices[i].helpMessage);
+    if (!silent) {
+      for (int i = 0; i < choices.length; i++) {
+        print("${i+1}");
+        print(choices[i].string);
+        print(choices[i].helpMessage);
+      }
     }
 
     int option;
@@ -64,4 +72,6 @@ Future run(bool automated) async {
   }
 
   assert(gotoPage == "endGame");
+
+  return printBuf;
 }

@@ -10,6 +10,9 @@ class RollOutOfWay extends EnemyTargetAction {
   String get nameTemplate => "roll out of way";
 
   @override
+  final String helpMessage = null; // TODO: come up with something
+
+  @override
   String applyFailure(Actor a, WorldState _, Storyline s) {
     a.report(s, "<subject> tr<ies> to roll out of the way");
     a.report(s, "<subject> can't", but: true);

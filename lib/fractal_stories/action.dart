@@ -35,6 +35,8 @@ abstract class Action {
 
   String get name;
 
+  String get helpMessage;
+
   Iterable<PlanConsequence> apply(
       Actor actor, PlanConsequence current, WorldState world) sync* {
     var successChance = getSuccessChance(actor, current.world);

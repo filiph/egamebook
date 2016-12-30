@@ -6,7 +6,8 @@ typedef dynamic ChoiceFunction(String string,
     Future<Null> script(),
     String submenu,
     bool deferToEndOfPage,
-    bool deferToChoiceList});
+    bool deferToChoiceList,
+    String helpMessage});
 
 typedef void StringTakingVoidFunction(String arg);
 

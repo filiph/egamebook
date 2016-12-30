@@ -10,7 +10,11 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "kill <object>";
+  String get nameTemplate => "kill <object> (WARNING: should not be "
+      "user-visible)";
+
+  @override
+  final String helpMessage = null;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -27,6 +31,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     return "${a.name} slains ${enemy.name} on the ground";
   }
 
+  /// All action takes place in the OnGroundDefenseSituation.
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
@@ -43,6 +48,10 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   String get nameTemplate => "strike down at <object>";
+
+  @override
+  final String helpMessage = "Opponents on the ground are often the most "
+      "vulnerable.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -64,7 +73,6 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
     return "${a.name} strikes down at ${enemy.name} on the ground";
   }
 
-  // TODO: implement nameTemplate
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
