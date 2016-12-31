@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/kick.dart';
+import 'package:edgehead/src/fight/on_ground/scramble.dart';
 import 'package:edgehead/src/fight/on_ground/slash_grounded_enemy.dart';
 import 'package:edgehead/src/fight/on_ground/stand_up.dart';
 import 'package:edgehead/src/fight/regain_balance.dart';
@@ -34,7 +35,8 @@ abstract class FightSituation extends Situation
   get actionGenerators =>
       [Kick.builder, StartSlash.builder, StartSlashGroundedEnemy.builder];
 
-  get actions => <Action>[RegainBalance.singleton, StandUp.singleton];
+  get actions =>
+      <Action>[RegainBalance.singleton, StandUp.singleton, Scramble.singleton];
 
   BuiltList<int> get enemyTeamIds;
 
