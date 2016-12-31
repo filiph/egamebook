@@ -134,7 +134,10 @@ class ActorPlanner {
     return new PlannerRecommendation.fromScores(firstActionScores);
   }
 
-  Future<Null> plan({int maxOrder: 4, Future<Null> waitFunction()}) async {
+  Future<Null> plan(
+      {int maxOrder: 10,
+      int maxConsequences: 100,
+      Future<Null> waitFunction()}) async {
     firstActionScores.clear();
 
     var currentActor =
@@ -151,9 +154,9 @@ class ActorPlanner {
         // Bail early if action isn't possible at all.
         continue;
       }
-      var consequenceStats =
-          await _getConsequenceStats(_initial, action, maxOrder, waitFunction)
-              .toList();
+      var consequenceStats = await _getConsequenceStats(
+              _initial, action, maxOrder, maxConsequences, waitFunction)
+          .toList();
 
       if (consequenceStats.isEmpty) {
         log.finer("- action '${action.name}' is possible but we couldn't get "
@@ -189,8 +192,12 @@ class ActorPlanner {
   /// [firstAction] is the action which we evaluate. All following actions are
   /// consequences -- actions taken by the different actors after the main actor
   /// ([actorId]) chooses this path.
-  Stream<ConsequenceStats> _getConsequenceStats(PlanConsequence initial,
-      Action firstAction, int maxOrder, Future<Null> waitFunction()) async* {
+  Stream<ConsequenceStats> _getConsequenceStats(
+      PlanConsequence initial,
+      Action firstAction,
+      int maxOrder,
+      int maxConsequences,
+      Future<Null> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
 
@@ -226,10 +233,14 @@ class ActorPlanner {
       open.add(firstConsequence);
     }
 
+    int consequences = 0;
+
     while (open.isNotEmpty) {
+      consequences += 1;
+
       if (waitFunction != null &&
           new DateTime.now().difference(_latestWait) >
-              const Duration(milliseconds: 15)) {
+              const Duration(milliseconds: 5)) {
         await waitFunction();
         _latestWait = new DateTime.now();
       }
@@ -241,17 +252,20 @@ class ActorPlanner {
       log.finest(() => "- situation: "
           "${current.world.currentSituation.runtimeType}");
 
-      if (current.order > maxOrder) {
+      if (current.order > maxOrder || consequences > maxConsequences) {
         log.finest(() => "- order (${current.order}) higher than "
-            "maximum ($maxOrder), continuing onto next");
+            "maximum ($maxOrder), "
+            "or consequences ($consequences) higher than maximum");
         log.finest(() {
           var ars = current.world.actionRecords.toList()
             ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
           String path = ars.map((a) => a.description).join(' <- ');
           return "- how we got here: $path";
         });
-        closed.add(current.world);
-        continue;
+
+        // We can break because we go from lowest order to highest (because
+        // new consequences are added to the end of the [open] queue).
+        break;
       }
 
       if (current.world.situations.isEmpty) {

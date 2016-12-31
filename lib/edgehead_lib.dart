@@ -146,11 +146,13 @@ class EdgeheadGame extends LoopedEvent {
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        maxOrder: 4,
-        waitFunction: () async {
-          // await window.animationFrame;
-          await new Future.delayed(const Duration(milliseconds: 5));
-        });
+        // Unused because we're running in both command line and browser.
+        // TODO: re-introduce
+        //
+        //   waitFunction: () async {
+        //     await window.animationFrame;
+        //   }
+        );
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
@@ -172,6 +174,7 @@ class EdgeheadGame extends LoopedEvent {
       echo(storyline.realize());
       storyline.clear();
 
+      log.fine("planner.generateTable for ${actor.name}");
       planner.generateTable().forEach((line) => log.fine(line));
 
       // Take only the first few best actions.
