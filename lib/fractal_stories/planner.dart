@@ -19,7 +19,7 @@ class ActorPlanner {
 
   /// Only consequences with cumulative probability over this threshold
   /// will be considered for best cases.
-  static const num bestCaseProbabilityThreshold = 0.3;
+  static const num bestCaseProbabilityThreshold = 0.15;
 
   static DateTime _latestWait = new DateTime.now();
   final int actorId;
@@ -80,8 +80,15 @@ class ActorPlanner {
       uplifts.add(uplift);
     }
 
+    // Look at average to see what kind of effect, on average, this action
+    // will have.
     var average = uplifts.fold(0, (a, b) => a + b) / uplifts.length;
-    var best = _bestCase == null ? 0 : _bestCase.score / _bestCase.order;
+
+    // Also look at the best possible outcome. If we only used the average,
+    // an action that leads to a lot of bad outcomes but one great one
+    // (presumably the one the actor has in mind) would receive a bad score.
+    var bestUpside = _bestCase == null ? 0 : (_bestCase.score - initialScore);
+    var best = bestUpside / _bestCase?.order ?? 1;
 
     log.finest("- uplifts average = $average");
     log.finest("- best = $best");
