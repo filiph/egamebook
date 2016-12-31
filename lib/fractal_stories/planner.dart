@@ -63,13 +63,14 @@ class ActorPlanner {
     ConsequenceStats _bestCase;
 
     for (var consequence in stats) {
-      log.finest(() => "  - consequence: score=${consequence.score}, "
-          "cumProb=${consequence.cumulativeProbability}");
+      log.finest(() => "  - consequence: $consequence");
       if (consequence.cumulativeProbability > bestCaseProbabilityThreshold) {
         if (_bestCase == null) {
+          log.finest("    - first _bestCase");
           _bestCase = consequence;
         } else if (consequence.score > _bestCase.score) {
           _bestCase = consequence;
+          log.finest("    - new _bestCase");
         }
       }
 
@@ -177,30 +178,36 @@ class ActorPlanner {
 
   /// Returns the stats for consequences of a given [initial] state after
   /// applying [firstAction] and then up to [maxOrder] other steps.
+  ///
+  /// [firstAction] is the action which we evaluate. All following actions are
+  /// consequences -- actions taken by the different actors after the main actor
+  /// ([actorId]) chooses this path.
   Stream<ConsequenceStats> _getConsequenceStats(PlanConsequence initial,
       Action firstAction, int maxOrder, Future<Null> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
 
     log.finer("=====");
-    log.finer("_getConsequenceStats for firstAction '${firstAction.name}'"
-        "of ${mainActor.name}");
-    log.finer("- initial action == $firstAction");
-    log.finer(() => "- current: score=${mainActor.scoreWorld(initial.world)} * "
+    log.finer(() => "_getConsequenceStats for firstAction "
+        "'${firstAction.name}' of ${mainActor.name}");
+    log.finer(() => "- firstAction == $firstAction");
+
+    if (!firstAction.isApplicable(mainActor, initial.world)) {
+      log.finer("- firstAction not applicable");
+      return;
+    }
+
+    num initialScore = mainActor.scoreWorld(initial.world);
+
+    log.finer(() => "- current: initialScore=$initialScore, "
         "cumProb=${initial.cumulativeProbability} "
         "(prob=${initial.probability}, "
         "ord=${initial.order})");
     log.finer(() => "- initial action: "
         "${' ' * initial.order}- ${initial.action}");
 
-    num initialScore = mainActor.scoreWorld(initial.world);
-
     Queue<PlanConsequence> open = new Queue<PlanConsequence>();
     final Set<WorldState> closed = new Set<WorldState>();
-
-    if (!firstAction.isApplicable(mainActor, initial.world)) {
-      return;
-    }
 
     var initialWorldHash = initial.world.hashCode;
     for (var firstConsequence
@@ -221,14 +228,38 @@ class ActorPlanner {
       }
       var current = open.removeFirst();
 
-      if (current.order >= maxOrder) break;
+      log.finest("----");
+      log.finest(() => "evaluating a PlanConsequence "
+          "of '${current.action.name}'");
+      log.finest(() => "- situation: "
+          "${current.world.currentSituation.runtimeType}");
+
+      if (current.order > maxOrder) {
+        log.finest(() => "- order (${current.order}) higher than "
+            "maximum ($maxOrder), continuing onto next");
+        log.finest(() {
+          var ars = current.world.actionRecords.toList()
+            ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
+          String path = ars.map((a) => a.description).join(' <- ');
+          return "- how we got here: $path";
+        });
+        closed.add(current.world);
+        continue;
+      }
+
       if (current.world.situations.isEmpty) {
-        // Leaf node of the graph. Make sure to score the world here, too.
+        log.finest("- leaf node: world.situations is empty (end of book)");
+
         var score = current.world.actors
             .singleWhere((a) => a.id == actorId)
             .scoreWorld(current.world);
-        yield new ConsequenceStats(
+
+        var stats = new ConsequenceStats(
             score, current.cumulativeProbability, current.order);
+
+        log.finest(() => "- $stats");
+
+        yield stats;
         continue;
       }
 
@@ -240,26 +271,24 @@ class ActorPlanner {
       var mainActor = current.world.actors.singleWhere((a) => a.id == actorId);
       bool currentActorIsMain = currentActor == mainActor;
 
+      log.finest("- actor: ${currentActor.name} (isMain==$currentActorIsMain)");
+      log.finest("- mainActor: ${mainActor.name}");
+
       var score = mainActor.scoreWorld(current.world);
-      yield new ConsequenceStats(
+      var stats = new ConsequenceStats(
           score, current.cumulativeProbability, current.order);
 
-      log.finest("----");
-      log.finest("evaluating a PlanConsequence of '${current.action.name}'");
-      log.finest("situation == ${current.world.currentSituation.runtimeType}");
-      log.finest("mainActor == ${mainActor.name}");
-      log.finest("actor == ${currentActor.name} (isMain==$currentActorIsMain)");
-      log.finest(() => "mainActor's score=$score initial=$initialScore "
-          "cumProb=${current.cumulativeProbability} "
-          "(prob=${current.probability}, ord=${current.order})");
+      log.finest(() => "- mainActor's score == $stats (initial=$initialScore)");
       log.finest(() {
         var ars = current.world.actionRecords.toList()
           ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
         String path = ars.map((a) => a.description).join(' <- ');
-        return "how we got here: $path";
+        return "- how we got here: $path";
       });
 
-      log.finest("generating all actions for ${currentActor.name}");
+      yield stats;
+
+      log.finest("- generating all actions for ${currentActor.name}");
       var originalCount = open.length;
       for (Action action in _generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, current.world)) continue;

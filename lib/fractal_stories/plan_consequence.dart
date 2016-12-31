@@ -12,6 +12,10 @@ class ConsequenceStats {
   final num cumulativeProbability;
   final int order;
   const ConsequenceStats(this.score, this.cumulativeProbability, this.order);
+
+  String toString() => "ConsequenceStats<order=$order, "
+      "cumProb=${cumulativeProbability.toStringAsFixed(3)}, "
+      "score=${score.toStringAsFixed(2)}>";
 }
 
 class PlanConsequence {
