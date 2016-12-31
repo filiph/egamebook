@@ -589,7 +589,7 @@ lz:{"^":"a:20;",
 $0:function(){var z=0,y=new P.aR(),x=1,w
 var $async$$0=P.aN(function(a,b){if(a===1){w=b
 z=x}while(true)switch(z){case 0:z=2
-return P.D(P.bQ(C.Z,null,null),$async$$0,y)
+return P.D(P.bQ(C.a_,null,null),$async$$0,y)
 case 2:return P.D(null,0,y)
 case 1:return P.D(w,1,y)}})
 return P.D(null,$async$$0,y)}},
@@ -1058,7 +1058,7 @@ if(l.gu(r)!==k)throw H.d(new P.z("Action "+a2.k(0)+" modified world state when p
 n.ac(h)}s.a=0
 case 3:if(!!n.gC(n)){z=4
 break}++s.a
-z=1000*(Date.now()-$.$get$dZ().a)>1e4?5:6
+z=1000*(Date.now()-$.$get$dZ().a)>5000?5:6
 break
 case 5:z=7
 return P.cE(a5.$0(),$async$c6,y)
@@ -2661,7 +2661,7 @@ setupProgram(dart,init.types.length)
 var deferredTypes=[{func:1,ret:P.h,args:[R.ab,A.aM,Y.aV]},{func:1,ret:Q.an,args:[R.ab]},{func:1,ret:Y.bP,args:[P.r]},{func:1,v:true,args:[P.h]},{func:1,ret:P.h,args:[P.r]},{func:1,ret:P.T,args:[R.ab,A.aM]},{func:1,ret:P.r,args:[R.ab]},{func:1,ret:P.T,args:[P.T,P.T]},{func:1,ret:L.ag,args:[P.h],named:{deferToChoiceList:P.U,deferToEndOfPage:P.U,goto:P.h,helpMessage:P.h,script:{func:1,ret:[P.ae,P.aU]},submenu:P.h}}]
 init.types.push.apply(init.types,deferredTypes)
 C.X=new P.rb()
-C.Z=new P.ai(1e4)
+C.a_=new P.ai(2000)
 C.a2=new U.d4(0)
 C.a3=new U.d4(1)
 C.a4=new U.d4(2)
@@ -2697,4 +2697,4 @@ z=$.$get$bE()
 y=H.t([],[P.h])
 z==null
 return new Y.bP(!0,"balance",y,z,!1,C.l)},$,"i5","$get$i5",function(){return new Q.p9(null,null)},$,"eq","$get$eq",function(){return new F.o2("Sometimes, patience pays off. Especially when the other option is potentially dangerous.",null)},$,"hU","$get$hU",function(){return new B.oq("Most moves are easier and more effective when you are firmly in balance.",null)},$,"hx","$get$hx",function(){return N.bS("")},$,"hw","$get$hw",function(){return P.ao(P.h,N.em)},$])}
-$dart_deferred_initializers$["kIKfMO93joY28feRERFt4nGgwCc="]=$dart_deferred_initializers$.current
+$dart_deferred_initializers$["vUc9SVz/b1TBtkuaqIWdSoqMAtQ="]=$dart_deferred_initializers$.current
