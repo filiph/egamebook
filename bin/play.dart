@@ -45,20 +45,18 @@ Choice choice(String string,
   return choice;
 }
 
-Future<Null> pipeLog(Stream<LogRecord> records, StringSink logSink) async {
-  await for (var record in records) {
-    logSink.writeln('${record.time.toIso8601String()} - '
-        '[${record.loggerName}] - '
-        '[${record.level.name}] - '
-        '${record.message}');
-  }
-}
 
 Future<Null> run(bool automated, bool silent, StringSink logSink,
     {Level logLevel: Level.ALL}) async {
+  StreamSubscription loggerSubscription;
   if (logSink != null) {
     Logger.root.level = logLevel;
-    pipeLog(Logger.root.onRecord, logSink);
+    loggerSubscription = Logger.root.onRecord.listen((record) {
+      logSink.writeln('${record.time.toIso8601String()} - '
+          '[${record.loggerName}] - '
+          '[${record.level.name}] - '
+          '${record.message}');
+    });
   }
 
   final Logger log = new Logger("play_run");
@@ -98,4 +96,6 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
   }
 
   assert(gotoPage == "endGame");
+
+  await loggerSubscription?.cancel();
 }

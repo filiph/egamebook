@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
-import 'package:test/test.dart';
+
 import 'package:path/path.dart' as path;
+import 'package:test/test.dart';
 
 import '../bin/play.dart';
 
@@ -19,36 +22,72 @@ void main() {
 
     test("edgehead runs to completion 10 times without warnings", () async {
       for (int i = 0; i < 10; i++) {
-        var logPath = createLogFilePath(tempDir, i);
-        var logSink = new LineBuffer();
-        await run(true, true, logSink);
-        if (logSink.contains("[WARNING]") ||
-            logSink.contains("[SEVERE]") ||
-            logSink.contains("[SHOUT]")) {
-          await new File(logPath).writeAsString(logSink.toString());
-          fail("Warning-aware playthrough $i had a severe error. "
-              "Log file: ${logPath}");
+        var logPath = createLogFilePath(tempDir, i, 'walk_with_warning');
+        LineBuffer logSink;
+        try {
+          logSink =
+              new LineBuffer(logPath, ["[WARNING]", "[SEVERE]", "[SHOUT]"]);
+          await logSink.open();
+          print("Running warning-aware test $i.");
+          await run(true, true, logSink);
+          if (logSink.watchPatternTriggered) {
+            fail("Warning-aware playthrough $i had a severe error. "
+                "Log file: ${logPath}");
+          }
+        } finally {
+          await logSink?.close();
         }
       }
     }, timeout: new Timeout.factor(10), tags: ["strict", "long-running"]);
 
     test("edgehead runs to completion 50 times", () async {
       for (int i = 0; i < 50; i++) {
-        var logPath = createLogFilePath(tempDir, i);
-        var logSink = new LineBuffer();
-        await run(true, true, logSink);
-        if (logSink.contains("[SEVERE]") || logSink.contains("[SHOUT]")) {
-          await new File(logPath).writeAsString(logSink.toString());
-          fail("Playthrough $i had a severe error. Log file: ${logPath}");
+        var logPath = createLogFilePath(tempDir, i, 'walk');
+        LineBuffer logSink;
+        try {
+          logSink = new LineBuffer(logPath, ["[SEVERE]", "[SHOUT]"]);
+          await logSink.open();
+          print("Running error-aware test $i.");
+          await run(true, true, logSink);
+          if (logSink.watchPatternTriggered) {
+            fail("Playthrough $i had a severe error. Log file: ${logPath}");
+          }
+        } finally {
+          await logSink?.close();
         }
       }
-      // await dir.delete();
     }, timeout: new Timeout.factor(50), tags: ["long-running"]);
   });
 }
 
-class LineBuffer implements StringSink {
-  final _lines = new Queue<String>();
+String createLogFilePath(Directory tempDir, int i, String description) =>
+    path.absolute(path.join(
+        tempDir.path, "${description}_${i.toString().padLeft(3, '0')}.log"));
+
+/// This helper class acts as logger output which forwards everything to a file
+/// but also watches for patterns in the output.
+class LineBuffer implements ClosableStringSink {
+  final List<Pattern> _watchPatterns;
+
+  RandomAccessFile _pipe;
+
+  bool _watchPatternTriggered = false;
+
+  final String path;
+
+  LineBuffer(this.path, List<Pattern> watchPatterns)
+      : _watchPatterns = watchPatterns;
+
+  Future<Null> open() async {
+    _pipe = await new File(path).open(mode: FileMode.WRITE);
+  }
+
+  bool get watchPatternTriggered => _watchPatternTriggered;
+
+  @override
+  Future<Null> close() async {
+    await _pipe?.close();
+  }
 
   @override
   void write(Object obj) {
@@ -70,18 +109,13 @@ class LineBuffer implements StringSink {
 
   @override
   void writeln([Object obj = ""]) {
-    _lines.addLast(obj.toString());
-  }
-
-  bool contains(Pattern pattern) {
-    for (var line in _lines) {
-      if (line.contains(pattern)) return true;
+    assert(_pipe != null);
+    var line = obj.toString();
+    _pipe?.writeStringSync(line);
+    _pipe?.writeStringSync('\n');
+    if (!_watchPatternTriggered &&
+        _watchPatterns.any((p) => line.contains(p))) {
+      _watchPatternTriggered = true;
     }
-    return false;
   }
-
-  String toString() => _lines.join('\n');
 }
-
-String createLogFilePath(Directory tempDir, int i) => path.absolute(path.join(
-    tempDir.path, "walk_with_warning_${i.toString().padLeft(3, '0')}.log"));
