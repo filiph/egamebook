@@ -45,15 +45,20 @@ Choice choice(String string,
   return choice;
 }
 
-Future<Null> run(bool automated, bool silent, StringSink logSink) async {
+Future<Null> pipeLog(Stream<LogRecord> records, StringSink logSink) async {
+  await for (var record in records) {
+    logSink.writeln('${record.time.toIso8601String()} - '
+        '[${record.loggerName}] - '
+        '[${record.level.name}] - '
+        '${record.message}');
+  }
+}
+
+Future<Null> run(bool automated, bool silent, StringSink logSink,
+    {Level logLevel: Level.ALL}) async {
   if (logSink != null) {
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((LogRecord rec) {
-      logSink.writeln('${rec.time.toIso8601String()} - '
-          '[${rec.loggerName}] - '
-          '[${rec.level.name}] - '
-          '${rec.message}');
-    });
+    Logger.root.level = logLevel;
+    pipeLog(Logger.root.onRecord, logSink);
   }
 
   final Logger log = new Logger("play_run");
