@@ -40,8 +40,8 @@ void main() {
       }
     }, timeout: new Timeout.factor(10), tags: ["strict", "long-running"]);
 
-    test("edgehead runs to completion 50 times", () async {
-      for (int i = 0; i < 50; i++) {
+    test("edgehead runs to completion 20 times", () async {
+      for (int i = 0; i < 20; i++) {
         var logPath = createLogFilePath(tempDir, i, 'walk');
         LineBuffer logSink;
         try {
@@ -56,7 +56,7 @@ void main() {
           await logSink?.close();
         }
       }
-    }, timeout: new Timeout.factor(50), tags: ["long-running"]);
+    }, timeout: new Timeout.factor(20), tags: ["long-running"]);
   });
 }
 

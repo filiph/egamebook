@@ -240,7 +240,7 @@ class ActorPlanner {
 
       if (waitFunction != null &&
           new DateTime.now().difference(_latestWait) >
-              const Duration(milliseconds: 10)) {
+              const Duration(milliseconds: 5)) {
         await waitFunction();
         _latestWait = new DateTime.now();
       }

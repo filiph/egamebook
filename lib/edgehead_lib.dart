@@ -153,7 +153,7 @@ class EdgeheadGame extends LoopedEvent {
         //     await window.animationFrame;
         //   }
       waitFunction: () async {
-        await new Future.delayed(const Duration(milliseconds: 10));
+        await new Future.delayed(const Duration(milliseconds: 2));
       }
     );
     var recs = planner.getRecommendations();
