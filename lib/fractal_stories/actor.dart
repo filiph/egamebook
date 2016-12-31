@@ -160,12 +160,22 @@ abstract class Actor extends Object
     int score = 0;
     score += 10 * hitpoints;
 
-    var friends = world.actors.where((a) => a.team == team);
-    score +=
-        friends.fold/*<int>*/(0, (int sum, Actor a) => sum + 2 * a.hitpoints);
+    if (team.isEnemyWith(playerTeam)) {
+      // Discount self-worth for enemies (makes them more gung-ho and fun).
+      score = score ~/ 2;
+    }
 
+    // Add points for every friend and their hitpoints.
+    var friends = world.actors.where((a) => a.team == team);
+    score += friends.fold/*<int>*/(
+        0,
+        (int sum, Actor a) =>
+            sum + (a.isAliveAndActive ? 2 : 0) + 2 * a.hitpoints);
+
+    // Remove points for every enemy and their hitpoints.
     var enemies = world.actors.where((a) => a.isEnemyOf(this));
-    score -= enemies.fold/*<int>*/(0, (int sum, Actor a) => sum + a.hitpoints);
+    score -= enemies.fold/*<int>*/(0,
+        (int sum, Actor a) => sum + (a.isAliveAndActive ? 1 : 0) + a.hitpoints);
 
     return score;
   }
