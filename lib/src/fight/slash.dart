@@ -26,7 +26,8 @@ class FinishSlash extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
-    if (w.getActorById(enemy.id).isAlive) {
+    bool killed = w.getActorById(enemy.id).isAlive;
+    if (killed) {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} <object's> "
@@ -43,7 +44,7 @@ class FinishSlash extends EnemyTargetAction {
           positive: true);
       reportDeath(s, enemy);
     }
-    return "${a.name} slains ${enemy.name}";
+    return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
   }
 
   @override
@@ -81,7 +82,7 @@ class StartSlash extends EnemyTargetAction {
     w.pushSituation(slashSituation);
     var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
     w.pushSituation(slashDefenseSituation);
-    return "${a.name} slashes at ${enemy.name}";
+    return "${a.name} starts a slash at ${enemy.name}";
   }
 
   @override
