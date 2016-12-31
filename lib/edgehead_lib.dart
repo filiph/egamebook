@@ -152,7 +152,10 @@ class EdgeheadGame extends LoopedEvent {
         //   waitFunction: () async {
         //     await window.animationFrame;
         //   }
-        );
+      waitFunction: () async {
+        await new Future.delayed(const Duration(milliseconds: 10));
+      }
+    );
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
