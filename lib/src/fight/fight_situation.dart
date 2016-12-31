@@ -14,6 +14,7 @@ import 'package:edgehead/src/fight/on_ground/slash_grounded_enemy.dart';
 import 'package:edgehead/src/fight/on_ground/stand_up.dart';
 import 'package:edgehead/src/fight/regain_balance.dart';
 import 'package:edgehead/src/fight/slash.dart';
+import 'package:edgehead/src/fight/slash_out_of_balance.dart';
 
 part 'fight_situation.g.dart';
 
@@ -32,8 +33,12 @@ abstract class FightSituation extends Situation
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id)));
   FightSituation._();
 
-  get actionGenerators =>
-      [Kick.builder, StartSlash.builder, StartSlashGroundedEnemy.builder];
+  get actionGenerators => [
+        Kick.builder,
+        StartSlash.builder,
+        StartSlashGroundedEnemy.builder,
+        StartSlashOutOfBalance.builder
+      ];
 
   get actions =>
       <Action>[RegainBalance.singleton, StandUp.singleton, Scramble.singleton];
