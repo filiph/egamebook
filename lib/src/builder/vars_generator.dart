@@ -75,6 +75,7 @@ class VarsGenerator {
     // String concatenation. It could build the code from AST, but that
     // would be way too complicated given the simplicity of the output.
     final StringBuffer out = new StringBuffer();
+    out.writeln("  @override");
     out.writeln("  void populateVarsFromState() {");
     for (TypedVariable variable in _vars) {
       out.writeln("    vars[\"${variable.name}\"] = ${variable.name};");
@@ -97,6 +98,7 @@ class VarsGenerator {
   ///     }
   String generateExtractMethodCode() {
     final StringBuffer out = new StringBuffer();
+    out.writeln("  @override");
     out.writeln("  void extractStateFromVars() {");
     for (TypedVariable variable in _vars) {
       out.write("    ${variable.name} = vars[\"${variable.name}\"]");

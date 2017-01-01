@@ -1130,10 +1130,10 @@ class Builder {
     List<String> fullPaths = new List<String>();
 
     for (File f in importLibFiles) {
-      _log.finest("Normalizing library import $f.");
+      log.finest("Normalizing library import $f.");
 
       if (f.path.startsWith("package:")) {
-        _log.fine("Skipping normalization of library import ${f.path} since "
+        log.fine("Skipping normalization of library import ${f.path} since "
             "it appears to be a package import. This will not check its "
             "existence.");
         fullPaths.add(f.path);
@@ -1275,7 +1275,7 @@ class Builder {
   static final RegExp variableInText =
       new RegExp(r"(^|[^\\])\$[a-zA-Z_][a-zA-Z0-9_]*|(^|[^\\])\${[^}]+}");
 
-  final Logger _log = new Logger("Builder");
+  final Logger log = new Logger("Builder");
 
   /**
    * Writes following Dart files to disk:
@@ -1352,6 +1352,8 @@ class Builder {
       dartOutStream.write(implEndClass);
       dartOutStream.write(implEndFile);
 
+      log.info("scripter file ${path.absolute(pathToOutputDart)} written");
+
       // Close and complete
       return dartOutStream.close();
     }).then((_) {
@@ -1362,6 +1364,7 @@ class Builder {
   }
 
   void writeUid(IOSink dartOutStream) {
+    dartOutStream.writeln("  @override");
     if (uid != null) {
       dartOutStream.writeln("  String uid = \"$uid\";");
     } else {
@@ -1425,14 +1428,14 @@ class Builder {
       "[[NAME]]": getProjectName()
     };
 
-    Future
-        .wait([
+    Future.wait([
 //        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
-          _fileFromTemplate(
-              HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
-        ])
-        .then((_) => completer.complete(true))
-        .catchError((e) => completer.completeError(e));
+      _fileFromTemplate(
+          HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
+    ]).then((_) {
+      log.info("presenter file ${path.absolute(pathToOutputHtml)} written");
+      completer.complete(true);
+    }).catchError((e) => completer.completeError(e));
 
     return completer.future;
   }
@@ -2127,6 +2130,7 @@ class ScripterImpl extends Scripter {
 
   final String implStartInit = """
   /* INIT */
+  @override
   void initBlock() {
 """;
 
