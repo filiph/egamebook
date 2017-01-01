@@ -7,7 +7,7 @@ import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:logging/logging.dart';
 
-main(List<String> args) async {
+Future<Null> main(List<String> args) async {
   var automated = args.contains("--automated");
   var logged = args.contains("--log");
 
@@ -65,7 +65,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     if (!silent) print(msg);
   }
 
-  String gotoPage = null;
+  String gotoPage;
 
   var game = new EdgeheadGame(
       hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
@@ -91,7 +91,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     } else {
       option = int.parse(stdin.readLineSync()) - 1;
     }
-    choices[option].f();
+    await choices[option].f();
     choices.clear();
   }
 

@@ -63,7 +63,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
+  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new DefensiveParrySlash(enemy);

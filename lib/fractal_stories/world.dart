@@ -1,18 +1,19 @@
 library stranded.world;
 
+import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:quiver/core.dart';
 
 import 'action_record.dart';
 import 'actor.dart';
 import 'item.dart';
-import 'location.dart';
+import 'room.dart';
 import 'situation.dart';
 
 class WorldState {
   final Set<Actor> actors;
   final Set<Item> items;
   final Set<ActionRecord> actionRecords;
-  final Set<Location> locations;
+  final Set<Room> rooms;
 
   /// A stack of situations. The top-most (first) one is the [currentSituation].
   ///
@@ -25,7 +26,7 @@ class WorldState {
   WorldState(this.actors, Situation startingSituation)
       : actionRecords = new Set(),
         items = new Set(),
-        locations = new Set(),
+        rooms = new Set(),
         situations = new List.from([startingSituation]),
         time = 0;
 
@@ -34,16 +35,18 @@ class WorldState {
       : actors = new Set<Actor>(),
         actionRecords = new Set<ActionRecord>(),
         items = new Set<Item>(),
-        locations = new Set(),
+        rooms = new Set(),
         situations = new List() {
     actors.addAll(other.actors);
     // TODO: duplicateActionRecord, item, etc.
     actionRecords.addAll(other.actionRecords
         .map((otherRecord) => new ActionRecord.duplicate(otherRecord)));
     items.addAll(other.items);
-    locations.addAll(other.locations
-        .map((otherLocation) => new Location.duplicate(otherLocation)));
+    rooms.addAll(other.rooms);
     situations.addAll(other.situations);
+
+    throwIfDuplicate(actors.map((a) => a.id), "WorldState.actors");
+    throwIfDuplicate(rooms.map((r) => r.name), "WorldState.rooms");
 
     time = other.time;
   }
@@ -57,7 +60,8 @@ class WorldState {
         hashObjects(situations), time);
   }
 
-  bool operator ==(o) => o is WorldState && hashCode == o.hashCode;
+  @override
+  bool operator ==(Object o) => o is WorldState && hashCode == o.hashCode;
 
   void elapseSituationTime(int situationId) {
     int index = _findSituationIndex(situationId);
@@ -102,7 +106,8 @@ class WorldState {
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
-  toString() => "World<${actors.toSet()}>";
+  @override
+  String toString() => "World<${actors.toSet()}>";
 
   void updateActorById(int id, updates(ActorBuilder b)) {
     var original = getActorById(id);

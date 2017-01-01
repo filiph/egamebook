@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:egamebook/runner.dart';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/src/persistence/storage.dart';
@@ -11,7 +13,7 @@ import 'package:edgehead/edgehead.dart' as book;
 /// This is the entry point of the egamebook app as implemented through
 /// [HtmlPresenter]. It's a template, to be rewritten by [Builder].
 
-main() async {
+Future<Null> main() async {
   // create the presenter
   Presenter presenter = new HtmlPresenter();
   // open store
@@ -22,6 +24,6 @@ main() async {
   /* #if RELEASE *//*
   var _ = await book.loadLibrary();
   *//* #endif */
-  run(new book.ScripterImpl(), presenter, store);
+  await run(new book.ScripterImpl(), presenter, store);
 }
 

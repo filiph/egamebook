@@ -33,26 +33,31 @@ abstract class FightSituation extends Situation
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id)));
   FightSituation._();
 
-  get actionGenerators => [
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => [
         Kick.builder,
         StartSlash.builder,
         StartSlashGroundedEnemy.builder,
         StartSlashOutOfBalance.builder
       ];
 
-  get actions =>
+  @override
+  List<Action> get actions =>
       <Action>[RegainBalance.singleton, StandUp.singleton, Scramble.singleton];
 
   BuiltList<int> get enemyTeamIds;
 
   BuiltMap<int, TimedEventCallback> get events;
 
+  @override
   int get id;
 
+  @override
   String get name => "FightSituation";
 
   BuiltList<int> get playerTeamIds;
 
+  @override
   int get time;
 
   @override
@@ -66,13 +71,10 @@ abstract class FightSituation extends Situation
     var activeActorsIds = allActorIds
         .where((id) => world.getActorById(id).isAliveAndActive)
         .toList(growable: false);
-    i = i % activeActorsIds.length;
-    return world.getActorById(activeActorsIds[i]);
+    int mod = i % activeActorsIds.length;
+    return world.getActorById(activeActorsIds[mod]);
   }
 
-  // We're using [onBeforeAction] because when using onAfterAction, we'd report
-  // timed events at a time when an action in FightSituation might have
-  // created other (child) situations.
   @override
   Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
       actors.where((Actor actor) =>
@@ -80,6 +82,9 @@ abstract class FightSituation extends Situation
           (playerTeamIds.contains(actor.id) ||
               enemyTeamIds.contains(actor.id)));
 
+  // We're using [onBeforeAction] because when using onAfterAction, we'd report
+  // timed events at a time when an action in FightSituation might have
+  // created other (child) situations.
   @override
   void onBeforeAction(WorldState world, Storyline s) {
     if (events.containsKey(time)) {

@@ -25,18 +25,23 @@ abstract class CounterAttackSituation extends Situation
 
   CounterAttackSituation._();
 
-  get actionGenerators => [CounterSlash.builder];
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => [CounterSlash.builder];
 
+  @override
   List<Action> get actions => [Pass.singleton];
 
   int get counterAttacker;
 
+  @override
   int get id;
 
+  @override
   String get name => "CounterAttackSituation";
 
   int get target;
 
+  @override
   int get time;
 
   @override

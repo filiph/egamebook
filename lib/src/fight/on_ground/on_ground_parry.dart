@@ -47,7 +47,7 @@ class OnGroundParry extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState world) => a.wields(ItemType.SWORD);
+  bool isApplicable(Actor a, WorldState world) => a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new OnGroundParry(enemy);
 }

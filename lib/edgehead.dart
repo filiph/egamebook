@@ -13,6 +13,7 @@ void main(List<String> args, SendPort mainIsolatePort) {
 
 // The entry point of the isolate.
 class ScripterImpl extends Scripter {
+  @override
   String uid = "net.filiph.edgehead.0.0.1";
 
   /* LIBRARY */
@@ -46,10 +47,12 @@ class ScripterImpl extends Scripter {
     ]);
     firstPage = pageMap[r"""start"""];
   }
+  @override
   void extractStateFromVars() {
     game = vars["game"] as EdgeheadGame;
   }
 
+  @override
   void initBlock() {
     game = null;
 
@@ -58,6 +61,7 @@ class ScripterImpl extends Scripter {
   }
 
   /* INIT */
+  @override
   void populateVarsFromState() {
     vars["game"] = game;
   }

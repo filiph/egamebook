@@ -11,15 +11,12 @@ typedef dynamic ChoiceFunction(String string,
 
 typedef void StringTakingVoidFunction(String arg);
 
-/**
- * LoopedEvent is any event that gets executed in a loop, waiting for
- * a) resolution and b) need of player input. It is intended for 'minigames'
- * inside the egamebook.
- *
- * Example: a hand-to-hand combat can be a LoopedEvent that takes fighters
- * and loops through 'rounds' (seconds?) of the fight.
- */
-
+/// LoopedEvent is any event that gets executed in a loop, waiting for
+/// a) resolution and b) need of player input. It is intended for 'minigames'
+/// inside the egamebook.
+///
+/// Example: a hand-to-hand combat can be a LoopedEvent that takes fighters
+/// and loops through 'rounds' (seconds?) of the fight.
 abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   final StringTakingVoidFunction _goto;
 
@@ -33,16 +30,14 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   /// The page to jump to when combat is finished.
   String onFinishedGoto;
 
-  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction) {}
+  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction);
 
   void echo(String message) {
     _strbuf.write(message);
   }
 
-  /**
-   * Runs the update loop until user interaction is needed or until LoopedEvent
-   * is finished.
-   */
+  /// Runs the update loop until user interaction is needed or until LoopedEvent
+  /// is finished.
   Future<Null> run() async {
     if (onFinishedGoto == null)
       throw new StateError("Cannot run a LoopedEvent "

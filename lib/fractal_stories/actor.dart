@@ -22,6 +22,7 @@ abstract class Actor extends Object
 
   bool get alreadyMentioned;
 
+  @override
   List<String> get categories; // TODO make immutable
 
   /// The weapon this actor is wielding at the moment.
@@ -45,10 +46,13 @@ abstract class Actor extends Object
   /// This doesn't change during gameplay.
   int get initiative;
 
+  @override
   bool get isActive;
 
+  @override
   bool get isAlive => hitpoints > 0;
 
+  @override
   bool get isPlayer;
 
   /// How safe does [this] Actor feel in the presence of the different other
@@ -63,17 +67,21 @@ abstract class Actor extends Object
 
   Set<Item> get items;
 
+  @override
   String get name;
 
+  @override
   bool get nameIsProperNoun;
 
   Pose get pose;
 
+  @override
   Pronoun get pronoun;
 
   @nullable
   Item get shield;
 
+  @override
   Team get team;
 
   @nullable
@@ -96,14 +104,15 @@ abstract class Actor extends Object
   // TODO: loveIndifference
   // other feelings?
 
-  bool hasItem(Type type, {int count: 1}) {
+  bool hasItem(Type type, {int needed: 1}) {
+    int count = 0;
     for (var item in items) {
       if (item.runtimeType == type) {
-        count -= 1;
+        count += 1;
       }
-      if (count <= 0) break;
+      if (count >= needed) break;
     }
-    return count <= 0;
+    return count >= needed;
   }
 
   Item removeItem(Type type) {
@@ -239,7 +248,8 @@ class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
     return hashObjects(values.toList(growable: false));
   }
 
-  bool operator ==(o) => o is ActorMap && hashCode == o.hashCode;
+  @override
+  bool operator ==(Object o) => o is ActorMap && hashCode == o.hashCode;
 }
 
 enum Pose { standing, offBalance, onGround }

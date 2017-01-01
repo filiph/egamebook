@@ -1,6 +1,7 @@
 library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -28,9 +29,11 @@ abstract class OffBalanceOpportunitySituation extends Situation
 
   OffBalanceOpportunitySituation._();
 
-  get actionGenerators => [OffBalanceOpportunityThrust.builder];
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => <EnemyTargetActionBuilder>[OffBalanceOpportunityThrust.builder];
 
-  get actions => [Pass.singleton];
+  @override
+  List<Action> get actions => [Pass.singleton];
 
   /// The actor who is off balance.
   int get actorId;
@@ -39,10 +42,13 @@ abstract class OffBalanceOpportunitySituation extends Situation
   @nullable
   int get culpritId;
 
+  @override
   int get id;
 
+  @override
   String get name => "OffBalanceOpportunitySituation";
 
+  @override
   int get time;
 
   @override

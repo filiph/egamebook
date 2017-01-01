@@ -6,13 +6,11 @@ import 'randomly.dart';
 part 'storyline_entity.dart';
 part 'storyline_pronoun.dart';
 
-/**
- * A single report about an event, atomic part of a story. It can be "John
- * picks up a shovel", "John approaches Jack" or "Jack is dead".
- *
- * These events are stringed together by [Storyline] to create a coherent,
- * naturally sounding narrative.
- */
+/// A single report about an event, atomic part of a story. It can be "John
+/// picks up a shovel", "John approaches Jack" or "Jack is dead".
+///
+/// These events are stringed together by [Storyline] to create a coherent,
+/// naturally sounding narrative.
 class Report {
   final String string;
 
@@ -74,7 +72,8 @@ class Report {
         isSupportiveActionInThread = false,
         time = null;
 
-  operator [](key) {
+  @deprecated
+  dynamic operator [](String key) {
     // TODO: get rid of Report field accessed via inefficient [] operator
     switch (key) {
       case 'string':
@@ -109,9 +108,7 @@ class Report {
 // Prevents: "You set up the laser. The laser is now set up to fire at target."
 }
 
-/**
- * Class for reporting a sequence of events in 'natural' language.
- */
+/// Class for reporting a sequence of events in 'natural' language.
 class Storyline {
   static const String SUBJECT = "<subject>";
   static const String SUBJECT_POSSESIVE = "<subject's>";
@@ -173,12 +170,10 @@ class Storyline {
   bool get hasManyParagraphs =>
       reports.any((r) => r.string == PARAGRAPH_NEWLINES);
 
-  /**
-   * Add another event to the story.
-   *
-   * When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
-   * letter, [wholeSentence] will automatically be [:true:] for convenience.
-   */
+  /// Add another event to the story.
+  ///
+  /// When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
+  /// letter, [wholeSentence] will automatically be [:true:] for convenience.
   void add(String str,
       {Entity subject,
       Entity object,
@@ -198,15 +193,12 @@ class Storyline {
       return;
     }
 
-    time ??= this.time;
-
     assert(subject != null || !str.contains("<subject"));
     assert(object != null || !str.contains("<object"));
 
-    if ((str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
-        str.startsWith(new RegExp("[A-Z]"))) {
-      wholeSentence = true;
-    }
+    bool wholeSentenceAutoDetected =
+        (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
+            str.startsWith(new RegExp("[A-Z]"));
 
     reports.add(new Report(str,
         subject: subject,
@@ -218,17 +210,15 @@ class Storyline {
         negative: negative,
         endSentence: endSentence,
         startSentence: startSentence,
-        wholeSentence: wholeSentence,
+        wholeSentence: wholeSentenceAutoDetected ? true : wholeSentence,
         actionThread: actionThread,
         isSupportiveActionInThread: isSupportiveActionInThread,
-        time: time));
+        time: time ?? this.time));
   }
 
-  /**
-   * Add a sentence (or more) enumerating several things ([articles]) at once.
-   * Example: "You can see a handkerchief, a brush and a mirror here."
-   * You can provide "<also>" for a more human-like enumeration.
-   */
+  /// Add a sentence (or more) enumerating several things ([articles]) at once.
+  /// Example: "You can see a handkerchief, a brush and a mirror here."
+  /// You can provide "<also>" for a more human-like enumeration.
   void addEnumeration(String start, Iterable<Entity> articles, String end,
       {Entity subject,
       Entity object,
@@ -316,20 +306,23 @@ class Storyline {
       return string;
     }
 
+    String stringWithParticle;
+
     if (!entity.nameIsProperNoun) {
       if (_hasBeenMentioned(entity, reportTime)) {
-        string = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
+        stringWithParticle = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
       } else {
         if (entity.name
             .startsWith(new RegExp(r"[aeiouy]", caseSensitive: false))) {
-          string = string.replaceFirst(SUB_STRING, "an $SUB_STRING");
+          stringWithParticle =
+              string.replaceFirst(SUB_STRING, "an $SUB_STRING");
         } else {
-          string = string.replaceFirst(SUB_STRING, "a $SUB_STRING");
+          stringWithParticle = string.replaceFirst(SUB_STRING, "a $SUB_STRING");
         }
         _firstMentions[entity.id] = reportTime;
       }
     }
-    return string;
+    return stringWithParticle ?? string;
   }
 
   void clear() {
@@ -698,6 +691,7 @@ class Storyline {
   }
 
   @deprecated
+  @override
   String toString() => realize();
 
   bool valid(int i) {
@@ -715,17 +709,18 @@ class Storyline {
 
   /// Applies the logic of needed for `<owner>` and `<owner's>` to work.
   ///
-  /// While [result] is the text (with stopwords) to work on, [str] is the
+  /// While [resultSoFar] is the text (with stopwords) to work on, [str] is the
   /// original text (with all the stopwords still in).
   String _realizeOwner(
       Entity owner,
-      String result,
+      String resultSoFar,
       String str,
       String OWNER_OR_OBJECT_OWNER,
       String OWNER_OR_OBJECT_OWNER_POSSESSIVE,
       String OWNER_OR_OBJECT_OWNER_PRONOUN,
       String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE,
       int reportTime) {
+    var result = resultSoFar;
     if (owner != null) {
       if (owner.isPlayer) {
         result =
@@ -783,15 +778,16 @@ class Storyline {
     return a.team == b.team;
   }
 
-  static String capitalize(String str) {
-    if (!str.contains(PARAGRAPH_NEWLINES)) {
-      str = str.trimLeft();
+  static String capitalize(String string) {
+    var result = string;
+    if (!result.contains(PARAGRAPH_NEWLINES)) {
+      result = result.trimLeft();
     }
-    if (str.isEmpty) return str;
-    String firstLetter = str[0].toUpperCase();
-    if (str.length == 1)
+    if (result.isEmpty) return result;
+    String firstLetter = result[0].toUpperCase();
+    if (result.length == 1)
       return firstLetter;
     else
-      return "$firstLetter${str.substring(1)}";
+      return "$firstLetter${result.substring(1)}";
   }
 }

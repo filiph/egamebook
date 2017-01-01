@@ -77,10 +77,10 @@ class ParrySlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
+  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new ParrySlash(enemy);
 }
 
-final swing =
+final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);

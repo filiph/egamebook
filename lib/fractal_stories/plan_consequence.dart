@@ -13,6 +13,7 @@ class ConsequenceStats {
   final int order;
   const ConsequenceStats(this.score, this.cumulativeProbability, this.order);
 
+  @override
   String toString() => "ConsequenceStats<order=$order, "
       "cumProb=${cumulativeProbability.toStringAsFixed(3)}, "
       "score=${score.toStringAsFixed(2)}>";
@@ -58,9 +59,11 @@ class PlanConsequence {
         isSuccess
       ]);
 
-  bool operator ==(o) => o is PlanConsequence && hashCode == o.hashCode;
+  @override
+  bool operator ==(Object o) => o is PlanConsequence && hashCode == o.hashCode;
 
-  toString() =>
+  @override
+  String toString() =>
       "PlanConsequence<${world.hashCode}, $world, $action, $probability, "
       "$order, ${isSuccess ? 'isSuccess' : ''}>";
 }

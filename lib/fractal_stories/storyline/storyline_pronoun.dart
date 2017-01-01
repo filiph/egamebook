@@ -1,8 +1,6 @@
 part of storyline;
 
-/**
- * The pronouns and their different forms.
- */
+/// The pronouns and their different forms.
 class Pronoun {
   // see http://en.wikipedia.org/wiki/Latin_declension
   static const Pronoun YOU =
@@ -24,9 +22,15 @@ class Pronoun {
   static const Pronoun WE = const Pronoun("we", "us", "our", "ourselves");
 
   final String nominative;
+
   final String accusative;
+
   final String genitive;
+
   final String self;
+
   const Pronoun(this.nominative, this.accusative, this.genitive, this.self);
+
+  @override
   String toString() => nominative;
 }

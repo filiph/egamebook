@@ -37,7 +37,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      enemy.pose == Pose.onGround && a.wields(ItemType.SWORD);
+      enemy.pose == Pose.onGround && a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new FinishSlashGroundedEnemy(enemy);
@@ -80,7 +80,7 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
   bool isApplicable(Actor a, WorldState world) =>
       enemy.pose == Pose.onGround &&
       a.pose != Pose.onGround &&
-      a.wields(ItemType.SWORD);
+      a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new StartSlashGroundedEnemy(enemy);

@@ -51,7 +51,7 @@ class FinishSlash extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
+  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new FinishSlash(enemy);
 }
@@ -92,7 +92,7 @@ class StartSlash extends EnemyTargetAction {
   bool isApplicable(Actor a, WorldState world) =>
       a.pose == Pose.standing &&
       enemy.pose != Pose.onGround &&
-      a.wields(ItemType.SWORD);
+      a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new StartSlash(enemy);
 }

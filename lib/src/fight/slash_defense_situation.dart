@@ -1,6 +1,7 @@
 library stranded.fight.slash_defense_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -25,17 +26,21 @@ abstract class SlashDefenseSituation extends Situation
 
   SlashDefenseSituation._();
 
-  get actionGenerators =>
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators =>
       [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
 
   int get attacker;
 
+  @override
   int get id;
 
+  @override
   String get name => "SlashDefenseSituation";
 
   int get target;
 
+  @override
   int get time;
 
   @override

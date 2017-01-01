@@ -10,13 +10,13 @@ Random _random = new Random();
 
 String typeToDescription(ItemType type) {
   switch (type) {
-    case ItemType.SPEAR:
+    case ItemType.spear:
       return "spear";
-    case ItemType.BRANCH:
+    case ItemType.branch:
       return "branch";
-    case ItemType.TENT:
+    case ItemType.tent:
       return "tent";
-    case ItemType.SWORD:
+    case ItemType.sword:
       return "sword";
     default:
       throw new ArgumentError(type);
@@ -53,21 +53,25 @@ abstract class Item<T extends Item> extends Object
   T copy();
 }
 
-enum ItemType { SPEAR, BRANCH, TENT, SWORD }
+enum ItemType { spear, branch, tent, sword }
 
 class Sword extends Item {
+  @override
   final bool luxuryIsCumulative = false;
 
+  @override
   final num luxuryScore = 10;
 
   @override
   bool isActive = true;
+
   @override
   Team team = neutralTeam;
 
+  @override
   final String name;
 
-  Sword([this.name = "sword"]) : super(ItemType.SWORD);
+  Sword([this.name = "sword"]) : super(ItemType.sword);
 
   @override
   List<String> get categories => const [];
@@ -87,5 +91,6 @@ class Sword extends Item {
   @override
   Pronoun get pronoun => Pronoun.IT;
 
+  @override
   Sword copy() => new Sword();
 }

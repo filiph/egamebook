@@ -1,6 +1,7 @@
 library stranded.fight.slash_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -22,16 +23,20 @@ abstract class SlashSituation extends Situation
 
   SlashSituation._();
 
-  get actionGenerators => [FinishSlash.builder];
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlash.builder];
 
   int get attacker;
 
+  @override
   int get id;
 
+  @override
   String get name => "SlashSituation";
 
   int get target;
 
+  @override
   int get time;
 
   @override

@@ -31,7 +31,7 @@ void main() {
           await run(true, true, logSink);
           if (logSink.watchPatternTriggered) {
             fail("Warning-aware playthrough $i had a severe error. "
-                "Log file: ${logPath}");
+                "Log file: $logPath");
           }
         } finally {
           await logSink?.close();
@@ -49,7 +49,7 @@ void main() {
           print("Running error-aware test $i.");
           await run(true, true, logSink);
           if (logSink.watchPatternTriggered) {
-            fail("Playthrough $i had a severe error. Log file: ${logPath}");
+            fail("Playthrough $i had a severe error. Log file: $logPath");
           }
         } finally {
           await logSink?.close();

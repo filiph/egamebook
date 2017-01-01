@@ -1,12 +1,10 @@
 part of storyline;
 
-/**
- * Entity is a thing, a creature, a robot, or a person that is an interactive
- * part of the gamebook environment.
- *
- * They have a [name], they are referred to by a [pronoun] and more often
- * than not they are at a [location].
- */
+/// Entity is a thing, a creature, a robot, or a person that is an interactive
+/// part of the gamebook environment.
+///
+/// They have a [name], they are referred to by a [pronoun] and more often
+/// than not they are at a [location].
 class Entity extends Object with EntityBehavior {
   /// Used to allow passing arguments that are automatically generated from
   /// context. In this case, a method can accept both a [:null:] Entity (i.e.
@@ -36,6 +34,7 @@ class Entity extends Object with EntityBehavior {
   /// in one sentence, only the non-overlapping ones are used.
   final List<String> categories = new List<String>();
 
+  @override
   final Team team;
 
   final bool isPlayer;
@@ -61,14 +60,14 @@ class Entity extends Object with EntityBehavior {
   /// hashCode (for example, immutable ones), this should be overridden.
   int get id => hashCode;
 
-  /**
-   * Whether or not this entity should be shown to the player. This can be useful
-   * for entities that are only relevant later in the game (i.e. after player
-   * does something else) or items that become irrelevant after use.
-   */
+  /// Whether or not this entity should be shown to the player. This can be useful
+  /// for entities that are only relevant later in the game (i.e. after player
+  /// does something else) or items that become irrelevant after use.
+  @override
   bool get isActive => true;
 
   /// True if Actor is alive, i.e. not destroyed or dead.
+  @override
   bool get isAlive => true;
 }
 

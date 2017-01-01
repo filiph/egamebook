@@ -44,7 +44,7 @@ class CounterSlash extends EnemyTargetAction {
       enemy.pose == Pose.standing ? 0.7 : 0.9;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.SWORD);
+  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new CounterSlash(enemy);
 }

@@ -1,6 +1,7 @@
 library stranded.fight.strike_down_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -23,16 +24,20 @@ abstract class StrikeDownSituation extends Situation
 
   StrikeDownSituation._();
 
-  get actionGenerators => [FinishSlashGroundedEnemy.builder];
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlashGroundedEnemy.builder];
 
   int get attacker;
 
+  @override
   int get id;
 
+  @override
   String get name => "StrikeDownSituation";
 
   int get targetOnGround;
 
+  @override
   int get time;
 
   @override

@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 
 import 'off_balance_opportunity_situation.dart';
 
-final balance =
+final Entity balance =
     new Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
 class Kick extends EnemyTargetAction {

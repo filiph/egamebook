@@ -3,11 +3,9 @@ library randomly;
 import 'dart:math';
 
 class Randomly {
-  static Random _random = new Random();
+  static final Random _random = new Random();
 
-  /**
-   * Function gets a list of choices, picks one of them randomly.
-   */
+  // Function gets a list of choices, picks one of them randomly.
   static dynamic choose(List choices) {
     if (choices == null) throw new ArgumentError("Cannot choose from null.");
     num number = choices.length;
@@ -85,25 +83,24 @@ class Randomly {
   }
 
   /// Returns the probability in "rounded" by [precisionSteps]. So, if
-  /// [precisionSteps] is [:10:], a [probability] of [:0.46:] becomes "50%".
+  /// [precisionSteps] is [:10:], a [humanProbability] of [:0.46:] becomes "50%".
   /// When [precisionSteps] is [:5:], then it becomes "45%".
   static String humanStringifyProbability(num probability,
       {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
-    probability *= 100 / precisionSteps; // ex. 6.4
-    probability = probability.round(); // ex. 6.0
-    probability *= precisionSteps; // ex. 60
-    return "$prefix${probability.toStringAsFixed(0)}$postfix";
+
+    num humanProbability = probability * 100 / precisionSteps; // ex. 6.4
+    humanProbability = humanProbability.round(); // ex. 6.0
+    humanProbability *= precisionSteps; // ex. 60
+    return "$prefix${humanProbability.toStringAsFixed(0)}$postfix";
   }
 
-  /**
-   * Function gets a String in the format 'something {is fishy|doesn't add up}'
-   * and outputs either 'something is fishy' or 'something doesn't add up'. This
-   * works even recursively ('{I {think|guess}|Maybe} it will work.') and
-   * also with empty choices ('This is {very|} interesting').
-   *
-   * When creating messaging that the user/player will likely see often, this will
-   * make sure that they see some 'natural' variance.
-   */
+  // Function gets a String in the format 'something {is fishy|doesn't add up}'
+  // and outputs either 'something is fishy' or 'something doesn't add up'. This
+  // works even recursively ('{I {think|guess}|Maybe} it will work.') and
+  // also with empty choices ('This is {very|} interesting').
+  //
+  // When creating messaging that the user/player will likely see often, this will
+  // make sure that they see some 'natural' variance.
   static String parse(String str) {
     int startTagIndex = str.indexOf("{");
     if (startTagIndex != -1 && startTagIndex < str.length - 1) {
@@ -180,9 +177,7 @@ class Randomly {
     }
   }
 
-  /**
-   * Resolve a 'coin toss' of the given probability.
-   */
+  /// Resolve a 'coin toss' of the given probability.
   static bool saveAgainst(num probability) {
     if (probability < 0 || probability > 1.0) {
       throw new RangeError.range(

@@ -1,6 +1,7 @@
 library stranded.fight.on_ground_defense_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -26,16 +27,20 @@ abstract class OnGroundDefenseSituation extends Situation
 
   OnGroundDefenseSituation._();
 
-  get actionGenerators => [OnGroundParry.builder, RollOutOfWay.builder];
+  @override
+  List<EnemyTargetActionBuilder> get actionGenerators => [OnGroundParry.builder, RollOutOfWay.builder];
 
   int get attacker;
 
+  @override
   int get id;
 
+  @override
   String get name => "OnGroundDefenseSituation";
 
   int get targetOnGround;
 
+  @override
   int get time;
 
   @override

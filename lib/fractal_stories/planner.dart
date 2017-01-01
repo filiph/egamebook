@@ -15,7 +15,7 @@ class ActorPlanner {
 
   /// We will stop processing a plan path once its leaf node has lower
   /// cumulative probability than this.
-  static const minimumCumulativeProbability = 0.05;
+  static const num minimumCumulativeProbability = 0.05;
 
   /// Only consequences with cumulative probability over this threshold
   /// will be considered for best cases.
@@ -227,7 +227,7 @@ class ActorPlanner {
     for (var firstConsequence
         in firstAction.apply(mainActor, initial, initial.world)) {
       if (initial.world.hashCode != initialWorldHash) {
-        throw new StateError("Action ${firstAction} modified world state when "
+        throw new StateError("Action $firstAction modified world state when "
             "producing $firstConsequence.");
       }
       open.add(firstConsequence);

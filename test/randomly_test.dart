@@ -103,7 +103,7 @@ void main() {
     var p112 = 1.12;
 
     test("solves for precision step of 10", () {
-      humanize(num n) =>
+      String humanize(num n) =>
           Randomly.humanStringifyProbability(n, precisionSteps: 10);
       expect(humanize(p0), "0%");
       expect(humanize(p15), "20%");
@@ -115,7 +115,7 @@ void main() {
     });
 
     test("solves for precision step of 5", () {
-      humanize(num n) =>
+      String humanize(num n) =>
           Randomly.humanStringifyProbability(n, precisionSteps: 5);
       expect(humanize(p0), "0%");
       expect(humanize(p15), "15%");
@@ -127,7 +127,7 @@ void main() {
     });
 
     test("solves for precision step of 2", () {
-      humanize(num n) =>
+      String humanize(num n) =>
           Randomly.humanStringifyProbability(n, precisionSteps: 2);
       expect(humanize(p0), "0%");
       expect(humanize(p15), "16%");

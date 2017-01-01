@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 ///
 /// Since Storyline started as a singleton pattern, these tests are written
 /// with that in mind. TODO: pass storyline
-var storyline = new Storyline();
+Storyline storyline = new Storyline();
 
 void main() {
   test("simple storyline", () {

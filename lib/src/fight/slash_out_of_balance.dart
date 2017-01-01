@@ -43,7 +43,7 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   bool isApplicable(Actor a, WorldState world) =>
       a.pose == Pose.offBalance &&
       enemy.pose != Pose.onGround &&
-      a.wields(ItemType.SWORD);
+      a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new StartSlashOutOfBalance(enemy);

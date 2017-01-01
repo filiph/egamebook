@@ -136,16 +136,16 @@ class ActionRecord {
   Set<int> get performers =>
       protagonist == null ? new Set.identity() : new Set.from([protagonist]);
 
-  bool operator ==(o) => o is ActionRecord && hashCode == o.hashCode;
+  @override
+  bool operator ==(Object o) => o is ActionRecord && hashCode == o.hashCode;
 
+  @override
   String toString() => "ActionRecord<$actionClass, $actionName, $description>";
 }
 
 class ActionRecordBuilder {
-  Actor _protagonist;
-  String _description;
   ActorMap<num> _actorScoresBefore;
-  KnownToMode _knownToMode = KnownToMode.ALL;
+
   WorldState _afterWorld;
 
   Set<Actor> sufferers;
@@ -158,43 +158,34 @@ class ActionRecordBuilder {
 
   bool wasFailure;
 
-  int time = null;
+  int time;
 
-  String get description => _description;
-  set description(String value) {
-    _description = value;
-  }
+  String description;
 
-  KnownToMode get knownToMode => _knownToMode;
-  set knownToMode(KnownToMode value) {
-    _knownToMode = value;
-  }
+  KnownToMode knownToMode = KnownToMode.all;
 
-  Actor get protagonist => _protagonist;
-  set protagonist(Actor value) {
-    _protagonist = value;
-  }
+  Actor protagonist;
 
   ActionRecord build() {
     assert(actionName != null);
-    assert(_protagonist != null);
+    assert(protagonist != null);
     assert(_actorScoresBefore != null);
-    assert(_knownToMode != null);
+    assert(knownToMode != null);
     assert(_afterWorld != null);
     assert(wasSuccess != null);
     assert(wasFailure != null);
 
     Set<Actor> knownTo;
 
-    switch (_knownToMode) {
-      case KnownToMode.ALL:
+    switch (knownToMode) {
+      case KnownToMode.all:
         knownTo = _afterWorld.actors;
         break;
-      case KnownToMode.PROTAGONIST_ONLY:
+      case KnownToMode.protagonistOnly:
         knownTo = new Set<Actor>.from(<Actor>[protagonist]);
         break;
       default:
-        throw new UnimplementedError("Mode $_knownToMode not implemented");
+        throw new UnimplementedError("Mode $knownToMode not implemented");
     }
 
     ActorMap<num> scoreChanges = new ActorMap<num>();
@@ -209,8 +200,8 @@ class ActionRecordBuilder {
         time,
         actionName,
         actionClass,
-        _description,
-        _protagonist.id,
+        description,
+        protagonist.id,
         sufferers.map(_extractId).toSet(),
         knownTo.map(_extractId).toSet(),
         wasSuccess,
@@ -230,4 +221,4 @@ class ActionRecordBuilder {
   }
 }
 
-enum KnownToMode { ALL, PROTAGONIST_ONLY, CUSTOM }
+enum KnownToMode { all, protagonistOnly, custom }
