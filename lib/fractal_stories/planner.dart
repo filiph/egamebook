@@ -138,7 +138,7 @@ class ActorPlanner {
 
   Future<Null> plan(
       {int maxOrder: 10,
-      int maxConsequences: 100,
+      int maxConsequences: 50,
       Future<Null> waitFunction()}) async {
     firstActionScores.clear();
 
