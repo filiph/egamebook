@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
@@ -28,7 +29,7 @@ void main() {
               new LineBuffer(logPath, ["[WARNING]", "[SEVERE]", "[SHOUT]"]);
           await logSink.open();
           print("Running warning-aware test $i.");
-          await run(true, true, logSink);
+          await run(true, true, logSink, logLevel: Level.INFO);
           if (logSink.watchPatternTriggered) {
             fail("Warning-aware playthrough $i had a severe error. "
                 "Log file: $logPath");
@@ -47,7 +48,7 @@ void main() {
           logSink = new LineBuffer(logPath, ["[SEVERE]", "[SHOUT]"]);
           await logSink.open();
           print("Running error-aware test $i.");
-          await run(true, true, logSink);
+          await run(true, true, logSink, logLevel: Level.WARNING);
           if (logSink.watchPatternTriggered) {
             fail("Playthrough $i had a severe error. Log file: $logPath");
           }
