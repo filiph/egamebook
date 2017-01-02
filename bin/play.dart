@@ -67,35 +67,37 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
   String gotoPage;
 
-  var game = new EdgeheadGame(
-      hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
-  game.onFinishedGoto = "endGame";
+  try {
+    var game = new EdgeheadGame(
+        hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
+    game.onFinishedGoto = "endGame";
 
-  while (gotoPage == null) {
-    await game.run();
+    while (gotoPage == null) {
+      await game.run();
 
-    if (choices.isEmpty) continue;
+      if (choices.isEmpty) continue;
 
-    if (!silent) {
-      for (int i = 0; i < choices.length; i++) {
-        print("${i+1}");
-        print(choices[i].string);
-        print(choices[i].helpMessage);
+      if (!silent) {
+        for (int i = 0; i < choices.length; i++) {
+          print("${i + 1}");
+          print(choices[i].string);
+          print(choices[i].helpMessage);
+        }
       }
+
+      int option;
+
+      if (automated) {
+        option = _random.nextInt(choices.length);
+      } else {
+        option = int.parse(stdin.readLineSync()) - 1;
+      }
+      await choices[option].f();
+      choices.clear();
     }
 
-    int option;
-
-    if (automated) {
-      option = _random.nextInt(choices.length);
-    } else {
-      option = int.parse(stdin.readLineSync()) - 1;
-    }
-    await choices[option].f();
-    choices.clear();
+    assert(gotoPage == "endGame");
+  } finally {
+    await loggerSubscription?.cancel();
   }
-
-  assert(gotoPage == "endGame");
-
-  await loggerSubscription?.cancel();
 }

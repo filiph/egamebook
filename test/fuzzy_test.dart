@@ -110,8 +110,8 @@ class LineBuffer implements ClosableStringSink {
   void writeln([Object obj = ""]) {
     assert(_pipe != null);
     var line = obj.toString();
-    _pipe?.writeStringSync(line);
-    _pipe?.writeStringSync('\n');
+    _pipe.writeStringSync(line);
+    _pipe.writeStringSync('\n');
     if (!_watchPatternTriggered &&
         _watchPatterns.any((p) => line.contains(p))) {
       _watchPatternTriggered = true;
