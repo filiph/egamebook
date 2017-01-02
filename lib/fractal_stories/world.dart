@@ -81,6 +81,13 @@ class WorldState {
 
   Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
 
+  bool hasAliveActor(int actorId) {
+    var actor =
+        actors.firstWhere((actor) => actor.id == actorId, orElse: () => null);
+    if (actor == null) return false;
+    return actor.isAlive;
+  }
+
   Situation getSituationById(int situationId) {
     int index = _findSituationIndex(situationId);
     if (index == null) return null;

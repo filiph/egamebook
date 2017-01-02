@@ -12,7 +12,6 @@ part 'room_roaming_situation.g.dart';
 
 abstract class RoomRoamingSituation extends Situation
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
-
   factory RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;
 
@@ -47,11 +46,11 @@ abstract class RoomRoamingSituation extends Situation
 
   @override
   Actor getActorAtTime(_, WorldState world) {
-    var mainActor = world.actors
-        .firstWhere((a) => a.isPlayer, orElse: () => null);
+    var mainActor = world.actors.firstWhere(
+        (a) => a.isPlayer && a.isAliveAndActive,
+        orElse: () => null);
     return mainActor;
   }
-
 
   @override
   Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {

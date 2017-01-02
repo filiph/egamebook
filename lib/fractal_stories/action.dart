@@ -19,8 +19,8 @@ import 'world.dart';
 Iterable<EnemyTargetAction> generateEnemyTargetActions(
     Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
   var situationActors = world.currentSituation.getActors(world.actors, world);
-  var enemies =
-      situationActors.where((other) => other.team.isEnemyWith(actor.team));
+  var enemies = situationActors.where(
+      (other) => other.isAliveAndActive && other.team.isEnemyWith(actor.team));
   for (var enemy in enemies) {
     var action = builder(enemy);
     assert(action.enemy == enemy);
