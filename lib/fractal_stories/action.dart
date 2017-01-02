@@ -1,5 +1,7 @@
 library stranded.action;
 
+import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 import 'action_record.dart';
@@ -26,9 +28,34 @@ Iterable<EnemyTargetAction> generateEnemyTargetActions(
   }
 }
 
+/// Generator generates multiple [Action] instances given a [world] and
+/// an [actor] and a [builder].
+Iterable<ExitAction> generateExitActions(
+    Actor actor, WorldState world, ExitActionBuilder builder) sync* {
+  RoomRoamingSituation situation = world.currentSituation;
+  var room = world.getRoomByName(situation.currentRoomName);
+
+  for (var exit in room.exits) {
+    var action = builder(exit);
+    assert(action.exit == exit);
+    yield action;
+  }
+}
+
+/// A generic type for builder functions that take a parameter to build
+/// a concrete implementation of an action.
+///
+/// For example, a "kick-someone" builder can take an Actor Joe as [parameter]
+/// and can output "kick Joe" action.
+typedef T ActionBuilder<T extends Action, V>(V parameter);
+
 /// Builder takes an enemy actor and generates an instance of
 /// [EnemyTargetAction] with the given [enemy].
 typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
+
+/// Builder takes an enemy actor and generates an instance of
+/// [ExitAction] with the given [exit].
+typedef ExitAction ExitActionBuilder(Exit exit);
 
 abstract class Action {
   String _description;
@@ -163,4 +190,22 @@ abstract class EnemyTargetAction extends Action {
   @override
   String toString() => "EnemyTargetAction<$nameTemplate::"
       "enemy=${enemy.id}/${enemy.name}>";
+}
+
+/// This [Action] requires an [exit].
+///
+/// Every [ExitAction] should contain a static builder like this:
+///
+///     static ExitAction builder(Exit enemy) => new Example(exit);
+abstract class ExitAction extends Action {
+  final Exit exit;
+
+  @mustCallSuper
+  ExitAction(this.exit);
+
+  @override
+  String get name => exit.description;
+
+  @override
+  String toString() => "ExitAction<$name>";
 }

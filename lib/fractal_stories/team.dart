@@ -7,6 +7,7 @@ part 'team.g.dart';
 final Team defaultEnemyTeam = new Team((b) => b.id = 2);
 
 final Team neutralTeam = new Team((b) => b.id = 0);
+
 final Team playerTeam = new Team((b) => b.id = 1);
 
 abstract class Team implements Built<Team, TeamBuilder> {
@@ -18,4 +19,8 @@ abstract class Team implements Built<Team, TeamBuilder> {
   /// Currently, every team is enemy of every other team. In the future,
   /// we can implement allegiances etc.
   bool isEnemyWith(Team other) => id != other.id;
+
+  /// Currently, only team members are friendly with each other. In the future,
+  /// we can have alliances.
+  bool isFriendWith(Team other) => id == other.id;
 }

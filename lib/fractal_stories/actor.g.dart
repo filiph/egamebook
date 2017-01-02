@@ -13,7 +13,11 @@ class _$Actor extends Actor {
   @override
   final List<String> categories;
   @override
+  final String currentRoomName;
+  @override
   final Item currentWeapon;
+  @override
+  final int followingActorId;
   @override
   final int hitpoints;
   @override
@@ -47,7 +51,9 @@ class _$Actor extends Actor {
   _$Actor._(
       {this.alreadyMentioned,
       this.categories,
+      this.currentRoomName,
       this.currentWeapon,
+      this.followingActorId,
       this.hitpoints,
       this.id,
       this.initiative,
@@ -91,7 +97,9 @@ class _$Actor extends Actor {
     if (other is! Actor) return false;
     return alreadyMentioned == other.alreadyMentioned &&
         categories == other.categories &&
+        currentRoomName == other.currentRoomName &&
         currentWeapon == other.currentWeapon &&
+        followingActorId == other.followingActorId &&
         hitpoints == other.hitpoints &&
         id == other.id &&
         initiative == other.initiative &&
@@ -125,12 +133,18 @@ class _$Actor extends Actor {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    alreadyMentioned
+                                                                    $jc(
+                                                                        $jc(
+                                                                            0,
+                                                                            alreadyMentioned
+                                                                                .hashCode),
+                                                                        categories
+                                                                            .hashCode),
+                                                                    currentRoomName
                                                                         .hashCode),
-                                                                categories
+                                                                currentWeapon
                                                                     .hashCode),
-                                                            currentWeapon
+                                                            followingActorId
                                                                 .hashCode),
                                                         hitpoints.hashCode),
                                                     id.hashCode),
@@ -152,7 +166,9 @@ class _$Actor extends Actor {
     return 'Actor {'
         'alreadyMentioned=${alreadyMentioned.toString()},\n'
         'categories=${categories.toString()},\n'
+        'currentRoomName=${currentRoomName.toString()},\n'
         'currentWeapon=${currentWeapon.toString()},\n'
+        'followingActorId=${followingActorId.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
@@ -198,6 +214,18 @@ class _$ActorBuilder extends ActorBuilder {
   }
 
   @override
+  String get currentRoomName {
+    _$this;
+    return super.currentRoomName;
+  }
+
+  @override
+  set currentRoomName(String currentRoomName) {
+    _$this;
+    super.currentRoomName = currentRoomName;
+  }
+
+  @override
   Item get currentWeapon {
     _$this;
     return super.currentWeapon;
@@ -207,6 +235,18 @@ class _$ActorBuilder extends ActorBuilder {
   set currentWeapon(Item currentWeapon) {
     _$this;
     super.currentWeapon = currentWeapon;
+  }
+
+  @override
+  int get followingActorId {
+    _$this;
+    return super.followingActorId;
+  }
+
+  @override
+  set followingActorId(int followingActorId) {
+    _$this;
+    super.followingActorId = followingActorId;
   }
 
   @override
@@ -371,7 +411,9 @@ class _$ActorBuilder extends ActorBuilder {
     if (_$v != null) {
       super.alreadyMentioned = _$v.alreadyMentioned;
       super.categories = _$v.categories;
+      super.currentRoomName = _$v.currentRoomName;
       super.currentWeapon = _$v.currentWeapon;
+      super.followingActorId = _$v.followingActorId;
       super.hitpoints = _$v.hitpoints;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
@@ -406,7 +448,9 @@ class _$ActorBuilder extends ActorBuilder {
         new _$Actor._(
             alreadyMentioned: alreadyMentioned,
             categories: categories,
+            currentRoomName: currentRoomName,
             currentWeapon: currentWeapon,
+            followingActorId: followingActorId,
             hitpoints: hitpoints,
             id: id,
             initiative: initiative,

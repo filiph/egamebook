@@ -23,11 +23,13 @@ class WorldState {
   /// The age of this WorldState. Every 'turn', this number increases by one.
   int time;
 
-  WorldState(this.actors, Situation startingSituation)
-      : actionRecords = new Set(),
-        items = new Set(),
-        rooms = new Set(),
-        situations = new List.from([startingSituation]),
+  WorldState(
+      Iterable<Actor> actors, Iterable<Room> rooms, Situation startingSituation)
+      : actors = new Set<Actor>.from(actors),
+        actionRecords = new Set<ActionRecord>(),
+        items = new Set<Item>(),
+        rooms = new Set<Room>.from(rooms),
+        situations = new List<Situation>.from([startingSituation]),
         time = 0;
 
   /// Creates a deep clone of [other].
@@ -128,4 +130,7 @@ class WorldState {
     }
     return index;
   }
+
+  Room getRoomByName(String roomName) =>
+      rooms.singleWhere((room) => room.name == roomName);
 }

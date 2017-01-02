@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.fight_situation;
+part of stranded.room_roaming.room_roaming_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator

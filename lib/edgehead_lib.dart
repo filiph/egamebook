@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/room_exit.dart';
 
 import 'fractal_stories/action.dart';
 import 'fractal_stories/actor.dart';
@@ -13,6 +14,7 @@ import 'fractal_stories/storyline/randomly.dart';
 import 'fractal_stories/storyline/storyline.dart';
 import 'fractal_stories/team.dart';
 import 'fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:logging/logging.dart';
 // import 'dart:html';
 
@@ -40,6 +42,9 @@ class EdgeheadGame extends LoopedEvent {
   Actor orc;
   Actor goblin;
 
+  Room characterSetup;
+  Room tunnel;
+
   Situation initialSituation;
   WorldState world;
   PlanConsequence consequence;
@@ -53,22 +58,6 @@ class EdgeheadGame extends LoopedEvent {
   }
 
   void setup() {
-    filip = new Actor((b) => b
-      ..id = 1
-      ..isPlayer = true
-      ..pronoun = Pronoun.YOU
-      ..name = "Filip"
-      ..currentWeapon = new Sword()
-      ..hitpoints = 2
-      ..initiative = 1000);
-
-    briana = new Actor((b) => b
-      ..id = 100
-      ..pronoun = Pronoun.SHE
-      ..name = "Briana"
-      ..currentWeapon = new Sword("longsword")
-      ..hitpoints = 2);
-
     orc = new Actor((b) => b
       ..id = 1000
       ..name = "orc"
@@ -88,29 +77,61 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..worldScoringFunction = carelessScoringFunction);
 
-    initialSituation =
-        new FightSituation.initialized([filip, briana], [orc, goblin])
-            .rebuild((b) => b
-              ..events[2] = (w, s) {
-                s.addParagraph();
-                s.add("You hear a horrible growling sound from behind.");
-                s.add("The worm must be near.");
-                s.addParagraph();
-              }
-              ..events[6] = (w, s) {
-                s.addParagraph();
-                s.add("The earth shatters and there's that sound again.");
-                s.addParagraph();
-              });
+    characterSetup = new Room(
+        "characterSetup",
+        "You are about to make a choice of your character!",
+        "",
+        null,
+        null,
+        [new Exit("tunnel", "Run towards freedom")]);
+    tunnel = new Room("tunnel", "You run and see a goblin and an orc.", "",
+        (_) => [orc, goblin], null, [new Exit(endOfRoam.name, "End book")]);
+
+    filip = new Actor((b) => b
+      ..id = 1
+      ..isPlayer = true
+      ..pronoun = Pronoun.YOU
+      ..name = "Filip"
+      ..currentWeapon = new Sword()
+      ..hitpoints = 2
+      ..initiative = 1000
+      ..currentRoomName = characterSetup.name);
+
+    briana = new Actor((b) => b
+      ..id = 100
+      ..pronoun = Pronoun.SHE
+      ..name = "Briana"
+      ..currentWeapon = new Sword("longsword")
+      ..hitpoints = 2
+      ..currentRoomName = characterSetup.name
+      ..followingActorId = filip.id);
+
+    // TODO: make sure to re-use these events
+    // new FightSituation.initialized([filip, briana], [orc, goblin])
+    //     .rebuild((b) => b
+    //   ..events[2] = (w, s) {
+    //     s.addParagraph();
+    //     s.add("You hear a horrible growling sound from behind.");
+    //     s.add("The worm must be near.");
+    //     s.addParagraph();
+    //   }
+    //   ..events[6] = (w, s) {
+    //     s.addParagraph();
+    //     s.add("The earth shatters and there's that sound again.");
+    //     s.addParagraph();
+    //   });
+
+    initialSituation = new RoomRoamingSituation.initialized(characterSetup);
 
     world = new WorldState(
-        new Set.from([filip, briana, orc, goblin]), initialSituation);
+        [filip, briana], [characterSetup, tunnel, endOfRoam], initialSituation);
 
     consequence = new PlanConsequence.initial(world);
   }
 
   @override
   Future<Null> update() async {
+    log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
       finished = true;
 
@@ -152,14 +173,14 @@ class EdgeheadGame extends LoopedEvent {
         //   waitFunction: () async {
         //     await window.animationFrame;
         //   }
-      waitFunction: () async {
-        await new Future.delayed(const Duration(milliseconds: 2));
-      }
-    );
+        waitFunction: () async {
+      await new Future.delayed(const Duration(milliseconds: 2));
+    });
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?
+      log.severe("No recommendation for ${actor.name}");
       world.elapseSituationTime(situation.id);
       world.time += 1;
       return;

@@ -1,4 +1,4 @@
-library stranded.fight.fight_situation;
+library stranded.room_roaming.room_roaming_situation;
 
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -6,11 +6,13 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/take_exit.dart';
 
 part 'room_roaming_situation.g.dart';
 
 abstract class RoomRoamingSituation extends Situation
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
+
   factory RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;
 
@@ -22,9 +24,9 @@ abstract class RoomRoamingSituation extends Situation
 
   RoomRoamingSituation._();
 
+  /// TODO: add all other actions that player can do while exploring
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      [/* TODO: add exit action generator */];
+  List<ExitActionBuilder> get actionGenerators => [TakeExitAction.builder];
 
   @override
   List<Action> get actions => <Action>[];
@@ -44,10 +46,31 @@ abstract class RoomRoamingSituation extends Situation
   RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int i, WorldState world) =>
-      getActors(world.actors, world).single;
+  Actor getActorAtTime(_, WorldState world) {
+    var mainActor = world.actors
+        .firstWhere((a) => a.isPlayer, orElse: () => null);
+    return mainActor;
+  }
+
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
-      [actors.singleWhere((a) => a.isPlayer)];
+  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
+    var mainActor = getActorAtTime(null, world);
+    if (mainActor == null) return [];
+    return [mainActor];
+  }
+
+  @override
+  void onAfterAction(WorldState world, _) {
+    // When going from place to place, remove the actors that died. It makes
+    // sure we don't leak memory.
+    world.actors.removeWhere((a) => !a.isAlive);
+  }
+
+  // Only player can roam at the moment.
+  @override
+  bool shouldContinue(WorldState world) {
+    if (currentRoomName == endOfRoam.name) return false;
+    return true;
+  }
 }

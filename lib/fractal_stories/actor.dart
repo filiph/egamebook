@@ -12,6 +12,11 @@ import 'world.dart';
 
 part 'actor.g.dart';
 
+Iterable<Actor> getPartyOf(Actor actor, WorldState world) sync* {
+  yield actor;
+  yield* world.actors.where((other) => other.followingActorId == actor.id);
+}
+
 typedef num WorldScoringFunction(Actor actor, WorldState world);
 
 abstract class Actor extends Object
@@ -25,11 +30,18 @@ abstract class Actor extends Object
   @override
   List<String> get categories; // TODO make immutable
 
+  @nullable
+  String get currentRoomName;
+
   /// The weapon this actor is wielding at the moment.
   ///
   /// Changing a weapon should ordinarily take a turn.
   @nullable
   Item get currentWeapon;
+
+  /// The actor that [this] actor is following around.
+  @nullable
+  int get followingActorId;
 
   int get hitpoints;
 
@@ -52,6 +64,7 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
+  // TODO: make non-nullable
   @override
   bool get isPlayer;
 
@@ -221,9 +234,14 @@ abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
   @virtual
   String name;
   @virtual
+  String currentRoomName;
+  @virtual
   bool nameIsProperNoun = true;
   @virtual
   Pronoun pronoun = Pronoun.IT;
+  @nullable
+  @virtual
+  int followingActorId;
   @virtual
   Team team = playerTeam;
   @nullable
@@ -245,7 +263,7 @@ class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
 
   @override
   int get hashCode {
-    return hashObjects(values.toList(growable: false));
+    return hash2(hashObjects(values), hashObjects(keys));
   }
 
   @override

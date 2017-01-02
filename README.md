@@ -15,7 +15,7 @@ completion or error.
 
 Run all the tests, including the long-running ones, using this command:
 
-    pub run test --run-skipped
+    pub run --checked test --run-skipped
 
 #### Playing on the command line
 

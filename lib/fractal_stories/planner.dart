@@ -33,7 +33,9 @@ class ActorPlanner {
 
   ActorPlanner(Actor actor, WorldState initialWorld)
       : actorId = actor.id,
-        _initial = new PlanConsequence.initial(initialWorld);
+        _initial = new PlanConsequence.initial(initialWorld) {
+    assert(actor.isAlive);
+  }
 
   /// Computes the combined score for a bunch of consequences.
   ///
@@ -181,8 +183,13 @@ class ActorPlanner {
   Iterable<Action> _generateAllActions(Actor actor, WorldState world) sync* {
     yield* world.currentSituation.actions;
     for (var builder in world.currentSituation.actionGenerators) {
-      assert(builder is EnemyTargetActionBuilder);
-      yield* generateEnemyTargetActions(actor, world, builder);
+      if (builder is EnemyTargetActionBuilder) {
+        yield* generateEnemyTargetActions(actor, world, builder);
+      } else if (builder is ExitActionBuilder) {
+        yield* generateExitActions(actor, world, builder);
+      } else {
+        throw new StateError("$builder is not one of the supported ones");
+      }
     }
   }
 
@@ -271,9 +278,15 @@ class ActorPlanner {
       if (current.world.situations.isEmpty) {
         log.finest("- leaf node: world.situations is empty (end of book)");
 
-        var score = current.world.actors
-            .singleWhere((a) => a.id == actorId)
-            .scoreWorld(current.world);
+        var mainActor = current.world.actors
+            .firstWhere((a) => a.id == actorId, orElse: () => null);
+
+        if (mainActor == null) {
+          log.finest("- this actor ($actorId) has been removed");
+          continue;
+        }
+
+        var score = mainActor.scoreWorld(current.world);
 
         var stats = new ConsequenceStats(
             score, current.cumulativeProbability, current.order);
