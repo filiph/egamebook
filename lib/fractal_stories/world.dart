@@ -47,8 +47,8 @@ class WorldState {
     rooms.addAll(other.rooms);
     situations.addAll(other.situations);
 
-    throwIfDuplicate(actors.map((a) => a.id), "WorldState.actors");
-    throwIfDuplicate(rooms.map((r) => r.name), "WorldState.rooms");
+    assert(!hasDuplicities(actors.map((a) => a.id)));
+    assert(!hasDuplicities(rooms.map((r) => r.name)));
 
     time = other.time;
   }
