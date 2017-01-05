@@ -1,22 +1,21 @@
 import 'dart:async';
 
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/looped_event/looped_event.dart';
+import 'package:edgehead/fractal_stories/plan_consequence.dart';
+import 'package:edgehead/fractal_stories/planner.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
-
-import 'fractal_stories/action.dart';
-import 'fractal_stories/actor.dart';
-import 'fractal_stories/item.dart';
-import 'fractal_stories/looped_event/looped_event.dart';
-import 'fractal_stories/plan_consequence.dart';
-import 'fractal_stories/planner.dart';
-import 'fractal_stories/situation.dart';
-import 'fractal_stories/storyline/randomly.dart';
-import 'fractal_stories/storyline/storyline.dart';
-import 'fractal_stories/team.dart';
-import 'fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/team.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/generic_animation_frame/animation_frame.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:logging/logging.dart';
-// import 'dart:html';
 
 /// Lesser self-worth than normal scoring function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
@@ -160,22 +159,13 @@ class EdgeheadGame extends LoopedEvent {
 
       return;
     }
-//    _choiceFunction("Do something", script: () => finished = true);
 
     var situation = world.currentSituation;
     var actor = situation.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        // Unused because we're running in both command line and browser.
-        // TODO: re-introduce
-        //
-        //   waitFunction: () async {
-        //     await window.animationFrame;
-        //   }
-        waitFunction: () async {
-      await new Future.delayed(const Duration(milliseconds: 2));
-    });
+        waitFunction: animationFrame);
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
