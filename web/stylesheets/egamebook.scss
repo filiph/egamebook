@@ -82,6 +82,14 @@ body.title-open {
   button {
     max-width: $max-width;
     margin: auto;
+
+    -webkit-transition: color 0.5s;
+    transition: color 0.5s;
+
+    &:enabled {
+      color: white;
+      @include linear-gradient(#05a505 10%, #019101);
+    }
   }
 }
 
