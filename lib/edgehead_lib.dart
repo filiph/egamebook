@@ -130,6 +130,13 @@ class EdgeheadGame extends LoopedEvent {
 
   @override
   Future<Null> update() async {
+    if (storyline.outputFinishedParagraphs(echo)) {
+      // We had some paragraphs ready and sent them to [echo]. Let's return
+      // to the outer loop so that we show the output before planning next
+      // moves.
+      return;
+    }
+
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
       finished = true;
@@ -202,17 +209,14 @@ class EdgeheadGame extends LoopedEvent {
       }
       return;
     } else {
-//      XXX START HERE - if more than one action, remove the one that was just made
-//      also rename to something else
+      // TODO - if more than one action, remove the one that was just made
+      // also rename to something else
       selected = recs.actions[Randomly.chooseWeightedPrecise(recs.weights,
           max: PlannerRecommendation.weightsResolution)];
       _applySelected(selected, actor, storyline);
     }
 
-    if (storyline.hasManyParagraphs) {
-      echo(storyline.realize(onlyFirstParagraph: true));
-      storyline.removeFirstParagraph();
-    }
+    storyline.outputFinishedParagraphs(echo);
   }
 
   void _applySelected(Action selected, Actor actor, Storyline storyline) {

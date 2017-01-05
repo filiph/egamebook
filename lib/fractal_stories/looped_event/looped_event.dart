@@ -32,7 +32,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
 
   LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction);
 
-  void echo(String message) {
+  void echo(Object message) {
     _strbuf.write(message);
   }
 

@@ -1,5 +1,7 @@
 library storyline;
 
+import 'package:meta/meta.dart';
+
 import '../team.dart';
 import 'randomly.dart';
 
@@ -167,6 +169,7 @@ class Storyline {
 
   Storyline();
 
+  @visibleForTesting
   bool get hasManyParagraphs =>
       reports.any((r) => r.string == PARAGRAPH_NEWLINES);
 
@@ -472,6 +475,20 @@ class Storyline {
     return false;
   }
 
+  /// If storyline already has something to show (at least one full
+  /// paragraph), this will output it through [printFunction] and remove it.
+  ///
+  /// Returns `true` if any paragraphs were output.
+  bool outputFinishedParagraphs(void printFunction(Object msg)) {
+    var printed = false;
+    while (hasManyParagraphs) {
+      printFunction(realize(onlyFirstParagraph: true));
+      removeFirstParagraph();
+      printed = true;
+    }
+    return printed;
+  }
+
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
@@ -580,6 +597,7 @@ class Storyline {
     return s;
   }
 
+  @visibleForTesting
   void removeFirstParagraph() {
     if (!hasManyParagraphs) {
       reports.clear();
