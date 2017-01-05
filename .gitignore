@@ -4,9 +4,4 @@
 .packages
 .pub/
 build/
-packages
-lib/bodega.dart
-web/bodega.html.dart
 *.scssc
-web/stylesheets/egamebook.css
-web/stylesheets/egamebook.css.map
