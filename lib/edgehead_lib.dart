@@ -165,7 +165,7 @@ class EdgeheadGame extends LoopedEvent {
 
     var planner = new ActorPlanner(actor, world);
     await planner.plan(
-        waitFunction: animationFrame);
+        waitFunction: idleCallback);
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
