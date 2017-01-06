@@ -9,7 +9,7 @@ UniqueID: net.filiph.edgehead.0.0.1
 </declare>
 
 <init>
-    game = new EdgeheadGame(echo, goto, choices, choice);
+    game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
     game.onFinishedGoto = "endGame";
 </init>
 
