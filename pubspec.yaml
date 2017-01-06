@@ -18,7 +18,7 @@ dependencies:
   meta: any
   logging: any
   path: any
-  slot_machine: any
+  slot_machine: ^2.1.0
 
 dev_dependencies:
   build: any
