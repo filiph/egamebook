@@ -221,6 +221,10 @@ nav button {
     box-shadow: 0 0 0.5rem 0.5rem lightblue; }
   100% {
     box-shadow: none; } }
+.slot-machine {
+  text-align: center;
+  text-transform: uppercase; }
+
 p.toast {
   font-size: 0.864rem;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
