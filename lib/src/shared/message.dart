@@ -1,6 +1,9 @@
 library egb_message;
 
 import 'dart:convert' show JSON;
+
+import 'package:slot_machine/result.dart' as slot;
+
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/stat.dart';
 
@@ -58,6 +61,9 @@ class Message {
 
   /// Message type update form.
   static const int UPDATE_FORM = 120;
+
+  /// Message type show slot machine.
+  static const int SHOW_SLOT_MACHINE = 130;
 
   /// Message type scripter error.
   static const int SCRIPTER_ERROR = 666;
@@ -130,6 +136,8 @@ class Message {
         return "CHOICE_SELECTED";
       case FORM_INPUT:
         return "FORM_INPUT";
+      case SHOW_SLOT_MACHINE:
+        return "SHOW_SLOT_MACHINE";
       case QUIT:
         return "QUIT";
       default:
@@ -264,6 +272,11 @@ class Message {
   /// [state] used as [mapContent].
   Message.formInput(CurrentState state) : type = FORM_INPUT {
     mapContent = state.toMap();
+  }
+
+  Message.showSlotMachine(num probability, slot.Result predeterminedResult)
+      : type = SHOW_SLOT_MACHINE {
+    listContent = [probability, predeterminedResult.index];
   }
 
   /// Creates new Message of type [SCRIPTER_ERROR] with provided

@@ -3,6 +3,7 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
+import 'package:slot_machine/result.dart' as slot;
 import "package:logging/logging.dart";
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
@@ -12,6 +13,7 @@ import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/scripter.dart';
+import 'package:meta/meta.dart';
 
 /**
  * The methods of Scripter that are callable by Presenter.
@@ -31,8 +33,10 @@ abstract class ScripterViewedFromPresenter {
   void quit();
 
   /// Instance of Presenter.
-  PresenterViewedFromScripter get presenter;
-  set presenter(PresenterViewedFromScripter value);
+//  PresenterViewedFromScripter get presenter;
+//  set presenter(PresenterViewedFromScripter value);
+  @virtual
+  PresenterViewedFromScripter presenter;
 
   /// Sets Presenter and also sets Presenter player profile's
   /// [:currentEgamebookUid:] to [uid] if is not [:null:].
@@ -172,6 +176,13 @@ class IsolateScripterProxy extends ScripterProxy {
         FormConfiguration changedConfig =
             new FormConfiguration.fromMap(message.mapContent);
         presenter.updateForm(changedConfig);
+        return;
+      case Message.SHOW_SLOT_MACHINE:
+        INT_DEBUG("Showing slot machine");
+        num probability = message.listContent[0];
+        int index = message.listContent[1];
+        slot.Result predeterminedResult = slot.Result.values[index];
+        presenter.showSlotMachine(probability, predeterminedResult);
         return;
       case Message.SCRIPTER_ERROR:
         INT_DEBUG("SCRIPTER ERROR: ${message.strContent}");

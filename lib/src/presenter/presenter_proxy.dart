@@ -3,6 +3,8 @@ library egb_presenter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
+import 'package:slot_machine/result.dart' as slot;
+
 import '../persistence/savegame.dart';
 import '../shared/points_award.dart';
 import '../shared/stat.dart';
@@ -33,6 +35,8 @@ abstract class PresenterViewedFromScripter {
   void save(Savegame savegame);
   Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
+  Future<Null> showSlotMachine(
+      double probability, slot.Result predeterminedResult);
 
   /// Instance of Scripter.
   ScripterViewedFromPresenter get scripter;
@@ -339,6 +343,13 @@ class IsolatePresenterProxy extends PresenterProxy {
   @override
   String getTextHistory() {
     throw new UnimplementedError("getTextHistory");
+  }
+
+  @override
+  Future<Null> showSlotMachine(
+      num probability, slot.Result predeterminedResult) {
+    _send(new Message.showSlotMachine(probability, predeterminedResult));
+    return new Future.value();
   }
 }
 

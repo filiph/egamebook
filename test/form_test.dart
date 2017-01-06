@@ -38,6 +38,9 @@ class ScripterProxyStub extends ScripterProxy {
     return new Future.value();
   }
 
+
+  @override
+  // ignore: strong_mode_invalid_method_override
   Presenter presenter;
 
   @override

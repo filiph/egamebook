@@ -8,6 +8,8 @@ library egb_presenter_html;
 import 'dart:async';
 import 'dart:html' hide FormElement;
 
+import 'package:slot_machine/slot_machine.dart' as slot;
+
 import 'package:markdown/markdown.dart' as mdown
     show
         InlineParser,
@@ -198,7 +200,9 @@ class HtmlPresenter extends Presenter {
     if (s == null) return new Future.value(false);
     var completer = new Completer<bool>();
 
-    new Future.delayed(_durationBetweenShowingText, () {
+    _slotMachineDone().then((_) {
+      return new Future.delayed(_durationBetweenShowingText);
+    }).then((_) {
       _textHistory.write("$s\n\n");
       final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
         new FootnoteSupTagSyntax()
@@ -219,7 +223,6 @@ class HtmlPresenter extends Presenter {
             el.classes.remove("hidden");
           });
         }
-//        el.text = _exchangeChars(el.text, "▒");
         _attachFootnoteClickListeners(el);
         bookDiv.append(el);
       }
@@ -296,11 +299,13 @@ class HtmlPresenter extends Presenter {
   }
 
   @override
-  Future<int> showChoices(ChoiceList choiceList) {
+  Future<int> showChoices(ChoiceList choiceList) async {
     log("Showing choices");
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
+
+    await _slotMachineDone();
 
     var completer = new Completer<int>();
 
@@ -380,7 +385,7 @@ class HtmlPresenter extends Presenter {
     bookDiv.append(choicesDiv);
     _showLoading(false);
     new Future(() => choicesDiv.classes.remove("hidden"));
-    return completer.future;
+    return await completer.future;
   }
 
   /// Creates new choice button in form of HTML [:button:] with index and text.
@@ -485,13 +490,16 @@ class HtmlPresenter extends Presenter {
   int _currentPoints;
 
   @override
-  Future<bool> awardPoints(PointsAward award) {
+  Future<bool> awardPoints(PointsAward award) async {
     _currentPoints = award.result;
     if (award.addition == 0) {
       // This is just setting the Points count. Don't show Toast.
       pointsSpan.text = "${award.result}";
       return new Future.value(true);
     }
+
+    await _slotMachineDone();
+
     var completer = new Completer<bool>();
 
     ParagraphElement paragraph = new ParagraphElement();
@@ -515,7 +523,7 @@ class HtmlPresenter extends Presenter {
       if (_periodicSubscription.isPaused) _periodicSubscription.resume();
       completer.complete(true);
     });
-    return completer.future;
+    return await completer.future;
   }
 
   /// List of actual UI stats.
@@ -525,9 +533,12 @@ class HtmlPresenter extends Presenter {
   final Map<String, Element> _statsElements = new Map();
 
   @override
-  Future<bool> setStats(List<UIStat> stats) {
+  Future<bool> setStats(List<UIStat> stats) async {
     _stats = stats;
     _printStats(); // DEBUG
+
+    await _slotMachineDone();
+
     var statsDiv = document.querySelector("nav div#stats");
     statsDiv.children.clear();
     for (int i = 0; i < stats.length; i++) {
@@ -541,11 +552,12 @@ class HtmlPresenter extends Presenter {
       _statsElements[stat.name] = button;
       button.onClick.listen(_statsOnClickListener);
     }
-    return new Future.value();
+    return true;
   }
 
   @override
-  Future<bool> updateStats(StatUpdateCollection updates) {
+  Future<bool> updateStats(StatUpdateCollection updates) async {
+    await _slotMachineDone();
     UIStat.updateStatsList(_stats, updates) // Returns only the changed stats.
         .forEach((UIStat stat) {
       var anchor = _statsElements[stat.name];
@@ -556,7 +568,36 @@ class HtmlPresenter extends Presenter {
         anchor.classes.add("display-none");
       }
     });
-    return new Future.value(true);
+    return true;
+  }
+
+  @override
+  Future<Null> showSlotMachine(
+      num probability, slot.Result predeterminedResult) {
+    var machine = new slot.SlotMachineAnimation.fromProbability(probability,
+        predeterminedResult: predeterminedResult);
+    var div = new Element.div()
+      ..classes.add("slot-machine")
+      ..append(machine.canvasEl);
+    var paragraph = new Element.p()
+      ..classes.add("slot-machine-result")
+      ..append(new Element.span()..text = "❦ ")
+      ..append(machine.resultEl)
+      ..append(new Element.span()..text = " ❦");
+    div.append(paragraph);
+    bookDiv.append(div);
+    _machineRollDone = machine.roll();
+    return new Future.value();
+  }
+
+  Future _machineRollDone;
+
+  /// Returns a future either immediately (if no slot machine is running)
+  /// or after current slot machine is done.
+  Future<Null> _slotMachineDone() async {
+    if (_machineRollDone == null) return new Future.value();
+    await _machineRollDone;
+    _machineRollDone = null;
   }
 
   /// Prints visible UI stats into console.

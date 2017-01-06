@@ -2,6 +2,8 @@ library egb_scripter;
 
 import 'dart:collection';
 
+import 'package:slot_machine/result.dart' as slot;
+
 import 'src/shared/user_interaction.dart';
 import 'src/persistence/savegame.dart';
 import 'src/shared/page.dart';
@@ -270,6 +272,7 @@ abstract class Scripter extends ScripterViewedFromPresenter {
   Scripter();
 
   /// Presenter proxy.
+  @override
   PresenterViewedFromScripter presenter;
 
   /// Sets Presenter and Scripter to given [presenter].
@@ -781,6 +784,11 @@ abstract class Scripter extends ScripterViewedFromPresenter {
   PointsCounter getPoints() {
     return _points;
   }
+
+  /// Shows slot machine.
+  Future<Null> showSlotMachine(
+          double probability, slot.Result predeterminedResult) =>
+      presenter.showSlotMachine(probability, predeterminedResult);
 }
 
 /// A [ScriptBlock] (the Dart code between [:<script>:] and [:</script>:])
