@@ -235,15 +235,13 @@ void main() {
 
       var callback = expectAsync((error) {
         List lines = error.message.split("\n");
+        expect(lines[0],
+            contains("More than one .egb file found in the directory:"));
         expect(
-            lines[0]
-                .contains("More than one .egb file found in the directory."),
-            isTrue);
-        expect(
-            lines[1].contains(
-                "To run builder on more .egb files in directory use argument --full-directory or -f."),
-            isTrue);
-        expect(lines[2].contains("BUILD FAILED!"), isTrue);
+            lines[1],
+            contains("To run builder on more .egb files in directory use "
+                "argument --full-directory or -f."));
+        expect(lines[2], contains("BUILD FAILED!"));
       });
 
       runner.run(["build", path]).catchError(callback);

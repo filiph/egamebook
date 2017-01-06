@@ -220,7 +220,8 @@ class ProjectBuilder extends Object with BuilderInterface implements Worker {
           OutputMessage.buildFailed("No $EXTENSION file in this directory."));
     } else if (!_fullDirectory && queue.length > 1) {
       throw new StateError(OutputMessage
-          .buildFailed("More than one .egb file found in the directory.\n"
+          .buildFailed("More than one .egb file found in the directory: "
+              "$queue\n"
               "To run builder on more .egb files in directory "
               "use argument --full-directory or -f."));
     }
