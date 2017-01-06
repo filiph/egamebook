@@ -1143,7 +1143,7 @@ class Builder {
       }
     }
 
-    List<bool> existsBools = await Future.wait(existsFutures) as List<bool>;
+    List<bool> existsBools = await Future.wait(existsFutures);
 
     for (int i = 0; i < existsBools.length; i++) {
       if (existsBools[i] == false) {

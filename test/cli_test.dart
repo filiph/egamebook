@@ -68,7 +68,7 @@ void main() {
 
   group("egamebook create", () {
     test("fails with no parameters", () {
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
         expect(error.message.contains("Usage:"), isTrue);
@@ -78,7 +78,7 @@ void main() {
     });
 
     test("fails with two parameters", () {
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
         expect(error.message.contains("Usage:"), isTrue);
@@ -88,7 +88,7 @@ void main() {
     });
 
     test("fails with . as a parameter", () {
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0], "Please specify valid name of the project.");
         expect(error.message.contains("Usage:"), isTrue);
@@ -101,7 +101,7 @@ void main() {
       String path = getPath("folder_exists");
       createTemporaryDir(path);
 
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         expect(error.message.contains("Folder $path already exists."), isTrue);
         deleteTemporaryDir(path);
       });
@@ -118,7 +118,7 @@ void main() {
         temp.deleteSync(recursive: true);
       }
 
-      var callback = expectAsync((message) {
+      var callback = expectAsync1((message) {
         List lines = message.split("\n");
         expect(lines[0].contains("New project in $path successfully created."),
             isTrue);
@@ -150,7 +150,7 @@ void main() {
     });
 
     test("fails with two parameters", () {
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0], "Please specify one project folder.");
         expect(error.message.contains("Usage:"), isTrue);
@@ -162,7 +162,7 @@ void main() {
     test("builds template project", () {
       String path = getPath(TEMPLATE_FILES);
 
-      var callback = expectAsync((_) {
+      var callback = expectAsync1((_) {
         File fileHtmlBuild = new File(p.join(
             path, "web/${p.withoutExtension(TEMPLATE_BOOK_NAME)}.html.dart"));
         File fileDartBuild = new File(
@@ -179,7 +179,7 @@ void main() {
       String path = getPath("no_egb");
       createTemporaryDir(path);
 
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0].contains("No .egb file in this directory."), isTrue);
         expect(lines[1].contains("BUILD FAILED!"), isTrue);
@@ -192,7 +192,7 @@ void main() {
     test("builds with .egb file as parameter", () {
       String path = getPath(TEMPLATE_FILES);
 
-      var callback = expectAsync((message) {
+      var callback = expectAsync1((message) {
         String templateFileName = getTemplateBookNameWithoutExtension();
         File fileHtmlBuild =
             new File(p.join(path, "web/${templateFileName}.html.dart"));
@@ -212,7 +212,7 @@ void main() {
       File file = new File(p.join(path, "test1.other"));
       file.writeAsStringSync('Not supported file!');
 
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[1].contains("BUILD FAILED!"), isTrue);
         expect(
@@ -233,7 +233,7 @@ void main() {
       File file1 = new File(p.join(path, "someotherbodega.egb"));
       file1.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
-      var callback = expectAsync((error) {
+      var callback = expectAsync1((error) {
         List lines = error.message.split("\n");
         expect(lines[0],
             contains("More than one .egb file found in the directory:"));
@@ -253,7 +253,7 @@ void main() {
       File file1 = new File(p.join(path, "someotherbodega.egb"));
       file1.writeAsStringSync(SIMPLE_EGB_CONTENT);
 
-      var callback = expectAsync((message) {
+      var callback = expectAsync1((message) {
         String templateFileName = getTemplateBookNameWithoutExtension();
         File fileHtmlBuild1 =
             new File(p.join(path, "web/${templateFileName}.html.dart"));
@@ -297,7 +297,7 @@ void main() {
 
       ProjectBuilder builder = new ProjectBuilder([], false, true);
 
-      var callback = expectAsync((ListQueue queue) {
+      var callback = expectAsync1((ListQueue queue) {
         List files = new List.from(queue);
         expect(files.length, 3);
         expect(p.basename(files[0].path), TEMPLATE_BOOK_NAME);
@@ -321,7 +321,7 @@ void main() {
 
       ProjectBuilder builder = new ProjectBuilder([], false, true);
 
-      var callback = expectAsync((ListQueue queue) {
+      var callback = expectAsync1((ListQueue queue) {
         List files = new List.from(queue);
         expect(files.length, 1);
         expect(p.basename(files[0].path), TEMPLATE_BOOK_NAME);
@@ -340,7 +340,7 @@ void main() {
 
       ProjectBuilder builder = new ProjectBuilder([], false, true);
 
-      var callback = expectAsync((ListQueue queue) {
+      var callback = expectAsync1((ListQueue queue) {
         List files = new List.from(queue);
         expect(files.length, 1);
         expect(p.basename(files[0].path), TEMPLATE_BOOK_NAME);
@@ -357,7 +357,7 @@ void main() {
 
       File file = new File(p.join(path, TEMPLATE_BOOK_NAME));
 
-      var callback = expectAsync((fileName) {
+      var callback = expectAsync1((fileName) {
         // Starts watching
         new Future.delayed(new Duration(seconds: 1), () {
           file.writeAsStringSync(SIMPLE_EGB_CONTENT);

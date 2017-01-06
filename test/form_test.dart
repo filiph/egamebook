@@ -76,8 +76,7 @@ void main() {
       form = new Form();
       input1 = new RangeInput("Age", (_) {},
           min: 20, max: 100, value: 30, step: 1, maxEnabled: 40);
-      input2 = new RangeInput("Money", (_) {},
-          max: 1000, step: 100);
+      input2 = new RangeInput("Money", (_) {}, max: 1000, step: 100);
       checkboxInput = new CheckboxInput("Use extra force", (_) {});
       multipleChoiceInput = new MultipleChoiceInput("Multiple Choice", (_) {});
       option1 = new Option("Option 1", (_) {});
@@ -98,7 +97,7 @@ void main() {
       form.children.add(input1);
       form.children.add(input2);
       form.children.add(checkboxInput);
-      Map map = form.toMap();
+      var map = form.toMap();
       // print(JSON.encode(map));
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.length, form.children.length);
@@ -108,7 +107,7 @@ void main() {
 
     test("Elements get parents", () {
       form.children.add(input1);
-      Map map = form.toMap();
+      var map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.single.parent, formProxy);
     });
@@ -129,7 +128,7 @@ void main() {
         ..children.add(input1)
         ..disabled = true;
       form.children.add(section);
-      Map map = form.toMap();
+      var map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect((formProxy.children.single as FormSection).disabled, true);
       expect(
@@ -143,7 +142,7 @@ void main() {
       multipleChoiceInput.children.add(option2);
       multipleChoiceInput.children.add(option3);
       form.children.add(multipleChoiceInput);
-      Map map = form.toMap();
+      var map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(formProxy.children.single.children.length,
           multipleChoiceInput.children.length);
@@ -162,7 +161,7 @@ void main() {
       multipleChoiceInput.children.add(option2);
       multipleChoiceInput.children.add(option3);
       form.children.add(multipleChoiceInput);
-      Map map = form.toMap();
+      var map = form.toMap();
       FormProxy formProxy = new FormProxy.fromMap(map);
       expect(
           (formProxy.children.single as FormElement).formElementChildren.length,
@@ -257,10 +256,8 @@ void main() {
           step: 5,
           minEnabled: 25,
           maxEnabled: 40);
-      input2 = new RangeInput("Money", (_) {},
-          max: 1000, step: 100);
-      input3 = new RangeInput("Free time", (_) {},
-          max: 10, maxEnabled: 5);
+      input2 = new RangeInput("Money", (_) {}, max: 1000, step: 100);
+      input3 = new RangeInput("Free time", (_) {}, max: 10, maxEnabled: 5);
       submitButton = new SubmitButton("SUBMIT BUTTON", null,
           helpMessage: "Submit help message");
       formSection1 = new FormSection("My form section 1")..children.add(input1);
@@ -270,7 +267,7 @@ void main() {
       startButton = querySelector("#start-button");
       restartButton = querySelector("#book-restart");
 
-      Function updateEnergyGauges = (_) {
+      InputCallback updateEnergyGauges = (_) {
         energyGauge.current = 10 - weapons.current - shields.current;
         weapons.maxEnabled = weapons.current + energyGauge.current;
         shields.maxEnabled = shields.current + energyGauge.current;
@@ -299,7 +296,7 @@ void main() {
     final Duration DEFAULT_WAIT_FOR_DOM_UPDATE =
         new Duration(milliseconds: 200);
     test("tests start button", () {
-      return new Future(expectAsync(() {
+      return new Future(expectAsync0(() {
         FormProxy formProxy = new FormProxy.fromMap(form.toMap());
         presenter.showForm(formProxy);
 
@@ -320,7 +317,7 @@ void main() {
     });
 
     test("tests restart button", () {
-      return new Future(expectAsync(() {
+      return new Future(expectAsync0(() {
         FormProxy formProxy = new FormProxy.fromMap(form.toMap());
         presenter.showForm(formProxy);
 
@@ -350,7 +347,7 @@ void main() {
       CheckboxInputElement checkboxEl =
           querySelector("#${formProxy.children.first.id} input");
       expect(checkboxInput.current, false);
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         print(JSON.encode(values.toMap()));
         form.receiveUserInput(values);
         expect((form.children[0] as CheckboxInput).current, true);
@@ -408,7 +405,7 @@ void main() {
       RadioButtonInputElement radioButton = querySelector(
           "#${formProxy.children.first.id} div.buttons input:nth-child(2)");
       expect(radioButton.checked, false);
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         form.receiveUserInput(values);
         expect((form.children[0] as RangeInput).current, 25);
         expect(age, 25);
@@ -423,7 +420,7 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = presenter.showForm(formProxy);
       ButtonElement submitButton = querySelectorAll("button.submit-main").last;
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         expect(values.submitted, true, reason: "not submitted");
         // Select the second radio button of the first RangeInput -> age = 25.
         RadioButtonInputElement radioButton = querySelector(
@@ -452,7 +449,7 @@ void main() {
           "#${formProxy.children[2].id} div.buttons input:nth-child(8)");
       expect(freeTimeButton.disabled, true);
 
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
         // Make sure the free time buttons have been un-disabled.
@@ -478,7 +475,7 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = presenter.showForm(formProxy);
 
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
         var percentageStringElement =
@@ -503,7 +500,7 @@ void main() {
       FormProxy formProxy = new FormProxy.fromMap(form.toMap());
       Stream<CurrentState> stream = presenter.showForm(formProxy);
 
-      stream.listen(expectAsync((CurrentState values) {
+      stream.listen(expectAsync1((CurrentState values) {
         FormConfiguration changedConfig = form.receiveUserInput(values);
         presenter.updateForm(changedConfig);
 
@@ -699,7 +696,7 @@ void main() {
 
     test("Show text", () {
       String text = "This is some funny text";
-      presenter.showText(text).then(expectAsync((_) {
+      presenter.showText(text).then(expectAsync1((_) {
         expect(querySelectorAll("p").any((el) => el.text == text), isTrue);
       }));
     });
@@ -709,7 +706,7 @@ void main() {
       PointsAward pointsAward = new PointsAward(0, 10, "for bravery");
       expect(pointsSpan.text.contains("${pointsAward.result}"), isFalse);
 
-      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+      presenter.awardPoints(pointsAward).then(expectAsync1((_) {
         expect(pointsSpan.text.contains("${pointsAward.result}"), isTrue);
       }));
     });
@@ -717,7 +714,7 @@ void main() {
     test("Award points with addition", () {
       PointsAward pointsAward = new PointsAward(10, 20, "for bravery");
 
-      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+      presenter.awardPoints(pointsAward).then(expectAsync1((_) {
         ParagraphElement pointsParagraph = querySelectorAll("p.toast").last;
         expect(pointsParagraph, isNotNull);
         expect(pointsParagraph.text, pointsAward.toString());
@@ -727,7 +724,7 @@ void main() {
     test("Award points with addition and no justification message", () {
       PointsAward pointsAward = new PointsAward(1, 21);
 
-      presenter.awardPoints(pointsAward).then(expectAsync((_) {
+      presenter.awardPoints(pointsAward).then(expectAsync1((_) {
         ParagraphElement pointsParagraph = querySelectorAll("p.toast").last;
         expect(pointsParagraph.text, pointsAward.toString());
         expect(pointsParagraph.text, "Score +${pointsAward.addition}.");
@@ -739,9 +736,9 @@ void main() {
           "#ff00ff", 1, true, false, "10");
       UIStat stat2 = new UIStat("bravery", "Description of bravery stat",
           "#ffff00", 2, false, false, "50");
-      List uiStats = [stat1, stat2];
+      var uiStats = [stat1, stat2];
 
-      presenter.setStats(uiStats).then(expectAsync((_) {
+      presenter.setStats(uiStats).then(expectAsync1((_) {
         DivElement statsDiv = querySelector("nav div#stats");
         List statsButtons = statsDiv.querySelectorAll("button");
         expect(statsButtons.length, uiStats.length);
@@ -842,7 +839,7 @@ void main() {
     });
 
     test("Save", () {
-      presenter.showText("Some saving text").then(expectAsync((_) {
+      presenter.showText("Some saving text").then(expectAsync1((_) {
         expect(presenter.getTextHistory().isEmpty,
             isFalse); //contains "Some testing text"
         presenter.save(savegame);
@@ -893,7 +890,7 @@ void main() {
     });
 
     test("Save", () {
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
         expect(value, isTrue);
 
         // We use HTML local storage implementation to retrieve value
@@ -904,8 +901,8 @@ void main() {
     });
 
     test("Save and load", () {
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
+        store.load(STORE_NAME).then(expectAsync1((valueFromStore) {
           expect(valueFromStore, isNotNull);
           expect(JSON.decode(valueFromStore), values);
         }));
@@ -913,8 +910,8 @@ void main() {
     });
 
     test("Delete", () {
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.delete(STORE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
+        store.delete(STORE_NAME).then(expectAsync1((boolValue) {
           expect(boolValue, isTrue);
           expect(window.localStorage[STORE_NAME], isNull);
         }));
@@ -942,15 +939,15 @@ void main() {
     });
 
     test("Award points fromMessage", () {
-      Map map = {
+      var map = {
         "listContent": [10, 20],
         "strContent": "for bravery"
       };
       Message message = new Message.fromMap(map);
       expect(message, isNotNull);
       expect(message.listContent, isNotNull);
-      expect(message.listContent[0], map["listContent"][0]);
-      expect(message.listContent[1], map["listContent"][1]);
+      expect(message.listContent[0], (map["listContent"] as List)[0]);
+      expect(message.listContent[1], (map["listContent"] as List)[1]);
       expect(message.strContent, map["strContent"]);
 
       PointsAward pointsAward = new PointsAward.fromMessage(message);
@@ -990,7 +987,7 @@ void main() {
       Choice choice1 = new Choice("Yes", submenu: "Yes submenu");
       Choice choice2 = new Choice("No", submenu: "No submenu");
       String question = "Is it cool?";
-      Map map = {
+      var map = {
         "listContent": [
           null,
           question,
@@ -1014,7 +1011,7 @@ void main() {
     });
 
     test("Choice list fromMessage throws with no listContent", () {
-      Map map = {};
+      var map = <String, Object>{};
       Message message = new Message.fromMap(map);
       expect(message, isNotNull);
       expect(message.listContent, isNull);

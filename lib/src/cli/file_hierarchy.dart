@@ -137,6 +137,6 @@ class FileHierarchy {
     }
     return _filesHierarchy[master.path]
         .map((path) => new File(path))
-        .toList(growable: false) as List<File>;
+        .toList(growable: false);
   }
 }

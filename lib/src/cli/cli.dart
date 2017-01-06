@@ -1,6 +1,6 @@
 library egb_cli;
 
-import 'dart:core' hide Resource;
+import 'dart:core';
 import 'dart:async';
 import 'dart:io';
 import 'dart:collection';

@@ -161,14 +161,14 @@ class Savegame {
       return input;
     } else if (input is List) {
       List outputList = new List();
-      for (int i = 0; i < (input as List).length; i++) {
-        if (_isSaveable((input as List)[i])) {
-          outputList.add(_dissolveToPrimitives((input as List)[i]));
+      for (int i = 0; i < (input).length; i++) {
+        if (_isSaveable((input)[i])) {
+          outputList.add(_dissolveToPrimitives((input)[i]));
         }
       }
       return outputList;
     } else if (input is Map) {
-      Map inputMap = input as Map;
+      Map inputMap = input;
       Map outputMap = new Map();
       inputMap.forEach((key, value) {
         if (_isSaveable(inputMap[key])) {
@@ -205,18 +205,18 @@ class Savegame {
       return input;
     } else if (input is List) {
       List outputList = new List();
-      for (int i = 0; i < (input as List).length; i++) {
+      for (int i = 0; i < (input).length; i++) {
         outputList
-            .add(_assembleFromPrimitives((input as List)[i], constructors));
+            .add(_assembleFromPrimitives((input)[i], constructors));
       }
       return outputList;
-    } else if (input is Map && !(input as Map).containsKey("_class")) {
+    } else if (input is Map && !(input).containsKey("_class")) {
       Map outputMap = new Map();
-      (input as Map).forEach((key, value) {
+      (input).forEach((key, value) {
         outputMap[key] = _assembleFromPrimitives(value, constructors);
       });
       return outputMap;
-    } else if (input is Map && (input as Map).containsKey("_class")) {
+    } else if (input is Map && (input).containsKey("_class")) {
       if (updateExisting != null) {
         // variable exists, just update it
         updateExisting.updateFromMap(input);

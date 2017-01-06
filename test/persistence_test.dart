@@ -25,7 +25,7 @@ void main() {
     test("Save", () {
       expect(store.memory, isNotNull);
 
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
         expect(value, isTrue);
 
         String valuesFromStore = store.memory[STORE_NAME];
@@ -35,8 +35,8 @@ void main() {
     });
 
     test("Save and load", () {
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.load(STORE_NAME).then(expectAsync((valueFromStore) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
+        store.load(STORE_NAME).then(expectAsync1((valueFromStore) {
           expect(valueFromStore, isNotNull);
           expect(JSON.decode(valueFromStore), values);
         }) as StringCallback);
@@ -44,8 +44,8 @@ void main() {
     });
 
     test("Delete", () {
-      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync((value) {
-        store.delete(STORE_NAME).then(expectAsync((boolValue) {
+      store.save(STORE_NAME, JSON.encode(values)).then(expectAsync1((value) {
+        store.delete(STORE_NAME).then(expectAsync1((boolValue) {
           expect(boolValue, isTrue);
           expect(store.memory[STORE_NAME], isNull);
         }) as BoolCallback);
