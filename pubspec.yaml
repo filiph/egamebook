@@ -4,17 +4,18 @@ author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   a_star: ^0.3.0
   analyzer: ">=0.25.0+1 <1.0.0"
+  ansicolor: ^0.0.9
   args: ^0.13.5
   browser: ^0.10.0+2
   html: ^0.12.2+2
   jsonml: ^0.1.7
+  logging: ^0.11.3
   markdown: ^0.10.1
   path: ^1.3.9
+  quiver: ^0.21.0
+  resource: ^1.1.0
+  slot_machine: ^2.0.1
   test: ^0.12.15+3
   watcher: ^0.9.7+3
-  logging: ^0.11.3
-  quiver: ^0.21.0
-  ansicolor: ^0.0.9
-  resource: ^1.1.0
 executables:
   egamebook:
