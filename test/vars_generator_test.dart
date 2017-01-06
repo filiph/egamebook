@@ -86,6 +86,7 @@ void main() {
         """;
 
       String extractMethod = """
+  @override
   void extractStateFromVars() {
     bodega = vars["bodega"] as SpaceshipMock;
     something = vars["something"] as int;
@@ -94,6 +95,7 @@ void main() {
 """;
 
       String populateMethod = """
+  @override
   void populateVarsFromState() {
     vars["bodega"] = bodega;
     vars["something"] = something;
