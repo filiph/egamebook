@@ -69,9 +69,9 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
   Future<Null> showSlotMachine(
       double probability, slot.Result predeterminedResult) {
     var msg = "[[ SLOT MACHINE ${probability.toStringAsPrecision(2)} "
-        "$predeterminedResult]]";
+        "$predeterminedResult ]]";
     log.info(msg);
-    if (!silent) print(msg);
+    if (!silent) print("$msg\n");
     return new Future.value();
   }
 
@@ -88,10 +88,11 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
       if (choices.isEmpty) continue;
 
       if (!silent) {
+        print("");
         for (int i = 0; i < choices.length; i++) {
-          print("${i + 1}");
-          print(choices[i].string);
-          print(choices[i].helpMessage);
+          var helpMessage = choices[i].helpMessage ?? '';
+          var shortened = helpMessage.split(' ').take(10).join(' ');
+          print("${i + 1}) ${choices[i].string} ($shortened ...)");
         }
       }
 
@@ -101,6 +102,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
         option = _random.nextInt(choices.length);
       } else {
         option = int.parse(stdin.readLineSync()) - 1;
+        print("");
       }
       await choices[option].f();
       choices.clear();
