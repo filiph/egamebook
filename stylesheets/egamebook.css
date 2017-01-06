@@ -69,7 +69,14 @@ body.title-open {
   padding: 2rem 1rem; }
   .bottom-fixed button {
     max-width: 40rem;
-    margin: auto; }
+    margin: auto;
+    -webkit-transition: color 0.5s;
+    transition: color 0.5s; }
+    .bottom-fixed button:enabled {
+      color: white;
+      background-color: #05a505;
+      background-image: -webkit-linear-gradient(#05a505 10%, #019101);
+      background-image: linear-gradient(#05a505 10%, #019101); }
 
 .bottom-fixed-gradient {
   position: fixed;
