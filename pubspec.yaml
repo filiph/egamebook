@@ -18,6 +18,7 @@ dependencies:
   meta: any
   logging: any
   path: any
+  slot_machine: any
 
 dev_dependencies:
   build: any

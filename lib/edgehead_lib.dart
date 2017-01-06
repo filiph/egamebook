@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:slot_machine/result.dart' as slot;
+
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -50,9 +52,13 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
-  EdgeheadGame(StringTakingVoidFunction echo, StringTakingVoidFunction goto,
-      choices, ChoiceFunction choiceFunction)
-      : super(echo, goto, choices, choiceFunction) {
+  EdgeheadGame(
+      StringTakingVoidFunction echo,
+      StringTakingVoidFunction goto,
+      choices,
+      ChoiceFunction choiceFunction,
+      SlotMachineShowFunction slotMachineShowFunction)
+      : super(echo, goto, choices, choiceFunction, slotMachineShowFunction) {
     setup();
   }
 
@@ -171,8 +177,7 @@ class EdgeheadGame extends LoopedEvent {
     var actor = situation.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
-    await planner.plan(
-        waitFunction: idleCallback);
+    await planner.plan(waitFunction: idleCallback);
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
@@ -219,10 +224,19 @@ class EdgeheadGame extends LoopedEvent {
     storyline.outputFinishedParagraphs(echo);
   }
 
-  void _applySelected(Action selected, Actor actor, Storyline storyline) {
-    var consequences = selected.apply(actor, consequence, world).toList();
+  void _applySelected(Action action, Actor actor, Storyline storyline) {
+    var consequences = action.apply(actor, consequence, world).toList();
     int index = Randomly.chooseWeighted(consequences.map((c) => c.probability));
     consequence = consequences[index];
+
+    if (actor.isPlayer) {
+      double chance = action.getSuccessChance(actor, world);
+      if (chance < 1.0) {
+        showSlotMachine(chance,
+            consequence.isSuccess ? slot.Result.success : slot.Result.failure);
+      }
+    }
+
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
   }

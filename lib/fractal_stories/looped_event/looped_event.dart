@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:slot_machine/result.dart' as slot;
+
 /// Mock of the signature of `choice()` in EgbScripter.
 typedef dynamic ChoiceFunction(String string,
     {String goto,
@@ -10,6 +12,9 @@ typedef dynamic ChoiceFunction(String string,
     String helpMessage});
 
 typedef void StringTakingVoidFunction(String arg);
+
+typedef Future<Null> SlotMachineShowFunction(
+    double probability, slot.Result predeterminedResult);
 
 /// LoopedEvent is any event that gets executed in a loop, waiting for
 /// a) resolution and b) need of player input. It is intended for 'minigames'
@@ -23,6 +28,8 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   final StringTakingVoidFunction _echo;
   final ChoiceFunction choiceFunction;
   final dynamic _choices;
+  final SlotMachineShowFunction _slotMachineShowFunction;
+
   final StringBuffer _strbuf = new StringBuffer();
 
   bool finished = false;
@@ -30,7 +37,22 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   /// The page to jump to when combat is finished.
   String onFinishedGoto;
 
-  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction);
+  LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction,
+      this._slotMachineShowFunction);
+
+  Future<Null> showSlotMachine(
+      double probability, slot.Result predeterminedResult) {
+    _pushStoryline();
+    return _slotMachineShowFunction(probability, predeterminedResult);
+  }
+
+  /// Calls Scripter's echo() function with the accumulated StringBuffer.
+  void _pushStoryline() {
+    if (_strbuf.isNotEmpty) {
+      _echo(_strbuf.toString());
+      _strbuf.clear();
+    }
+  }
 
   void echo(Object message) {
     _strbuf.write(message);
@@ -51,10 +73,8 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
     while (!finished && _choices.isEmpty && _strbuf.isEmpty) {
       await update();
     }
-    if (_strbuf.isNotEmpty) {
-      _echo(_strbuf.toString());
-      _strbuf.clear();
-    }
+
+    _pushStoryline();
   }
 
   Future<Null> update();

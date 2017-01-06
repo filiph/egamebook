@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:slot_machine/result.dart' as slot;
+
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
@@ -45,7 +47,6 @@ Choice choice(String string,
   return choice;
 }
 
-
 Future<Null> run(bool automated, bool silent, StringSink logSink,
     {Level logLevel: Level.ALL}) async {
   StreamSubscription loggerSubscription;
@@ -65,11 +66,20 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     if (!silent) print(msg);
   }
 
+  Future<Null> showSlotMachine(
+      double probability, slot.Result predeterminedResult) {
+    var msg = "[[ SLOT MACHINE ${probability.toStringAsPrecision(2)} "
+        "$predeterminedResult]]";
+    log.info(msg);
+    if (!silent) print(msg);
+    return new Future.value();
+  }
+
   String gotoPage;
 
   try {
-    var game = new EdgeheadGame(
-        hijackedPrint, (String goto) => gotoPage = goto, choices, choice);
+    var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
+        choices, choice, showSlotMachine);
     game.onFinishedGoto = "endGame";
 
     while (gotoPage == null) {

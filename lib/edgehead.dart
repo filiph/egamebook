@@ -61,7 +61,7 @@ class ScripterImpl extends Scripter {
   void initBlock() {
     game = null;
 
-        game = new EdgeheadGame(echo, goto, choices, choice);
+        game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
         game.onFinishedGoto = "endGame";
 
   }
