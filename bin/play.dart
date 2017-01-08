@@ -67,8 +67,9 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
   }
 
   Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult) {
-    var msg = "[[ SLOT MACHINE ${probability.toStringAsPrecision(2)} "
+      double probability, slot.Result predeterminedResult, String rollReason) {
+    var msg = "[[ SLOT MACHINE '$rollReason' "
+        "${probability.toStringAsPrecision(2)} "
         "$predeterminedResult ]]";
     log.info(msg);
     if (!silent) print("$msg\n");

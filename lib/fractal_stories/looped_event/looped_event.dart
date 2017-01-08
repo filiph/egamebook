@@ -14,7 +14,7 @@ typedef dynamic ChoiceFunction(String string,
 typedef void StringTakingVoidFunction(String arg);
 
 typedef Future<Null> SlotMachineShowFunction(
-    double probability, slot.Result predeterminedResult);
+    double probability, slot.Result predeterminedResult, String rollReason);
 
 /// LoopedEvent is any event that gets executed in a loop, waiting for
 /// a) resolution and b) need of player input. It is intended for 'minigames'
@@ -30,7 +30,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   final dynamic _choices;
   final SlotMachineShowFunction _slotMachineShowFunction;
 
-  final StringBuffer _strbuf = new StringBuffer();
+  final StringBuffer _stringBuffer = new StringBuffer();
 
   bool finished = false;
 
@@ -41,21 +41,22 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       this._slotMachineShowFunction);
 
   Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult) {
-    _pushStoryline();
-    return _slotMachineShowFunction(probability, predeterminedResult);
+      double probability, slot.Result predeterminedResult, String rollReason) {
+    _pushStringBuffer();
+    return _slotMachineShowFunction(
+        probability, predeterminedResult, rollReason);
   }
 
   /// Calls Scripter's echo() function with the accumulated StringBuffer.
-  void _pushStoryline() {
-    if (_strbuf.isNotEmpty) {
-      _echo(_strbuf.toString());
-      _strbuf.clear();
+  void _pushStringBuffer() {
+    if (_stringBuffer.isNotEmpty) {
+      _echo(_stringBuffer.toString());
+      _stringBuffer.clear();
     }
   }
 
   void echo(Object message) {
-    _strbuf.write(message);
+    _stringBuffer.write(message);
   }
 
   /// Runs the update loop until user interaction is needed or until LoopedEvent
@@ -70,11 +71,11 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       return;
     }
 
-    while (!finished && _choices.isEmpty && _strbuf.isEmpty) {
+    while (!finished && _choices.isEmpty && _stringBuffer.isEmpty) {
       await update();
     }
 
-    _pushStoryline();
+    _pushStringBuffer();
   }
 
   Future<Null> update();

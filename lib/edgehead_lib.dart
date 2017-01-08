@@ -232,8 +232,10 @@ class EdgeheadGame extends LoopedEvent {
     if (actor.isPlayer) {
       double chance = action.getSuccessChance(actor, world);
       if (chance < 1.0) {
-        showSlotMachine(chance,
-            consequence.isSuccess ? slot.Result.success : slot.Result.failure);
+        showSlotMachine(
+            chance,
+            consequence.isSuccess ? slot.Result.success : slot.Result.failure,
+            "Will you kick him off his feet?");
       }
     }
 

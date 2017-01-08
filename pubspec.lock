@@ -300,7 +300,7 @@ packages:
       name: slot_machine
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   source_gen:
     description:
       name: source_gen
