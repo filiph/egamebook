@@ -222,7 +222,20 @@ nav button {
   100% {
     box-shadow: none; } }
 .slot-machine {
-  text-align: center;
+  text-align: center; }
+
+.slot-machine__roll-reason {
+  margin-bottom: 0; }
+
+.slot-machine__humanized-probability {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #aaa;
+  vertical-align: top;
+  margin-bottom: 0; }
+
+.slot-machine__result {
   text-transform: uppercase; }
 
 p.toast {
