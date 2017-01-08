@@ -8,18 +8,27 @@ import 'slash_defense_situation.dart';
 import 'slash_situation.dart';
 
 class StartSlashOutOfBalance extends EnemyTargetAction {
+  @override
+  final String helpMessage = "It's always better to fight with your feet "
+      "firmly on the ground. But sometimes, it's necessary to act quickly.";
+
   StartSlashOutOfBalance(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "swing at <object> (while out of balance)";
 
   @override
-  final String helpMessage = "It's always better to fight with your feet "
-      "firmly on the ground. But sometimes, it's necessary to act quickly.";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
-    throw new UnimplementedError();
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    a.report(
+        s,
+        "<subject> completely miss<es> <object> with "
+        "<subject's> ${a.currentWeapon.name}",
+        object: enemy,
+        negative: true);
+    return "${a.name} fails to start an out-of-balance slash at ${enemy.name}";
   }
 
   @override
@@ -37,7 +46,7 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+  num getSuccessChance(Actor actor, WorldState world) => 0.7;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>

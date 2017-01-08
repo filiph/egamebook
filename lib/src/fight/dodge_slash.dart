@@ -6,16 +6,19 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
 
 class DodgeSlash extends EnemyTargetAction {
+  @override
+  final String helpMessage = "Dodging means moving your body out of harm's "
+      "way. When done correctly, it will throw your opponent off balance and "
+      "it will open an opportunity for a counter attack. When botched, it "
+      "can get you killed.";
+
   DodgeSlash(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "dodge and counter";
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
-      "way. When done correctly, it will throw your opponent off balance and "
-      "it will open an opportunity for a counter attack. When botched, it "
-      "can get you killed.";
+  String get rollReasonTemplate => "will <subject> dodge?";
 
   @override
   String applyFailure(Actor a, WorldState _, Storyline s) {

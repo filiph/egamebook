@@ -10,6 +10,9 @@ class TakeExitAction extends ExitAction {
   TakeExitAction(Exit exit) : super(exit);
 
   @override
+  String get helpMessage => null;
+
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     throw new UnimplementedError();
   }
@@ -39,13 +42,12 @@ class TakeExitAction extends ExitAction {
           actor.team.isFriendWith(a.team) &&
           actor.currentRoomName == room.name);
 
-      var monsters =room.monsterGenerator(w);
+      var monsters = room.monsterGenerator(w);
 
       w.actors.addAll(monsters);
 
       // TODO: add events (author can add events the generated Room instance)
-      var fightSituation =
-          new FightSituation.initialized(friends, monsters);
+      var fightSituation = new FightSituation.initialized(friends, monsters);
 
       w.pushSituation(fightSituation);
     }
@@ -54,10 +56,11 @@ class TakeExitAction extends ExitAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) => 1.0;
+  String getRollReason(Actor a, WorldState w) =>
+      "WARNING should not be user-visible";
 
   @override
-  String get helpMessage => null;
+  num getSuccessChance(Actor a, WorldState w) => 1.0;
 
   @override
   bool isApplicable(Actor a, WorldState w) {

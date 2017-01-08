@@ -7,15 +7,18 @@ import 'package:edgehead/src/fight/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash_situation.dart';
 
 class CounterSlash extends EnemyTargetAction {
+  @override
+  final String helpMessage = "You can deal serious damage when countering "
+      "because your opponent is often caught off guard. On the other hand, "
+      "counters require fast reaction and could throw you out of balance.";
+
   CounterSlash(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "swing back at <object>";
 
   @override
-  final String helpMessage = "You can deal serious damage when countering "
-      "because your opponent is often caught off guard. On the other hand, "
-      "counters require fast reaction and could throw you out of balance.";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {

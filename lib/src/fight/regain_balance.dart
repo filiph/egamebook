@@ -9,11 +9,11 @@ class RegainBalance extends Action {
   static final RegainBalance singleton = new RegainBalance();
 
   @override
-  String get name => "Regain balance.";
-
-  @override
   final String helpMessage = "Most moves are easier and more effective when "
       "you are firmly in balance.";
+
+  @override
+  String get name => "Regain balance.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -29,6 +29,10 @@ class RegainBalance extends Action {
     w.updateActorById(a.id, (b) => b.pose = Pose.standing);
     return "${a.name} regains balance";
   }
+
+  @override
+  String getRollReason(Actor a, WorldState w) =>
+      "Will ${a.pronoun.nominative} regain balance?";
 
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;

@@ -7,11 +7,11 @@ class Pass extends Action {
   static final Pass singleton = new Pass();
 
   @override
-  String get name => "Stand off.";
-
-  @override
   final String helpMessage = "Sometimes, patience pays off. Especially when "
       "the other option is potentially dangerous.";
+
+  @override
+  String get name => "Stand off.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -25,6 +25,9 @@ class Pass extends Action {
     }
     return "${a.name} passes the opportunity";
   }
+
+  String getRollReason(Actor a, WorldState w) => "WARNING this shouldn't be "
+      "user-visible";
 
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;

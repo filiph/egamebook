@@ -6,14 +6,17 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
 class DefensiveParrySlash extends EnemyTargetAction {
+  @override
+  final String helpMessage = "Stepping back is the safest way to get out of "
+      "harm's way.";
+
   DefensiveParrySlash(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "step back and parry";
 
   @override
-  final String helpMessage = "Stepping back is the safest way to get out of "
-      "harm's way.";
+  String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
   String applyFailure(Actor a, WorldState _, Storyline s) {

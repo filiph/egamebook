@@ -4,13 +4,16 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
 class RollOutOfWay extends EnemyTargetAction {
+  @override
+  final String helpMessage = null;
+
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "roll out of way";
 
   @override
-  final String helpMessage = null; // TODO: come up with something
+  String get rollReasonTemplate => "will <subject> evade?"; // TODO: come up with something
 
   @override
   String applyFailure(Actor a, WorldState _, Storyline s) {

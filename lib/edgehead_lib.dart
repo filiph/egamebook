@@ -235,7 +235,7 @@ class EdgeheadGame extends LoopedEvent {
         showSlotMachine(
             chance,
             consequence.isSuccess ? slot.Result.success : slot.Result.failure,
-            "Will you kick him off his feet?");
+            action.getRollReason(actor, world));
       }
     }
 

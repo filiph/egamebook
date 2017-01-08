@@ -6,14 +6,17 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
+  @override
+  final String helpMessage = "When an opponent is out of balance they are the "
+      "most vulnerable.";
+
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "stab <object>";
 
   @override
-  final String helpMessage = "When an opponent is out of balance they are the "
-      "most vulnerable.";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
   String applyFailure(Actor a, WorldState _, Storyline s) {

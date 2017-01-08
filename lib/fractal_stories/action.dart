@@ -100,6 +100,14 @@ abstract class Action {
   /// Success chance of the action given the actor and the state of the world.
   num getSuccessChance(Actor a, WorldState w);
 
+  /// Returns a string that will explain why actor needs to roll for success.
+  ///
+  /// For example:
+  ///
+  /// * "Will you hit him?"
+  /// * "Will you dodge the swing?"
+  String getRollReason(Actor a, WorldState w);
+
   bool isApplicable(Actor a, WorldState w);
 
   void _addWorldRecord(ActionRecordBuilder builder, WorldState world) {
@@ -185,7 +193,27 @@ abstract class EnemyTargetAction extends Action {
   String get name =>
       (new Storyline()..add(nameTemplate, object: enemy)).realize();
 
+  /// EnemyTargetAction should include the [enemy] in the [name]. To make it
+  /// easier to implement, this class will automatically construct the name
+  /// given a [Storyline] template.
+  ///
+  /// For example, "kill <object>" is a valid name template that might realize
+  /// into something like "Kill the orc."
   String get nameTemplate;
+
+  @override
+  String getRollReason(Actor a, WorldState w) => (new Storyline()
+        ..add(rollReasonTemplate,
+            subject: a, object: enemy, wholeSentence: true))
+      .realize();
+
+  /// EnemyTargetActions might want to mention the [enemy] in the output
+  /// of [getRollReason]. To make this easier to implement, this class will
+  /// automatically construct the roll reason given a [Storyline] template.
+  ///
+  /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
+  /// template that might realize into something like "Will you hit him?"
+  String get rollReasonTemplate;
 
   @override
   String toString() => "EnemyTargetAction<$nameTemplate::"

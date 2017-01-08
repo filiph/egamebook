@@ -12,6 +12,9 @@ class OnGroundParry extends EnemyTargetAction {
   String get nameTemplate => "parry it";
 
   @override
+  String get rollReasonTemplate => "will <subject> parry it?";
+
+  @override
   final String helpMessage = "You can deal serious damage when countering "
       "because your opponent is often caught off guard. On the other hand, "
       "counters require fast reaction and could throw you out of balance.";

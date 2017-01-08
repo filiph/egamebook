@@ -9,6 +9,9 @@ import 'slash_defense_situation.dart';
 import 'slash_situation.dart';
 
 class FinishSlash extends EnemyTargetAction {
+  @override
+  final String helpMessage = null;
+
   FinishSlash(Actor enemy) : super(enemy);
 
   @override
@@ -16,7 +19,7 @@ class FinishSlash extends EnemyTargetAction {
       "(WARNING should not be user-visible)";
 
   @override
-  final String helpMessage = null;
+  String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
@@ -57,18 +60,27 @@ class FinishSlash extends EnemyTargetAction {
 }
 
 class StartSlash extends EnemyTargetAction {
+  @override
+  final String helpMessage = "The basic swordfighting move is also often the "
+      "most effective.";
+
   StartSlash(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "swing at <object>";
 
   @override
-  final String helpMessage = "The basic swordfighting move is also often the "
-      "most effective.";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
-    throw new UnimplementedError();
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    a.report(
+        s,
+        "<subject> swing<s> just "
+            "{above <object's> head|in front of <object's> face|"
+            "outside <object's> shoulder}",
+        object: enemy, negative: true);
+    return "${a.name} fails to start a slash at ${enemy.name}";
   }
 
   @override
@@ -86,7 +98,7 @@ class StartSlash extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+  num getSuccessChance(Actor actor, WorldState world) => 0.9;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>

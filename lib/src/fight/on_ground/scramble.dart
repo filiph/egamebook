@@ -42,4 +42,7 @@ class Scramble extends Action {
     }
     return false;
   }
+
+  String getRollReason(Actor a, WorldState w) =>
+      "Will ${a.pronoun.nominative} crawl out of harm's way?";
 }

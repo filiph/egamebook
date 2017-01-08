@@ -8,10 +8,10 @@ class StandUp extends Action {
   static final StandUp singleton = new StandUp();
 
   @override
-  String get name => "Stand up.";
+  final String helpMessage = null;
 
   @override
-  final String helpMessage = null; // TODO: explanation?
+  String get name => "Stand up."; // TODO: explanation?
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -24,6 +24,10 @@ class StandUp extends Action {
     w.updateActorById(a.id, (b) => b.pose = Pose.standing);
     return "${a.name} stands up";
   }
+
+  @override
+  String getRollReason(Actor a, WorldState w) =>
+      "will ${a.pronoun.nominative} stand up?";
 
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
