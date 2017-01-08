@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:html' hide FormElement;
 
 import 'package:slot_machine/slot_machine.dart' as slot;
+import 'package:slot_machine/humanize_probability.dart';
 
 import 'package:markdown/markdown.dart' as mdown
     show
@@ -200,6 +201,9 @@ class HtmlPresenter extends Presenter {
     if (s == null) return new Future.value(false);
     var completer = new Completer<bool>();
 
+    // TODO: rewrite to async await and only wait for _slotMachine if there's
+    // actually one waiting. Otherwise, the future waits for too long and slot
+    // machine can overtake text to the UI.
     _slotMachineDone().then((_) {
       return new Future.delayed(_durationBetweenShowingText);
     }).then((_) {
@@ -573,14 +577,23 @@ class HtmlPresenter extends Presenter {
 
   @override
   Future<Null> showSlotMachine(
-      num probability, slot.Result predeterminedResult) {
+      num probability, slot.Result predeterminedResult, String rollReason) {
+    log("Showing slot machine: $probability, $predeterminedResult");
+
+    var div = new Element.div()..classes.add("slot-machine");
+    if (rollReason != null) {
+      div.append(new Element.p()
+        ..text = rollReason
+        ..classes.add("slot-machine__roll-reason"))
+        ..append(new Element.p()
+          ..text = humanizeProbability(probability)
+          ..classes.add("slot-machine__humanized-probability"));
+    }
     var machine = new slot.SlotMachineAnimation.fromProbability(probability,
         predeterminedResult: predeterminedResult);
-    var div = new Element.div()
-      ..classes.add("slot-machine")
-      ..append(machine.canvasEl);
+    div.append(machine.canvasEl);
     var paragraph = new Element.p()
-      ..classes.add("slot-machine-result")
+      ..classes.add("slot-machine__result")
       ..append(new Element.span()..text = "❦ ")
       ..append(machine.resultEl)
       ..append(new Element.span()..text = " ❦");

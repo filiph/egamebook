@@ -787,8 +787,14 @@ abstract class Scripter extends ScripterViewedFromPresenter {
 
   /// Shows slot machine.
   Future<Null> showSlotMachine(
-          double probability, slot.Result predeterminedResult) =>
-      presenter.showSlotMachine(probability, predeterminedResult);
+      double probability, slot.Result predeterminedResult, String rollReason) {
+    if (textBuffer.isNotEmpty) {
+      presenter.showText(textBuffer.toString());
+      textBuffer.clear();
+    }
+    return presenter.showSlotMachine(
+        probability, predeterminedResult, rollReason);
+  }
 }
 
 /// A [ScriptBlock] (the Dart code between [:<script>:] and [:</script>:])

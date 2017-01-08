@@ -181,8 +181,9 @@ class IsolateScripterProxy extends ScripterProxy {
         INT_DEBUG("Showing slot machine");
         num probability = message.listContent[0];
         int index = message.listContent[1];
+        String rollReason = message.listContent[2];
         slot.Result predeterminedResult = slot.Result.values[index];
-        presenter.showSlotMachine(probability, predeterminedResult);
+        presenter.showSlotMachine(probability, predeterminedResult, rollReason);
         return;
       case Message.SCRIPTER_ERROR:
         INT_DEBUG("SCRIPTER ERROR: ${message.strContent}");

@@ -36,6 +36,7 @@ class MockPresenter extends Presenter {
   ChoiceList _currentChoices;
 
   Completer<int> _currentChoicesCompleter;
+
   /// If set to [:false:] (default), when [MockPresenter] meets choices without
   /// any [choicesToBeTaken] or [choicesToBeTakenByString] set, it quits. When
   /// set to [:true:], the choice can be taken later by calling
@@ -136,6 +137,7 @@ class MockPresenter extends Presenter {
     _log.info("MockPresenter.restart() called.");
     scripter.restart();
   } // TODO: use for unittesting
+
   @override
   void save(Savegame savegame) {
     playerProfile.save(savegame);
@@ -186,7 +188,8 @@ class MockPresenter extends Presenter {
   }
 
   @override
-  Future<Null> showSlotMachine(double probability, Result predeterminedResult) {
+  Future<Null> showSlotMachine(
+      double probability, Result predeterminedResult, String rollReason) {
     throw new UnimplementedError();
   }
 

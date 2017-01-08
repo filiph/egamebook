@@ -274,9 +274,10 @@ class Message {
     mapContent = state.toMap();
   }
 
-  Message.showSlotMachine(num probability, slot.Result predeterminedResult)
+  Message.showSlotMachine(
+      num probability, slot.Result predeterminedResult, String rollReason)
       : type = SHOW_SLOT_MACHINE {
-    listContent = [probability, predeterminedResult.index];
+    listContent = [probability, predeterminedResult.index, rollReason];
   }
 
   /// Creates new Message of type [SCRIPTER_ERROR] with provided

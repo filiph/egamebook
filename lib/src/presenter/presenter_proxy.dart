@@ -36,7 +36,7 @@ abstract class PresenterViewedFromScripter {
   Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
   Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult);
+      double probability, slot.Result predeterminedResult, String rollReason);
 
   /// Instance of Scripter.
   ScripterViewedFromPresenter get scripter;
@@ -347,8 +347,9 @@ class IsolatePresenterProxy extends PresenterProxy {
 
   @override
   Future<Null> showSlotMachine(
-      num probability, slot.Result predeterminedResult) {
-    _send(new Message.showSlotMachine(probability, predeterminedResult));
+      num probability, slot.Result predeterminedResult, String rollReason) {
+    _send(new Message.showSlotMachine(
+        probability, predeterminedResult, rollReason));
     return new Future.value();
   }
 }

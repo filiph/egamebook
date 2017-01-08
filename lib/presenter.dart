@@ -134,8 +134,11 @@ abstract class Presenter implements PresenterViewedFromScripter {
   ///
   /// [predeterminedResult] cannot be null: the slot machine's result is always
   /// known before it is shown, to make cheating harder.
+  ///
+  /// The slot machine shows [rollReason] next to its visualization. An example
+  /// of roll reason can be "Will you hit him?" or "Does Joe avoid the missile?"
   Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult);
+      double probability, slot.Result predeterminedResult, String rollReason);
 
   /**
    * Displays the markdown-formatted text.
