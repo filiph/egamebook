@@ -47,8 +47,10 @@ class ParrySlash extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     if (enemy.pose == Pose.offBalance) {
-      enemy.report(s, "<subject> <is> out of balance", negative: true);
-      s.add("so <owner's> <subject> is {weak|feeble}", owner: enemy, subject: swing);
+      s.add("<subject> <is> out of balance",
+          subject: enemy, negative: true, startSentence: true);
+      s.add("so <owner's> <subject> is {weak|feeble}",
+          owner: enemy, subject: swing);
       a.report(
           s,
           "<subject> {parr<ies> it easily|"
