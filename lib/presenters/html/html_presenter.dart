@@ -580,6 +580,7 @@ class HtmlPresenter extends Presenter {
       num probability, slot.Result predeterminedResult, String rollReason) {
     log("Showing slot machine: $probability, $predeterminedResult");
 
+    _showLoading(false);
     var div = new Element.div()..classes.add("slot-machine");
     if (rollReason != null) {
       div.append(new Element.p()
@@ -611,6 +612,7 @@ class HtmlPresenter extends Presenter {
     if (_machineRollDone == null) return new Future.value();
     await _machineRollDone;
     _machineRollDone = null;
+    _showLoading(true);
   }
 
   /// Prints visible UI stats into console.
