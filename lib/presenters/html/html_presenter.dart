@@ -590,7 +590,7 @@ class HtmlPresenter extends Presenter {
           ..text = humanizeProbability(probability)
           ..classes.add("slot-machine__humanized-probability"));
     }
-    var machine = new slot.SlotMachineAnimation.fromProbability(probability,
+    var machine = new slot.SlotMachine.fromProbability(probability,
         predeterminedResult: predeterminedResult);
     div.append(machine.canvasEl);
     var paragraph = new Element.p()
