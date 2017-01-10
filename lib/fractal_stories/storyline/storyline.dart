@@ -674,8 +674,8 @@ class Storyline {
     if (object(i - 1) != null &&
         subject(i) != null &&
         subject(i - 1) != null &&
-        object(i - 1).id == subject(i).id &&
-        subject(i - 1).pronoun != subject(i).pronoun) {
+        object(i - 1)?.id == subject(i)?.id &&
+        subject(i - 1)?.pronoun != subject(i)?.pronoun) {
       // Never show "the guard's it".
       result = result.replaceAll(
           "$OWNER_POSSESIVE $SUBJECT", subject(i).pronoun.nominative);
@@ -688,8 +688,8 @@ class Storyline {
     // same as previous, but with object-subject reversed
     if (subject(i - 1) != null &&
         object(i) != null &&
-        subject(i - 1).id == object(i).id &&
-        subject(i - 1).pronoun != subject(i).pronoun) {
+        subject(i - 1)?.id == object(i)?.id &&
+        subject(i - 1)?.pronoun != subject(i)?.pronoun) {
       // Never show "the guard's it".
       result = result.replaceAll(
           "$OBJECT_OWNER_POSSESIVE $OBJECT", object(i).pronoun.nominative);
