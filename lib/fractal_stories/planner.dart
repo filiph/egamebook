@@ -32,8 +32,16 @@ class ActorPlanner {
   final Map<Action, num> firstActionScores = new Map();
 
   ActorPlanner(Actor actor, WorldState initialWorld)
-      : actorId = actor.id,
+      : actorId = actor?.id,
         _initial = new PlanConsequence.initial(initialWorld) {
+    if (actor == null) {
+      throw new ArgumentError("Called ActorPlanner with actor == null. "
+          "That may mean that a Situation returns getCurrentActor as null. "
+          "Some action that you added should make sure it removes the "
+          "Situation. "
+          "World: $initialWorld. "
+          "Situation: ${initialWorld.currentSituation}");
+    }
     assert(actor.isAlive);
   }
 

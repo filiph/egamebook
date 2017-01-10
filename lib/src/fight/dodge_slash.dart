@@ -41,7 +41,7 @@ class DodgeSlash extends EnemyTargetAction {
         object: enemy, positive: true);
     if (enemy.pose == Pose.standing) {
       enemy.report(s, "<subject> lose<s> balance because of that",
-          endSentence: true);
+          endSentence: true, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
     w.popSituationsUntil("FightSituation");

@@ -26,6 +26,7 @@ class Pass extends Action {
     return "${a.name} passes the opportunity";
   }
 
+  @override
   String getRollReason(Actor a, WorldState w) => "WARNING this shouldn't be "
       "user-visible";
 

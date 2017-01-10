@@ -25,7 +25,8 @@ abstract class StrikeDownSituation extends Situation
   StrikeDownSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlashGroundedEnemy.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators =>
+      [FinishSlashGroundedEnemy.builder];
 
   int get attacker;
 

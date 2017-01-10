@@ -14,12 +14,14 @@ abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
   factory SlashSituation([updates(SlashSituationBuilder b)]) = _$SlashSituation;
 
-  factory SlashSituation.initialized(Actor attacker, Actor target) =>
+  factory SlashSituation.initialized(Actor attacker, Actor target,
+          {bool extraForce: false}) =>
       new SlashSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..attacker = attacker.id
-        ..target = target.id);
+        ..target = target.id
+        ..extraForce = extraForce);
 
   SlashSituation._();
 
@@ -27,6 +29,8 @@ abstract class SlashSituation extends Situation
   List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlash.builder];
 
   int get attacker;
+
+  bool get extraForce;
 
   @override
   int get id;

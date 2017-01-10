@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
 final Random _random = new Random();
 
-/// Report's a humanoid's depth by sword from standing position.
+/// Report's a humanoid's death by sword from standing position.
 void reportDeath(Storyline s, Actor actor) {
   switch (_random.nextInt(3)) {
     case 0:

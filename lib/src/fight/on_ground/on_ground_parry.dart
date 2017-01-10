@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/on_ground/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
   OnGroundParry(Actor enemy) : super(enemy);
@@ -34,6 +35,24 @@ class OnGroundParry extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
+    bool extraForce =
+        (w.currentSituation as OnGroundDefenseSituation).extraForce;
+    if (extraForce) {
+      a.report(
+          s,
+          "<subject> put<s> <subject's> ${a.currentWeapon.name} "
+          "in the way");
+      s.add("the strike is too powerful", but: true);
+      w.updateActorById(a.id, (b) => b..hitpoints -= 1);
+      s.add(
+          "<owner's> <subject> still {cuts|slashes} "
+          "<object's> {arm|shoulder}",
+          subject: enemy.currentWeapon,
+          owner: enemy,
+          object: a);
+      w.popSituationsUntil("FightSituation");
+      return "${a.name} parries ${enemy.name} but the swing has extra force";
+    }
     a.report(
         s,
         "<subject> {parr<ies> it|"

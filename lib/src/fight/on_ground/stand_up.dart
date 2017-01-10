@@ -27,7 +27,7 @@ class StandUp extends Action {
 
   @override
   String getRollReason(Actor a, WorldState w) =>
-      "will ${a.pronoun.nominative} stand up?";
+      "Will ${a.pronoun.nominative} stand up?";
 
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;

@@ -18,19 +18,24 @@ abstract class OnGroundDefenseSituation extends Situation
       _$OnGroundDefenseSituation;
 
   factory OnGroundDefenseSituation.initialized(
-          Actor attacker, Actor targetOnGround) =>
+          Actor attacker, Actor targetOnGround,
+          {bool extraForce: false}) =>
       new OnGroundDefenseSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..attacker = attacker.id
-        ..targetOnGround = targetOnGround.id);
+        ..targetOnGround = targetOnGround.id
+        ..extraForce = extraForce);
 
   OnGroundDefenseSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => [OnGroundParry.builder, RollOutOfWay.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators =>
+      [OnGroundParry.builder, RollOutOfWay.builder];
 
   int get attacker;
+
+  bool get extraForce;
 
   @override
   int get id;

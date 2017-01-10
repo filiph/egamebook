@@ -17,12 +17,14 @@ abstract class SlashDefenseSituation extends Situation
   factory SlashDefenseSituation([updates(SlashDefenseSituationBuilder b)]) =
       _$SlashDefenseSituation;
 
-  factory SlashDefenseSituation.initialized(Actor attacker, Actor target) =>
+  factory SlashDefenseSituation.initialized(Actor attacker, Actor target,
+      {bool extraForce: false}) =>
       new SlashDefenseSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..attacker = attacker.id
-        ..target = target.id);
+        ..target = target.id
+        ..extraForce = extraForce);
 
   SlashDefenseSituation._();
 
@@ -31,6 +33,8 @@ abstract class SlashDefenseSituation extends Situation
       [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
 
   int get attacker;
+
+  bool get extraForce;
 
   @override
   int get id;

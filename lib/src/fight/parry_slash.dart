@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/slash_defense_situation.dart';
 
 final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
@@ -46,7 +47,24 @@ class ParrySlash extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    if (enemy.pose == Pose.offBalance) {
+    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
+    if (extraForce) {
+      a.report(
+          s,
+          "<subject> put<s> <subjectPronoun's> ${a.currentWeapon.name} "
+          "in the way of <object's> ${a.currentWeapon.name}",
+          object: enemy,
+          positive: true);
+      if (a.pose == Pose.standing) {
+        s.add("the force of the impact makes <object> lose balance", object: a);
+        w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
+      } else {
+        assert(a.pose == Pose.offBalance);
+        s.add("the force of the impact sends <object> falling to the ground",
+            object: a);
+        w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
+      }
+    } else if (enemy.pose == Pose.offBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <owner's> <subject> is {weak|feeble}",

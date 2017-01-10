@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/slash_defense_situation.dart';
 
 class DefensiveParrySlash extends EnemyTargetAction {
   @override
@@ -19,7 +20,8 @@ class DefensiveParrySlash extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -27,6 +29,8 @@ class DefensiveParrySlash extends EnemyTargetAction {
         "fend it off}");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
+    } else if (extraForce) {
+      a.report(s, "the swing is too {fast|quick}", but: true);
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
@@ -48,7 +52,24 @@ class DefensiveParrySlash extends EnemyTargetAction {
         "fend<s> it off}",
         positive: true);
 
-    if (a.pose != Pose.standing) {
+    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
+
+    if (extraForce) {
+      if (a.isPlayer) {
+        a.report(
+            s,
+            "<subject> feel<s> the power of the swing through "
+            "<subject's> ${a.currentWeapon.name}");
+      } else {
+        a.report(
+            s,
+            "<subject> almost drop<s> "
+            "<subject's> ${a.currentWeapon.name} in the process",
+            but: true);
+      }
+    }
+
+    if (a.pose != Pose.standing && !extraForce) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       if (a.isPlayer) {
         a.report(s, "<subject> regain<s> balance");
