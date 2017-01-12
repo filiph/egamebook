@@ -337,6 +337,29 @@ class Storyline {
     reports.addAll(other.reports);
   }
 
+  /// Returns true if there is at least one entity that appears both in
+  /// report[i] and in report[j], regardless of position
+  /// (subject, object, owner, ...).
+  bool someActorsSame(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    for (var a in getAllEntities(i)) {
+      for (var b in getAllEntities(j)) {
+        if (a.id == b.id) return true;
+      }
+    }
+    return false;
+  }
+
+  /// Returns an iterable of all the entities present in given report.
+  Iterable<Entity> getAllEntities(int i) sync* {
+    if (!valid(i)) return;
+    var report = reports[i];
+    if (report.subject != null) yield report.subject;
+    if (report.object != null) yield report.object;
+    if (report.owner != null) yield report.owner;
+    if (report.objectOwner != null) yield report.objectOwner;
+  }
+
   bool exchangedSubjectObject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     if (reports[i].subject == null || reports[j].subject == null) return false;
@@ -529,7 +552,8 @@ class Storyline {
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchangedSubjectObject(i - 1, i);
-        but = (reports[i].but || oppositeSentiment(i, i - 1)) &&
+        but = (reports[i].but ||
+                (oppositeSentiment(i, i - 1) && someActorsSame(i, i - 1))) &&
             !reports[i - 1].but;
         reports[i].but = but;
         endPreviousSentence = (i - lastEndSentence >= MAX_SENTENCE_LENGTH) ||
