@@ -1,5 +1,7 @@
 library stranded.fight.fight_situation;
 
+import 'dart:math';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -22,6 +24,10 @@ typedef void TimedEventCallback(WorldState world, Storyline storyline);
 
 abstract class FightSituation extends Situation
     implements Built<FightSituation, FightSituationBuilder> {
+  /// The advantage that player has over all other actors in terms of frequency
+  /// of turns.
+  static const double _playerTurnAdvantage = 1.5;
+
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
   factory FightSituation.initialized(
@@ -64,15 +70,43 @@ abstract class FightSituation extends Situation
   FightSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int i, WorldState world) {
-    // TODO: add _lastActor and use that to offset [i] if needed (when one of
-    //       the actors is removed during the fight.
-    var allActorIds = alternate/*<int>*/(playerTeamIds, enemyTeamIds);
-    var activeActorsIds = allActorIds
-        .where((id) => world.getActorById(id).isAliveAndActive)
+  Actor getActorAtTime(int time, WorldState world) {
+    var allActorIds = alternate<int>(playerTeamIds, enemyTeamIds);
+    var actors = allActorIds
+        .map((id) => world.getActorById(id))
+        .where((a) => a.isAliveAndActive)
         .toList(growable: false);
-    int mod = i % activeActorsIds.length;
-    return world.getActorById(activeActorsIds[mod]);
+    var players = actors.where((a) => a.isPlayer).toList(growable: false);
+    assert(players.length <= 1);
+    Actor player = players.length == 1 ? players.single : null;
+
+    if (time == 0) {
+      // Always start with the player if possible.
+      if (player != null) {
+        return player;
+      }
+    }
+
+    var best = 0;
+    Actor chosen = null;
+
+    for (var actor in actors) {
+      var records =
+          world.actionRecords.where((rec) => rec.protagonist == actor.id);
+      int latestTime =
+          records.fold(-1, (prev, rec) => max<int>(prev, rec.time));
+      var recency = world.time - latestTime;
+      if (actor.isPlayer) {
+        // Let player act more often.
+        recency = (recency * _playerTurnAdvantage).round();
+      }
+      if (recency > best) {
+        chosen = actor;
+        best = recency;
+      }
+    }
+
+    return chosen;
   }
 
   @override
