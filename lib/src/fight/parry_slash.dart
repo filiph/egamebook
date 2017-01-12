@@ -67,7 +67,7 @@ class ParrySlash extends EnemyTargetAction {
     } else if (enemy.pose == Pose.offBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
-      s.add("so <owner's> <subject> is {weak|feeble}",
+      s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
           owner: enemy, subject: swing);
       a.report(
           s,
