@@ -90,7 +90,7 @@ packages:
       name: code_transformers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0+1"
+    version: "0.5.0+2"
   collection:
     description:
       name: collection
@@ -300,7 +300,7 @@ packages:
       path: "../slot_machine"
       relative: true
     source: path
-    version: "3.0.1"
+    version: "3.1.0"
   source_gen:
     description:
       name: source_gen
@@ -336,7 +336,7 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.6.0"
   string_scanner:
     description:
       name: string_scanner
