@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class DefensiveParrySlash extends EnemyTargetAction {
   @override

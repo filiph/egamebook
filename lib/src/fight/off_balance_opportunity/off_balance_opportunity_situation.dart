@@ -5,9 +5,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
-import 'off_balance_opportunity_thrust.dart';
-import 'pass.dart';
+import 'package:edgehead/src/fight/actions/pass.dart';
+import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 
 part 'off_balance_opportunity_situation.g.dart';
 
@@ -30,7 +29,8 @@ abstract class OffBalanceOpportunitySituation extends Situation
   OffBalanceOpportunitySituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => <EnemyTargetActionBuilder>[OffBalanceOpportunityThrust.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators =>
+      <EnemyTargetActionBuilder>[OffBalanceOpportunityThrust.builder];
 
   @override
   List<Action> get actions => [Pass.singleton];

@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/on_ground/on_ground_defense_situation.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
   OnGroundParry(Actor enemy) : super(enemy);

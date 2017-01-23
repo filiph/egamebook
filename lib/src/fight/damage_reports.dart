@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 final Random _random = new Random();
 
 /// Report's a humanoid's death by sword from standing position.
-void reportDeath(Storyline s, Actor actor) {
+void reportDeath(Storyline s, Actor actor, String groundMaterial) {
   switch (_random.nextInt(3)) {
     case 0:
       actor.report(s, "<subject> collapse<s>, dead",
@@ -15,7 +15,7 @@ void reportDeath(Storyline s, Actor actor) {
     case 1:
       actor.report(s, "<subject> fall<s> backward", negative: true);
       actor.report(s, "<subject> twist<s>", negative: true);
-      actor.report(s, "<subject> hit<s> the ground face down",
+      actor.report(s, "<subject> hit<s> the $groundMaterial face down",
           negative: true, endSentence: true);
       break;
     case 2:

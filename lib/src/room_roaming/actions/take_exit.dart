@@ -47,7 +47,8 @@ class TakeExitAction extends ExitAction {
       w.actors.addAll(monsters);
 
       // TODO: add events (author can add events the generated Room instance)
-      var fightSituation = new FightSituation.initialized(friends, monsters);
+      var fightSituation = new FightSituation.initialized(
+          friends, monsters, room.groundMaterial);
 
       w.pushSituation(fightSituation);
     }

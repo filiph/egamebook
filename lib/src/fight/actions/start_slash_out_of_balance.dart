@@ -3,9 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
-import 'slash_defense_situation.dart';
-import 'slash_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 class StartSlashOutOfBalance extends EnemyTargetAction {
   @override

@@ -3,8 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/slash_defense_situation.dart';
-import 'package:edgehead/src/fight/slash_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 class CounterSlash extends EnemyTargetAction {
   @override

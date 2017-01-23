@@ -140,4 +140,13 @@ class WorldState {
 
   Room getRoomByName(String roomName) =>
       rooms.singleWhere((room) => room.name == roomName);
+
+  T getSituationByName<T extends Situation>(String situationName) {
+    for (int i = situations.length - 1; i >= 0; i--) {
+      if (situations[i].name == situationName) {
+        return situations[i] as T;
+      }
+    }
+    throw new ArgumentError("No situation with name=$situationName found.");
+  }
 }

@@ -11,13 +11,13 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/kick.dart';
-import 'package:edgehead/src/fight/on_ground/scramble.dart';
-import 'package:edgehead/src/fight/on_ground/slash_grounded_enemy.dart';
-import 'package:edgehead/src/fight/on_ground/stand_up.dart';
-import 'package:edgehead/src/fight/regain_balance.dart';
-import 'package:edgehead/src/fight/slash.dart';
-import 'package:edgehead/src/fight/slash_out_of_balance.dart';
+import 'package:edgehead/src/fight/actions/kick.dart';
+import 'package:edgehead/src/fight/actions/regain_balance.dart';
+import 'package:edgehead/src/fight/actions/scramble.dart';
+import 'package:edgehead/src/fight/actions/stand_up.dart';
+import 'package:edgehead/src/fight/actions/start_slash.dart';
+import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
+import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 
 part 'fight_situation.g.dart';
 
@@ -31,13 +31,14 @@ abstract class FightSituation extends Situation
 
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
-  factory FightSituation.initialized(
-          Iterable<Actor> playerTeam, Iterable<Actor> enemyTeam) =>
+  factory FightSituation.initialized(Iterable<Actor> playerTeam,
+          Iterable<Actor> enemyTeam, String groundMaterial) =>
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..playerTeamIds.replace(playerTeam.map((a) => a.id))
-        ..enemyTeamIds.replace(enemyTeam.map((a) => a.id)));
+        ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
+        ..groundMaterial = groundMaterial);
   FightSituation._();
 
   @override
@@ -55,6 +56,12 @@ abstract class FightSituation extends Situation
   BuiltList<int> get enemyTeamIds;
 
   BuiltMap<int, TimedEventCallback> get events;
+
+  /// The material on the ground. It can be 'wooden floor' or 'grass'.
+  ///
+  /// This is used when describing how monsters and team members fall to the
+  /// ground and how missiles get stuck in it.
+  String get groundMaterial;
 
   @override
   int get id;

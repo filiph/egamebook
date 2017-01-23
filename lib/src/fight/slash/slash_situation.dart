@@ -5,8 +5,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
-import 'slash.dart';
+import 'package:edgehead/src/fight/slash/actions/finish_slash.dart';
 
 part 'slash_situation.g.dart';
 

@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-import 'kick.dart';
+import 'package:edgehead/src/fight/actions/kick.dart';
 
 class RegainBalance extends Action {
   static final RegainBalance singleton = new RegainBalance();

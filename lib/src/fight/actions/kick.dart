@@ -5,7 +5,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-import 'off_balance_opportunity_situation.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
 final Entity balance =
     new Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
@@ -46,18 +47,22 @@ class Kick extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
+    var groundMaterial =
+        w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
     if (enemy.pose == Pose.standing || enemy.pose == Pose.offBalance) {
       Randomly.run(() {
         a.report(s, "<subject> kick<s> <object>", object: enemy);
         if (Randomly.tossCoin()) {
           enemy.report(s, "<subject> flail<s> <subject's> arms");
         }
-        enemy.report(s, "<subject> fall<s>{| to the ground}", negative: true);
+        enemy.report(s, "<subject> fall<s>{| to the $groundMaterial}",
+            negative: true);
       }, () {
         a.report(s, "<subject> kick<s> <object> off <object's> feet",
             object: enemy, positive: true);
         if (enemy.isPlayer) {
-          enemy.report(s, "<subject> land<s> on the ground", negative: true);
+          enemy.report(s, "<subject> land<s> on the $groundMaterial",
+              negative: true);
         }
       });
       w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);

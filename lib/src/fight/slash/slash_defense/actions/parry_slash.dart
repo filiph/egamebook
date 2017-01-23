@@ -5,8 +5,8 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);

@@ -13,6 +13,8 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltMap<int, TimedEventCallback> events;
   @override
+  final String groundMaterial;
+  @override
   final int id;
   @override
   final BuiltList<int> playerTeamIds;
@@ -23,10 +25,17 @@ class _$FightSituation extends FightSituation {
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
-      {this.enemyTeamIds, this.events, this.id, this.playerTeamIds, this.time})
+      {this.enemyTeamIds,
+      this.events,
+      this.groundMaterial,
+      this.id,
+      this.playerTeamIds,
+      this.time})
       : super._() {
     if (enemyTeamIds == null) throw new ArgumentError.notNull('enemyTeamIds');
     if (events == null) throw new ArgumentError.notNull('events');
+    if (groundMaterial == null)
+      throw new ArgumentError.notNull('groundMaterial');
     if (id == null) throw new ArgumentError.notNull('id');
     if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
     if (time == null) throw new ArgumentError.notNull('time');
@@ -45,6 +54,7 @@ class _$FightSituation extends FightSituation {
     if (other is! FightSituation) return false;
     return enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
+        groundMaterial == other.groundMaterial &&
         id == other.id &&
         playerTeamIds == other.playerTeamIds &&
         time == other.time;
@@ -54,7 +64,9 @@ class _$FightSituation extends FightSituation {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+            $jc(
+                $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+                    groundMaterial.hashCode),
                 id.hashCode),
             playerTeamIds.hashCode),
         time.hashCode));
@@ -65,6 +77,7 @@ class _$FightSituation extends FightSituation {
     return 'FightSituation {'
         'enemyTeamIds=${enemyTeamIds.toString()},\n'
         'events=${events.toString()},\n'
+        'groundMaterial=${groundMaterial.toString()},\n'
         'id=${id.toString()},\n'
         'playerTeamIds=${playerTeamIds.toString()},\n'
         'time=${time.toString()},\n'
@@ -88,6 +101,11 @@ class FightSituationBuilder
   set events(MapBuilder<int, TimedEventCallback> events) =>
       _$this._events = events;
 
+  String _groundMaterial;
+  String get groundMaterial => _$this._groundMaterial;
+  set groundMaterial(String groundMaterial) =>
+      _$this._groundMaterial = groundMaterial;
+
   int _id;
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
@@ -108,6 +126,7 @@ class FightSituationBuilder
     if (_$v != null) {
       _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
       _events = _$v.events?.toBuilder();
+      _groundMaterial = _$v.groundMaterial;
       _id = _$v.id;
       _playerTeamIds = _$v.playerTeamIds?.toBuilder();
       _time = _$v.time;
@@ -132,6 +151,7 @@ class FightSituationBuilder
         new _$FightSituation._(
             enemyTeamIds: enemyTeamIds?.build(),
             events: events?.build(),
+            groundMaterial: groundMaterial,
             id: id,
             playerTeamIds: playerTeamIds?.build(),
             time: time);

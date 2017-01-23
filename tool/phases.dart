@@ -8,7 +8,5 @@ final PhaseGroup phases = new PhaseGroup.singleAction(
       'lib/fractal_stories/actor.dart',
       'lib/fractal_stories/room.dart',
       'lib/fractal_stories/team.dart',
-      'lib/src/fight/*_situation.dart',
-      'lib/src/fight/on_ground/*_situation.dart',
-      'lib/src/room_roaming/*_situation.dart',
+      'lib/src/**/*_situation.dart',
     ]));

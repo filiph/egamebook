@@ -5,8 +5,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/counter_slash.dart';
-import 'package:edgehead/src/fight/pass.dart';
+import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
+import 'package:edgehead/src/fight/actions/pass.dart';
 
 part 'counter_attack_situation.g.dart';
 

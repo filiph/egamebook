@@ -5,10 +5,9 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/defensive_parry_slash.dart';
-
-import 'dodge_slash.dart';
-import 'parry_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
 
 part 'slash_defense_situation.g.dart';
 
@@ -18,7 +17,7 @@ abstract class SlashDefenseSituation extends Situation
       _$SlashDefenseSituation;
 
   factory SlashDefenseSituation.initialized(Actor attacker, Actor target,
-      {bool extraForce: false}) =>
+          {bool extraForce: false}) =>
       new SlashDefenseSituation((b) => b
         ..id = getRandomId()
         ..time = 0

@@ -1,13 +1,13 @@
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/src/fight/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/fight/off_balance_opportunity_situation.dart';
-import 'package:edgehead/src/fight/on_ground/on_ground_defense_situation.dart';
-import 'package:edgehead/src/fight/on_ground/strike_down_situation.dart';
-import 'package:edgehead/src/fight/slash_defense_situation.dart';
-import 'package:edgehead/src/fight/slash_situation.dart';
+import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 import 'package:test/test.dart';
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -43,8 +43,10 @@ void main() {
       });
 
       test("FightSituation", () {
-        checkSituationBuild(() => new FightSituation.initialized([], []));
-        checkSituationBuild(() => new FightSituation.initialized([a], [b]));
+        checkSituationBuild(
+            () => new FightSituation.initialized([], [], "ground"));
+        checkSituationBuild(
+            () => new FightSituation.initialized([a], [b], "ground"));
       });
       test("OnGroundDefenseSituation", () {
         checkSituationBuild(

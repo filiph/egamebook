@@ -2,16 +2,16 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/kick.dart';
+import 'package:edgehead/src/fight/actions/kick.dart';
 
-class StandUp extends Action {
-  static final StandUp singleton = new StandUp();
-
-  @override
-  final String helpMessage = null;
+class Scramble extends Action {
+  static final Scramble singleton = new Scramble();
 
   @override
-  String get name => "Stand up."; // TODO: explanation?
+  String get name => "Scramble.";
+
+  @override
+  final String helpMessage = null; // TODO: explanation?
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -20,14 +20,12 @@ class StandUp extends Action {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    a.report(s, "<subject> stand<s> up");
-    w.updateActorById(a.id, (b) => b.pose = Pose.standing);
-    return "${a.name} stands up";
+    a.report(
+        s,
+        "<subject> tr<ies> to {scramble|crawl} "
+        "out of {reach|harm's way}");
+    return "${a.name} scrambles on ground";
   }
-
-  @override
-  String getRollReason(Actor a, WorldState w) =>
-      "Will ${a.pronoun.nominative} stand up?";
 
   @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
@@ -35,13 +33,17 @@ class StandUp extends Action {
   @override
   bool isApplicable(Actor a, WorldState world) {
     if (a.pose != Pose.onGround) return false;
-    // If this actor just fell, do not let him stand up.
+    // Actor must have just fallen.
     if (world.actionRecords.last.actionClass ==
             Kick.builder(a).runtimeType.toString() &&
         world.actionRecords.last.sufferers.contains(a.id) &&
         world.actionRecords.last.wasSuccess) {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
+
+  @override
+  String getRollReason(Actor a, WorldState w) =>
+      "Will ${a.pronoun.nominative} crawl out of harm's way?";
 }

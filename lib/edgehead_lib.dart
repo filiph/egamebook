@@ -100,7 +100,8 @@ class EdgeheadGame extends LoopedEvent {
         null,
         [new Exit("tunnel", "Run towards freedom")]);
     tunnel = new Room("tunnel", "You run and see a goblin and an orc.", "",
-        (_) => [orc, goblin], null, [new Exit(endOfRoam.name, "End book")]);
+        (_) => [orc, goblin], null, [new Exit(endOfRoam.name, "End book")],
+        groundMaterial: "{rock|cavern} floor");
 
     filip = new Actor((b) => b
       ..id = 1

@@ -47,11 +47,14 @@ class Room {
   /// current [WorldState].
   final MonsterGenerator itemGenerator;
 
+  final String groundMaterial;
+
   // TODO: add possibility to make custom events for FightSituation
   // these will be "copied" to the fight situation in TakeExitAction
 
   Room(this.name, this.description, this.shortDescription,
-      this.monsterGenerator, this.itemGenerator, Iterable<Exit> exits) {
+      this.monsterGenerator, this.itemGenerator, Iterable<Exit> exits,
+      {this.groundMaterial: "ground"}) {
     _exits = new ListBuilder<Exit>(exits).build();
   }
 

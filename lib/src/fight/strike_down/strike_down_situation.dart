@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/on_ground/slash_grounded_enemy.dart';
+import 'package:edgehead/src/fight/strike_down/actions/finish_strike_down.dart';
 
 part 'strike_down_situation.g.dart';
 
