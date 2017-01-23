@@ -36,10 +36,9 @@ class StandUp extends Action {
   bool isApplicable(Actor a, WorldState world) {
     if (a.pose != Pose.onGround) return false;
     // If this actor just fell, do not let him stand up.
-    if (world.actionRecords.last.actionClass ==
-            Kick.builder(a).runtimeType.toString() &&
-        world.actionRecords.last.sufferers.contains(a.id) &&
-        world.actionRecords.last.wasSuccess) {
+    var recency = world.timeSinceLastActionRecord(
+        actionClassPattern: "Kick", sufferer: a, wasSuccess: true);
+    if (recency != null && recency <= 1) {
       return false;
     }
     return true;

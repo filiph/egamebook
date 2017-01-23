@@ -1,5 +1,7 @@
 library stranded.world;
 
+import 'dart:collection';
+
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:quiver/core.dart';
 
@@ -12,7 +14,12 @@ import 'situation.dart';
 class WorldState {
   final Set<Actor> actors;
   final Set<Item> items;
-  final Set<ActionRecord> actionRecords;
+
+  /// A 'memory' of actions. The queue is in reverse chronological order,
+  /// with the latest record at the beginning of the queue. This is because
+  /// we often want to process only the latest (or the latest few) records.
+  final Queue<ActionRecord> actionRecords;
+
   final Set<Room> rooms;
 
   /// A stack of situations. The top-most (first) one is the [currentSituation].
@@ -26,7 +33,7 @@ class WorldState {
   WorldState(
       Iterable<Actor> actors, Iterable<Room> rooms, Situation startingSituation)
       : actors = new Set<Actor>.from(actors),
-        actionRecords = new Set<ActionRecord>(),
+        actionRecords = new Queue<ActionRecord>(),
         items = new Set<Item>(),
         rooms = new Set<Room>.from(rooms),
         situations = new List<Situation>.from([startingSituation]),
@@ -35,7 +42,7 @@ class WorldState {
   /// Creates a deep clone of [other].
   WorldState.duplicate(WorldState other)
       : actors = new Set<Actor>(),
-        actionRecords = new Set<ActionRecord>(),
+        actionRecords = new Queue<ActionRecord>(),
         items = new Set<Item>(),
         rooms = new Set(),
         situations = new List() {
@@ -79,19 +86,68 @@ class WorldState {
     time += 1;
   }
 
+  /// Returns an iterable of action records conforming to specified input,
+  /// in reverse chronological order.
+  ///
+  /// When none of the named parameters is provided, all [actionRecords] are
+  /// returned.
+  Iterable<ActionRecord> getActionRecords(
+      {Pattern actionClassPattern, Actor sufferer, bool wasSuccess}) {
+    Iterable<ActionRecord> records = actionRecords;
+    if (actionClassPattern != null) {
+      records =
+          records.where((rec) => rec.actionClass.contains(actionClassPattern));
+    }
+    if (sufferer != null) {
+      records = records.where((rec) => rec.sufferers.contains(sufferer.id));
+    }
+    if (wasSuccess != null) {
+      records = records.where((rec) => rec.wasSuccess == wasSuccess);
+    }
+    return records;
+  }
+
+  /// Returns number of turns since an [ActionRecord] that conforms to
+  /// the specified named parameters was performed.
+  ///
+  /// Returns `null` when such a record doesn't exist.
+  int timeSinceLastActionRecord(
+      {Pattern actionClassPattern, Actor sufferer, bool wasSuccess}) {
+    var records = getActionRecords(
+        actionClassPattern: actionClassPattern,
+        sufferer: sufferer,
+        wasSuccess: wasSuccess);
+    for (var record in records) {
+      return time - record.time;
+    }
+    return null;
+  }
+
   Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
+
+  Room getRoomByName(String roomName) =>
+      rooms.singleWhere((room) => room.name == roomName);
+
+  Situation getSituationById(int situationId) {
+    int index = _findSituationIndex(situationId);
+    if (index == null) return null;
+    return situations[index];
+  }
+
+  T getSituationByName<T extends Situation>(String situationName) {
+    for (int i = situations.length - 1; i >= 0; i--) {
+      if (situations[i].name == situationName) {
+        return situations[i] as T;
+      }
+    }
+    throw new ArgumentError("No situation with name=$situationName found.");
+  }
 
   bool hasAliveActor(int actorId) {
     var actor =
         actors.firstWhere((actor) => actor.id == actorId, orElse: () => null);
     if (actor == null) return false;
     return actor.isAlive;
-  }
-
-  Situation getSituationById(int situationId) {
-    int index = _findSituationIndex(situationId);
-    if (index == null) return null;
-    return situations[index];
   }
 
   void popSituation() {
@@ -136,17 +192,5 @@ class WorldState {
       }
     }
     return index;
-  }
-
-  Room getRoomByName(String roomName) =>
-      rooms.singleWhere((room) => room.name == roomName);
-
-  T getSituationByName<T extends Situation>(String situationName) {
-    for (int i = situations.length - 1; i >= 0; i--) {
-      if (situations[i].name == situationName) {
-        return situations[i] as T;
-      }
-    }
-    throw new ArgumentError("No situation with name=$situationName found.");
   }
 }

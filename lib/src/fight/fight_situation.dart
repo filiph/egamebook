@@ -99,11 +99,10 @@ abstract class FightSituation extends Situation
     Actor chosen;
 
     for (var actor in actors) {
-      var records =
-          world.actionRecords.where((rec) => rec.protagonist == actor.id);
-      int latestTime =
-          records.fold(-1, (prev, rec) => max<int>(prev, rec.time));
-      var recency = world.time - latestTime;
+      var latestRecord = world.actionRecords
+          .firstWhere((rec) => rec.protagonist == actor.id, orElse: () => null);
+      int latestTime = latestRecord?.time ?? -1;
+      int recency = world.time - latestTime;
       if (actor.isPlayer) {
         // Let player act more often.
         recency = (recency * _playerTurnAdvantage).round();

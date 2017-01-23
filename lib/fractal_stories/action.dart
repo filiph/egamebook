@@ -118,7 +118,7 @@ abstract class Action {
     builder.markAfterAction(world);
     builder.description = _description;
     builder.time = world.time;
-    world.actionRecords.add(builder.build());
+    world.actionRecords.addFirst(builder.build());
   }
 
   Storyline _applyToWorldCopy(

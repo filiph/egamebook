@@ -34,10 +34,9 @@ class Scramble extends Action {
   bool isApplicable(Actor a, WorldState world) {
     if (a.pose != Pose.onGround) return false;
     // Actor must have just fallen.
-    if (world.actionRecords.last.actionClass ==
-            Kick.builder(a).runtimeType.toString() &&
-        world.actionRecords.last.sufferers.contains(a.id) &&
-        world.actionRecords.last.wasSuccess) {
+    var recency = world.timeSinceLastActionRecord(
+        actionClassPattern: "Kick", sufferer: a, wasSuccess: true);
+    if (recency != null && recency <= 1) {
       return true;
     }
     return false;

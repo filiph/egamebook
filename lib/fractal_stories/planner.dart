@@ -272,9 +272,9 @@ class ActorPlanner {
             "maximum ($maxOrder), "
             "or consequences ($consequences) higher than maximum");
         log.finest(() {
-          var ars = current.world.actionRecords.toList()
-            ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
-          String path = ars.map((a) => a.description).join(' <- ');
+          String path = current.world.actionRecords
+              .map((a) => a.description)
+              .join(' <- ');
           return "- how we got here: $path";
         });
 
@@ -322,9 +322,8 @@ class ActorPlanner {
 
       log.finest(() => "- mainActor's score == $stats (initial=$initialScore)");
       log.finest(() {
-        var ars = current.world.actionRecords.toList()
-          ..sort((a, b) => a?.time?.compareTo(b?.time) ?? 1);
-        String path = ars.map((a) => a.description).join(' <- ');
+        String path =
+            current.world.actionRecords.map((a) => a.description).join(' <- ');
         return "- how we got here: $path";
       });
 
