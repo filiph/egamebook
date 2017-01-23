@@ -17,7 +17,7 @@ Run all the tests, including the long-running ones, using this command:
 
     pub run --checked test --run-skipped
 
-#### Playing on the command line
+### Playing on the command line
 
 For a more hands-on approach, you can manually play on the command line.
 This is not meant to be pretty, but it's faster than in the browser.
@@ -28,7 +28,7 @@ following command to also log progress and catch more bugs through checked mode:
 
 The log is in `edgehead.log`.
 
-#### Building new actions
+### Building new actions
 
 All actions must extend `Action`. Actions meant for combat will probably
 extend `EnemyTargetAction` instead. There are other subclasses that take an
@@ -65,7 +65,7 @@ Once you have a singleton or a builder, you give it to situations like this:
       List<Action> get actions => <Action>[Example.singleton];
     }
 
-##### Playtesting actions
+#### Playtesting actions
 
 When you are ready to play-test your new action, run this command:
 
