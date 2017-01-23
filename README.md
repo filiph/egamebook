@@ -5,6 +5,14 @@
 
 ## Development
 
+Run the following when developing:
+
+    dart -c tool/watch.dart
+    
+This will make sure that built_value files (`*.g.dart`) are regenerated when
+needed. If you add a new built_value class, make sure it's covered by the
+globs in `tool/phases.dart`.
+
 ### Testing
 
 Run `pub run test` or setup your IDE for continuous unit testing.
