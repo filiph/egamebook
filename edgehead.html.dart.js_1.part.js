@@ -330,7 +330,7 @@ i1:function(){$.$get$ci().k(0,"game",this.cx)},
 kR:function(){this.cx=H.b3($.$get$ci().h(0,"game"),"$ishl")},
 l6:function(){this.cx=null
 var z=$.$get$cg()
-z=new O.hl(N.c1("EdgeheadGame"),null,null,null,null,null,null,null,null,null,new Y.bc(H.r([],[Y.aJ]),0,P.aj()),O.vQ(),O.vP(),O.vO(),z,this.giw(),new P.bd(""),!1,null)
+z=new O.hl(N.c1("EdgeheadGame"),null,!1,null,null,null,null,null,null,null,null,null,new Y.bc(H.r([],[Y.aJ]),0,P.aj()),O.vQ(),O.vP(),O.vO(),z,this.giw(),new P.bd(""),!1,null)
 z.e0()
 this.cx=z
 z.x="endGame"},
@@ -376,7 +376,7 @@ uC:{"^":"a:0;a",
 $1:function(a){return a.cm(this.a)}},
 uD:{"^":"a:3;",
 $2:function(a,b){return J.P(a,b.gaD())}},
-hl:{"^":"o3;y,z,Q,ch,cx,cy,db,dx,bQ:dy<,fr,fD:fx<,a,b,c,d,e,f,r,x",
+hl:{"^":"o3;y,z,Q,ch,cx,cy,db,dx,dy,fr,bQ:fx<,fy,fD:go<,a,b,c,d,e,f,r,x",
 e0:function(){var z,y,x,w,v,u
 z=[P.h]
 y=H.r([],z)
@@ -384,17 +384,17 @@ x=P.M(null,null,null,null)
 w=$.$get$e1()
 x=new R.cN(null,!0,y,null,null,C.c,1,null,100,!0,!1,x,null,null,!0,C.n,null,w,null)
 new O.lY().$1(x)
-this.ch=x.C()
+this.cy=x.C()
 y=new R.cN(null,!0,H.r([],z),null,null,C.c,1,null,100,!0,!1,P.M(null,null,null,null),null,null,!0,C.n,null,w,null)
 new O.lZ().$1(y)
-this.cx=y.C()
-y=new K.cG(null,"characterSetup","You are about to make a choice of your character!","",null,null)
+this.db=y.C()
+y=new K.cG(null,"deadEscapee","UNUSED because this is the first choice","",null,null)
 x=[Q.bz]
 v=new S.aZ(null,null,x)
 v.aP()
 v.ap(0,[new Q.bz("tunnel","Run towards freedom",null)])
 y.a=v.C()
-this.cy=y
+this.dx=y
 y=$.$get$fy()
 v=y.b
 u=new K.cG(null,"tunnel","You run and see a goblin and an orc.","",new O.m_(this),null)
@@ -402,49 +402,49 @@ x=new S.aZ(null,null,x)
 x.aP()
 x.ap(0,[new Q.bz(v,"End book",null)])
 u.a=x.C()
-this.db=u
+this.dy=u
 u=new R.cN(null,!0,H.r([],z),null,null,C.c,1,null,100,!0,!1,P.M(null,null,null,null),null,null,!0,C.n,null,w,null)
 new O.m0(this).$1(u)
-this.z=u.C()
+this.ch=u.C()
 z=new R.cN(null,!0,H.r([],z),null,null,C.c,1,null,100,!0,!1,P.M(null,null,null,null),null,null,!0,C.n,null,w,null)
 new O.m1(this).$1(z)
-this.Q=z.C()
-z=F.p2(this.cy)
-this.dx=z
-x=this.z
-w=this.Q
-v=this.cy
-u=this.db
+this.cx=z.C()
+z=F.p2(this.dx)
+this.fr=z
+x=this.ch
+w=this.cx
+v=this.dx
+u=this.dy
 w=P.aH([x,w],R.a7)
 x=P.M(null,null,null,O.cn)
 z=new A.be(w,P.M(null,null,null,U.df),x,P.aH([v,u,y],K.cG),P.ac([z],!0,S.bb),0)
-this.dy=z
+this.fx=z
 y=new Y.bc(H.r([],[Y.aJ]),0,P.aj())
 x=new B.cB(z,null,y,1,1,!0,!1,!1,0)
 x.fF(z,null,null,y,1,!1,!0,!1)
-this.fr=x},
+this.fy=x},
 dP:function(){var z=0,y=new P.ar(),x,w=2,v,u=this,t,s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d
 var $async$dP=P.ao(function(a,b){if(a===1){v=b
-z=w}while(true)switch(z){case 0:t=u.fx
+z=w}while(true)switch(z){case 0:t=u.go
 s=u.gkL()
 if(t.i_(s)){z=1
 break}r=u.y
-r.l4("update() for world at time "+H.b(u.dy.f))
-q=u.dy.e
+r.l4("update() for world at time "+H.b(u.fx.f))
+q=u.fx.e
 if(q.length===0){u.r=!0
 t.ba(0,"\n\n",!0)
-if(u.dy.hQ(u.z.r)){p=u.dy.am(u.z.r)
+if(u.fx.hQ(u.ch.r)){p=u.fx.am(u.ch.r)
 t.eI(0,"<subject> look<s> behind",p)
 t.eI(0,"<subject> see<s> the giant worm's hideous head approaching",p)
-if(u.dy.hQ(u.Q.r))t.ba(0,"You both start sprinting again.",!0)
+if(u.fx.hQ(u.cx.r))t.ba(0,"You both start sprinting again.",!0)
 else{t.eI(0,"<subject> take<s> a last look at Briana",p)
 t.kb(0,"<subject> start<s> sprinting again, alone",!0,p)}t.ba(0,"\n\n",!0)
 t.ba(0,"TO BE CONTINUED.",!0)}else t.ba(0,"You will soon be the giant worm's food.",!0)
 u.f.a+=t.cX()
 z=1
 break}o=C.a.gv(q)
-n=o.dV(u.dy)
-q=u.dy
+n=o.dV(u.fx)
+q=u.fx
 m=N.c1("ActorPlanner")
 l=new H.a1(0,null,null,null,null,null,0,[null,null])
 k=n==null
@@ -459,12 +459,11 @@ case 3:if(l.gE(l)){m.ic("There are no actions available for actorId="+H.b(j)+"."
 k="Actions not available for "+H.b(j)+" and "
 j=J.m(q)
 q="PlanConsequence<"+j.gq(q)+", "+j.j(q)+", "+C.x.j(null)
-q+", 1, 0, "
 m.dD(k+(q+", 1, 0, >")+".")}g=G.oD(l)
 q=g.b
 if(q.length===0){r.iu("No recommendation for "+H.b(J.B(n)))
-u.dy.hH(o.gt(o))
-t=u.dy
+u.fx.hH(o.gt(o))
+t=u.fx
 s=t.f
 if(typeof s!=="number"){x=s.H()
 z=1
@@ -491,17 +490,17 @@ case 1:return P.w(x,0,y)
 case 2:return P.w(v,1,y)}})
 return P.w(null,$async$dP,y)},
 e8:function(a,b,c){var z,y,x,w,v
-z=a.ds(b,this.fr,this.dy)
+z=a.ds(b,this.fy,this.fx)
 y=P.ac(z,!0,H.E(z,"L",0))
 x=S.oS(new H.at(y,new O.lX(),[null,null]),1)
 if(x>=y.length)return H.e(y,x)
-this.fr=y[x]
-if(b.gR()){w=a.a8(b,this.dy)
-if(w<1){z=this.fr.glf()?C.q:C.t
-v=a.bR(b,this.dy)
+this.fy=y[x]
+if(b.gR()){w=a.a8(b,this.fx)
+if(w<1){z=this.fy.glf()?C.q:C.t
+v=a.bR(b,this.fx)
 this.hd()
-this.e.$3(w,z,v)}}C.a.L(c.a,this.fr.gfD().a)
-this.dy=this.fr.gbQ()}},
+this.e.$3(w,z,v)}}C.a.L(c.a,this.fy.gfD().a)
+this.fx=this.fy.gbQ()}},
 lY:{"^":"a:0;",
 $1:function(a){var z
 a.gu()
@@ -544,7 +543,7 @@ a.fr=O.jD()
 return a}},
 m_:{"^":"a:0;a",
 $1:function(a){var z=this.a
-return[z.ch,z.cx]}},
+return[z.cy,z.db]}},
 m0:{"^":"a:0;a",
 $1:function(a){var z
 a.gu()
@@ -562,7 +561,7 @@ a.gu()
 a.f=2
 a.gu()
 a.x=1000
-z=this.a.cy.b
+z=this.a.dx.b
 a.gu()
 a.cx=z
 return a}},
@@ -580,10 +579,10 @@ a.c=new U.dB(!1,10,!0,z,"longsword",C.i)
 a.gu()
 a.f=2
 z=this.a
-y=z.cy.b
+y=z.dx.b
 a.gu()
 a.cx=y
-z=z.z.r
+z=z.ch.r
 a.gu()
 a.dx=z
 return a}},
@@ -593,7 +592,7 @@ m3:{"^":"a:3;",
 $2:function(a,b){return J.bP(J.B(a),J.B(b))}},
 m4:{"^":"a:1;a,b,c",
 $0:function(){var z=this.a
-z.e8(this.c,this.b,z.fx)}},
+z.e8(this.c,this.b,z.go)}},
 lX:{"^":"a:0;",
 $1:function(a){return a.glz()}}}],["","",,Q,{"^":"",
 jF:function(a,b,c){return new P.bt(function(){var z=a,y=b,x=c
@@ -3106,4 +3105,4 @@ var x=a[z++]
 var w=a[z++]
 var v=a[z++]
 I.$lazy(y,x,w,null,v)}})(["ee","$get$ee",function(){return P.lB()},$,"ia","$get$ia",function(){return N.c1("PlannerRecommendation")},$,"fy","$get$fy",function(){return K.p1("__END_OF_ROAM__","","",null,null,[])},$,"bf","$get$bf",function(){return P.ds(null)},$,"bF","$get$bF",function(){return P.ds(null)},$,"iy","$get$iy",function(){return P.I("(\\w)([\\.\\?\\!])([\"'])\\.(?=$|\\s)",!0,!1)},$,"fx","$get$fx",function(){return L.f3(new L.v0())},$,"bh","$get$bh",function(){return L.f3(new L.v_())},$,"e1","$get$e1",function(){return L.f3(new L.v2())},$,"jm","$get$jm",function(){return P.ds(null)},$,"ft","$get$ft",function(){return Y.ho(!1,"balance",!0,C.n,$.$get$bh())},$,"ip","$get$ip",function(){return new O.pf(null,null)},$,"iv","$get$iv",function(){return new Q.pV(null,null)},$,"jU","$get$jU",function(){return Y.ho(!1,"swing",!0,C.n,$.$get$bh())},$,"eI","$get$eI",function(){return new F.oB("Sometimes, patience pays off. Especially when the other option is potentially dangerous.",null)},$,"ik","$get$ik",function(){return new B.oY("Most moves are easier and more effective when you are firmly in balance.",null)},$,"hW","$get$hW",function(){return N.c1("")},$,"hV","$get$hV",function(){return P.as(P.h,N.eC)},$])}
-$dart_deferred_initializers$["EgxQKPu9iM+Z6yLugnKn+ZKppyA="]=$dart_deferred_initializers$.current
+$dart_deferred_initializers$["A0MwN7f9dSmA9cXbzRWktq+wmls="]=$dart_deferred_initializers$.current
