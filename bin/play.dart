@@ -12,6 +12,11 @@ import 'package:logging/logging.dart';
 Future<Null> main(List<String> args) async {
   var automated = args.contains("--automated");
   var logged = args.contains("--log");
+  RegExp actionPattern;
+  if (args.contains("--action")) {
+    int index = args.indexOf("--action");
+    actionPattern = new RegExp(args[index + 1], caseSensitive: false);
+  }
 
   IOSink fileLogSink;
   try {
@@ -19,7 +24,8 @@ Future<Null> main(List<String> args) async {
       var file = new File("edgehead.log");
       fileLogSink = file.openWrite();
     }
-    await run(automated, automated, logged ? fileLogSink : null);
+    await run(automated, automated, logged ? fileLogSink : null,
+        actionPattern: actionPattern);
   } finally {
     await fileLogSink?.close();
   }
@@ -48,7 +54,7 @@ Choice choice(String string,
 }
 
 Future<Null> run(bool automated, bool silent, StringSink logSink,
-    {Level logLevel: Level.ALL}) async {
+    {Level logLevel: Level.ALL, Pattern actionPattern}) async {
   StreamSubscription loggerSubscription;
   if (logSink != null) {
     Logger.root.level = logLevel;
@@ -60,10 +66,13 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     });
   }
 
+  // Silent mode can be overridden when [actionPattern] is encountered.
+  bool silentWithOverride = silent;
+
   final Logger log = new Logger("play_run");
   void hijackedPrint(Object msg) {
     log.info(msg);
-    if (!silent) print(msg);
+    if (!silentWithOverride) print(msg);
   }
 
   Future<Null> showSlotMachine(
@@ -72,7 +81,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
         "${probability.toStringAsPrecision(2)} "
         "$predeterminedResult ]]";
     log.info(msg);
-    if (!silent) print("$msg\n");
+    if (!silentWithOverride) print("$msg\n");
     return new Future.value();
   }
 
@@ -80,15 +89,18 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
   try {
     var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
-        choices, choice, showSlotMachine);
+        choices, choice, showSlotMachine,
+        actionPattern: actionPattern);
     game.onFinishedGoto = "endGame";
 
     while (gotoPage == null) {
       await game.run();
 
+      if (game.actionPatternWasHit) silentWithOverride = false;
+
       if (choices.isEmpty) continue;
 
-      if (!silent) {
+      if (!silentWithOverride) {
         print("");
         for (int i = 0; i < choices.length; i++) {
           var helpMessage = choices[i].helpMessage ?? '';
@@ -99,7 +111,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
       int option;
 
-      if (automated) {
+      if (automated && !game.actionPatternWasHit) {
         option = _random.nextInt(choices.length);
       } else {
         option = int.parse(stdin.readLineSync()) - 1;

@@ -38,12 +38,21 @@ class EdgeheadGame extends LoopedEvent {
 
   final Logger log = new Logger('EdgeheadGame');
 
+  /// When we hit an action whose [Action.name] matches this pattern,
+  /// we'll drop from automatic playthrough.
+  ///
+  /// This field exist in order to allow skipping to an action, as a way of
+  /// play-testing.
+  final Pattern actionPattern;
+
+  bool actionPatternWasHit = false;
+
   Actor filip;
   Actor briana;
   Actor orc;
   Actor goblin;
 
-  Room characterSetup;
+  Room deadEscapee;
   Room tunnel;
 
   Situation initialSituation;
@@ -57,7 +66,8 @@ class EdgeheadGame extends LoopedEvent {
       StringTakingVoidFunction goto,
       choices,
       ChoiceFunction choiceFunction,
-      SlotMachineShowFunction slotMachineShowFunction)
+      SlotMachineShowFunction slotMachineShowFunction,
+      {this.actionPattern})
       : super(echo, goto, choices, choiceFunction, slotMachineShowFunction) {
     setup();
   }
@@ -82,9 +92,9 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..worldScoringFunction = carelessScoringFunction);
 
-    characterSetup = new Room(
-        "characterSetup",
-        "You are about to make a choice of your character!",
+    deadEscapee = new Room(
+        "deadEscapee",
+        "UNUSED because this is the first choice",
         "",
         null,
         null,
@@ -100,7 +110,7 @@ class EdgeheadGame extends LoopedEvent {
       ..currentWeapon = new Sword()
       ..hitpoints = 2
       ..initiative = 1000
-      ..currentRoomName = characterSetup.name);
+      ..currentRoomName = deadEscapee.name);
 
     briana = new Actor((b) => b
       ..id = 100
@@ -108,7 +118,7 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "Briana"
       ..currentWeapon = new Sword("longsword")
       ..hitpoints = 2
-      ..currentRoomName = characterSetup.name
+      ..currentRoomName = deadEscapee.name
       ..followingActorId = filip.id);
 
     // TODO: make sure to re-use these events
@@ -126,10 +136,10 @@ class EdgeheadGame extends LoopedEvent {
     //     s.addParagraph();
     //   });
 
-    initialSituation = new RoomRoamingSituation.initialized(characterSetup);
+    initialSituation = new RoomRoamingSituation.initialized(deadEscapee);
 
     world = new WorldState(
-        [filip, briana], [characterSetup, tunnel, endOfRoam], initialSituation);
+        [filip, briana], [deadEscapee, tunnel, endOfRoam], initialSituation);
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -186,6 +196,28 @@ class EdgeheadGame extends LoopedEvent {
       world.elapseSituationTime(situation.id);
       world.time += 1;
       return;
+    }
+
+    if (actionPattern != null && actor.isPlayer) {
+      for (var action in recs.actions) {
+        if (!action.name.contains(actionPattern)) {
+          continue;
+        }
+        actionPatternWasHit = true;
+        void logAndPrint(String msg) {
+          print(msg);
+          log.info(msg);
+        }
+
+        logAndPrint("===== ACTIONPATTERN WAS HIT =====");
+        logAndPrint("Found action that matches '$actionPattern': $action");
+        for (var consequence in action.apply(actor, consequence, world)) {
+          logAndPrint("- consequence with probability "
+              "${consequence.probability}");
+          logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
+          logAndPrint("    ${consequence.storyline.realize()}");
+        }
+      }
     }
 
     Action selected;

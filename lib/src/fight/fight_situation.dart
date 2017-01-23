@@ -89,7 +89,7 @@ abstract class FightSituation extends Situation
     }
 
     var best = 0;
-    Actor chosen = null;
+    Actor chosen;
 
     for (var actor in actors) {
       var records =

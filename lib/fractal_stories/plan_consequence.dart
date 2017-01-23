@@ -30,6 +30,10 @@ class PlanConsequence {
   final bool isFailure;
   final bool isSuccess;
 
+  String get successOrFailure => isSuccess
+      ? 'success'
+      : (isFailure ? 'failure' : 'nor success nor failure');
+
   /// How far are we from initial world state.
   final int order;
 
