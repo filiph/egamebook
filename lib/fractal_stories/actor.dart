@@ -2,6 +2,7 @@ library stranded.actor;
 
 import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
+import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
@@ -52,8 +53,7 @@ abstract class Actor extends Object
 
   /// The higher the initiative, the sooner this actor will act each turn.
   ///
-  /// The player should have the highest initiative (so that he starts). The
-  /// island should probably have the lowest.
+  /// The player should have the highest initiative (so that he starts).
   ///
   /// This doesn't change during gameplay.
   int get initiative;
@@ -114,9 +114,6 @@ abstract class Actor extends Object
     return cumulativeScoreChange;
   }
 
-  // TODO: loveIndifference
-  // other feelings?
-
   bool hasItem(Type type, {int needed: 1}) {
     int count = 0;
     for (var item in items) {
@@ -126,6 +123,21 @@ abstract class Actor extends Object
       if (count >= needed) break;
     }
     return count >= needed;
+  }
+
+  // TODO: loveIndifference
+  // other feelings?
+
+  /// Returns whether actor is in confused state at present.
+  ///
+  /// This works by checking [w]'s history.
+  bool isConfused(WorldState w) {
+    int recency = w.timeSinceLastActionRecord(
+        actionClassPattern: Confuse.className,
+        sufferer: this,
+        wasSuccess: true);
+    if (recency == null) return false;
+    return recency < Confuse.effectLength;
   }
 
   Item removeItem(Type type) {

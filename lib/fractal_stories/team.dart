@@ -14,6 +14,7 @@ abstract class Team implements Built<Team, TeamBuilder> {
   factory Team([updates(TeamBuilder b)]) = _$Team;
 
   Team._();
+
   int get id;
 
   /// Currently, every team is enemy of every other team. In the future,

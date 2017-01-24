@@ -35,7 +35,7 @@ class Scramble extends Action {
     if (a.pose != Pose.onGround) return false;
     // Actor must have just fallen.
     var recency = world.timeSinceLastActionRecord(
-        actionClassPattern: "Kick", sufferer: a, wasSuccess: true);
+        actionClassPattern: Kick.className, sufferer: a, wasSuccess: true);
     if (recency != null && recency <= 1) {
       return true;
     }

@@ -14,6 +14,8 @@ final Entity balance =
 class Kick extends EnemyTargetAction {
   Kick(Actor enemy) : super(enemy);
 
+  static const String className = "Kick";
+
   @override
   String get nameTemplate => "kick <object>";
 
