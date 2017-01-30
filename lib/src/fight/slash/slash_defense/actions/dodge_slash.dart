@@ -12,6 +12,9 @@ class DodgeSlash extends EnemyTargetAction {
       "it will open an opportunity for a counter attack. When botched, it "
       "can get you killed.";
 
+  @override
+  final bool isAggressive = false;
+
   DodgeSlash(Actor enemy) : super(enemy);
 
   @override
@@ -21,7 +24,7 @@ class DodgeSlash extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> dodge?";
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -32,6 +35,7 @@ class DodgeSlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
+    w.popSituation();
     return "${a.name} fails to dodge ${enemy.name}";
   }
 

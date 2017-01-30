@@ -60,7 +60,7 @@ abstract class OffBalanceOpportunitySituation extends Situation
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
         .where((Actor a) =>
-            a.isAliveAndActive && a.isEnemyOf(actor) && a.id != culpritId)
+            a.isAliveAndActive && a.hates(actor, world) && a.id != culpritId)
         .toList();
     // TODO: sort by distance, cut off if too far
 
@@ -80,6 +80,6 @@ abstract class OffBalanceOpportunitySituation extends Situation
   @override
   Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
     var actor = world.getActorById(actorId);
-    return actors.where((a) => a == actor || a.isEnemyOf(actor));
+    return actors.where((a) => a == actor || a.hates(actor, world));
   }
 }

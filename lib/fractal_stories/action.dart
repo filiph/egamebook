@@ -19,11 +19,12 @@ import 'world.dart';
 Iterable<EnemyTargetAction> generateEnemyTargetActions(
     Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
   var situationActors = world.currentSituation.getActors(world.actors, world);
-  var enemies = situationActors.where(
-      (other) => other.isAliveAndActive && other.team.isEnemyWith(actor.team));
+  var enemies = situationActors
+      .where((other) => other != actor && other.isAliveAndActive);
   for (var enemy in enemies) {
     var action = builder(enemy);
     assert(action.enemy == enemy);
+    if (action.isAggressive && !actor.hates(enemy, world)) continue;
     yield action;
   }
 }
@@ -64,6 +65,13 @@ abstract class Action {
 
   String get helpMessage;
 
+  /// Whether or not this action is aggressive towards its sufferer. Combat
+  /// moves are aggressive, healing moves aren't.
+  ///
+  /// This describes intent, not result. A failed attempt to kill someone is
+  /// aggressive although it doesn't harm the intended target.
+  bool get isAggressive;
+
   Iterable<PlanConsequence> apply(
       Actor actor, PlanConsequence current, WorldState world) sync* {
     var successChance = getSuccessChance(actor, current.world);
@@ -93,8 +101,14 @@ abstract class Action {
     }
   }
 
-  /// Changes the [world].
+  /// Called to get the result of failure to do this action. Mutates [w]
+  /// (World). Returns a string useful for logging, such as "player failed to
+  /// slash orc".
   String applyFailure(Actor a, WorldState w, Storyline s);
+
+  /// Called to get the result of success of doing this action. Mutates [w]
+  /// (World). Returns a string useful for logging, such as "player slashed
+  /// orc".
   String applySuccess(Actor a, WorldState w, Storyline s);
 
   /// Success chance of the action given the actor and the state of the world.
@@ -175,6 +189,7 @@ abstract class Action {
             : [])
         ..wasSuccess = isSuccess
         ..wasFailure = isFailure
+        ..wasAggressive = isAggressive
         ..markBeforeAction(world);
 }
 

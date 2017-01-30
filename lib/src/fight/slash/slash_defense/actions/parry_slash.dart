@@ -19,6 +19,9 @@ class ParrySlash extends EnemyTargetAction {
       "throw your opponent off balance like dodging does, but it's also "
       "slightly easier to do.";
 
+  @override
+  final bool isAggressive = false;
+
   ParrySlash(Actor enemy) : super(enemy);
 
   @override
@@ -28,7 +31,7 @@ class ParrySlash extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> parry?";
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -42,6 +45,7 @@ class ParrySlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
+    w.popSituation();
     return "${a.name} fails to parry ${enemy.name}";
   }
 

@@ -24,6 +24,7 @@ class Report {
   bool but;
   final bool positive;
   final bool negative;
+  final bool subjectAndObjectAreEnemies;
   final bool endSentence;
   final bool startSentence;
   final bool wholeSentence;
@@ -52,6 +53,7 @@ class Report {
       this.but: false,
       this.positive: false,
       this.negative: false,
+      this.subjectAndObjectAreEnemies: false,
       this.endSentence: false,
       this.startSentence: false,
       this.wholeSentence: false,
@@ -67,6 +69,7 @@ class Report {
         but = false,
         positive = false,
         negative = false,
+        subjectAndObjectAreEnemies = false,
         endSentence = false,
         startSentence = false,
         wholeSentence = false,
@@ -185,6 +188,7 @@ class Storyline {
       bool but: false,
       bool positive: false,
       bool negative: false,
+      bool subjectAndObjectAreEnemies: false,
       bool endSentence: false,
       bool startSentence: false,
       bool wholeSentence: false,
@@ -211,6 +215,7 @@ class Storyline {
         but: but,
         positive: positive,
         negative: negative,
+        subjectAndObjectAreEnemies: subjectAndObjectAreEnemies,
         endSentence: endSentence,
         startSentence: startSentence,
         wholeSentence: wholeSentenceAutoDetected ? true : wholeSentence,
@@ -487,7 +492,7 @@ class Storyline {
   bool oppositeSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), both have same sentiment => opposite sentiment
-    if (exchangedSubjectObject(i, j) && subject(i).isEnemyOf(subject(j))) {
+    if (exchangedSubjectObject(i, j) && reports[i].subjectAndObjectAreEnemies) {
       if (reports[i].positive && reports[j].positive) return true;
       if (reports[i].negative && reports[j].negative) return true;
     }
@@ -637,7 +642,7 @@ class Storyline {
   bool sameSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), opposite sentiments => same sentiment
-    if (exchangedSubjectObject(i, j) && subject(i).isEnemyOf(subject(j))) {
+    if (exchangedSubjectObject(i, j) && reports[i].subjectAndObjectAreEnemies) {
       if (reports[i].positive && reports[j].negative) return true;
       if (reports[i].negative && reports[j].positive) return true;
     }

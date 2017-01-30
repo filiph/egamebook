@@ -86,23 +86,33 @@ class WorldState {
     time += 1;
   }
 
-  /// Returns an iterable of action records conforming to specified input,
+  /// Returns a lazy iterable of action records conforming to specified input,
   /// in reverse chronological order.
   ///
   /// When none of the named parameters is provided, all [actionRecords] are
   /// returned.
   Iterable<ActionRecord> getActionRecords(
-      {Pattern actionClassPattern, Actor sufferer, bool wasSuccess}) {
+      {Pattern actionClassPattern,
+      Actor protagonist,
+      Actor sufferer,
+      bool wasSuccess,
+      bool wasAggressive}) {
     Iterable<ActionRecord> records = actionRecords;
     if (actionClassPattern != null) {
       records =
           records.where((rec) => rec.actionClass.contains(actionClassPattern));
+    }
+    if (protagonist != null) {
+      records = records.where((rec) => rec.protagonist == protagonist.id);
     }
     if (sufferer != null) {
       records = records.where((rec) => rec.sufferers.contains(sufferer.id));
     }
     if (wasSuccess != null) {
       records = records.where((rec) => rec.wasSuccess == wasSuccess);
+    }
+    if (wasAggressive != null) {
+      records = records.where((rec) => rec.wasAggressive == wasAggressive);
     }
     return records;
   }
@@ -112,11 +122,17 @@ class WorldState {
   ///
   /// Returns `null` when such a record doesn't exist.
   int timeSinceLastActionRecord(
-      {Pattern actionClassPattern, Actor sufferer, bool wasSuccess}) {
+      {Pattern actionClassPattern,
+      Actor protagonist,
+      Actor sufferer,
+      bool wasSuccess,
+      bool wasAggressive}) {
     var records = getActionRecords(
         actionClassPattern: actionClassPattern,
+        protagonist: protagonist,
         sufferer: sufferer,
-        wasSuccess: wasSuccess);
+        wasSuccess: wasSuccess,
+        wasAggressive: wasAggressive);
     for (var record in records) {
       return time - record.time;
     }

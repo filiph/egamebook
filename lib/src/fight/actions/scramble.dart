@@ -8,10 +8,13 @@ class Scramble extends Action {
   static final Scramble singleton = new Scramble();
 
   @override
-  String get name => "Scramble.";
+  final String helpMessage = null;
 
   @override
-  final String helpMessage = null; // TODO: explanation?
+  final bool isAggressive = false; // TODO: explanation?
+
+  @override
+  String get name => "Scramble.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -28,6 +31,10 @@ class Scramble extends Action {
   }
 
   @override
+  String getRollReason(Actor a, WorldState w) =>
+      "Will ${a.pronoun.nominative} crawl out of harm's way?";
+
+  @override
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
   @override
@@ -41,8 +48,4 @@ class Scramble extends Action {
     }
     return false;
   }
-
-  @override
-  String getRollReason(Actor a, WorldState w) =>
-      "Will ${a.pronoun.nominative} crawl out of harm's way?";
 }

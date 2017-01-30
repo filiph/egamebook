@@ -11,6 +11,9 @@ class FinishSlash extends EnemyTargetAction {
   @override
   final String helpMessage = null;
 
+  @override
+  final bool isAggressive = true;
+
   FinishSlash(Actor enemy) : super(enemy);
 
   @override

@@ -12,6 +12,9 @@ class StartSlash extends EnemyTargetAction {
   final String helpMessage = "The basic swordfighting move is also often the "
       "most effective.";
 
+  @override
+  final bool isAggressive = true;
+
   StartSlash(Actor enemy) : super(enemy);
 
   @override

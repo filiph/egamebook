@@ -11,6 +11,9 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   final String helpMessage = "When an opponent is out of balance they are the "
       "most vulnerable.";
 
+  @override
+  final bool isAggressive = true;
+
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
 
   @override

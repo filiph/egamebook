@@ -85,24 +85,21 @@ abstract class EntityBehavior {
     return new Report(text, subject: this as Entity, object: object);
   }
 
-  bool isEnemyOf(Entity other) {
-    if (team == neutralTeam || other.team == neutralTeam) return false;
-    return team != other.team;
-  }
-
   void report(Storyline storyline, String text,
       {Entity object,
       Entity objectOwner,
       bool positive: false,
       bool negative: false,
       bool but: false,
-      bool endSentence: false}) {
+      bool endSentence: false,
+      bool subjectAndObjectAreEnemies: false}) {
     storyline.add(text,
         subject: this as Entity,
         object: object,
         objectOwner: objectOwner,
         positive: positive,
         negative: negative,
+        subjectAndObjectAreEnemies: subjectAndObjectAreEnemies,
         but: but,
         endSentence: endSentence);
   }

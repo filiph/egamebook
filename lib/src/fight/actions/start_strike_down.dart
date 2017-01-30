@@ -11,6 +11,9 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
   final String helpMessage = "Opponents on the ground are often the most "
       "vulnerable.";
 
+  @override
+  final bool isAggressive = true;
+
   StartSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override

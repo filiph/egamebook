@@ -14,6 +14,9 @@ class Pass extends Action {
   String get name => "Stand off.";
 
   @override
+  final bool isAggressive = false;
+
+  @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
     throw new UnimplementedError();
   }

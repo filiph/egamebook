@@ -2,7 +2,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
 import 'package:edgehead/src/fight/actions/kick.dart';
 
 class RegainBalance extends Action {
@@ -11,6 +10,9 @@ class RegainBalance extends Action {
   @override
   final String helpMessage = "Most moves are easier and more effective when "
       "you are firmly in balance.";
+
+  @override
+  final bool isAggressive = false;
 
   @override
   String get name => "Regain balance.";

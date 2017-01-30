@@ -12,6 +12,9 @@ class CounterSlash extends EnemyTargetAction {
       "because your opponent is often caught off guard. On the other hand, "
       "counters require fast reaction and could throw you out of balance.";
 
+  @override
+  final bool isAggressive = true;
+
   CounterSlash(Actor enemy) : super(enemy);
 
   @override

@@ -7,6 +7,9 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class TakeExitAction extends ExitAction {
+  @override
+  final bool isAggressive = false;
+
   TakeExitAction(Exit exit) : super(exit);
 
   @override

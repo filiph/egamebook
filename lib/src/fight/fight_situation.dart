@@ -1,7 +1,5 @@
 library stranded.fight.fight_situation;
 
-import 'dart:math';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -11,6 +9,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/kick.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
@@ -43,6 +42,7 @@ abstract class FightSituation extends Situation
 
   @override
   List<EnemyTargetActionBuilder> get actionGenerators => [
+        Confuse.builder,
         Kick.builder,
         StartSlash.builder,
         StartSlashGroundedEnemy.builder,

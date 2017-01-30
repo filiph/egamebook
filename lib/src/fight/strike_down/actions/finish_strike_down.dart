@@ -5,6 +5,12 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
 class FinishSlashGroundedEnemy extends EnemyTargetAction {
+  @override
+  final String helpMessage = null;
+
+  @override
+  final bool isAggressive = false;
+
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
@@ -13,9 +19,6 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
-
-  @override
-  final String helpMessage = null;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

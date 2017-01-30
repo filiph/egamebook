@@ -11,7 +11,10 @@ class StandUp extends Action {
   final String helpMessage = null;
 
   @override
-  String get name => "Stand up."; // TODO: explanation?
+  final bool isAggressive = false; // TODO: explanation?
+
+  @override
+  String get name => "Stand up.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

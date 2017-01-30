@@ -34,6 +34,7 @@ class ActionRecord {
   final int time;
 
   /// The [Actor.id] of the protagonist. The single person responsible for
+  /// this action.
   ///
   /// When set to `null`, it means "environment" is to blame.
   ///
@@ -62,6 +63,8 @@ class ActionRecord {
 
   final bool wasFailure;
 
+  final bool wasAggressive;
+
   /// The changes to worldScore of the different people, regardless whether they
   /// know about it or not (we pretend they do, and see how that affects
   /// things).
@@ -80,6 +83,7 @@ class ActionRecord {
       Iterable<Actor> knownTo,
       bool wasSuccess,
       bool wasFailure,
+      bool wasAggressive,
       ActorMap<num> scoreChanges)
       : this._(
             time,
@@ -91,6 +95,7 @@ class ActionRecord {
             knownTo.map(_extractId).toSet(),
             wasSuccess,
             wasFailure,
+            wasAggressive,
             new ActorMap<num>.from(scoreChanges));
 
   ActionRecord.duplicate(ActionRecord other)
@@ -104,6 +109,7 @@ class ActionRecord {
             new Set<int>.from(other.knownTo),
             other.wasSuccess,
             other.wasFailure,
+            other.wasAggressive,
             new ActorMap<num>.from(other.scoreChange));
 
   ActionRecord._(
@@ -116,6 +122,7 @@ class ActionRecord {
       this.knownTo,
       this.wasSuccess,
       this.wasFailure,
+      this.wasAggressive,
       this.scoreChange);
 
   @override
@@ -157,6 +164,8 @@ class ActionRecordBuilder {
   bool wasSuccess;
 
   bool wasFailure;
+
+  bool wasAggressive;
 
   int time;
 
@@ -206,6 +215,7 @@ class ActionRecordBuilder {
         knownTo.map(_extractId).toSet(),
         wasSuccess,
         wasFailure,
+        wasAggressive,
         scoreChanges);
   }
 

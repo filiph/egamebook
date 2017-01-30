@@ -11,6 +11,9 @@ class DefensiveParrySlash extends EnemyTargetAction {
   final String helpMessage = "Stepping back is the safest way to get out of "
       "harm's way.";
 
+  @override
+  final bool isAggressive = false;
+
   DefensiveParrySlash(Actor enemy) : super(enemy);
 
   @override
@@ -37,6 +40,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
+    w.popSituation();
     return "${a.name} fails to parry ${enemy.name}";
   }
 

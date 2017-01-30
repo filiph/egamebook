@@ -4,7 +4,6 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
@@ -12,9 +11,17 @@ final Entity balance =
     new Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
 class Kick extends EnemyTargetAction {
-  Kick(Actor enemy) : super(enemy);
-
   static const String className = "Kick";
+
+  @override
+  final bool isAggressive = true;
+
+  @override
+  String helpMessage = "Kicking opponents doesn't deal much damage but it can "
+      "put them off balance or even to the ground. Such opponents are much "
+      "easier targets for you and your allies.";
+
+  Kick(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "kick <object>";
@@ -22,11 +29,6 @@ class Kick extends EnemyTargetAction {
   @override
   String get rollReasonTemplate => "will <subject> undercut "
       "<objectPronoun's> feet?";
-
-  @override
-  String helpMessage = "Kicking opponents doesn't deal much damage but it can "
-      "put them off balance or even to the ground. Such opponents are much "
-      "easier targets for you and your allies.";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {

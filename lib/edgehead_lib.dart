@@ -27,8 +27,10 @@ num carelessScoringFunction(Actor monster, WorldState world) {
   var friends = world.actors.where((a) => a.team == monster.team);
   score += friends.fold(0, (sum, a) => sum + a.hitpoints);
 
-  var enemies = world.actors.where((a) => a.isEnemyOf(monster));
-  score -= enemies.fold(0, (sum, a) => sum + a.hitpoints);
+  score -= world.actors
+      .fold<num>(
+          0, (sum, a) => sum + monster.hateTowards(a, world) * a.hitpoints)
+      .round();
 
   return score;
 }

@@ -7,6 +7,9 @@ class RollOutOfWay extends EnemyTargetAction {
   @override
   final String helpMessage = null;
 
+  @override
+  final bool isAggressive = false;
+
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override

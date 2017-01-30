@@ -11,6 +11,9 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   final String helpMessage = "It's always better to fight with your feet "
       "firmly on the ground. But sometimes, it's necessary to act quickly.";
 
+  @override
+  final bool isAggressive = true;
+
   StartSlashOutOfBalance(Actor enemy) : super(enemy);
 
   @override

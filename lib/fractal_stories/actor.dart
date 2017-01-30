@@ -64,7 +64,6 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
-  // TODO: make non-nullable
   @override
   bool get isPlayer;
 
@@ -80,6 +79,7 @@ abstract class Actor extends Object
 
   Set<Item> get items;
 
+  // TODO: make non-nullable
   @override
   String get name;
 
@@ -125,8 +125,33 @@ abstract class Actor extends Object
     return count >= needed;
   }
 
-  // TODO: loveIndifference
-  // other feelings?
+  /// When an [Actor] hates another actor, they will be willing and eager to
+  /// attack them.
+  ///
+  /// By default, Actors from enemy teams hate each other, and so will attack
+  /// each other on sight. But, for example, when an actor is bound by spell,
+  /// they can hate their own team. When an actor was just attacked by their
+  /// team mate, they will attack back.
+  ///
+  /// This method is a simple threshold over [hateTowards].
+  bool hates(Actor other, WorldState w) {
+    return hateTowards(other, w) > 0.0;
+  }
+
+  /// Returns the intensity of hate towards the actor. Very high when
+  /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
+  /// neutrals or friends.
+  double hateTowards(Actor other, WorldState w) {
+    if (isConfused(w) && team.isFriendWith(other.team)) {
+      return 10.0;
+    }
+
+    if (_hasBeenAttackedBy(other, w, 10)) {
+      return 1.0;
+    }
+
+    return team.isEnemyWith(other.team) ? 1.0 : 0.0;
+  }
 
   /// Returns whether actor is in confused state at present.
   ///
@@ -139,6 +164,9 @@ abstract class Actor extends Object
     if (recency == null) return false;
     return recency < Confuse.effectLength;
   }
+
+  // TODO: loveIndifference
+  // other feelings?
 
   Item removeItem(Type type) {
     Item markedForRemoval;
@@ -195,27 +223,39 @@ abstract class Actor extends Object
     score += 10 * hitpoints;
 
     if (team.isEnemyWith(playerTeam)) {
-      // Discount self-worth for enemies (makes them more gung-ho and fun).
+      // Discount self-worth for enemies of player (makes them more gung-ho
+      // and fun).
       score = score ~/ 2;
     }
 
     // Add points for every friend and their hitpoints.
     var friends = world.actors.where((a) => a.team == team);
-    score += friends.fold/*<int>*/(
+    score += friends.fold<int>(
         0,
         (int sum, Actor a) =>
             sum + (a.isAliveAndActive ? 2 : 0) + 2 * a.hitpoints);
 
     // Remove points for every enemy and their hitpoints.
-    var enemies = world.actors.where((a) => a.isEnemyOf(this));
-    score -= enemies.fold/*<int>*/(0,
-        (int sum, Actor a) => sum + (a.isAliveAndActive ? 1 : 0) + a.hitpoints);
+    score -= world.actors.fold<num>(0, (num sum, Actor a) {
+      final enemyScore = (a.isAliveAndActive ? 1 : 0) + a.hitpoints;
+      final weightedScore = enemyScore * hateTowards(a, world);
+      return sum + weightedScore;
+    }).round();
 
     return score;
   }
 
   bool wields(ItemType value) =>
       currentWeapon != null && currentWeapon.type == value;
+
+  /// Returns true if this actor has ever been attacked by [actor] in the past
+  /// [time] turns.
+  bool _hasBeenAttackedBy(Actor other, WorldState w, int time) {
+    int recency = w.timeSinceLastActionRecord(
+        protagonist: other, sufferer: this, wasAggressive: true);
+    if (recency == null) return false;
+    return recency <= time;
+  }
 }
 
 abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
