@@ -17,6 +17,7 @@ import 'package:edgehead/src/fight/actions/stand_up.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/actions/unconfuse.dart';
 
 part 'fight_situation.g.dart';
 
@@ -50,8 +51,12 @@ abstract class FightSituation extends Situation
       ];
 
   @override
-  List<Action> get actions =>
-      <Action>[RegainBalance.singleton, StandUp.singleton, Scramble.singleton];
+  List<Action> get actions => <Action>[
+        RegainBalance.singleton,
+        StandUp.singleton,
+        Scramble.singleton,
+        Unconfuse.singleton
+      ];
 
   BuiltList<int> get enemyTeamIds;
 

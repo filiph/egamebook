@@ -4,6 +4,8 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/damage_reports.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
@@ -47,12 +49,22 @@ class OnGroundParry extends EnemyTargetAction {
           "in the way");
       s.add("the strike is too powerful", but: true);
       w.updateActorById(a.id, (b) => b..hitpoints -= 1);
+      bool killed = !w.getActorById(enemy.id).isAlive;
       s.add(
           "<owner's> <subject> still {cuts|slashes} "
-          "<object's> {arm|shoulder}",
+          "${killed ? 'across <object\'s> {neck|abdomen}'
+              : '<object\'s> {arm|shoulder}'}",
           subject: enemy.currentWeapon,
           owner: enemy,
           object: a);
+      if (killed) {
+        var groundMaterial = w
+            .getSituationByName<FightSituation>("FightSituation")
+            .groundMaterial;
+        reportDeath(s, a, groundMaterial);
+      } else {
+        reportPain(s, a);
+      }
       w.popSituationsUntil("FightSituation");
       return "${a.name} parries ${enemy.name} but the swing has extra force";
     }

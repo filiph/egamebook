@@ -1,5 +1,6 @@
 library storyline;
 
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 import '../team.dart';
@@ -7,6 +8,8 @@ import 'randomly.dart';
 
 part 'storyline_entity.dart';
 part 'storyline_pronoun.dart';
+
+final Logger log = new Logger('Storyline');
 
 /// A single report about an event, atomic part of a story. It can be "John
 /// picks up a shovel", "John approaches Jack" or "Jack is dead".
@@ -342,17 +345,12 @@ class Storyline {
     reports.addAll(other.reports);
   }
 
-  /// Returns true if there is at least one entity that appears both in
-  /// report[i] and in report[j], regardless of position
-  /// (subject, object, owner, ...).
-  bool someActorsSame(int i, int j) {
+  bool exchangedSubjectObject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    for (var a in getAllEntities(i)) {
-      for (var b in getAllEntities(j)) {
-        if (a.id == b.id) return true;
-      }
-    }
-    return false;
+    if (reports[i].subject == null || reports[j].subject == null) return false;
+    if (reports[i].object == null || reports[j].object == null) return false;
+    return reports[i].subject.id == reports[j].object.id &&
+        reports[i].object.id == reports[j].subject.id;
   }
 
   /// Returns an iterable of all the entities present in given report.
@@ -363,14 +361,6 @@ class Storyline {
     if (report.object != null) yield report.object;
     if (report.owner != null) yield report.owner;
     if (report.objectOwner != null) yield report.objectOwner;
-  }
-
-  bool exchangedSubjectObject(int i, int j) {
-    if (!valid(i) || !valid(j)) return false;
-    if (reports[i].subject == null || reports[j].subject == null) return false;
-    if (reports[i].object == null || reports[j].object == null) return false;
-    return reports[i].subject.id == reports[j].object.id &&
-        reports[i].object.id == reports[j].subject.id;
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
@@ -460,7 +450,13 @@ class Storyline {
         OBJECT_OWNER_PRONOUN_POSSESIVE,
         report.time);
 
-    return Randomly.parse(result);
+    result = Randomly.parse(result);
+    if (result.contains('{') || result.contains('}')) {
+      log.severe('Storyline result includes { and/or } even after being '
+          'parsed by Randomly. Is there a dangling bracket here? '
+          'Input = """$str""" Output = """$result"""');
+    }
+    return result;
   }
 
   /// When an entity should start the storyline as unmentioned, call this
@@ -492,13 +488,11 @@ class Storyline {
   bool oppositeSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), both have same sentiment => opposite sentiment
-    if (exchangedSubjectObject(i, j) && reports[i].subjectAndObjectAreEnemies) {
+    if (exchangedSubjectObject(i, j) &&
+        reports[i].subjectAndObjectAreEnemies &&
+        reports[j].subjectAndObjectAreEnemies) {
       if (reports[i].positive && reports[j].positive) return true;
       if (reports[i].negative && reports[j].negative) return true;
-    }
-    if (_sameTeam(reports[i].subject, reports[j].subject)) {
-      if (reports[i].positive && reports[j].negative) return true;
-      if (reports[i].negative && reports[j].positive) return true;
     }
     return false;
   }
@@ -642,7 +636,9 @@ class Storyline {
   bool sameSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), opposite sentiments => same sentiment
-    if (exchangedSubjectObject(i, j) && reports[i].subjectAndObjectAreEnemies) {
+    if (exchangedSubjectObject(i, j) &&
+        reports[i].subjectAndObjectAreEnemies &&
+        reports[j].subjectAndObjectAreEnemies) {
       if (reports[i].positive && reports[j].negative) return true;
       if (reports[i].negative && reports[j].positive) return true;
     }
@@ -652,6 +648,19 @@ class Storyline {
       return true;
     else
       return false;
+  }
+
+  /// Returns true if there is at least one entity that appears both in
+  /// report[i] and in report[j], regardless of position
+  /// (subject, object, owner, ...).
+  bool someActorsSame(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    for (var a in getAllEntities(i)) {
+      for (var b in getAllEntities(j)) {
+        if (a.id == b.id) return true;
+      }
+    }
+    return false;
   }
 
   String string(int i) {
@@ -818,11 +827,6 @@ class Storyline {
     if (!valid(i) || !valid(j)) return false;
     if (reports[i].subject == null || reports[j].subject == null) return false;
     return reports[i].subject.id == reports[j].subject.id;
-  }
-
-  bool _sameTeam(Entity a, Entity b) {
-    if (a == null || b == null) return false;
-    return a.team == b.team;
   }
 
   static String capitalize(String string) {

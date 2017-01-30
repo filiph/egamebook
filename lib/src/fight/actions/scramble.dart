@@ -11,7 +11,7 @@ class Scramble extends Action {
   final String helpMessage = null;
 
   @override
-  final bool isAggressive = false; // TODO: explanation?
+  final bool isAggressive = false;
 
   @override
   String get name => "Scramble.";

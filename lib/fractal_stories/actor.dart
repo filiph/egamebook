@@ -3,6 +3,7 @@ library stranded.actor;
 import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
+import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
@@ -162,7 +163,12 @@ abstract class Actor extends Object
         sufferer: this,
         wasSuccess: true);
     if (recency == null) return false;
-    return recency < Confuse.effectLength;
+    int unconfuseRecency = w.timeSinceLastActionRecord(
+        actionClassPattern: Unconfuse.className,
+        protagonist: this,
+        wasSuccess: true);
+    if (unconfuseRecency == null) return true;
+    return unconfuseRecency < recency;
   }
 
   // TODO: loveIndifference
@@ -236,7 +242,7 @@ abstract class Actor extends Object
             sum + (a.isAliveAndActive ? 2 : 0) + 2 * a.hitpoints);
 
     // Remove points for every enemy and their hitpoints.
-    score -= world.actors.fold<num>(0, (num sum, Actor a) {
+    score -= world.actors.fold(0, (num sum, Actor a) {
       final enemyScore = (a.isAliveAndActive ? 1 : 0) + a.hitpoints;
       final weightedScore = enemyScore * hateTowards(a, world);
       return sum + weightedScore;
