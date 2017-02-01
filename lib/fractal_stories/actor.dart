@@ -101,20 +101,6 @@ abstract class Actor extends Object
   @nullable
   WorldScoringFunction get worldScoringFunction;
 
-  /// Computes gratitude towards [other] given the state of the [world].
-  ///
-  /// Goes through action records.
-  num getGratitude(Actor other, WorldState world) {
-    var othersActions = world.actionRecords.where(
-        (rec) => rec.knownTo.contains(id) && rec.protagonist == other.id);
-
-    var scoreChanges = othersActions
-        .map((rec) => rec.scoreChange[this])
-        .where((value) => value != null);
-    num cumulativeScoreChange = scoreChanges.fold(0, (a, b) => a + b);
-    return cumulativeScoreChange;
-  }
-
   bool hasItem(Type type, {int needed: 1}) {
     int count = 0;
     for (var item in items) {
