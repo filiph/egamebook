@@ -36,7 +36,7 @@ num carelessScoringFunction(Actor monster, WorldState world) {
 }
 
 class EdgeheadGame extends LoopedEvent {
-  static const int maxChoicesCount = 4;
+  static const int maxChoicesCount = 5;
 
   final Logger log = new Logger('EdgeheadGame');
 
