@@ -471,7 +471,7 @@ break}u.f.a+=t.cX()
 C.a.si(t.a,0)
 r.dC("planner.generateTable for "+H.b(n.gm(n)))
 h.fw().B(0,new O.m2(u))
-f=P.ac(new H.qF(q,0,4,[H.p(q,0)]),!0,null)
+f=P.ac(new H.qF(q,0,5,[H.p(q,0)]),!0,null)
 t=new O.m3()
 s=f.length-1
 if(s-0<=32)H.iu(f,0,s,t)
@@ -3160,4 +3160,4 @@ var x=a[z++]
 var w=a[z++]
 var v=a[z++]
 I.$lazy(y,x,w,null,v)}})(["ed","$get$ed",function(){return P.lB()},$,"ib","$get$ib",function(){return N.bD("PlannerRecommendation")},$,"fw","$get$fw",function(){return K.p2("__END_OF_ROAM__","","",null,null,[],"ground")},$,"bg","$get$bg",function(){return P.dr(null)},$,"bG","$get$bG",function(){return P.dr(null)},$,"jO","$get$jO",function(){return N.bD("Storyline")},$,"iz","$get$iz",function(){return P.I("(\\w)([\\.\\?\\!])([\"'])\\.(?=$|\\s)",!0,!1)},$,"fv","$get$fv",function(){return L.f1(new L.v7())},$,"bv","$get$bv",function(){return L.f1(new L.v6())},$,"e0","$get$e0",function(){return L.f1(new L.v9())},$,"fr","$get$fr",function(){return Y.hp(!1,"balance",!0,C.n,$.$get$bv())},$,"eG","$get$eG",function(){return new F.oC("Sometimes, patience pays off. Especially when the other option is potentially dangerous.",!1,null)},$,"il","$get$il",function(){return new B.oZ("Most moves are easier and more effective when you are firmly in balance.",!1,null)},$,"iq","$get$iq",function(){return new O.pg(null,!1,null)},$,"iw","$get$iw",function(){return new Q.pW(null,!1,null)},$,"iZ","$get$iZ",function(){return new M.r1("",!1,null)},$,"jo","$get$jo",function(){return P.dr(null)},$,"jW","$get$jW",function(){return Y.hp(!1,"swing",!0,C.n,$.$get$bv())},$,"hX","$get$hX",function(){return N.bD("")},$,"hW","$get$hW",function(){return P.at(P.h,N.eA)},$])}
-$dart_deferred_initializers$["h9KO3yjH1ngsUn4Fl1G2NPgNaQA="]=$dart_deferred_initializers$.current
+$dart_deferred_initializers$["gFM35jkJOk5wgHRAyoaf+BkAiqk="]=$dart_deferred_initializers$.current
