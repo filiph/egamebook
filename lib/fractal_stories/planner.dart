@@ -119,21 +119,6 @@ class ActorPlanner {
     }
   }
 
-  Action getBest() {
-    assert(_resultsReady);
-
-    num bestScore = firstActionScores.values.reduce((a, b) => a > b ? a : b);
-
-    for (var action in firstActionScores.keys) {
-      if (firstActionScores[action] == bestScore) {
-        return action;
-      }
-    }
-
-    throw new StateError("No best action found in $firstActionScores "
-        "(bestScore = $bestScore)");
-  }
-
   PlannerRecommendation getRecommendations() {
     assert(_resultsReady);
     if (firstActionScores.isEmpty) {
