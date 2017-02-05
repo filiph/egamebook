@@ -56,7 +56,7 @@ class ParrySlash extends EnemyTargetAction {
       a.report(
           s,
           "<subject> put<s> <subjectPronoun's> ${a.currentWeapon.name} "
-          "in the way of <object's> ${a.currentWeapon.name}",
+          "in the way of <object's> ${enemy.currentWeapon.name}",
           object: enemy,
           positive: true);
       if (a.pose == Pose.standing) {
