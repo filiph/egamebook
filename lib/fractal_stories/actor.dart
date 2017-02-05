@@ -208,14 +208,10 @@ abstract class Actor extends Object
   /// depending on who scores it (if Bob has all the bananas and Alice is
   /// starving, then Bob's score will be higher than Alice's).
   ActorScore scoreWorld(WorldState world) {
-    int selfPreservation = 10 * hitpoints;
-
-    if (team.isEnemyWith(playerTeam)) {
-      // Discount self-worth for enemies of player (makes them more gung-ho
-      // and fun).
-      // TODO: move into combining function
-      selfPreservation = selfPreservation ~/ 2;
-    }
+    var actor = world.getActorById(id);
+    int selfPreservation = 2 * actor.hitpoints;
+    // Extra painful if actor dies in this world.
+    if (!actor.isAlive) selfPreservation -= 10;
 
     // Add points for every friend and their hitpoints.
     var friends = world.actors.where((a) => a.team == team);
