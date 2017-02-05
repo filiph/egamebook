@@ -23,6 +23,6 @@ export 'src/shared/html_entities.dart';
 export 'src/shared/message.dart';
 export 'src/shared/page.dart';
 export 'src/shared/points_award.dart';
-export 'src/shared/stat.dart';
+export 'package:egamebook/stat/stat.dart';
 export 'src/shared/user_interaction.dart';
 export 'src/shared/utils.dart';

@@ -1,7 +1,7 @@
 library stat;
 
-import 'message.dart';
-import '../persistence/saveable.dart';
+import 'package:egamebook/src/shared/message.dart';
+import 'package:egamebook/src/persistence/saveable.dart';
 
 /**
  * [StatBase] is the common interface of the [Stat] in [Scripter] and the

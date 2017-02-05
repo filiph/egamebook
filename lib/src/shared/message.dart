@@ -5,7 +5,7 @@ import 'dart:convert' show JSON;
 import 'package:slot_machine/result.dart' as slot;
 
 import 'package:egamebook/src/shared/form.dart';
-import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 
 /// Class Message wraps messages used for communication between Presenter
 /// and Scripter parts.

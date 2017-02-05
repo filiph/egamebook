@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/shared/points_award.dart';
-import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/message.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'dart:convert';

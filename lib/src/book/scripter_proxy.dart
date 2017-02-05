@@ -8,7 +8,7 @@ import "package:logging/logging.dart";
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
 import '../shared/points_award.dart';
-import '../shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';

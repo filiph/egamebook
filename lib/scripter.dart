@@ -13,8 +13,8 @@ import 'src/book/author_script_exception.dart';
 import 'src/presenter/presenter_proxy.dart';
 export 'src/presenter/presenter_proxy.dart';
 
-import 'src/shared/stat.dart';
-export 'src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
+export 'package:egamebook/stat/stat.dart';
 
 import 'src/shared/form.dart';
 export 'src/shared/form.dart';

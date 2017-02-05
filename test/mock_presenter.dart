@@ -8,7 +8,7 @@ import 'package:egamebook/src/persistence/savegame.dart';
 import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/points_award.dart';
-import 'package:egamebook/src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import "package:logging/logging.dart";
 import 'package:slot_machine/result.dart';

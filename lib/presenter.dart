@@ -12,7 +12,7 @@ import 'package:egamebook/src/shared/form.dart';
 import 'src/persistence/savegame.dart';
 import 'src/presenter/presenter_proxy.dart';
 import 'src/shared/points_award.dart';
-import 'src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 import 'src/shared/user_interaction.dart';
 
 /// Presenter is an interface for all presenters in application.

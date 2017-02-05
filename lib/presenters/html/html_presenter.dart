@@ -25,7 +25,7 @@ export '../../presenter.dart' show Presenter;
 import '../../src/persistence/savegame.dart';
 import '../../src/shared/user_interaction.dart';
 import '../../src/shared/points_award.dart';
-import '../../src/shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 
 // because we're defining localStorage here
 import '../../src/persistence/storage.dart';

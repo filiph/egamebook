@@ -7,7 +7,7 @@ import 'package:slot_machine/result.dart' as slot;
 
 import '../persistence/savegame.dart';
 import '../shared/points_award.dart';
-import '../shared/stat.dart';
+import 'package:egamebook/stat/stat.dart';
 import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
