@@ -2,6 +2,8 @@ library stranded.actor;
 
 import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
+import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:meta/meta.dart';
@@ -19,8 +21,6 @@ Iterable<Actor> getPartyOf(Actor actor, WorldState world) sync* {
   yield* world.actors.where((other) => other.followingActorId == actor.id);
 }
 
-typedef num WorldScoringFunction(Actor actor, WorldState world);
-
 abstract class Actor extends Object
     with EntityBehavior
     implements Built<Actor, ActorBuilder>, Entity {
@@ -31,6 +31,9 @@ abstract class Actor extends Object
 
   @override
   List<String> get categories; // TODO make immutable
+
+  @nullable
+  CombineFunction get combineFunction;
 
   @nullable
   String get currentRoomName;
@@ -68,6 +71,7 @@ abstract class Actor extends Object
   @override
   bool get isPlayer;
 
+  // TODO: make non-nullable
   /// How safe does [this] Actor feel in the presence of the different other
   /// actors.
   ///
@@ -80,7 +84,6 @@ abstract class Actor extends Object
 
   Set<Item> get items;
 
-  // TODO: make non-nullable
   @override
   String get name;
 
@@ -97,9 +100,6 @@ abstract class Actor extends Object
 
   @override
   Team get team;
-
-  @nullable
-  WorldScoringFunction get worldScoringFunction;
 
   bool hasItem(Type type, {int needed: 1}) {
     int count = 0;
@@ -207,34 +207,31 @@ abstract class Actor extends Object
   /// differently, and of course the same world will be scored differently
   /// depending on who scores it (if Bob has all the bananas and Alice is
   /// starving, then Bob's score will be higher than Alice's).
-  num scoreWorld(WorldState world) {
-    if (worldScoringFunction != null) {
-      return worldScoringFunction(this, world);
-    }
-    int score = 0;
-    score += 10 * hitpoints;
+  ActorScore scoreWorld(WorldState world) {
+    int selfPreservation = 10 * hitpoints;
 
     if (team.isEnemyWith(playerTeam)) {
       // Discount self-worth for enemies of player (makes them more gung-ho
       // and fun).
-      score = score ~/ 2;
+      // TODO: move into combining function
+      selfPreservation = selfPreservation ~/ 2;
     }
 
     // Add points for every friend and their hitpoints.
     var friends = world.actors.where((a) => a.team == team);
-    score += friends.fold<int>(
+    var teamPreservation = friends.fold<int>(
         0,
         (int sum, Actor a) =>
             sum + (a.isAliveAndActive ? 2 : 0) + 2 * a.hitpoints);
 
     // Remove points for every enemy and their hitpoints.
-    score -= world.actors.fold(0, (num sum, Actor a) {
+    var enemy = world.actors.fold(0, (num sum, Actor a) {
       final enemyScore = (a.isAliveAndActive ? 1 : 0) + a.hitpoints;
       final weightedScore = enemyScore * hateTowards(a, world);
       return sum + weightedScore;
-    }).round();
+    });
 
-    return score;
+    return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
   bool wields(ItemType value) =>
@@ -290,7 +287,7 @@ abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
   Team team = playerTeam;
   @nullable
   @virtual
-  WorldScoringFunction worldScoringFunction;
+  CombineFunction combineFunction;
 
   factory ActorBuilder() = _$ActorBuilder;
   ActorBuilder._();

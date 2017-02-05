@@ -2,10 +2,11 @@ library stranded.planner;
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:math' as math;
 
 import 'action.dart';
 import 'actor.dart';
+import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:logging/logging.dart';
 import 'plan_consequence.dart';
 import 'world.dart';
@@ -29,7 +30,7 @@ class ActorPlanner {
 
   bool _resultsReady = false;
 
-  final Map<Action, num> firstActionScores = new Map();
+  final Map<Action, ActorScoreChange> firstActionScores = new Map();
 
   ActorPlanner(Actor actor, WorldState initialWorld)
       : actorId = actor?.id,
@@ -49,28 +50,17 @@ class ActorPlanner {
   ///
   /// TODO: allow to personalize this (for example, optimistic characters
   /// only take `isSuccess == true` consequences into account).
-  num combineScores(
-      Iterable<ConsequenceStats> stats, num initialScore, int maxOrder) {
-    // This approach has a problem: sometimes the stats are not available for
-    // maxOrder at all...
-//    var list = stats
-//        .where((stat) => stat.order == maxOrder - 1)
-//        .toList(growable: false);
-//    num result = list
-//            .map((stat) =>
-//                (stat.score - initialScore) * stat.cumulativeProbability)
-//            .fold(0, (a, b) => a + b) /
-//        list.length;
-//    assert(!result.isNaN);
-//    assert(!result.isInfinite);
-//    return result;
-
+  ActorScoreChange combineScores(
+      Iterable<ConsequenceStats> stats, ActorScore initialScore, int maxOrder) {
     log.finest("...");
     log.finest("combining scores");
 
-    var uplifts = <num>[];
+    var uplifts = <ActorScoreChange>[];
 
     ConsequenceStats _bestCase;
+
+    num combineForBestCase(ActorScore score) =>
+        score.teamPreservation - score.enemy;
 
     for (var consequence in stats) {
       log.finest(() => "  - consequence: $consequence");
@@ -78,13 +68,14 @@ class ActorPlanner {
         if (_bestCase == null) {
           log.finest("    - first _bestCase");
           _bestCase = consequence;
-        } else if (consequence.score > _bestCase.score) {
+        } else if (combineForBestCase(consequence.score) >
+            combineForBestCase(_bestCase.score)) {
           _bestCase = consequence;
           log.finest("    - new _bestCase");
         }
       }
 
-      var uplift = (consequence.score - initialScore) *
+      ActorScoreChange uplift = (consequence.score - initialScore) *
           consequence.cumulativeProbability;
       log.finest(() => "    - uplift = $uplift");
       uplifts.add(uplift);
@@ -92,13 +83,15 @@ class ActorPlanner {
 
     // Look at average to see what kind of effect, on average, this action
     // will have.
-    var average = uplifts.fold(0, (a, b) => a + b) / uplifts.length;
+    var average = new ActorScoreChange.average(uplifts);
 
     // Also look at the best possible outcome. If we only used the average,
     // an action that leads to a lot of bad outcomes but one great one
     // (presumably the one the actor has in mind) would receive a bad score.
-    var bestUpside = _bestCase == null ? 0 : (_bestCase.score - initialScore);
-    var best = bestUpside / _bestCase?.order ?? 1;
+    var bestUpside = _bestCase == null
+        ? const ActorScoreChange.zero()
+        : (_bestCase.score - initialScore);
+    ActorScoreChange best = bestUpside / _bestCase?.order ?? 1;
 
     log.finest("- uplifts average = $average");
     log.finest("- best = $best");
@@ -106,15 +99,13 @@ class ActorPlanner {
     var result = best + average;
 
     log.finest("- result = $result");
-    assert(!result.isNaN);
-    assert(!result.isInfinite);
     return result;
   }
 
   Iterable<String> generateTable() sync* {
     int i = 1;
     for (var key in firstActionScores.keys) {
-      yield "$i) ${key.name}\t${firstActionScores[key].toStringAsFixed(2)}";
+      yield "$i) ${key.name}\t${firstActionScores[key]}";
       i += 1;
     }
   }
@@ -126,7 +117,7 @@ class ActorPlanner {
           "actorId=$actorId.");
       log.fine("Actions not available for $actorId and $_initial.");
     }
-    return new PlannerRecommendation.fromScores(firstActionScores);
+    return new PlannerRecommendation(firstActionScores);
   }
 
   Future<Null> plan(
@@ -156,14 +147,15 @@ class ActorPlanner {
       if (consequenceStats.isEmpty) {
         log.finer("- action '${action.name}' is possible but we couldn't get "
             "to any outcomes while planning. Scoring with negative infinity.");
-        firstActionScores[action] = double.NEGATIVE_INFINITY;
+        // For example, at the very end of a book, it is possible to have
+        // 'no future'.
+        firstActionScores[action] = const ActorScoreChange.undefined();
         continue;
       }
 
       log.finer("- action '${action.name}' leads to ${consequenceStats.length} "
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
-      assert(!score.isNaN);
 
       firstActionScores[action] = score;
 
@@ -211,7 +203,7 @@ class ActorPlanner {
       return;
     }
 
-    num initialScore = mainActor.scoreWorld(initial.world);
+    ActorScore initialScore = mainActor.scoreWorld(initial.world);
 
     log.finer(() => "- current: initialScore=$initialScore, "
         "cumProb=${initial.cumulativeProbability} "
@@ -344,76 +336,4 @@ class ActorPlanner {
       closed.add(current.world);
     }
   }
-}
-
-class PlannerRecommendation {
-  static final Logger log = new Logger('PlannerRecommendation');
-
-  /// The [weights] have to add up to this number.
-  ///
-  /// We're using [int] instead of [num] for weights because we want to
-  /// avoid rounding errors (when all weights add up to 0.99 and a random
-  /// function returns 0.995).
-  static const int weightsResolution = 1000;
-  static const num _worstOptionWeight = 0.1;
-
-  final List<int> weights;
-  final List<Action> actions;
-
-  PlannerRecommendation(this.actions, this.weights) {
-    assert(actions.length == weights.length);
-    assert(weights.length == 0 || weights.fold(0, _sum) == weightsResolution);
-    // TODO: assert that it's a gradient from best to worst
-  }
-
-  factory PlannerRecommendation.fromScores(Map<Action, num> scores) {
-    if (scores.isEmpty) {
-      log.warning("Created with no recommendations.");
-      return new PlannerRecommendation([], []);
-    }
-    var actions = scores.keys.toList();
-    // Remove impossible actions. TODO: make sure we don't duplicate effort here
-    actions.removeWhere((a) => scores[a] == double.NEGATIVE_INFINITY);
-
-    if (actions.length == 1) {
-      return new PlannerRecommendation(actions, [weightsResolution]);
-    }
-
-    // Make the first action be the best one.
-    actions.sort((a, b) => -scores[a].compareTo(scores[b]));
-
-    num minimum = scores.values.fold(double.INFINITY, math.min);
-    num maximum = scores.values.fold(double.NEGATIVE_INFINITY, math.max);
-    assert(!minimum.isNaN);
-    assert(!maximum.isNaN);
-    assert(minimum.isFinite);
-    assert(maximum.isFinite);
-
-    // Make sure even the worst option has some weight.
-    num lowerBound = minimum - (maximum - minimum) * _worstOptionWeight;
-    if (minimum == maximum) {
-      // When all options are equal, make sure we don't divide by zero.
-      lowerBound -= 1;
-    }
-    num totalLength = maximum - lowerBound;
-
-    var fractionWeights = new List<double>.generate(actions.length, (int i) {
-      var action = actions[i];
-      var score = scores[action];
-      return (score - lowerBound) / totalLength;
-    }, growable: false);
-    num fractionTotal = fractionWeights.fold(0, _sum);
-    List<int> weights = fractionWeights
-        .map/*<int>*/((n) => (n / fractionTotal * weightsResolution).round())
-        .toList(growable: false);
-
-    // Account for rounding errors by modifying the best option.
-    int weightsDifference = weightsResolution - weights.fold(0, _sum);
-    weights[weights.length - 1] += weightsDifference;
-    return new PlannerRecommendation(actions, weights);
-  }
-
-  bool get isEmpty => actions.isEmpty;
-
-  static num _sum(num a, num b) => a + b;
 }

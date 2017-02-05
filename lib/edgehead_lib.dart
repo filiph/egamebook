@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -19,21 +20,15 @@ import 'package:edgehead/generic_animation_frame/animation_frame.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:logging/logging.dart';
 
-/// Lesser self-worth than normal scoring function as monsters should
+/// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
-num carelessScoringFunction(Actor monster, WorldState world) {
-  int score = 0;
+num carelessCombineFunction(ActorScoreChange scoreChange) =>
+    scoreChange.selfPreservation - 2 * scoreChange.enemy;
 
-  var friends = world.actors.where((a) => a.team == monster.team);
-  score += friends.fold(0, (sum, a) => sum + a.hitpoints);
-
-  score -= world.actors
-      .fold<num>(
-          0, (sum, a) => sum + monster.hateTowards(a, world) * a.hitpoints)
-      .round();
-
-  return score;
-}
+num normalCombineFunction(ActorScoreChange scoreChange) =>
+    scoreChange.selfPreservation +
+    scoreChange.teamPreservation -
+    scoreChange.enemy;
 
 class EdgeheadGame extends LoopedEvent {
   static const int maxChoicesCount = 5;
@@ -83,7 +78,7 @@ class EdgeheadGame extends LoopedEvent {
       ..currentWeapon = new Sword()
       ..hitpoints = 2
       ..team = defaultEnemyTeam
-      ..worldScoringFunction = carelessScoringFunction);
+      ..combineFunction = carelessCombineFunction);
 
     goblin = new Actor((b) => b
       ..id = 1001
@@ -92,7 +87,7 @@ class EdgeheadGame extends LoopedEvent {
       ..pronoun = Pronoun.HE
       ..currentWeapon = new Sword("scimitar")
       ..team = defaultEnemyTeam
-      ..worldScoringFunction = carelessScoringFunction);
+      ..combineFunction = carelessCombineFunction);
 
     deadEscapee = new Room(
         "deadEscapee",
@@ -228,7 +223,7 @@ class EdgeheadGame extends LoopedEvent {
       // Player
       if (recs.actions.length == 1) {
         // Only one option, select by default.
-        selected = recs.actions.single; // TODO
+        selected = recs.actions.single;
         _applySelected(selected, actor, storyline);
         return;
       }
@@ -239,7 +234,9 @@ class EdgeheadGame extends LoopedEvent {
       planner.generateTable().forEach((line) => log.fine(line));
 
       // Take only the first few best actions.
-      List<Action> actions = new List.from(recs.actions.take(maxChoicesCount));
+      List<Action> actions = recs
+          .pickMax(maxChoicesCount, normalCombineFunction)
+          .toList(growable: false);
       actions.sort((a, b) => a.name.compareTo(b.name));
       for (Action action in actions) {
         choiceFunction(action.name, helpMessage: action.helpMessage,
@@ -250,9 +247,8 @@ class EdgeheadGame extends LoopedEvent {
       return;
     } else {
       // TODO - if more than one action, remove the one that was just made
-      // also rename to something else
-      selected = recs.actions[Randomly.chooseWeightedPrecise(recs.weights,
-          max: PlannerRecommendation.weightsResolution)];
+      selected =
+          recs.pickRandomly(actor.combineFunction ?? normalCombineFunction);
       _applySelected(selected, actor, storyline);
     }
 

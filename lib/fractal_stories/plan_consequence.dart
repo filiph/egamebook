@@ -1,5 +1,6 @@
 library stranded.plan_consequence;
 
+import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:quiver/core.dart';
 
 import 'action.dart';
@@ -8,7 +9,7 @@ import 'world.dart';
 
 /// A container for statistics for a [PlanConsequence].
 class ConsequenceStats {
-  final num score;
+  final ActorScore score;
   final num cumulativeProbability;
   final int order;
   const ConsequenceStats(this.score, this.cumulativeProbability, this.order);
@@ -16,7 +17,7 @@ class ConsequenceStats {
   @override
   String toString() => "ConsequenceStats<order=$order, "
       "cumProb=${cumulativeProbability.toStringAsFixed(3)}, "
-      "score=${score.toStringAsFixed(2)}>";
+      "score=$score>";
 }
 
 class PlanConsequence {

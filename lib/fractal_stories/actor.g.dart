@@ -43,7 +43,7 @@ class _$Actor extends Actor {
   @override
   final Team team;
   @override
-  final WorldScoringFunction worldScoringFunction;
+  final CombineFunction combineFunction;
 
   factory _$Actor([updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
@@ -66,7 +66,7 @@ class _$Actor extends Actor {
       this.pronoun,
       this.shield,
       this.team,
-      this.worldScoringFunction})
+      this.combineFunction})
       : super._() {
     if (alreadyMentioned == null)
       throw new ArgumentError.notNull('alreadyMentioned');
@@ -112,7 +112,7 @@ class _$Actor extends Actor {
         pronoun == other.pronoun &&
         shield == other.shield &&
         team == other.team &&
-        worldScoringFunction == other.worldScoringFunction;
+        combineFunction == other.combineFunction;
   }
 
   @override
@@ -158,7 +158,7 @@ class _$Actor extends Actor {
                     pronoun.hashCode),
                 shield.hashCode),
             team.hashCode),
-        worldScoringFunction.hashCode));
+        combineFunction.hashCode));
   }
 
   @override
@@ -181,7 +181,7 @@ class _$Actor extends Actor {
         'pronoun=${pronoun.toString()},\n'
         'shield=${shield.toString()},\n'
         'team=${team.toString()},\n'
-        'worldScoringFunction=${worldScoringFunction.toString()},\n'
+        'combineFunction=${combineFunction.toString()},\n'
         '}';
   }
 }
@@ -394,15 +394,15 @@ class _$ActorBuilder extends ActorBuilder {
   }
 
   @override
-  WorldScoringFunction get worldScoringFunction {
+  CombineFunction get combineFunction {
     _$this;
-    return super.worldScoringFunction;
+    return super.combineFunction;
   }
 
   @override
-  set worldScoringFunction(WorldScoringFunction worldScoringFunction) {
+  set combineFunction(CombineFunction combineFunction) {
     _$this;
-    super.worldScoringFunction = worldScoringFunction;
+    super.combineFunction = combineFunction;
   }
 
   _$ActorBuilder() : super._();
@@ -426,7 +426,7 @@ class _$ActorBuilder extends ActorBuilder {
       super.pronoun = _$v.pronoun;
       super.shield = _$v.shield;
       super.team = _$v.team;
-      super.worldScoringFunction = _$v.worldScoringFunction;
+      super.combineFunction = _$v.combineFunction;
       _$v = null;
     }
     return this;
@@ -463,7 +463,7 @@ class _$ActorBuilder extends ActorBuilder {
             pronoun: pronoun,
             shield: shield,
             team: team,
-            worldScoringFunction: worldScoringFunction);
+            combineFunction: combineFunction);
     replace(result);
     return result;
   }

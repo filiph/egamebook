@@ -1,5 +1,6 @@
 library stranded.action_record;
 
+import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:quiver/core.dart';
 
 import 'actor.dart';
@@ -71,7 +72,7 @@ class ActionRecord {
   ///
   /// Actors are represented by their [Actor.id] since we only care about
   /// their identity, not their state at the time of action.
-  final ActorMap<num> scoreChange;
+  final ActorMap<ActorScoreChange> scoreChange;
 
   ActionRecord(
       int time,
@@ -84,7 +85,7 @@ class ActionRecord {
       bool wasSuccess,
       bool wasFailure,
       bool wasAggressive,
-      ActorMap<num> scoreChanges)
+      ActorMap<ActorScoreChange> scoreChanges)
       : this._(
             time,
             actionName,
@@ -96,7 +97,7 @@ class ActionRecord {
             wasSuccess,
             wasFailure,
             wasAggressive,
-            new ActorMap<num>.from(scoreChanges));
+            new ActorMap<ActorScoreChange>.from(scoreChanges));
 
   ActionRecord.duplicate(ActionRecord other)
       : this._(
@@ -110,7 +111,7 @@ class ActionRecord {
             other.wasSuccess,
             other.wasFailure,
             other.wasAggressive,
-            new ActorMap<num>.from(other.scoreChange));
+            new ActorMap<ActorScoreChange>.from(other.scoreChange));
 
   ActionRecord._(
       this.time,
@@ -151,7 +152,7 @@ class ActionRecord {
 }
 
 class ActionRecordBuilder {
-  ActorMap<num> _actorScoresBefore;
+  ActorMap<ActorScore> _actorScoresBefore;
 
   WorldState _afterWorld;
 
@@ -197,7 +198,7 @@ class ActionRecordBuilder {
         throw new UnimplementedError("Mode $knownToMode not implemented");
     }
 
-    ActorMap<num> scoreChanges = new ActorMap<num>();
+    ActorMap<ActorScoreChange> scoreChanges = new ActorMap<ActorScoreChange>();
     var actorsBeforeAndAfter = _afterWorld.actors
         .where((actor) => _actorScoresBefore.keys.contains(actor));
     for (Actor actor in actorsBeforeAndAfter) {
@@ -224,7 +225,7 @@ class ActionRecordBuilder {
   }
 
   void markBeforeAction(WorldState world) {
-    _actorScoresBefore = new ActorMap<num>();
+    _actorScoresBefore = new ActorMap<ActorScore>();
     for (var a in world.actors) {
       _actorScoresBefore[a] = a.scoreWorld(world);
     }
