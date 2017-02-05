@@ -157,7 +157,7 @@ class _TopLevelVariableHarvester extends GeneralizingAstVisitor<Object> {
             : null;
         // TODO: varList.keyword == final : do not add or raise error?
         vars.add(new TypedVariable(variable.name.name,
-            varList.type != null ? varList.type.name.name : null, initializer));
+            varList.type?.toSource(), initializer));
       });
     }
     return super.visitNode(node);

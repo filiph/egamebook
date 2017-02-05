@@ -118,5 +118,35 @@ void main() {
       String generatedInitBlock = generator.generateInitBlockCode();
       expect(generatedInitBlock.trim(), initBlock.trim());
     });
+
+    test("generates valid generic type", () {
+      String code = r"""
+        Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
+            "$value S", description: "Spare physical energy", show: true);
+        """;
+
+      String extractMethod = """
+  @override
+  void extractStateFromVars() {
+    stamina = vars["stamina"] as Stat<int>;
+  }
+""";
+
+      String populateMethod = """
+  @override
+  void populateVarsFromState() {
+    vars["stamina"] = stamina;
+  }
+""";
+
+      var generator = new VarsGenerator();
+      generator.addSource(code);
+      String generatedExtractMethod = generator.generateExtractMethodCode();
+      expect(generatedExtractMethod.trim(), extractMethod.trim());
+      String generatedPopulateMethod = generator.generatePopulateMethodCode();
+      expect(generatedPopulateMethod.trim(), populateMethod.trim());
+      String generatedInitBlock = generator.generateInitBlockCode();
+      expect(generatedInitBlock.trim(), contains(r'new Stat<int>("Stamina",'));
+    });
   });
 }

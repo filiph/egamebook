@@ -183,7 +183,7 @@ class Stat<T> implements StatBase, Saveable {
 
   /// Lambda that takes care of of converting the [value] to a String that
   /// can be shown in the presenter.
-  final ValueToStringLambda valueToString;
+  final ValueToStringLambda<T> valueToString;
 
   /// The color associated with this stat. It should be an HTML-recognizable
   /// string (e.g. "blue", or "#ff00ff").
@@ -239,7 +239,7 @@ class Stat<T> implements StatBase, Saveable {
   /// If the [Stat] with the given [name] is already contained in internal
   /// Map of stats, this stat is updated with new value of [initialValue] and
   /// [show]. Other attributes remain same.
-  factory Stat(String name, ValueToStringLambda valueToString,
+  factory Stat(String name, ValueToStringLambda<T> valueToString,
       {String description,
       String color: StatBase.DEFAULT_COLOR,
       int priority: 0,
@@ -340,4 +340,4 @@ class Stat<T> implements StatBase, Saveable {
 }
 
 /// Typedef value to String.
-typedef String ValueToStringLambda(Object o);
+typedef String ValueToStringLambda<T>(T o);
