@@ -13,6 +13,8 @@ class _$Actor extends Actor {
   @override
   final List<String> categories;
   @override
+  final CombineFunction combineFunction;
+  @override
   final String currentRoomName;
   @override
   final Item currentWeapon;
@@ -20,6 +22,8 @@ class _$Actor extends Actor {
   final int followingActorId;
   @override
   final int hitpoints;
+  @override
+  final int stamina;
   @override
   final int id;
   @override
@@ -42,8 +46,6 @@ class _$Actor extends Actor {
   final Item shield;
   @override
   final Team team;
-  @override
-  final CombineFunction combineFunction;
 
   factory _$Actor([updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
@@ -51,10 +53,12 @@ class _$Actor extends Actor {
   _$Actor._(
       {this.alreadyMentioned,
       this.categories,
+      this.combineFunction,
       this.currentRoomName,
       this.currentWeapon,
       this.followingActorId,
       this.hitpoints,
+      this.stamina,
       this.id,
       this.initiative,
       this.isActive,
@@ -65,13 +69,13 @@ class _$Actor extends Actor {
       this.pose,
       this.pronoun,
       this.shield,
-      this.team,
-      this.combineFunction})
+      this.team})
       : super._() {
     if (alreadyMentioned == null)
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
+    if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
@@ -97,10 +101,12 @@ class _$Actor extends Actor {
     if (other is! Actor) return false;
     return alreadyMentioned == other.alreadyMentioned &&
         categories == other.categories &&
+        combineFunction == other.combineFunction &&
         currentRoomName == other.currentRoomName &&
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
         hitpoints == other.hitpoints &&
+        stamina == other.stamina &&
         id == other.id &&
         initiative == other.initiative &&
         isActive == other.isActive &&
@@ -111,8 +117,7 @@ class _$Actor extends Actor {
         pose == other.pose &&
         pronoun == other.pronoun &&
         shield == other.shield &&
-        team == other.team &&
-        combineFunction == other.combineFunction;
+        team == other.team;
   }
 
   @override
@@ -135,10 +140,13 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            alreadyMentioned
+                                                                            $jc(
+                                                                                0,
+                                                                                alreadyMentioned
+                                                                                    .hashCode),
+                                                                            categories
                                                                                 .hashCode),
-                                                                        categories
+                                                                        combineFunction
                                                                             .hashCode),
                                                                     currentRoomName
                                                                         .hashCode),
@@ -147,18 +155,18 @@ class _$Actor extends Actor {
                                                             followingActorId
                                                                 .hashCode),
                                                         hitpoints.hashCode),
-                                                    id.hashCode),
-                                                initiative.hashCode),
-                                            isActive.hashCode),
-                                        isPlayer.hashCode),
-                                    items.hashCode),
-                                name.hashCode),
-                            nameIsProperNoun.hashCode),
-                        pose.hashCode),
-                    pronoun.hashCode),
-                shield.hashCode),
-            team.hashCode),
-        combineFunction.hashCode));
+                                                    stamina.hashCode),
+                                                id.hashCode),
+                                            initiative.hashCode),
+                                        isActive.hashCode),
+                                    isPlayer.hashCode),
+                                items.hashCode),
+                            name.hashCode),
+                        nameIsProperNoun.hashCode),
+                    pose.hashCode),
+                pronoun.hashCode),
+            shield.hashCode),
+        team.hashCode));
   }
 
   @override
@@ -166,10 +174,12 @@ class _$Actor extends Actor {
     return 'Actor {'
         'alreadyMentioned=${alreadyMentioned.toString()},\n'
         'categories=${categories.toString()},\n'
+        'combineFunction=${combineFunction.toString()},\n'
         'currentRoomName=${currentRoomName.toString()},\n'
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
+        'stamina=${stamina.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
         'isActive=${isActive.toString()},\n'
@@ -181,7 +191,6 @@ class _$Actor extends Actor {
         'pronoun=${pronoun.toString()},\n'
         'shield=${shield.toString()},\n'
         'team=${team.toString()},\n'
-        'combineFunction=${combineFunction.toString()},\n'
         '}';
   }
 }
@@ -211,6 +220,18 @@ class _$ActorBuilder extends ActorBuilder {
   set categories(List<String> categories) {
     _$this;
     super.categories = categories;
+  }
+
+  @override
+  CombineFunction get combineFunction {
+    _$this;
+    return super.combineFunction;
+  }
+
+  @override
+  set combineFunction(CombineFunction combineFunction) {
+    _$this;
+    super.combineFunction = combineFunction;
   }
 
   @override
@@ -259,6 +280,18 @@ class _$ActorBuilder extends ActorBuilder {
   set hitpoints(int hitpoints) {
     _$this;
     super.hitpoints = hitpoints;
+  }
+
+  @override
+  int get stamina {
+    _$this;
+    return super.stamina;
+  }
+
+  @override
+  set stamina(int stamina) {
+    _$this;
+    super.stamina = stamina;
   }
 
   @override
@@ -393,28 +426,18 @@ class _$ActorBuilder extends ActorBuilder {
     super.team = team;
   }
 
-  @override
-  CombineFunction get combineFunction {
-    _$this;
-    return super.combineFunction;
-  }
-
-  @override
-  set combineFunction(CombineFunction combineFunction) {
-    _$this;
-    super.combineFunction = combineFunction;
-  }
-
   _$ActorBuilder() : super._();
 
   ActorBuilder get _$this {
     if (_$v != null) {
       super.alreadyMentioned = _$v.alreadyMentioned;
       super.categories = _$v.categories;
+      super.combineFunction = _$v.combineFunction;
       super.currentRoomName = _$v.currentRoomName;
       super.currentWeapon = _$v.currentWeapon;
       super.followingActorId = _$v.followingActorId;
       super.hitpoints = _$v.hitpoints;
+      super.stamina = _$v.stamina;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
       super.isActive = _$v.isActive;
@@ -426,7 +449,6 @@ class _$ActorBuilder extends ActorBuilder {
       super.pronoun = _$v.pronoun;
       super.shield = _$v.shield;
       super.team = _$v.team;
-      super.combineFunction = _$v.combineFunction;
       _$v = null;
     }
     return this;
@@ -448,10 +470,12 @@ class _$ActorBuilder extends ActorBuilder {
         new _$Actor._(
             alreadyMentioned: alreadyMentioned,
             categories: categories,
+            combineFunction: combineFunction,
             currentRoomName: currentRoomName,
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
             hitpoints: hitpoints,
+            stamina: stamina,
             id: id,
             initiative: initiative,
             isActive: isActive,
@@ -462,8 +486,7 @@ class _$ActorBuilder extends ActorBuilder {
             pose: pose,
             pronoun: pronoun,
             shield: shield,
-            team: team,
-            combineFunction: combineFunction);
+            team: team);
     replace(result);
     return result;
   }

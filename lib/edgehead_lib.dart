@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:edgehead/fractal_stories/actor_score.dart';
-import 'package:slot_machine/result.dart' as slot;
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/looped_event/looped_event.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
@@ -18,7 +16,9 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/generic_animation_frame/animation_frame.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
+import 'package:slot_machine/result.dart' as slot;
 
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
@@ -58,12 +58,17 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
+  final Stat<int> hitpoints;
+  final Stat<int> stamina;
+
   EdgeheadGame(
       StringTakingVoidFunction echo,
       StringTakingVoidFunction goto,
       choices,
       ChoiceFunction choiceFunction,
       SlotMachineShowFunction slotMachineShowFunction,
+      this.hitpoints,
+      this.stamina,
       {this.actionPattern})
       : super(echo, goto, choices, choiceFunction, slotMachineShowFunction) {
     setup();
@@ -107,8 +112,12 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "Filip"
       ..currentWeapon = new Sword()
       ..hitpoints = 2
+      ..stamina = 1
       ..initiative = 1000
       ..currentRoomName = deadEscapee.name);
+
+    hitpoints.value = filip.hitpoints;
+    stamina.value = filip.stamina;
 
     briana = new Actor((b) => b
       ..id = 100
@@ -150,6 +159,10 @@ class EdgeheadGame extends LoopedEvent {
       // moves.
       return;
     }
+
+    var currentPlayer = world.getActorById(filip.id);
+    hitpoints.value = currentPlayer.hitpoints;
+    stamina.value = currentPlayer.stamina;
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {

@@ -7,12 +7,16 @@ UniqueID: net.filiph.edgehead.0.0.1
 <declare>
     EdgeheadGame game;
 
+    Stat<int> hitpoints = new Stat<int>("Health", (int value) =>
+          "$value HP", description: "Amount of damage your body can still take "
+          "before collapsing", show: true);
     Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
           "$value S", description: "Spare physical energy", show: true);
 </declare>
 
 <init>
-    game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
+    game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine,
+                            hitpoints, stamina);
     game.onFinishedGoto = "endGame";
     points.add(0);
 </init>

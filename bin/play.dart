@@ -88,8 +88,14 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
   String gotoPage;
 
   try {
-    var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
-        choices, choice, showSlotMachine,
+    var game = new EdgeheadGame(
+        hijackedPrint,
+        (String goto) => gotoPage = goto,
+        choices,
+        choice,
+        showSlotMachine,
+        new Stat<int>("hitpoints", (v) => "$v HP"),
+        new Stat<int>("stamina", (v) => "$v S"),
         actionPattern: actionPattern);
     game.onFinishedGoto = "endGame";
 

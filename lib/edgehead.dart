@@ -13,17 +13,22 @@ class ScripterImpl extends Scripter {
 
       EdgeheadGame game;
   
+      Stat<int> hitpoints = new Stat<int>("Health", (int value) =>
+            "$value HP", description: "Amount of damage your body can still take "
+            "before collapsing", show: true);
       Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
             "$value S", description: "Spare physical energy", show: true);
 
   @override
   void populateVarsFromState() {
     vars["game"] = game;
+    vars["hitpoints"] = hitpoints;
     vars["stamina"] = stamina;
   }
   @override
   void extractStateFromVars() {
     game = vars["game"] as EdgeheadGame;
+    hitpoints = vars["hitpoints"] as Stat<int>;
     stamina = vars["stamina"] as Stat<int>;
   }
   ScripterImpl() : super() {
@@ -65,9 +70,11 @@ class ScripterImpl extends Scripter {
   @override
   void initBlock() {
     game = null;
+    hitpoints = new Stat<int>("Health", (int value) => "$value HP", description: "Amount of damage your body can still take " "before collapsing", show: true);
     stamina = new Stat<int>("Stamina", (int value) => "$value S", description: "Spare physical energy", show: true);
 
-        game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
+        game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine,
+                                hitpoints, stamina);
         game.onFinishedGoto = "endGame";
         points.add(0);
 
