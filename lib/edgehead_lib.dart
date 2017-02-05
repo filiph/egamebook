@@ -237,7 +237,17 @@ class EdgeheadGame extends LoopedEvent {
       List<Action> actions = recs
           .pickMax(maxChoicesCount, normalCombineFunction)
           .toList(growable: false);
-      actions.sort((a, b) => a.name.compareTo(b.name));
+
+      // Creates a string just for sorting. Actions with same enemy are
+      // sorted next to each other.
+      String sortingName(Action a) {
+        if (a is EnemyTargetAction) {
+          return "${a.enemy.name} ${a.name}";
+        }
+        return "ZZZZZZ ${a.name}";
+      }
+
+      actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
       for (Action action in actions) {
         choiceFunction(action.name, helpMessage: action.helpMessage,
             script: () {
