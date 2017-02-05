@@ -85,3 +85,9 @@ the game switches to interactive mode.
 
 This is a much faster way to get to your actions. The alternative is to play
 towards that action manually, which takes much more time.
+
+### Building new Situations
+
+TBD
+
+Don't forget to add your situation to `test/fractal_stories_test.dart`.

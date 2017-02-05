@@ -23,12 +23,14 @@ void main() {
           ..name = "Filip"
           ..currentWeapon = new Sword()
           ..hitpoints = 2
+          ..stamina = 1
           ..initiative = 1000);
 
-        var filip2 = filip.rebuild((b) => b.name = "Richard");
+        var filip2 = filip.rebuild((b) => b);
+        var richard = filip.rebuild((b) => b..name = "Richard");
 
-        expect(filip.hashCode, equals(filip.hashCode));
-        expect(filip.hashCode, isNot(filip2.hashCode));
+        expect(filip.hashCode, equals(filip2.hashCode));
+        expect(filip.hashCode, isNot(richard.hashCode));
       });
     });
     group("Situation", () {
@@ -111,7 +113,7 @@ void checkSituationBuild(Situation build()) {
   expect(c.time, a.time + 1);
 
   // Situations keep id when elapsing time.
-  expect(a.id, c.id);
+  expect(a.id, equals(c.id));
 
   // Hashcode for same situation with different [time] data is different.
   expect(a.hashCode, isNot(c.hashCode));
