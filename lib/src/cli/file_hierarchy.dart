@@ -17,6 +17,10 @@ class FileHierarchy {
   /// Allowed fileType.
   static const String FILE_TYPE = ".egb";
 
+  // Ignore the file that comes with the package.
+  static final String exampleEgbFile =
+      p.join("packages", "egamebook", "example", "example.egb");
+
   /// Saved hierarchy of master and part files as a Map.
   Map<String, List<String>> _filesHierarchy = {};
 
@@ -25,9 +29,12 @@ class FileHierarchy {
   List<File> _listFiles(Directory directoryFrom) {
     var contents = directoryFrom.listSync(recursive: true, followLinks: false);
 
-    var files = new List<File>.from(contents.where((entity) => entity is File));
+    Iterable<File> files =
+        contents.where((entity) => entity is File).map<File>((e) => e as File);
 
-    return files.where((file) => p.extension(file.path) == FILE_TYPE).toList();
+    return new List<File>.from(files.where((file) =>
+        p.extension(file.path) == FILE_TYPE &&
+        !file.path.contains(exampleEgbFile)));
   }
 
   /// Creates hierarchy of files from [fromDirectory] or parent of [fromFile].
