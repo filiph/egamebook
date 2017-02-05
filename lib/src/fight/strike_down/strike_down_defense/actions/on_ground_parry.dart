@@ -48,7 +48,7 @@ class OnGroundParry extends EnemyTargetAction {
           "<subject> put<s> <subject's> ${a.currentWeapon.name} "
           "in the way");
       s.add("the strike is too powerful", but: true);
-      w.updateActorById(a.id, (b) => b..hitpoints -= 1);
+      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
       bool killed = !w.getActorById(enemy.id).isAlive;
       s.add(
           "<owner's> <subject> still {cuts|slashes} "
