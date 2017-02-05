@@ -12,14 +12,19 @@ class ScripterImpl extends Scripter {
   /* LIBRARY */
 
       EdgeheadGame game;
+  
+      Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
+            "$value S", description: "Spare physical energy", show: true);
 
   @override
   void populateVarsFromState() {
     vars["game"] = game;
+    vars["stamina"] = stamina;
   }
   @override
   void extractStateFromVars() {
     game = vars["game"] as EdgeheadGame;
+    stamina = vars["stamina"] as Stat<int>;
   }
   ScripterImpl() : super() {
     /* PAGES & BLOCKS */
@@ -60,9 +65,11 @@ class ScripterImpl extends Scripter {
   @override
   void initBlock() {
     game = null;
+    stamina = new Stat<int>("Stamina", (int value) => "$value S", description: "Spare physical energy", show: true);
 
         game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
         game.onFinishedGoto = "endGame";
+        points.add(0);
 
   }
 }

@@ -6,11 +6,15 @@ UniqueID: net.filiph.edgehead.0.0.1
 
 <declare>
     EdgeheadGame game;
+
+    Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
+          "$value S", description: "Spare physical energy", show: true);
 </declare>
 
 <init>
     game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine);
     game.onFinishedGoto = "endGame";
+    points.add(0);
 </init>
 
 ---
