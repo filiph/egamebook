@@ -34,8 +34,8 @@ class TakeExitAction extends ExitAction {
     }
 
     s.addParagraph();
-    s.add(room
-        .description); // TODO: show short description according to world.actionRecords
+    // TODO: show short description according to world.actionRecords
+    s.add(room.description, wholeSentence: true);
     s.addParagraph();
 
     if (room.monsterGenerator != null) {
