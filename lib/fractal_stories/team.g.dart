@@ -63,6 +63,7 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
 
   @override
   void replace(Team other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

@@ -137,6 +137,7 @@ class FightSituationBuilder
 
   @override
   void replace(FightSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

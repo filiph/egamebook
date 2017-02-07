@@ -102,6 +102,7 @@ class OffBalanceOpportunitySituationBuilder
 
   @override
   void replace(OffBalanceOpportunitySituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

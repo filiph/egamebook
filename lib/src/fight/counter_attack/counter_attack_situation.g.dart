@@ -103,6 +103,7 @@ class CounterAttackSituationBuilder
 
   @override
   void replace(CounterAttackSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

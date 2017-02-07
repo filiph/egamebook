@@ -112,6 +112,7 @@ class SlashSituationBuilder
 
   @override
   void replace(SlashSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

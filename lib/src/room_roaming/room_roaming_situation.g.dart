@@ -89,6 +89,7 @@ class RoomRoamingSituationBuilder
 
   @override
   void replace(RoomRoamingSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

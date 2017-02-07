@@ -456,6 +456,7 @@ class _$ActorBuilder extends ActorBuilder {
 
   @override
   void replace(Actor other) {
+    if (other == null) throw new ArgumentError.notNull('other');
     _$v = other;
   }
 

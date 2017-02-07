@@ -11,8 +11,8 @@ dependencies:
   browser: '>=0.10.0 <0.11.0'
   dart_to_js_script_rewriter: '^0.1.0'
   sass: '^0.4.2'
-  built_collection: 1.2.0
-  built_value: 0.4.3
+  built_collection: ^1.2.0
+  built_value: ">=0.5.3 <1.0.0"
   egamebook:
     path: ../egamebook
   meta: any
@@ -22,7 +22,7 @@ dependencies:
     path: ../slot_machine
 
 dev_dependencies:
-  build: any
+  build_runner: any
   built_value_generator: any
   simple_preprocessor: any
   source_gen: any

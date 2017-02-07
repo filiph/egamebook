@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:build/build.dart';
+import 'package:build_runner/build_runner.dart';
 import 'package:built_value_generator/built_value_generator.dart';
+
 import 'phases.dart';
 
 /// Example of how to use source_gen with [BuiltValueGenerator].
