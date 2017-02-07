@@ -35,9 +35,6 @@ class ScripterImpl extends Scripter {
     /* PAGES & BLOCKS */
     pageMap[r"""start"""] = new ScripterPage(
       [
-          """You and Briana sprint through the giant worm’s tunnel.""",
-          """Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.""",
-          """![Orc and Goblin](img/orc_and_goblin_sketch.jpg)""",
           [
             null,
           {
