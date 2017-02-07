@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:egamebook/src/presenter/slot_machine_roll_result.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 /// Mock of the signature of `choice()` in EgbScripter.
@@ -13,8 +14,9 @@ typedef dynamic ChoiceFunction(String string,
 
 typedef void StringTakingVoidFunction(String arg);
 
-typedef Future<Null> SlotMachineShowFunction(
-    double probability, slot.Result predeterminedResult, String rollReason);
+typedef Future<RollResult> SlotMachineShowFunction(
+    double probability, String rollReason,
+    {bool rerollEnabled, String rerollEffectDescription});
 
 /// LoopedEvent is any event that gets executed in a loop, waiting for
 /// a) resolution and b) need of player input. It is intended for 'minigames'
@@ -40,11 +42,12 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction,
       this._slotMachineShowFunction);
 
-  Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult, String rollReason) {
+  Future<RollResult> showSlotMachine(double probability, String rollReason,
+      {bool rerollEnabled, String rerollEffectDescription}) {
     _pushStringBuffer();
-    return _slotMachineShowFunction(
-        probability, predeterminedResult, rollReason);
+    return _slotMachineShowFunction(probability, rollReason,
+        rerollEnabled: rerollEnabled,
+        rerollEffectDescription: rerollEffectDescription);
   }
 
   /// Calls Scripter's echo() function with the accumulated StringBuffer.

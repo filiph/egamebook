@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:egamebook/src/presenter/slot_machine_roll_result.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 import 'package:edgehead/edgehead_lib.dart';
@@ -75,11 +76,11 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     if (!silentWithOverride) print(msg);
   }
 
-  Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult, String rollReason) {
+  Future<RollResult> showSlotMachine(double probability, String rollReason,
+      {bool rerollEnabled, String rerollEffectDescription}) {
     var msg = "[[ SLOT MACHINE '$rollReason' "
         "${probability.toStringAsPrecision(2)} "
-        "$predeterminedResult ]]";
+        "$rerollEffectDescription (${rerollEnabled ? 'on' : 'off'} ]]";
     log.info(msg);
     if (!silentWithOverride) print("$msg\n");
     return new Future.value();

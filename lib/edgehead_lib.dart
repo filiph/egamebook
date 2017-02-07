@@ -294,6 +294,9 @@ class EdgeheadGame extends LoopedEvent {
     int index = Randomly.chooseWeighted(consequences.map((c) => c.probability));
     consequence = consequences[index];
 
+    XXX START HERE-
+        make this an async function, don't forget to await, await result below
+
     if (actor.isPlayer) {
       double chance = action.getSuccessChance(actor, world);
       if (chance < 1.0) {
