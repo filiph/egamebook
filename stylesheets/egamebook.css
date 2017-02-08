@@ -151,6 +151,10 @@ nav {
   flex: 1 0 0;
   padding-top: 0.5rem;
   padding-left: 1rem; }
+  #left-hand-nav button {
+    line-height: 100%; }
+    #left-hand-nav button span {
+      vertical-align: sub; }
 
 #right-hand-nav {
   -webkit-box-flex: 2;
@@ -166,7 +170,10 @@ nav {
   text-align: right; }
   #right-hand-nav button {
     margin-left: 0.5rem;
-    margin-bottom: 0.5rem; }
+    margin-bottom: 0.5rem;
+    line-height: 100%; }
+    #right-hand-nav button span {
+      vertical-align: sub; }
 
 #stats {
   display: inline;
