@@ -13,11 +13,20 @@ class ScripterImpl extends Scripter {
 
       EdgeheadGame game;
   
-      Stat<int> hitpoints = new Stat<int>("Health", (int value) =>
-            "$value HP", description: "Amount of damage your body can still take "
-            "before collapsing", show: true);
-      Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
-            "$value S", description: "Spare physical energy", show: true);
+      Stat<double> hitpoints = new Stat<double>("Health", (double value) {
+      if (value == 0.0) {
+        return "💀"; // dead, skull
+      }
+      if (value <= 0.5) {
+        return "😣"; // bleeding, persevering face
+      }
+      if (value < 1.0) {
+        return "😧"; // cut, anguished face
+      }
+      return "😐"; // fine, neutral face
+      }, description: "Your physical state", initialValue: 100.0, show: true);
+      Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value S",
+        description: "Spare physical energy", show: true);
 
   @override
   void populateVarsFromState() {
@@ -28,7 +37,7 @@ class ScripterImpl extends Scripter {
   @override
   void extractStateFromVars() {
     game = vars["game"] as EdgeheadGame;
-    hitpoints = vars["hitpoints"] as Stat<int>;
+    hitpoints = vars["hitpoints"] as Stat<double>;
     stamina = vars["stamina"] as Stat<int>;
   }
   ScripterImpl() : super() {
@@ -67,7 +76,7 @@ class ScripterImpl extends Scripter {
   @override
   void initBlock() {
     game = null;
-    hitpoints = new Stat<int>("Health", (int value) => "$value HP", description: "Amount of damage your body can still take " "before collapsing", show: true);
+    hitpoints = new Stat<double>("Health", (double value) {if (value == 0.0) {return "💀";} if (value <= 0.5) {return "😣";} if (value < 1.0) {return "😧";} return "😐";}, description: "Your physical state", initialValue: 100.0, show: true);
     stamina = new Stat<int>("Stamina", (int value) => "$value S", description: "Spare physical energy", show: true);
 
         game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine,

@@ -7,11 +7,20 @@ UniqueID: net.filiph.edgehead.0.0.1
 <declare>
     EdgeheadGame game;
 
-    Stat<int> hitpoints = new Stat<int>("Health", (int value) =>
-          "$value HP", description: "Amount of damage your body can still take "
-          "before collapsing", show: true);
-    Stat<int> stamina = new Stat<int>("Stamina", (int value) =>
-          "$value S", description: "Spare physical energy", show: true);
+    Stat<double> hitpoints = new Stat<double>("Health", (double value) {
+    if (value == 0.0) {
+      return "💀"; // dead, skull
+    }
+    if (value <= 0.5) {
+      return "😣"; // bleeding, persevering face
+    }
+    if (value < 1.0) {
+      return "😧"; // cut, anguished face
+    }
+    return "😐"; // fine, neutral face
+    }, description: "Your physical state", initialValue: 100.0, show: true);
+    Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value S",
+      description: "Spare physical energy", show: true);
 </declare>
 
 <init>

@@ -156,6 +156,13 @@ nav {
   @include flex(1 0 0);
   padding-top: 0.5rem;
   padding-left: 1rem;
+
+  button {
+    line-height: 100%;
+    span {
+      vertical-align: sub;
+    }
+  }
 }
 
 #right-hand-nav {
@@ -169,6 +176,10 @@ nav {
   button {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
+    line-height: 100%;
+    span {
+      vertical-align: sub;
+    }
   }
 }
 

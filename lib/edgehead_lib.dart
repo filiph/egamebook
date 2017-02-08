@@ -58,7 +58,7 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
-  final Stat<int> hitpoints;
+  final Stat<double> hitpoints;
   final Stat<int> stamina;
 
   EdgeheadGame(
@@ -82,6 +82,7 @@ class EdgeheadGame extends LoopedEvent {
       ..pronoun = Pronoun.HE
       ..currentWeapon = new Sword()
       ..hitpoints = 2
+      ..maxHitpoints = 2
       ..team = defaultEnemyTeam
       ..combineFunction = carelessCombineFunction);
 
@@ -120,11 +121,12 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "Filip"
       ..currentWeapon = new Sword()
       ..hitpoints = 2
+      ..maxHitpoints = 2
       ..stamina = 1
       ..initiative = 1000
       ..currentRoomName = deadEscapee.name);
 
-    hitpoints.value = filip.hitpoints;
+    hitpoints.value = filip.hitpoints / filip.maxHitpoints;
     stamina.value = filip.stamina;
 
     briana = new Actor((b) => b
@@ -133,6 +135,7 @@ class EdgeheadGame extends LoopedEvent {
       ..name = "Briana"
       ..currentWeapon = new Sword("longsword")
       ..hitpoints = 2
+      ..maxHitpoints = 2
       ..currentRoomName = deadEscapee.name
       ..followingActorId = filip.id);
 
@@ -169,7 +172,7 @@ class EdgeheadGame extends LoopedEvent {
     }
 
     var currentPlayer = world.getActorById(filip.id);
-    hitpoints.value = currentPlayer.hitpoints;
+    hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
 
     log.info("update() for world at time ${world.time}");

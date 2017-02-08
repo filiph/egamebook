@@ -23,6 +23,8 @@ class _$Actor extends Actor {
   @override
   final int hitpoints;
   @override
+  final int maxHitpoints;
+  @override
   final int stamina;
   @override
   final int id;
@@ -58,6 +60,7 @@ class _$Actor extends Actor {
       this.currentWeapon,
       this.followingActorId,
       this.hitpoints,
+      this.maxHitpoints,
       this.stamina,
       this.id,
       this.initiative,
@@ -75,6 +78,7 @@ class _$Actor extends Actor {
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
+    if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
     if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
@@ -106,6 +110,7 @@ class _$Actor extends Actor {
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
         hitpoints == other.hitpoints &&
+        maxHitpoints == other.maxHitpoints &&
         stamina == other.stamina &&
         id == other.id &&
         initiative == other.initiative &&
@@ -141,20 +146,22 @@ class _$Actor extends Actor {
                                                                     $jc(
                                                                         $jc(
                                                                             $jc(
-                                                                                0,
-                                                                                alreadyMentioned
+                                                                                $jc(
+                                                                                    0,
+                                                                                    alreadyMentioned
+                                                                                        .hashCode),
+                                                                                categories
                                                                                     .hashCode),
-                                                                            categories
+                                                                            combineFunction
                                                                                 .hashCode),
-                                                                        combineFunction
+                                                                        currentRoomName
                                                                             .hashCode),
-                                                                    currentRoomName
+                                                                    currentWeapon
                                                                         .hashCode),
-                                                                currentWeapon
+                                                                followingActorId
                                                                     .hashCode),
-                                                            followingActorId
-                                                                .hashCode),
-                                                        hitpoints.hashCode),
+                                                            hitpoints.hashCode),
+                                                        maxHitpoints.hashCode),
                                                     stamina.hashCode),
                                                 id.hashCode),
                                             initiative.hashCode),
@@ -179,6 +186,7 @@ class _$Actor extends Actor {
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
+        'maxHitpoints=${maxHitpoints.toString()},\n'
         'stamina=${stamina.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
@@ -280,6 +288,18 @@ class _$ActorBuilder extends ActorBuilder {
   set hitpoints(int hitpoints) {
     _$this;
     super.hitpoints = hitpoints;
+  }
+
+  @override
+  int get maxHitpoints {
+    _$this;
+    return super.maxHitpoints;
+  }
+
+  @override
+  set maxHitpoints(int maxHitpoints) {
+    _$this;
+    super.maxHitpoints = maxHitpoints;
   }
 
   @override
@@ -437,6 +457,7 @@ class _$ActorBuilder extends ActorBuilder {
       super.currentWeapon = _$v.currentWeapon;
       super.followingActorId = _$v.followingActorId;
       super.hitpoints = _$v.hitpoints;
+      super.maxHitpoints = _$v.maxHitpoints;
       super.stamina = _$v.stamina;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
@@ -476,6 +497,7 @@ class _$ActorBuilder extends ActorBuilder {
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
             hitpoints: hitpoints,
+            maxHitpoints: maxHitpoints,
             stamina: stamina,
             id: id,
             initiative: initiative,

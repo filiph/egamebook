@@ -94,7 +94,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
         choices,
         choice,
         showSlotMachine,
-        new Stat<int>("hitpoints", (v) => "$v HP"),
+        new Stat<double>("hitpoints", (v) => "$v HP"),
         new Stat<int>("stamina", (v) => "$v S"),
         actionPattern: actionPattern);
     game.onFinishedGoto = "endGame";
