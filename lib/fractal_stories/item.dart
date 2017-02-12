@@ -23,7 +23,7 @@ String typeToDescription(ItemType type) {
   }
 }
 
-abstract class Item<T extends Item> extends Object
+abstract class Item extends Object
     with EntityBehavior
     implements Entity {
   final ItemType type;
@@ -48,9 +48,6 @@ abstract class Item<T extends Item> extends Object
   /// value to be wanted. Branch in itself doesn't help you, but it does get
   /// you to traps, which get you to food.
   num get luxuryScore;
-
-  /// Makes a copy of instance. To be overridden by subclasses.
-  T copy();
 }
 
 enum ItemType { spear, branch, tent, sword }
@@ -90,7 +87,4 @@ class Sword extends Item {
 
   @override
   Pronoun get pronoun => Pronoun.IT;
-
-  @override
-  Sword copy() => new Sword();
 }

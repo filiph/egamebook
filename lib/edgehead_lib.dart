@@ -248,7 +248,7 @@ class EdgeheadGame extends LoopedEvent {
       if (recs.actions.length == 1) {
         // Only one option, select by default.
         selected = recs.actions.single;
-        _applySelected(selected, actor, storyline);
+        await _applySelected(selected, actor, storyline);
         return;
       }
       echo(storyline.realize());
@@ -274,8 +274,8 @@ class EdgeheadGame extends LoopedEvent {
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
       for (Action action in actions) {
         choiceFunction(action.name, helpMessage: action.helpMessage,
-            script: () {
-          _applySelected(action, actor, storyline);
+            script: () async {
+          await _applySelected(action, actor, storyline);
         });
       }
       return;
@@ -283,28 +283,37 @@ class EdgeheadGame extends LoopedEvent {
       // TODO - if more than one action, remove the one that was just made
       selected =
           recs.pickRandomly(actor.combineFunction ?? normalCombineFunction);
-      _applySelected(selected, actor, storyline);
+      await _applySelected(selected, actor, storyline);
     }
 
     storyline.outputFinishedParagraphs(echo);
   }
 
-  void _applySelected(Action action, Actor actor, Storyline storyline) {
+  Future<Null> _applySelected(
+      Action action, Actor actor, Storyline storyline) async {
     var consequences = action.apply(actor, consequence, world).toList();
-    int index = Randomly.chooseWeighted(consequences.map((c) => c.probability));
-    consequence = consequences[index];
-
-    XXX START HERE-
-        make this an async function, don't forget to await, await result below
 
     if (actor.isPlayer) {
       double chance = action.getSuccessChance(actor, world);
-      if (chance < 1.0) {
-        showSlotMachine(
-            chance,
-            consequence.isSuccess ? slot.Result.success : slot.Result.failure,
-            action.getRollReason(actor, world));
+      if (chance == 1.0) {
+        consequence = consequences.single;
+      } else if (chance == 0.0) {
+        consequence = consequences.single;
+      } else {
+        var result = await showSlotMachine(
+            chance, action.getRollReason(actor, world),
+            rerollEnabled: false /* TODO */,
+            rerollEffectDescription: null /* TODO */
+            );
+        // TODO: deduct player's stats (stamina, etc.) according to wasRerolled
+        consequence =
+            consequences.where((c) => c.isSuccess == result.isSuccess).single;
       }
+    } else {
+      // Actor isn't player. Just play dice.
+      int index =
+          Randomly.chooseWeighted(consequences.map((c) => c.probability));
+      consequence = consequences[index];
     }
 
     storyline.concatenate(consequence.storyline);

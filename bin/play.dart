@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:egamebook/src/presenter/slot_machine_roll_result.dart';
-import 'package:slot_machine/result.dart' as slot;
-
 import 'package:edgehead/edgehead_lib.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:egamebook/scripter.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:logging/logging.dart';
+import 'package:slot_machine/result.dart' as slot;
 
 Future<Null> main(List<String> args) async {
   var automated = args.contains("--automated");
@@ -33,6 +32,22 @@ Future<Null> main(List<String> args) async {
 }
 
 final ChoiceList choices = new ChoiceList();
+
+Stat<double> hitpoints = new Stat<double>("Health", (double value) {
+  if (value == 0.0) {
+    return "💀"; // dead, skull
+  }
+  if (value <= 0.5) {
+    return "😣"; // bleeding, persevering face
+  }
+  if (value < 1.0) {
+    return "😧"; // cut, anguished face
+  }
+  return "😐"; // fine, neutral face
+}, description: "Your physical state", initialValue: 100.0, show: true);
+
+Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value S",
+    description: "Spare physical energy", show: true);
 
 final _random = new Random();
 
@@ -76,27 +91,45 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     if (!silentWithOverride) print(msg);
   }
 
-  Future<RollResult> showSlotMachine(double probability, String rollReason,
-      {bool rerollEnabled, String rerollEffectDescription}) {
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollEnabled, String rerollEffectDescription}) async {
     var msg = "[[ SLOT MACHINE '$rollReason' "
         "${probability.toStringAsPrecision(2)} "
         "$rerollEffectDescription (${rerollEnabled ? 'on' : 'off'} ]]";
     log.info(msg);
-    if (!silentWithOverride) print("$msg\n");
-    return new Future.value();
+    if (!silentWithOverride) {
+      print("$msg\n");
+    }
+
+    var success = Randomly.saveAgainst(probability);
+    var initialResult = new slot.SessionResult(
+        success ? slot.Result.success : slot.Result.failure, false);
+    log.info('result = $initialResult');
+
+    if (success) {
+      // Success of initial roll.
+      if (!silentWithOverride) {
+        print("result = $initialResult");
+      }
+      return initialResult;
+    } else {
+      // Failure of initial roll.
+      if (silentWithOverride) {
+        // We're in silent mode. TODO: figure out if we want to reroll
+        return initialResult;
+      }
+      print("Initial roll failure.");
+      // TODO: allow reroll.
+      return initialResult;
+    }
   }
 
   String gotoPage;
 
   try {
-    var game = new EdgeheadGame(
-        hijackedPrint,
-        (String goto) => gotoPage = goto,
-        choices,
-        choice,
-        showSlotMachine,
-        new Stat<double>("hitpoints", (v) => "$v HP"),
-        new Stat<int>("stamina", (v) => "$v S"),
+    var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
+        choices, choice, showSlotMachine, hitpoints, stamina,
         actionPattern: actionPattern);
     game.onFinishedGoto = "endGame";
 

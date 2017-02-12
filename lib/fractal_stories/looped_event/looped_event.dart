@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:egamebook/src/presenter/slot_machine_roll_result.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 /// Mock of the signature of `choice()` in EgbScripter.
@@ -14,7 +13,7 @@ typedef dynamic ChoiceFunction(String string,
 
 typedef void StringTakingVoidFunction(String arg);
 
-typedef Future<RollResult> SlotMachineShowFunction(
+typedef Future<slot.SessionResult> SlotMachineShowFunction(
     double probability, String rollReason,
     {bool rerollEnabled, String rerollEffectDescription});
 
@@ -42,7 +41,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction,
       this._slotMachineShowFunction);
 
-  Future<RollResult> showSlotMachine(double probability, String rollReason,
+  Future<slot.SessionResult> showSlotMachine(double probability, String rollReason,
       {bool rerollEnabled, String rerollEffectDescription}) {
     _pushStringBuffer();
     return _slotMachineShowFunction(probability, rollReason,
