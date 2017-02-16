@@ -22,6 +22,12 @@ class Confuse extends EnemyTargetAction {
   String get nameTemplate => "confuse <object>";
 
   @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
+  @override
   String get rollReasonTemplate => "will <subject> confuse <object>?";
 
   @override

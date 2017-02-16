@@ -13,6 +13,12 @@ class OnGroundParry extends EnemyTargetAction {
   final bool isAggressive = false;
 
   @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
+  @override
   final String helpMessage = "You can deal serious damage when countering "
       "because your opponent is often caught off guard. On the other hand, "
       "counters require fast reaction and could throw you out of balance.";

@@ -2,6 +2,7 @@ library stranded.actor;
 
 import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
@@ -53,6 +54,11 @@ abstract class Actor extends Object
   int get maxHitpoints;
 
   int get stamina;
+
+  bool hasResource(Resource resource) {
+    assert(resource == Resource.stamina, "Only stamina implemented");
+    return stamina >= 1;
+  }
 
   /// Names can change or can even be duplicate. [id] is the only safe way
   /// to find out if we're talking about the same actor.

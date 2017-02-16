@@ -14,6 +14,12 @@ class StandUp extends Action {
   final bool isAggressive = false;
 
   @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
+  @override
   String get name => "Stand up.";
 
   @override

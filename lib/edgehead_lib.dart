@@ -18,7 +18,6 @@ import 'package:edgehead/generic_animation_frame/animation_frame.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
-import 'package:slot_machine/result.dart' as slot;
 
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
@@ -300,14 +299,28 @@ class EdgeheadGame extends LoopedEvent {
       } else if (chance == 0.0) {
         consequence = consequences.single;
       } else {
+        var resourceName = action.rerollResource.toString().split('.').last;
         var result = await showSlotMachine(
             chance, action.getRollReason(actor, world),
-            rerollEnabled: false /* TODO */,
-            rerollEffectDescription: null /* TODO */
-            );
-        // TODO: deduct player's stats (stamina, etc.) according to wasRerolled
+            rerollEnabled:
+                action.rerollable && actor.hasResource(action.rerollResource),
+            rerollEffectDescription: "Use $resourceName?");
         consequence =
             consequences.where((c) => c.isSuccess == result.isSuccess).single;
+
+        if (result.wasRerolled) {
+          // Deduct player's stats (stamina, etc.) according to wasRerolled.
+          assert(
+              action.rerollResource != null,
+              "Action.rerollable is true but "
+              "no Action.rerollResource is specified.");
+          var world = new WorldState.duplicate(consequence.world);
+          assert(action.rerollResource == Resource.stamina,
+              "Only stamina is supported as reroll resource right now");
+          world.updateActorById(actor.id, (b) => b..stamina -= 1);
+          consequence =
+              new PlanConsequence.withUpdatedWorld(consequence, world);
+        }
       }
     } else {
       // Actor isn't player. Just play dice.

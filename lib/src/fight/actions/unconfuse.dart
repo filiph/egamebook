@@ -13,10 +13,16 @@ class Unconfuse extends Action {
   final String helpMessage = "";
 
   @override
-  String get name => "Regain clarity.";
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
 
   @override
   final bool isAggressive = false;
+
+  @override
+  String get name => "Regain clarity.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

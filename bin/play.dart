@@ -96,7 +96,8 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
       {bool rerollEnabled, String rerollEffectDescription}) async {
     var msg = "[[ SLOT MACHINE '$rollReason' "
         "${probability.toStringAsPrecision(2)} "
-        "$rerollEffectDescription (${rerollEnabled ? 'on' : 'off'} ]]";
+        "$rerollEffectDescription "
+        "(enabled: ${rerollEnabled ? 'on' : 'off'}) ]]";
     log.info(msg);
     if (!silentWithOverride) {
       print("$msg\n");
@@ -120,7 +121,26 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
         return initialResult;
       }
       print("Initial roll failure.");
-      // TODO: allow reroll.
+
+      if (rerollEnabled) {
+        print(rerollEffectDescription);
+        print("Reroll? (y/n)");
+        var input = stdin.readLineSync().trim().toLowerCase();
+        if (input != 'y') {
+          print('No reroll');
+          return initialResult;
+        }
+
+        var rerollSuccess = Randomly.saveAgainst(1 - pow(1 - probability, 2));
+        if (rerollSuccess) {
+          print("Reroll success!");
+          return new slot.SessionResult(slot.Result.success, true);
+        }
+        print("Reroll failure.");
+        return new slot.SessionResult(slot.Result.failure, true);
+      }
+
+      print("Reroll impossible. So: $initialResult");
       return initialResult;
     }
   }

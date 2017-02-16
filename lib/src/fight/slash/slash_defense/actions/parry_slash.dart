@@ -22,6 +22,12 @@ class ParrySlash extends EnemyTargetAction {
   @override
   final bool isAggressive = false;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   ParrySlash(Actor enemy) : super(enemy);
 
   @override

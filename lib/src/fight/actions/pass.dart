@@ -11,10 +11,17 @@ class Pass extends Action {
       "the other option is potentially dangerous.";
 
   @override
-  String get name => "Stand off.";
+  final bool isAggressive = false;
 
   @override
-  final bool isAggressive = false;
+  final bool rerollable = false;
+
+
+  @override
+  final Resource rerollResource = null;
+
+  @override
+  String get name => "Stand off.";
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

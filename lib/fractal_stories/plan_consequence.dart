@@ -31,26 +31,66 @@ class PlanConsequence {
   final bool isFailure;
   final bool isSuccess;
 
-  String get successOrFailure => isSuccess
-      ? 'success'
-      : (isFailure ? 'failure' : 'nor success nor failure');
-
   /// How far are we from initial world state.
   final int order;
 
-  PlanConsequence(this.world, PlanConsequence previous, this.action,
-      this.storyline, num probability,
-      {this.isInitial: false, this.isFailure: false, this.isSuccess: false})
-      : order = previous == null ? 0 : previous.order + 1,
-        cumulativeProbability = previous == null
-            ? probability
-            : probability * previous.cumulativeProbability,
-        probability = probability {
-    storyline.time = world.time;
-  }
+  /// The main constructor for building consequences.
+  ///
+  /// It builds the new consequence out of previous consequence ([previous]),
+  /// the newly updated [world], the [action] that lead to this world,
+  /// the associated [storyline], and the [probability] with which
+  /// the previous world turns into this world.
+  PlanConsequence(WorldState world, PlanConsequence previous, Action action,
+      Storyline storyline, num probability,
+      {bool isInitial: false, bool isFailure: false, bool isSuccess: false})
+      : this._(
+            world,
+            action,
+            storyline,
+            probability,
+            previous == null
+                ? probability
+                : probability * previous.cumulativeProbability,
+            isInitial,
+            isFailure,
+            isSuccess,
+            previous == null ? 0 : previous.order + 1);
 
+  /// Create the first consequence (the start of planning). It's a consequence
+  /// of nothing, with no previous state.
   PlanConsequence.initial(WorldState world)
       : this(world, null, null, new Storyline(), 1.0, isInitial: true);
+
+  /// Returns a copy of the [consequence] with updated [PlanConsequence.world].
+  ///
+  /// This is useful when correcting the consequence's world after the action
+  /// has been applied.
+  factory PlanConsequence.withUpdatedWorld(
+      PlanConsequence consequence, WorldState world) {
+    return new PlanConsequence._(
+        world,
+        consequence.action,
+        new Storyline()..concatenate(consequence.storyline),
+        consequence.probability,
+        consequence.cumulativeProbability,
+        consequence.isInitial,
+        consequence.isFailure,
+        consequence.isSuccess,
+        consequence.order);
+  }
+
+  PlanConsequence._(
+      this.world,
+      this.action,
+      this.storyline,
+      this.probability,
+      this.cumulativeProbability,
+      this.isInitial,
+      this.isFailure,
+      this.isSuccess,
+      this.order) {
+    storyline.time = world.time;
+  }
 
   @override
   int get hashCode => hashObjects([
@@ -63,6 +103,10 @@ class PlanConsequence {
         isFailure,
         isSuccess
       ]);
+
+  String get successOrFailure => isSuccess
+      ? 'success'
+      : (isFailure ? 'failure' : 'nor success nor failure');
 
   @override
   bool operator ==(Object o) => o is PlanConsequence && hashCode == o.hashCode;

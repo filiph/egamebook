@@ -14,6 +14,12 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   StartSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override

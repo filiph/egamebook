@@ -10,6 +10,12 @@ class TakeExitAction extends ExitAction {
   @override
   final bool isAggressive = false;
 
+  @override
+  final bool rerollable = false;
+
+  @override
+  final Resource rerollResource = null;
+
   TakeExitAction(Exit exit) : super(exit);
 
   @override

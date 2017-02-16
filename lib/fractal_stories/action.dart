@@ -58,12 +58,43 @@ typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
 /// [ExitAction] with the given [exit].
 typedef ExitAction ExitActionBuilder(Exit exit);
 
+/// This enum defines all the different resources (Stats) that player can use
+/// to reroll action throws.
+enum Resource {
+  /// Using stamina means exerting extra physical energy. Useful for power
+  /// moves, running away unscathed, etc.
+  stamina,
+
+  /// Some moves can be rerolled by 'spending' balance. A kick will land,
+  /// but the player will go off-balance or even fall down.
+  balance,
+
+  // Ideas: weaponGrip (throw sword), shield (let the shield break)
+}
+
 abstract class Action {
   String _description;
 
   String get name;
 
   String get helpMessage;
+
+  /// Whether or not the actor can exert a resource (of type [rerollResource])
+  /// to reroll a failed throw.
+  ///
+  /// For example, the player can exert his spare [Resource.stamina] to reroll
+  /// an attempt to parry an enemy's attack. This will give him another throw,
+  /// but will also decrease his stamina. We need to know which type of stat
+  /// this action takes.
+  bool get rerollable;
+
+  /// When [rerollable] is `true`, this field must be set to the type of
+  /// resource that can be exerted.
+  ///
+  /// The resource must be spent _outside_ [apply]. The game system – not
+  /// the class – is responsible for taking the resource away and reporting
+  /// on it.
+  Resource get rerollResource;
 
   /// Whether or not this action is aggressive towards its sufferer. Combat
   /// moves are aggressive, healing moves aren't.

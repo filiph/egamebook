@@ -15,6 +15,12 @@ class StartSlash extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   StartSlash(Actor enemy) : super(enemy);
 
   @override

@@ -15,6 +15,12 @@ class CounterSlash extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   CounterSlash(Actor enemy) : super(enemy);
 
   @override

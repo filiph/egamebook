@@ -14,6 +14,12 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
 
   @override

@@ -14,6 +14,12 @@ class Scramble extends Action {
   final bool isAggressive = false;
 
   @override
+  final bool rerollable = false;
+
+  @override
+  final Resource rerollResource = null;
+
+  @override
   String get name => "Scramble.";
 
   @override

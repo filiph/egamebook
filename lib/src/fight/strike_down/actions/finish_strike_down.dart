@@ -11,6 +11,12 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   @override
   final bool isAggressive = false;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override

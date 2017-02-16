@@ -14,6 +14,12 @@ class FinishSlash extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   FinishSlash(Actor enemy) : super(enemy);
 
   @override

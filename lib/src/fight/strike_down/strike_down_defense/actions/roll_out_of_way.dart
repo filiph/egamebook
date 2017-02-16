@@ -10,6 +10,12 @@ class RollOutOfWay extends EnemyTargetAction {
   @override
   final bool isAggressive = false;
 
+  @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override

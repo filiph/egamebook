@@ -14,6 +14,12 @@ class Kick extends EnemyTargetAction {
   static const String className = "Kick";
 
   @override
+  final bool rerollable = true;
+
+  @override
+  final Resource rerollResource = Resource.stamina;
+
+  @override
   final bool isAggressive = true;
 
   @override
