@@ -12,7 +12,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.29.6"
+    version: "0.29.7"
   ansicolor:
     description:
       name: ansicolor
@@ -30,7 +30,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.13.0"
+    version: "1.13.1"
   barback:
     description:
       name: barback
@@ -54,13 +54,13 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.2"
   build_barback:
     description:
       name: build_barback
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   build_runner:
     description:
       name: build_runner
@@ -168,7 +168,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.3+9"
+    version: "0.11.3+10"
   http_multi_server:
     description:
       name: http_multi_server
@@ -186,7 +186,7 @@ packages:
       name: isolate
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.3"
+    version: "1.0.0"
   jsonml:
     description:
       name: jsonml
@@ -252,7 +252,7 @@ packages:
       name: pool
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.4"
+    version: "1.3.0"
   pub_semver:
     description:
       name: pub_semver
@@ -312,13 +312,13 @@ packages:
       path: "../slot_machine"
       relative: true
     source: path
-    version: "3.1.0"
+    version: "4.0.0"
   source_gen:
     description:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4"
+    version: "0.5.4+2"
   source_map_stack_trace:
     description:
       name: source_map_stack_trace
@@ -342,7 +342,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.1"
   stream_channel:
     description:
       name: stream_channel
@@ -355,12 +355,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  term_glyph:
+    description:
+      name: term_glyph
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   test:
     description:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.18+1"
+    version: "0.12.19+1"
   typed_data:
     description:
       name: typed_data
@@ -404,4 +410,4 @@ packages:
     source: hosted
     version: "2.1.12"
 sdks:
-  dart: ">=1.21.0 <2.0.0"
+  dart: ">=1.22.0 <2.0.0"
