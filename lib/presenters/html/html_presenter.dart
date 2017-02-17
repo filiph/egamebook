@@ -201,12 +201,7 @@ class HtmlPresenter extends Presenter {
     if (s == null) return new Future.value(false);
     var completer = new Completer<bool>();
 
-    // TODO: rewrite to async await and only wait for _slotMachine if there's
-    // actually one waiting. Otherwise, the future waits for too long and slot
-    // machine can overtake text to the UI.
-    _slotMachineDone().then((_) {
-      return new Future.delayed(_durationBetweenShowingText);
-    }).then((_) {
+    new Future.delayed(_durationBetweenShowingText, () {
       _textHistory.write("$s\n\n");
       final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
         new FootnoteSupTagSyntax()
@@ -308,8 +303,6 @@ class HtmlPresenter extends Presenter {
     if (currentActivity == UI_ACTIVITY_TITLE) {
       _bookReadyHandler();
     }
-
-    await _slotMachineDone();
 
     var completer = new Completer<int>();
 
@@ -502,8 +495,6 @@ class HtmlPresenter extends Presenter {
       return new Future.value(true);
     }
 
-    await _slotMachineDone();
-
     var completer = new Completer<bool>();
 
     ParagraphElement paragraph = new ParagraphElement();
@@ -541,8 +532,6 @@ class HtmlPresenter extends Presenter {
     _stats = stats;
     _printStats(); // DEBUG
 
-    await _slotMachineDone();
-
     var statsDiv = document.querySelector("nav div#stats");
     statsDiv.children.clear();
     for (int i = 0; i < stats.length; i++) {
@@ -561,7 +550,6 @@ class HtmlPresenter extends Presenter {
 
   @override
   Future<bool> updateStats(StatUpdateCollection updates) async {
-    await _slotMachineDone();
     UIStat.updateStatsList(_stats, updates) // Returns only the changed stats.
         .forEach((UIStat stat) {
       var anchor = _statsElements[stat.name];
@@ -576,9 +564,12 @@ class HtmlPresenter extends Presenter {
   }
 
   @override
-  Future<Null> showSlotMachine(
-      num probability, slot.Result predeterminedResult, String rollReason) {
-    log("Showing slot machine: $probability, $predeterminedResult");
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollable: false, String rerollEffectDescription}) async {
+    assert(rerollable != null, "rerollable shouldn't be null");
+    log("Showing slot machine: $probability, $rollReason,"
+        "reroll: $rerollEffectDescription");
 
     _showLoading(false);
     var div = new Element.div()..classes.add("slot-machine");
@@ -590,8 +581,8 @@ class HtmlPresenter extends Presenter {
           ..text = humanizeProbability(probability)
           ..classes.add("slot-machine__humanized-probability"));
     }
-    var machine = new slot.SlotMachine.fromProbability(probability,
-        predeterminedResult: predeterminedResult);
+    var machine = new slot.SlotMachine(probability,
+        rerollable: rerollable, rerollEffectDescription: rerollEffectDescription);
     div.append(machine.canvasEl);
     var paragraph = new Element.p()
       ..classes.add("slot-machine__result")
@@ -599,20 +590,11 @@ class HtmlPresenter extends Presenter {
       ..append(machine.resultEl)
       ..append(new Element.span()..text = " ❦");
     div.append(paragraph);
+    div.append(machine.rerollEl);
     bookDiv.append(div);
-    _machineRollDone = machine.roll();
-    return new Future.value();
-  }
-
-  Future _machineRollDone;
-
-  /// Returns a future either immediately (if no slot machine is running)
-  /// or after current slot machine is done.
-  Future<Null> _slotMachineDone() async {
-    if (_machineRollDone == null) return new Future.value();
-    await _machineRollDone;
-    _machineRollDone = null;
+    var result = await machine.play();
     _showLoading(true);
+    return result;
   }
 
   /// Prints visible UI stats into console.

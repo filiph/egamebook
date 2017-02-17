@@ -2,30 +2,21 @@ library egb_message;
 
 import 'dart:convert' show JSON;
 
-import 'package:slot_machine/result.dart' as slot;
-
 import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/stat/stat.dart';
+import 'package:slot_machine/result.dart' as slot;
 
 /// Class Message wraps messages used for communication between Presenter
 /// and Scripter parts.
+///
+/// The correct handshake looks like this:
+///
+/// Runner                 Scripter
+/// REQUEST_BOOK_UID
+///                        SEND_BOOK_UID
+/// LOAD_GAME/START (incl. player chronology)
+///                        NO_RESULT/TEXT_RESULT/SHOW_CHOICES
 class Message {
-  /// Type of the message.
-  final int type;
-
-  /// List type of content.
-  List listContent;
-
-  /// String type of content.
-  String strContent;
-
-  /// Int type of content.
-  int intContent;
-
-  /// Map type of content.
-  Map<String, Object> mapContent;
-
-  // Messages from Scripter to Runner.
   /// Message type send book Uid.
   static const int SEND_BOOK_UID = 10;
 
@@ -71,8 +62,8 @@ class Message {
   /// Message type scripter log.
   static const int SCRIPTER_LOG = 667;
 
-  // Messages from Runner to Scripter.
   /// Message type request book Uid.
+
   static const int REQUEST_BOOK_UID = 1000;
 
   /// Message type start.
@@ -92,6 +83,191 @@ class Message {
 
   /// Message type quit.
   static const int QUIT = 1070;
+
+  /// Message type slot machine result.
+  static const int SLOT_MACHINE_RESULT = 1080;
+
+  /// Type of the message.
+  final int type;
+
+  /// List type of content.
+  List listContent;
+
+  /// String type of content.
+  String strContent;
+
+  /// Int type of content.
+  int intContent;
+
+  /// Map type of content.
+  Map<String, Object> mapContent;
+
+  /// Creates new Message with [type] and optional if it [needsAnswer].
+  Message(this.type, {bool needsAnswer: true});
+
+  /// Creates new Message of type [SEND_BOOK_UID]
+  /// with String content [strContent].
+  Message.bookUid(this.strContent) : type = SEND_BOOK_UID;
+
+  /// Creates new Message of type [CHOICE_SELECTED] with provided [hash]
+  /// used as [intContent].
+  Message.choiceSelected(int hash) : type = CHOICE_SELECTED {
+    intContent = hash;
+  }
+
+  /// Creates new Message of type [END_OF_BOOK].
+  /// It is used during the [IsolatePresenterProxy]'s [:endBook():].
+  Message.endOfBook() : type = END_OF_BOOK;
+
+  /// Creates new Message of type [FORM_INPUT] with provided
+  /// [state] used as [mapContent].
+  Message.formInput(CurrentState state) : type = FORM_INPUT {
+    mapContent = state.toMap();
+  }
+
+  /// Creates new Message from provided [json] String.
+  Message.fromJson(String json)
+      : this.fromMap(JSON.decode(json) as Map<String, Object>);
+
+  /// Creates new Message from provided [map].
+  /// It fills all the parts of [Message] - [type], [strContent],
+  /// [listContent], [intContent] and [mapContent] if provided.
+  Message.fromMap(Map<String, Object> map) : type = map["type"] {
+    if (map.containsKey("strContent")) {
+      strContent = map["strContent"];
+    }
+    if (map.containsKey("listContent")) {
+      listContent = map["listContent"];
+    }
+    if (map.containsKey("intContent")) {
+      intContent = map["intContent"];
+    }
+    if (map.containsKey("mapContent")) {
+      mapContent = map["mapContent"] as Map<String, Object>;
+    }
+  }
+
+  /// Creates new Message of type [LOAD_GAME] with provided [json] used
+  /// as [strContent].
+  Message.loadGame(String json) : type = LOAD_GAME {
+    strContent = json;
+  }
+
+  /// Creates new Message of type [NO_RESULT].
+  Message.noResult() : type = NO_RESULT;
+
+  /// Creates new Message of type [PROCEED].
+  Message.proceed() : type = PROCEED;
+
+  /// Creates new Message of type [QUIT].
+  /// It is used during the [IsolateScripterProxy]'s [:quit():].
+  Message.quit() : type = QUIT;
+
+  /// Creates new Message of type [REQUEST_BOOK_UID].
+  Message.requestBookUid() : type = REQUEST_BOOK_UID;
+
+  // Message containing ChoiceList is created in ChoiceList.toMessage().
+
+  /// Creates new Message of type [SAVE_GAME] with provided [json] used
+  /// as [strContent].
+  Message.saveGame(String json) : type = SAVE_GAME {
+    strContent = json;
+  }
+
+  /// Creates new Message of type [SAVE_PLAYER_CHRONOLOGY] with provided
+  /// [playerChronology] used as [listContent].
+  /// It is used during the [IsolatePresenterProxy]'s [:savePlayerChronology():].
+  Message.savePlayerChronology(Set<String> playerChronology)
+      : type = SAVE_PLAYER_CHRONOLOGY {
+    listContent = playerChronology.toList();
+  }
+
+  /// Creates new Message of type [SCRIPTER_ERROR] with provided
+  /// [message] used as [strContent].
+  /// This message is used when some error appears. and is also used during
+  /// the [IsolatePresenterProxy]'s [:reportError():].
+  Message.scripterError(String message) : type = SCRIPTER_ERROR {
+    strContent = message;
+  }
+
+  /// Creates new Message of type [SCRIPTER_LOG] with provided
+  /// [message] used as [strContent].
+  /// It is used during the [IsolatePresenterProxy]'s [:log():].
+  Message.scripterLog(String message) : type = SCRIPTER_LOG {
+    strContent = message;
+  }
+
+  /// Creates new Message of type [SHOW_FORM] with provided [form]
+  /// used as [mapContent].
+  /// It is used during the [IsolatePresenterProxy]'s [:showForm():].
+  Message.showForm(Form form) : type = SHOW_FORM {
+    mapContent = form.toMap();
+  }
+
+  Message.showSlotMachine(num probability, String rollReason, bool rerollable,
+      String rerollEffectDescription)
+      : type = SHOW_SLOT_MACHINE {
+    listContent = [
+      probability,
+      rollReason,
+      rerollable,
+      rerollEffectDescription
+    ];
+  }
+
+  // PointsAward messages are made and deconstructed in points_award.dart.
+
+  // Stats messages are made and deconstructed in stat.dart.
+
+  Message.slotMachineResult(slot.SessionResult result)
+      : type = SLOT_MACHINE_RESULT {
+    listContent = [result.result.index, result.wasRerolled];
+  }
+
+  /// Creates new Message of type [START].
+  /// It is used during the [IsolatePresenterProxy]'s [:restart():].
+  Message.start() : type = START;
+
+  /// Creates new Message of type [SET_STATS] with provided [list] used as
+  /// a [listContent].
+  /// It is also used during the [IsolatePresenterProxy]'s [:setStats():].
+  Message.statsInit(List<Map<String, Object>> list) : type = SET_STATS {
+    listContent = list;
+  }
+
+  /// Creates new Message of type [UPDATE_STATS] with provided
+  /// StatUpdateCollection [updates] used as a [mapContent].
+  /// It is used during the [IsolatePresenterProxy]'s [:updateStats():].
+  Message.statUpdates(StatUpdateCollection updates) : type = UPDATE_STATS {
+    mapContent = updates.toMap();
+  }
+
+  /// Creates new Message of type [TEXT_RESULT] with String
+  /// content [str].
+  /// It is used during the [IsolatePresenterProxy]'s [:showText():].
+  Message.textResult(String str) : type = TEXT_RESULT {
+    strContent = str;
+  }
+
+  /// Creates new Message of type [UPDATE_FORM] with provided
+  /// [formConfiguration] used as [mapContent].
+  /// It is used during the [IsolatePresenterProxy]'s [:updateForm():].
+  Message.updateForm(FormConfiguration formConfiguration) : type = UPDATE_FORM {
+    mapContent = formConfiguration.toMap();
+  }
+
+  /// Returns true for message types that are async, ie. sender doesn't wait
+  /// for the receiver to do something.
+  ///
+  /// Async message types are type [SAVE_GAME], [SAVE_PLAYER_CHRONOLOGY],
+  /// [SET_STATS], [UPDATE_STATS], [SCRIPTER_ERROR] and [SCRIPTER_LOG].
+  bool get isAsync =>
+      (type == SAVE_GAME) ||
+      (type == SAVE_PLAYER_CHRONOLOGY) ||
+      (type == SET_STATS) ||
+      (type == UPDATE_STATS) ||
+      (type == SCRIPTER_ERROR) ||
+      (type == SCRIPTER_LOG);
 
   /// Returns type as a String.
   String get typeString {
@@ -145,178 +321,6 @@ class Message {
     }
   }
 
-  /// Returns String representation of Message with its String as a type
-  /// [typeString] and if [isAsync] is [:true:].
-  String toString() => "Message $typeString${isAsync ? ' (async)' : ''}";
-
-  /// Returns true for message types that are async, ie. sender doesn't wait
-  /// for the receiver to do something.
-  ///
-  /// Async message types are type [SAVE_GAME], [SAVE_PLAYER_CHRONOLOGY],
-  /// [SET_STATS], [UPDATE_STATS], [SCRIPTER_ERROR] and [SCRIPTER_LOG].
-  bool get isAsync =>
-      (type == SAVE_GAME) ||
-      (type == SAVE_PLAYER_CHRONOLOGY) ||
-      (type == SET_STATS) ||
-      (type == UPDATE_STATS) ||
-      (type == SCRIPTER_ERROR) ||
-      (type == SCRIPTER_LOG);
-
-  /*
-   * The correct handshake looks like this:
-   *
-   * Runner                 Scripter
-   * GET_BOOK_UID
-   *                        SEND_BOOK_UID
-   * LOAD_GAME/START (incl. player chronology)
-   *                        NO_RESULT/TEXT_RESULT/SHOW_CHOICES
-   *
-   */
-
-  /// Creates new Message with [type] and optional if it [needsAnswer].
-  Message(this.type, {bool needsAnswer: true});
-
-  /// Creates new Message of type [QUIT].
-  /// It is used during the [IsolateScripterProxy]'s [:quit():].
-  Message.quit() : type = QUIT;
-
-  /// Creates new Message of type [PROCEED].
-  Message.proceed() : type = PROCEED;
-
-  /// Creates new Message of type [TEXT_RESULT] with String
-  /// content [str].
-  /// It is used during the [IsolatePresenterProxy]'s [:showText():].
-  Message.textResult(String str) : type = TEXT_RESULT {
-    strContent = str;
-  }
-
-  /// Creates new Message of type [START].
-  /// It is used during the [IsolatePresenterProxy]'s [:restart():].
-  Message.start() : type = START;
-
-  /// Creates new Message of type [SEND_BOOK_UID]
-  /// with String content [strContent].
-  Message.bookUid(this.strContent) : type = SEND_BOOK_UID;
-
-  /// Creates new Message of type [REQUEST_BOOK_UID].
-  Message.requestBookUid() : type = REQUEST_BOOK_UID;
-
-  /// Creates new Message of type [END_OF_BOOK].
-  /// It is used during the [IsolatePresenterProxy]'s [:endBook():].
-  Message.endOfBook() : type = END_OF_BOOK;
-
-  // Message containing ChoiceList is created in ChoiceList.toMessage().
-
-  /// Creates new Message of type [CHOICE_SELECTED] with provided [hash]
-  /// used as [intContent].
-  Message.choiceSelected(int hash) : type = CHOICE_SELECTED {
-    intContent = hash;
-  }
-
-  /// Creates new Message of type [UPDATE_STATS] with provided
-  /// StatUpdateCollection [updates] used as a [mapContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:updateStats():].
-  Message.statUpdates(StatUpdateCollection updates) : type = UPDATE_STATS {
-    mapContent = updates.toMap();
-  }
-
-  /// Creates new Message of type [SET_STATS] with provided [list] used as
-  /// a [listContent].
-  /// It is also used during the [IsolatePresenterProxy]'s [:setStats():].
-  Message.statsInit(List<Map<String, Object>> list) : type = SET_STATS {
-    listContent = list;
-  }
-
-  /// Creates new Message of type [NO_RESULT].
-  Message.noResult() : type = NO_RESULT;
-
-  /// Creates new Message of type [SAVE_GAME] with provided [json] used
-  /// as [strContent].
-  Message.saveGame(String json) : type = SAVE_GAME {
-    strContent = json;
-  }
-
-  /// Creates new Message of type [LOAD_GAME] with provided [json] used
-  /// as [strContent].
-  Message.loadGame(String json) : type = LOAD_GAME {
-    strContent = json;
-  }
-
-  // PointsAward messages are made and deconstructed in points_award.dart.
-
-  // Stats messages are made and deconstructed in stat.dart.
-
-  /// Creates new Message of type [SAVE_PLAYER_CHRONOLOGY] with provided
-  /// [playerChronology] used as [listContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:savePlayerChronology():].
-  Message.savePlayerChronology(Set<String> playerChronology)
-      : type = SAVE_PLAYER_CHRONOLOGY {
-    listContent = playerChronology.toList();
-  }
-
-  /// Creates new Message of type [SHOW_FORM] with provided [form]
-  /// used as [mapContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:showForm():].
-  Message.showForm(Form form) : type = SHOW_FORM {
-    mapContent = form.toMap();
-  }
-
-  /// Creates new Message of type [UPDATE_FORM] with provided
-  /// [formConfiguration] used as [mapContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:updateForm():].
-  Message.updateForm(FormConfiguration formConfiguration) : type = UPDATE_FORM {
-    mapContent = formConfiguration.toMap();
-  }
-
-  /// Creates new Message of type [FORM_INPUT] with provided
-  /// [state] used as [mapContent].
-  Message.formInput(CurrentState state) : type = FORM_INPUT {
-    mapContent = state.toMap();
-  }
-
-  Message.showSlotMachine(
-      num probability, slot.Result predeterminedResult, String rollReason)
-      : type = SHOW_SLOT_MACHINE {
-    listContent = [probability, predeterminedResult.index, rollReason];
-  }
-
-  /// Creates new Message of type [SCRIPTER_ERROR] with provided
-  /// [message] used as [strContent].
-  /// This message is used when some error appears. and is also used during
-  /// the [IsolatePresenterProxy]'s [:reportError():].
-  Message.scripterError(String message) : type = SCRIPTER_ERROR {
-    strContent = message;
-  }
-
-  /// Creates new Message of type [SCRIPTER_LOG] with provided
-  /// [message] used as [strContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:log():].
-  Message.scripterLog(String message) : type = SCRIPTER_LOG {
-    strContent = message;
-  }
-
-  /// Creates new Message from provided [json] String.
-  Message.fromJson(String json)
-      : this.fromMap(JSON.decode(json) as Map<String, Object>);
-
-  /// Creates new Message from provided [map].
-  /// It fills all the parts of [Message] - [type], [strContent],
-  /// [listContent], [intContent] and [mapContent] if provided.
-  Message.fromMap(Map<String, Object> map) : type = map["type"] {
-    if (map.containsKey("strContent")) {
-      strContent = map["strContent"];
-    }
-    if (map.containsKey("listContent")) {
-      listContent = map["listContent"];
-    }
-    if (map.containsKey("intContent")) {
-      intContent = map["intContent"];
-    }
-    if (map.containsKey("mapContent")) {
-      mapContent = map["mapContent"] as Map<String, Object>;
-    }
-  }
-
   /// Outputs message to JSON string. Useful when sending via Port to Isolate.
   String toJson() {
     return JSON.encode(toMap());
@@ -345,6 +349,10 @@ class Message {
 
     return map;
   }
+
+  /// Returns String representation of Message with its String as a type
+  /// [typeString] and if [isAsync] is [:true:].
+  String toString() => "Message $typeString${isAsync ? ' (async)' : ''}";
 }
 
 /// Class MessageException wraps exception for Message.

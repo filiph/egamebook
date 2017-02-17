@@ -786,14 +786,16 @@ abstract class Scripter extends ScripterViewedFromPresenter {
   }
 
   /// Shows slot machine.
-  Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult, String rollReason) {
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollable: false, String rerollEffectDescription}) async {
     if (textBuffer.isNotEmpty) {
       presenter.showText(textBuffer.toString());
       textBuffer.clear();
     }
-    return presenter.showSlotMachine(
-        probability, predeterminedResult, rollReason);
+    return presenter.showSlotMachine(probability, rollReason,
+        rerollable: rerollable,
+        rerollEffectDescription: rerollEffectDescription);
   }
 }
 

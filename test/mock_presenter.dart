@@ -11,7 +11,7 @@ import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
 import "package:logging/logging.dart";
-import 'package:slot_machine/result.dart';
+import 'package:slot_machine/result.dart' as slot;
 
 class MockPresenter extends Presenter {
   static final String WAITING_FOR_INPUT_EVENT = "WAITING_FOR_INPUT";
@@ -188,8 +188,9 @@ class MockPresenter extends Presenter {
   }
 
   @override
-  Future<Null> showSlotMachine(
-      double probability, Result predeterminedResult, String rollReason) {
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollable, String rerollEffectDescription}) {
     throw new UnimplementedError();
   }
 

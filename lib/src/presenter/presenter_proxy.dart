@@ -35,8 +35,14 @@ abstract class PresenterViewedFromScripter {
   void save(Savegame savegame);
   Stream<CurrentState> showForm(FormProxy form);
   void updateForm(FormConfiguration values);
-  Future<Null> showSlotMachine(
-      double probability, slot.Result predeterminedResult, String rollReason);
+
+  /// Initiate a slot machine session.
+  ///
+  /// When [rerollEffectDescription] is provided, then user can can see
+  /// a reroll UI. It can be enabled or disabled through [rerollable].
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollable, String rerollEffectDescription});
 
   /// Instance of Scripter.
   ScripterViewedFromPresenter get scripter;
@@ -118,6 +124,14 @@ class IsolatePresenterProxy extends PresenterProxy {
         DEBUG_SCR("New form state from player received.");
         CurrentState state = new CurrentState.fromMap(message.mapContent);
         _formInputStreamController.add(state);
+        return;
+      case Message.SLOT_MACHINE_RESULT:
+        DEBUG_SCR("Received slot machine result.");
+        int index = message.listContent[0];
+        bool wasRerolled = message.listContent[1];
+        _slotMachineCompleter.complete(
+            new slot.SessionResult(slot.Result.values[index], wasRerolled));
+        _slotMachineCompleter = null;
         return;
       case Message.START:
         DEBUG_SCR("Starting book from scratch.");
@@ -345,12 +359,16 @@ class IsolatePresenterProxy extends PresenterProxy {
     throw new UnimplementedError("getTextHistory");
   }
 
+  Completer<slot.SessionResult> _slotMachineCompleter;
+
   @override
-  Future<Null> showSlotMachine(
-      num probability, slot.Result predeterminedResult, String rollReason) {
+  Future<slot.SessionResult> showSlotMachine(num probability, String rollReason,
+      {bool rerollable, String rerollEffectDescription}) {
+    assert(_slotMachineCompleter == null);
     _send(new Message.showSlotMachine(
-        probability, predeterminedResult, rollReason));
-    return new Future.value();
+        probability, rollReason, rerollable, rerollEffectDescription));
+    _slotMachineCompleter = new Completer<slot.SessionResult>();
+    return _slotMachineCompleter.future;
   }
 }
 

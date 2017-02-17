@@ -3,7 +3,6 @@ library egb_scripter_proxy;
 import "dart:async";
 import 'dart:isolate';
 
-import 'package:slot_machine/result.dart' as slot;
 import "package:logging/logging.dart";
 import '../persistence/savegame.dart';
 import '../shared/message.dart';
@@ -180,10 +179,14 @@ class IsolateScripterProxy extends ScripterProxy {
       case Message.SHOW_SLOT_MACHINE:
         INT_DEBUG("Showing slot machine");
         num probability = message.listContent[0];
-        int index = message.listContent[1];
-        String rollReason = message.listContent[2];
-        slot.Result predeterminedResult = slot.Result.values[index];
-        presenter.showSlotMachine(probability, predeterminedResult, rollReason);
+        String rollReason = message.listContent[1];
+        bool rerollable = message.listContent[2];
+        String rerollEffectDescription = message.listContent[3];
+        presenter.showSlotMachine(probability, rollReason,
+            rerollable: rerollable,
+            rerollEffectDescription: rerollEffectDescription).then((result) {
+          _send(new Message.slotMachineResult(result));
+        });
         return;
       case Message.SCRIPTER_ERROR:
         INT_DEBUG("SCRIPTER ERROR: ${message.strContent}");
