@@ -15,7 +15,7 @@ typedef void StringTakingVoidFunction(String arg);
 
 typedef Future<slot.SessionResult> SlotMachineShowFunction(
     double probability, String rollReason,
-    {bool rerollEnabled, String rerollEffectDescription});
+    {bool rerollable, String rerollEffectDescription});
 
 /// LoopedEvent is any event that gets executed in a loop, waiting for
 /// a) resolution and b) need of player input. It is intended for 'minigames'
@@ -45,7 +45,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       {bool rerollEnabled, String rerollEffectDescription}) {
     _pushStringBuffer();
     return _slotMachineShowFunction(probability, rollReason,
-        rerollEnabled: rerollEnabled,
+        rerollable: rerollEnabled,
         rerollEffectDescription: rerollEffectDescription);
   }
 

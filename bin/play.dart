@@ -93,11 +93,11 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
   Future<slot.SessionResult> showSlotMachine(
       double probability, String rollReason,
-      {bool rerollEnabled, String rerollEffectDescription}) async {
+      {bool rerollable, String rerollEffectDescription}) async {
     var msg = "[[ SLOT MACHINE '$rollReason' "
         "${probability.toStringAsPrecision(2)} "
         "$rerollEffectDescription "
-        "(enabled: ${rerollEnabled ? 'on' : 'off'}) ]]";
+        "(enabled: ${rerollable ? 'on' : 'off'}) ]]";
     log.info(msg);
     if (!silentWithOverride) {
       print("$msg\n");
@@ -122,7 +122,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
       }
       print("Initial roll failure.");
 
-      if (rerollEnabled) {
+      if (rerollable) {
         print(rerollEffectDescription);
         print("Reroll? (y/n)");
         var input = stdin.readLineSync().trim().toLowerCase();

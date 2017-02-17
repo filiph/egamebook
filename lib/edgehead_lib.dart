@@ -304,7 +304,7 @@ class EdgeheadGame extends LoopedEvent {
             chance, action.getRollReason(actor, world),
             rerollEnabled:
                 action.rerollable && actor.hasResource(action.rerollResource),
-            rerollEffectDescription: "Use $resourceName?");
+            rerollEffectDescription: "use $resourceName");
         consequence =
             consequences.where((c) => c.isSuccess == result.isSuccess).single;
 
