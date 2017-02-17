@@ -67,7 +67,7 @@ class StartSlash extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor actor, WorldState world) =>
-      actor.isPlayer ? 0.9 : 0.3;
+      actor.isPlayer ? 0.7 : 0.3;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
