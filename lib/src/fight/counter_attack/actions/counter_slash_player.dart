@@ -3,31 +3,25 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
-class CounterSlash extends EnemyTargetAction {
+class CounterSlashPlayer extends CounterSlash {
   @override
-  final String helpMessage = "You can deal serious damage when countering "
-      "because your opponent is often caught off guard. On the other hand, "
-      "counters require fast reaction and could throw you out of balance.";
-
-  @override
-  final bool isAggressive = true;
+  bool get rerollable => true;
 
   @override
-  bool get rerollable => false;
+  Resource get rerollResource => Resource.stamina;
 
-  @override
-  Resource get rerollResource => null;
-
-  CounterSlash(Actor enemy) : super(enemy);
+  CounterSlashPlayer(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "swing back at <object>";
 
   @override
-  String get rollReasonTemplate => "will <subject> keep <subject's> balance?";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
@@ -52,9 +46,10 @@ class CounterSlash extends EnemyTargetAction {
         object: enemy, positive: true);
     var slashSituation = new SlashSituation.initialized(a, enemy);
     w.pushSituation(slashSituation);
-    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
+    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy,
+        predeterminedResult: Predetermination.failureGuaranteed);
     w.pushSituation(slashDefenseSituation);
-    return "${a.name} swings back at ${enemy.name}";
+    return "${a.name} swings successfully back at ${enemy.name}";
   }
 
   @override
@@ -63,7 +58,8 @@ class CounterSlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      !a.isPlayer && a.wields(ItemType.sword) && a.pose != Pose.onGround;
+      a.isPlayer && a.wields(ItemType.sword) && a.pose != Pose.onGround;
 
-  static EnemyTargetAction builder(Actor enemy) => new CounterSlash(enemy);
+  static EnemyTargetAction builder(Actor enemy) =>
+      new CounterSlashPlayer(enemy);
 }

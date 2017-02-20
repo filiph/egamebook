@@ -57,24 +57,7 @@ class ParrySlash extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
-    if (extraForce) {
-      a.report(
-          s,
-          "<subject> put<s> <subjectPronoun's> ${a.currentWeapon.name} "
-          "in the way of <object's> ${enemy.currentWeapon.name}",
-          object: enemy,
-          positive: true);
-      if (a.pose == Pose.standing) {
-        s.add("the force of the impact makes <object> lose balance", object: a);
-        w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
-      } else {
-        assert(a.pose == Pose.offBalance);
-        s.add("the force of the impact sends <object> falling to the ground",
-            object: a);
-        w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
-      }
-    } else if (enemy.pose == Pose.offBalance) {
+    if (enemy.pose == Pose.offBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
@@ -106,6 +89,13 @@ class ParrySlash extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
+    SlashDefenseSituation situation = w.currentSituation;
+    if (situation.actionsGuaranteedToFail) {
+      return 0.0;
+    }
+    if (situation.actionsGuaranteedToSucceed) {
+      return 1.0;
+    }
     num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.pose == Pose.offBalance ? 0.3 : 0;
     if (a.isPlayer) return 0.6 - outOfBalancePenalty + enemyOutOfBalanceBonus;

@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
 part 'slash_defense_situation.g.dart';
 
@@ -17,13 +18,13 @@ abstract class SlashDefenseSituation extends Situation
       _$SlashDefenseSituation;
 
   factory SlashDefenseSituation.initialized(Actor attacker, Actor target,
-          {bool extraForce: false}) =>
+          {Predetermination predeterminedResult: Predetermination.none}) =>
       new SlashDefenseSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id
-        ..extraForce = extraForce);
+        ..predeterminedResult = predeterminedResult);
 
   SlashDefenseSituation._();
 
@@ -31,15 +32,21 @@ abstract class SlashDefenseSituation extends Situation
   List<EnemyTargetActionBuilder> get actionGenerators =>
       [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
 
-  int get attacker;
+  bool get actionsGuaranteedToFail =>
+      predeterminedResult == Predetermination.failureGuaranteed;
 
-  bool get extraForce;
+  bool get actionsGuaranteedToSucceed =>
+      predeterminedResult == Predetermination.successGuaranteed;
+
+  int get attacker;
 
   @override
   int get id;
 
   @override
   String get name => "SlashDefenseSituation";
+
+  Predetermination get predeterminedResult;
 
   int get target;
 

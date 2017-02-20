@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class DodgeSlash extends EnemyTargetAction {
   @override
@@ -66,6 +67,13 @@ class DodgeSlash extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
+    SlashDefenseSituation situation = w.currentSituation;
+    if (situation.actionsGuaranteedToFail) {
+      return 0.0;
+    }
+    if (situation.actionsGuaranteedToSucceed) {
+      return 1.0;
+    }
     num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     return 0.4 - outOfBalancePenalty;

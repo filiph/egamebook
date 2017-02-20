@@ -11,9 +11,9 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   @override
   final int attacker;
   @override
-  final bool extraForce;
-  @override
   final int id;
+  @override
+  final Predetermination predeterminedResult;
   @override
   final int targetOnGround;
   @override
@@ -24,11 +24,16 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
       (new OnGroundDefenseSituationBuilder()..update(updates)).build();
 
   _$OnGroundDefenseSituation._(
-      {this.attacker, this.extraForce, this.id, this.targetOnGround, this.time})
+      {this.attacker,
+      this.id,
+      this.predeterminedResult,
+      this.targetOnGround,
+      this.time})
       : super._() {
     if (attacker == null) throw new ArgumentError.notNull('attacker');
-    if (extraForce == null) throw new ArgumentError.notNull('extraForce');
     if (id == null) throw new ArgumentError.notNull('id');
+    if (predeterminedResult == null)
+      throw new ArgumentError.notNull('predeterminedResult');
     if (targetOnGround == null)
       throw new ArgumentError.notNull('targetOnGround');
     if (time == null) throw new ArgumentError.notNull('time');
@@ -47,8 +52,8 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   bool operator ==(dynamic other) {
     if (other is! OnGroundDefenseSituation) return false;
     return attacker == other.attacker &&
-        extraForce == other.extraForce &&
         id == other.id &&
+        predeterminedResult == other.predeterminedResult &&
         targetOnGround == other.targetOnGround &&
         time == other.time;
   }
@@ -57,8 +62,8 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, attacker.hashCode), extraForce.hashCode),
-                id.hashCode),
+            $jc($jc($jc(0, attacker.hashCode), id.hashCode),
+                predeterminedResult.hashCode),
             targetOnGround.hashCode),
         time.hashCode));
   }
@@ -67,8 +72,8 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   String toString() {
     return 'OnGroundDefenseSituation {'
         'attacker=${attacker.toString()},\n'
-        'extraForce=${extraForce.toString()},\n'
         'id=${id.toString()},\n'
+        'predeterminedResult=${predeterminedResult.toString()},\n'
         'targetOnGround=${targetOnGround.toString()},\n'
         'time=${time.toString()},\n'
         '}';
@@ -84,13 +89,14 @@ class OnGroundDefenseSituationBuilder
   int get attacker => _$this._attacker;
   set attacker(int attacker) => _$this._attacker = attacker;
 
-  bool _extraForce;
-  bool get extraForce => _$this._extraForce;
-  set extraForce(bool extraForce) => _$this._extraForce = extraForce;
-
   int _id;
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
+
+  Predetermination _predeterminedResult;
+  Predetermination get predeterminedResult => _$this._predeterminedResult;
+  set predeterminedResult(Predetermination predeterminedResult) =>
+      _$this._predeterminedResult = predeterminedResult;
 
   int _targetOnGround;
   int get targetOnGround => _$this._targetOnGround;
@@ -106,8 +112,8 @@ class OnGroundDefenseSituationBuilder
   OnGroundDefenseSituationBuilder get _$this {
     if (_$v != null) {
       _attacker = _$v.attacker;
-      _extraForce = _$v.extraForce;
       _id = _$v.id;
+      _predeterminedResult = _$v.predeterminedResult;
       _targetOnGround = _$v.targetOnGround;
       _time = _$v.time;
       _$v = null;
@@ -131,8 +137,8 @@ class OnGroundDefenseSituationBuilder
     final result = _$v ??
         new _$OnGroundDefenseSituation._(
             attacker: attacker,
-            extraForce: extraForce,
             id: id,
+            predeterminedResult: predeterminedResult,
             targetOnGround: targetOnGround,
             time: time);
     replace(result);

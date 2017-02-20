@@ -11,9 +11,9 @@ class _$SlashDefenseSituation extends SlashDefenseSituation {
   @override
   final int attacker;
   @override
-  final bool extraForce;
-  @override
   final int id;
+  @override
+  final Predetermination predeterminedResult;
   @override
   final int target;
   @override
@@ -23,11 +23,16 @@ class _$SlashDefenseSituation extends SlashDefenseSituation {
       (new SlashDefenseSituationBuilder()..update(updates)).build();
 
   _$SlashDefenseSituation._(
-      {this.attacker, this.extraForce, this.id, this.target, this.time})
+      {this.attacker,
+      this.id,
+      this.predeterminedResult,
+      this.target,
+      this.time})
       : super._() {
     if (attacker == null) throw new ArgumentError.notNull('attacker');
-    if (extraForce == null) throw new ArgumentError.notNull('extraForce');
     if (id == null) throw new ArgumentError.notNull('id');
+    if (predeterminedResult == null)
+      throw new ArgumentError.notNull('predeterminedResult');
     if (target == null) throw new ArgumentError.notNull('target');
     if (time == null) throw new ArgumentError.notNull('time');
   }
@@ -44,8 +49,8 @@ class _$SlashDefenseSituation extends SlashDefenseSituation {
   bool operator ==(dynamic other) {
     if (other is! SlashDefenseSituation) return false;
     return attacker == other.attacker &&
-        extraForce == other.extraForce &&
         id == other.id &&
+        predeterminedResult == other.predeterminedResult &&
         target == other.target &&
         time == other.time;
   }
@@ -54,8 +59,8 @@ class _$SlashDefenseSituation extends SlashDefenseSituation {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, attacker.hashCode), extraForce.hashCode),
-                id.hashCode),
+            $jc($jc($jc(0, attacker.hashCode), id.hashCode),
+                predeterminedResult.hashCode),
             target.hashCode),
         time.hashCode));
   }
@@ -64,8 +69,8 @@ class _$SlashDefenseSituation extends SlashDefenseSituation {
   String toString() {
     return 'SlashDefenseSituation {'
         'attacker=${attacker.toString()},\n'
-        'extraForce=${extraForce.toString()},\n'
         'id=${id.toString()},\n'
+        'predeterminedResult=${predeterminedResult.toString()},\n'
         'target=${target.toString()},\n'
         'time=${time.toString()},\n'
         '}';
@@ -80,13 +85,14 @@ class SlashDefenseSituationBuilder
   int get attacker => _$this._attacker;
   set attacker(int attacker) => _$this._attacker = attacker;
 
-  bool _extraForce;
-  bool get extraForce => _$this._extraForce;
-  set extraForce(bool extraForce) => _$this._extraForce = extraForce;
-
   int _id;
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
+
+  Predetermination _predeterminedResult;
+  Predetermination get predeterminedResult => _$this._predeterminedResult;
+  set predeterminedResult(Predetermination predeterminedResult) =>
+      _$this._predeterminedResult = predeterminedResult;
 
   int _target;
   int get target => _$this._target;
@@ -101,8 +107,8 @@ class SlashDefenseSituationBuilder
   SlashDefenseSituationBuilder get _$this {
     if (_$v != null) {
       _attacker = _$v.attacker;
-      _extraForce = _$v.extraForce;
       _id = _$v.id;
+      _predeterminedResult = _$v.predeterminedResult;
       _target = _$v.target;
       _time = _$v.time;
       _$v = null;
@@ -126,8 +132,8 @@ class SlashDefenseSituationBuilder
     final result = _$v ??
         new _$SlashDefenseSituation._(
             attacker: attacker,
-            extraForce: extraForce,
             id: id,
+            predeterminedResult: predeterminedResult,
             target: target,
             time: time);
     replace(result);

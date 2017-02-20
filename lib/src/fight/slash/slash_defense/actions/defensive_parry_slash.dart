@@ -30,7 +30,6 @@ class DefensiveParrySlash extends EnemyTargetAction {
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -38,8 +37,6 @@ class DefensiveParrySlash extends EnemyTargetAction {
         "fend it off}");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
-    } else if (extraForce) {
-      a.report(s, "the swing is too {fast|quick}", but: true);
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
@@ -62,24 +59,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
         "fend<s> it off}",
         positive: true);
 
-    final extraForce = (w.currentSituation as SlashDefenseSituation).extraForce;
-
-    if (extraForce) {
-      if (a.isPlayer) {
-        a.report(
-            s,
-            "<subject> feel<s> the power of the swing through "
-            "<subject's> ${a.currentWeapon.name}");
-      } else {
-        a.report(
-            s,
-            "<subject> almost drop<s> "
-            "<subject's> ${a.currentWeapon.name} in the process",
-            but: true);
-      }
-    }
-
-    if (a.pose != Pose.standing && !extraForce) {
+    if (a.pose != Pose.standing) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       if (a.isPlayer) {
         a.report(s, "<subject> regain<s> balance");
@@ -92,6 +72,13 @@ class DefensiveParrySlash extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, WorldState w) {
     if (a.isPlayer) return 1.0;
+    SlashDefenseSituation situation = w.currentSituation;
+    if (situation.actionsGuaranteedToFail) {
+      return 0.0;
+    }
+    if (situation.actionsGuaranteedToSucceed) {
+      return 1.0;
+    }
     num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
     return 0.5 - outOfBalancePenalty;
   }

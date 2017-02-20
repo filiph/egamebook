@@ -4,8 +4,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/damage_reports.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
@@ -46,34 +44,6 @@ class OnGroundParry extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    bool extraForce =
-        (w.currentSituation as OnGroundDefenseSituation).extraForce;
-    if (extraForce) {
-      a.report(
-          s,
-          "<subject> put<s> <subject's> ${a.currentWeapon.name} "
-          "in the way");
-      s.add("the strike is too powerful", but: true);
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
-      bool killed = !w.getActorById(enemy.id).isAlive;
-      s.add(
-          "<owner's> <subject> still {cuts|slashes} "
-          "${killed ? 'across <object\'s> {neck|abdomen}'
-              : '<object\'s> {arm|shoulder}'}",
-          subject: enemy.currentWeapon,
-          owner: enemy,
-          object: a);
-      if (killed) {
-        var groundMaterial = w
-            .getSituationByName<FightSituation>("FightSituation")
-            .groundMaterial;
-        reportDeath(s, a, groundMaterial);
-      } else {
-        reportPain(s, a);
-      }
-      w.popSituationsUntil("FightSituation");
-      return "${a.name} parries ${enemy.name} but the swing has extra force";
-    }
     a.report(
         s,
         "<subject> {parr<ies> it|"
@@ -84,7 +54,14 @@ class OnGroundParry extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState world) {
+  num getSuccessChance(Actor a, WorldState w) {
+    OnGroundDefenseSituation situation = w.currentSituation;
+    if (situation.actionsGuaranteedToFail) {
+      return 0.0;
+    }
+    if (situation.actionsGuaranteedToSucceed) {
+      return 1.0;
+    }
     if (a.isPlayer) return 0.6;
     return 0.3;
   }

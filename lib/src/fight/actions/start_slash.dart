@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
@@ -16,9 +15,6 @@ class StartSlash extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
-  final bool rerollable = true;
-
-  @override
   final Resource rerollResource = Resource.stamina;
 
   StartSlash(Actor enemy) : super(enemy);
@@ -27,50 +23,39 @@ class StartSlash extends EnemyTargetAction {
   String get nameTemplate => "swing at <object>";
 
   @override
-  String get rollReasonTemplate => "will <subject> swing with extra force?";
+  bool get rerollable => false;
+
+  @override
+  String get rollReasonTemplate => null;
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new UnimplementedError();
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
     a.report(
         s,
         "<subject> swing<s> "
-        "{<subject's> ${a.currentWeapon.name} |}at <object>",
+            "{<subject's> ${a.currentWeapon.name} |}at <object>",
         object: enemy);
-    var slashSituation = new SlashSituation.initialized(a, enemy);
+    var slashSituation =
+        new SlashSituation.initialized(a, enemy, extraForce: true);
     w.pushSituation(slashSituation);
-    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
+    var slashDefenseSituation =
+        new SlashDefenseSituation.initialized(a, enemy);
     w.pushSituation(slashDefenseSituation);
     return "${a.name} starts a slash at ${enemy.name}";
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    Randomly.run(
-        () => a.report(s, "<subject> swing<s> powerfuly at <object>",
-            object: enemy, positive: true),
-        () => a.report(
-            s,
-            "<subject> swing<s> "
-            "{<subject's> ${a.currentWeapon.name} |}at <object> "
-            "with great force",
-            object: enemy,
-            positive: true));
-
-    var slashSituation =
-        new SlashSituation.initialized(a, enemy, extraForce: true);
-    w.pushSituation(slashSituation);
-    var slashDefenseSituation =
-        new SlashDefenseSituation.initialized(a, enemy, extraForce: true);
-    w.pushSituation(slashDefenseSituation);
-    return "${a.name} starts a slash at ${enemy.name} with extra force";
-  }
-
-  @override
   num getSuccessChance(Actor actor, WorldState world) =>
-      actor.isPlayer ? 0.7 : 0.3;
+      1.0;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
+      !a.isPlayer &&
       a.pose == Pose.standing &&
       enemy.pose != Pose.onGround &&
       a.wields(ItemType.sword);

@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class RollOutOfWay extends EnemyTargetAction {
   @override
@@ -44,7 +45,14 @@ class RollOutOfWay extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState world) {
+  num getSuccessChance(Actor a, WorldState w) {
+    OnGroundDefenseSituation situation = w.currentSituation;
+    if (situation.actionsGuaranteedToFail) {
+      return 0.0;
+    }
+    if (situation.actionsGuaranteedToSucceed) {
+      return 1.0;
+    }
     if (a.isPlayer) return 1.0;
     return 0.5;
   }

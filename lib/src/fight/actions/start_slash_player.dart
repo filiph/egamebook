@@ -3,27 +3,16 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
-class StartSlashOutOfBalance extends EnemyTargetAction {
+class StartSlashPlayer extends StartSlash {
   @override
-  final String helpMessage = "It's always better to fight with your feet "
-      "firmly on the ground. But sometimes, it's necessary to act quickly.";
+  bool rerollable = true;
 
-  @override
-  final bool isAggressive = true;
-
-  @override
-  final bool rerollable = true;
-
-  @override
-  final Resource rerollResource = Resource.stamina;
-
-  StartSlashOutOfBalance(Actor enemy) : super(enemy);
-
-  @override
-  String get nameTemplate => "swing at <object> (while out of balance)";
+  StartSlashPlayer(Actor enemy) : super(enemy);
 
   @override
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
@@ -32,11 +21,15 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(
         s,
-        "<subject> completely miss<es> <object> with "
-        "<subject's> ${a.currentWeapon.name}",
-        object: enemy,
-        negative: true);
-    return "${a.name} fails to start an out-of-balance slash at ${enemy.name}";
+        "<subject> swing<s> "
+        "{<subject's> ${a.currentWeapon.name} |}at <object>",
+        object: enemy);
+    var slashSituation = new SlashSituation.initialized(a, enemy);
+    w.pushSituation(slashSituation);
+    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy,
+        predeterminedResult: Predetermination.successGuaranteed);
+    w.pushSituation(slashDefenseSituation);
+    return "${a.name} starts a failed slash at ${enemy.name}";
   }
 
   @override
@@ -48,9 +41,10 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
         object: enemy);
     var slashSituation = new SlashSituation.initialized(a, enemy);
     w.pushSituation(slashSituation);
-    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
+    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy,
+        predeterminedResult: Predetermination.failureGuaranteed);
     w.pushSituation(slashDefenseSituation);
-    return "${a.name} starts an out-of-balance slash at ${enemy.name}";
+    return "${a.name} starts a successful slash at ${enemy.name}";
   }
 
   @override
@@ -58,11 +52,11 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      !a.isPlayer &&
-      a.pose == Pose.offBalance &&
+      a.isPlayer &&
+      a.pose == Pose.standing &&
       enemy.pose != Pose.onGround &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
-      new StartSlashOutOfBalance(enemy);
+      new StartSlashPlayer(enemy);
 }

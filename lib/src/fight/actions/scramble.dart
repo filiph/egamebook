@@ -2,7 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/actions/kick.dart';
+import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 
 class Scramble extends Action {
   static final Scramble singleton = new Scramble();
@@ -48,7 +48,7 @@ class Scramble extends Action {
     if (a.pose != Pose.onGround) return false;
     // Actor must have just fallen.
     var recency = world.timeSinceLastActionRecord(
-        actionClassPattern: Kick.className, sufferer: a, wasSuccess: true);
+        actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);
     if (recency != null && recency <= 1) {
       return true;
     }

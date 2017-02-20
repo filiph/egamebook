@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
-class StartSlashGroundedEnemy extends EnemyTargetAction {
+class StartStrikeDown extends EnemyTargetAction {
   @override
   final String helpMessage = "Opponents on the ground are often the most "
       "vulnerable.";
@@ -15,32 +15,22 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
-  final bool rerollable = true;
+  bool get rerollable => false;
 
   @override
-  final Resource rerollResource = Resource.stamina;
+  Resource get rerollResource => null;
 
-  StartSlashGroundedEnemy(Actor enemy) : super(enemy);
+  StartStrikeDown(Actor enemy) : super(enemy);
 
   @override
   String get nameTemplate => "strike down at <object>";
 
   @override
-  String get rollReasonTemplate => "will <subject> strike with extra force?";
+  String get rollReasonTemplate => null;
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    a.report(
-        s,
-        "<subject> strike<s> down "
-        "{with <subject's> ${a.currentWeapon.name} |}at <object>",
-        object: enemy);
-    var strikeDownSituation = new StrikeDownSituation.initialized(a, enemy);
-    w.pushSituation(strikeDownSituation);
-    var onGroundDefenseSituation =
-        new OnGroundDefenseSituation.initialized(a, enemy);
-    w.pushSituation(onGroundDefenseSituation);
-    return "${a.name} strikes down at ${enemy.name} on the ground";
+    throw new UnimplementedError();
   }
 
   @override
@@ -48,10 +38,8 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
     a.report(
         s,
         "<subject> strike<s> down "
-        "{with <subject's> ${a.currentWeapon.name} |}at <object> "
-        "with all <subject's> {might|power}",
-        object: enemy,
-        positive: true);
+        "{with <subject's> ${a.currentWeapon.name} |}at <object>",
+        object: enemy);
     var strikeDownSituation = new StrikeDownSituation.initialized(a, enemy);
     w.pushSituation(strikeDownSituation);
     var onGroundDefenseSituation =
@@ -61,14 +49,14 @@ class StartSlashGroundedEnemy extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 0.95;
+  num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
+      !a.isPlayer &&
       enemy.pose == Pose.onGround &&
       a.pose != Pose.onGround &&
       a.wields(ItemType.sword);
 
-  static EnemyTargetAction builder(Actor enemy) =>
-      new StartSlashGroundedEnemy(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new StartStrikeDown(enemy);
 }

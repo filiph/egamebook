@@ -2,7 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/actions/kick.dart';
+import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 
 class StandUp extends Action {
   static final StandUp singleton = new StandUp();
@@ -46,7 +46,7 @@ class StandUp extends Action {
     if (a.pose != Pose.onGround) return false;
     // If this actor just fell, do not let him stand up.
     var recency = world.timeSinceLastActionRecord(
-        actionClassPattern: Kick.className, sufferer: a, wasSuccess: true);
+        actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);
     if (recency != null && recency <= 1) {
       return false;
     }

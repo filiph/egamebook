@@ -10,13 +10,17 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
-import 'package:edgehead/src/fight/actions/kick.dart';
+import 'package:edgehead/src/fight/actions/pound.dart';
+import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
+import 'package:edgehead/src/fight/actions/start_slash_out_of_balance_player.dart';
+import 'package:edgehead/src/fight/actions/start_slash_player.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/actions/start_strike_down_player.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 
 part 'fight_situation.g.dart';
@@ -44,10 +48,14 @@ abstract class FightSituation extends Situation
   @override
   List<EnemyTargetActionBuilder> get actionGenerators => [
         Confuse.builder,
-        Kick.builder,
+        Pound.builder,
+        SweepOffFeet.builder,
         StartSlash.builder,
-        StartSlashGroundedEnemy.builder,
-        StartSlashOutOfBalance.builder
+        StartSlashPlayer.builder,
+        StartStrikeDown.builder,
+        StartStrikeDownPlayer.builder,
+        StartSlashOutOfBalance.builder,
+        StartSlashOutOfBalancePlayer.builder,
       ];
 
   @override
