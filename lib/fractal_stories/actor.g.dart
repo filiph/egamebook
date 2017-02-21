@@ -23,10 +23,6 @@ class _$Actor extends Actor {
   @override
   final int hitpoints;
   @override
-  final int maxHitpoints;
-  @override
-  final int stamina;
-  @override
   final int id;
   @override
   final int initiative;
@@ -37,6 +33,8 @@ class _$Actor extends Actor {
   @override
   final Set<Item> items;
   @override
+  final int maxHitpoints;
+  @override
   final String name;
   @override
   final bool nameIsProperNoun;
@@ -46,6 +44,8 @@ class _$Actor extends Actor {
   final Pronoun pronoun;
   @override
   final Item shield;
+  @override
+  final int stamina;
   @override
   final Team team;
 
@@ -60,36 +60,36 @@ class _$Actor extends Actor {
       this.currentWeapon,
       this.followingActorId,
       this.hitpoints,
-      this.maxHitpoints,
-      this.stamina,
       this.id,
       this.initiative,
       this.isActive,
       this.isPlayer,
       this.items,
+      this.maxHitpoints,
       this.name,
       this.nameIsProperNoun,
       this.pose,
       this.pronoun,
       this.shield,
+      this.stamina,
       this.team})
       : super._() {
     if (alreadyMentioned == null)
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
-    if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
-    if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
     if (isPlayer == null) throw new ArgumentError.notNull('isPlayer');
     if (items == null) throw new ArgumentError.notNull('items');
+    if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
     if (name == null) throw new ArgumentError.notNull('name');
     if (nameIsProperNoun == null)
       throw new ArgumentError.notNull('nameIsProperNoun');
     if (pose == null) throw new ArgumentError.notNull('pose');
     if (pronoun == null) throw new ArgumentError.notNull('pronoun');
+    if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (team == null) throw new ArgumentError.notNull('team');
   }
 
@@ -110,18 +110,18 @@ class _$Actor extends Actor {
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
         hitpoints == other.hitpoints &&
-        maxHitpoints == other.maxHitpoints &&
-        stamina == other.stamina &&
         id == other.id &&
         initiative == other.initiative &&
         isActive == other.isActive &&
         isPlayer == other.isPlayer &&
         items == other.items &&
+        maxHitpoints == other.maxHitpoints &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
         pose == other.pose &&
         pronoun == other.pronoun &&
         shield == other.shield &&
+        stamina == other.stamina &&
         team == other.team;
   }
 
@@ -161,18 +161,18 @@ class _$Actor extends Actor {
                                                                 followingActorId
                                                                     .hashCode),
                                                             hitpoints.hashCode),
-                                                        maxHitpoints.hashCode),
-                                                    stamina.hashCode),
-                                                id.hashCode),
-                                            initiative.hashCode),
-                                        isActive.hashCode),
-                                    isPlayer.hashCode),
-                                items.hashCode),
-                            name.hashCode),
-                        nameIsProperNoun.hashCode),
-                    pose.hashCode),
-                pronoun.hashCode),
-            shield.hashCode),
+                                                        id.hashCode),
+                                                    initiative.hashCode),
+                                                isActive.hashCode),
+                                            isPlayer.hashCode),
+                                        items.hashCode),
+                                    maxHitpoints.hashCode),
+                                name.hashCode),
+                            nameIsProperNoun.hashCode),
+                        pose.hashCode),
+                    pronoun.hashCode),
+                shield.hashCode),
+            stamina.hashCode),
         team.hashCode));
   }
 
@@ -186,18 +186,18 @@ class _$Actor extends Actor {
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
-        'maxHitpoints=${maxHitpoints.toString()},\n'
-        'stamina=${stamina.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
         'isActive=${isActive.toString()},\n'
         'isPlayer=${isPlayer.toString()},\n'
         'items=${items.toString()},\n'
+        'maxHitpoints=${maxHitpoints.toString()},\n'
         'name=${name.toString()},\n'
         'nameIsProperNoun=${nameIsProperNoun.toString()},\n'
         'pose=${pose.toString()},\n'
         'pronoun=${pronoun.toString()},\n'
         'shield=${shield.toString()},\n'
+        'stamina=${stamina.toString()},\n'
         'team=${team.toString()},\n'
         '}';
   }
@@ -291,30 +291,6 @@ class _$ActorBuilder extends ActorBuilder {
   }
 
   @override
-  int get maxHitpoints {
-    _$this;
-    return super.maxHitpoints;
-  }
-
-  @override
-  set maxHitpoints(int maxHitpoints) {
-    _$this;
-    super.maxHitpoints = maxHitpoints;
-  }
-
-  @override
-  int get stamina {
-    _$this;
-    return super.stamina;
-  }
-
-  @override
-  set stamina(int stamina) {
-    _$this;
-    super.stamina = stamina;
-  }
-
-  @override
   int get id {
     _$this;
     return super.id;
@@ -372,6 +348,18 @@ class _$ActorBuilder extends ActorBuilder {
   set items(Set<Item> items) {
     _$this;
     super.items = items;
+  }
+
+  @override
+  int get maxHitpoints {
+    _$this;
+    return super.maxHitpoints;
+  }
+
+  @override
+  set maxHitpoints(int maxHitpoints) {
+    _$this;
+    super.maxHitpoints = maxHitpoints;
   }
 
   @override
@@ -435,6 +423,18 @@ class _$ActorBuilder extends ActorBuilder {
   }
 
   @override
+  int get stamina {
+    _$this;
+    return super.stamina;
+  }
+
+  @override
+  set stamina(int stamina) {
+    _$this;
+    super.stamina = stamina;
+  }
+
+  @override
   Team get team {
     _$this;
     return super.team;
@@ -457,18 +457,18 @@ class _$ActorBuilder extends ActorBuilder {
       super.currentWeapon = _$v.currentWeapon;
       super.followingActorId = _$v.followingActorId;
       super.hitpoints = _$v.hitpoints;
-      super.maxHitpoints = _$v.maxHitpoints;
-      super.stamina = _$v.stamina;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
       super.isActive = _$v.isActive;
       super.isPlayer = _$v.isPlayer;
       super.items = _$v.items;
+      super.maxHitpoints = _$v.maxHitpoints;
       super.name = _$v.name;
       super.nameIsProperNoun = _$v.nameIsProperNoun;
       super.pose = _$v.pose;
       super.pronoun = _$v.pronoun;
       super.shield = _$v.shield;
+      super.stamina = _$v.stamina;
       super.team = _$v.team;
       _$v = null;
     }
@@ -497,18 +497,18 @@ class _$ActorBuilder extends ActorBuilder {
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
             hitpoints: hitpoints,
-            maxHitpoints: maxHitpoints,
-            stamina: stamina,
             id: id,
             initiative: initiative,
             isActive: isActive,
             isPlayer: isPlayer,
             items: items,
+            maxHitpoints: maxHitpoints,
             name: name,
             nameIsProperNoun: nameIsProperNoun,
             pose: pose,
             pronoun: pronoun,
             shield: shield,
+            stamina: stamina,
             team: team);
     replace(result);
     return result;

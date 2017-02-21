@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
 class DodgeSlash extends EnemyTargetAction {
   @override
@@ -33,7 +34,7 @@ class DodgeSlash extends EnemyTargetAction {
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
-    if (a.pose == Pose.offBalance) {
+    if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
       Randomly.run(
@@ -50,7 +51,7 @@ class DodgeSlash extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
         object: enemy, positive: true);
-    if (enemy.pose == Pose.standing) {
+    if (enemy.isStanding) {
       enemy.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
@@ -74,13 +75,13 @@ class DodgeSlash extends EnemyTargetAction {
     if (situation.actionsGuaranteedToSucceed) {
       return 1.0;
     }
-    num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     return 0.4 - outOfBalancePenalty;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.pose != Pose.onGround;
+  bool isApplicable(Actor a, WorldState w) => !a.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new DodgeSlash(enemy);
 }

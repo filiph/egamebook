@@ -33,11 +33,11 @@ class CounterSlash extends EnemyTargetAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> tr<ies> to swing back");
     a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
-    if (a.pose == Pose.standing) {
+    if (a.isStanding) {
       w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
       a.report(s, "<subject> lose<s> balance because of that",
           negative: true, endSentence: true);
-    } else if (a.pose == Pose.offBalance) {
+    } else if (a.isOffBalance) {
       w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
       a.report(s, "<subject> lose<s> balance because of that", negative: true);
       a.report(s, "<subject> fall<s> to the ground",
@@ -59,11 +59,11 @@ class CounterSlash extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor actor, WorldState world) =>
-      enemy.pose == Pose.standing ? 0.7 : 0.9;
+      enemy.isStanding ? 0.7 : 0.9;
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      !a.isPlayer && a.wields(ItemType.sword) && a.pose != Pose.onGround;
+      !a.isPlayer && a.wields(ItemType.sword) && !a.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new CounterSlash(enemy);
 }

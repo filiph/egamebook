@@ -29,8 +29,8 @@ class StartSlashOutOfBalancePlayer extends StartSlashOutOfBalance {
   @override
   bool isApplicable(Actor a, WorldState world) =>
       a.isPlayer &&
-      a.pose == Pose.offBalance &&
-      enemy.pose != Pose.onGround &&
+      a.isOffBalance &&
+      !enemy.isOnGround &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>

@@ -54,8 +54,8 @@ class StartStrikeDown extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, WorldState world) =>
       !a.isPlayer &&
-      enemy.pose == Pose.onGround &&
-      a.pose != Pose.onGround &&
+      enemy.isOnGround &&
+      !a.isOnGround &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new StartStrikeDown(enemy);

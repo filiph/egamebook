@@ -43,7 +43,7 @@ class ParrySlash extends EnemyTargetAction {
         "<subject> tr<ies> to {parry|deflect it|"
         "meet it with <subject's> ${a.currentWeapon.name}|"
         "fend it off}");
-    if (a.pose == Pose.offBalance) {
+    if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
       Randomly.run(
@@ -57,7 +57,7 @@ class ParrySlash extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    if (enemy.pose == Pose.offBalance) {
+    if (enemy.isOffBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
@@ -96,8 +96,8 @@ class ParrySlash extends EnemyTargetAction {
     if (situation.actionsGuaranteedToSucceed) {
       return 1.0;
     }
-    num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
-    num enemyOutOfBalanceBonus = enemy.pose == Pose.offBalance ? 0.3 : 0;
+    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
+    num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.3 : 0;
     if (a.isPlayer) return 0.6 - outOfBalancePenalty + enemyOutOfBalanceBonus;
     return 0.3 - outOfBalancePenalty + enemyOutOfBalanceBonus;
   }

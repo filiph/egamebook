@@ -45,7 +45,7 @@ class Scramble extends Action {
 
   @override
   bool isApplicable(Actor a, WorldState world) {
-    if (a.pose != Pose.onGround) return false;
+    if (!a.isOnGround) return false;
     // Actor must have just fallen.
     var recency = world.timeSinceLastActionRecord(
         actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);

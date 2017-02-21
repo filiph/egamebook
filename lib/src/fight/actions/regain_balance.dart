@@ -46,5 +46,5 @@ class RegainBalance extends Action {
   num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState world) => a.pose == Pose.offBalance;
+  bool isApplicable(Actor a, WorldState world) => a.isOffBalance;
 }

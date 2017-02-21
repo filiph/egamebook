@@ -68,8 +68,8 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      a.pose == Pose.standing &&
-      enemy.pose == Pose.offBalance &&
+      a.isStanding &&
+      enemy.isOffBalance &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>

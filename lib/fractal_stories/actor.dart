@@ -51,15 +51,6 @@ abstract class Actor extends Object
 
   int get hitpoints;
 
-  int get maxHitpoints;
-
-  int get stamina;
-
-  bool hasResource(Resource resource) {
-    assert(resource == Resource.stamina, "Only stamina implemented");
-    return stamina >= 1;
-  }
-
   /// Names can change or can even be duplicate. [id] is the only safe way
   /// to find out if we're talking about the same actor.
   @override
@@ -78,8 +69,14 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
+  bool get isOffBalance => pose == Pose.offBalance;
+
+  bool get isOnGround => pose == Pose.onGround;
+
   @override
   bool get isPlayer;
+
+  bool get isStanding => pose == Pose.standing;
 
   // TODO: make non-nullable
   /// How safe does [this] Actor feel in the presence of the different other
@@ -93,6 +90,8 @@ abstract class Actor extends Object
 //  ActorRelationshipMap get safetyFear;
 
   Set<Item> get items;
+
+  int get maxHitpoints;
 
   @override
   String get name;
@@ -108,6 +107,8 @@ abstract class Actor extends Object
   @nullable
   Item get shield;
 
+  int get stamina;
+
   @override
   Team get team;
 
@@ -120,6 +121,11 @@ abstract class Actor extends Object
       if (count >= needed) break;
     }
     return count >= needed;
+  }
+
+  bool hasResource(Resource resource) {
+    assert(resource == Resource.stamina, "Only stamina implemented");
+    return stamina >= 1;
   }
 
   /// When an [Actor] hates another actor, they will be willing and eager to

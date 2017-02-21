@@ -57,13 +57,16 @@ class StartStrikeDownPlayer extends StartStrikeDown {
   }
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 0.7;
+  num getSuccessChance(Actor actor, WorldState world) {
+    // TODO: add penalty for out of balance
+    return 0.7;
+  }
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
       a.isPlayer &&
-      enemy.pose == Pose.onGround &&
-      a.pose != Pose.onGround &&
+      enemy.isOnGround &&
+      !a.isOnGround &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>

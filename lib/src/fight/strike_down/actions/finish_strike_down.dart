@@ -47,7 +47,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      enemy.pose == Pose.onGround && a.wields(ItemType.sword);
+      enemy.isOnGround && a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new FinishSlashGroundedEnemy(enemy);

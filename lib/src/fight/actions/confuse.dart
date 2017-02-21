@@ -62,7 +62,7 @@ class Confuse extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      a.isPlayer && a.pose == Pose.standing && !enemy.isConfused(world);
+      a.isPlayer && a.isStanding && !enemy.isConfused(world);
 
   static EnemyTargetAction builder(Actor enemy) => new Confuse(enemy);
 }

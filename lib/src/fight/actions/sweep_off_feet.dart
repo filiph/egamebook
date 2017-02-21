@@ -69,15 +69,14 @@ class SweepOffFeet extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState world) {
-    num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     return 0.5 - outOfBalancePenalty;
   }
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      (a.pose == Pose.standing || a.pose == Pose.offBalance) &&
-      (enemy.pose != Pose.onGround);
+      (a.isStanding || a.isOffBalance) && !enemy.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new SweepOffFeet(enemy);
 }

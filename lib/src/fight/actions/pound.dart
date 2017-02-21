@@ -61,7 +61,7 @@ class Pound extends EnemyTargetAction {
         "{<object>|weapon}",
         objectOwner: enemy,
         object: enemy.currentWeapon);
-    if (enemy.pose == Pose.standing) {
+    if (enemy.isStanding) {
       enemy.report(s, "<subject> lose<s> <object>",
           object: balance, negative: true);
       w.updateActorById(enemy.id, (b) => b..pose = Pose.offBalance);
@@ -70,7 +70,7 @@ class Pound extends EnemyTargetAction {
           new OffBalanceOpportunitySituation.initialized(enemy, culprit: a);
       w.pushSituation(situation);
       return "${a.name} pounds ${enemy.name} off balance";
-    } else if (enemy.pose == Pose.offBalance) {
+    } else if (enemy.isOffBalance) {
       enemy.report(s, "<subject> <is> already off balance");
       var groundMaterial =
           w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
@@ -88,16 +88,16 @@ class Pound extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState world) {
-    num outOfBalancePenalty = a.pose == Pose.standing ? 0 : 0.2;
+    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     return 0.5 - outOfBalancePenalty;
   }
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      a.pose != Pose.onGround &&
+      !a.isOnGround &&
       a.wields(ItemType.sword) &&
-      enemy.pose != Pose.onGround;
+      !enemy.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new Pound(enemy);
 }

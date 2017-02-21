@@ -43,7 +43,7 @@ class StandUp extends Action {
 
   @override
   bool isApplicable(Actor a, WorldState world) {
-    if (a.pose != Pose.onGround) return false;
+    if (!a.isOnGround) return false;
     // If this actor just fell, do not let him stand up.
     var recency = world.timeSinceLastActionRecord(
         actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);

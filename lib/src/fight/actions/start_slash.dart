@@ -56,8 +56,8 @@ class StartSlash extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, WorldState world) =>
       !a.isPlayer &&
-      a.pose == Pose.standing &&
-      enemy.pose != Pose.onGround &&
+      a.isStanding &&
+      !enemy.isOnGround &&
       a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) => new StartSlash(enemy);
