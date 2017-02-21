@@ -13,8 +13,7 @@ abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
   factory SlashSituation([updates(SlashSituationBuilder b)]) = _$SlashSituation;
 
-  factory SlashSituation.initialized(Actor attacker, Actor target,
-          {bool extraForce: false}) =>
+  factory SlashSituation.initialized(Actor attacker, Actor target) =>
       new SlashSituation((b) => b
         ..id = getRandomId()
         ..time = 0

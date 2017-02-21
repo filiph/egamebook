@@ -20,8 +20,7 @@ abstract class OnGroundDefenseSituation extends Situation
 
   factory OnGroundDefenseSituation.initialized(
           Actor attacker, Actor targetOnGround,
-          {Predetermination predeterminedResult = Predetermination.none,
-          bool extraForce: false}) =>
+          {Predetermination predeterminedResult = Predetermination.none}) =>
       new OnGroundDefenseSituation((b) => b
         ..id = getRandomId()
         ..time = 0

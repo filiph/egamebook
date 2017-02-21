@@ -43,7 +43,7 @@ class StartStrikeDown extends EnemyTargetAction {
     var strikeDownSituation = new StrikeDownSituation.initialized(a, enemy);
     w.pushSituation(strikeDownSituation);
     var onGroundDefenseSituation =
-        new OnGroundDefenseSituation.initialized(a, enemy, extraForce: true);
+        new OnGroundDefenseSituation.initialized(a, enemy);
     w.pushSituation(onGroundDefenseSituation);
     return "${a.name} strikes down at ${enemy.name} on the ground";
   }
