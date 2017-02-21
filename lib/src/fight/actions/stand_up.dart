@@ -47,7 +47,10 @@ class StandUp extends Action {
     // If this actor just fell, do not let him stand up.
     var recency = world.timeSinceLastActionRecord(
         actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);
-    if (recency != null && recency <= 1) {
+    // We're using 2 here because it's safer. Sometimes, an action by another
+    // actor is silent, so with 1 we would still get 'you sweep his legs, he
+    // stands up'.
+    if (recency != null && recency <= 2) {
       return false;
     }
     return true;

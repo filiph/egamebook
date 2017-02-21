@@ -36,16 +36,13 @@ class FinishSlash extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    final extraForce = (w.currentSituation as SlashSituation).extraForce;
-    final damage = extraForce ? 2 : 1;
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
     bool killed = !w.getActorById(enemy.id).isAlive;
     if (!killed) {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} <object's> "
-          "{shoulder|abdomen|thigh}"
-          "${extraForce ? ' with all <subjectPronoun\'s> {power|might}' : ''}",
+          "{shoulder|abdomen|thigh}",
           object: enemy,
           positive: true);
       reportPain(s, enemy);
@@ -54,8 +51,7 @@ class FinishSlash extends EnemyTargetAction {
           s,
           "<subject> {slash<es>|cut<s>} "
           "{across|through} <object's> "
-          "{neck|abdomen|lower body}"
-          "${extraForce ? ' with all <subjectPronoun\'s> {power|might}' : ''}",
+          "{neck|abdomen|lower body}",
           object: enemy,
           positive: true);
       var groundMaterial =

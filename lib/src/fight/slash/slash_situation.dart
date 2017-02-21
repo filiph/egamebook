@@ -19,8 +19,7 @@ abstract class SlashSituation extends Situation
         ..id = getRandomId()
         ..time = 0
         ..attacker = attacker.id
-        ..target = target.id
-        ..extraForce = extraForce);
+        ..target = target.id);
 
   SlashSituation._();
 
@@ -28,8 +27,6 @@ abstract class SlashSituation extends Situation
   List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlash.builder];
 
   int get attacker;
-
-  bool get extraForce;
 
   @override
   int get id;

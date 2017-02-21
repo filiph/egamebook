@@ -49,7 +49,7 @@ class Scramble extends Action {
     // Actor must have just fallen.
     var recency = world.timeSinceLastActionRecord(
         actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);
-    if (recency != null && recency <= 1) {
+    if (recency != null && recency <= 2) {
       return true;
     }
     return false;

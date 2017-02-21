@@ -41,7 +41,7 @@ class StartSlash extends EnemyTargetAction {
             "{<subject's> ${a.currentWeapon.name} |}at <object>",
         object: enemy);
     var slashSituation =
-        new SlashSituation.initialized(a, enemy, extraForce: true);
+        new SlashSituation.initialized(a, enemy);
     w.pushSituation(slashSituation);
     var slashDefenseSituation =
         new SlashDefenseSituation.initialized(a, enemy);

@@ -30,7 +30,7 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.enemy;
 
 class EdgeheadGame extends LoopedEvent {
-  static const int maxChoicesCount = 5;
+  static const int maxChoicesCount = 6;
 
   final Logger log = new Logger('EdgeheadGame');
 

@@ -50,12 +50,7 @@ class SweepOffFeet extends EnemyTargetAction {
         w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
     Randomly.run(() {
       a.report(s, "<subject> sweep<s> <object> off <object's> feet",
-          object: enemy);
-      if (Randomly.tossCoin()) {
-        enemy.report(s, "<subject> flail<s> <subject's> arms");
-      }
-      enemy.report(s, "<subject> fall<s>{| to the $groundMaterial}",
-          negative: true);
+          object: enemy, positive: true);
     }, () {
       a.report(s, "<subject> kick<s> <object's> {right|left} ankle",
           object: enemy, positive: true);
