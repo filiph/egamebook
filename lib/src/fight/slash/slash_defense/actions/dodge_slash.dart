@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
-import 'package:edgehead/src/predetermined_result.dart';
 
 class DodgeSlash extends EnemyTargetAction {
   @override

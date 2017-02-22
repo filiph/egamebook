@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 class FinishSlash extends EnemyTargetAction {
   @override
