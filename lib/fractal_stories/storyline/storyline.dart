@@ -371,6 +371,15 @@ class Storyline {
     Entity objectOwner = report.objectOwner;
 
     String result = str;
+
+    // Resolve randomness first.
+    result = Randomly.parse(result);
+    if (result.contains('{') || result.contains('}')) {
+      log.severe('Storyline result includes { and/or } even after being '
+          'parsed by Randomly. Is there a dangling bracket here? '
+          'Input = """$str""" Output = """$result"""');
+    }
+
     if (subject != null) {
       if (subject.isPlayer) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
@@ -450,12 +459,7 @@ class Storyline {
         OBJECT_OWNER_PRONOUN_POSSESIVE,
         report.time);
 
-    result = Randomly.parse(result);
-    if (result.contains('{') || result.contains('}')) {
-      log.severe('Storyline result includes { and/or } even after being '
-          'parsed by Randomly. Is there a dangling bracket here? '
-          'Input = """$str""" Output = """$result"""');
-    }
+
     return result;
   }
 

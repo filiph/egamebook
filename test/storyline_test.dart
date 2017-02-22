@@ -243,7 +243,7 @@ void main() {
         matches("The enemy's ship aims her guns at you.+ your gun is faster."));
   });
 
-  test("possesive particles works even with <objectOwner's> <object>", () {
+  test("possesive particles works even with <object-owner's> <object>", () {
     var storyline = new Storyline();
     var player = new Player("Filip");
     var gun = new Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
@@ -259,6 +259,17 @@ void main() {
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
     expect(storyline.realize(),
         matches("Your gun is pointed at *the enemy.+t fires."));
+  });
+
+  test("we don't show 'your the sword' even if Randomly is involved", () {
+    var storyline = new Storyline();
+    var player = new Player("Filip");
+    var sword = new Entity(name: "sword", pronoun: Pronoun.IT);
+    var orc =
+        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
+        subject: orc, objectOwner: player, object: sword);
+    expect(storyline.realize(), matches("The orc pounds on your sword."));
   });
 
   test("first paragraph", () {
@@ -281,10 +292,12 @@ void main() {
 
   test("nice flow ('briana stands up, orc swings at her')", () {
     var storyline = new Storyline();
-    var briana = new Entity(name: "Briana", nameIsProperNoun: true, pronoun: Pronoun.SHE);
+    var briana = new Entity(
+        name: "Briana", nameIsProperNoun: true, pronoun: Pronoun.SHE);
     var orc = new Entity(name: "orc", pronoun: Pronoun.HE);
     storyline.add("<subject> stand<s> up", subject: briana);
-    storyline.add("<subject> swing<s> at <object>", subject: orc, object: briana);
+    storyline.add("<subject> swing<s> at <object>",
+        subject: orc, object: briana);
 
     expect(storyline.realize(), contains("swings at her"));
   });
@@ -297,7 +310,8 @@ void main() {
     storyline.markEntityAsUnmentioned(shield);
 
     storyline.add("<subject> l<ies> on the table", subject: sword, time: 0);
-    storyline.add("<subject> <is> propped up on the wall next to it", subject: shield, time: 1);
+    storyline.add("<subject> <is> propped up on the wall next to it",
+        subject: shield, time: 1);
     storyline.add("<subject> <is> rusty", subject: sword, time: 3);
 
     var first = storyline.realize();
