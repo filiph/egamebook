@@ -14,7 +14,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/generic_animation_frame/animation_frame.dart';
+//import 'package:edgehead/generic_animation_frame/animation_frame.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
@@ -208,7 +208,7 @@ class EdgeheadGame extends LoopedEvent {
     var actor = situation.getCurrentActor(world);
 
     var planner = new ActorPlanner(actor, world);
-    await planner.plan(waitFunction: idleCallback);
+    await planner.plan();
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
