@@ -1,12 +1,8 @@
 library stranded.item;
 
-import 'dart:math';
-
 import 'actor.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
-
-Random _random = new Random();
 
 String typeToDescription(ItemType type) {
   switch (type) {

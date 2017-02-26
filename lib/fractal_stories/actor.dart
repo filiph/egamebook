@@ -312,7 +312,7 @@ abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
 class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
   ActorMap() : super((Actor key) => key.id, isValidKey: (key) => key != null);
 
-  factory ActorMap.from(ActorMap other) {
+  factory ActorMap.from(ActorMap<T> other) {
     var map = new ActorMap<T>();
     other.forEach((Actor key, T value) => map[key] = value);
     return map;

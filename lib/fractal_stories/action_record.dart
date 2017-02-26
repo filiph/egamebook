@@ -1,6 +1,6 @@
 library stranded.action_record;
 
-import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:built_value/built_value.dart' show $jc, $jf;
 import 'package:quiver/core.dart';
 
 import 'actor.dart';
@@ -55,10 +55,7 @@ class ActionRecord {
   final Set<int> sufferers;
 
   /// The actors who know about this.
-  ///
-  /// Actors are represented by their [Actor.id] since we only care about
-  /// their identity, not their state at the time of action.
-  final Set<int> knownTo;
+  final KnownToMode knownTo;
 
   final bool wasSuccess;
 
@@ -66,13 +63,7 @@ class ActionRecord {
 
   final bool wasAggressive;
 
-  /// The changes to worldScore of the different people, regardless whether they
-  /// know about it or not (we pretend they do, and see how that affects
-  /// things).
-  ///
-  /// Actors are represented by their [Actor.id] since we only care about
-  /// their identity, not their state at the time of action.
-  final ActorMap<ActorScoreChange> scoreChange;
+  Set<int> _performers;
 
   ActionRecord(
       int time,
@@ -81,11 +72,10 @@ class ActionRecord {
       String description,
       Actor protagonist,
       Iterable<Actor> sufferers,
-      Iterable<Actor> knownTo,
+      KnownToMode knownTo,
       bool wasSuccess,
       bool wasFailure,
-      bool wasAggressive,
-      ActorMap<ActorScoreChange> scoreChanges)
+      bool wasAggressive)
       : this._(
             time,
             actionName,
@@ -93,11 +83,10 @@ class ActionRecord {
             description,
             protagonist.id,
             sufferers.map(_extractId).toSet(),
-            knownTo.map(_extractId).toSet(),
+            knownTo,
             wasSuccess,
             wasFailure,
-            wasAggressive,
-            new ActorMap<ActorScoreChange>.from(scoreChanges));
+            wasAggressive);
 
   ActionRecord.duplicate(ActionRecord other)
       : this._(
@@ -107,11 +96,10 @@ class ActionRecord {
             other.description,
             other.protagonist,
             new Set<int>.from(other.sufferers),
-            new Set<int>.from(other.knownTo),
+            other.knownTo,
             other.wasSuccess,
             other.wasFailure,
-            other.wasAggressive,
-            new ActorMap<ActorScoreChange>.from(other.scoreChange));
+            other.wasAggressive);
 
   ActionRecord._(
       this.time,
@@ -123,26 +111,28 @@ class ActionRecord {
       this.knownTo,
       this.wasSuccess,
       this.wasFailure,
-      this.wasAggressive,
-      this.scoreChange);
+      this.wasAggressive) {
+    _performers =
+        protagonist == null ? new Set.identity() : new Set.from([protagonist]);
+  }
 
   @override
   int get hashCode {
-    return hashObjects([
-      time,
-      description,
-      hashObjects(performers),
-      hashObjects(sufferers),
-      hashObjects(knownTo),
-      wasSuccess,
-      wasFailure
-    ]);
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, time.hashCode), description.hashCode),
+                        hashObjects(performers)),
+                    hashObjects(sufferers)),
+                knownTo.hashCode),
+            wasSuccess.hashCode),
+        wasFailure.hashCode));
   }
 
   /// The actors responsible for this action, or an empty set if this is an
   /// environmental event (monkeys steal stuff).
-  Set<int> get performers =>
-      protagonist == null ? new Set.identity() : new Set.from([protagonist]);
+  Set<int> get performers => _performers;
 
   @override
   bool operator ==(Object o) => o is ActionRecord && hashCode == o.hashCode;
@@ -152,8 +142,6 @@ class ActionRecord {
 }
 
 class ActionRecordBuilder {
-  ActorMap<ActorScore> _actorScoresBefore;
-
   WorldState _afterWorld;
 
   Set<Actor> sufferers;
@@ -179,32 +167,10 @@ class ActionRecordBuilder {
   ActionRecord build() {
     assert(actionName != null);
     assert(protagonist != null);
-    assert(_actorScoresBefore != null);
     assert(knownToMode != null);
     assert(_afterWorld != null);
     assert(wasSuccess != null);
     assert(wasFailure != null);
-
-    Set<Actor> knownTo;
-
-    switch (knownToMode) {
-      case KnownToMode.all:
-        knownTo = _afterWorld.actors;
-        break;
-      case KnownToMode.protagonistOnly:
-        knownTo = new Set<Actor>.from(<Actor>[protagonist]);
-        break;
-      default:
-        throw new UnimplementedError("Mode $knownToMode not implemented");
-    }
-
-    ActorMap<ActorScoreChange> scoreChanges = new ActorMap<ActorScoreChange>();
-    var actorsBeforeAndAfter = _afterWorld.actors
-        .where((actor) => _actorScoresBefore.keys.contains(actor));
-    for (Actor actor in actorsBeforeAndAfter) {
-      scoreChanges[actor] =
-          actor.scoreWorld(_afterWorld) - _actorScoresBefore[actor];
-    }
 
     return new ActionRecord._(
         time,
@@ -213,11 +179,10 @@ class ActionRecordBuilder {
         description,
         protagonist.id,
         sufferers.map(_extractId).toSet(),
-        knownTo.map(_extractId).toSet(),
+        knownToMode,
         wasSuccess,
         wasFailure,
-        wasAggressive,
-        scoreChanges);
+        wasAggressive);
   }
 
   void markAfterAction(WorldState world) {
@@ -225,10 +190,7 @@ class ActionRecordBuilder {
   }
 
   void markBeforeAction(WorldState world) {
-    _actorScoresBefore = new ActorMap<ActorScore>();
-    for (var a in world.actors) {
-      _actorScoresBefore[a] = a.scoreWorld(world);
-    }
+    // Unneeded, because we don't compute scoreChanges anymore.
   }
 }
 

@@ -182,11 +182,9 @@ abstract class Action {
     var situationId = worldCopy.currentSituation.id;
     int hashCode = worldCopy.hashCode;
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
-    if (worldCopy.hashCode != hashCode) {
-      // TODO: change this into an assert with message, #perfmatters
-      // assert(worldCopy.hashCode == hashCode, "Please don't change the world in onBeforeAction");
-      throw new StateError("Please don't change the world in onBeforeAction");
-    }
+    // TODO: can we remove the need to run hashCode every time here?
+    assert(worldCopy.hashCode == hashCode,
+        "Please don't change the world in onBeforeAction");
     _description = applyFunction(actorInWorldCopy, worldCopy, storyline);
     if (worldCopy.situationExists(situationId)) {
       // The current situation could have been removed by [applyFunction].
