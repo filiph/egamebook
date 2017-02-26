@@ -301,12 +301,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
-  simple_preprocessor:
-    description:
-      name: simple_preprocessor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
   slot_machine:
     description:
       path: "../slot_machine"
