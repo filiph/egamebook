@@ -15,7 +15,8 @@ import 'package:egamebook/presenters/html/main_entry_point.dart'
     show
         HTML_BOOK_DART_PATH_FROM_ENTRYPOINT,
         HTML_BOOK_ENTRYPOINT_PATH,
-        HTML_ENTRY_POINT_DART_FILE;
+        HTML_ENTRY_POINT_DART_FILE,
+        HTML_ENTRY_POINT_ISOLATE;
 import 'package:egamebook/src/cli/file_hierarchy.dart';
 
 /**
@@ -1407,31 +1408,22 @@ class Builder {
     }
     var pathToOutputHtml =
         path.join(pathToPresenter, "${getProjectName()}.html.dart");
+    var pathToOutputHtmlIsolate =
+        path.join(pathToPresenter, "${getProjectName()}.isolate.dart");
 
     presenterDartPath = pathToOutputHtml;
 
     File htmlOutputFile = new File(pathToOutputHtml);
+    File htmlIsolateOutputFile = new File(pathToOutputHtmlIsolate);
 
-    var substitutions = {
-//      "import '../runner.dart';" :
-//          "import 'package:egamebook/runner.dart';\n",
-//      "import 'presenter/presenter.dart';" :
-//          "import 'package:egamebook/src/presenter/presenter.dart';\n",
-//      "import 'presenter/presenter_cmdline.dart';" :
-//          "import 'package:egamebook/src/presenter/presenter_cmdline.dart';\n",
-//      "import 'presenter/presenter_html.dart';" :
-//          "import 'package:egamebook/src/presenter/presenter_html.dart';\n",
-//      "import 'persistence/storage.dart';" :
-//        "import 'package:egamebook/src/persistence/storage.dart';\n",
-//      "import 'persistence/player_profile.dart';" :
-//        "import 'package:egamebook/src/persistence/player_profile.dart';\n",
-      "[[NAME]]": getProjectName()
-    };
+    var substitutions = {"[[NAME]]": getProjectName()};
 
     Future.wait([
 //        _fileFromTemplate(cmdLineTemplateFile, cmdLineOutputFile, substitutions),
       _fileFromTemplate(
           HTML_ENTRY_POINT_DART_FILE, htmlOutputFile, substitutions),
+      _fileFromTemplate(
+          HTML_ENTRY_POINT_ISOLATE, htmlIsolateOutputFile, substitutions)
     ]).then((_) {
       log.info("presenter file ${path.absolute(pathToOutputHtml)} written");
       completer.complete(true);

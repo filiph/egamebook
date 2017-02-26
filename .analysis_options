@@ -5,7 +5,7 @@ analyzer:
     - test/files/**
 linter:
   rules:
-    - always_declare_return_types
+    # - always_declare_return_types
     # - avoid_as  # TODO
     - avoid_empty_else
     - avoid_init_to_null
@@ -25,6 +25,7 @@ linter:
     - library_names
     - library_prefixes
     - super_goes_last
+    - unawaited_futures
     # - non_constant_identifier_names # TODO: will need cleanup, 31 issues
     # - one_member_abstracts # Worker class probably shouldn't be a function
     # - only_throw_errors # TODO
@@ -43,7 +44,6 @@ linter:
     # - throw_in_finally
     # - type_annotate_public_apis
     # - type_init_formals
-    # - unawaited_futures
     # - unnecessary_brace_in_string_interp
     # - unnecessary_getters_setters
     # - unrelated_type_equality_checks

@@ -57,11 +57,16 @@ class IsolateScripterProxy extends ScripterProxy {
   /// Isolate URI.
   Uri _isolateUri;
 
+  Isolate _isolate;
+
   /// Own port for receiving messages from Isolate.
   ReceivePort _receivePort;
 
   /// Port of the calling Isolate.
   SendPort _scripterPort;
+
+  /// Receives error messages from isolate.
+  ReceivePort _isolateErrorPort;
 
   /// Unique id.
   String _uid;
@@ -79,11 +84,14 @@ class IsolateScripterProxy extends ScripterProxy {
   IsolateScripterProxy(this._isolateUri);
 
   @override
-  Future<Null> init() {
+  Future<Null> init() async {
     INT_DEBUG("Initializing the isolate at $_isolateUri");
     _initCompleter = new Completer<Null>();
     _receivePort = new ReceivePort();
-    Isolate.spawnUri(_isolateUri, [], _receivePort.sendPort);
+    _isolateErrorPort = new ReceivePort();
+    _isolateErrorPort.listen(_isolateErrorHandler);
+    _isolate = await Isolate.spawnUri(_isolateUri, [], _receivePort.sendPort,
+        errorsAreFatal: true, onError: _isolateErrorPort.sendPort);
     _receivePort.listen(_onMessageFromScripterIsolate);
     return _initCompleter.future;
   }
@@ -127,8 +135,12 @@ class IsolateScripterProxy extends ScripterProxy {
             .savePlayerChronology(message.listContent.toSet() as Set<String>);
         return;
       case Message.TEXT_RESULT:
-        presenter.showText(message.strContent).then((_) {
-          // Do nothing.
+        presenter.showText(message.strContent).then((result) {
+          assert(
+              result == true,
+              "showText should return true, false is "
+              "reserved for failure (currently undefined)");
+          _send(new Message.textShown());
         });
         return;
       case Message.NO_RESULT:
@@ -182,9 +194,11 @@ class IsolateScripterProxy extends ScripterProxy {
         String rollReason = message.listContent[1];
         bool rerollable = message.listContent[2];
         String rerollEffectDescription = message.listContent[3];
-        presenter.showSlotMachine(probability, rollReason,
-            rerollable: rerollable,
-            rerollEffectDescription: rerollEffectDescription).then((result) {
+        presenter
+            .showSlotMachine(probability, rollReason,
+                rerollable: rerollable,
+                rerollEffectDescription: rerollEffectDescription)
+            .then((result) {
           _send(new Message.slotMachineResult(result));
         });
         return;
@@ -230,6 +244,7 @@ class IsolateScripterProxy extends ScripterProxy {
       _send(new Message.quit());
     }
     _receivePort.close();
+    _isolateErrorPort.close();
   }
 
   /// Sends start message to Presenter proxy.
@@ -244,4 +259,10 @@ class IsolateScripterProxy extends ScripterProxy {
 
   @override
   PresenterViewedFromScripter presenter;
+
+  void _isolateErrorHandler(message) {
+    String error = message[0];
+    String stacktrace = message[1];
+    _log.severe("Error from isolate: $error, $stacktrace");
+  }
 }

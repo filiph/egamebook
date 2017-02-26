@@ -261,6 +261,8 @@ class ChoiceList extends ListBase<Choice> {
    *
    * By providing [filterOut()], one can force to not show choices that
    * satisfy [:filterOut(choice) == true:].
+   *
+   * TODO: move to new Message.showChoice() -- better separation of concerns
    */
   Message toMessage(
       {String prependText,

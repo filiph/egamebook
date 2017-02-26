@@ -19,45 +19,38 @@ import 'package:egamebook/scripter.dart';
  * and try to load a saved game or create a new one.
  */
 Future<Presenter> runFromIsolate(
-    String dartFilename, Presenter presenter, Store store) {
+    String dartFilename, Presenter presenter, Store store) async {
   presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   ScripterProxy bookProxy = new IsolateScripterProxy(Uri.parse(dartFilename));
 
-  return init(bookProxy, presenter).then((_) {
-    presenter.setup();
-    presenter.continueSavedGameOrCreateNew();
-  });
+  await bookProxy.init();
+  presenter.setScripter(bookProxy);
+  bookProxy.setPresenter(presenter);
+  presenter.setup();
+  await presenter.continueSavedGameOrCreateNew();
+  return presenter;
 }
 
-/**
- * Does the required work to run it directly, set it up, tie it with the
- * provided [presenter], and try to load a saved game or create a new one.
- */
+/// Runs the scripter and the presenter via proxy, but without separation by
+/// isolate.
 Future<Presenter> runDirectly(
-    ScripterProxy bookProxy, Presenter presenter, Store store) {
+    ScripterProxy bookProxy, Presenter presenter, Store store) async {
   presenter.setPlayerProfile(store.getDefaultPlayerProfile());
-  return init(bookProxy, presenter).then((_) {
-    presenter.setup();
-    presenter.continueSavedGameOrCreateNew();
-  });
+  await bookProxy.init();
+  presenter.setScripter(bookProxy);
+  bookProxy.setPresenter(presenter);
+  presenter.setup();
+  await presenter.continueSavedGameOrCreateNew();
+  return presenter;
 }
 
+/// Runs the scripter and the presenter without any proxies.
 Future<Presenter> run(Scripter scripter, Presenter presenter, Store store) {
   presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   presenter.setScripter(scripter);
+  scripter.setPresenter(presenter);
   presenter.setup();
   presenter.continueSavedGameOrCreateNew();
   return new Future.value(presenter);
 }
 
-/**
- * Initializes the [Scripter], and ties [Presenter] with it.
- */
-Future<Presenter> init(ScripterProxy bookProxy, Presenter presenter) {
-  return bookProxy.init().then((_) {
-    presenter.setScripter(bookProxy);
-    bookProxy.setPresenter(presenter);
-
-    return presenter;
-  });
-}

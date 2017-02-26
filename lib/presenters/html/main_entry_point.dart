@@ -3,34 +3,45 @@ library html_main_entry_point;
 /// This is the basis of [:example.html.dart:]. It is the entry point of
 /// the egamebook app as implemented through [HtmlPresenter]. It's a template,
 /// to be rewritten by [Builder].
-const String HTML_ENTRY_POINT_DART_FILE = """
+const String HTML_ENTRY_POINT_DART_FILE = r"""
 import 'dart:async';
 
-import 'package:egamebook/runner.dart';
 import 'package:egamebook/presenters/html/html_presenter.dart';
+import 'package:egamebook/runner.dart';
 import 'package:egamebook/src/persistence/storage.dart';
-
-/* #if RELEASE *//*
-import 'package:[[NAME]]/[[NAME]].dart' deferred as book;
-*//* #else */
-import 'package:[[NAME]]/[[NAME]].dart' as book;
-/* #endif */
+import 'package:logging/logging.dart';
 
 /// This is the entry point of the egamebook app as implemented through
-/// [HtmlPresenter]. It's a template, to be rewritten by [Builder].
+/// [HtmlPresenter].
 
 Future<Null> main() async {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    print('${rec.level.name} (${rec.loggerName}): ${rec.time}: ${rec.message}');
+  });
+
   // create the presenter
   Presenter presenter = new HtmlPresenter();
   // open store
   Store store = new LocalStorageStore();
-  // set player profile
-  presenter.setPlayerProfile(store.getDefaultPlayerProfile());
   // run
-  /* #if RELEASE *//*
-  var _ = await book.loadLibrary();
-  *//* #endif */
-  await run(new book.ScripterImpl(), presenter, store);
+  await runFromIsolate("[[NAME]].isolate.dart", presenter, store);
+}
+""";
+
+/// This is the file that starts the isolate. It needs to live in the web/
+/// directory (so that it's compiled to JavaScript).
+const String HTML_ENTRY_POINT_ISOLATE = r"""
+import 'dart:isolate';
+
+import 'package:[[NAME]]/[[NAME]].dart';
+import 'package:egamebook/scripter.dart';
+
+// The entry point of the isolate.
+void main(List<String> args, SendPort mainIsolatePort) {
+  PresenterProxy presenter = new IsolatePresenterProxy(mainIsolatePort);
+  Scripter book = new ScripterImpl();
+  presenter.setScripter(book);
 }
 """;
 

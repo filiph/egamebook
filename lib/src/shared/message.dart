@@ -63,7 +63,6 @@ class Message {
   static const int SCRIPTER_LOG = 667;
 
   /// Message type request book Uid.
-
   static const int REQUEST_BOOK_UID = 1000;
 
   /// Message type start.
@@ -86,6 +85,8 @@ class Message {
 
   /// Message type slot machine result.
   static const int SLOT_MACHINE_RESULT = 1080;
+
+  static const int TEXT_SHOWN = 1090;
 
   /// Type of the message.
   final int type;
@@ -249,6 +250,8 @@ class Message {
     strContent = str;
   }
 
+  Message.textShown() : type = TEXT_SHOWN;
+
   /// Creates new Message of type [UPDATE_FORM] with provided
   /// [formConfiguration] used as [mapContent].
   /// It is used during the [IsolatePresenterProxy]'s [:updateForm():].
@@ -314,6 +317,8 @@ class Message {
         return "FORM_INPUT";
       case SHOW_SLOT_MACHINE:
         return "SHOW_SLOT_MACHINE";
+      case TEXT_SHOWN:
+        return "TEXT_SHOWN";
       case QUIT:
         return "QUIT";
       default:

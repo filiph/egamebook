@@ -188,6 +188,12 @@ class IsolatePresenterProxy extends PresenterProxy {
         int pointSum = scripter.getPoints().sum;
         _send(new PointsAward(0, pointSum).toMessage());
         return;
+      case Message.TEXT_SHOWN:
+        assert(_showTextCompleter != null, "Received $message but "
+            "_showTextCompleter is null.");
+        _showTextCompleter.complete(true);
+        _showTextCompleter = null;
+        return;
       case Message.PROCEED:
         // Solve backlog. TODO: do better or drop completely
         if (_messageBacklog != null) {
@@ -305,14 +311,17 @@ class IsolatePresenterProxy extends PresenterProxy {
     return _choiceSelectedCompleter.future;
   }
 
+  Completer<bool> _showTextCompleter;
+
   /// Sends text result message from provided [text] to Scripter proxy.
   @override
   Future<bool> showText(String text) {
+    assert(_showTextCompleter == null, "Sending text before last showText has "
+        "been completed.");
+    _showTextCompleter = new Completer<bool>();
     _send(new Message.textResult(text));
-    return new Future.value(); // TODO: wait for presenter to return
-    //       Message.TEXT_SHOWN
+    return _showTextCompleter.future;
   }
-
   /// Sends update stats message from provided StatUpdateCollection [updates]
   /// to Scripter proxy.
   @override

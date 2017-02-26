@@ -196,43 +196,43 @@ class HtmlPresenter extends Presenter {
    * Returns [Future] when complete.
    */
   @override
-  Future<bool> showText(String s) {
+  Future<bool> showText(String s) async {
     log("Showing: $s");
     if (s == null) return new Future.value(false);
-    var completer = new Completer<bool>();
 
-    new Future.delayed(_durationBetweenShowingText, () {
-      _textHistory.write("$s\n\n");
-      final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
-        new FootnoteSupTagSyntax()
-      ];
-      String html = mdown.markdownToHtml(s, inlineSyntaxes: syntaxes);
-      DocumentFragment container = new DocumentFragment();
-      container.innerHtml = html;
-      int count = 0;
-      for (Element el in container.children) {
-        if (USE_SHOWTEXT_ANIMATION) {
-          count++;
-          el.classes.add("hidden");
-          num transitionDelay = _durationBetweenShowingElements.inMilliseconds *
-              (count - 1) /
-              1000;
-          el.style.transitionDelay = "${transitionDelay}s";
-          new Future(() {
-            el.classes.remove("hidden");
-          });
-        }
-        _attachFootnoteClickListeners(el);
-        bookDiv.append(el);
+    _textHistory.write("$s\n\n");
+    final List<mdown.InlineSyntax> syntaxes = <mdown.InlineSyntax>[
+      new FootnoteSupTagSyntax()
+    ];
+    String html = mdown.markdownToHtml(s, inlineSyntaxes: syntaxes);
+    DocumentFragment container = new DocumentFragment();
+    container.innerHtml = html;
+    int count = 0;
+    for (Element el in container.children) {
+      if (USE_SHOWTEXT_ANIMATION) {
+        count++;
+        el.classes.add("hidden");
+        num transitionDelay = _durationBetweenShowingElements.inMilliseconds *
+            (count) /
+            1000;
+        el.style.transitionDelay = "${transitionDelay}s";
+        // We're waiting for another frame so that the transition runs.
+        // ignore: unawaited_futures
+        new Future(() {
+          el.classes.remove("hidden");
+        });
       }
-      container.remove();
-      // TODO: find out if necessary to avoid leaks
+      _attachFootnoteClickListeners(el);
+      bookDiv.append(el);
+    }
+    container.remove();
+    // TODO: find out if necessary to avoid leaks
 
-      new Future.delayed(_durationBetweenShowingElements * count,
-          () => completer.complete(true));
-    });
+    if (USE_SHOWTEXT_ANIMATION) {
+      await new Future.delayed(_durationBetweenShowingElements * count);
+    }
 
-    return completer.future;
+    return true;
   }
 
   /// Search for footnotes in [el] and attach click listeners on them. Clicking
