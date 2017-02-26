@@ -4518,7 +4518,7 @@ this.cx=y
 y.x="endGame"
 $.$get$bV().t(0,0)},
 he:function(){var z,y
-z=new O.ct([[null,P.a6(["goto","gameLoop"])]],0,null,!1,!1)
+z=new O.ct(['<p class="meta">\n  Build: Feb 26, 2017, 11:12am\n</p>',[null,P.a6(["goto","gameLoop"])]],0,null,!1,!1)
 y=this.b.a
 y.l(0,"start",z)
 z.a="start"
