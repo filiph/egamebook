@@ -133,10 +133,11 @@ class ActorPlanner {
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
 
     for (var action in _generateAllActions(currentActor, _initial.world)) {
-      log.finer("Evaluating action '${action.name}' for ${currentActor.name}");
+      log.finer(() => "Evaluating action '${action.name}' "
+          "for ${currentActor.name}");
 
       if (!action.isApplicable(currentActor, _initial.world)) {
-        log.finer("- action '${action.name}' isn't applicable");
+        log.finer(() => "- action '${action.name}' isn't applicable");
         // Bail early if action isn't possible at all.
         continue;
       }
@@ -145,21 +146,23 @@ class ActorPlanner {
           .toList();
 
       if (consequenceStats.isEmpty) {
-        log.finer("- action '${action.name}' is possible but we couldn't get "
-            "to any outcomes while planning. Scoring with negative infinity.");
+        log.finer(() => "- action '${action.name}' is possible but we "
+            "couldn't get to any outcomes while planning. "
+            "Scoring with negative infinity.");
         // For example, at the very end of a book, it is possible to have
         // 'no future'.
         firstActionScores[action] = const ActorScoreChange.undefined();
         continue;
       }
 
-      log.finer("- action '${action.name}' leads to ${consequenceStats.length} "
+      log.finer(() => "- action '${action.name}' leads "
+          "to ${consequenceStats.length} "
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
 
       firstActionScores[action] = score;
 
-      log.finer("- action '${action.name}' was scored $score");
+      log.finer(() => "- action '${action.name}' was scored $score");
     }
 
     _resultsReady = true;

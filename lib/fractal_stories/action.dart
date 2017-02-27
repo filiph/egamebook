@@ -160,7 +160,6 @@ abstract class Action {
       throw new StateError("No description given when executing $this. You "
           "should return it from your world-modifying function.");
     }
-    builder.markAfterAction(world);
     builder.description = _description;
     builder.time = world.time;
     world.actionRecords.addFirst(builder.build());
@@ -208,18 +207,23 @@ abstract class Action {
   }
 
   ActionRecordBuilder _prepareWorldRecord(
-          Actor actor, WorldState world, bool isSuccess, isFailure) =>
-      new ActionRecordBuilder()
-        ..actionClass = this.runtimeType.toString()
-        ..actionName = name
-        ..protagonist = actor
-        ..sufferers = new Set.from((this is EnemyTargetAction)
-            ? [(this as EnemyTargetAction).enemy]
-            : [])
-        ..wasSuccess = isSuccess
-        ..wasFailure = isFailure
-        ..wasAggressive = isAggressive
-        ..markBeforeAction(world);
+          Actor actor, WorldState world, bool isSuccess, isFailure) {
+    var builder = new ActionRecordBuilder()
+      ..actionClass = this.runtimeType.toString()
+      ..protagonist = actor.id
+      ..knownTo = KnownToMode.all
+      ..wasSuccess = isSuccess
+      ..wasFailure = isFailure
+      ..wasAggressive = isAggressive;
+    if (this is EnemyTargetAction) {
+      EnemyTargetAction action = this;
+      builder.sufferers.add(action.enemy.id);
+      builder.actionName = "$runtimeType at ${action.enemy.name}";
+    } else {
+      builder.actionName = runtimeType.toString();
+    }
+    return builder;
+  }
 }
 
 /// This [Action] requires an [enemy].

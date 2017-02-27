@@ -48,8 +48,7 @@ class WorldState {
         situations = new List() {
     actors.addAll(other.actors);
     // TODO: duplicateActionRecord, item, etc.
-    actionRecords.addAll(other.actionRecords
-        .map((otherRecord) => new ActionRecord.duplicate(otherRecord)));
+    actionRecords.addAll(other.actionRecords);
     items.addAll(other.items);
     rooms.addAll(other.rooms);
     situations.addAll(other.situations);
