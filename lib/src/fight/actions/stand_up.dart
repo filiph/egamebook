@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 
 class StandUp extends Action {
@@ -45,12 +46,20 @@ class StandUp extends Action {
   bool isApplicable(Actor a, WorldState world) {
     if (!a.isOnGround) return false;
     // If this actor just fell, do not let him stand up.
-    var recency = world.timeSinceLastActionRecord(
-        actionClassPattern: SweepOffFeet.className, sufferer: a, wasSuccess: true);
+    var sweepRecency = world.timeSinceLastActionRecord(
+        actionClassPattern: SweepOffFeet.className,
+        sufferer: a,
+        wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another
     // actor is silent, so with 1 we would still get 'you sweep his legs, he
     // stands up'.
-    if (recency != null && recency <= 2) {
+    if (sweepRecency != null && sweepRecency <= 3) {
+      return false;
+    }
+    // If this actor was just pounded to ground, do not let him stand up.
+    var poundRecency = world.timeSinceLastActionRecord(
+        actionClassPattern: Pound.className, sufferer: a, wasSuccess: true);
+    if (poundRecency != null && poundRecency <= 3) {
       return false;
     }
     return true;

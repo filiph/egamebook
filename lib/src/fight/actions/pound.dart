@@ -13,6 +13,8 @@ final Entity balance =
 final Entity pounding = new Entity(name: "pounding", team: neutralTeam);
 
 class Pound extends EnemyTargetAction {
+  static const String className = "Pound";
+
   @override
   final bool rerollable = true;
 
