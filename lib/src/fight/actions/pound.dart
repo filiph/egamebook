@@ -76,7 +76,7 @@ class Pound extends EnemyTargetAction {
           w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
       s.add(
           "<subject> make<s> <object> fall "
-          "to $groundMaterial",
+          "to the $groundMaterial",
           subject: pounding,
           object: enemy);
       w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
