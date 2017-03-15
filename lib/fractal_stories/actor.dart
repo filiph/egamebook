@@ -147,7 +147,7 @@ abstract class Actor extends Object
   /// neutrals or friends.
   double hateTowards(Actor other, WorldState w) {
     if (isConfused(w) && team.isFriendWith(other.team)) {
-      return 10.0;
+      return 1000.0;
     }
 
     if (_hasBeenAttackedBy(other, w, 10)) {
