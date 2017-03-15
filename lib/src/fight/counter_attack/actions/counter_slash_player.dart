@@ -18,7 +18,7 @@ class CounterSlashPlayer extends CounterSlash {
   CounterSlashPlayer(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "swing back at <object>";
+  String get commandTemplate => "swing back at <object>";
 
   @override
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";

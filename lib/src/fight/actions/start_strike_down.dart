@@ -22,7 +22,7 @@ class StartStrikeDown extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "strike down at <object>";
+  String get commandTemplate => "strike down at <object>";
 
   @override
   bool get rerollable => false;

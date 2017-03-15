@@ -44,7 +44,7 @@ class ScripterImpl extends Scripter {
     /* PAGES & BLOCKS */
     pageMap[r"""start"""] = new ScripterPage(
       [
-          """<p class='meta'>Debug version from Wed, March 15, 2017.</p>""",
+          """<p class='meta'>Debug version from 12:25pm, Wed, March 15, 2017.</p>""",
           [
             null,
           {

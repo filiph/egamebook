@@ -28,7 +28,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "step back and parry";
+  String get commandTemplate => "step back and parry";
 
   @override
   String get rollReasonTemplate => "will <subject> parry it?";

@@ -36,7 +36,7 @@ class ParrySlash extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "parry and counter";
+  String get commandTemplate => "parry and counter";
 
   @override
   String get rollReasonTemplate => "will <subject> parry?";

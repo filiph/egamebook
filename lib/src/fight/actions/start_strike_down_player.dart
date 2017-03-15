@@ -12,7 +12,7 @@ class StartStrikeDownPlayer extends StartStrikeDown {
   StartStrikeDownPlayer(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "strike down at <object>";
+  String get commandTemplate => "strike down at <object>";
 
   @override
   bool get rerollable => true;

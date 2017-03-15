@@ -245,7 +245,7 @@ abstract class EnemyTargetAction extends Action {
 
   @override
   String get command =>
-      (new Storyline()..add(nameTemplate, object: enemy)).realize();
+      (new Storyline()..add(commandTemplate, object: enemy)).realize();
 
   /// EnemyTargetAction should include the [enemy] in the [command]. To make it
   /// easier to implement, this class will automatically construct the name
@@ -253,7 +253,7 @@ abstract class EnemyTargetAction extends Action {
   ///
   /// For example, "kill <object>" is a valid name template that might realize
   /// into something like "Kill the orc."
-  String get nameTemplate;
+  String get commandTemplate;
 
   @override
   String getRollReason(Actor a, WorldState w) => (new Storyline()
@@ -270,7 +270,7 @@ abstract class EnemyTargetAction extends Action {
   String get rollReasonTemplate;
 
   @override
-  String toString() => "EnemyTargetAction<$nameTemplate::"
+  String toString() => "EnemyTargetAction<$commandTemplate::"
       "enemy=${enemy.id}/${enemy.name}>";
 }
 

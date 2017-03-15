@@ -25,10 +25,10 @@ class Confuse extends EnemyTargetAction {
   Confuse(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "confuse <object>";
 
   @override
-  String get nameTemplate => "confuse <object>";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> confuse <object>?";

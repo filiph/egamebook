@@ -25,7 +25,7 @@ class StartSlash extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "swing at <object>";
+  String get commandTemplate => "swing at <object>";
 
   @override
   bool get rerollable => false;

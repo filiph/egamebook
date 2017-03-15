@@ -27,7 +27,7 @@ class FinishSlash extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "kill <object> "
+  String get commandTemplate => "kill <object> "
       "(WARNING should not be user-visible)";
 
   @override

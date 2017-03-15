@@ -29,7 +29,7 @@ class CounterSlash extends EnemyTargetAction {
   CounterSlash(Actor enemy) : super(enemy);
 
   @override
-  String get nameTemplate => "swing back at <object>";
+  String get commandTemplate => "swing back at <object>";
 
   @override
   String get rollReasonTemplate => "will <subject> keep <subject's> balance?";

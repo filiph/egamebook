@@ -29,7 +29,7 @@ class OnGroundParry extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "parry it";
+  String get commandTemplate => "parry it";
 
   @override
   String get rollReasonTemplate => "will <subject> parry it?";

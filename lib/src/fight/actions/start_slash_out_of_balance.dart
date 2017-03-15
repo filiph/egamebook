@@ -28,7 +28,7 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "swing at <object> (while out of balance)";
+  String get commandTemplate => "swing at <object> (while out of balance)";
 
   @override
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";

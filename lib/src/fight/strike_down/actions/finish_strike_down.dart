@@ -25,7 +25,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "kill <object> (WARNING should not be "
+  String get commandTemplate => "kill <object> (WARNING should not be "
       "user-visible)";
 
   @override

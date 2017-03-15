@@ -30,7 +30,7 @@ class DodgeSlash extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "dodge and counter";
+  String get commandTemplate => "dodge and counter";
 
   @override
   String get rollReasonTemplate => "will <subject> dodge?";

@@ -28,7 +28,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "stab <object>";
+  String get commandTemplate => "stab <object>";
 
   @override
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";

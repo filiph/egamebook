@@ -28,7 +28,7 @@ class SweepOffFeet extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "sweep <object> off <objectPronoun's> feet";
+  String get commandTemplate => "sweep <object> off <objectPronoun's> feet";
 
   @override
   String get rollReasonTemplate => "will <subject> knock "

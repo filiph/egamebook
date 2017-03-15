@@ -25,7 +25,7 @@ class RollOutOfWay extends EnemyTargetAction {
   String get name => className;
 
   @override
-  String get nameTemplate => "roll out of way";
+  String get commandTemplate => "roll out of way";
 
   @override
   String get rollReasonTemplate =>
