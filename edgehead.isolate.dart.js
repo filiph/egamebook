@@ -4551,7 +4551,7 @@ this.cx=y
 y.x="endGame"
 $.$get$bX().p(0,0)},
 hg:function(){var z,y
-z=new O.cu(["<p class='meta'>Debug version from Wed, March 15, 2017.</p>",[null,P.a6(["goto","gameLoop"])]],0,null,!1,!1)
+z=new O.cu(["<p class='meta'>Debug version from 12:25pm, Wed, March 15, 2017.</p>",[null,P.a6(["goto","gameLoop"])]],0,null,!1,!1)
 y=this.b.a
 y.l(0,"start",z)
 z.a="start"
