@@ -25,9 +25,9 @@ class Pound extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
-  String helpMessage = "Pounding on someone means hitting them heavily several "
-      "times in a row. The goal is not to deal damage but to force "
-      "the opponent to lose ground or balance.";
+  String helpMessage = "Forcing enemies off balance often means hitting them "
+      "heavily several times in a row. The goal is not to deal damage but to "
+      "force the opponent to lose control of their combat stance.";
 
   Pound(Actor enemy) : super(enemy);
 
@@ -46,12 +46,15 @@ class Pound extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {fiercely|violently} "
-        "{pound<s>|and repeatedly {strike<s>|hammer<s>|batter<s>}} "
+        "{pound<s>|strike<s>|hammer<s>|batter<s>} "
         "on <object-owner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
         object: enemy.currentWeapon);
-    enemy.report(s, "<subject> {stand<s> ground|deflect<s> each blow}",
+    enemy.report(
+        s,
+        "<subject> {retain<s>|keep<s>} "
+        "<subject's> {|combat} {stance|footing}",
         positive: true);
     return "${a.name} kicks ${enemy.name} off balance";
   }
@@ -61,7 +64,7 @@ class Pound extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {fiercely|violently} "
-        "{pound<s>|and repeatedly {strike<s>|hammer<s>|batter<s>}} "
+        "{pound<s>|strike<s>|hammer<s>|batter<s>} "
         "on <object-owner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
@@ -100,9 +103,7 @@ class Pound extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      !a.isOnGround &&
-      a.wields(ItemType.sword) &&
-      !enemy.isOnGround;
+      !a.isOnGround && a.wields(ItemType.sword) && !enemy.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new Pound(enemy);
 }
