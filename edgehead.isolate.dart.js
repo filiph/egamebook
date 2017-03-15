@@ -4551,7 +4551,7 @@ this.cx=y
 y.x="endGame"
 $.$get$bX().p(0,0)},
 hf:function(){var z,y
-z=new O.cv([[null,P.a7(["goto","gameLoop"])]],0,null,!1,!1)
+z=new O.cv(["<p class='meta'>Debug version from Wed, March 15, 2017.</p>",[null,P.a7(["goto","gameLoop"])]],0,null,!1,!1)
 y=this.b.a
 y.l(0,"start",z)
 z.a="start"
