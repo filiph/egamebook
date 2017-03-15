@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
+import 'package:edgehead/writers_input.dart' as writersInput;
 
 part 'room_roaming_situation.g.dart';
 
@@ -28,7 +29,7 @@ abstract class RoomRoamingSituation extends Situation
   List<ExitActionBuilder> get actionGenerators => [TakeExitAction.builder];
 
   @override
-  List<Action> get actions => <Action>[];
+  List<Action> get actions => writersInput.allActions;
 
   String get currentRoomName;
 

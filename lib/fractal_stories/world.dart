@@ -140,8 +140,13 @@ class WorldState {
 
   Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
 
-  Room getRoomByName(String roomName) =>
-      rooms.singleWhere((room) => room.name == roomName);
+  Room getRoomByName(String roomName) {
+    assert(
+        rooms.any((room) => room.name == roomName),
+        "Room with name $roomName not defined. "
+        "Current world: $this.");
+    return rooms.singleWhere((room) => room.name == roomName);
+  }
 
   Situation getSituationById(int situationId) {
     int index = _findSituationIndex(situationId);

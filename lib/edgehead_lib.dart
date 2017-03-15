@@ -15,6 +15,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:edgehead/writers_input.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
 
@@ -109,7 +110,7 @@ class EdgeheadGame extends LoopedEvent {
         "",
         (_) => [orc, goblin],
         null,
-        [new Exit(endOfRoam.name, "End book")],
+        [new Exit(entranceToBloodrock.name, "Continue")],
         groundMaterial: "{rock|cavern} floor");
 
     filip = new Actor((b) => b
@@ -154,8 +155,10 @@ class EdgeheadGame extends LoopedEvent {
 
     initialSituation = new RoomRoamingSituation.initialized(deadEscapee);
 
-    world = new WorldState(
-        [filip, briana], [deadEscapee, tunnel, endOfRoam], initialSituation);
+    var rooms = new List<Room>.from(allRooms)
+      ..addAll([deadEscapee, tunnel, endOfRoam]);
+
+    world = new WorldState([filip, briana], rooms, initialSituation);
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -213,6 +216,11 @@ class EdgeheadGame extends LoopedEvent {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?
       log.severe("No recommendation for ${actor.name}");
+      log.severe(() {
+        String path =
+            world.actionRecords.map((a) => a.description).join(' <- ');
+        return "- how we got here: $path";
+      });
       world.elapseSituationTime(situation.id);
       world.time += 1;
       return;

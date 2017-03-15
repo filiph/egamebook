@@ -97,6 +97,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1+2"
+  code_builder:
+    description:
+      name: code_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-beta+5"
   code_transformers:
     description:
       name: code_transformers
@@ -145,6 +151,12 @@ packages:
       relative: true
     source: path
     version: "0.2.1"
+  func:
+    description:
+      name: func
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   glob:
     description:
       name: glob
@@ -265,6 +277,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.23.0"
+  recase:
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+1"
   resource:
     description:
       name: resource

@@ -249,6 +249,13 @@ abstract class Actor extends Object
     return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
+  /// The default score when actor dies and is no longer in the world.
+  ///
+  /// For example, after a `FightSituation` ends, all dead actors are deleted,
+  /// which means there is nobody to score the situation. In that case, we
+  /// provide this default score.
+  static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
+
   bool wields(ItemType value) =>
       currentWeapon != null && currentWeapon.type == value;
 

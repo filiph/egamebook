@@ -14,7 +14,7 @@ class ActorScore {
   /// the worse this is for the Actor.
   final num enemy;
 
-  ActorScore(this.selfPreservation, this.teamPreservation, this.enemy);
+  const ActorScore(this.selfPreservation, this.teamPreservation, this.enemy);
 
   ActorScoreChange operator -(ActorScore other) => new ActorScoreChange(
       selfPreservation - other.selfPreservation,

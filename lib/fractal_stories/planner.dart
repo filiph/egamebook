@@ -290,13 +290,29 @@ class ActorPlanner {
       assert(currentActor != null);
 
       // This actor is the one we originally started planning for.
-      var mainActor = current.world.actors.singleWhere((a) => a.id == actorId);
+      if (current.world.actors.where((a) => a.id == actorId).length != 1) {
+        print(current.world);
+      }
+
+      Actor mainActor;
+      var mainActorDuplicates =
+          current.world.actors.where((a) => a.id == actorId).length;
+      if (mainActorDuplicates > 1) {
+        throw new StateError("World has several duplicates of mainActor: "
+            "${current.world}");
+      } else if (mainActorDuplicates == 0) {
+        log.info("mainActor $actorId dies and is removed in world - "
+            "will use defaultScoreWhenDead");
+      } else {
+        mainActor = current.world.actors.singleWhere((a) => a.id == actorId);
+      }
       bool currentActorIsMain = currentActor == mainActor;
 
       log.finest("- actor: ${currentActor.name} (isMain==$currentActorIsMain)");
-      log.finest("- mainActor: ${mainActor.name}");
+      log.finest("- mainActor: ${mainActor?.name}");
 
-      var score = mainActor.scoreWorld(current.world);
+      var score =
+          mainActor?.scoreWorld(current.world) ?? Actor.defaultScoreWhenDead;
       var stats = new ConsequenceStats(
           score, current.cumulativeProbability, current.order);
 
