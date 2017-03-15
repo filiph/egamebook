@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 class StartSlashOutOfBalance extends EnemyTargetAction {
+  static const String className = "StartSlashOutOfBalance";
+
   @override
   final String helpMessage = "It's always better to fight with your feet "
       "firmly on the ground. But sometimes, it's necessary to act quickly.";
@@ -21,6 +23,9 @@ class StartSlashOutOfBalance extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   StartSlashOutOfBalance(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "swing at <object> (while out of balance)";

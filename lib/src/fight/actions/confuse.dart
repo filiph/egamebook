@@ -16,16 +16,19 @@ class Confuse extends EnemyTargetAction {
       "minds is something you've been practicing. It makes the target rabid "
       "and disoriented. They might attack their own.";
 
-  Confuse(Actor enemy) : super(enemy);
-
-  @override
-  String get nameTemplate => "confuse <object>";
-
   @override
   final bool rerollable = true;
 
   @override
   final Resource rerollResource = Resource.stamina;
+
+  Confuse(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
+
+  @override
+  String get nameTemplate => "confuse <object>";
 
   @override
   String get rollReasonTemplate => "will <subject> confuse <object>?";

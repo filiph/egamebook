@@ -22,8 +22,6 @@ abstract class ActionRecord
 
   String get actionClass;
 
-  String get actionName;
-
   String get description;
 
   /// The actors who know about this.
@@ -56,7 +54,7 @@ abstract class ActionRecord
   bool get wasSuccess;
 
   @override
-  String toString() => "ActionRecord<$actionClass, $actionName, $description>";
+  String toString() => "ActionRecord<$actionClass, $description>";
 }
 
 enum KnownToMode { all, protagonistOnly, custom }

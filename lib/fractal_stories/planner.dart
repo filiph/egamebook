@@ -105,7 +105,7 @@ class ActorPlanner {
   Iterable<String> generateTable() sync* {
     int i = 1;
     for (var key in firstActionScores.keys) {
-      yield "$i) ${key.name}\t${firstActionScores[key]}";
+      yield "$i) ${key.command}\t${firstActionScores[key]}";
       i += 1;
     }
   }
@@ -133,11 +133,11 @@ class ActorPlanner {
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
 
     for (var action in _generateAllActions(currentActor, _initial.world)) {
-      log.finer(() => "Evaluating action '${action.name}' "
+      log.finer(() => "Evaluating action '${action.command}' "
           "for ${currentActor.name}");
 
       if (!action.isApplicable(currentActor, _initial.world)) {
-        log.finer(() => "- action '${action.name}' isn't applicable");
+        log.finer(() => "- action '${action.command}' isn't applicable");
         // Bail early if action isn't possible at all.
         continue;
       }
@@ -146,7 +146,7 @@ class ActorPlanner {
           .toList();
 
       if (consequenceStats.isEmpty) {
-        log.finer(() => "- action '${action.name}' is possible but we "
+        log.finer(() => "- action '${action.command}' is possible but we "
             "couldn't get to any outcomes while planning. "
             "Scoring with negative infinity.");
         // For example, at the very end of a book, it is possible to have
@@ -155,14 +155,14 @@ class ActorPlanner {
         continue;
       }
 
-      log.finer(() => "- action '${action.name}' leads "
+      log.finer(() => "- action '${action.command}' leads "
           "to ${consequenceStats.length} "
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
 
       firstActionScores[action] = score;
 
-      log.finer(() => "- action '${action.name}' was scored $score");
+      log.finer(() => "- action '${action.command}' was scored $score");
     }
 
     _resultsReady = true;
@@ -198,7 +198,7 @@ class ActorPlanner {
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
-        "'${firstAction.name}' of ${mainActor.name}");
+        "'${firstAction.command}' of ${mainActor.name}");
     log.finer(() => "- firstAction == $firstAction");
 
     if (!firstAction.isApplicable(mainActor, initial.world)) {
@@ -243,7 +243,7 @@ class ActorPlanner {
 
       log.finest("----");
       log.finest(() => "evaluating a PlanConsequence "
-          "of '${current.action.name}'");
+          "of '${current.action.command}'");
       log.finest(() => "- situation: "
           "${current.world.currentSituation.runtimeType}");
 

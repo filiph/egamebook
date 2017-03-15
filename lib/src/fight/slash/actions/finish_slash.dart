@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/damage_reports.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishSlash extends EnemyTargetAction {
+  static const String className = "FinishSlash";
+
   @override
   final String helpMessage = null;
 
@@ -20,6 +22,9 @@ class FinishSlash extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   FinishSlash(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "kill <object> "

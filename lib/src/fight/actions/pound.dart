@@ -32,6 +32,9 @@ class Pound extends EnemyTargetAction {
   Pound(Actor enemy) : super(enemy);
 
   @override
+  String get name => className;
+
+  @override
   String get nameTemplate => "pound <object>";
 
   @override

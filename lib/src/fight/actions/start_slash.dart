@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 class StartSlash extends EnemyTargetAction {
+  static const String className = "StartSlash";
+
   @override
   final String helpMessage = "The basic swordfighting move is also often the "
       "most effective.";
@@ -18,6 +20,9 @@ class StartSlash extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   StartSlash(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "swing at <object>";
@@ -38,20 +43,17 @@ class StartSlash extends EnemyTargetAction {
     a.report(
         s,
         "<subject> swing<s> "
-            "{<subject's> ${a.currentWeapon.name} |}at <object>",
+        "{<subject's> ${a.currentWeapon.name} |}at <object>",
         object: enemy);
-    var slashSituation =
-        new SlashSituation.initialized(a, enemy);
+    var slashSituation = new SlashSituation.initialized(a, enemy);
     w.pushSituation(slashSituation);
-    var slashDefenseSituation =
-        new SlashDefenseSituation.initialized(a, enemy);
+    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
     w.pushSituation(slashDefenseSituation);
     return "${a.name} starts a slash at ${enemy.name}";
   }
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) =>
-      1.0;
+  num getSuccessChance(Actor actor, WorldState world) => 1.0;
 
   @override
   bool isApplicable(Actor a, WorldState world) =>

@@ -9,7 +9,12 @@ import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
 class StartSlashOutOfBalancePlayer extends StartSlashOutOfBalance {
+  static const String className = "StartSlashOutOfBalancePlayer";
+
   StartSlashOutOfBalancePlayer(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {

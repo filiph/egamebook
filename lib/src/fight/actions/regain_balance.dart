@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/actions/pound.dart';
 class RegainBalance extends Action {
   static final RegainBalance singleton = new RegainBalance();
 
+  static const String className = "RegainBalance";
+
   @override
   final String helpMessage = "Most moves are easier and more effective when "
       "you are firmly in balance.";
@@ -21,7 +23,10 @@ class RegainBalance extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get name => "Regain balance.";
+  String get command => "Regain balance.";
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

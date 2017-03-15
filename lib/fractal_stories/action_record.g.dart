@@ -13,8 +13,6 @@ class _$ActionRecord extends ActionRecord {
   @override
   final String actionClass;
   @override
-  final String actionName;
-  @override
   final String description;
   @override
   final KnownToMode knownTo;
@@ -37,7 +35,6 @@ class _$ActionRecord extends ActionRecord {
   _$ActionRecord._(
       {this.accomplices,
       this.actionClass,
-      this.actionName,
       this.description,
       this.knownTo,
       this.protagonist,
@@ -49,7 +46,6 @@ class _$ActionRecord extends ActionRecord {
       : super._() {
     if (accomplices == null) throw new ArgumentError.notNull('accomplices');
     if (actionClass == null) throw new ArgumentError.notNull('actionClass');
-    if (actionName == null) throw new ArgumentError.notNull('actionName');
     if (description == null) throw new ArgumentError.notNull('description');
     if (knownTo == null) throw new ArgumentError.notNull('knownTo');
     if (protagonist == null) throw new ArgumentError.notNull('protagonist');
@@ -72,7 +68,6 @@ class _$ActionRecord extends ActionRecord {
     if (other is! ActionRecord) return false;
     return accomplices == other.accomplices &&
         actionClass == other.actionClass &&
-        actionName == other.actionName &&
         description == other.description &&
         knownTo == other.knownTo &&
         protagonist == other.protagonist &&
@@ -93,10 +88,8 @@ class _$ActionRecord extends ActionRecord {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc(
-                                        $jc($jc(0, accomplices.hashCode),
-                                            actionClass.hashCode),
-                                        actionName.hashCode),
+                                    $jc($jc(0, accomplices.hashCode),
+                                        actionClass.hashCode),
                                     description.hashCode),
                                 knownTo.hashCode),
                             protagonist.hashCode),
@@ -112,7 +105,6 @@ class _$ActionRecord extends ActionRecord {
     return 'ActionRecord {'
         'accomplices=${accomplices.toString()},\n'
         'actionClass=${actionClass.toString()},\n'
-        'actionName=${actionName.toString()},\n'
         'description=${description.toString()},\n'
         'knownTo=${knownTo.toString()},\n'
         'protagonist=${protagonist.toString()},\n'
@@ -138,10 +130,6 @@ class ActionRecordBuilder
   String _actionClass;
   String get actionClass => _$this._actionClass;
   set actionClass(String actionClass) => _$this._actionClass = actionClass;
-
-  String _actionName;
-  String get actionName => _$this._actionName;
-  set actionName(String actionName) => _$this._actionName = actionName;
 
   String _description;
   String get description => _$this._description;
@@ -182,7 +170,6 @@ class ActionRecordBuilder
     if (_$v != null) {
       _accomplices = _$v.accomplices?.toBuilder();
       _actionClass = _$v.actionClass;
-      _actionName = _$v.actionName;
       _description = _$v.description;
       _knownTo = _$v.knownTo;
       _protagonist = _$v.protagonist;
@@ -213,7 +200,6 @@ class ActionRecordBuilder
         new _$ActionRecord._(
             accomplices: accomplices?.build(),
             actionClass: actionClass,
-            actionName: actionName,
             description: description,
             knownTo: knownTo,
             protagonist: protagonist,

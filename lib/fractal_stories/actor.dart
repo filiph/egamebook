@@ -115,6 +115,7 @@ abstract class Actor extends Object
   bool hasItem(Type type, {int needed: 1}) {
     int count = 0;
     for (var item in items) {
+      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
       if (item.runtimeType == type) {
         count += 1;
       }
@@ -179,6 +180,7 @@ abstract class Actor extends Object
   Item removeItem(Type type) {
     Item markedForRemoval;
     for (var item in items) {
+      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
       if (item.runtimeType == type) {
         markedForRemoval = item;
         break;
@@ -196,6 +198,7 @@ abstract class Actor extends Object
     var markedForRemoval = <Item>[];
     int remaining = count;
     for (var item in items) {
+      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
       if (item.runtimeType == type) {
         markedForRemoval.add(item);
       }

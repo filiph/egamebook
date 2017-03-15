@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart'
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class DodgeSlash extends EnemyTargetAction {
+  static const String className = "DodgeSlash";
+
   @override
   final String helpMessage = "Dodging means moving your body out of harm's "
       "way. When done correctly, it will throw your opponent off balance and "
@@ -23,6 +25,9 @@ class DodgeSlash extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   DodgeSlash(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "dodge and counter";

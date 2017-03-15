@@ -7,6 +7,8 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class DefensiveParrySlash extends EnemyTargetAction {
+  static const String className = "DefensiveParrySlash";
+
   @override
   final String helpMessage = "Stepping back is the safest way to get out of "
       "harm's way.";
@@ -21,6 +23,9 @@ class DefensiveParrySlash extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   DefensiveParrySlash(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "step back and parry";

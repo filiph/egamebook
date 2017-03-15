@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/damage_reports.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
+  static const String className = "OffBalanceOpportunityThrust";
+
   @override
   final String helpMessage = "When an opponent is out of balance they are the "
       "most vulnerable.";
@@ -21,6 +23,9 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "stab <object>";
@@ -68,9 +73,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      a.isStanding &&
-      enemy.isOffBalance &&
-      a.wields(ItemType.sword);
+      a.isStanding && enemy.isOffBalance && a.wields(ItemType.sword);
 
   static EnemyTargetAction builder(Actor enemy) =>
       new OffBalanceOpportunityThrust(enemy);

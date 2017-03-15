@@ -12,6 +12,11 @@ class CounterSlash extends EnemyTargetAction {
       "because your opponent is often caught off guard. On the other hand, "
       "counters require fast reaction and could throw you out of balance.";
 
+  static const String className = "CounterSlash";
+
+  @override
+  String get name => className;
+
   @override
   final bool isAggressive = true;
 

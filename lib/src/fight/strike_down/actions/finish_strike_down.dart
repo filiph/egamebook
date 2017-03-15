@@ -5,6 +5,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
 class FinishSlashGroundedEnemy extends EnemyTargetAction {
+  static const String className = "FinishSlashGroundedEnemy";
+
   @override
   final String helpMessage = null;
 
@@ -18,6 +20,9 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "kill <object> (WARNING should not be "

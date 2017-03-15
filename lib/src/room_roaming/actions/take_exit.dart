@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class TakeExitAction extends ExitAction {
+  static const String className = "TakeExitAction";
+
   @override
   final bool isAggressive = false;
 
@@ -20,6 +22,9 @@ class TakeExitAction extends ExitAction {
 
   @override
   String get helpMessage => null;
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {

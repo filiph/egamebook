@@ -7,6 +7,8 @@ import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_def
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
 class StartStrikeDown extends EnemyTargetAction {
+  static const String className = "StartStrikeDown";
+
   @override
   final String helpMessage = "Opponents on the ground are often the most "
       "vulnerable.";
@@ -14,16 +16,19 @@ class StartStrikeDown extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  StartStrikeDown(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
+
+  @override
+  String get nameTemplate => "strike down at <object>";
+
   @override
   bool get rerollable => false;
 
   @override
   Resource get rerollResource => null;
-
-  StartStrikeDown(Actor enemy) : super(enemy);
-
-  @override
-  String get nameTemplate => "strike down at <object>";
 
   @override
   String get rollReasonTemplate => null;

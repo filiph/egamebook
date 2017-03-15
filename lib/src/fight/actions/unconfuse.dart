@@ -22,7 +22,10 @@ class Unconfuse extends Action {
   final bool isAggressive = false;
 
   @override
-  String get name => "Regain clarity.";
+  String get command => "Regain clarity.";
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

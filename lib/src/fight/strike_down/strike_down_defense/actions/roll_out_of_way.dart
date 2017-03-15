@@ -5,6 +5,8 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class RollOutOfWay extends EnemyTargetAction {
+  static const String className = "RollOutOfWay";
+
   @override
   final String helpMessage = null;
 
@@ -20,10 +22,14 @@ class RollOutOfWay extends EnemyTargetAction {
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override
+  String get name => className;
+
+  @override
   String get nameTemplate => "roll out of way";
 
   @override
-  String get rollReasonTemplate => "will <subject> evade?"; // TODO: come up with something
+  String get rollReasonTemplate =>
+      "will <subject> evade?"; // TODO: come up with something
 
   @override
   String applyFailure(Actor a, WorldState _, Storyline s) {

@@ -12,6 +12,8 @@ final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 class ParrySlash extends EnemyTargetAction {
+  static const String className = "ParrySlash";
+
   @override
   final String helpMessage = "Parrying means deflecting your opponent's move "
       "with your weapon. When successful, "
@@ -29,6 +31,9 @@ class ParrySlash extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   ParrySlash(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "parry and counter";

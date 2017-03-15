@@ -8,6 +8,8 @@ import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 class StandUp extends Action {
   static final StandUp singleton = new StandUp();
 
+  static const String className = "StandUp";
+
   @override
   final String helpMessage = null;
 
@@ -21,7 +23,10 @@ class StandUp extends Action {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get name => "Stand up.";
+  String get command => "Stand up.";
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -53,13 +58,13 @@ class StandUp extends Action {
     // We're using 2 here because it's safer. Sometimes, an action by another
     // actor is silent, so with 1 we would still get 'you sweep his legs, he
     // stands up'.
-    if (sweepRecency != null && sweepRecency <= 3) {
+    if (sweepRecency != null && sweepRecency <= 2) {
       return false;
     }
     // If this actor was just pounded to ground, do not let him stand up.
     var poundRecency = world.timeSinceLastActionRecord(
         actionClassPattern: Pound.className, sufferer: a, wasSuccess: true);
-    if (poundRecency != null && poundRecency <= 3) {
+    if (poundRecency != null && poundRecency <= 2) {
       return false;
     }
     return true;

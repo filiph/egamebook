@@ -8,6 +8,8 @@ import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 class Scramble extends Action {
   static final Scramble singleton = new Scramble();
 
+  static const String className = "Scramble";
+
   @override
   final String helpMessage = null;
 
@@ -21,7 +23,10 @@ class Scramble extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get name => "Scramble.";
+  String get command => "Scramble.";
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {
@@ -52,13 +57,13 @@ class Scramble extends Action {
         actionClassPattern: SweepOffFeet.className,
         sufferer: a,
         wasSuccess: true);
-    if (sweepRecency != null && sweepRecency <= 3) {
+    if (sweepRecency != null && sweepRecency <= 2) {
       return true;
     }
     // If this actor was just pounded to ground, do not let him stand up.
     var poundRecency = world.timeSinceLastActionRecord(
         actionClassPattern: Pound.className, sufferer: a, wasSuccess: true);
-    if (poundRecency != null && poundRecency <= 3) {
+    if (poundRecency != null && poundRecency <= 2) {
       return true;
     }
     return false;

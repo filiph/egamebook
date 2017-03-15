@@ -25,6 +25,9 @@ class SweepOffFeet extends EnemyTargetAction {
   SweepOffFeet(Actor enemy) : super(enemy);
 
   @override
+  String get name => className;
+
+  @override
   String get nameTemplate => "sweep <object> off <objectPronoun's> feet";
 
   @override

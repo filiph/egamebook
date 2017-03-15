@@ -6,6 +6,8 @@ import 'package:edgehead/fractal_stories/world.dart';
 class Pass extends Action {
   static final Pass singleton = new Pass();
 
+  static const String className = "Pass";
+
   @override
   final String helpMessage = "Sometimes, patience pays off. Especially when "
       "the other option is potentially dangerous.";
@@ -16,12 +18,15 @@ class Pass extends Action {
   @override
   final bool rerollable = false;
 
-
   @override
   final Resource rerollResource = null;
 
+
   @override
-  String get name => "Stand off.";
+  String get command => "Stand off.";
+
+  @override
+  String get name => className;
 
   @override
   String applyFailure(Actor actor, WorldState world, Storyline storyline) {

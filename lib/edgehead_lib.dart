@@ -264,14 +264,14 @@ class EdgeheadGame extends LoopedEvent {
       // sorted next to each other.
       String sortingName(Action a) {
         if (a is EnemyTargetAction) {
-          return "${a.enemy.name} ${a.name}";
+          return "${a.enemy.name} ${a.command}";
         }
-        return "ZZZZZZ ${a.name}";
+        return "ZZZZZZ ${a.command}";
       }
 
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
       for (Action action in actions) {
-        choiceFunction(action.name, helpMessage: action.helpMessage,
+        choiceFunction(action.command, helpMessage: action.helpMessage,
             script: () async {
           await _applySelected(action, actor, storyline);
         });

@@ -75,6 +75,15 @@ enum Resource {
 abstract class Action {
   String _description;
 
+  /// The command that describes this action.
+  ///
+  /// For example: "open the door" or "swing at the orc".
+  String get command;
+
+  /// The name of the class of the Action.
+  ///
+  /// We need to use this instead of the [runtimeType] because [runtimeType]
+  /// can be mangled in production (dart2js).
   String get name;
 
   String get helpMessage;
@@ -209,7 +218,7 @@ abstract class Action {
   ActionRecordBuilder _prepareWorldRecord(
           Actor actor, WorldState world, bool isSuccess, isFailure) {
     var builder = new ActionRecordBuilder()
-      ..actionClass = this.runtimeType.toString()
+      ..actionClass = name
       ..protagonist = actor.id
       ..knownTo = KnownToMode.all
       ..wasSuccess = isSuccess
@@ -218,9 +227,6 @@ abstract class Action {
     if (this is EnemyTargetAction) {
       EnemyTargetAction action = this;
       builder.sufferers.add(action.enemy.id);
-      builder.actionName = "$runtimeType at ${action.enemy.name}";
-    } else {
-      builder.actionName = runtimeType.toString();
     }
     return builder;
   }
@@ -238,10 +244,10 @@ abstract class EnemyTargetAction extends Action {
   EnemyTargetAction(this.enemy);
 
   @override
-  String get name =>
+  String get command =>
       (new Storyline()..add(nameTemplate, object: enemy)).realize();
 
-  /// EnemyTargetAction should include the [enemy] in the [name]. To make it
+  /// EnemyTargetAction should include the [enemy] in the [command]. To make it
   /// easier to implement, this class will automatically construct the name
   /// given a [Storyline] template.
   ///
@@ -280,8 +286,8 @@ abstract class ExitAction extends Action {
   ExitAction(this.exit);
 
   @override
-  String get name => exit.description;
+  String get command => exit.description;
 
   @override
-  String toString() => "ExitAction<$name>";
+  String toString() => "ExitAction<$command>";
 }

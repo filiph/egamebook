@@ -7,6 +7,8 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
+  static const String className = "OnGroundParry";
+
   @override
   final bool isAggressive = false;
 
@@ -22,6 +24,9 @@ class OnGroundParry extends EnemyTargetAction {
       "counters require fast reaction and could throw you out of balance.";
 
   OnGroundParry(Actor enemy) : super(enemy);
+
+  @override
+  String get name => className;
 
   @override
   String get nameTemplate => "parry it";
