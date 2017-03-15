@@ -6422,9 +6422,9 @@ S:function(a,b){return 1},
 P:function(a,b){var z,y
 if(!a.gab())return!1
 z=b.bY("SweepOffFeet",a,!0)
-if(z!=null&&z<=3)return!0
+if(z!=null&&z<=2)return!0
 y=b.bY("Pound",a,!0)
-if(y!=null&&y<=3)return!0
+if(y!=null&&y<=2)return!0
 return!1}}}],["","",,Q,{"^":"",l5:{"^":"ae;a1:b<,a0:c<,X:d<,W:e<,a",
 gaa:function(){return"Stand up."},
 gi:function(){return"StandUp"},
@@ -6437,9 +6437,9 @@ S:function(a,b){return 1},
 P:function(a,b){var z,y
 if(!a.gab())return!1
 z=b.bY("SweepOffFeet",a,!0)
-if(z!=null&&z<=3)return!1
+if(z!=null&&z<=2)return!1
 y=b.bY("Pound",a,!0)
-if(y!=null&&y<=3)return!1
+if(y!=null&&y<=2)return!1
 return!0}},l6:{"^":"b:0;",
 $1:function(a){a.sau(C.j)
 return C.j}}}],["","",,G,{"^":"",eU:{"^":"K;a1:c<,a0:d<,W:e<,b,a",
