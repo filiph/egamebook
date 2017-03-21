@@ -30,7 +30,7 @@ class ProjectCreator implements Worker {
   static const String RESOURCE_PATH = "package:egamebook/example/";
 
   /// Map of files and directories to be created in new project.
-  final Map _templateFiles = {
+  final Map<String, List<String>> _templateFiles = {
     "directory": ["web", "lib"],
     "file": [NAME_OF_EXAMPLE_BOOK, "pubspec.yaml", "README.md", "LICENSE"]
   };
