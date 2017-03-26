@@ -423,13 +423,21 @@ class GeneratedRoom extends GeneratedGameObject {
 
     var instanceName = name;
 
+    ExpressionBuilder monsterGenerator;
+    if (_map['MONSTERS'] == null || _map['MONSTERS'].isEmpty) {
+      monsterGenerator = literal(null);
+    } else {
+      // TODO: actually build the generator
+      monsterGenerator = new MethodBuilder.closure(
+          returns: list([], type: _actorType, asConst: true))
+        ..addPositional(_worldParameter);
+    }
+
     var newInstance = _roomType.newInstance([
       literal(instanceName),
       literal(_escapeDollarSign(_map['DESCRIPTION'])),
       literal(_map['SHORT_DESCRIPTION'] ?? ''),
-      new MethodBuilder.closure(
-          returns: list([], type: _actorType, asConst: true))
-        ..addPositional(_worldParameter) /* TODO: add monster generator */,
+      monsterGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: _exitType)
     ]);

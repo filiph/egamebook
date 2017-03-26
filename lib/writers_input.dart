@@ -23,7 +23,7 @@ Briana frowns. "I don\'t, actually." There\'s an orcish war cry coming from some
 Blinking hard, you make out your surroundings. Before you lies the winding, beaten path that leads down the mountain. Seems simple enough, but that way inevitably means more orcs.
 But Briana points you to the edge of a nearby cliff. You peer over the edge and study the descent. Without proper gear it’s a difficult climb down, but not too sheer, and likely no resistance. Perhaps you could chance it?''',
     'The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit('mountainsidePath',
@@ -42,7 +42,7 @@ You and Briana stay quiet and still in your hiding spot. An hour later, you peek
 
 A few miles further down and you will reach Fort Ironcast.''',
     'The Bloodrock pass flows snakelike down the mountain.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[new Exit('ironcastRoad', 'You continue towards the fort.')]);
 Room mountainPassGate = new Room(
@@ -61,7 +61,7 @@ You don’t answer. With only four distracted orcs and the cart driver, you may 
 
 Briana seems to sense what you’re thinking. “A direct attack sounds risky. If they have an alarm, they can bring reinforcements here in a matter of moments.”''',
     'The Bloodrock stone gate looms ahead of you.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit('mountainPassGuardPost',
@@ -193,7 +193,7 @@ When it is your turn to go on watch, you see something that you haven’t notice
 
 You give up after an hour’s work of inspection and leave it alone for now. Fort Ironcast still awaits you.''',
     'The great stone doors still stands unopened on the mountainside.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit('ironcastRoad',
@@ -209,7 +209,7 @@ Over the next agonizing hour, you inch your way down the mountainside. You keep 
 
 “Remind me again why we decided to go down this way?” Briana grouses. You decide to save your breath. There’s still a ways to go.''',
     '',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit(
@@ -389,7 +389,7 @@ A large moss-green serpent adorned with black feathered wings hovers above you. 
 
 You must defend yourselves.''',
     'The sheer cliff of the mountainside impedes your progress.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit('__END_OF_ROAM__',
@@ -447,7 +447,7 @@ When they leave, you turn to Briana. “It’s a gift we fae have,” she said. 
 
 Together you jog all the way to the every growing silhouette of Fort Ironcast.''',
     'A dirt road streaks through the grass. In the distance, a stone fort looms.',
-    (WorldState w) => const <Actor>[],
+    null,
     null,
     <Exit>[
       new Exit('__END_OF_ROAM__',
