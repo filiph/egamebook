@@ -153,7 +153,9 @@ class EdgeheadGame extends LoopedEvent {
     //     s.addParagraph();
     //   });
 
-    initialSituation = new RoomRoamingSituation.initialized(deadEscapee);
+    initialSituation = new RoomRoamingSituation.initialized(
+        // deadEscapee
+        entranceToBloodrock);
 
     var rooms = new List<Room>.from(allRooms)
       ..addAll([deadEscapee, tunnel, endOfRoam]);
@@ -300,37 +302,8 @@ class EdgeheadGame extends LoopedEvent {
     var consequences = action.apply(actor, consequence, world).toList();
 
     if (actor.isPlayer) {
-      double chance = action.getSuccessChance(actor, world);
-      if (chance == 1.0) {
-        consequence = consequences.single;
-      } else if (chance == 0.0) {
-        consequence = consequences.single;
-      } else {
-        var resourceName = action.rerollResource.toString().split('.').last;
-        var result = await showSlotMachine(
-            chance, action.getRollReason(actor, world),
-            rerollEnabled:
-                action.rerollable && actor.hasResource(action.rerollResource),
-            rerollEffectDescription: "use $resourceName");
-        consequence =
-            consequences.where((c) => c.isSuccess == result.isSuccess).single;
-
-        if (result.wasRerolled) {
-          // Deduct player's stats (stamina, etc.) according to wasRerolled.
-          assert(
-              action.rerollResource != null,
-              "Action.rerollable is true but "
-              "no Action.rerollResource is specified.");
-          var world = new WorldState.duplicate(consequence.world);
-          assert(action.rerollResource == Resource.stamina,
-              "Only stamina is supported as reroll resource right now");
-          world.updateActorById(actor.id, (b) => b..stamina -= 1);
-          consequence =
-              new PlanConsequence.withUpdatedWorld(consequence, world);
-        }
-      }
+      await _applyPlayerAction(action, actor, consequences);
     } else {
-      // Actor isn't player. Just play dice.
       int index =
           Randomly.chooseWeighted(consequences.map((c) => c.probability));
       consequence = consequences[index];
@@ -338,5 +311,41 @@ class EdgeheadGame extends LoopedEvent {
 
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
+  }
+
+  Future _applyPlayerAction(
+      Action action, Actor actor, List<PlanConsequence> consequences) async {
+    double chance = action.getSuccessChance(actor, world);
+    if (chance == 1.0) {
+      consequence = consequences.single;
+    } else if (chance == 0.0) {
+      consequence = consequences.single;
+    } else if (!action.rerollable) {
+      int index =
+          Randomly.chooseWeighted(consequences.map((c) => c.probability));
+      consequence = consequences[index];
+    } else {
+      var resourceName = action.rerollResource.toString().split('.').last;
+      var result = await showSlotMachine(
+          chance, action.getRollReason(actor, world),
+          rerollEnabled:
+              action.rerollable && actor.hasResource(action.rerollResource),
+          rerollEffectDescription: "use $resourceName");
+      consequence =
+          consequences.where((c) => c.isSuccess == result.isSuccess).single;
+
+      if (result.wasRerolled) {
+        // Deduct player's stats (stamina, etc.) according to wasRerolled.
+        assert(
+            action.rerollResource != null,
+            "Action.rerollable is true but "
+            "no Action.rerollResource is specified.");
+        var world = new WorldState.duplicate(consequence.world);
+        assert(action.rerollResource == Resource.stamina,
+            "Only stamina is supported as reroll resource right now");
+        world.updateActorById(actor.id, (b) => b..stamina -= 1);
+        consequence = new PlanConsequence.withUpdatedWorld(consequence, world);
+      }
+    }
   }
 }
