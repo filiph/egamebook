@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart'
     show Storyline;
 import 'package:edgehead/fractal_stories/world.dart' show WorldState;
 
+const bool DEV_MODE = true;
 Room entranceToBloodrock = new Room(
     'entranceToBloodrock',
     '''You emerge into blinding sunlight. You moan and cover your eyes as the world spins around you and your ears ring like glass chimes. 
@@ -89,8 +90,7 @@ class SneakOntoCart extends Action {
 
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: none */';
-    assert(false);
-    XXX START HERE: don't assert stuff (or create a bool DEBUG which prevents asserts)
+    assert(DEV_MODE || false);
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'mountainPassGate';
   }
@@ -103,7 +103,7 @@ In the cart you find a small keg of beer. You decide it is worth taking.''');
 (DOLLAR_SIGN)hidden_cart = true
 (DOLLAR_SIGN)location = (DOLLAR_SIGN)mountain_pass
 (DOLLAR_SIGN)keg_of_beer */''';
-    assert(false);
+    assert(DEV_MODE || false);
     return '$a successfully performs SneakOntoCart';
   }
 
@@ -137,7 +137,7 @@ class TakeOutGateGuards extends Action {
 
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: (DOLLAR_SIGN)take_out_gate_guards never used */';
-    assert(false);
+    assert(DEV_MODE || false);
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'mountainPassGate';
   }
@@ -153,7 +153,7 @@ You and Briana successfully make it to the other side of the rock. With a viciou
 Once done, you sneak back away from the gate.''');
     '''/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold
 (DOLLAR_SIGN)orcish_shield */''';
-    assert(false);
+    assert(DEV_MODE || false);
     return '$a successfully performs TakeOutGateGuards';
   }
 
@@ -217,48 +217,33 @@ Over the next agonizing hour, you inch your way down the mountainside. You keep 
     ]);
 
 class ThreatenWingedSerpent extends Action {
-  final command = 'threaten the serpent’s eggs';
+  final command = 'scare off the serpent';
 
   final name = 'ThreatenWingedSerpent';
 
   static final ThreatenWingedSerpent singleton = new ThreatenWingedSerpent();
 
   bool isApplicable(Actor a, WorldState w) {
-    '/* PLEASE IMPLEMENT PREREQUISITE: None */';
-    assert(false);
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'wingedSerpentNest';
   }
 
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You grab one of the eggs from the nest and hold over the edge. The serpent hovers in place, hissing loudly, but otherwise holding off its attack. 
-
-
-You grin at it as you juggle the egg from one hand to the other. With one smooth motion you cock your arm back and throw. The serpent gives a piercing cry, then launches itself after its precious offspring.
-
-
-“Good thinking, throwing that egg,” said Briana.
-
-
-“Yes, well, I just had to make it think I threw it,” you say, and show her the serpent egg in your hand. “I just threw the rock I had in my other hand.”
-
-
-Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”
-
-
-(DOLLAR_SIGN)gained_serpent_egg=true''');
+        'Intimidated by your weapon, the winged serpent abandons its nest and flees to the mountaintop.');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(false);
+    assert(DEV_MODE || false);
     return '$a successfully performs ThreatenWingedSerpent';
   }
 
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    throw new StateError('Success chance is 100%');
+    s.add(
+        'The serpent does not even look at your sword as you swing it wildly. Its reptilian eyes glitter as it opens its jaws wide.');
+    return '$a fails to perform ThreatenWingedSerpent';
   }
 
   num getSuccessChance(Actor a, WorldState w) {
-    return 1.0;
+    return 0.3;
   }
 
   bool get rerollable => false;
@@ -275,48 +260,35 @@ Briana whistled. “That should fetch some coin from the right merchants. Now, l
 }
 
 class SootheWingedSerpent extends Action {
-  final command = 'threaten the serpent’s eggs';
+  final command = 'soothe the serpent';
 
   final name = 'SootheWingedSerpent';
 
   static final SootheWingedSerpent singleton = new SootheWingedSerpent();
 
   bool isApplicable(Actor a, WorldState w) {
-    '/* PLEASE IMPLEMENT PREREQUISITE: None */';
-    assert(false);
+    '/* PLEASE IMPLEMENT PREREQUISITE: player has (DOLLAR_SIGN)animal_kinship */';
+    assert(DEV_MODE || false);
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'wingedSerpentNest';
   }
 
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You grab one of the eggs from the nest and hold over the edge. The serpent hovers in place, hissing loudly, but otherwise holding off its attack. 
-
-
-You grin at it as you juggle the egg from one hand to the other. With one smooth motion you cock your arm back and throw. The serpent gives a piercing cry, then launches itself after its precious offspring.
-
-
-“Good thinking, throwing that egg,” said Briana.
-
-
-“Yes, well, I just had to make it think I threw it,” you say, and show her the serpent egg in your hand. “I just threw the rock I had in my other hand.”
-
-
-Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”
-
-
-(DOLLAR_SIGN)gained_serpent_egg=true''');
+        'Your sibilant words reach the winged serpent’s ears. It coils in the air for a while longer, then whips towards its nest to clutch possessively at its eggs. You decide it’s time to move on.');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(false);
+    assert(DEV_MODE || false);
     return '$a successfully performs SootheWingedSerpent';
   }
 
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    throw new StateError('Success chance is 100%');
+    s.add(
+        'The serpent sways at your hissing, but is otherwise unimpressed as it opens its jaws menacingly.');
+    return '$a fails to perform SootheWingedSerpent';
   }
 
   num getSuccessChance(Actor a, WorldState w) {
-    return 1.0;
+    return 0.8;
   }
 
   bool get rerollable => false;
@@ -342,7 +314,7 @@ class ThreatenWingedSerpentEggs extends Action {
 
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: None */';
-    assert(false);
+    assert(DEV_MODE || false);
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'wingedSerpentNest';
   }
@@ -361,12 +333,10 @@ You grin at it as you juggle the egg from one hand to the other. With one smooth
 “Yes, well, I just had to make it think I threw it,” you say, and show her the serpent egg in your hand. “I just threw the rock I had in my other hand.”
 
 
-Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”
-
-
-(DOLLAR_SIGN)gained_serpent_egg=true''');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(false);
+Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”''');
+    '''/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true
+location = (DOLLAR_SIGN)mountainside_base */''';
+    assert(DEV_MODE || false);
     return '$a successfully performs ThreatenWingedSerpentEggs';
   }
 
@@ -418,7 +388,7 @@ A large moss-green serpent adorned with black feathered wings hovers above you. 
 
 
 You must defend yourselves.''',
-    '',
+    'The sheer cliff of the mountainside impedes your progress.',
     (WorldState w) => const <Actor>[],
     null,
     <Exit>[
@@ -485,7 +455,7 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.''
     ]);
 
 class HideInGrass extends Action {
-  final command = 'Stand and fight';
+  final command = 'Take cover in the tall grass';
 
   final name = 'HideInGrass';
 
@@ -497,17 +467,19 @@ class HideInGrass extends Action {
   }
 
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    throw new StateError('Success chance is 0%.');
+    s.add(
+        'You sink to your knees below the grass and hold your breath. The orcs pass close, but given their proximity to Fort Ironcast don’t seem eager to linger. They hurry onwards back to the mountain pass. When they are specks in the distance, you stand up and continue on.');
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)ironcast_road_clear = true */';
+    assert(DEV_MODE || false);
+    return '$a successfully performs HideInGrass';
   }
 
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(
-        'You raise a war cry and close the gap against the battle-eager orcs. But it soon becomes clear that you are outnumbered and outflanked. The orcs surround you, beat you down, and cast you in chains. You trail blood as you are led up the mountain pass you traversed years ago, once again a slave.');
-    return '$a fails to perform HideInGrass';
+    throw new StateError('Success chance is 100%');
   }
 
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.0;
+    return 1.0;
   }
 
   bool get rerollable => false;

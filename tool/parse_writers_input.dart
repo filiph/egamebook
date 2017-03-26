@@ -13,6 +13,8 @@ Future<Null> main(List<String> args) async {
     stderr.writeln("[${r.level}] -- ${r.loggerName} -- ${r.message}");
   });
 
+  var devMode = true;
+
   var dir = new Directory(args.single);
 
   if (!await dir.exists()) {
@@ -23,9 +25,6 @@ Future<Null> main(List<String> args) async {
 
   LibraryBuilder lib = new LibraryBuilder();
   List<GeneratedGameObject> objects = [];
-
-//  XXX START HERE: make note of all exits that lead to non-existing rooms, show warnings
-//  but rewrite to an existing 'dummy' room instead ("This place doesn't exist yet.")
 
   await for (var fsEntity in dir.list(recursive: true)) {
     if (fsEntity is File && p.extension(fsEntity.path) == ".txt") {
@@ -44,6 +43,11 @@ Future<Null> main(List<String> args) async {
   }
 
   lib.addDirectives(_allNeededTypes.map((b) => b.toImportBuilder()));
+
+  if (devMode) {
+    log.warning("Building in dev mode (less runtime asserts).");
+  }
+  lib.addMember(new FieldBuilder.asConst('DEV_MODE', type: _boolType, value: literal(devMode)));
 
   List<GeneratedRoom> rooms =
       objects.where((o) => o is GeneratedRoom).toList(growable: false);
@@ -135,11 +139,11 @@ final _worldStateType = new TypeBuilder("WorldState",
 /// Following this:
 /// https://trello.com/c/S1cXPDQ7/1-parser-for-writer-s-output#comment-58682ee019b9e7b833655fb7
 GeneratedGameObject generateAction(Map<String, String> map, String dirPath) {
-  return new GeneratedAction(map, dirPath);
+  return new GeneratedAction(new Map.from(map), dirPath);
 }
 
 GeneratedGameObject generateRoom(Map<String, String> map, String dirPath) {
-  return new GeneratedRoom(map, dirPath);
+  return new GeneratedRoom(new Map.from(map), dirPath);
 }
 
 /// Parses a file and returns all objects specified in that file as a raw
@@ -201,7 +205,7 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
 void _addTodoToMethod(MethodBuilder method, String message) {
   var escapedMessage = _escapeDollarSign(message);
   method.addStatement(literal('/* $escapedMessage */'));
-  method.addStatement(literal(false).asAssert());
+  method.addStatement(reference('DEV_MODE').or(literal(false)).asAssert());
 }
 
 MethodBuilder _createActorWorldMethod(
