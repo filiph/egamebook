@@ -205,7 +205,7 @@ abstract class Action {
         ?.onAfterAction(worldCopy, storyline);
 
     // Remove ended situations: the ones that don't return an actor anymore,
-    // and the ones that return shouldContinue(world) == true.
+    // and the ones that return shouldContinue(world) != true.
     while (worldCopy.currentSituation?.getCurrentActor(worldCopy) == null ||
         worldCopy.currentSituation?.shouldContinue(worldCopy) != true) {
       if (worldCopy.currentSituation == null) break;

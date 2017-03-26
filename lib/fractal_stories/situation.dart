@@ -93,19 +93,19 @@ abstract class Situation {
     // No-op by default.
   }
 
-  /// Called when this situation is about to be popped from the
-  /// [WorldState.situations] stack, either manually (by using
-  /// [WorldState.popSituation]) or automatically (when [shouldContinue] is
-  /// no longer true or [getCurrentActor] returns `null`).
-  void onPop(WorldState world) {
-    // No-op by default.
-  }
-
   /// Called just before executing an action.
   ///
   /// This should NOT modify the world. This is only for adding to the
   /// [storyline].
   void onBeforeAction(WorldState world, Storyline storyline) {
+    // No-op by default.
+  }
+
+  /// Called when this situation is about to be popped from the
+  /// [WorldState.situations] stack, either manually (by using
+  /// [WorldState.popSituation]) or automatically (when [shouldContinue] is
+  /// no longer true or [getCurrentActor] returns `null`).
+  void onPop(WorldState world) {
     // No-op by default.
   }
 

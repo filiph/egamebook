@@ -154,8 +154,10 @@ class EdgeheadGame extends LoopedEvent {
     //   });
 
     initialSituation = new RoomRoamingSituation.initialized(
-        // deadEscapee
-        entranceToBloodrock);
+        deadEscapee,
+        // entranceToBloodrock,
+        false
+    );
 
     var rooms = new List<Room>.from(allRooms)
       ..addAll([deadEscapee, tunnel, endOfRoam]);
