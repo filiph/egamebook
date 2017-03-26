@@ -27,7 +27,7 @@ int getRandomId() => _random.nextInt(_largeInteger);
 ///   `MySituation` here.
 /// * Put the new class in a separate Dart file.
 /// * Make sure that the new class `MySituation` implements
-///   `BuiltValue<MySituation, MySituationBuilder` as required by built_value.
+///   `BuiltValue<MySituation, MySituationBuilder>` as required by built_value.
 /// * Create the `MySituationBuilder` class.
 /// * Add the new Dart file into `tool/phases.dart`.
 /// * Run `tool/build.dart` if it doesn't run automatically.
@@ -77,6 +77,9 @@ abstract class Situation {
   Situation elapseTime();
 
   /// Returns the actor whose turn it is at specified [time].
+  ///
+  /// Returns `null` when no actor can act anymore (for example, all
+  /// actors are dead, or all have acted).
   Actor getActorAtTime(int time, WorldState world);
 
   /// Filters the [actors] that are active in this situation.
@@ -85,7 +88,16 @@ abstract class Situation {
   /// Returns the actor whose time it is at the current [time].
   Actor getCurrentActor(WorldState world) => getActorAtTime(time, world);
 
+  /// Called after action is executed inside this situation.
   void onAfterAction(WorldState world, Storyline storyline) {
+    // No-op by default.
+  }
+
+  /// Called when this situation is about to be popped from the
+  /// [WorldState.situations] stack, either manually (by using
+  /// [WorldState.popSituation]) or automatically (when [shouldContinue] is
+  /// no longer true or [getCurrentActor] returns `null`).
+  void onPop(WorldState world) {
     // No-op by default.
   }
 

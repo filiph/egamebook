@@ -47,7 +47,6 @@ class WorldState {
         rooms = new Set(),
         situations = new List() {
     actors.addAll(other.actors);
-    // TODO: duplicateActionRecord, item, etc.
     actionRecords.addAll(other.actionRecords);
     items.addAll(other.items);
     rooms.addAll(other.rooms);
@@ -171,12 +170,13 @@ class WorldState {
   }
 
   void popSituation() {
+    situations.last.onPop(this);
     situations.removeLast();
   }
 
   void popSituationsUntil(String situationName) {
     while (situations.isNotEmpty && situations.last.name != situationName) {
-      situations.removeLast();
+      popSituation();
     }
     if (situations.isEmpty) {
       throw new ArgumentError("Tried to pop situations until $situationName "
@@ -199,6 +199,15 @@ class WorldState {
     var updated = original.rebuild(updates);
     actors.remove(original);
     actors.add(updated);
+  }
+
+  void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
+    int index = _findSituationIndex(id);
+    if (index == null) {
+      throw new ArgumentError("Situation with id $id does not "
+          "exist in $situations");
+    }
+    situations[index] = updatedSituation;
   }
 
   /// Returns the index at which the [Situation] with [situationId] resides
