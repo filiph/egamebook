@@ -358,7 +358,7 @@ class GeneratedAction extends GeneratedGameObject {
 
     var rollReasonBuilder =
         _createActorWorldMethod('getRollReason', _stringType)
-          ..addStatement(_stateErrorThrow('Not rerollable.'));
+          ..addStatement(literal('Will you be successful?').asReturn());
     classBuilder.addMethod(rollReasonBuilder);
 
     var rerollResourceBuilder = new MethodBuilder.getter('rerollResource',

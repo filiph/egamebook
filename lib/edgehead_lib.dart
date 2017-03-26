@@ -322,10 +322,6 @@ class EdgeheadGame extends LoopedEvent {
       consequence = consequences.single;
     } else if (chance == 0.0) {
       consequence = consequences.single;
-    } else if (!action.rerollable) {
-      int index =
-          Randomly.chooseWeighted(consequences.map((c) => c.probability));
-      consequence = consequences[index];
     } else {
       var resourceName = action.rerollResource.toString().split('.').last;
       var result = await showSlotMachine(

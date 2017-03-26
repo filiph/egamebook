@@ -118,7 +118,7 @@ In the cart you find a small keg of beer. You decide it is worth taking.''');
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -173,7 +173,7 @@ You and Briana successfully make it to the other side of that rock. As luck woul
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -249,7 +249,7 @@ class ThreatenWingedSerpent extends Action {
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -294,7 +294,7 @@ class SootheWingedSerpent extends Action {
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -351,7 +351,7 @@ location = (DOLLAR_SIGN)mountainside_base */''';
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -485,7 +485,7 @@ class HideInGrass extends Action {
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
@@ -524,7 +524,7 @@ class StandAndFight extends Action {
   bool get rerollable => false;
 
   String getRollReason(Actor a, WorldState w) {
-    throw new StateError('Not rerollable.');
+    return 'Will you be successful?';
   }
 
   Resource get rerollResource => null;
