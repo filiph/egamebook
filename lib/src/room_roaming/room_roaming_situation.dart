@@ -6,8 +6,9 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
-import 'package:edgehead/writers_input.dart' as writersInput;
+import 'package:edgehead/writers_input.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
 
@@ -16,11 +17,13 @@ abstract class RoomRoamingSituation extends Situation
   factory RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;
 
-  factory RoomRoamingSituation.initialized(Room currentRoom) =>
+  factory RoomRoamingSituation.initialized(
+          Room currentRoom, bool monstersAlive) =>
       new RoomRoamingSituation((b) => b
         ..id = getRandomId()
         ..time = 0
-        ..currentRoomName = currentRoom.name);
+        ..currentRoomName = currentRoom.name
+        ..monstersAlive = monstersAlive);
 
   RoomRoamingSituation._();
 
@@ -29,12 +32,16 @@ abstract class RoomRoamingSituation extends Situation
   List<ExitActionBuilder> get actionGenerators => [TakeExitAction.builder];
 
   @override
-  List<Action> get actions => writersInput.allActions;
+  List<Action> get actions => []
+    ..addAll(writers_input.allActions)
+    ..add(SlayMonstersAction.singleton);
 
   String get currentRoomName;
 
   @override
   int get id;
+
+  bool get monstersAlive;
 
   @override
   String get name => "RoomRoamingSituation";
@@ -47,6 +54,7 @@ abstract class RoomRoamingSituation extends Situation
 
   @override
   Actor getActorAtTime(_, WorldState world) {
+    // Only player can roam at the moment.
     var mainActor = world.actors.firstWhere(
         (a) => a.isPlayer && a.isAliveAndActive,
         orElse: () => null);
@@ -67,7 +75,6 @@ abstract class RoomRoamingSituation extends Situation
     world.actors.removeWhere((a) => !a.isAlive);
   }
 
-  // Only player can roam at the moment.
   @override
   bool shouldContinue(WorldState world) {
     if (currentRoomName == endOfRoam.name) return false;

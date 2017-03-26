@@ -22,6 +22,7 @@ import 'package:edgehead/src/fight/actions/start_slash_player.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down_player.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'fight_situation.g.dart';
 
@@ -36,13 +37,15 @@ abstract class FightSituation extends Situation
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
   factory FightSituation.initialized(Iterable<Actor> playerTeam,
-          Iterable<Actor> enemyTeam, String groundMaterial) =>
+          Iterable<Actor> enemyTeam, String groundMaterial,
+          {RoomRoamingSituation roomRoamingSituation}) =>
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..playerTeamIds.replace(playerTeam.map((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
-        ..groundMaterial = groundMaterial);
+        ..groundMaterial = groundMaterial
+        ..roomRoamingSituationId = roomRoamingSituation?.id);
   FightSituation._();
 
   @override
@@ -69,6 +72,10 @@ abstract class FightSituation extends Situation
   BuiltList<int> get enemyTeamIds;
 
   BuiltMap<int, TimedEventCallback> get events;
+
+  /// This is used
+  @nullable
+  int get roomRoamingSituationId;
 
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   ///
@@ -150,16 +157,29 @@ abstract class FightSituation extends Situation
   }
 
   @override
+  void onPop(WorldState world) {
+    if (roomRoamingSituationId != null && !canFight(enemyTeamIds, world)) {
+      // We should update the underlying roomRoamingSituation with the fact
+      // that all monsters have been slain.
+      RoomRoamingSituation situation =
+          world.getSituationById(roomRoamingSituationId);
+      world.replaceSituationById(
+          situation.id, situation.rebuild((b) => b..monstersAlive = false));
+    }
+  }
+
+  @override
   bool shouldContinue(WorldState world) {
-    bool canFight(Iterable<int> teamIds) =>
-        teamIds.any((id) => world.getActorById(id).isAliveAndActive);
     bool isPlayerAndAlive(int id) {
       var actor = world.getActorById(id);
       return actor.isPlayer && actor.isAliveAndActive;
     }
 
-    return canFight(playerTeamIds) &&
-        canFight(enemyTeamIds) &&
+    return canFight(playerTeamIds, world) &&
+        canFight(enemyTeamIds, world) &&
         playerTeamIds.any(isPlayerAndAlive);
   }
+
+  bool canFight(Iterable<int> teamIds, WorldState world) =>
+      teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 }

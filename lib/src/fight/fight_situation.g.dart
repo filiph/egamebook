@@ -13,6 +13,8 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltMap<int, TimedEventCallback> events;
   @override
+  final int roomRoamingSituationId;
+  @override
   final String groundMaterial;
   @override
   final int id;
@@ -27,6 +29,7 @@ class _$FightSituation extends FightSituation {
   _$FightSituation._(
       {this.enemyTeamIds,
       this.events,
+      this.roomRoamingSituationId,
       this.groundMaterial,
       this.id,
       this.playerTeamIds,
@@ -54,6 +57,7 @@ class _$FightSituation extends FightSituation {
     if (other is! FightSituation) return false;
     return enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
+        roomRoamingSituationId == other.roomRoamingSituationId &&
         groundMaterial == other.groundMaterial &&
         id == other.id &&
         playerTeamIds == other.playerTeamIds &&
@@ -65,7 +69,9 @@ class _$FightSituation extends FightSituation {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+                $jc(
+                    $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+                        roomRoamingSituationId.hashCode),
                     groundMaterial.hashCode),
                 id.hashCode),
             playerTeamIds.hashCode),
@@ -77,6 +83,7 @@ class _$FightSituation extends FightSituation {
     return 'FightSituation {'
         'enemyTeamIds=${enemyTeamIds.toString()},\n'
         'events=${events.toString()},\n'
+        'roomRoamingSituationId=${roomRoamingSituationId.toString()},\n'
         'groundMaterial=${groundMaterial.toString()},\n'
         'id=${id.toString()},\n'
         'playerTeamIds=${playerTeamIds.toString()},\n'
@@ -100,6 +107,11 @@ class FightSituationBuilder
       _$this._events ??= new MapBuilder<int, TimedEventCallback>();
   set events(MapBuilder<int, TimedEventCallback> events) =>
       _$this._events = events;
+
+  int _roomRoamingSituationId;
+  int get roomRoamingSituationId => _$this._roomRoamingSituationId;
+  set roomRoamingSituationId(int roomRoamingSituationId) =>
+      _$this._roomRoamingSituationId = roomRoamingSituationId;
 
   String _groundMaterial;
   String get groundMaterial => _$this._groundMaterial;
@@ -126,6 +138,7 @@ class FightSituationBuilder
     if (_$v != null) {
       _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
       _events = _$v.events?.toBuilder();
+      _roomRoamingSituationId = _$v.roomRoamingSituationId;
       _groundMaterial = _$v.groundMaterial;
       _id = _$v.id;
       _playerTeamIds = _$v.playerTeamIds?.toBuilder();
@@ -152,6 +165,7 @@ class FightSituationBuilder
         new _$FightSituation._(
             enemyTeamIds: enemyTeamIds?.build(),
             events: events?.build(),
+            roomRoamingSituationId: roomRoamingSituationId,
             groundMaterial: groundMaterial,
             id: id,
             playerTeamIds: playerTeamIds?.build(),

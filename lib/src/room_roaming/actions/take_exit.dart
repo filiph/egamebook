@@ -34,12 +34,15 @@ class TakeExitAction extends ExitAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     RoomRoamingSituation situation = w.currentSituation;
-    var updatedSituation =
-        situation.rebuild((b) => b..currentRoomName = exit.destinationRoomName);
-    w.popSituation();
-    w.pushSituation(updatedSituation);
 
     var room = w.getRoomByName(exit.destinationRoomName);
+
+    var nextRoomSituation = new RoomRoamingSituation.initialized(
+        room, room.monsterGenerator != null);
+
+    w.popSituation();
+    w.pushSituation(nextRoomSituation);
+
     for (var actor in getPartyOf(a, w).toList()) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
     }
@@ -48,24 +51,6 @@ class TakeExitAction extends ExitAction {
     // TODO: show short description according to world.actionRecords
     s.add(room.description, wholeSentence: true);
     s.addParagraph();
-
-    if (room.monsterGenerator != null) {
-      // TODO: also check whether we're here for the first time, because if not, we shouldn't start the fight anew
-
-      var friends = w.actors.where((actor) =>
-          actor.team.isFriendWith(a.team) &&
-          actor.currentRoomName == room.name);
-
-      var monsters = room.monsterGenerator(w);
-
-      w.actors.addAll(monsters);
-
-      // TODO: add events (author can add events the generated Room instance)
-      var fightSituation = new FightSituation.initialized(
-          friends, monsters, room.groundMaterial);
-
-      w.pushSituation(fightSituation);
-    }
 
     return "${a.name} went through exit to ${exit.destinationRoomName}";
   }
@@ -79,7 +64,11 @@ class TakeExitAction extends ExitAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    // TODO: do we need to guard against some invalid exit-taking here?
+    if ((w.currentSituation as RoomRoamingSituation).monstersAlive) {
+      // Don't allow exit taking when monsters in this room are still alive.
+      return false;
+    }
+    // TODO: do we need to guard against some other invalid exit-taking here?
     return true;
   }
 

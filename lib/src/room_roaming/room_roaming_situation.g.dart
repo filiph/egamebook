@@ -13,16 +13,20 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   @override
   final int id;
   @override
+  final bool monstersAlive;
+  @override
   final int time;
 
   factory _$RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =>
       (new RoomRoamingSituationBuilder()..update(updates)).build();
 
-  _$RoomRoamingSituation._({this.currentRoomName, this.id, this.time})
+  _$RoomRoamingSituation._(
+      {this.currentRoomName, this.id, this.monstersAlive, this.time})
       : super._() {
     if (currentRoomName == null)
       throw new ArgumentError.notNull('currentRoomName');
     if (id == null) throw new ArgumentError.notNull('id');
+    if (monstersAlive == null) throw new ArgumentError.notNull('monstersAlive');
     if (time == null) throw new ArgumentError.notNull('time');
   }
 
@@ -39,13 +43,16 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
     if (other is! RoomRoamingSituation) return false;
     return currentRoomName == other.currentRoomName &&
         id == other.id &&
+        monstersAlive == other.monstersAlive &&
         time == other.time;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, currentRoomName.hashCode), id.hashCode), time.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, currentRoomName.hashCode), id.hashCode),
+            monstersAlive.hashCode),
+        time.hashCode));
   }
 
   @override
@@ -53,6 +60,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
     return 'RoomRoamingSituation {'
         'currentRoomName=${currentRoomName.toString()},\n'
         'id=${id.toString()},\n'
+        'monstersAlive=${monstersAlive.toString()},\n'
         'time=${time.toString()},\n'
         '}';
   }
@@ -71,6 +79,11 @@ class RoomRoamingSituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
+  bool _monstersAlive;
+  bool get monstersAlive => _$this._monstersAlive;
+  set monstersAlive(bool monstersAlive) =>
+      _$this._monstersAlive = monstersAlive;
+
   int _time;
   int get time => _$this._time;
   set time(int time) => _$this._time = time;
@@ -81,6 +94,7 @@ class RoomRoamingSituationBuilder
     if (_$v != null) {
       _currentRoomName = _$v.currentRoomName;
       _id = _$v.id;
+      _monstersAlive = _$v.monstersAlive;
       _time = _$v.time;
       _$v = null;
     }
@@ -102,7 +116,10 @@ class RoomRoamingSituationBuilder
   RoomRoamingSituation build() {
     final result = _$v ??
         new _$RoomRoamingSituation._(
-            currentRoomName: currentRoomName, id: id, time: time);
+            currentRoomName: currentRoomName,
+            id: id,
+            monstersAlive: monstersAlive,
+            time: time);
     replace(result);
     return result;
   }
