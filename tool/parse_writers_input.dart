@@ -47,7 +47,8 @@ Future<Null> main(List<String> args) async {
   if (devMode) {
     log.warning("Building in dev mode (less runtime asserts).");
   }
-  lib.addMember(new FieldBuilder.asConst('DEV_MODE', type: _boolType, value: literal(devMode)));
+  lib.addMember(new FieldBuilder.asConst('DEV_MODE',
+      type: _boolType, value: literal(devMode)));
 
   List<GeneratedRoom> rooms =
       objects.where((o) => o is GeneratedRoom).toList(growable: false);
@@ -56,7 +57,7 @@ Future<Null> main(List<String> args) async {
   }
 
   for (var object in objects) {
-    lib.addMember(object.finalizeAst());
+    lib.addMembers(object.finalizeAst());
   }
 
   lib.addMember(_generateAllRooms(objects));
@@ -108,6 +109,8 @@ final _listOfActionType = new TypeBuilder('List', genericTypes: [_actionType]);
 final _listOfRoomsType = new TypeBuilder('List', genericTypes: [_roomType]);
 
 final _numType = new TypeBuilder("num");
+
+final _overrideAnnotation = reference('override');
 
 final _resourceType = new TypeBuilder("Resource",
     importFrom: "package:edgehead/fractal_stories/action.dart");
@@ -212,7 +215,8 @@ MethodBuilder _createActorWorldMethod(
     String methodName, TypeBuilder returnType) {
   return new MethodBuilder(methodName, returnType: returnType)
     ..addPositional(_actorParameter)
-    ..addPositional(_worldParameter);
+    ..addPositional(_worldParameter)
+    ..addAnnotation(_overrideAnnotation);
 }
 
 /// Creates a new [MethodBuilder] with a skeleton of a method that takes
@@ -224,7 +228,8 @@ MethodBuilder _createActorWorldStoryMethod(
   return new MethodBuilder(methodName, returnType: returnType)
     ..addPositional(_actorParameter)
     ..addPositional(_worldParameter)
-    ..addPositional(_storylineParameter);
+    ..addPositional(_storylineParameter)
+    ..addAnnotation(_overrideAnnotation);
 }
 
 String _escapeDollarSign(String s) {
@@ -279,7 +284,7 @@ class GeneratedAction extends GeneratedGameObject {
   String get path => 'TODO ADD';
 
   @override
-  AstBuilder<AstNode> finalizeAst() {
+  Iterable<AstBuilder<AstNode>> finalizeAst() sync* {
     var className = name;
     var forLocation = _reCase(_map['FOR_LOCATION']).camelCase;
     var classBuilder = new ClassBuilder(className);
@@ -287,16 +292,16 @@ class GeneratedAction extends GeneratedGameObject {
 
     var classType = new TypeBuilder(className);
 
-    classBuilder.addField(
-        new FieldBuilder.asFinal("command", value: literal(_map['COMMAND'])));
+    classBuilder.addField(new FieldBuilder.asFinal("command",
+        type: _stringType,
+        value: literal(_map['COMMAND']))..addAnnotation(_overrideAnnotation));
 
-    classBuilder
-        .addField(new FieldBuilder.asFinal("name", value: literal(className)));
+    classBuilder.addField(new FieldBuilder.asFinal("name",
+        type: _stringType,
+        value: literal(className))..addAnnotation(_overrideAnnotation));
 
     var isApplicableBuilder =
-        new MethodBuilder("isApplicable", returnType: _boolType)
-          ..addPositional(_actorParameter)
-          ..addPositional(_worldParameter);
+        _createActorWorldMethod("isApplicable", _boolType);
     if (_map['PREREQUISITES'] != null) {
       _addTodoToMethod(isApplicableBuilder,
           'PLEASE IMPLEMENT PREREQUISITE: ${_map['PREREQUISITES']}');
@@ -353,7 +358,8 @@ class GeneratedAction extends GeneratedGameObject {
     classBuilder.addMethod(successChanceBuilder);
 
     var rerollableBuilder = new MethodBuilder.getter('rerollable',
-        returnType: _boolType, returns: literal(false));
+        returnType: _boolType,
+        returns: literal(false))..addAnnotation(_overrideAnnotation);
     classBuilder.addMethod(rerollableBuilder);
 
     var rollReasonBuilder =
@@ -362,15 +368,25 @@ class GeneratedAction extends GeneratedGameObject {
     classBuilder.addMethod(rollReasonBuilder);
 
     var rerollResourceBuilder = new MethodBuilder.getter('rerollResource',
-        returnType: _resourceType, returns: literal(null));
+        returnType: _resourceType,
+        returns: literal(null))..addAnnotation(_overrideAnnotation);
     classBuilder.addMethod(rerollResourceBuilder);
 
+    String helpMessage = _map['HINT'] ?? '';
+    if (helpMessage.isNotEmpty &&
+        _map.containsKey('ADVANTAGE_HINT_ADDENDUM_NEGATIVE')) {
+      helpMessage += " " + _map['ADVANTAGE_HINT_ADDENDUM_NEGATIVE'];
+      // TODO: create the other action, with ADVANTAGE_HINT_ADDENDUM
+    }
+
     var helpMessageBuilder = new MethodBuilder.getter('helpMessage',
-        returnType: _stringType, returns: literal(null));
+        returnType: _stringType,
+        returns: literal(helpMessage))..addAnnotation(_overrideAnnotation);
     classBuilder.addMethod(helpMessageBuilder);
 
     var isAggressiveBuilder = new MethodBuilder.getter('isAggressive',
-        returnType: _boolType, returns: literal(false));
+        returnType: _boolType,
+        returns: literal(false))..addAnnotation(_overrideAnnotation);
     classBuilder.addMethod(isAggressiveBuilder);
 
     var singletonBuilder = new FieldBuilder.asFinal('singleton',
@@ -379,7 +395,7 @@ class GeneratedAction extends GeneratedGameObject {
 
     //  START HERE --  then add FAILURE_BEGINNING_DESCRIPTION in applyFailure
     //   https://trello.com/c/S1XPDQ7/1-parser-for-writer-s-output#comment-58682ee019b9e7b833655fb7
-    return classBuilder;
+    yield classBuilder;
   }
 }
 
@@ -400,7 +416,7 @@ abstract class GeneratedGameObject {
 
   String get path;
 
-  AstBuilder finalizeAst();
+  Iterable<AstBuilder> finalizeAst();
 }
 
 class GeneratedRoom extends GeneratedGameObject {
@@ -418,7 +434,7 @@ class GeneratedRoom extends GeneratedGameObject {
   String get path => p.join(dirPath, '$filename.dart');
 
   @override
-  AstBuilder<AstNode> finalizeAst() {
+  Iterable<AstBuilder<AstNode>> finalizeAst() sync* {
     assert(_reachableRooms != null);
 
     var instanceName = name;
@@ -443,7 +459,7 @@ class GeneratedRoom extends GeneratedGameObject {
     ]);
     // TODO: add named constructor for groundMaterial
     var assignment = newInstance.asVar(instanceName, _roomType);
-    return assignment;
+    yield assignment;
   }
 
   Iterable<ExpressionBuilder> parseExits(String s) sync* {

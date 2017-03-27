@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class TakeExitAction extends ExitAction {
@@ -33,8 +32,6 @@ class TakeExitAction extends ExitAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    RoomRoamingSituation situation = w.currentSituation;
-
     var room = w.getRoomByName(exit.destinationRoomName);
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(

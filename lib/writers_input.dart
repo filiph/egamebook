@@ -82,12 +82,15 @@ Room mountainPassGuardPost = new Room(
     ]);
 
 class SneakOntoCart extends Action {
-  final command = 'Sneak onto the back of the cart';
+  @override
+  final String command = 'Sneak onto the back of the cart';
 
-  final name = 'SneakOntoCart';
+  @override
+  final String name = 'SneakOntoCart';
 
   static final SneakOntoCart singleton = new SneakOntoCart();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: none */';
     assert(DEV_MODE || false);
@@ -95,6 +98,7 @@ class SneakOntoCart extends Action {
         'mountainPassGate';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''You squeeze through the burlap sacks and hide under some rags. The orcs conclude their negotiations as the driver hurls a bag of turnips to a guard. The gates split open to the rattle of chains and the ominous creak of metal hinges. The ox cart lurches forward into the mountain pass.
@@ -107,34 +111,45 @@ In the cart you find a small keg of beer. You decide it is worth taking.''');
     return '$a successfully performs SneakOntoCart';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     throw new StateError('Success chance is 100%');
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 1.0;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'With the guards distracted, it should be a simple matter to squeeze through the burlap sacks and hide under some rags.';
 
+  @override
   bool get isAggressive => false;
 }
 
 class TakeOutGateGuards extends Action {
-  final command = 'Stealthily take out some of the gate guards';
+  @override
+  final String command = 'Stealthily take out some of the gate guards';
 
-  final name = 'TakeOutGateGuards';
+  @override
+  final String name = 'TakeOutGateGuards';
 
   static final TakeOutGateGuards singleton = new TakeOutGateGuards();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: (DOLLAR_SIGN)take_out_gate_guards never used */';
     assert(DEV_MODE || false);
@@ -142,6 +157,7 @@ class TakeOutGateGuards extends Action {
         'mountainPassGate';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''You sneak forward as close as you can. There are four guards in total. Two of them are distracted with talking to the cart merchant. But the other two are on the other side of the road, leaning against a large rock. They’re paying attention to the argument and not much else.
@@ -157,6 +173,7 @@ Once done, you sneak back away from the gate.''');
     return '$a successfully performs TakeOutGateGuards';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         '''You sneak forward as close as you can. There are four guards in total. Two of them are distracted with talking to the cart merchant. But the other two are on the other side of the road, leaning against a large rock. They’re paying attention to the argument and not much else.
@@ -166,20 +183,27 @@ You and Briana successfully make it to the other side of that rock. As luck woul
     return '$a fails to perform TakeOutGateGuards';
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 0.5;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'Two of the orcs seem distracted. You\'re not particularly good at camouflage but you can still try.';
 
+  @override
   bool get isAggressive => false;
 }
 
@@ -217,17 +241,21 @@ Over the next agonizing hour, you inch your way down the mountainside. You keep 
     ]);
 
 class ThreatenWingedSerpent extends Action {
-  final command = 'scare off the serpent';
+  @override
+  final String command = 'scare off the serpent';
 
-  final name = 'ThreatenWingedSerpent';
+  @override
+  final String name = 'ThreatenWingedSerpent';
 
   static final ThreatenWingedSerpent singleton = new ThreatenWingedSerpent();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'wingedSerpentNest';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Intimidated by your weapon, the winged serpent abandons its nest and flees to the mountaintop.');
@@ -236,36 +264,47 @@ class ThreatenWingedSerpent extends Action {
     return '$a successfully performs ThreatenWingedSerpent';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'The serpent does not even look at your sword as you swing it wildly. Its reptilian eyes glitter as it opens its jaws wide.');
     return '$a fails to perform ThreatenWingedSerpent';
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 0.3;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'You have a disadvantage this high up with your backs to the mountainside.';
 
+  @override
   bool get isAggressive => false;
 }
 
 class SootheWingedSerpent extends Action {
-  final command = 'soothe the serpent';
+  @override
+  final String command = 'soothe the serpent';
 
-  final name = 'SootheWingedSerpent';
+  @override
+  final String name = 'SootheWingedSerpent';
 
   static final SootheWingedSerpent singleton = new SootheWingedSerpent();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: player has (DOLLAR_SIGN)animal_kinship */';
     assert(DEV_MODE || false);
@@ -273,6 +312,7 @@ class SootheWingedSerpent extends Action {
         'wingedSerpentNest';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Your sibilant words reach the winged serpent’s ears. It coils in the air for a while longer, then whips towards its nest to clutch possessively at its eggs. You decide it’s time to move on.');
@@ -281,37 +321,48 @@ class SootheWingedSerpent extends Action {
     return '$a successfully performs SootheWingedSerpent';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'The serpent sways at your hissing, but is otherwise unimpressed as it opens its jaws menacingly.');
     return '$a fails to perform SootheWingedSerpent';
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 0.8;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'The creature is only defending its nest—maybe you can convince it that you mean no harm.';
 
+  @override
   bool get isAggressive => false;
 }
 
 class ThreatenWingedSerpentEggs extends Action {
-  final command = 'threaten the serpent’s eggs';
+  @override
+  final String command = 'threaten the serpent’s eggs';
 
-  final name = 'ThreatenWingedSerpentEggs';
+  @override
+  final String name = 'ThreatenWingedSerpentEggs';
 
   static final ThreatenWingedSerpentEggs singleton =
       new ThreatenWingedSerpentEggs();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     '/* PLEASE IMPLEMENT PREREQUISITE: None */';
     assert(DEV_MODE || false);
@@ -319,6 +370,7 @@ class ThreatenWingedSerpentEggs extends Action {
         'wingedSerpentNest';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''You grab one of the eggs from the nest and hold over the edge. The serpent hovers in place, hissing loudly, but otherwise holding off its attack. 
@@ -340,24 +392,31 @@ location = (DOLLAR_SIGN)mountainside_base */''';
     return '$a successfully performs ThreatenWingedSerpentEggs';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     throw new StateError('Success chance is 100%');
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 1.0;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage => 'Perhaps you can divert its attention.';
 
+  @override
   bool get isAggressive => false;
 }
 
@@ -455,17 +514,21 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.''
     ]);
 
 class HideInGrass extends Action {
-  final command = 'Take cover in the tall grass';
+  @override
+  final String command = 'Take cover in the tall grass';
 
-  final name = 'HideInGrass';
+  @override
+  final String name = 'HideInGrass';
 
   static final HideInGrass singleton = new HideInGrass();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'ironcastRoad';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'You sink to your knees below the grass and hold your breath. The orcs pass close, but given their proximity to Fort Ironcast don’t seem eager to linger. They hurry onwards back to the mountain pass. When they are specks in the distance, you stand up and continue on.');
@@ -474,63 +537,83 @@ class HideInGrass extends Action {
     return '$a successfully performs HideInGrass';
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     throw new StateError('Success chance is 100%');
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 1.0;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'The grass here is tall enough to hide you if you crouch.';
 
+  @override
   bool get isAggressive => false;
 }
 
 class StandAndFight extends Action {
-  final command = 'Stand and fight';
+  @override
+  final String command = 'Stand and fight';
 
-  final name = 'StandAndFight';
+  @override
+  final String name = 'StandAndFight';
 
   static final StandAndFight singleton = new StandAndFight();
 
+  @override
   bool isApplicable(Actor a, WorldState w) {
     return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
         'ironcastRoad';
   }
 
+  @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     throw new StateError('Success chance is 0%.');
   }
 
+  @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'You raise a war cry and close the gap against the battle-eager orcs. But it soon becomes clear that you are outnumbered and outflanked. The orcs surround you, beat you down, and cast you in chains. You trail blood as you are led up the mountain pass you traversed years ago, once again a slave.');
     return '$a fails to perform StandAndFight';
   }
 
+  @override
   num getSuccessChance(Actor a, WorldState w) {
     return 0.0;
   }
 
+  @override
   bool get rerollable => false;
 
+  @override
   String getRollReason(Actor a, WorldState w) {
     return 'Will you be successful?';
   }
 
+  @override
   Resource get rerollResource => null;
 
-  String get helpMessage => null;
+  @override
+  String get helpMessage =>
+      'This patrol won’t get in between you and the fort.';
 
+  @override
   bool get isAggressive => false;
 }
 
