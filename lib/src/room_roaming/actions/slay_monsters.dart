@@ -40,7 +40,9 @@ class SlayMonstersAction extends Action {
     Room room = w.getRoomByName(situation.currentRoomName);
 
     var friends = w.actors.where((other) =>
-        other.team.isFriendWith(a.team) && other.currentRoomName == room.name);
+        other.isAliveAndActive &&
+        other.team.isFriendWith(a.team) &&
+        other.currentRoomName == room.name);
 
     var monsters = room.monsterGenerator(w);
 
