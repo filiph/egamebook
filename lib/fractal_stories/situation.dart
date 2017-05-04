@@ -2,6 +2,8 @@ library stranded.situation;
 
 import 'dart:math' show Random;
 
+import 'package:meta/meta.dart';
+
 import 'action.dart';
 import 'actor.dart';
 import 'storyline/storyline.dart';
@@ -36,6 +38,7 @@ int getRandomId() => _random.nextInt(_largeInteger);
 ///   it reads like this:
 ///         @virtual
 ///         int id = getRandomId();
+@immutable
 abstract class Situation {
   /// The actions with objects available to the actors.
   ///

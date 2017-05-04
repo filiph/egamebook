@@ -2,12 +2,14 @@ library stranded.action_record;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:meta/meta.dart';
 
 import 'actor.dart';
 
 part 'action_record.g.dart';
 
 /// A record of some event action that transpired.
+@immutable
 abstract class ActionRecord
     implements Built<ActionRecord, ActionRecordBuilder> {
   factory ActionRecord([updates(ActionRecordBuilder b)]) = _$ActionRecord;

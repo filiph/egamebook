@@ -1,5 +1,8 @@
+import 'package:meta/meta.dart';
+
 /// Scores a given [WorldState] according to [Actor]. The different fields
 /// measure the different dimensions to look at the world.
+@immutable
 class ActorScore {
   /// How safe this outcome is to the actor.
   ///
@@ -28,6 +31,7 @@ class ActorScore {
       "enemy=${enemy.toStringAsFixed(2)}>";
 }
 
+@immutable
 class ActorScoreChange {
   /// How much safer an outcome is to the actor relative to another outcome.
   final num selfPreservation;
@@ -38,9 +42,6 @@ class ActorScoreChange {
 
   /// How better-off the enemy is relative to another outcome.
   final num enemy;
-
-  /// A simple combination of different scores, for AI.
-  num get simpleCombination => selfPreservation + teamPreservation - enemy;
 
   const ActorScoreChange(
       this.selfPreservation, this.teamPreservation, this.enemy);
@@ -62,13 +63,13 @@ class ActorScoreChange {
     return new ActorScoreChange(self / count, team / count, enemy / count);
   }
 
-  /// Outcome has zero effect on the world from the scoring actor's perspective.
-  const ActorScoreChange.zero() : this(0, 0, 0);
-
   /// Action outcome cannot be computed at all.
   const ActorScoreChange.undefined()
       : this(double.NEGATIVE_INFINITY, double.NEGATIVE_INFINITY,
             double.NEGATIVE_INFINITY);
+
+  /// Outcome has zero effect on the world from the scoring actor's perspective.
+  const ActorScoreChange.zero() : this(0, 0, 0);
 
   /// Action outcome could not be computed at all.
   bool get isUndefined =>
@@ -76,15 +77,18 @@ class ActorScoreChange {
       teamPreservation == double.NEGATIVE_INFINITY &&
       enemy == double.NEGATIVE_INFINITY;
 
+  /// A simple combination of different scores, for AI.
+  num get simpleCombination => selfPreservation + teamPreservation - enemy;
+
+  /// Returns a score change multiplied by a scalar value.
+  ActorScoreChange operator *(num value) => new ActorScoreChange(
+      selfPreservation * value, teamPreservation * value, enemy * value);
+
   /// Returns the addition of two actor score changes.
   ActorScoreChange operator +(ActorScoreChange other) => new ActorScoreChange(
       selfPreservation + other.selfPreservation,
       teamPreservation + other.teamPreservation,
       enemy + other.enemy);
-
-  /// Returns a score change multiplied by a scalar value.
-  ActorScoreChange operator *(num value) => new ActorScoreChange(
-      selfPreservation * value, teamPreservation * value, enemy * value);
 
   /// Returns a score change divided by a scalar value.
   ActorScoreChange operator /(num value) => new ActorScoreChange(

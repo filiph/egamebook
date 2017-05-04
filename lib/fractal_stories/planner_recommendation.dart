@@ -5,7 +5,13 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
+/// A function that takes the multi-dimensional [ActorScoreChange] and outputs
+/// a single number.
+typedef num CombineFunction(ActorScoreChange change);
+
+@immutable
 class PlannerRecommendation {
   static final Logger log = new Logger('PlannerRecommendation');
 
@@ -17,22 +23,14 @@ class PlannerRecommendation {
   static const int weightsResolution = 1000;
   static const num _worstOptionWeight = 0.1;
 
-  UnmodifiableMapView<Action, ActorScoreChange> scores;
-  List<Action> _actions;
+  final UnmodifiableMapView<Action, ActorScoreChange> scores;
+  final List<Action> _actions;
 
   PlannerRecommendation(Map<Action, ActorScoreChange> scores)
-      : scores = new UnmodifiableMapView(scores) {
+      : scores = new UnmodifiableMapView(scores),
+        _actions = _getAttainableActions(scores) {
     if (scores.isEmpty) {
       log.warning("Created with no recommendations.");
-    }
-
-    // Remove impossible actions. TODO: make sure we don't duplicate effort here
-    _actions = scores.keys
-        .where((a) => !scores[a].isUndefined)
-        .toList(growable: false);
-    if (_actions.isEmpty) {
-      log.warning("After removing actions scored by undefined, there are no "
-          "recommendations.");
     }
   }
 
@@ -94,21 +92,6 @@ class PlannerRecommendation {
     }
   }
 
-  Action _findBest(CombineFunction combineFunction,
-      {List<Action> skip: const []}) {
-    Action best;
-    num bestScore;
-    for (var action in _actions) {
-      if (skip.contains(action)) continue;
-      if (best == null || combineFunction(scores[action]) > bestScore) {
-        best = action;
-        bestScore = combineFunction(scores[action]);
-        continue;
-      }
-    }
-    return best;
-  }
-
   /// Pick an action randomly, but with more weight given to actions that
   /// are scored more highly according to [combineFunction].
   Action pickRandomly(CombineFunction combineFunction) {
@@ -156,9 +139,33 @@ class PlannerRecommendation {
     return _actions[index];
   }
 
+  Action _findBest(CombineFunction combineFunction,
+      {List<Action> skip: const []}) {
+    Action best;
+    num bestScore;
+    for (var action in _actions) {
+      if (skip.contains(action)) continue;
+      if (best == null || combineFunction(scores[action]) > bestScore) {
+        best = action;
+        bestScore = combineFunction(scores[action]);
+        continue;
+      }
+    }
+    return best;
+  }
+
+  /// Remove impossible actions. TODO: make sure we don't duplicate effort here
+  static List<Action> _getAttainableActions(
+      Map<Action, ActorScoreChange> scores) {
+    List<Action> result = scores.keys
+        .where((a) => !scores[a].isUndefined)
+        .toList(growable: false);
+    if (result.isEmpty) {
+      log.warning("After removing actions scored by undefined, there are no "
+          "recommendations.");
+    }
+    return result;
+  }
+
   static num _sum(num a, num b) => a + b;
 }
-
-/// A function that takes the multi-dimensional [ActorScoreChange] and outputs
-/// a single number.
-typedef num CombineFunction(ActorScoreChange change);

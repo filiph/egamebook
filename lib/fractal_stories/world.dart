@@ -39,7 +39,7 @@ class WorldState {
         situations = new List<Situation>.from([startingSituation]),
         time = 0;
 
-  /// Creates a deep clone of [other].
+  /// Creates a deep clone of [other]. TODO: use BuiltValue here as well.
   WorldState.duplicate(WorldState other)
       : actors = new Set<Actor>(),
         actionRecords = new Queue<ActionRecord>(),
@@ -69,6 +69,24 @@ class WorldState {
 
   @override
   bool operator ==(Object o) => o is WorldState && hashCode == o.hashCode;
+
+  /// Returns `true` if action that satisfies [actionNamePattern] has been
+  /// _successfully_ performed, ever.
+  ///
+  /// To satisfie [actionNamePattern], the [Action.name] must contain the
+  /// pattern.
+  bool actionHasBeenPerformed(Pattern actionNamePattern) {
+    var records = getActionRecords(actionNamePattern: actionNamePattern,
+      wasSuccess: true);
+    for (var _ in records) {
+      return true;
+    }
+    return false;
+  }
+
+  bool actionNeverUsed(String name) {
+    return timeSinceLastActionRecord(actionNamePattern: name) == null;
+  }
 
   void elapseSituationTime(int situationId) {
     int index = _findSituationIndex(situationId);
@@ -115,42 +133,6 @@ class WorldState {
     return records;
   }
 
-  /// Returns number of turns since an [ActionRecord] that conforms to
-  /// the specified named parameters was performed.
-  ///
-  /// Returns `null` when such a record doesn't exist.
-  int timeSinceLastActionRecord(
-      {Pattern actionNamePattern,
-      Actor protagonist,
-      Actor sufferer,
-      bool wasSuccess,
-      bool wasAggressive}) {
-    var records = getActionRecords(
-        actionNamePattern: actionNamePattern,
-        protagonist: protagonist,
-        sufferer: sufferer,
-        wasSuccess: wasSuccess,
-        wasAggressive: wasAggressive);
-    for (var record in records) {
-      return time - record.time;
-    }
-    return null;
-  }
-
-  /// Returns `true` if action that satisfies [actionNamePattern] has been
-  /// _successfully_ performed, ever.
-  ///
-  /// To satisfie [actionNamePattern], the [Action.name] must contain the
-  /// pattern.
-  bool actionHasBeenPerformed(Pattern actionNamePattern) {
-    var records = getActionRecords(actionNamePattern: actionNamePattern,
-      wasSuccess: true);
-    for (var _ in records) {
-      return true;
-    }
-    return false;
-  }
-
   Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
 
   Room getRoomByName(String roomName) {
@@ -188,10 +170,6 @@ class WorldState {
     throw new ArgumentError("No situation with name=$situationName found.");
   }
 
-  bool actionNeverUsed(String name) {
-    return timeSinceLastActionRecord(actionNamePattern: name) == null;
-  }
-
   bool hasAliveActor(int actorId) {
     var actor =
         actors.firstWhere((actor) => actor.id == actorId, orElse: () => null);
@@ -218,8 +196,39 @@ class WorldState {
     situations.add(situation);
   }
 
+  void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
+    int index = _findSituationIndex(id);
+    if (index == null) {
+      throw new ArgumentError("Situation with id $id does not "
+          "exist in $situations");
+    }
+    situations[index] = updatedSituation;
+  }
+
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
+
+  /// Returns number of turns since an [ActionRecord] that conforms to
+  /// the specified named parameters was performed.
+  ///
+  /// Returns `null` when such a record doesn't exist.
+  int timeSinceLastActionRecord(
+      {Pattern actionNamePattern,
+      Actor protagonist,
+      Actor sufferer,
+      bool wasSuccess,
+      bool wasAggressive}) {
+    var records = getActionRecords(
+        actionNamePattern: actionNamePattern,
+        protagonist: protagonist,
+        sufferer: sufferer,
+        wasSuccess: wasSuccess,
+        wasAggressive: wasAggressive);
+    for (var record in records) {
+      return time - record.time;
+    }
+    return null;
+  }
 
   @override
   String toString() => "World<${actors.toSet()}>";
@@ -229,15 +238,6 @@ class WorldState {
     var updated = original.rebuild(updates);
     actors.remove(original);
     actors.add(updated);
-  }
-
-  void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
-    int index = _findSituationIndex(id);
-    if (index == null) {
-      throw new ArgumentError("Situation with id $id does not "
-          "exist in $situations");
-    }
-    situations[index] = updatedSituation;
   }
 
   /// Returns the index at which the [Situation] with [situationId] resides

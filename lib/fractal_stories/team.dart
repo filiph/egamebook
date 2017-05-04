@@ -1,6 +1,7 @@
 library stranded.team;
 
 import 'package:built_value/built_value.dart';
+import 'package:meta/meta.dart';
 
 part 'team.g.dart';
 
@@ -10,6 +11,7 @@ final Team neutralTeam = new Team((b) => b.id = 0);
 
 final Team playerTeam = new Team((b) => b.id = 1);
 
+@immutable
 abstract class Team implements Built<Team, TeamBuilder> {
   factory Team([updates(TeamBuilder b)]) = _$Team;
 

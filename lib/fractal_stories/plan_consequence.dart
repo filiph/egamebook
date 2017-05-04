@@ -1,6 +1,7 @@
 library stranded.plan_consequence;
 
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
 import 'action.dart';
@@ -8,6 +9,7 @@ import 'storyline/storyline.dart';
 import 'world.dart';
 
 /// A container for statistics for a [PlanConsequence].
+@immutable
 class ConsequenceStats {
   final ActorScore score;
   final num cumulativeProbability;
@@ -20,6 +22,7 @@ class ConsequenceStats {
       "score=$score>";
 }
 
+@immutable
 class PlanConsequence {
   final WorldState world;
   final Action action;

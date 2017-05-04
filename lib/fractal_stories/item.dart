@@ -1,5 +1,7 @@
 library stranded.item;
 
+import 'package:meta/meta.dart';
+
 import 'actor.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
@@ -19,9 +21,8 @@ String typeToDescription(ItemType type) {
   }
 }
 
-abstract class Item extends Object
-    with EntityBehavior
-    implements Entity {
+@immutable
+abstract class Item extends Object with EntityBehavior implements Entity {
   final ItemType type;
   Item(this.type);
 

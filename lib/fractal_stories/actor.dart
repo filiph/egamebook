@@ -22,16 +22,24 @@ Iterable<Actor> getPartyOf(Actor actor, WorldState world) sync* {
   yield* world.actors.where((other) => other.followingActorId == actor.id);
 }
 
+@immutable
 abstract class Actor extends Object
     with EntityBehavior
     implements Built<Actor, ActorBuilder>, Entity {
+  /// The default score when actor dies and is no longer in the world.
+  ///
+  /// For example, after a `FightSituation` ends, all dead actors are deleted,
+  /// which means there is nobody to score the situation. In that case, we
+  /// provide this default score.
+  static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
   factory Actor([updates(ActorBuilder b)]) = _$Actor;
+
   Actor._();
 
-  bool get alreadyMentioned;
+  bool get alreadyMentioned; // TODO make immutable
 
   @override
-  List<String> get categories; // TODO make immutable
+  List<String> get categories;
 
   @nullable
   CombineFunction get combineFunction;
@@ -76,9 +84,9 @@ abstract class Actor extends Object
   @override
   bool get isPlayer;
 
+  // TODO: make non-nullable
   bool get isStanding => pose == Pose.standing;
 
-  // TODO: make non-nullable
   /// How safe does [this] Actor feel in the presence of the different other
   /// actors.
   ///
@@ -157,14 +165,15 @@ abstract class Actor extends Object
     return team.isEnemyWith(other.team) ? 1.0 : 0.0;
   }
 
+  // TODO: loveIndifference
+  // other feelings?
+
   /// Returns whether actor is in confused state at present.
   ///
   /// This works by checking [w]'s history.
   bool isConfused(WorldState w) {
     int recency = w.timeSinceLastActionRecord(
-        actionNamePattern: Confuse.className,
-        sufferer: this,
-        wasSuccess: true);
+        actionNamePattern: Confuse.className, sufferer: this, wasSuccess: true);
     if (recency == null) return false;
     int unconfuseRecency = w.timeSinceLastActionRecord(
         actionNamePattern: Unconfuse.className,
@@ -173,9 +182,6 @@ abstract class Actor extends Object
     if (unconfuseRecency == null) return true;
     return unconfuseRecency < recency;
   }
-
-  // TODO: loveIndifference
-  // other feelings?
 
   Item removeItem(Type type) {
     Item markedForRemoval;
@@ -248,13 +254,6 @@ abstract class Actor extends Object
 
     return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
-
-  /// The default score when actor dies and is no longer in the world.
-  ///
-  /// For example, after a `FightSituation` ends, all dead actors are deleted,
-  /// which means there is nobody to score the situation. In that case, we
-  /// provide this default score.
-  static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
 
   bool wields(ItemType value) =>
       currentWeapon != null && currentWeapon.type == value;
