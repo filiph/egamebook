@@ -94,16 +94,13 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..combineFunction = carelessCombineFunction);
 
-    deadEscapee = new Room(
-        "deadEscapee",
-        "UNUSED because this is the first choice",
-        "",
-        null,
-        null,
-        [new Exit("tunnel", "Run towards freedom", "You run.")]);
+    deadEscapee = new Room("deadEscapee",
+        "UNUSED because this is the first choice", "", null, null, [
+      new Exit("tunnel", "Run towards freedom",
+          "You and Briana sprint through the giant worm’s tunnel.")
+    ]);
     tunnel = new Room(
         "tunnel",
-        "You and Briana sprint through the giant worm’s tunnel.\n\n"
         "Suddenly, an **orc** and a **goblin** jump in front of you from "
         "a slimy crevice, swords in hands.\n\n"
         "![Orc and Goblin](img/orc_and_goblin_sketch.jpg)",
@@ -157,8 +154,8 @@ class EdgeheadGame extends LoopedEvent {
     //   });
 
     initialSituation = new RoomRoamingSituation.initialized(
-//        deadEscapee,
-        entranceToBloodrock,
+        deadEscapee,
+//        entranceToBloodrock,
         false);
 
     var rooms = new List<Room>.from(allRooms)
@@ -242,11 +239,13 @@ class EdgeheadGame extends LoopedEvent {
     Action selected;
     if (actor.isPlayer) {
       // Player
-      if (recs.actions.length == 1) {
-        // Only one option, select by default.
-        selected = recs.actions.single;
-        await _applySelected(selected, actor, storyline);
-        return;
+      if (recs.actions.length > 1) {
+        // If we have more than one action, none of them should have
+        // blank command (which signifies an action that should be
+        // auto-selected.
+        for (var action in recs.actions) {
+          assert(action.command.isNotEmpty);
+        }
       }
       echo(storyline.realize());
       storyline.clear();
@@ -277,6 +276,7 @@ class EdgeheadGame extends LoopedEvent {
       }
       return;
     } else {
+      // NPC
       // TODO - if more than one action, remove the one that was just made
       selected =
           recs.pickRandomly(actor.combineFunction ?? normalCombineFunction);

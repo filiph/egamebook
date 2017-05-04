@@ -173,6 +173,8 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
       if (automated && !game.actionPatternWasHit) {
         option = _random.nextInt(choices.length);
+      } else if (choices.length == 1 && choices.single.isAutomatic) {
+        option = 0;
       } else {
         option = int.parse(stdin.readLineSync()) - 1;
         print("");
