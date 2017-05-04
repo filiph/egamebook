@@ -20,7 +20,7 @@ abstract class ActionRecord
   /// IMPLEMENTATION DETAIL: Currently, there can be no accomplices.
   BuiltSet<int> get accomplices;
 
-  String get actionClass;
+  String get actionName;
 
   String get description;
 
@@ -54,7 +54,7 @@ abstract class ActionRecord
   bool get wasSuccess;
 
   @override
-  String toString() => "ActionRecord<$actionClass, $description>";
+  String toString() => "ActionRecord<$actionName, $description>";
 }
 
 enum KnownToMode { all, protagonistOnly, custom }

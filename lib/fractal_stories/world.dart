@@ -90,15 +90,15 @@ class WorldState {
   /// When none of the named parameters is provided, all [actionRecords] are
   /// returned.
   Iterable<ActionRecord> getActionRecords(
-      {Pattern actionClassPattern,
+      {Pattern actionNamePattern,
       Actor protagonist,
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
     Iterable<ActionRecord> records = actionRecords;
-    if (actionClassPattern != null) {
+    if (actionNamePattern != null) {
       records =
-          records.where((rec) => rec.actionClass.contains(actionClassPattern));
+          records.where((rec) => rec.actionName.contains(actionNamePattern));
     }
     if (protagonist != null) {
       records = records.where((rec) => rec.protagonist == protagonist.id);
@@ -120,13 +120,13 @@ class WorldState {
   ///
   /// Returns `null` when such a record doesn't exist.
   int timeSinceLastActionRecord(
-      {Pattern actionClassPattern,
+      {Pattern actionNamePattern,
       Actor protagonist,
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
     var records = getActionRecords(
-        actionClassPattern: actionClassPattern,
+        actionNamePattern: actionNamePattern,
         protagonist: protagonist,
         sufferer: sufferer,
         wasSuccess: wasSuccess,
@@ -137,12 +137,27 @@ class WorldState {
     return null;
   }
 
+  /// Returns `true` if action that satisfies [actionNamePattern] has been
+  /// _successfully_ performed, ever.
+  ///
+  /// To satisfie [actionNamePattern], the [Action.name] must contain the
+  /// pattern.
+  bool actionHasBeenPerformed(Pattern actionNamePattern) {
+    var records = getActionRecords(actionNamePattern: actionNamePattern,
+      wasSuccess: true);
+    for (var _ in records) {
+      return true;
+    }
+    return false;
+  }
+
   Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
 
   Room getRoomByName(String roomName) {
     assert(
         rooms.any((room) => room.name == roomName),
-        "Room with name $roomName not defined. "
+        "Room with name $roomName not defined.\n"
+        "Rooms: ${rooms.map((r) => r.name).join(', ')}.\n"
         "Current world: $this.");
     return rooms.singleWhere((room) => room.name == roomName);
   }
@@ -153,6 +168,17 @@ class WorldState {
     return situations[index];
   }
 
+  /// Returns the [Situation] of the provided [situationName] that is highest
+  /// on the [situations] stack.
+  ///
+  /// [situationName] must correspond to [Situation.name]. So this is really
+  /// finding situations by type. That is why this is a generic method. The
+  /// intended use can look like this:
+  ///
+  ///     var s = world.getSituationByName<SomeSituation>("SomeSituation");
+  ///
+  /// Throws an [ArgumentError] if there is no Situation of that name on the
+  /// stack.
   T getSituationByName<T extends Situation>(String situationName) {
     for (int i = situations.length - 1; i >= 0; i--) {
       if (situations[i].name == situationName) {
@@ -160,6 +186,10 @@ class WorldState {
       }
     }
     throw new ArgumentError("No situation with name=$situationName found.");
+  }
+
+  bool actionNeverUsed(String name) {
+    return timeSinceLastActionRecord(actionNamePattern: name) == null;
   }
 
   bool hasAliveActor(int actorId) {

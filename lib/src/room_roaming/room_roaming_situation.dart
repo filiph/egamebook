@@ -75,6 +75,22 @@ abstract class RoomRoamingSituation extends Situation
     world.actors.removeWhere((a) => !a.isAlive);
   }
 
+  /// Moves [a] with their party to [destination].
+  void moveActor(WorldState w, Actor a, String destinationRoomName) {
+    var room = w.getRoomByName(destinationRoomName);
+
+    var nextRoomSituation = new RoomRoamingSituation.initialized(
+        room,
+        /* TODO: do not reset monsters when coming back */
+        room.monsterGenerator != null);
+
+    w.replaceSituationById(id, nextRoomSituation);
+
+    for (var actor in getPartyOf(a, w).toList()) {
+      w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
+    }
+  }
+
   @override
   bool shouldContinue(WorldState world) {
     if (currentRoomName == endOfRoam.name) return false;

@@ -104,7 +104,3 @@ abstract class EntityBehavior {
         endSentence: endSentence);
   }
 }
-
-class Player extends Entity {
-  Player(String name) : super._(name, true, Pronoun.YOU, playerTeam, true);
-}

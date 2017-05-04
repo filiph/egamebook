@@ -54,7 +54,7 @@ class Scramble extends Action {
     if (!a.isOnGround) return false;
     // Actor must have just fallen.
     var sweepRecency = world.timeSinceLastActionRecord(
-        actionClassPattern: SweepOffFeet.className,
+        actionNamePattern: SweepOffFeet.className,
         sufferer: a,
         wasSuccess: true);
     if (sweepRecency != null && sweepRecency <= 2) {
@@ -62,7 +62,7 @@ class Scramble extends Action {
     }
     // If this actor was just pounded to ground, do not let him stand up.
     var poundRecency = world.timeSinceLastActionRecord(
-        actionClassPattern: Pound.className, sufferer: a, wasSuccess: true);
+        actionNamePattern: Pound.className, sufferer: a, wasSuccess: true);
     if (poundRecency != null && poundRecency <= 2) {
       return true;
     }

@@ -162,12 +162,12 @@ abstract class Actor extends Object
   /// This works by checking [w]'s history.
   bool isConfused(WorldState w) {
     int recency = w.timeSinceLastActionRecord(
-        actionClassPattern: Confuse.className,
+        actionNamePattern: Confuse.className,
         sufferer: this,
         wasSuccess: true);
     if (recency == null) return false;
     int unconfuseRecency = w.timeSinceLastActionRecord(
-        actionClassPattern: Unconfuse.className,
+        actionNamePattern: Unconfuse.className,
         protagonist: this,
         wasSuccess: true);
     if (unconfuseRecency == null) return true;

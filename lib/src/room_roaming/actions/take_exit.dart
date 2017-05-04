@@ -34,15 +34,9 @@ class TakeExitAction extends ExitAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     var room = w.getRoomByName(exit.destinationRoomName);
 
-    var nextRoomSituation = new RoomRoamingSituation.initialized(
-        room, room.monsterGenerator != null);
+    s.add(exit.description);
 
-    w.popSituation();
-    w.pushSituation(nextRoomSituation);
-
-    for (var actor in getPartyOf(a, w).toList()) {
-      w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
-    }
+    (w.currentSituation as RoomRoamingSituation).moveActor(w, a, room.name);
 
     s.addParagraph();
     // TODO: show short description according to world.actionRecords
@@ -65,7 +59,11 @@ class TakeExitAction extends ExitAction {
       // Don't allow exit taking when monsters in this room are still alive.
       return false;
     }
-    // TODO: do we need to guard against some other invalid exit-taking here?
+    if (exit.isAccessible != null && !exit.isAccessible(w)) {
+      // Don't allow if `isAccessible` is defined on [exit] and it returns
+      // `false`.
+      return false;
+    }
     return true;
   }
 

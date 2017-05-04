@@ -1,0 +1,387 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of writers_input;
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class TakeOutGateGuardsRescueSituation
+// **************************************************************************
+
+class _$TakeOutGateGuardsRescueSituation
+    extends TakeOutGateGuardsRescueSituation {
+  @override
+  final int id;
+  @override
+  final int time;
+
+  factory _$TakeOutGateGuardsRescueSituation(
+          [updates(TakeOutGateGuardsRescueSituationBuilder b)]) =>
+      (new TakeOutGateGuardsRescueSituationBuilder()..update(updates)).build();
+
+  _$TakeOutGateGuardsRescueSituation._({this.id, this.time}) : super._() {
+    if (id == null) throw new ArgumentError.notNull('id');
+    if (time == null) throw new ArgumentError.notNull('time');
+  }
+
+  @override
+  TakeOutGateGuardsRescueSituation rebuild(
+          updates(TakeOutGateGuardsRescueSituationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  TakeOutGateGuardsRescueSituationBuilder toBuilder() =>
+      new TakeOutGateGuardsRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is! TakeOutGateGuardsRescueSituation) return false;
+    return id == other.id && time == other.time;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), time.hashCode));
+  }
+
+  @override
+  String toString() {
+    return 'TakeOutGateGuardsRescueSituation {'
+        'id=${id.toString()},\n'
+        'time=${time.toString()},\n'
+        '}';
+  }
+}
+
+class TakeOutGateGuardsRescueSituationBuilder
+    implements
+        Builder<TakeOutGateGuardsRescueSituation,
+            TakeOutGateGuardsRescueSituationBuilder> {
+  TakeOutGateGuardsRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
+
+  TakeOutGateGuardsRescueSituationBuilder();
+
+  TakeOutGateGuardsRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _time = _$v.time;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(TakeOutGateGuardsRescueSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
+    _$v = other;
+  }
+
+  @override
+  void update(updates(TakeOutGateGuardsRescueSituationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  TakeOutGateGuardsRescueSituation build() {
+    final result =
+        _$v ?? new _$TakeOutGateGuardsRescueSituation._(id: id, time: time);
+    replace(result);
+    return result;
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class ThreatenWingedSerpentRescueSituation
+// **************************************************************************
+
+class _$ThreatenWingedSerpentRescueSituation
+    extends ThreatenWingedSerpentRescueSituation {
+  @override
+  final int id;
+  @override
+  final int time;
+
+  factory _$ThreatenWingedSerpentRescueSituation(
+          [updates(ThreatenWingedSerpentRescueSituationBuilder b)]) =>
+      (new ThreatenWingedSerpentRescueSituationBuilder()..update(updates))
+          .build();
+
+  _$ThreatenWingedSerpentRescueSituation._({this.id, this.time}) : super._() {
+    if (id == null) throw new ArgumentError.notNull('id');
+    if (time == null) throw new ArgumentError.notNull('time');
+  }
+
+  @override
+  ThreatenWingedSerpentRescueSituation rebuild(
+          updates(ThreatenWingedSerpentRescueSituationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ThreatenWingedSerpentRescueSituationBuilder toBuilder() =>
+      new ThreatenWingedSerpentRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is! ThreatenWingedSerpentRescueSituation) return false;
+    return id == other.id && time == other.time;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), time.hashCode));
+  }
+
+  @override
+  String toString() {
+    return 'ThreatenWingedSerpentRescueSituation {'
+        'id=${id.toString()},\n'
+        'time=${time.toString()},\n'
+        '}';
+  }
+}
+
+class ThreatenWingedSerpentRescueSituationBuilder
+    implements
+        Builder<ThreatenWingedSerpentRescueSituation,
+            ThreatenWingedSerpentRescueSituationBuilder> {
+  ThreatenWingedSerpentRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
+
+  ThreatenWingedSerpentRescueSituationBuilder();
+
+  ThreatenWingedSerpentRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _time = _$v.time;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ThreatenWingedSerpentRescueSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
+    _$v = other;
+  }
+
+  @override
+  void update(updates(ThreatenWingedSerpentRescueSituationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  ThreatenWingedSerpentRescueSituation build() {
+    final result =
+        _$v ?? new _$ThreatenWingedSerpentRescueSituation._(id: id, time: time);
+    replace(result);
+    return result;
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class SootheWingedSerpentRescueSituation
+// **************************************************************************
+
+class _$SootheWingedSerpentRescueSituation
+    extends SootheWingedSerpentRescueSituation {
+  @override
+  final int id;
+  @override
+  final int time;
+
+  factory _$SootheWingedSerpentRescueSituation(
+          [updates(SootheWingedSerpentRescueSituationBuilder b)]) =>
+      (new SootheWingedSerpentRescueSituationBuilder()..update(updates))
+          .build();
+
+  _$SootheWingedSerpentRescueSituation._({this.id, this.time}) : super._() {
+    if (id == null) throw new ArgumentError.notNull('id');
+    if (time == null) throw new ArgumentError.notNull('time');
+  }
+
+  @override
+  SootheWingedSerpentRescueSituation rebuild(
+          updates(SootheWingedSerpentRescueSituationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  SootheWingedSerpentRescueSituationBuilder toBuilder() =>
+      new SootheWingedSerpentRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is! SootheWingedSerpentRescueSituation) return false;
+    return id == other.id && time == other.time;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), time.hashCode));
+  }
+
+  @override
+  String toString() {
+    return 'SootheWingedSerpentRescueSituation {'
+        'id=${id.toString()},\n'
+        'time=${time.toString()},\n'
+        '}';
+  }
+}
+
+class SootheWingedSerpentRescueSituationBuilder
+    implements
+        Builder<SootheWingedSerpentRescueSituation,
+            SootheWingedSerpentRescueSituationBuilder> {
+  SootheWingedSerpentRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
+
+  SootheWingedSerpentRescueSituationBuilder();
+
+  SootheWingedSerpentRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _time = _$v.time;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(SootheWingedSerpentRescueSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
+    _$v = other;
+  }
+
+  @override
+  void update(updates(SootheWingedSerpentRescueSituationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  SootheWingedSerpentRescueSituation build() {
+    final result =
+        _$v ?? new _$SootheWingedSerpentRescueSituation._(id: id, time: time);
+    replace(result);
+    return result;
+  }
+}
+
+// **************************************************************************
+// Generator: BuiltValueGenerator
+// Target: abstract class ThreatenWingedSerpentEggsRescueSituation
+// **************************************************************************
+
+class _$ThreatenWingedSerpentEggsRescueSituation
+    extends ThreatenWingedSerpentEggsRescueSituation {
+  @override
+  final int id;
+  @override
+  final int time;
+
+  factory _$ThreatenWingedSerpentEggsRescueSituation(
+          [updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)]) =>
+      (new ThreatenWingedSerpentEggsRescueSituationBuilder()..update(updates))
+          .build();
+
+  _$ThreatenWingedSerpentEggsRescueSituation._({this.id, this.time})
+      : super._() {
+    if (id == null) throw new ArgumentError.notNull('id');
+    if (time == null) throw new ArgumentError.notNull('time');
+  }
+
+  @override
+  ThreatenWingedSerpentEggsRescueSituation rebuild(
+          updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ThreatenWingedSerpentEggsRescueSituationBuilder toBuilder() =>
+      new ThreatenWingedSerpentEggsRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(dynamic other) {
+    if (other is! ThreatenWingedSerpentEggsRescueSituation) return false;
+    return id == other.id && time == other.time;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), time.hashCode));
+  }
+
+  @override
+  String toString() {
+    return 'ThreatenWingedSerpentEggsRescueSituation {'
+        'id=${id.toString()},\n'
+        'time=${time.toString()},\n'
+        '}';
+  }
+}
+
+class ThreatenWingedSerpentEggsRescueSituationBuilder
+    implements
+        Builder<ThreatenWingedSerpentEggsRescueSituation,
+            ThreatenWingedSerpentEggsRescueSituationBuilder> {
+  ThreatenWingedSerpentEggsRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _time;
+  int get time => _$this._time;
+  set time(int time) => _$this._time = time;
+
+  ThreatenWingedSerpentEggsRescueSituationBuilder();
+
+  ThreatenWingedSerpentEggsRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _time = _$v.time;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ThreatenWingedSerpentEggsRescueSituation other) {
+    if (other == null) throw new ArgumentError.notNull('other');
+    _$v = other;
+  }
+
+  @override
+  void update(updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  ThreatenWingedSerpentEggsRescueSituation build() {
+    final result = _$v ??
+        new _$ThreatenWingedSerpentEggsRescueSituation._(id: id, time: time);
+    replace(result);
+    return result;
+  }
+}

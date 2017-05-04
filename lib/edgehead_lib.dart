@@ -100,7 +100,7 @@ class EdgeheadGame extends LoopedEvent {
         "",
         null,
         null,
-        [new Exit("tunnel", "Run towards freedom")]);
+        [new Exit("tunnel", "Run towards freedom", "You run.")]);
     tunnel = new Room(
         "tunnel",
         "You and Briana sprint through the giant worm’s tunnel.\n\n"
@@ -110,7 +110,10 @@ class EdgeheadGame extends LoopedEvent {
         "",
         (_) => [orc, goblin],
         null,
-        [new Exit(entranceToBloodrock.name, "Continue")],
+        [
+          new Exit(entranceToBloodrock.name, "Continue",
+              "You finally arrive to the cave's entrance.")
+        ],
         groundMaterial: "{rock|cavern} floor");
 
     filip = new Actor((b) => b
@@ -154,10 +157,9 @@ class EdgeheadGame extends LoopedEvent {
     //   });
 
     initialSituation = new RoomRoamingSituation.initialized(
-        deadEscapee,
-        // entranceToBloodrock,
-        false
-    );
+//        deadEscapee,
+        entranceToBloodrock,
+        false);
 
     var rooms = new List<Room>.from(allRooms)
       ..addAll([deadEscapee, tunnel, endOfRoam]);
@@ -186,24 +188,9 @@ class EdgeheadGame extends LoopedEvent {
 
       storyline.addParagraph();
       if (world.hasAliveActor(filip.id)) {
-        var player = world.getActorById(filip.id);
-        storyline.add("<subject> look<s> behind", subject: player);
-        storyline.add(
-            "<subject> see<s> the giant worm's hideous head approaching",
-            subject: player);
-        if (world.hasAliveActor(briana.id)) {
-          storyline.add("You both start sprinting again.", wholeSentence: true);
-        } else {
-          storyline.add("<subject> take<s> a last look at Briana",
-              subject: player);
-          storyline.add("<subject> start<s> sprinting again, alone",
-              subject: player, endSentence: true);
-        }
-        storyline.addParagraph();
         storyline.add("TO BE CONTINUED.", wholeSentence: true);
       } else {
-        storyline.add("You will soon be the giant worm's food.",
-            wholeSentence: true);
+        storyline.add("You died.", wholeSentence: true);
       }
       echo(storyline.realize());
 

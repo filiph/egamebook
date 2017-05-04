@@ -216,9 +216,9 @@ abstract class Action {
   }
 
   ActionRecordBuilder _prepareWorldRecord(
-          Actor actor, WorldState world, bool isSuccess, isFailure) {
+      Actor actor, WorldState world, bool isSuccess, isFailure) {
     var builder = new ActionRecordBuilder()
-      ..actionClass = name
+      ..actionName = name
       ..protagonist = actor.id
       ..knownTo = KnownToMode.all
       ..wasSuccess = isSuccess
@@ -286,7 +286,7 @@ abstract class ExitAction extends Action {
   ExitAction(this.exit);
 
   @override
-  String get command => exit.description;
+  String get command => exit.command;
 
   @override
   String toString() => "ExitAction<$command>";

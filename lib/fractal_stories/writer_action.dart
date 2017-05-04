@@ -1,0 +1,93 @@
+/// Use these classes in sources generated from writer's input.
+library stranded.writer_action;
+
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+
+/// An action that takes place in the context of a [RoomRoamingSituation]
+/// (either directly or as an indirect descendant of such situation).
+abstract class RoamingAction extends Action {
+  RoomRoamingSituation getRoomRoaming(WorldState w) {
+    return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
+  }
+
+  /// Used for things like 'has_keg_of_beer'. Things that can't be read
+  /// from ActionRecords (because they may live
+  ///
+  @Deprecated(
+      'define values on WorldState instead, maybe create a Built value type') // TODO
+  void setFlag(String flag) {}
+
+  bool getFlag(String flag) {}
+
+  void movePlayer(WorldState w, String locationName) {
+    getRoomRoaming(w).moveActor(w, getPlayer(w), locationName);
+  }
+
+  Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
+
+//  void giveGold(WorldState w, int amount) {
+//    w.updateActorById(getPlayer(w).id, (b) => b..);
+//  }
+}
+
+typedef String ApplyFunction(Actor a, WorldState w, Storyline s,
+    void movePlayer(WorldState w, String locationName));
+
+/// This is a simple actions that, once taken, always succeed.
+///
+/// It is meant to be used for classic 'CYOA-style' options. Anything more
+/// involved (needing a target, a non-1.0 success chance, rerollability,
+/// variable applicability) will need to use another class or extend
+/// [Action].
+class SimpleAction extends RoamingAction {
+  final ApplyFunction success;
+
+  SimpleAction(this.name, this.command, this.success, this.helpMessage);
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError("SimpleAction always succeeds");
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    return success(a, w, s, movePlayer);
+  }
+
+  @override
+  final String command;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    throw new StateError("SimpleAction shouldn't have to provide roll reason");
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  final String helpMessage;
+
+  @override
+  bool get isAggressive => false;
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    return true;
+  }
+
+  @override
+  final String name;
+
+  @override
+  Resource get rerollResource => throw new StateError("Not rerollable");
+
+  @override
+  bool get rerollable => false;
+}

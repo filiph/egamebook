@@ -1,17 +1,27 @@
-import 'package:edgehead/fractal_stories/action.dart' show Action;
+library writers_input;
+
+import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
 import 'package:edgehead/fractal_stories/actor.dart' show Actor;
+import 'package:built_value/built_value.dart' show Built;
+import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
+import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
 import 'package:edgehead/fractal_stories/room.dart' show Room;
+import 'package:edgehead/fractal_stories/writer_action.dart' show SimpleAction;
+import 'package:edgehead/fractal_stories/situation.dart' show Situation;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart'
     show Storyline;
 import 'package:edgehead/fractal_stories/world.dart' show WorldState;
+import 'package:built_value/built_value.dart';
+import 'package:edgehead/writers_input_helpers.dart';
+part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
 Room entranceToBloodrock = new Room(
-    'entranceToBloodrock',
+    'entrance_to_bloodrock',
     '''You emerge into blinding sunlight. You moan and cover your eyes as the world spins around you and your ears ring like glass chimes. 
 Briana steadies you as sway on your feet. “Now is absolutely the worst time to faint.”
 “I’m fine,” you mutter. “It’s just…the sun…been so long…”
@@ -26,13 +36,13 @@ But Briana points you to the edge of a nearby cliff. You peer over the edge and 
     null,
     null,
     <Exit>[
-      new Exit('mountainsidePath',
+      new Exit('mountainside_path', 'Climb down the cliff',
           'You decide to risk the mountainside. With a deep breath, you swing your leg over the edge, find a foothold, and lower yourself down.'),
-      new Exit('mountainPassGate',
+      new Exit('mountain_pass_gate', 'Use the path',
           'You steel yourself and trudge down the mountain pass.')
     ]);
 Room mountainPass = new Room(
-    'mountainPass',
+    'mountain_pass',
     '''The Bloodrock Pass winds down the slope of mountain. Though the weather-beaten path looks well-traveled, you thankfully come across no patrols at this time. 
 
 
@@ -44,9 +54,12 @@ A few miles further down and you will reach Fort Ironcast.''',
     'The Bloodrock pass flows snakelike down the mountain.',
     null,
     null,
-    <Exit>[new Exit('ironcastRoad', 'You continue towards the fort.')]);
+    <Exit>[
+      new Exit('ironcast_road', 'Go to Fort Ironcast',
+          'You continue towards the fort.')
+    ]);
 Room mountainPassGate = new Room(
-    'mountainPassGate',
+    'mountain_pass_gate',
     '''The pass slopes down a short way before bending to the left. You inch forward and peer around the corner. Several feet away, a stone gate looms over the pass, flanked on both sides with thick walls too high to climb. An iron gate bearing the insignia of the many-eyed octopus lies between you and freedom. 
 
 
@@ -64,38 +77,39 @@ Briana seems to sense what you’re thinking. “A direct attack sounds risky. I
     null,
     null,
     <Exit>[
-      new Exit('mountainPassGuardPost',
+      new Exit('mountain_pass_guard_post', 'Go to the gate',
           'You unsheathe (DOLLAR_SIGN)weapon and start towards the guards.')
     ]);
 Room mountainPassGuardPost = new Room(
-    'mountainPassGuardPost',
+    'mountain_pass_guard_post',
     '''The orcish guards see you approaching and raise their weapons. One of them smirks.
 
 
 “We’re lucky, Ruglag!” he says in a rumbling voice. “Today we kill human.”''',
     'The stone gate looms before you.',
-    (WorldState w) => const <Actor>[],
+    mountainPassGuardPostMonsters,
     null,
     <Exit>[
-      new Exit('mountainPass',
-          'You release the winch holding the gate closed. The gate swing ponderously outward, just enough for you and Briana to squeeze through to freedom.')
+      new Exit('mountain_pass', 'Go through the gate',
+          'You release the winch holding the gate closed. The gate swings ponderously outward, just enough for you and Briana to squeeze through to freedom.')
     ]);
 
-class SneakOntoCart extends Action {
+class SneakOntoCart extends RoamingAction {
   @override
   final String command = 'Sneak onto the back of the cart';
 
   @override
-  final String name = 'SneakOntoCart';
+  final String name = 'sneak_onto_cart';
 
   static final SneakOntoCart singleton = new SneakOntoCart();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    '/* PLEASE IMPLEMENT PREREQUISITE: none */';
-    assert(DEV_MODE || false);
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'mountainPassGate';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'mountain_pass_gate') {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -103,12 +117,12 @@ class SneakOntoCart extends Action {
     s.add(
         '''You squeeze through the burlap sacks and hide under some rags. The orcs conclude their negotiations as the driver hurls a bag of turnips to a guard. The gates split open to the rattle of chains and the ominous creak of metal hinges. The ox cart lurches forward into the mountain pass.
 In the cart you find a small keg of beer. You decide it is worth taking.''');
-    '''/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)enter_mountain_pass=true
-(DOLLAR_SIGN)hidden_cart = true
-(DOLLAR_SIGN)location = (DOLLAR_SIGN)mountain_pass
-(DOLLAR_SIGN)keg_of_beer */''';
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)hidden_cart = true */';
     assert(DEV_MODE || false);
-    return '$a successfully performs SneakOntoCart';
+    movePlayer(w, "mountain_pass");
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)keg_of_beer */';
+    assert(DEV_MODE || false);
+    return '${a.name} successfully performs SneakOntoCart';
   }
 
   @override
@@ -140,21 +154,25 @@ In the cart you find a small keg of beer. You decide it is worth taking.''');
   bool get isAggressive => false;
 }
 
-class TakeOutGateGuards extends Action {
+class TakeOutGateGuards extends RoamingAction {
   @override
   final String command = 'Stealthily take out some of the gate guards';
 
   @override
-  final String name = 'TakeOutGateGuards';
+  final String name = 'take_out_gate_guards';
 
   static final TakeOutGateGuards singleton = new TakeOutGateGuards();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    '/* PLEASE IMPLEMENT PREREQUISITE: (DOLLAR_SIGN)take_out_gate_guards never used */';
-    assert(DEV_MODE || false);
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'mountainPassGate';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'mountain_pass_gate') {
+      return false;
+    }
+    if ((w.actionNeverUsed(this.name)) != true) {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -167,10 +185,11 @@ You and Briana successfully make it to the other side of the rock. With a viciou
 
 
 Once done, you sneak back away from the gate.''');
-    '''/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold
-(DOLLAR_SIGN)orcish_shield */''';
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold */';
     assert(DEV_MODE || false);
-    return '$a successfully performs TakeOutGateGuards';
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)orcish_shield */';
+    assert(DEV_MODE || false);
+    return '${a.name} successfully performs TakeOutGateGuards';
   }
 
   @override
@@ -180,7 +199,8 @@ Once done, you sneak back away from the gate.''');
 
 
 You and Briana successfully make it to the other side of that rock. As luck would have it, though, the two orcs decide to look around at that very moment. You dive behind the rock and hope they didn’t see you.''');
-    return '$a fails to perform TakeOutGateGuards';
+    w.pushSituation(new TakeOutGateGuardsRescueSituation.initialized());
+    return '${a.name} fails to perform TakeOutGateGuards';
   }
 
   @override
@@ -207,8 +227,83 @@ You and Briana successfully make it to the other side of that rock. As luck woul
   bool get isAggressive => false;
 }
 
+abstract class TakeOutGateGuardsRescueSituation extends Situation
+    implements
+        Built<TakeOutGateGuardsRescueSituation,
+            TakeOutGateGuardsRescueSituationBuilder> {
+  factory TakeOutGateGuardsRescueSituation(
+          [updates(TakeOutGateGuardsRescueSituationBuilder b)]) =
+      _$TakeOutGateGuardsRescueSituation;
+
+  factory TakeOutGateGuardsRescueSituation.initialized() {
+    return new TakeOutGateGuardsRescueSituation((b) {
+      b.id = getRandomId();
+      b.time = 0;
+      return b;
+    });
+  }
+
+  TakeOutGateGuardsRescueSituation._();
+
+  @override
+  List<RoamingAction> get actions => [
+        new SimpleAction('take_out_gate_guards_rescue', 'Take the guards out',
+            (a, w, s, movePlayer) {
+          s.add(
+              '''Suspicious, the orcs come close to investigate the disturbance. You let one pass behind the rock, then grab the other by the throat and into a choke hold. Briana takes the other one out silently with a knife in the back. You drag them to the other side of the rock, out of sight.
+
+
+You find 10 gold coins in a pouch attached to one of the orcs’ belt. You also take an orcish shield. Then, you sneak back away from the gate.''');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: lose 1 luck */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)orcish_shield */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'TakeOutGateGuardsRescueSituation resolved with rescue/continuation (Take the guards out)';
+        }, 'You decide to finish the job, however improbable it seems that you’ll succeed.'),
+        new SimpleAction(
+            'take_out_gate_guards_continuation_of_failure', 'MISSING',
+            (a, w, s, movePlayer) {
+          s.add(
+              'Seeing that the window of opportunity has passed, you sneak away from the rock.');
+          w.popSituation();
+          return 'TakeOutGateGuardsRescueSituation resolved with rescue/continuation (MISSING)';
+        }, 'It’s too risky.')
+      ];
+
+  @override
+  int get id;
+
+  @override
+  int get time;
+
+  @override
+  String get name => 'take_out_gate_guards';
+
+  @override
+  Situation elapseTime() => rebuild((b) {
+        b.time++;
+        return b;
+      });
+
+  @override
+  Actor getActorAtTime(int time, WorldState w) {
+    if (time != 0) {
+      return null;
+    }
+    return w.actors.singleWhere((a) => a.isPlayer);
+  }
+
+  @override
+  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState w) {
+    return [actors.singleWhere((a) => a.isPlayer)];
+  }
+}
+
 Room mountainsideBase = new Room(
-    'mountainsideBase',
+    'mountainside_base',
     '''After hours of climbing with several stops on the way, you make it all the way down to the base of the mountain. Thankfully, there are no wandering orc patrols here or any other dangers, so you decide to camp behind some rocks and rest for a few hours. Briana takes the watch.
 
 
@@ -220,11 +315,11 @@ You give up after an hour’s work of inspection and leave it alone for now. For
     null,
     null,
     <Exit>[
-      new Exit('ironcastRoad',
+      new Exit('ironcast_road', 'Go to Fort Ironcast',
           'The Fort awaits, so you press on to only road to and from Mt. Bloodrock.')
     ]);
 Room mountainsidePath = new Room(
-    'mountainsidePath',
+    'mountainside_path',
     '''You and Briana tie yourselves together with some rope. Then, with a deep breath you swing yourself over the side and gently find a toehold with your foot. You lower yourself to the next. And the next. 
 
 
@@ -236,23 +331,26 @@ Over the next agonizing hour, you inch your way down the mountainside. You keep 
     null,
     null,
     <Exit>[
-      new Exit(
-          'wingedSerpentNest', 'You find a ledge you might rest on for a bit.')
+      new Exit('winged_serpent_nest', 'Continue down',
+          'You find a ledge you might rest on for a bit.')
     ]);
 
-class ThreatenWingedSerpent extends Action {
+class ThreatenWingedSerpent extends RoamingAction {
   @override
   final String command = 'scare off the serpent';
 
   @override
-  final String name = 'ThreatenWingedSerpent';
+  final String name = 'threaten_winged_serpent';
 
   static final ThreatenWingedSerpent singleton = new ThreatenWingedSerpent();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'wingedSerpentNest';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'winged_serpent_nest') {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -261,14 +359,15 @@ class ThreatenWingedSerpent extends Action {
         'Intimidated by your weapon, the winged serpent abandons its nest and flees to the mountaintop.');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
     assert(DEV_MODE || false);
-    return '$a successfully performs ThreatenWingedSerpent';
+    return '${a.name} successfully performs ThreatenWingedSerpent';
   }
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'The serpent does not even look at your sword as you swing it wildly. Its reptilian eyes glitter as it opens its jaws wide.');
-    return '$a fails to perform ThreatenWingedSerpent';
+    w.pushSituation(new ThreatenWingedSerpentRescueSituation.initialized());
+    return '${a.name} fails to perform ThreatenWingedSerpent';
   }
 
   @override
@@ -295,21 +394,96 @@ class ThreatenWingedSerpent extends Action {
   bool get isAggressive => false;
 }
 
-class SootheWingedSerpent extends Action {
+abstract class ThreatenWingedSerpentRescueSituation extends Situation
+    implements
+        Built<ThreatenWingedSerpentRescueSituation,
+            ThreatenWingedSerpentRescueSituationBuilder> {
+  factory ThreatenWingedSerpentRescueSituation(
+          [updates(ThreatenWingedSerpentRescueSituationBuilder b)]) =
+      _$ThreatenWingedSerpentRescueSituation;
+
+  factory ThreatenWingedSerpentRescueSituation.initialized() {
+    return new ThreatenWingedSerpentRescueSituation((b) {
+      b.id = getRandomId();
+      b.time = 0;
+      return b;
+    });
+  }
+
+  ThreatenWingedSerpentRescueSituation._();
+
+  @override
+  List<RoamingAction> get actions => [
+        new SimpleAction('threaten_winged_serpent_rescue', 'get Briana’s help',
+            (a, w, s, movePlayer) {
+          s.add(
+              'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
+        }, 'Maybe your companion has an answer.'),
+        new SimpleAction('threaten_winged_serpent_continuation_of_failure',
+            'face the winged serpent head on.', (a, w, s, movePlayer) {
+          s.add('''You slash at the serpent’s head as it moves in to strike you!
+But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
+END''');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+        }, 'You will attack the creature straight on.')
+      ];
+
+  @override
+  int get id;
+
+  @override
+  int get time;
+
+  @override
+  String get name => 'threaten_winged_serpent';
+
+  @override
+  Situation elapseTime() => rebuild((b) {
+        b.time++;
+        return b;
+      });
+
+  @override
+  Actor getActorAtTime(int time, WorldState w) {
+    if (time != 0) {
+      return null;
+    }
+    return w.actors.singleWhere((a) => a.isPlayer);
+  }
+
+  @override
+  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState w) {
+    return [actors.singleWhere((a) => a.isPlayer)];
+  }
+}
+
+class SootheWingedSerpent extends RoamingAction {
   @override
   final String command = 'soothe the serpent';
 
   @override
-  final String name = 'SootheWingedSerpent';
+  final String name = 'soothe_winged_serpent';
 
   static final SootheWingedSerpent singleton = new SootheWingedSerpent();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'winged_serpent_nest') {
+      return false;
+    }
     '/* PLEASE IMPLEMENT PREREQUISITE: player has (DOLLAR_SIGN)animal_kinship */';
     assert(DEV_MODE || false);
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'wingedSerpentNest';
+    return true;
   }
 
   @override
@@ -318,14 +492,15 @@ class SootheWingedSerpent extends Action {
         'Your sibilant words reach the winged serpent’s ears. It coils in the air for a while longer, then whips towards its nest to clutch possessively at its eggs. You decide it’s time to move on.');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
     assert(DEV_MODE || false);
-    return '$a successfully performs SootheWingedSerpent';
+    return '${a.name} successfully performs SootheWingedSerpent';
   }
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'The serpent sways at your hissing, but is otherwise unimpressed as it opens its jaws menacingly.');
-    return '$a fails to perform SootheWingedSerpent';
+    w.pushSituation(new SootheWingedSerpentRescueSituation.initialized());
+    return '${a.name} fails to perform SootheWingedSerpent';
   }
 
   @override
@@ -352,22 +527,95 @@ class SootheWingedSerpent extends Action {
   bool get isAggressive => false;
 }
 
-class ThreatenWingedSerpentEggs extends Action {
+abstract class SootheWingedSerpentRescueSituation extends Situation
+    implements
+        Built<SootheWingedSerpentRescueSituation,
+            SootheWingedSerpentRescueSituationBuilder> {
+  factory SootheWingedSerpentRescueSituation(
+          [updates(SootheWingedSerpentRescueSituationBuilder b)]) =
+      _$SootheWingedSerpentRescueSituation;
+
+  factory SootheWingedSerpentRescueSituation.initialized() {
+    return new SootheWingedSerpentRescueSituation((b) {
+      b.id = getRandomId();
+      b.time = 0;
+      return b;
+    });
+  }
+
+  SootheWingedSerpentRescueSituation._();
+
+  @override
+  List<RoamingAction> get actions => [
+        new SimpleAction('soothe_winged_serpent_rescue', 'get Briana’s help',
+            (a, w, s, movePlayer) {
+          s.add(
+              'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
+        }, 'Maybe your companion has an answer.'),
+        new SimpleAction('soothe_winged_serpent_continuation_of_failure',
+            'face the winged serpent head on.', (a, w, s, movePlayer) {
+          s.add('''You slash at the serpent’s head as it moves in to strike you!
+But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
+END''');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+        }, 'You will attack the creature straight on.')
+      ];
+
+  @override
+  int get id;
+
+  @override
+  int get time;
+
+  @override
+  String get name => 'soothe_winged_serpent';
+
+  @override
+  Situation elapseTime() => rebuild((b) {
+        b.time++;
+        return b;
+      });
+
+  @override
+  Actor getActorAtTime(int time, WorldState w) {
+    if (time != 0) {
+      return null;
+    }
+    return w.actors.singleWhere((a) => a.isPlayer);
+  }
+
+  @override
+  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState w) {
+    return [actors.singleWhere((a) => a.isPlayer)];
+  }
+}
+
+class ThreatenWingedSerpentEggs extends RoamingAction {
   @override
   final String command = 'threaten the serpent’s eggs';
 
   @override
-  final String name = 'ThreatenWingedSerpentEggs';
+  final String name = 'threaten_winged_serpent_eggs';
 
   static final ThreatenWingedSerpentEggs singleton =
       new ThreatenWingedSerpentEggs();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    '/* PLEASE IMPLEMENT PREREQUISITE: None */';
-    assert(DEV_MODE || false);
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'wingedSerpentNest';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'winged_serpent_nest') {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -386,10 +634,11 @@ You grin at it as you juggle the egg from one hand to the other. With one smooth
 
 
 Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”''');
-    '''/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true
-location = (DOLLAR_SIGN)mountainside_base */''';
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
     assert(DEV_MODE || false);
-    return '$a successfully performs ThreatenWingedSerpentEggs';
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
+    assert(DEV_MODE || false);
+    return '${a.name} successfully performs ThreatenWingedSerpentEggs';
   }
 
   @override
@@ -420,8 +669,83 @@ location = (DOLLAR_SIGN)mountainside_base */''';
   bool get isAggressive => false;
 }
 
+abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
+    implements
+        Built<ThreatenWingedSerpentEggsRescueSituation,
+            ThreatenWingedSerpentEggsRescueSituationBuilder> {
+  factory ThreatenWingedSerpentEggsRescueSituation(
+          [updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)]) =
+      _$ThreatenWingedSerpentEggsRescueSituation;
+
+  factory ThreatenWingedSerpentEggsRescueSituation.initialized() {
+    return new ThreatenWingedSerpentEggsRescueSituation((b) {
+      b.id = getRandomId();
+      b.time = 0;
+      return b;
+    });
+  }
+
+  ThreatenWingedSerpentEggsRescueSituation._();
+
+  @override
+  List<RoamingAction> get actions => [
+        new SimpleAction(
+            'threaten_winged_serpent_eggs_rescue', 'get Briana’s help',
+            (a, w, s, movePlayer) {
+          s.add(
+              'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
+          assert(DEV_MODE || false);
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (get Briana’s help)';
+        }, 'Maybe your companion has an answer.'),
+        new SimpleAction('threaten_winged_serpent_eggs_continuation_of_failure',
+            'face the winged serpent head on.', (a, w, s, movePlayer) {
+          s.add('''You slash at the serpent’s head as it moves in to strike you!
+But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
+END''');
+          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
+          assert(DEV_MODE || false);
+          w.popSituation();
+          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+        }, 'You will attack the creature straight on.')
+      ];
+
+  @override
+  int get id;
+
+  @override
+  int get time;
+
+  @override
+  String get name => 'threaten_winged_serpent_eggs';
+
+  @override
+  Situation elapseTime() => rebuild((b) {
+        b.time++;
+        return b;
+      });
+
+  @override
+  Actor getActorAtTime(int time, WorldState w) {
+    if (time != 0) {
+      return null;
+    }
+    return w.actors.singleWhere((a) => a.isPlayer);
+  }
+
+  @override
+  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState w) {
+    return [actors.singleWhere((a) => a.isPlayer)];
+  }
+}
+
 Room wingedSerpentNest = new Room(
-    'wingedSerpentNest',
+    'winged_serpent_nest',
     '''After an hour, you find yourself at the limit of your endurance. Thankfully, you find a narrow ledge just a few feet below you. You lower yourself onto the edge and sit, leaning gratefully against the rock face. 
 
 
@@ -451,11 +775,11 @@ You must defend yourselves.''',
     null,
     null,
     <Exit>[
-      new Exit('__END_OF_ROAM__',
-          'You continue your descent to level ground. Thankfully, the end is in sight. (UNIMPLEMENTED)')
+      new Exit('__END_OF_ROAM__', 'Continue down (UNIMPLEMENTED)',
+          'You continue your descent to level ground. Thankfully, the end is in sight.')
     ]);
 Room ironcastRoad = new Room(
-    'ironcastRoad',
+    'ironcast_road',
     '''You leave the dust of the Bloodrock mountain pass for the gentler plateaus of the Aelphremede mountain range. The road crawls along the spine of the mountains all the way to Fort Ironcast, which sits on the horizon like a sleeping sentinel.
 
 
@@ -509,23 +833,26 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.''
     null,
     null,
     <Exit>[
-      new Exit('__END_OF_ROAM__',
-          'You make your way closer to the fort. (UNIMPLEMENTED)')
+      new Exit('__END_OF_ROAM__', 'Go to Fort Ironcast (UNIMPLEMENTED)',
+          'You make your way closer to the fort.')
     ]);
 
-class HideInGrass extends Action {
+class HideInGrass extends RoamingAction {
   @override
   final String command = 'Take cover in the tall grass';
 
   @override
-  final String name = 'HideInGrass';
+  final String name = 'hide_in_grass';
 
   static final HideInGrass singleton = new HideInGrass();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'ironcastRoad';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'ironcast_road') {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -534,7 +861,7 @@ class HideInGrass extends Action {
         'You sink to your knees below the grass and hold your breath. The orcs pass close, but given their proximity to Fort Ironcast don’t seem eager to linger. They hurry onwards back to the mountain pass. When they are specks in the distance, you stand up and continue on.');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)ironcast_road_clear = true */';
     assert(DEV_MODE || false);
-    return '$a successfully performs HideInGrass';
+    return '${a.name} successfully performs HideInGrass';
   }
 
   @override
@@ -566,19 +893,22 @@ class HideInGrass extends Action {
   bool get isAggressive => false;
 }
 
-class StandAndFight extends Action {
+class StandAndFight extends RoamingAction {
   @override
   final String command = 'Stand and fight';
 
   @override
-  final String name = 'StandAndFight';
+  final String name = 'stand_and_fight';
 
   static final StandAndFight singleton = new StandAndFight();
 
   @override
   bool isApplicable(Actor a, WorldState w) {
-    return (w.currentSituation as RoomRoamingSituation).currentRoomName ==
-        'ironcastRoad';
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'ironcast_road') {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -590,7 +920,7 @@ class StandAndFight extends Action {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
         'You raise a war cry and close the gap against the battle-eager orcs. But it soon becomes clear that you are outnumbered and outflanked. The orcs surround you, beat you down, and cast you in chains. You trail blood as you are led up the mountain pass you traversed years ago, once again a slave.');
-    return '$a fails to perform StandAndFight';
+    return '${a.name} fails to perform StandAndFight';
   }
 
   @override
@@ -627,7 +957,7 @@ List<Room> allRooms = <Room>[
   wingedSerpentNest,
   ironcastRoad
 ];
-List<Action> allActions = <Action>[
+List<RoamingAction> allActions = <RoamingAction>[
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,

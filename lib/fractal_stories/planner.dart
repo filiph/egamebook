@@ -290,10 +290,6 @@ class ActorPlanner {
       assert(currentActor != null);
 
       // This actor is the one we originally started planning for.
-      if (current.world.actors.where((a) => a.id == actorId).length != 1) {
-        print(current.world);
-      }
-
       Actor mainActor;
       var mainActorDuplicates =
           current.world.actors.where((a) => a.id == actorId).length;
