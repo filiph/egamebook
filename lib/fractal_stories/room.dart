@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:meta/meta.dart';
 
 /// This is the magic [currentRoomGame] that, when reached, makes
 /// the room roaming situation stop.
@@ -20,8 +21,9 @@ typedef Iterable<Actor> MonsterGenerator(WorldState world);
 ///
 /// Rooms define [Room.exits] that explicitly specify which other Rooms are
 /// connected.
+@immutable
 class Room {
-  BuiltList<Exit> _exits;
+  final BuiltList<Exit> _exits;
 
   final String name;
 
@@ -54,9 +56,8 @@ class Room {
 
   Room(this.name, this.description, this.shortDescription,
       this.monsterGenerator, this.itemGenerator, Iterable<Exit> exits,
-      {this.groundMaterial: "ground"}) {
-    _exits = new ListBuilder<Exit>(exits).build();
-  }
+      {this.groundMaterial: "ground"})
+      : _exits = new ListBuilder<Exit>(exits).build();
 
   BuiltList<Exit> get exits => _exits;
 
@@ -65,4 +66,7 @@ class Room {
 
   @override
   bool operator ==(Object other) => other is Room && other.name == name;
+
+  @override
+  String toString() => "Room<$name>";
 }
