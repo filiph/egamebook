@@ -21,7 +21,7 @@ class SlayMonstersAction extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "Fight";
+  String get command => "";
 
   @override
   String get helpMessage => null;
