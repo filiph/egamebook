@@ -23,13 +23,29 @@ const bool DEV_MODE = true;
 Room entranceToBloodrock = new Room(
     'entrance_to_bloodrock',
     '''You emerge into blinding sunlight. You moan and cover your eyes as the world spins around you and your ears ring like glass chimes. 
+
+
 Briana steadies you as sway on your feet. “Now is absolutely the worst time to faint.”
+
+
 “I’m fine,” you mutter. “It’s just…the sun…been so long…”
+
+
 She guides you forward and you touch the cliff wall. “I don’t mean to rush you, this being your big reunion with fresh air and all, but we can’t stay. Orcs will be coming through here any moment, and we\'re in no shape to face them. Look at us. We should run as far from this cursed mountain as possible."
+
+
 "I\'m going to the Fort and not a step further," you say, blinking tears from your eyes.
+
+
 "Are you crazy?" She looks at you, then at the cave, then in the direction of Fort Ironcast, a few miles down the mountain slope. "You saw what\'s in the mountain. The Fort has no chance of withstanding a force that size. It will fall within a day!"
+
+
 "If the Fort falls, there\'s no place far enough from here to be safe. You know that."
+
+
 Briana frowns. "I don\'t, actually." There\'s an orcish war cry coming from somewhere down the cave. The Orcs are coming out. Briana’s frown deepens to a scowl. "We\'re losing time. We may never even make it to the Fort, and here we are talking about where to go from there. Well, I see two ways out. Which way do you think we should go?” 
+
+
 Blinking hard, you make out your surroundings. Before you lies the winding, beaten path that leads down the mountain. Seems simple enough, but that way inevitably means more orcs.
 But Briana points you to the edge of a nearby cliff. You peer over the edge and study the descent. Without proper gear it’s a difficult climb down, but not too sheer, and likely no resistance. Perhaps you could chance it?''',
     'The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.',
@@ -836,117 +852,6 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.''
       new Exit('__END_OF_ROAM__', 'Go to Fort Ironcast (UNIMPLEMENTED)',
           'You make your way closer to the fort.')
     ]);
-
-class HideInGrass extends RoamingAction {
-  @override
-  final String command = 'Take cover in the tall grass';
-
-  @override
-  final String name = 'hide_in_grass';
-
-  static final HideInGrass singleton = new HideInGrass();
-
-  @override
-  bool isApplicable(Actor a, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'ironcast_road') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add(
-        'You sink to your knees below the grass and hold your breath. The orcs pass close, but given their proximity to Fort Ironcast don’t seem eager to linger. They hurry onwards back to the mountain pass. When they are specks in the distance, you stand up and continue on.');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)ironcast_road_clear = true */';
-    assert(DEV_MODE || false);
-    return '${a.name} successfully performs HideInGrass';
-  }
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'The grass here is tall enough to hide you if you crouch.';
-
-  @override
-  bool get isAggressive => false;
-}
-
-class StandAndFight extends RoamingAction {
-  @override
-  final String command = 'Stand and fight';
-
-  @override
-  final String name = 'stand_and_fight';
-
-  static final StandAndFight singleton = new StandAndFight();
-
-  @override
-  bool isApplicable(Actor a, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'ironcast_road') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    throw new StateError('Success chance is 0%.');
-  }
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(
-        'You raise a war cry and close the gap against the battle-eager orcs. But it soon becomes clear that you are outnumbered and outflanked. The orcs surround you, beat you down, and cast you in chains. You trail blood as you are led up the mountain pass you traversed years ago, once again a slave.');
-    return '${a.name} fails to perform StandAndFight';
-  }
-
-  @override
-  num getSuccessChance(Actor a, WorldState w) {
-    return 0.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'This patrol won’t get in between you and the fort.';
-
-  @override
-  bool get isAggressive => false;
-}
-
 List<Room> allRooms = <Room>[
   entranceToBloodrock,
   mountainPass,
@@ -962,8 +867,6 @@ List<RoamingAction> allActions = <RoamingAction>[
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,
   SootheWingedSerpent.singleton,
-  ThreatenWingedSerpentEggs.singleton,
-  HideInGrass.singleton,
-  StandAndFight.singleton
+  ThreatenWingedSerpentEggs.singleton
 ];
 

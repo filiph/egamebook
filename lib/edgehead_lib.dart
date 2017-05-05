@@ -108,7 +108,7 @@ class EdgeheadGame extends LoopedEvent {
         (_) => [orc, goblin],
         null,
         [
-          new Exit(entranceToBloodrock.name, "Continue",
+          new Exit(entranceToBloodrock.name, "Start running again",
               "You finally arrive to the cave's entrance.")
         ],
         groundMaterial: "{rock|cavern} floor");
