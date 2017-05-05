@@ -17,7 +17,8 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   @override
   final int time;
 
-  factory _$RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =>
+  factory _$RoomRoamingSituation(
+          [void updates(RoomRoamingSituationBuilder b)]) =>
       (new RoomRoamingSituationBuilder()..update(updates)).build();
 
   _$RoomRoamingSituation._(
@@ -31,7 +32,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   }
 
   @override
-  RoomRoamingSituation rebuild(updates(RoomRoamingSituationBuilder b)) =>
+  RoomRoamingSituation rebuild(void updates(RoomRoamingSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -40,6 +41,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! RoomRoamingSituation) return false;
     return currentRoomName == other.currentRoomName &&
         id == other.id &&
@@ -68,7 +70,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
 class RoomRoamingSituationBuilder
     implements Builder<RoomRoamingSituation, RoomRoamingSituationBuilder> {
-  RoomRoamingSituation _$v;
+  _$RoomRoamingSituation _$v;
 
   String _currentRoomName;
   String get currentRoomName => _$this._currentRoomName;
@@ -104,16 +106,16 @@ class RoomRoamingSituationBuilder
   @override
   void replace(RoomRoamingSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$RoomRoamingSituation;
   }
 
   @override
-  void update(updates(RoomRoamingSituationBuilder b)) {
+  void update(void updates(RoomRoamingSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  RoomRoamingSituation build() {
+  _$RoomRoamingSituation build() {
     final result = _$v ??
         new _$RoomRoamingSituation._(
             currentRoomName: currentRoomName,

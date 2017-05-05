@@ -11,7 +11,7 @@ class _$Team extends Team {
   @override
   final int id;
 
-  factory _$Team([updates(TeamBuilder b)]) =>
+  factory _$Team([void updates(TeamBuilder b)]) =>
       (new TeamBuilder()..update(updates)).build();
 
   _$Team._({this.id}) : super._() {
@@ -19,7 +19,7 @@ class _$Team extends Team {
   }
 
   @override
-  Team rebuild(updates(TeamBuilder b)) =>
+  Team rebuild(void updates(TeamBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -27,6 +27,7 @@ class _$Team extends Team {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! Team) return false;
     return id == other.id;
   }
@@ -45,7 +46,7 @@ class _$Team extends Team {
 }
 
 class TeamBuilder implements Builder<Team, TeamBuilder> {
-  Team _$v;
+  _$Team _$v;
 
   int _id;
   int get id => _$this._id;
@@ -64,16 +65,16 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
   @override
   void replace(Team other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$Team;
   }
 
   @override
-  void update(updates(TeamBuilder b)) {
+  void update(void updates(TeamBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  Team build() {
+  _$Team build() {
     final result = _$v ?? new _$Team._(id: id);
     replace(result);
     return result;

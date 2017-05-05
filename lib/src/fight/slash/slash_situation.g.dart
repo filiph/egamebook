@@ -17,7 +17,7 @@ class _$SlashSituation extends SlashSituation {
   @override
   final int time;
 
-  factory _$SlashSituation([updates(SlashSituationBuilder b)]) =>
+  factory _$SlashSituation([void updates(SlashSituationBuilder b)]) =>
       (new SlashSituationBuilder()..update(updates)).build();
 
   _$SlashSituation._({this.attacker, this.id, this.target, this.time})
@@ -29,7 +29,7 @@ class _$SlashSituation extends SlashSituation {
   }
 
   @override
-  SlashSituation rebuild(updates(SlashSituationBuilder b)) =>
+  SlashSituation rebuild(void updates(SlashSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -38,6 +38,7 @@ class _$SlashSituation extends SlashSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! SlashSituation) return false;
     return attacker == other.attacker &&
         id == other.id &&
@@ -65,7 +66,7 @@ class _$SlashSituation extends SlashSituation {
 
 class SlashSituationBuilder
     implements Builder<SlashSituation, SlashSituationBuilder> {
-  SlashSituation _$v;
+  _$SlashSituation _$v;
 
   int _attacker;
   int get attacker => _$this._attacker;
@@ -99,16 +100,16 @@ class SlashSituationBuilder
   @override
   void replace(SlashSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$SlashSituation;
   }
 
   @override
-  void update(updates(SlashSituationBuilder b)) {
+  void update(void updates(SlashSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  SlashSituation build() {
+  _$SlashSituation build() {
     final result = _$v ??
         new _$SlashSituation._(
             attacker: attacker, id: id, target: target, time: time);

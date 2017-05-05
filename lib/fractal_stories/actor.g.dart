@@ -49,8 +49,8 @@ class _$Actor extends Actor {
   @override
   final Team team;
 
-  factory _$Actor([updates(ActorBuilder b)]) =>
-      (new ActorBuilder()..update(updates)).build();
+  factory _$Actor([void updates(ActorBuilder b)]) =>
+      (new ActorBuilder()..update(updates)).build() as _$Actor;
 
   _$Actor._(
       {this.alreadyMentioned,
@@ -94,7 +94,7 @@ class _$Actor extends Actor {
   }
 
   @override
-  Actor rebuild(updates(ActorBuilder b)) =>
+  Actor rebuild(void updates(ActorBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -102,6 +102,7 @@ class _$Actor extends Actor {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! Actor) return false;
     return alreadyMentioned == other.alreadyMentioned &&
         categories == other.categories &&
@@ -204,7 +205,7 @@ class _$Actor extends Actor {
 }
 
 class _$ActorBuilder extends ActorBuilder {
-  Actor _$v;
+  _$Actor _$v;
 
   @override
   bool get alreadyMentioned {
@@ -478,16 +479,16 @@ class _$ActorBuilder extends ActorBuilder {
   @override
   void replace(Actor other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$Actor;
   }
 
   @override
-  void update(updates(ActorBuilder b)) {
+  void update(void updates(ActorBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  Actor build() {
+  _$Actor build() {
     final result = _$v ??
         new _$Actor._(
             alreadyMentioned: alreadyMentioned,

@@ -18,7 +18,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   final int time;
 
   factory _$OffBalanceOpportunitySituation(
-          [updates(OffBalanceOpportunitySituationBuilder b)]) =>
+          [void updates(OffBalanceOpportunitySituationBuilder b)]) =>
       (new OffBalanceOpportunitySituationBuilder()..update(updates)).build();
 
   _$OffBalanceOpportunitySituation._(
@@ -31,7 +31,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
 
   @override
   OffBalanceOpportunitySituation rebuild(
-          updates(OffBalanceOpportunitySituationBuilder b)) =>
+          void updates(OffBalanceOpportunitySituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -40,6 +40,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! OffBalanceOpportunitySituation) return false;
     return actorId == other.actorId &&
         culpritId == other.culpritId &&
@@ -69,7 +70,7 @@ class OffBalanceOpportunitySituationBuilder
     implements
         Builder<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
-  OffBalanceOpportunitySituation _$v;
+  _$OffBalanceOpportunitySituation _$v;
 
   int _actorId;
   int get actorId => _$this._actorId;
@@ -103,16 +104,16 @@ class OffBalanceOpportunitySituationBuilder
   @override
   void replace(OffBalanceOpportunitySituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$OffBalanceOpportunitySituation;
   }
 
   @override
-  void update(updates(OffBalanceOpportunitySituationBuilder b)) {
+  void update(void updates(OffBalanceOpportunitySituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  OffBalanceOpportunitySituation build() {
+  _$OffBalanceOpportunitySituation build() {
     final result = _$v ??
         new _$OffBalanceOpportunitySituation._(
             actorId: actorId, culpritId: culpritId, id: id, time: time);

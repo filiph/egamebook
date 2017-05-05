@@ -15,7 +15,7 @@ class _$TakeOutGateGuardsRescueSituation
   final int time;
 
   factory _$TakeOutGateGuardsRescueSituation(
-          [updates(TakeOutGateGuardsRescueSituationBuilder b)]) =>
+          [void updates(TakeOutGateGuardsRescueSituationBuilder b)]) =>
       (new TakeOutGateGuardsRescueSituationBuilder()..update(updates)).build();
 
   _$TakeOutGateGuardsRescueSituation._({this.id, this.time}) : super._() {
@@ -25,7 +25,7 @@ class _$TakeOutGateGuardsRescueSituation
 
   @override
   TakeOutGateGuardsRescueSituation rebuild(
-          updates(TakeOutGateGuardsRescueSituationBuilder b)) =>
+          void updates(TakeOutGateGuardsRescueSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -34,6 +34,7 @@ class _$TakeOutGateGuardsRescueSituation
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! TakeOutGateGuardsRescueSituation) return false;
     return id == other.id && time == other.time;
   }
@@ -56,7 +57,7 @@ class TakeOutGateGuardsRescueSituationBuilder
     implements
         Builder<TakeOutGateGuardsRescueSituation,
             TakeOutGateGuardsRescueSituationBuilder> {
-  TakeOutGateGuardsRescueSituation _$v;
+  _$TakeOutGateGuardsRescueSituation _$v;
 
   int _id;
   int get id => _$this._id;
@@ -80,16 +81,16 @@ class TakeOutGateGuardsRescueSituationBuilder
   @override
   void replace(TakeOutGateGuardsRescueSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$TakeOutGateGuardsRescueSituation;
   }
 
   @override
-  void update(updates(TakeOutGateGuardsRescueSituationBuilder b)) {
+  void update(void updates(TakeOutGateGuardsRescueSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  TakeOutGateGuardsRescueSituation build() {
+  _$TakeOutGateGuardsRescueSituation build() {
     final result =
         _$v ?? new _$TakeOutGateGuardsRescueSituation._(id: id, time: time);
     replace(result);
@@ -110,7 +111,7 @@ class _$ThreatenWingedSerpentRescueSituation
   final int time;
 
   factory _$ThreatenWingedSerpentRescueSituation(
-          [updates(ThreatenWingedSerpentRescueSituationBuilder b)]) =>
+          [void updates(ThreatenWingedSerpentRescueSituationBuilder b)]) =>
       (new ThreatenWingedSerpentRescueSituationBuilder()..update(updates))
           .build();
 
@@ -121,7 +122,7 @@ class _$ThreatenWingedSerpentRescueSituation
 
   @override
   ThreatenWingedSerpentRescueSituation rebuild(
-          updates(ThreatenWingedSerpentRescueSituationBuilder b)) =>
+          void updates(ThreatenWingedSerpentRescueSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -130,6 +131,7 @@ class _$ThreatenWingedSerpentRescueSituation
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! ThreatenWingedSerpentRescueSituation) return false;
     return id == other.id && time == other.time;
   }
@@ -152,7 +154,7 @@ class ThreatenWingedSerpentRescueSituationBuilder
     implements
         Builder<ThreatenWingedSerpentRescueSituation,
             ThreatenWingedSerpentRescueSituationBuilder> {
-  ThreatenWingedSerpentRescueSituation _$v;
+  _$ThreatenWingedSerpentRescueSituation _$v;
 
   int _id;
   int get id => _$this._id;
@@ -176,16 +178,16 @@ class ThreatenWingedSerpentRescueSituationBuilder
   @override
   void replace(ThreatenWingedSerpentRescueSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$ThreatenWingedSerpentRescueSituation;
   }
 
   @override
-  void update(updates(ThreatenWingedSerpentRescueSituationBuilder b)) {
+  void update(void updates(ThreatenWingedSerpentRescueSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  ThreatenWingedSerpentRescueSituation build() {
+  _$ThreatenWingedSerpentRescueSituation build() {
     final result =
         _$v ?? new _$ThreatenWingedSerpentRescueSituation._(id: id, time: time);
     replace(result);
@@ -206,7 +208,7 @@ class _$SootheWingedSerpentRescueSituation
   final int time;
 
   factory _$SootheWingedSerpentRescueSituation(
-          [updates(SootheWingedSerpentRescueSituationBuilder b)]) =>
+          [void updates(SootheWingedSerpentRescueSituationBuilder b)]) =>
       (new SootheWingedSerpentRescueSituationBuilder()..update(updates))
           .build();
 
@@ -217,7 +219,7 @@ class _$SootheWingedSerpentRescueSituation
 
   @override
   SootheWingedSerpentRescueSituation rebuild(
-          updates(SootheWingedSerpentRescueSituationBuilder b)) =>
+          void updates(SootheWingedSerpentRescueSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -226,6 +228,7 @@ class _$SootheWingedSerpentRescueSituation
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! SootheWingedSerpentRescueSituation) return false;
     return id == other.id && time == other.time;
   }
@@ -248,7 +251,7 @@ class SootheWingedSerpentRescueSituationBuilder
     implements
         Builder<SootheWingedSerpentRescueSituation,
             SootheWingedSerpentRescueSituationBuilder> {
-  SootheWingedSerpentRescueSituation _$v;
+  _$SootheWingedSerpentRescueSituation _$v;
 
   int _id;
   int get id => _$this._id;
@@ -272,16 +275,16 @@ class SootheWingedSerpentRescueSituationBuilder
   @override
   void replace(SootheWingedSerpentRescueSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$SootheWingedSerpentRescueSituation;
   }
 
   @override
-  void update(updates(SootheWingedSerpentRescueSituationBuilder b)) {
+  void update(void updates(SootheWingedSerpentRescueSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  SootheWingedSerpentRescueSituation build() {
+  _$SootheWingedSerpentRescueSituation build() {
     final result =
         _$v ?? new _$SootheWingedSerpentRescueSituation._(id: id, time: time);
     replace(result);
@@ -302,7 +305,7 @@ class _$ThreatenWingedSerpentEggsRescueSituation
   final int time;
 
   factory _$ThreatenWingedSerpentEggsRescueSituation(
-          [updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)]) =>
+          [void updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)]) =>
       (new ThreatenWingedSerpentEggsRescueSituationBuilder()..update(updates))
           .build();
 
@@ -314,7 +317,7 @@ class _$ThreatenWingedSerpentEggsRescueSituation
 
   @override
   ThreatenWingedSerpentEggsRescueSituation rebuild(
-          updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) =>
+          void updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -323,6 +326,7 @@ class _$ThreatenWingedSerpentEggsRescueSituation
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! ThreatenWingedSerpentEggsRescueSituation) return false;
     return id == other.id && time == other.time;
   }
@@ -345,7 +349,7 @@ class ThreatenWingedSerpentEggsRescueSituationBuilder
     implements
         Builder<ThreatenWingedSerpentEggsRescueSituation,
             ThreatenWingedSerpentEggsRescueSituationBuilder> {
-  ThreatenWingedSerpentEggsRescueSituation _$v;
+  _$ThreatenWingedSerpentEggsRescueSituation _$v;
 
   int _id;
   int get id => _$this._id;
@@ -369,16 +373,16 @@ class ThreatenWingedSerpentEggsRescueSituationBuilder
   @override
   void replace(ThreatenWingedSerpentEggsRescueSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$ThreatenWingedSerpentEggsRescueSituation;
   }
 
   @override
-  void update(updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) {
+  void update(void updates(ThreatenWingedSerpentEggsRescueSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  ThreatenWingedSerpentEggsRescueSituation build() {
+  _$ThreatenWingedSerpentEggsRescueSituation build() {
     final result = _$v ??
         new _$ThreatenWingedSerpentEggsRescueSituation._(id: id, time: time);
     replace(result);

@@ -18,7 +18,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   final int time;
 
   factory _$CounterAttackSituation(
-          [updates(CounterAttackSituationBuilder b)]) =>
+          [void updates(CounterAttackSituationBuilder b)]) =>
       (new CounterAttackSituationBuilder()..update(updates)).build();
 
   _$CounterAttackSituation._(
@@ -32,7 +32,8 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   }
 
   @override
-  CounterAttackSituation rebuild(updates(CounterAttackSituationBuilder b)) =>
+  CounterAttackSituation rebuild(
+          void updates(CounterAttackSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -41,6 +42,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! CounterAttackSituation) return false;
     return counterAttacker == other.counterAttacker &&
         id == other.id &&
@@ -69,7 +71,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
 class CounterAttackSituationBuilder
     implements Builder<CounterAttackSituation, CounterAttackSituationBuilder> {
-  CounterAttackSituation _$v;
+  _$CounterAttackSituation _$v;
 
   int _counterAttacker;
   int get counterAttacker => _$this._counterAttacker;
@@ -104,16 +106,16 @@ class CounterAttackSituationBuilder
   @override
   void replace(CounterAttackSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$CounterAttackSituation;
   }
 
   @override
-  void update(updates(CounterAttackSituationBuilder b)) {
+  void update(void updates(CounterAttackSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  CounterAttackSituation build() {
+  _$CounterAttackSituation build() {
     final result = _$v ??
         new _$CounterAttackSituation._(
             counterAttacker: counterAttacker,

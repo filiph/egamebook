@@ -23,7 +23,7 @@ class _$FightSituation extends FightSituation {
   @override
   final int time;
 
-  factory _$FightSituation([updates(FightSituationBuilder b)]) =>
+  factory _$FightSituation([void updates(FightSituationBuilder b)]) =>
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
@@ -45,7 +45,7 @@ class _$FightSituation extends FightSituation {
   }
 
   @override
-  FightSituation rebuild(updates(FightSituationBuilder b)) =>
+  FightSituation rebuild(void updates(FightSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -54,6 +54,7 @@ class _$FightSituation extends FightSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! FightSituation) return false;
     return enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
@@ -94,7 +95,7 @@ class _$FightSituation extends FightSituation {
 
 class FightSituationBuilder
     implements Builder<FightSituation, FightSituationBuilder> {
-  FightSituation _$v;
+  _$FightSituation _$v;
 
   ListBuilder<int> _enemyTeamIds;
   ListBuilder<int> get enemyTeamIds =>
@@ -151,16 +152,16 @@ class FightSituationBuilder
   @override
   void replace(FightSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$FightSituation;
   }
 
   @override
-  void update(updates(FightSituationBuilder b)) {
+  void update(void updates(FightSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  FightSituation build() {
+  _$FightSituation build() {
     final result = _$v ??
         new _$FightSituation._(
             enemyTeamIds: enemyTeamIds?.build(),

@@ -29,7 +29,7 @@ class _$ActionRecord extends ActionRecord {
   @override
   final bool wasSuccess;
 
-  factory _$ActionRecord([updates(ActionRecordBuilder b)]) =>
+  factory _$ActionRecord([void updates(ActionRecordBuilder b)]) =>
       (new ActionRecordBuilder()..update(updates)).build();
 
   _$ActionRecord._(
@@ -57,7 +57,7 @@ class _$ActionRecord extends ActionRecord {
   }
 
   @override
-  ActionRecord rebuild(updates(ActionRecordBuilder b)) =>
+  ActionRecord rebuild(void updates(ActionRecordBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -65,6 +65,7 @@ class _$ActionRecord extends ActionRecord {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! ActionRecord) return false;
     return accomplices == other.accomplices &&
         actionName == other.actionName &&
@@ -119,7 +120,7 @@ class _$ActionRecord extends ActionRecord {
 
 class ActionRecordBuilder
     implements Builder<ActionRecord, ActionRecordBuilder> {
-  ActionRecord _$v;
+  _$ActionRecord _$v;
 
   SetBuilder<int> _accomplices;
   SetBuilder<int> get accomplices =>
@@ -186,16 +187,16 @@ class ActionRecordBuilder
   @override
   void replace(ActionRecord other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$ActionRecord;
   }
 
   @override
-  void update(updates(ActionRecordBuilder b)) {
+  void update(void updates(ActionRecordBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  ActionRecord build() {
+  _$ActionRecord build() {
     final result = _$v ??
         new _$ActionRecord._(
             accomplices: accomplices?.build(),

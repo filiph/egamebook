@@ -17,7 +17,7 @@ class _$StrikeDownSituation extends StrikeDownSituation {
   @override
   final int time;
 
-  factory _$StrikeDownSituation([updates(StrikeDownSituationBuilder b)]) =>
+  factory _$StrikeDownSituation([void updates(StrikeDownSituationBuilder b)]) =>
       (new StrikeDownSituationBuilder()..update(updates)).build();
 
   _$StrikeDownSituation._(
@@ -31,7 +31,7 @@ class _$StrikeDownSituation extends StrikeDownSituation {
   }
 
   @override
-  StrikeDownSituation rebuild(updates(StrikeDownSituationBuilder b)) =>
+  StrikeDownSituation rebuild(void updates(StrikeDownSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -40,6 +40,7 @@ class _$StrikeDownSituation extends StrikeDownSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! StrikeDownSituation) return false;
     return attacker == other.attacker &&
         id == other.id &&
@@ -68,7 +69,7 @@ class _$StrikeDownSituation extends StrikeDownSituation {
 
 class StrikeDownSituationBuilder
     implements Builder<StrikeDownSituation, StrikeDownSituationBuilder> {
-  StrikeDownSituation _$v;
+  _$StrikeDownSituation _$v;
 
   int _attacker;
   int get attacker => _$this._attacker;
@@ -103,16 +104,16 @@ class StrikeDownSituationBuilder
   @override
   void replace(StrikeDownSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$StrikeDownSituation;
   }
 
   @override
-  void update(updates(StrikeDownSituationBuilder b)) {
+  void update(void updates(StrikeDownSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  StrikeDownSituation build() {
+  _$StrikeDownSituation build() {
     final result = _$v ??
         new _$StrikeDownSituation._(
             attacker: attacker,

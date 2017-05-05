@@ -20,7 +20,7 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   final int time;
 
   factory _$OnGroundDefenseSituation(
-          [updates(OnGroundDefenseSituationBuilder b)]) =>
+          [void updates(OnGroundDefenseSituationBuilder b)]) =>
       (new OnGroundDefenseSituationBuilder()..update(updates)).build();
 
   _$OnGroundDefenseSituation._(
@@ -41,7 +41,7 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
 
   @override
   OnGroundDefenseSituation rebuild(
-          updates(OnGroundDefenseSituationBuilder b)) =>
+          void updates(OnGroundDefenseSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -50,6 +50,7 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
 
   @override
   bool operator ==(dynamic other) {
+    if (identical(other, this)) return true;
     if (other is! OnGroundDefenseSituation) return false;
     return attacker == other.attacker &&
         id == other.id &&
@@ -83,7 +84,7 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
 class OnGroundDefenseSituationBuilder
     implements
         Builder<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
-  OnGroundDefenseSituation _$v;
+  _$OnGroundDefenseSituation _$v;
 
   int _attacker;
   int get attacker => _$this._attacker;
@@ -124,16 +125,16 @@ class OnGroundDefenseSituationBuilder
   @override
   void replace(OnGroundDefenseSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other;
+    _$v = other as _$OnGroundDefenseSituation;
   }
 
   @override
-  void update(updates(OnGroundDefenseSituationBuilder b)) {
+  void update(void updates(OnGroundDefenseSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  OnGroundDefenseSituation build() {
+  _$OnGroundDefenseSituation build() {
     final result = _$v ??
         new _$OnGroundDefenseSituation._(
             attacker: attacker,
