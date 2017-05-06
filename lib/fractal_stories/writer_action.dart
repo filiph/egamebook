@@ -23,8 +23,8 @@ abstract class RoamingAction extends Action {
 
   bool getFlag(String flag) {}
 
-  void movePlayer(WorldState w, String locationName) {
-    getRoomRoaming(w).moveActor(w, getPlayer(w), locationName);
+  void movePlayer(WorldState w, Storyline s, String locationName) {
+    getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
   }
 
   Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
@@ -34,8 +34,14 @@ abstract class RoamingAction extends Action {
 //  }
 }
 
-typedef String ApplyFunction(Actor a, WorldState w, Storyline s,
-    void movePlayer(WorldState w, String locationName));
+/// This closure signature is here in order to allow [SimpleAction] to be
+/// defined without needing to implement the class.
+///
+/// For example, apply function needs access to the class's
+/// [SimpleAction.movePlayer] method, but a closure won't be able to access it
+/// without the [self] parameter.
+typedef String SimpleActionApplyFunction(
+    Actor a, WorldState w, Storyline s, SimpleAction self);
 
 /// This is a simple actions that, once taken, always succeed.
 ///
@@ -44,7 +50,7 @@ typedef String ApplyFunction(Actor a, WorldState w, Storyline s,
 /// variable applicability) will need to use another class or extend
 /// [Action].
 class SimpleAction extends RoamingAction {
-  final ApplyFunction success;
+  final SimpleActionApplyFunction success;
 
   SimpleAction(this.name, this.command, this.success, this.helpMessage);
 
@@ -55,7 +61,7 @@ class SimpleAction extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    return success(a, w, s, movePlayer);
+    return success(a, w, s, this);
   }
 
   @override

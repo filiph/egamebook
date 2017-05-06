@@ -54,7 +54,7 @@ final roomRoamingSituationType = new TypeBuilder('RoomRoamingSituation',
 final roomType = new TypeBuilder("Room",
     importFrom: "package:edgehead/fractal_stories/room.dart");
 
-final simpleActionApplyFunction = new TypeBuilder("ApplyFunction",
+final simpleActionApplyFunction = new TypeBuilder("SimpleActionApplyFunction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
 
 final simpleActionType = new TypeBuilder("SimpleAction",

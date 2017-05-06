@@ -62,8 +62,11 @@ Room mountainPass = new Room(
     '''The Bloodrock Pass winds down the slope of mountain. Though the weather-beaten path looks well-traveled, you thankfully come across no patrols at this time. 
 
 
-If hidden in cart=true
+[[IF (w.actionHasBeenPerformedSuccessfully("sneak_onto_cart"))]]
 You and Briana stay quiet and still in your hiding spot. An hour later, you peek out of the cart and see that you have reached level ground. You sneak off the cart and hide behind some rocks as it drives away.
+[[ELSE]]
+You run down the mountain side as fast as your legs can carry you. When you pause, gulping for air, you find you have nearly reached the bottom.  
+[[ENDIF]]
 
 
 A few miles further down and you will reach Fort Ironcast.''',
@@ -135,7 +138,7 @@ class SneakOntoCart extends RoamingAction {
 In the cart you find a small keg of beer. You decide it is worth taking.''');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)hidden_cart = true */';
     assert(DEV_MODE || false);
-    movePlayer(w, "mountain_pass");
+    movePlayer(w, s, "mountain_pass");
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)keg_of_beer */';
     assert(DEV_MODE || false);
     return '${a.name} successfully performs SneakOntoCart';
@@ -264,7 +267,7 @@ abstract class TakeOutGateGuardsRescueSituation extends Situation
   @override
   List<RoamingAction> get actions => [
         new SimpleAction('take_out_gate_guards_rescue', 'Take the guards out',
-            (a, w, s, movePlayer) {
+            (a, w, s, self) {
           s.add(
               '''Suspicious, the orcs come close to investigate the disturbance. You let one pass behind the rock, then grab the other by the throat and into a choke hold. Briana takes the other one out silently with a knife in the back. You drag them to the other side of the rock, out of sight.
 
@@ -281,7 +284,7 @@ You find 10 gold coins in a pouch attached to one of the orcs’ belt. You also 
         }, 'You decide to finish the job, however improbable it seems that you’ll succeed.'),
         new SimpleAction(
             'take_out_gate_guards_continuation_of_failure', 'MISSING',
-            (a, w, s, movePlayer) {
+            (a, w, s, self) {
           s.add(
               'Seeing that the window of opportunity has passed, you sneak away from the rock.');
           w.popSituation();
@@ -431,7 +434,7 @@ abstract class ThreatenWingedSerpentRescueSituation extends Situation
   @override
   List<RoamingAction> get actions => [
         new SimpleAction('threaten_winged_serpent_rescue', 'get Briana’s help',
-            (a, w, s, movePlayer) {
+            (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
@@ -442,7 +445,7 @@ abstract class ThreatenWingedSerpentRescueSituation extends Situation
           return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('threaten_winged_serpent_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, movePlayer) {
+            'face the winged serpent head on.', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
 But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
 END''');
@@ -564,7 +567,7 @@ abstract class SootheWingedSerpentRescueSituation extends Situation
   @override
   List<RoamingAction> get actions => [
         new SimpleAction('soothe_winged_serpent_rescue', 'get Briana’s help',
-            (a, w, s, movePlayer) {
+            (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
@@ -575,7 +578,7 @@ abstract class SootheWingedSerpentRescueSituation extends Situation
           return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('soothe_winged_serpent_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, movePlayer) {
+            'face the winged serpent head on.', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
 But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
 END''');
@@ -707,7 +710,7 @@ abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
   List<RoamingAction> get actions => [
         new SimpleAction(
             'threaten_winged_serpent_eggs_rescue', 'get Briana’s help',
-            (a, w, s, movePlayer) {
+            (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
@@ -720,7 +723,7 @@ abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
           return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('threaten_winged_serpent_eggs_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, movePlayer) {
+            'face the winged serpent head on.', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
 But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
 END''');

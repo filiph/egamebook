@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
@@ -76,15 +77,24 @@ abstract class RoomRoamingSituation extends Situation
   }
 
   /// Moves [a] with their party to [destination].
-  void moveActor(WorldState w, Actor a, String destinationRoomName) {
+  ///
+  /// This will also print out the description of the room (or the short version
+  /// as appropriate).
+  void moveActor(
+      WorldState w, Actor a, String destinationRoomName, Storyline s) {
     var room = w.getRoomByName(destinationRoomName);
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(
         room,
-        /* TODO: do not reset monsters when coming back */
+        /* TODO: do not reset monsters when coming back and monsters slain */
         room.monsterGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
+
+    s.addParagraph();
+    // TODO: show short description according to world.actionRecords
+    s.add(room.description, wholeSentence: true);
+    s.addParagraph();
 
     for (var actor in getPartyOf(a, w).toList()) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);

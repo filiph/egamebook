@@ -15,7 +15,7 @@ NewInstanceBuilder generateSimpleAction(String actionName, String command,
     ..addPositional(new ParameterBuilder('a'))
     ..addPositional(new ParameterBuilder('w'))
     ..addPositional(new ParameterBuilder('s'))
-    ..addPositional(new ParameterBuilder('movePlayer'))
+    ..addPositional(new ParameterBuilder('self'))
     ..addStatement(reference('s').property('add').call([literal(description)]));
 
   if (effect != null) {

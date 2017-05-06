@@ -32,16 +32,10 @@ class TakeExitAction extends ExitAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    var room = w.getRoomByName(exit.destinationRoomName);
-
     s.add(exit.description);
 
-    (w.currentSituation as RoomRoamingSituation).moveActor(w, a, room.name);
-
-    s.addParagraph();
-    // TODO: show short description according to world.actionRecords
-    s.add(room.description, wholeSentence: true);
-    s.addParagraph();
+    (w.currentSituation as RoomRoamingSituation)
+        .moveActor(w, a, exit.destinationRoomName, s);
 
     return "${a.name} went through exit to ${exit.destinationRoomName}";
   }
