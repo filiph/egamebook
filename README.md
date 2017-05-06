@@ -2,6 +2,29 @@
 
 A system which automatically creates playable electronic gamebooks from `.egb` files.
 
+The philosophy of egamebook:
+
+1. **Very complex, very procedural books should be possible to build with 
+   egamebook.** This project is less about bringing gamebooks to the computer, 
+   and more about bringing computer games and simulation to the world
+   of the written word.
+2. **No new [DSL](https://en.wikipedia.org/wiki/Domain-specific_language), 
+   please.** Whenever there's any behavior (i.e. scripting) in the book, it
+   will be in Dart. Too many projects fall into the trap of trying to invent
+   their own programming language, and then making something half-baked.
+   In contrast, Dart has proven semantics, parser, a type system, a great set of
+   static analysis tools, etc. You can still have some kind of "higher level 
+   language" in your egamebooks, but that language should always 
+   [sourcegen](https://en.wikipedia.org/wiki/Automatic_programming#Source_code_generation)
+   into valid Dart.
+3. **Embrace textuality.** Too many electronic gamebooks try to beat video games
+   at their own, well, game. They add interactivity, animations, action 
+   sequences, minigames, etc. In contrast, egamebook tries to make it easy to
+   create purely textual games.
+4. **Cross-platform.** You can play egamebooks on any device with a modern
+   browser. In the future, egamebooks might be able to run on iOS and Android
+   natively.
+
 ## Quick Start
 
 Or how to be a published interactive fiction writer in X easy steps!
