@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 
 Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
   var orc = new Actor((b) => b
-    ..id = 1000
+    ..id = 2000
     ..name = "orc"
     ..nameIsProperNoun = false
     ..pronoun = Pronoun.HE
@@ -18,7 +18,7 @@ Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
     ..combineFunction = carelessCombineFunction);
 
   var goblin = new Actor((b) => b
-    ..id = 1001
+    ..id = 2001
     ..name = "goblin"
     ..nameIsProperNoun = false
     ..pronoun = Pronoun.HE
@@ -26,9 +26,9 @@ Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
     ..team = defaultEnemyTeam
     ..combineFunction = carelessCombineFunction);
 
-  if (w.actionNeverUsed("take_out_gate_guards")) {
-    return [orc, goblin];
-  } else {
+  if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards")) {
     return [orc];
+  } else {
+    return [orc, goblin];
   }
 }

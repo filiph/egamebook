@@ -75,7 +75,7 @@ class WorldState {
   ///
   /// To satisfie [actionNamePattern], the [Action.name] must contain the
   /// pattern.
-  bool actionHasBeenPerformed(Pattern actionNamePattern) {
+  bool actionHasBeenPerformedSuccessfully(Pattern actionNamePattern) {
     var records = getActionRecords(actionNamePattern: actionNamePattern,
       wasSuccess: true);
     for (var _ in records) {
@@ -84,6 +84,8 @@ class WorldState {
     return false;
   }
 
+  /// Returns `true` if action satisfying [name] pattern has never been
+  /// used, regardless if it was used successfully or not.
   bool actionNeverUsed(String name) {
     return timeSinceLastActionRecord(actionNamePattern: name) == null;
   }
