@@ -20,9 +20,10 @@ import 'package:edgehead/writers_input_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
-Room entranceToBloodrock = new Room(
-    'entrance_to_bloodrock',
-    '''You emerge into blinding sunlight. You moan and cover your eyes as the world spins around you and your ears ring like glass chimes. 
+Room entranceToBloodrock =
+    new Room('entrance_to_bloodrock', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''You emerge into blinding sunlight. You moan and cover your eyes as the world spins around you and your ears ring like glass chimes. 
 
 
 Briana steadies you as sway on your feet. “Now is absolutely the worst time to faint.”
@@ -48,18 +49,21 @@ Briana frowns. "I don\'t, actually." There\'s an orcish war cry coming from some
 
 Blinking hard, you make out your surroundings. Before you lies the winding, beaten path that leads down the mountain. Seems simple enough, but that way inevitably means more orcs.
 But Briana points you to the edge of a nearby cliff. You peer over the edge and study the descent. Without proper gear it’s a difficult climb down, but not too sheer, and likely no resistance. Perhaps you could chance it?''',
-    'The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.',
-    null,
-    null,
-    <Exit>[
-      new Exit('mountainside_path', 'Climb down the cliff',
-          'You decide to risk the mountainside. With a deep breath, you swing your leg over the edge, find a foothold, and lower yourself down.'),
-      new Exit('mountain_pass_gate', 'Use the path',
-          'You steel yourself and trudge down the mountain pass.')
-    ]);
-Room mountainPass = new Room(
-    'mountain_pass',
-    '''The Bloodrock Pass winds down the slope of mountain. Though the weather-beaten path looks well-traveled, you thankfully come across no patrols at this time. 
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      'The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('mountainside_path', 'Climb down the cliff',
+      'You decide to risk the mountainside. With a deep breath, you swing your leg over the edge, find a foothold, and lower yourself down.'),
+  new Exit('mountain_pass_gate', 'Use the path',
+      'You steel yourself and trudge down the mountain pass.')
+]);
+Room mountainPass =
+    new Room('mountain_pass', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The Bloodrock Pass winds down the slope of mountain. Though the weather-beaten path looks well-traveled, you thankfully come across no patrols at this time. 
 
 
 [[IF (w.actionHasBeenPerformedSuccessfully("sneak_onto_cart"))]]
@@ -70,16 +74,18 @@ You run down the mountain side as fast as your legs can carry you. When you paus
 
 
 A few miles further down and you will reach Fort Ironcast.''',
-    'The Bloodrock pass flows snakelike down the mountain.',
-    null,
-    null,
-    <Exit>[
-      new Exit('ironcast_road', 'Go to Fort Ironcast',
-          'You continue towards the fort.')
-    ]);
-Room mountainPassGate = new Room(
-    'mountain_pass_gate',
-    '''The pass slopes down a short way before bending to the left. You inch forward and peer around the corner. Several feet away, a stone gate looms over the pass, flanked on both sides with thick walls too high to climb. An iron gate bearing the insignia of the many-eyed octopus lies between you and freedom. 
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('The Bloodrock pass flows snakelike down the mountain.',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit(
+      'ironcast_road', 'Go to Fort Ironcast', 'You continue towards the fort.')
+]);
+Room mountainPassGate =
+    new Room('mountain_pass_gate', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The pass slopes down a short way before bending to the left. You inch forward and peer around the corner. Several feet away, a stone gate looms over the pass, flanked on both sides with thick walls too high to climb. An iron gate bearing the insignia of the many-eyed octopus lies between you and freedom. 
 
 
 You spy only two pairs of orc guards standing by the gate. An ox cart is parked before them, the rider apparently negotiating passage with the keepers. From your knowledge of orcish, you can tell that the guards are demanding the driver leave them some food.
@@ -92,26 +98,27 @@ You don’t answer. With only four distracted orcs and the cart driver, you may 
 
 
 Briana seems to sense what you’re thinking. “A direct attack sounds risky. If they have an alarm, they can bring reinforcements here in a matter of moments.”''',
-    'The Bloodrock stone gate looms ahead of you.',
-    null,
-    null,
-    <Exit>[
-      new Exit('mountain_pass_guard_post', 'Go to the gate',
-          'You unsheathe (DOLLAR_SIGN)weapon and start towards the guards.')
-    ]);
-Room mountainPassGuardPost = new Room(
-    'mountain_pass_guard_post',
-    '''The orcish guards see you approaching and raise their weapons. One of them smirks.
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('The Bloodrock stone gate looms ahead of you.', wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('mountain_pass_guard_post', 'Go to the gate',
+      'You unsheathe (DOLLAR_SIGN)weapon and start towards the guards.')
+]);
+Room mountainPassGuardPost =
+    new Room('mountain_pass_guard_post', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The orcish guards see you approaching and raise their weapons. One of them smirks.
 
 
 “We’re lucky, Ruglag!” he says in a rumbling voice. “Today we kill human.”''',
-    'The stone gate looms before you.',
-    mountainPassGuardPostMonsters,
-    null,
-    <Exit>[
-      new Exit('mountain_pass', 'Go through the gate',
-          'You release the winch holding the gate closed. The gate swings ponderously outward, just enough for you and Briana to squeeze through to freedom.')
-    ]);
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('The stone gate looms before you.', wholeSentence: true);
+}, mountainPassGuardPostMonsters, null, <Exit>[
+  new Exit('mountain_pass', 'Go through the gate',
+      'You release the winch holding the gate closed. The gate swings ponderously outward, just enough for you and Briana to squeeze through to freedom.')
+]);
 
 class SneakOntoCart extends RoamingAction {
   @override
@@ -321,38 +328,41 @@ You find 10 gold coins in a pouch attached to one of the orcs’ belt. You also 
   }
 }
 
-Room mountainsideBase = new Room(
-    'mountainside_base',
-    '''After hours of climbing with several stops on the way, you make it all the way down to the base of the mountain. Thankfully, there are no wandering orc patrols here or any other dangers, so you decide to camp behind some rocks and rest for a few hours. Briana takes the watch.
+Room mountainsideBase =
+    new Room('mountainside_base', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''After hours of climbing with several stops on the way, you make it all the way down to the base of the mountain. Thankfully, there are no wandering orc patrols here or any other dangers, so you decide to camp behind some rocks and rest for a few hours. Briana takes the watch.
 
 
 When it is your turn to go on watch, you see something that you haven’t noticed before. Carved onto the rock face is what appears to be an enormous door; cunning craftsmanship has disguised it to look like part of the mountainside. You point it out to Briana when she awakens and the two of you inspect it more closely. It seems tall enough for a giant and wide enough for a herd of cattle to pass through. Yet you find no indication that is has been opened in many years. And try as you might, neither of you can find a mechanism for opening it.
 
 
 You give up after an hour’s work of inspection and leave it alone for now. Fort Ironcast still awaits you.''',
-    'The great stone doors still stands unopened on the mountainside.',
-    null,
-    null,
-    <Exit>[
-      new Exit('ironcast_road', 'Go to Fort Ironcast',
-          'The Fort awaits, so you press on to only road to and from Mt. Bloodrock.')
-    ]);
-Room mountainsidePath = new Room(
-    'mountainside_path',
-    '''You and Briana tie yourselves together with some rope. Then, with a deep breath you swing yourself over the side and gently find a toehold with your foot. You lower yourself to the next. And the next. 
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('The great stone doors still stands unopened on the mountainside.',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('ironcast_road', 'Go to Fort Ironcast',
+      'The Fort awaits, so you press on to only road to and from Mt. Bloodrock.')
+]);
+Room mountainsidePath =
+    new Room('mountainside_path', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''You and Briana tie yourselves together with some rope. Then, with a deep breath you swing yourself over the side and gently find a toehold with your foot. You lower yourself to the next. And the next. 
 
 
 Over the next agonizing hour, you inch your way down the mountainside. You keep looking down to see how much further is left before the slope becomes gentler, but it seems you are hardly making progress.
 
 
 “Remind me again why we decided to go down this way?” Briana grouses. You decide to save your breath. There’s still a ways to go.''',
-    '',
-    null,
-    null,
-    <Exit>[
-      new Exit('winged_serpent_nest', 'Continue down',
-          'You find a ledge you might rest on for a bit.')
-    ]);
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('', wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('winged_serpent_nest', 'Continue down',
+      'You find a ledge you might rest on for a bit.')
+]);
 
 class ThreatenWingedSerpent extends RoamingAction {
   @override
@@ -763,9 +773,10 @@ END''');
   }
 }
 
-Room wingedSerpentNest = new Room(
-    'winged_serpent_nest',
-    '''After an hour, you find yourself at the limit of your endurance. Thankfully, you find a narrow ledge just a few feet below you. You lower yourself onto the edge and sit, leaning gratefully against the rock face. 
+Room wingedSerpentNest =
+    new Room('winged_serpent_nest', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''After an hour, you find yourself at the limit of your endurance. Thankfully, you find a narrow ledge just a few feet below you. You lower yourself onto the edge and sit, leaning gratefully against the rock face. 
 
 
 A few dozen feet below, you can see where the mountainside starts to slope less steeply. Perhaps you have another hour in the descent before you could rest again. 
@@ -790,16 +801,18 @@ A large moss-green serpent adorned with black feathered wings hovers above you. 
 
 
 You must defend yourselves.''',
-    'The sheer cliff of the mountainside impedes your progress.',
-    null,
-    null,
-    <Exit>[
-      new Exit('__END_OF_ROAM__', 'Continue down (UNIMPLEMENTED)',
-          'You continue your descent to level ground. Thankfully, the end is in sight.')
-    ]);
-Room ironcastRoad = new Room(
-    'ironcast_road',
-    '''You leave the dust of the Bloodrock mountain pass for the gentler plateaus of the Aelphremede mountain range. The road crawls along the spine of the mountains all the way to Fort Ironcast, which sits on the horizon like a sleeping sentinel.
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('The sheer cliff of the mountainside impedes your progress.',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('__END_OF_ROAM__', 'Continue down (UNIMPLEMENTED)',
+      'You continue your descent to level ground. Thankfully, the end is in sight.')
+]);
+Room ironcastRoad =
+    new Room('ironcast_road', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''You leave the dust of the Bloodrock mountain pass for the gentler plateaus of the Aelphremede mountain range. The road crawls along the spine of the mountains all the way to Fort Ironcast, which sits on the horizon like a sleeping sentinel.
 
 
 The last time you saw this path you were still a child, shaking and crying, being led in chains through the grass by your orc captors. The lights from the distant Fort Ironcast may as well have been on the other side of the world. 
@@ -848,13 +861,15 @@ When they leave, you turn to Briana. “It’s a gift we fae have,” she said. 
 
 
 Together you jog all the way to the every growing silhouette of Fort Ironcast.''',
-    'A dirt road streaks through the grass. In the distance, a stone fort looms.',
-    null,
-    null,
-    <Exit>[
-      new Exit('__END_OF_ROAM__', 'Go to Fort Ironcast (UNIMPLEMENTED)',
-          'You make your way closer to the fort.')
-    ]);
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      'A dirt road streaks through the grass. In the distance, a stone fort looms.',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('__END_OF_ROAM__', 'Go to Fort Ironcast (UNIMPLEMENTED)',
+      'You make your way closer to the fort.')
+]);
 List<Room> allRooms = <Room>[
   entranceToBloodrock,
   mountainPass,

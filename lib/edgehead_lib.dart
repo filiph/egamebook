@@ -94,17 +94,25 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..combineFunction = carelessCombineFunction);
 
-    deadEscapee = new Room("deadEscapee",
-        "UNUSED because this is the first choice", "", null, null, [
-      new Exit("tunnel", "Run towards freedom",
-          "You and Briana sprint through the giant worm’s tunnel.")
-    ]);
+    deadEscapee = new Room(
+        "deadEscapee",
+        (a, w, s) => s.add("UNUSED because this is the first choice",
+            wholeSentence: true),
+        (a, w, s) => throw new StateError("Room isn't to be revisited"),
+        null,
+        null,
+        [
+          new Exit("tunnel", "Run towards freedom",
+              "You and Briana sprint through the giant worm’s tunnel.")
+        ]);
     tunnel = new Room(
         "tunnel",
-        "Suddenly, an **orc** and a **goblin** jump in front of you from "
-        "a slimy crevice, swords in hands.\n\n"
-        "![Orc and Goblin](img/orc_and_goblin_sketch.jpg)",
-        "",
+        (a, w, s) => s.add(
+            "Suddenly, an **orc** and a **goblin** jump in front of you from "
+            "a slimy crevice, swords in hands.\n\n"
+            "![Orc and Goblin](img/orc_and_goblin_sketch.jpg)",
+            wholeSentence: true),
+        (a, w, s) => throw new StateError("Room isn't to be revisited"),
         (_) => [orc, goblin],
         null,
         [

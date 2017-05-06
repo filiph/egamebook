@@ -93,7 +93,7 @@ abstract class RoomRoamingSituation extends Situation
 
     s.addParagraph();
     // TODO: show short description according to world.actionRecords
-    s.add(room.description, wholeSentence: true);
+    room.describe(a, w, s);
     s.addParagraph();
 
     for (var actor in getPartyOf(a, w).toList()) {

@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 
 import 'escape_dollar_sign.dart';
 import 'generated_game_object.dart';
+import 'method_builders.dart';
 import 'recase.dart';
 import 'types.dart';
 
@@ -46,10 +47,16 @@ class GeneratedRoom extends GeneratedGameObject {
       monsterGenerator = reference(_map['MONSTERS'].trim());
     }
 
+    ExpressionBuilder createLiteralDescriber(String text) =>
+        createActorWorldStoryClosure()
+          ..addStatement(reference("s").property("add").call(
+              [literal(escapeDollarSign(text ?? ''))],
+              namedArguments: {"wholeSentence": literal(true)}));
+
     var newInstance = roomType.newInstance([
       literal(writersName),
-      literal(escapeDollarSign(_map['DESCRIPTION'])),
-      literal(_map['SHORT_DESCRIPTION'] ?? ''),
+      createLiteralDescriber(_map['DESCRIPTION']),
+      createLiteralDescriber(_map['SHORT_DESCRIPTION']),
       monsterGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: exitType)

@@ -36,5 +36,14 @@ MethodBuilder createActorWorldStoryMethod(
     ..addAnnotation(overrideAnnotation);
 }
 
+/// Creates a new [MethodBuilder] with a skeleton of a closure that takes
+/// 3 positional arguments: an [Actor], a [WorldState] and a [Storyline].
+MethodBuilder createActorWorldStoryClosure() {
+  return new MethodBuilder.closure()
+      ..addPositional(actorParameter)
+      ..addPositional(worldParameter)
+      ..addPositional(storylineParameter);
+}
+
 StatementBuilder stateErrorThrow(String message) =>
     reference('StateError').newInstance([literal(message)]).asThrow();
