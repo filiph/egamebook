@@ -48,11 +48,13 @@ Briana frowns. "I don\'t, actually." There\'s an orcish war cry coming from some
 
 
 Blinking hard, you make out your surroundings. Before you lies the winding, beaten path that leads down the mountain. Seems simple enough, but that way inevitably means more orcs.
-But Briana points you to the edge of a nearby cliff. You peer over the edge and study the descent. Without proper gear it’s a difficult climb down, but not too sheer, and likely no resistance. Perhaps you could chance it?''',
+But Briana points you to the edge of a nearby cliff. You peer over the edge and study the descent. Without proper gear it’s a difficult climb down, but not too sheer, and likely no resistance. Perhaps you could chance it?
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      'The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.',
+      '''The cavern entrance to Mt. Bloodrock yawns before you. The wind issuing from its depths gives you the disturbing impression that it’s breathing.
+''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('mountainside_path', 'Climb down the cliff',
@@ -66,17 +68,27 @@ Room mountainPass =
       '''The Bloodrock Pass winds down the slope of mountain. Though the weather-beaten path looks well-traveled, you thankfully come across no patrols at this time. 
 
 
-[[IF (w.actionHasBeenPerformedSuccessfully("sneak_onto_cart"))]]
-You and Briana stay quiet and still in your hiding spot. An hour later, you peek out of the cart and see that you have reached level ground. You sneak off the cart and hide behind some rocks as it drives away.
-[[ELSE]]
-You run down the mountain side as fast as your legs can carry you. When you pause, gulping for air, you find you have nearly reached the bottom.  
-[[ENDIF]]
+''',
+      wholeSentence: true);
+  if (w.actionIsBeingPerformed("sneak_onto_cart")) {
+    s.add(
+        "You and Briana stay quiet and still in your hiding spot. An hour later, you peek out of the cart and see that you have reached level ground. You sneak off the cart and hide behind some rocks as it drives away.",
+        wholeSentence: true);
+  } else {
+    s.add(
+        "You run down the mountain side as fast as your legs can carry you. When you pause, gulping for air, you find you have nearly reached the bottom.",
+        wholeSentence: true);
+  }
+  s.add(
+      '''
 
-
-A few miles further down and you will reach Fort Ironcast.''',
+A few miles further down and you will reach Fort Ironcast.
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('The Bloodrock pass flows snakelike down the mountain.',
+  s.add(
+      '''The Bloodrock pass flows snakelike down the mountain.
+''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit(
@@ -97,10 +109,14 @@ You spy only two pairs of orc guards standing by the gate. An ox cart is parked 
 You don’t answer. With only four distracted orcs and the cart driver, you may be able to take them by surprise.
 
 
-Briana seems to sense what you’re thinking. “A direct attack sounds risky. If they have an alarm, they can bring reinforcements here in a matter of moments.”''',
+Briana seems to sense what you’re thinking. “A direct attack sounds risky. If they have an alarm, they can bring reinforcements here in a matter of moments.”
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('The Bloodrock stone gate looms ahead of you.', wholeSentence: true);
+  s.add(
+      '''The Bloodrock stone gate looms ahead of you.
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('mountain_pass_guard_post', 'Go to the gate',
       'You unsheathe (DOLLAR_SIGN)weapon and start towards the guards.')
@@ -111,10 +127,14 @@ Room mountainPassGuardPost =
       '''The orcish guards see you approaching and raise their weapons. One of them smirks.
 
 
-“We’re lucky, Ruglag!” he says in a rumbling voice. “Today we kill human.”''',
+“We’re lucky, Ruglag!” he says in a rumbling voice. “Today we kill human.”
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('The stone gate looms before you.', wholeSentence: true);
+  s.add(
+      '''The stone gate looms before you.
+''',
+      wholeSentence: true);
 }, mountainPassGuardPostMonsters, null, <Exit>[
   new Exit('mountain_pass', 'Go through the gate',
       'You release the winch holding the gate closed. The gate swings ponderously outward, just enough for you and Briana to squeeze through to freedom.')
@@ -337,10 +357,13 @@ Room mountainsideBase =
 When it is your turn to go on watch, you see something that you haven’t noticed before. Carved onto the rock face is what appears to be an enormous door; cunning craftsmanship has disguised it to look like part of the mountainside. You point it out to Briana when she awakens and the two of you inspect it more closely. It seems tall enough for a giant and wide enough for a herd of cattle to pass through. Yet you find no indication that is has been opened in many years. And try as you might, neither of you can find a mechanism for opening it.
 
 
-You give up after an hour’s work of inspection and leave it alone for now. Fort Ironcast still awaits you.''',
+You give up after an hour’s work of inspection and leave it alone for now. Fort Ironcast still awaits you.
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('The great stone doors still stands unopened on the mountainside.',
+  s.add(
+      '''The great stone doors still stands unopened on the mountainside.
+''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('ironcast_road', 'Go to Fort Ironcast',
@@ -355,10 +378,14 @@ Room mountainsidePath =
 Over the next agonizing hour, you inch your way down the mountainside. You keep looking down to see how much further is left before the slope becomes gentler, but it seems you are hardly making progress.
 
 
-“Remind me again why we decided to go down this way?” Briana grouses. You decide to save your breath. There’s still a ways to go.''',
+“Remind me again why we decided to go down this way?” Briana grouses. You decide to save your breath. There’s still a ways to go.
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('winged_serpent_nest', 'Continue down',
       'You find a ledge you might rest on for a bit.')
@@ -800,10 +827,13 @@ What manner of creature would build a nest here? You ask yourself. And the answe
 A large moss-green serpent adorned with black feathered wings hovers above you. It gives one more warning hiss, then dives to attack.
 
 
-You must defend yourselves.''',
+You must defend yourselves.
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('The sheer cliff of the mountainside impedes your progress.',
+  s.add(
+      '''The sheer cliff of the mountainside impedes your progress.
+''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('__END_OF_ROAM__', 'Continue down (UNIMPLEMENTED)',
@@ -860,11 +890,13 @@ When they leave, you turn to Briana. “It’s a gift we fae have,” she said. 
 “Another time.” You get up and pull her along. “Run now, talk later. Let’s get to safety.”
 
 
-Together you jog all the way to the every growing silhouette of Fort Ironcast.''',
+Together you jog all the way to the every growing silhouette of Fort Ironcast.
+''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      'A dirt road streaks through the grass. In the distance, a stone fort looms.',
+      '''A dirt road streaks through the grass. In the distance, a stone fort looms.
+''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('__END_OF_ROAM__', 'Go to Fort Ironcast (UNIMPLEMENTED)',

@@ -2,6 +2,7 @@ library stranded.world;
 
 import 'dart:collection';
 
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:quiver/core.dart';
 
@@ -30,6 +31,18 @@ class WorldState {
   /// The age of this WorldState. Every 'turn', this number increases by one.
   int time;
 
+  /// This is normally `null` but is set to the current action when that action
+  /// is being applied.
+  ///
+  /// This is so that, for example, descriptions of Rooms can access this
+  /// information and provide text according to how the Room is being reached.
+  ///
+  /// TODO: This should exist in the 'mutable' WorldState while the immutable
+  ///       worldstate shouldn't have this. Since, today, immutability of
+  ///       WorldState outside action application is merely a convention, we
+  ///       have it here.
+  Action currentAction;
+
   WorldState(
       Iterable<Actor> actors, Iterable<Room> rooms, Situation startingSituation)
       : actors = new Set<Actor>.from(actors),
@@ -56,6 +69,9 @@ class WorldState {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
 
     time = other.time;
+
+    assert(other.currentAction == null, "currentAction should only be non-null "
+        "during application of an action.");
   }
 
   Situation get currentSituation =>
@@ -82,6 +98,16 @@ class WorldState {
       return true;
     }
     return false;
+  }
+
+  /// Returns `true` if action that satisfies [actionNamePattern] is currently
+  /// being performed.
+  ///
+  /// This is for cases like when a room description needs to know whether
+  /// player has arrived via a cart or on foot.
+  bool actionIsBeingPerformed(Pattern actionNamePattern) {
+    if (currentAction == null) return false;
+    return currentAction.name.contains(actionNamePattern);
   }
 
   /// Returns `true` if action satisfying [name] pattern has never been

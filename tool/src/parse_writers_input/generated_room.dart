@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'escape_dollar_sign.dart';
 import 'generated_game_object.dart';
 import 'method_builders.dart';
+import 'parse_code_blocks.dart';
 import 'recase.dart';
 import 'types.dart';
 
@@ -53,10 +54,38 @@ class GeneratedRoom extends GeneratedGameObject {
               [literal(escapeDollarSign(text ?? ''))],
               namedArguments: {"wholeSentence": literal(true)}));
 
+    ExpressionBuilder createAlgorithmicDescriber(String text) =>
+        createActorWorldStoryClosure()
+          ..addStatements([
+            reference("s").property("add").call(
+                [literal(escapeDollarSign(text ?? ''))],
+                namedArguments: {"wholeSentence": literal(true)}),
+            new StatementBuilder.raw(
+                (_) => "if (true) { print('hello'); } else {print('bye');}")
+          ]);
+
+    ExpressionBuilder createDescriber(String text) {
+      var closure = createActorWorldStoryClosure();
+      for (var block in parseBlocks(text ?? '')) {
+        switch (block.type) {
+          case BlockType.text:
+            closure.addStatement(reference("s").property("add").call(
+                [literal(escapeDollarSign(block.content))],
+                namedArguments: {"wholeSentence": literal(true)}));
+            break;
+          case BlockType.code:
+            closure
+                .addStatement(new StatementBuilder.raw((_) => block.content));
+            break;
+        }
+      }
+      return closure;
+    }
+
     var newInstance = roomType.newInstance([
       literal(writersName),
-      createLiteralDescriber(_map['DESCRIPTION']),
-      createLiteralDescriber(_map['SHORT_DESCRIPTION']),
+      createDescriber(_map['DESCRIPTION']),
+      createDescriber(_map['SHORT_DESCRIPTION']),
       monsterGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: exitType)

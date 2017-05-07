@@ -58,20 +58,6 @@ typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
 /// [ExitAction] with the given [exit].
 typedef ExitAction ExitActionBuilder(Exit exit);
 
-/// This enum defines all the different resources (Stats) that player can use
-/// to reroll action throws.
-enum Resource {
-  /// Using stamina means exerting extra physical energy. Useful for power
-  /// moves, running away unscathed, etc.
-  stamina,
-
-  /// Some moves can be rerolled by 'spending' balance. A kick will land,
-  /// but the player will go off-balance or even fall down.
-  balance,
-
-  // Ideas: weaponGrip (throw sword), shield (let the shield break)
-}
-
 abstract class Action {
   String _description;
 
@@ -80,13 +66,20 @@ abstract class Action {
   /// For example: "open the door" or "swing at the orc".
   String get command;
 
+  String get helpMessage;
+
+  /// Whether or not this action is aggressive towards its sufferer. Combat
+  /// moves are aggressive, healing moves aren't.
+  ///
+  /// This describes intent, not result. A failed attempt to kill someone is
+  /// aggressive although it doesn't harm the intended target.
+  bool get isAggressive;
+
   /// The name of the class of the Action.
   ///
   /// We need to use this instead of the [runtimeType] because [runtimeType]
   /// can be mangled in production (dart2js).
   String get name;
-
-  String get helpMessage;
 
   /// Whether or not the actor can exert a resource (of type [rerollResource])
   /// to reroll a failed throw.
@@ -104,13 +97,6 @@ abstract class Action {
   /// the class – is responsible for taking the resource away and reporting
   /// on it.
   Resource get rerollResource;
-
-  /// Whether or not this action is aggressive towards its sufferer. Combat
-  /// moves are aggressive, healing moves aren't.
-  ///
-  /// This describes intent, not result. A failed attempt to kill someone is
-  /// aggressive although it doesn't harm the intended target.
-  bool get isAggressive;
 
   Iterable<PlanConsequence> apply(
       Actor actor, PlanConsequence current, WorldState world) sync* {
@@ -151,9 +137,6 @@ abstract class Action {
   /// orc".
   String applySuccess(Actor a, WorldState w, Storyline s);
 
-  /// Success chance of the action given the actor and the state of the world.
-  num getSuccessChance(Actor a, WorldState w);
-
   /// Returns a string that will explain why actor needs to roll for success.
   ///
   /// For example:
@@ -161,6 +144,9 @@ abstract class Action {
   /// * "Will you hit him?"
   /// * "Will you dodge the swing?"
   String getRollReason(Actor a, WorldState w);
+
+  /// Success chance of the action given the actor and the state of the world.
+  num getSuccessChance(Actor a, WorldState w);
 
   bool isApplicable(Actor a, WorldState w);
 
@@ -181,12 +167,14 @@ abstract class Action {
       String applyFunction(Actor actor, WorldState world, Storyline storyline),
       {bool isSuccess: false,
       bool isFailure: false}) {
+    // Set currentAction.
+    worldCopy.currentAction = this;
     // Find actor by id.
     var actorInWorldCopy =
         worldCopy.actors.singleWhere((a) => a.id == actor.id);
     var builder = _prepareWorldRecord(actor, world, isSuccess, isFailure);
-    // Remember situation as it can be changed during applySuccess.
     var storyline = new Storyline();
+    // Remember situation as it can be changed during applySuccess.
     var situationId = worldCopy.currentSituation.id;
     int hashCode = worldCopy.hashCode;
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
@@ -203,6 +191,7 @@ abstract class Action {
     worldCopy
         .getSituationById(situationId)
         ?.onAfterAction(worldCopy, storyline);
+    worldCopy.currentAction = null;
 
     // Remove ended situations: the ones that don't return an actor anymore,
     // and the ones that return shouldContinue(world) != true.
@@ -255,12 +244,6 @@ abstract class EnemyTargetAction extends Action {
   /// into something like "Kill the orc."
   String get commandTemplate;
 
-  @override
-  String getRollReason(Actor a, WorldState w) => (new Storyline()
-        ..add(rollReasonTemplate,
-            subject: a, object: enemy, wholeSentence: true))
-      .realize();
-
   /// EnemyTargetActions might want to mention the [enemy] in the output
   /// of [getRollReason]. To make this easier to implement, this class will
   /// automatically construct the roll reason given a [Storyline] template.
@@ -268,6 +251,12 @@ abstract class EnemyTargetAction extends Action {
   /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
   /// template that might realize into something like "Will you hit him?"
   String get rollReasonTemplate;
+
+  @override
+  String getRollReason(Actor a, WorldState w) => (new Storyline()
+        ..add(rollReasonTemplate,
+            subject: a, object: enemy, wholeSentence: true))
+      .realize();
 
   @override
   String toString() => "EnemyTargetAction<$commandTemplate::"
@@ -290,4 +279,18 @@ abstract class ExitAction extends Action {
 
   @override
   String toString() => "ExitAction<$command>";
+}
+
+/// This enum defines all the different resources (Stats) that player can use
+/// to reroll action throws.
+enum Resource {
+  /// Using stamina means exerting extra physical energy. Useful for power
+  /// moves, running away unscathed, etc.
+  stamina,
+
+  /// Some moves can be rerolled by 'spending' balance. A kick will land,
+  /// but the player will go off-balance or even fall down.
+  balance,
+
+  // Ideas: weaponGrip (throw sword), shield (let the shield break)
 }

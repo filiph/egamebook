@@ -162,8 +162,8 @@ class EdgeheadGame extends LoopedEvent {
     //   });
 
     initialSituation = new RoomRoamingSituation.initialized(
-        deadEscapee,
-//        entranceToBloodrock,
+//        deadEscapee,
+        entranceToBloodrock,
         false);
 
     var rooms = new List<Room>.from(allRooms)
@@ -308,6 +308,14 @@ class EdgeheadGame extends LoopedEvent {
 
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
+
+    log.fine(() => "${actor.name} selected ${action.name}");
+    log.finest(() {
+      String path = world.actionRecords
+          .map((a) => a.description)
+          .join(' <- ');
+      return "- how ${actor.name} got here: $path";
+    });
   }
 
   Future _applyPlayerAction(
