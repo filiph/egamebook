@@ -26,7 +26,8 @@ Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
     ..team = defaultEnemyTeam
     ..combineFunction = carelessCombineFunction);
 
-  if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards")) {
+  if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards") ||
+      w.actionHasBeenPerformedSuccessfully("take_out_gate_guards_rescue")) {
     return [orc];
   } else {
     return [orc, goblin];

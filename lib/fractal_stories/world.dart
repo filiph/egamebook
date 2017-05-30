@@ -70,7 +70,9 @@ class WorldState {
 
     time = other.time;
 
-    assert(other.currentAction == null, "currentAction should only be non-null "
+    assert(
+        other.currentAction == null,
+        "currentAction should only be non-null "
         "during application of an action.");
   }
 
@@ -86,14 +88,11 @@ class WorldState {
   @override
   bool operator ==(Object o) => o is WorldState && hashCode == o.hashCode;
 
-  /// Returns `true` if action that satisfies [actionNamePattern] has been
-  /// _successfully_ performed, ever.
-  ///
-  /// To satisfie [actionNamePattern], the [Action.name] must contain the
-  /// pattern.
-  bool actionHasBeenPerformedSuccessfully(Pattern actionNamePattern) {
-    var records = getActionRecords(actionNamePattern: actionNamePattern,
-      wasSuccess: true);
+  /// Returns `true` if any action in the action records (past actions)
+  /// has the [Action.name] of [actionName] and was ever performed
+  /// _successfully_.
+  bool actionHasBeenPerformedSuccessfully(String actionName) {
+    var records = getActionRecords(actionName: actionName, wasSuccess: true);
     for (var _ in records) {
       return true;
     }
@@ -110,10 +109,10 @@ class WorldState {
     return currentAction.name.contains(actionNamePattern);
   }
 
-  /// Returns `true` if action satisfying [name] pattern has never been
+  /// Returns `true` if action with [Action.name] equal to [name] has never been
   /// used, regardless if it was used successfully or not.
   bool actionNeverUsed(String name) {
-    return timeSinceLastActionRecord(actionNamePattern: name) == null;
+    return timeSinceLastActionRecord(actionName: name) == null;
   }
 
   void elapseSituationTime(int situationId) {
@@ -136,15 +135,14 @@ class WorldState {
   /// When none of the named parameters is provided, all [actionRecords] are
   /// returned.
   Iterable<ActionRecord> getActionRecords(
-      {Pattern actionNamePattern,
+      {String actionName,
       Actor protagonist,
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
     Iterable<ActionRecord> records = actionRecords;
-    if (actionNamePattern != null) {
-      records =
-          records.where((rec) => rec.actionName.contains(actionNamePattern));
+    if (actionName != null) {
+      records = records.where((rec) => rec.actionName == actionName);
     }
     if (protagonist != null) {
       records = records.where((rec) => rec.protagonist == protagonist.id);
@@ -241,13 +239,13 @@ class WorldState {
   ///
   /// Returns `null` when such a record doesn't exist.
   int timeSinceLastActionRecord(
-      {Pattern actionNamePattern,
+      {String actionName,
       Actor protagonist,
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
     var records = getActionRecords(
-        actionNamePattern: actionNamePattern,
+        actionName: actionName,
         protagonist: protagonist,
         sufferer: sufferer,
         wasSuccess: wasSuccess,

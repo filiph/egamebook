@@ -48,22 +48,6 @@ class GeneratedRoom extends GeneratedGameObject {
       monsterGenerator = reference(_map['MONSTERS'].trim());
     }
 
-    ExpressionBuilder createLiteralDescriber(String text) =>
-        createActorWorldStoryClosure()
-          ..addStatement(reference("s").property("add").call(
-              [literal(escapeDollarSign(text ?? ''))],
-              namedArguments: {"wholeSentence": literal(true)}));
-
-    ExpressionBuilder createAlgorithmicDescriber(String text) =>
-        createActorWorldStoryClosure()
-          ..addStatements([
-            reference("s").property("add").call(
-                [literal(escapeDollarSign(text ?? ''))],
-                namedArguments: {"wholeSentence": literal(true)}),
-            new StatementBuilder.raw(
-                (_) => "if (true) { print('hello'); } else {print('bye');}")
-          ]);
-
     ExpressionBuilder createDescriber(String text) {
       var closure = createActorWorldStoryClosure();
       for (var block in parseBlocks(text ?? '')) {

@@ -52,7 +52,7 @@ class StandUp extends Action {
     if (!a.isOnGround) return false;
     // If this actor just fell, do not let him stand up.
     var sweepRecency = world.timeSinceLastActionRecord(
-        actionNamePattern: SweepOffFeet.className,
+        actionName: SweepOffFeet.className,
         sufferer: a,
         wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another
@@ -63,7 +63,7 @@ class StandUp extends Action {
     }
     // If this actor was just pounded to ground, do not let him stand up.
     var poundRecency = world.timeSinceLastActionRecord(
-        actionNamePattern: Pound.className, sufferer: a, wasSuccess: true);
+        actionName: Pound.className, sufferer: a, wasSuccess: true);
     if (poundRecency != null && poundRecency <= 2) {
       return false;
     }

@@ -54,7 +54,7 @@ class Unconfuse extends Action {
   bool isApplicable(Actor actor, WorldState world) =>
       actor.isConfused(world) &&
       world.timeSinceLastActionRecord(
-              actionNamePattern: Confuse.className,
+              actionName: Confuse.className,
               sufferer: actor,
               wasSuccess: true) >
           Confuse.minimalEffectLength;
