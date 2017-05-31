@@ -16,6 +16,16 @@ class WorldState {
   final Set<Actor> actors;
   final Set<Item> items;
 
+  /// The global flags and counters that make up the state of the world.
+  ///
+  /// Use this as sparingly as possible. Flags can be often avoided by checking
+  /// for specific past actions (has "kill_jack" been performed? then Jack is
+  /// dead and we don't need that flag).
+  ///
+  /// This object must have a hash code that is value-based so that globals
+  /// with the same state have the same [Object.hashCode].
+  dynamic global;
+
   /// A 'memory' of actions. The queue is in reverse chronological order,
   /// with the latest record at the beginning of the queue. This is because
   /// we often want to process only the latest (or the latest few) records.
@@ -43,8 +53,8 @@ class WorldState {
   ///       have it here.
   Action currentAction;
 
-  WorldState(
-      Iterable<Actor> actors, Iterable<Room> rooms, Situation startingSituation)
+  WorldState(Iterable<Actor> actors, Iterable<Room> rooms,
+      Situation startingSituation, this.global)
       : actors = new Set<Actor>.from(actors),
         actionRecords = new Queue<ActionRecord>(),
         items = new Set<Item>(),
@@ -58,7 +68,8 @@ class WorldState {
         actionRecords = new Queue<ActionRecord>(),
         items = new Set<Item>(),
         rooms = new Set(),
-        situations = new List() {
+        situations = new List(),
+        global = other.global {
     actors.addAll(other.actors);
     actionRecords.addAll(other.actionRecords);
     items.addAll(other.items);
@@ -82,7 +93,7 @@ class WorldState {
   @override
   int get hashCode {
     return hash4(hashObjects(actors), hashObjects(actionRecords),
-        hashObjects(situations), time);
+        hashObjects(situations), hash2(time, global));
   }
 
   @override

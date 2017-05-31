@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
@@ -169,7 +170,9 @@ class EdgeheadGame extends LoopedEvent {
     var rooms = new List<Room>.from(allRooms)
       ..addAll([deadEscapee, tunnel, endOfRoam]);
 
-    world = new WorldState([filip, briana], rooms, initialSituation);
+    var global = new EdgeheadGlobalState();
+
+    world = new WorldState([filip, briana], rooms, initialSituation, global);
 
     consequence = new PlanConsequence.initial(world);
   }

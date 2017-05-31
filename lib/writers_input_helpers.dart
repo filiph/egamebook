@@ -1,9 +1,12 @@
+import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+
+EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
 
 Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
   var orc = new Actor((b) => b
@@ -32,4 +35,10 @@ Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
   } else {
     return [orc, goblin];
   }
+}
+
+void updateGlobal(WorldState w,
+    EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
+  var builder = (w.global as EdgeheadGlobalState).toBuilder();
+  w.global = updates(builder).build();
 }

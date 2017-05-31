@@ -178,7 +178,6 @@ abstract class Action {
     var situationId = worldCopy.currentSituation.id;
     int hashCode = worldCopy.hashCode;
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
-    // TODO: can we remove the need to run hashCode every time here?
     assert(worldCopy.hashCode == hashCode,
         "Please don't change the world in onBeforeAction");
     _description = applyFunction(actorInWorldCopy, worldCopy, storyline);

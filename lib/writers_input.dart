@@ -119,7 +119,7 @@ Briana seems to sense what you’re thinking. “A direct attack sounds risky. I
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('mountain_pass_guard_post', 'Go to the gate',
-      'You unsheathe (DOLLAR_SIGN)weapon and start towards the guards.')
+      'You unsheathe your weapon and start towards the guards.')
 ]);
 Room mountainPassGuardPost =
     new Room('mountain_pass_guard_post', (Actor a, WorldState w, Storyline s) {
@@ -163,11 +163,8 @@ class SneakOntoCart extends RoamingAction {
     s.add(
         '''You squeeze through the burlap sacks and hide under some rags. The orcs conclude their negotiations as the driver hurls a bag of turnips to a guard. The gates split open to the rattle of chains and the ominous creak of metal hinges. The ox cart lurches forward into the mountain pass.
 In the cart you find a small keg of beer. You decide it is worth taking.''');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)hidden_cart = true */';
-    assert(DEV_MODE || false);
+    updateGlobal(w, (b) => b..hasKegOfBeer = true);
     movePlayer(w, s, "mountain_pass");
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)keg_of_beer */';
-    assert(DEV_MODE || false);
     return '${a.name} successfully performs SneakOntoCart';
   }
 
