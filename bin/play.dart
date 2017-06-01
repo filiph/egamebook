@@ -46,8 +46,11 @@ Stat<double> hitpoints = new Stat<double>("Health", (double value) {
   return "😐"; // fine, neutral face
 }, description: "Your physical state", initialValue: 100.0, show: true);
 
-Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value S",
+Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🔆",
     description: "Spare physical energy", show: true);
+
+Stat<int> gold = new Stat<int>("Gold", (int value) => "$value 💰",
+    description: "Gold coins", show: true);
 
 final _random = new Random();
 
@@ -149,7 +152,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
   try {
     var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
-        choices, choice, showSlotMachine, hitpoints, stamina,
+        choices, choice, showSlotMachine, hitpoints, stamina, gold,
         actionPattern: actionPattern);
     game.onFinishedGoto = "endGame";
 

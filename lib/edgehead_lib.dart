@@ -60,6 +60,7 @@ class EdgeheadGame extends LoopedEvent {
 
   final Stat<double> hitpoints;
   final Stat<int> stamina;
+  final Stat<int> gold;
 
   EdgeheadGame(
       StringTakingVoidFunction echo,
@@ -69,6 +70,7 @@ class EdgeheadGame extends LoopedEvent {
       SlotMachineShowFunction slotMachineShowFunction,
       this.hitpoints,
       this.stamina,
+      this.gold,
       {this.actionPattern})
       : super(echo, goto, choices, choiceFunction, slotMachineShowFunction) {
     setup();
@@ -136,6 +138,7 @@ class EdgeheadGame extends LoopedEvent {
 
     hitpoints.value = filip.hitpoints / filip.maxHitpoints;
     stamina.value = filip.stamina;
+    gold.value = filip.gold;
 
     briana = new Actor((b) => b
       ..id = 100
@@ -189,6 +192,7 @@ class EdgeheadGame extends LoopedEvent {
     var currentPlayer = world.getActorById(filip.id);
     hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
+    gold.value = currentPlayer.gold;
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {

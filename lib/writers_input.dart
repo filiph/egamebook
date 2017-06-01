@@ -149,6 +149,8 @@ class SneakOntoCart extends RoamingAction {
 
   static final SneakOntoCart singleton = new SneakOntoCart();
 
+  RoamingAction get self => this;
+
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -206,6 +208,8 @@ class TakeOutGateGuards extends RoamingAction {
 
   static final TakeOutGateGuards singleton = new TakeOutGateGuards();
 
+  RoamingAction get self => this;
+
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -228,8 +232,7 @@ You and Briana successfully make it to the other side of the rock. With a viciou
 
 
 Once done, you sneak back away from the gate.''');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold */';
-    assert(DEV_MODE || false);
+    w.updateActorById(a.id, (b) => b..gold += 10);
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)orcish_shield */';
     assert(DEV_MODE || false);
     return '${a.name} successfully performs TakeOutGateGuards';
@@ -297,22 +300,20 @@ abstract class TakeOutGateGuardsRescueSituation extends Situation
 
 
 You find 10 gold coins in a pouch attached to one of the orcs’ belt. You also take an orcish shield. Then, you sneak back away from the gate.''');
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: lose 1 luck */';
-          assert(DEV_MODE || false);
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: 10 gold */';
-          assert(DEV_MODE || false);
+          w.updateActorById(a.id, (b) => b..stamina -= 1);
+          w.updateActorById(a.id, (b) => b..gold += 10);
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)orcish_shield */';
           assert(DEV_MODE || false);
           w.popSituation();
           return 'TakeOutGateGuardsRescueSituation resolved with rescue/continuation (Take the guards out)';
         }, 'You decide to finish the job, however improbable it seems that you’ll succeed.'),
         new SimpleAction(
-            'take_out_gate_guards_continuation_of_failure', 'MISSING',
+            'take_out_gate_guards_continuation_of_failure', 'Sneak away',
             (a, w, s, self) {
           s.add(
               'Seeing that the window of opportunity has passed, you sneak away from the rock.');
           w.popSituation();
-          return 'TakeOutGateGuardsRescueSituation resolved with rescue/continuation (MISSING)';
+          return 'TakeOutGateGuardsRescueSituation resolved with rescue/continuation (Sneak away)';
         }, 'It’s too risky.')
       ];
 
@@ -390,12 +391,14 @@ Over the next agonizing hour, you inch your way down the mountainside. You keep 
 
 class ThreatenWingedSerpent extends RoamingAction {
   @override
-  final String command = 'scare off the serpent';
+  final String command = 'Scare off the serpent';
 
   @override
   final String name = 'threaten_winged_serpent';
 
   static final ThreatenWingedSerpent singleton = new ThreatenWingedSerpent();
+
+  RoamingAction get self => this;
 
   @override
   bool isApplicable(Actor a, WorldState w) {
@@ -410,8 +413,7 @@ class ThreatenWingedSerpent extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Intimidated by your weapon, the winged serpent abandons its nest and flees to the mountaintop.');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(DEV_MODE || false);
+    self.movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs ThreatenWingedSerpent';
   }
 
@@ -467,26 +469,25 @@ abstract class ThreatenWingedSerpentRescueSituation extends Situation
 
   @override
   List<RoamingAction> get actions => [
-        new SimpleAction('threaten_winged_serpent_rescue', 'get Briana’s help',
+        new SimpleAction('threaten_winged_serpent_rescue', 'Get Briana’s help',
             (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
           assert(DEV_MODE || false);
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-          assert(DEV_MODE || false);
+          self.movePlayer(w, s, "mountainside_base");
           w.popSituation();
-          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
+          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('threaten_winged_serpent_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, self) {
+            'Face the winged serpent head on', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
-But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
-END''');
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
-          assert(DEV_MODE || false);
+
+
+But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.''');
+          w.updateActorById(a.id, (b) => b..hitpoints = 0);
           w.popSituation();
-          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+          return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (Face the winged serpent head on)';
         }, 'You will attack the creature straight on.')
       ];
 
@@ -528,6 +529,8 @@ class SootheWingedSerpent extends RoamingAction {
 
   static final SootheWingedSerpent singleton = new SootheWingedSerpent();
 
+  RoamingAction get self => this;
+
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -543,8 +546,7 @@ class SootheWingedSerpent extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Your sibilant words reach the winged serpent’s ears. It coils in the air for a while longer, then whips towards its nest to clutch possessively at its eggs. You decide it’s time to move on.');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(DEV_MODE || false);
+    self.movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs SootheWingedSerpent';
   }
 
@@ -600,26 +602,25 @@ abstract class SootheWingedSerpentRescueSituation extends Situation
 
   @override
   List<RoamingAction> get actions => [
-        new SimpleAction('soothe_winged_serpent_rescue', 'get Briana’s help',
+        new SimpleAction('soothe_winged_serpent_rescue', 'Get Briana’s help',
             (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
           assert(DEV_MODE || false);
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-          assert(DEV_MODE || false);
+          self.movePlayer(w, s, "mountainside_base");
           w.popSituation();
-          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (get Briana’s help)';
+          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('soothe_winged_serpent_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, self) {
+            'Face the winged serpent head on', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
-But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
-END''');
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
-          assert(DEV_MODE || false);
+
+
+But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.''');
+          w.updateActorById(a.id, (b) => b..hitpoints = 0);
           w.popSituation();
-          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+          return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (Face the winged serpent head on)';
         }, 'You will attack the creature straight on.')
       ];
 
@@ -662,6 +663,8 @@ class ThreatenWingedSerpentEggs extends RoamingAction {
   static final ThreatenWingedSerpentEggs singleton =
       new ThreatenWingedSerpentEggs();
 
+  RoamingAction get self => this;
+
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -677,20 +680,27 @@ class ThreatenWingedSerpentEggs extends RoamingAction {
         '''You grab one of the eggs from the nest and hold over the edge. The serpent hovers in place, hissing loudly, but otherwise holding off its attack. 
 
 
+
+
 You grin at it as you juggle the egg from one hand to the other. With one smooth motion you cock your arm back and throw. The serpent gives a piercing cry, then launches itself after its precious offspring.
+
+
 
 
 “Good thinking, throwing that egg,” said Briana.
 
 
+
+
 “Yes, well, I just had to make it think I threw it,” you say, and show her the serpent egg in your hand. “I just threw the rock I had in my other hand.”
+
+
 
 
 Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”''');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
     assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-    assert(DEV_MODE || false);
+    self.movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs ThreatenWingedSerpentEggs';
   }
 
@@ -743,7 +753,7 @@ abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
   @override
   List<RoamingAction> get actions => [
         new SimpleAction(
-            'threaten_winged_serpent_eggs_rescue', 'get Briana’s help',
+            'threaten_winged_serpent_eggs_rescue', 'Get Briana’s help',
             (a, w, s, self) {
           s.add(
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
@@ -751,20 +761,20 @@ abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
           assert(DEV_MODE || false);
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
           assert(DEV_MODE || false);
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: location = (DOLLAR_SIGN)mountainside_base */';
-          assert(DEV_MODE || false);
+          self.movePlayer(w, s, "mountainside_base");
           w.popSituation();
-          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (get Briana’s help)';
+          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
         new SimpleAction('threaten_winged_serpent_eggs_continuation_of_failure',
-            'face the winged serpent head on.', (a, w, s, self) {
+            'Face the winged serpent head on', (a, w, s, self) {
           s.add('''You slash at the serpent’s head as it moves in to strike you!
+
+
 But the sky is the creature’s domain, and it easily weaves away from your blows before coiling itself around your sword arm. Before you can react it bites deeply into your neck. You topple over the edge of the mountain. It’s now a matter of what kills you first: the fall or the venom.
 END''');
-          '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)player_death=true */';
-          assert(DEV_MODE || false);
+          w.updateActorById(a.id, (b) => b..hitpoints = 0);
           w.popSituation();
-          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (face the winged serpent head on.)';
+          return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (Face the winged serpent head on)';
         }, 'You will attack the creature straight on.')
       ];
 
@@ -833,7 +843,7 @@ You must defend yourselves.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('__END_OF_ROAM__', 'Continue down (UNIMPLEMENTED)',
+  new Exit('mountainside_base', 'Continue down',
       'You continue your descent to level ground. Thankfully, the end is in sight.')
 ]);
 Room ironcastRoad =

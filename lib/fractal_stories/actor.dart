@@ -59,6 +59,8 @@ abstract class Actor extends Object
 
   int get hitpoints;
 
+  int get gold;
+
   /// Names can change or can even be duplicate. [id] is the only safe way
   /// to find out if we're talking about the same actor.
   @override
@@ -283,6 +285,8 @@ abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
   Pose pose = Pose.standing;
   @virtual
   int hitpoints = 1;
+  @virtual
+  int gold = 0;
   @virtual
   int maxHitpoints = 1;
   @virtual

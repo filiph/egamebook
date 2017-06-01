@@ -14,24 +14,11 @@ abstract class RoamingAction extends Action {
     return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
   }
 
-  /// Used for things like 'has_keg_of_beer'. Things that can't be read
-  /// from ActionRecords (because they may live
-  ///
-  @Deprecated(
-      'define values on WorldState instead, maybe create a Built value type') // TODO
-  void setFlag(String flag) {}
-
-  bool getFlag(String flag) {}
-
   void movePlayer(WorldState w, Storyline s, String locationName) {
     getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
   }
 
   Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
-
-//  void giveGold(WorldState w, int amount) {
-//    w.updateActorById(getPlayer(w).id, (b) => b..);
-//  }
 }
 
 /// This closure signature is here in order to allow [SimpleAction] to be

@@ -23,6 +23,8 @@ class _$Actor extends Actor {
   @override
   final int hitpoints;
   @override
+  final int gold;
+  @override
   final int id;
   @override
   final int initiative;
@@ -60,6 +62,7 @@ class _$Actor extends Actor {
       this.currentWeapon,
       this.followingActorId,
       this.hitpoints,
+      this.gold,
       this.id,
       this.initiative,
       this.isActive,
@@ -78,6 +81,7 @@ class _$Actor extends Actor {
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
+    if (gold == null) throw new ArgumentError.notNull('gold');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
@@ -111,6 +115,7 @@ class _$Actor extends Actor {
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
         hitpoints == other.hitpoints &&
+        gold == other.gold &&
         id == other.id &&
         initiative == other.initiative &&
         isActive == other.isActive &&
@@ -146,22 +151,13 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc(
-                                                                                $jc(
-                                                                                    0,
-                                                                                    alreadyMentioned
-                                                                                        .hashCode),
-                                                                                categories
-                                                                                    .hashCode),
-                                                                            combineFunction
-                                                                                .hashCode),
-                                                                        currentRoomName
-                                                                            .hashCode),
-                                                                    currentWeapon
-                                                                        .hashCode),
-                                                                followingActorId
-                                                                    .hashCode),
-                                                            hitpoints.hashCode),
+                                                                            $jc($jc($jc(0, alreadyMentioned.hashCode), categories.hashCode),
+                                                                                combineFunction.hashCode),
+                                                                            currentRoomName.hashCode),
+                                                                        currentWeapon.hashCode),
+                                                                    followingActorId.hashCode),
+                                                                hitpoints.hashCode),
+                                                            gold.hashCode),
                                                         id.hashCode),
                                                     initiative.hashCode),
                                                 isActive.hashCode),
@@ -187,6 +183,7 @@ class _$Actor extends Actor {
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
         'hitpoints=${hitpoints.toString()},\n'
+        'gold=${gold.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
         'isActive=${isActive.toString()},\n'
@@ -289,6 +286,18 @@ class _$ActorBuilder extends ActorBuilder {
   set hitpoints(int hitpoints) {
     _$this;
     super.hitpoints = hitpoints;
+  }
+
+  @override
+  int get gold {
+    _$this;
+    return super.gold;
+  }
+
+  @override
+  set gold(int gold) {
+    _$this;
+    super.gold = gold;
   }
 
   @override
@@ -458,6 +467,7 @@ class _$ActorBuilder extends ActorBuilder {
       super.currentWeapon = _$v.currentWeapon;
       super.followingActorId = _$v.followingActorId;
       super.hitpoints = _$v.hitpoints;
+      super.gold = _$v.gold;
       super.id = _$v.id;
       super.initiative = _$v.initiative;
       super.isActive = _$v.isActive;
@@ -498,6 +508,7 @@ class _$ActorBuilder extends ActorBuilder {
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
             hitpoints: hitpoints,
+            gold: gold,
             id: id,
             initiative: initiative,
             isActive: isActive,
