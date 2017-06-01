@@ -10,15 +10,7 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
 abstract class RoamingAction extends Action {
-  RoomRoamingSituation getRoomRoaming(WorldState w) {
-    return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
-  }
-
-  void movePlayer(WorldState w, Storyline s, String locationName) {
-    getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
-  }
-
-  Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
+  // TODO: remove if not in use
 }
 
 /// This closure signature is here in order to allow [SimpleAction] to be

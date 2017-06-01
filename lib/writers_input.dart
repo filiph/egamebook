@@ -149,8 +149,6 @@ class SneakOntoCart extends RoamingAction {
 
   static final SneakOntoCart singleton = new SneakOntoCart();
 
-  RoamingAction get self => this;
-
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -207,8 +205,6 @@ class TakeOutGateGuards extends RoamingAction {
   final String name = 'take_out_gate_guards';
 
   static final TakeOutGateGuards singleton = new TakeOutGateGuards();
-
-  RoamingAction get self => this;
 
   @override
   bool isApplicable(Actor a, WorldState w) {
@@ -398,8 +394,6 @@ class ThreatenWingedSerpent extends RoamingAction {
 
   static final ThreatenWingedSerpent singleton = new ThreatenWingedSerpent();
 
-  RoamingAction get self => this;
-
   @override
   bool isApplicable(Actor a, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -413,7 +407,7 @@ class ThreatenWingedSerpent extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Intimidated by your weapon, the winged serpent abandons its nest and flees to the mountaintop.');
-    self.movePlayer(w, s, "mountainside_base");
+    movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs ThreatenWingedSerpent';
   }
 
@@ -475,7 +469,7 @@ abstract class ThreatenWingedSerpentRescueSituation extends Situation
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
           assert(DEV_MODE || false);
-          self.movePlayer(w, s, "mountainside_base");
+          movePlayer(w, s, "mountainside_base");
           w.popSituation();
           return 'ThreatenWingedSerpentRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
@@ -522,14 +516,12 @@ But the sky is the creature’s domain, and it easily weaves away from your blow
 
 class SootheWingedSerpent extends RoamingAction {
   @override
-  final String command = 'soothe the serpent';
+  final String command = 'Soothe the serpent';
 
   @override
   final String name = 'soothe_winged_serpent';
 
   static final SootheWingedSerpent singleton = new SootheWingedSerpent();
-
-  RoamingAction get self => this;
 
   @override
   bool isApplicable(Actor a, WorldState w) {
@@ -546,7 +538,7 @@ class SootheWingedSerpent extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         'Your sibilant words reach the winged serpent’s ears. It coils in the air for a while longer, then whips towards its nest to clutch possessively at its eggs. You decide it’s time to move on.');
-    self.movePlayer(w, s, "mountainside_base");
+    movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs SootheWingedSerpent';
   }
 
@@ -608,7 +600,7 @@ abstract class SootheWingedSerpentRescueSituation extends Situation
               'Just as the serpent strikes, Briana hurls her dagger at its wing. The weapon grazes the creature’s wing just enough to keep it from directly biting you. Still, one poisoned fang grazes your skin.');
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: subtract 2 from player\'s luck */';
           assert(DEV_MODE || false);
-          self.movePlayer(w, s, "mountainside_base");
+          movePlayer(w, s, "mountainside_base");
           w.popSituation();
           return 'SootheWingedSerpentRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),
@@ -655,15 +647,13 @@ But the sky is the creature’s domain, and it easily weaves away from your blow
 
 class ThreatenWingedSerpentEggs extends RoamingAction {
   @override
-  final String command = 'threaten the serpent’s eggs';
+  final String command = 'Threaten the serpent’s eggs';
 
   @override
   final String name = 'threaten_winged_serpent_eggs';
 
   static final ThreatenWingedSerpentEggs singleton =
       new ThreatenWingedSerpentEggs();
-
-  RoamingAction get self => this;
 
   @override
   bool isApplicable(Actor a, WorldState w) {
@@ -700,7 +690,7 @@ You grin at it as you juggle the egg from one hand to the other. With one smooth
 Briana whistled. “That should fetch some coin from the right merchants. Now, let’s get out of here before that thing comes back.”''');
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
     assert(DEV_MODE || false);
-    self.movePlayer(w, s, "mountainside_base");
+    movePlayer(w, s, "mountainside_base");
     return '${a.name} successfully performs ThreatenWingedSerpentEggs';
   }
 
@@ -761,7 +751,7 @@ abstract class ThreatenWingedSerpentEggsRescueSituation extends Situation
           assert(DEV_MODE || false);
           '/* PLEASE IMPLEMENT SUCCESS_EFFECT: (DOLLAR_SIGN)gained_serpent_egg=true */';
           assert(DEV_MODE || false);
-          self.movePlayer(w, s, "mountainside_base");
+          movePlayer(w, s, "mountainside_base");
           w.popSituation();
           return 'ThreatenWingedSerpentEggsRescueSituation resolved with rescue/continuation (Get Briana’s help)';
         }, 'Maybe your companion has an answer.'),

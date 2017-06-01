@@ -5,8 +5,15 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
+
+Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
+
+RoomRoamingSituation getRoomRoaming(WorldState w) {
+  return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
+}
 
 Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
   var orc = new Actor((b) => b
@@ -35,6 +42,10 @@ Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
   } else {
     return [orc, goblin];
   }
+}
+
+void movePlayer(WorldState w, Storyline s, String locationName) {
+  getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
 }
 
 void updateGlobal(WorldState w,
