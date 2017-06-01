@@ -54,6 +54,13 @@ class GeneratedAction extends GeneratedGameObject {
         type: stringType, value: literal(writersName))
       ..addAnnotation(overrideAnnotation));
 
+    // Create a convenience method that unifies access to methods like
+    // [RoamingAction.movePlayer] between methods in a RoamingAction and
+    // a SimpleAction (which gets a `self` argument).
+    var selfGetter =
+        getter("self", returnType: actionType, returns: reference('this'));
+    classBuilder.addMethod(selfGetter);
+
     MethodBuilder isApplicableBuilder = _createIsApplicableBuilder(forLocation);
     classBuilder.addMethod(isApplicableBuilder);
 
