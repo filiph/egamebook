@@ -20,6 +20,166 @@ import 'package:edgehead/writers_input_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
+Room startOfBook =
+    new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The journey from slavery to power begins with a single crack of a skull. Agruth, the orc-slaver, falls to the rock floor. You take his shortsword and with help from another slave, Briana, you move Agruth\'s body to a shady crevice in the tunnel\'s wall.
+
+
+You are Aren, a slave on the run. You have spent three horrible years inside this mountain, and you decided it\'s better to die than to stay.
+
+
+<p class="meta">You can use the question mark (?) icons below to learn more about each option.</p>
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[]);
+
+class FleeThroughNecromancersChurch extends RoamingAction {
+  @override
+  final String command = 'Flee through the Underground Church';
+
+  @override
+  final String name = 'flee_through_necromancers_church';
+
+  static final FleeThroughNecromancersChurch singleton =
+      new FleeThroughNecromancersChurch();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_of_book') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('You go to church.');
+    updateGlobal(w, (b) => b..hasKegOfBeer = true);
+    movePlayer(w, s, "underground_church");
+    return '${a.name} successfully performs FleeThroughNecromancersChurch';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    s.add(null);
+    return '${a.name} fails to perform FleeThroughNecromancersChurch';
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 0.9;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'The Underground Church is much less patroled, so you\'re more likely to slip unnoticed. On the other hand, it\'s unclear who or what lurks there.';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class FleeThroughWarForge extends RoamingAction {
+  @override
+  final String command = 'Flee through the War Forge';
+
+  @override
+  final String name = 'flee_through_war_forge';
+
+  static final FleeThroughWarForge singleton = new FleeThroughWarForge();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_of_book') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('You go to war forgery (some hidden place there).');
+    movePlayer(w, s, "war_forge");
+    return '${a.name} successfully performs FleeThroughWarForge';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    s.add(null);
+    return '${a.name} fails to perform FleeThroughWarForge';
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 0.7;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'The War Forge is where the war machines are built. It\'s a place that you are familiar with, and it\'s a more direct path to freedom. But these parts are also full of orcs.';
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room undergroundChurch =
+    new Room('underground_church', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''underground_church -- TBD
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('__END_OF_ROAM__', 'DEBUG - continue (UNIMPLEMENTED)',
+      'You continue your journey DEBUG.')
+]);
+Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''war_forge TBD
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('__END_OF_ROAM__', 'DEBUG - continue (UNIMPLEMENTED)',
+      'You continue your journey DEBUG')
+]);
 Room entranceToBloodrock =
     new Room('entrance_to_bloodrock', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -900,6 +1060,9 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
       'You make your way closer to the fort.')
 ]);
 List<Room> allRooms = <Room>[
+  startOfBook,
+  undergroundChurch,
+  warForge,
   entranceToBloodrock,
   mountainPass,
   mountainPassGate,
@@ -910,6 +1073,8 @@ List<Room> allRooms = <Room>[
   ironcastRoad
 ];
 List<RoamingAction> allActions = <RoamingAction>[
+  FleeThroughNecromancersChurch.singleton,
+  FleeThroughWarForge.singleton,
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,

@@ -49,6 +49,7 @@ class EdgeheadGame extends LoopedEvent {
   Actor orc;
   Actor goblin;
 
+  Room preStartBook;
   Room deadEscapee;
   Room tunnel;
 
@@ -97,6 +98,14 @@ class EdgeheadGame extends LoopedEvent {
       ..team = defaultEnemyTeam
       ..combineFunction = carelessCombineFunction);
 
+    preStartBook = new Room(
+        "preStartBook",
+        (a, w, s) => s.add("UNUSED because this is the first choice",
+            wholeSentence: true),
+        (a, w, s) => throw new StateError("Room isn't to be revisited"),
+        null,
+        null,
+        [new Exit("start_of_book", "", "")]);
     deadEscapee = new Room(
         "deadEscapee",
         (a, w, s) => s.add("UNUSED because this is the first choice",
@@ -167,11 +176,12 @@ class EdgeheadGame extends LoopedEvent {
 
     initialSituation = new RoomRoamingSituation.initialized(
 //        deadEscapee,
-        entranceToBloodrock,
+//        entranceToBloodrock,
+        preStartBook,
         false);
 
     var rooms = new List<Room>.from(allRooms)
-      ..addAll([deadEscapee, tunnel, endOfRoam]);
+      ..addAll([preStartBook, deadEscapee, tunnel, endOfRoam]);
 
     var global = new EdgeheadGlobalState();
 
@@ -318,9 +328,7 @@ class EdgeheadGame extends LoopedEvent {
 
     log.fine(() => "${actor.name} selected ${action.name}");
     log.finest(() {
-      String path = world.actionRecords
-          .map((a) => a.description)
-          .join(' <- ');
+      String path = world.actionRecords.map((a) => a.description).join(' <- ');
       return "- how ${actor.name} got here: $path";
     });
   }
