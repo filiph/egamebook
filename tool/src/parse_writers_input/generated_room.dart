@@ -80,6 +80,7 @@ class GeneratedRoom extends GeneratedGameObject {
   }
 
   Iterable<ExpressionBuilder> parseExits(String s) sync* {
+    if (s == null) return;
     for (var line in s.split('\n')) {
       line = line.trim();
       if (line.isEmpty) continue;
