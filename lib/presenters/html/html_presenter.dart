@@ -41,7 +41,7 @@ import "package:html/dom.dart" as html5lib;
 /// in gamebook for user interaction and displaying information.
 class HtmlPresenter extends Presenter {
   /// Restart [:button:].
-  ButtonElement restartAnchor;
+  Element restartAnchor;
 
   /// [:span:] where points are displayed.
   SpanElement pointsSpan;
@@ -50,7 +50,7 @@ class HtmlPresenter extends Presenter {
   DivElement bookDiv;
 
   /// Start [:button:].
-  ButtonElement startButton;
+  Element startButton;
 
   /// Book's title [:div:].
   DivElement bookTitleDiv;
@@ -137,7 +137,7 @@ class HtmlPresenter extends Presenter {
         .querySelector("#start-button-start-text")
         .classes
         .remove("hidden");
-    startButton.disabled = false;
+    startButton.classes.remove("disabled");
     startButton.onClick.first.then((_) {
       document.body.classes.remove("title-open");
       new Future(() {
@@ -212,9 +212,8 @@ class HtmlPresenter extends Presenter {
       if (USE_SHOWTEXT_ANIMATION) {
         count++;
         el.classes.add("hidden");
-        num transitionDelay = _durationBetweenShowingElements.inMilliseconds *
-            (count) /
-            1000;
+        num transitionDelay =
+            _durationBetweenShowingElements.inMilliseconds * (count) / 1000;
         el.style.transitionDelay = "${transitionDelay}s";
         // We're waiting for another frame so that the transition runs.
         // ignore: unawaited_futures
@@ -325,7 +324,7 @@ class HtmlPresenter extends Presenter {
     // Build the <li> elements of the main (non-submenu) choices, one by one.
     int mainChoiceListNumber = 1;
     choiceList.where((choice) => choice.submenu == null).forEach((choice) {
-      ButtonElement btn = _createChoiceButton("$mainChoiceListNumber.", choice,
+      Element btn = _createChoiceButton("$mainChoiceListNumber.", choice,
           completer, choicesDiv, clickSubscriptions);
 
       choicesOl.append(btn);
@@ -350,7 +349,7 @@ class HtmlPresenter extends Presenter {
       submenusDiv.append(submenuButtonsDiv);
 
       submenus.forEach((name, submenu) {
-        ButtonElement submenuButton = new ButtonElement()
+        Element submenuButton = _createButtonElement()
           ..classes.add("submenu-button")
           ..text = submenu.name;
 
@@ -360,7 +359,7 @@ class HtmlPresenter extends Presenter {
           ..classes.addAll(["choices-ol", "display-none"]);
 
         submenu.choices.forEach((choice) {
-          ButtonElement btn = _createChoiceButton(
+          Element btn = _createChoiceButton(
               "", choice, completer, choicesDiv, clickSubscriptions);
 
           submenuChoicesOl.append(btn);
@@ -385,16 +384,25 @@ class HtmlPresenter extends Presenter {
     return await completer.future;
   }
 
+  /// Creates an element that is button-like, but not actual HTML
+  /// [ButtonElement].
+  ///
+  /// This is useful when we want to have buttons inside that button (which
+  /// is unsupported for `<button>` in Firefox and maybe other browsers).
+  LIElement _createButtonElement() => new LIElement()
+    ..classes.add('button')
+    ..setAttribute('role', 'button');
+
   /// Creates new choice button in form of HTML [:button:] with index and text.
   ///
   /// Choice button can also have info chips.
-  ButtonElement _createChoiceButton(
+  LIElement _createChoiceButton(
       String index,
       Choice choice,
       Completer completer,
       DivElement choicesDiv,
       Set<StreamSubscription> clickSubscriptions) {
-    ButtonElement btn = new ButtonElement();
+    var btn = _createButtonElement();
 
     var numberSpan = new SpanElement();
     numberSpan.text = index;
@@ -456,7 +464,7 @@ class HtmlPresenter extends Presenter {
       MouseEvent event,
       Completer completer,
       Choice choice,
-      ButtonElement btn,
+      Element btn,
       DivElement choicesDiv,
       Set<StreamSubscription> clickSubscriptions) {
     // Send choice hash back to Scripter, but asynchronously.
@@ -468,8 +476,8 @@ class HtmlPresenter extends Presenter {
     choicesDiv.classes.add("chosen");
     // Unregister listeners.
     choicesDiv
-        .querySelectorAll("button")
-        .forEach((var b) => (b as ButtonElement).disabled = true);
+        .querySelectorAll(".button")
+        .forEach((var b) => b.classes.add('disabled'));
     clickSubscriptions.forEach((StreamSubscription s) => s.cancel());
     clickSubscriptions.clear();
     // Show bookmark.
@@ -538,7 +546,7 @@ class HtmlPresenter extends Presenter {
       var stat = stats[i];
       var span = new SpanElement();
       span.text = stat.string;
-      var button = new ButtonElement();
+      var button = _createButtonElement();
       if (!stat.show) button.classes.add("display-none");
       button.children.add(span);
       statsDiv.children.add(button);
@@ -582,7 +590,8 @@ class HtmlPresenter extends Presenter {
           ..classes.add("slot-machine__humanized-probability"));
     }
     var machine = new slot.SlotMachine(probability,
-        rerollable: rerollable, rerollEffectDescription: rerollEffectDescription);
+        rerollable: rerollable,
+        rerollEffectDescription: rerollEffectDescription);
     div.append(machine.canvasEl);
     var paragraph = new Element.p()
       ..classes.add("slot-machine__result")
@@ -681,7 +690,7 @@ class HtmlPresenter extends Presenter {
     contentDiv.children.add(textDiv);
     DivElement buttonsDiv = new DivElement()..classes.add("dialog-buttons");
     for (DialogButton dialogButton in dialog.buttons) {
-      ButtonElement buttonEl = new ButtonElement()..text = dialogButton.label;
+      Element buttonEl = _createButtonElement()..text = dialogButton.label;
       buttonEl.onClick.listen((_) {
         bool shouldClose = dialogButton.behaviour();
         if (shouldClose) {
@@ -1509,9 +1518,9 @@ class HtmlOption extends HtmlUiElement {
   /// [blueprint].
   HtmlOption(OptionBase blueprint) : super(blueprint) {
     this.blueprint = blueprint;
-    uiRepresentation = new OptionElement(
-        value: blueprint.id,
-        selected: blueprint.current)..text = blueprint.text;
+    uiRepresentation =
+        new OptionElement(value: blueprint.id, selected: blueprint.current)
+          ..text = blueprint.text;
 
     update();
   }
