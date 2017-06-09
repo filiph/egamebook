@@ -79,14 +79,14 @@ body.title-open {
   background: white;
   padding: 2rem 1rem;
 
-  button {
+  .button {
     max-width: $max-width;
     margin: auto;
 
     -webkit-transition: color 0.5s;
     transition: color 0.5s;
 
-    &:enabled {
+    &:not(.disabled) {
       color: white;
       @include linear-gradient(#05a505 10%, #019101);
     }
@@ -133,7 +133,7 @@ nav {
   @include position(fixed, 0 0 null 0);
   z-index: 10;
 
-  button {
+  .button {
     width: auto;
   }
 }
@@ -157,7 +157,7 @@ nav {
   padding-top: 0.5rem;
   padding-left: 1rem;
 
-  button {
+  .button {
     line-height: 100%;
     span {
       vertical-align: sub;
@@ -173,7 +173,7 @@ nav {
   display: inline;
   text-align: right;
 
-  button {
+  .button {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
     line-height: 100%;
@@ -193,7 +193,7 @@ nav {
   border-color: gold;
 }
 
-nav button {
+nav .button {
   @include button-appearance;
   color: #666;
   text-shadow: 1px 1px 0px #ffffff;
@@ -414,7 +414,7 @@ h2 {
   margin-bottom: $line-height;
 }
 
-button {
+.button {
   @include button-appearance;
   display: block;
   width: 100%;
@@ -424,26 +424,30 @@ button {
   // font-size: modular-scale(0);
 }
 
-ol.choices-ol button span.choice-number {
+.button.disabled {
+  background: white;
+}
+
+ol.choices-ol .button span.choice-number {
   display: block;
   width: 1.5rem;
   float: left;
   text-align: right;
 }
 
-ol.choices-ol button span.choice-display {
+ol.choices-ol .button span.choice-display {
   padding-left: 2.5rem;
   @include display(flex);
   @include justify-content(space-between);
   @include align-items(flex-start);
 }
 
-ol.choices-ol button span.choice-text {
+ol.choices-ol .button span.choice-text {
   @include order(1);
   display: block;
 }
 
-.choices-div.chosen button:not(.chosen) {
+.choices-div.chosen .button:not(.chosen) {
   @include linear-gradient(tint(#f9f9f9, 50%) 10%, tint(#ededed, 50%));
   color: #ddd;
 }
@@ -453,11 +457,13 @@ ol.choices-ol button span.choice-text {
 .choice-help-button {
   @include order(3);
 
-  font-size: $sans-serif-font-size / 3 * 2;
+  font-size: $sans-serif-font-size;
   border: 1px solid #ddd;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
-  padding: 0.1rem 0.3rem;
+  padding: 0.1rem 0.4rem;
+  line-height: 1.2;
+  margin-top: 0.2rem;
 }
 
 // Infochips
