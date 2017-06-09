@@ -171,7 +171,7 @@ class Storyline {
   /// correctly realize a [Storyline] several times in a row. If we kept
   /// track of first mentions as booleans, once an entity was mentioned, it
   /// would then forever appear as "mentioned from the beginning".
-  Map<int, int> _firstMentions = {};
+  final Map<int, int> _firstMentions = {};
 
   Storyline();
 

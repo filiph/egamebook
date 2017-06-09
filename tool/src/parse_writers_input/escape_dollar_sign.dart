@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
 
-final log = new Logger("escape_dollar_sign");
+final Logger log = new Logger("escape_dollar_sign");
 
 String escapeDollarSign(String s) {
   if (s.contains(r'$')) {

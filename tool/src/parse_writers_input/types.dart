@@ -1,5 +1,7 @@
 import 'package:code_builder/code_builder.dart';
 
+// ignore_for_file: type_annotate_public_apis
+
 final actionType = new TypeBuilder("RoamingAction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
 

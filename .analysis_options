@@ -1,5 +1,7 @@
 analyzer:
   strong-mode: true
+  exclude:
+    - drivedump/**
 linter:
   rules:
     - annotate_overrides

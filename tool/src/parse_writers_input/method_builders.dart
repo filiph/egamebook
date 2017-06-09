@@ -3,9 +3,9 @@ import 'package:code_builder/code_builder.dart';
 import 'escape_dollar_sign.dart';
 import 'parameters.dart';
 
-final overrideAnnotation = reference('override');
+final ReferenceBuilder overrideAnnotation = reference('override');
 
-final unimplementedErrorThrow =
+final ExpressionBuilder unimplementedErrorThrow =
     reference('UnimplementedError').newInstance([]).asThrow();
 
 /// Adds a note to the method, with an assert that fails.
