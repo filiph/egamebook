@@ -144,6 +144,11 @@ class GeneratedAction extends GeneratedGameObject {
           reference(rescueSituationClassName)
               .newInstance([], constructor: 'initialized')
         ]));
+      } else {
+        // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION
+        applyFailureBuilder.addStatement(reference(storylineParameter.name)
+            .invoke('add', [literal(_map['FAILURE_DESCRIPTION'])]));
+        addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder);
       }
       applyFailureBuilder.addStatement(
           literal('\${a.name} fails to perform $className').asReturn());
