@@ -16,15 +16,15 @@ void main() {
   group("fractal_stories", () {
     group("Actor", () {
       test("rebuilt actor has different hashcode", () {
-        Actor filip = new Actor((b) => b
-          ..id = 1
-          ..isPlayer = true
-          ..pronoun = Pronoun.YOU
-          ..name = "Filip"
-          ..currentWeapon = new Sword()
-          ..hitpoints = 2
-          ..stamina = 1
-          ..initiative = 1000);
+        Actor filip = new Actor.initialized(1, "Filip",
+            isPlayer: true,
+            pronoun: Pronoun.YOU,
+            currentWeapon: new Sword(),
+            hitpoints: 2,
+            maxHitpoints: 2,
+            stamina: 1,
+            initiative: 1000
+            );
 
         var filip2 = filip.rebuild((b) => b);
         var richard = filip.rebuild((b) => b..name = "Richard");
@@ -36,12 +36,8 @@ void main() {
     group("Situation", () {
       Actor a, b;
       setUp(() {
-        a = new Actor((b) => b
-          ..id = 1
-          ..name = "A");
-        b = new Actor((b) => b
-          ..id = 2
-          ..name = "B");
+        a = new Actor.initialized(1, "A");
+        b = new Actor.initialized(2, "B");
       });
 
       test("FightSituation", () {

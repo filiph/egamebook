@@ -50,8 +50,6 @@ class EdgeheadGame extends LoopedEvent {
   Actor goblin;
 
   Room preStartBook;
-  Room deadEscapee;
-  Room tunnel;
 
   Situation initialSituation;
   WorldState world;
@@ -78,25 +76,21 @@ class EdgeheadGame extends LoopedEvent {
   }
 
   void setup() {
-    orc = new Actor((b) => b
-      ..id = 1000
-      ..name = "orc"
-      ..nameIsProperNoun = false
-      ..pronoun = Pronoun.HE
-      ..currentWeapon = new Sword()
-      ..hitpoints = 2
-      ..maxHitpoints = 2
-      ..team = defaultEnemyTeam
-      ..combineFunction = carelessCombineFunction);
+    orc = new Actor.initialized(1000, "orc",
+        nameIsProperNoun: false,
+        pronoun: Pronoun.HE,
+        currentWeapon: new Sword(),
+        hitpoints: 2,
+        maxHitpoints: 2,
+        team: defaultEnemyTeam,
+        combineFunction: carelessCombineFunction);
 
-    goblin = new Actor((b) => b
-      ..id = 1001
-      ..name = "goblin"
-      ..nameIsProperNoun = false
-      ..pronoun = Pronoun.HE
-      ..currentWeapon = new Sword("scimitar")
-      ..team = defaultEnemyTeam
-      ..combineFunction = carelessCombineFunction);
+    goblin = new Actor.initialized(1001, "goblin",
+        nameIsProperNoun: false,
+        pronoun: Pronoun.HE,
+        currentWeapon: new Sword("scimitar"),
+        team: defaultEnemyTeam,
+        combineFunction: carelessCombineFunction);
 
     preStartBook = new Room(
         "preStartBook",
@@ -106,82 +100,35 @@ class EdgeheadGame extends LoopedEvent {
         null,
         null,
         [new Exit("start_of_book", "", "")]);
-    deadEscapee = new Room(
-        "deadEscapee",
-        (a, w, s) => s.add("UNUSED because this is the first choice",
-            wholeSentence: true),
-        (a, w, s) => throw new StateError("Room isn't to be revisited"),
-        null,
-        null,
-        [
-          new Exit("tunnel", "Run towards freedom",
-              "You and Briana sprint through the giant worm’s tunnel.")
-        ]);
-    tunnel = new Room(
-        "tunnel",
-        (a, w, s) => s.add(
-            "Suddenly, an **orc** and a **goblin** jump in front of you from "
-            "a slimy crevice, swords in hands.\n\n"
-            "![Orc and Goblin](img/orc_and_goblin_sketch.jpg)",
-            wholeSentence: true),
-        (a, w, s) => throw new StateError("Room isn't to be revisited"),
-        (_) => [orc, goblin],
-        null,
-        [
-          new Exit(entranceToBloodrock.name, "Start running again",
-              "You finally arrive to the cave's entrance.")
-        ],
-        groundMaterial: "{rock|cavern} floor");
 
-    filip = new Actor((b) => b
-      ..id = 1
-      ..isPlayer = true
-      ..pronoun = Pronoun.YOU
-      ..name = "Filip"
-      ..currentWeapon = new Sword()
-      ..hitpoints = 2
-      ..maxHitpoints = 2
-      ..stamina = 1
-      ..initiative = 1000
-      ..currentRoomName = deadEscapee.name);
+    filip = new Actor.initialized(1, "Filip",
+        isPlayer: true,
+        pronoun: Pronoun.YOU,
+        currentWeapon: new Sword(),
+        hitpoints: 2,
+        maxHitpoints: 2,
+        stamina: 1,
+        initiative: 1000,
+        currentRoomName: preStartBook.name);
 
     hitpoints.value = filip.hitpoints / filip.maxHitpoints;
     stamina.value = filip.stamina;
     gold.value = filip.gold;
 
-    briana = new Actor((b) => b
-      ..id = 100
-      ..pronoun = Pronoun.SHE
-      ..name = "Briana"
-      ..currentWeapon = new Sword("longsword")
-      ..hitpoints = 2
-      ..maxHitpoints = 2
-      ..currentRoomName = deadEscapee.name
-      ..followingActorId = filip.id);
-
-    // TODO: make sure to re-use these events
-    // new FightSituation.initialized([filip, briana], [orc, goblin])
-    //     .rebuild((b) => b
-    //   ..events[2] = (w, s) {
-    //     s.addParagraph();
-    //     s.add("You hear a horrible growling sound from behind.");
-    //     s.add("The worm must be near.");
-    //     s.addParagraph();
-    //   }
-    //   ..events[6] = (w, s) {
-    //     s.addParagraph();
-    //     s.add("The earth shatters and there's that sound again.");
-    //     s.addParagraph();
-    //   });
+    briana = new Actor.initialized(100, "Briana",
+        pronoun: Pronoun.SHE,
+        currentWeapon: new Sword("longsword"),
+        hitpoints: 2,
+        maxHitpoints: 2,
+        currentRoomName: preStartBook.name,
+        followingActorId: filip.id);
 
     initialSituation = new RoomRoamingSituation.initialized(
-//        deadEscapee,
-//        entranceToBloodrock,
         preStartBook,
         false);
 
     var rooms = new List<Room>.from(allRooms)
-      ..addAll([preStartBook, deadEscapee, tunnel, endOfRoam]);
+      ..addAll([preStartBook, endOfRoam]);
 
     var global = new EdgeheadGlobalState();
 

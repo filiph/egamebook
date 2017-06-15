@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -15,32 +16,36 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
   return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
 }
 
+final _rand = new Random();
+
+int _makeUniqueId() => 1000 + _rand.nextInt(99999);
+
+Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
+    nameIsProperNoun: false,
+    pronoun: Pronoun.HE,
+    currentWeapon: new Sword(),
+    hitpoints: 2,
+    maxHitpoints: 2,
+    team: defaultEnemyTeam,
+    combineFunction: carelessCombineFunction);
+
+Actor _makeGoblin() => new Actor.initialized(_makeUniqueId(), "goblin",
+    nameIsProperNoun: false,
+    pronoun: Pronoun.HE,
+    currentWeapon: new Sword("scimitar"),
+    team: defaultEnemyTeam,
+    combineFunction: carelessCombineFunction);
+
+Iterable<Actor> escapeTunnelMonsters(WorldState w) {
+  return [_makeOrc(), _makeGoblin()];
+}
+
 Iterable<Actor> mountainPassGuardPostMonsters(WorldState w) {
-  var orc = new Actor((b) => b
-    ..id = 2000
-    ..name = "orc"
-    ..nameIsProperNoun = false
-    ..pronoun = Pronoun.HE
-    ..currentWeapon = new Sword()
-    ..hitpoints = 2
-    ..maxHitpoints = 2
-    ..team = defaultEnemyTeam
-    ..combineFunction = carelessCombineFunction);
-
-  var goblin = new Actor((b) => b
-    ..id = 2001
-    ..name = "goblin"
-    ..nameIsProperNoun = false
-    ..pronoun = Pronoun.HE
-    ..currentWeapon = new Sword("scimitar")
-    ..team = defaultEnemyTeam
-    ..combineFunction = carelessCombineFunction);
-
   if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards") ||
       w.actionHasBeenPerformedSuccessfully("take_out_gate_guards_rescue")) {
-    return [orc];
+    return [_makeOrc()];
   } else {
-    return [orc, goblin];
+    return [_makeOrc(), _makeGoblin()];
   }
 }
 

@@ -32,7 +32,45 @@ abstract class Actor extends Object
   /// which means there is nobody to score the situation. In that case, we
   /// provide this default score.
   static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
+
   factory Actor([updates(ActorBuilder b)]) = _$Actor;
+
+  factory Actor.initialized(int id, String name,
+          {bool isPlayer: false,
+          bool nameIsProperNoun: false,
+          Pronoun pronoun: Pronoun.IT,
+          Item currentWeapon,
+          int hitpoints: 1,
+          int maxHitpoints: 1,
+          int stamina: 0,
+          int initiative: 0,
+          int gold: 0,
+          String currentRoomName,
+          int followingActorId,
+          Team team,
+          CombineFunction combineFunction}) =>
+      new _$Actor((b) => b
+        ..id = id
+        ..name = name
+        ..nameIsProperNoun = nameIsProperNoun
+        ..pronoun = pronoun
+        ..currentWeapon = currentWeapon
+        ..alreadyMentioned = true
+        ..categories = []
+        ..pose = Pose.standing
+        ..hitpoints = hitpoints
+        ..maxHitpoints = maxHitpoints
+        ..gold = gold
+        ..stamina = stamina
+        ..initiative = initiative
+        ..isActive = true
+        ..isPlayer = isPlayer
+        ..items = new Set()
+        ..pronoun = Pronoun.IT
+        ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
+        ..currentRoomName = currentRoomName
+        ..followingActorId = followingActorId
+        ..combineFunction = combineFunction);
 
   Actor._();
 
@@ -178,9 +216,7 @@ abstract class Actor extends Object
         actionName: Confuse.className, sufferer: this, wasSuccess: true);
     if (recency == null) return false;
     int unconfuseRecency = w.timeSinceLastActionRecord(
-        actionName: Unconfuse.className,
-        protagonist: this,
-        wasSuccess: true);
+        actionName: Unconfuse.className, protagonist: this, wasSuccess: true);
     if (unconfuseRecency == null) return true;
     return unconfuseRecency < recency;
   }
@@ -268,58 +304,6 @@ abstract class Actor extends Object
     if (recency == null) return false;
     return recency <= time;
   }
-}
-
-abstract class ActorBuilder implements Builder<Actor, ActorBuilder> {
-  @virtual
-  bool alreadyMentioned = true;
-  @virtual
-  List<String> categories = <String>[];
-  @nullable
-  @virtual
-  Item currentWeapon;
-  @nullable
-  @virtual
-  Item shield;
-  @virtual
-  Pose pose = Pose.standing;
-  @virtual
-  int hitpoints = 1;
-  @virtual
-  int gold = 0;
-  @virtual
-  int maxHitpoints = 1;
-  @virtual
-  int stamina = 0;
-  @virtual
-  int id;
-  @virtual
-  int initiative = 100;
-  @virtual
-  bool isActive = true;
-  @virtual
-  bool isPlayer = false;
-  @virtual
-  Set<Item> items = new Set();
-  @virtual
-  String name;
-  @virtual
-  String currentRoomName;
-  @virtual
-  bool nameIsProperNoun = true;
-  @virtual
-  Pronoun pronoun = Pronoun.IT;
-  @nullable
-  @virtual
-  int followingActorId;
-  @virtual
-  Team team = playerTeam;
-  @nullable
-  @virtual
-  CombineFunction combineFunction;
-
-  factory ActorBuilder() = _$ActorBuilder;
-  ActorBuilder._();
 }
 
 class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {

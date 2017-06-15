@@ -52,7 +52,7 @@ class _$Actor extends Actor {
   final Team team;
 
   factory _$Actor([void updates(ActorBuilder b)]) =>
-      (new ActorBuilder()..update(updates)).build() as _$Actor;
+      (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
       {this.alreadyMentioned,
@@ -102,7 +102,7 @@ class _$Actor extends Actor {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$ActorBuilder toBuilder() => new _$ActorBuilder()..replace(this);
+  ActorBuilder toBuilder() => new ActorBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
@@ -201,286 +201,124 @@ class _$Actor extends Actor {
   }
 }
 
-class _$ActorBuilder extends ActorBuilder {
+class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
 
-  @override
-  bool get alreadyMentioned {
-    _$this;
-    return super.alreadyMentioned;
-  }
+  bool _alreadyMentioned;
+  bool get alreadyMentioned => _$this._alreadyMentioned;
+  set alreadyMentioned(bool alreadyMentioned) =>
+      _$this._alreadyMentioned = alreadyMentioned;
 
-  @override
-  set alreadyMentioned(bool alreadyMentioned) {
-    _$this;
-    super.alreadyMentioned = alreadyMentioned;
-  }
+  List<String> _categories;
+  List<String> get categories => _$this._categories;
+  set categories(List<String> categories) => _$this._categories = categories;
 
-  @override
-  List<String> get categories {
-    _$this;
-    return super.categories;
-  }
+  CombineFunction _combineFunction;
+  CombineFunction get combineFunction => _$this._combineFunction;
+  set combineFunction(CombineFunction combineFunction) =>
+      _$this._combineFunction = combineFunction;
 
-  @override
-  set categories(List<String> categories) {
-    _$this;
-    super.categories = categories;
-  }
+  String _currentRoomName;
+  String get currentRoomName => _$this._currentRoomName;
+  set currentRoomName(String currentRoomName) =>
+      _$this._currentRoomName = currentRoomName;
 
-  @override
-  CombineFunction get combineFunction {
-    _$this;
-    return super.combineFunction;
-  }
+  Item _currentWeapon;
+  Item get currentWeapon => _$this._currentWeapon;
+  set currentWeapon(Item currentWeapon) =>
+      _$this._currentWeapon = currentWeapon;
 
-  @override
-  set combineFunction(CombineFunction combineFunction) {
-    _$this;
-    super.combineFunction = combineFunction;
-  }
+  int _followingActorId;
+  int get followingActorId => _$this._followingActorId;
+  set followingActorId(int followingActorId) =>
+      _$this._followingActorId = followingActorId;
 
-  @override
-  String get currentRoomName {
-    _$this;
-    return super.currentRoomName;
-  }
+  int _hitpoints;
+  int get hitpoints => _$this._hitpoints;
+  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
 
-  @override
-  set currentRoomName(String currentRoomName) {
-    _$this;
-    super.currentRoomName = currentRoomName;
-  }
+  int _gold;
+  int get gold => _$this._gold;
+  set gold(int gold) => _$this._gold = gold;
 
-  @override
-  Item get currentWeapon {
-    _$this;
-    return super.currentWeapon;
-  }
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
-  @override
-  set currentWeapon(Item currentWeapon) {
-    _$this;
-    super.currentWeapon = currentWeapon;
-  }
+  int _initiative;
+  int get initiative => _$this._initiative;
+  set initiative(int initiative) => _$this._initiative = initiative;
 
-  @override
-  int get followingActorId {
-    _$this;
-    return super.followingActorId;
-  }
+  bool _isActive;
+  bool get isActive => _$this._isActive;
+  set isActive(bool isActive) => _$this._isActive = isActive;
 
-  @override
-  set followingActorId(int followingActorId) {
-    _$this;
-    super.followingActorId = followingActorId;
-  }
+  bool _isPlayer;
+  bool get isPlayer => _$this._isPlayer;
+  set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
 
-  @override
-  int get hitpoints {
-    _$this;
-    return super.hitpoints;
-  }
+  Set<Item> _items;
+  Set<Item> get items => _$this._items;
+  set items(Set<Item> items) => _$this._items = items;
 
-  @override
-  set hitpoints(int hitpoints) {
-    _$this;
-    super.hitpoints = hitpoints;
-  }
+  int _maxHitpoints;
+  int get maxHitpoints => _$this._maxHitpoints;
+  set maxHitpoints(int maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
 
-  @override
-  int get gold {
-    _$this;
-    return super.gold;
-  }
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
 
-  @override
-  set gold(int gold) {
-    _$this;
-    super.gold = gold;
-  }
+  bool _nameIsProperNoun;
+  bool get nameIsProperNoun => _$this._nameIsProperNoun;
+  set nameIsProperNoun(bool nameIsProperNoun) =>
+      _$this._nameIsProperNoun = nameIsProperNoun;
 
-  @override
-  int get id {
-    _$this;
-    return super.id;
-  }
+  Pose _pose;
+  Pose get pose => _$this._pose;
+  set pose(Pose pose) => _$this._pose = pose;
 
-  @override
-  set id(int id) {
-    _$this;
-    super.id = id;
-  }
+  Pronoun _pronoun;
+  Pronoun get pronoun => _$this._pronoun;
+  set pronoun(Pronoun pronoun) => _$this._pronoun = pronoun;
 
-  @override
-  int get initiative {
-    _$this;
-    return super.initiative;
-  }
+  Item _shield;
+  Item get shield => _$this._shield;
+  set shield(Item shield) => _$this._shield = shield;
 
-  @override
-  set initiative(int initiative) {
-    _$this;
-    super.initiative = initiative;
-  }
+  int _stamina;
+  int get stamina => _$this._stamina;
+  set stamina(int stamina) => _$this._stamina = stamina;
 
-  @override
-  bool get isActive {
-    _$this;
-    return super.isActive;
-  }
+  TeamBuilder _team;
+  TeamBuilder get team => _$this._team ??= new TeamBuilder();
+  set team(TeamBuilder team) => _$this._team = team;
 
-  @override
-  set isActive(bool isActive) {
-    _$this;
-    super.isActive = isActive;
-  }
-
-  @override
-  bool get isPlayer {
-    _$this;
-    return super.isPlayer;
-  }
-
-  @override
-  set isPlayer(bool isPlayer) {
-    _$this;
-    super.isPlayer = isPlayer;
-  }
-
-  @override
-  Set<Item> get items {
-    _$this;
-    return super.items;
-  }
-
-  @override
-  set items(Set<Item> items) {
-    _$this;
-    super.items = items;
-  }
-
-  @override
-  int get maxHitpoints {
-    _$this;
-    return super.maxHitpoints;
-  }
-
-  @override
-  set maxHitpoints(int maxHitpoints) {
-    _$this;
-    super.maxHitpoints = maxHitpoints;
-  }
-
-  @override
-  String get name {
-    _$this;
-    return super.name;
-  }
-
-  @override
-  set name(String name) {
-    _$this;
-    super.name = name;
-  }
-
-  @override
-  bool get nameIsProperNoun {
-    _$this;
-    return super.nameIsProperNoun;
-  }
-
-  @override
-  set nameIsProperNoun(bool nameIsProperNoun) {
-    _$this;
-    super.nameIsProperNoun = nameIsProperNoun;
-  }
-
-  @override
-  Pose get pose {
-    _$this;
-    return super.pose;
-  }
-
-  @override
-  set pose(Pose pose) {
-    _$this;
-    super.pose = pose;
-  }
-
-  @override
-  Pronoun get pronoun {
-    _$this;
-    return super.pronoun;
-  }
-
-  @override
-  set pronoun(Pronoun pronoun) {
-    _$this;
-    super.pronoun = pronoun;
-  }
-
-  @override
-  Item get shield {
-    _$this;
-    return super.shield;
-  }
-
-  @override
-  set shield(Item shield) {
-    _$this;
-    super.shield = shield;
-  }
-
-  @override
-  int get stamina {
-    _$this;
-    return super.stamina;
-  }
-
-  @override
-  set stamina(int stamina) {
-    _$this;
-    super.stamina = stamina;
-  }
-
-  @override
-  Team get team {
-    _$this;
-    return super.team;
-  }
-
-  @override
-  set team(Team team) {
-    _$this;
-    super.team = team;
-  }
-
-  _$ActorBuilder() : super._();
+  ActorBuilder();
 
   ActorBuilder get _$this {
     if (_$v != null) {
-      super.alreadyMentioned = _$v.alreadyMentioned;
-      super.categories = _$v.categories;
-      super.combineFunction = _$v.combineFunction;
-      super.currentRoomName = _$v.currentRoomName;
-      super.currentWeapon = _$v.currentWeapon;
-      super.followingActorId = _$v.followingActorId;
-      super.hitpoints = _$v.hitpoints;
-      super.gold = _$v.gold;
-      super.id = _$v.id;
-      super.initiative = _$v.initiative;
-      super.isActive = _$v.isActive;
-      super.isPlayer = _$v.isPlayer;
-      super.items = _$v.items;
-      super.maxHitpoints = _$v.maxHitpoints;
-      super.name = _$v.name;
-      super.nameIsProperNoun = _$v.nameIsProperNoun;
-      super.pose = _$v.pose;
-      super.pronoun = _$v.pronoun;
-      super.shield = _$v.shield;
-      super.stamina = _$v.stamina;
-      super.team = _$v.team;
+      _alreadyMentioned = _$v.alreadyMentioned;
+      _categories = _$v.categories;
+      _combineFunction = _$v.combineFunction;
+      _currentRoomName = _$v.currentRoomName;
+      _currentWeapon = _$v.currentWeapon;
+      _followingActorId = _$v.followingActorId;
+      _hitpoints = _$v.hitpoints;
+      _gold = _$v.gold;
+      _id = _$v.id;
+      _initiative = _$v.initiative;
+      _isActive = _$v.isActive;
+      _isPlayer = _$v.isPlayer;
+      _items = _$v.items;
+      _maxHitpoints = _$v.maxHitpoints;
+      _name = _$v.name;
+      _nameIsProperNoun = _$v.nameIsProperNoun;
+      _pose = _$v.pose;
+      _pronoun = _$v.pronoun;
+      _shield = _$v.shield;
+      _stamina = _$v.stamina;
+      _team = _$v.team?.toBuilder();
       _$v = null;
     }
     return this;
@@ -521,7 +359,7 @@ class _$ActorBuilder extends ActorBuilder {
             pronoun: pronoun,
             shield: shield,
             stamina: stamina,
-            team: team);
+            team: team?.build());
     replace(result);
     return result;
   }
