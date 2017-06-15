@@ -140,7 +140,7 @@ class FleeThroughWarForge extends RoamingAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.4;
+    return 0.7;
   }
 
   @override

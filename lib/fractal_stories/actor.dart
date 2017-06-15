@@ -66,7 +66,6 @@ abstract class Actor extends Object
         ..isActive = true
         ..isPlayer = isPlayer
         ..items = new Set()
-        ..pronoun = Pronoun.IT
         ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
         ..currentRoomName = currentRoomName
         ..followingActorId = followingActorId
