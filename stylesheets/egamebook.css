@@ -67,12 +67,12 @@ body.title-open {
   left: 0;
   background: white;
   padding: 2rem 1rem; }
-  .bottom-fixed button {
+  .bottom-fixed .button {
     max-width: 40rem;
     margin: auto;
     -webkit-transition: color 0.5s;
     transition: color 0.5s; }
-    .bottom-fixed button:enabled {
+    .bottom-fixed .button:not(.disabled) {
       color: white;
       background-color: #05a505;
       background-image: -webkit-linear-gradient(#05a505 10%, #019101);
@@ -113,7 +113,7 @@ nav {
   right: 0;
   left: 0;
   z-index: 10; }
-  nav button {
+  nav .button {
     width: auto; }
 
 #top-nav {
@@ -151,9 +151,9 @@ nav {
   flex: 1 0 0;
   padding-top: 0.5rem;
   padding-left: 1rem; }
-  #left-hand-nav button {
+  #left-hand-nav .button {
     line-height: 100%; }
-    #left-hand-nav button span {
+    #left-hand-nav .button span {
       vertical-align: sub; }
 
 #right-hand-nav {
@@ -168,11 +168,11 @@ nav {
   padding-right: 1rem;
   display: inline;
   text-align: right; }
-  #right-hand-nav button {
+  #right-hand-nav .button {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
     line-height: 100%; }
-    #right-hand-nav button span {
+    #right-hand-nav .button span {
       vertical-align: sub; }
 
 #stats {
@@ -183,7 +183,7 @@ nav {
   font-weight: bold;
   border-color: gold; }
 
-nav button {
+nav .button {
   display: inline-block;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   font-size: 1.08rem;
@@ -373,7 +373,7 @@ h2 {
 .choices-div {
   margin-bottom: 1.88571rem; }
 
-button {
+.button {
   display: inline-block;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   font-size: 1.08rem;
@@ -392,13 +392,16 @@ button {
   margin-bottom: 0.62857rem;
   padding: 0.4rem 1.5rem; }
 
-ol.choices-ol button span.choice-number {
+.button.disabled {
+  background: white; }
+
+ol.choices-ol .button span.choice-number {
   display: block;
   width: 1.5rem;
   float: left;
   text-align: right; }
 
-ol.choices-ol button span.choice-display {
+ol.choices-ol .button span.choice-display {
   padding-left: 2.5rem;
   display: -webkit-box;
   display: -moz-box;
@@ -426,7 +429,7 @@ ol.choices-ol button span.choice-display {
   align-items: flex-start;
   -ms-flex-align: start; }
 
-ol.choices-ol button span.choice-text {
+ol.choices-ol .button span.choice-text {
   -webkit-box-ordinal-group: 1;
   -moz-box-ordinal-group: 1;
   box-ordinal-group: 1;
@@ -436,7 +439,7 @@ ol.choices-ol button span.choice-text {
   -ms-flex-order: 1;
   display: block; }
 
-.choices-div.chosen button:not(.chosen) {
+.choices-div.chosen .button:not(.chosen) {
   background-color: #fcfcfc;
   background-image: -webkit-linear-gradient(#fcfcfc 10%, #f6f6f6);
   background-image: linear-gradient(#fcfcfc 10%, #f6f6f6);
@@ -450,11 +453,13 @@ ol.choices-ol button span.choice-text {
   -moz-order: 3;
   order: 3;
   -ms-flex-order: 3;
-  font-size: 0.72rem;
+  font-size: 1.08rem;
   border: 1px solid #ddd;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
-  padding: 0.1rem 0.3rem; }
+  padding: 0.1rem 0.4rem;
+  line-height: 1.2;
+  margin-top: 0.2rem; }
 
 .choice-infochips {
   -webkit-box-ordinal-group: 2;
