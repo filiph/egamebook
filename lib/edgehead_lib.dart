@@ -31,8 +31,6 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.enemy;
 
 class EdgeheadGame extends LoopedEvent {
-  static const int maxChoicesCount = 6;
-
   final Logger log = new Logger('EdgeheadGame');
 
   /// When we hit an action whose [Action.name] matches this pattern,
@@ -227,7 +225,7 @@ class EdgeheadGame extends LoopedEvent {
 
       // Take only the first few best actions.
       List<Action> actions = recs
-          .pickMax(maxChoicesCount, normalCombineFunction)
+          .pickMax(situation.maxActionsToShow, normalCombineFunction)
           .toList(growable: false);
 
       // Creates a string just for sorting. Actions with same enemy are

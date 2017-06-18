@@ -40,6 +40,9 @@ int getRandomId() => _random.nextInt(_largeInteger);
 ///         int id = getRandomId();
 @immutable
 abstract class Situation {
+  /// Default value for [maxActionsToShow].
+  static const int defaultMaxActionsToShow = 3;
+
   /// The actions with objects available to the actors.
   ///
   /// For every actor, every turn, these action generators will be called
@@ -65,6 +68,12 @@ abstract class Situation {
   /// Identifies the situation even after it has changed (for example, the time
   /// has been increased, or an actor has changed).
   int get id;
+
+  /// How many actions the player will be shown when inside this situation.
+  ///
+  /// Defaults to [defaultMaxActionsToShow]. For situations like combat, this
+  /// can be much higher.
+  int get maxActionsToShow => defaultMaxActionsToShow;
 
   /// Identifies the type of the Situation (i.e. 'FightSituation' for
   /// [FightSituation].
