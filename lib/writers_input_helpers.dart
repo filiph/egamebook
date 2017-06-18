@@ -53,6 +53,14 @@ void movePlayer(WorldState w, Storyline s, String locationName) {
   getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
 }
 
+void giveGoldToPlayer(WorldState w, int amount) {
+  w.updateActorById(getPlayer(w).id, (b) => b..gold += amount);
+}
+
+void giveStaminaToPlayer(WorldState w, int amount) {
+  w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);
+}
+
 void updateGlobal(WorldState w,
     EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
   var builder = (w.global as EdgeheadGlobalState).toBuilder();
