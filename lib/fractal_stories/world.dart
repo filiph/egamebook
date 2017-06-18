@@ -110,6 +110,18 @@ class WorldState {
     return false;
   }
 
+  /// Returns `true` if any action in the action records (past actions)
+  /// has the [Action.name] of [actionName].
+  ///
+  /// This returns `true` regardless of success or failure.
+  bool actionHasBeenPerformed(String actionName) {
+    var records =getActionRecords(actionName: actionName);
+    for (var _ in records) {
+      return true;
+    }
+    return false;
+  }
+
   /// Returns `true` if action that satisfies [actionNamePattern] is currently
   /// being performed.
   ///

@@ -291,5 +291,5 @@ enum Resource {
   /// but the player will go off-balance or even fall down.
   balance,
 
-  // Ideas: weaponGrip (throw sword), shield (let the shield break)
+  // TODO: Ideas: weaponGrip (throw sword), shield (let the shield break)
 }
