@@ -13,12 +13,17 @@ abstract class EdgeheadGlobalState
   EdgeheadGlobalState._();
 
   bool get hasKegOfBeer;
+
+  int get bloodrockFollowers;
 }
 
 abstract class EdgeheadGlobalStateBuilder
     implements Builder<EdgeheadGlobalState, EdgeheadGlobalStateBuilder> {
   @virtual
   bool hasKegOfBeer = false;
+
+  @virtual
+  int bloodrockFollowers = 0;
 
   factory EdgeheadGlobalStateBuilder() = _$EdgeheadGlobalStateBuilder;
   EdgeheadGlobalStateBuilder._();

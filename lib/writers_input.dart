@@ -26,7 +26,7 @@ Room startOfBook =
       '''The journey from slavery to power begins with a single crack of a skull. Agruth, the orc-slaver, falls to the rock floor. You take his shortsword and with help from another slave, Briana, you move Agruth\'s body to a shady crevice in the tunnel\'s wall.
 
 
-You are Aren, a slave on the run, deep in the orc mines of Mount Bloodrock. You have spent three horrible years inside this mountain, and you decided it\'s better to die than to stay.
+You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten. [a][b][c][d]
 
 
 <p class="meta">You can use the question mark (?) icons below to learn more about each option.</p>
@@ -71,8 +71,7 @@ class FleeThroughNecromancersChurch extends RoamingAction {
     s.add(null);
     s.add(
         'You go to church but someone notices a shadow (but doesn\'t pursue immediately). Entering the church -- just before "The Church is…"');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: the \'threat level\' increases by 1 */';
-    assert(DEV_MODE || false);
+    updateGlobal(w, (b) => b..bloodrockFollowers += 1);
     movePlayer(w, s, "underground_church");
     return '${a.name} fails to perform FleeThroughNecromancersChurch';
   }
@@ -95,7 +94,7 @@ class FleeThroughNecromancersChurch extends RoamingAction {
 
   @override
   String get helpMessage =>
-      'The Underground Church is much less patroled, so you\'re more likely to slip unnoticed. On the other hand, it\'s unclear who or what lurks there.';
+      'The Underground Church is … It is much less patrolled, so you\'re more likely to slip through unnoticed. On the other hand, it\'s unclear who or what lurks there.';
 
   @override
   bool get isAggressive => false;
@@ -131,9 +130,8 @@ class FleeThroughWarForge extends RoamingAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(null);
     s.add(
-        'You go to war forgery but someone notices a shadow (but doesn\'t pursue immediately). Entering forges -- just before "The Forges are…"');
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: the \'threat level\' increases by 1 */';
-    assert(DEV_MODE || false);
+        'You go to war forge but someone notices a shadow (but doesn\'t pursue immediately). Entering forges -- just before "The Forges are…"');
+    updateGlobal(w, (b) => b..bloodrockFollowers += 1);
     movePlayer(w, s, "war_forge");
     return '${a.name} fails to perform FleeThroughWarForge';
   }
@@ -162,16 +160,87 @@ class FleeThroughWarForge extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class SearchAgruth extends RoamingAction {
+  @override
+  final String command = 'Search Agruth';
+
+  @override
+  final String name = 'search_agruth';
+
+  static final SearchAgruth singleton = new SearchAgruth();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_of_book') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        'You search pockets and nothing.  There are some noises. You should be going. But the you realize if Agruth had something valuable on him, he would have it well hidden. You quickly check the inside of his vest and find [Blablabla], a drug. It gives extra energy when needed. This will come handy. (Your stamina increases by 1.)');
+    giveStaminaToPlayer(w, 1);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [a]as a student of Necromancy? something cool like that */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [b]an apprentice warlock, summoner (interesting for game mechanics -- summoning monsters to help) */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [c]artificer (engineer) -- nah */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: beastmaster (game mechanics!) */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [d]btw, all this comes from http://tvtropes.org/pmwiki/pmwiki.php/Main/FantasyCharacterClasses */';
+    assert(DEV_MODE || false);
+    return '${a.name} successfully performs SearchAgruth';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    s.add(null);
+    s.add(
+        'You search but can\'t find anything. There are some noises. You should be going.');
+    return '${a.name} fails to perform SearchAgruth';
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 0.1;
+  }
+
+  @override
+  bool get rerollable => true;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => Resource.stamina;
+
+  @override
+  String get helpMessage =>
+      'You have taken his weapon but there might be other useful items in his pocket.';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room theShafts = new Room('the_shafts', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''This must be the place that the orcs call the shafts. It\'s a tall, seemingly endless room, with many walkways across.
+      '''This must be the place that the orcs call the Shafts. It\'s a tall, seemingly endless room, with many walkways across.
 
 
 
 
 
 
-There is really only one way out, over one of the walkways. You\'ll have to run, there is no hiding anymore.
+You realize there is really only one way out, over one of the walkways. You\'ll have to run, there is no hiding anymore.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -181,16 +250,11 @@ There is really only one way out, over one of the walkways. You\'ll have to run,
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('tunnel', 'Run',
-      'You run over the passage. Orcs start to scream and yell commands.')
+      'You run over the passage. Orcs start to scream and yell commands. As you near the entrance, the air gets better.')
 ]);
 Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You and Briana run.
-
-
-
-
-Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
+      '''Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
 
 
 ![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
@@ -213,7 +277,14 @@ Room undergroundChurch =
 
 
 
-
+''',
+      wholeSentence: true);
+  if (getGlobal(w).bloodrockFollowers >= 1) {
+    s.add('''You hear orders being yelled somewhere behind you.''',
+        wholeSentence: true);
+  }
+  s.add(
+      '''
 
 After a bit of searching, you find a twisty passage going from the right hand side of the Church.
 ''',
@@ -229,14 +300,29 @@ After a bit of searching, you find a twisty passage going from the right hand si
 ]);
 Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The Forges are enormous. It seems like they have been here forever, since before the orcs, maybe even since before the Dead Prince. The forges
+      '''A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These are the war forges.
 
 
+You and Briana take a moment to stare; likely no living human has seen this. Orc teams tilt huge kettles of molten steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. Strange. 
 
 
+You and Briana duck behind some carts. As you head towards what seems to be an exit, you hear strange whispering. You crane your neck and spot a dark-robed figure—a priest?—chanting softly to himself by the forge. Despite his whispering, his words crawl through your mind like a spider:
 
 
-After a bit of searching, you find a corridor leading out. There\'s also a crevice that seems to lead in the same direction.
+> "_Pwarfa n’ngen aradra._ The slow suffer. _Madraga n’ngen nach santutra._ Only the hard-working prosper. _Nfarfi Arach m’marrash._ The Dead Prince sees all."
+
+
+''',
+      wholeSentence: true);
+  if (getGlobal(w).bloodrockFollowers >= 1) {
+    s.add(
+        '''Somewhere behind you, a gutteral tongue bellows a string of orders. You must get moving.''',
+        wholeSentence: true);
+  }
+  s.add(
+      '''
+
+You find a corridor to the left. Next to it you spy a crevice apparently leading in the same direction.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -246,10 +332,10 @@ After a bit of searching, you find a corridor leading out. There\'s also a crevi
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('the_shafts', 'Enter the corridor', 'You enter the corridor.'),
-  new Exit('war_forge_crevice', 'Enter the crevice', 'You enter the crevice.')
+  new Exit('war_forge_crevice', 'Enter the crevice', 'You take the crevice.')
 ]);
-Room warForgeCrevice = new Room('war_forge_crevice',
-    (Actor a, WorldState w, Storyline s) {
+Room warForgeCrevice =
+    new Room('war_forge_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The crevice is small.
 ''',
@@ -259,8 +345,10 @@ Room warForgeCrevice = new Room('war_forge_crevice',
       '''
 ''',
       wholeSentence: true);
-}, null, null,
-    <Exit>[new Exit('tunnel', 'Continue along the crevice', 'You continue.')]);
+}, null, null, <Exit>[
+  new Exit('tunnel', 'Continue along the crevice',
+      'You continue until the crevice open into a tunnel. You can smell fresh air.')
+]);
 Room entranceToBloodrock =
     new Room('entrance_to_bloodrock', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -1159,6 +1247,7 @@ List<Room> allRooms = <Room>[
 List<RoamingAction> allActions = <RoamingAction>[
   FleeThroughNecromancersChurch.singleton,
   FleeThroughWarForge.singleton,
+  SearchAgruth.singleton,
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,

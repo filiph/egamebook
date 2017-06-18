@@ -10,13 +10,18 @@ part of edgehead_global;
 class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   @override
   final bool hasKegOfBeer;
+  @override
+  final int bloodrockFollowers;
 
   factory _$EdgeheadGlobalState([void updates(EdgeheadGlobalStateBuilder b)]) =>
       (new EdgeheadGlobalStateBuilder()..update(updates)).build()
           as _$EdgeheadGlobalState;
 
-  _$EdgeheadGlobalState._({this.hasKegOfBeer}) : super._() {
+  _$EdgeheadGlobalState._({this.hasKegOfBeer, this.bloodrockFollowers})
+      : super._() {
     if (hasKegOfBeer == null) throw new ArgumentError.notNull('hasKegOfBeer');
+    if (bloodrockFollowers == null)
+      throw new ArgumentError.notNull('bloodrockFollowers');
   }
 
   @override
@@ -31,18 +36,20 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! EdgeheadGlobalState) return false;
-    return hasKegOfBeer == other.hasKegOfBeer;
+    return hasKegOfBeer == other.hasKegOfBeer &&
+        bloodrockFollowers == other.bloodrockFollowers;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, hasKegOfBeer.hashCode));
+    return $jf($jc($jc(0, hasKegOfBeer.hashCode), bloodrockFollowers.hashCode));
   }
 
   @override
   String toString() {
     return 'EdgeheadGlobalState {'
         'hasKegOfBeer=${hasKegOfBeer.toString()},\n'
+        'bloodrockFollowers=${bloodrockFollowers.toString()},\n'
         '}';
   }
 }
@@ -62,11 +69,24 @@ class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
     super.hasKegOfBeer = hasKegOfBeer;
   }
 
+  @override
+  int get bloodrockFollowers {
+    _$this;
+    return super.bloodrockFollowers;
+  }
+
+  @override
+  set bloodrockFollowers(int bloodrockFollowers) {
+    _$this;
+    super.bloodrockFollowers = bloodrockFollowers;
+  }
+
   _$EdgeheadGlobalStateBuilder() : super._();
 
   EdgeheadGlobalStateBuilder get _$this {
     if (_$v != null) {
       super.hasKegOfBeer = _$v.hasKegOfBeer;
+      super.bloodrockFollowers = _$v.bloodrockFollowers;
       _$v = null;
     }
     return this;
@@ -85,8 +105,9 @@ class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
 
   @override
   _$EdgeheadGlobalState build() {
-    final result =
-        _$v ?? new _$EdgeheadGlobalState._(hasKegOfBeer: hasKegOfBeer);
+    final result = _$v ??
+        new _$EdgeheadGlobalState._(
+            hasKegOfBeer: hasKegOfBeer, bloodrockFollowers: bloodrockFollowers);
     replace(result);
     return result;
   }
