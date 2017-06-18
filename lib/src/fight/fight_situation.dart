@@ -11,7 +11,6 @@ import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
-import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
@@ -21,6 +20,7 @@ import 'package:edgehead/src/fight/actions/start_slash_out_of_balance_player.dar
 import 'package:edgehead/src/fight/actions/start_slash_player.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down_player.dart';
+import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -33,6 +33,9 @@ abstract class FightSituation extends Situation
   /// The advantage that player has over all other actors in terms of frequency
   /// of turns.
   static const double _playerTurnAdvantage = 1.5;
+
+  @override
+  int get maxActionsToShow => 1000;
 
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
@@ -73,10 +76,6 @@ abstract class FightSituation extends Situation
 
   BuiltMap<int, TimedEventCallback> get events;
 
-  /// This is used
-  @nullable
-  int get roomRoamingSituationId;
-
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   ///
   /// This is used when describing how monsters and team members fall to the
@@ -91,8 +90,15 @@ abstract class FightSituation extends Situation
 
   BuiltList<int> get playerTeamIds;
 
+  /// This is used
+  @nullable
+  int get roomRoamingSituationId;
+
   @override
   int get time;
+
+  bool canFight(Iterable<int> teamIds, WorldState world) =>
+      teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 
   @override
   FightSituation elapseTime() => rebuild((b) => b..time += 1);
@@ -136,6 +142,9 @@ abstract class FightSituation extends Situation
     return chosen;
   }
 
+  // We're using [onBeforeAction] because when using onAfterAction, we'd report
+  // timed events at a time when an action in FightSituation might have
+  // created other (child) situations.
   @override
   Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
       actors.where((Actor actor) =>
@@ -143,9 +152,6 @@ abstract class FightSituation extends Situation
           (playerTeamIds.contains(actor.id) ||
               enemyTeamIds.contains(actor.id)));
 
-  // We're using [onBeforeAction] because when using onAfterAction, we'd report
-  // timed events at a time when an action in FightSituation might have
-  // created other (child) situations.
   @override
   void onBeforeAction(WorldState world, Storyline s) {
     if (Randomly.saveAgainst(0.25)) {
@@ -179,7 +185,4 @@ abstract class FightSituation extends Situation
         canFight(enemyTeamIds, world) &&
         playerTeamIds.any(isPlayerAndAlive);
   }
-
-  bool canFight(Iterable<int> teamIds, WorldState world) =>
-      teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 }
