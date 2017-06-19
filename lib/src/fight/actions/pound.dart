@@ -104,7 +104,10 @@ class Pound extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      !a.isOnGround && a.wields(ItemType.sword) && !enemy.isOnGround;
+      !a.isOnGround &&
+      a.wields(ItemType.sword) &&
+      enemy.wields(ItemType.sword) &&
+      !enemy.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new Pound(enemy);
 }

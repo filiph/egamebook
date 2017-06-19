@@ -100,6 +100,7 @@ class EdgeheadGame extends LoopedEvent {
         [new Exit("start_of_book", "", "")]);
 
     filip = new Actor.initialized(1, "Filip",
+        nameIsProperNoun: true,
         isPlayer: true,
         pronoun: Pronoun.YOU,
         currentWeapon: new Sword(),
@@ -114,16 +115,15 @@ class EdgeheadGame extends LoopedEvent {
     gold.value = filip.gold;
 
     briana = new Actor.initialized(100, "Briana",
+        nameIsProperNoun: true,
         pronoun: Pronoun.SHE,
-        currentWeapon: new Sword("longsword"),
         hitpoints: 2,
         maxHitpoints: 2,
         currentRoomName: preStartBook.name,
         followingActorId: filip.id);
 
-    initialSituation = new RoomRoamingSituation.initialized(
-        preStartBook,
-        false);
+    initialSituation =
+        new RoomRoamingSituation.initialized(preStartBook, false);
 
     var rooms = new List<Room>.from(allRooms)
       ..addAll([preStartBook, endOfRoam]);
@@ -287,6 +287,8 @@ class EdgeheadGame extends LoopedEvent {
       consequence = consequences.single;
     } else {
       var resourceName = action.rerollResource.toString().split('.').last;
+      assert(!action.rerollable || action.rerollResource == Resource.stamina,
+          'Non-stamina resource needed for ${action.name}');
       var result = await showSlotMachine(
           chance, action.getRollReason(actor, world),
           rerollEnabled:

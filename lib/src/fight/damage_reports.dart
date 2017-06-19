@@ -7,6 +7,11 @@ final Random _random = new Random();
 
 /// Report's a humanoid's death by sword from standing position.
 void reportDeath(Storyline s, Actor actor, String groundMaterial) {
+  if (actor.pose == Pose.onGround) {
+    actor.report(s, "<subject> stop<s> moving", negative: true);
+    s.addParagraph();
+    return;
+  }
   switch (_random.nextInt(3)) {
     case 0:
       actor.report(s, "<subject> collapse<s>, dead",

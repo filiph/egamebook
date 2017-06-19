@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
@@ -23,8 +24,7 @@ void main() {
             hitpoints: 2,
             maxHitpoints: 2,
             stamina: 1,
-            initiative: 1000
-            );
+            initiative: 1000);
 
         var filip2 = filip.rebuild((b) => b);
         var richard = filip.rebuild((b) => b..name = "Richard");
@@ -67,6 +67,10 @@ void main() {
       });
       test("SlashSituation", () {
         checkSituationBuild(() => new SlashSituation.initialized(a, b));
+      });
+      test("BreakNeckOnGroundSituation", () {
+        checkSituationBuild(
+            () => new BreakNeckOnGroundSituation.initialized(a, b));
       });
     });
   });

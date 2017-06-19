@@ -12,6 +12,9 @@ class StartSlashPlayer extends StartSlash {
   @override
   bool rerollable = true;
 
+  @override
+  final Resource rerollResource = Resource.stamina;
+
   StartSlashPlayer(Actor enemy) : super(enemy);
 
   @override

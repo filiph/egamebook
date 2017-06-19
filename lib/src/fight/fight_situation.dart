@@ -9,6 +9,8 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/break_neck_on_ground.dart';
+import 'package:edgehead/src/fight/actions/break_neck_on_ground_player.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
@@ -34,9 +36,6 @@ abstract class FightSituation extends Situation
   /// of turns.
   static const double _playerTurnAdvantage = 1.5;
 
-  @override
-  int get maxActionsToShow => 1000;
-
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
   factory FightSituation.initialized(Iterable<Actor> playerTeam,
@@ -49,13 +48,15 @@ abstract class FightSituation extends Situation
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
         ..groundMaterial = groundMaterial
         ..roomRoamingSituationId = roomRoamingSituation?.id);
-  FightSituation._();
 
+  FightSituation._();
   @override
   List<EnemyTargetActionBuilder> get actionGenerators => [
         Confuse.builder,
         Pound.builder,
         SweepOffFeet.builder,
+        StartBreakNeckOnGround.builder,
+        StartBreakNeckOnGroundPlayer.builder,
         StartSlash.builder,
         StartSlashPlayer.builder,
         StartStrikeDown.builder,
@@ -84,6 +85,9 @@ abstract class FightSituation extends Situation
 
   @override
   int get id;
+
+  @override
+  int get maxActionsToShow => 1000;
 
   @override
   String get name => "FightSituation";

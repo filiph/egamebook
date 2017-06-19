@@ -129,6 +129,7 @@ class Storyline {
   static const String OBJECT_POSSESIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
   static const String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
+  static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
   static const String SUBJECT_NOUN = "<subjectNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
@@ -203,8 +204,9 @@ class Storyline {
       return;
     }
 
-    assert(subject != null || !str.contains("<subject"));
-    assert(object != null || !str.contains("<object"));
+    assert(
+        subject != null || !str.contains("<subject"), "'$str' lacks subject");
+    assert(object != null || !str.contains("<object"), "'$str' lacks object");
 
     bool wholeSentenceAutoDetected =
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
@@ -423,6 +425,7 @@ class Storyline {
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       result = result.replaceAll(
           SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
+      result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
     }
 
     if (object != null) {
@@ -458,7 +461,6 @@ class Storyline {
         OBJECT_OWNER_PRONOUN,
         OBJECT_OWNER_PRONOUN_POSSESIVE,
         report.time);
-
 
     return result;
   }
