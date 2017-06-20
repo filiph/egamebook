@@ -175,6 +175,8 @@ class ActorPlanner {
         yield* generateEnemyTargetActions(actor, world, builder);
       } else if (builder is ExitActionBuilder) {
         yield* generateExitActions(actor, world, builder);
+      } else if (builder is ItemActionBuilder) {
+        yield* generateItemActions(actor, world, builder);
       } else {
         throw new StateError("$builder is not one of the supported ones");
       }

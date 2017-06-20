@@ -9,6 +9,8 @@ part of stranded.fight.fight_situation;
 
 class _$FightSituation extends FightSituation {
   @override
+  final BuiltList<Item> droppedItems;
+  @override
   final BuiltList<int> enemyTeamIds;
   @override
   final BuiltMap<int, TimedEventCallback> events;
@@ -27,7 +29,8 @@ class _$FightSituation extends FightSituation {
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
-      {this.enemyTeamIds,
+      {this.droppedItems,
+      this.enemyTeamIds,
       this.events,
       this.groundMaterial,
       this.id,
@@ -35,6 +38,7 @@ class _$FightSituation extends FightSituation {
       this.roomRoamingSituationId,
       this.time})
       : super._() {
+    if (droppedItems == null) throw new ArgumentError.notNull('droppedItems');
     if (enemyTeamIds == null) throw new ArgumentError.notNull('enemyTeamIds');
     if (events == null) throw new ArgumentError.notNull('events');
     if (groundMaterial == null)
@@ -56,7 +60,8 @@ class _$FightSituation extends FightSituation {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! FightSituation) return false;
-    return enemyTeamIds == other.enemyTeamIds &&
+    return droppedItems == other.droppedItems &&
+        enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
         groundMaterial == other.groundMaterial &&
         id == other.id &&
@@ -71,7 +76,11 @@ class _$FightSituation extends FightSituation {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, enemyTeamIds.hashCode), events.hashCode),
+                    $jc(
+                        $jc(
+                            $jc($jc(0, droppedItems.hashCode),
+                                enemyTeamIds.hashCode),
+                            events.hashCode),
                         groundMaterial.hashCode),
                     id.hashCode),
                 playerTeamIds.hashCode),
@@ -82,6 +91,7 @@ class _$FightSituation extends FightSituation {
   @override
   String toString() {
     return 'FightSituation {'
+        'droppedItems=${droppedItems.toString()},\n'
         'enemyTeamIds=${enemyTeamIds.toString()},\n'
         'events=${events.toString()},\n'
         'groundMaterial=${groundMaterial.toString()},\n'
@@ -96,6 +106,12 @@ class _$FightSituation extends FightSituation {
 class FightSituationBuilder
     implements Builder<FightSituation, FightSituationBuilder> {
   _$FightSituation _$v;
+
+  ListBuilder<Item> _droppedItems;
+  ListBuilder<Item> get droppedItems =>
+      _$this._droppedItems ??= new ListBuilder<Item>();
+  set droppedItems(ListBuilder<Item> droppedItems) =>
+      _$this._droppedItems = droppedItems;
 
   ListBuilder<int> _enemyTeamIds;
   ListBuilder<int> get enemyTeamIds =>
@@ -137,6 +153,7 @@ class FightSituationBuilder
 
   FightSituationBuilder get _$this {
     if (_$v != null) {
+      _droppedItems = _$v.droppedItems?.toBuilder();
       _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
       _events = _$v.events?.toBuilder();
       _groundMaterial = _$v.groundMaterial;
@@ -164,6 +181,7 @@ class FightSituationBuilder
   _$FightSituation build() {
     final result = _$v ??
         new _$FightSituation._(
+            droppedItems: droppedItems?.build(),
             enemyTeamIds: enemyTeamIds?.build(),
             events: events?.build(),
             groundMaterial: groundMaterial,

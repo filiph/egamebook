@@ -1,6 +1,8 @@
 library stranded.action;
 
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
@@ -29,7 +31,7 @@ Iterable<EnemyTargetAction> generateEnemyTargetActions(
   }
 }
 
-/// Generator generates multiple [Action] instances given a [world] and
+/// Generator generates multiple [ExitAction] instances given a [world] and
 /// an [actor] and a [builder].
 Iterable<ExitAction> generateExitActions(
     Actor actor, WorldState world, ExitActionBuilder builder) sync* {
@@ -39,6 +41,19 @@ Iterable<ExitAction> generateExitActions(
   for (var exit in room.exits) {
     var action = builder(exit);
     assert(action.exit == exit);
+    yield action;
+  }
+}
+
+/// Generator generates multiple [ItemAction] instances given a [world] and
+/// an [actor] and a [builder].
+Iterable<ItemAction> generateItemActions(
+    Actor actor, WorldState world, ItemActionBuilder builder) sync* {
+  FightSituation situation = world.currentSituation;
+
+  for (var item in situation.droppedItems) {
+    var action = builder(item);
+    assert(action.item == item);
     yield action;
   }
 }
@@ -57,6 +72,10 @@ typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
 /// Builder takes an enemy actor and generates an instance of
 /// [ExitAction] with the given [exit].
 typedef ExitAction ExitActionBuilder(Exit exit);
+
+/// Builder takes situation's items and generates an instance of [ItemAction]
+/// with the given [item] and its [description].
+typedef ItemAction ItemActionBuilder(Item item);
 
 abstract class Action {
   String _description;
@@ -278,6 +297,30 @@ abstract class ExitAction extends Action {
 
   @override
   String toString() => "ExitAction<$command>";
+}
+
+/// This [Action] requires an [item].
+///
+/// Every [ItemAction] should contain a static builder like this:
+///
+///     static ItemAction builder(Item enemy) => new Example(item);
+abstract class ItemAction extends Action {
+  final Item item;
+
+  @mustCallSuper
+  ItemAction(this.item);
+
+  @override
+  String get command =>
+      (new Storyline()..add(commandTemplate, object: item)).realize();
+
+  /// ItemAction should include the [item] in the [command]. To make it
+  /// easier to implement, this class will automatically construct the name
+  /// given a [Storyline] template.
+  String get commandTemplate;
+
+  @override
+  String toString() => "ItemAction<$command>";
 }
 
 /// This enum defines all the different resources (Stats) that player can use

@@ -274,6 +274,8 @@ abstract class Actor extends Object
     int selfPreservation = 2 * actor.hitpoints;
     // Extra painful if actor dies in this world.
     if (!actor.isAlive) selfPreservation -= 10;
+    // Add bonus point for weapon.
+    if (actor.currentWeapon != null) selfPreservation += 4;
 
     // Add points for every friend and their hitpoints.
     var friends = world.actors.where((a) => a.team == team);

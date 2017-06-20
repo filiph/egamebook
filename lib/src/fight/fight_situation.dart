@@ -4,6 +4,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -23,6 +24,7 @@ import 'package:edgehead/src/fight/actions/start_slash_player.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down_player.dart';
 import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
+import 'package:edgehead/src/fight/actions/take_dropped_item.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -47,11 +49,12 @@ abstract class FightSituation extends Situation
         ..playerTeamIds.replace(playerTeam.map((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
         ..groundMaterial = groundMaterial
+        ..droppedItems = new ListBuilder<Item>()
         ..roomRoamingSituationId = roomRoamingSituation?.id);
 
   FightSituation._();
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => [
+  List<ActionBuilder> get actionGenerators => [
         Confuse.builder,
         Pound.builder,
         SweepOffFeet.builder,
@@ -63,6 +66,7 @@ abstract class FightSituation extends Situation
         StartStrikeDownPlayer.builder,
         StartSlashOutOfBalance.builder,
         StartSlashOutOfBalancePlayer.builder,
+        TakeDroppedItem.builder,
       ];
 
   @override
@@ -72,6 +76,10 @@ abstract class FightSituation extends Situation
         Scramble.singleton,
         Unconfuse.singleton
       ];
+
+  /// The items dropped by dead combatants. The Map's `value` is a qualified
+  /// name, such as "goblin's scimitar". The `key` is the actual item.
+  BuiltList<Item> get droppedItems;
 
   BuiltList<int> get enemyTeamIds;
 

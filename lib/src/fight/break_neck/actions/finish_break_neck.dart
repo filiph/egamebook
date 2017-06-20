@@ -48,7 +48,7 @@ class FinishBreakNeck extends EnemyTargetAction {
         positive: true);
     var groundMaterial =
         w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
-    reportDeath(s, enemy, groundMaterial);
+    killHumanoid(s, w, enemy, groundMaterial);
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }
 
