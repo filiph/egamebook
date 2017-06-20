@@ -196,6 +196,11 @@ nav .button {
   cursor: pointer;
   box-sizing: border-box;
   min-height: 1.25714rem;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   color: #666;
   text-shadow: 1px 1px 0px #ffffff; }
 
@@ -386,6 +391,11 @@ h2 {
   cursor: pointer;
   box-sizing: border-box;
   min-height: 1.25714rem;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   display: block;
   width: 100%;
   text-align: left;

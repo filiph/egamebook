@@ -14740,10 +14740,12 @@ var $async$fD=P.b9(function(a,b){if(a===1)return P.b6(b,y)
 while(true)switch(z){case 0:v={}
 u=document
 t=u.createElement("button")
-t.textContent=H.b(w.m3(w.f))+"?"
+t.classList.add("button")
+t.textContent=H.b(w.m3(w.f))+" to reroll"
 w.fx.appendChild(t)
 s=u.createElement("button")
-s.textContent="Okay"
+s.classList.add("button")
+s.textContent="Accept failure"
 w.fx.appendChild(s)
 u=U.cI
 w.fy=new P.b5(new P.L(0,$.x,null,[u]),[u])
@@ -14787,11 +14789,12 @@ y.fillStyle=this.y
 v=this.a*5
 y.fillRect(0,0,v,this.b*3)
 y=this.dy
-if(y!=null&&J.af(J.G(this.dx,y),500)){y=this.x
-u=J.G(this.dx,this.dy)
-if(typeof u!=="number")return u.ks()
-y.fillStyle="rgba(255, 255, 255, "+H.b(1-u/500)+")"
-this.x.fillRect(0,0,v,this.b*3)}this.ch.textContent=this.gim()
+if(y!=null&&J.af(J.G(this.dx,y),500)){y=J.G(this.dx,this.dy)
+if(typeof y!=="number")return y.ks()
+u="rgba(255, 255, 255, "+H.b(1-y/500)+")"
+y=this.x
+y.fillStyle=u
+y.fillRect(0,0,v,this.b*3)}this.ch.textContent=this.gim()
 this.ih()},"$1","gmZ",2,0,48],
 lK:function(a,b,c,d,e,f,g){var z,y,x,w,v,u,t,s,r,q,p
 z=this.a
@@ -14897,11 +14900,11 @@ for(z=this.b,y=this.a,x=0;x<z;){w=y.d5(10)
 v=this.fx
 v.length
 if(w<0||w>=10)return H.c(v,w)
-if(!v[w]){v[w]=!0;++x}}this.r=500+y.d5(2000)
+if(!v[w]){v[w]=!0;++x}}this.r=100+y.d5(1000)
 this.z=1e4+C.i.aP(y.d5(1e4)/10)
 if(this.f!=null)this.dx=this.kU()},
 G:{
-v0:function(a,b,c,d,e,f,g,h,i){var z=new B.jT(h,a,c,d,e,i,null,b,0,null,5,!1,!1,f,g,0,0,null,null)
+v0:function(a,b,c,d,e,f,g,h,i){var z=new B.jT(h,a,c,d,e,i,null,b,0,null,7,!1,!1,f,g,0,0,null,null)
 z.lX(a,b,c,d,e,f,g,h,i)
 return z}}},v1:{"^":"d:0;a",
 $1:function(a){return!J.f(a,this.a.f)}}}],["","",,U,{"^":"",
