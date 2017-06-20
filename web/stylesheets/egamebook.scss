@@ -30,6 +30,14 @@ body {
   padding: 1rem 1rem 3rem;
 }
 
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @mixin button-appearance {
   display: inline-block;
   font-family: $sans-serif;
@@ -43,6 +51,7 @@ body {
   cursor: pointer;
   box-sizing: border-box;
   min-height: 2 / 3 * $line-height;
+  @include no-select;
 }
 
 .hidden {
