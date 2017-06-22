@@ -20,13 +20,28 @@ import 'package:edgehead/writers_input_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
+Room forgeChurchCrevice =
+    new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The crevice is small.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('tunnel', 'Continue along the crevice',
+      'You continue until the crevice open into a tunnel. You can smell fresh air.')
+]);
 Room startOfBook =
     new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The journey from slavery to power begins with a single crack of a skull. Agruth, the orc-slaver, falls to the rock floor. You take his shortsword and with help from another slave, Briana, you move Agruth\'s body to a shady crevice in the tunnel\'s wall.
 
 
-You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten. [a][b][c][d]
+You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten. [a][b][c][d][e]
 
 
 <p class="meta">You can use the question mark (?) icons below to learn more about each option.</p>
@@ -61,7 +76,7 @@ class FleeThroughNecromancersChurch extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'You go to church. Entering the church -- just before "The Church is…"');
+        'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.');
     movePlayer(w, s, "underground_church");
     return '${a.name} successfully performs FleeThroughNecromancersChurch';
   }
@@ -70,7 +85,7 @@ class FleeThroughNecromancersChurch extends RoamingAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(null);
     s.add(
-        'You go to church but someone notices a shadow (but doesn\'t pursue immediately). Entering the church -- just before "The Church is…"');
+        'You manage to slip into a Church window, but a guard notices your shadow. As he squints in your direction, you disappear into the shadowy main hall.');
     updateGlobal(w, (b) => b..bloodrockFollowers += 1);
     movePlayer(w, s, "underground_church");
     return '${a.name} fails to perform FleeThroughNecromancersChurch';
@@ -94,7 +109,7 @@ class FleeThroughNecromancersChurch extends RoamingAction {
 
   @override
   String get helpMessage =>
-      'The Underground Church is … It is much less patrolled, so you\'re more likely to slip through unnoticed. On the other hand, it\'s unclear who or what lurks there.';
+      'The Underground Church will have fewer guards, so you\'re more likely to slip through unnoticed. Then again, you have no idea who--or what--lurks there.';
 
   @override
   bool get isAggressive => false;
@@ -121,7 +136,7 @@ class FleeThroughWarForge extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'You go to war forgery (some hidden place there). Entering forges -- just before "The Forges are…"');
+        'You sneak your way into the War Forges and hide in the shadows of an alcove.');
     movePlayer(w, s, "war_forge");
     return '${a.name} successfully performs FleeThroughWarForge';
   }
@@ -130,7 +145,7 @@ class FleeThroughWarForge extends RoamingAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(null);
     s.add(
-        'You go to war forge but someone notices a shadow (but doesn\'t pursue immediately). Entering forges -- just before "The Forges are…"');
+        'You manage to sneak into the War Forges, but a guard notices your shadow. You quickly duck into an alcove as he frowns in your direction and scratches his head.');
     updateGlobal(w, (b) => b..bloodrockFollowers += 1);
     movePlayer(w, s, "war_forge");
     return '${a.name} fails to perform FleeThroughWarForge';
@@ -154,7 +169,7 @@ class FleeThroughWarForge extends RoamingAction {
 
   @override
   String get helpMessage =>
-      'The War Forges are where the war machines are built. It\'s a place that you are familiar with, and it\'s a more direct path to freedom. But these parts are also full of orcs.';
+      'The War Forges are where the orcs build their weapons and war machines. As a slave, you’re familiar with the place and it\'s a more direct path to freedom, but almost certainly filled with orcs.';
 
   @override
   bool get isAggressive => false;
@@ -184,7 +199,10 @@ class SearchAgruth extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'You search pockets and nothing.  There are some noises. You should be going. But the you realize if Agruth had something valuable on him, he would have it well hidden. You quickly check the inside of his vest and find [Blablabla], a drug. It gives extra energy when needed. This will come handy. (Your stamina increases by 1.)');
+        '''You search his pockets but turn up with nothing. Just then, you hear heavy footfalls approaching. Briana grabs your arm. “We’ve got to go.”  
+
+
+You realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)''');
     giveStaminaToPlayer(w, 1);
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [a]as a student of Necromancy? something cool like that */';
     assert(DEV_MODE || false);
@@ -196,6 +214,26 @@ class SearchAgruth extends RoamingAction {
     assert(DEV_MODE || false);
     '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [d]btw, all this comes from http://tvtropes.org/pmwiki/pmwiki.php/Main/FantasyCharacterClasses */';
     assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [e]Some possible choices: */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: an Acolyte... */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: warmage */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Ethermage */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Animist */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Shaper */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: mageknight */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: battlecaster */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Weaver */';
+    assert(DEV_MODE || false);
+    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Incarnate */';
+    assert(DEV_MODE || false);
     return '${a.name} successfully performs SearchAgruth';
   }
 
@@ -203,17 +241,17 @@ class SearchAgruth extends RoamingAction {
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(null);
     s.add(
-        'You search but can\'t find anything. There are some noises. You should be going.');
+        'You search but don’t find anything. Suddenly, heavy footfalls come your way. No choice--you have to go now.');
     return '${a.name} fails to perform SearchAgruth';
   }
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.1;
+    return 0.9;
   }
 
   @override
-  bool get rerollable => true;
+  bool get rerollable => false;
 
   @override
   String getRollReason(Actor a, WorldState w) {
@@ -221,7 +259,7 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  Resource get rerollResource => Resource.stamina;
+  Resource get rerollResource => null;
 
   @override
   String get helpMessage =>
@@ -295,7 +333,7 @@ After a bit of searching, you find a twisty passage going from the right hand si
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('the_shafts', 'Enter the small passage',
+  new Exit('forge_church_crevice', 'Enter the small passage',
       'You enter the passage and go a long way.')
 ]);
 Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
@@ -303,7 +341,7 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
       '''A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These are the war forges.
 
 
-You and Briana take a moment to stare; likely no living human has seen this. Orc teams tilt huge kettles of molten steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. Strange. 
+You and Briana take a moment to stare; likely no living human has seen this and lived to tell others. Orc teams tilt huge kettles of molten steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. Strange. 
 
 
 You and Briana duck behind some carts. As you head towards what seems to be an exit, you hear strange whispering. You crane your neck and spot a dark-robed figure—a priest?—chanting softly to himself by the forge. Despite his whispering, his words crawl through your mind like a spider:
@@ -322,7 +360,7 @@ You and Briana duck behind some carts. As you head towards what seems to be an e
   s.add(
       '''
 
-You find a corridor to the left. Next to it you spy a crevice apparently leading in the same direction.
+You can guess which corridor will get you out. Fresh air is flowing into the forge through it, stirring the smoke. It\'s not far, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -331,8 +369,8 @@ You find a corridor to the left. Next to it you spy a crevice apparently leading
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('the_shafts', 'Enter the corridor', 'You enter the corridor.'),
-  new Exit('war_forge_crevice', 'Enter the crevice', 'You take the crevice.')
+  new Exit('tunnel', 'Enter the corridor', 'You enter the corridor.'),
+  new Exit('forge_church_crevice', 'Enter the crevice', 'You take the crevice.')
 ]);
 Room warForgeCrevice =
     new Room('war_forge_crevice', (Actor a, WorldState w, Storyline s) {
@@ -1229,6 +1267,7 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
       'You make your way closer to the fort.')
 ]);
 List<Room> allRooms = <Room>[
+  forgeChurchCrevice,
   startOfBook,
   theShafts,
   tunnel,
