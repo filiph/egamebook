@@ -3,64 +3,63 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
-class StartSlash extends EnemyTargetAction {
-  static const String className = "StartSlash";
+const String startSlashCommandTemplate = "swing at <object>";
 
-  @override
-  final String helpMessage = "The basic swordfighting move is also often the "
-      "most effective.";
+const String startSlashHelpMessage =
+    "The basic swordfighting move is also often the "
+    "most effective.";
 
-  @override
-  final bool isAggressive = true;
+EnemyTargetAction startSlashBuilder(Actor enemy) => new StartDefensibleAction(
+    "StartSlash",
+    startSlashCommandTemplate,
+    startSlashHelpMessage,
+    startSlashReportStart,
+    (a, w, enemy) =>
+        !a.isPlayer &&
+        a.isStanding &&
+        !enemy.isOnGround &&
+        a.wields(ItemType.sword),
+    (a, w, enemy) => new SlashSituation.initialized(a, enemy),
+    (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
+    enemy);
 
-  @override
-  Resource get rerollResource => null;
+EnemyTargetAction
+    startSlashPlayerBuilder(Actor enemy) =>
+        new StartDefensibleAction(
+            "StartSlashPlayer",
+            startSlashCommandTemplate,
+            startSlashHelpMessage,
+            startSlashReportStart,
+            (a, w, enemy) =>
+                a.isPlayer &&
+                a.isStanding &&
+                !enemy.isOnGround &&
+                a.wields(ItemType.sword),
+            (a, w, enemy) => new SlashSituation.initialized(a, enemy),
+            (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
+                predeterminedResult: Predetermination.failureGuaranteed),
+            enemy,
+            successChanceGetter: (_, __, ___) => 0.7,
+            applyStartOfFailure: (a, w, s, enemy) => a.report(
+                s,
+                "<subject> swing<s> "
+                "{<subject's> ${a.currentWeapon.name} |}at <object>",
+                object: enemy),
+            defenseSituationWhenFailed:
+                (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
+                    predeterminedResult: Predetermination.successGuaranteed),
+            rerollable: true,
+            rerollResource: Resource.stamina,
+            rollReasonTemplate: "will <subject> hit <objectPronoun>?");
 
-  StartSlash(Actor enemy) : super(enemy);
-
-  @override
-  String get name => className;
-
-  @override
-  String get commandTemplate => "swing at <object>";
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String get rollReasonTemplate => null;
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    throw new UnimplementedError();
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+void startSlashReportStart(Actor a, WorldState w, Storyline s, Actor enemy) =>
     a.report(
         s,
         "<subject> swing<s> "
         "{<subject's> ${a.currentWeapon.name} |}at <object>",
         object: enemy);
-    var slashSituation = new SlashSituation.initialized(a, enemy);
-    w.pushSituation(slashSituation);
-    var slashDefenseSituation = new SlashDefenseSituation.initialized(a, enemy);
-    w.pushSituation(slashDefenseSituation);
-    return "${a.name} starts a slash at ${enemy.name}";
-  }
-
-  @override
-  num getSuccessChance(Actor actor, WorldState world) => 1.0;
-
-  @override
-  bool isApplicable(Actor a, WorldState world) =>
-      !a.isPlayer &&
-      a.isStanding &&
-      !enemy.isOnGround &&
-      a.wields(ItemType.sword);
-
-  static EnemyTargetAction builder(Actor enemy) => new StartSlash(enemy);
-}

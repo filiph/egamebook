@@ -65,6 +65,11 @@ Iterable<ItemAction> generateItemActions(
 /// and can output "kick Joe" action.
 typedef T ActionBuilder<T extends Action, V>(V parameter);
 
+/// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
+/// [Action.applyFailure].
+typedef String ApplyFunction(
+    Actor actor, WorldState world, Storyline storyline);
+
 /// Builder takes an enemy actor and generates an instance of
 /// [EnemyTargetAction] with the given [enemy].
 typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
@@ -179,13 +184,9 @@ abstract class Action {
     world.actionRecords.addFirst(builder.build());
   }
 
-  Storyline _applyToWorldCopy(
-      WorldState worldCopy,
-      Actor actor,
-      WorldState world,
-      String applyFunction(Actor actor, WorldState world, Storyline storyline),
-      {bool isSuccess: false,
-      bool isFailure: false}) {
+  Storyline _applyToWorldCopy(WorldState worldCopy, Actor actor,
+      WorldState world, ApplyFunction applyFunction,
+      {bool isSuccess: false, bool isFailure: false}) {
     // Set currentAction.
     worldCopy.currentAction = this;
     // Find actor by id.

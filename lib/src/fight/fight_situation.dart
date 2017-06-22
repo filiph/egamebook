@@ -10,19 +10,15 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/actions/break_neck_on_ground.dart';
-import 'package:edgehead/src/fight/actions/break_neck_on_ground_player.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
+import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
-import 'package:edgehead/src/fight/actions/start_slash_out_of_balance_player.dart';
-import 'package:edgehead/src/fight/actions/start_slash_player.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
-import 'package:edgehead/src/fight/actions/start_strike_down_player.dart';
 import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_item.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
@@ -58,14 +54,14 @@ abstract class FightSituation extends Situation
         Confuse.builder,
         Pound.builder,
         SweepOffFeet.builder,
-        StartBreakNeckOnGround.builder,
-        StartBreakNeckOnGroundPlayer.builder,
-        StartSlash.builder,
-        StartSlashPlayer.builder,
-        StartStrikeDown.builder,
-        StartStrikeDownPlayer.builder,
-        StartSlashOutOfBalance.builder,
-        StartSlashOutOfBalancePlayer.builder,
+        startBreakNeckOnGroundBuilder,
+        startBreakNeckOnGroundPlayerBuilder,
+        startSlashBuilder,
+        startSlashPlayerBuilder,
+        startStrikeDownBuilder,
+        startStrikeDownPlayerBuilder,
+        startSlashOutOfBalanceBuilder,
+        startSlashOutOfBalancePlayerBuilder,
         TakeDroppedItem.builder,
       ];
 
