@@ -15,7 +15,7 @@ import 'types.dart';
 /// Example line that matches:
 ///
 ///     $ironcast_road (Go to Fort Ironcast): You start towards the fort.
-final RegExp exitPattern = new RegExp(r"^(\$\w+)\s+\((.+?)\):\s(.+)$");
+final RegExp exitPattern = new RegExp(r"^(\$\w+)\s+\((.*?)\):\s(.+)$");
 
 GeneratedGameObject generateRoom(Map<String, String> map, String dirPath) {
   return new GeneratedRoom(new Map.from(map), dirPath);
