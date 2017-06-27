@@ -4,13 +4,13 @@ import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart';
+import 'package:edgehead/src/fight/defense_situation_interface.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
 part 'wrestle_defense_situation.g.dart';
 
-abstract class OnGroundWrestleDefenseSituation extends Situation
+abstract class OnGroundWrestleDefenseSituation extends DefenseSituation
     implements
         Built<OnGroundWrestleDefenseSituation,
             OnGroundWrestleDefenseSituationBuilder> {
@@ -34,12 +34,7 @@ abstract class OnGroundWrestleDefenseSituation extends Situation
   List<EnemyTargetActionBuilder> get actionGenerators =>
       [EvadeNeckBreaking.builder];
 
-  bool get actionsGuaranteedToFail =>
-      predeterminedResult == Predetermination.failureGuaranteed;
-
-  bool get actionsGuaranteedToSucceed =>
-      predeterminedResult == Predetermination.successGuaranteed;
-
+  @override
   int get attacker;
 
   @override
@@ -48,8 +43,10 @@ abstract class OnGroundWrestleDefenseSituation extends Situation
   @override
   String get name => "OnGroundWrestleDefenseSituation";
 
+  @override
   Predetermination get predeterminedResult;
 
+  @override
   int get target;
 
   @override
@@ -57,14 +54,4 @@ abstract class OnGroundWrestleDefenseSituation extends Situation
 
   @override
   OnGroundWrestleDefenseSituation elapseTime() => rebuild((b) => b..time += 1);
-
-  @override
-  Actor getActorAtTime(int time, WorldState w) {
-    if (time == 0) return w.getActorById(target);
-    return null;
-  }
-
-  @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
-      actors.where((actor) => actor.id == attacker || actor.id == target);
 }

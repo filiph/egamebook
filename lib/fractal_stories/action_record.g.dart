@@ -25,6 +25,8 @@ class _$ActionRecord extends ActionRecord {
   @override
   final bool wasAggressive;
   @override
+  final bool wasProactive;
+  @override
   final bool wasFailure;
   @override
   final bool wasSuccess;
@@ -41,6 +43,7 @@ class _$ActionRecord extends ActionRecord {
       this.sufferers,
       this.time,
       this.wasAggressive,
+      this.wasProactive,
       this.wasFailure,
       this.wasSuccess})
       : super._() {
@@ -52,6 +55,7 @@ class _$ActionRecord extends ActionRecord {
     if (sufferers == null) throw new ArgumentError.notNull('sufferers');
     if (time == null) throw new ArgumentError.notNull('time');
     if (wasAggressive == null) throw new ArgumentError.notNull('wasAggressive');
+    if (wasProactive == null) throw new ArgumentError.notNull('wasProactive');
     if (wasFailure == null) throw new ArgumentError.notNull('wasFailure');
     if (wasSuccess == null) throw new ArgumentError.notNull('wasSuccess');
   }
@@ -75,6 +79,7 @@ class _$ActionRecord extends ActionRecord {
         sufferers == other.sufferers &&
         time == other.time &&
         wasAggressive == other.wasAggressive &&
+        wasProactive == other.wasProactive &&
         wasFailure == other.wasFailure &&
         wasSuccess == other.wasSuccess;
   }
@@ -89,14 +94,16 @@ class _$ActionRecord extends ActionRecord {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc($jc(0, accomplices.hashCode),
-                                        actionName.hashCode),
-                                    description.hashCode),
-                                knownTo.hashCode),
-                            protagonist.hashCode),
-                        sufferers.hashCode),
-                    time.hashCode),
-                wasAggressive.hashCode),
+                                    $jc(
+                                        $jc($jc(0, accomplices.hashCode),
+                                            actionName.hashCode),
+                                        description.hashCode),
+                                    knownTo.hashCode),
+                                protagonist.hashCode),
+                            sufferers.hashCode),
+                        time.hashCode),
+                    wasAggressive.hashCode),
+                wasProactive.hashCode),
             wasFailure.hashCode),
         wasSuccess.hashCode));
   }
@@ -112,6 +119,7 @@ class _$ActionRecord extends ActionRecord {
         'sufferers=${sufferers.toString()},\n'
         'time=${time.toString()},\n'
         'wasAggressive=${wasAggressive.toString()},\n'
+        'wasProactive=${wasProactive.toString()},\n'
         'wasFailure=${wasFailure.toString()},\n'
         'wasSuccess=${wasSuccess.toString()},\n'
         '}';
@@ -157,6 +165,10 @@ class ActionRecordBuilder
   set wasAggressive(bool wasAggressive) =>
       _$this._wasAggressive = wasAggressive;
 
+  bool _wasProactive;
+  bool get wasProactive => _$this._wasProactive;
+  set wasProactive(bool wasProactive) => _$this._wasProactive = wasProactive;
+
   bool _wasFailure;
   bool get wasFailure => _$this._wasFailure;
   set wasFailure(bool wasFailure) => _$this._wasFailure = wasFailure;
@@ -177,6 +189,7 @@ class ActionRecordBuilder
       _sufferers = _$v.sufferers?.toBuilder();
       _time = _$v.time;
       _wasAggressive = _$v.wasAggressive;
+      _wasProactive = _$v.wasProactive;
       _wasFailure = _$v.wasFailure;
       _wasSuccess = _$v.wasSuccess;
       _$v = null;
@@ -207,6 +220,7 @@ class ActionRecordBuilder
             sufferers: sufferers?.build(),
             time: time,
             wasAggressive: wasAggressive,
+            wasProactive: wasProactive,
             wasFailure: wasFailure,
             wasSuccess: wasSuccess);
     replace(result);

@@ -4,8 +4,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
-typedef void _PartialApplyFunction(
-    Actor actor, WorldState world, Storyline storyline, Actor enemy);
+typedef void _PartialApplyFunction(Actor actor, WorldState world,
+    Storyline storyline, Actor enemy, Situation mainSituation);
 
 typedef Situation _SituationBuilder(Actor actor, WorldState world, Actor enemy);
 
@@ -70,6 +70,9 @@ class StartDefensibleAction extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   final String name;
 
   @override
@@ -115,12 +118,14 @@ class StartDefensibleAction extends EnemyTargetAction {
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     assert(_successChanceGetter != null);
-    _applyStartOfFailure(a, w, s, enemy);
     if (buildSituationsOnFailure) {
       var mainSituation = _mainSituationBuilder(a, w, enemy);
-      w.pushSituation(mainSituation);
       var defenseSituation = _defenseSituationBuilderWhenFailed(a, w, enemy);
+      _applyStartOfFailure(a, w, s, enemy, mainSituation);
+      w.pushSituation(mainSituation);
       w.pushSituation(defenseSituation);
+    } else {
+      _applyStartOfFailure(a, w, s, enemy, null);
     }
     return "${a.name} fails to start a $name (defensible situation) "
         "at ${enemy.name}";
@@ -128,10 +133,10 @@ class StartDefensibleAction extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    _applyStartOfSuccess(a, w, s, enemy);
     var mainSituation = _mainSituationBuilder(a, w, enemy);
-    w.pushSituation(mainSituation);
     var defenseSituation = _defenseSituationBuilder(a, w, enemy);
+    _applyStartOfSuccess(a, w, s, enemy, mainSituation);
+    w.pushSituation(mainSituation);
     w.pushSituation(defenseSituation);
     return "${a.name} starts a $name (defensible situation) at ${enemy.name}";
   }

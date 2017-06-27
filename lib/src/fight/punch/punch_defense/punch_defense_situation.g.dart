@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.on_ground_defense_situation;
+part of stranded.fight.punch_defense_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class OnGroundDefenseSituation
+// Target: abstract class PunchDefenseSituation
 // **************************************************************************
 
-class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
+class _$PunchDefenseSituation extends PunchDefenseSituation {
   @override
   final int attacker;
   @override
@@ -19,11 +19,11 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   @override
   final int time;
 
-  factory _$OnGroundDefenseSituation(
-          [void updates(OnGroundDefenseSituationBuilder b)]) =>
-      (new OnGroundDefenseSituationBuilder()..update(updates)).build();
+  factory _$PunchDefenseSituation(
+          [void updates(PunchDefenseSituationBuilder b)]) =>
+      (new PunchDefenseSituationBuilder()..update(updates)).build();
 
-  _$OnGroundDefenseSituation._(
+  _$PunchDefenseSituation._(
       {this.attacker,
       this.id,
       this.predeterminedResult,
@@ -39,18 +39,17 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   }
 
   @override
-  OnGroundDefenseSituation rebuild(
-          void updates(OnGroundDefenseSituationBuilder b)) =>
+  PunchDefenseSituation rebuild(void updates(PunchDefenseSituationBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  OnGroundDefenseSituationBuilder toBuilder() =>
-      new OnGroundDefenseSituationBuilder()..replace(this);
+  PunchDefenseSituationBuilder toBuilder() =>
+      new PunchDefenseSituationBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
-    if (other is! OnGroundDefenseSituation) return false;
+    if (other is! PunchDefenseSituation) return false;
     return attacker == other.attacker &&
         id == other.id &&
         predeterminedResult == other.predeterminedResult &&
@@ -70,7 +69,7 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
 
   @override
   String toString() {
-    return 'OnGroundDefenseSituation {'
+    return 'PunchDefenseSituation {'
         'attacker=${attacker.toString()},\n'
         'id=${id.toString()},\n'
         'predeterminedResult=${predeterminedResult.toString()},\n'
@@ -80,10 +79,9 @@ class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   }
 }
 
-class OnGroundDefenseSituationBuilder
-    implements
-        Builder<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
-  _$OnGroundDefenseSituation _$v;
+class PunchDefenseSituationBuilder
+    implements Builder<PunchDefenseSituation, PunchDefenseSituationBuilder> {
+  _$PunchDefenseSituation _$v;
 
   int _attacker;
   int get attacker => _$this._attacker;
@@ -106,9 +104,9 @@ class OnGroundDefenseSituationBuilder
   int get time => _$this._time;
   set time(int time) => _$this._time = time;
 
-  OnGroundDefenseSituationBuilder();
+  PunchDefenseSituationBuilder();
 
-  OnGroundDefenseSituationBuilder get _$this {
+  PunchDefenseSituationBuilder get _$this {
     if (_$v != null) {
       _attacker = _$v.attacker;
       _id = _$v.id;
@@ -121,20 +119,20 @@ class OnGroundDefenseSituationBuilder
   }
 
   @override
-  void replace(OnGroundDefenseSituation other) {
+  void replace(PunchDefenseSituation other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other as _$OnGroundDefenseSituation;
+    _$v = other as _$PunchDefenseSituation;
   }
 
   @override
-  void update(void updates(OnGroundDefenseSituationBuilder b)) {
+  void update(void updates(PunchDefenseSituationBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$OnGroundDefenseSituation build() {
+  _$PunchDefenseSituation build() {
     final result = _$v ??
-        new _$OnGroundDefenseSituation._(
+        new _$PunchDefenseSituation._(
             attacker: attacker,
             id: id,
             predeterminedResult: predeterminedResult,

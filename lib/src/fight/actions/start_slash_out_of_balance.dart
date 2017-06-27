@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
@@ -16,7 +17,7 @@ const String startSlashOutOfBalanceHelp =
     "firmly on the ground. But sometimes, it's necessary to act quickly.";
 
 void startSlashOutOfBalanceApplyFailure(
-        Actor a, WorldState w, Storyline s, Actor enemy) =>
+        Actor a, WorldState w, Storyline s, Actor enemy, _) =>
     a.report(
         s,
         "<subject> completely miss<es> <object> with "
@@ -61,10 +62,12 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 
-void startSlashOutOfBalanceReportStart(
-        Actor a, WorldState w, Storyline s, Actor enemy) =>
+void startSlashOutOfBalanceReportStart(Actor a, WorldState w, Storyline s,
+        Actor enemy, Situation mainSituation) =>
     a.report(
         s,
         "<subject> swing<s> "
         "{<subject's> ${a.currentWeapon.name} |}at <object>",
-        object: enemy);
+        object: enemy,
+        actionThread: mainSituation.id,
+        isSupportiveActionInThread: true);

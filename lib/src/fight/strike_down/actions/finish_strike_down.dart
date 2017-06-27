@@ -11,7 +11,10 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   final String helpMessage = null;
 
   @override
-  final bool isAggressive = false;
+  final bool isAggressive = true;
+
+  @override
+  final bool isProactive = true;
 
   @override
   final bool rerollable = true;

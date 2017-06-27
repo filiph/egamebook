@@ -25,6 +25,9 @@ class Pound extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   String helpMessage = "Forcing enemies off balance often means hitting them "
       "heavily several times in a row. The goal is not to deal damage but to "
       "force the opponent to lose control of their combat stance. It can also "

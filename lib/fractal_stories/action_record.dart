@@ -51,6 +51,10 @@ abstract class ActionRecord
   /// the [sufferers].
   bool get wasAggressive;
 
+  /// Specifies whether this action was proactive (as opposed to being
+  /// a reaction to another actor's action).
+  bool get wasProactive;
+
   bool get wasFailure;
 
   bool get wasSuccess;

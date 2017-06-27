@@ -1,5 +1,6 @@
 library storyline;
 
+import 'dart:math';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
@@ -110,6 +111,11 @@ class Report {
         throw new ArgumentError("Invalid key $key.");
     }
   }
+
+  @override
+  String toString() => "Report"
+      "<${string.substring(0, min(string.length, 20))}...,"
+      "thread=$actionThread${isSupportiveActionInThread ? '(sup)' : ''}>";
 
 // TODO: startOfAction - if there is no report before startOfAction and
 // endOfAction, don't report startOfAction.

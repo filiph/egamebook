@@ -16,6 +16,9 @@ class EvadeNeckBreaking extends EnemyTargetAction {
   final bool isAggressive = false;
 
   @override
+  final bool isProactive = false;
+
+  @override
   final bool rerollable = true;
 
   @override
@@ -60,10 +63,8 @@ class EvadeNeckBreaking extends EnemyTargetAction {
     if (situation.actionsGuaranteedToSucceed) {
       return 1.0;
     }
-    // Attackers who wield weapons are bad at administering this move.
-    num bonusWhenAttackerHasWeapon = enemy.currentWeapon != null ? 0.4 : 0.0;
-    if (a.isPlayer) return 0.6 + bonusWhenAttackerHasWeapon;
-    return 0.5 + bonusWhenAttackerHasWeapon;
+    if (a.isPlayer) return 0.6;
+    return 0.5;
   }
 
   @override

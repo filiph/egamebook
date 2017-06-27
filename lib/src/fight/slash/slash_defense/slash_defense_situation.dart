@@ -4,7 +4,7 @@ import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/defense_situation_interface.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
@@ -12,7 +12,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'slash_defense_situation.g.dart';
 
-abstract class SlashDefenseSituation extends Situation
+abstract class SlashDefenseSituation extends DefenseSituation
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
   factory SlashDefenseSituation([updates(SlashDefenseSituationBuilder b)]) =
       _$SlashDefenseSituation;
@@ -32,12 +32,7 @@ abstract class SlashDefenseSituation extends Situation
   List<EnemyTargetActionBuilder> get actionGenerators =>
       [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
 
-  bool get actionsGuaranteedToFail =>
-      predeterminedResult == Predetermination.failureGuaranteed;
-
-  bool get actionsGuaranteedToSucceed =>
-      predeterminedResult == Predetermination.successGuaranteed;
-
+  @override
   int get attacker;
 
   @override
@@ -46,8 +41,10 @@ abstract class SlashDefenseSituation extends Situation
   @override
   String get name => "SlashDefenseSituation";
 
+  @override
   Predetermination get predeterminedResult;
 
+  @override
   int get target;
 
   @override
@@ -55,14 +52,4 @@ abstract class SlashDefenseSituation extends Situation
 
   @override
   SlashDefenseSituation elapseTime() => rebuild((b) => b..time += 1);
-
-  @override
-  Actor getActorAtTime(int time, WorldState w) {
-    if (time == 0) return w.getActorById(target);
-    return null;
-  }
-
-  @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
-      actors.where((actor) => actor.id == attacker || actor.id == target);
 }

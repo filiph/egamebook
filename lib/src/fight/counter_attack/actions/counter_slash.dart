@@ -21,6 +21,9 @@ class CounterSlash extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   bool get rerollable => false;
 
   @override

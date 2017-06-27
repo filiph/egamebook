@@ -57,7 +57,7 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
                 predeterminedResult: Predetermination.successGuaranteed));
 
 void startStrikeDownReportStart(
-        Actor a, WorldState w, Storyline s, Actor enemy) =>
+        Actor a, WorldState w, Storyline s, Actor enemy, _) =>
     a.report(
         s,
         "<subject> strike<s> down "

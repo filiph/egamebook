@@ -2,6 +2,7 @@ library stranded.action;
 
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
@@ -98,6 +99,13 @@ abstract class Action {
   /// This describes intent, not result. A failed attempt to kill someone is
   /// aggressive although it doesn't harm the intended target.
   bool get isAggressive;
+
+  /// Returns `false` if this action is a reaction to someone else's action.
+  /// Returns `true` if the actor chose this action pro-actively.
+  ///
+  /// Examples of reactive actions are 'dodge' and 'parry'. Examples of
+  /// proactive actions are 'slash' and 'cast spell'.
+  bool get isProactive;
 
   /// The name of the class of the Action.
   ///
@@ -231,7 +239,8 @@ abstract class Action {
       ..knownTo = KnownToMode.all
       ..wasSuccess = isSuccess
       ..wasFailure = isFailure
-      ..wasAggressive = isAggressive;
+      ..wasAggressive = isAggressive
+      ..wasProactive = isProactive;
     if (this is EnemyTargetAction) {
       EnemyTargetAction action = this;
       builder.sufferers.add(action.enemy.id);
@@ -276,6 +285,16 @@ abstract class EnemyTargetAction extends Action {
         ..add(rollReasonTemplate,
             subject: a, object: enemy, wholeSentence: true))
       .realize();
+
+  /// Gets the [Situation.id] of the main situation of this action.
+  ///
+  /// This is useful for using [Storyline] threads. Actions at the start
+  /// of a situation can mark themselves as supportive in a thread, and then
+  /// other actions will add themselves to that same thread, so that [Storyline]
+  /// can discard the supportive actions when they are to be reported next
+  /// to each other. The thread id is taken from the [Situation.id].
+  int getThreadId(WorldState w, String mainSituationName) =>
+      w.getSituationByName<Situation>(mainSituationName).id;
 
   @override
   String toString() => "EnemyTargetAction<$commandTemplate::"

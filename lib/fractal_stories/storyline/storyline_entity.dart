@@ -92,7 +92,9 @@ abstract class EntityBehavior {
       bool negative: false,
       bool but: false,
       bool endSentence: false,
-      bool subjectAndObjectAreEnemies: false}) {
+      bool subjectAndObjectAreEnemies: false,
+      int actionThread,
+      bool isSupportiveActionInThread: false}) {
     storyline.add(text,
         subject: this as Entity,
         object: object,
@@ -101,6 +103,8 @@ abstract class EntityBehavior {
         negative: negative,
         subjectAndObjectAreEnemies: subjectAndObjectAreEnemies,
         but: but,
-        endSentence: endSentence);
+        endSentence: endSentence,
+        actionThread: actionThread,
+        isSupportiveActionInThread: isSupportiveActionInThread);
   }
 }

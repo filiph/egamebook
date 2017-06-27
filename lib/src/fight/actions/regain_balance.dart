@@ -17,6 +17,9 @@ class RegainBalance extends Action {
   final bool isAggressive = false;
 
   @override
+  final bool isProactive = true;
+
+  @override
   final bool rerollable = false;
 
   @override

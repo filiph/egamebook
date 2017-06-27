@@ -97,13 +97,12 @@ class EdgeheadGame extends LoopedEvent {
         (a, w, s) => throw new StateError("Room isn't to be revisited"),
         null,
         null,
-        [new Exit("start_of_book", "", "")]);
+        [new Exit("kill_arguth", "", "")]);
 
     filip = new Actor.initialized(1, "Filip",
         nameIsProperNoun: true,
         isPlayer: true,
         pronoun: Pronoun.YOU,
-        currentWeapon: new Sword(),
         hitpoints: 2,
         maxHitpoints: 2,
         stamina: 1,
@@ -212,13 +211,11 @@ class EdgeheadGame extends LoopedEvent {
       if (recs.actions.length > 1) {
         // If we have more than one action, none of them should have
         // blank command (which signifies an action that should be
-        // auto-selected.
+        // auto-selected).
         for (var action in recs.actions) {
           assert(action.command.isNotEmpty);
         }
       }
-      echo(storyline.realize());
-      storyline.clear();
 
       log.fine("planner.generateTable for ${actor.name}");
       planner.generateTable().forEach((line) => log.fine(line));
@@ -235,6 +232,12 @@ class EdgeheadGame extends LoopedEvent {
           return "${a.enemy.name} ${a.command}";
         }
         return "ZZZZZZ ${a.command}";
+      }
+
+      if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
+        /// Only realize storyline when there is an actual choice to show.
+        echo(storyline.realize());
+        storyline.clear();
       }
 
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));

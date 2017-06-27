@@ -21,9 +21,9 @@ class _$Actor extends Actor {
   @override
   final int followingActorId;
   @override
-  final int hitpoints;
-  @override
   final int gold;
+  @override
+  final int hitpoints;
   @override
   final int id;
   @override
@@ -61,8 +61,8 @@ class _$Actor extends Actor {
       this.currentRoomName,
       this.currentWeapon,
       this.followingActorId,
-      this.hitpoints,
       this.gold,
+      this.hitpoints,
       this.id,
       this.initiative,
       this.isActive,
@@ -80,8 +80,8 @@ class _$Actor extends Actor {
     if (alreadyMentioned == null)
       throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
-    if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (gold == null) throw new ArgumentError.notNull('gold');
+    if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
@@ -114,8 +114,8 @@ class _$Actor extends Actor {
         currentRoomName == other.currentRoomName &&
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
-        hitpoints == other.hitpoints &&
         gold == other.gold &&
+        hitpoints == other.hitpoints &&
         id == other.id &&
         initiative == other.initiative &&
         isActive == other.isActive &&
@@ -156,8 +156,8 @@ class _$Actor extends Actor {
                                                                             currentRoomName.hashCode),
                                                                         currentWeapon.hashCode),
                                                                     followingActorId.hashCode),
-                                                                hitpoints.hashCode),
-                                                            gold.hashCode),
+                                                                gold.hashCode),
+                                                            hitpoints.hashCode),
                                                         id.hashCode),
                                                     initiative.hashCode),
                                                 isActive.hashCode),
@@ -182,8 +182,8 @@ class _$Actor extends Actor {
         'currentRoomName=${currentRoomName.toString()},\n'
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
-        'hitpoints=${hitpoints.toString()},\n'
         'gold=${gold.toString()},\n'
+        'hitpoints=${hitpoints.toString()},\n'
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
         'isActive=${isActive.toString()},\n'
@@ -233,13 +233,13 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set followingActorId(int followingActorId) =>
       _$this._followingActorId = followingActorId;
 
-  int _hitpoints;
-  int get hitpoints => _$this._hitpoints;
-  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
-
   int _gold;
   int get gold => _$this._gold;
   set gold(int gold) => _$this._gold = gold;
+
+  int _hitpoints;
+  int get hitpoints => _$this._hitpoints;
+  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
 
   int _id;
   int get id => _$this._id;
@@ -304,8 +304,8 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _currentRoomName = _$v.currentRoomName;
       _currentWeapon = _$v.currentWeapon;
       _followingActorId = _$v.followingActorId;
-      _hitpoints = _$v.hitpoints;
       _gold = _$v.gold;
+      _hitpoints = _$v.hitpoints;
       _id = _$v.id;
       _initiative = _$v.initiative;
       _isActive = _$v.isActive;
@@ -345,8 +345,8 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             currentRoomName: currentRoomName,
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
-            hitpoints: hitpoints,
             gold: gold,
+            hitpoints: hitpoints,
             id: id,
             initiative: initiative,
             isActive: isActive,

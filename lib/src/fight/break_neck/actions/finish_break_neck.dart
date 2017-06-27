@@ -15,6 +15,9 @@ class FinishBreakNeck extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   final bool rerollable = true;
 
   @override

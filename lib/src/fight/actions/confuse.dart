@@ -12,6 +12,9 @@ class Confuse extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   String helpMessage = "Channeling the terror of the Dead Prince into lesser "
       "minds is something you've been practicing. It makes the target rabid "
       "and disoriented. They might attack their own.";

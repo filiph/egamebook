@@ -289,7 +289,10 @@ class ActorPlanner {
 
       var currentActor =
           current.world.currentSituation.getCurrentActor(current.world);
-      assert(currentActor != null);
+      assert(
+          currentActor != null,
+          "Situation ${current.world.currentSituation} "
+          "returned null for getCurrentActor for world ${current.world}");
 
       // This actor is the one we originally started planning for.
       Actor mainActor;

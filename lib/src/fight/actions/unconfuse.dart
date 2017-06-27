@@ -22,6 +22,9 @@ class Unconfuse extends Action {
   final bool isAggressive = false;
 
   @override
+  final bool isProactive = true;
+
+  @override
   String get command => "Regain clarity.";
 
   @override

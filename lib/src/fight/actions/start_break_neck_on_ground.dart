@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
@@ -18,7 +19,7 @@ EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
         startBreakNeckOnGroundCommandTemplate,
         startBreakNeckOnGroundHelpMessage,
         startBreakNeckOnGroundReportStart,
-        (a, w, enemy) => !a.isPlayer && enemy.isOnGround,
+        (a, w, enemy) => !a.isPlayer && enemy.isOnGround && a.isBarehanded,
         (a, w, enemy) => new BreakNeckOnGroundSituation.initialized(a, enemy),
         (a, w, enemy) =>
             new OnGroundWrestleDefenseSituation.initialized(a, enemy),
@@ -30,7 +31,7 @@ EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
         startBreakNeckOnGroundCommandTemplate,
         startBreakNeckOnGroundHelpMessage,
         startBreakNeckOnGroundReportStart,
-        (a, w, enemy) => a.isPlayer && enemy.isOnGround,
+        (a, w, enemy) => a.isPlayer && enemy.isOnGround && a.isBarehanded,
         (a, w, enemy) => new BreakNeckOnGroundSituation.initialized(a, enemy),
         (a, w, enemy) => new OnGroundWrestleDefenseSituation.initialized(
             a, enemy, predeterminedResult: Predetermination.failureGuaranteed),
@@ -45,7 +46,7 @@ EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
         rollReasonTemplate: "will <subject> succeed?");
 
 void startBreakNeckOnGroundReportStart(
-    Actor a, WorldState w, Storyline s, Actor enemy) {
+    Actor a, WorldState w, Storyline s, Actor enemy, Situation mainSituation) {
   a.report(s, "<subject> throw<s> <subjectPronounSelf> {on|upon} <object>",
       object: enemy);
   w.updateActorById(a.id, (b) => b..pose = Pose.onGround);

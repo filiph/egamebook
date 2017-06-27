@@ -421,6 +421,18 @@ void main() {
         expect(storyline.realize(), contains("shoot a duck"));
         storyline.clear();
       });
+
+      test("not shown when multiple supportive action reports together", () {
+        storyline.add("you aim at the sky",
+            actionThread: threadA, isSupportiveActionInThread: true);
+        storyline.add("you look through the scopes",
+            actionThread: threadA, isSupportiveActionInThread: true);
+        storyline.add("you shoot a duck", actionThread: threadA);
+        expect(storyline.realize(), isNot(contains("aim at the sky")));
+        expect(storyline.realize(), isNot(contains("look through the scopes")));
+        expect(storyline.realize(), contains("shoot a duck"));
+        storyline.clear();
+      });
     });
   });
 }

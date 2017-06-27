@@ -16,6 +16,9 @@ class FinishSlash extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   final bool rerollable = true;
 
   @override
@@ -40,6 +43,7 @@ class FinishSlash extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+    final thread = getThreadId(w, "SlashSituation");
     bool killed = !w.getActorById(enemy.id).isAlive;
     if (!killed) {
       a.report(
@@ -47,7 +51,8 @@ class FinishSlash extends EnemyTargetAction {
           "<subject> {slash<es>|cut<s>} <object's> "
           "{shoulder|abdomen|thigh}",
           object: enemy,
-          positive: true);
+          positive: true,
+          actionThread: thread);
       reportPain(s, enemy);
     } else {
       a.report(
@@ -56,7 +61,8 @@ class FinishSlash extends EnemyTargetAction {
           "{across|through} <object's> "
           "{neck|abdomen|lower body}",
           object: enemy,
-          positive: true);
+          positive: true,
+          actionThread: thread);
       var groundMaterial =
           w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
       killHumanoid(s, w, enemy, groundMaterial);

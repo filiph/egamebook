@@ -6,7 +6,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -16,6 +15,7 @@ import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
+import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
@@ -56,6 +56,8 @@ abstract class FightSituation extends Situation
         SweepOffFeet.builder,
         startBreakNeckOnGroundBuilder,
         startBreakNeckOnGroundPlayerBuilder,
+        startPunchBuilder,
+        startPunchPlayerBuilder,
         startSlashBuilder,
         startSlashPlayerBuilder,
         startStrikeDownBuilder,
@@ -129,17 +131,31 @@ abstract class FightSituation extends Situation
       }
     }
 
-    var best = 0;
+    var best = 0.0;
     Actor chosen;
 
     for (var actor in actors) {
-      var latestRecord = world.actionRecords
+      // Compute the last time this actor did any pro-active action.
+      var latestProactiveRecord = world.actionRecords.firstWhere(
+          (rec) => rec.protagonist == actor.id && rec.wasProactive,
+          orElse: () => null);
+      int latestProactiveTime = latestProactiveRecord?.time ?? -1;
+      int proactiveRecency = world.time - latestProactiveTime;
+      // If actor did something just now, they shouldn't be chosen.
+      if (proactiveRecency <= 1) continue;
+      // Otherwise, let's look at who was aggressive recently.
+      var latestAnyRecord = world.actionRecords
           .firstWhere((rec) => rec.protagonist == actor.id, orElse: () => null);
-      int latestTime = latestRecord?.time ?? -1;
-      int recency = world.time - latestTime;
+      int latestAnyTime = latestAnyRecord?.time ?? -1;
+      int anyRecency = world.time - latestAnyTime;
+      // We care about how long ago someone acted, but we especially care
+      // about how long ago they made a pro-active action. This is because
+      // otherwise an actor can be perpetually reacting to opponents and
+      // never getting to their own action repertoire.
+      num recency = (anyRecency + proactiveRecency) / 2;
       if (actor.isPlayer) {
         // Let player act more often.
-        recency = (recency * _playerTurnAdvantage).round();
+        recency = recency * _playerTurnAdvantage;
       }
       if (recency > best) {
         chosen = actor;
@@ -162,9 +178,11 @@ abstract class FightSituation extends Situation
 
   @override
   void onBeforeAction(WorldState world, Storyline s) {
-    if (Randomly.saveAgainst(0.25)) {
-      s.addParagraph();
-    }
+//    bool storylineEndsWithSupportiveAction =
+//        s.reports.isNotEmpty && s.reports.last.isSupportiveActionInThread;
+//    if (!storylineEndsWithSupportiveAction && Randomly.saveAgainst(0.25)) {
+//      s.addParagraph();
+//    }
     if (events.containsKey(time)) {
       events[time](world, s);
     }

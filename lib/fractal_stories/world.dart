@@ -115,7 +115,7 @@ class WorldState {
   ///
   /// This returns `true` regardless of success or failure.
   bool actionHasBeenPerformed(String actionName) {
-    var records =getActionRecords(actionName: actionName);
+    var records = getActionRecords(actionName: actionName);
     for (var _ in records) {
       return true;
     }
@@ -182,7 +182,11 @@ class WorldState {
     return records;
   }
 
-  Actor getActorById(int id) => actors.singleWhere((actor) => actor.id == id);
+  Actor getActorById(int id) {
+    assert(actors.where((actor) => actor.id == id).length == 1,
+        "Too many actors of id=$id in world: $this");
+    return actors.singleWhere((actor) => actor.id == id);
+  }
 
   Room getRoomByName(String roomName) {
     assert(

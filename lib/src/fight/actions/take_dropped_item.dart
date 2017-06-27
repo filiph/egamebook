@@ -20,6 +20,9 @@ class TakeDroppedItem extends ItemAction {
   bool get isAggressive => false;
 
   @override
+  final bool isProactive = true;
+
+  @override
   String get name => className;
 
   @override

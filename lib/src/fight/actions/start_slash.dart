@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
@@ -45,11 +46,7 @@ EnemyTargetAction
                 predeterminedResult: Predetermination.failureGuaranteed),
             enemy,
             successChanceGetter: (_, __, ___) => 0.7,
-            applyStartOfFailure: (a, w, s, enemy) => a.report(
-                s,
-                "<subject> swing<s> "
-                "{<subject's> ${a.currentWeapon.name} |}at <object>",
-                object: enemy),
+            applyStartOfFailure: startSlashReportStart,
             defenseSituationWhenFailed:
                 (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
                     predeterminedResult: Predetermination.successGuaranteed),
@@ -57,9 +54,12 @@ EnemyTargetAction
             rerollResource: Resource.stamina,
             rollReasonTemplate: "will <subject> hit <objectPronoun>?");
 
-void startSlashReportStart(Actor a, WorldState w, Storyline s, Actor enemy) =>
+void startSlashReportStart(Actor a, WorldState w, Storyline s, Actor enemy,
+        Situation mainSituation) =>
     a.report(
         s,
         "<subject> swing<s> "
         "{<subject's> ${a.currentWeapon.name} |}at <object>",
-        object: enemy);
+        object: enemy,
+        actionThread: mainSituation.id,
+        isSupportiveActionInThread: true);

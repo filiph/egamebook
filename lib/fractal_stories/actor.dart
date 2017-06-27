@@ -94,9 +94,9 @@ abstract class Actor extends Object
   @nullable
   int get followingActorId;
 
-  int get hitpoints;
-
   int get gold;
+
+  int get hitpoints;
 
   /// Names can change or can even be duplicate. [id] is the only safe way
   /// to find out if we're talking about the same actor.
@@ -116,14 +116,16 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
+  bool get isBarehanded => currentWeapon == null;
+
   bool get isOffBalance => pose == Pose.offBalance;
 
   bool get isOnGround => pose == Pose.onGround;
 
+  // TODO: make non-nullable
   @override
   bool get isPlayer;
 
-  // TODO: make non-nullable
   bool get isStanding => pose == Pose.standing;
 
   /// How safe does [this] Actor feel in the presence of the different other
@@ -189,6 +191,9 @@ abstract class Actor extends Object
     return hateTowards(other, w) > 0.0;
   }
 
+  // TODO: loveIndifference
+  // other feelings?
+
   /// Returns the intensity of hate towards the actor. Very high when
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
@@ -203,9 +208,6 @@ abstract class Actor extends Object
 
     return team.isEnemyWith(other.team) ? 1.0 : 0.0;
   }
-
-  // TODO: loveIndifference
-  // other feelings?
 
   /// Returns whether actor is in confused state at present.
   ///

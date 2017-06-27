@@ -18,6 +18,9 @@ class SweepOffFeet extends EnemyTargetAction {
   final bool isAggressive = true;
 
   @override
+  final bool isProactive = true;
+
+  @override
   String helpMessage = "Sweeping opponents off their feet doesn't deal much "
       "damage but on the ground they will be much easier targets for you "
       "and your allies.";

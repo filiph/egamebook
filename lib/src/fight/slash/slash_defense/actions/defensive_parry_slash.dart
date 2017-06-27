@@ -17,6 +17,9 @@ class DefensiveParrySlash extends EnemyTargetAction {
   final bool isAggressive = false;
 
   @override
+  final bool isProactive = false;
+
+  @override
   final bool rerollable = true;
 
   @override

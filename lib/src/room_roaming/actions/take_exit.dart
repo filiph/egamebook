@@ -12,6 +12,9 @@ class TakeExitAction extends ExitAction {
   final bool isAggressive = false;
 
   @override
+  final bool isProactive = true;
+
+  @override
   final bool rerollable = false;
 
   @override

@@ -2,8 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/actions/pound.dart';
-import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
+import 'package:edgehead/src/fight/actions/stand_up.dart';
 
 class Scramble extends Action {
   static final Scramble singleton = new Scramble();
@@ -15,6 +14,9 @@ class Scramble extends Action {
 
   @override
   final bool isAggressive = false;
+
+  @override
+  final bool isProactive = true;
 
   @override
   final bool rerollable = false;
@@ -53,19 +55,7 @@ class Scramble extends Action {
   bool isApplicable(Actor a, WorldState world) {
     if (!a.isOnGround) return false;
     // Actor must have just fallen.
-    var sweepRecency = world.timeSinceLastActionRecord(
-        actionName: SweepOffFeet.className,
-        sufferer: a,
-        wasSuccess: true);
-    if (sweepRecency != null && sweepRecency <= 2) {
-      return true;
-    }
-    // If this actor was just pounded to ground, do not let him stand up.
-    var poundRecency = world.timeSinceLastActionRecord(
-        actionName: Pound.className, sufferer: a, wasSuccess: true);
-    if (poundRecency != null && poundRecency <= 2) {
-      return true;
-    }
+    if (recentlyForcedToGround(a, world)) return true;
     return false;
   }
 }
