@@ -40,13 +40,13 @@ Room killArguth = new Room('kill_arguth', (Actor a, WorldState w, Storyline s) {
       '''The journey from slavery to power begins with a single crack of a skull. Oddmund falls to the rock floor and his blond hair is quickly filled with blood. Above him, Arguth is grinning. He finds Oddmund\'s death funny. He always finds dying slaves funny.
 
 
-Oddmund. He was the leader among the slaves. He was the only one brave enough to steal fungus mush from the goblins and give it to the other slaves. He was the only slave who knew how to get from here.
+You and Briana watch this in terror, unable to move.
 
 
-Arguth is checking Oddmund\'s teeth in case there\'s gold in them. He stops when he notices you looking at him.
+When the puddle of blood beneath Oddmund\'s head stops spreading, Arguth bends down to check the teeth in case there\'s gold in them. He stops when he notices you looking at him.
 
 
-"What the matter, human?" he says, smirking. He finds your expression amusing.
+"What the matter, human?" he says, smirking. "You have no work?"
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -55,18 +55,19 @@ Arguth is checking Oddmund\'s teeth in case there\'s gold in them. He stops when
 ''',
       wholeSentence: true);
 }, generateArguth, null, <Exit>[
-  new Exit('start_of_book', '', 'You watch Arguth\'s corpse with hatred.')
+  new Exit(
+      'start_of_book', '', 'You look around. Fortunately, nobody is in sight.')
 ]);
 Room startOfBook =
     new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The journey from slavery to power begins with a single crack of a skull. Agruth, the orc-slaver, falls to the rock floor. You take his shortsword and with help from another slave, Briana, you move Agruth\'s body to a shady crevice in the tunnel\'s wall.
+      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten, but it has to be revived. There is no turning back now. [a][b][c][d][e]
 
 
-You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten. [a][b][c][d][e]
+Briana kneels down to Oddmund. "Dead," she says plainly.
 
 
-<p class="meta">You can use the question mark (?) icons below to learn more about each option.</p>
+Oddmund was the leader among the slaves. He was the only one brave enough to steal the disgusting but precious food from the goblins and give it to the other slaves. He was the only slave who knew how to get from here.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
