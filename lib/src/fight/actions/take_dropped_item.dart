@@ -44,7 +44,7 @@ class TakeDroppedItem extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) => b..currentWeapon = item);
-    a.report(s, "<subject> pick<s> up <object>", object: item);
+    a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
   }
 
