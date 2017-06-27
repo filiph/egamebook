@@ -2,15 +2,15 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
-import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/punch/actions/finish_punch.dart';
 
 /// This will return `true` if the actor [a] was recently pushed to the ground.
 /// That's useful to know so that they can't immediately stand up.
 bool recentlyForcedToGround(Actor a, WorldState world) {
   var sweepRecency = world.timeSinceLastActionRecord(
-      actionName: SweepOffFeet.className, sufferer: a, wasSuccess: true);
+      actionName: KickToGround.className, sufferer: a, wasSuccess: true);
   // We're using 2 here because it's safer. Sometimes, an action by another
   // actor is silent, so with 1 we would still get 'you sweep his legs, he
   // stands up'.

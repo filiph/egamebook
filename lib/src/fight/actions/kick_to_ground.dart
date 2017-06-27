@@ -5,8 +5,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class SweepOffFeet extends EnemyTargetAction {
-  static const String className = "SweepOffFeet";
+class KickToGround extends EnemyTargetAction {
+  static const String className = "KickToGround";
 
   @override
   final bool rerollable = true;
@@ -25,24 +25,24 @@ class SweepOffFeet extends EnemyTargetAction {
       "damage but on the ground they will be much easier targets for you "
       "and your allies.";
 
-  SweepOffFeet(Actor enemy) : super(enemy);
+  KickToGround(Actor enemy) : super(enemy);
 
   @override
   String get name => className;
 
   @override
-  String get commandTemplate => "sweep <object> off <objectPronoun's> feet";
+  String get commandTemplate => "kick <object> to the ground";
 
   @override
-  String get rollReasonTemplate => "will <subject> knock "
-      "<object> down?";
+  String get rollReasonTemplate => "will <subject> kick "
+      "<object> prone?";
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     Randomly.run(() {
-      a.report(s, "<subject> sweep<s> <subject's> legs at <object's> feet",
+      a.report(s, "<subject> kick<s> {at|towards} <object's> feet",
           object: enemy);
-      s.add("they don't connect", but: true, endSentence: true);
+      a.report(s, "<subject> mi<sses>", but: true);
     }, () {
       a.report(s, "<subject> kick<s> <object's> shin", object: enemy);
       enemy.report(s, "<subject> <does>n't budge", but: true);
@@ -55,10 +55,15 @@ class SweepOffFeet extends EnemyTargetAction {
     var groundMaterial =
         w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
     Randomly.run(() {
-      a.report(s, "<subject> sweep<s> <object> off <object's> feet",
-          object: enemy, positive: true);
+      a.report(
+          s,
+          "<subject> kick<s> <object> off <object's> feet "
+          "and to the ground",
+          object: enemy,
+          positive: true,
+          endSentence: true);
     }, () {
-      a.report(s, "<subject> kick<s> <object's> {right|left} ankle",
+      a.report(s, "<subject> kick<s> <object's> {right|left} shin",
           object: enemy, positive: true);
       enemy.report(s, "<subject> {grunt|shriek}<s>");
       enemy.report(s, "<subject> fall<s> to the $groundMaterial",
@@ -79,5 +84,5 @@ class SweepOffFeet extends EnemyTargetAction {
   bool isApplicable(Actor a, WorldState world) =>
       (a.isStanding || a.isOffBalance) && !enemy.isOnGround;
 
-  static EnemyTargetAction builder(Actor enemy) => new SweepOffFeet(enemy);
+  static EnemyTargetAction builder(Actor enemy) => new KickToGround(enemy);
 }

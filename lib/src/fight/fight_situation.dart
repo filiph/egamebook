@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
+import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
@@ -19,7 +20,6 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
-import 'package:edgehead/src/fight/actions/sweep_off_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_item.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -52,8 +52,8 @@ abstract class FightSituation extends Situation
   @override
   List<ActionBuilder> get actionGenerators => [
         Confuse.builder,
+        KickToGround.builder,
         Pound.builder,
-        SweepOffFeet.builder,
         startBreakNeckOnGroundBuilder,
         startBreakNeckOnGroundPlayerBuilder,
         startPunchBuilder,

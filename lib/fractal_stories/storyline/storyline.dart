@@ -147,6 +147,7 @@ class Storyline {
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
   static const String VERB_ES = "<es>";
+  static const String VERB_SSES = "<sses>";
   static const String VERB_IES = "<ies>";
   // e.g. in "goes"
   static const String VERB_DO = "<does>";
@@ -399,6 +400,7 @@ class Storyline {
         // "you fly there", "they pick up the bananas" ...
         result = result.replaceAll(VERB_S, "");
         result = result.replaceAll(VERB_ES, "");
+        result = result.replaceAll(VERB_SSES, "ss");
         result = result.replaceAll(VERB_IES, "y");
         result = result.replaceAll(VERB_DO, "do");
         result = result.replaceAll(VERB_BE, "are");
@@ -407,6 +409,7 @@ class Storyline {
         // "he flies there", "it picks up the bananas" ...
         result = result.replaceAll(VERB_S, "s");
         result = result.replaceAll(VERB_ES, "es");
+        result = result.replaceAll(VERB_SSES, "sses");
         result = result.replaceAll(VERB_IES, "ies");
         result = result.replaceAll(VERB_DO, "does");
         result = result.replaceAll(VERB_BE, "is");
