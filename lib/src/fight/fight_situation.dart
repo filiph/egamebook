@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
+import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
@@ -52,6 +53,7 @@ abstract class FightSituation extends Situation
   @override
   List<ActionBuilder> get actionGenerators => [
         Confuse.builder,
+        DisarmKick.builder,
         KickToGround.builder,
         Pound.builder,
         startBreakNeckOnGroundBuilder,

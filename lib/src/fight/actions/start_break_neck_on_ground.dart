@@ -19,7 +19,11 @@ EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
         startBreakNeckOnGroundCommandTemplate,
         startBreakNeckOnGroundHelpMessage,
         startBreakNeckOnGroundReportStart,
-        (a, w, enemy) => !a.isPlayer && enemy.isOnGround && a.isBarehanded,
+        (a, w, enemy) =>
+            !a.isPlayer &&
+            enemy.isOnGround &&
+            a.isBarehanded &&
+            enemy.isBarehanded,
         (a, w, enemy) => new BreakNeckOnGroundSituation.initialized(a, enemy),
         (a, w, enemy) =>
             new OnGroundWrestleDefenseSituation.initialized(a, enemy),
@@ -31,7 +35,11 @@ EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
         startBreakNeckOnGroundCommandTemplate,
         startBreakNeckOnGroundHelpMessage,
         startBreakNeckOnGroundReportStart,
-        (a, w, enemy) => a.isPlayer && enemy.isOnGround && a.isBarehanded,
+        (a, w, enemy) =>
+            a.isPlayer &&
+            enemy.isOnGround &&
+            a.isBarehanded &&
+            enemy.isBarehanded,
         (a, w, enemy) => new BreakNeckOnGroundSituation.initialized(a, enemy),
         (a, w, enemy) => new OnGroundWrestleDefenseSituation.initialized(
             a, enemy, predeterminedResult: Predetermination.failureGuaranteed),
