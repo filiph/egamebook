@@ -61,7 +61,7 @@ class DisarmKick extends EnemyTargetAction {
           positive: true,
           endSentence: true);
     }, () {
-      a.report(s, "<subject> kick<s> <object's> {right|left} hand",
+      a.report(s, "<subject> kick<s> <object's> {right|} hand",
           object: enemy, positive: true);
       s.add("<owner's> <subject> fl<ies> away",
           subject: enemy.currentWeapon, owner: enemy);
