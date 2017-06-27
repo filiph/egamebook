@@ -16,7 +16,6 @@ Iterable<Actor> escapeTunnelMonsters(WorldState w) {
 }
 
 Iterable<Actor> generateArguth(WorldState w) {
-  // TODO: give him sword in hand or not, according to player's first choice
   // TODO: name the orc "Arguth" (storyline should alternate between "the orc"
   //       and "Arguth"
   return [
@@ -27,8 +26,7 @@ Iterable<Actor> generateArguth(WorldState w) {
         hitpoints: 2,
         maxHitpoints: 2,
         team: defaultEnemyTeam,
-        initiative: 100,
-        combineFunction: carelessCombineFunction)
+        initiative: 100)
   ];
 }
 
@@ -83,4 +81,4 @@ Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
     team: defaultEnemyTeam,
     combineFunction: carelessCombineFunction);
 
-int _makeUniqueId() => 1000 + _rand.nextInt(99999);
+int _makeUniqueId() => 1000 + _rand.nextInt(999999);
