@@ -35,15 +35,15 @@ Room forgeChurchCrevice =
   new Exit('tunnel', 'Continue along the crevice',
       'You continue until the crevice open into a tunnel. You can smell fresh air.')
 ]);
-Room killArguth = new Room('kill_arguth', (Actor a, WorldState w, Storyline s) {
+Room killAgruth = new Room('kill_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The journey from slavery to power begins with a single crack of a skull. Oddmund falls to the rock floor and his blond hair is quickly filled with blood. Above him, Arguth is grinning. He finds Oddmund\'s death funny. He always finds dying slaves funny.
+      '''The journey from slavery to power begins with a single crack of a skull. Oddmund falls to the rock floor and his blond hair is quickly filled with blood. Above him, Agruth is grinning. He finds Oddmund\'s death funny. He always finds dying slaves funny.
 
 
 You and Briana watch this in terror, unable to move.
 
 
-When the puddle of blood beneath Oddmund\'s head stops spreading, Arguth bends down to check the teeth in case there\'s gold in them. He stops when he notices you looking at him.
+When the puddle of blood beneath Oddmund\'s head stops spreading, Agruth bends down to check the teeth in case there\'s gold in them. He stops when he notices you looking at him.
 
 
 "What the matter, human?" he says, smirking. "You have no work?"
@@ -54,7 +54,7 @@ When the puddle of blood beneath Oddmund\'s head stops spreading, Arguth bends d
       '''
 ''',
       wholeSentence: true);
-}, generateArguth, null, <Exit>[
+}, generateAgruth, null, <Exit>[
   new Exit(
       'start_of_book', '', 'You look around. Fortunately, nobody is in sight.')
 ]);
@@ -1291,7 +1291,7 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
 ]);
 List<Room> allRooms = <Room>[
   forgeChurchCrevice,
-  killArguth,
+  killAgruth,
   startOfBook,
   theShafts,
   tunnel,

@@ -15,11 +15,11 @@ Iterable<Actor> escapeTunnelMonsters(WorldState w) {
   return [_makeOrc(), _makeGoblin()];
 }
 
-Iterable<Actor> generateArguth(WorldState w) {
+Iterable<Actor> generateAgruth(WorldState w) {
   // TODO: name the orc "Arguth" (storyline should alternate between "the orc"
   //       and "Arguth"
   return [
-    new Actor.initialized(_makeUniqueId(), "Arguth",
+    new Actor.initialized(_makeUniqueId(), "Agruth",
         nameIsProperNoun: true,
         pronoun: Pronoun.HE,
         currentWeapon: new Sword('scimitar'),
