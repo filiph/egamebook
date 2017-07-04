@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -182,11 +183,11 @@ abstract class FightSituation extends Situation
 
   @override
   void onBeforeAction(WorldState world, Storyline s) {
-//    bool storylineEndsWithSupportiveAction =
-//        s.reports.isNotEmpty && s.reports.last.isSupportiveActionInThread;
-//    if (!storylineEndsWithSupportiveAction && Randomly.saveAgainst(0.25)) {
-//      s.addParagraph();
-//    }
+    bool storylineEndsWithSupportiveAction =
+        s.reports.isNotEmpty && s.reports.last.isSupportiveActionInThread;
+    if (!storylineEndsWithSupportiveAction && Randomly.saveAgainst(0.25)) {
+      s.addParagraph();
+    }
     if (events.containsKey(time)) {
       events[time](world, s);
     }
