@@ -109,7 +109,9 @@ abstract class FightSituation extends Situation
   @override
   int get time;
 
-  bool canFight(Iterable<int> teamIds, WorldState world) =>
+  /// Returns `true` if any actor among `teamIds` can still fight
+  /// (and is active).
+  bool canFight(WorldState world, Iterable<int> teamIds) =>
       teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 
   @override
@@ -192,13 +194,28 @@ abstract class FightSituation extends Situation
 
   @override
   void onPop(WorldState world) {
-    if (roomRoamingSituationId != null && !canFight(enemyTeamIds, world)) {
+    if (roomRoamingSituationId != null && !canFight(world, enemyTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
       RoomRoamingSituation situation =
           world.getSituationById(roomRoamingSituationId);
       world.replaceSituationById(
           situation.id, situation.rebuild((b) => b..monstersAlive = false));
+
+      for (var id in playerTeamIds) {
+        if (world.getActorById(id).isAliveAndActive) {
+          world.updateActorById(id, (b) => b..pose = Pose.standing);
+        }
+      }
+    } else if (!canFight(world, playerTeamIds)) {
+      // Nothing to do here. The player's team is all dead.
+    } else {
+      assert(
+          true,
+          "$name is being popped but there are still enemies or players alive "
+          "and we have no code path for that (for example, actors don't stand "
+          "up). If this is a 'run away', you should probably implement a "
+          "situation on top of $name");
     }
   }
 
@@ -209,8 +226,8 @@ abstract class FightSituation extends Situation
       return actor.isPlayer && actor.isAliveAndActive;
     }
 
-    return canFight(playerTeamIds, world) &&
-        canFight(enemyTeamIds, world) &&
+    return canFight(world, playerTeamIds) &&
+        canFight(world, enemyTeamIds) &&
         playerTeamIds.any(isPlayerAndAlive);
   }
 }
