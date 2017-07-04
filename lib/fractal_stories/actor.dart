@@ -278,18 +278,29 @@ abstract class Actor extends Object
   /// starving, then Bob's score will be higher than Alice's).
   ActorScore scoreWorld(WorldState world) {
     var actor = world.getActorById(id);
-    int selfPreservation = 2 * actor.hitpoints;
+    num selfPreservation = 2 * actor.hitpoints;
     // Extra painful if actor dies in this world.
     if (!actor.isAlive) selfPreservation -= 10;
     // Add bonus point for weapon.
     if (!actor.isBarehanded) selfPreservation += 4;
+    // Add points for weapon value.
+    selfPreservation += actor.currentWeapon.value / 2;
+    // Add points for item values.
+    for (var item in actor.items) {
+      selfPreservation += item.value / 10;
+    }
 
-    // Add points for every friend and their hitpoints.
-    var friends = world.actors.where((a) => a.team == team);
-    var teamPreservation = friends.fold<int>(
-        0,
-        (int sum, Actor a) =>
-            sum + (a.isAliveAndActive ? 2 : 0) + 2 * a.hitpoints);
+    // Add points for every friend and their well-being.
+    var friends = world.actors.where((a) => a.team == team && a.id != id);
+    num teamPreservation = 0;
+    for (var friend in friends) {
+      teamPreservation += (friend.isAliveAndActive ? 2 : 0);
+      teamPreservation += 2 * friend.hitpoints;
+      teamPreservation += friend.currentWeapon.value / 2;
+      for (var item in friend.items) {
+        teamPreservation += item.value / 10;
+      }
+    }
 
     // Remove points for every enemy and their hitpoints.
     var enemy = world.actors.fold(0, (num sum, Actor a) {
