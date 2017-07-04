@@ -1,6 +1,5 @@
 library stranded.item;
 
-import 'actor.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
 
@@ -8,67 +7,27 @@ String typeToDescription(ItemType type) {
   switch (type) {
     case ItemType.spear:
       return "spear";
-    case ItemType.branch:
-      return "branch";
-    case ItemType.tent:
-      return "tent";
     case ItemType.sword:
       return "sword";
+    case ItemType.fist:
+      return "fist";
     default:
       throw new ArgumentError(type);
   }
 }
 
 abstract class Item extends Object with EntityBehavior implements Entity {
-  final ItemType type;
-  Item(this.type);
+  final List<ItemType> types;
 
-  String get description => typeToDescription(type);
+  Item(Iterable<ItemType> types) : types = new List.unmodifiable(types);
 
-  /// When `true`, having more of [this] makes the person happier.
-  ///
-  /// For example, having more of coins makes an [Actor] happier. On the other
-  /// hand, having just one tent is enough -- it won't make the person
-  /// happier to have 2 tents.
-  bool get luxuryIsCumulative;
-
-  /// This is the intrinsic value of the item.
-  ///
-  /// When [luxuryScore] is high, people (AI) will be more incentivized to
-  /// get it. Sleeping in a tent (as opposed to 'below a tree branch') is
-  /// a massive luxury improvement.
-  ///
-  /// Note that the way AI plans, items don't need to have their own (intrinsic)
-  /// value to be wanted. Branch in itself doesn't help you, but it does get
-  /// you to traps, which get you to food.
-  num get luxuryScore;
-}
-
-enum ItemType { spear, branch, tent, sword }
-
-class Sword extends Item {
-  @override
-  final bool luxuryIsCumulative = false;
-
-  @override
-  final num luxuryScore = 10;
-
-  @override
-  bool isActive = true;
-
-  @override
-  Team team = neutralTeam;
-
-  @override
-  final String name;
-
-  Sword([this.name = "sword"]) : super(ItemType.sword);
-
-  @override
-  List<String> get categories => const [];
+  String get description => typeToDescription(types.first);
 
   @override
   int get id => hashCode;
+
+  @override
+  bool get isActive => true;
 
   @override
   bool get isAlive => false;
@@ -81,4 +40,11 @@ class Sword extends Item {
 
   @override
   Pronoun get pronoun => Pronoun.IT;
+
+  @override
+  Team get team => neutralTeam;
+
+  int get value;
 }
+
+enum ItemType { spear, sword, fist }

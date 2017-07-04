@@ -212,7 +212,7 @@ abstract class FightSituation extends Situation
     } else {
       assert(
           true,
-          "$name is being popped but there are still enemies or players alive "
+          "$name is being popped but there are still players alive "
           "and we have no code path for that (for example, actors don't stand "
           "up). If this is a 'run away', you should probably implement a "
           "situation on top of $name");

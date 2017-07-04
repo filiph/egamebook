@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -71,7 +72,7 @@ class DisarmKick extends EnemyTargetAction {
         situation.id,
         situation.rebuild((FightSituationBuilder b) =>
             b..droppedItems.add(enemy.currentWeapon)));
-    w.updateActorById(enemy.id, (b) => b..currentWeapon = null);
+    w.updateActorById(enemy.id, (b) => b..currentWeapon = defaultFist);
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
 
@@ -86,7 +87,7 @@ class DisarmKick extends EnemyTargetAction {
   bool isApplicable(Actor a, WorldState world) =>
       (a.isStanding || a.isOffBalance) &&
       enemy.isOnGround &&
-      enemy.currentWeapon != null;
+      !enemy.isBarehanded;
 
   static EnemyTargetAction builder(Actor enemy) => new DisarmKick(enemy);
 }

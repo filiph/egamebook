@@ -4,6 +4,8 @@ import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/items/fist.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
@@ -39,7 +41,7 @@ abstract class Actor extends Object
           {bool isPlayer: false,
           bool nameIsProperNoun: false,
           Pronoun pronoun: Pronoun.IT,
-          Item currentWeapon,
+          Weapon currentWeapon,
           int hitpoints: 1,
           int maxHitpoints: 1,
           int stamina: 0,
@@ -54,8 +56,7 @@ abstract class Actor extends Object
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
         ..pronoun = pronoun
-        ..currentWeapon = currentWeapon
-        ..alreadyMentioned = true
+        ..currentWeapon = currentWeapon ?? defaultFist
         ..categories = []
         ..pose = Pose.standing
         ..hitpoints = hitpoints
@@ -73,7 +74,12 @@ abstract class Actor extends Object
 
   Actor._();
 
-  bool get alreadyMentioned; // TODO make immutable
+  /// Actor can wield weapons other than [Fist].
+  ///
+  /// This is `true` for most humanoids and `false` for most non-humanoids.
+  /// Humans, goblins and octopus-kings can wield. Wolves, bats and zombies
+  /// cannot wield.
+  bool get canWield => true;
 
   @override
   List<String> get categories;
@@ -87,8 +93,7 @@ abstract class Actor extends Object
   /// The weapon this actor is wielding at the moment.
   ///
   /// Changing a weapon should ordinarily take a turn.
-  @nullable
-  Item get currentWeapon;
+  Weapon get currentWeapon;
 
   /// The actor that [this] actor is following around.
   @nullable
@@ -116,7 +121,7 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
-  bool get isBarehanded => currentWeapon == null;
+  bool get isBarehanded => currentWeapon is Fist;
 
   bool get isOffBalance => pose == Pose.offBalance;
 
@@ -277,7 +282,7 @@ abstract class Actor extends Object
     // Extra painful if actor dies in this world.
     if (!actor.isAlive) selfPreservation -= 10;
     // Add bonus point for weapon.
-    if (actor.currentWeapon != null) selfPreservation += 4;
+    if (!actor.isBarehanded) selfPreservation += 4;
 
     // Add points for every friend and their hitpoints.
     var friends = world.actors.where((a) => a.team == team);
@@ -296,8 +301,7 @@ abstract class Actor extends Object
     return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
-  bool wields(ItemType value) =>
-      currentWeapon != null && currentWeapon.type == value;
+  bool wields(ItemType value) => currentWeapon.types.contains(value);
 
   /// Returns true if this actor has ever been attacked by [actor] in the past
   /// [time] turns.

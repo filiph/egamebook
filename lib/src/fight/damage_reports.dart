@@ -12,7 +12,7 @@ void killHumanoid(
     Storyline s, WorldState w, Actor actor, String groundMaterial) {
   var fight = w.getSituationByName<FightSituation>("FightSituation");
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (actor.currentWeapon != null) {
+    if (!actor.isBarehanded) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }

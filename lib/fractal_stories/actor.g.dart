@@ -9,15 +9,13 @@ part of stranded.actor;
 
 class _$Actor extends Actor {
   @override
-  final bool alreadyMentioned;
-  @override
   final List<String> categories;
   @override
   final CombineFunction combineFunction;
   @override
   final String currentRoomName;
   @override
-  final Item currentWeapon;
+  final Weapon currentWeapon;
   @override
   final int followingActorId;
   @override
@@ -55,8 +53,7 @@ class _$Actor extends Actor {
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
-      {this.alreadyMentioned,
-      this.categories,
+      {this.categories,
       this.combineFunction,
       this.currentRoomName,
       this.currentWeapon,
@@ -77,9 +74,8 @@ class _$Actor extends Actor {
       this.stamina,
       this.team})
       : super._() {
-    if (alreadyMentioned == null)
-      throw new ArgumentError.notNull('alreadyMentioned');
     if (categories == null) throw new ArgumentError.notNull('categories');
+    if (currentWeapon == null) throw new ArgumentError.notNull('currentWeapon');
     if (gold == null) throw new ArgumentError.notNull('gold');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (id == null) throw new ArgumentError.notNull('id');
@@ -108,8 +104,7 @@ class _$Actor extends Actor {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! Actor) return false;
-    return alreadyMentioned == other.alreadyMentioned &&
-        categories == other.categories &&
+    return categories == other.categories &&
         combineFunction == other.combineFunction &&
         currentRoomName == other.currentRoomName &&
         currentWeapon == other.currentWeapon &&
@@ -151,7 +146,7 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc(0, alreadyMentioned.hashCode), categories.hashCode),
+                                                                            $jc($jc(0, categories.hashCode),
                                                                                 combineFunction.hashCode),
                                                                             currentRoomName.hashCode),
                                                                         currentWeapon.hashCode),
@@ -176,7 +171,6 @@ class _$Actor extends Actor {
   @override
   String toString() {
     return 'Actor {'
-        'alreadyMentioned=${alreadyMentioned.toString()},\n'
         'categories=${categories.toString()},\n'
         'combineFunction=${combineFunction.toString()},\n'
         'currentRoomName=${currentRoomName.toString()},\n'
@@ -204,11 +198,6 @@ class _$Actor extends Actor {
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
 
-  bool _alreadyMentioned;
-  bool get alreadyMentioned => _$this._alreadyMentioned;
-  set alreadyMentioned(bool alreadyMentioned) =>
-      _$this._alreadyMentioned = alreadyMentioned;
-
   List<String> _categories;
   List<String> get categories => _$this._categories;
   set categories(List<String> categories) => _$this._categories = categories;
@@ -223,9 +212,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  Item _currentWeapon;
-  Item get currentWeapon => _$this._currentWeapon;
-  set currentWeapon(Item currentWeapon) =>
+  Weapon _currentWeapon;
+  Weapon get currentWeapon => _$this._currentWeapon;
+  set currentWeapon(Weapon currentWeapon) =>
       _$this._currentWeapon = currentWeapon;
 
   int _followingActorId;
@@ -298,7 +287,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   ActorBuilder get _$this {
     if (_$v != null) {
-      _alreadyMentioned = _$v.alreadyMentioned;
       _categories = _$v.categories;
       _combineFunction = _$v.combineFunction;
       _currentRoomName = _$v.currentRoomName;
@@ -339,7 +327,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor build() {
     final result = _$v ??
         new _$Actor._(
-            alreadyMentioned: alreadyMentioned,
             categories: categories,
             combineFunction: combineFunction,
             currentRoomName: currentRoomName,

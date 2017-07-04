@@ -44,7 +44,14 @@ class TakeDroppedItem extends ItemAction {
         situation.id,
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
-    w.updateActorById(a.id, (b) => b..currentWeapon = item);
+    w.updateActorById(a.id, (b) {
+      if (!a.isBarehanded) {
+        // Move current weapon to inventory.
+        b.items.add(b.currentWeapon);
+      }
+      b.currentWeapon = item;
+      return b;
+    });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
   }
@@ -57,6 +64,7 @@ class TakeDroppedItem extends ItemAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) {
+    if (!a.canWield) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another

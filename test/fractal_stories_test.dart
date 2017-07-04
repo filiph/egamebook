@@ -1,4 +1,4 @@
-import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';

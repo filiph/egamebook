@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -22,7 +22,7 @@ Iterable<Actor> generateAgruth(WorldState w) {
     new Actor.initialized(_makeUniqueId(), "Agruth",
         nameIsProperNoun: true,
         pronoun: Pronoun.HE,
-        currentWeapon: new Sword('scimitar'),
+        currentWeapon: new Sword(name: 'scimitar'),
         hitpoints: 2,
         maxHitpoints: 2,
         team: defaultEnemyTeam,
@@ -68,7 +68,7 @@ void updateGlobal(WorldState w,
 Actor _makeGoblin() => new Actor.initialized(_makeUniqueId(), "goblin",
     nameIsProperNoun: false,
     pronoun: Pronoun.HE,
-    currentWeapon: new Sword("scimitar"),
+    currentWeapon: new Sword(name: "scimitar"),
     team: defaultEnemyTeam,
     combineFunction: carelessCombineFunction);
 

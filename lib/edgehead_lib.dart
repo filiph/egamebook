@@ -4,7 +4,7 @@ import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
-import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/looped_event/looped_event.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
@@ -86,7 +86,7 @@ class EdgeheadGame extends LoopedEvent {
     goblin = new Actor.initialized(1001, "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Sword("scimitar"),
+        currentWeapon: new Sword(name: "scimitar"),
         team: defaultEnemyTeam,
         combineFunction: carelessCombineFunction);
 
