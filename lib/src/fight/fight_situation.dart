@@ -24,6 +24,7 @@ import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_item.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
+import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'fight_situation.g.dart';
@@ -103,7 +104,8 @@ abstract class FightSituation extends Situation
 
   BuiltList<int> get playerTeamIds;
 
-  /// This is used
+  /// This is used to update the underlying [RoomRoamingSituation] with the
+  /// fact that all monsters have been slain.
   @nullable
   int get roomRoamingSituationId;
 
@@ -195,7 +197,9 @@ abstract class FightSituation extends Situation
 
   @override
   void onPop(WorldState world) {
-    if (roomRoamingSituationId != null && !canFight(world, enemyTeamIds)) {
+    if (roomRoamingSituationId != null &&
+        !canFight(world, enemyTeamIds) &&
+        canFight(world, playerTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
       RoomRoamingSituation situation =
@@ -208,6 +212,10 @@ abstract class FightSituation extends Situation
           world.updateActorById(id, (b) => b..pose = Pose.standing);
         }
       }
+
+      // Allow player to take and distribute loot.
+      world.pushSituation(
+          new LootSituation.initialized(groundMaterial, droppedItems));
     } else if (!canFight(world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.
     } else {

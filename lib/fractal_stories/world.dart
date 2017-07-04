@@ -231,8 +231,11 @@ class WorldState {
   }
 
   void popSituation() {
-    situations.last.onPop(this);
-    situations.removeLast();
+    var removal = situations.last;
+    removal.onPop(this);
+    // The onPop function could have added another situation to the stack,
+    // so we can't use `situations.removeLast()`.
+    situations.remove(removal);
   }
 
   void popSituationsUntil(String situationName) {
