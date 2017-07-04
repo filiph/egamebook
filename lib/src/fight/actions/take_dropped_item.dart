@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class TakeDroppedItem extends ItemAction {
@@ -55,7 +56,17 @@ class TakeDroppedItem extends ItemAction {
   num getSuccessChance(Actor a, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => true;
+  bool isApplicable(Actor a, WorldState w) {
+    var disarmedRecency = w.timeSinceLastActionRecord(
+        actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
+    // We're using 2 here because it's safer. Sometimes, an action by another
+    // actor is silent, so with 1 we would still get 'you sweep his legs, he
+    // stands up'.
+    if (disarmedRecency != null && disarmedRecency <= 2) {
+      return false;
+    }
+    return true;
+  }
 
   static ItemAction builder(Item item) => new TakeDroppedItem(item);
 }
