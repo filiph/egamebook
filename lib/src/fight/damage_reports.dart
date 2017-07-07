@@ -8,9 +8,9 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 final Random _random = new Random();
 
 /// Report's a humanoid's death and drops their items.
-void killHumanoid(
-    Storyline s, WorldState w, Actor actor, String groundMaterial) {
+void killHumanoid(Storyline s, WorldState w, Actor actor) {
   var fight = w.getSituationByName<FightSituation>("FightSituation");
+  var groundMaterial = fight.groundMaterial;
   w.replaceSituationById(fight.id, fight.rebuild((b) {
     if (!actor.isBarehanded) {
       // Drop weapon.

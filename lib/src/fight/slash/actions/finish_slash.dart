@@ -4,7 +4,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishSlash extends EnemyTargetAction {
   static const String className = "FinishSlash";
@@ -63,9 +62,7 @@ class FinishSlash extends EnemyTargetAction {
           object: enemy,
           positive: true,
           actionThread: thread);
-      var groundMaterial =
-          w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
-      killHumanoid(s, w, enemy, groundMaterial);
+      killHumanoid(s, w, enemy);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

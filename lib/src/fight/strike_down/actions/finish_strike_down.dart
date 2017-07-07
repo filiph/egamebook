@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/damage_reports.dart';
 
 class FinishSlashGroundedEnemy extends EnemyTargetAction {
   static const String className = "FinishSlashGroundedEnemy";
@@ -43,8 +44,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     s.add("<subject> {cuts|slashes|slits} <object's> {throat|neck|side}",
         subject: a.currentWeapon, object: enemy);
-    enemy.report(s, "<subject> die<s>", negative: true);
-    s.addParagraph();
+    killHumanoid(s, w, enemy);
     return "${a.name} slains ${enemy.name} on the ground";
   }
 

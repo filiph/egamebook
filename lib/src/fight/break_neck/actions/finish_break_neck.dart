@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishBreakNeck extends EnemyTargetAction {
   static const String className = "FinishBreakNeck";
@@ -49,9 +48,7 @@ class FinishBreakNeck extends EnemyTargetAction {
         "neck" /* TODO: add variants */,
         object: enemy,
         positive: true);
-    var groundMaterial =
-        w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
-    killHumanoid(s, w, enemy, groundMaterial);
+    killHumanoid(s, w, enemy);
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }
 

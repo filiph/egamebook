@@ -4,7 +4,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
   static const String className = "OffBalanceOpportunityThrust";
@@ -61,9 +60,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           "run<s> <subject's> ${a.currentWeapon.name} through} <object>",
           object: enemy,
           positive: true);
-      var groundMaterial =
-          w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
-      killHumanoid(s, w, enemy, groundMaterial);
+      killHumanoid(s, w, enemy);
     }
     return "${a.name} stabs ${enemy.name}";
   }
