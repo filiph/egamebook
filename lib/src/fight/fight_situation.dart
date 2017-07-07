@@ -214,8 +214,8 @@ abstract class FightSituation extends Situation
       }
 
       // Allow player to take and distribute loot.
-      world.pushSituation(
-          new LootSituation.initialized(groundMaterial, droppedItems));
+      world.pushSituation(new LootSituation.initialized(
+          playerTeamIds, groundMaterial, droppedItems));
     } else if (!canFight(world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.
     } else {

@@ -13,6 +13,8 @@ class _$LootSituation extends LootSituation {
   @override
   final String groundMaterial;
   @override
+  final BuiltList<int> playerTeamIds;
+  @override
   final int id;
   @override
   final int time;
@@ -21,11 +23,16 @@ class _$LootSituation extends LootSituation {
       (new LootSituationBuilder()..update(updates)).build();
 
   _$LootSituation._(
-      {this.droppedItems, this.groundMaterial, this.id, this.time})
+      {this.droppedItems,
+      this.groundMaterial,
+      this.playerTeamIds,
+      this.id,
+      this.time})
       : super._() {
     if (droppedItems == null) throw new ArgumentError.notNull('droppedItems');
     if (groundMaterial == null)
       throw new ArgumentError.notNull('groundMaterial');
+    if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
     if (id == null) throw new ArgumentError.notNull('id');
     if (time == null) throw new ArgumentError.notNull('time');
   }
@@ -43,6 +50,7 @@ class _$LootSituation extends LootSituation {
     if (other is! LootSituation) return false;
     return droppedItems == other.droppedItems &&
         groundMaterial == other.groundMaterial &&
+        playerTeamIds == other.playerTeamIds &&
         id == other.id &&
         time == other.time;
   }
@@ -50,7 +58,9 @@ class _$LootSituation extends LootSituation {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, droppedItems.hashCode), groundMaterial.hashCode),
+        $jc(
+            $jc($jc($jc(0, droppedItems.hashCode), groundMaterial.hashCode),
+                playerTeamIds.hashCode),
             id.hashCode),
         time.hashCode));
   }
@@ -60,6 +70,7 @@ class _$LootSituation extends LootSituation {
     return 'LootSituation {'
         'droppedItems=${droppedItems.toString()},\n'
         'groundMaterial=${groundMaterial.toString()},\n'
+        'playerTeamIds=${playerTeamIds.toString()},\n'
         'id=${id.toString()},\n'
         'time=${time.toString()},\n'
         '}';
@@ -81,6 +92,12 @@ class LootSituationBuilder
   set groundMaterial(String groundMaterial) =>
       _$this._groundMaterial = groundMaterial;
 
+  ListBuilder<int> _playerTeamIds;
+  ListBuilder<int> get playerTeamIds =>
+      _$this._playerTeamIds ??= new ListBuilder<int>();
+  set playerTeamIds(ListBuilder<int> playerTeamIds) =>
+      _$this._playerTeamIds = playerTeamIds;
+
   int _id;
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
@@ -95,6 +112,7 @@ class LootSituationBuilder
     if (_$v != null) {
       _droppedItems = _$v.droppedItems?.toBuilder();
       _groundMaterial = _$v.groundMaterial;
+      _playerTeamIds = _$v.playerTeamIds?.toBuilder();
       _id = _$v.id;
       _time = _$v.time;
       _$v = null;
@@ -119,6 +137,7 @@ class LootSituationBuilder
         new _$LootSituation._(
             droppedItems: droppedItems?.build(),
             groundMaterial: groundMaterial,
+            playerTeamIds: playerTeamIds?.build(),
             id: id,
             time: time);
     replace(result);

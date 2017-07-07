@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -39,25 +40,25 @@ class AutoLoot extends Action {
 
   @override
   String applySuccess(Actor a, WorldState world, Storyline s) {
-    var player = world.actors.where((a) => a.isPlayer).single;
-
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
 
     Weapon takenWeapon;
     List<Item> takenItems = [];
     for (var item in situation.droppedItems) {
-      if (item is Weapon && item.value > player.currentWeapon.value) {
+      if (item is Weapon && item.value > a.currentWeapon.value) {
         // Arm player with the best weapon available.
-        world.updateActorById(
-            player.id,
-            (b) => b
-              ..items.add(player.currentWeapon)
-              ..currentWeapon = item);
+        world.updateActorById(a.id, (b) {
+          if (a.currentWeapon is! Fist) {
+            b.items.add(a.currentWeapon);
+          }
+          b.currentWeapon = item;
+          return b;
+        });
         takenWeapon = item;
       } else {
         // Put the rest to inventory.
-        world.updateActorById(player.id, (b) => b..items.add(item));
+        world.updateActorById(a.id, (b) => b..items.add(item));
         takenItems.add(item);
       }
     }
@@ -66,6 +67,8 @@ class AutoLoot extends Action {
       a.report(s, "<subject> pick<s> up <object>", object: takenWeapon);
       a.report(s, "<subject> wield<s> <object>", object: takenWeapon);
     }
+
+    _distributeWeapons(takenItems, a, situation, world, s);
 
     if (takenItems.isNotEmpty) {
       s.addEnumeration("<subject> <also> take<s>", takenItems, null,
@@ -84,4 +87,26 @@ class AutoLoot extends Action {
 
   @override
   bool isApplicable(Actor actor, WorldState world) => actor.isPlayer;
+
+  /// Give weapons to unarmed teammates.
+  void _distributeWeapons(List<Item> takenItems, Actor actor,
+      LootSituation situation, WorldState world, Storyline s) {
+    var weapons =
+        new List<Weapon>.from(takenItems.where((item) => item is Weapon));
+    weapons.addAll(actor.items.where((item) => item is Weapon));
+    if (weapons.isEmpty) return;
+    weapons.sort((a, b) => a.value.compareTo(b.value));
+    var barehanded = situation.playerTeamIds
+        .map((id) => world.getActorById(id))
+        .where((a) => a.isAliveAndActive && a.isBarehanded);
+    for (var friend in barehanded) {
+      if (weapons.isEmpty) break;
+      var weapon = weapons.removeLast();
+      world.updateActorById(friend.id, (b) => b..currentWeapon = weapon);
+      takenItems.remove(weapon);
+      world.updateActorById(actor.id, (b) => b..items.remove(weapon));
+      actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
+          object: friend);
+    }
+  }
 }

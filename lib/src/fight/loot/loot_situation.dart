@@ -18,13 +18,14 @@ abstract class LootSituation extends Situation
 
   factory LootSituation([updates(LootSituationBuilder b)]) = _$LootSituation;
 
-  factory LootSituation.initialized(
+  factory LootSituation.initialized(Iterable<int> playerTeamIds,
           String groundMaterial, Iterable<Item> droppedItems,
           {RoomRoamingSituation roomRoamingSituation}) =>
       new LootSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..groundMaterial = groundMaterial
+        ..playerTeamIds = new ListBuilder<int>(playerTeamIds)
         ..droppedItems = new ListBuilder<Item>(droppedItems));
 
   LootSituation._();
@@ -37,6 +38,9 @@ abstract class LootSituation extends Situation
 
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   String get groundMaterial;
+
+  /// The actors present at looting.
+  BuiltList<int> get playerTeamIds;
 
   @override
   int get id;
