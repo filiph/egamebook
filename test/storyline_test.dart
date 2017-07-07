@@ -265,6 +265,23 @@ void main() {
     expect(storyline.realize(), matches("The orc pounds on your sword."));
   });
 
+  test(
+      "we don't make subsequent <object> a pronoun when the first instance "
+      "is actually a Randomly option", () {
+    var player = new _Player("Filip");
+    var orc =
+        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    for (int i = 0; i < 1000; i++) {
+      var storyline = new Storyline();
+      storyline.add(
+          "<subject> {punch<es> <object> in the eye|"
+              "punch<es> <object's> eye}",
+          subject: player,
+          object: orc);
+      expect(storyline.realize(), isNot(contains("his eye")));
+    }
+  });
+
   test("first paragraph", () {
     var storyline = new Storyline();
     storyline.add("this is some lorem ipsum");
@@ -394,9 +411,6 @@ void main() {
   });
 
   group("actionThread", () {
-    // Basic actionThread functionality is currently just "assign int to field".
-    // No neet to test that.
-
     group("isSupportiveActionInThread", () {
       var threadA = 42;
 
@@ -419,6 +433,23 @@ void main() {
         storyline.add("you shoot a duck", actionThread: threadA);
         expect(storyline.realize(), isNot(contains("aim at the sky")));
         expect(storyline.realize(), contains("shoot a duck"));
+        storyline.clear();
+      });
+
+      test(
+          "not shown supportive action doesn't influence making subjects "
+          "into pronouns", () {
+        var player = new _Player("Filip");
+        var enemy = new Entity(
+            name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+        storyline.add("<subject> aim<s> at <object>",
+            subject: player,
+            object: enemy,
+            actionThread: threadA,
+            isSupportiveActionInThread: true);
+        storyline.add("<subject> shoot<s> <object>",
+            subject: player, object: enemy, actionThread: threadA);
+        expect(storyline.realize(), "You shoot the orc.");
         storyline.clear();
       });
 

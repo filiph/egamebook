@@ -381,14 +381,6 @@ class Storyline {
 
     String result = str;
 
-    // Resolve randomness first.
-    result = Randomly.parse(result);
-    if (result.contains('{') || result.contains('}')) {
-      log.severe('Storyline result includes { and/or } even after being '
-          'parsed by Randomly. Is there a dangling bracket here? '
-          'Input = """$str""" Output = """$result"""');
-    }
-
     if (subject != null) {
       if (subject.isPlayer) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
@@ -604,11 +596,23 @@ class Storyline {
         }
       }
 
-      String report = string(i);
+      String randomReport = string(i);
+
+      // Resolve randomness first.
+      String report = Randomly.parse(randomReport);
+      if (report.contains('{') || report.contains('}')) {
+        log.severe('Storyline result includes { and/or } even after being '
+            'parsed by Randomly. Is there a dangling bracket here? '
+            'Input = """$randomReport""" Output = """$report"""');
+      }
+
       // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
-      if (!endPreviousSentence) if (_sameSubject(i, i - 1)) if (string(i - 1)
-          .startsWith("$SUBJECT ")) if (report.startsWith("$SUBJECT "))
+      if (!endPreviousSentence &&
+          _sameSubject(i, i - 1) &&
+          string(i - 1).startsWith("$SUBJECT ") &&
+          report.startsWith("$SUBJECT ")) {
         report = report.replaceFirst("$SUBJECT ", "");
+      }
 
       report = substitute(i, report);
 
