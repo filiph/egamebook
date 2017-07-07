@@ -29,6 +29,12 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'fight_situation.g.dart';
 
+String getGroundMaterial(WorldState w) {
+  var fight = w.getSituationByName<FightSituation>("FightSituation");
+  var groundMaterial = fight.groundMaterial;
+  return groundMaterial;
+}
+
 typedef void TimedEventCallback(WorldState world, Storyline storyline);
 
 abstract class FightSituation extends Situation

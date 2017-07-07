@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
+import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 
 part 'counter_attack_situation.g.dart';
 
@@ -27,7 +28,7 @@ abstract class CounterAttackSituation extends Situation
 
   @override
   List<EnemyTargetActionBuilder> get actionGenerators =>
-      [counterSlashBuilder, counterSlashPlayerBuilder];
+      [counterSlashBuilder, counterSlashPlayerBuilder, CounterTackle.builder];
 
   @override
   List<Action> get actions => [Pass.singleton];
