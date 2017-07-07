@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -75,7 +74,7 @@ class OnGroundParry extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState world) => a.wields(ItemType.sword);
+  bool isApplicable(Actor a, WorldState world) => a.currentWeapon.canParrySlash;
 
   static EnemyTargetAction builder(Actor enemy) => new OnGroundParry(enemy);
 }

@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -108,8 +107,9 @@ class Pound extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, WorldState world) =>
       !a.isOnGround &&
-      a.wields(ItemType.sword) &&
-      enemy.wields(ItemType.sword) &&
+      (a.currentWeapon.isSlashing || a.currentWeapon.isBlunt) &&
+      (enemy.currentWeapon.canParrySlash ||
+          enemy.currentWeapon.canParryBlunt) &&
       !enemy.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new Pound(enemy);

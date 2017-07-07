@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
@@ -54,7 +53,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      enemy.isOnGround && a.wields(ItemType.sword);
+      enemy.isOnGround && a.currentWeapon.isSlashing;
 
   static EnemyTargetAction builder(Actor enemy) =>
       new FinishSlashGroundedEnemy(enemy);

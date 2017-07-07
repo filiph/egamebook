@@ -312,8 +312,6 @@ abstract class Actor extends Object
     return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
-  bool wields(ItemType value) => currentWeapon.types.contains(value);
-
   /// Returns true if this actor has ever been attacked by [actor] in the past
   /// [time] turns.
   bool _hasBeenAttackedBy(Actor other, WorldState w, int time) {

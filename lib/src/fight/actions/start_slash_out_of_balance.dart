@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -35,7 +34,7 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
             !a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
-            a.wields(ItemType.sword),
+            a.currentWeapon.isSlashing,
         (a, w, enemy) => new SlashSituation.initialized(a, enemy),
         (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
         enemy,
@@ -53,7 +52,7 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
-            a.wields(ItemType.sword),
+            a.currentWeapon.isSlashing,
         (a, w, enemy) => new SlashSituation.initialized(a, enemy),
         (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),

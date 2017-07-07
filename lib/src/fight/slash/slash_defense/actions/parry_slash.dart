@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -111,7 +110,7 @@ class ParrySlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
+  bool isApplicable(Actor a, WorldState w) => a.currentWeapon.canParrySlash;
 
   static EnemyTargetAction builder(Actor enemy) => new ParrySlash(enemy);
 }

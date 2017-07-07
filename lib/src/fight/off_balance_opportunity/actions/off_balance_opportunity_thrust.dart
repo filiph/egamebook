@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
@@ -44,7 +43,8 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+    w.updateActorById(
+        enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
     if (w.getActorById(enemy.id).isAlive) {
       a.report(
           s,
@@ -73,7 +73,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      a.isStanding && enemy.isOffBalance && a.wields(ItemType.sword);
+      a.isStanding && enemy.isOffBalance && a.currentWeapon.isThrusting;
 
   static EnemyTargetAction builder(Actor enemy) =>
       new OffBalanceOpportunityThrust(enemy);

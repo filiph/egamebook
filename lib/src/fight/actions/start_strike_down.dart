@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
@@ -24,7 +23,7 @@ EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
             !a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.wields(ItemType.sword),
+            a.currentWeapon.isSlashing,
         (a, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
         (a, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy),
         enemy);
@@ -39,7 +38,7 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.wields(ItemType.sword),
+            a.currentWeapon.isSlashing,
         (a, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
         (a, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),

@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
@@ -41,7 +40,8 @@ class FinishSlash extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+    w.updateActorById(
+        enemy.id, (b) => b..hitpoints -= a.currentWeapon.slashingDamage);
     final thread = getThreadId(w, "SlashSituation");
     bool killed = !w.getActorById(enemy.id).isAlive;
     if (!killed) {
@@ -71,7 +71,7 @@ class FinishSlash extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.wields(ItemType.sword);
+  bool isApplicable(Actor a, WorldState w) => a.currentWeapon.isSlashing;
 
   static EnemyTargetAction builder(Actor enemy) => new FinishSlash(enemy);
 }

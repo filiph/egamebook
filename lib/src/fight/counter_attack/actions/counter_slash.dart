@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
@@ -71,7 +70,7 @@ class CounterSlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) =>
-      !a.isPlayer && a.wields(ItemType.sword) && !a.isOnGround;
+      !a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround;
 
   static EnemyTargetAction builder(Actor enemy) => new CounterSlash(enemy);
 }
