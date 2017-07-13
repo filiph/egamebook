@@ -1,6 +1,5 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
@@ -39,7 +38,7 @@ class JumpBackFromSlash extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {jump<s>|leap<s>} {back|backward} "
-        "but <subject> <is> {not fast enough|too slow}",
+        "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
     w.popSituation();
     return "${a.name} fails to jump back from ${enemy.name}";

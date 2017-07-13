@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class SlayMonstersAction extends Action {
@@ -47,14 +46,14 @@ class SlayMonstersAction extends Action {
         other.team.isFriendWith(a.team) &&
         other.currentRoomName == room.name);
 
-    var monsters = room.monsterGenerator(w);
-
-    w.actors.addAll(monsters);
-
-    // TODO: add events (author can add events the generated Room instance)
-    var fightSituation = new FightSituation.initialized(
-        friends, monsters, room.groundMaterial,
-        roomRoamingSituation: situation);
+    var fightSituation = room.fightGenerator(w, situation, friends);
+    assert(
+        fightSituation.enemyTeamIds
+            .every((id) => w.actors.any((a) => a.id == id)),
+        "FightGenerator in $room didn't add its monsters to the world's "
+        "actors. Add a line like `w.actors.addAll(monsters)` to the "
+        "generator. At least one of these actors is missing: "
+        "${fightSituation.enemyTeamIds}");
 
     w.pushSituation(fightSituation);
 

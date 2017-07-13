@@ -45,9 +45,12 @@ abstract class FightSituation extends Situation
 
   factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
 
-  factory FightSituation.initialized(Iterable<Actor> playerTeam,
-          Iterable<Actor> enemyTeam, String groundMaterial,
-          {RoomRoamingSituation roomRoamingSituation}) =>
+  factory FightSituation.initialized(
+          Iterable<Actor> playerTeam,
+          Iterable<Actor> enemyTeam,
+          String groundMaterial,
+          RoomRoamingSituation roomRoamingSituation,
+          Map<int, TimedEventCallback> events) =>
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
@@ -55,7 +58,8 @@ abstract class FightSituation extends Situation
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
         ..groundMaterial = groundMaterial
         ..droppedItems = new ListBuilder<Item>()
-        ..roomRoamingSituationId = roomRoamingSituation?.id);
+        ..roomRoamingSituationId = roomRoamingSituation.id
+        ..events = new MapBuilder<int, TimedEventCallback>(events));
 
   FightSituation._();
   @override
@@ -112,7 +116,6 @@ abstract class FightSituation extends Situation
 
   /// This is used to update the underlying [RoomRoamingSituation] with the
   /// fact that all monsters have been slain.
-  @nullable
   int get roomRoamingSituationId;
 
   @override

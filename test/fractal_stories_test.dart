@@ -1,4 +1,5 @@
 import 'package:edgehead/fractal_stories/items/sword.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
@@ -9,6 +10,7 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:test/test.dart';
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -41,10 +43,14 @@ void main() {
       });
 
       test("FightSituation", () {
-        checkSituationBuild(
-            () => new FightSituation.initialized([], [], "ground"));
-        checkSituationBuild(
-            () => new FightSituation.initialized([a], [b], "ground"));
+        var roomRoamingSituation = new RoomRoamingSituation.initialized(
+            new Room("something", (a, w, s) {}, (a, w, s) => {}, null, null,
+                const []),
+            false);
+        checkSituationBuild(() => new FightSituation.initialized(
+            [], [], "ground", roomRoamingSituation, {}));
+        checkSituationBuild(() => new FightSituation.initialized(
+            [a], [b], "ground", roomRoamingSituation, {}));
       });
       test("OnGroundDefenseSituation", () {
         checkSituationBuild(

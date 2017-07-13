@@ -45,6 +45,8 @@ class _$FightSituation extends FightSituation {
       throw new ArgumentError.notNull('groundMaterial');
     if (id == null) throw new ArgumentError.notNull('id');
     if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
+    if (roomRoamingSituationId == null)
+      throw new ArgumentError.notNull('roomRoamingSituationId');
     if (time == null) throw new ArgumentError.notNull('time');
   }
 

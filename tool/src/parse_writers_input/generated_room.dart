@@ -41,11 +41,16 @@ class GeneratedRoom extends GeneratedGameObject {
 
     var instanceName = name;
 
-    ExpressionBuilder monsterGenerator;
-    if (_map['MONSTERS'] == null || _map['MONSTERS'].isEmpty) {
-      monsterGenerator = literal(null);
+    if (_map.containsKey('MONSTERS')) {
+      log.warning("MONSTERS found in $name. It is deprecated. "
+          "Use FIGHT_SITUATION instead.");
+    }
+
+    ExpressionBuilder fightGenerator;
+    if (_map['FIGHT_SITUATION'] == null || _map['FIGHT_SITUATION'].isEmpty) {
+      fightGenerator = literal(null);
     } else {
-      monsterGenerator = reference(_map['MONSTERS'].trim());
+      fightGenerator = reference(_map['FIGHT_SITUATION'].trim());
     }
 
     ExpressionBuilder createDescriber(String text) {
@@ -70,7 +75,7 @@ class GeneratedRoom extends GeneratedGameObject {
       literal(writersName),
       createDescriber(_map['DESCRIPTION']),
       createDescriber(_map['SHORT_DESCRIPTION']),
-      monsterGenerator,
+      fightGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: exitType)
     ]);

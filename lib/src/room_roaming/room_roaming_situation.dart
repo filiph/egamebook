@@ -87,7 +87,7 @@ abstract class RoomRoamingSituation extends Situation
     var nextRoomSituation = new RoomRoamingSituation.initialized(
         room,
         /* TODO: do not reset monsters when coming back and monsters slain */
-        room.monsterGenerator != null);
+        room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
 

@@ -37,16 +37,16 @@ Room forgeChurchCrevice =
 ]);
 Room killAgruth = new Room('kill_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The journey from slavery to power begins with a single crack of a skull. Oddmund falls to the rock floor and his blond hair is quickly filled with blood. Above him, Agruth is grinning. He finds Oddmund\'s death funny. He always finds dying slaves funny.
+      '''The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
 
 
-You and Briana watch this in terror, unable to move.
+Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
 
 
-When the puddle of blood beneath Oddmund\'s head stops spreading, Agruth bends down to check the teeth in case there\'s gold in them. He stops when he notices you looking at him.
+Another crack and there is new blood on Briana\'s face. Agruth grins.
 
 
-"What the matter, human?" he says, smirking. "You have no work?"
+Nobody else is in sight except for Agruth, Briana and you. That\'s Agruth\'s main mistake.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -54,7 +54,7 @@ When the puddle of blood beneath Oddmund\'s head stops spreading, Agruth bends d
       '''
 ''',
       wholeSentence: true);
-}, generateAgruth, null, <Exit>[
+}, generateAgruthFight, null, <Exit>[
   new Exit(
       'start_of_book', '', 'You look around. Fortunately, nobody is in sight.')
 ]);
@@ -326,7 +326,7 @@ Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
       '''
 ''',
       wholeSentence: true);
-}, escapeTunnelMonsters, null, <Exit>[
+}, generateEscapeTunnelFight, null, <Exit>[
   new Exit('entrance_to_bloodrock', 'Start running again',
       'You finally arrive to the cave\'s entrance.')
 ]);
@@ -525,7 +525,7 @@ Room mountainPassGuardPost =
       '''The stone gate looms before you.
 ''',
       wholeSentence: true);
-}, mountainPassGuardPostMonsters, null, <Exit>[
+}, generateMountainPassGuardPostFight, null, <Exit>[
   new Exit('mountain_pass', 'Go through the gate',
       'You release the winch holding the gate closed. The gate swings ponderously outward, just enough for you and Briana to squeeze through to freedom.')
 ]);

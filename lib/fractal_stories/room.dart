@@ -6,6 +6,8 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 /// Describer that doesn't output any text at all.
@@ -16,9 +18,14 @@ final RoomDescriber emptyRoomDescription = (a, w, s) {};
 final Room endOfRoam = new Room("__END_OF_ROAM__", emptyRoomDescription,
     emptyRoomDescription, null, null, []);
 
-typedef Iterable<Item> ItemGenerator(WorldState world);
+/// This generator creates a [FightSituation].
+///
+/// TODO: remove the dependency on [FightSituation] and [RoomRoamingSituation]
+///       or pull out Room into RoomRoaming instead of having it here.
+typedef FightSituation FightGenerator(WorldState world,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party);
 
-typedef Iterable<Actor> MonsterGenerator(WorldState world);
+typedef Iterable<Item> ItemGenerator(WorldState world);
 
 /// A function that should use [s] to report on what the player sees when
 /// entering the room.
@@ -47,14 +54,14 @@ class Room {
   /// it once.
   final RoomDescriber shortDescribe;
 
-  /// A function that creates monsters that are in the Room when player arrives
+  /// A function that builds the fight situation in the Room when player arrives
   /// for the first time.
   ///
-  /// It's a function instead of a constant list because we want to only
-  /// initialize monsters when we get to them (so that they don't take memory
-  /// and CPU) and sometimes we might like varying monsters according to
-  /// current [WorldState].
-  final MonsterGenerator monsterGenerator;
+  /// It's a function instead of a constant because we want to only
+  /// initialize the fight situation and the monsters when we get to them
+  /// (so that they don't take memory and CPU) and sometimes we might like
+  /// varying fights according to current [WorldState].
+  final FightGenerator fightGenerator;
 
   /// A function that creates items that are in the Room when player arrives
   /// for the first time.
@@ -63,15 +70,15 @@ class Room {
   /// initialize items when we get to them (so that they don't take memory
   /// and CPU) and sometimes we might like varying items according to
   /// current [WorldState].
-  final MonsterGenerator itemGenerator;
+  final ItemGenerator itemGenerator;
 
   final String groundMaterial;
 
   // TODO: add possibility to make custom events for FightSituation
   // these will be "copied" to the fight situation in TakeExitAction
 
-  Room(this.name, this.describe, this.shortDescribe,
-      this.monsterGenerator, this.itemGenerator, Iterable<Exit> exits,
+  Room(this.name, this.describe, this.shortDescribe, this.fightGenerator,
+      this.itemGenerator, Iterable<Exit> exits,
       {this.groundMaterial: "ground"})
       : _exits = new ListBuilder<Exit>(exits).build();
 

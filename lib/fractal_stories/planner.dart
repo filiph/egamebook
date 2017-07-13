@@ -168,6 +168,12 @@ class ActorPlanner {
     _resultsReady = true;
   }
 
+  /// Generates all applicable actions for [actor] given a [world]. This goes
+  /// through all [Situation.actions] as well as [Situation.actionGenerators].
+  ///
+  /// TODO: remove dependency on [ExitActionBuilder], [ItemActionBuilder], etc.
+  ///       because that leads to dependency of core fractal_stories on
+  ///       things like [Room] (which should be in `RoomRoamingSituation`).
   Iterable<Action> _generateAllActions(Actor actor, WorldState world) sync* {
     assert(
         world.currentSituation.actions.isNotEmpty ||

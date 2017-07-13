@@ -265,6 +265,17 @@ void main() {
     expect(storyline.realize(), matches("The orc pounds on your sword."));
   });
 
+  test("we don't show 'his the scimitar' for <subject's> <object>", () {
+    var storyline = new Storyline();
+    var orc =
+        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    var sword = new Entity(name: "scimitar", pronoun: Pronoun.IT);
+    orc.report(storyline, "<subject> drop<s> the whip");
+    orc.report(storyline, "<subject> draw<s> <subject's> <object>",
+        object: sword);
+    expect(storyline.realize(), isNot(matches("his the scimitar")));
+  });
+
   test(
       "we don't make subsequent <object> a pronoun when the first instance "
       "is actually a Randomly option", () {
@@ -275,7 +286,7 @@ void main() {
       var storyline = new Storyline();
       storyline.add(
           "<subject> {punch<es> <object> in the eye|"
-              "punch<es> <object's> eye}",
+          "punch<es> <object's> eye}",
           subject: player,
           object: orc);
       expect(storyline.realize(), isNot(contains("his eye")));
