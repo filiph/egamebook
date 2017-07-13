@@ -55,15 +55,9 @@ class RollOutOfWay extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    OnGroundDefenseSituation situation = w.currentSituation;
-    if (situation.actionsGuaranteedToFail) {
-      return 0.0;
-    }
-    if (situation.actionsGuaranteedToSucceed) {
-      return 1.0;
-    }
     if (a.isPlayer) return 1.0;
-    return 0.5;
+    OnGroundDefenseSituation situation = w.currentSituation;
+    return situation.predeterminedChance.or(0.5);
   }
 
   @override

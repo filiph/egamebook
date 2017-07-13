@@ -80,14 +80,8 @@ class DefensiveParrySlash extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) {
     if (a.isPlayer) return 1.0;
     SlashDefenseSituation situation = w.currentSituation;
-    if (situation.actionsGuaranteedToFail) {
-      return 0.0;
-    }
-    if (situation.actionsGuaranteedToSucceed) {
-      return 1.0;
-    }
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    return 0.5 - outOfBalancePenalty;
+    return situation.predeterminedChance.or(0.5 - outOfBalancePenalty);
   }
 
   @override

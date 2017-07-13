@@ -92,6 +92,7 @@ abstract class EntityBehavior {
       bool negative: false,
       bool but: false,
       bool endSentence: false,
+      bool wholeSentence: false,
       bool subjectAndObjectAreEnemies: false,
       int actionThread,
       bool isSupportiveActionInThread: false}) {
@@ -104,6 +105,7 @@ abstract class EntityBehavior {
         subjectAndObjectAreEnemies: subjectAndObjectAreEnemies,
         but: but,
         endSentence: endSentence,
+        wholeSentence: wholeSentence,
         actionThread: actionThread,
         isSupportiveActionInThread: isSupportiveActionInThread);
   }

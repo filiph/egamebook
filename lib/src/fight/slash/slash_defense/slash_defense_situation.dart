@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/defense_situation_interface.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
@@ -29,8 +30,12 @@ abstract class SlashDefenseSituation extends DefenseSituation
   SlashDefenseSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      [DodgeSlash.builder, ParrySlash.builder, DefensiveParrySlash.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators => [
+        DodgeSlash.builder,
+        ParrySlash.builder,
+        DefensiveParrySlash.builder,
+        JumpBackFromSlash.builder
+      ];
 
   @override
   int get attacker;

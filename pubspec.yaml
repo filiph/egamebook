@@ -18,6 +18,7 @@ dependencies:
   meta: any
   logging: any
   path: any
+  quiver: any
   slot_machine:
     path: ../slot_machine
 

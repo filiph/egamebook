@@ -56,15 +56,9 @@ class EvadeNeckBreaking extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    OnGroundWrestleDefenseSituation situation = w.currentSituation;
-    if (situation.actionsGuaranteedToFail) {
-      return 0.0;
-    }
-    if (situation.actionsGuaranteedToSucceed) {
-      return 1.0;
-    }
     if (a.isPlayer) return 0.6;
-    return 0.5;
+    OnGroundWrestleDefenseSituation situation = w.currentSituation;
+    return situation.predeterminedChance.or(0.5);
   }
 
   @override

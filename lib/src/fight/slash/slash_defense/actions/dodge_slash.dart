@@ -75,16 +75,10 @@ class DodgeSlash extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    SlashDefenseSituation situation = w.currentSituation;
-    if (situation.actionsGuaranteedToFail) {
-      return 0.0;
-    }
-    if (situation.actionsGuaranteedToSucceed) {
-      return 1.0;
-    }
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-    return 0.4 - outOfBalancePenalty;
+    SlashDefenseSituation situation = w.currentSituation;
+    return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
   }
 
   @override
