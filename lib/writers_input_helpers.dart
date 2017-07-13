@@ -31,8 +31,18 @@ FightSituation generateAgruthFight(WorldState w,
         },
         3: (w, s) {
           var agruth = w.getActorById(agruthId);
-          agruth.report(s, "\"I'll kill you both,\" <subject> say<s>");
+          agruth.report(s, "\"I kill you both,\" <subject> growl<s>");
           agruth.report(s, "<subject's> eyes glare with pure hatred");
+        },
+        7: (w, s) {
+          var agruth = w.getActorById(agruthId);
+          var player = getPlayer(w);
+          agruth.report(
+              s,
+              "\"I'll enjoy gutting you, pig,\" "
+              "<subject> snarl<s> at <object>.",
+              object: player,
+              wholeSentence: true);
         }
       });
 }
