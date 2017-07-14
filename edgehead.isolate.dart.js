@@ -8965,7 +8965,7 @@ $2:function(a,b){var z=a.a_(this.a)
 b.fw()
 z.ah(b,'"I\'ll kill you both," <subject> growl<s>')
 b.G(0,"\n\n",!0)
-b.G(0,"<p class='meta'>Most of this text is procedural. This is a simulation.</p>",!0)
+b.G(0,"<p class='meta'>This fight and the whole adventure is procedurally generated. You can Restart (top left) and see how different choices lead to very different results.</p>",!0)
 b.G(0,"\n\n",!0)}},
 t1:{"^":"a:7;a",
 $2:function(a,b){a.a_(this.a).h7(b,'"I\'ll enjoy gutting you, pig," <subject> snarl<s>.',!0)}},
