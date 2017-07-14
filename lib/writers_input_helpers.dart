@@ -26,30 +26,36 @@ FightSituation generateAgruthFight(WorldState w,
         1: (w, s) {
           var agruth = w.getActorById(agruthId);
           var sword = new Sword(name: 'scimitar');
-          agruth.report(s, "<subject> drop<s> the whip");
+          agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
           agruth.report(s, "<subject> draw<s> <subject's> <object>",
               object: sword);
           w.updateActorById(agruthId, (b) => b..currentWeapon = sword);
+          agruth.report(s, "<subject> eye<s> <object> with hatred",
+              object: getPlayer(w));
         },
         3: (w, s) {
-          var agruth = w.getActorById(agruthId);
-          s.addParagraph();
-          agruth.report(s, "\"I'll kill you both,\" <subject> growl<s>");
           s.addParagraph();
           s.add(
               "<p class='meta'>This fight and the whole adventure is "
               "procedurally generated. You can Restart (top left) and see "
-              "how different choices lead to very different results.</p>",
+              "how different choices and random events lead to "
+              "very different results.</p>",
               wholeSentence: true);
           s.addParagraph();
         },
-        7: (w, s) {
+        5: (w, s) {
           var agruth = w.getActorById(agruthId);
+          s.addParagraph();
           agruth.report(
               s,
-              "\"I'll enjoy gutting you, pig,\" "
+              "\"I'll enjoy gutting you, human,\" "
               "<subject> snarl<s>.",
               wholeSentence: true);
+          s.addParagraph();
+        },
+        8: (w, s) {
+          var agruth = w.getActorById(agruthId);
+          agruth.report(s, "<subject> spit<s> on the cavern floor");
         },
         12: (w, s) {
           var agruth = w.getActorById(agruthId);
