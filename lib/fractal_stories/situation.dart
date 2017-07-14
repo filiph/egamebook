@@ -101,7 +101,21 @@ abstract class Situation {
   Actor getCurrentActor(WorldState world) => getActorAtTime(time, world);
 
   /// Called after action is executed inside this situation.
+  ///
+  /// This method is called immediately after executing the action, even when
+  /// the action adds more situations to the top of the stack. It _won't_ run
+  /// if the situation is popped from the stack by the action.
   void onAfterAction(WorldState world, Storyline storyline) {
+    // No-op by default.
+  }
+
+  /// Called after action is executed inside this situation, including any
+  /// subsequent actions that happen in situations above in the stack.
+  ///
+  /// For example, if the action adds new situations at the top of the stack,
+  /// those situations will first get resolved (and popped) and only then will
+  /// [onAfterTurn] get called.
+  void onAfterTurn(WorldState world, Storyline storyline) {
     // No-op by default.
   }
 

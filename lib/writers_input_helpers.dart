@@ -25,24 +25,40 @@ FightSituation generateAgruthFight(WorldState w,
       {
         1: (w, s) {
           var agruth = w.getActorById(agruthId);
+          var sword = new Sword(name: 'scimitar');
           agruth.report(s, "<subject> drop<s> the whip");
           agruth.report(s, "<subject> draw<s> <subject's> <object>",
-              object: agruth.currentWeapon);
+              object: sword);
+          w.updateActorById(agruthId, (b) => b..currentWeapon = sword);
         },
         3: (w, s) {
           var agruth = w.getActorById(agruthId);
-          agruth.report(s, "\"I kill you both,\" <subject> growl<s>");
-          agruth.report(s, "<subject's> eyes glare with pure hatred");
+          s.addParagraph();
+          agruth.report(s, "\"I'll kill you both,\" <subject> growl<s>");
+          s.addParagraph();
+          s.add(
+              "<p class='meta'>This fight and the whole adventure is "
+              "procedurally generated. You can Restart (top left) and see "
+              "how different choices lead to very different results.</p>",
+              wholeSentence: true);
+          s.addParagraph();
         },
         7: (w, s) {
           var agruth = w.getActorById(agruthId);
-          var player = getPlayer(w);
           agruth.report(
               s,
               "\"I'll enjoy gutting you, pig,\" "
-              "<subject> snarl<s> at <object>.",
-              object: player,
+              "<subject> snarl<s>.",
               wholeSentence: true);
+        },
+        12: (w, s) {
+          var agruth = w.getActorById(agruthId);
+          agruth.report(s, "<subject> grit<s> <subject's> teeth");
+          agruth.report(s, "<subject> do<es>n't talk any more", but: true);
+        },
+        17: (w, s) {
+          var agruth = w.getActorById(agruthId);
+          agruth.report(s, "<subject> scowl<s> with pure hatred");
         }
       });
 }
@@ -100,7 +116,6 @@ Actor _generateAgruth(WorldState w) {
   return new Actor.initialized(6666, "Agruth",
       nameIsProperNoun: true,
       pronoun: Pronoun.HE,
-      currentWeapon: new Sword(name: 'scimitar'),
       hitpoints: 2,
       maxHitpoints: 2,
       team: defaultEnemyTeam,

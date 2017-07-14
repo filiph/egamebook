@@ -218,6 +218,7 @@ abstract class Action {
     worldCopy
         .getSituationById(situationId)
         ?.onAfterAction(worldCopy, storyline);
+
     worldCopy.currentAction = null;
 
     // Remove ended situations: the ones that don't return an actor anymore,
@@ -227,6 +228,11 @@ abstract class Action {
       if (worldCopy.currentSituation == null) break;
       worldCopy.popSituation();
     }
+
+    // Only 'surviving' (non-popped) situations get to run their `onAfterTurn`
+    // methods.
+    worldCopy.currentSituation?.onAfterTurn(worldCopy, storyline);
+
     _addWorldRecord(builder, worldCopy);
     return storyline;
   }
