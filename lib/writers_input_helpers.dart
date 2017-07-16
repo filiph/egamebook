@@ -30,32 +30,36 @@ FightSituation generateAgruthFight(WorldState w,
           agruth.report(s, "<subject> draw<s> <subject's> <object>",
               object: sword);
           w.updateActorById(agruthId, (b) => b..currentWeapon = sword);
-          agruth.report(s, "<subject> eye<s> <object> with hatred",
-              object: getPlayer(w));
-        },
-        3: (w, s) {
-          s.addParagraph();
-          s.add(
-              "<p class='meta'>This fight and the whole adventure is "
-              "procedurally generated. You can Restart (top left) and see "
-              "how different choices and random events lead to "
-              "very different results.</p>",
+          agruth.report(
+              s,
+              "\"You're dead, slave,\" <subject> growl<s> at <object> "
+              "with hatred.",
+              object: getPlayer(w),
               wholeSentence: true);
-          s.addParagraph();
         },
+//        3: (w, s) {
+//          s.addParagraph();
+//          s.add(
+//              "<p class='meta'>This fight and the whole adventure is "
+//              "procedurally generated. You can Restart (top left) and see "
+//              "how different choices and random events lead to "
+//              "very different results.</p>",
+//              wholeSentence: true);
+//          s.addParagraph();
+//        },
         5: (w, s) {
+          var agruth = w.getActorById(agruthId);
+          agruth.report(s, "<subject> spit<s> on the cavern floor");
+        },
+        9: (w, s) {
           var agruth = w.getActorById(agruthId);
           s.addParagraph();
           agruth.report(
               s,
-              "\"I'll enjoy gutting you, human,\" "
+              "\"I'll enjoy eating your flesh, human,\" "
               "<subject> snarl<s>.",
               wholeSentence: true);
           s.addParagraph();
-        },
-        8: (w, s) {
-          var agruth = w.getActorById(agruthId);
-          agruth.report(s, "<subject> spit<s> on the cavern floor");
         },
         12: (w, s) {
           var agruth = w.getActorById(agruthId);
