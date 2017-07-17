@@ -44,11 +44,18 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> tackle <objectPronoun>?");
 
-void startLeapReportStart(Actor a, WorldState w, Storyline s, Actor enemy,
-        Situation mainSituation) =>
+void startLeapReportStart(
+    Actor a, WorldState w, Storyline s, Actor enemy, Situation mainSituation) {
+  if (a.isOnGround) {
+    a.report(s, "<subject> roll<s>", actionThread: mainSituation.id);
     a.report(
-        s,
-        "<subject> {leap<s>|jump<s>|spring<s>|launch<es> <subjectPronounSelf>|"
-        "lunge<s>} at <object>",
-        object: enemy,
+        s, "<subject> put<s> <subject's> feet under <subjectPronounAccusative>",
         actionThread: mainSituation.id);
+  }
+  a.report(
+      s,
+      "<subject> {leap<s>|jump<s>|spring<s>|launch<es> <subjectPronounSelf>|"
+      "lunge<s>} at <object>",
+      object: enemy,
+      actionThread: mainSituation.id);
+}
