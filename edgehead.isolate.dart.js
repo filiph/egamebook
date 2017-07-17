@@ -5464,7 +5464,7 @@ break
 case 3:x.e=!0
 return P.aC(null,y)}})
 return P.aD($async$dw,y)},
-kn:function(){return this.dw(50,10,null)},
+kn:function(){return this.dw(100,15,null)},
 e4:function(a,b){return P.aM(function(){var z=a,y=b
 var x=0,w=1,v,u,t,s,r,q,p,o
 return function $async$e4(c,d){if(c===1){v=d
@@ -6677,7 +6677,7 @@ $3:function(a,b,c){return M.fb(a,c)}},
 uf:{"^":"a:3;",
 $3:function(a,b,c){return V.dv(a,c,C.m)}},
 uc:{"^":"a:3;",
-$3:function(a,b,c){return 0.5}},
+$3:function(a,b,c){return 0.4}},
 ug:{"^":"a:3;",
 $3:function(a,b,c){return V.dv(a,c,C.o)}}}],["","",,U,{"^":"",
 w3:[function(a){return new A.ad(U.ev(),null,null,new U.uh(),new U.ui(),new U.uj(),null,!0,"Punching someone hard enough can cause them to lose their footing. And it hurts.",!0,!0,"StartPunch",!1,null,"punch <object>",null,a,null)},"$1","uT",2,0,4],
@@ -6899,7 +6899,7 @@ S.am(new Z.kA(a,c),new Z.kB(this,a,c),null,null)
 b.aN()
 return H.b(a.gh())+" fails to dodge "+H.b(this.b.gh())},"$3","gS",6,0,2],
 W:[function(a,b,c){var z=this.b
-a.bA(c,"<subject> {dodge<s>|evade<s>} it",z,!0)
+a.bA(c,"<subject> {dodge<s>|break<s> free} it",z,!0)
 b.bn("FightSituation")
 return H.b(a.gh())+" evades "+H.b(z.gh())},"$3","gT",6,0,2],
 M:function(a,b){var z
