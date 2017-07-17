@@ -134,10 +134,12 @@ class Storyline {
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
   static const String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
   static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
   static const String SUBJECT_NOUN = "<subjectNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
+  static const String OBJECT_PRONOUN_NOMINATIVE = "<objectPronounNominative>";
   static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
@@ -320,9 +322,10 @@ class Storyline {
     // Make sure we don't add particles to "your car" etc.
     if (entityOwner != null &&
         (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1)) {
+            string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
+            string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
+            string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") !=
+                -1)) {
       return string;
     }
     if (string.indexOf("$SUBJECT_POSSESIVE $SUB_STRING") != -1 ||
@@ -428,6 +431,8 @@ class Storyline {
           result, SUBJECT_POSSESIVE, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+      result = result.replaceAll(
+          SUBJECT_PRONOUN_ACCUSATIVE, subject.pronoun.accusative);
       result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
     }
 
@@ -454,6 +459,8 @@ class Storyline {
           result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(
           OBJECT_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
+      result = result.replaceAll(
+          OBJECT_PRONOUN_NOMINATIVE, object.pronoun.nominative);
     }
 
     if (subject != null) {

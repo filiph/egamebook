@@ -17,6 +17,7 @@ import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
+import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
@@ -69,6 +70,8 @@ abstract class FightSituation extends Situation
         Pound.builder,
         startBreakNeckOnGroundBuilder,
         startBreakNeckOnGroundPlayerBuilder,
+        startLeapBuilder,
+        startLeapPlayerBuilder,
         startPunchBuilder,
         startPunchPlayerBuilder,
         startSlashBuilder,
