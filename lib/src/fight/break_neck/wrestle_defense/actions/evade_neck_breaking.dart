@@ -48,7 +48,7 @@ class EvadeNeckBreaking extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    a.report(s, "<subject> {dodge<s>|evade<s>} it",
+    a.report(s, "<subject> {dodge<s>|break<s> free} it",
         object: enemy, positive: true);
     w.popSituationsUntil("FightSituation");
     return "${a.name} evades ${enemy.name}";

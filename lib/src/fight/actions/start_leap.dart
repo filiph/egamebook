@@ -37,7 +37,7 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (_, __, ___) => 0.5,
+        successChanceGetter: (_, __, ___) => 0.4,
         applyStartOfFailure: startLeapReportStart,
         defenseSituationWhenFailed: (a, w, enemy) =>
             new LeapDefenseSituation.initialized(a, enemy,
