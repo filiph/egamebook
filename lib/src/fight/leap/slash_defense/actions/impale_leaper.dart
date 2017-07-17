@@ -104,9 +104,13 @@ class ImpaleLeaper extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    if (a.isPlayer) return 0.5 - outOfBalancePenalty;
+    num enemyJumpedFromGroundBonus = enemy.isOnGround ? 0.2 : 0;
+    if (a.isPlayer) {
+      return 0.5 - outOfBalancePenalty + enemyJumpedFromGroundBonus;
+    }
     LeapDefenseSituation situation = w.currentSituation;
-    return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
+    return situation.predeterminedChance
+        .or(0.4 - outOfBalancePenalty + enemyJumpedFromGroundBonus);
   }
 
   @override

@@ -19,8 +19,7 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
     startLeapCommandTemplate,
     startLeapHelpMessage,
     startLeapReportStart,
-    (a, w, enemy) =>
-        !a.isPlayer && a.isStanding && !enemy.isOnGround && a.isBarehanded,
+    (a, w, enemy) => !a.isPlayer && !enemy.isOnGround,
     (a, w, enemy) => new LeapSituation.initialized(a, enemy),
     (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy),
     enemy);
@@ -31,13 +30,12 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         startLeapCommandTemplate,
         startLeapHelpMessage,
         startLeapReportStart,
-        (a, w, enemy) =>
-            a.isPlayer && a.isStanding && !enemy.isOnGround && a.isBarehanded,
+        (a, w, enemy) => a.isPlayer && !enemy.isOnGround,
         (a, w, enemy) => new LeapSituation.initialized(a, enemy),
         (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (_, __, ___) => 0.4,
+        successChanceGetter: (a, __, ___) => a.isStanding ? 0.4 : 0.2,
         applyStartOfFailure: startLeapReportStart,
         defenseSituationWhenFailed: (a, w, enemy) =>
             new LeapDefenseSituation.initialized(a, enemy,
