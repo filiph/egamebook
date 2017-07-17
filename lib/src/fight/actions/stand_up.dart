@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
@@ -65,7 +66,14 @@ class StandUp extends Action {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    a.report(s, "<subject> stand<s> up");
+    a.report(
+        s,
+        "<subject> {rise<s>|stand<s> up|get<s> to <subject's> feet|"
+        "get<s> up|pick<s> <subjectPronounSelf> up}");
+    Randomly.run(
+        () => a.report(
+            s, "<subject> {stagger<s>|sway<s>} back before finding balance"),
+        () => a.report(s, "<subject> stead<ies> <subjectPronounSelf>"));
     w.updateActorById(a.id, (b) => b.pose = Pose.standing);
     return "${a.name} stands up";
   }
