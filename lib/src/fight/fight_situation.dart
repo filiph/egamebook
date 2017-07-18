@@ -22,7 +22,7 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
-import 'package:edgehead/src/fight/actions/take_dropped_item.dart';
+import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -81,7 +81,7 @@ abstract class FightSituation extends Situation
         startStrikeDownPlayerBuilder,
         startSlashOutOfBalanceBuilder,
         startSlashOutOfBalancePlayerBuilder,
-        TakeDroppedItem.builder,
+        TakeDroppedWeapon.builder,
       ];
 
   @override
@@ -150,7 +150,7 @@ abstract class FightSituation extends Situation
       }
     }
 
-    var best = 0.0;
+    num best = 0.0;
     Actor chosen;
 
     for (var actor in actors) {

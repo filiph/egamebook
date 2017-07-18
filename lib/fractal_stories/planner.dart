@@ -91,7 +91,7 @@ class ActorPlanner {
     var bestUpside = _bestCase == null
         ? const ActorScoreChange.zero()
         : (_bestCase.score - initialScore);
-    ActorScoreChange best = bestUpside / _bestCase?.order ?? 1;
+    ActorScoreChange best = bestUpside / (_bestCase?.order ?? 1);
 
     log.finest("- uplifts average = $average");
     log.finest("- best = $best");

@@ -92,7 +92,8 @@ class AutoLoot extends Action {
       LootSituation situation, WorldState world, Storyline s) {
     var weapons =
         new List<Weapon>.from(takenItems.where((item) => item is Weapon));
-    weapons.addAll(actor.items.where((item) => item is Weapon));
+    weapons.addAll(
+        actor.items.where((item) => item is Weapon) as Iterable<Weapon>);
     if (weapons.isEmpty) return;
     weapons.sort((a, b) => a.value.compareTo(b.value));
     var barehanded = situation.playerTeamIds

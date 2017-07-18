@@ -1,15 +1,16 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedItem extends ItemAction {
-  static const String className = "TakeDroppedItem";
+class TakeDroppedWeapon extends ItemAction {
+  static const String className = "TakeDroppedWeapon";
 
-  TakeDroppedItem(Item item) : super(item);
+  TakeDroppedWeapon(Item item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -49,7 +50,7 @@ class TakeDroppedItem extends ItemAction {
         // Move current weapon to inventory.
         b.items.add(b.currentWeapon);
       }
-      b.currentWeapon = item;
+      b.currentWeapon = item as Weapon;
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -63,6 +64,7 @@ class TakeDroppedItem extends ItemAction {
 
   @override
   bool isApplicable(Actor a, WorldState w) {
+    if (item is! Weapon) return false;
     if (!a.canWield) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
@@ -75,5 +77,5 @@ class TakeDroppedItem extends ItemAction {
     return true;
   }
 
-  static ItemAction builder(Item item) => new TakeDroppedItem(item);
+  static ItemAction builder(Item item) => new TakeDroppedWeapon(item);
 }

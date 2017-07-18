@@ -131,7 +131,7 @@ class PlannerRecommendation {
         .toList(growable: false);
 
     // Account for rounding errors by modifying the best option.
-    int weightsDifference = weightsResolution - weights.fold(0, _sum);
+    int weightsDifference = weightsResolution - weights.fold<int>(0, _sumInts);
     weights[weights.length - 1] += weightsDifference;
 
     int index = Randomly.chooseWeightedPrecise(weights, max: weightsResolution);
@@ -168,4 +168,6 @@ class PlannerRecommendation {
   }
 
   static num _sum(num a, num b) => a + b;
+
+  static int _sumInts(int a, int b) => a + b;
 }

@@ -8,7 +8,7 @@ class Randomly {
   // Function gets a list of choices, picks one of them randomly.
   static dynamic choose(List choices) {
     if (choices == null) throw new ArgumentError("Cannot choose from null.");
-    num number = choices.length;
+    int number = choices.length;
     if (number == 0) {
       throw new ArgumentError("Cannot randomly choose from an empty set.");
     }

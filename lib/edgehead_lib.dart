@@ -283,7 +283,7 @@ class EdgeheadGame extends LoopedEvent {
 
   Future _applyPlayerAction(
       Action action, Actor actor, List<PlanConsequence> consequences) async {
-    double chance = action.getSuccessChance(actor, world);
+    num chance = action.getSuccessChance(actor, world);
     if (chance == 1.0) {
       consequence = consequences.single;
     } else if (chance == 0.0) {
@@ -293,7 +293,7 @@ class EdgeheadGame extends LoopedEvent {
       assert(!action.rerollable || action.rerollResource == Resource.stamina,
           'Non-stamina resource needed for ${action.name}');
       var result = await showSlotMachine(
-          chance, action.getRollReason(actor, world),
+          chance.toDouble(), action.getRollReason(actor, world),
           rerollEnabled:
               action.rerollable && actor.hasResource(action.rerollResource),
           rerollEffectDescription: "use $resourceName");

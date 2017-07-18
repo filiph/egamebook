@@ -59,8 +59,9 @@ Future<Null> main(List<String> args) async {
   lib.addMember(new FieldBuilder.asConst('DEV_MODE',
       type: boolType, value: literal(devMode)));
 
-  List<GeneratedRoom> rooms =
-      objects.where((o) => o is GeneratedRoom).toList(growable: false);
+  List<GeneratedRoom> rooms = objects
+      .where((o) => o is GeneratedRoom)
+      .toList(growable: false) as List<GeneratedRoom>;
   for (var room in rooms) {
     room.registerReachableRooms(rooms.map((r) => r.writersName));
   }
