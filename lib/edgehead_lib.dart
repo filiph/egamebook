@@ -62,7 +62,7 @@ class EdgeheadGame extends LoopedEvent {
   EdgeheadGame(
       StringTakingVoidFunction echo,
       StringTakingVoidFunction goto,
-      choices,
+      dynamic choices /* TODO: make this statically typed */,
       ChoiceFunction choiceFunction,
       SlotMachineShowFunction slotMachineShowFunction,
       this.hitpoints,

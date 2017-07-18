@@ -238,7 +238,7 @@ abstract class Action {
   }
 
   ActionRecordBuilder _prepareWorldRecord(
-      Actor actor, WorldState world, bool isSuccess, isFailure) {
+      Actor actor, WorldState world, bool isSuccess, bool isFailure) {
     var builder = new ActionRecordBuilder()
       ..actionName = name
       ..protagonist = actor.id

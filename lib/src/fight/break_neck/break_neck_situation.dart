@@ -13,7 +13,7 @@ abstract class BreakNeckOnGroundSituation extends Situation
     implements
         Built<BreakNeckOnGroundSituation, BreakNeckOnGroundSituationBuilder> {
   factory BreakNeckOnGroundSituation(
-          [updates(BreakNeckOnGroundSituationBuilder b)]) =
+          [void updates(BreakNeckOnGroundSituationBuilder b)]) =
       _$BreakNeckOnGroundSituation;
 
   factory BreakNeckOnGroundSituation.initialized(

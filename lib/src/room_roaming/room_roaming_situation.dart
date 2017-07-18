@@ -15,7 +15,7 @@ part 'room_roaming_situation.g.dart';
 
 abstract class RoomRoamingSituation extends Situation
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
-  factory RoomRoamingSituation([updates(RoomRoamingSituationBuilder b)]) =
+  factory RoomRoamingSituation([void updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;
 
   factory RoomRoamingSituation.initialized(

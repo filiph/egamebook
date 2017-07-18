@@ -43,7 +43,8 @@ abstract class FightSituation extends Situation
   /// of turns.
   static const double _playerTurnAdvantage = 1.5;
 
-  factory FightSituation([updates(FightSituationBuilder b)]) = _$FightSituation;
+  factory FightSituation([void updates(FightSituationBuilder b)]) =
+      _$FightSituation;
 
   factory FightSituation.initialized(
           Iterable<Actor> playerTeam,

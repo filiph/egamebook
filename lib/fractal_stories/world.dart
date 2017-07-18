@@ -291,7 +291,7 @@ class WorldState {
   @override
   String toString() => "World<${actors.toSet()}>";
 
-  void updateActorById(int id, updates(ActorBuilder b)) {
+  void updateActorById(int id, void updates(ActorBuilder b)) {
     var original = getActorById(id);
     var updated = original.rebuild(updates);
     actors.remove(original);

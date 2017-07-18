@@ -11,7 +11,7 @@ part 'strike_down_situation.g.dart';
 
 abstract class StrikeDownSituation extends Situation
     implements Built<StrikeDownSituation, StrikeDownSituationBuilder> {
-  factory StrikeDownSituation([updates(StrikeDownSituationBuilder b)]) =
+  factory StrikeDownSituation([void updates(StrikeDownSituationBuilder b)]) =
       _$StrikeDownSituation;
 
   factory StrikeDownSituation.initialized(

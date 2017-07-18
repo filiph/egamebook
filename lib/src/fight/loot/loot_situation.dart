@@ -16,7 +16,8 @@ abstract class LootSituation extends Situation
     implements Built<LootSituation, LootSituationBuilder> {
   static const String className = "LootSituation";
 
-  factory LootSituation([updates(LootSituationBuilder b)]) = _$LootSituation;
+  factory LootSituation([void updates(LootSituationBuilder b)]) =
+      _$LootSituation;
 
   factory LootSituation.initialized(Iterable<int> playerTeamIds,
           String groundMaterial, Iterable<Item> droppedItems,

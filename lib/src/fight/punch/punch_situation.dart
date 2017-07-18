@@ -11,7 +11,8 @@ part 'punch_situation.g.dart';
 
 abstract class PunchSituation extends Situation
     implements Built<PunchSituation, PunchSituationBuilder> {
-  factory PunchSituation([updates(PunchSituationBuilder b)]) = _$PunchSituation;
+  factory PunchSituation([void updates(PunchSituationBuilder b)]) =
+      _$PunchSituation;
 
   factory PunchSituation.initialized(Actor attacker, Actor target) =>
       new PunchSituation((b) => b

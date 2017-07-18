@@ -8,5 +8,5 @@ Future<Null> awaitAnimationFrame() async {
 Future<Null> awaitIdleCallback() async {
   // TODO: actually use window.requestIdleCallback() when available
   await window.animationFrame;
-  await new Future.delayed(const Duration(milliseconds: 5));
+  await new Future<Null>.delayed(const Duration(milliseconds: 5));
 }

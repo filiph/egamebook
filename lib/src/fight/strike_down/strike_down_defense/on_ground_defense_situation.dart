@@ -15,7 +15,7 @@ abstract class OnGroundDefenseSituation extends DefenseSituation
     implements
         Built<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
   factory OnGroundDefenseSituation(
-          [updates(OnGroundDefenseSituationBuilder b)]) =
+          [void updates(OnGroundDefenseSituationBuilder b)]) =
       _$OnGroundDefenseSituation;
 
   factory OnGroundDefenseSituation.initialized(

@@ -98,7 +98,7 @@ class PlanConsequence {
   }
 
   @override
-  int get hashCode => hashObjects([
+  int get hashCode => hashObjects(<Object>[
         world,
         cumulativeProbability,
         action,

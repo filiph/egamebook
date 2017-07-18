@@ -13,7 +13,7 @@ part 'leap_defense_situation.g.dart';
 
 abstract class LeapDefenseSituation extends DefenseSituation
     implements Built<LeapDefenseSituation, LeapDefenseSituationBuilder> {
-  factory LeapDefenseSituation([updates(LeapDefenseSituationBuilder b)]) =
+  factory LeapDefenseSituation([void updates(LeapDefenseSituationBuilder b)]) =
       _$LeapDefenseSituation;
 
   factory LeapDefenseSituation.initialized(Actor attacker, Actor target,

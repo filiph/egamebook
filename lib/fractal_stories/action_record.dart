@@ -12,7 +12,7 @@ part 'action_record.g.dart';
 @immutable
 abstract class ActionRecord
     implements Built<ActionRecord, ActionRecordBuilder> {
-  factory ActionRecord([updates(ActionRecordBuilder b)]) = _$ActionRecord;
+  factory ActionRecord([void updates(ActionRecordBuilder b)]) = _$ActionRecord;
 
   ActionRecord._();
 

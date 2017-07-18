@@ -35,7 +35,7 @@ abstract class Actor extends Object
   /// provide this default score.
   static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
 
-  factory Actor([updates(ActorBuilder b)]) = _$Actor;
+  factory Actor([void updates(ActorBuilder b)]) = _$Actor;
 
   factory Actor.initialized(int id, String name,
           {bool isPlayer: false,

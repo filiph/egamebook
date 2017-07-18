@@ -13,7 +13,7 @@ final Team playerTeam = new Team((b) => b.id = 1);
 
 @immutable
 abstract class Team implements Built<Team, TeamBuilder> {
-  factory Team([updates(TeamBuilder b)]) = _$Team;
+  factory Team([void updates(TeamBuilder b)]) = _$Team;
 
   Team._();
 

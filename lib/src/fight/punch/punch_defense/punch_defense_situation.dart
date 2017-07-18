@@ -12,8 +12,8 @@ part 'punch_defense_situation.g.dart';
 
 abstract class PunchDefenseSituation extends DefenseSituation
     implements Built<PunchDefenseSituation, PunchDefenseSituationBuilder> {
-  factory PunchDefenseSituation([updates(PunchDefenseSituationBuilder b)]) =
-      _$PunchDefenseSituation;
+  factory PunchDefenseSituation(
+      [void updates(PunchDefenseSituationBuilder b)]) = _$PunchDefenseSituation;
 
   factory PunchDefenseSituation.initialized(Actor attacker, Actor target,
           {Predetermination predeterminedResult: Predetermination.none}) =>

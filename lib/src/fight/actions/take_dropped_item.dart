@@ -50,7 +50,6 @@ class TakeDroppedItem extends ItemAction {
         b.items.add(b.currentWeapon);
       }
       b.currentWeapon = item;
-      return b;
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";

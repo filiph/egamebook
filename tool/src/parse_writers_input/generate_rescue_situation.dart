@@ -90,7 +90,7 @@ AstBuilder<AstNode> generateRescueSituation(
       "${successEffect ?? ''}";
   var actionsGetter = new MethodBuilder.getter("actions",
       returnType: new TypeBuilder("List", genericTypes: [actionType]),
-      returns: list([
+      returns: list(<NewInstanceBuilder>[
         generateSimpleAction("${writersName}_rescue", rescueCommand,
             rescueDescription, effect, rescueHint, className),
         generateSimpleAction(
@@ -163,7 +163,7 @@ AstBuilder<AstNode> generateRescueSituation(
       returnType: actorIterablesType)
     ..addPositional(new ParameterBuilder('actors', type: actorIterablesType))
     ..addPositional(worldParameter)
-    ..addStatement(list([
+    ..addStatement(list(<ExpressionBuilder>[
       reference('actors').property('singleWhere').call([
         new MethodBuilder.closure(returns: reference('a').property('isPlayer'))
           ..addPositional(new ParameterBuilder('a'))

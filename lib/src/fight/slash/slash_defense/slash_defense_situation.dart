@@ -15,8 +15,8 @@ part 'slash_defense_situation.g.dart';
 
 abstract class SlashDefenseSituation extends DefenseSituation
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
-  factory SlashDefenseSituation([updates(SlashDefenseSituationBuilder b)]) =
-      _$SlashDefenseSituation;
+  factory SlashDefenseSituation(
+      [void updates(SlashDefenseSituationBuilder b)]) = _$SlashDefenseSituation;
 
   factory SlashDefenseSituation.initialized(Actor attacker, Actor target,
           {Predetermination predeterminedResult: Predetermination.none}) =>

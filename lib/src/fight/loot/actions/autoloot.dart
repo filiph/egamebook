@@ -53,7 +53,6 @@ class AutoLoot extends Action {
             b.items.add(a.currentWeapon);
           }
           b.currentWeapon = item;
-          return b;
         });
         takenWeapon = item;
       } else {

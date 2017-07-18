@@ -7,7 +7,7 @@ part 'edgehead_global.g.dart';
 
 abstract class EdgeheadGlobalState
     implements Built<EdgeheadGlobalState, EdgeheadGlobalStateBuilder> {
-  factory EdgeheadGlobalState([updates(EdgeheadGlobalStateBuilder b)]) =
+  factory EdgeheadGlobalState([void updates(EdgeheadGlobalStateBuilder b)]) =
       _$EdgeheadGlobalState;
 
   EdgeheadGlobalState._();

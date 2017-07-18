@@ -13,7 +13,7 @@ part 'counter_attack_situation.g.dart';
 
 abstract class CounterAttackSituation extends Situation
     implements Built<CounterAttackSituation, CounterAttackSituationBuilder> {
-  factory CounterAttackSituation([updates(CounterAttackSituationBuilder b)]) =
+  factory CounterAttackSituation([void updates(CounterAttackSituationBuilder b)]) =
       _$CounterAttackSituation;
 
   factory CounterAttackSituation.initialized(

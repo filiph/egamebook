@@ -15,7 +15,7 @@ abstract class OnGroundWrestleDefenseSituation extends DefenseSituation
         Built<OnGroundWrestleDefenseSituation,
             OnGroundWrestleDefenseSituationBuilder> {
   factory OnGroundWrestleDefenseSituation(
-          [updates(OnGroundWrestleDefenseSituationBuilder b)]) =
+          [void updates(OnGroundWrestleDefenseSituationBuilder b)]) =
       _$OnGroundWrestleDefenseSituation;
 
   factory OnGroundWrestleDefenseSituation.initialized(

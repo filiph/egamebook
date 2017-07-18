@@ -15,7 +15,7 @@ abstract class OffBalanceOpportunitySituation extends Situation
         Built<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
   factory OffBalanceOpportunitySituation(
-          [updates(OffBalanceOpportunitySituationBuilder b)]) =
+          [void updates(OffBalanceOpportunitySituationBuilder b)]) =
       _$OffBalanceOpportunitySituation;
 
   factory OffBalanceOpportunitySituation.initialized(Actor actor,

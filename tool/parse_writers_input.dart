@@ -145,16 +145,17 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
 StatementBuilder _generateAllActionInstances(
     List<GeneratedGameObject> objects) {
   var listLiteral = list(
-      objects
-          .where((o) => o.type == actionType)
-          .map((o) => reference(o.name).property('singleton')),
+      objects.where((o) => o.type == actionType).map<ExpressionBuilder>(
+          (o) => reference(o.name).property('singleton')),
       type: actionType);
   return listLiteral.asVar('allActions', listOfActionType);
 }
 
 StatementBuilder _generateAllRooms(List<GeneratedGameObject> objects) {
   var listLiteral = list(
-      objects.where((o) => o.type == roomType).map((o) => reference(o.name)),
+      objects
+          .where((o) => o.type == roomType)
+          .map<ReferenceBuilder>((o) => reference(o.name)),
       type: roomType);
   return listLiteral.asVar('allRooms', listOfRoomsType);
 }

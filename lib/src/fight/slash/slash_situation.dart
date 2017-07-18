@@ -11,7 +11,8 @@ part 'slash_situation.g.dart';
 
 abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
-  factory SlashSituation([updates(SlashSituationBuilder b)]) = _$SlashSituation;
+  factory SlashSituation([void updates(SlashSituationBuilder b)]) =
+      _$SlashSituation;
 
   factory SlashSituation.initialized(Actor attacker, Actor target) =>
       new SlashSituation((b) => b
