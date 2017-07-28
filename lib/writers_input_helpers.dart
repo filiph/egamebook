@@ -116,6 +116,18 @@ void movePlayer(WorldState w, Storyline s, String locationName) {
   getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
 }
 
+void nameAgruthSword(WorldState w, String name) {
+  // Assume only one sword wielded by either Aren or Briana.
+  for (var actor in w.actors.where((a) => a.team == playerTeam)) {
+    if (!actor.isBarehanded) {
+      var sword = actor.currentWeapon as Sword;
+      var named = new Sword.from(sword, name: name);
+      w.updateActorById(actor.id, (b) => b..currentWeapon = named);
+      break;
+    }
+  }
+}
+
 void updateGlobal(WorldState w,
     EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
   var builder = (w.global as EdgeheadGlobalState).toBuilder();

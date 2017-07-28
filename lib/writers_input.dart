@@ -46,7 +46,7 @@ Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slave
 Another crack and there is new blood on Briana\'s face. Agruth grins.
 
 
-Nobody else is in sight except for Agruth, Briana and you. That\'s Agruth\'s main mistake.
+Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s main mistake.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -55,19 +55,197 @@ Nobody else is in sight except for Agruth, Briana and you. That\'s Agruth\'s mai
 ''',
       wholeSentence: true);
 }, generateAgruthFight, null, <Exit>[
-  new Exit(
-      'start_of_book', '', 'You look around. Fortunately, nobody is in sight.')
+  new Exit('just_after_agruth_fight', '',
+      'You look around. Fortunately, nobody is in sight.')
 ]);
+Room justAfterAgruthFight =
+    new Room('just_after_agruth_fight', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten, but it could be revived now. It must be. There is no turning back at this point. 
+
+
+"We should name that sword," Briana says, motioning to Agruth\'s scimitar. "It\'s the only thing we have going for us."
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[]);
+
+class NameAgruthSwordOpportunity extends RoamingAction {
+  @override
+  final String command = '"Opportunity"';
+
+  @override
+  final String name = 'name_agruth_sword_opportunity';
+
+  static final NameAgruthSwordOpportunity singleton =
+      new NameAgruthSwordOpportunity();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'just_after_agruth_fight') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '"You\'re right. We\'ll call it Opportunity. It\'s our only chance to get out of this hell."');
+    nameAgruthSword(w, "Opportunity");
+    movePlayer(w, s, "start_of_book");
+    return '${a.name} successfully performs NameAgruthSwordOpportunity';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class NameAgruthSwordRedemption extends RoamingAction {
+  @override
+  final String command = '"Redemption"';
+
+  @override
+  final String name = 'name_agruth_sword_redemption';
+
+  static final NameAgruthSwordRedemption singleton =
+      new NameAgruthSwordRedemption();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'just_after_agruth_fight') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '"You\'re right. We\'ll call it Redemption. It is our first step to freedom."');
+    nameAgruthSword(w, "Redemption");
+    movePlayer(w, s, "start_of_book");
+    return '${a.name} successfully performs NameAgruthSwordRedemption';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class NameAgruthSwordNothing extends RoamingAction {
+  @override
+  final String command = 'No name';
+
+  @override
+  final String name = 'name_agruth_sword_nothing';
+
+  static final NameAgruthSwordNothing singleton = new NameAgruthSwordNothing();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'just_after_agruth_fight') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('"That\'s foolish. It\'s just a sword, after all."');
+    movePlayer(w, s, "start_of_book");
+    return '${a.name} successfully performs NameAgruthSwordNothing';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room startOfBook =
     new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten, but it has to be revived. There is no turning back now. [a][b][c][d][e]
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs.
 
 
-Briana kneels down to Oddmund. "Dead," she says plainly.
-
-
-Oddmund was the leader among the slaves. He was the only one brave enough to steal the disgusting but precious food from the goblins and give it to the other slaves. He was the only slave who knew how to get from here.
+That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -227,36 +405,6 @@ class SearchAgruth extends RoamingAction {
 
 You realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)''');
     giveStaminaToPlayer(w, 1);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [a]as a student of Necromancy? something cool like that */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [b]an apprentice warlock, summoner (interesting for game mechanics -- summoning monsters to help) */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [c]artificer (engineer) -- nah */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: beastmaster (game mechanics!) */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [d]btw, all this comes from http://tvtropes.org/pmwiki/pmwiki.php/Main/FantasyCharacterClasses */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: [e]Some possible choices: */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: an Acolyte... */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: warmage */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Ethermage */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Animist */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Shaper */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: mageknight */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: battlecaster */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Weaver */';
-    assert(DEV_MODE || false);
-    '/* PLEASE IMPLEMENT SUCCESS_EFFECT: Incarnate */';
-    assert(DEV_MODE || false);
     return '${a.name} successfully performs SearchAgruth';
   }
 
@@ -1292,6 +1440,7 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
 List<Room> allRooms = <Room>[
   forgeChurchCrevice,
   killAgruth,
+  justAfterAgruthFight,
   startOfBook,
   theShafts,
   tunnel,
@@ -1308,6 +1457,9 @@ List<Room> allRooms = <Room>[
   ironcastRoad
 ];
 List<RoamingAction> allActions = <RoamingAction>[
+  NameAgruthSwordOpportunity.singleton,
+  NameAgruthSwordRedemption.singleton,
+  NameAgruthSwordNothing.singleton,
   FleeThroughNecromancersChurch.singleton,
   FleeThroughWarForge.singleton,
   SearchAgruth.singleton,

@@ -24,4 +24,12 @@ class Sword extends Weapon {
       this.canParrySlash: true,
       this.canParryBlunt: false})
       : super(const [ItemType.sword]);
+
+  Sword.from(Sword other, {String name})
+      : this(
+            name: name ?? other.name,
+            slashingDamage: other.slashingDamage,
+            thrustingDamage: other.thrustingDamage,
+            canParrySlash: other.canParrySlash,
+            canParryBlunt: other.canParryBlunt);
 }
