@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.slash_situation;
+part of stranded.fight.punch_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator

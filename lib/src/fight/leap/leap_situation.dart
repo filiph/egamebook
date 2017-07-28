@@ -1,4 +1,4 @@
-library stranded.fight.slash_situation;
+library stranded.fight.leap_situation;
 
 import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
