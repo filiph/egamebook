@@ -6696,13 +6696,13 @@ a.hb(c,"<subject> put<s> <subject's> feet under <subjectPronounAccusative>",e.gj
 up:{"^":"a:3;",
 $3:function(a,b,c){return a.gF()!==!0&&!c.ga3()}},
 uq:{"^":"a:3;",
-$3:function(a,b,c){return M.fd(a,c)}},
+$3:function(a,b,c){return F.fd(a,c)}},
 ur:{"^":"a:3;",
 $3:function(a,b,c){return V.dw(a,c,C.l)}},
 ut:{"^":"a:3;",
 $3:function(a,b,c){return a.gF()===!0&&!c.ga3()}},
 uu:{"^":"a:3;",
-$3:function(a,b,c){return M.fd(a,c)}},
+$3:function(a,b,c){return F.fd(a,c)}},
 uv:{"^":"a:3;",
 $3:function(a,b,c){return V.dw(a,c,C.m)}},
 us:{"^":"a:3;",
@@ -6718,7 +6718,7 @@ if(a.gF()!==!0)z=(a.ga9()||a.dx===C.i)&&!c.ga3()&&a.gb5()
 else z=!1
 return z}},
 uy:{"^":"a:3;",
-$3:function(a,b,c){return M.fA(a,c)}},
+$3:function(a,b,c){return Q.fA(a,c)}},
 uz:{"^":"a:3;",
 $3:function(a,b,c){return Z.dQ(a,c,C.l)}},
 uB:{"^":"a:3;",
@@ -6727,7 +6727,7 @@ if(a.gF()===!0)z=(a.ga9()||a.dx===C.i)&&!c.ga3()&&a.gb5()
 else z=!1
 return z}},
 uC:{"^":"a:3;",
-$3:function(a,b,c){return M.fA(a,c)}},
+$3:function(a,b,c){return Q.fA(a,c)}},
 uD:{"^":"a:3;",
 $3:function(a,b,c){return Z.dQ(a,c,C.m)}},
 uA:{"^":"a:3;",
@@ -7459,20 +7459,20 @@ return a}},l0:{"^":"a:0;",
 $1:function(a){var z=a.gaj()
 if(typeof z!=="number")return z.at()
 a.saj(z-1)
-return a}}}],["","",,M,{"^":"",
-fd:function(a,b){var z=new M.dx(null,null,null,null,null)
-new M.t0(a,b).$1(z)
+return a}}}],["","",,F,{"^":"",
+fd:function(a,b){var z=new F.dx(null,null,null,null,null)
+new F.t0(a,b).$1(z)
 return z.p()},
 fc:{"^":"a0;",
 gaA:function(){return[R.tA()]},
 gh:function(){return"LeapSituation"},
-ao:function(){var z=new M.dx(null,null,null,null,null)
+ao:function(){var z=new F.dx(null,null,null,null,null)
 z.l(this)
-new M.lI().$1(z)
+new F.lI().$1(z)
 return z.p()},
 ax:function(a,b){if(a===0)return b.a1(this.a)
 return},
-aD:function(a,b){return new H.J(a,new M.lJ(this),[H.m(a,0)])}},
+aD:function(a,b){return new H.J(a,new F.lJ(this),[H.m(a,0)])}},
 t0:{"^":"a:0;a,b",
 $1:function(a){var z=$.$get$V().ad(1073741823)
 a.gb_().c=z
@@ -7491,14 +7491,14 @@ lJ:{"^":"a:0;a",
 $1:function(a){var z=this.a
 return J.h(a.gj(),z.a)||J.h(a.gj(),z.c)}},
 pl:{"^":"fc;a,j:b<,c,I:d<",
-Z:function(a){var z=new M.dx(null,null,null,null,null)
+Z:function(a){var z=new F.dx(null,null,null,null,null)
 z.l(this)
 a.$1(z)
 return z.p()},
 t:function(a,b){var z,y
 if(b==null)return!1
 if(b===this)return!0
-if(!(b instanceof M.fc))return!1
+if(!(b instanceof F.fc))return!1
 if(J.h(this.a,b.a)){z=this.b
 y=b.b
 if(z==null?y==null:z===y)if(J.h(this.c,b.c)){z=this.d
@@ -7525,7 +7525,7 @@ if(z==null){y=this.gb_().b
 x=this.gb_().c
 w=this.gb_().d
 v=this.gb_().e
-z=new M.pl(y,x,w,v)
+z=new F.pl(y,x,w,v)
 if(y==null)H.f(P.l("attacker"))
 if(x==null)H.f(P.l("id"))
 if(w==null)H.f(P.l("target"))
@@ -8098,20 +8098,20 @@ if(x==null)H.f(P.l("id"))
 if(w==null)H.f(P.l("predeterminedResult"))
 if(v==null)H.f(P.l("target"))
 if(u==null)H.f(P.l("time"))}this.l(z)
-return z}}}],["","",,M,{"^":"",
-fA:function(a,b){var z=new M.dR(null,null,null,null,null)
-new M.rZ(a,b).$1(z)
+return z}}}],["","",,Q,{"^":"",
+fA:function(a,b){var z=new Q.dR(null,null,null,null,null)
+new Q.rZ(a,b).$1(z)
 return z.p()},
 fz:{"^":"a0;",
 gaA:function(){return[O.tB()]},
 gh:function(){return"PunchSituation"},
-ao:function(){var z=new M.dR(null,null,null,null,null)
+ao:function(){var z=new Q.dR(null,null,null,null,null)
 z.l(this)
-new M.mM().$1(z)
+new Q.mM().$1(z)
 return z.p()},
 ax:function(a,b){if(a===0)return b.a1(this.a)
 return},
-aD:function(a,b){return new H.J(a,new M.mN(this),[H.m(a,0)])}},
+aD:function(a,b){return new H.J(a,new Q.mN(this),[H.m(a,0)])}},
 rZ:{"^":"a:0;a,b",
 $1:function(a){var z=$.$get$V().ad(1073741823)
 a.gb1().c=z
@@ -8130,14 +8130,14 @@ mN:{"^":"a:0;a",
 $1:function(a){var z=this.a
 return J.h(a.gj(),z.a)||J.h(a.gj(),z.c)}},
 pr:{"^":"fz;a,j:b<,c,I:d<",
-Z:function(a){var z=new M.dR(null,null,null,null,null)
+Z:function(a){var z=new Q.dR(null,null,null,null,null)
 z.l(this)
 a.$1(z)
 return z.p()},
 t:function(a,b){var z,y
 if(b==null)return!1
 if(b===this)return!0
-if(!(b instanceof M.fz))return!1
+if(!(b instanceof Q.fz))return!1
 if(J.h(this.a,b.a)){z=this.b
 y=b.b
 if(z==null?y==null:z===y)if(J.h(this.c,b.c)){z=this.d
@@ -8164,7 +8164,7 @@ if(z==null){y=this.gb1().b
 x=this.gb1().c
 w=this.gb1().d
 v=this.gb1().e
-z=new M.pr(y,x,w,v)
+z=new Q.pr(y,x,w,v)
 if(y==null)H.f(P.l("attacker"))
 if(x==null)H.f(P.l("id"))
 if(w==null)H.f(P.l("target"))
