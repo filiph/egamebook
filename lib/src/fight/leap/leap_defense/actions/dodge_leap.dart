@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/fight/leap/slash_defense/leap_defense_situation.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 
 class DodgeLeap extends EnemyTargetAction {
   static const String className = "DodgeLeap";

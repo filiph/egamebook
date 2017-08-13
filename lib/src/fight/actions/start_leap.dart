@@ -5,8 +5,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
-import 'package:edgehead/src/fight/leap/slash_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
 const String startLeapCommandTemplate = "leap at <object>";

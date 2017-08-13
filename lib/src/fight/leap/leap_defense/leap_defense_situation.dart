@@ -5,8 +5,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/defense_situation_interface.dart';
-import 'package:edgehead/src/fight/leap/slash_defense/actions/dodge_leap.dart';
-import 'package:edgehead/src/fight/leap/slash_defense/actions/impale_leaper.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/actions/dodge_leap.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/actions/impale_leaper.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
 part 'leap_defense_situation.g.dart';
@@ -31,7 +31,7 @@ abstract class LeapDefenseSituation extends DefenseSituation
   List<EnemyTargetActionBuilder> get actionGenerators => [
         DodgeLeap.builder,
         ImpaleLeaper.builder,
-        // WithstandImpactOfLeap.builder,
+        // TODO: WithstandImpactOfLeap.builder,
       ];
 
   @override

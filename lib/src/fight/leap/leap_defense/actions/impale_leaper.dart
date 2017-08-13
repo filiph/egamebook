@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
-import 'package:edgehead/src/fight/leap/slash_defense/leap_defense_situation.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
   static const String className = "ImpaleLeaper";
@@ -87,7 +87,12 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: enemy);
       reportPain(s, enemy);
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+      enemy.report(s, "<subject> fall<s> to the ground");
+      w.updateActorById(
+          enemy.id,
+          (b) => b
+            ..hitpoints -= 1
+            ..pose = Pose.onGround);
     } else {
       a.currentWeapon.report(
           s,
