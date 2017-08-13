@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 import 'package:edgehead/src/fight/leap/slash_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -19,7 +20,8 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
     startLeapCommandTemplate,
     startLeapHelpMessage,
     startLeapReportStart,
-    (a, w, enemy) => !a.isPlayer && !enemy.isOnGround,
+    (a, w, enemy) =>
+        !a.isPlayer && !enemy.isOnGround && !recentlyForcedToGround(a, w),
     (a, w, enemy) => new LeapSituation.initialized(a, enemy),
     (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy),
     enemy);
@@ -30,7 +32,8 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         startLeapCommandTemplate,
         startLeapHelpMessage,
         startLeapReportStart,
-        (a, w, enemy) => a.isPlayer && !enemy.isOnGround,
+        (a, w, enemy) =>
+            a.isPlayer && !enemy.isOnGround && !recentlyForcedToGround(a, w),
         (a, w, enemy) => new LeapSituation.initialized(a, enemy),
         (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),

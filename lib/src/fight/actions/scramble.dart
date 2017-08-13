@@ -2,7 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
-import 'package:edgehead/src/fight/actions/stand_up.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
 class Scramble extends Action {
   static final Scramble singleton = new Scramble();
