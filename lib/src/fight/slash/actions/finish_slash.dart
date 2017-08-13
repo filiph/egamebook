@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -43,7 +44,7 @@ class FinishSlash extends EnemyTargetAction {
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.slashingDamage);
     final thread = getThreadId(w, "SlashSituation");
-    bool killed = !w.getActorById(enemy.id).isAlive;
+    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
     if (!killed) {
       a.report(
           s,

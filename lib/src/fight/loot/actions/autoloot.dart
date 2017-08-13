@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -42,6 +43,21 @@ class AutoLoot extends Action {
   String applySuccess(Actor a, WorldState world, Storyline s) {
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
+
+    Actor briana = world.getActorById(brianaId);
+    if (briana.isActive && !briana.isAlive) {
+      // Briana cannot die.
+      a.report(s, "<subject> kneel<s> next to <object>", object: briana);
+      a.report(s, "<subject> help<s> <object> to <object's> feet",
+          object: briana);
+      briana.report(s, "\"I'll live,\" <subject> say<s>.", wholeSentence: true);
+
+      world.updateActorById(
+          brianaId,
+          (b) => b
+            ..pose = Pose.offBalance
+            ..hitpoints = 1);
+    }
 
     Weapon takenWeapon;
     List<Item> takenItems = [];

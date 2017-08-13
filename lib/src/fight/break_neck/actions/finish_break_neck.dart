@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -41,13 +42,19 @@ class FinishBreakNeck extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    a.report(
-        s,
-        "<subject> break<s> "
-        "<object's> "
-        "neck" /* TODO: add variants */,
-        object: enemy,
-        positive: true);
+    if (enemy.id == brianaId) {
+      // Special case for Briana who cannot die.
+      a.report(s, "<subject> smash<es> <object's> head to the ground",
+          object: enemy, positive: true);
+    } else {
+      a.report(
+          s,
+          "<subject> break<s> "
+              "<object's> "
+              "neck" /* TODO: add variants */,
+          object: enemy,
+          positive: true);
+    }
     killHumanoid(s, w, enemy);
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -8,11 +9,15 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 final Random _random = new Random();
 
 /// Report's a humanoid's death and drops their items.
+///
+/// Special case is for Briana, who will never die, only lose consciousness.
 void killHumanoid(Storyline s, WorldState w, Actor actor) {
   var fight = w.getSituationByName<FightSituation>("FightSituation");
   var groundMaterial = fight.groundMaterial;
+  var actorDies = actor.id != brianaId;
+
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (!actor.isBarehanded) {
+    if (!actor.isBarehanded && actorDies) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
@@ -25,7 +30,7 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
   }
   switch (_random.nextInt(3)) {
     case 0:
-      actor.report(s, "<subject> collapse<s>, dead",
+      actor.report(s, "<subject> collapse<s>${actorDies ? ', dead' : ''}",
           negative: true, endSentence: true);
       break;
     case 1:

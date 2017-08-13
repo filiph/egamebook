@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -41,7 +42,8 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    s.add("<subject> {cuts|slashes|slits} <object's> {throat|neck|side}",
+    var bodyPart = enemy.id == brianaId ? 'side' : '{throat|neck|side}';
+    s.add("<subject> {cuts|slashes|slits} <object's> $bodyPart",
         subject: a.currentWeapon, object: enemy);
     killHumanoid(s, w, enemy);
     return "${a.name} slains ${enemy.name} on the ground";

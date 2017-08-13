@@ -30,6 +30,9 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.teamPreservation -
     scoreChange.enemy;
 
+/// [EdgeheadGame.briana]'s [Actor.id].
+const int brianaId = 100;
+
 class EdgeheadGame extends LoopedEvent {
   final Logger log = new Logger('EdgeheadGame');
 
@@ -113,7 +116,7 @@ class EdgeheadGame extends LoopedEvent {
     stamina.value = filip.stamina;
     gold.value = filip.gold;
 
-    briana = new Actor.initialized(100, "Briana",
+    briana = new Actor.initialized(brianaId, "Briana",
         nameIsProperNoun: true,
         pronoun: Pronoun.SHE,
         hitpoints: 2,
