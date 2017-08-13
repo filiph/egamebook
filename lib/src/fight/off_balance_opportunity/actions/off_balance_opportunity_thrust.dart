@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
@@ -26,10 +27,10 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "stab <object>";
 
   @override
-  String get commandTemplate => "stab <object>";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
@@ -48,7 +49,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     if (w.getActorById(enemy.id).isAlive) {
       a.report(
           s,
-          "<subject> thrust<s> {|<subject's> ${a.currentWeapon.name}} "
+          "<subject> thrust<s> {|${weaponAsObject2(a)}} "
           "deep into <object's> {shoulder|hip|thigh}",
           object: enemy,
           positive: true);
@@ -57,7 +58,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
       a.report(
           s,
           "<subject> {stab<s>|"
-          "run<s> <subject's> ${a.currentWeapon.name} through} <object>",
+          "run<s> ${weaponAsObject2(a)} through} <object>",
           object: enemy,
           positive: true);
       killHumanoid(s, w, enemy);

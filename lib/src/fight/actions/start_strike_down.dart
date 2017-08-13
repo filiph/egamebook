@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -60,5 +61,5 @@ void startStrikeDownReportStart(
     a.report(
         s,
         "<subject> strike<s> down "
-        "{with <subject's> ${a.currentWeapon.name} |}at <object>",
+        "{with ${weaponAsObject2(a)} |}at <object>",
         object: enemy);

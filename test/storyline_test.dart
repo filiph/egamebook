@@ -24,7 +24,7 @@ void main() {
     expect(
         storyline.realize(),
         matches("The ship trembles. There is something wrong with the "
-            "engines. You gesture to your Gorilla.+"
+            "engines. You gesture to Gorilla.+"
             "uns towards the engine room\."));
   });
 
@@ -263,6 +263,31 @@ void main() {
     storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
     expect(storyline.realize(), matches("The orc pounds on your sword."));
+  });
+
+  group("possessive pronoun", () {
+    Storyline storyline;
+    _Player player;
+    Entity dog;
+    const String template = "<subject> unleash<es> <subject's> <object>";
+
+    setUp(() {
+      storyline = new Storyline();
+      player = new _Player("Filip");
+    });
+
+    test("do show with common nouns", () {
+      dog = new Entity(name: "dog", pronoun: Pronoun.IT);
+      storyline.add(template, subject: player, object: dog);
+      expect(storyline.realize(), contains("your dog"));
+    });
+
+    test("don't show with proper nouns", () {
+      dog = new Entity(
+          name: "Buster", nameIsProperNoun: true, pronoun: Pronoun.IT);
+      storyline.add(template, subject: player, object: dog);
+      expect(storyline.realize(), isNot(contains("your Buster")));
+    });
   });
 
   test("we don't show 'his the scimitar' for <subject's> <object>", () {

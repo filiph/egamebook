@@ -391,8 +391,9 @@ class Storyline {
     if (subject != null) {
       if (subject.isPlayer) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
-        result = result.replaceAll(SUBJECT, Pronoun.YOU.nominative);
-        result = result.replaceAll(SUBJECT_POSSESIVE, Pronoun.YOU.genitive);
+        result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
+        result =
+            result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
       }
 
       if (subject.pronoun == Pronoun.YOU || subject.pronoun == Pronoun.THEY) {
@@ -437,15 +438,24 @@ class Storyline {
     }
 
     if (object != null) {
+      if (object.nameIsProperNoun) {
+        // Disallow "you unleash your Buster".
+        // We must do this before we auto-change <OBJECT> to object.name below.
+        result = result.replaceAll("$SUBJECT_POSSESIVE $OBJECT", OBJECT);
+        result =
+            result.replaceAll("$SUBJECT_PRONOUN_POSSESIVE $OBJECT", OBJECT);
+      }
+
       if (object.isPlayer) {
-        result = result.replaceAll(OBJECT, Pronoun.YOU.accusative);
-        result = result.replaceAll(OBJECT_POSSESIVE, Pronoun.YOU.genitive);
+        result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
+        result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
       } else {
         result = addParticleToFirstOccurence(
             result, OBJECT, object, objectOwner, report.time);
         result = result.replaceAll(OBJECT, object.name);
         // TODO: change first to name, next to pronoun?
       }
+
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
       if (str.contains(new RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) {
         // "actor takes his weapon"

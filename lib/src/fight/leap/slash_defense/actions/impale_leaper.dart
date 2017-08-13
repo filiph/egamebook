@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/damage_reports.dart';
 import 'package:edgehead/src/fight/leap/slash_defense/leap_defense_situation.dart';
 
@@ -43,7 +44,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     a.report(
         s,
         "<subject> tr<ies> to {move|swing|shift} "
-        "<subject's> ${a.currentWeapon.name} between <subjectPronounSelf> "
+        "${weaponAsObject2(a)} between <subjectPronounSelf> "
         "and <object>",
         object: enemy,
         actionThread: thread,
@@ -72,7 +73,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {move<s>|swing<s>|shift<s>} "
-        "<subject's> ${a.currentWeapon.name} between <subjectPronounSelf> "
+        "${weaponAsObject2(a)} between <subjectPronounSelf> "
         "and <object>",
         object: enemy,
         positive: true,
@@ -93,6 +94,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<subject> {go<es> right through|completely impale<s>|"
           "bore<s> through} <object's> {body|chest|stomach|neck}",
           object: enemy);
+      enemy.report(s, "<subject> go<es> down", negative: true);
       killHumanoid(s, w, enemy);
       w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     }

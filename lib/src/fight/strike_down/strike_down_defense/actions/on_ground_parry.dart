@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class OnGroundParry extends EnemyTargetAction {
@@ -41,7 +42,7 @@ class OnGroundParry extends EnemyTargetAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "stop it{| with <subject's> ${a.currentWeapon.name}}}");
+        "stop it{| with ${weaponAsObject2(a)}}}");
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
@@ -54,7 +55,7 @@ class OnGroundParry extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {parr<ies> it|"
-        "stop<s> it with <subject's> ${a.currentWeapon.name}}",
+        "stop<s> it with ${weaponAsObject2(a)}}",
         positive: true);
     w.popSituationsUntil("FightSituation");
     return "${a.name} parries ${enemy.name}";

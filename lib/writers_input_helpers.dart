@@ -121,7 +121,7 @@ void nameAgruthSword(WorldState w, String name) {
   for (var actor in w.actors.where((a) => a.team == playerTeam)) {
     if (!actor.isBarehanded) {
       var sword = actor.currentWeapon as Sword;
-      var named = new Sword.from(sword, name: name);
+      var named = new Sword.from(sword, name: name, nameIsProperNoun: true);
       w.updateActorById(actor.id, (b) => b..currentWeapon = named);
       break;
     }

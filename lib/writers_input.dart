@@ -35,33 +35,10 @@ Room forgeChurchCrevice =
   new Exit('tunnel', 'Continue along the crevice',
       'You continue until the crevice open into a tunnel. You can smell fresh air.')
 ]);
-Room killAgruth = new Room('kill_agruth', (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
-
-
-Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
-
-
-Another crack and there is new blood on Briana\'s face. Agruth grins.
-
-
-Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s main mistake.
-''',
-      wholeSentence: true);
-}, (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''
-''',
-      wholeSentence: true);
-}, generateAgruthFight, null, <Exit>[
-  new Exit('just_after_agruth_fight', '',
-      'You look around. Fortunately, nobody is in sight.')
-]);
 Room justAfterAgruthFight =
     new Room('just_after_agruth_fight', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the barbed whip of Agruth. Your past life is almost forgotten, but it could be revived now. It must be. There is no turning back at this point. 
+      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
 "We should name that sword," Briana says, motioning to Agruth\'s scimitar. "It\'s the only thing we have going for us."
@@ -76,7 +53,7 @@ Room justAfterAgruthFight =
 
 class NameAgruthSwordOpportunity extends RoamingAction {
   @override
-  final String command = '"Opportunity"';
+  final String command = '"Luck Bringer"';
 
   @override
   final String name = 'name_agruth_sword_opportunity';
@@ -96,8 +73,11 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '"You\'re right. We\'ll call it Opportunity. It\'s our only chance to get out of this hell."');
-    nameAgruthSword(w, "Opportunity");
+        '''"You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
+
+
+Briana nods.''');
+    nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "start_of_book");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
   }
@@ -132,7 +112,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
 
 class NameAgruthSwordRedemption extends RoamingAction {
   @override
-  final String command = '"Redemption"';
+  final String command = '"Savior"';
 
   @override
   final String name = 'name_agruth_sword_redemption';
@@ -152,8 +132,11 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '"You\'re right. We\'ll call it Redemption. It is our first step to freedom."');
-    nameAgruthSword(w, "Redemption");
+        '''"You\'re right. We\'ll call it Savior. It is our first step to freedom."
+
+
+Briana nods.''');
+    nameAgruthSword(w, "Savior");
     movePlayer(w, s, "start_of_book");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
   }
@@ -239,13 +222,33 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
+Room killAgruth = new Room('kill_agruth', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
+
+
+Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
+
+
+Another crack and there is new blood on Briana\'s face. Agruth grins.
+
+
+Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s main mistake.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, generateAgruthFight, null, <Exit>[
+  new Exit('just_after_agruth_fight', '',
+      'You look around. Fortunately, nobody is in sight.')
+]);
 Room startOfBook =
     new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs.
-
-
-That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+      '''You look around. The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -542,21 +545,6 @@ You can guess which corridor will get you out. Fresh air is flowing into the for
 }, null, null, <Exit>[
   new Exit('tunnel', 'Enter the corridor', 'You enter the corridor.'),
   new Exit('forge_church_crevice', 'Enter the crevice', 'You take the crevice.')
-]);
-Room warForgeCrevice =
-    new Room('war_forge_crevice', (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''The crevice is small.
-''',
-      wholeSentence: true);
-}, (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''
-''',
-      wholeSentence: true);
-}, null, null, <Exit>[
-  new Exit('tunnel', 'Continue along the crevice',
-      'You continue until the crevice open into a tunnel. You can smell fresh air.')
 ]);
 Room entranceToBloodrock =
     new Room('entrance_to_bloodrock', (Actor a, WorldState w, Storyline s) {
@@ -1439,14 +1427,13 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
 ]);
 List<Room> allRooms = <Room>[
   forgeChurchCrevice,
-  killAgruth,
   justAfterAgruthFight,
+  killAgruth,
   startOfBook,
   theShafts,
   tunnel,
   undergroundChurch,
   warForge,
-  warForgeCrevice,
   entranceToBloodrock,
   mountainPass,
   mountainPassGate,

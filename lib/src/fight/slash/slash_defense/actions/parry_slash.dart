@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
@@ -48,7 +49,7 @@ class ParrySlash extends EnemyTargetAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "meet it with <subject's> ${a.currentWeapon.name}|"
+        "meet it with ${weaponAsObject2(a)}|"
         "fend it off}");
     if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -72,14 +73,14 @@ class ParrySlash extends EnemyTargetAction {
       a.report(
           s,
           "<subject> {parr<ies> it easily|"
-          "easily meet<s> it with <subject's> ${a.currentWeapon.name}|"
+          "easily meet<s> it with ${weaponAsObject2(a)}|"
           "fend<s> it off easily}",
           positive: true);
     } else {
       a.report(
           s,
           "<subject> {parr<ies> it|"
-          "meet<s> it with <subject's> ${a.currentWeapon.name}|"
+          "meet<s> it with ${weaponAsObject2(a)}|"
           "fend<s> it off}",
           positive: true);
     }

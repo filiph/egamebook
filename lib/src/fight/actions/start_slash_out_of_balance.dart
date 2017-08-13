@@ -4,6 +4,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/actions/start_slash.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -20,7 +22,7 @@ void startSlashOutOfBalanceApplyFailure(
     a.report(
         s,
         "<subject> completely miss<es> <object> with "
-        "<subject's> ${a.currentWeapon.name}",
+        "${weaponAsObject2(a)}",
         object: enemy,
         negative: true);
 
@@ -63,10 +65,4 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
 
 void startSlashOutOfBalanceReportStart(Actor a, WorldState w, Storyline s,
         Actor enemy, Situation mainSituation) =>
-    a.report(
-        s,
-        "<subject> swing<s> "
-        "{<subject's> ${a.currentWeapon.name} |}at <object>",
-        object: enemy,
-        actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+    startSlashReportStart(a, w, s, enemy, mainSituation);

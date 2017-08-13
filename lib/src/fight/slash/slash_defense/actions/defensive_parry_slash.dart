@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/fight/actions/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class DefensiveParrySlash extends EnemyTargetAction {
@@ -27,10 +28,10 @@ class DefensiveParrySlash extends EnemyTargetAction {
   DefensiveParrySlash(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "step back and parry";
 
   @override
-  String get commandTemplate => "step back and parry";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> parry it?";
@@ -40,7 +41,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "meet it with <subject's> ${a.currentWeapon.name}|"
+        "meet it with ${weaponAsObject2(a)}|"
         "fend it off}");
     if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -62,7 +63,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {parr<ies> it|deflect<s> it|"
-        "meet<s> it with <subject's> ${a.currentWeapon.name}|"
+        "meet<s> it with ${weaponAsObject2(a)}|"
         "fend<s> it off}",
         positive: true);
 
