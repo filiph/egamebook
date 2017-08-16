@@ -33,6 +33,18 @@ abstract class Weapon extends Item {
 
   int get thrustingDamage => 0;
 
+  /// Intrinsic value of the weapon.
+  ///
+  /// This is a heuristic for deciding which weapon is worth more, in general.
+  /// It is not a monetary value.
+  ///
+  /// Bonus point is added when the weapon is named ([nameIsProperNoun]
+  /// is `true`), such us "Excalibur".
   @override
-  int get value => slashingDamage + thrustingDamage + bluntDamage;
+  int get value =>
+      length +
+      slashingDamage +
+      thrustingDamage +
+      bluntDamage +
+      (nameIsProperNoun ? 1 : 0);
 }

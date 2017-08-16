@@ -66,6 +66,8 @@ class TakeDroppedWeapon extends ItemAction {
   bool isApplicable(Actor a, WorldState w) {
     if (item is! Weapon) return false;
     if (!a.canWield) return false;
+    Weapon weapon = item;
+    if (weapon.value <= a.currentWeapon.value) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another
