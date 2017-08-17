@@ -216,7 +216,12 @@ class EdgeheadGame extends LoopedEvent {
         // blank command (which signifies an action that should be
         // auto-selected).
         for (var action in recs.actions) {
-          assert(action.command.isNotEmpty);
+          assert(
+              action.command.isNotEmpty,
+              "Action can have an empty ('') command "
+              "only if it is the only action presented. But now we have "
+              "these commands: ${recs.actions}. One of these actions "
+              "should probably have a stricter PREREQUISITE (isApplicable).");
         }
       }
 

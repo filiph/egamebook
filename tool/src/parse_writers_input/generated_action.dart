@@ -36,7 +36,9 @@ class GeneratedAction extends GeneratedGameObject {
   @override
   Iterable<AstBuilder<AstNode>> finalizeAst() sync* {
     var className = name;
-    var forLocation = reCase(_map['FOR_LOCATION']).snakeCase;
+    String forLocation = _map.containsKey('FOR_LOCATION')
+        ? reCase(_map['FOR_LOCATION']).snakeCase
+        : null;
     var classBuilder = new ClassBuilder(className);
     classBuilder.setExtends(actionType);
 
@@ -183,14 +185,16 @@ class GeneratedAction extends GeneratedGameObject {
 
   MethodBuilder _createIsApplicableBuilder(String forLocation) {
     var isApplicableBuilder = createActorWorldMethod("isApplicable", boolType);
-    isApplicableBuilder.addStatement((reference(worldParameter.name)
-            .property("currentSituation")
-            .castAs(roomRoamingSituationType))
-        .parentheses()
-        .property("currentRoomName")
-        .notEquals(literal(forLocation))
-        .asIf()
-          ..addStatement(literal(false).asReturn()));
+    if (forLocation != null) {
+      isApplicableBuilder.addStatement((reference(worldParameter.name)
+              .property("currentSituation")
+              .castAs(roomRoamingSituationType))
+          .parentheses()
+          .property("currentRoomName")
+          .notEquals(literal(forLocation))
+          .asIf()
+            ..addStatement(literal(false).asReturn()));
+    }
     if (_map['PREREQUISITES'] != null) {
       var ifStatement = new ExpressionBuilder.raw((_) => _map['PREREQUISITES'])
           .parentheses()
