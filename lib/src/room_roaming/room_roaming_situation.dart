@@ -69,13 +69,6 @@ abstract class RoomRoamingSituation extends Situation
     return [mainActor];
   }
 
-  @override
-  void onAfterAction(WorldState world, _) {
-    // When going from place to place, remove the actors that died. It makes
-    // sure we don't leak memory.
-    world.actors.removeWhere((a) => !a.isAlive);
-  }
-
   /// Moves [a] with their party to [destination].
   ///
   /// This will also print out the description of the room (or the short version
@@ -91,10 +84,14 @@ abstract class RoomRoamingSituation extends Situation
 
     w.replaceSituationById(id, nextRoomSituation);
 
-    s.addParagraph();
-    // TODO: show short description according to world.actionRecords
-    room.describe(a, w, s);
-    s.addParagraph();
+    // Show short description according to world.actionRecords.
+    if (_actorHasVisitedRoom(w, a, room)) {
+      room.shortDescribe(a, w, s);
+    } else {
+      s.addParagraph();
+      room.describe(a, w, s);
+      s.addParagraph();
+    }
 
     for (var actor in getPartyOf(a, w).toList()) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
@@ -102,8 +99,32 @@ abstract class RoomRoamingSituation extends Situation
   }
 
   @override
+  void onAfterAction(WorldState world, _) {
+    // When going from place to place, remove the actors that died. It makes
+    // sure we don't leak memory.
+    world.actors.removeWhere((a) => !a.isAlive);
+  }
+
+  @override
   bool shouldContinue(WorldState world) {
     if (currentRoomName == endOfRoam.name) return false;
     return true;
+  }
+
+  /// Find out if [a] has visited [room] by checking [WorldState.actionRecords].
+  bool _actorHasVisitedRoom(WorldState w, Actor a, Room room) {
+    for (var record in w.actionRecords) {
+      if (record.protagonist != a.id) continue;
+      if (record.actionName != TakeExitAction.className) continue;
+      // This is a hack. There is no guarantee the description will always
+      // contain the room name (and only _that_ room name). Thus, an assert.
+      assert(
+          record.description.contains("went through exit to"),
+          "Description of TakeExitActions has changed. "
+          "Maybe this is a good time to implement actual user data "
+          "in ActionRecords.");
+      if (record.description.contains(room.name)) return true;
+    }
+    return false;
   }
 }

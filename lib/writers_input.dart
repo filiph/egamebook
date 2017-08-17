@@ -20,6 +20,18 @@ import 'package:edgehead/writers_input_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
+Room caveWithAgruthPre =
+    new Room('cave_with_agruth_pre', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -28,7 +40,7 @@ Room caveWithAgruth =
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''
+      '''The corpse lies still, getting cold.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -160,7 +172,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
 
 Briana nods.''');
     nameAgruthSword(w, "Luck Bringer");
-    movePlayer(w, s, "cave_with_agruth");
+    movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
   }
 
@@ -219,7 +231,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
 
 Briana nods.''');
     nameAgruthSword(w, "Savior");
-    movePlayer(w, s, "cave_with_agruth");
+    movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
   }
 
@@ -272,7 +284,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add('"That\'s foolish. It\'s just a sword, after all."');
-    movePlayer(w, s, "cave_with_agruth");
+    movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
@@ -388,7 +400,7 @@ After a bit of searching, you find a twisty passage going from the right hand si
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''
+      '''The Underground Church
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -409,27 +421,20 @@ You and Briana duck behind some carts. As you head towards what seems to be an e
 > "_Pwarfa n’ngen aradra._ The slow suffer. _Madraga n’ngen nach santutra._ Only the hard-working prosper. _Nfarfi Arach m’marrash._ The Dead Prince sees all."
 
 
-''',
-      wholeSentence: true);
-  if (getGlobal(w).bloodrockFollowers >= 1) {
-    s.add(
-        '''Somewhere behind you, a gutteral tongue bellows a string of orders. You must get moving.''',
-        wholeSentence: true);
-  }
-  s.add(
-      '''
-
 You can guess which corridor will get you out. Fresh air is flowing into the forge through it, stirring the smoke. It\'s not far, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''
+      '''The air in the war forges is heavy and the noise overwhelming.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('tunnel', 'Enter the corridor', 'You enter the corridor.'),
-  new Exit('forge_church_crevice', 'Enter the crevice', 'You take the crevice.')
+  new Exit(
+      'forge_church_crevice', 'Enter the crevice', 'You take the crevice.'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You sneak back towards where you left Agruth\'s body.')
 ]);
 Room entranceToBloodrock =
     new Room('entrance_to_bloodrock', (Actor a, WorldState w, Storyline s) {
@@ -1311,6 +1316,7 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
       'You make your way closer to the fort.')
 ]);
 List<Room> allRooms = <Room>[
+  caveWithAgruthPre,
   caveWithAgruth,
   forgeChurchCrevice,
   justAfterAgruthFight,
