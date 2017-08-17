@@ -35,7 +35,7 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You look around. The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
