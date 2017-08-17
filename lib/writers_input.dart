@@ -20,6 +20,88 @@ import 'package:edgehead/writers_input_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
+Room caveWithAgruth =
+    new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''You look around. The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('underground_church', 'Flee through the Underground Church',
+      'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.'),
+  new Exit('war_forge', 'Flee through the war forges',
+      'You sneak your way into the War Forges and hide in the shadows of an alcove.')
+]);
+
+class SearchAgruth extends RoamingAction {
+  @override
+  final String command = 'Search Agruth';
+
+  @override
+  final String name = 'search_agruth';
+
+  static final SearchAgruth singleton = new SearchAgruth();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'cave_with_agruth') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''You search his pockets but turn up with nothing. Just then, you hear heavy footfalls approaching. Briana grabs your arm. “We’ve got to go.”  
+
+
+You realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)''');
+    giveStaminaToPlayer(w, 1);
+    return '${a.name} successfully performs SearchAgruth';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    s.add(null);
+    s.add(
+        'You search but don’t find anything. Suddenly, heavy footfalls come your way. No choice--you have to go now.');
+    return '${a.name} fails to perform SearchAgruth';
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 0.9;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'You have taken his weapon but there might be other useful items in his pocket.';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room forgeChurchCrevice =
     new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -78,7 +160,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
 
 Briana nods.''');
     nameAgruthSword(w, "Luck Bringer");
-    movePlayer(w, s, "start_of_book");
+    movePlayer(w, s, "cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
   }
 
@@ -137,7 +219,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
 
 Briana nods.''');
     nameAgruthSword(w, "Savior");
-    movePlayer(w, s, "start_of_book");
+    movePlayer(w, s, "cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
   }
 
@@ -190,7 +272,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add('"That\'s foolish. It\'s just a sword, after all."');
-    movePlayer(w, s, "start_of_book");
+    movePlayer(w, s, "cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
@@ -222,7 +304,8 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
-Room killAgruth = new Room('kill_agruth', (Actor a, WorldState w, Storyline s) {
+Room startAdventure =
+    new Room('start_adventure', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
 
@@ -245,204 +328,6 @@ Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s ma
   new Exit('just_after_agruth_fight', '',
       'You look around. Fortunately, nobody is in sight.')
 ]);
-Room startOfBook =
-    new Room('start_of_book', (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''You look around. The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
-''',
-      wholeSentence: true);
-}, (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''
-''',
-      wholeSentence: true);
-}, null, null, <Exit>[]);
-
-class FleeThroughNecromancersChurch extends RoamingAction {
-  @override
-  final String command = 'Flee through the Underground Church';
-
-  @override
-  final String name = 'flee_through_necromancers_church';
-
-  static final FleeThroughNecromancersChurch singleton =
-      new FleeThroughNecromancersChurch();
-
-  @override
-  bool isApplicable(Actor a, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_of_book') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add(
-        'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.');
-    movePlayer(w, s, "underground_church");
-    return '${a.name} successfully performs FleeThroughNecromancersChurch';
-  }
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(null);
-    s.add(
-        'You manage to slip into a Church window, but a guard notices your shadow. As he squints in your direction, you disappear into the shadowy main hall.');
-    updateGlobal(w, (b) => b..bloodrockFollowers += 1);
-    movePlayer(w, s, "underground_church");
-    return '${a.name} fails to perform FleeThroughNecromancersChurch';
-  }
-
-  @override
-  num getSuccessChance(Actor a, WorldState w) {
-    return 0.9;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'The Underground Church will have fewer guards, so you\'re more likely to slip through unnoticed. Then again, you have no idea who--or what--lurks there.';
-
-  @override
-  bool get isAggressive => false;
-}
-
-class FleeThroughWarForge extends RoamingAction {
-  @override
-  final String command = 'Flee through the War Forges';
-
-  @override
-  final String name = 'flee_through_war_forge';
-
-  static final FleeThroughWarForge singleton = new FleeThroughWarForge();
-
-  @override
-  bool isApplicable(Actor a, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_of_book') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add(
-        'You sneak your way into the War Forges and hide in the shadows of an alcove.');
-    movePlayer(w, s, "war_forge");
-    return '${a.name} successfully performs FleeThroughWarForge';
-  }
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(null);
-    s.add(
-        'You manage to sneak into the War Forges, but a guard notices your shadow. You quickly duck into an alcove as he frowns in your direction and scratches his head.');
-    updateGlobal(w, (b) => b..bloodrockFollowers += 1);
-    movePlayer(w, s, "war_forge");
-    return '${a.name} fails to perform FleeThroughWarForge';
-  }
-
-  @override
-  num getSuccessChance(Actor a, WorldState w) {
-    return 0.7;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'The War Forges are where the orcs build their weapons and war machines. As a slave, you’re familiar with the place and it\'s a more direct path to freedom, but almost certainly filled with orcs.';
-
-  @override
-  bool get isAggressive => false;
-}
-
-class SearchAgruth extends RoamingAction {
-  @override
-  final String command = 'Search Agruth';
-
-  @override
-  final String name = 'search_agruth';
-
-  static final SearchAgruth singleton = new SearchAgruth();
-
-  @override
-  bool isApplicable(Actor a, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_of_book') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name)) != true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add(
-        '''You search his pockets but turn up with nothing. Just then, you hear heavy footfalls approaching. Briana grabs your arm. “We’ve got to go.”  
-
-
-You realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)''');
-    giveStaminaToPlayer(w, 1);
-    return '${a.name} successfully performs SearchAgruth';
-  }
-
-  @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(null);
-    s.add(
-        'You search but don’t find anything. Suddenly, heavy footfalls come your way. No choice--you have to go now.');
-    return '${a.name} fails to perform SearchAgruth';
-  }
-
-  @override
-  num getSuccessChance(Actor a, WorldState w) {
-    return 0.9;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'You have taken his weapon but there might be other useful items in his pocket.';
-
-  @override
-  bool get isAggressive => false;
-}
-
 Room theShafts = new Room('the_shafts', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''This must be the place that the orcs call the Shafts. It\'s a tall, seemingly endless room, with many walkways across.
@@ -1426,10 +1311,10 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
       'You make your way closer to the fort.')
 ]);
 List<Room> allRooms = <Room>[
+  caveWithAgruth,
   forgeChurchCrevice,
   justAfterAgruthFight,
-  killAgruth,
-  startOfBook,
+  startAdventure,
   theShafts,
   tunnel,
   undergroundChurch,
@@ -1444,12 +1329,10 @@ List<Room> allRooms = <Room>[
   ironcastRoad
 ];
 List<RoamingAction> allActions = <RoamingAction>[
+  SearchAgruth.singleton,
   NameAgruthSwordOpportunity.singleton,
   NameAgruthSwordRedemption.singleton,
   NameAgruthSwordNothing.singleton,
-  FleeThroughNecromancersChurch.singleton,
-  FleeThroughWarForge.singleton,
-  SearchAgruth.singleton,
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,

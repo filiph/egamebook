@@ -100,7 +100,7 @@ class EdgeheadGame extends LoopedEvent {
         (a, w, s) => throw new StateError("Room isn't to be revisited"),
         null,
         null,
-        [new Exit("kill_agruth", "", "")]);
+        [new Exit("start_adventure", "", "")]);
 
     filip = new Actor.initialized(1, "Filip",
         nameIsProperNoun: true,
