@@ -42,6 +42,9 @@ abstract class RoomRoamingSituation extends Situation
   @override
   int get id;
 
+  @override
+  int get maxActionsToShow => 1000;
+
   bool get monstersAlive;
 
   @override
