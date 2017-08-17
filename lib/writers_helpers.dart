@@ -112,6 +112,20 @@ void giveStaminaToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);
 }
 
+/// Returns `true` while player is roaming through Bloodrock. Note that the list
+/// of rooms contains only those that are actual rooms (it excludes the likes
+/// of `just_after_agruth_fight`, which is a helper room for naming Agruth's
+/// sword).
+bool isRoamingInBloodrock(WorldState w) {
+  const bloodrockRoamingRooms = const [
+    "cave_with_agruth",
+    "underground_church",
+    "war_forge"
+  ];
+  return bloodrockRoamingRooms
+      .contains((w.currentSituation as RoomRoamingSituation).currentRoomName);
+}
+
 void movePlayer(WorldState w, Storyline s, String locationName) {
   getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
 }

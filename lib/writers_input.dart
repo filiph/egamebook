@@ -16,7 +16,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart'
     show Storyline;
 import 'package:edgehead/fractal_stories/world.dart' show WorldState;
 import 'package:built_value/built_value.dart';
-import 'package:edgehead/writers_input_helpers.dart';
+import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.g.dart';
 
 const bool DEV_MODE = true;
@@ -340,6 +340,137 @@ Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s ma
   new Exit('just_after_agruth_fight', '',
       'You look around. Fortunately, nobody is in sight.')
 ]);
+
+class TalkToBriana1 extends RoamingAction {
+  @override
+  final String command = 'Talk to Briana';
+
+  @override
+  final String name = 'talk_to_briana_1';
+
+  static final TalkToBriana1 singleton = new TalkToBriana1();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((!w.actionHasBeenPerformed(name) && isRoamingInBloodrock(w)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''"You were caught not too long ago, I think. What can you tell me about outside?"
+
+
+Briana: "How long have you been here?"
+
+
+"Three years."
+
+
+"Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
+
+
+"So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
+
+
+"Correct. The closest safe place is the fort."''');
+    return '${a.name} successfully performs TalkToBriana1';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToBriana2 extends RoamingAction {
+  @override
+  final String command = 'Talk to Briana';
+
+  @override
+  final String name = 'talk_to_briana_2';
+
+  static final TalkToBriana2 singleton = new TalkToBriana2();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.actionHasBeenPerformed("talk_to_briana_1") &&
+            !w.actionHasBeenPerformed(name) &&
+            isRoamingInBloodrock(w)) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('''"Where did they catch you?"
+
+
+Briana: "At the Screaming Gate. I was trying to sneak in."
+
+
+"You what?"
+
+
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal the Orcthorn, get out, help the fight."''');
+    return '${a.name} successfully performs TalkToBriana2';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room theShafts = new Room('the_shafts', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''This must be the place that the orcs call the Shafts. It\'s a tall, seemingly endless room, with many walkways across.
@@ -400,7 +531,7 @@ After a bit of searching, you find a twisty passage going from the right hand si
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The Underground Church
+      '''The Underground Church stands silent, as if holding breath.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -1339,6 +1470,8 @@ List<RoamingAction> allActions = <RoamingAction>[
   NameAgruthSwordOpportunity.singleton,
   NameAgruthSwordRedemption.singleton,
   NameAgruthSwordNothing.singleton,
+  TalkToBriana1.singleton,
+  TalkToBriana2.singleton,
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,
