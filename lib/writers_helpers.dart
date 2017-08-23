@@ -37,16 +37,6 @@ FightSituation generateAgruthFight(WorldState w,
               object: getPlayer(w),
               wholeSentence: true);
         },
-//        3: (w, s) {
-//          s.addParagraph();
-//          s.add(
-//              "<p class='meta'>This fight and the whole adventure is "
-//              "procedurally generated. You can Restart (top left) and see "
-//              "how different choices and random events lead to "
-//              "very different results.</p>",
-//              wholeSentence: true);
-//          s.addParagraph();
-//        },
         5: (w, s) {
           var agruth = w.getActorById(agruthId);
           agruth.report(s, "<subject> spit<s> on the cavern floor");
@@ -79,6 +69,33 @@ FightSituation generateEscapeTunnelFight(WorldState w,
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rock|cavern} floor", roomRoamingSituation, {});
+}
+
+FightSituation generateMadGuardianFight(WorldState w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  var madGuardian = _generateMadGuardian(w);
+  var madGuardianId = madGuardian.id;
+  w.actors.add(madGuardian);
+  return new FightSituation.initialized(
+      party,
+      [madGuardian],
+      "{rock|cavern} floor",
+      roomRoamingSituation,
+      {
+        1: (w, s) {
+          var guardian = w.getActorById(madGuardianId);
+          guardian.report(
+              s, "\"Good good good,\" <subject> whispers<s>, eyeing <object>.",
+              object: getPlayer(w), wholeSentence: true);
+        },
+        9: (w, s) {
+          var guardian = w.getActorById(madGuardianId);
+          s.addParagraph();
+          guardian.report(s, "\"Pain is good,\" <subject> chuckle<s>.",
+              wholeSentence: true);
+          s.addParagraph();
+        },
+      });
 }
 
 FightSituation generateMountainPassGuardPostFight(WorldState w,
@@ -119,8 +136,11 @@ void giveStaminaToPlayer(WorldState w, int amount) {
 bool isRoamingInBloodrock(WorldState w) {
   const bloodrockRoamingRooms = const [
     "cave_with_agruth",
+    "guardpost_above_church",
+    "orcthorn_door",
+    "smelter",
     "underground_church",
-    "war_forge"
+    "war_forge",
   ];
   return bloodrockRoamingRooms
       .contains((w.currentSituation as RoomRoamingSituation).currentRoomName);
@@ -154,6 +174,16 @@ Actor _generateAgruth(WorldState w) {
       pronoun: Pronoun.HE,
       hitpoints: 2,
       maxHitpoints: 2,
+      team: defaultEnemyTeam,
+      initiative: 100);
+}
+
+Actor _generateMadGuardian(WorldState w) {
+  return new Actor.initialized(6667, "mad guardian",
+      pronoun: Pronoun.HE,
+      currentWeapon: new Sword(name: "rusty sword"),
+      hitpoints: 3,
+      maxHitpoints: 3,
       team: defaultEnemyTeam,
       initiative: 100);
 }

@@ -129,6 +129,27 @@ Room forgeChurchCrevice =
   new Exit('tunnel', 'Continue along the crevice',
       'You continue until the crevice open into a tunnel. You can smell fresh air.')
 ]);
+Room guardpostAboveChurch =
+    new Room('guardpost_above_church', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''It\'s a small, circular room. There are exits on four sides, all marked with where they lead to. 
+
+
+Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('underground_church', 'Descend towards the Underground Church',
+      'You take the passage leading down.'),
+  new Exit('tunnel', 'Go to the upper gate',
+      'You take the passage that leads out of here.'),
+  new Exit('smelter', 'Go to the smelter', 'Something something.')
+]);
 Room justAfterAgruthFight =
     new Room('just_after_agruth_fight', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -316,6 +337,66 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
+Room orcthornDoor =
+    new Room('orcthorn_door', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The small door is still closed. TODO!!!!
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('guardpost_above_church', 'Enter the small passage',
+      'You enter the passage and go a long, slightly rising way.'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You back out from the door, sneak out of the church, and go where you left Agruth\'s body.'),
+  new Exit('orcthorn_room', 'Open the door', 'You open the door.')
+]);
+Room orcthornRoom =
+    new Room('orcthorn_room', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The room is dark and wet. As you enter, the noises end. 
+
+
+When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room\'s ceiling, but you slowly realize it\'s a stone statue. The other figure, though, is living.
+
+
+Its face is in constant motion, overwhelmed by tics and waves of hateful expressions. You realize it\'s a male orc, but an especially large one, with huge muscles and many scars. If he wasn\'t locked up here, he\'d surely make a captain.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The room is quiet. The mad guardian\'s huge body lies on the floor beneath the statue.
+''',
+      wholeSentence: true);
+}, generateMadGuardianFight, null, <Exit>[
+  new Exit('orcthorn_door', 'Exit the room',
+      'You go through the door and into the main cave of the Underground Church.')
+]);
+Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''Smelter description TODO
+
+
+A small crevice appears to be sucking the hot air.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''Smelter short description TODO
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('tunnel', 'Enter the crevice',
+      'You enter the crevice. The air flows around you, pushing into your back. After a while, the crevice joins with a larger tunnel. The draft isn\'t as strong here, but it\'s still noticable, and you follow it.'),
+  new Exit('war_forge', 'Go to the war forges',
+      'A short passage leads to the top of the war forges room.'),
+  new Exit('guardpost_above_church', 'Go through the smooth passage',
+      'You enter the passage and it leads you slightly upwards to a junction.')
+]);
 Room startAdventure =
     new Room('start_adventure', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -512,21 +593,12 @@ Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
 Room undergroundChurch =
     new Room('underground_church', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The Underground Church is a dark, long, tall cave. In the distance, you see the altar. It\'s glowing. There are unnatural noises.
+      '''The Underground Church is a dark, long, tall cave. In the distance, you see the altar. It\'s glowing. There are unnatural, angry noises coming from a little door to your left.
 
 
 
 
-''',
-      wholeSentence: true);
-  if (getGlobal(w).bloodrockFollowers >= 1) {
-    s.add('''You hear orders being yelled somewhere behind you.''',
-        wholeSentence: true);
-  }
-  s.add(
-      '''
-
-After a bit of searching, you find a twisty passage going from the right hand side of the Church.
+After a bit of searching, you find a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -535,8 +607,11 @@ After a bit of searching, you find a twisty passage going from the right hand si
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('forge_church_crevice', 'Enter the small passage',
-      'You enter the passage and go a long way.')
+  new Exit('guardpost_above_church', 'Enter the passage',
+      'You enter the passage and go a long, slightly rising way.'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You sneak out of the church, back towards where you left Agruth\'s body.'),
+  new Exit('orcthorn_door', 'Approach the little door', 'Something something.')
 ]);
 Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -552,7 +627,7 @@ You and Briana duck behind some carts. As you head towards what seems to be an e
 > "_Pwarfa n’ngen aradra._ The slow suffer. _Madraga n’ngen nach santutra._ Only the hard-working prosper. _Nfarfi Arach m’marrash._ The Dead Prince sees all."
 
 
-You can guess which corridor will get you out. Fresh air is flowing into the forge through it, stirring the smoke. It\'s not far, and thankfully there is nobody in the way.
+You can guess which corridor leads to the smelter. Hot air is flowing into the forge through it, stirring the smoke. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -561,9 +636,8 @@ You can guess which corridor will get you out. Fresh air is flowing into the for
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('tunnel', 'Enter the corridor', 'You enter the corridor.'),
-  new Exit(
-      'forge_church_crevice', 'Enter the crevice', 'You take the crevice.'),
+  new Exit('smelter', 'Go to smelter',
+      'You keep low, ascending the stairs. At the top the hot air hits you. You make your way through a short passage and arrive at the smelter.'),
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak back towards where you left Agruth\'s body.')
 ]);
@@ -1450,7 +1524,11 @@ List<Room> allRooms = <Room>[
   caveWithAgruthPre,
   caveWithAgruth,
   forgeChurchCrevice,
+  guardpostAboveChurch,
   justAfterAgruthFight,
+  orcthornDoor,
+  orcthornRoom,
+  smelter,
   startAdventure,
   theShafts,
   tunnel,
