@@ -35,9 +35,10 @@ class RollOutOfWay extends EnemyTargetAction {
       "will <subject> evade?"; // TODO: come up with something
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(s, "<subject> tr<ies> to roll out of the way");
     a.report(s, "<subject> can't", but: true);
+    w.popSituation();
     return "${a.name} fails to roll out of the way";
   }
 

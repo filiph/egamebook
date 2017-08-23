@@ -39,9 +39,11 @@ class ActorPlanner {
       throw new ArgumentError("Called ActorPlanner with actor == null. "
           "That may mean that a Situation returns getCurrentActor as null. "
           "Some action that you added should make sure it removes the "
-          "Situation. "
+          "Situation (maybe ${initialWorld.actionRecords.last.description}?). "
           "World: $initialWorld. "
-          "Situation: ${initialWorld.currentSituation}");
+          "Situation: ${initialWorld.currentSituation}. "
+          "Action Records: "
+          "${initialWorld.actionRecords.map((a) => a.description).join('<-')}");
     }
     assert(actor.isAlive);
   }

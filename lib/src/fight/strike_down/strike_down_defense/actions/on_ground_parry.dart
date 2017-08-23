@@ -38,7 +38,7 @@ class OnGroundParry extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s) {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -47,6 +47,7 @@ class OnGroundParry extends EnemyTargetAction {
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
+    w.popSituation();
     return "${a.name} fails to parry ${enemy.name}";
   }
 
