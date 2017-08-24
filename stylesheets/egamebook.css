@@ -29,7 +29,7 @@ table {
 
 body {
   font-family: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
-  line-height: 1.88571rem;
+  line-height: 1.8857142857rem;
   text-align: justify;
   font-size: 1.2rem;
   -webkit-hyphens: auto;
@@ -90,13 +90,13 @@ body.title-open {
   background-image: linear-gradient(to top,white 0%, rgba(255, 255, 255, 0) 100%); }
 
 h1 {
-  font-size: 2.51429rem;
+  font-size: 2.5142857143rem;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   font-weight: bold;
   text-align: left;
-  line-height: 3.77143rem;
+  line-height: 3.7714285714rem;
   margin-top: 5vh;
-  margin-bottom: 1.88571rem; }
+  margin-bottom: 1.8857142857rem; }
 
 .title__illustration {
   float: right;
@@ -195,7 +195,7 @@ nav .button {
   background-image: linear-gradient(#f9f9f9 10%, #ededed);
   cursor: pointer;
   box-sizing: border-box;
-  min-height: 1.25714rem;
+  min-height: 1.2571428571rem;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -256,7 +256,7 @@ p.toast {
   text-align: center;
   margin-left: 10%;
   margin-right: 10%;
-  margin-bottom: 1.88571rem;
+  margin-bottom: 1.8857142857rem;
   -webkit-transition: color 5s;
   -moz-transition: color 5s;
   transition: color 5s;
@@ -335,7 +335,7 @@ div.dialog table {
     border-top: 2px solid lightgray; }
 
 p {
-  margin-bottom: 1.88571rem; }
+  margin-bottom: 1.8857142857rem; }
 
 p img {
   max-width: 100%; }
@@ -347,10 +347,10 @@ strong {
   font-weight: bold; }
 
 h2 {
-  font-size: 1.88571rem;
+  font-size: 1.8857142857rem;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-  margin: 1.88571rem 0;
-  margin-top: 3.77143rem;
+  margin: 1.8857142857rem 0;
+  margin-top: 3.7714285714rem;
   font-weight: bold; }
 
 .meta {
@@ -373,10 +373,10 @@ h2 {
   height: 10rem; }
 
 .choices-question {
-  margin-bottom: 0.68571rem; }
+  margin-bottom: 0.6857142857rem; }
 
 .choices-div {
-  margin-bottom: 1.88571rem; }
+  margin-bottom: 1.8857142857rem; }
 
 .button {
   display: inline-block;
@@ -390,7 +390,7 @@ h2 {
   background-image: linear-gradient(#f9f9f9 10%, #ededed);
   cursor: pointer;
   box-sizing: border-box;
-  min-height: 1.25714rem;
+  min-height: 1.2571428571rem;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -399,7 +399,7 @@ h2 {
   display: block;
   width: 100%;
   text-align: left;
-  margin-bottom: 0.62857rem;
+  margin-bottom: 0.6285714286rem;
   padding: 0.4rem 1.5rem; }
 
 .button.disabled {
@@ -509,16 +509,16 @@ ol.choices-ol .button span.choice-text {
   font-size: 1.08rem;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   text-align: left;
-  margin-top: 1.88571rem;
-  margin-bottom: 1.88571rem;
-  padding: 0 1.88571rem; }
+  margin-top: 1.8857142857rem;
+  margin-bottom: 1.8857142857rem;
+  padding: 0 1.8857142857rem; }
   .form > div > div {
-    min-height: 1.88571rem;
-    margin-bottom: 0.94286rem; }
+    min-height: 1.8857142857rem;
+    margin-bottom: 0.9428571429rem; }
 
 .form-table {
   width: 100%;
-  line-height: 1.88571rem; }
+  line-height: 1.8857142857rem; }
   .form-table th {
     width: 30rem;
     vertical-align: bottom;
@@ -600,7 +600,7 @@ ol.choices-ol .button span.choice-text {
   -moz-transition: -moz-transform 0.1s ease-out;
   transition: transform 0.1s ease-out;
   position: relative;
-  padding: 0 0 0.94286rem 0; }
+  padding: 0 0 0.9428571429rem 0; }
 
 .closed {
   -webkit-transform: scaleY(0);
@@ -645,15 +645,15 @@ ol.choices-ol .button span.choice-text {
   -o-transform: scale(1.5);
   transform: scale(1.5);
   float: left;
-  height: 1.88571rem; }
+  height: 1.8857142857rem; }
 .checkbox-input label {
   display: block;
   text-align: left;
   padding-left: 2rem;
-  min-height: 1.88571rem; }
+  min-height: 1.8857142857rem; }
 
 .multiple-choice-input {
-  margin-bottom: 1.88571rem; }
+  margin-bottom: 1.8857142857rem; }
   .multiple-choice-input select {
     display: block;
     font-size: 1.08rem; }
