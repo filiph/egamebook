@@ -44,10 +44,12 @@ Room caveWithAgruth =
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('underground_church', 'Flee through the Underground Church',
+  new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.'),
-  new Exit('war_forge', 'Flee through the war forges',
-      'You sneak your way into the War Forges and hide in the shadows of an alcove.')
+  new Exit('war_forge', 'Go to the war forges',
+      'You sneak your way into the War Forges and hide in the shadows of an alcove.'),
+  new Exit('slave_quarters_passage', 'Go to the slave quarters',
+      'You and Briana hug the wall and start towards the slave quarters.')
 ]);
 
 class SearchAgruth extends RoamingAction {
@@ -74,25 +76,19 @@ class SearchAgruth extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You search his pockets but turn up with nothing. Just then, you hear heavy footfalls approaching. Briana grabs your arm. “We’ve got to go.”  
-
-
-You realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)''');
+        'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)');
     giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs SearchAgruth';
   }
 
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
-    s.add(null);
-    s.add(
-        'You search but don’t find anything. Suddenly, heavy footfalls come your way. No choice--you have to go now.');
-    return '${a.name} fails to perform SearchAgruth';
+    throw new StateError('Success chance is 100%');
   }
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.9;
+    return 1.0;
   }
 
   @override
@@ -114,6 +110,58 @@ You realize that if Agruth had something valuable on him, he would have hidden i
   bool get isAggressive => false;
 }
 
+Room exitFromBloodrock = new Room('exit_from_bloodrock',
+    (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''There is light at the end of the tunnel, Briana points ahead. You approach it with suspicion, but soon there is no question about it. The fresh air, the howling of the wind, the brightness of the light. After three years, you step out of the mountain you thought would be your grave. 
+
+
+You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
+
+
+Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
+
+
+"We must stop this." 
+
+
+Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s a problem for kings, not peasants."
+
+
+"That may be so. But no kings have what I have."
+
+
+"Orcthorn? Bah, you think they\'ll let you have it? A farm boy? / Muscles and a bit of brains? Don\'t be a fool, you\'re still a farm boy."
+
+
+"I\'m not a farm boy. And I don\'t mean Orcthorn / my own smarts. No, I have a connection."
+
+
+"A connection."
+
+
+"With the dead prince. I dream his dreams. I think I have some of his power. You know  I survived 3 years even though  none other made it for more than a few months. I think he wants me for something."
+
+
+"And you plan is?"
+
+
+(IMG long view of the road ahead) 
+
+
+"Not giving it to him. Giving him the exact opposite of what he wants."
+
+
+With that, you sheathe (weapon) and start down the road towards the black fort in the distance.
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null,
+    <Exit>[new Exit('entrance_to_bloodrock', 'Go forth', 'You head down.')]);
 Room forgeChurchCrevice =
     new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -135,6 +183,8 @@ Room guardpostAboveChurch =
       '''It\'s a small, circular room. There are exits on four sides, all marked with where they lead to. 
 
 
+
+
 Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
 ''',
       wholeSentence: true);
@@ -154,6 +204,8 @@ Room justAfterAgruthFight =
     new Room('just_after_agruth_fight', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
+
+
 
 
 "We should name that sword," Briana says, motioning to Agruth\'s scimitar. "It\'s the only thing we have going for us."
@@ -189,6 +241,8 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''"You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
+
+
 
 
 Briana nods.''');
@@ -248,6 +302,8 @@ class NameAgruthSwordRedemption extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''"You\'re right. We\'ll call it Savior. It is our first step to freedom."
+
+
 
 
 Briana nods.''');
@@ -345,14 +401,13 @@ Room orcthornDoor =
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The small door is still closed. TODO!!!!
+      '''There\'s a small door on the side here.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('guardpost_above_church', 'Enter the small passage',
-      'You enter the passage and go a long, slightly rising way.'),
-  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-      'You back out from the door, sneak out of the church, and go where you left Agruth\'s body.'),
+  new Exit('cave_with_agruth', 'Go to the cave with Agruth\'s corpse',
+      'You back out from the door, and go back where you left Agruth\'s body.'),
+  new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),
   new Exit('orcthorn_room', 'Open the door', 'You open the door.')
 ]);
 Room orcthornRoom =
@@ -361,7 +416,11 @@ Room orcthornRoom =
       '''The room is dark and wet. As you enter, the noises end. 
 
 
+
+
 When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room\'s ceiling, but you slowly realize it\'s a stone statue. The other figure, though, is living.
+
+
 
 
 Its face is in constant motion, overwhelmed by tics and waves of hateful expressions. You realize it\'s a male orc, but an especially large one, with huge muscles and many scars. If he wasn\'t locked up here, he\'d surely make a captain.
@@ -374,19 +433,191 @@ Its face is in constant motion, overwhelmed by tics and waves of hateful express
       wholeSentence: true);
 }, generateMadGuardianFight, null, <Exit>[
   new Exit('orcthorn_door', 'Exit the room',
-      'You go through the door and into the main cave of the Underground Church.')
+      'You go through the door. Once back in the corridor of the slave quarters, you close it behind you.')
 ]);
-Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
+
+class TakeOrcthorn extends RoamingAction {
+  @override
+  final String command = 'Take the statue\'s sword';
+
+  @override
+  final String name = 'take_orcthorn';
+
+  static final TakeOrcthorn singleton = new TakeOrcthorn();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'orcthorn_room') {
+      return false;
+    }
+    if ((w.actionHasBeenPerformed("talk_to_briana_3") &&
+            !w.actionHasBeenPerformed(name) &&
+            !(w.currentSituation as RoomRoamingSituation).monstersAlive) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''TODO - this must be it. the sword is held at the statue\'s back, uncharacteristic for an orc.
+
+
+Briana: "I can\'t believe we did it. A farm boy and a freak."
+
+
+"A freak?"
+
+
+"A simple thing like this. You don\'t understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
+
+
+"Well, we still need to get out of here."''');
+    return '${a.name} successfully performs TakeOrcthorn';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room slaveQuarters =
+    new Room('slave_quarters', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''Smelter description TODO
-
-
-A small crevice appears to be sucking the hot air.
+      '''TODO
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''Smelter short description TODO
+      '''TODO
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[]);
+
+class SlaveQuartersContinue extends RoamingAction {
+  @override
+  final String command = 'Continue';
+
+  @override
+  final String name = 'slave_quarters_continue';
+
+  static final SlaveQuartersContinue singleton = new SlaveQuartersContinue();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'slave_quarters') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('TODO FIGHT');
+    w.popSituation();
+    return '${a.name} successfully performs SlaveQuartersContinue';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room slaveQuartersPassage =
+    new Room('slave_quarters_passage', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''It doesn\'t take long before you start hearing voices. Orcs shouting commands, mostly. 
+
+
+The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, two orcs turn a corner and start towards you.
+
+
+You step back and motion Briana to lean on the wall, hoping that the little door\'s embossed frame will provide enough cover before the two orcs turn again. 
+
+
+But at that time, something or someone smashes on the door from the inside. Then come angry growls and something akin to barking.
+
+
+The door stays shut but the patrol is now looking directly at you, closing in with their swords in hands.
+
+
+![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The small door is TODO open/close.
+''',
+      wholeSentence: true);
+}, generateEscapeTunnelFight, null, <Exit>[
+  new Exit('cave_with_agruth', 'Go to the working area', 'TODO'),
+  new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),
+  new Exit('orcthorn_door', 'Approach the little door', 'Something something.')
+]);
+Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
+
+
+Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single orc is distributing the forge-ready steel into troughs that lead to the war forges below. He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, he may well be blind. The other orcs are two far away and too busy to look around.
+
+
+A small crevice appears to be sucking the hot air. TODO describe  other exits
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The reds and whites of the molten steel reflect in the heaps of coal.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -403,10 +634,16 @@ Room startAdventure =
       '''The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
 
 
+
+
 Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
 
 
+
+
 Another crack and there is new blood on Briana\'s face. Agruth grins.
+
+
 
 
 Nobody else is in sight. It\'s just you, Agruth and Briana. That\'s Agruth\'s main mistake.
@@ -445,16 +682,26 @@ class TalkToBriana1 extends RoamingAction {
         '''"You were caught not too long ago, I think. What can you tell me about outside?"
 
 
+
+
 Briana: "How long have you been here?"
+
+
 
 
 "Three years."
 
 
+
+
 "Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
 
 
+
+
 "So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
+
+
 
 
 "Correct. The closest safe place is the fort."''');
@@ -514,14 +761,98 @@ class TalkToBriana2 extends RoamingAction {
     s.add('''"Where did they catch you?"
 
 
-Briana: "At the Screaming Gate. I was trying to sneak in."
+
+
+Briana: "At the Gate of Screams. I was trying to sneak in."
+
+
 
 
 "You what?"
 
 
-"I know. It seemed like a stupid idea even then. I wanted to get in, steal the Orcthorn, get out, help the fight."''');
+
+
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."''');
     return '${a.name} successfully performs TalkToBriana2';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToBriana3 extends RoamingAction {
+  @override
+  final String command = 'Talk to Briana';
+
+  @override
+  final String name = 'talk_to_briana_3';
+
+  static final TalkToBriana3 singleton = new TalkToBriana3();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.actionHasBeenPerformed("talk_to_briana_2") &&
+            !w.actionHasBeenPerformed(name) &&
+            isRoamingInBloodrock(w)) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('''"What\'s Orcthorn?"
+
+
+"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it."
+
+
+"But they did."
+
+
+"Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
+
+
+"The mad guardian."
+
+
+"The mad who?"
+
+
+"That\'s what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and that sword is still with him. Hidden in some kind of a statue."
+
+
+"Where is that cell?"
+
+
+"Somewhere in the slave quarters."''');
+    return '${a.name} successfully performs TalkToBriana3';
   }
 
   @override
@@ -575,10 +906,7 @@ You realize there is really only one way out, over one of the walkways. You\'ll 
 ]);
 Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
-
-
-![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+      '''
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -587,18 +915,16 @@ Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
 ''',
       wholeSentence: true);
 }, generateEscapeTunnelFight, null, <Exit>[
-  new Exit('entrance_to_bloodrock', 'Start running again',
-      'You finally arrive to the cave\'s entrance.')
+  new Exit(
+      'exit_from_bloodrock', 'Start running again', 'You start running again.')
 ]);
 Room undergroundChurch =
     new Room('underground_church', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The Underground Church is a dark, long, tall cave. In the distance, you see the altar. It\'s glowing. There are unnatural, angry noises coming from a little door to your left.
+      '''You enter something that at first looks like a large, twisting cave, but then opens into a high room with many columns. This must be what the orcs call the Underground Church. Your bare footsteps reverberate around the space, so you slow down to quiet them. There are no windows, of course, you are deep underground, but there is dim light coming from the far end of the place, where you expect the altar to be but can\'t quite see it. No torches here. Quiet. 
 
 
-
-
-After a bit of searching, you find a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.
+After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -611,23 +937,215 @@ After a bit of searching, you find a twisty passage going from the right hand si
       'You enter the passage and go a long, slightly rising way.'),
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak out of the church, back towards where you left Agruth\'s body.'),
-  new Exit('orcthorn_door', 'Approach the little door', 'Something something.')
+  new Exit('underground_church_altar', 'Go towards the altar',
+      'You sneak your way among the columns, trying to stay in the shadows.')
 ]);
+
+class ExamineUndergroundChurch extends RoamingAction {
+  @override
+  final String command = 'Look around';
+
+  @override
+  final String name = 'examine_underground_church';
+
+  static final ExamineUndergroundChurch singleton =
+      new ExamineUndergroundChurch();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'underground_church') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.
+
+
+Briana: "So this is it? This is where the Dead Prince resides?"
+
+
+"Don\'t be a fool. This is one of many of these temples inside the mountain."
+
+
+"So where is he? Everyone knows he\'s from Mt. Bloodrock."
+
+
+"The Dead Prince is _somewhere_ here, that\'s correct. But where exactly? The orcs say the whole mountain is his vessel. Whatever that means."
+
+
+The glow coming from the altar dims for a moment, then lights up again.''');
+    return '${a.name} successfully performs ExamineUndergroundChurch';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room undergroundChurchAltar =
+    new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''TODO - altar, eight black eyes, spear that some orc must have forgotten here, there is motion behind the altar (wait)
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''The altar glows with a dim red light that reflect in the eight black eyes above it.
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('underground_church', 'Sneak back',
+      'You keep low and, keeping an eye on the altar, head back to the Church\'s entrance.')
+]);
+
+class WaitForRitual extends RoamingAction {
+  @override
+  final String command = 'Wait';
+
+  @override
+  final String name = 'wait_for_ritual';
+
+  static final WaitForRitual singleton = new WaitForRitual();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'underground_church_altar') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('''TODO - build up with sounds
+
+
+A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. With the lich, two huge creatures enter as well. It\'s unclear what they are, but perhaps some large breed of ogres. Their swords are as long as you are tall, but they don\'t wield them. Between the ogres, a living orc walks. Despite being a large one, probably captain or even chieftain, he visibly shakes in horror, and he is dwarfed by the two creatures leading him.''');
+    return '${a.name} successfully performs WaitForRitual';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class TakeSpearInUndergroundChurch extends RoamingAction {
+  @override
+  final String command = 'Take spear';
+
+  @override
+  final String name = 'take_spear_in_underground_church';
+
+  static final TakeSpearInUndergroundChurch singleton =
+      new TakeSpearInUndergroundChurch();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'underground_church_altar') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add('TODO - a forgotten, orcish spear');
+    return '${a.name} successfully performs TakeSpearInUndergroundChurch';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These are the war forges.
-
-
-You and Briana take a moment to stare; likely no living human has seen this and lived to tell others. Orc teams tilt huge kettles of molten steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. Strange. 
-
-
-You and Briana duck behind some carts. As you head towards what seems to be an exit, you hear strange whispering. You crane your neck and spot a dark-robed figure—a priest?—chanting softly to himself by the forge. Despite his whispering, his words crawl through your mind like a spider:
-
-
-> "_Pwarfa n’ngen aradra._ The slow suffer. _Madraga n’ngen nach santutra._ Only the hard-working prosper. _Nfarfi Arach m’marrash._ The Dead Prince sees all."
-
-
-You can guess which corridor leads to the smelter. Hot air is flowing into the forge through it, stirring the smoke. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
+      '''
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1523,16 +2041,20 @@ Together you jog all the way to the every growing silhouette of Fort Ironcast.
 List<Room> allRooms = <Room>[
   caveWithAgruthPre,
   caveWithAgruth,
+  exitFromBloodrock,
   forgeChurchCrevice,
   guardpostAboveChurch,
   justAfterAgruthFight,
   orcthornDoor,
   orcthornRoom,
+  slaveQuarters,
+  slaveQuartersPassage,
   smelter,
   startAdventure,
   theShafts,
   tunnel,
   undergroundChurch,
+  undergroundChurchAltar,
   warForge,
   entranceToBloodrock,
   mountainPass,
@@ -1548,8 +2070,14 @@ List<RoamingAction> allActions = <RoamingAction>[
   NameAgruthSwordOpportunity.singleton,
   NameAgruthSwordRedemption.singleton,
   NameAgruthSwordNothing.singleton,
+  TakeOrcthorn.singleton,
+  SlaveQuartersContinue.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,
+  TalkToBriana3.singleton,
+  ExamineUndergroundChurch.singleton,
+  WaitForRitual.singleton,
+  TakeSpearInUndergroundChurch.singleton,
   SneakOntoCart.singleton,
   TakeOutGateGuards.singleton,
   ThreatenWingedSerpent.singleton,
