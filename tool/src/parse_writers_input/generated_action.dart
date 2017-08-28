@@ -169,6 +169,8 @@ class GeneratedAction extends GeneratedGameObject {
       applySuccessBuilder
           .addStatement(stateErrorThrow('Success chance is 0%.'));
     } else {
+      assert(_map.containsKey('COMPLETE_SUCCESS_DESCRIPTION'),
+          "$name is missing COMPLETE_SUCCESS_DESCRIPTION: $_map");
       var successDescription =
           escapeDollarSign(_map['COMPLETE_SUCCESS_DESCRIPTION']);
       applySuccessBuilder.addStatement(reference(storylineParameter.name)

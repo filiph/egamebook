@@ -48,8 +48,7 @@ Future<Null> main(List<String> args) async {
 
   lib.addDirectives(allNeededTypes.map((b) => b.toImportBuilder()));
   lib.addDirective(new ImportBuilder("package:built_value/built_value.dart"));
-  lib.addDirective(
-      new ImportBuilder("package:edgehead/writers_helpers.dart"));
+  lib.addDirective(new ImportBuilder("package:edgehead/writers_helpers.dart"));
 
   lib.addDirective(new PartBuilder("writers_input.g.dart"));
 
@@ -110,7 +109,8 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
   for (var line in contents) {
     if (commentPattern.hasMatch(line)) continue;
     var keyMatch = keyPattern.firstMatch(line);
-    if (keyMatch == null) {
+    if (keyMatch == null ||
+        keyMatch.group(1) == "TODO" /* for lines starting with "TODO:" */) {
       if (currentKey != null) {
         currentValue.writeln(line);
       }
