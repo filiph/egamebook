@@ -1,0 +1,54 @@
+﻿ROOM: $exit_from_bloodrock
+
+
+
+
+DESCRIPTION:
+There is light at the end of the tunnel, Briana points ahead. You approach it with suspicion, but soon there is no question about it. The fresh air, the howling of the wind, the brightness of the light. After three years, you step out of the mountain you thought would be your grave. 
+
+
+You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
+
+
+Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
+
+
+"We must stop this." 
+
+
+Briana: "This is much larger than us, Aren. If the dead prince is back, that's a problem for kings, not peasants."
+
+
+"That may be so. But no kings have what I have."
+
+
+"Orcthorn? Bah, you think they'll let you have it? A farm boy? / Muscles and a bit of brains? Don't be a fool, you're still a farm boy."
+
+
+"I'm not a farm boy. And I don't mean Orcthorn / my own smarts. No, I have a connection."
+
+
+"A connection."
+
+
+"With the dead prince. I dream his dreams. I think I have some of his power. You know  I survived 3 years even though  none other made it for more than a few months. I think he wants me for something."
+
+
+"And you plan is?"
+
+
+(IMG long view of the road ahead) 
+
+
+"Not giving it to him. Giving him the exact opposite of what he wants."
+
+
+With that, you sheathe (weapon) and start down the road towards the black fort in the distance. 
+
+
+
+
+
+
+EXITS:
+$later_link_to_entrance_to_bloodrock (Go forth): You head down.

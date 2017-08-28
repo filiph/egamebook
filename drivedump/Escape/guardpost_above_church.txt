@@ -1,0 +1,36 @@
+﻿ROOM: $guardpost_above_church
+
+
+
+
+DESCRIPTION:
+It's a small, circular room. There are exits on four sides, all marked with where they lead to. 
+
+
+
+
+Leaning on the wall next to one of the exits is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.
+
+
+
+
+
+
+
+
+SHORT_DESCRIPTION: 
+TODO: either sleeping goblin or not
+
+
+
+
+EXITS:
+$underground_church (Descend towards the Underground Church): You take the passage leading down. 
+$tunnel (Go to the upper gate): You take the passage that leads out of here.
+$smelter (Go to the smelter): Something something.
+
+
+
+
+// TODO: action with RESCUE for taking shield
+// TODO: guard recognizes his spear during fight (if the player has the spear)

@@ -1,0 +1,36 @@
+﻿ROOM: $smelter
+
+
+
+
+DESCRIPTION: 
+A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
+
+
+Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single orc is distributing the forge-ready steel into troughs that lead to the war forges below. He's no more than a spear's throw away from you, but doesn't notice. In fact, he may well be blind. The other orcs are two far away and too busy to look around.
+
+
+A small crevice appears to be sucking the hot air. TODO describe  other exits
+
+
+
+
+SHORT_DESCRIPTION: 
+The reds and whites of the molten steel reflect in the heaps of coal.
+
+
+
+
+EXITS:
+$tunnel (Enter the crevice): You enter the crevice. The air flows around you, pushing into your back. After a while, the crevice joins with a larger tunnel. The draft isn't as strong here, but it's still noticable, and you follow it.
+
+
+$war_forge (Go to the war forges): A short passage leads to the top of the war forges room. 
+
+
+$guardpost_above_church (Go through the smooth passage): You enter the passage and it leads you slightly upwards to a junction.
+
+
+
+
+// TODO: action for throwing spear at the orc that holds the molten steel gate --- THEN: That was some throw! That thing downstairs.. I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.

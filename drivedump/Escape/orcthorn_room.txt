@@ -1,0 +1,80 @@
+﻿ROOM: $orcthorn_room
+
+
+
+
+DESCRIPTION:
+The room is dark and wet. As you enter, the noises end. 
+
+
+
+
+When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room's ceiling, but you slowly realize it's a stone statue. The other figure, though, is living.
+
+
+
+
+Its face is in constant motion, overwhelmed by tics and waves of hateful expressions. You realize it's a male orc, but an especially large one, with huge muscles and many scars. If he wasn't locked up here, he'd surely make a captain.
+
+
+
+
+SHORT_DESCRIPTION: 
+The room is quiet. The mad guardian's huge body lies on the floor beneath the statue.
+
+
+
+
+FIGHT_SITUATION:
+generateMadGuardianFight
+
+
+
+
+EXITS:
+$orcthorn_door (Exit the room): You go through the door. Once back in the corridor of the slave quarters, you close it behind you. 
+
+
+
+
+// ----------
+
+
+
+
+ACTION: $take_orcthorn
+COMMAND: Take the statue's sword
+
+
+FOR_LOCATION: $orcthorn_room
+
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_briana_3")
+&&
+!w.actionHasBeenPerformed(name)
+&&
+!(w.currentSituation as RoomRoamingSituation).monstersAlive
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO - this must be it. the sword is held at the statue's back, uncharacteristic for an orc.
+
+
+Briana: "I can't believe we did it. A farm boy and a freak."
+
+
+"A freak?"
+
+
+"A simple thing like this. You don't understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
+
+
+"Well, we still need to get out of here."
+
+
+SUCCESS_EFFECT:
+// TODO: give Orcthorn

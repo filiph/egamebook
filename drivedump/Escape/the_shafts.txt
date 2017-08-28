@@ -1,0 +1,19 @@
+﻿ROOM: $the_shafts
+
+
+DESCRIPTION:
+This must be the place that the orcs call the Shafts. It's a tall, seemingly endless room, with many walkways across.
+
+
+// Must be intriguing and revealing. 
+// also, sound / smell
+
+
+// add 'followers noises' according to flag
+
+
+You realize there is really only one way out, over one of the walkways. You'll have to run, there is no hiding anymore.
+
+
+EXITS:
+$tunnel (Run): You run over the passage. Orcs start to scream and yell commands. As you near the entrance, the air gets better.

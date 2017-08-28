@@ -1,0 +1,131 @@
+﻿ROOM: $just_after_agruth_fight
+
+
+
+
+DESCRIPTION:
+You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
+
+
+
+
+"We should name that sword," Briana says, motioning to Agruth's scimitar. "It's the only thing we have going for us."
+
+
+
+
+
+
+
+
+
+
+
+
+// -------------
+
+
+
+
+ACTION: $name_agruth_sword_opportunity
+COMMAND: "Luck Bringer"
+
+
+
+
+FOR_LOCATION: $just_after_agruth_fight
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell."
+
+
+
+
+Briana nods.
+
+
+
+
+SUCCESS_EFFECT:
+nameAgruthSword(w, "Luck Bringer");
+movePlayer(w, s, "cave_with_agruth_pre");
+
+
+
+
+// -------------
+
+
+
+
+ACTION: $name_agruth_sword_redemption
+COMMAND: "Savior"
+
+
+
+
+FOR_LOCATION: $just_after_agruth_fight
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"You're right. We'll call it Savior. It is our first step to freedom."
+
+
+
+
+Briana nods.
+
+
+
+
+SUCCESS_EFFECT:
+nameAgruthSword(w, "Savior");
+movePlayer(w, s, "cave_with_agruth_pre");
+
+
+
+
+// -------------
+
+
+
+
+ACTION: $name_agruth_sword_nothing
+COMMAND: No name
+
+
+
+
+FOR_LOCATION: $just_after_agruth_fight
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"That's foolish. It's just a sword, after all."
+
+
+
+
+SUCCESS_EFFECT:
+movePlayer(w, s, "cave_with_agruth_pre");

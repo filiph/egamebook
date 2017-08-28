@@ -1,0 +1,46 @@
+﻿ACTION: $guardpost_above_church_take_shield
+COMMAND: Cautiously take the shield
+
+
+HINT: TODO
+
+
+PREREQUISITES: 
+w.actionNeverUsed(name)
+
+
+FOR_LOCATION: $guardpost_above_church
+
+
+COMPLETE_SUCCESS_PROBABILITY: 80%
+
+
+COMPLETE_SUCCESS_DESCRIPTION: 
+TODO - take without waking the guard
+
+
+
+
+FAILURE_BEGINNING_DESCRIPTION:
+TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing
+
+
+RESCUE_COMMAND: Stay perfectly still
+RESCUE_HINT: If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.
+RESCUE_EFFECT: 
+w.updateActorById(a.id, (b) => b..stamina -= 1);
+RESCUE_DESCRIPTION:
+TODO - staying still, drops of sweat dripping on the guard, but ultimately the guard goes back to sleep and you take the shield
+
+
+CONTINUATION_OF_FAILURE_COMMAND: Snag the shield
+CONTINUATION_OF_FAILURE_HINT: TODO
+CONTINUATION_OF_FAILURE_EFFECT: 
+// TODO: fight situation + give shield
+
+
+CONTINUATION_OF_FAILURE_DESCRIPTION: TODO
+
+
+SUCCESS_EFFECT: 
+// TODO: give shield

@@ -1,0 +1,41 @@
+﻿ROOM: $slave_quarters_passage
+
+
+
+
+DESCRIPTION:
+It doesn't take long before you start hearing voices. Orcs shouting commands, mostly. 
+
+
+The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, two orcs turn a corner and start towards you.
+
+
+You step back and motion Briana to lean on the wall, hoping that the little door's embossed frame will provide enough cover before the two orcs turn again. 
+
+
+But at that time, something or someone smashes on the door from the inside. Then come angry growls and something akin to barking.
+
+
+The door stays shut but the patrol is now looking directly at you, closing in with their swords in hands.
+
+
+![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+
+
+
+
+SHORT_DESCRIPTION:
+The small door is TODO open/close.
+
+
+FIGHT_SITUATION:
+generateEscapeTunnelFight
+
+
+EXITS:
+$cave_with_agruth (Go to the working area): TODO
+ 
+$slave_quarters (Go further towards the Gate of Screams): TODO
+
+
+$orcthorn_door (Approach the little door): Something something.

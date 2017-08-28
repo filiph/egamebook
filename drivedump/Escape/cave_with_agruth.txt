@@ -1,0 +1,82 @@
+﻿ROOM: $cave_with_agruth_pre
+
+
+
+
+DESCRIPTION:
+// Nothing. This is here so that $cave_with_agruth registers as visited.
+
+
+
+
+EXITS:
+$cave_with_agruth (): You look around.
+
+
+
+
+// ------------------
+
+
+
+
+ROOM: $cave_with_agruth
+
+
+
+
+DESCRIPTION:
+The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+
+
+
+
+SHORT_DESCRIPTION:
+The corpse lies still, getting cold.
+
+
+
+
+EXITS:
+$underground_church (Go to the Unholy Church): You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.
+ 
+$war_forge (Go to the war forges): You sneak your way into the War Forges and hide in the shadows of an alcove.  
+
+
+$slave_quarters_passage (Go to the slave quarters): You and Briana hug the wall and start towards the slave quarters.
+
+
+
+
+// -------------
+
+
+
+
+ACTION: $search_agruth
+COMMAND: Search Agruth
+
+
+HINT: You have taken his weapon but there might be other useful items in his pocket.
+
+
+FOR_LOCATION: $cave_with_agruth
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)
+
+
+
+
+SUCCESS_EFFECT:
+giveStaminaToPlayer(w, 1);

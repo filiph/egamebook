@@ -1,0 +1,42 @@
+﻿ROOM: $tunnel
+
+
+
+
+DESCRIPTION:
+TODO - start chase
+
+
+Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
+
+
+
+
+![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+
+
+
+
+FIGHT_SITUATION:
+generateEscapeTunnelFight
+// groundMaterial: "{rock|cavern} floor"
+// TODO: make sure to re-use these events
+// new FightSituation.initialized([filip, briana], [orc, goblin])
+//     .rebuild((b) => b
+//   ..events[2] = (w, s) {
+//     s.addParagraph();
+//     s.add("You hear a horrible growling sound from behind.");
+//     s.add("The worm must be near.");
+//     s.addParagraph();
+//   }
+//   ..events[6] = (w, s) {
+//     s.addParagraph();
+//     s.add("The earth shatters and there's that sound again.");
+//     s.addParagraph();
+//   });
+
+
+
+
+EXITS:
+$exit_from_bloodrock (Start running again): You start running again.

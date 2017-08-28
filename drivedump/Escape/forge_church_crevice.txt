@@ -1,0 +1,19 @@
+﻿ROOM: $forge_church_crevice
+
+
+DESCRIPTION:
+The crevice is small.
+
+
+// add muffled 'followers noises' according to flag
+
+
+// Spider.
+
+
+MONSTERS:
+// TODO: fight monster - giant spider
+
+
+EXITS:
+$tunnel (Continue along the crevice): You continue until the crevice open into a tunnel. You can smell fresh air.

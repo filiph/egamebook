@@ -1,0 +1,149 @@
+﻿ACTION: $talk_to_briana_1
+COMMAND: Talk to Briana
+
+
+
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+isRoamingInBloodrock(w)
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"You were caught not too long ago, I think. What can you tell me about outside?"
+
+
+
+
+Briana: "How long have you been here?"
+
+
+
+
+"Three years."
+
+
+
+
+"Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
+
+
+
+
+"So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
+
+
+
+
+"Correct. The closest safe place is the fort."
+
+
+
+
+// -----
+
+
+
+
+ACTION: $talk_to_briana_2
+COMMAND: Talk to Briana
+
+
+
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_briana_1")
+&&
+w.actionNeverUsed(name)
+&&
+isRoamingInBloodrock(w)
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"Where did they catch you?"
+
+
+
+
+Briana: "At the Gate of Screams. I was trying to sneak in."
+
+
+
+
+"You what?"
+
+
+
+
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."
+
+
+
+
+// ----
+
+
+
+
+ACTION: $talk_to_briana_3
+COMMAND: Talk to Briana
+
+
+
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_briana_2")
+&&
+w.actionNeverUsed(name)
+&&
+isRoamingInBloodrock(w)
+
+
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"What's Orcthorn?"
+
+
+"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it."
+
+
+"But they did."
+
+
+"Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
+
+
+"The mad guardian."
+
+
+"The mad who?"
+
+
+"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and that sword is still with him. Hidden in some kind of a statue."
+
+
+"Where is that cell?"
+
+
+"Somewhere in the slave quarters."

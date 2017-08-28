@@ -1,0 +1,73 @@
+﻿ROOM: $underground_church_altar
+
+
+
+
+DESCRIPTION:
+TODO - altar, eight black eyes, spear that some orc must have forgotten here, there is motion behind the altar (wait)
+
+
+SHORT_DESCRIPTION: 
+The altar glows with a dim red light that reflect in the eight black eyes above it.
+
+
+
+
+EXITS:
+$underground_church (Sneak back): You keep low and, keeping an eye on the altar, head back to the Church's entrance.
+
+
+
+
+
+
+// ---------------
+
+
+ACTION: $wait_for_ritual
+COMMAND: Wait
+
+
+FOR_LOCATION: $underground_church_altar
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO - build up with sounds
+
+
+A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. With the lich, two huge creatures enter as well. It's unclear what they are, but perhaps some large breed of ogres. Their swords are as long as you are tall, but they don't wield them. Between the ogres, a living orc walks. Despite being a large one, probably captain or even chieftain, he visibly shakes in horror, and he is dwarfed by the two creatures leading him. 
+
+
+TODO: the lich will take him on the altar. Aren says 'maggots', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the skeletons pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Once the orc is dead, rychlý process. Skeletons drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I'll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don't know"
+
+
+// ---------------
+
+
+ACTION: $take_spear_in_underground_church
+COMMAND: Take spear
+
+
+FOR_LOCATION: $underground_church_altar
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO - a forgotten, orcish spear
+
+
+SUCCESS_EFFECT:
+// TODO: give spear

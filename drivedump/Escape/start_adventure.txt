@@ -1,0 +1,34 @@
+﻿ROOM: $start_adventure
+
+
+
+
+DESCRIPTION:
+The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. 
+
+
+
+
+Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
+
+
+
+
+Another crack and there is new blood on Briana's face. Agruth grins.
+
+
+
+
+Nobody else is in sight. It's just you, Agruth and Briana. That's Agruth's main mistake. 
+
+
+
+
+FIGHT_SITUATION:
+generateAgruthFight
+
+
+
+
+EXITS:
+$just_after_agruth_fight (): You look around. Fortunately, nobody is in sight.

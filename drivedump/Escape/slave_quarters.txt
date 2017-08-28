@@ -1,0 +1,40 @@
+﻿ROOM: $slave_quarters
+
+
+
+
+DESCRIPTION:
+TODO
+
+
+
+
+SHORT_DESCRIPTION:
+TODO
+
+
+EXIT:
+$slave_quarters_death (Go on): Exhausted, you stumble for a few seconds before seeing another orc patrol.
+
+
+
+
+// ---
+
+
+ACTION: $slave_quarters_continue
+COMMAND: Continue
+
+
+FOR_LOCATION: $slave_quarters
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO FIGHT
+
+
+SUCCESS_EFFECT:
+w.popSituation();

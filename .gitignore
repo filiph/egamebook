@@ -6,4 +6,3 @@
 build/
 *.scssc
 .cli_access_credentials.private
-drivedump
