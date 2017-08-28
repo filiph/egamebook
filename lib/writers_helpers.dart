@@ -73,7 +73,8 @@ FightSituation generateEscapeTunnelFight(WorldState w,
 
 FightSituation generateMadGuardianFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var madGuardian = _generateMadGuardian(w);
+  var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
+  var madGuardian = _generateMadGuardian(w, knowsAboutGuardian);
   var madGuardianId = madGuardian.id;
   w.actors.add(madGuardian);
   return new FightSituation.initialized(
@@ -134,10 +135,13 @@ void giveStaminaToPlayer(WorldState w, int amount) {
 /// of `just_after_agruth_fight`, which is a helper room for naming Agruth's
 /// sword).
 bool isRoamingInBloodrock(WorldState w) {
+  if ((w.currentSituation as RoomRoamingSituation).monstersAlive) return false;
   const bloodrockRoamingRooms = const [
     "cave_with_agruth",
     "guardpost_above_church",
     "orcthorn_door",
+    "orcthorn_room",
+    "slave_quarters_passage",
     "smelter",
     "underground_church",
     "war_forge",
@@ -178,8 +182,9 @@ Actor _generateAgruth(WorldState w) {
       initiative: 100);
 }
 
-Actor _generateMadGuardian(WorldState w) {
-  return new Actor.initialized(6667, "mad guardian",
+Actor _generateMadGuardian(WorldState w, bool playerKnowsAboutGuardian) {
+  return new Actor.initialized(
+      6667, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
       currentWeapon: new Sword(name: "rusty sword"),
       hitpoints: 3,
