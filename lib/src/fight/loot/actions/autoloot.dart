@@ -96,6 +96,7 @@ class AutoLoot extends Action {
     }
 
     _distributeWeapons(takenItems, a, situation, world, s);
+    _distributeShields(takenItems, a, situation, world, s);
 
     if (takenItems.isNotEmpty) {
       s.addEnumeration("<subject> <also> take<s>", takenItems, null,
@@ -134,6 +135,29 @@ class AutoLoot extends Action {
       takenItems.remove(weapon);
       world.updateActorById(actor.id, (b) => b..items.remove(weapon));
       actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
+          object: friend);
+    }
+  }
+
+  /// Give shields to unshielded teammates.
+  void _distributeShields(List<Item> takenItems, Actor actor,
+      LootSituation situation, WorldState world, Storyline s) {
+    var shields =
+        new List<Shield>.from(takenItems.where((item) => item is Shield));
+    shields.addAll(
+        actor.items.where((item) => item is Shield) as Iterable<Shield>);
+    if (shields.isEmpty) return;
+    shields.sort((a, b) => a.value.compareTo(b.value));
+    var unshielded = situation.playerTeamIds
+        .map((id) => world.getActorById(id))
+        .where((a) => a.isAliveAndActive && a.currentShield == null);
+    for (var friend in unshielded) {
+      if (shields.isEmpty) break;
+      var shield = shields.removeLast();
+      world.updateActorById(friend.id, (b) => b..currentShield = shield);
+      takenItems.remove(shield);
+      world.updateActorById(actor.id, (b) => b..items.remove(shield));
+      actor.report(s, "<subject> give<s> the ${shield.name} to <object>",
           object: friend);
     }
   }
