@@ -45,7 +45,10 @@ EnemyTargetAction
             (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
                 predeterminedResult: Predetermination.failureGuaranteed),
             enemy,
-            successChanceGetter: (_, __, ___) => 0.7,
+            successChanceGetter: (a, w, enemy) {
+              final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
+              return 0.7 - shieldPenalty;
+            },
             applyStartOfFailure: startSlashReportStart,
             defenseSituationWhenFailed:
                 (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,

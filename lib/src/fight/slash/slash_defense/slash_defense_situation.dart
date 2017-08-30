@@ -9,6 +9,7 @@ import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_s
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/shield_block_slash.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
 part 'slash_defense_situation.g.dart';
@@ -31,10 +32,11 @@ abstract class SlashDefenseSituation extends DefenseSituation
 
   @override
   List<EnemyTargetActionBuilder> get actionGenerators => [
-        DodgeSlash.builder,
-        ParrySlash.builder,
         DefensiveParrySlash.builder,
-        JumpBackFromSlash.builder
+        DodgeSlash.builder,
+        JumpBackFromSlash.builder,
+        ParrySlash.builder,
+        ShieldBlockSlash.builder,
       ];
 
   @override

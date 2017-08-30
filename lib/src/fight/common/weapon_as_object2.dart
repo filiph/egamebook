@@ -6,3 +6,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 String weaponAsObject2(Actor a) => a.currentWeapon.nameIsProperNoun
     ? a.currentWeapon.name
     : "<subject's> ${a.currentWeapon.name}";
+
+/// Same as [weaponAsObject2] but for [Actor.currentShield].
+String shieldAsObject2(Actor a) => a.currentShield.nameIsProperNoun
+    ? a.currentShield.name
+    : "<subject's> ${a.currentShield.name}";

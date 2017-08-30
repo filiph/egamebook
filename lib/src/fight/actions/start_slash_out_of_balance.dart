@@ -40,10 +40,15 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
         (a, w, enemy) => new SlashSituation.initialized(a, enemy),
         (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
         enemy,
-        successChanceGetter: (_, __, ___) => 0.7,
+        successChanceGetter: (_, __, ___) =>
+            0.7 /* 30% chance of complete miss */,
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 
+/// This is different from simple StartSlashPlayer in that a failure is
+/// a complete miss (no enemy defense needed) while success is a complete
+/// success (enemy defense is guaranteed to fail). This is due to technical
+/// limitation of [StartDefensibleAction] more than anything else.
 EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
     new StartDefensibleAction(
         "StartSlashOutOfBalancePlayer",
@@ -59,7 +64,15 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (_, __, ___) => 0.7,
+        successChanceGetter: (a, w, enemy) {
+          // This is intentional. Since the action can only lead to either
+          // complete miss (attacker's failure) or guaranteed failure
+          // of enemy's defense (attacker's success), we do need to count
+          // defender's shield here. Let's say the attacking player tries
+          // not to hit the shield and therefore misses completely.
+          final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
+          return 0.5 - shieldPenalty;
+        },
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 

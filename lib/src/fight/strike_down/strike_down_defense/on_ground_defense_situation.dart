@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/defense_situation_interface.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/on_ground_parry.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/on_ground_shield_block.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
@@ -31,8 +32,11 @@ abstract class OnGroundDefenseSituation extends DefenseSituation
   OnGroundDefenseSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      [OnGroundParry.builder, RollOutOfWay.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators => [
+        OnGroundParry.builder,
+        OnGroundShieldBlock.builder,
+        RollOutOfWay.builder
+      ];
 
   @override
   int get attacker;

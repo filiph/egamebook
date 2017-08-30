@@ -48,8 +48,9 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> hit?",
         successChanceGetter: (a, w, enemy) {
-          // TODO: add penalty for out of balance
-          return 0.7;
+          final outOfBalancePenalty = a.isOffBalance ? 0.2 : 0.0;
+          final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
+          return 0.7 - outOfBalancePenalty - shieldPenalty;
         },
         applyStartOfFailure: startStrikeDownReportStart,
         defenseSituationWhenFailed: (a, w, enemy) =>

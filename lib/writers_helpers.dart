@@ -86,7 +86,7 @@ FightSituation generateMadGuardianFight(WorldState w,
         1: (w, s) {
           var guardian = w.getActorById(madGuardianId);
           guardian.report(
-              s, "\"Good good good,\" <subject> whispers<s>, eyeing <object>.",
+              s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
               object: getPlayer(w), wholeSentence: true);
         },
         9: (w, s) {

@@ -1,6 +1,6 @@
 import 'package:edgehead/fractal_stories/item.dart';
 
-abstract class Shield extends Item {
+class Shield extends Item {
   @override
   final String name;
 
@@ -8,4 +8,7 @@ abstract class Shield extends Item {
 
   @override
   List<String> get categories => const ["shield"];
+
+  @override
+  int get value => 1;
 }

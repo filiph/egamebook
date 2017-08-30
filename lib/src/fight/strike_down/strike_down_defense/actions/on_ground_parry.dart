@@ -22,9 +22,7 @@ class OnGroundParry extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  final String helpMessage = "You can deal serious damage when countering "
-      "because your opponent is often caught off guard. On the other hand, "
-      "counters require fast reaction and could throw you out of balance.";
+  final String helpMessage = "TODO" /* TODO , maybe allow counter */;
 
   OnGroundParry(Actor enemy) : super(enemy);
 
