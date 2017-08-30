@@ -5,15 +5,16 @@ import 'team.dart';
 
 String typeToDescription(ItemType type) {
   switch (type) {
+    case ItemType.fist:
+      return "fist";
+    case ItemType.shield:
+      return "shield";
     case ItemType.spear:
       return "spear";
     case ItemType.sword:
       return "sword";
-    case ItemType.fist:
-      return "fist";
-    default:
-      throw new ArgumentError(type);
   }
+  throw new ArgumentError(type);
 }
 
 abstract class Item extends Object with EntityBehavior implements Entity {
@@ -47,4 +48,4 @@ abstract class Item extends Object with EntityBehavior implements Entity {
   int get value;
 }
 
-enum ItemType { spear, sword, fist }
+enum ItemType { fist, shield, spear, sword }

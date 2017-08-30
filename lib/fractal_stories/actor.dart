@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
+import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
@@ -42,6 +43,7 @@ abstract class Actor extends Object
           bool nameIsProperNoun: false,
           Pronoun pronoun: Pronoun.IT,
           Weapon currentWeapon,
+          Shield currentShield,
           int hitpoints: 1,
           int maxHitpoints: 1,
           int stamina: 0,
@@ -57,6 +59,7 @@ abstract class Actor extends Object
         ..nameIsProperNoun = nameIsProperNoun
         ..pronoun = pronoun
         ..currentWeapon = currentWeapon ?? defaultFist
+        ..currentShield = currentShield
         ..categories = []
         ..pose = Pose.standing
         ..hitpoints = hitpoints
@@ -89,6 +92,11 @@ abstract class Actor extends Object
 
   @nullable
   String get currentRoomName;
+
+  /// The shield that the actor is currently wielding. This can be `null`
+  /// of there is no shield.
+  @nullable
+  Shield get currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
@@ -157,9 +165,6 @@ abstract class Actor extends Object
 
   @override
   Pronoun get pronoun;
-
-  @nullable
-  Item get shield;
 
   int get stamina;
 

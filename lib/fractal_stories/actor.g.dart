@@ -15,6 +15,8 @@ class _$Actor extends Actor {
   @override
   final String currentRoomName;
   @override
+  final Shield currentShield;
+  @override
   final Weapon currentWeapon;
   @override
   final int followingActorId;
@@ -43,8 +45,6 @@ class _$Actor extends Actor {
   @override
   final Pronoun pronoun;
   @override
-  final Item shield;
-  @override
   final int stamina;
   @override
   final Team team;
@@ -56,6 +56,7 @@ class _$Actor extends Actor {
       {this.categories,
       this.combineFunction,
       this.currentRoomName,
+      this.currentShield,
       this.currentWeapon,
       this.followingActorId,
       this.gold,
@@ -70,7 +71,6 @@ class _$Actor extends Actor {
       this.nameIsProperNoun,
       this.pose,
       this.pronoun,
-      this.shield,
       this.stamina,
       this.team})
       : super._() {
@@ -107,6 +107,7 @@ class _$Actor extends Actor {
     return categories == other.categories &&
         combineFunction == other.combineFunction &&
         currentRoomName == other.currentRoomName &&
+        currentShield == other.currentShield &&
         currentWeapon == other.currentWeapon &&
         followingActorId == other.followingActorId &&
         gold == other.gold &&
@@ -121,7 +122,6 @@ class _$Actor extends Actor {
         nameIsProperNoun == other.nameIsProperNoun &&
         pose == other.pose &&
         pronoun == other.pronoun &&
-        shield == other.shield &&
         stamina == other.stamina &&
         team == other.team;
   }
@@ -146,24 +146,33 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc(0, categories.hashCode),
-                                                                                combineFunction.hashCode),
-                                                                            currentRoomName.hashCode),
-                                                                        currentWeapon.hashCode),
-                                                                    followingActorId.hashCode),
-                                                                gold.hashCode),
-                                                            hitpoints.hashCode),
-                                                        id.hashCode),
-                                                    initiative.hashCode),
-                                                isActive.hashCode),
-                                            isPlayer.hashCode),
-                                        items.hashCode),
-                                    maxHitpoints.hashCode),
-                                name.hashCode),
-                            nameIsProperNoun.hashCode),
-                        pose.hashCode),
-                    pronoun.hashCode),
-                shield.hashCode),
+                                                                            $jc(
+                                                                                $jc(
+                                                                                    0,
+                                                                                    categories
+                                                                                        .hashCode),
+                                                                                combineFunction
+                                                                                    .hashCode),
+                                                                            currentRoomName
+                                                                                .hashCode),
+                                                                        currentShield
+                                                                            .hashCode),
+                                                                    currentWeapon
+                                                                        .hashCode),
+                                                                followingActorId
+                                                                    .hashCode),
+                                                            gold.hashCode),
+                                                        hitpoints.hashCode),
+                                                    id.hashCode),
+                                                initiative.hashCode),
+                                            isActive.hashCode),
+                                        isPlayer.hashCode),
+                                    items.hashCode),
+                                maxHitpoints.hashCode),
+                            name.hashCode),
+                        nameIsProperNoun.hashCode),
+                    pose.hashCode),
+                pronoun.hashCode),
             stamina.hashCode),
         team.hashCode));
   }
@@ -174,6 +183,7 @@ class _$Actor extends Actor {
         'categories=${categories.toString()},\n'
         'combineFunction=${combineFunction.toString()},\n'
         'currentRoomName=${currentRoomName.toString()},\n'
+        'currentShield=${currentShield.toString()},\n'
         'currentWeapon=${currentWeapon.toString()},\n'
         'followingActorId=${followingActorId.toString()},\n'
         'gold=${gold.toString()},\n'
@@ -188,7 +198,6 @@ class _$Actor extends Actor {
         'nameIsProperNoun=${nameIsProperNoun.toString()},\n'
         'pose=${pose.toString()},\n'
         'pronoun=${pronoun.toString()},\n'
-        'shield=${shield.toString()},\n'
         'stamina=${stamina.toString()},\n'
         'team=${team.toString()},\n'
         '}';
@@ -211,6 +220,11 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   String get currentRoomName => _$this._currentRoomName;
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
+
+  Shield _currentShield;
+  Shield get currentShield => _$this._currentShield;
+  set currentShield(Shield currentShield) =>
+      _$this._currentShield = currentShield;
 
   Weapon _currentWeapon;
   Weapon get currentWeapon => _$this._currentWeapon;
@@ -271,10 +285,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   Pronoun get pronoun => _$this._pronoun;
   set pronoun(Pronoun pronoun) => _$this._pronoun = pronoun;
 
-  Item _shield;
-  Item get shield => _$this._shield;
-  set shield(Item shield) => _$this._shield = shield;
-
   int _stamina;
   int get stamina => _$this._stamina;
   set stamina(int stamina) => _$this._stamina = stamina;
@@ -290,6 +300,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _categories = _$v.categories;
       _combineFunction = _$v.combineFunction;
       _currentRoomName = _$v.currentRoomName;
+      _currentShield = _$v.currentShield;
       _currentWeapon = _$v.currentWeapon;
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
@@ -304,7 +315,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _nameIsProperNoun = _$v.nameIsProperNoun;
       _pose = _$v.pose;
       _pronoun = _$v.pronoun;
-      _shield = _$v.shield;
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
       _$v = null;
@@ -330,6 +340,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             categories: categories,
             combineFunction: combineFunction,
             currentRoomName: currentRoomName,
+            currentShield: currentShield,
             currentWeapon: currentWeapon,
             followingActorId: followingActorId,
             gold: gold,
@@ -344,7 +355,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             nameIsProperNoun: nameIsProperNoun,
             pose: pose,
             pronoun: pronoun,
-            shield: shield,
             stamina: stamina,
             team: team?.build());
     replace(result);
