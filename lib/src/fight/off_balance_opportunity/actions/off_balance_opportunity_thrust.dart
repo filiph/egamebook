@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
-import 'package:edgehead/src/fight/damage_reports.dart';
+import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
   static const String className = "OffBalanceOpportunityThrust";
