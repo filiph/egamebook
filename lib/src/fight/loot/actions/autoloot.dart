@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
+import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -60,17 +61,23 @@ class AutoLoot extends Action {
     }
 
     Weapon takenWeapon;
+    Shield takenShield;
     List<Item> takenItems = [];
     for (var item in situation.droppedItems) {
       if (item is Weapon && item.value > a.currentWeapon.value) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
           if (a.currentWeapon is! Fist) {
+            // Put current weapon to inventory.
             b.items.add(a.currentWeapon);
           }
+          // Wield the new weapon.
           b.currentWeapon = item;
         });
         takenWeapon = item;
+      } else if (item is Shield && a.currentShield == null) {
+        world.updateActorById(a.id, (b) => b.currentShield = item);
+        takenShield = item;
       } else {
         // Put the rest to inventory.
         world.updateActorById(a.id, (b) => b..items.add(item));
@@ -81,6 +88,11 @@ class AutoLoot extends Action {
     if (takenWeapon != null) {
       a.report(s, "<subject> pick<s> up <object>", object: takenWeapon);
       a.report(s, "<subject> wield<s> <object>", object: takenWeapon);
+    }
+
+    if (takenShield != null) {
+      a.report(s, "<subject> pick<s> up <object>", object: takenShield);
+      a.report(s, "<subject> wield<s> <object>", object: takenShield);
     }
 
     _distributeWeapons(takenItems, a, situation, world, s);

@@ -21,6 +21,10 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
+    if (actor.currentShield != null && actorDies) {
+      // Drop shield.
+      b.droppedItems.add(actor.currentShield);
+    }
     return b;
   }));
   if (actor.pose == Pose.onGround) {
