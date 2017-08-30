@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -112,6 +113,16 @@ FightSituation generateMountainPassGuardPostFight(WorldState w,
 
   return new FightSituation.initialized(
       party, monsters, "ground", roomRoamingSituation, {});
+}
+
+/// Updates state according to whatever happened when Aren tried to steal
+/// the shield from the sleeping guard. If he was successful, there will be
+/// no fight, otherwise, there will be fight.
+void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
+  w.updateActorById(a.id, (b) => b..currentShield = new Shield());
+  if (!wasSuccess) {
+    s.add("TODO: create fight");
+  }
 }
 
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;

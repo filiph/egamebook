@@ -125,10 +125,10 @@ COMPLETE_SUCCESS_DESCRIPTION:
 "What's Orcthorn?"
 
 
-"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it."
+"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
 
 
-"But they did."
+"Almost."
 
 
 "Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
@@ -140,7 +140,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 "The mad who?"
 
 
-"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and that sword is still with him. Hidden in some kind of a statue."
+"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him _grach kamkorr_. The mad guardian. That sword is still with him. Hidden there in the cell."
 
 
 "Where is that cell?"

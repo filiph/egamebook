@@ -36,11 +36,11 @@ TODO - staying still, drops of sweat dripping on the guard, but ultimately the g
 CONTINUATION_OF_FAILURE_COMMAND: Snag the shield
 CONTINUATION_OF_FAILURE_HINT: TODO
 CONTINUATION_OF_FAILURE_EFFECT: 
-// TODO: fight situation + give shield
+setUpStealShield(a, w, s, false);
 
 
 CONTINUATION_OF_FAILURE_DESCRIPTION: TODO
 
 
 SUCCESS_EFFECT: 
-// TODO: give shield
+setUpStealShield(a, w, s, true);

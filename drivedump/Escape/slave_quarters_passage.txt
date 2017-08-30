@@ -7,6 +7,9 @@ DESCRIPTION:
 It doesn't take long before you start hearing voices. Orcs shouting commands, mostly. 
 
 
+// TODO: patrol killing slaves
+
+
 The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, two orcs turn a corner and start towards you.
 
 

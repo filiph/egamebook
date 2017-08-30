@@ -7,6 +7,7 @@ DESCRIPTION:
 The room is dark and wet. As you enter, the noises end. 
 
 
+// TODO: no statue? something else instead - orc corpses + smell of rotting?
 
 
 When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room's ceiling, but you slowly realize it's a stone statue. The other figure, though, is living.
@@ -43,7 +44,7 @@ $orcthorn_door (Exit the room): You go through the door. Once back in the corrid
 
 
 ACTION: $take_orcthorn
-COMMAND: Take the statue's sword
+COMMAND: Search for the sword
 
 
 FOR_LOCATION: $orcthorn_room
@@ -61,7 +62,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO - this must be it. the sword is held at the statue's back, uncharacteristic for an orc.
+TODO - this must be it. you search to room and find the sword hidden well (under a loose tile? under a heap of corpses?). then "why would they keep the sword at all? why wouldn't they destroy it?" - "fear. it's the ultimate authority. I don't think it was the orcs who decided to keep the sword intact."
 
 
 Briana: "I can't believe we did it. A farm boy and a freak."

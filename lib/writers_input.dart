@@ -227,6 +227,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add('TODO - take without waking the guard');
+    setUpStealShield(a, w, s, true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
   }
 
@@ -288,6 +289,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
           s.add(
               'TODO - staying still, drops of sweat dripping on the guard, but ultimately the guard goes back to sleep and you take the shield');
           w.updateActorById(a.id, (b) => b..stamina -= 1);
+          setUpStealShield(a, w, s, true);
           w.popSituation();
           return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
         }, 'If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.'),
@@ -295,6 +297,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
             'guardpost_above_church_take_shield_continuation_of_failure',
             'Snag the shield', (a, w, s, self) {
           s.add('TODO');
+          setUpStealShield(a, w, s, false);
           w.popSituation();
           return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snag the shield)';
         }, 'TODO')
@@ -530,7 +533,7 @@ Room orcthornDoor =
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''There\'s a small door on the side here.
+      '''TODO
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -567,7 +570,7 @@ Its face is in constant motion, overwhelmed by tics and waves of hateful express
 
 class TakeOrcthorn extends RoamingAction {
   @override
-  final String command = 'Take the statue\'s sword';
+  final String command = 'Search for the sword';
 
   @override
   final String name = 'take_orcthorn';
@@ -592,7 +595,7 @@ class TakeOrcthorn extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''TODO - this must be it. the sword is held at the statue\'s back, uncharacteristic for an orc.
+        '''TODO - this must be it. you search to room and find the sword hidden well (under a loose tile? under a heap of corpses?). then "why would they keep the sword at all? why wouldn\'t they destroy it?" - "fear. it\'s the ultimate authority. I don\'t think it was the orcs who decided to keep the sword intact."
 
 
 Briana: "I can\'t believe we did it. A farm boy and a freak."
@@ -706,6 +709,8 @@ Room slaveQuartersPassage =
     new Room('slave_quarters_passage', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''It doesn\'t take long before you start hearing voices. Orcs shouting commands, mostly. 
+
+
 
 
 The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, two orcs turn a corner and start towards you.
@@ -959,10 +964,10 @@ class TalkToBriana3 extends RoamingAction {
     s.add('''"What\'s Orcthorn?"
 
 
-"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it."
+"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
 
 
-"But they did."
+"Almost."
 
 
 "Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
@@ -974,7 +979,7 @@ class TalkToBriana3 extends RoamingAction {
 "The mad who?"
 
 
-"That\'s what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and that sword is still with him. Hidden in some kind of a statue."
+"That\'s what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him _grach kamkorr_. The mad guardian. That sword is still with him. Hidden there in the cell."
 
 
 "Where is that cell?"
@@ -1109,7 +1114,7 @@ class ExamineUndergroundChurch extends RoamingAction {
 Briana: "So this is it? This is where the Dead Prince resides?"
 
 
-"Don\'t be a fool. This is one of many of these temples inside the mountain."
+"This is one of many of these temples inside the mountain. So I think not."
 
 
 "So where is he? Everyone knows he\'s from Mt. Bloodrock."
@@ -1153,7 +1158,7 @@ The glow coming from the altar dims for a moment, then lights up again.''');
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO - altar, eight black eyes, spear that some orc must have forgotten here, there is motion behind the altar (wait)
+      '''TODO - altar, eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1192,10 +1197,10 @@ class WaitForRitual extends RoamingAction {
     s.add('''TODO - build up with sounds
 
 
-A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. With the lich, two huge creatures enter as well. It\'s unclear what they are, but perhaps some large breed of ogres. Their swords are as long as you are tall, but they don\'t wield them. Between the ogres, a living orc walks. Despite being a large one, probably captain or even chieftain, he visibly shakes in horror, and he is dwarfed by the two creatures leading him. 
+A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. After the lich, a huge creature enters through the door, crouching below the door\'s frame. It\'s unclear what it is, but perhaps some large breed of ogre, and judging by the braided hair, a female. Her sword is as long as you are tall, but she doesn\'t wield it. She leads someone on a chain. An orc. Despite being a strong one, probably captain or even chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
 
 
-TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the skeletons pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Once the orc is dead, rychlý process. Skeletons drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"''');
+TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"''');
     return '${a.name} successfully performs WaitForRitual';
   }
 

@@ -37,3 +37,7 @@ $cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak back tow
 
 
 // DEFINITELY: What is that thing! You look and at first all you see is chaos of work and orcs everywhere. Then you squint and an image appears. An image of an enormous thing. The legs are long as a good rock throw. There are eight of them. They are separated from the body, and some of them are yet only pieces. Then there's the body. Teeth of molten steel. A full sized ogre is pouring water over the form just now, and the are is immediately a cloud of steam. You can't see much else. From the upper part of the left wall, molten steel is starting to flow to fill another part of the iron monster.
+
+
+ 
+// MAYBE: I've never seen anything like this. The orcs are working. They must be terrified. Aren: "They don't use slaves. That tells me there must be something important going on here."

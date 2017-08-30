@@ -10,7 +10,7 @@ Violent grunts and growls are coming through that door. Next to it, an orcish wr
 
 
 SHORT_DESCRIPTION: 
-There's a small door on the side here.
+TODO
 
 
 
