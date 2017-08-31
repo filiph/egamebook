@@ -1,19 +1,17 @@
 ﻿ROOM: $just_after_agruth_fight
 
 
-
-
 DESCRIPTION:
 You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
+
 You watch Briana straighten over Agruth's corpse. The fear has gone during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly.
+
 
 She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it's the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth's_." She makes a pained grimace when she says the orc's name. "That creature does not deserve another mention."
 
 
-
 // -------------
-
 
 
 ACTION: $name_agruth_sword_opportunity
@@ -23,15 +21,12 @@ COMMAND: "Luck Bringer"
 FOR_LOCATION: $just_after_agruth_fight
 
 
-
-
 COMPLETE_SUCCESS_PROBABILITY: 100%
-
-
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
 You look at the sword. "You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell."
+
 
 Briana nods. "Luck Bringer it is."
 
@@ -64,21 +59,16 @@ FOR_LOCATION: $just_after_agruth_fight
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
-
-
 COMPLETE_SUCCESS_DESCRIPTION:
 You look at the sword. "You're right. We'll call it Savior. It is our first step to freedom."
 
+
 Briana nods. "Savior it is."
-
-
 
 
 SUCCESS_EFFECT:
 nameAgruthSword(w, "Savior");
 movePlayer(w, s, "cave_with_agruth_pre");
-
-
 
 
 // -------------
@@ -90,23 +80,17 @@ ACTION: $name_agruth_sword_nothing
 COMMAND: No name
 
 
-
-
 FOR_LOCATION: $just_after_agruth_fight
-
-
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
-
-
 COMPLETE_SUCCESS_DESCRIPTION:
 "That's foolish. It's just a sword, after all."
 
-Briana shrugs. "Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here."
 
+Briana shrugs. "Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here."
 
 
 SUCCESS_EFFECT:

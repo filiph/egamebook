@@ -184,6 +184,7 @@ Room guardpostAboveChurch =
   s.add(
       '''It\'s a small, circular room. There are exits on four sides, all marked with where they lead to. 
 
+
 Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
 ''',
       wholeSentence: true);
@@ -342,7 +343,9 @@ Room justAfterAgruthFight =
   s.add(
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
+
 You watch Briana straighten over Agruth\'s corpse. The fear has gone during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly.
+
 
 She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name. "That creature does not deserve another mention."
 ''',
@@ -377,6 +380,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''You look at the sword. "You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
+
 
 Briana nods. "Luck Bringer it is."''',
         wholeSentence: true);
@@ -437,6 +441,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
     s.add(
         '''You look at the sword. "You\'re right. We\'ll call it Savior. It is our first step to freedom."
 
+
 Briana nods. "Savior it is."''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
@@ -494,6 +499,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''"That\'s foolish. It\'s just a sword, after all."
+
 
 Briana shrugs. "Whatever, just don\'t ever call it Agruth\'s. I already have more respect to the piece of iron than to that worthless animal over here."''',
         wholeSentence: true);
@@ -715,19 +721,29 @@ Room slaveQuartersPassage =
   s.add(
       '''You can see Briana clutching her fists. "Are we homesick already?" she says. But she doesn\'t wait for reply, and presses on.
 
+
 It doesn\'t take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.
+
 
 The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn\'t see you or anything else.
 
+
 Before you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man\'s chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.
+
 
 An orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. "Vicious throw, small one!" he roars.
 
+
 You step back and motion Briana to lean on the wall, hoping that the door\'s embossed frame will provide enough cover before the two slavers turn again. 
+
 
 But at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.
 
+
 The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
+
+
+
 
 
 
