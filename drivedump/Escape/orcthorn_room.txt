@@ -44,7 +44,7 @@ $orcthorn_door (Exit the room): You go through the door. Once back in the corrid
 
 
 ACTION: $take_orcthorn
-COMMAND: Search for the sword
+COMMAND: Search for Orcthorn
 
 
 FOR_LOCATION: $orcthorn_room

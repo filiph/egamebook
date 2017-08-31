@@ -11,6 +11,24 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
+/// Mostly quotes that Briana says while roaming Bloodrock.
+const _brianaQuotes = const [
+  '''Briana spits on the floor. "Can't wait to see some actual architecture 
+  when we get out of here."''',
+  '''Somewhere in the distance, there are yells that rise in intensity, 
+  then suddenly stop entirely.''',
+  '''Briana turns to you with an intense whisper. 
+  "You know, I _have_ a right to hate orcs." 
+  
+  "I didn't know people need to have a right to hate them, to be honest." 
+  
+  She observes you for a moment. "I'm glad we are in agreement."''',
+  '''More yells from the distance.''',
+  '''Briana stops and listens for a moment. "Aren, we're pushing our luck. 
+  I'd hate to go all this way only to get 
+  my head smashed in by some random orc patrol.''',
+];
+
 final _rand = new Random();
 
 FightSituation generateAgruthFight(WorldState w,
@@ -115,16 +133,6 @@ FightSituation generateMountainPassGuardPostFight(WorldState w,
       party, monsters, "ground", roomRoamingSituation, {});
 }
 
-/// Updates state according to whatever happened when Aren tried to steal
-/// the shield from the sleeping guard. If he was successful, there will be
-/// no fight, otherwise, there will be fight.
-void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
-  w.updateActorById(a.id, (b) => b..currentShield = new Shield());
-  if (!wasSuccess) {
-    s.add("TODO: create fight");
-  }
-}
-
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
 
 Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
@@ -174,6 +182,24 @@ void nameAgruthSword(WorldState w, String name) {
       w.updateActorById(actor.id, (b) => b..currentWeapon = named);
       break;
     }
+  }
+}
+
+void rollBrianaQuote(WorldState w, Storyline s) {
+  int index = (w.global as EdgeheadGlobalState).brianaQuoteIndex;
+  if (index >= _brianaQuotes.length) return;
+  final current = _brianaQuotes[index];
+  s.add(current, wholeSentence: true);
+  updateGlobal(w, (b) => b..brianaQuoteIndex += 1);
+}
+
+/// Updates state according to whatever happened when Aren tried to steal
+/// the shield from the sleeping guard. If he was successful, there will be
+/// no fight, otherwise, there will be fight.
+void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
+  w.updateActorById(a.id, (b) => b..currentShield = new Shield());
+  if (!wasSuccess) {
+    s.add("TODO: create fight");
   }
 }
 

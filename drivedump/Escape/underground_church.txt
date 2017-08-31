@@ -12,8 +12,9 @@ After a bit of searching, you also notice a twisty passage going from the right 
 
 SHORT_DESCRIPTION: 
 The Underground Church stands silent, as if holding breath.
-
-
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
 
 
 EXITS:

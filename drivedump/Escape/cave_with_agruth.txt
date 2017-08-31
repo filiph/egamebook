@@ -33,6 +33,9 @@ The tunnel back to the main slave quarters is suicide. There will be too many or
 
 SHORT_DESCRIPTION:
 The corpse lies still, getting cold.
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
 
 
 

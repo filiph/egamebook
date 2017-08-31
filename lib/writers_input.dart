@@ -43,6 +43,8 @@ Room caveWithAgruth =
       '''The corpse lies still, getting cold.
 ''',
       wholeSentence: true);
+  rollBrianaQuote(w, s);
+  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.'),
@@ -580,7 +582,7 @@ Its face is in constant motion, overwhelmed by tics and waves of hateful express
 
 class TakeOrcthorn extends RoamingAction {
   @override
-  final String command = 'Search for the sword';
+  final String command = 'Search for Orcthorn';
 
   @override
   final String name = 'take_orcthorn';
@@ -1101,6 +1103,8 @@ After a bit of searching, you also notice a twisty passage going from the right 
       '''The Underground Church stands silent, as if holding breath.
 ''',
       wholeSentence: true);
+  rollBrianaQuote(w, s);
+  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('guardpost_above_church', 'Enter the passage',
       'You enter the passage and go a long, slightly rising way.'),
@@ -1334,6 +1338,8 @@ You and Briana duck behind some carts. You can guess which corridor leads to the
       '''The air in the war forges is heavy and the noise overwhelming.
 ''',
       wholeSentence: true);
+  rollBrianaQuote(w, s);
+  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('smelter', 'Go to smelter',
       'You keep low, ascending the stairs. At the top the hot air hits you. You make your way through a short passage and arrive at the smelter.'),

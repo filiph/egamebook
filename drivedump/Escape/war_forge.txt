@@ -17,8 +17,9 @@ You and Briana duck behind some carts. You can guess which corridor leads to the
 
 SHORT_DESCRIPTION: 
 The air in the war forges is heavy and the noise overwhelming.
-
-
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
 
 
 EXITS:

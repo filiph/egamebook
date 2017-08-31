@@ -9,19 +9,24 @@ part of edgehead_global;
 
 class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   @override
-  final bool hasKegOfBeer;
-  @override
   final int bloodrockFollowers;
+  @override
+  final int brianaQuoteIndex;
+  @override
+  final bool hasKegOfBeer;
 
   factory _$EdgeheadGlobalState([void updates(EdgeheadGlobalStateBuilder b)]) =>
       (new EdgeheadGlobalStateBuilder()..update(updates)).build()
           as _$EdgeheadGlobalState;
 
-  _$EdgeheadGlobalState._({this.hasKegOfBeer, this.bloodrockFollowers})
+  _$EdgeheadGlobalState._(
+      {this.bloodrockFollowers, this.brianaQuoteIndex, this.hasKegOfBeer})
       : super._() {
-    if (hasKegOfBeer == null) throw new ArgumentError.notNull('hasKegOfBeer');
     if (bloodrockFollowers == null)
       throw new ArgumentError.notNull('bloodrockFollowers');
+    if (brianaQuoteIndex == null)
+      throw new ArgumentError.notNull('brianaQuoteIndex');
+    if (hasKegOfBeer == null) throw new ArgumentError.notNull('hasKegOfBeer');
   }
 
   @override
@@ -36,38 +41,30 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! EdgeheadGlobalState) return false;
-    return hasKegOfBeer == other.hasKegOfBeer &&
-        bloodrockFollowers == other.bloodrockFollowers;
+    return bloodrockFollowers == other.bloodrockFollowers &&
+        brianaQuoteIndex == other.brianaQuoteIndex &&
+        hasKegOfBeer == other.hasKegOfBeer;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, hasKegOfBeer.hashCode), bloodrockFollowers.hashCode));
+    return $jf($jc(
+        $jc($jc(0, bloodrockFollowers.hashCode), brianaQuoteIndex.hashCode),
+        hasKegOfBeer.hashCode));
   }
 
   @override
   String toString() {
     return 'EdgeheadGlobalState {'
-        'hasKegOfBeer=${hasKegOfBeer.toString()},\n'
         'bloodrockFollowers=${bloodrockFollowers.toString()},\n'
+        'brianaQuoteIndex=${brianaQuoteIndex.toString()},\n'
+        'hasKegOfBeer=${hasKegOfBeer.toString()},\n'
         '}';
   }
 }
 
 class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
   _$EdgeheadGlobalState _$v;
-
-  @override
-  bool get hasKegOfBeer {
-    _$this;
-    return super.hasKegOfBeer;
-  }
-
-  @override
-  set hasKegOfBeer(bool hasKegOfBeer) {
-    _$this;
-    super.hasKegOfBeer = hasKegOfBeer;
-  }
 
   @override
   int get bloodrockFollowers {
@@ -81,12 +78,37 @@ class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
     super.bloodrockFollowers = bloodrockFollowers;
   }
 
+  @override
+  int get brianaQuoteIndex {
+    _$this;
+    return super.brianaQuoteIndex;
+  }
+
+  @override
+  set brianaQuoteIndex(int brianaQuoteIndex) {
+    _$this;
+    super.brianaQuoteIndex = brianaQuoteIndex;
+  }
+
+  @override
+  bool get hasKegOfBeer {
+    _$this;
+    return super.hasKegOfBeer;
+  }
+
+  @override
+  set hasKegOfBeer(bool hasKegOfBeer) {
+    _$this;
+    super.hasKegOfBeer = hasKegOfBeer;
+  }
+
   _$EdgeheadGlobalStateBuilder() : super._();
 
   EdgeheadGlobalStateBuilder get _$this {
     if (_$v != null) {
-      super.hasKegOfBeer = _$v.hasKegOfBeer;
       super.bloodrockFollowers = _$v.bloodrockFollowers;
+      super.brianaQuoteIndex = _$v.brianaQuoteIndex;
+      super.hasKegOfBeer = _$v.hasKegOfBeer;
       _$v = null;
     }
     return this;
@@ -107,7 +129,9 @@ class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
   _$EdgeheadGlobalState build() {
     final result = _$v ??
         new _$EdgeheadGlobalState._(
-            hasKegOfBeer: hasKegOfBeer, bloodrockFollowers: bloodrockFollowers);
+            bloodrockFollowers: bloodrockFollowers,
+            brianaQuoteIndex: brianaQuoteIndex,
+            hasKegOfBeer: hasKegOfBeer);
     replace(result);
     return result;
   }
