@@ -183,17 +183,19 @@ Room guardpostAboveChurch =
   s.add(
       '''It\'s a small, circular room. There are exits on four sides, all marked with where they lead to. 
 
-
-
-
 Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add(
-      '''TODO: either sleeping goblin or not
-''',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
+  if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
+      !w.actionHasBeenPerformedSuccessfully(
+          "guardpost_above_church_take_shield")) {
+    s.add("The goblin's corpse is sprawled on the ground.");
+  } else {
+    s.add("The goblin is sleeping soundly.");
+  }
+  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Descend towards the Underground Church',
       'You take the passage leading down.'),
