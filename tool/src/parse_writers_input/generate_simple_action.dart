@@ -16,7 +16,8 @@ NewInstanceBuilder generateSimpleAction(String actionName, String command,
     ..addPositional(new ParameterBuilder('w'))
     ..addPositional(new ParameterBuilder('s'))
     ..addPositional(new ParameterBuilder('self'))
-    ..addStatement(reference('s').property('add').call([literal(description)]));
+    ..addStatement(reference('s').property('add').call([literal(description)],
+        namedArguments: {"wholeSentence": literal(true)}));
 
   if (effect != null) {
     addStatements(effect, closure);

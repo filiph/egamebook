@@ -76,7 +76,8 @@ class SearchAgruth extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)');
+        'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)',
+        wholeSentence: true);
     giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs SearchAgruth';
   }
@@ -228,7 +229,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO - take without waking the guard');
+    s.add('TODO - take without waking the guard', wholeSentence: true);
     setUpStealShield(a, w, s, true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
   }
@@ -236,7 +237,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
-        'TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing');
+        'TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing',
+        wholeSentence: true);
     w.pushSituation(
         new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
     return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
@@ -289,7 +291,8 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
             'guardpost_above_church_take_shield_rescue', 'Stay perfectly still',
             (a, w, s, self) {
           s.add(
-              'TODO - staying still, drops of sweat dripping on the guard, but ultimately the guard goes back to sleep and you take the shield');
+              'TODO - staying still, drops of sweat dripping on the guard, but ultimately the guard goes back to sleep and you take the shield',
+              wholeSentence: true);
           w.updateActorById(a.id, (b) => b..stamina -= 1);
           setUpStealShield(a, w, s, true);
           w.popSituation();
@@ -298,7 +301,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
         new SimpleAction(
             'guardpost_above_church_take_shield_continuation_of_failure',
             'Snag the shield', (a, w, s, self) {
-          s.add('TODO');
+          s.add('TODO', wholeSentence: true);
           setUpStealShield(a, w, s, false);
           w.popSituation();
           return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snag the shield)';
@@ -376,7 +379,8 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '''"You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
 
 
-Briana nods.''');
+Briana nods.''',
+        wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
@@ -437,7 +441,8 @@ class NameAgruthSwordRedemption extends RoamingAction {
 
 
 
-Briana nods.''');
+Briana nods.''',
+        wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
@@ -491,7 +496,8 @@ class NameAgruthSwordNothing extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('"That\'s foolish. It\'s just a sword, after all."');
+    s.add('"That\'s foolish. It\'s just a sword, after all."',
+        wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
@@ -606,7 +612,8 @@ Briana: "I can\'t believe we did it. A farm boy and a freak."
 "A simple thing like this. You don\'t understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
 
 
-"Well, we still need to get out of here."''');
+"Well, we still need to get out of here."''',
+        wholeSentence: true);
     return '${a.name} successfully performs TakeOrcthorn';
   }
 
@@ -671,7 +678,7 @@ class SlaveQuartersContinue extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO FIGHT');
+    s.add('TODO FIGHT', wholeSentence: true);
     w.popSituation();
     return '${a.name} successfully performs SlaveQuartersContinue';
   }
@@ -837,7 +844,8 @@ Briana: "How long have you been here?"
 
 
 
-"Correct. The closest safe place is the fort."''');
+"Correct. The closest safe place is the fort."''',
+        wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana1';
   }
 
@@ -891,7 +899,8 @@ class TalkToBriana2 extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''"Where did they catch you?"
+    s.add(
+        '''"Where did they catch you?"
 
 
 
@@ -906,7 +915,8 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 
 
-"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."''');
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."''',
+        wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana2';
   }
 
@@ -960,7 +970,8 @@ class TalkToBriana3 extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''"What\'s Orcthorn?"
+    s.add(
+        '''"What\'s Orcthorn?"
 
 
 "A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
@@ -984,7 +995,8 @@ class TalkToBriana3 extends RoamingAction {
 "Where is that cell?"
 
 
-"Somewhere in the slave quarters."''');
+"Somewhere in the slave quarters."''',
+        wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana3';
   }
 
@@ -1122,7 +1134,8 @@ Briana: "So this is it? This is where the Dead Prince resides?"
 "The Dead Prince is _somewhere_ here, that\'s correct. But where exactly? The orcs say the whole mountain is his vessel. Whatever that means."
 
 
-The glow coming from the altar dims for a moment, then lights up again.''');
+The glow coming from the altar dims for a moment, then lights up again.''',
+        wholeSentence: true);
     return '${a.name} successfully performs ExamineUndergroundChurch';
   }
 
@@ -1193,13 +1206,15 @@ class WaitForRitual extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''TODO - build up with sounds
+    s.add(
+        '''TODO - build up with sounds
 
 
 A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. After the lich, a huge creature enters through the door, crouching below the door\'s frame. It\'s unclear what it is, but perhaps some large breed of ogre, and judging by the braided hair, a female. Her sword is as long as you are tall, but she doesn\'t wield it. She leads someone on a chain. An orc. Despite being a strong one, probably captain or even chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
 
 
-TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"''');
+TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"''',
+        wholeSentence: true);
     return '${a.name} successfully performs WaitForRitual';
   }
 
@@ -1255,7 +1270,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO - a forgotten, orcish spear');
+    s.add('TODO - a forgotten, orcish spear', wholeSentence: true);
     return '${a.name} successfully performs TakeSpearInUndergroundChurch';
   }
 

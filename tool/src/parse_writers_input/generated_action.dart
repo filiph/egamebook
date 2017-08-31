@@ -138,7 +138,8 @@ class GeneratedAction extends GeneratedGameObject {
           .addStatement(stateErrorThrow('Success chance is 100%'));
     } else {
       applyFailureBuilder.addStatement(reference(storylineParameter.name)
-          .invoke('add', [literal(_map['FAILURE_BEGINNING_DESCRIPTION'])]));
+          .invoke('add', [literal(_map['FAILURE_BEGINNING_DESCRIPTION'])],
+              namedArguments: {"wholeSentence": literal(true)}));
       if (hasRescue) {
         applyFailureBuilder.addStatement(reference('w')
             .property('pushSituation')
@@ -149,7 +150,8 @@ class GeneratedAction extends GeneratedGameObject {
       } else {
         // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION
         applyFailureBuilder.addStatement(reference(storylineParameter.name)
-            .invoke('add', [literal(_map['FAILURE_DESCRIPTION'])]));
+            .invoke('add', [literal(_map['FAILURE_DESCRIPTION'])],
+                namedArguments: {"wholeSentence": literal(true)}));
         if (_map.containsKey('FAILURE_EFFECT')) {
           addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder);
         }
@@ -174,7 +176,8 @@ class GeneratedAction extends GeneratedGameObject {
       var successDescription =
           escapeDollarSign(_map['COMPLETE_SUCCESS_DESCRIPTION']);
       applySuccessBuilder.addStatement(reference(storylineParameter.name)
-          .invoke('add', [literal(successDescription)]));
+          .invoke('add', [literal(successDescription)],
+              namedArguments: {"wholeSentence": literal(true)}));
       if (_map['SUCCESS_EFFECT'] != null) {
         String successEffectBlock = _map['SUCCESS_EFFECT'];
         addStatements(successEffectBlock, applySuccessBuilder);
