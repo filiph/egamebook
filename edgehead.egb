@@ -1,4 +1,4 @@
-Title:    Edgehead
+Title:    Tomorrow We Slay Death
 Author:   Filip Hracek
 UniqueID: net.filiph.edgehead.0.0.1
 
@@ -34,6 +34,8 @@ UniqueID: net.filiph.edgehead.0.0.1
 
 ---
 start
+
+# Tomorrow We Slay Death
 
 - [gameLoop]
 

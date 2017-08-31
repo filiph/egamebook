@@ -48,6 +48,7 @@ class ScripterImpl extends Scripter {
     /* PAGES & BLOCKS */
     pageMap[r"""start"""] = new ScripterPage(
       [
+          """# Tomorrow We Slay Death""",
           [
             null,
           {
