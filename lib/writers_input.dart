@@ -339,10 +339,9 @@ Room justAfterAgruthFight =
   s.add(
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
+You watch Briana straighten over Agruth\'s corpse. The fear has gone during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly.
 
-
-
-"We should name that sword," Briana says, motioning to Agruth\'s scimitar. "It\'s the only thing we have going for us."
+She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name. "That creature does not deserve another mention."
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -375,8 +374,6 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''"You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
-
-
 
 
 Briana nods.''');
