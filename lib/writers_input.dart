@@ -376,10 +376,9 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
+        '''You look at the sword. "You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
 
-
-Briana nods.''',
+Briana nods. "Luck Bringer it is."''',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -436,12 +435,9 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"You\'re right. We\'ll call it Savior. It is our first step to freedom."
+        '''You look at the sword. "You\'re right. We\'ll call it Savior. It is our first step to freedom."
 
-
-
-
-Briana nods.''',
+Briana nods. "Savior it is."''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -496,7 +492,10 @@ class NameAgruthSwordNothing extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('"That\'s foolish. It\'s just a sword, after all."',
+    s.add(
+        '''"That\'s foolish. It\'s just a sword, after all."
+
+Briana shrugs. "Whatever, just don\'t ever call it Agruth\'s. I already have more respect to the piece of iron than to that worthless animal over here."''',
         wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
@@ -714,21 +713,22 @@ class SlaveQuartersContinue extends RoamingAction {
 Room slaveQuartersPassage =
     new Room('slave_quarters_passage', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''It doesn\'t take long before you start hearing voices. Orcs shouting commands, mostly. 
+      '''You can see Briana clutching her fists. "Are we homesick already?" she says. But she doesn\'t wait for reply, and presses on.
 
+It doesn\'t take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.
 
+The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn\'t see you or anything else.
 
+Before you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man\'s chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.
 
-The tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, two orcs turn a corner and start towards you.
+An orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. "Vicious throw, small one!" he roars.
 
+You step back and motion Briana to lean on the wall, hoping that the door\'s embossed frame will provide enough cover before the two slavers turn again. 
 
-You step back and motion Briana to lean on the wall, hoping that the little door\'s embossed frame will provide enough cover before the two orcs turn again. 
+But at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.
 
+The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
 
-But at that time, something or someone smashes on the door from the inside. Then come angry growls and something akin to barking.
-
-
-The door stays shut but the patrol is now looking directly at you, closing in with their swords in hands.
 
 
 ![Orc and Goblin](img/orc_and_goblin_sketch.jpg)

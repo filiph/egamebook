@@ -31,10 +31,9 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell."
+You look at the sword. "You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell."
 
-
-Briana nods.
+Briana nods. "Luck Bringer it is."
 
 
 
@@ -68,12 +67,9 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"You're right. We'll call it Savior. It is our first step to freedom."
+You look at the sword. "You're right. We'll call it Savior. It is our first step to freedom."
 
-
-
-
-Briana nods.
+Briana nods. "Savior it is."
 
 
 
@@ -109,6 +105,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 "That's foolish. It's just a sword, after all."
 
+Briana shrugs. "Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here."
 
 
 
