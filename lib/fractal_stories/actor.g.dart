@@ -33,7 +33,7 @@ class _$Actor extends Actor {
   @override
   final bool isPlayer;
   @override
-  final Set<Item> items;
+  final BuiltSet<Item> items;
   @override
   final int maxHitpoints;
   @override
@@ -260,9 +260,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isPlayer => _$this._isPlayer;
   set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
 
-  Set<Item> _items;
-  Set<Item> get items => _$this._items;
-  set items(Set<Item> items) => _$this._items = items;
+  SetBuilder<Item> _items;
+  SetBuilder<Item> get items => _$this._items ??= new SetBuilder<Item>();
+  set items(SetBuilder<Item> items) => _$this._items = items;
 
   int _maxHitpoints;
   int get maxHitpoints => _$this._maxHitpoints;
@@ -309,7 +309,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _initiative = _$v.initiative;
       _isActive = _$v.isActive;
       _isPlayer = _$v.isPlayer;
-      _items = _$v.items;
+      _items = _$v.items?.toBuilder();
       _maxHitpoints = _$v.maxHitpoints;
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
@@ -349,7 +349,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             initiative: initiative,
             isActive: isActive,
             isPlayer: isPlayer,
-            items: items,
+            items: items?.build(),
             maxHitpoints: maxHitpoints,
             name: name,
             nameIsProperNoun: nameIsProperNoun,

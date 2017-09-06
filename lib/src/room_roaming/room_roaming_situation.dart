@@ -15,6 +15,8 @@ part 'room_roaming_situation.g.dart';
 
 abstract class RoomRoamingSituation extends Situation
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
+  static const String className = "RoomRoamingSituation";
+
   factory RoomRoamingSituation([void updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;
 
@@ -48,7 +50,7 @@ abstract class RoomRoamingSituation extends Situation
   bool get monstersAlive;
 
   @override
-  String get name => "RoomRoamingSituation";
+  String get name => className;
 
   @override
   int get time;

@@ -1190,7 +1190,7 @@ The glow coming from the altar dims for a moment, then lights up again.''',
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO - altar, eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
+      '''TODO - altar, "you are brave, my friend. Or stupid. So am I for following you." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1291,6 +1291,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add('TODO - a forgotten, orcish spear', wholeSentence: true);
+    giveSpearToPlayer(w);
     return '${a.name} successfully performs TakeSpearInUndergroundChurch';
   }
 

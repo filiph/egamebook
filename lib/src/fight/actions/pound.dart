@@ -83,8 +83,7 @@ class Pound extends EnemyTargetAction {
       return "${a.name} pounds ${enemy.name} off balance";
     } else if (enemy.isOffBalance) {
       enemy.report(s, "<subject> <is> already off balance");
-      var groundMaterial =
-          w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
+      var groundMaterial = getGroundMaterial(w);
       s.add(
           "<subject> make<s> <object> fall "
           "to the $groundMaterial",

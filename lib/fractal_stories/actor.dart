@@ -1,5 +1,6 @@
 library stranded.actor;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -69,7 +70,7 @@ abstract class Actor extends Object
         ..initiative = initiative
         ..isActive = true
         ..isPlayer = isPlayer
-        ..items = new Set()
+        ..items = new SetBuilder<Item>()
         ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
         ..currentRoomName = currentRoomName
         ..followingActorId = followingActorId
@@ -151,7 +152,7 @@ abstract class Actor extends Object
   // TODO: for 'Skyrim', we don't need this most of the time (simple friend or foe suffices) -- maybe create PsychologicalActor?
 //  ActorRelationshipMap get safetyFear;
 
-  Set<Item> get items;
+  BuiltSet<Item> get items;
 
   int get maxHitpoints;
 
@@ -171,16 +172,31 @@ abstract class Actor extends Object
   @override
   Team get team;
 
-  bool hasItem(Type type, {int needed: 1}) {
+  bool hasItem(ItemType type, {int needed: 1}) {
     int count = 0;
     for (var item in items) {
-      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
-      if (item.runtimeType == type) {
+      if (item.types.contains(type)) {
         count += 1;
       }
-      if (count >= needed) break;
+      if (count >= needed) return true;
     }
-    return count >= needed;
+    return false;
+  }
+
+  /// Returns the best weapon (by [Weapon.value]) in [Actor.items].
+  ///
+  /// Returns `null` when there are no weapons available.
+  Weapon findBestWeapon() {
+    Weapon best;
+    int value = -9999999;
+    for (var item in items) {
+      if (item is! Weapon) continue;
+      if (item.value > value) {
+        best = item;
+        value = item.value;
+      }
+    }
+    return best;
   }
 
   bool hasResource(Resource resource) {
@@ -230,42 +246,6 @@ abstract class Actor extends Object
         actionName: Unconfuse.className, protagonist: this, wasSuccess: true);
     if (unconfuseRecency == null) return true;
     return unconfuseRecency < recency;
-  }
-
-  Item removeItem(Type type) {
-    Item markedForRemoval;
-    for (var item in items) {
-      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
-      if (item.runtimeType == type) {
-        markedForRemoval = item;
-        break;
-      }
-    }
-    if (markedForRemoval == null) {
-      throw new StateError("Cannot remove item: actor $this doesn't have "
-          "$type");
-    }
-    items.remove(markedForRemoval);
-    return markedForRemoval;
-  }
-
-  Iterable<Item> removeItems(Type type, int count) {
-    var markedForRemoval = <Item>[];
-    int remaining = count;
-    for (var item in items) {
-      // TODO: get rid of runtimeType here - no guarantee it will work when compiled to JS
-      if (item.runtimeType == type) {
-        markedForRemoval.add(item);
-      }
-      remaining -= 1;
-      if (remaining <= 0) break;
-    }
-    if (remaining != 0) {
-      throw new StateError("Cannot remove $count items of $type from $this. "
-          "Only ${count - remaining} in possession.");
-    }
-    markedForRemoval.forEach((item) => items.remove(item));
-    return markedForRemoval;
   }
 
   /// The resources this actor knows about.

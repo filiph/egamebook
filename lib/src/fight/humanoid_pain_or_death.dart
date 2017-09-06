@@ -12,7 +12,7 @@ final Random _random = new Random();
 ///
 /// Special case is for Briana, who will never die, only lose consciousness.
 void killHumanoid(Storyline s, WorldState w, Actor actor) {
-  var fight = w.getSituationByName<FightSituation>("FightSituation");
+  var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   var actorDies = actor.id != brianaId;
 

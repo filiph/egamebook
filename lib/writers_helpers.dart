@@ -4,6 +4,7 @@ import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
+import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -138,12 +139,16 @@ EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
 Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
 
 RoomRoamingSituation getRoomRoaming(WorldState w) {
-  return w.getSituationByName<RoomRoamingSituation>("RoomRoamingSituation");
+  return w
+      .getSituationByName<RoomRoamingSituation>(RoomRoamingSituation.className);
 }
 
 void giveGoldToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..gold += amount);
 }
+
+void giveSpearToPlayer(WorldState w) =>
+    w.updateActorById(getPlayer(w).id, (b) => b..items.add(new Spear()));
 
 void giveStaminaToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);

@@ -43,8 +43,7 @@ class FinishPunch extends EnemyTargetAction {
     assert(!enemy.isOnGround, "Can't punch people on the ground.");
     final updatedPose = enemy.isStanding ? Pose.offBalance : Pose.onGround;
     final thread = getThreadId(w, "PunchSituation");
-    final groundMaterial =
-        w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
+    final groundMaterial = getGroundMaterial(w);
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
     switch (updatedPose) {
       case Pose.standing:

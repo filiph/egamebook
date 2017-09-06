@@ -24,6 +24,7 @@ import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
+import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -31,7 +32,7 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 part 'fight_situation.g.dart';
 
 String getGroundMaterial(WorldState w) {
-  var fight = w.getSituationByName<FightSituation>("FightSituation");
+  var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   return groundMaterial;
 }
@@ -43,6 +44,8 @@ abstract class FightSituation extends Situation
   /// The advantage that player has over all other actors in terms of frequency
   /// of turns.
   static const double _playerTurnAdvantage = 1.5;
+
+  static const String className = "FightSituation";
 
   factory FightSituation([void updates(FightSituationBuilder b)]) =
       _$FightSituation;
@@ -62,8 +65,8 @@ abstract class FightSituation extends Situation
         ..droppedItems = new ListBuilder<Item>()
         ..roomRoamingSituationId = roomRoamingSituation.id
         ..events = new MapBuilder<int, TimedEventCallback>(events));
-
   FightSituation._();
+
   @override
   List<ActionBuilder> get actionGenerators => [
         Confuse.builder,
@@ -84,6 +87,7 @@ abstract class FightSituation extends Situation
         startSlashOutOfBalancePlayerBuilder,
         TakeDroppedShield.builder,
         TakeDroppedWeapon.builder,
+        ThrowSpear.builder,
       ];
 
   @override
@@ -115,7 +119,7 @@ abstract class FightSituation extends Situation
   int get maxActionsToShow => 1000;
 
   @override
-  String get name => "FightSituation";
+  String get name => className;
 
   BuiltList<int> get playerTeamIds;
 

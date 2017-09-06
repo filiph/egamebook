@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -65,6 +66,8 @@ class TakeDroppedWeapon extends ItemAction {
   @override
   bool isApplicable(Actor a, WorldState w) {
     if (item is! Weapon) return false;
+    // TODO: remove the next condition
+    if (item is Spear) return false;
     if (!a.canWield) return false;
     Weapon weapon = item;
     if (weapon.value <= a.currentWeapon.value) return false;

@@ -52,8 +52,7 @@ class KickToGround extends EnemyTargetAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    var groundMaterial =
-        w.getSituationByName<FightSituation>("FightSituation").groundMaterial;
+    var groundMaterial = getGroundMaterial(w);
     Randomly.run(() {
       a.report(
           s,

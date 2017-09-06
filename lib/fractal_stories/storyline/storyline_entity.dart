@@ -86,7 +86,8 @@ abstract class EntityBehavior {
   }
 
   void report(Storyline storyline, String text,
-      {Entity object,
+      {Entity owner,
+      Entity object,
       Entity objectOwner,
       bool positive: false,
       bool negative: false,
@@ -98,6 +99,7 @@ abstract class EntityBehavior {
       bool isSupportiveActionInThread: false}) {
     storyline.add(text,
         subject: this as Entity,
+        owner: owner,
         object: object,
         objectOwner: objectOwner,
         positive: positive,
