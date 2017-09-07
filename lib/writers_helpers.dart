@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
@@ -188,6 +189,13 @@ void nameAgruthSword(WorldState w, String name) {
       break;
     }
   }
+}
+
+void removeSpearFromPlayer(WorldState w) {
+  final player = getPlayer(w);
+  final spear =
+      player.items.firstWhere((item) => item.types.contains(ItemType.spear));
+  w.updateActorById(getPlayer(w).id, (b) => b..items.remove(spear));
 }
 
 void rollBrianaQuote(WorldState w, Storyline s) {

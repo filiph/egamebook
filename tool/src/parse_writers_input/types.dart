@@ -15,6 +15,7 @@ final allNeededTypes = <TypeBuilder>[
   builderType,
   exitType,
   getRandomIdFunction,
+  itemTypeType,
   resourceType,
   roomRoamingSituationType,
   roomType,
@@ -39,6 +40,9 @@ final getRandomIdFunction =
     reference("getRandomId", "package:edgehead/fractal_stories/situation.dart");
 
 final intType = new TypeBuilder("int");
+
+final itemTypeType = new TypeBuilder("ItemType",
+    importFrom: "package:edgehead/fractal_stories/item.dart");
 
 final listOfActionType = new TypeBuilder('List', genericTypes: [actionType]);
 

@@ -46,7 +46,10 @@ FOR_LOCATION: $smelter
 
 PREREQUISITES:
 !w.actionHasBeenPerformed(name)
-// && has spear && action(war_forge_look_around) has been performed
+&&
+w.actionHasBeenPerformed("war_forge_look_around") 
+&&
+getPlayer(w).hasItem(ItemType.spear)
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
@@ -60,4 +63,4 @@ That was some throw! That thing downstairs.. I don't know what it is but I would
 
 
 SUCCESS_EFFECT:
-// TODO: removeSpearFromPlayer()
+removeSpearFromPlayer(w);

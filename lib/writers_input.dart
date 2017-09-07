@@ -6,6 +6,7 @@ import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
 import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
+import 'package:edgehead/fractal_stories/item.dart' show ItemType;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
@@ -758,7 +759,8 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 ''',
       wholeSentence: true);
 }, generateEscapeTunnelFight, null, <Exit>[
-  new Exit('cave_with_agruth', 'Go to the working area', 'TODO'),
+  new Exit(
+      'cave_with_agruth', 'Go back to the cave with Agruth\'s corpse', 'TODO'),
   new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),
   new Exit('orcthorn_door', 'Approach the little door', 'Something something.')
 ]);
@@ -805,7 +807,10 @@ class SmelterThrowSpear extends RoamingAction {
         'smelter') {
       return false;
     }
-    if ((!w.actionHasBeenPerformed(name)) != true) {
+    if ((!w.actionHasBeenPerformed(name) &&
+            w.actionHasBeenPerformed("war_forge_look_around") &&
+            getPlayer(w).hasItem(ItemType.spear)) !=
+        true) {
       return false;
     }
     return true;
@@ -819,6 +824,7 @@ class SmelterThrowSpear extends RoamingAction {
 
 That was some throw! That thing downstairs.. I don\'t know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.''',
         wholeSentence: true);
+    removeSpearFromPlayer(w);
     return '${a.name} successfully performs SmelterThrowSpear';
   }
 
@@ -1157,6 +1163,8 @@ Room undergroundChurch =
     new Room('underground_church', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''You enter something that at first looks like a large, twisting cave, but then opens into a high room with many columns. This must be what the orcs call the Underground Church. Your bare footsteps reverberate around the space, so you slow down to quiet them. There are no windows, of course, you are deep underground, but there is dim light coming from the far end of the place, where you expect the altar to be but can\'t quite see it. No torches here. Quiet. 
+
+
 
 
 After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.

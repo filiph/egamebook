@@ -43,7 +43,7 @@ generateEscapeTunnelFight
 
 
 EXITS:
-$cave_with_agruth (Go to the working area): TODO
+$cave_with_agruth (Go back to the cave with Agruth's corpse): TODO
 
 
 $slave_quarters (Go further towards the Gate of Screams): TODO
