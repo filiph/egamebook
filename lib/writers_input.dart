@@ -759,11 +759,72 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 ''',
       wholeSentence: true);
 }, generateEscapeTunnelFight, null, <Exit>[
-  new Exit(
-      'cave_with_agruth', 'Go back to the cave with Agruth\'s corpse', 'TODO'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You back out from the door, and go back where you left Agruth\'s body.'),
   new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),
-  new Exit('orcthorn_door', 'Approach the little door', 'Something something.')
+  new Exit('orcthorn_room', 'Open the door', 'You open the door.')
 ]);
+
+class SlaveQuartersPassageExamineDoor extends RoamingAction {
+  @override
+  final String command = 'Examine the door';
+
+  @override
+  final String name = 'slave_quarters_passage_examine_door';
+
+  static final SlaveQuartersPassageExamineDoor singleton =
+      new SlaveQuartersPassageExamineDoor();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'slave_quarters_passage') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name) &&
+            !(w.currentSituation as RoomRoamingSituation).monstersAlive) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        'Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."',
+        wholeSentence: true);
+    return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
@@ -1518,6 +1579,7 @@ List<RoamingAction> allActions = <RoamingAction>[
   NameAgruthSwordNothing.singleton,
   TakeOrcthorn.singleton,
   SlaveQuartersContinue.singleton,
+  SlaveQuartersPassageExamineDoor.singleton,
   SmelterThrowSpear.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,

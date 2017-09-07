@@ -28,7 +28,7 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 
 
 
-// TODO: make the goblin a spearman (both sketch and in simulation)
+// TODO: make the goblin a spearman (both sketch and in simulation) -- and make them both goblins - a spearman and a swordsman
 
 
 ![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
@@ -43,10 +43,38 @@ generateEscapeTunnelFight
 
 
 EXITS:
-$cave_with_agruth (Go back to the cave with Agruth's corpse): TODO
+$cave_with_agruth (Go back to the cave with Agruth's corpse): You back out from the door, and go back where you left Agruth's body.
 
 
 $slave_quarters (Go further towards the Gate of Screams): TODO
 
 
-$orcthorn_door (Approach the little door): Something something.
+$orcthorn_room (Open the door): You open the door. 
+
+
+
+
+// ----------
+
+
+
+
+ACTION: $slave_quarters_passage_examine_door
+COMMAND: Examine the door
+
+
+FOR_LOCATION: $slave_quarters_passage
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+&&
+!(w.currentSituation as RoomRoamingSituation).monstersAlive
+// TODO player hasn't been inside yet (hasn't taken the orcthorn_door exit)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."
