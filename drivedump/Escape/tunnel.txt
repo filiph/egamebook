@@ -17,6 +17,14 @@ Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice,
 
 
 
+// TODO: Look, Dregh! Look at them. Give a puny slave some steel and suddenly they think they're mighty slayers.
+
+
+// TODO: on death. You don't understand. No matter how many of us you kill, there will be more. And when they get you, they will eat your face alive. You mean nothing.
+
+
+
+
 FIGHT_SITUATION:
 generateEscapeTunnelFight
 // groundMaterial: "{rock|cavern} floor"

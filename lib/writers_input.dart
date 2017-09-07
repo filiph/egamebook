@@ -141,6 +141,8 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 "I\'m not a farm boy. And I don\'t mean Orcthorn / my own smarts. No, I have a connection."
 
 
+
+
 "A connection."
 
 
@@ -154,6 +156,9 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 
 
 "Not giving it to him. Giving him the exact opposite of what he wants."
+
+
+TODO: "you know we could just run as fast as we can, kicking some orcs in their faces along the way, right?" yes. But we won\'t. "yeah. We won\'t. 
 
 
 With that, you sheathe (weapon) and start down the road towards the black fort in the distance.
@@ -347,7 +352,22 @@ Room justAfterAgruthFight =
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
-You watch Briana straighten over Agruth\'s corpse. The fear has gone during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly.
+You watch Briana straighten over Agruth\'s corpse. The fear has gone from her face during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly. You shrug.
+
+
+"When someone hurts me, I hurt them back," Briana says. "I am a simple person."
+
+
+"The world, on the other hand, is often not that simple and…"
+
+
+"Oh, but it is," Briana intercepts, smoothing her hair and using the quickly forming pool of Agruth\'s blood as a mirror.
+
+
+"... and this one is already dead."
+
+
+"I was making sure."
 
 
 She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name. "That creature does not deserve another mention."
@@ -385,7 +405,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '''You look at the sword. "You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
 
 
-Briana nods. "Luck Bringer it is."''',
+Briana nods. "Luck Bringer it is. Now let\'s just get out of here as quickly as possible"''',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -445,7 +465,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
         '''You look at the sword. "You\'re right. We\'ll call it Savior. It is our first step to freedom."
 
 
-Briana nods. "Savior it is."''',
+Briana nods. "Savior it is. Now let\'s just get out of here as quickly as possible"''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -504,7 +524,7 @@ class NameAgruthSwordNothing extends RoamingAction {
         '''"That\'s foolish. It\'s just a sword, after all."
 
 
-Briana shrugs. "Whatever, just don\'t ever call it Agruth\'s. I already have more respect to the piece of iron than to that worthless animal over here."''',
+Briana shrugs. "Whatever, just don\'t ever call it Agruth\'s. I already have more respect to the piece of iron than to that worthless animal over here. Now let\'s just get out of here as quickly as possible"''',
         wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
@@ -881,6 +901,21 @@ class SmelterThrowSpear extends RoamingAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
         '''throwing spear at the orc that holds the molten steel gate
+
+
+Why would you do that? You just wasted a perfectly good spear on a stupid ogre that posed no threat to us.
+
+
+Watch.
+
+
+(molten steel ruins everything)
+
+
+The less simple you see the world, the easier it is for you to change it. 
+
+
+You got lucky. 
 
 
 That was some throw! That thing downstairs.. I don\'t know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.''',
@@ -1323,7 +1358,7 @@ The glow coming from the altar dims for a moment, then lights up again.''',
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO - altar, "you are brave, my friend. Or stupid. So am I for following you." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
+      '''TODO - altar, "you are brave, my friend. Or stupid. So am I for following you.", "We are way over our head here." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1366,7 +1401,10 @@ class WaitForRitual extends RoamingAction {
 A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. After the lich, a huge creature enters through the door, crouching below the door\'s frame. It\'s unclear what it is, but perhaps some large breed of ogre, and judging by the braided hair, a female. Her sword is as long as you are tall, but she doesn\'t wield it. She leads someone on a chain. An orc. Despite being a strong one, probably captain or even chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
 
 
-TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"''',
+TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"
+
+
+TODO: foreshadow \'special connection\' via "This place does something weird to people" - "I know" - "And I don\'t mean the abuse" - "I know"''',
         wholeSentence: true);
     return '${a.name} successfully performs WaitForRitual';
   }

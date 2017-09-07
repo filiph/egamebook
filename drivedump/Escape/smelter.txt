@@ -59,7 +59,24 @@ COMPLETE_SUCCESS_DESCRIPTION:
 throwing spear at the orc that holds the molten steel gate
 
 
+Why would you do that? You just wasted a perfectly good spear on a stupid ogre that posed no threat to us.
+
+
+Watch.
+
+
+(molten steel ruins everything)
+
+
+The less simple you see the world, the easier it is for you to change it. 
+
+
+You got lucky. 
+
+
 That was some throw! That thing downstairs.. I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best. 
+
+
 
 
 SUCCESS_EFFECT:

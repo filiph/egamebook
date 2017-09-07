@@ -4,7 +4,7 @@
 
 
 DESCRIPTION:
-TODO - altar, "you are brave, my friend. Or stupid. So am I for following you." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
+TODO - altar, "you are brave, my friend. Or stupid. So am I for following you.", "We are way over our head here." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
 
 
 SHORT_DESCRIPTION: 
@@ -46,6 +46,9 @@ A lich orc enters from a steel door on the right of the altar and the whole temp
 
 
 TODO: the lich will take him on the altar. Aren says 'maggots', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I'll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don't know"
+
+
+TODO: foreshadow 'special connection' via "This place does something weird to people" - "I know" - "And I don't mean the abuse" - "I know"
 
 
 // ---------------

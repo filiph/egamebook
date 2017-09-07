@@ -5,7 +5,22 @@ DESCRIPTION:
 You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
-You watch Briana straighten over Agruth's corpse. The fear has gone during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly.
+You watch Briana straighten over Agruth's corpse. The fear has gone from her face during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly. You shrug.
+
+
+"When someone hurts me, I hurt them back," Briana says. "I am a simple person."
+
+
+"The world, on the other hand, is often not that simple and…"
+
+
+"Oh, but it is," Briana intercepts, smoothing her hair and using the quickly forming pool of Agruth's blood as a mirror.
+
+
+"... and this one is already dead."
+
+
+"I was making sure."
 
 
 She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it's the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth's_." She makes a pained grimace when she says the orc's name. "That creature does not deserve another mention."
@@ -28,7 +43,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 You look at the sword. "You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell."
 
 
-Briana nods. "Luck Bringer it is."
+Briana nods. "Luck Bringer it is. Now let's just get out of here as quickly as possible"
 
 
 
@@ -63,7 +78,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 You look at the sword. "You're right. We'll call it Savior. It is our first step to freedom."
 
 
-Briana nods. "Savior it is."
+Briana nods. "Savior it is. Now let's just get out of here as quickly as possible"
 
 
 SUCCESS_EFFECT:
@@ -90,7 +105,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 "That's foolish. It's just a sword, after all."
 
 
-Briana shrugs. "Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here."
+Briana shrugs. "Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here. Now let's just get out of here as quickly as possible"
 
 
 SUCCESS_EFFECT:
