@@ -764,10 +764,13 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 ]);
 Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
+      '''A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
 
 
-Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single orc is distributing the forge-ready steel into troughs that lead to the war forges below. He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, he may well be blind. The other orcs are two far away and too busy to look around.
+Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
+
+
+He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, he may well be blind, with all the molten steel around him. The orcs are much farther away and too busy to look around.
 
 
 A small crevice appears to be sucking the hot air. TODO describe  other exits
@@ -1388,10 +1391,13 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''You enter the enormous cave that holds Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
+
 One side of the cave is artificial, like a room\'s wall, and beyond that is the smelter. From an opening high on the wall, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot almost overcomes all the orc sweat.
 
 
-You and Briana duck behind some carts. You can guess which corridor leads to the smelter. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
+
+
+You and Briana duck behind some carts on a walkway way above the floor of the cave. You can guess which corridor leads to the smelter. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1434,11 +1440,15 @@ class WarForgeLookAround extends RoamingAction {
     s.add(
         '''You crane your neck from your hiding and take the scene in. More likely than not, no human has ever seen this place and lived to tell the tale.
 
+
 Briana shakes her head: "The orcs are working together with ogres. They must be terrified."
+
 
 You scan the workers, noticing the slow-moving ogres that tower over the orcs. "And they don\'t use slaves here," you say. "There must be something important going on here." Looking again at the molds they are using, you don\'t see anything out of the expected. Primitive axes and swords, some armor.
 
+
 "What is that thing!" Briana gasps. You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. An image of an enormous, repulsive, half-assembled insect. Each leg, or whatever they are, is as long as a good rock\'s throw. There are eight of them. Then there\'s the body — a huge cockroach-like contraption. The teeth of steel are already completed, sharp and menacing and as long as a man. 
+
 
 A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.''',
         wholeSentence: true);

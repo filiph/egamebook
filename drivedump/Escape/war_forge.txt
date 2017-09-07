@@ -4,11 +4,14 @@
 DESCRIPTION: 
 You enter the enormous cave that holds Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
+
 One side of the cave is artificial, like a room's wall, and beyond that is the smelter. From an opening high on the wall, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot almost overcomes all the orc sweat.
+
 
 // TODO: only "you can guess smelter" below if we've never been there, otherwise say "there is a way to descend deeper into the mountain, towards the place where you slayed Agruth"
 
-You and Briana duck behind some carts. You can guess which corridor leads to the smelter. It's up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way. 
+
+You and Briana duck behind some carts on a walkway way above the floor of the cave. You can guess which corridor leads to the smelter. It's up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way. 
 
 
 SHORT_DESCRIPTION: 
@@ -16,6 +19,7 @@ The air in the war forges is heavy and the noise overwhelming.
 [[CODE]]
 rollBrianaQuote(w, s);
 [[/CODE]]
+
 
 // TODO: pure chaos if player has done the throw in smelter.
 
@@ -49,10 +53,14 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 You crane your neck from your hiding and take the scene in. More likely than not, no human has ever seen this place and lived to tell the tale.
 
+
 Briana shakes her head: "The orcs are working together with ogres. They must be terrified."
+
 
 You scan the workers, noticing the slow-moving ogres that tower over the orcs. "And they don't use slaves here," you say. "There must be something important going on here." Looking again at the molds they are using, you don't see anything out of the expected. Primitive axes and swords, some armor.
 
+
 "What is that thing!" Briana gasps. You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. An image of an enormous, repulsive, half-assembled insect. Each leg, or whatever they are, is as long as a good rock's throw. There are eight of them. Then there's the body — a huge cockroach-like contraption. The teeth of steel are already completed, sharp and menacing and as long as a man. 
+
 
 A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can't see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.

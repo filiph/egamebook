@@ -1,13 +1,14 @@
 ﻿ROOM: $smelter
 
 
-
-
 DESCRIPTION: 
-A blast of smoke and heat greets you as you enter this vast room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
+A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
 
 
-Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single orc is distributing the forge-ready steel into troughs that lead to the war forges below. He's no more than a spear's throw away from you, but doesn't notice. In fact, he may well be blind. The other orcs are two far away and too busy to look around.
+Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
+
+
+He's no more than a spear's throw away from you, but doesn't notice. In fact, he may well be blind, with all the molten steel around him. The orcs are much farther away and too busy to look around.
 
 
 A small crevice appears to be sucking the hot air. TODO describe  other exits
@@ -29,8 +30,6 @@ $war_forge (Go to the war forges): A short passage leads to the top of the war f
 
 
 $guardpost_above_church (Go through the smooth passage): You enter the passage and it leads you slightly upwards to a junction.
-
-
 
 
 
