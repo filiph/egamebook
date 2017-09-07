@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -46,7 +47,8 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
-    if (w.getActorById(enemy.id).isAlive) {
+    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    if (!killed) {
       a.report(
           s,
           "<subject> thrust<s> {|${weaponAsObject2(a)}} "

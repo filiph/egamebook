@@ -46,16 +46,17 @@ class FinishBreakNeck extends EnemyTargetAction {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: enemy, positive: true);
+      reportPain(s, enemy);
     } else {
       a.report(
           s,
           "<subject> break<s> "
-              "<object's> "
-              "neck" /* TODO: add variants */,
+          "<object's> "
+          "neck" /* TODO: add variants */,
           object: enemy,
           positive: true);
+      killHumanoid(s, w, enemy);
     }
-    killHumanoid(s, w, enemy);
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }
 

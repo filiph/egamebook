@@ -14,14 +14,17 @@ final Random _random = new Random();
 void killHumanoid(Storyline s, WorldState w, Actor actor) {
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
-  var actorDies = actor.id != brianaId;
+  assert(
+      actor.id != brianaId,
+      "Briana cannot die. Never call killHumanoid "
+      "with Briana as actor.");
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (!actor.isBarehanded && actorDies) {
+    if (!actor.isBarehanded) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
-    if (actor.currentShield != null && actorDies) {
+    if (actor.currentShield != null) {
       // Drop shield.
       b.droppedItems.add(actor.currentShield);
     }
@@ -34,7 +37,7 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
   }
   switch (_random.nextInt(3)) {
     case 0:
-      actor.report(s, "<subject> collapse<s>${actorDies ? ', dead' : ''}",
+      actor.report(s, "<subject> collapse<s>, dead",
           negative: true, endSentence: true);
       break;
     case 1:
@@ -52,5 +55,25 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
 }
 
 void reportPain(Storyline s, Actor actor) {
+  if (actor.id == brianaId && actor.hitpoints == 0) {
+    _reportPainBriana(s, actor);
+    return;
+  }
+  assert(
+      actor.hitpoints > 0,
+      "All actors except Briana should call killHumanoid (not reportPain) "
+      "when they lose all hitpoints.");
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
+}
+
+void _reportPainBriana(Storyline s, Actor actor) {
+  assert(actor.id == brianaId);
+  if (actor.pose == Pose.onGround) {
+    actor.report(s, "<subject> stop<s> moving", negative: true);
+    s.addParagraph();
+    return;
+  }
+  actor.report(s, "<subject> drop<s> to <subject's> knees", negative: true);
+  actor.report(s, "<subject> keel<s> over", negative: true);
+  s.addParagraph();
 }

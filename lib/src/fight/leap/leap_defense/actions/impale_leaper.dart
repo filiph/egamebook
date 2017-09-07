@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
@@ -80,19 +81,20 @@ class ImpaleLeaper extends EnemyTargetAction {
         actionThread: thread);
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
-    if (enemy.hitpoints > 1) {
+    w.updateActorById(
+        enemy.id,
+        (b) => b
+          ..hitpoints -= 1
+          ..pose = Pose.onGround);
+    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    if (!killed) {
       a.currentWeapon.report(
           s,
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<object's> flesh",
           object: enemy);
-      reportPain(s, enemy);
       enemy.report(s, "<subject> fall<s> to the ground");
-      w.updateActorById(
-          enemy.id,
-          (b) => b
-            ..hitpoints -= 1
-            ..pose = Pose.onGround);
+      reportPain(s, enemy);
     } else {
       a.currentWeapon.report(
           s,
@@ -101,7 +103,6 @@ class ImpaleLeaper extends EnemyTargetAction {
           object: enemy);
       enemy.report(s, "<subject> go<es> down", negative: true);
       killHumanoid(s, w, enemy);
-      w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     }
 
     w.popSituationsUntil("FightSituation");
