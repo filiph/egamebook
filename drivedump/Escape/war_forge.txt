@@ -1,13 +1,14 @@
 ﻿ROOM: $war_forge
 
 
-
-
 DESCRIPTION: 
 TODO: first impression, clangs, shouts, heaving carts of steel
 
 
 From above, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. 
+
+
+// TODO: only "you can guess smelter" below if we've never been there, otherwise say "there is a way to descend deeper into the mountain, towards the place where you slayed Agruth"
 
 
 You and Briana duck behind some carts. You can guess which corridor leads to the smelter. Hot air is flowing into the forge through it, stirring the smoke. It's up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way. 
@@ -31,14 +32,37 @@ $cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak back tow
 
 
 
-// TODO: action for watching the hubbub
+// ---------------------
+
+
+ACTION: $war_forge_look_around
+COMMAND: Watch the workers
+
+
+FOR_LOCATION: $war_forge
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Briana: I've never seen anything like this. The orcs are working. They must be terrified. 
+
+
+Aren: "They don't use slaves. That tells me there must be something important going on here."
+
+
+What is that thing! You look and at first all you see is chaos of work and orcs everywhere. Then you squint and an image appears. An image of an enormous thing. The legs are long as a good rock throw. There are eight of them. They are separated from the body, and some of them are yet only pieces. Then there's the body. Teeth of molten steel. A full sized ogre is pouring water over the form just now, and the are is immediately a cloud of steam. You can't see much else. From the upper part of the left wall, molten steel is starting to flow to fill another part of the iron monster.
+
+
+
+
+
+
 
 
 // MAYBE: As you head towards what seems to be an exit, you hear strange whispering. You crane your neck and spot a dark-robed figure—a priest?—chanting softly to himself by the forge. Despite his whispering, his words crawl through your mind like a spider: > "_Pwarfa n’ngen aradra._ The slow suffer. _Madraga n’ngen nach santutra._ Only the hard-working prosper. _Nfarfi Arach m’marrash._ The Dead Prince sees all."
-
-
-// DEFINITELY: What is that thing! You look and at first all you see is chaos of work and orcs everywhere. Then you squint and an image appears. An image of an enormous thing. The legs are long as a good rock throw. There are eight of them. They are separated from the body, and some of them are yet only pieces. Then there's the body. Teeth of molten steel. A full sized ogre is pouring water over the form just now, and the are is immediately a cloud of steam. You can't see much else. From the upper part of the left wall, molten steel is starting to flow to fill another part of the iron monster.
-
-
- 
-// MAYBE: I've never seen anything like this. The orcs are working. They must be terrified. Aren: "They don't use slaves. That tells me there must be something important going on here."

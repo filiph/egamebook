@@ -33,4 +33,32 @@ $guardpost_above_church (Go through the smooth passage): You enter the passage a
 
 
 
-// TODO: action for throwing spear at the orc that holds the molten steel gate --- THEN: That was some throw! That thing downstairs.. I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.
+
+
+// ---------------------
+
+
+ACTION: $smelter_throw_spear
+COMMAND: Throw spear at
+
+
+FOR_LOCATION: $smelter
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+// && has spear && action(war_forge_look_around) has been performed
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+throwing spear at the orc that holds the molten steel gate
+
+
+That was some throw! That thing downstairs.. I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best. 
+
+
+SUCCESS_EFFECT:
+// TODO: removeSpearFromPlayer()

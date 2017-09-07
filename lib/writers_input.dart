@@ -786,6 +786,67 @@ A small crevice appears to be sucking the hot air. TODO describe  other exits
   new Exit('guardpost_above_church', 'Go through the smooth passage',
       'You enter the passage and it leads you slightly upwards to a junction.')
 ]);
+
+class SmelterThrowSpear extends RoamingAction {
+  @override
+  final String command = 'Throw spear at';
+
+  @override
+  final String name = 'smelter_throw_spear';
+
+  static final SmelterThrowSpear singleton = new SmelterThrowSpear();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'smelter') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''throwing spear at the orc that holds the molten steel gate
+
+
+That was some throw! That thing downstairs.. I don\'t know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.''',
+        wholeSentence: true);
+    return '${a.name} successfully performs SmelterThrowSpear';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room startAdventure =
     new Room('start_adventure', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -1331,6 +1392,8 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
 From above, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. They move as if in a trance, without a single complaint as they work. 
 
 
+
+
 You and Briana duck behind some carts. You can guess which corridor leads to the smelter. Hot air is flowing into the forge through it, stirring the smoke. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
@@ -1347,6 +1410,70 @@ You and Briana duck behind some carts. You can guess which corridor leads to the
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak back towards where you left Agruth\'s body.')
 ]);
+
+class WarForgeLookAround extends RoamingAction {
+  @override
+  final String command = 'Watch the workers';
+
+  @override
+  final String name = 'war_forge_look_around';
+
+  static final WarForgeLookAround singleton = new WarForgeLookAround();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'war_forge') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''Briana: I\'ve never seen anything like this. The orcs are working. They must be terrified. 
+
+
+Aren: "They don\'t use slaves. That tells me there must be something important going on here."
+
+
+What is that thing! You look and at first all you see is chaos of work and orcs everywhere. Then you squint and an image appears. An image of an enormous thing. The legs are long as a good rock throw. There are eight of them. They are separated from the body, and some of them are yet only pieces. Then there\'s the body. Teeth of molten steel. A full sized ogre is pouring water over the form just now, and the are is immediately a cloud of steam. You can\'t see much else. From the upper part of the left wall, molten steel is starting to flow to fill another part of the iron monster.''',
+        wholeSentence: true);
+    return '${a.name} successfully performs WarForgeLookAround';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 List<Room> allRooms = <Room>[
   caveWithAgruthPre,
   caveWithAgruth,
@@ -1374,11 +1501,13 @@ List<RoamingAction> allActions = <RoamingAction>[
   NameAgruthSwordNothing.singleton,
   TakeOrcthorn.singleton,
   SlaveQuartersContinue.singleton,
+  SmelterThrowSpear.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,
   TalkToBriana3.singleton,
   ExamineUndergroundChurch.singleton,
   WaitForRitual.singleton,
-  TakeSpearInUndergroundChurch.singleton
+  TakeSpearInUndergroundChurch.singleton,
+  WarForgeLookAround.singleton
 ];
 
