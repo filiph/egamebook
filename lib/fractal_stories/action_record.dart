@@ -24,6 +24,14 @@ abstract class ActionRecord
 
   String get actionName;
 
+  /// Additional data that a specific type of [Action] could save.
+  ///
+  /// For example, a "VisitArea" action could save the unique name of the area
+  /// visited, so that later the game can check whether an area has been
+  /// seen by the player.
+  @nullable
+  String get dataString;
+
   String get description;
 
   /// The actors who know about this.
@@ -51,11 +59,11 @@ abstract class ActionRecord
   /// the [sufferers].
   bool get wasAggressive;
 
+  bool get wasFailure;
+
   /// Specifies whether this action was proactive (as opposed to being
   /// a reaction to another actor's action).
   bool get wasProactive;
-
-  bool get wasFailure;
 
   bool get wasSuccess;
 

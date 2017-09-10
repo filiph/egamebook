@@ -82,10 +82,17 @@ abstract class RoomRoamingSituation extends Situation
       WorldState w, Actor a, String destinationRoomName, Storyline s) {
     var room = w.getRoomByName(destinationRoomName);
 
+    // Find if monsters were slain by seeing if there was a [TakeExit] action
+    // record leading to this room.
+    bool hasBeenVisited = w
+        .getActionRecords(
+            actionName: TakeExitAction.className,
+            protagonist: a,
+            wasSuccess: true)
+        .any((r) => r.dataString == destinationRoomName);
+
     var nextRoomSituation = new RoomRoamingSituation.initialized(
-        room,
-        /* TODO: do not reset monsters when coming back and monsters slain */
-        room.fightGenerator != null);
+        room, !hasBeenVisited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
 

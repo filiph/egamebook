@@ -251,6 +251,10 @@ abstract class Action {
       EnemyTargetAction action = this;
       builder.sufferers.add(action.enemy.id);
     }
+    if (this is ExitAction) {
+      ExitAction action = this;
+      builder.dataString = action.exit.destinationRoomName;
+    }
     return builder;
   }
 }

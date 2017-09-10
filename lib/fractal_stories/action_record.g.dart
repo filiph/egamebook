@@ -13,6 +13,8 @@ class _$ActionRecord extends ActionRecord {
   @override
   final String actionName;
   @override
+  final String dataString;
+  @override
   final String description;
   @override
   final KnownToMode knownTo;
@@ -25,9 +27,9 @@ class _$ActionRecord extends ActionRecord {
   @override
   final bool wasAggressive;
   @override
-  final bool wasProactive;
-  @override
   final bool wasFailure;
+  @override
+  final bool wasProactive;
   @override
   final bool wasSuccess;
 
@@ -37,14 +39,15 @@ class _$ActionRecord extends ActionRecord {
   _$ActionRecord._(
       {this.accomplices,
       this.actionName,
+      this.dataString,
       this.description,
       this.knownTo,
       this.protagonist,
       this.sufferers,
       this.time,
       this.wasAggressive,
-      this.wasProactive,
       this.wasFailure,
+      this.wasProactive,
       this.wasSuccess})
       : super._() {
     if (accomplices == null) throw new ArgumentError.notNull('accomplices');
@@ -55,8 +58,8 @@ class _$ActionRecord extends ActionRecord {
     if (sufferers == null) throw new ArgumentError.notNull('sufferers');
     if (time == null) throw new ArgumentError.notNull('time');
     if (wasAggressive == null) throw new ArgumentError.notNull('wasAggressive');
-    if (wasProactive == null) throw new ArgumentError.notNull('wasProactive');
     if (wasFailure == null) throw new ArgumentError.notNull('wasFailure');
+    if (wasProactive == null) throw new ArgumentError.notNull('wasProactive');
     if (wasSuccess == null) throw new ArgumentError.notNull('wasSuccess');
   }
 
@@ -73,14 +76,15 @@ class _$ActionRecord extends ActionRecord {
     if (other is! ActionRecord) return false;
     return accomplices == other.accomplices &&
         actionName == other.actionName &&
+        dataString == other.dataString &&
         description == other.description &&
         knownTo == other.knownTo &&
         protagonist == other.protagonist &&
         sufferers == other.sufferers &&
         time == other.time &&
         wasAggressive == other.wasAggressive &&
-        wasProactive == other.wasProactive &&
         wasFailure == other.wasFailure &&
+        wasProactive == other.wasProactive &&
         wasSuccess == other.wasSuccess;
   }
 
@@ -95,16 +99,18 @@ class _$ActionRecord extends ActionRecord {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, accomplices.hashCode),
-                                            actionName.hashCode),
+                                        $jc(
+                                            $jc($jc(0, accomplices.hashCode),
+                                                actionName.hashCode),
+                                            dataString.hashCode),
                                         description.hashCode),
                                     knownTo.hashCode),
                                 protagonist.hashCode),
                             sufferers.hashCode),
                         time.hashCode),
                     wasAggressive.hashCode),
-                wasProactive.hashCode),
-            wasFailure.hashCode),
+                wasFailure.hashCode),
+            wasProactive.hashCode),
         wasSuccess.hashCode));
   }
 
@@ -113,14 +119,15 @@ class _$ActionRecord extends ActionRecord {
     return 'ActionRecord {'
         'accomplices=${accomplices.toString()},\n'
         'actionName=${actionName.toString()},\n'
+        'dataString=${dataString.toString()},\n'
         'description=${description.toString()},\n'
         'knownTo=${knownTo.toString()},\n'
         'protagonist=${protagonist.toString()},\n'
         'sufferers=${sufferers.toString()},\n'
         'time=${time.toString()},\n'
         'wasAggressive=${wasAggressive.toString()},\n'
-        'wasProactive=${wasProactive.toString()},\n'
         'wasFailure=${wasFailure.toString()},\n'
+        'wasProactive=${wasProactive.toString()},\n'
         'wasSuccess=${wasSuccess.toString()},\n'
         '}';
   }
@@ -139,6 +146,10 @@ class ActionRecordBuilder
   String _actionName;
   String get actionName => _$this._actionName;
   set actionName(String actionName) => _$this._actionName = actionName;
+
+  String _dataString;
+  String get dataString => _$this._dataString;
+  set dataString(String dataString) => _$this._dataString = dataString;
 
   String _description;
   String get description => _$this._description;
@@ -165,13 +176,13 @@ class ActionRecordBuilder
   set wasAggressive(bool wasAggressive) =>
       _$this._wasAggressive = wasAggressive;
 
-  bool _wasProactive;
-  bool get wasProactive => _$this._wasProactive;
-  set wasProactive(bool wasProactive) => _$this._wasProactive = wasProactive;
-
   bool _wasFailure;
   bool get wasFailure => _$this._wasFailure;
   set wasFailure(bool wasFailure) => _$this._wasFailure = wasFailure;
+
+  bool _wasProactive;
+  bool get wasProactive => _$this._wasProactive;
+  set wasProactive(bool wasProactive) => _$this._wasProactive = wasProactive;
 
   bool _wasSuccess;
   bool get wasSuccess => _$this._wasSuccess;
@@ -183,14 +194,15 @@ class ActionRecordBuilder
     if (_$v != null) {
       _accomplices = _$v.accomplices?.toBuilder();
       _actionName = _$v.actionName;
+      _dataString = _$v.dataString;
       _description = _$v.description;
       _knownTo = _$v.knownTo;
       _protagonist = _$v.protagonist;
       _sufferers = _$v.sufferers?.toBuilder();
       _time = _$v.time;
       _wasAggressive = _$v.wasAggressive;
-      _wasProactive = _$v.wasProactive;
       _wasFailure = _$v.wasFailure;
+      _wasProactive = _$v.wasProactive;
       _wasSuccess = _$v.wasSuccess;
       _$v = null;
     }
@@ -214,14 +226,15 @@ class ActionRecordBuilder
         new _$ActionRecord._(
             accomplices: accomplices?.build(),
             actionName: actionName,
+            dataString: dataString,
             description: description,
             knownTo: knownTo,
             protagonist: protagonist,
             sufferers: sufferers?.build(),
             time: time,
             wasAggressive: wasAggressive,
-            wasProactive: wasProactive,
             wasFailure: wasFailure,
+            wasProactive: wasProactive,
             wasSuccess: wasSuccess);
     replace(result);
     return result;
