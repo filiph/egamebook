@@ -6,11 +6,14 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/slash/actions/finish_slash.dart';
+import 'package:edgehead/src/fight/slash/actions/finish_thrust_spear.dart';
 
 part 'slash_situation.g.dart';
 
 abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
+  static const String className = "SlashSituation";
+
   factory SlashSituation([void updates(SlashSituationBuilder b)]) =
       _$SlashSituation;
 
@@ -24,7 +27,8 @@ abstract class SlashSituation extends Situation
   SlashSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => [FinishSlash.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators =>
+      [FinishSlash.builder, FinishThrustSpear.builder];
 
   int get attacker;
 
@@ -32,7 +36,7 @@ abstract class SlashSituation extends Situation
   int get id;
 
   @override
-  String get name => "SlashSituation";
+  String get name => className;
 
   int get target;
 

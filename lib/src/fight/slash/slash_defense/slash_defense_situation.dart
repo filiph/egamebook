@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/defense_situation_interface.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_thrust_spear.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/shield_block_slash.dart';
@@ -34,6 +35,7 @@ abstract class SlashDefenseSituation extends DefenseSituation
   List<EnemyTargetActionBuilder> get actionGenerators => [
         DefensiveParrySlash.builder,
         DodgeSlash.builder,
+        DodgeThrustSpear.builder,
         JumpBackFromSlash.builder,
         ParrySlash.builder,
         ShieldBlockSlash.builder,

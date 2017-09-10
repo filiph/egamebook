@@ -22,6 +22,7 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/actions/start_thrust_spear.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
@@ -85,6 +86,8 @@ abstract class FightSituation extends Situation
         startStrikeDownPlayerBuilder,
         startSlashOutOfBalanceBuilder,
         startSlashOutOfBalancePlayerBuilder,
+        startThrustSpearBuilder,
+        startThrustSpearPlayerBuilder,
         TakeDroppedShield.builder,
         TakeDroppedWeapon.builder,
         ThrowSpear.builder,
