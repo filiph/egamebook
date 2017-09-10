@@ -164,7 +164,6 @@ bool isRoamingInBloodrock(WorldState w) {
   const bloodrockRoamingRooms = const [
     "cave_with_agruth",
     "guardpost_above_church",
-    "orcthorn_door",
     "orcthorn_room",
     "slave_quarters_passage",
     "smelter",
