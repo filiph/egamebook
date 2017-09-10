@@ -28,10 +28,10 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 
 
 
-// TODO: make the goblin a spearman (both sketch and in simulation) -- and make them both goblins - a spearman and a swordsman
+// TODO: make the goblin a spearman (both sketch and in simulation)
 
 
-![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+[IMAGE goblin spearman + orc]
 
 
 SHORT_DESCRIPTION:
@@ -39,7 +39,7 @@ The small door is TODO open/close.
 
 
 FIGHT_SITUATION:
-generateEscapeTunnelFight
+generateSlaveQuartersPassageFight
 
 
 EXITS:

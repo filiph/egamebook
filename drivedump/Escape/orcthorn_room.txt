@@ -78,4 +78,4 @@ Briana: "I can't believe we did it. A farm boy and a freak."
 
 
 SUCCESS_EFFECT:
-// TODO: give Orcthorn
+takeOrcthorn(w, a);

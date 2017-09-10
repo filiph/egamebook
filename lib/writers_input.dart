@@ -36,7 +36,7 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -642,6 +642,7 @@ Briana: "I can\'t believe we did it. A farm boy and a freak."
 
 "Well, we still need to get out of here."''',
         wholeSentence: true);
+    takeOrcthorn(w, a);
     return '${a.name} successfully performs TakeOrcthorn';
   }
 
@@ -770,7 +771,7 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 
 
 
-![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+[IMAGE goblin spearman + orc]
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -778,7 +779,7 @@ The door stays shut but the two slavers are now looking directly at you. The gob
       '''The small door is TODO open/close.
 ''',
       wholeSentence: true);
-}, generateEscapeTunnelFight, null, <Exit>[
+}, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You back out from the door, and go back where you left Agruth\'s body.'),
   new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),

@@ -31,6 +31,12 @@ const _brianaQuotes = const [
   my head smashed in by some random orc patrol.''',
 ];
 
+final Sword orcthorn = new Sword(
+    name: "Orcthorn",
+    nameIsProperNoun: true,
+    slashingDamage: 2,
+    thrustingDamage: 2);
+
 final _rand = new Random();
 
 FightSituation generateAgruthFight(WorldState w,
@@ -135,6 +141,14 @@ FightSituation generateMountainPassGuardPostFight(WorldState w,
       party, monsters, "ground", roomRoamingSituation, {});
 }
 
+FightSituation generateSlaveQuartersPassageFight(WorldState w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  var monsters = [_makeOrc(), _makeGoblin(spear: true)];
+  w.actors.addAll(monsters);
+  return new FightSituation.initialized(
+      party, monsters, "{rough|stone} floor", roomRoamingSituation, {});
+}
+
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
 
 Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
@@ -215,6 +229,15 @@ void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
   }
 }
 
+void takeOrcthorn(WorldState w, Actor a) {
+  w.updateActorById(a.id, (b) {
+    if (!a.isBarehanded) {
+      b.items.add(a.currentWeapon);
+    }
+    b.currentWeapon = orcthorn;
+  });
+}
+
 void updateGlobal(WorldState w,
     EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
   var builder = (w.global as EdgeheadGlobalState).toBuilder();
@@ -242,12 +265,13 @@ Actor _generateMadGuardian(WorldState w, bool playerKnowsAboutGuardian) {
       initiative: 100);
 }
 
-Actor _makeGoblin() => new Actor.initialized(_makeUniqueId(), "goblin",
-    nameIsProperNoun: false,
-    pronoun: Pronoun.HE,
-    currentWeapon: new Sword(name: "scimitar"),
-    team: defaultEnemyTeam,
-    combineFunction: carelessCombineFunction);
+Actor _makeGoblin({bool spear: false}) =>
+    new Actor.initialized(_makeUniqueId(), "goblin",
+        nameIsProperNoun: false,
+        pronoun: Pronoun.HE,
+        currentWeapon: spear ? new Spear() : new Sword(name: "scimitar"),
+        team: defaultEnemyTeam,
+        combineFunction: carelessCombineFunction);
 
 Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
     nameIsProperNoun: false,
