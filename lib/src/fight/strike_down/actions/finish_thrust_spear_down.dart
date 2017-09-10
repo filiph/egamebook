@@ -1,12 +1,13 @@
 import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
-class FinishSlashGroundedEnemy extends EnemyTargetAction {
-  static const String className = "FinishSlashGroundedEnemy";
+class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
+  static const String className = "FinishThrustSpearAtGroundedEnemy";
 
   @override
   final String helpMessage = null;
@@ -23,13 +24,13 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
-
-  @override
-  String get name => className;
+  FinishThrustSpearAtGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
   String get commandTemplate => "";
+
+  @override
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
@@ -43,15 +44,18 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final isBriana = enemy.id == brianaId;
-    var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
-    s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
-        subject: a.currentWeapon, object: enemy);
+    var bodyPart = isBriana ? 'side' : '{throat|neck|heart}';
+    s.add(
+        "<subject> {impale<s>|bore<s> through|pierce<s>} "
+        "<object's> $bodyPart",
+        subject: a.currentWeapon,
+        object: enemy);
     if (isBriana) {
       reportPain(s, enemy);
     } else {
       killHumanoid(s, w, enemy);
     }
-    return "${a.name} slains ${enemy.name} on the ground";
+    return "${a.name} slains ${enemy.name} on the ground with a spear";
   }
 
   /// All action takes place in the OnGroundDefenseSituation.
@@ -60,8 +64,8 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, WorldState world) =>
-      enemy.isOnGround && a.currentWeapon.isSlashing;
+      enemy.isOnGround && a.currentWeapon is Spear;
 
   static EnemyTargetAction builder(Actor enemy) =>
-      new FinishSlashGroundedEnemy(enemy);
+      new FinishThrustSpearAtGroundedEnemy(enemy);
 }

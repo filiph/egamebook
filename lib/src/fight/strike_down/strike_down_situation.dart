@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/strike_down/actions/finish_strike_down.dart';
+import 'package:edgehead/src/fight/strike_down/actions/finish_thrust_spear_down.dart';
 
 part 'strike_down_situation.g.dart';
 
@@ -25,8 +26,10 @@ abstract class StrikeDownSituation extends Situation
   StrikeDownSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      [FinishSlashGroundedEnemy.builder];
+  List<EnemyTargetActionBuilder> get actionGenerators => [
+        FinishSlashGroundedEnemy.builder,
+        FinishThrustSpearAtGroundedEnemy.builder
+      ];
 
   int get attacker;
 
