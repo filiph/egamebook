@@ -38,6 +38,11 @@ SHORT_DESCRIPTION:
 The small door is TODO open/close.
 
 
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
+
+
 FIGHT_SITUATION:
 generateSlaveQuartersPassageFight
 

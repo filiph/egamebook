@@ -29,6 +29,9 @@ SHORT_DESCRIPTION:
 The reds and whites of the molten steel reflect in the heaps of coal.
 
 
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
 
 
 EXITS:

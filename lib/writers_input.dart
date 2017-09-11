@@ -36,12 +36,14 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small entrance at the side of Mount Bloodrock.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The corpse lies still, getting cold.
+
+
 ''',
       wholeSentence: true);
   rollBrianaQuote(w, s);
@@ -777,8 +779,12 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The small door is TODO open/close.
+
+
 ''',
       wholeSentence: true);
+  rollBrianaQuote(w, s);
+  s.add('', wholeSentence: true);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You back out from the door, and go back where you left Agruth\'s body.'),
@@ -872,8 +878,12 @@ He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact,
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The reds and whites of the molten steel reflect in the heaps of coal.
+
+
 ''',
       wholeSentence: true);
+  rollBrianaQuote(w, s);
+  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('war_forge', 'Go to the war forges',
       'A short passage leads to the top of the war forges room.'),
@@ -1284,6 +1294,8 @@ Room undergroundChurch =
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The Underground Church stands silent, as if holding breath.
+
+
 ''',
       wholeSentence: true);
   rollBrianaQuote(w, s);
@@ -1525,6 +1537,8 @@ You and Briana duck behind some carts on a walkway way above the floor of the ca
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The air in the war forges is heavy and the noise overwhelming.
+
+
 ''',
       wholeSentence: true);
   rollBrianaQuote(w, s);
