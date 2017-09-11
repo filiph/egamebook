@@ -848,26 +848,33 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
 
 Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. These is the smelter.
+      '''A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. This is the smelter.
 
 
-Orc teams tilt huge kettles of molten steel into troughs that lead the white-hot liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
+Orc teams tilt huge kettles of molten steel into white-hot rivers that lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
 
 
-He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, he may well be blind, with all the molten steel around him. The orcs are much farther away and too busy to look around.
+He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him. The orcs are much farther away and too busy to look around.
 
 
-A small crevice appears to be sucking the hot air. TODO describe  other exits
 ''',
       wholeSentence: true);
+  if (justCameFrom(w, "war_forge")) {
+    s.add(
+        """You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.""");
+  }
+  s.add('', wholeSentence: true);
+  if (justCameFrom(w, "guardpost_above_church")) {
+    s.add(
+        """Not far from the blind ogre there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges.""");
+  }
+  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The reds and whites of the molten steel reflect in the heaps of coal.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
-  new Exit('tunnel', 'Enter the crevice',
-      'You enter the crevice. The air flows around you, pushing into your back. After a while, the crevice joins with a larger tunnel. The draft isn\'t as strong here, but it\'s still noticable, and you follow it.'),
   new Exit('war_forge', 'Go to the war forges',
       'A short passage leads to the top of the war forges room.'),
   new Exit('guardpost_above_church', 'Go through the smooth passage',
@@ -1262,11 +1269,18 @@ Room undergroundChurch =
       '''You enter something that at first looks like a large, twisting cave, but then opens into a high room with many columns. This must be what the orcs call the Underground Church. Your bare footsteps reverberate around the space, so you slow down to quiet them. There are no windows, of course, you are deep underground, but there is dim light coming from the far end of the place, where you expect the altar to be but can\'t quite see it. No torches here. Quiet. 
 
 
-
-
-After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.
 ''',
       wholeSentence: true);
+  if (justCameFrom(w, "cave_with_agruth")) {
+    s.add(
+        """After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.""");
+  }
+  s.add('', wholeSentence: true);
+  if (justCameFrom(w, "guardpost_above_church")) {
+    s.add(
+        """Not far from here, a tunnel leads slightly downwards, to where you killed Agruth.""");
+  }
+  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The Underground Church stands silent, as if holding breath.

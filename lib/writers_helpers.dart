@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
@@ -186,6 +187,18 @@ bool isRoamingInBloodrock(WorldState w) {
   ];
   return bloodrockRoamingRooms
       .contains((w.currentSituation as RoomRoamingSituation).currentRoomName);
+}
+
+/// Checks whether player was just now at [roomName].
+bool justCameFrom(WorldState w, String roomName) {
+  var player = getPlayer(w);
+  for (final rec in w.actionRecords) {
+    if (rec.protagonist != player.id) continue;
+    if (rec.actionName != TakeExitAction.className) continue;
+    if (rec.dataString == roomName) return true;
+    return false;
+  }
+  return false;
 }
 
 void movePlayer(WorldState w, Storyline s, String locationName) {

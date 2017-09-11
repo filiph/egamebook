@@ -7,10 +7,16 @@ DESCRIPTION:
 You enter something that at first looks like a large, twisting cave, but then opens into a high room with many columns. This must be what the orcs call the Underground Church. Your bare footsteps reverberate around the space, so you slow down to quiet them. There are no windows, of course, you are deep underground, but there is dim light coming from the far end of the place, where you expect the altar to be but can't quite see it. No torches here. Quiet. 
 
 
-// TODO: "notice" twisty passage below only if not coming from guardpost
-
-
-After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.
+[[CODE]]
+if (justCameFrom(w, "cave_with_agruth")) { 
+  s.add("""After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.""");
+}
+[[/CODE]]
+[[CODE]]
+if (justCameFrom(w, "guardpost_above_church")) { 
+  s.add("""Not far from here, a tunnel leads slightly downwards, to where you killed Agruth.""");
+}
+[[/CODE]]
 
 
 SHORT_DESCRIPTION: 
