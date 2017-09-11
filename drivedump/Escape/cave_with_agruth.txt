@@ -26,7 +26,7 @@ ROOM: $cave_with_agruth
 
 
 DESCRIPTION:
-The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small entrance at the side of Mount Bloodrock.
+The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small exit at the side of Mount Bloodrock.
 
 
 
@@ -43,7 +43,7 @@ rollBrianaQuote(w, s);
 
 
 EXITS:
-$underground_church (Go to the Unholy Church): You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.
+$underground_church (Go to the Unholy Church): You make it to the Church undetected.
  
 $war_forge (Go to the war forges): You sneak your way into the War Forges and hide in the shadows of an alcove.  
 

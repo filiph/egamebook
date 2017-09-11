@@ -36,7 +36,7 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small entrance at the side of Mount Bloodrock.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small exit at the side of Mount Bloodrock.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -50,7 +50,7 @@ Room caveWithAgruth =
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Go to the Unholy Church',
-      'You make it to the Church undetected, slipping through one of the lower windows leading into the main hall.'),
+      'You make it to the Church undetected.'),
   new Exit('war_forge', 'Go to the war forges',
       'You sneak your way into the War Forges and hide in the shadows of an alcove.'),
   new Exit('slave_quarters_passage', 'Go to the slave quarters',
@@ -372,7 +372,7 @@ _"I know."_
 _"That one is already dead."_
 
 
-"I was making sure. You understand that we should name the sword, right? It\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.
+"I was making sure. You understand that we should name the sword, right? It\'s the only thing we have going for us right now. Gods love named swords. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -523,7 +523,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''_"That is foolish. It is just a sword, after all."
+        '''_"That is foolish. It is just a sword, after all."_
 
 
 Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."''',

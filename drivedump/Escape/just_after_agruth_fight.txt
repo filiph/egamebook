@@ -23,7 +23,7 @@ _"I know."_
 _"That one is already dead."_
 
 
-"I was making sure. You understand that we should name the sword, right? It's the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth's_." She makes a pained grimace when she says the orc's name.
+"I was making sure. You understand that we should name the sword, right? It's the only thing we have going for us right now. Gods love named swords. And I refuse to carry it around referring to it as _Agruth's_." She makes a pained grimace when she says the orc's name.
 
 
 // -------------
@@ -102,7 +102,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-_"That is foolish. It is just a sword, after all."
+_"That is foolish. It is just a sword, after all."_
 
 
 Briana shrugs. "Whatever, just don't ever call it _Agruth's._ I already have more respect to this piece of iron than to that worthless animal. Now, you're right, let's just get out of here as quickly as possible."
