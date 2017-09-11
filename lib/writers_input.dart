@@ -352,25 +352,25 @@ Room justAfterAgruthFight =
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
-You watch Briana straighten over Agruth\'s corpse. The fear has gone from her face during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly. You shrug.
+You watch Briana straighten over Agruth\'s corpse. She smooths her hair, using a pool of Agruth\'s blood as a mirror. "What?" she says when she notices you\'re looking.
 
 
-"When someone hurts me, I hurt them back," Briana says. "I am a simple person."
+_"We either go now, or die."_
 
 
-"The world, on the other hand, is often not that simple and…"
+Briana spits down at the body. "He wasn\'t even the worst of them, you know."
 
 
-"Oh, but it is," Briana intercepts, smoothing her hair and using the quickly forming pool of Agruth\'s blood as a mirror.
+_"I know."_
 
 
-"... and this one is already dead."
+"They _all_ deserve this, or worse. All of them. And I like the fact we\'ll kill them by their own swords." She kicks the dead slaver in the hip. 
 
 
-"I was making sure."
+_"That one is already dead."_
 
 
-She spits on the body and turns the attention to the sword. "You know, we should name the weapon—it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name. "That creature does not deserve another mention."
+"I was making sure. You understand that we should name the sword, right? It\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -402,10 +402,10 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You look at the sword. "You\'re right. We\'ll call it Luck Bringer. It\'s our only chance to get out of this hell."
+        '''_"We will call it Luck Bringer. It is our only chance to get out of this hell."_
 
 
-Briana nods. "Luck Bringer it is. Now let\'s just get out of here as quickly as possible"''',
+Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -462,10 +462,10 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You look at the sword. "You\'re right. We\'ll call it Savior. It is our first step to freedom."
+        '''_"We will call it Savior. It is our first step to freedom."_
 
 
-Briana nods. "Savior it is. Now let\'s just get out of here as quickly as possible"''',
+Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -521,10 +521,10 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"That\'s foolish. It\'s just a sword, after all."
+        '''_"That is foolish. It is just a sword, after all."
 
 
-Briana shrugs. "Whatever, just don\'t ever call it Agruth\'s. I already have more respect to the piece of iron than to that worthless animal over here. Now let\'s just get out of here as quickly as possible"''',
+Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
         wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
