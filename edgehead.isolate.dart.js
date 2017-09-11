@@ -9443,7 +9443,7 @@ mx:{"^":"Z;V:c<,h:d<,b,a",
 G:function(a,b){var z=b.f
 if(!J.e(H.H(z.length!==0?C.a.gw(z):null,"$isM").a,"just_after_agruth_fight"))return!1
 return!0},
-R:[function(a,b,c){c.v(0,"_\"That is foolish. It is just a sword, after all.\"\n\n\nBriana shrugs. \"Whatever, just don't ever call it _Agruth's._ I already have more respect to this piece of iron than to that worthless animal. Now, you're right, let's just get out of here as quickly as possible.\"",!0)
+R:[function(a,b,c){c.v(0,"_\"That is foolish. It is just a sword, after all.\"_\n\n\nBriana shrugs. \"Whatever, just don't ever call it _Agruth's._ I already have more respect to this piece of iron than to that worthless animal. Now, you're right, let's just get out of here as quickly as possible.\"",!0)
 b.at("RoomRoamingSituation").dE(b,O.aK(b),"cave_with_agruth_pre",c)
 return H.b(a.gh())+" successfully performs NameAgruthSwordNothing"},"$3","gN",6,0,1],
 P:[function(a,b,c){throw H.c(new P.x("Success chance is 100%"))},"$3","gM",6,0,1],
