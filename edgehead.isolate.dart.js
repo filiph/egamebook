@@ -9406,14 +9406,14 @@ $1:function(a){return a.gH()}},
 lK:{"^":"a:0;",
 $1:function(a){return a.gH()}},
 t0:{"^":"a:5;",
-$3:function(a,b,c){c.A(0,'You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. \n\n\nYou watch Briana straighten over Agruth\'s corpse. The fear has gone from her face during the short battle but the anger remains. She kicks the dead slaver in the hip. When she notices you looking at her, she looks back. "What?" she says flatly. You shrug.\n\n\n"When someone hurts me, I hurt them back," Briana says. "I am a simple person."\n\n\n"The world, on the other hand, is often not that simple and\u2026"\n\n\n"Oh, but it is," Briana intercepts, smoothing her hair and using the quickly forming pool of Agruth\'s blood as a mirror.\n\n\n"... and this one is already dead."\n\n\n"I was making sure."\n\n\nShe spits on the body and turns the attention to the sword. "You know, we should name the weapon\u2014it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name. "That creature does not deserve another mention."\n',!0)}},
+$3:function(a,b,c){c.A(0,'You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. \n\n\nYou watch Briana straighten over Agruth\'s corpse. She smooths her hair, using a pool of Agruth\'s blood as a mirror. "What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve this, or worse. All of them.I like the fact we\'ll kill them by their own swords," she says. She kicks the dead slaver in the hip. \n\n\n_"That one is already dead."_\n\n\n"I was making sure. You know, we should name the sword\u2014it\'s the only thing we have going for us right now. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.\n',!0)}},
 t1:{"^":"a:5;",
 $3:function(a,b,c){c.A(0,"",!0)}},
 my:{"^":"Z;V:c<,h:d<,b,a",
 G:function(a,b){var z=b.f
 if(!J.e(H.H(z.length!==0?C.a.gv(z):null,"$isM").a,"just_after_agruth_fight"))return!1
 return!0},
-R:[function(a,b,c){c.A(0,"You look at the sword. \"You're right. We'll call it Luck Bringer. It's our only chance to get out of this hell.\"\n\n\nBriana nods. \"Luck Bringer it is. Now let's just get out of here as quickly as possible\"",!0)
+R:[function(a,b,c){c.A(0,'_"You are right. We will call it Luck Bringer. It is our only chance to get out of this hell."_\n\n\nBriana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."',!0)
 O.is(b,"Luck Bringer")
 b.at("RoomRoamingSituation").dE(b,O.aK(b),"cave_with_agruth_pre",c)
 return H.b(a.gh())+" successfully performs NameAgruthSwordOpportunity"},"$3","gN",6,0,1],
@@ -9428,7 +9428,7 @@ mz:{"^":"Z;V:c<,h:d<,b,a",
 G:function(a,b){var z=b.f
 if(!J.e(H.H(z.length!==0?C.a.gv(z):null,"$isM").a,"just_after_agruth_fight"))return!1
 return!0},
-R:[function(a,b,c){c.A(0,'You look at the sword. "You\'re right. We\'ll call it Savior. It is our first step to freedom."\n\n\nBriana nods. "Savior it is. Now let\'s just get out of here as quickly as possible"',!0)
+R:[function(a,b,c){c.A(0,'_"You are right. We will call it Savior. It is our first step to freedom."_\n\n\nBriana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."',!0)
 O.is(b,"Savior")
 b.at("RoomRoamingSituation").dE(b,O.aK(b),"cave_with_agruth_pre",c)
 return H.b(a.gh())+" successfully performs NameAgruthSwordRedemption"},"$3","gN",6,0,1],
@@ -9443,7 +9443,7 @@ mx:{"^":"Z;V:c<,h:d<,b,a",
 G:function(a,b){var z=b.f
 if(!J.e(H.H(z.length!==0?C.a.gv(z):null,"$isM").a,"just_after_agruth_fight"))return!1
 return!0},
-R:[function(a,b,c){c.A(0,"\"That's foolish. It's just a sword, after all.\"\n\n\nBriana shrugs. \"Whatever, just don't ever call it Agruth's. I already have more respect to the piece of iron than to that worthless animal over here. Now let's just get out of here as quickly as possible\"",!0)
+R:[function(a,b,c){c.A(0,"_\"That is foolish. It is just a sword, after all.\"\n\n\nBriana shrugs. \"Whatever, just don't ever call it _Agruth's._ I already have more respect to this piece of iron than to that worthless animal. Now, you're right, let's just get out of here as quickly as possible.\"",!0)
 b.at("RoomRoamingSituation").dE(b,O.aK(b),"cave_with_agruth_pre",c)
 return H.b(a.gh())+" successfully performs NameAgruthSwordNothing"},"$3","gN",6,0,1],
 P:[function(a,b,c){throw H.c(new P.x("Success chance is 100%"))},"$3","gM",6,0,1],
