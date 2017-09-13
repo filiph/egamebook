@@ -81,7 +81,8 @@ class SearchAgruth extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)',
+        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. (Your stamina increases by 1.)
+''',
         wholeSentence: true);
     giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs SearchAgruth';
@@ -262,7 +263,10 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO - take without waking the guard', wholeSentence: true);
+    s.add(
+        '''TODO - take without waking the guard
+''',
+        wholeSentence: true);
     setUpStealShield(a, w, s, true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
   }
@@ -270,7 +274,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
-        'TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing',
+        '''TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing
+''',
         wholeSentence: true);
     w.pushSituation(
         new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
@@ -432,7 +437,8 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '''_"We will call it Luck Bringer. It is our only chance to get out of this hell."_
 
 
-Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
+Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
+''',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -492,7 +498,8 @@ class NameAgruthSwordRedemption extends RoamingAction {
         '''_"We will call it Savior. It is our first step to freedom."_
 
 
-Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
+Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
+''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(w, s, "cave_with_agruth_pre");
@@ -551,7 +558,8 @@ class NameAgruthSwordNothing extends RoamingAction {
         '''_"That is foolish. It is just a sword, after all."_
 
 
-Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
+Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."
+''',
         wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
@@ -667,7 +675,8 @@ Briana: "I can\'t believe we did it. A farm boy and a freak."
 "A simple thing like this. You don\'t understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
 
 
-"Well, we still need to get out of here."''',
+"Well, we still need to get out of here."
+''',
         wholeSentence: true);
     takeOrcthorn(w, a);
     return '${a.name} successfully performs TakeOrcthorn';
@@ -734,7 +743,10 @@ class SlaveQuartersContinue extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO FIGHT', wholeSentence: true);
+    s.add(
+        '''TODO FIGHT
+''',
+        wholeSentence: true);
     w.popSituation();
     return '${a.name} successfully performs SlaveQuartersContinue';
   }
@@ -844,7 +856,8 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        'Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."',
+        '''Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."
+''',
         wholeSentence: true);
     return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
   }
@@ -879,13 +892,13 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
 
 Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. This is the smelter.
+      '''A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
-Orc teams tilt huge kettles of molten steel into white-hot rivers that lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
+The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
 
 
-He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him. The orcs are much farther away and too busy to look around.
+Unlike the orcs, who are on the other side of the large room, the ogre is no more than a spear\'s throw away from you. But he doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him.
 
 
 ''',
@@ -952,7 +965,7 @@ Why would you do that? You just wasted a perfectly good spear on a stupid ogre t
 Watch.
 
 
-(molten steel ruins everything)
+TODO (molten steel ruins everything)
 
 
 The less simple you see the world, the easier it is for you to change it. 
@@ -961,7 +974,8 @@ The less simple you see the world, the easier it is for you to change it.
 You got lucky. 
 
 
-That was some throw! That thing downstairs.. I don\'t know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.''',
+That was some throw! That thing downstairs.. I don\'t know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best.
+''',
         wholeSentence: true);
     removeSpearFromPlayer(w);
     return '${a.name} successfully performs SmelterThrowSpear';
@@ -1071,7 +1085,8 @@ Briana: "How long have you been here?"
 
 
 
-"Correct. The closest safe place is the fort."''',
+"Correct. The closest safe place is the fort."
+''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana1';
   }
@@ -1142,7 +1157,8 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 
 
-"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."''',
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."
+''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana2';
   }
@@ -1222,7 +1238,8 @@ class TalkToBriana3 extends RoamingAction {
 "Where is that cell?"
 
 
-"Somewhere in the slave quarters."''',
+"Somewhere in the slave quarters."
+''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana3';
   }
@@ -1331,7 +1348,7 @@ Room undergroundChurch =
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak out of the church, back towards where you left Agruth\'s body.'),
   new Exit('underground_church_altar', 'Go towards the altar',
-      'You sneak your way among the columns, trying to stay in the shadows.')
+      'You sneak towards the front of the temple, trying to stay in the shadows.')
 ]);
 
 class ExamineUndergroundChurch extends RoamingAction {
@@ -1362,19 +1379,42 @@ class ExamineUndergroundChurch extends RoamingAction {
         '''This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.
 
 
-Briana: "So this is it? This is where the Dead Prince resides?"
+"What are these things?" Briana whispers.
 
 
-"This is one of many of these temples inside the mountain. So I think not."
+_"This place worships the Dead Prince."_
 
 
-"So where is he? Everyone knows he\'s from Mt. Bloodrock."
+Saying the name brings coldness and sweat. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.
 
 
-"The Dead Prince is _somewhere_ here, that\'s correct. But where exactly? The orcs say the whole mountain is his vessel. Whatever that means."
+"Worships?" Briana looks up at the high ceiling, then around the temple. "I though the Dead Prince was a warlord. A shaman. Something like that."
 
 
-The glow coming from the altar dims for a moment, then lights up again.''',
+_"He is god."_
+
+
+''',
+        wholeSentence: true);
+    if (!w.actionHasBeenPerformed("wait_for_ritual")) {
+      s.add(
+          """Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, you shouldn't. He's some talented illusionist at best." """,
+          wholeSentence: true);
+    }
+    s.add(
+        '''
+
+The glow coming from the altar dims for a moment, then lights up again.
+
+
+_"He is worse than god. He is fear itself."_
+
+
+Briana looks at you, narrowing her eyes.
+
+
+_"I think you have felt it."_
+''',
         wholeSentence: true);
     return '${a.name} successfully performs ExamineUndergroundChurch';
   }
@@ -1410,12 +1450,24 @@ The glow coming from the altar dims for a moment, then lights up again.''',
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO - altar, "you are brave, my friend. Or stupid. So am I for following you.", "We are way over our head here." , eight black eyes, spear that some goblin must have forgotten here, there is motion behind the altar (wait)
+      '''The altar a simple block of stone underneath a large wall-mounted ornament portraying an octopus with eight tentacles and eight black eyes at their tips. 
+
+
+It\'s the sign of the Dead Prince. You have never seen it in real life but you know it well.
+
+
+"You\'re brave, my friend," Briana says. "I\'ll give you that. But if we must linger in this mountain, I\'d much rather kill some orcs than spy around a temple."
+
+
+_"You hate orcs? This is what made them."_
+
+
+Briana opens her mouth to reply, but at that point the otherwise steady light from the altar flickers like a flame, and you both slip behind a large column to move out of sight. A spear that lies here on the ground almost trips you up.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The altar glows with a dim red light that reflect in the eight black eyes above it.
+      '''The altar glows with a dim red light that reflects in the eight black eyes above it.
 ''',
       wholeSentence: true);
 }, null, null, <Exit>[
@@ -1447,17 +1499,75 @@ class WaitForRitual extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''TODO - build up with sounds
+        '''You move to a shadow and wait. After a few heartbeats, there is a scraping sound of stone against stone. You lean out from your hiding and see a part of the wall to the right of the altar opening.
 
 
-A lich orc enters from a steel door on the right of the altar and the whole temple sounds a tone that is powerful and sickening at the same time. After the lich, a huge creature enters through the door, crouching below the door\'s frame. It\'s unclear what it is, but perhaps some large breed of ogre, and judging by the braided hair, a female. Her sword is as long as you are tall, but she doesn\'t wield it. She leads someone on a chain. An orc. Despite being a strong one, probably captain or even chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
+An orc priest, tall and pale, enters from the stone door. At that time, the whole temple reverberates with a strong, dissonant tone that is somehow both sickening and appealing at the same time. It\'s like a groan of some large beast awakening.
 
 
-TODO: the lich will take him on the altar. Aren says \'maggots\', somehow he knows. From underneath the altar, a large horde of maggots appears. The orc tries to escape, horrified, but the ogre pin him. The maggots crawl all over the orc, and as he screams, the church reacts with tones. The lich raises his hands as if in offering. Somehow, Aren find the whole experience invigorating (+2 stamina). Once the orc is dead, rychlý process. Ogre drag the body. Leave. Briana : "how did you know it will be maggots?". Aren : "I\'ll explain when we get out of here." Briana : "And if it was meant to be an offering, why did they not leave the body?" Aren : "that I don\'t know"
+After the priest, a huge creature enters through the door, crouching below the frame. It\'s unclear what it is, but possibly some large breed of ogre, and judging by the braided hair, a female. Her sword — attached to her hip with a rope — is as long as you are tall. 
 
 
-TODO: foreshadow \'special connection\' via "This place does something weird to people" - "I know" - "And I don\'t mean the abuse" - "I know"''',
+When she enters the temple and unbends, you can see that she leads someone on a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
+
+
+The three of them — the priest, the ogre and the orc — go around the altar and stop before it, facing the symbol of the octopus, and away from you and Briana. The dissonant tone stops. You lean a little further out from your hiding, to have a better view.
+
+
+Without words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but complies. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.
+
+
+When the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.
+
+
+_"Maggots."_
+
+
+Somehow, you know. Briana gives you a puzzled look, then turns back to the altar. From the shadows in the base of the altar, a swarm of large black insects starts to make its way to the top, towards the terrified orc. The priest lifts his arms as if in silent worship.
+
+
+The ogre pushes down, preparing for the inevitable struggle. The orc senses it, tenses up and opens his mouth to scream.
+
+
+But the scream doesn\'t come. Instead of it, the dissonant tone sounds again, more powerful than before.
+
+
+The maggots crawl over the edge of the altar\'s top, onto the orc\'s body, heading straight towards his face. They move faster now.
+
+
+
+
+The orc\'s eyes go wide. He struggles against the ogre\'s grip, pointlessly. The dissonant tone gets even louder. The temple quivers. The sound permeates everything.
+
+
+This has a strange effect on you. Suddenly, the terror of the moment is fully replaced by something of an opposite — an invigorating feeling of power. You breathe in and feel stronger, refreshed. (Your stamina increases by +1.)
+
+
+You notice that the priest takes a deep breath as well.
+
+
+Then, suddenly, the sound stops, and the orc\'s body sinks. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.
+
+
+The priest puts his arms down again, and — without ceremony — heads back to the stone door. The ogre takes the orc\'s dead body, puts it over her shoulder, and follows. In a few heartbeats, they are all gone and the door is closed. A new splash of blood on the altar is the only reminder of the scene.
+
+
+Briana doesn\'t look at you. "How did you know it will be maggots?"
+
+
+_"I do not know."_
+
+
+"Is this… I _felt_ that sound, somehow. I _felt_ it."
+
+
+_"This place does something weird to people."_
+
+
+"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head, still not looking at you. "Let\'s… let\'s just get out of here."
+''',
         wholeSentence: true);
+    giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs WaitForRitual';
   }
 
@@ -1491,7 +1601,7 @@ TODO: foreshadow \'special connection\' via "This place does something weird to 
 
 class TakeSpearInUndergroundChurch extends RoamingAction {
   @override
-  final String command = 'Take spear';
+  final String command = 'Take the spear';
 
   @override
   final String name = 'take_spear_in_underground_church';
@@ -1513,7 +1623,13 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('TODO - a forgotten, orcish spear', wholeSentence: true);
+    s.add(
+        '''It\'s a primive short spear that probably belonged to some goblin. You take it in your hand, feeling the wet wood and the patches of mire along its length. It must have been here for a while. 
+
+
+But it feels right in your hand, a good throwing weapon.
+''',
+        wholeSentence: true);
     giveSpearToPlayer(w);
     return '${a.name} successfully performs TakeSpearInUndergroundChurch';
   }
@@ -1593,7 +1709,7 @@ You and Briana stand on a walkway way above the floor of the cave. You can see t
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('smelter', 'Go to smelter',
-      'You keep low, ascending the stairs. At the top the hot air hits you. You make your way through a short passage and arrive at the smelter.'),
+      'You keep low, ascending the stairs. At the top you sense a draft of hot air coming from a passage through the wall. You make your way through it.'),
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak back towards where you left Agruth\'s body.')
 ]);
@@ -1634,7 +1750,8 @@ You scan the workers, noticing the slow-moving ogres that tower over the orcs. "
 "What is that thing!" Briana gasps. You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. An image of an enormous, repulsive, half-assembled insect. Each leg, or whatever they are, is as long as a good rock\'s throw. There are eight of them. Then there\'s the body — a huge cockroach-like contraption. The teeth of steel are already completed, sharp and menacing and as long as a man. 
 
 
-A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.''',
+A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
+''',
         wholeSentence: true);
     return '${a.name} successfully performs WarForgeLookAround';
   }

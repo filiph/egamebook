@@ -49,7 +49,7 @@ rollBrianaQuote(w, s);
 
 
 EXITS:
-$smelter (Go to smelter): You keep low, ascending the stairs. At the top the hot air hits you. You make your way through a short passage and arrive at the smelter.
+$smelter (Go to smelter): You keep low, ascending the stairs. At the top you sense a draft of hot air coming from a passage through the wall. You make your way through it.
 
 
 $cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak back towards where you left Agruth's body.

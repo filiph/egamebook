@@ -35,7 +35,7 @@ $guardpost_above_church (Enter the passage): You take the sloping passage and go
 $cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak out of the church, back towards where you left Agruth's body.
 
 
-$underground_church_altar (Go towards the altar): You sneak your way among the columns, trying to stay in the shadows.
+$underground_church_altar (Go towards the altar): You sneak towards the front of the temple, trying to stay in the shadows.
 
 
 
@@ -61,16 +61,36 @@ COMPLETE_SUCCESS_DESCRIPTION:
 This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.
 
 
-Briana: "So this is it? This is where the Dead Prince resides?"
+"What are these things?" Briana whispers.
 
 
-"This is one of many of these temples inside the mountain. So I think not."
+_"This place worships the Dead Prince."_
 
 
-"So where is he? Everyone knows he's from Mt. Bloodrock."
+Saying the name brings coldness and sweat. You hear the name every night in the Dead Prince's tongue — but it has been a long time since you said it yourself.
 
 
-"The Dead Prince is _somewhere_ here, that's correct. But where exactly? The orcs say the whole mountain is his vessel. Whatever that means."
+"Worships?" Briana looks up at the high ceiling, then around the temple. "I though the Dead Prince was a warlord. A shaman. Something like that."
+
+
+_"He is god."_
+
+
+// Don't allow the following paragraph if we've been through "Wait" in altar - by then Briana is not sceptical
+[[CODE]]
+if (!w.actionHasBeenPerformed("wait_for_ritual")) {
+  s.add("""Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, you shouldn't. He's some talented illusionist at best." """, wholeSentence: true);
+}
+[[/CODE]]
 
 
 The glow coming from the altar dims for a moment, then lights up again.
+
+
+_"He is worse than god. He is fear itself."_
+
+
+Briana looks at you, narrowing her eyes.
+
+
+_"I think you have felt it."_

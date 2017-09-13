@@ -2,13 +2,13 @@
 
 
 DESCRIPTION: 
-A blast of smoke and heat greets you as you enter this room. The roaring fire and the clanging of metal draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace. This is the smelter.
+A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
-Orc teams tilt huge kettles of molten steel into white-hot rivers that lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
+The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
 
 
-He's no more than a spear's throw away from you, but doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him. The orcs are much farther away and too busy to look around.
+Unlike the orcs, who are on the other side of the large room, the ogre is no more than a spear's throw away from you. But he doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him.
 
 
 [[CODE]]
@@ -74,7 +74,7 @@ Why would you do that? You just wasted a perfectly good spear on a stupid ogre t
 Watch.
 
 
-(molten steel ruins everything)
+TODO (molten steel ruins everything)
 
 
 The less simple you see the world, the easier it is for you to change it. 
