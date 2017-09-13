@@ -53,7 +53,7 @@ FightSituation generateAgruthFight(WorldState w,
       {
         1: (w, s) {
           var agruth = w.getActorById(agruthId);
-          var sword = new Sword(name: 'scimitar');
+          var sword = new Sword();
           agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
           agruth.report(s, "<subject> draw<s> <subject's> <object>",
               object: sword);
