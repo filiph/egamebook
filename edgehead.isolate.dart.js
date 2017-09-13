@@ -9243,7 +9243,7 @@ uc:{"^":"a:6;a",
 $2:function(a,b){var z,y,x
 z=this.a
 y=a.Y(z)
-x=new G.b2("scimitar",1,1,!1,!0,!1,P.aC(C.o,null))
+x=new G.b2("sword",1,1,!1,!0,!1,P.aC(C.o,null))
 y.ad(b,"<subject> {drop<s>|let<s> go of} the whip")
 y.ae(b,"<subject> draw<s> <subject's> <object>",x)
 a.X(z,new O.ub(x))
