@@ -295,4 +295,5 @@ Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
     team: defaultEnemyTeam,
     combineFunction: carelessCombineFunction);
 
+// TODO: make this sequential to prevent random failures when we get same id
 int _makeUniqueId() => 1000 + _rand.nextInt(999999);

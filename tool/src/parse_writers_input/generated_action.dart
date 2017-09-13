@@ -8,6 +8,7 @@ import 'generate_rescue_situation.dart';
 import 'generated_game_object.dart';
 import 'method_builders.dart';
 import 'parameters.dart';
+import 'parse_code_blocks.dart';
 import 'parse_percent.dart';
 import 'recase.dart';
 import 'types.dart';
@@ -137,9 +138,9 @@ class GeneratedAction extends GeneratedGameObject {
       applyFailureBuilder
           .addStatement(stateErrorThrow('Success chance is 100%'));
     } else {
-      applyFailureBuilder.addStatement(reference(storylineParameter.name)
-          .invoke('add', [literal(_map['FAILURE_BEGINNING_DESCRIPTION'])],
-              namedArguments: {"wholeSentence": literal(true)}));
+      var failureBeginningDescription = _map['FAILURE_BEGINNING_DESCRIPTION'];
+      applyFailureBuilder.addStatements(
+          createDescriptionStatements(failureBeginningDescription ?? ''));
       if (hasRescue) {
         applyFailureBuilder.addStatement(reference('w')
             .property('pushSituation')
@@ -149,9 +150,9 @@ class GeneratedAction extends GeneratedGameObject {
         ]));
       } else {
         // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION
-        applyFailureBuilder.addStatement(reference(storylineParameter.name)
-            .invoke('add', [literal(_map['FAILURE_DESCRIPTION'])],
-                namedArguments: {"wholeSentence": literal(true)}));
+        var failureDescription = _map['FAILURE_DESCRIPTION'];
+        applyFailureBuilder.addStatements(
+            createDescriptionStatements(failureDescription ?? ''));
         if (_map.containsKey('FAILURE_EFFECT')) {
           addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder);
         }
@@ -175,9 +176,8 @@ class GeneratedAction extends GeneratedGameObject {
           "$name is missing COMPLETE_SUCCESS_DESCRIPTION: $_map");
       var successDescription =
           escapeDollarSign(_map['COMPLETE_SUCCESS_DESCRIPTION']);
-      applySuccessBuilder.addStatement(reference(storylineParameter.name)
-          .invoke('add', [literal(successDescription)],
-              namedArguments: {"wholeSentence": literal(true)}));
+      applySuccessBuilder
+          .addStatements(createDescriptionStatements(successDescription ?? ''));
       if (_map['SUCCESS_EFFECT'] != null) {
         String successEffectBlock = _map['SUCCESS_EFFECT'];
         addStatements(successEffectBlock, applySuccessBuilder);

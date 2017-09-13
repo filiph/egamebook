@@ -55,19 +55,7 @@ class GeneratedRoom extends GeneratedGameObject {
 
     ExpressionBuilder createDescriber(String text) {
       var closure = createActorWorldStoryClosure();
-      for (var block in parseBlocks(text ?? '')) {
-        switch (block.type) {
-          case BlockType.text:
-            closure.addStatement(reference("s").property("add").call(
-                [literal(escapeDollarSign(block.content))],
-                namedArguments: {"wholeSentence": literal(true)}));
-            break;
-          case BlockType.code:
-            closure
-                .addStatement(new StatementBuilder.raw((_) => block.content));
-            break;
-        }
-      }
+      closure.addStatements(createDescriptionStatements(text ?? ''));
       return closure;
     }
 
