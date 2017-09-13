@@ -45,7 +45,7 @@ rollBrianaQuote(w, s);
 EXITS:
 $underground_church (Go to the Unholy Church): You make it to the Church undetected.
  
-$war_forge (Go to the war forges): You sneak your way into the War Forges and hide in the shadows of an alcove.  
+$war_forge (Go to the war forges): You sneak your way through the black passage, closing towards the sound of hundreds of anvils.  
 
 
 $slave_quarters_passage (Go to the slave quarters): You and Briana hug the wall and start towards the slave quarters.

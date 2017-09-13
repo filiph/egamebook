@@ -5,7 +5,10 @@ DESCRIPTION:
 You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
-You watch Briana straighten over Agruth's corpse. She smooths her hair, using a pool of Agruth's blood as a mirror. "What?" she says when she notices you're looking.
+You watch Briana straighten over Agruth's corpse. She smooths her hair, using a pool of Agruth's blood as a mirror. 
+
+
+"What?" she says when she notices you're looking.
 
 
 _"We either go now, or die."_

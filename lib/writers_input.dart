@@ -52,7 +52,7 @@ Room caveWithAgruth =
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected.'),
   new Exit('war_forge', 'Go to the war forges',
-      'You sneak your way into the War Forges and hide in the shadows of an alcove.'),
+      'You sneak your way through the black passage, closing towards the sound of hundreds of anvils.'),
   new Exit('slave_quarters_passage', 'Go to the slave quarters',
       'You and Briana hug the wall and start towards the slave quarters.')
 ]);
@@ -192,10 +192,31 @@ Room forgeChurchCrevice =
 Room guardpostAboveChurch =
     new Room('guardpost_above_church', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''It\'s a small, circular room. There are exits on four sides, all marked with where they lead to. 
+      '''You enter a small, circular room. There are exits on three sides, all marked with where they lead to.
 
 
-Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
+''',
+      wholeSentence: true);
+  if (justCameFrom(w, "smelter")) {
+    s.add(
+        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downards.""");
+  }
+  s.add(
+      '''
+
+''',
+      wholeSentence: true);
+  if (justCameFrom(w, "underground_church")) {
+    s.add(
+        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downards.""");
+  }
+  s.add(
+      '''
+
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it.
+
+
+Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -210,10 +231,11 @@ Leaning on the wall next to one of the exits is a goblin guard. He\'s sleeping. 
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Descend towards the Underground Church',
-      'You take the passage leading down.'),
+      'You take the passage leading down towards the temple.'),
   new Exit('tunnel', 'Go to the upper gate',
-      'You take the passage that leads out of here.'),
-  new Exit('smelter', 'Go to the smelter', 'Something something.')
+      'You take the passage that leads upwards.'),
+  new Exit('smelter', 'Go to the smelter',
+      'You take the slightly downwards passage towards the smelter.')
 ]);
 
 class GuardpostAboveChurchTakeShield extends RoamingAction {
@@ -257,7 +279,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.8;
+    return 0.4;
   }
 
   @override
@@ -354,7 +376,10 @@ Room justAfterAgruthFight =
       '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
 
 
-You watch Briana straighten over Agruth\'s corpse. She smooths her hair, using a pool of Agruth\'s blood as a mirror. "What?" she says when she notices you\'re looking.
+You watch Briana straighten over Agruth\'s corpse. She smooths her hair, using a pool of Agruth\'s blood as a mirror. 
+
+
+"What?" she says when she notices you\'re looking.
 
 
 _"We either go now, or die."_
@@ -886,9 +911,9 @@ He\'s no more than a spear\'s throw away from you, but doesn\'t notice. In fact,
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('war_forge', 'Go to the war forges',
-      'A short passage leads to the top of the war forges room.'),
+      'You walk through a short passage set in stone, towards the sound of hundreds of anvils.'),
   new Exit('guardpost_above_church', 'Go through the smooth passage',
-      'You enter the passage and it leads you slightly upwards to a junction.')
+      'You take the smooth passage and it leads you slightly upwards.')
 ]);
 
 class SmelterThrowSpear extends RoamingAction {
@@ -1302,7 +1327,7 @@ Room undergroundChurch =
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('guardpost_above_church', 'Enter the passage',
-      'You enter the passage and go a long, slightly rising way.'),
+      'You take the sloping passage and go a long, slightly rising way.'),
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak out of the church, back towards where you left Agruth\'s body.'),
   new Exit('underground_church_altar', 'Go towards the altar',
@@ -1526,14 +1551,37 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
       '''You enter the enormous cave that holds Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
 
-One side of the cave is artificial, like a room\'s wall, and beyond that is the smelter. From an opening high on the wall, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot almost overcomes all the orc sweat.
-
-
-
-
-You and Briana duck behind some carts on a walkway way above the floor of the cave. You can guess which corridor leads to the smelter. It\'s up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way.
 ''',
       wholeSentence: true);
+  if (justCameFrom(w, "cave_with_agruth")) {
+    s.add(
+        """The cave is natural, but on one side there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
+
+
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
+
+
+Beyond that artificial wall must be the smelter, and further, the Upper Door and your freedom.
+
+
+You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into the wall of the smelter. Thankfully, there is nobody in the way. """);
+  }
+  s.add(
+      '''
+
+''',
+      wholeSentence: true);
+  if (justCameFrom(w, "smelter")) {
+    s.add(
+        """The cave is natural, but on the side from which you enter there is an artificial wall, like a stone dam. From a nearby opening on this wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
+
+
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
+
+
+You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. Thankfully, there is nobody in the way. """);
+  }
+  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''The air in the war forges is heavy and the noise overwhelming.

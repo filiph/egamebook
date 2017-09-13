@@ -35,10 +35,10 @@ rollBrianaQuote(w, s);
 
 
 EXITS:
-$war_forge (Go to the war forges): A short passage leads to the top of the war forges room. 
+$war_forge (Go to the war forges): You walk through a short passage set in stone, towards the sound of hundreds of anvils.
 
 
-$guardpost_above_church (Go through the smooth passage): You enter the passage and it leads you slightly upwards to a junction.
+$guardpost_above_church (Go through the smooth passage): You take the smooth passage and it leads you slightly upwards.
 
 
 

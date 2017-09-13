@@ -2,10 +2,27 @@
 
 
 DESCRIPTION:
-It's a small, circular room. There are exits on four sides, all marked with where they lead to. 
+You enter a small, circular room. There are exits on three sides, all marked with where they lead to.
 
 
-Leaning on the wall next to one of the exits is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.
+[[CODE]]
+if (justCameFrom(w, "smelter")) { 
+  s.add("""The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downards.""");
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (justCameFrom(w, "underground_church")) { 
+  s.add("""The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downards.""");
+}
+[[/CODE]]
+
+
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it.
+
+
+Leaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.
 
 
 
@@ -21,9 +38,10 @@ SHORT_DESCRIPTION:
 
 
 EXITS:
-$underground_church (Descend towards the Underground Church): You take the passage leading down. 
-$tunnel (Go to the upper gate): You take the passage that leads out of here.
-$smelter (Go to the smelter): Something something.
+$underground_church (Descend towards the Underground Church): You take the passage leading down towards the temple. 
+$tunnel (Go to the upper gate): You take the passage that leads upwards.
+$smelter (Go to the smelter): You take the slightly downwards passage towards the smelter.
 
 
+// TODO: make the tunnel exit description more interesting
 // TODO: guard recognizes his spear during fight (if the player has the spear)

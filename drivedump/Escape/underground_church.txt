@@ -29,7 +29,7 @@ rollBrianaQuote(w, s);
 
 
 EXITS:
-$guardpost_above_church (Enter the passage): You enter the passage and go a long, slightly rising way. 
+$guardpost_above_church (Enter the passage): You take the sloping passage and go a long, slightly rising way.
 
 
 $cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak out of the church, back towards where you left Agruth's body.

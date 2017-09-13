@@ -5,13 +5,35 @@ DESCRIPTION:
 You enter the enormous cave that holds Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
 
-One side of the cave is artificial, like a room's wall, and beyond that is the smelter. From an opening high on the wall, troughs of molten steel descend into all parts of the room like huge fiery tentacles. At the end of each, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot almost overcomes all the orc sweat.
+[[CODE]]
+if (justCameFrom(w, "cave_with_agruth")) { 
+  s.add("""The cave is natural, but on one side there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
 
 
-// TODO: only "you can guess smelter" below if we've never been there, otherwise say "there is a way to descend deeper into the mountain, towards the place where you slayed Agruth"
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
 
 
-You and Briana duck behind some carts on a walkway way above the floor of the cave. You can guess which corridor leads to the smelter. It's up a flight of stairs that hugs one side of the room, and thankfully there is nobody in the way. 
+Beyond that artificial wall must be the smelter, and further, the Upper Door and your freedom.
+
+
+You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into the wall of the smelter. Thankfully, there is nobody in the way. """);
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (justCameFrom(w, "smelter")) { 
+  s.add("""The cave is natural, but on the side from which you enter there is an artificial wall, like a stone dam. From a nearby opening on this wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
+
+
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
+
+
+You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. Thankfully, there is nobody in the way. """);
+}
+[[/CODE]]
+
+
 
 
 SHORT_DESCRIPTION: 
