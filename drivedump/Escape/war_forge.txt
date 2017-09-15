@@ -5,6 +5,9 @@ DESCRIPTION:
 You enter the enormous cave that holds Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
 
+// TODO: move most of this to an ACTION. Here, we should only show "enormous room" and exit. The "Watch workers" action should have this new "Look around" action as a prerequisite
+
+
 [[CODE]]
 if (justCameFrom(w, "cave_with_agruth")) { 
   s.add("""The cave is natural, but on one side there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 

@@ -13,7 +13,7 @@ You have to close your eyes to keep the blinding sun out. You let the wind chill
 Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
 
 
-"We must stop this." 
+_"We must stop this."_
 
 
 Briana: "This is much larger than us, Aren. If the dead prince is back, that's a problem for kings, not peasants."
@@ -25,16 +25,22 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that's a
 "Orcthorn? Bah, you think they'll let you have it? A farm boy? / Muscles and a bit of brains? Don't be a fool, you're still a farm boy."
 
 
-"I'm not a farm boy. And I don't mean Orcthorn / my own smarts. No, I have a connection."
+"I'm not a farm boy. And I don't mean Orcthorn / my own smarts. No, I have a connection. We both do."
 
 
-// TODO: Special connection needs to be foreshadowed (in church , "this place does something to people") and not special to Aren. He is special by surviving this long in his own doing. V bloodrock changes people. 
+// TODO: o Aren. He is special by surviving this long in his own doing. V bloodrock changes people. 
 
 
 "A connection."
 
 
-"With the dead prince. I dream his dreams. I think I have some of his power. You know  I survived 3 years even though  none other made it for more than a few months. I think he wants me for something."
+"With the dead prince. I dream his dreams. I think I have some of his power. I think he is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
+
+
+"So the thing you have that kings don't is… a way to communicate? You want to negotiate?"
+
+
+"I do not have anything the Dead Prince wants. No, I do not think any man, king or peasant, has it. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."
 
 
 "And you plan is?"
@@ -43,10 +49,22 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that's a
 (IMG long view of the road ahead) 
 
 
-"Not giving it to him. Giving him the exact opposite of what he wants."
+"Not letting him have it. Giving him the exact opposite of what he wants."
 
 
-TODO: "you know we could just run as fast as we can, kicking some orcs in their faces along the way, right?" yes "that others would do exactly that." But we won't. "yeah. We won't."
+"You know we could just run as fast as we can, kicking some orcs in their faces along the way, right?"
+
+
+"yes" 
+
+
+"that others would do exactly that."
+
+
+"But we will not." 
+
+
+"Yeah. We will not."
 
 
 With that, you sheathe (weapon) and start down the road towards the black fort in the distance. 

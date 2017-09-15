@@ -129,7 +129,7 @@ You have to close your eyes to keep the blinding sun out. You let the wind chill
 Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
 
 
-"We must stop this." 
+_"We must stop this."_
 
 
 Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s a problem for kings, not peasants."
@@ -141,7 +141,7 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 "Orcthorn? Bah, you think they\'ll let you have it? A farm boy? / Muscles and a bit of brains? Don\'t be a fool, you\'re still a farm boy."
 
 
-"I\'m not a farm boy. And I don\'t mean Orcthorn / my own smarts. No, I have a connection."
+"I\'m not a farm boy. And I don\'t mean Orcthorn / my own smarts. No, I have a connection. We both do."
 
 
 
@@ -149,7 +149,13 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 "A connection."
 
 
-"With the dead prince. I dream his dreams. I think I have some of his power. You know  I survived 3 years even though  none other made it for more than a few months. I think he wants me for something."
+"With the dead prince. I dream his dreams. I think I have some of his power. I think he is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
+
+
+"So the thing you have that kings don\'t is… a way to communicate? You want to negotiate?"
+
+
+"I do not have anything the Dead Prince wants. No, I do not think any man, king or peasant, has it. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."
 
 
 "And you plan is?"
@@ -158,10 +164,22 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 (IMG long view of the road ahead) 
 
 
-"Not giving it to him. Giving him the exact opposite of what he wants."
+"Not letting him have it. Giving him the exact opposite of what he wants."
 
 
-TODO: "you know we could just run as fast as we can, kicking some orcs in their faces along the way, right?" yes "that others would do exactly that." But we won\'t. "yeah. We won\'t."
+"You know we could just run as fast as we can, kicking some orcs in their faces along the way, right?"
+
+
+"yes" 
+
+
+"that others would do exactly that."
+
+
+"But we will not." 
+
+
+"Yeah. We will not."
 
 
 With that, you sheathe (weapon) and start down the road towards the black fort in the distance.
@@ -200,7 +218,7 @@ Room guardpostAboveChurch =
       wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
-        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downards.""");
+        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.""");
   }
   s.add(
       '''
@@ -209,12 +227,14 @@ Room guardpostAboveChurch =
       wholeSentence: true);
   if (justCameFrom(w, "underground_church")) {
     s.add(
-        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downards.""");
+        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.""");
   }
   s.add(
       '''
 
-A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it.
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end of those three horrible years.
+
+
 
 
 Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
@@ -895,6 +915,8 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
       '''A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
+
+
 The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
 
 
@@ -931,7 +953,7 @@ Unlike the orcs, who are on the other side of the large room, the ogre is no mor
 
 class SmelterThrowSpear extends RoamingAction {
   @override
-  final String command = 'Throw spear at';
+  final String command = 'Throw spear at the ogre';
 
   @override
   final String name = 'smelter_throw_spear';
@@ -956,7 +978,7 @@ class SmelterThrowSpear extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''throwing spear at the orc that holds the molten steel gate
+        '''TODO - throwing spear at the orc that holds the molten steel gate
 
 
 Why would you do that? You just wasted a perfectly good spear on a stupid ogre that posed no threat to us.
@@ -1665,6 +1687,8 @@ But it feels right in your hand, a good throwing weapon.
 Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''You enter the enormous cave that holds Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
+
+
 
 
 ''',

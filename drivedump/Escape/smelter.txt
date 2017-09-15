@@ -5,6 +5,9 @@ DESCRIPTION:
 A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
+// TODO: move most of this into a separate action. This should only say navigational stuff. The "Look around" action should be prerequisite to throw_spear.
+
+
 The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
 
 
@@ -47,7 +50,7 @@ $guardpost_above_church (Go through the smooth passage): You take the smooth pas
 
 
 ACTION: $smelter_throw_spear
-COMMAND: Throw spear at
+COMMAND: Throw spear at the ogre
 
 
 FOR_LOCATION: $smelter
@@ -65,7 +68,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-throwing spear at the orc that holds the molten steel gate
+TODO - throwing spear at the orc that holds the molten steel gate
 
 
 Why would you do that? You just wasted a perfectly good spear on a stupid ogre that posed no threat to us.
