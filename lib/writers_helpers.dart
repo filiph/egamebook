@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -9,6 +7,7 @@ import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
+import 'package:edgehead/fractal_stories/unique_id.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
@@ -38,7 +37,7 @@ final Sword orcthorn = new Sword(
     slashingDamage: 2,
     thrustingDamage: 2);
 
-final _rand = new Random();
+final _uniqueId = new UniqueIdMaker();
 
 FightSituation generateAgruthFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
@@ -279,14 +278,14 @@ Actor _generateMadGuardian(WorldState w, bool playerKnowsAboutGuardian) {
 }
 
 Actor _makeGoblin({bool spear: false}) =>
-    new Actor.initialized(_makeUniqueId(), "goblin",
+    new Actor.initialized(_uniqueId.generateNext(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear ? new Spear() : new Sword(name: "scimitar"),
         team: defaultEnemyTeam,
         combineFunction: carelessCombineFunction);
 
-Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
+Actor _makeOrc() => new Actor.initialized(_uniqueId.generateNext(), "orc",
     nameIsProperNoun: false,
     pronoun: Pronoun.HE,
     currentWeapon: new Sword(),
@@ -294,6 +293,3 @@ Actor _makeOrc() => new Actor.initialized(_makeUniqueId(), "orc",
     maxHitpoints: 2,
     team: defaultEnemyTeam,
     combineFunction: carelessCombineFunction);
-
-// TODO: make this sequential to prevent random failures when we get same id
-int _makeUniqueId() => 1000 + _rand.nextInt(999999);
