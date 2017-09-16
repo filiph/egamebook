@@ -42,6 +42,7 @@ class FinishLeap extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
+    final updatedEnemy = w.getActorById(enemy.id);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     final thread = getThreadId(w, "LeapSituation");
     final ground = getGroundMaterial(w);
@@ -57,7 +58,7 @@ class FinishLeap extends EnemyTargetAction {
           "{knocks <object> unconscious|knocks <object> out}",
           object: enemy,
           actionThread: thread);
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
       w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
     }
     return "${a.name} finishes leap at ${enemy.name}";

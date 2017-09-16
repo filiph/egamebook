@@ -86,23 +86,24 @@ class ImpaleLeaper extends EnemyTargetAction {
         (b) => b
           ..hitpoints -= 1
           ..pose = Pose.onGround);
-    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    final updatedEnemy = w.getActorById(enemy.id);
+    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.currentWeapon.report(
           s,
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<object's> flesh",
-          object: enemy);
-      enemy.report(s, "<subject> fall<s> to the ground");
-      reportPain(s, enemy);
+          object: updatedEnemy);
+      updatedEnemy.report(s, "<subject> fall<s> to the ground");
+      reportPain(s, updatedEnemy);
     } else {
       a.currentWeapon.report(
           s,
           "<subject> {go<es> right through|completely impale<s>|"
           "bore<s> through} <object's> {body|chest|stomach|neck}",
-          object: enemy);
-      enemy.report(s, "<subject> go<es> down", negative: true);
-      killHumanoid(s, w, enemy);
+          object: updatedEnemy);
+      updatedEnemy.report(s, "<subject> go<es> down", negative: true);
+      killHumanoid(s, w, updatedEnemy);
     }
 
     w.popSituationsUntil("FightSituation");

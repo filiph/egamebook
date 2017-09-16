@@ -44,27 +44,28 @@ class FinishSlash extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.slashingDamage);
+    final updatedEnemy = w.getActorById(enemy.id);
     final thread = getThreadId(w, SlashSituation.className);
-    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} <object's> "
           "{shoulder|abdomen|thigh}",
-          object: enemy,
+          object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
     } else {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} "
           "{across|through} <object's> "
           "{neck|abdomen|lower body}",
-          object: enemy,
+          object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

@@ -42,20 +42,21 @@ class FinishBreakNeck extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    if (enemy.id == brianaId) {
+    final updatedEnemy = w.getActorById(enemy.id);
+    if (updatedEnemy.id == brianaId) {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
-          object: enemy, positive: true);
-      reportPain(s, enemy);
+          object: updatedEnemy, positive: true);
+      reportPain(s, updatedEnemy);
     } else {
       a.report(
           s,
           "<subject> break<s> "
           "<object's> "
           "neck" /* TODO: add variants */,
-          object: enemy,
+          object: updatedEnemy,
           positive: true);
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }

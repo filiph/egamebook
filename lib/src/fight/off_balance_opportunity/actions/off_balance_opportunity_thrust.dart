@@ -47,23 +47,24 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
-    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    final updatedEnemy = w.getActorById(enemy.id);
+    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.report(
           s,
           "<subject> thrust<s> {|${weaponAsObject2(a)}} "
           "deep into <object's> {shoulder|hip|thigh}",
-          object: enemy,
+          object: updatedEnemy,
           positive: true);
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
     } else {
       a.report(
           s,
           "<subject> {stab<s>|"
           "run<s> ${weaponAsObject2(a)} through} <object>",
-          object: enemy,
+          object: updatedEnemy,
           positive: true);
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} stabs ${enemy.name}";
   }

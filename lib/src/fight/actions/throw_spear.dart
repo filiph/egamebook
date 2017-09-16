@@ -75,7 +75,8 @@ class ThrowSpear extends EnemyTargetAction {
     }
 
     w.updateActorById(enemy.id, (b) => b..hitpoints -= spear.thrustingDamage);
-    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    final updatedEnemy = w.getActorById(enemy.id);
+    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       final bodyPart = _createBodyPartEntity(
           a, "{shoulder|{left|right} arm|{left|right} thigh}");
@@ -84,10 +85,10 @@ class ThrowSpear extends EnemyTargetAction {
           "<subject> {pierce<s>|ram<s> into|drill<s> through} "
           "<object-owner's> <object>",
           owner: a,
-          objectOwner: enemy,
+          objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
     } else {
       final bodyPart = _createBodyPartEntity(a, "{chest|eye|neck}");
       spear.report(
@@ -95,10 +96,10 @@ class ThrowSpear extends EnemyTargetAction {
           "<subject> {pierce<s>|ram<s> into|drill<s> through} "
           "<object-owner's> <object>",
           owner: a,
-          objectOwner: enemy,
+          objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     _moveSpearToGround(w, a, spear);
     return "${a.name} hits ${enemy.name} with spear";

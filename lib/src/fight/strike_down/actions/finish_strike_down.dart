@@ -42,14 +42,15 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    final isBriana = enemy.id == brianaId;
+    final updatedEnemy = w.getActorById(enemy.id);
+    final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
-        subject: a.currentWeapon, object: enemy);
+        subject: a.currentWeapon, object: updatedEnemy);
     if (isBriana) {
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
     } else {
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} slains ${enemy.name} on the ground";
   }

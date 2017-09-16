@@ -45,27 +45,28 @@ class FinishThrustSpear extends EnemyTargetAction {
   String applySuccess(Actor a, WorldState w, Storyline s) {
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
+    final updatedEnemy = w.getActorById(enemy.id);
     final thread = getThreadId(w, SlashSituation.className);
-    bool killed = !w.getActorById(enemy.id).isAlive && enemy.id != brianaId;
+    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.report(
           s,
           "<subject> {pierce<s>|stab<s>|bore<s> through} <object's> "
           "{shoulder|abdomen|thigh}",
-          object: enemy,
+          object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      reportPain(s, enemy);
+      reportPain(s, updatedEnemy);
     } else {
       a.report(
           s,
           "<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} "
           "<object's> "
           "{neck|chest|heart}",
-          object: enemy,
+          object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      killHumanoid(s, w, enemy);
+      killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} pierces${killed ? ' (and kills)' : ''} ${enemy.name}";
   }
