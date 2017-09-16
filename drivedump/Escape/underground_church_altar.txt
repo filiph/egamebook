@@ -4,13 +4,10 @@
 
 
 DESCRIPTION:
-The altar a simple block of stone underneath a large wall-mounted ornament portraying an octopus with eight tentacles and eight black eyes at their tips. 
+The altar is a simple block of stone at the back of the temple. On the wall above it, there is a large ornament portraying an octopus with eight tentacles and eight black eyes at their tips. It's the sign of the Dead Prince. You have never seen it in real life but you know it well.
 
 
-It's the sign of the Dead Prince. You have never seen it in real life but you know it well.
-
-
-"You're brave, my friend," Briana says. "I'll give you that. But if we must linger in this mountain, I'd much rather kill some orcs than spy around a temple."
+"You're brave, my friend," Briana whispers. "I'll give you that. But if we must linger in this mountain, I'd much rather kill some orcs than spy around a temple."
 
 
 _"You hate orcs? This is what made them."_
@@ -28,7 +25,7 @@ The altar glows with a dim red light that reflects in the eight black eyes above
 
 
 EXITS:
-$underground_church (Sneak back): You keep low and, keeping an eye on the altar, head back to the Church's entrance.
+$underground_church (Sneak back): You crouch low and, keeping an eye on the altar, head back to the Church's entrance.
 
 
 

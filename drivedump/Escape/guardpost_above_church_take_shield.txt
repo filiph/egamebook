@@ -51,7 +51,7 @@ CONTINUATION_OF_FAILURE_HINT: You can quickly snatch the shield, jump back and p
 CONTINUATION_OF_FAILURE_EFFECT: 
 setUpStealShield(a, w, s, false);
 CONTINUATION_OF_FAILURE_DESCRIPTION: 
-You snatch the shield and jump back next to Briana. The goblin is suprisingly fast in getting his bearing. He jumps up and gets into combat stance.
+You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance.
 
 
 // TODO: if player has spear from the altar: He looks at your spear. "Thief!" he hisses.

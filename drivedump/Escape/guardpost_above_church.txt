@@ -27,7 +27,7 @@ Leaning on the wall next to the third exit is a goblin guard. He's sleeping. He 
 
 [[CODE]]
 if (!w.actionHasBeenPerformed("smelter_throw_spear") && !w.actionHasBeenPerformed("take_orcthorn")) { 
-  s.add("""For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "I can't believe we have made it this far," she whispers, looking into the third passage. "Although I'll admit it feels like we could have taken more from them. Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
+  s.add("""For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin. "Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
 
 
 _"Let us keep that second part true, then."_

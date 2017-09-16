@@ -12,7 +12,7 @@ if (justCameFrom(w, "war_forge")) {
 [[/CODE]]
 [[CODE]]
 if (justCameFrom(w, "guardpost_above_church")) { 
-  s.add("""Not far from here there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges. You'll be able to go there unnoticed.""", wholeSentence: true);
+  s.add("""Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel goes — the war forges. You'll be able to go there unnoticed.""", wholeSentence: true);
 }
 [[/CODE]]
 
@@ -55,10 +55,10 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that lead to the war forges below. 
+The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that descend to the war forges below. 
 
 
-The ogre is no more than a spear's throw away from you. But he doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him. Yet he's performing his job without fault, listening to commands from the war forges beyond the wall, and operating the  floodgates accordingly.
+The ogre is no more than a spear's throw away from you. But he doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him. Yet he's performing his job without fault, listening to commands from orcs in the war forges beyond the wall, and operating the  floodgates accordingly.
 
 
 // ---------------------

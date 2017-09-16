@@ -20,7 +20,7 @@ if (justCameFrom(w, "guardpost_above_church")) {
 
 
 SHORT_DESCRIPTION: 
-The Underground Church stands silent, as if holding breath.
+The temple stands silent, as if holding breath.
 
 
 [[CODE]]

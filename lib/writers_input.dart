@@ -243,7 +243,7 @@ Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He
   if (!w.actionHasBeenPerformed("smelter_throw_spear") &&
       !w.actionHasBeenPerformed("take_orcthorn")) {
     s.add(
-        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "I can't believe we have made it this far," she whispers, looking into the third passage. "Although I'll admit it feels like we could have taken more from them. Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
+        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin. "Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
 
 
 _"Let us keep that second part true, then."_
@@ -389,7 +389,7 @@ You deftly lift the shield, take a few slow steps back, then fix the shield on y
             'guardpost_above_church_take_shield_continuation_of_failure',
             'Snatch the shield', (a, w, s, self) {
           s.add(
-              '''You snatch the shield and jump back next to Briana. The goblin is suprisingly fast in getting his bearing. He jumps up and gets into combat stance.
+              '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance.
 
 
 
@@ -961,7 +961,7 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   s.add('', wholeSentence: true);
   if (justCameFrom(w, "guardpost_above_church")) {
     s.add(
-        """Not far from here there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges. You'll be able to go there unnoticed.""",
+        """Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel goes — the war forges. You'll be able to go there unnoticed.""",
         wholeSentence: true);
   }
   s.add('', wholeSentence: true);
@@ -1005,10 +1005,10 @@ class SmelterLookAround extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that lead to the war forges below. 
+        '''The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that descend to the war forges below. 
 
 
-The ogre is no more than a spear\'s throw away from you. But he doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him. Yet he\'s performing his job without fault, listening to commands from the war forges beyond the wall, and operating the  floodgates accordingly.
+The ogre is no more than a spear\'s throw away from you. But he doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him. Yet he\'s performing his job without fault, listening to commands from orcs in the war forges beyond the wall, and operating the  floodgates accordingly.
 ''',
         wholeSentence: true);
     return '${a.name} successfully performs SmelterLookAround';
@@ -1449,7 +1449,7 @@ Room undergroundChurch =
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The Underground Church stands silent, as if holding breath.
+      '''The temple stands silent, as if holding breath.
 
 
 ''',
@@ -1564,13 +1564,10 @@ _"I think you have felt it."_
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The altar a simple block of stone underneath a large wall-mounted ornament portraying an octopus with eight tentacles and eight black eyes at their tips. 
+      '''The altar is a simple block of stone at the back of the temple. On the wall above it, there is a large ornament portraying an octopus with eight tentacles and eight black eyes at their tips. It\'s the sign of the Dead Prince. You have never seen it in real life but you know it well.
 
 
-It\'s the sign of the Dead Prince. You have never seen it in real life but you know it well.
-
-
-"You\'re brave, my friend," Briana says. "I\'ll give you that. But if we must linger in this mountain, I\'d much rather kill some orcs than spy around a temple."
+"You\'re brave, my friend," Briana whispers. "I\'ll give you that. But if we must linger in this mountain, I\'d much rather kill some orcs than spy around a temple."
 
 
 _"You hate orcs? This is what made them."_
@@ -1586,7 +1583,7 @@ Briana opens her mouth to reply, but at that point the otherwise steady light fr
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Sneak back',
-      'You keep low and, keeping an eye on the altar, head back to the Church\'s entrance.')
+      'You crouch low and, keeping an eye on the altar, head back to the Church\'s entrance.')
 ]);
 
 class WaitForRitual extends RoamingAction {
