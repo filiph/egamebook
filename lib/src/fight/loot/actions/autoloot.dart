@@ -67,20 +67,22 @@ class AutoLoot extends Action {
     List<Item> takenItems = [];
     for (var item in situation.droppedItems) {
       // TODO: generalize sword for spear for other weapons
-      final isSwordForSpear = a.currentWeapon is Spear && item is Sword;
+      final currentActor = world.getActorById(a.id);
+      final isSwordForSpear =
+          currentActor.currentWeapon is Spear && item is Sword;
       if (item is Weapon &&
-          (item.value > a.currentWeapon.value || isSwordForSpear)) {
+          (item.value > currentActor.currentWeapon.value || isSwordForSpear)) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
-          if (a.currentWeapon is! Fist) {
+          if (currentActor.currentWeapon is! Fist) {
             // Put current weapon to inventory.
-            b.items.add(a.currentWeapon);
+            b.items.add(currentActor.currentWeapon);
           }
           // Wield the new weapon.
           b.currentWeapon = item;
         });
         takenWeapon = item;
-      } else if (item is Shield && a.currentShield == null) {
+      } else if (item is Shield && currentActor.currentShield == null) {
         world.updateActorById(a.id, (b) => b.currentShield = item);
         takenShield = item;
       } else {
