@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/spear.dart';
+import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -70,7 +71,8 @@ class TakeDroppedWeapon extends ItemAction {
     if (item is Spear) return false;
     if (!a.canWield) return false;
     Weapon weapon = item;
-    if (weapon.value <= a.currentWeapon.value) return false;
+    final isSwordForSpear = a.currentWeapon is Spear && weapon is Sword;
+    if (weapon.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another

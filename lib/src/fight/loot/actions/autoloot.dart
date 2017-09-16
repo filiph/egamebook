@@ -4,6 +4,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
+import 'package:edgehead/fractal_stories/items/spear.dart';
+import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
@@ -64,7 +66,10 @@ class AutoLoot extends Action {
     Shield takenShield;
     List<Item> takenItems = [];
     for (var item in situation.droppedItems) {
-      if (item is Weapon && item.value > a.currentWeapon.value) {
+      // TODO: generalize sword for spear for other weapons
+      final isSwordForSpear = a.currentWeapon is Spear && item is Sword;
+      if (item is Weapon &&
+          (item.value > a.currentWeapon.value || isSwordForSpear)) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
           if (a.currentWeapon is! Fist) {
