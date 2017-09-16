@@ -237,7 +237,12 @@ void rollBrianaQuote(WorldState w, Storyline s) {
 void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
   w.updateActorById(a.id, (b) => b..currentShield = new Shield());
   if (!wasSuccess) {
-    s.add("TODO: create fight");
+    final playerParty = w.actors.where((a) => a.team == playerTeam);
+    final goblin = _makeGoblin();
+    w.actors.add(goblin);
+    final roomRoamingSituation = getRoomRoaming(w);
+    w.pushSituation(new FightSituation.initialized(playerParty, [goblin],
+        "{smooth|} rock", roomRoamingSituation, const {}));
   }
 }
 

@@ -321,7 +321,7 @@ You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts
 
   @override
   num getSuccessChance(Actor a, WorldState w) {
-    return 0.4;
+    return 0.3;
   }
 
   @override
@@ -376,9 +376,9 @@ Fortunately, at about that moment the goblin shifts again and his expression get
 
 You deftly lift the shield, take a few slow steps back, then fix the shield on your offhand.''',
                   wholeSentence: true);
+              w.popSituation();
               w.updateActorById(a.id, (b) => b..stamina -= 1);
               setUpStealShield(a, w, s, true);
-              w.popSituation();
               return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
             },
             'If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)',
@@ -396,8 +396,8 @@ You deftly lift the shield, take a few slow steps back, then fix the shield on y
 
 You hold the shield on your offhand and get ready to fight.''',
               wholeSentence: true);
-          setUpStealShield(a, w, s, false);
           w.popSituation();
+          setUpStealShield(a, w, s, false);
           return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
         }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
       ];
