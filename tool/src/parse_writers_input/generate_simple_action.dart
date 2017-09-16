@@ -26,6 +26,17 @@ NewInstanceBuilder generateSimpleAction(
     ..addStatement(reference('s').property('add').call([literal(description)],
         namedArguments: {"wholeSentence": literal(true)}));
 
+  // Pop the RescueSituation.
+  successClosure.addStatement(reference('w').property('popSituation').call([]));
+
+  if (effect != null) {
+    addStatements(effect, successClosure);
+  }
+
+  successClosure.addStatement(
+      literal("$className resolved with rescue/continuation ($command)")
+          .asReturn());
+
   Map<String, MethodBuilder> namedArguments = const {};
   if (prerequisites != null) {
     MethodBuilder isApplicableClosure = new MethodBuilder.closure()
@@ -35,16 +46,6 @@ NewInstanceBuilder generateSimpleAction(
     _addIsApplicableFromString(isApplicableClosure, prerequisites);
     namedArguments = {"isApplicableClosure": isApplicableClosure};
   }
-
-  if (effect != null) {
-    addStatements(effect, successClosure);
-  }
-
-  successClosure
-    ..addStatement(reference('w').property('popSituation').call([]))
-    ..addStatement(
-        literal("$className resolved with rescue/continuation ($command)")
-            .asReturn());
 
   return simpleActionType.newInstance(
       [literal(actionName), literal(command), successClosure, literal(hint)],
