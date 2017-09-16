@@ -117,8 +117,8 @@ class SearchAgruth extends RoamingAction {
   bool get isAggressive => false;
 }
 
-Room exitFromBloodrock = new Room('exit_from_bloodrock',
-    (Actor a, WorldState w, Storyline s) {
+Room exitFromBloodrock =
+    new Room('exit_from_bloodrock', (Actor a, WorldState w, Storyline s) {
   s.add(
       '''There is light at the end of the tunnel, Briana points ahead. You approach it with suspicion, but soon there is no question about it. The fresh air, the howling of the wind, the brightness of the light. After three years, you step out of the mountain you thought would be your grave. 
 
@@ -182,7 +182,7 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 "Yeah. We will not."
 
 
-With that, you sheathe (weapon) and start down the road towards the black fort in the distance.
+With that, you start down the road towards the black fort in the distance.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -190,9 +190,7 @@ With that, you sheathe (weapon) and start down the road towards the black fort i
       '''
 ''',
       wholeSentence: true);
-}, null, null, <Exit>[
-  new Exit('__END_OF_ROAM__', 'Go forth (UNIMPLEMENTED)', 'You head down.')
-]);
+}, null, null, <Exit>[new Exit('__END_OF_ROAM__', ' (UNIMPLEMENTED)', '...')]);
 Room forgeChurchCrevice =
     new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -211,14 +209,15 @@ Room forgeChurchCrevice =
 Room guardpostAboveChurch =
     new Room('guardpost_above_church', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You enter a small, circular room. There are exits on three sides, all marked with where they lead to.
+      '''You enter a small, circular room. There are exits on three sides, all marked with crude writing.
 
 
 ''',
       wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
-        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.""");
+        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.""",
+        wholeSentence: true);
   }
   s.add(
       '''
@@ -227,7 +226,8 @@ Room guardpostAboveChurch =
       wholeSentence: true);
   if (justCameFrom(w, "underground_church")) {
     s.add(
-        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.""");
+        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.""",
+        wholeSentence: true);
   }
   s.add(
       '''
@@ -235,11 +235,22 @@ Room guardpostAboveChurch =
 A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end of those three horrible years.
 
 
-
-
 Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
+
+
 ''',
       wholeSentence: true);
+  if (!w.actionHasBeenPerformed("smelter_throw_spear") &&
+      !w.actionHasBeenPerformed("take_orcthorn")) {
+    s.add(
+        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "I can't believe we have made it this far," she whispers, looking into the third passage. "Although I'll admit it feels like we could have taken more from them. Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
+
+
+_"Let us keep that second part true, then."_
+ """,
+        wholeSentence: true);
+  }
+  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add('', wholeSentence: true);
   if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
@@ -284,7 +295,10 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''TODO - take without waking the guard
+        '''You silently approach the goblin\'s legs, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs, moves, but stays asleep.
+
+
+You take a few slow steps back, then fix the shield on your offhand.
 ''',
         wholeSentence: true);
     setUpStealShield(a, w, s, true);
@@ -294,7 +308,10 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   String applyFailure(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''TODO - start taking, guard is beginning to wake. You have to stay in an uncomfortable position for a minute before continuing
+        '''You silently approach the goblin\'s legs, and wait a few moments. You\'re trying to stay as far away from his nose as possible. The goblin sniffs, moves, but stays asleep. You shift your weight on the right leg, leaning over the goblin and using the other leg as a counterweigh. Briana watches you with amusement.
+
+
+You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move, he\'ll wake up.
 ''',
         wholeSentence: true);
     w.pushSituation(
@@ -319,7 +336,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => 'TODO';
+  String get helpMessage =>
+      'The goblin is asleep but not soundly — the floor here must be cold and uncomfortable. Taking the shield from its position on the goblin\'s lap will quite likely wake him up.';
 
   @override
   bool get isAggressive => false;
@@ -349,21 +367,34 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
             'guardpost_above_church_take_shield_rescue', 'Stay perfectly still',
             (a, w, s, self) {
           s.add(
-              'TODO - staying still, drops of sweat dripping on the guard, but ultimately the guard goes back to sleep and you take the shield',
+              '''You stay frozen in place. After a while, the strain of holding the awkward position start to show. Your left leg is shaking, and a drop of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
+
+
+Fortunately, at about that moment the goblin shifts again and his expression gets visibly more relaxed. His breath is deep and regular again.
+
+
+You deftly lift the shield, take a few slow steps back, then fix the shield on your offhand.''',
               wholeSentence: true);
           w.updateActorById(a.id, (b) => b..stamina -= 1);
           setUpStealShield(a, w, s, true);
           w.popSituation();
           return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
-        }, 'If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.'),
+        }, 'If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.'),
         new SimpleAction(
             'guardpost_above_church_take_shield_continuation_of_failure',
-            'Snag the shield', (a, w, s, self) {
-          s.add('TODO', wholeSentence: true);
+            'Snatch the shield', (a, w, s, self) {
+          s.add(
+              '''You snatch the shield and jump back next to Briana. The goblin is suprisingly fast in getting his bearing. He jumps up and gets into combat stance.
+
+
+
+
+You hold the shield on your offhand and get ready to fight.''',
+              wholeSentence: true);
           setUpStealShield(a, w, s, false);
           w.popSituation();
-          return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snag the shield)';
-        }, 'TODO')
+          return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
+        }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
       ];
 
   @override
