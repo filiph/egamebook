@@ -21,6 +21,7 @@ AstBuilder<AstNode> generateRescueSituation(
     String writersName,
     String rescueCommand,
     String rescueDescription,
+    String rescuePrerequisites,
     String rescueEffect,
     String rescueHint,
     String continuationCommand,
@@ -92,11 +93,12 @@ AstBuilder<AstNode> generateRescueSituation(
       returnType: new TypeBuilder("List", genericTypes: [actionType]),
       returns: list(<NewInstanceBuilder>[
         generateSimpleAction("${writersName}_rescue", rescueCommand,
-            rescueDescription, effect, rescueHint, className),
+            rescueDescription, rescuePrerequisites, effect, rescueHint, className),
         generateSimpleAction(
             "${writersName}_continuation_of_failure",
             continuationCommand,
             continuationDescription,
+            null,
             continuationEffect,
             continuationHint,
             className)

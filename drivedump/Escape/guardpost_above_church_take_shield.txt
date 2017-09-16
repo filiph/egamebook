@@ -30,7 +30,8 @@ You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts
 
 
 RESCUE_COMMAND: Stay perfectly still
-RESCUE_HINT: If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.
+RESCUE_HINT: If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)
+RESCUE_PREREQUISITES: a.stamina > 0
 RESCUE_EFFECT: 
 w.updateActorById(a.id, (b) => b..stamina -= 1);
 RESCUE_DESCRIPTION:

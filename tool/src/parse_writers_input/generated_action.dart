@@ -120,6 +120,7 @@ class GeneratedAction extends GeneratedGameObject {
           writersName,
           _map['RESCUE_COMMAND'],
           _map['RESCUE_DESCRIPTION'],
+          _map['RESCUE_PREREQUISITES'],
           _map['RESCUE_EFFECT'],
           _map['RESCUE_HINT'],
           _map['CONTINUATION_OF_FAILURE_COMMAND'],

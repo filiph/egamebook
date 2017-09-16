@@ -364,22 +364,27 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
   @override
   List<RoamingAction> get actions => [
         new SimpleAction(
-            'guardpost_above_church_take_shield_rescue', 'Stay perfectly still',
+            'guardpost_above_church_take_shield_rescue',
+            'Stay perfectly still',
             (a, w, s, self) {
-          s.add(
-              '''You stay frozen in place. After a while, the strain of holding the awkward position start to show. Your left leg is shaking, and a drop of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
+              s.add(
+                  '''You stay frozen in place. After a while, the strain of holding the awkward position start to show. Your left leg is shaking, and a drop of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
 
 
 Fortunately, at about that moment the goblin shifts again and his expression gets visibly more relaxed. His breath is deep and regular again.
 
 
 You deftly lift the shield, take a few slow steps back, then fix the shield on your offhand.''',
-              wholeSentence: true);
-          w.updateActorById(a.id, (b) => b..stamina -= 1);
-          setUpStealShield(a, w, s, true);
-          w.popSituation();
-          return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
-        }, 'If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat.'),
+                  wholeSentence: true);
+              w.updateActorById(a.id, (b) => b..stamina -= 1);
+              setUpStealShield(a, w, s, true);
+              w.popSituation();
+              return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
+            },
+            'If you stop moving, the guard will go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)',
+            isApplicableClosure: (a, w, self) {
+              return (a.stamina > 0);
+            }),
         new SimpleAction(
             'guardpost_above_church_take_shield_continuation_of_failure',
             'Snatch the shield', (a, w, s, self) {
