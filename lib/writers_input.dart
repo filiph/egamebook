@@ -915,24 +915,18 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
       '''A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
-
-
-The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
-
-
-Unlike the orcs, who are on the other side of the large room, the ogre is no more than a spear\'s throw away from you. But he doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him.
-
-
 ''',
       wholeSentence: true);
   if (justCameFrom(w, "war_forge")) {
     s.add(
-        """You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.""");
+        """You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.""",
+        wholeSentence: true);
   }
   s.add('', wholeSentence: true);
   if (justCameFrom(w, "guardpost_above_church")) {
     s.add(
-        """Not far from the blind ogre there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges.""");
+        """Not far from here there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges. You'll be able to go there unnoticed.""",
+        wholeSentence: true);
   }
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -951,6 +945,67 @@ Unlike the orcs, who are on the other side of the large room, the ogre is no mor
       'You take the smooth passage and it leads you slightly upwards.')
 ]);
 
+class SmelterLookAround extends RoamingAction {
+  @override
+  final String command = 'Look around';
+
+  @override
+  final String name = 'smelter_look_around';
+
+  static final SmelterLookAround singleton = new SmelterLookAround();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'smelter') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that lead to the war forges below. 
+
+
+The ogre is no more than a spear\'s throw away from you. But he doesn\'t notice. In fact, you realize he\'s blind, probably from all the molten steel around him. Yet he\'s performing his job without fault, listening to commands from the war forges beyond the wall, and operating the  floodgates accordingly.
+''',
+        wholeSentence: true);
+    return '${a.name} successfully performs SmelterLookAround';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
 class SmelterThrowSpear extends RoamingAction {
   @override
   final String command = 'Throw spear at the ogre';
@@ -967,7 +1022,8 @@ class SmelterThrowSpear extends RoamingAction {
       return false;
     }
     if ((!w.actionHasBeenPerformed(name) &&
-            w.actionHasBeenPerformed("war_forge_look_around") &&
+            w.actionHasBeenPerformed("war_forge_watch_workers") &&
+            w.actionHasBeenPerformed("smelter_look_around") &&
             getPlayer(w).hasItem(ItemType.spear)) !=
         true) {
       return false;
@@ -1689,22 +1745,12 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
       '''You enter the enormous cave that holds Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.
 
 
-
-
 ''',
       wholeSentence: true);
   if (justCameFrom(w, "cave_with_agruth")) {
     s.add(
-        """The cave is natural, but on one side there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
-
-
-At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
-
-
-Beyond that artificial wall must be the smelter, and further, the Upper Door and your freedom.
-
-
-You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into the wall of the smelter. Thankfully, there is nobody in the way. """);
+        """You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there is nobody in the way. """,
+        wholeSentence: true);
   }
   s.add(
       '''
@@ -1713,13 +1759,8 @@ You and Briana duck behind some carts on a walkway above the floor of the cave. 
       wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
-        """The cave is natural, but on the side from which you enter there is an artificial wall, like a stone dam. From a nearby opening on this wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
-
-
-At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The strong smell of iron and soot is almost stronger than the smell of all the orc sweat.
-
-
-You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. Thankfully, there is nobody in the way. """);
+        """You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. There is nobody in the way. """,
+        wholeSentence: true);
   }
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1740,7 +1781,7 @@ You and Briana stand on a walkway way above the floor of the cave. You can see t
 
 class WarForgeLookAround extends RoamingAction {
   @override
-  final String command = 'Watch the workers';
+  final String command = 'Look around';
 
   @override
   final String name = 'war_forge_look_around';
@@ -1754,6 +1795,69 @@ class WarForgeLookAround extends RoamingAction {
       return false;
     }
     if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''The cave is natural, but on the side of the smelter there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. 
+
+
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot is almost stronger than the smell of all that orc sweat.
+''',
+        wholeSentence: true);
+    return '${a.name} successfully performs WarForgeLookAround';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
+
+class WarForgeWatchWorkers extends RoamingAction {
+  @override
+  final String command = 'Watch the workers';
+
+  @override
+  final String name = 'war_forge_watch_workers';
+
+  static final WarForgeWatchWorkers singleton = new WarForgeWatchWorkers();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'war_forge') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name) &&
+            w.actionHasBeenPerformed("war_forge_look_around")) !=
+        true) {
       return false;
     }
     return true;
@@ -1777,7 +1881,7 @@ You scan the workers, noticing the slow-moving ogres that tower over the orcs. "
 A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
 ''',
         wholeSentence: true);
-    return '${a.name} successfully performs WarForgeLookAround';
+    return '${a.name} successfully performs WarForgeWatchWorkers';
   }
 
   @override
@@ -1836,6 +1940,7 @@ List<RoamingAction> allActions = <RoamingAction>[
   TakeOrcthorn.singleton,
   SlaveQuartersContinue.singleton,
   SlaveQuartersPassageExamineDoor.singleton,
+  SmelterLookAround.singleton,
   SmelterThrowSpear.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,
@@ -1843,6 +1948,7 @@ List<RoamingAction> allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
   WaitForRitual.singleton,
   TakeSpearInUndergroundChurch.singleton,
-  WarForgeLookAround.singleton
+  WarForgeLookAround.singleton,
+  WarForgeWatchWorkers.singleton
 ];
 

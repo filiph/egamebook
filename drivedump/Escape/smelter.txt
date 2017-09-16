@@ -5,23 +5,14 @@ DESCRIPTION:
 A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.
 
 
-// TODO: move most of this into a separate action. This should only say navigational stuff. The "Look around" action should be prerequisite to throw_spear.
-
-
-The artificial rivers lead the liquid across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready steel into troughs that lead to the war forges below. 
-
-
-Unlike the orcs, who are on the other side of the large room, the ogre is no more than a spear's throw away from you. But he doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him.
-
-
 [[CODE]]
 if (justCameFrom(w, "war_forge")) { 
-  s.add("""You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.""");
+  s.add("""You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.""", wholeSentence: true);
 }
 [[/CODE]]
 [[CODE]]
 if (justCameFrom(w, "guardpost_above_church")) { 
-  s.add("""Not far from the blind ogre there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges.""");
+  s.add("""Not far from here there is a short tunnel, sloping down. It leads into the same room as the molten steel — the war forges. You'll be able to go there unnoticed.""", wholeSentence: true);
 }
 [[/CODE]]
 
@@ -49,6 +40,30 @@ $guardpost_above_church (Go through the smooth passage): You take the smooth pas
 // ---------------------
 
 
+ACTION: $smelter_look_around
+COMMAND: Look around
+
+
+FOR_LOCATION: $smelter
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The artificial rivers lead the molten iron across the room, into a large pool. From that pool, a single ogre is distributing the forge-ready liquid into troughs that lead to the war forges below. 
+
+
+The ogre is no more than a spear's throw away from you. But he doesn't notice. In fact, you realize he's blind, probably from all the molten steel around him. Yet he's performing his job without fault, listening to commands from the war forges beyond the wall, and operating the  floodgates accordingly.
+
+
+// ---------------------
+
+
 ACTION: $smelter_throw_spear
 COMMAND: Throw spear at the ogre
 
@@ -59,7 +74,9 @@ FOR_LOCATION: $smelter
 PREREQUISITES:
 !w.actionHasBeenPerformed(name)
 &&
-w.actionHasBeenPerformed("war_forge_look_around") 
+w.actionHasBeenPerformed("war_forge_watch_workers") 
+&&
+w.actionHasBeenPerformed("smelter_look_around") 
 &&
 getPlayer(w).hasItem(ItemType.spear)
 
