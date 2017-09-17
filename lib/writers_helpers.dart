@@ -143,10 +143,39 @@ FightSituation generateMountainPassGuardPostFight(WorldState w,
 
 FightSituation generateSlaveQuartersPassageFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var monsters = [_makeOrc(), _makeGoblin(spear: true)];
+  var orc = _makeOrc();
+  var goblin = _makeGoblin(spear: true);
+  final orcId = orc.id;
+  final goblinId = goblin.id;
+
+  Actor getOrc(WorldState w) => w.getActorById(orcId);
+  Actor getGoblin(WorldState w) => w.getActorById(goblinId);
+  bool bothAreAlive(Actor orc, Actor goblin) {
+    return orc.isAliveAndActive && goblin.isAliveAndActive;
+  }
+
+  var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
-      party, monsters, "{rough|stone} floor", roomRoamingSituation, {});
+      party, monsters, "{rough|stone} floor", roomRoamingSituation, {
+    1: (w, s) {
+      final orc = getOrc(w);
+      final goblin = getGoblin(w);
+      if (!goblin.isAlive) {
+        orc.report(s, "<subject> look<s> at <object's> body", object: goblin);
+        orc.report(s, "\"You'll pay for this, vermin,\" <subject> snarl<s>.",
+            wholeSentence: true);
+        return;
+      }
+      if (bothAreAlive(orc, goblin)) {
+        orc.report(s, "<subject> look<s> at <object>", object: goblin);
+        orc.report(
+            s, "\"Now that is practice,\" <subject> say<s> to <objectPronoun>.",
+            object: goblin, wholeSentence: true);
+      }
+    }
+    // TODO: add more conversation
+  });
 }
 
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
