@@ -153,4 +153,4 @@ But it feels right in your hand, a good throwing weapon.
 
 
 SUCCESS_EFFECT:
-giveSpearToPlayer(w);
+giveGoblinsSpearToPlayer(w);

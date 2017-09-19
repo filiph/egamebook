@@ -92,10 +92,99 @@ FightSituation generateAgruthFight(WorldState w,
 
 FightSituation generateEscapeTunnelFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var monsters = [_makeOrc(), _makeGoblin()];
+  var orc = _makeOrc();
+  var goblin = _makeGoblin();
+  final orcId = orc.id;
+  final goblinId = goblin.id;
+
+  Actor getOrc(WorldState w) => w.getActorById(orcId);
+  Actor getGoblin(WorldState w) => w.getActorById(goblinId);
+  bool bothAreAlive(Actor orc, Actor goblin) {
+    return orc.isAliveAndActive && goblin.isAliveAndActive;
+  }
+
+  var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
-      party, monsters, "{rock|cavern} floor", roomRoamingSituation, {});
+      party, monsters, "{rock|cavern} floor", roomRoamingSituation, {
+    1: (w, s) {
+      final orc = getOrc(w);
+      final goblin = getGoblin(w);
+      final player = getPlayer(w);
+      if (bothAreAlive(orc, goblin)) {
+        final actor = orc.isConfused(w) ? goblin : orc;
+        final otherActor = actor == orc ? goblin : orc;
+        actor.report(
+            s,
+            "\"Look, Sgarr,\" <subject> say<s>. \"Look at them. "
+            "Give a puny slave some steel and suddenly they think "
+            "they're mighty slayers.\"",
+            wholeSentence: true);
+        otherActor.report(s, "<subject> laugh<s>");
+        if (player.currentWeapon.name == orcthorn.name) {
+          otherActor.report(s, "<subject> stop<s> almost instantly", but: true);
+          otherActor.report(s, "<subject> see<s> <object> in your hand.",
+              object: player.currentWeapon, wholeSentence: true);
+        }
+      } else {
+        final actor = orc.isAliveAndActive ? orc : goblin;
+        assert(actor.isAliveAndActive);
+        actor.report(
+            s,
+            "\"Look at you,\" <subject> laugh<s>. "
+            "\"Give a puny slave some steel and suddenly you think "
+            "you're mighty slayers.\"",
+            wholeSentence: true);
+        if (player.currentWeapon.name == orcthorn.name) {
+          actor.report(
+              s,
+              "But then <subject> see<s> <object> in your hand "
+              "and his face hardens.",
+              object: player.currentWeapon,
+              but: true,
+              wholeSentence: true);
+        }
+      }
+    },
+    4: (w, s) {
+      final orc = getOrc(w);
+      final goblin = getGoblin(w);
+      final actor = orc.isAliveAndActive ? orc : goblin;
+      final player = getPlayer(w);
+      assert(actor.isAliveAndActive);
+      assert(player.isAliveAndActive);
+      final kicking = actor.isBarehanded ||
+          (player.isBarehanded && player.currentShield == null);
+      var assaultVerbing = kicking ? 'kicking' : 'slashing';
+      var sounds = kicking
+          ? ['Whoosh!', 'Swah!', 'Slam!']
+          : ['Swish!', 'Whoosh!', 'Thunk!'];
+      actor.report(
+          s,
+          "<subject> start<s> wildly $assaultVerbing "
+          "in your direction",
+          positive: true);
+      s.add(
+          "\"Insignificant...\" ${sounds[0]} "
+          "\"... little ...\" ${sounds[1]} "
+          "\"... vermin!\" ${sounds[2]}",
+          wholeSentence: true);
+      var target = kicking
+          ? ('chest')
+          : (player.currentShield != null
+              ? 'shield'
+              : player.currentWeapon.name);
+      s.add(
+          "That last blow hits your $target hard"
+          "${player.isOnGround ?
+            '' :
+            ' and sends you a couple of steps back'}.",
+          wholeSentence: true);
+      final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
+      s.add("<owner's> <subject> glint<s> with intensity",
+          owner: actor, subject: eyes);
+    }
+  });
 }
 
 FightSituation generateMadGuardianFight(WorldState w,
@@ -173,8 +262,20 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
             s, "\"Now that is practice,\" <subject> say<s> to <objectPronoun>.",
             object: goblin, wholeSentence: true);
       }
+    },
+    3: (w, s) {
+      final orc = getOrc(w);
+      final goblin = getGoblin(w);
+      final actor = orc.isAliveAndActive ? orc : goblin;
+      actor.report(
+          s,
+          "\"You don't understand,\" <subject> growl<s>. "
+          "\"No matter how many of us you kill, there will be more. "
+          "And when they get you, they will eat your face alive.\"",
+          wholeSentence: true);
+      actor.report(s, "<subject> smirk<s>");
+      actor.report(s, "\"You mean nothing.\"", wholeSentence: true);
     }
-    // TODO: add more conversation
   });
 }
 
@@ -191,8 +292,10 @@ void giveGoldToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..gold += amount);
 }
 
-void giveSpearToPlayer(WorldState w) =>
-    w.updateActorById(getPlayer(w).id, (b) => b..items.add(new Spear()));
+final _goblinsSpear = new Spear();
+
+void giveGoblinsSpearToPlayer(WorldState w) =>
+    w.updateActorById(getPlayer(w).id, (b) => b..items.add(_goblinsSpear));
 
 void giveStaminaToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);
@@ -268,10 +371,28 @@ void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
   if (!wasSuccess) {
     final playerParty = w.actors.where((a) => a.team == playerTeam);
     final goblin = _makeGoblin();
+    final goblinId = goblin.id;
     w.actors.add(goblin);
     final roomRoamingSituation = getRoomRoaming(w);
-    w.pushSituation(new FightSituation.initialized(playerParty, [goblin],
-        "{smooth|} rock", roomRoamingSituation, const {}));
+    w.pushSituation(new FightSituation.initialized(
+        playerParty,
+        [goblin],
+        "{smooth|} rock",
+        roomRoamingSituation,
+        {
+          1: (w, s) {
+            final goblin = w.getActorById(goblinId);
+            final player = getPlayer(w);
+            final tookSpear = w.actionHasBeenPerformedSuccessfully(
+                "take_spear_in_underground_church");
+            if (tookSpear) {
+              goblin.report(s, "<subject> look<s> at <object-owner's> <object>",
+                  objectOwner: player, object: _goblinsSpear);
+              goblin.report(s, "\"Thief,\" <subject> mutter<s>.",
+                  wholeSentence: true);
+            }
+          }
+        }));
   }
 }
 
@@ -319,11 +440,12 @@ Actor _makeGoblin({bool spear: false}) =>
         team: defaultEnemyTeam,
         combineFunction: carelessCombineFunction);
 
-Actor _makeOrc() => new Actor.initialized(_uniqueId.generateNext(), "orc",
-    nameIsProperNoun: false,
-    pronoun: Pronoun.HE,
-    currentWeapon: new Sword(),
-    hitpoints: 2,
-    maxHitpoints: 2,
-    team: defaultEnemyTeam,
-    combineFunction: carelessCombineFunction);
+Actor _makeOrc({int hitpoints: 2}) =>
+    new Actor.initialized(_uniqueId.generateNext(), "orc",
+        nameIsProperNoun: false,
+        pronoun: Pronoun.HE,
+        currentWeapon: new Sword(),
+        hitpoints: hitpoints,
+        maxHitpoints: hitpoints,
+        team: defaultEnemyTeam,
+        combineFunction: carelessCombineFunction);

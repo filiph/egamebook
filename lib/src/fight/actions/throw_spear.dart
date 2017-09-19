@@ -56,8 +56,8 @@ class ThrowSpear extends EnemyTargetAction {
     final ground = getGroundMaterial(w);
     spear.report(
         s,
-        "<subject> {drive<s>|plunge<s>|ram<s>|thrust<s>} into the $ground "
-        "{|nearby|not far from here}");
+        "<subject> {drive<s>|plunge<s>|ram<s>|thrust<s>} into the $ground"
+        "{| nearby| not far from here}");
     _moveSpearToGround(w, a, spear);
     return "${a.name} fails to hit ${enemy.name} with spear";
   }

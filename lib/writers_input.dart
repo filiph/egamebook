@@ -149,7 +149,7 @@ Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s 
 "A connection."
 
 
-"With the dead prince. I dream his dreams. I think I have some of his power. I think he is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
+"With the dead prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
 
 
 "So the thing you have that kings don\'t is… a way to communicate? You want to negotiate?"
@@ -1741,7 +1741,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
 But it feels right in your hand, a good throwing weapon.
 ''',
         wholeSentence: true);
-    giveSpearToPlayer(w);
+    giveGoblinsSpearToPlayer(w);
     return '${a.name} successfully performs TakeSpearInUndergroundChurch';
   }
 
