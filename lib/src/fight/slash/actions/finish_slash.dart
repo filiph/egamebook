@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/writers_helpers.dart' show orcthorn;
 
 class FinishSlash extends EnemyTargetAction {
   static const String className = "FinishSlash";
@@ -27,10 +28,10 @@ class FinishSlash extends EnemyTargetAction {
   FinishSlash(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "";
 
   @override
-  String get commandTemplate => "";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
@@ -65,6 +66,11 @@ class FinishSlash extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
+      if (a.currentWeapon.name == orcthorn.name && enemy.name.contains('orc')) {
+        a.currentWeapon.report(
+            s, "<subject> slit<s> through the flesh like it isn't there.",
+            wholeSentence: true);
+      }
       killHumanoid(s, w, updatedEnemy);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
