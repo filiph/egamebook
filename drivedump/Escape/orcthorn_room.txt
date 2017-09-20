@@ -4,18 +4,10 @@
 
 
 DESCRIPTION:
-The room is dark and wet. As you enter, the noises end. 
+The room is dark and wet. As you enter, the noises end. Smell of rotting flesh fills your nostrils and almost makes you vomit.
 
 
-// TODO: no statue? something else instead - orc corpses + smell of rotting?
-
-
-When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room's ceiling, but you slowly realize it's a stone statue. The other figure, though, is living.
-
-
-
-
-Its face is in constant motion, overwhelmed by tics and waves of hateful expressions. You realize it's a male orc, but an especially large one, with huge muscles and many scars. If he wasn't locked up here, he'd surely make a captain.
+When your eyes become accustomed to the dark, you see a figure standing in front of you, and next to a heap of dead bodies. You realize it's a male orc, but an especially large one, with huge muscles and many scars. His face is in constant motion, overwhelmed by tics and waves of hateful expressions.
 
 
 
@@ -33,49 +25,4 @@ generateMadGuardianFight
 
 
 EXITS:
-$orcthorn_door (Exit the room): You go through the door. Once back in the corridor of the slave quarters, you close it behind you. 
-
-
-
-
-// ----------
-
-
-
-
-ACTION: $take_orcthorn
-COMMAND: Search for Orcthorn
-
-
-FOR_LOCATION: $orcthorn_room
-
-
-PREREQUISITES:
-w.actionHasBeenPerformed("talk_to_briana_3")
-&&
-!w.actionHasBeenPerformed(name)
-&&
-!(w.currentSituation as RoomRoamingSituation).monstersAlive
-
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
-
-
-COMPLETE_SUCCESS_DESCRIPTION:
-TODO - this must be it. you search to room and find the sword hidden well (under a loose tile? under a heap of corpses?). then "why would they keep the sword at all? why wouldn't they destroy it?" - "fear. it's the ultimate authority. I don't think it was the orcs who decided to keep the sword intact."
-
-
-Briana: "I can't believe we did it. A farm boy and a freak."
-
-
-"A freak?"
-
-
-"A simple thing like this. You don't understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
-
-
-"Well, we still need to get out of here."
-
-
-SUCCESS_EFFECT:
-takeOrcthorn(w, a);
+$orcthorn_door (Exit the room): You go through the door. Once back in the corridor of the slave quarters, you close it behind you.

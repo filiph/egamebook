@@ -1,5 +1,6 @@
 import 'package:edgehead/edgehead_global.dart';
-import 'package:edgehead/edgehead_lib.dart' show carelessCombineFunction;
+import 'package:edgehead/edgehead_lib.dart'
+    show brianaId, carelessCombineFunction;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
@@ -215,10 +216,35 @@ FightSituation generateMadGuardianFight(WorldState w,
               s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
               object: getPlayer(w), wholeSentence: true);
         },
-        9: (w, s) {
+        3: (w, s) {
           var guardian = w.getActorById(madGuardianId);
+          var briana = w.getActorById(brianaId);
           s.addParagraph();
           guardian.report(s, "\"Pain is good,\" <subject> chuckle<s>.",
+              wholeSentence: true);
+          s.addParagraph();
+          if (briana.isAliveAndActive) {
+            briana.report(s, "<subject> purse<s> <subject's> lips");
+            briana.report(s, "\"Shut up and die.\"", wholeSentence: true);
+            s.addParagraph();
+          }
+        },
+        5: (w, s) {
+          var guardian = w.getActorById(madGuardianId);
+          var player = getPlayer(w);
+          s.addParagraph();
+          guardian.report(
+              s,
+              "\"You'll make a nice addition to my collection,\" "
+              "<subject> say<s>, laughing.",
+              wholeSentence: true);
+          guardian.report(
+              s, "<subject> nod<s> towards a heap of rotting bodies nearby");
+          s.addParagraph();
+          player.report(
+              s, "<subject> glance<s> over at Briana, then back at the orc.",
+              wholeSentence: true);
+          player.report(s, "_\"You had better shut up, and die.\"_",
               wholeSentence: true);
           s.addParagraph();
         },
@@ -281,7 +307,7 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
           s,
           "\"You don't understand,\" <subject> growl<s>. "
           "\"No matter how many of us you kill, there will be more. "
-          "And when they get you, they will eat your face alive.\"",
+          "And when we get you, we will eat your face alive.\"",
           wholeSentence: true);
       actor.report(s, "<subject> smirk<s>");
       actor.report(s, "\"You mean nothing.\"", wholeSentence: true);

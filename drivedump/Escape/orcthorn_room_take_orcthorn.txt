@@ -1,0 +1,40 @@
+﻿ACTION: $take_orcthorn
+COMMAND: Search for Orcthorn
+
+
+FOR_LOCATION: $orcthorn_room
+
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_briana_3")
+&&
+!w.actionHasBeenPerformed(name)
+&&
+!(w.currentSituation as RoomRoamingSituation).monstersAlive
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+
+
+
+
+TODO - this must be it. you search to room and find the sword hidden well (under a loose tile? under a heap of corpses?). then "why would they keep the sword at all? why wouldn't they destroy it?" - "fear. it's the ultimate authority. I don't think it was the orcs who decided to keep the sword intact."
+
+
+Briana: "I can't believe we did it. A farm boy and a freak."
+
+
+"A freak?"
+
+
+"A simple thing like this. You don't understand how much the orcs learned to fear the sword. A single knight could hold two dozens of orcs in check just by wielding that sword."
+
+
+"Well, we still need to get out of here."
+
+
+SUCCESS_EFFECT:
+takeOrcthorn(w, a);

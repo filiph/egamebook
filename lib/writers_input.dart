@@ -669,17 +669,10 @@ Room orcthornDoor =
 Room orcthornRoom =
     new Room('orcthorn_room', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The room is dark and wet. As you enter, the noises end. 
+      '''The room is dark and wet. As you enter, the noises end. Smell of rotting flesh fills your nostrils and almost makes you vomit.
 
 
-
-
-When your eyes become accustomed to the dark, you see two figures standing in front of you. One is much higher, almost touching the room\'s ceiling, but you slowly realize it\'s a stone statue. The other figure, though, is living.
-
-
-
-
-Its face is in constant motion, overwhelmed by tics and waves of hateful expressions. You realize it\'s a male orc, but an especially large one, with huge muscles and many scars. If he wasn\'t locked up here, he\'d surely make a captain.
+When your eyes become accustomed to the dark, you see a figure standing in front of you, and next to a heap of dead bodies. You realize it\'s a male orc, but an especially large one, with huge muscles and many scars. His face is in constant motion, overwhelmed by tics and waves of hateful expressions.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
