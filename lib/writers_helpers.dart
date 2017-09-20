@@ -37,7 +37,17 @@ final Sword orcthorn = new Sword(
     slashingDamage: 2,
     thrustingDamage: 2);
 
+final _goblinsSpear = new Spear();
+
 final _uniqueId = new UniqueIdMaker();
+
+void executeSpearThrowAtOgre(WorldState w, Storyline s) {
+  final player = getPlayer(w);
+  final spear =
+      player.items.firstWhere((item) => item.types.contains(ItemType.spear));
+  w.updateActorById(getPlayer(w).id, (b) => b..items.remove(spear));
+  movePlayer(w, s, "war_forge", silent: true);
+}
 
 FightSituation generateAgruthFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
@@ -288,14 +298,12 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
       .getSituationByName<RoomRoamingSituation>(RoomRoamingSituation.className);
 }
 
+void giveGoblinsSpearToPlayer(WorldState w) =>
+    w.updateActorById(getPlayer(w).id, (b) => b..items.add(_goblinsSpear));
+
 void giveGoldToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..gold += amount);
 }
-
-final _goblinsSpear = new Spear();
-
-void giveGoblinsSpearToPlayer(WorldState w) =>
-    w.updateActorById(getPlayer(w).id, (b) => b..items.add(_goblinsSpear));
 
 void giveStaminaToPlayer(WorldState w, int amount) {
   w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);
@@ -332,8 +340,9 @@ bool justCameFrom(WorldState w, String roomName) {
   return false;
 }
 
-void movePlayer(WorldState w, Storyline s, String locationName) {
-  getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s);
+void movePlayer(WorldState w, Storyline s, String locationName,
+    {bool silent: false}) {
+  getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s, silent: silent);
 }
 
 void nameAgruthSword(WorldState w, String name) {
@@ -346,13 +355,6 @@ void nameAgruthSword(WorldState w, String name) {
       break;
     }
   }
-}
-
-void removeSpearFromPlayer(WorldState w) {
-  final player = getPlayer(w);
-  final spear =
-      player.items.firstWhere((item) => item.types.contains(ItemType.spear));
-  w.updateActorById(getPlayer(w).id, (b) => b..items.remove(spear));
 }
 
 void rollBrianaQuote(WorldState w, Storyline s) {

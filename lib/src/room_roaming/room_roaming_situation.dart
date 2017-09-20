@@ -78,8 +78,8 @@ abstract class RoomRoamingSituation extends Situation
   ///
   /// This will also print out the description of the room (or the short version
   /// as appropriate).
-  void moveActor(
-      WorldState w, Actor a, String destinationRoomName, Storyline s) {
+  void moveActor(WorldState w, Actor a, String destinationRoomName, Storyline s,
+      {bool silent: false}) {
     var room = w.getRoomByName(destinationRoomName);
 
     // Find if monsters were slain by seeing if there was a [TakeExit] action
@@ -96,13 +96,15 @@ abstract class RoomRoamingSituation extends Situation
 
     w.replaceSituationById(id, nextRoomSituation);
 
-    // Show short description according to world.actionRecords.
-    if (_actorHasVisitedRoom(w, a, room)) {
-      room.shortDescribe(a, w, s);
-    } else {
-      s.addParagraph();
-      room.describe(a, w, s);
-      s.addParagraph();
+    if (!silent) {
+      // Show short description according to world.actionRecords.
+      if (_actorHasVisitedRoom(w, a, room)) {
+        room.shortDescribe(a, w, s);
+      } else {
+        s.addParagraph();
+        room.describe(a, w, s);
+        s.addParagraph();
+      }
     }
 
     for (var actor in getPartyOf(a, w).toList()) {

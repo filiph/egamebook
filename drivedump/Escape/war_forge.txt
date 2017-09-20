@@ -22,6 +22,7 @@ if (justCameFrom(w, "smelter")) {
 
 
 SHORT_DESCRIPTION: 
+// TODO: change after the iron monster was destroyed
 The air in the war forges is heavy and the noise overwhelming.
 
 
@@ -101,3 +102,6 @@ You scan the workers, noticing the slow-moving ogres that tower over the orcs. "
 
 
 A full-sized ogre is pouring water over one part of the form just now, producing a cloud of steam. You can't see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
+
+
+// I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast.

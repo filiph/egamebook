@@ -15,36 +15,66 @@ w.actionHasBeenPerformed("smelter_look_around")
 getPlayer(w).hasItem(ItemType.spear)
 
 
+// TODO (possibility) have a non 100% probability. Failure still leads to ogre falling into molten still, just the throw is a little worse. Should not be rescue-able, as we don't want people to spend their resources for nothing (that would feel unfair).
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
+It is a long distance to the blind ogre, but you can't come any closer — there is the pool of molten steel between you and him, and going around it would surely make the orcs aware of your presence. You wait for the ogre to get an order from bellow and watch him open one of the gates. The molten steel starts flowing.
 
 
+You move just a few steps closer to the ogre and withdraw the spear. 
 
 
-TODO - throwing spear at the orc that holds the molten steel gate
+Briana gives you a puzzled look. "Wait…" she whispers.
 
 
-Why would you do that? You just wasted a perfectly good spear on a stupid ogre that posed no threat to us.
+You throw.
 
 
-Watch.
+The spear sails over the molten steel and rams into the blind ogre's shoulder. Your heart skips a beat. It's not a killing throw. The ogre will scream, the orcs will hear it — you're dead. But then, the gods show mercy. The ogre wheels around, trying to reach the spear with his left hand. He gets away from the gate and tries to correct it by stepping back.
 
 
-TODO (molten steel ruins everything)
+The last step takes him over the edge and into the pool of white-hot steel. He doesn't even have a chance to scream — the liquid swallows him. The orcs on the other side of the room don't notice.
 
 
-The less simple you see the world, the easier it is for you to change it. 
+"Why would you do that?" Briana says with her hands thrown in the direction of the throw. "You wasted a perfectly good spear on a stupid ogre that posed no threat to us."
 
 
-You got lucky. 
+_"Listen."_
 
 
-That was some throw! That thing downstairs.. I don't know what it is but I would not want to meet it in battle. - it is probably meant to scale castle walls. - so, fort ironcast. One well placed spear may have prevented the fall of Ironcast. - delayed. - what? - we delayed the fall of the fort, at best. 
+At this point, the distant voices coming from the war forges get slightly louder. Then again. In the clamor and noise of the two rooms, the small increase in volume is almost imperceptible but Briana hears it. She looks at you and a smile starts to form on her lips. "Let's go," she says.
+
+
+You pass the short passage and crouch at the walkway above the war forges. There is chaos below. Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away. 
+
+
+Soon, you see an orc using a rope ladder to scale the wall to the smelter. He'll be able to get to the gate and close it but it will take him some time to make the climb. And the damage has already been done.
+
+
+"That, my friend, was the most boring heroic deed in history." Briana seems amused, watching the havoc below. "You just threw a spear…"
+
+
+_"A well placed throw."_
+
+
+"... and killed a _blind_ ogre …"
+
+
+_"An important one."_
+
+
+"... a _dam_ worker. Who happened to trip and fall into molten steel."
+
+
+_"As I said, a well placed throw. The less simple you see the world, the easier it is for you to change it."_
+
+
+"Nonsense. You got lucky."
 
 
 
 
 SUCCESS_EFFECT:
-removeSpearFromPlayer(w);
+executeSpearThrowAtOgre(w, s);
