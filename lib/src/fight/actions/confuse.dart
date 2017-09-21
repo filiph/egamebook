@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 
 class Confuse extends EnemyTargetAction {
-  static const int minimalEffectLength = 4;
+  static const int minimalEffectLength = 8;
 
   static const String className = "Confuse";
 
