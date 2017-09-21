@@ -54,7 +54,7 @@ Briana: "How long have you been here?"
 
 
 ACTION: $talk_to_briana_2
-COMMAND: Talk to Briana
+COMMAND: Ask Briana about her capture
 
 
 
@@ -75,7 +75,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"Where did they catch you?"
+_"Where did they get you?"_
 
 
 
@@ -85,7 +85,7 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 
 
-"You what?"
+_"You what?"_
 
 
 
@@ -101,7 +101,7 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 
 ACTION: $talk_to_briana_3
-COMMAND: Talk to Briana
+COMMAND: Ask Briana about Orcthorn
 
 
 

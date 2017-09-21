@@ -1313,7 +1313,7 @@ Briana: "How long have you been here?"
 
 class TalkToBriana2 extends RoamingAction {
   @override
-  final String command = 'Talk to Briana';
+  final String command = 'Ask Briana about her capture';
 
   @override
   final String name = 'talk_to_briana_2';
@@ -1334,7 +1334,7 @@ class TalkToBriana2 extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"Where did they catch you?"
+        '''_"Where did they get you?"_
 
 
 
@@ -1344,7 +1344,7 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 
 
-"You what?"
+_"You what?"_
 
 
 
@@ -1385,7 +1385,7 @@ Briana: "At the Gate of Screams. I was trying to sneak in."
 
 class TalkToBriana3 extends RoamingAction {
   @override
-  final String command = 'Talk to Briana';
+  final String command = 'Ask Briana about Orcthorn';
 
   @override
   final String name = 'talk_to_briana_3';
