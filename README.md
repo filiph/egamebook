@@ -5,6 +5,9 @@
 
 ## Development
 
+**IMPORTANT:** This code depends on `package:egamebook` which is not yet
+open source.
+
 Run the following when developing:
 
     dart -c tool/watch.dart
@@ -12,6 +15,15 @@ Run the following when developing:
 This will make sure that built_value files (`*.g.dart`) are regenerated when
 needed. If you add a new built_value class, make sure it's covered by the
 globs in `tool/phases.dart`.
+
+To get latest writing, run `./update_from_drive.sh`.
+
+To test, run `pub run test`, and to include long-running fuzzy tests,
+run `pub run -c test --run-skipped`.
+
+A one-line command that tests and then, if those are successful, immediately 
+publishes the bleeding edge version to github.io can look something like
+`pub run -c test --run-skipped && peanut && git push origin --set-upstream gh-pages`.
 
 ### Testing
 
