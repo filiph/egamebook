@@ -43,6 +43,7 @@ class Unconfuse extends Action {
     }
     a.report(s, "<subject's> eyes regain focus and clarity",
         positive: true, endSentence: true);
+    world.updateActorById(a.id, (b) => b..isConfused = false);
     return "${a.name} regains clarity";
   }
 
@@ -55,7 +56,7 @@ class Unconfuse extends Action {
 
   @override
   bool isApplicable(Actor actor, WorldState world) =>
-      actor.isConfused(world) &&
+      actor.isConfused &&
       world.timeSinceLastActionRecord(
               actionName: Confuse.className,
               sufferer: actor,

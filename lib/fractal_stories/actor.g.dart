@@ -31,6 +31,8 @@ class _$Actor extends Actor {
   @override
   final bool isActive;
   @override
+  final bool isConfused;
+  @override
   final bool isPlayer;
   @override
   final BuiltSet<Item> items;
@@ -64,6 +66,7 @@ class _$Actor extends Actor {
       this.id,
       this.initiative,
       this.isActive,
+      this.isConfused,
       this.isPlayer,
       this.items,
       this.maxHitpoints,
@@ -81,6 +84,7 @@ class _$Actor extends Actor {
     if (id == null) throw new ArgumentError.notNull('id');
     if (initiative == null) throw new ArgumentError.notNull('initiative');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
+    if (isConfused == null) throw new ArgumentError.notNull('isConfused');
     if (isPlayer == null) throw new ArgumentError.notNull('isPlayer');
     if (items == null) throw new ArgumentError.notNull('items');
     if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
@@ -115,6 +119,7 @@ class _$Actor extends Actor {
         id == other.id &&
         initiative == other.initiative &&
         isActive == other.isActive &&
+        isConfused == other.isConfused &&
         isPlayer == other.isPlayer &&
         items == other.items &&
         maxHitpoints == other.maxHitpoints &&
@@ -146,26 +151,17 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc(
-                                                                                $jc(
-                                                                                    0,
-                                                                                    categories
-                                                                                        .hashCode),
-                                                                                combineFunction
-                                                                                    .hashCode),
-                                                                            currentRoomName
-                                                                                .hashCode),
-                                                                        currentShield
-                                                                            .hashCode),
-                                                                    currentWeapon
-                                                                        .hashCode),
-                                                                followingActorId
-                                                                    .hashCode),
-                                                            gold.hashCode),
-                                                        hitpoints.hashCode),
-                                                    id.hashCode),
-                                                initiative.hashCode),
-                                            isActive.hashCode),
+                                                                            $jc($jc($jc(0, categories.hashCode), combineFunction.hashCode),
+                                                                                currentRoomName.hashCode),
+                                                                            currentShield.hashCode),
+                                                                        currentWeapon.hashCode),
+                                                                    followingActorId.hashCode),
+                                                                gold.hashCode),
+                                                            hitpoints.hashCode),
+                                                        id.hashCode),
+                                                    initiative.hashCode),
+                                                isActive.hashCode),
+                                            isConfused.hashCode),
                                         isPlayer.hashCode),
                                     items.hashCode),
                                 maxHitpoints.hashCode),
@@ -191,6 +187,7 @@ class _$Actor extends Actor {
         'id=${id.toString()},\n'
         'initiative=${initiative.toString()},\n'
         'isActive=${isActive.toString()},\n'
+        'isConfused=${isConfused.toString()},\n'
         'isPlayer=${isPlayer.toString()},\n'
         'items=${items.toString()},\n'
         'maxHitpoints=${maxHitpoints.toString()},\n'
@@ -256,6 +253,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isActive => _$this._isActive;
   set isActive(bool isActive) => _$this._isActive = isActive;
 
+  bool _isConfused;
+  bool get isConfused => _$this._isConfused;
+  set isConfused(bool isConfused) => _$this._isConfused = isConfused;
+
   bool _isPlayer;
   bool get isPlayer => _$this._isPlayer;
   set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
@@ -308,6 +309,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _id = _$v.id;
       _initiative = _$v.initiative;
       _isActive = _$v.isActive;
+      _isConfused = _$v.isConfused;
       _isPlayer = _$v.isPlayer;
       _items = _$v.items?.toBuilder();
       _maxHitpoints = _$v.maxHitpoints;
@@ -348,6 +350,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             id: id,
             initiative: initiative,
             isActive: isActive,
+            isConfused: isConfused,
             isPlayer: isPlayer,
             items: items?.build(),
             maxHitpoints: maxHitpoints,

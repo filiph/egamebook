@@ -123,7 +123,7 @@ FightSituation generateEscapeTunnelFight(WorldState w,
       final goblin = getGoblin(w);
       final player = getPlayer(w);
       if (bothAreAlive(orc, goblin)) {
-        final actor = orc.isConfused(w) ? goblin : orc;
+        final actor = orc.isConfused ? goblin : orc;
         final otherActor = actor == orc ? goblin : orc;
         actor.report(
             s,

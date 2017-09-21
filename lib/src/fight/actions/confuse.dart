@@ -58,6 +58,7 @@ class Confuse extends EnemyTargetAction {
         object: enemy,
         positive: true);
     enemy.report(s, "<subject's> eyes go wide with terror", negative: true);
+    w.updateActorById(enemy.id, (b) => b..isConfused = true);
     return "${a.name} confuses ${enemy.name}";
   }
 
@@ -74,7 +75,7 @@ class Confuse extends EnemyTargetAction {
               .where((o) => o.isAlive && o.team.isFriendWith(enemy.team))
               .length >=
           2 &&
-      !enemy.isConfused(world);
+      !enemy.isConfused;
 
   static EnemyTargetAction builder(Actor enemy) => new Confuse(enemy);
 }

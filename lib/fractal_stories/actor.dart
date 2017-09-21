@@ -9,8 +9,6 @@ import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
-import 'package:edgehead/src/fight/actions/confuse.dart';
-import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
@@ -53,6 +51,7 @@ abstract class Actor extends Object
           String currentRoomName,
           int followingActorId,
           Team team,
+          bool isConfused: false,
           CombineFunction combineFunction}) =>
       new _$Actor((b) => b
         ..id = id
@@ -74,6 +73,7 @@ abstract class Actor extends Object
         ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
         ..currentRoomName = currentRoomName
         ..followingActorId = followingActorId
+        ..isConfused = isConfused
         ..combineFunction = combineFunction);
 
   Actor._();
@@ -129,6 +129,8 @@ abstract class Actor extends Object
 
   @override
   bool get isAlive => hitpoints > 0;
+
+  bool get isConfused;
 
   bool get isBarehanded => currentWeapon is Fist;
 
@@ -224,7 +226,7 @@ abstract class Actor extends Object
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
   double hateTowards(Actor other, WorldState w) {
-    if (isConfused(w) && team.isFriendWith(other.team)) {
+    if (isConfused && team.isFriendWith(other.team)) {
       return 1000.0;
     }
 
@@ -233,19 +235,6 @@ abstract class Actor extends Object
     }
 
     return team.isEnemyWith(other.team) ? 1.0 : 0.0;
-  }
-
-  /// Returns whether actor is in confused state at present.
-  ///
-  /// This works by checking [w]'s history.
-  bool isConfused(WorldState w) {
-    int recency = w.timeSinceLastActionRecord(
-        actionName: Confuse.className, sufferer: this, wasSuccess: true);
-    if (recency == null) return false;
-    int unconfuseRecency = w.timeSinceLastActionRecord(
-        actionName: Unconfuse.className, protagonist: this, wasSuccess: true);
-    if (unconfuseRecency == null) return true;
-    return unconfuseRecency < recency;
   }
 
   /// The resources this actor knows about.
