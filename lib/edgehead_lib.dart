@@ -172,6 +172,23 @@ class EdgeheadGame extends LoopedEvent {
     var situation = world.currentSituation;
     var actor = situation.getCurrentActor(world);
 
+    assert(
+        actor != null,
+        "situation.getCurrentActor(world) returned null. "
+        "Some action that you added should make sure it removes the "
+        "Situation (maybe '${world.actionRecords.first.description}'?) or that "
+        "the actor has at least one way to resolve the situation. "
+        "World: $world. "
+        "Situation: ${world.currentSituation}. "
+        "Action Records: "
+        "${world.actionRecords.map((a) => a.description).join('<-')}");
+    if (actor == null) {
+      // In prod, silently remove the Situation and continue.
+      world.popSituation();
+      world.time += 1;
+      return;
+    }
+
     var planner = new ActorPlanner(actor, world);
     await planner.plan();
     var recs = planner.getRecommendations();
