@@ -18,17 +18,17 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"You were caught not too long ago, I think. What can you tell me about outside?"
+_"You were caught not too long ago, I think. What can you tell me about outside?"_
 
 
 
 
-Briana: "How long have you been here?"
+Briana shrugs. "How long have you been here?"
 
 
 
 
-"Three years."
+_"Three years."_
 
 
 
@@ -36,14 +36,13 @@ Briana: "How long have you been here?"
 "Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
 
 
+// TODO: some replacement for what's commented out below
 
 
-"So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
+// "So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
 
 
-
-
-"Correct. The closest safe place is the fort."
+// "Correct. The closest safe place is the fort."
 
 
 
@@ -80,7 +79,7 @@ _"Where did they get you?"_
 
 
 
-Briana: "At the Gate of Screams. I was trying to sneak in."
+"At the Gate of Screams. I was trying to sneak in."
 
 
 
@@ -155,3 +154,6 @@ if (!playerHasVisited(w, "slave_quarters_passage")) {
   s.add("""Briana tenses. "Well then, at least we have that choice." """, wholeSentence: true);
 }
 [[/CODE]]
+
+
+// TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breating space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.

@@ -1252,32 +1252,22 @@ class TalkToBriana1 extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"You were caught not too long ago, I think. What can you tell me about outside?"
+        '''_"You were caught not too long ago, I think. What can you tell me about outside?"_
 
 
 
 
-Briana: "How long have you been here?"
+Briana shrugs. "How long have you been here?"
 
 
 
 
-"Three years."
+_"Three years."_
 
 
 
 
 "Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
-
-
-
-
-"So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
-
-
-
-
-"Correct. The closest safe place is the fort."
 ''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana1';
@@ -1339,7 +1329,7 @@ class TalkToBriana2 extends RoamingAction {
 
 
 
-Briana: "At the Gate of Screams. I was trying to sneak in."
+"At the Gate of Screams. I was trying to sneak in."
 
 
 
