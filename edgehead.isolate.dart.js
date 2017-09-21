@@ -9722,7 +9722,7 @@ $3:function(a,b,c){c.p(0,"",!0)}},
 pq:{"^":"W;X:c<,h:d<,b,a",
 H:function(a,b){if(!(b.dP(this.d)==null&&O.eE(b)))return!1
 return!0},
-R:[function(a,b,c){c.p(0,'"You were caught not too long ago, I think. What can you tell me about outside?"\n\n\n\n\nBriana: "How long have you been here?"\n\n\n\n\n"Three years."\n\n\n\n\n"Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."\n\n\n\n\n"So when we escape from here \u2014 *if* we escape from here \u2014 we still have to cover miles of orc territory."\n\n\n\n\n"Correct. The closest safe place is the fort."\n',!0)
+R:[function(a,b,c){c.p(0,'_"You were caught not too long ago, I think. What can you tell me about outside?"_\n\n\n\n\nBriana shrugs. "How long have you been here?"\n\n\n\n\n_"Three years."_\n\n\n\n\n"Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."\n',!0)
 return H.b(a.gh())+" successfully performs TalkToBriana1"},"$3","gN",6,0,1],
 P:[function(a,b,c){throw H.c(new P.w("Success chance is 100%"))},"$3","gM",6,0,1],
 I:function(a,b){return 1},
@@ -9734,7 +9734,7 @@ gK:function(){return!1}},
 pr:{"^":"W;X:c<,h:d<,b,a",
 H:function(a,b){if(!(b.ao("talk_to_briana_1")&&b.dP(this.d)==null&&O.eE(b)))return!1
 return!0},
-R:[function(a,b,c){c.p(0,'_"Where did they get you?"_\n\n\n\n\nBriana: "At the Gate of Screams. I was trying to sneak in."\n\n\n\n\n_"You what?"_\n\n\n\n\n"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."\n',!0)
+R:[function(a,b,c){c.p(0,'_"Where did they get you?"_\n\n\n\n\n"At the Gate of Screams. I was trying to sneak in."\n\n\n\n\n_"You what?"_\n\n\n\n\n"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."\n',!0)
 return H.b(a.gh())+" successfully performs TalkToBriana2"},"$3","gN",6,0,1],
 P:[function(a,b,c){throw H.c(new P.w("Success chance is 100%"))},"$3","gM",6,0,1],
 I:function(a,b){return 1},
