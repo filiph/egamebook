@@ -36,7 +36,7 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both these paths lead upwards and in the general direction of a small exit near the mountaintop — the Upper Door.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. That leaves two options: the black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both these paths lead upwards and in the general direction of a small exit near the mountaintop — the Upper Door.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -189,7 +189,7 @@ _"With the Dead Prince. I dream his dreams. I think I have some of his power. He
 _"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
 
 
-"And you plan is?"
+"And your plan is?"
 
 
 [IMG long view of the road ahead]
@@ -263,7 +263,7 @@ Room guardpostAboveChurch =
   s.add(
       '''
 
-A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end of those three horrible years.
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end to those three horrible years.
 
 
 Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
@@ -1493,7 +1493,7 @@ Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
 The air gets colder and fresher, but there\'s still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.
 
 
-"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock to then die of exhaution on its doorstep."
+"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of mount bloodrock just to die of exhaution on its doorstep."
 
 
 _"That… that would be disappointing, yes."_
@@ -1754,7 +1754,7 @@ Then, suddenly, the sound stops, and the orc\'s body sinks. The invigorating fee
 The priest puts his arms down again, and — without ceremony — heads back to the stone door. The ogre takes the orc\'s dead body, puts it over her shoulder, and follows. In a few heartbeats, they are all gone and the door is closed. A new splash of blood on the altar is the only reminder of the scene.
 
 
-Briana doesn\'t look at you. "How did you know it will be maggots?"
+Briana doesn\'t look at you. "How did you know it would be maggots?"
 
 
 _"I do not know."_

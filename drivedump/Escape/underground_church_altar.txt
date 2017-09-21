@@ -90,6 +90,7 @@ The maggots crawl over the edge of the altar's top, onto the orc's body, heading
 
 // TODO: make this a separate 'ROOM' so we can try and attack or throw spear (and abort the throw)
 // TODO - throw spear - ability to abort, briana says "coming here was bravery. this is madness".
+// Probably NOPE, this will increase confusion.
 
 
 The orc's eyes go wide. He struggles against the ogre's grip, pointlessly. The dissonant tone gets even louder. The temple quivers. The sound permeates everything.
@@ -107,7 +108,7 @@ Then, suddenly, the sound stops, and the orc's body sinks. The invigorating feel
 The priest puts his arms down again, and — without ceremony — heads back to the stone door. The ogre takes the orc's dead body, puts it over her shoulder, and follows. In a few heartbeats, they are all gone and the door is closed. A new splash of blood on the altar is the only reminder of the scene.
 
 
-Briana doesn't look at you. "How did you know it will be maggots?"
+Briana doesn't look at you. "How did you know it would be maggots?"
 
 
 _"I do not know."_
