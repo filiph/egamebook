@@ -148,12 +148,15 @@ _"That's what Agruth and the other slavers were talking about a couple of weeks 
 _"Somewhere in the slave quarters."_
 
 
-// TODO if never entered slave quarters, then Briana tenses, but then says something heroic like "well then, at least we have that choice"
 [[CODE]]
 if (!playerHasVisited(w, "slave_quarters_passage")) { 
   s.add("""Briana tenses. "Well then, at least we have that choice." """, wholeSentence: true);
 }
 [[/CODE]]
+
+
+// TODO: if player has been to slave quarters but not inside the room: "that door?" - you shrug
+// TODO: if player has been to slave quarters and to the room: "that mad orc behind the door?" - you shrug
 
 
 // TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breating space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.

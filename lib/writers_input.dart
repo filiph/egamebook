@@ -712,8 +712,8 @@ When your eyes become accustomed to the dark, you see a figure standing in front
 ''',
       wholeSentence: true);
 }, generateMadGuardianFight, null, <Exit>[
-  new Exit('orcthorn_door', 'Exit the room',
-      'You go through the door. Once back in the corridor of the slave quarters, you close it behind you.')
+  new Exit('slave_quarters_passage', 'Exit the room',
+      'You leave through the door and find yourself back in the corridor of the slave quarters.')
 ]);
 
 class TakeOrcthorn extends RoamingAction {
@@ -907,17 +907,27 @@ But at that time, something or someone smashes on that very door from the inside
 The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
 
 
-
-
-
-
 [IMAGE goblin spearman + orc]
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
+  s.add('', wholeSentence: true);
+  if (playerHasVisited(w, "orcthorn_room") &&
+      !justCameFrom(w, "orcthorn_room")) {
+    s.add("The small door on the side of the corridor is open.",
+        wholeSentence: true);
+  }
   s.add(
-      '''The small door is TODO open/close.
+      '''
 
+''',
+      wholeSentence: true);
+  if (!playerHasVisited(w, "orcthorn_room")) {
+    s.add("The small door on the side of the corridor is closed.",
+        wholeSentence: true);
+  }
+  s.add(
+      '''
 
 ''',
       wholeSentence: true);
@@ -947,7 +957,8 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
       return false;
     }
     if ((!w.actionHasBeenPerformed(name) &&
-            !(w.currentSituation as RoomRoamingSituation).monstersAlive) !=
+            !(w.currentSituation as RoomRoamingSituation).monstersAlive &&
+            !playerHasVisited(w, "orcthorn_room")) !=
         true) {
       return false;
     }

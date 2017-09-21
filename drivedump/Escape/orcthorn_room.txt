@@ -25,4 +25,4 @@ generateMadGuardianFight
 
 
 EXITS:
-$orcthorn_door (Exit the room): You go through the door. Once back in the corridor of the slave quarters, you close it behind you.
+$slave_quarters_passage (Exit the room): You leave through the door and find yourself back in the corridor of the slave quarters.

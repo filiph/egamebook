@@ -246,7 +246,7 @@ FightSituation generateMadGuardianFight(WorldState w,
               wholeSentence: true);
           s.addParagraph();
           if (briana.isAliveAndActive) {
-            briana.report(s, "<subject> purse<s> <subject's> lips");
+            briana.report(s, "<subject> glare<s> at him");
             briana.report(s, "\"Shut up and die.\"", wholeSentence: true);
             s.addParagraph();
           }

@@ -26,16 +26,22 @@ But at that time, something or someone smashes on that very door from the inside
 The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
 
 
-
-
-// TODO: make the goblin a spearman (both sketch and in simulation)
-
-
 [IMAGE goblin spearman + orc]
 
 
 SHORT_DESCRIPTION:
-The small door is TODO open/close.
+[[CODE]]
+if (playerHasVisited(w, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
+  s.add("The small door on the side of the corridor is open.", wholeSentence: true);
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (!playerHasVisited(w, "orcthorn_room")) {
+  s.add("The small door on the side of the corridor is closed.", wholeSentence: true);
+}
+[[/CODE]]
 
 
 [[CODE]]
@@ -75,7 +81,8 @@ PREREQUISITES:
 !w.actionHasBeenPerformed(name)
 &&
 !(w.currentSituation as RoomRoamingSituation).monstersAlive
-// TODO player hasn't been inside yet (hasn't taken the orcthorn_door exit)
+&&
+!playerHasVisited(w, "orcthorn_room")
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
