@@ -274,7 +274,7 @@ Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He
   if (!w.actionHasBeenPerformed("smelter_throw_spear") &&
       !w.actionHasBeenPerformed("take_orcthorn")) {
     s.add(
-        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin. "Wreak more havoc. I mean, we might be the first people to be in Mount Bloodrock, and live." 
+        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. Take more. I mean, we might be the first people to be in Mount Bloodrock, and live." 
 
 
 _"Let us keep that second part true, then."_
@@ -1406,33 +1406,40 @@ class TalkToBriana3 extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''"What\'s Orcthorn?"
+        '''_"What\'s Orcthorn?"_
 
 
 "A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
 
 
-"Almost."
+_"Almost."_
 
 
 "Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
 
 
-"The mad guardian."
+_"The mad guardian."_
 
 
 "The mad who?"
 
 
-"That\'s what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him _grach kamkorr_. The mad guardian. That sword is still with him. Hidden there in the cell."
+_"That\'s what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him *grach kamkorr*. The mad guardian. That sword is still with him. Hidden there in the cell."_
 
 
 "Where is that cell?"
 
 
-"Somewhere in the slave quarters."
+_"Somewhere in the slave quarters."_
+
+
 ''',
         wholeSentence: true);
+    if (!playerHasVisited(w, "slave_quarters_passage")) {
+      s.add("""Briana tenses. "Well then, at least we have that choice." """,
+          wholeSentence: true);
+    }
+    s.add('', wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana3';
   }
 

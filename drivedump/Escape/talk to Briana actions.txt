@@ -122,28 +122,36 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"What's Orcthorn?"
+_"What's Orcthorn?"_
 
 
 "A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
 
 
-"Almost."
+_"Almost."_
 
 
 "Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
 
 
-"The mad guardian."
+_"The mad guardian."_
 
 
 "The mad who?"
 
 
-"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him _grach kamkorr_. The mad guardian. That sword is still with him. Hidden there in the cell."
+_"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him *grach kamkorr*. The mad guardian. That sword is still with him. Hidden there in the cell."_
 
 
 "Where is that cell?"
 
 
-"Somewhere in the slave quarters."
+_"Somewhere in the slave quarters."_
+
+
+// TODO if never entered slave quarters, then Briana tenses, but then says something heroic like "well then, at least we have that choice"
+[[CODE]]
+if (!playerHasVisited(w, "slave_quarters_passage")) { 
+  s.add("""Briana tenses. "Well then, at least we have that choice." """, wholeSentence: true);
+}
+[[/CODE]]
