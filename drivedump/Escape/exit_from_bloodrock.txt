@@ -4,70 +4,94 @@
 
 
 DESCRIPTION:
-There is light at the end of the tunnel, Briana points ahead. You approach it with suspicion, but soon there is no question about it. The fresh air, the howling of the wind, the brightness of the light. After three years, you step out of the mountain you thought would be your grave. 
+Only a few bends ahead, the tunnel get blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. 
 
 
 You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
 
 
-Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
+But merely two breaths later, you are again in motion, jumping down a sharply descending path. Outside, it's you and Briana who have the upper hand — the orcs and goblins groan and stumble. This is still their territory, but the bright sun and the lack of cave walls rubs against all their instincts. These are cave breeds.
+
+
+Soon, they stop following altogether, presumably leaving the two of you to their aboveground brothers. You don't dare to stop but you gradually slow down, and then lift your eyes from the treacherous terrain.
+
+
+At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. You look at Briana but she doesn't seem surprised. You turn your eyes to the scenery again, to the black smoke of orc camps and razed villages, to the burned forests, to the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview hill. 
+
+
+No birds, only some horrible dark eagle-like creatures with no head, circling in both directions above Mount Bloodrock.
 
 
 _"We must stop this."_
 
 
-Briana: "This is much larger than us, Aren. If the dead prince is back, that's a problem for kings, not peasants."
+Briana follows your gaze, then shakes her head. "This is much larger than us, Aren. We've both seen what takes place in the mountain. Now you can see what has happend outside. This is a problem for kings, not peasants."
 
 
-"That may be so. But no kings have what I have."
+_"No king has what we have."_
 
 
-"Orcthorn? Bah, you think they'll let you have it? A farm boy? / Muscles and a bit of brains? Don't be a fool, you're still a farm boy."
+[[CODE]]
+if (w.actionHasBeenPerformed("take_orcthorn")) { 
+  s.add(""" 
+"Orcthorn? Bah, you think they'll let you have it? A farm boy?" 
 
 
-"I'm not a farm boy. And I don't mean Orcthorn / my own smarts. No, I have a connection. We both do."
+_"I'm not a farm boy. And I don't mean Orcthorn, no. I have a connection. We both do."_
+""", wholeSentence: true);
+}
+[[/CODE]]
 
 
-// TODO: o Aren. He is special by surviving this long in his own doing. V bloodrock changes people. 
+[[CODE]]
+if (!w.actionHasBeenPerformed("take_orcthorn")) { 
+  s.add("""
+"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
+
+
+_"I'm not a farm boy. And I don't mean muscles or brains, no. I have a connection. We both do."_
+""", wholeSentence: true);
+}
+[[/CODE]]
 
 
 "A connection."
 
 
-"With the dead prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
+_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
 
 
-"So the thing you have that kings don't is… a way to communicate? You want to negotiate?"
+"So the thing you have that kings don't is… a way to communicate? Negotiate?"
 
 
-"I do not have anything the Dead Prince wants. No, I do not think any man, king or peasant, has it. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."
+_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
 
 
 "And you plan is?"
 
 
-(IMG long view of the road ahead) 
+[IMG long view of the road ahead]
 
 
-"Not letting him have it. Giving him the exact opposite of what he wants."
+_"Not letting him have it. Giving him the exact opposite of what he wants."_
 
 
-"You know we could just run as fast as we can, kicking some orcs in their faces along the way, right?"
+"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"
 
 
-"yes" 
+_"Yes."_
 
 
-"that others would do exactly that."
+"That others would do exactly that."
 
 
-"But we will not." 
+_"But we will not."_
 
 
-"Yeah. We will not."
+"No. We will not."
 
 
-With that, you start down the road towards the black fort in the distance. 
+With that, you both start down the road towards the black fort in the distance. 
 
 
 

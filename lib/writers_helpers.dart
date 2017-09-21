@@ -194,6 +194,28 @@ FightSituation generateEscapeTunnelFight(WorldState w,
       final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
       s.add("<owner's> <subject> glint<s> with intensity",
           owner: actor, subject: eyes);
+    },
+    6: (w, s) {
+      s.add(
+          "From behind, you hear loud cries. Your pursuers must have reached "
+          "the top of the stairs.",
+          wholeSentence: true);
+    },
+    9: (w, s) {
+      s.add(
+          "Ear-splitting shouts come from behind. You wheel around and see "
+          "a body of orcs and goblins approaching at top speed, their "
+          "swords and spears at the ready.",
+          wholeSentence: true);
+    },
+    12: (w, s) {
+      s.add(
+          "Your pursuers reach you from behind and a sword pierces your chest "
+          "with formidable power.",
+          wholeSentence: true);
+      w.updateActorById(getPlayer(w).id, (b) => b..hitpoints = 0);
+      w.popSituationsUntil(RoomRoamingSituation.className);
+      w.popSituation();
     }
   });
 }

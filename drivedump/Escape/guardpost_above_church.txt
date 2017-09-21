@@ -52,7 +52,7 @@ SHORT_DESCRIPTION:
 
 EXITS:
 $underground_church (Descend towards the Underground Church): You take the passage leading down towards the temple. 
-$tunnel (Go to the upper gate): You take the passage that leads upwards.
+$tunnel (Go to the upper gate): You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.
 $smelter (Go to the smelter): You take the slightly downwards passage towards the smelter.
 
 

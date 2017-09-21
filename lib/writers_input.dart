@@ -36,7 +36,7 @@ Room caveWithAgruthPre =
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both paths should lead you towards the Upper Door, a small exit at the side of Mount Bloodrock.
+      '''The tunnel back to the main slave quarters is suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. That leaves two options. The black passage towards the war forges, and the deserted tunnel to the Unholy Church, an underground temple. Both these paths lead upwards and in the general direction of a small exit near the mountaintop — the Upper Door.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -120,69 +120,100 @@ class SearchAgruth extends RoamingAction {
 Room exitFromBloodrock =
     new Room('exit_from_bloodrock', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''There is light at the end of the tunnel, Briana points ahead. You approach it with suspicion, but soon there is no question about it. The fresh air, the howling of the wind, the brightness of the light. After three years, you step out of the mountain you thought would be your grave. 
+      '''Only a few bends ahead, the tunnel get blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. 
 
 
 You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
 
 
-Then you open your eyes and see the valley and beyond. The black smoke of orc camps and razed villages. The burned forests. The cracks in the wall of the distant fort ironcast, just visible over the TODO hill. No birds, only those horrible dark eagles, with no head, and eight eyes where the neck on a normal 
+But merely two breaths later, you are again in motion, jumping down a sharply descending path. Outside, it\'s you and Briana who have the upper hand — the orcs and goblins groan and stumble. This is still their territory, but the bright sun and the lack of cave walls rubs against all their instincts. These are cave breeds.
+
+
+Soon, they stop following altogether, presumably leaving the two of you to their aboveground brothers. You don\'t dare to stop but you gradually slow down, and then lift your eyes from the treacherous terrain.
+
+
+At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. You look at Briana but she doesn\'t seem surprised. You turn your eyes to the scenery again, to the black smoke of orc camps and razed villages, to the burned forests, to the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview hill. 
+
+
+No birds, only some horrible dark eagle-like creatures with no head, circling in both directions above Mount Bloodrock.
 
 
 _"We must stop this."_
 
 
-Briana: "This is much larger than us, Aren. If the dead prince is back, that\'s a problem for kings, not peasants."
+Briana follows your gaze, then shakes her head. "This is much larger than us, Aren. We\'ve both seen what takes place in the mountain. Now you can see what has happend outside. This is a problem for kings, not peasants."
 
 
-"That may be so. But no kings have what I have."
+_"No king has what we have."_
 
 
-"Orcthorn? Bah, you think they\'ll let you have it? A farm boy? / Muscles and a bit of brains? Don\'t be a fool, you\'re still a farm boy."
+''',
+      wholeSentence: true);
+  if (w.actionHasBeenPerformed("take_orcthorn")) {
+    s.add(
+        """ 
+"Orcthorn? Bah, you think they'll let you have it? A farm boy?" 
 
 
-"I\'m not a farm boy. And I don\'t mean Orcthorn / my own smarts. No, I have a connection. We both do."
+_"I'm not a farm boy. And I don't mean Orcthorn, no. I have a connection. We both do."_
+""",
+        wholeSentence: true);
+  }
+  s.add(
+      '''
+
+''',
+      wholeSentence: true);
+  if (!w.actionHasBeenPerformed("take_orcthorn")) {
+    s.add(
+        """
+"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
 
 
-
+_"I'm not a farm boy. And I don't mean muscles or brains, no. I have a connection. We both do."_
+""",
+        wholeSentence: true);
+  }
+  s.add(
+      '''
 
 "A connection."
 
 
-"With the dead prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. I think you feel it, too, but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."
+_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
 
 
-"So the thing you have that kings don\'t is… a way to communicate? You want to negotiate?"
+"So the thing you have that kings don\'t is… a way to communicate? Negotiate?"
 
 
-"I do not have anything the Dead Prince wants. No, I do not think any man, king or peasant, has it. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."
+_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
 
 
 "And you plan is?"
 
 
-(IMG long view of the road ahead) 
+[IMG long view of the road ahead]
 
 
-"Not letting him have it. Giving him the exact opposite of what he wants."
+_"Not letting him have it. Giving him the exact opposite of what he wants."_
 
 
-"You know we could just run as fast as we can, kicking some orcs in their faces along the way, right?"
+"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"
 
 
-"yes" 
+_"Yes."_
 
 
-"that others would do exactly that."
+"That others would do exactly that."
 
 
-"But we will not." 
+_"But we will not."_
 
 
-"Yeah. We will not."
+"No. We will not."
 
 
-With that, you start down the road towards the black fort in the distance.
+With that, you both start down the road towards the black fort in the distance.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -265,7 +296,7 @@ _"Let us keep that second part true, then."_
   new Exit('underground_church', 'Descend towards the Underground Church',
       'You take the passage leading down towards the temple.'),
   new Exit('tunnel', 'Go to the upper gate',
-      'You take the passage that leads upwards.'),
+      'You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.'),
   new Exit('smelter', 'Go to the smelter',
       'You take the slightly downwards passage towards the smelter.')
 ]);
@@ -1456,15 +1487,28 @@ You realize there is really only one way out, over one of the walkways. You\'ll 
 ]);
 Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO - start chase
+      '''Almost as soon as you lose the circular room from sight, loud yells and shouting rises from the deep of the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear stomping of dozens of orc and goblin feet.
 
 
-Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
+The air gets colder and fresher, but there\'s still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.
 
 
+"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock to then die of exhaution on its doorstep."
+
+
+_"That… that would be disappointing, yes."_
+
+
+The sounds from behind get louder. You can now pick out individual voices, although not what they say. The stairway suddenly makes a sharp left and levels out. Tasting blood on the roof of your mouth, your whole body demands to stop — but you start running anyway. Briana closely follows.
+
+
+The light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. 
 
 
 ![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+
+
+This must be the guard of the Upper Door. There is no way around them.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {

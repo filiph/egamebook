@@ -4,46 +4,34 @@
 
 
 DESCRIPTION:
-TODO - start chase
+Almost as soon as you lose the circular room from sight, loud yells and shouting rises from the deep of the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear stomping of dozens of orc and goblin feet.
 
 
-Suddenly, an **orc** and a **goblin** jump in front of you from a slimy crevice, swords in hands.
+The air gets colder and fresher, but there's still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.
 
 
+"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock to then die of exhaution on its doorstep."
+
+
+_"That… that would be disappointing, yes."_
+
+
+The sounds from behind get louder. You can now pick out individual voices, although not what they say. The stairway suddenly makes a sharp left and levels out. Tasting blood on the roof of your mouth, your whole body demands to stop — but you start running anyway. Briana closely follows.
+
+
+The light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. 
 
 
 ![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
 
 
-
-
-// TODO: Look, Dregh! Look at them. Give a puny slave some steel and suddenly they think they're mighty slayers.
-
-
-// TODO: on death. You don't understand. No matter how many of us you kill, there will be more. And when they get you, they will eat your face alive. You mean nothing.
+This must be the guard of the Upper Door. There is no way around them.
 
 
 
 
 FIGHT_SITUATION:
 generateEscapeTunnelFight
-// groundMaterial: "{rock|cavern} floor"
-// TODO: make sure to re-use these events
-// new FightSituation.initialized([filip, briana], [orc, goblin])
-//     .rebuild((b) => b
-//   ..events[2] = (w, s) {
-//     s.addParagraph();
-//     s.add("You hear a horrible growling sound from behind.");
-//     s.add("The worm must be near.");
-//     s.addParagraph();
-//   }
-//   ..events[6] = (w, s) {
-//     s.addParagraph();
-//     s.add("The earth shatters and there's that sound again.");
-//     s.addParagraph();
-//   });
-
-
 
 
 EXITS:
