@@ -483,13 +483,13 @@ Briana spits down at the body. "He wasn\'t even the worst of them, you know."
 _"I know."_
 
 
-"They _all_ deserve this, or worse. All of them. And I like the fact we\'ll kill them by their own swords." She kicks the dead slaver in the hip. 
+"They _all_ deserve this, or worse, and I like the fact we\'ll kill them by their own swords." She kicks the dead slaver in the hip. 
 
 
 _"That one is already dead."_
 
 
-"I was making sure. You understand that we should name the sword, right? It\'s the only thing we have going for us right now. Gods love named swords. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.
+"I was making sure," she says, and turns her attention to the sword. "We should name it. Gods love named swords. And I refuse to carry it around referring to it as _Agruth\'s_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -521,7 +521,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''_"We will call it Luck Bringer. It is our only chance to get out of this hell."_
+        '''_"We will call it Luck Bringer. We got lucky, and luck is our only chance to get out of this place."_
 
 
 Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
@@ -582,7 +582,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''_"We will call it Savior. It is our first step to freedom."_
+        '''_"We will call it Savior. It was our first step to freedom. The sword should have killed us and instead it set us free."_
 
 
 Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
