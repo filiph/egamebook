@@ -1,6 +1,6 @@
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart'
-    show brianaId, carelessCombineFunction;
+    show brianaId, carelessCombineFunction, playerId;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
@@ -339,7 +339,7 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
 
 EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
 
-Actor getPlayer(WorldState w) => w.actors.singleWhere((a) => a.isPlayer);
+Actor getPlayer(WorldState w) => w.getActorById(playerId);
 
 RoomRoamingSituation getRoomRoaming(WorldState w) {
   return w
@@ -404,6 +404,9 @@ void nameAgruthSword(WorldState w, String name) {
     }
   }
 }
+
+bool playerHasVisited(WorldState w, String roomName) =>
+    getRoomRoaming(w).hasBeenVisited(w, getPlayer(w), roomName);
 
 void rollBrianaQuote(WorldState w, Storyline s) {
   int index = (w.global as EdgeheadGlobalState).brianaQuoteIndex;

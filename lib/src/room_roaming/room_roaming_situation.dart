@@ -74,6 +74,16 @@ abstract class RoomRoamingSituation extends Situation
     return [mainActor];
   }
 
+  /// Returns `true` if [Room] with [roomName] has been visited by [actor].
+  bool hasBeenVisited(WorldState w, Actor actor, String roomName) {
+    return w
+        .getActionRecords(
+            actionName: TakeExitAction.className,
+            protagonist: actor,
+            wasSuccess: true)
+        .any((r) => r.dataString == roomName);
+  }
+
   /// Moves [a] with their party to [destination].
   ///
   /// This will also print out the description of the room (or the short version
@@ -84,15 +94,10 @@ abstract class RoomRoamingSituation extends Situation
 
     // Find if monsters were slain by seeing if there was a [TakeExit] action
     // record leading to this room.
-    bool hasBeenVisited = w
-        .getActionRecords(
-            actionName: TakeExitAction.className,
-            protagonist: a,
-            wasSuccess: true)
-        .any((r) => r.dataString == destinationRoomName);
+    bool visited = hasBeenVisited(w, a, destinationRoomName);
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(
-        room, !hasBeenVisited && room.fightGenerator != null);
+        room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
 

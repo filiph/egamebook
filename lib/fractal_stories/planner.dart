@@ -39,7 +39,7 @@ class ActorPlanner {
       throw new ArgumentError("Called ActorPlanner with actor == null. "
           "That may mean that a Situation returns getCurrentActor as null. "
           "Some action that you added should make sure it removes the "
-          "Situation (maybe ${initialWorld.actionRecords.last.description}?). "
+          "Situation (maybe ${initialWorld.actionRecords.first.description}?). "
           "World: $initialWorld. "
           "Situation: ${initialWorld.currentSituation}. "
           "Action Records: "

@@ -20,6 +20,12 @@ import 'package:edgehead/writers_input.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
 
+/// [EdgeheadGame.briana]'s [Actor.id].
+const int brianaId = 100;
+
+/// [EdgeheadGame.filip]'s [Actor.id].
+const int playerId = 1;
+
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
 num carelessCombineFunction(ActorScoreChange scoreChange) =>
@@ -29,9 +35,6 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
     scoreChange.teamPreservation -
     scoreChange.enemy;
-
-/// [EdgeheadGame.briana]'s [Actor.id].
-const int brianaId = 100;
 
 class EdgeheadGame extends LoopedEvent {
   final Logger log = new Logger('EdgeheadGame');
@@ -102,7 +105,7 @@ class EdgeheadGame extends LoopedEvent {
         null,
         [new Exit("start_adventure", "", "")]);
 
-    filip = new Actor.initialized(1, "Filip",
+    filip = new Actor.initialized(playerId, "Filip",
         nameIsProperNoun: true,
         isPlayer: true,
         pronoun: Pronoun.YOU,
@@ -267,28 +270,6 @@ class EdgeheadGame extends LoopedEvent {
     storyline.outputFinishedParagraphs(echo);
   }
 
-  Future<Null> _applySelected(
-      Action action, Actor actor, Storyline storyline) async {
-    var consequences = action.apply(actor, consequence, world).toList();
-
-    if (actor.isPlayer) {
-      await _applyPlayerAction(action, actor, consequences);
-    } else {
-      int index =
-          Randomly.chooseWeighted(consequences.map((c) => c.probability));
-      consequence = consequences[index];
-    }
-
-    storyline.concatenate(consequence.storyline);
-    world = consequence.world;
-
-    log.fine(() => "${actor.name} selected ${action.name}");
-    log.finest(() {
-      String path = world.actionRecords.map((a) => a.description).join(' <- ');
-      return "- how ${actor.name} got here: $path";
-    });
-  }
-
   Future _applyPlayerAction(
       Action action, Actor actor, List<PlanConsequence> consequences) async {
     num chance = action.getSuccessChance(actor, world);
@@ -321,5 +302,27 @@ class EdgeheadGame extends LoopedEvent {
         consequence = new PlanConsequence.withUpdatedWorld(consequence, world);
       }
     }
+  }
+
+  Future<Null> _applySelected(
+      Action action, Actor actor, Storyline storyline) async {
+    var consequences = action.apply(actor, consequence, world).toList();
+
+    if (actor.isPlayer) {
+      await _applyPlayerAction(action, actor, consequences);
+    } else {
+      int index =
+          Randomly.chooseWeighted(consequences.map((c) => c.probability));
+      consequence = consequences[index];
+    }
+
+    storyline.concatenate(consequence.storyline);
+    world = consequence.world;
+
+    log.fine(() => "${actor.name} selected ${action.name}");
+    log.finest(() {
+      String path = world.actionRecords.map((a) => a.description).join(' <- ');
+      return "- how ${actor.name} got here: $path";
+    });
   }
 }
