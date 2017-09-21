@@ -49,7 +49,7 @@ class Pound extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {fiercely|violently} "
-        "{pound<s>|strike<s>|hammer<s>|batter<s>} "
+        "{strike<s>|hammer<s>|batter<s>} "
         "on <object-owner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
@@ -67,7 +67,7 @@ class Pound extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {fiercely|violently} "
-        "{pound<s>|strike<s>|hammer<s>|batter<s>} "
+        "{strike<s>|hammer<s>|batter<s>} "
         "on <object-owner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
