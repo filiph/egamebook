@@ -263,7 +263,7 @@ if(j instanceof Array)j=j[0]
 var i=[]
 var h=[]
 processStatics(l,s)
-x.push([p,o,i,h,n,j,k,m])}finishClasses(s)}I.bf=function(){}
+x.push([p,o,i,h,n,j,k,m])}finishClasses(s)}I.bg=function(){}
 var dart=[["","",,H,{"^":"",xf:{"^":"d;a"}}],["","",,J,{"^":"",
 o:function(a){return void 0},
 aY:{"^":"d;",
@@ -373,7 +373,7 @@ return!1},
 gY:function(a){return a.length===0},
 gav:function(a){return a.length!==0},
 k:function(a){return P.cf(a,"[","]")},
-bG:function(a){return P.b8(a,H.m(a,0))},
+bG:function(a){return P.b9(a,H.m(a,0))},
 ga_:function(a){return new J.bj(a,a.length,0,null,[H.m(a,0)])},
 gD:function(a){return H.aE(a)},
 gl:function(a){return a.length},
@@ -389,7 +389,7 @@ if(typeof b!=="number"||Math.floor(b)!==b)throw H.c(H.aK(a,b))
 if(b>=a.length||b<0)throw H.c(H.aK(a,b))
 a[b]=c},
 $iscW:1,
-$ascW:I.bf,
+$ascW:I.bg,
 $isN:1,
 $isa_:1},
 xe:{"^":"cg;$ti"},
@@ -576,7 +576,7 @@ j:function(a,b){if(typeof b!=="number"||Math.floor(b)!==b)throw H.c(H.aK(a,b))
 if(b>=a.length||b<0)throw H.c(H.aK(a,b))
 return a[b]},
 $iscW:1,
-$ascW:I.bf,
+$ascW:I.bg,
 $isq:1,
 $isdZ:1,
 v:{
@@ -866,7 +866,7 @@ if(v)w=w!=null&&$.$get$fe()!=null
 else w=!0
 y.y=w
 y.r=x&&v
-y.f=new H.qB(P.ba(null,H.cu),0)
+y.f=new H.qB(P.bb(null,H.cu),0)
 x=P.t
 y.z=new H.R(0,null,null,null,null,null,0,[x,H.em])
 y.ch=new H.R(0,null,null,null,null,null,0,[x,null])
@@ -1002,7 +1002,7 @@ if(!z.A(b,0))z=z.A(b,1)&&!this.cy
 else z=!0
 if(z){a.G(c)
 return}z=this.cx
-if(z==null){z=P.ba(null,null)
+if(z==null){z=P.bb(null,null)
 this.cx=z}z.aE(new H.qS(a,c))},
 k0:function(a,b){var z
 if(!this.r.A(0,a))return
@@ -1011,7 +1011,7 @@ if(!z.A(b,0))z=z.A(b,1)&&!this.cy
 else z=!0
 if(z){this.eQ()
 return}z=this.cx
-if(z==null){z=P.ba(null,null)
+if(z==null){z=P.bb(null,null)
 this.cx=z}z.aE(this.gku())},
 k6:function(a,b){var z,y,x
 z=this.dx
@@ -1186,7 +1186,7 @@ this.b.bu()},"$0","gjz",0,0,7],
 ie:function(a){var z=new P.rj(null,0,null,null,null,null,this.gjz(),[null])
 this.b=z
 this.a.b=z.gji(z)},
-$asal:I.bf},
+$asal:I.bg},
 py:{"^":"d;a,b,c",
 gc2:function(){return this.c!=null},
 ii:function(a,b){var z,y
@@ -1438,13 +1438,13 @@ x:function(a){throw H.c(H.T(a))},
 f:function(a,b){if(a==null)J.aN(a)
 throw H.c(H.aK(a,b))},
 aK:function(a,b){var z,y
-if(typeof b!=="number"||Math.floor(b)!==b)return new P.b6(!0,b,"index",null)
+if(typeof b!=="number"||Math.floor(b)!==b)return new P.b7(!0,b,"index",null)
 z=J.aN(a)
 if(!(b<0)){if(typeof z!=="number")return H.x(z)
 y=b>=z}else y=!0
 if(y)return P.cT(b,a,"index",null,z)
 return P.cl(b,"index",null)},
-T:function(a){return new P.b6(!0,a,null,null)},
+T:function(a){return new P.b7(!0,a,null,null)},
 dg:function(a){if(typeof a!=="number")throw H.c(H.T(a))
 return a},
 rS:function(a){if(typeof a!=="number"||Math.floor(a)!==a)throw H.c(H.T(a))
@@ -1498,7 +1498,7 @@ if(l==null){l=m.bx(y)
 v=l!=null}else v=!0}else v=!0}else v=!0}else v=!0}else v=!0}else v=!0}else v=!0
 if(v)return z.$1(new H.fA(y,l==null?null:l.method))}}return z.$1(new H.pI(typeof y==="string"?y:""))}if(a instanceof RangeError){if(typeof y==="string"&&y.indexOf("call stack")!==-1)return new P.h8()
 y=function(b){try{return String(b)}catch(k){}return null}(a)
-return z.$1(new P.b6(!1,null,null,typeof y==="string"?y.replace(/^RangeError:\s*/,""):y))}if(typeof InternalError=="function"&&a instanceof InternalError)if(typeof y==="string"&&y==="too much recursion")return new P.h8()
+return z.$1(new P.b7(!1,null,null,typeof y==="string"?y.replace(/^RangeError:\s*/,""):y))}if(typeof InternalError=="function"&&a instanceof InternalError)if(typeof y==="string"&&y==="too much recursion")return new P.h8()
 return a},
 E:function(a){var z
 if(a instanceof H.dB)return a.b
@@ -1639,7 +1639,7 @@ y=H.eA(a)
 throw H.c(H.cM(y!=null?H.Z(y,null):H.bL(a),z))},
 wP:function(a){throw H.c(new P.kl(a))},
 dn:function(){return(Math.random()*0x100000000>>>0)+(Math.random()*0x100000000>>>0)*4294967296},
-be:function(a){return new H.av(a,null)},
+bf:function(a){return new H.av(a,null)},
 p:function(a,b){a.$ti=b
 return a},
 cz:function(a){if(a==null)return
@@ -1702,7 +1702,7 @@ if(a==null||b==null)return!0
 z=a.length
 for(y=0;y<z;++y)if(!H.an(a[y],b[y]))return!1
 return!0},
-bd:function(a,b,c){return a.apply(b,H.io(b,c))},
+be:function(a,b,c){return a.apply(b,H.io(b,c))},
 dh:function(a,b){var z,y,x
 if(a==null)return b==null||b.builtin$cls==="d"||b.builtin$cls==="at"
 if(b==null)return!0
@@ -2449,7 +2449,7 @@ bU:function(a){return new P.bT(a,1)},
 aS:function(){return C.ag},
 hK:function(a){return new P.bT(a,0)},
 aT:function(a){return new P.bT(a,3)}}},
-bc:{"^":"d;a,b,c,d",
+bd:{"^":"d;a,b,c,d",
 gU:function(){var z=this.c
 return z==null?this.b:z.gU()},
 u:function(){var z,y,x,w
@@ -2467,7 +2467,7 @@ this.a=z.pop()
 continue}else{z=y.a
 if(x===3)throw z
 else{w=J.aj(z)
-if(!!w.$isbc){z=this.d
+if(!!w.$isbd){z=this.d
 if(z==null){z=[]
 this.d=z}z.push(this.a)
 this.a=w.a
@@ -2475,9 +2475,9 @@ continue}else{this.c=w
 continue}}}}else{this.b=y
 return!0}}return!1}},
 ri:{"^":"ce;a",
-ga_:function(a){return new P.bc(this.a(),null,null,null)},
-$asce:I.bf,
-$asB:I.bf,
+ga_:function(a){return new P.bd(this.a(),null,null,null)},
+$asce:I.bg,
+$asB:I.bg,
 v:{
 aU:function(a){return new P.ri(a)}}},
 Q:{"^":"d;$ti"},
@@ -2782,7 +2782,7 @@ $1:function(a){var z,y
 z=this.a
 y=this.d
 P.i_(new P.oV(this.c,a),new P.oW(z,y),P.hP(z.a,y))},
-$S:function(){return H.bd(function(a){return{func:1,args:[a]}},this.b,"al")}},
+$S:function(){return H.be(function(a){return{func:1,args:[a]}},this.b,"al")}},
 oV:{"^":"a:2;a,b",
 $0:function(){return J.e(this.b,this.a)}},
 oW:{"^":"a:31;a,b",
@@ -2791,7 +2791,7 @@ oY:{"^":"a:2;a",
 $0:function(){this.a.bl(!1)}},
 p0:{"^":"a;a,b,c,d",
 $1:function(a){P.i_(new P.oZ(this.c,a),new P.p_(),P.hP(this.a.a,this.d))},
-$S:function(){return H.bd(function(a){return{func:1,args:[a]}},this.b,"al")}},
+$S:function(){return H.be(function(a){return{func:1,args:[a]}},this.b,"al")}},
 oZ:{"^":"a:2;a,b",
 $0:function(){return this.a.$1(this.b)}},
 p_:{"^":"a:0;",
@@ -2808,19 +2808,19 @@ p3:{"^":"a:2;a",
 $0:function(){this.a.bl(!0)}},
 p8:{"^":"a;a,b",
 $1:function(a){this.b.push(a)},
-$S:function(){return H.bd(function(a){return{func:1,args:[a]}},this.a,"al")}},
+$S:function(){return H.be(function(a){return{func:1,args:[a]}},this.a,"al")}},
 p9:{"^":"a:2;a,b",
 $0:function(){this.b.bl(this.a)}},
 pa:{"^":"a;a,b",
 $1:function(a){this.b.t(0,a)},
-$S:function(){return H.bd(function(a){return{func:1,args:[a]}},this.a,"al")}},
+$S:function(){return H.be(function(a){return{func:1,args:[a]}},this.a,"al")}},
 pb:{"^":"a:2;a,b",
 $0:function(){this.b.bl(this.a)}},
 p4:{"^":"a;a,b",
 $1:function(a){var z=this.a
 z.b=!0
 z.a=a},
-$S:function(){return H.bd(function(a){return{func:1,args:[a]}},this.b,"al")}},
+$S:function(){return H.be(function(a){return{func:1,args:[a]}},this.b,"al")}},
 p5:{"^":"a:2;a,b",
 $0:function(){var z,y,x,w
 x=this.a
@@ -2863,7 +2863,7 @@ fs:function(){var z=this.c
 if(z==null){z=(this.b&2)!==0?$.$get$bl():new P.H(0,$.r,null,[null])
 this.c=z}return z},
 t:[function(a,b){if(this.b>=4)throw H.c(this.cC())
-this.bU(b)},"$1","gji",2,0,function(){return H.bd(function(a){return{func:1,v:true,args:[a]}},this.$receiver,"dc")}],
+this.bU(b)},"$1","gji",2,0,function(){return H.be(function(a){return{func:1,v:true,args:[a]}},this.$receiver,"dc")}],
 eB:function(a,b){if(this.b>=4)throw H.c(this.cC())
 if(a==null)a=new P.cY()
 $.r.toString
@@ -2878,7 +2878,7 @@ else if((z&3)===0)this.eb().t(0,C.v)
 return this.fs()},
 bU:[function(a){var z=this.b
 if((z&1)!==0)this.cJ(a)
-else if((z&3)===0)this.eb().t(0,new P.eh(a,null,this.$ti))},"$1","git",2,0,function(){return H.bd(function(a){return{func:1,v:true,args:[a]}},this.$receiver,"dc")}],
+else if((z&3)===0)this.eb().t(0,new P.eh(a,null,this.$ti))},"$1","git",2,0,function(){return H.be(function(a){return{func:1,v:true,args:[a]}},this.$receiver,"dc")}],
 cf:[function(a,b){var z=this.b
 if((z&1)!==0)this.cL(a,b)
 else if((z&3)===0)this.eb().t(0,new P.ei(a,b,null))},"$2","giq",4,0,48],
@@ -3090,7 +3090,7 @@ eh:{"^":"ej;ae:b<,a,$ti",
 eU:function(a){a.cJ(this.b)}},
 ei:{"^":"ej;bv:b<,br:c<,a",
 eU:function(a){a.cL(this.b,this.c)},
-$asej:I.bf},
+$asej:I.bg},
 qA:{"^":"d;",
 eU:function(a){a.cK()},
 gcq:function(){return},
@@ -3147,7 +3147,7 @@ z.d6()},"$0","geq",0,0,7],
 en:function(){var z=this.y
 if(z!=null){this.y=null
 return z.ck()}return},
-li:[function(a){this.x.fA(a,this)},"$1","giL",2,0,function(){return H.bd(function(a,b){return{func:1,v:true,args:[a]}},this.$receiver,"hI")}],
+li:[function(a){this.x.fA(a,this)},"$1","giL",2,0,function(){return H.be(function(a,b){return{func:1,v:true,args:[a]}},this.$receiver,"hI")}],
 lk:[function(a,b){this.x.iO(a,b,this)},"$2","giN",4,0,40],
 lj:[function(){this.e5()},"$0","giM",0,0,7],
 il:function(a,b,c,d,e,f,g){this.y=this.x.a.eT(this.giL(),this.giM(),this.giN())},
@@ -3281,7 +3281,7 @@ cj:function(a,b,c){var z=P.mq(null,null,null,b,c)
 a.Z(0,new P.rT(z))
 return z},
 a6:function(a,b,c,d){return new P.hL(0,null,null,null,null,null,0,[d])},
-b8:function(a,b){var z,y
+b9:function(a,b){var z,y
 z=P.a6(null,null,null,b)
 for(y=J.aj(a);y.u();)z.t(0,y.gU())
 return z},
@@ -3450,9 +3450,9 @@ ce:{"^":"B;$ti"},
 rT:{"^":"a:6;a",
 $2:function(a,b){this.a.p(0,a,b)}},
 fs:{"^":"fB;$ti"},
-fB:{"^":"d+b9;$ti",$asN:null,$asa_:null,$isN:1,$isa_:1},
-b9:{"^":"d;$ti",
-ga_:function(a){return new H.dO(this,this.gl(this),0,null,[H.y(this,"b9",0)])},
+fB:{"^":"d+ba;$ti",$asN:null,$asa_:null,$isN:1,$isa_:1},
+ba:{"^":"d;$ti",
+ga_:function(a){return new H.dO(this,this.gl(this),0,null,[H.y(this,"ba",0)])},
 au:function(a,b){return this.j(0,b)},
 Z:function(a,b){var z,y
 z=this.gl(this)
@@ -3475,10 +3475,10 @@ z=this.gl(this)
 for(y=0;y<z;++y){x=this.j(0,y)
 if(b.$1(x)===!0)return x
 if(z!==this.gl(this))throw H.c(new P.D(this))}return c.$0()},
-aJ:function(a,b){return new H.aq(this,b,[H.y(this,"b9",0),null])},
-e1:function(a,b){return H.he(this,b,null,H.y(this,"b9",0))},
+aJ:function(a,b){return new H.aq(this,b,[H.y(this,"ba",0),null])},
+e1:function(a,b){return H.he(this,b,null,H.y(this,"ba",0))},
 bG:function(a){var z,y
-z=P.a6(null,null,null,H.y(this,"b9",0))
+z=P.a6(null,null,null,H.y(this,"ba",0))
 for(y=0;y<this.gl(this);++y)z.t(0,this.j(0,y))
 return z},
 t:function(a,b){var z=this.gl(this)
@@ -3489,7 +3489,7 @@ for(z=0;z<this.gl(this);++z)if(J.e(this.j(0,z),b)){this.b7(0,z,this.gl(this)-1,t
 this.sl(0,this.gl(this)-1)
 return!0}return!1},
 iH:function(a,b){var z,y,x,w
-z=H.p([],[H.y(this,"b9",0)])
+z=H.p([],[H.y(this,"ba",0)])
 y=this.gl(this)
 for(x=0;x<y;++x){w=this.j(0,x)
 if(J.e(a.$1(w),b))z.push(w)
@@ -3499,7 +3499,7 @@ b7:function(a,b,c,d,e){var z,y,x,w,v
 P.cm(b,c,this.gl(this),null,null,null)
 z=c-b
 if(z===0)return
-if(H.aV(d,"$isN",[H.y(this,"b9",0)],"$asN")){y=e
+if(H.aV(d,"$isN",[H.y(this,"ba",0)],"$asN")){y=e
 x=d}else{x=J.j_(d,e).bF(0,!1)
 y=0}w=J.L(x)
 if(y+z>w.gl(x))throw H.c(H.fg())
@@ -3658,7 +3658,7 @@ ia:function(a,b){var z=new Array(8)
 z.fixed$length=Array
 this.a=H.p(z,[b])},
 v:{
-ba:function(a,b){var z=new P.mr(null,0,0,0,[b])
+bb:function(a,b){var z=new P.mr(null,0,0,0,[b])
 z.ia(a,b)
 return z},
 ms:function(a){var z
@@ -4000,32 +4000,32 @@ return"0"+a}}},
 aW:{"^":"M;",$isV:1,
 $asV:function(){return[P.M]}},
 "+double":0,
-b7:{"^":"d;bW:a<",
-aj:function(a,b){return new P.b7(this.a+b.gbW())},
-at:function(a,b){return new P.b7(this.a-b.gbW())},
+b8:{"^":"d;bW:a<",
+aj:function(a,b){return new P.b8(this.a+b.gbW())},
+at:function(a,b){return new P.b8(this.a-b.gbW())},
 cb:function(a,b){if(typeof b!=="number")return H.x(b)
-return new P.b7(C.j.hx(this.a*b))},
+return new P.b8(C.j.hx(this.a*b))},
 b0:function(a,b){return C.e.b0(this.a,b.gbW())},
 bk:function(a,b){return this.a>b.gbW()},
 df:function(a,b){return this.a<=b.gbW()},
 bT:function(a,b){return C.e.bT(this.a,b.gbW())},
 gke:function(){return C.e.bM(this.a,1000)},
 A:function(a,b){if(b==null)return!1
-if(!(b instanceof P.b7))return!1
+if(!(b instanceof P.b8))return!1
 return this.a===b.a},
 gD:function(a){return this.a&0x1FFFFFFF},
 bD:function(a,b){return C.e.bD(this.a,b.gbW())},
 k:function(a){var z,y,x,w,v
 z=new P.kQ()
 y=this.a
-if(y<0)return"-"+new P.b7(0-y).k(0)
+if(y<0)return"-"+new P.b8(0-y).k(0)
 x=z.$1(C.e.bM(y,6e7)%60)
 w=z.$1(C.e.bM(y,1e6)%60)
 v=new P.kP().$1(y%1e6)
 return""+C.e.bM(y,36e8)+":"+H.b(x)+":"+H.b(w)+"."+H.b(v)},
-f8:function(a){return new P.b7(0-this.a)},
+f8:function(a){return new P.b8(0-this.a)},
 $isV:1,
-$asV:function(){return[P.b7]}},
+$asV:function(){return[P.b8]}},
 kP:{"^":"a:14;",
 $1:function(a){if(a>=1e5)return""+a
 if(a>=1e4)return"0"+a
@@ -4040,7 +4040,7 @@ a5:{"^":"d;",
 gbr:function(){return H.E(this.$thrownJsError)}},
 cY:{"^":"a5;",
 k:function(a){return"Throw of null."}},
-b6:{"^":"a5;a,b,h:c<,d",
+b7:{"^":"a5;a,b,h:c<,d",
 ged:function(){return"Invalid argument"+(!this.a?"(s)":"")},
 gec:function(){return""},
 k:function(a){var z,y,x,w,v,u
@@ -4054,10 +4054,10 @@ v=this.gec()
 u=P.f8(this.b)
 return w+v+": "+H.b(u)},
 v:{
-G:function(a){return new P.b6(!1,null,null,a)},
-cH:function(a,b,c){return new P.b6(!0,a,b,c)},
-l:function(a){return new P.b6(!1,null,a,"Must not be null")}}},
-e6:{"^":"b6;e,f,a,b,c,d",
+G:function(a){return new P.b7(!1,null,null,a)},
+cH:function(a,b,c){return new P.b7(!0,a,b,c)},
+l:function(a){return new P.b7(!1,null,a,"Must not be null")}}},
+e6:{"^":"b7;e,f,a,b,c,d",
 ged:function(){return"RangeError"},
 gec:function(){var z,y,x
 z=this.e
@@ -4074,7 +4074,7 @@ ny:function(a,b,c,d,e){if(a<b||a>c)throw H.c(P.a8(a,b,c,d,e))},
 cm:function(a,b,c,d,e,f){if(0>a||a>c)throw H.c(P.a8(a,0,c,"start",f))
 if(a>b||b>c)throw H.c(P.a8(b,a,c,"end",f))
 return b}}},
-lU:{"^":"b6;e,l:f>,a,b,c,d",
+lU:{"^":"b7;e,l:f>,a,b,c,d",
 ged:function(){return"RangeError"},
 gec:function(){if(J.c0(this.b,0))return": index must not be negative"
 var z=this.f
@@ -4150,7 +4150,7 @@ for(z=this.ga_(this);z.u();)if(b.$1(z.gU())===!0)return!0
 return!1},
 bF:function(a,b){return P.P(this,b,H.y(this,"B",0))},
 cw:function(a){return this.bF(a,!0)},
-bG:function(a){return P.b8(this,H.y(this,"B",0))},
+bG:function(a){return P.b9(this,H.y(this,"B",0))},
 gl:function(a){var z,y
 z=this.ga_(this)
 for(y=0;z.u();)++y
@@ -4260,7 +4260,7 @@ return this.b.t(0,b)},
 k:function(a){return J.h(this.b)},
 iB:function(){if(!this.a)return
 this.a=!1
-this.b=P.b8(this.b,H.m(this,0))},
+this.b=P.b9(this.b,H.m(this,0))},
 $isbO:1,
 $isa_:1}}],["","",,S,{"^":"",dx:{"^":"d;fG:a<,b,$ti",
 a2:function(a){var z=new S.O(null,null,this.$ti)
@@ -4305,7 +4305,7 @@ Z:function(a,b){var z=this.a
 return(z&&C.a).Z(z,b)},
 bG:function(a){var z=this.a
 z.toString
-return P.b8(z,H.m(z,0))},
+return P.b9(z,H.m(z,0))},
 gY:function(a){return this.a.length===0},
 gav:function(a){return this.a.length!==0},
 gw:function(a){var z=this.a
@@ -4470,11 +4470,11 @@ this.gev().t(0,b)},
 a3:function(a,b){this.gev().a3(0,b)},
 aJ:function(a,b){var z=this.a
 z.toString
-z=P.b8(new H.bF(z,b,[H.m(z,0),null]),null)
+z=P.b9(new H.bF(z,b,[H.m(z,0),null]),null)
 this.b=null
 this.a=z
 this.j8(z)},
-gev:function(){if(this.b!=null){this.a=P.b8(this.a,H.m(this,0))
+gev:function(){if(this.b!=null){this.a=P.b9(this.a,H.m(this,0))
 this.b=null}return this.a},
 b2:function(){if(new H.av(H.Z(H.m(this,0)),null).A(0,C.q))throw H.c(new P.S('explicit element type required, for example "new SetBuilder<int>"'))},
 j8:function(a){var z,y,x
@@ -4591,13 +4591,13 @@ f7:{"^":"mv;y,z,Q,ch,cx,cy,db,dx,dy,bH:fr<,fx,fe:fy<,ag:go<,b8:id<,k1,a,b,c,d,e,
 hZ:function(){var z,y,x,w,v,u
 z=P.aD(C.o,null)
 y=$.$get$bz()
-this.cy=R.b5(1000,"orc",O.dk(),null,null,new G.aG("sword",1,1,!1,!0,!1,z),null,0,2,0,!1,!1,2,!1,C.t,0,y)
-this.db=R.b5(1001,"goblin",O.dk(),null,null,new G.aG("scimitar",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,1,0,!1,!1,1,!1,C.t,0,y)
+this.cy=R.b6(1000,"orc",O.dk(),null,null,new G.aG("sword",1,1,!1,!0,!1,z),null,0,2,0,!1,!1,2,!1,C.t,0,y)
+this.db=R.b6(1001,"goblin",O.dk(),null,null,new G.aG("scimitar",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,1,0,!1,!1,1,!1,C.t,0,y)
 y=new S.O(null,null,[Q.v])
 y.al()
 y.m([new Q.v("start_adventure","","",null)])
 this.dx=new K.co(y.q(),"preStartBook",new O.kX(),new O.kY(),null,null,"ground")
-y=R.b5(1,"Filip",null,"preStartBook",null,null,null,0,2,1000,!1,!0,2,!0,C.F,1,null)
+y=R.b6(1,"Filip",null,"preStartBook",null,null,null,0,2,1000,!1,!0,2,!0,C.F,1,null)
 this.ch=y
 z=y.x
 y=y.db
@@ -4606,7 +4606,7 @@ if(typeof y!=="number")return H.x(y)
 this.go.sae(z/y)
 this.id.sae(this.ch.fy)
 this.k1.sae(this.ch.r)
-this.cx=R.b5(100,"Briana",null,this.dx.b,null,null,this.ch.y,0,2,0,!1,!1,2,!0,C.a5,0,null)
+this.cx=R.b6(100,"Briana",null,this.dx.b,null,null,this.ch.y,0,2,0,!1,!1,2,!0,C.a5,0,null)
 this.dy=F.fS(this.dx,!1)
 y=K.co
 x=P.P($.$get$i2(),!0,y)
@@ -4615,9 +4615,9 @@ w=new M.ee(null,!1,0,0).q()
 z=this.ch
 v=this.cx
 u=this.dy
-v=P.b8([z,v],R.A)
-z=P.ba(null,O.cF)
-u=new A.a4(v,P.a6(null,null,null,U.ad),w,z,P.b8(x,y),P.P([u],!0,S.ae),0,null)
+v=P.b9([z,v],R.A)
+z=P.bb(null,O.cF)
+u=new A.a4(v,P.a6(null,null,null,U.ad),w,z,P.b9(x,y),P.P([u],!0,S.ae),0,null)
 this.fr=u
 y=new Y.a3(H.p([],[Y.ai]),0,P.b_())
 y.b=u.r
@@ -5073,7 +5073,7 @@ x=3
 return P.bU(new H.K(u,new R.uM(z),[H.m(u,0)]))
 case 3:return P.aS()
 case 1:return P.aT(v)}}})},
-b5:function(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q){var z=new R.eV(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+b6:function(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q){var z=new R.eV(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 new R.tq(a,b,l,n,o,f,e,i,m,p,j,h,d,g,q,!1,c).$1(z)
 return z.q()},
 uM:{"^":"a:0;a",
@@ -5128,20 +5128,20 @@ x=2*y
 if(!z.gaH())x-=10
 y=z.e
 if(!(y instanceof K.cc))x+=4
-y=J.b4(y.gae(),2)
+y=J.b5(y.gae(),2)
 if(typeof y!=="number")return H.x(y)
 x+=y
-for(y=z.cy.a,w=[null],v=new P.af(y,y.r,null,null,w),v.c=y.e;v.u();){y=J.b4(v.d.gae(),10)
+for(y=z.cy.a,w=[null],v=new P.af(y,y.r,null,null,w),v.c=y.e;v.u();){y=J.b5(v.d.gae(),10)
 if(typeof y!=="number")return H.x(y)
 x+=y}y=a.a
 for(v=y.ga_(y),u=new H.bS(v,new R.jz(this),[H.m(y,0)]),t=0;u.u();){s=v.gU()
 r=s.gaq()?2:0
 q=s.gag()
 if(typeof q!=="number")return H.x(q)
-p=J.b4(s.e.gae(),2)
+p=J.b5(s.e.gae(),2)
 if(typeof p!=="number")return H.x(p)
 t=t+r+2*q+p
-for(r=s.cy.a,q=new P.af(r,r.r,null,null,w),q.c=r.e;q.u();){r=J.b4(q.d.gae(),10)
+for(r=s.cy.a,q=new P.af(r,r.r,null,null,w),q.c=r.e;q.u();){r=J.b5(q.d.gae(),10)
 if(typeof r!=="number")return H.x(r)
 t+=r}}return new A.cG(x,t,y.bw(0,0,new R.jA(this,a)))},
 iP:function(a,b,c){var z=b.l0(a,this,!0)
@@ -5390,7 +5390,7 @@ cb:function(a,b){if(typeof b!=="number")return H.x(b)
 return new A.ap(this.a*b,this.b*b,J.c1(this.c,b))},
 aj:function(a,b){return new A.ap(this.a+b.gcc(),this.b+b.gd7(),J.ao(this.c,b.gc0()))},
 dd:function(a,b){if(typeof b!=="number")return H.x(b)
-return new A.ap(this.a/b,this.b/b,J.b4(this.c,b))},
+return new A.ap(this.a/b,this.b/b,J.b5(this.c,b))},
 k:function(a){return"ActorScoreChange<self="+C.j.bj(this.a,2)+",team="+C.j.bj(this.b,2)+",enemy="+J.c3(this.c,2)+">"},
 v:{
 jy:function(a){var z,y,x,w,v,u,t,s,r
@@ -5502,7 +5502,7 @@ if(w==null)w=1
 if(typeof w!=="number")return H.x(w)
 v=l.a/w
 u=l.b/w
-w=J.b4(l.c,w)
+w=J.b5(l.c,w)
 t=m.a
 q=m.b
 p=m.c
@@ -5536,7 +5536,7 @@ t=u.a.bI(0,new G.js(x))
 s=t.di(u)
 r=x.a
 r.bP("Planning for "+H.b(t.dx)+", initialScore="+s.k(0))
-q=new P.bc(x.ef(t,u).a(),null,null,null)
+q=new P.bd(x.ef(t,u).a(),null,null,null)
 case 2:if(!q.u()){z=3
 break}p=q.c
 o=p==null?q.b:p.gU()
@@ -5613,11 +5613,11 @@ z=1
 break}o=q.di(r)
 p.bo(new G.jg(a5,o))
 p.bo(new G.jh(a5))
-n=P.ba(null,B.bJ)
+n=P.bb(null,B.bJ)
 m=P.a6(null,null,null,A.a4)
 l=J.o(r)
 k=l.gD(r)
-for(j=new P.bc(a6.dD(q,a5,r).a(),null,null,null);j.u();){i=j.c
+for(j=new P.bd(a6.dD(q,a5,r).a(),null,null,null);j.u();){i=j.c
 h=i==null?j.b:i.gU()
 if(l.gD(r)!==k)throw H.c(new P.w("Action "+a6.k(0)+" modified world state when producing "+H.b(h)+"."))
 n.aE(h)}s.a=0
@@ -5670,10 +5670,10 @@ case 8:p.an("- generating all actions for "+H.b(e.gh()))
 j=n.c
 i=n.b
 a=n.a
-for(a0=new P.bc(t.ef(e,l).a(),null,null,null);a0.u();){a1=a0.c
+for(a0=new P.bd(t.ef(e,l).a(),null,null,null);a0.u();){a1=a0.c
 a2=a1==null?a0.b:a1.gU()
 if(a2.H(e,l)!==!0)continue
-for(a1=new P.bc(a2.dD(e,g,l).a(),null,null,null);a1.u();){a3=a1.c
+for(a1=new P.bd(a2.dD(e,g,l).a(),null,null,null);a1.u();){a3=a1.c
 a4=a3==null?a1.b:a3.gU();++t.d
 if(J.c0(a4.gdG(),0.05))continue
 if(m.a7(0,a4.gbH()))continue
@@ -5851,8 +5851,8 @@ $1:function(a){var z,y
 z=this.b
 y=z.b
 if(a>=y.length)return H.f(y,a)
-return J.b4(J.bC(this.c.$1(z.a.a.j(0,y[a])),this.a.a),this.d)}},nd:{"^":"a:0;a",
-$1:function(a){return J.iZ(J.c1(J.b4(a,this.a),1000))}},n4:{"^":"a:0;a",
+return J.b5(J.bC(this.c.$1(z.a.a.j(0,y[a])),this.a.a),this.d)}},nd:{"^":"a:0;a",
+$1:function(a){return J.iZ(J.c1(J.b5(a,this.a),1000))}},n4:{"^":"a:0;a",
 $1:function(a){return!this.a.j(0,a).gks()}}}],["","",,K,{"^":"",rU:{"^":"a:3;",
 $3:function(a,b,c){}},co:{"^":"d;a,h:b<,c,d,jU:e<,f,ca:r<",
 gjS:function(){return this.a},
@@ -5963,7 +5963,7 @@ return z+(this.cy?"(sup)":"")+">"}},a3:{"^":"d;a,V:b<,c",
 geL:function(){return C.a.bt(this.a,new Y.oP())},
 aS:function(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p){var z,y
 if(b==null||J.e(b,""))return
-z=(J.bg(b).eJ(b,".")||C.b.eJ(b,"!")||C.b.eJ(b,"?"))&&C.b.dl(b,P.bp("[A-Z]",!0,!1))?!0:p
+z=(J.bh(b).eJ(b,".")||C.b.eJ(b,"!")||C.b.eJ(b,"?"))&&C.b.dl(b,P.bp("[A-Z]",!0,!1))?!0:p
 y=this.b
 this.a.push(new Y.ai(b,m,h,j,i,d,k,g,!1,e,l,z,c,f,y))},
 t:function(a,b){return this.aS(a,b,null,!1,!1,!1,!1,null,null,null,!1,!1,null,!1,null,!1)},
@@ -6226,9 +6226,9 @@ if(z)return!0
 else return!1},
 i2:function(a,b){var z,y,x,w,v
 if(!this.aZ(a)||!this.aZ(b))return!1
-for(z=new P.bc(this.dV(a).a(),null,null,null);z.u();){y=z.c
+for(z=new P.bd(this.dV(a).a(),null,null,null);z.u();){y=z.c
 x=y==null?z.b:y.gU()
-for(y=new P.bc(this.dV(b).a(),null,null,null);y.u();){w=y.c
+for(y=new P.bd(this.dV(b).a(),null,null,null);y.u();){w=y.c
 v=w==null?y.b:w.gU()
 if(J.e(x.gi(),v.gi()))return!0}}return!1},
 e3:[function(a){var z=J.am(a)
@@ -6517,7 +6517,7 @@ this.r=a.r},
 v:{
 ed:function(a){var z,y,x,w
 z=P.a6(null,null,null,R.A)
-y=P.ba(null,O.cF)
+y=P.bb(null,O.cF)
 x=P.a6(null,null,null,U.ad)
 w=P.a6(null,null,null,null)
 w=new A.a4(z,x,a.c,y,w,[],null,null)
@@ -6830,13 +6830,13 @@ y6:[function(a,b,c,d,e){return a.dO(c,"<subject> swing<s> {"+H.b(U.aa(a))+" |}at
 vO:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()!==!0&&a.ga4()&&!c.ga0()&&a.e.gaV()}},
 vP:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 vQ:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.l)}},
 w_:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()===!0&&a.ga4()&&!c.ga0()&&a.e.gaV()}},
 w0:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 w1:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.m)}},
 vZ:{"^":"a:3;",
@@ -6850,7 +6850,7 @@ y4:[function(a,b,c,d,e){return a.dO(c,"<subject> swing<s> {"+H.b(U.aa(a))+" |}at
 vS:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()!==!0&&a.gar()&&!c.ga0()&&a.e.gaV()}},
 vT:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 vU:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.l)}},
 vR:{"^":"a:3;",
@@ -6858,7 +6858,7 @@ $3:function(a,b,c){return 0.7}},
 vW:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()===!0&&a.gar()&&!c.ga0()&&a.e.gaV()}},
 vX:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 vY:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.m)}},
 vV:{"^":"a:3;",
@@ -6891,13 +6891,13 @@ yf:[function(a,b,c,d,e){return a.dO(c,"<subject> thrust<s> {"+H.b(U.aa(a))+" |}a
 wb:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()!==!0&&a.ga4()&&!c.ga0()&&a.e instanceof Z.ak}},
 wc:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 wd:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.l)}},
 wn:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()===!0&&a.ga4()&&!c.ga0()&&a.e instanceof Z.ak}},
 wo:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 wp:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.m)}},
 wm:{"^":"a:3;",
@@ -7015,7 +7015,7 @@ if(!w){u=S.bN("{shoulder|{left|right} arm|{left|right} thigh}")
 t=a.gaY()
 v=H.p([],v)
 z.dP(c,"<subject> {pierce<s>|ram<s> into|drill<s> through} <object-owner's> <object>",new Y.aC(!1,u,v,t==null?$.$get$aL():t,!1,C.n),x,a,!0)
-N.b3(c,x)}else{u=S.bN("{chest|eye|neck}")
+N.b4(c,x)}else{u=S.bN("{chest|eye|neck}")
 t=a.gaY()
 v=H.p([],v)
 z.dP(c,"<subject> {pierce<s>|ram<s> into|drill<s> through} <object-owner's> <object>",new Y.aC(!1,u,v,t==null?$.$get$aL():t,!1,C.n),x,a,!0)
@@ -7079,7 +7079,7 @@ z=this.b
 b.W(z.gi(),new R.ls())
 y=b.B(z.gi())
 if(J.e(y.gi(),100)){a.bp(c,"<subject> smash<es> <object's> head to the ground",y,!0)
-N.b3(c,y)}else{a.bp(c,"<subject> break<s> <object's> neck",y,!0)
+N.b4(c,y)}else{a.bp(c,"<subject> break<s> <object's> neck",y,!0)
 N.bi(c,b,y)}return H.b(a.gh())+" breaks "+H.b(z.gh())+"'s neck on ground"},"$3","gN",6,0,1],
 I:function(a,b){return 1},
 H:function(a,b){return!0},
@@ -7279,7 +7279,7 @@ return a}},
 tW:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()!==!0&&a.gS().gaV()&&!a.ga0()}},
 tX:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 tY:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.l)}},
 tV:{"^":"a:3;",
@@ -7287,7 +7287,7 @@ $3:function(a,b,c){return c.ga4()?0.7:0.9}},
 u_:{"^":"a:3;",
 $3:function(a,b,c){return a.gT()===!0&&a.gS().gaV()&&!a.ga0()}},
 u0:{"^":"a:3;",
-$3:function(a,b,c){return M.bb(a,c)}},
+$3:function(a,b,c){return M.bc(a,c)}},
 u1:{"^":"a:3;",
 $3:function(a,b,c){return L.aP(a,c,C.m)}},
 tZ:{"^":"a:3;",
@@ -7678,7 +7678,7 @@ break
 case 2:c.aD(a,"<subject> drop<s> to <subject's> knees",!0)
 c.aD(a,"<subject> keel<s> over",!0)
 break}a.n(0,"\n\n",!0)},
-b3:function(a,b){if(J.e(b.gi(),100)&&b.gag()===0){N.rG(a,b)
+b4:function(a,b){if(J.e(b.gi(),100)&&b.gag()===0){N.rG(a,b)
 return}b.aD(a,"<subject> {scream|yell|grunt}<s> in pain",!0)},
 rG:function(a,b){if(b.gah()===C.f){b.aD(a,"<subject> stop<s> moving",!0)
 a.n(0,"\n\n",!0)
@@ -7706,7 +7706,7 @@ c.jl(0,"both "+(a.gT()===!0||z.gT()===!0?"of you":"")+" {land on|fall to} the "+
 v=z.gag()
 if(typeof v!=="number")return v.bk()
 if(v>1){c.jm(0,"the impact almost {knocks <object> unconscious|knocks <object> out}",x,z)
-N.b3(c,y)
+N.b4(c,y)
 b.W(z.gi(),new R.lw())}return H.b(a.gh())+" finishes leap at "+H.b(z.gh())},"$3","gN",6,0,1],
 I:function(a,b){return 1},
 H:function(a,b){return!0},
@@ -7771,7 +7771,7 @@ b.W(y.gi(),new D.lT())
 x=b.B(y.gi())
 if(!(!x.gaH()&&x.gi()!==100)){a.gS().ac(c,"<subject> {cut<s> into|pierce<s>|go<es> into} <object's> flesh",x)
 x.a8(c,"<subject> fall<s> to the ground")
-N.b3(c,x)}else{a.gS().ac(c,"<subject> {go<es> right through|completely impale<s>|bore<s> through} <object's> {body|chest|stomach|neck}",x)
+N.b4(c,x)}else{a.gS().ac(c,"<subject> {go<es> right through|completely impale<s>|bore<s> through} <object's> {body|chest|stomach|neck}",x)
 x.aD(c,"<subject> go<es> down",!0)
 N.bi(c,b,x)}b.aX("FightSituation")
 return H.b(a.gh())+" impales "+H.b(y.gh())},"$3","gN",6,0,1],
@@ -8179,7 +8179,7 @@ z=this.b
 b.W(z.gi(),new A.mN(a))
 y=b.B(z.gi())
 if(!(!y.gaH()&&y.gi()!==100)){a.bp(c,"<subject> thrust<s> {|"+H.b(U.aa(a))+"} deep into <object's> {shoulder|hip|thigh}",y,!0)
-N.b3(c,y)}else{a.bp(c,"<subject> {stab<s>|run<s> "+H.b(U.aa(a))+" through} <object>",y,!0)
+N.b4(c,y)}else{a.bp(c,"<subject> {stab<s>|run<s> "+H.b(U.aa(a))+" through} <object>",y,!0)
 N.bi(c,b,y)}return H.b(a.gh())+" stabs "+H.b(z.gh())},"$3","gN",6,0,1],
 I:function(a,b){if(a.gT()===!0)return 0.6
 return 0.5},
@@ -8482,7 +8482,7 @@ y=b.B(z.gi())
 x=b.ak("SlashSituation").gi()
 w=!y.gaH()&&y.gi()!==100
 if(!w){a.bS(c,"<subject> {slash<es>|cut<s>} <object's> {shoulder|abdomen|thigh}",x,y,!0)
-N.b3(c,y)}else{a.bS(c,"<subject> {slash<es>|cut<s>} {across|through} <object's> {neck|abdomen|lower body}",x,y,!0)
+N.b4(c,y)}else{a.bS(c,"<subject> {slash<es>|cut<s>} {across|through} <object's> {neck|abdomen|lower body}",x,y,!0)
 if(J.e(a.gS().gh(),$.$get$cA().b)&&J.ds(z.gh(),"orc")===!0)a.e.aL(c,"<subject> slit<s> through the flesh like it isn't there.",!0)
 N.bi(c,b,y)}v=H.b(a.gh())+" slashes"
 return v+(w?" (and kills)":"")+" "+H.b(z.gh())},"$3","gN",6,0,1],
@@ -8507,7 +8507,7 @@ y=b.B(z.gi())
 x=b.ak("SlashSituation").gi()
 w=!y.gaH()&&y.gi()!==100
 if(!w){a.bS(c,"<subject> {pierce<s>|stab<s>|bore<s> through} <object's> {shoulder|abdomen|thigh}",x,y,!0)
-N.b3(c,y)}else{a.bS(c,"<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} <object's> {neck|chest|heart}",x,y,!0)
+N.b4(c,y)}else{a.bS(c,"<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} <object's> {neck|chest|heart}",x,y,!0)
 N.bi(c,b,y)}v=H.b(a.gh())+" pierces"
 return v+(w?" (and kills)":"")+" "+H.b(z.gh())},"$3","gN",6,0,1],
 I:function(a,b){return 1},
@@ -8747,7 +8747,7 @@ if(w==null)H.i(P.l("predeterminedResult"))
 if(v==null)H.i(P.l("target"))
 if(u==null)H.i(P.l("time"))}this.m(z)
 return z}}}],["","",,M,{"^":"",
-bb:function(a,b){var z=new M.ea(null,null,null,null,null)
+bc:function(a,b){var z=new M.ea(null,null,null,null,null)
 new M.tD(a,b).$1(z)
 return z.q()},
 h0:{"^":"ae;",
@@ -8828,7 +8828,7 @@ b.W(z.gi(),new Q.lB())
 y=b.B(z.gi())
 x=J.e(y.gi(),100)
 c.ez(0,"<subject> {cut<s>|slash<es>|slit<s>} <object's> "+(x?"side":"{throat|neck|side}"),y,a.gS())
-if(x)N.b3(c,y)
+if(x)N.b4(c,y)
 else N.bi(c,b,y)
 return H.b(a.gh())+" slains "+H.b(z.gh())+" on the ground"},"$3","gN",6,0,1],
 I:function(a,b){return 1},
@@ -8847,7 +8847,7 @@ b.W(z.gi(),new V.lF())
 y=b.B(z.gi())
 x=J.e(y.gi(),100)
 c.ez(0,"<subject> {impale<s>|bore<s> through|pierce<s>} <object's> "+(x?"side":"{throat|neck|heart}"),y,a.gS())
-if(x)N.b3(c,y)
+if(x)N.b4(c,y)
 else N.bi(c,b,y)
 return H.b(a.gh())+" slains "+H.b(z.gh())+" on the ground with a spear"},"$3","gN",6,0,1],
 I:function(a,b){return 1},
@@ -9213,7 +9213,7 @@ uc:function(a,b){var z=a.B(1).gaC().cl(0,new O.ud())
 a.W(a.B(1).gi(),new O.ue(z))
 a.ak("RoomRoamingSituation").d_(a,a.B(1),"war_forge",b,!0)},
 xL:[function(a,b,c){var z,y
-z=R.b5(6666,"Agruth",null,null,null,null,null,0,2,100,!1,!1,2,!0,C.t,0,$.$get$bz())
+z=R.b6(6666,"Agruth",null,null,null,null,null,0,2,100,!1,!1,2,!0,C.t,0,$.$get$bz())
 y=z.y
 a.gey().t(0,z)
 return U.cb(c,[z],"{rock|cavern} floor",b,P.a0([1,new O.up(y),5,new O.uq(y),9,new O.ur(y),12,new O.us(y),17,new O.ut(y)]))},"$3","wT",6,0,12],
@@ -9227,7 +9227,7 @@ a.gey().ax(0,v)
 return U.cb(c,v,"{rock|cavern} floor",b,P.a0([1,new O.ux(x,w,new O.uw()),4,new O.uy(x,w),6,new O.uz(),9,new O.uA(),12,new O.uB()]))},"$3","wU",6,0,12],
 xN:[function(a,b,c){var z,y,x
 z=a.ap("talk_to_briana_3")?"guardian":"orc"
-y=R.b5(6667,z,null,null,null,new G.aG("rusty sword",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,3,100,!1,!1,3,!1,C.t,0,$.$get$bz())
+y=R.b6(6667,z,null,null,null,new G.aG("rusty sword",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,3,100,!1,!1,3,!1,C.t,0,$.$get$bz())
 x=y.y
 a.a.t(0,y)
 return U.cb(c,[y],"{rock|cavern} floor",b,P.a0([1,new O.uE(x),3,new O.uF(x),5,new O.uG(x)]))},"$3","wV",6,0,12],
@@ -9244,7 +9244,7 @@ iq:function(a,b){a.W(a.B(1).gi(),new O.uQ(b))},
 eE:function(a){var z=a.f
 if(H.F(z.length!==0?C.a.gw(z):null,"$isJ").c===!0)return!1
 return C.a.a7(C.a_,H.F(z.length!==0?C.a.gw(z):null,"$isJ").a)},
-bh:function(a,b){var z,y,x
+b3:function(a,b){var z,y,x
 z=a.B(1)
 for(y=a.d,y=new P.db(y,y.c,y.d,y.b,null,[H.m(y,0)]);y.u();){x=y.e
 if(!J.e(x.gcs(),z.gi()))continue
@@ -9285,8 +9285,8 @@ wK:function(a,b){a.W(b.gi(),new O.wL(b))},
 et:function(a){var z,y
 z=$.$get$ew().a++
 y=a?new Z.ak("spear",0,1,!1,!1,!1,P.aD(C.D,null)):new G.aG("scimitar",1,1,!1,!0,!1,P.aD(C.o,null))
-return R.b5(z,"goblin",O.dk(),null,null,y,null,0,1,0,!1,!1,1,!1,C.t,0,$.$get$bz())},
-hT:function(a){return R.b5($.$get$ew().a++,"orc",O.dk(),null,null,new G.aG("sword",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,a,0,!1,!1,a,!1,C.t,0,$.$get$bz())},
+return R.b6(z,"goblin",O.dk(),null,null,y,null,0,1,0,!1,!1,1,!1,C.t,0,$.$get$bz())},
+hT:function(a){return R.b6($.$get$ew().a++,"orc",O.dk(),null,null,new G.aG("sword",1,1,!1,!0,!1,P.aD(C.o,null)),null,0,a,0,!1,!1,a,!1,C.t,0,$.$get$bz())},
 ud:{"^":"a:0;",
 $1:function(a){return C.a.a7(a.gf3(),C.r)}},
 ue:{"^":"a:0;a",
@@ -9490,9 +9490,9 @@ ti:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"",!0)}},
 te:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"You enter a small, circular room. There are exits on three sides, all marked with crude writing.\n\n\n",!0)
-if(O.bh(b,"smelter"))c.n(0,'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.',!0)
+if(O.b3(b,"smelter"))c.n(0,'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.',!0)
 c.n(0,"\n",!0)
-if(O.bh(b,"underground_church"))c.n(0,'The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs\' vocabulary. Both of these slope downwards.',!0)
+if(O.b3(b,"underground_church"))c.n(0,'The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs\' vocabulary. Both of these slope downwards.',!0)
 c.n(0,"\nA third passage is marked \"Up Door\", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years.\n\n\nLeaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.\n\n\n",!0)
 if(!b.ap("smelter_throw_spear")&&!b.ap("take_orcthorn"))c.n(0,'For the first time, you see a smile on Briana\'s face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can\'t believe we have made it this far. Although \u2014 I\'ll admit \u2014 it feels like we could have taken more from them." She motions at the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. Take more. I mean, we might be the first people to be in Mount Bloodrock, and live." \n\n\n_"Let us keep that second part true, then."_\n ',!0)
 c.n(0,"",!0)}},
@@ -9658,7 +9658,7 @@ t3:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"You can see Briana clutching her fists. \"Are we homesick already?\" she says. But she doesn't wait for reply, and presses on.\n\n\nIt doesn't take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.\n\n\nThe tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn't see you or anything else.\n\n\nBefore you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man's chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.\n\n\nAn orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. \"Vicious throw, small one!\" he roars.\n\n\nYou step back and motion Briana to lean on the wall, hoping that the door's embossed frame will provide enough cover before the two slavers turn again. \n\n\nBut at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.\n\n\nThe door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.\n\n\n[IMAGE goblin spearman + orc]\n",!0)}},
 t4:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"",!0)
-if(b.ak("RoomRoamingSituation").cW(b,b.B(1),"orcthorn_room"))c.n(0,"The small door on the side of the corridor is open.",!0)
+if(b.ak("RoomRoamingSituation").cW(b,b.B(1),"orcthorn_room")&&!O.b3(b,"orcthorn_room"))c.n(0,"The small door on the side of the corridor is open.",!0)
 c.n(0,"\n",!0)
 if(!b.ak("RoomRoamingSituation").cW(b,b.B(1),"orcthorn_room"))c.n(0,"The small door on the side of the corridor is closed.",!0)
 c.n(0,"\n",!0)
@@ -9682,9 +9682,9 @@ gJ:function(){return""},
 gK:function(){return!1}},
 t1:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.\n\n\n",!0)
-if(O.bh(b,"war_forge"))c.n(0,"You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.",!0)
+if(O.b3(b,"war_forge"))c.n(0,"You see a smooth passage leading out of the smelter and sloping upwards. You'll be able to go there unnoticed.",!0)
 c.n(0,"",!0)
-if(O.bh(b,"guardpost_above_church"))c.n(0,"Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel goes \u2014 the war forges. You'll be able to go there unnoticed.",!0)
+if(O.b3(b,"guardpost_above_church"))c.n(0,"Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel goes \u2014 the war forges. You'll be able to go there unnoticed.",!0)
 c.n(0,"",!0)}},
 t2:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"The reds and whites of the molten steel reflect in the heaps of coal.\n\n\n",!0)
@@ -9771,9 +9771,9 @@ tO:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"",!0)}},
 tC:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"You enter something that at first looks like a large, twisting cave, but then opens into a high room with many columns. This must be what the orcs call the Underground Church. Your bare footsteps reverberate around the space, so you slow down to quiet them. There are no windows, of course, you are deep underground, but there is dim light coming from the far end of the place, where you expect the altar to be but can't quite see it. No torches here. Quiet. \n\n\n",!0)
-if(O.bh(b,"cave_with_agruth"))c.t(0,"After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.")
+if(O.b3(b,"cave_with_agruth"))c.t(0,"After a bit of searching, you also notice a twisty passage going from the right hand side of the Church and sloping upwards. That must be the way out.")
 c.n(0,"",!0)
-if(O.bh(b,"guardpost_above_church"))c.t(0,"Not far from here, a tunnel leads slightly downwards, to where you killed Agruth.")
+if(O.b3(b,"guardpost_above_church"))c.t(0,"Not far from here, a tunnel leads slightly downwards, to where you killed Agruth.")
 c.n(0,"",!0)}},
 tM:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"The temple stands silent, as if holding breath.\n\n\n",!0)
@@ -9831,9 +9831,9 @@ gJ:function(){return""},
 gK:function(){return!1}},
 rV:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"You enter the enormous cave that holds Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.\n\n\n",!0)
-if(O.bh(b,"cave_with_agruth"))c.n(0,"You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there is nobody in the way. ",!0)
+if(O.b3(b,"cave_with_agruth"))c.n(0,"You and Briana duck behind some carts on a walkway above the floor of the cave. You can see that the walkway leads up a flight of stairs that hugs one side of the cave, and into a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there is nobody in the way. ",!0)
 c.n(0,"\n",!0)
-if(O.bh(b,"smelter"))c.n(0,"You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. There is nobody in the way. ",!0)
+if(O.b3(b,"smelter"))c.n(0,"You and Briana stand on a walkway way above the floor of the cave. You can see the walkway leads down a flight of stairs that hugs one side of the cave, towards the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, towards the slave quarters, and therefore to where you slayed Agruth. There is nobody in the way. ",!0)
 c.n(0,"",!0)}},
 t5:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"The air in the war forges is heavy and the noise overwhelming.\n\n\n",!0)
@@ -10056,7 +10056,7 @@ r.toString
 o=new A.u(667,null,null,null,null)
 o.c="We have choices."
 r.a.G(o.F())
-o=H.y(k,"b9",0)
+o=H.y(k,"ba",0)
 o=P.P(new H.K(k,new O.o8(u,l),[o]),!0,o)
 r=k.a
 H.p([],[L.ac])
@@ -10460,7 +10460,7 @@ return this},
 F:function(){return P.a0(["points",this.a])},
 hE:function(a){this.a=a.j(0,"points")
 this.b.bh(0)},
-ic:function(){this.b=P.ba(null,A.cZ)},
+ic:function(){this.b=P.bb(null,A.cZ)},
 $ise8:1},
 d3:{"^":"mY;aB:d<,dT:e@,a,b,c",
 ghF:function(){return J.ab(this.e,0)}},
@@ -10737,7 +10737,7 @@ return this},
 bD:function(a,b){return C.b.bD(this.e,b.gb9())},
 k:function(a){return"Choice: "+this.e+" ["+H.b(this.x)+"] ("+this.d+")"},
 i9:function(a,b,c,d,e,f,g){if(a==null)throw H.c(P.G("String given to choice cannot be null."))
-this.e=J.bg(a).f2(a)
+this.e=J.bh(a).f2(a)
 this.d=C.b.gD(a)
 this.r=f
 this.b=!1
@@ -10774,7 +10774,7 @@ q=J.aA(y,"goto")
 p=H.ii(J.aA(y,"script"),t)
 o=new L.ac(!1,null,null,null,null,null,null,q,J.aA(y,"submenu"))
 if(r==null)H.i(P.G("String given to choice cannot be null."))
-o.e=J.bg(r).f2(r)
+o.e=J.bh(r).f2(r)
 o.d=C.b.gD(r)
 o.r=p
 o.b=!1
@@ -11034,13 +11034,13 @@ if(typeof a=="string")return J.ci.prototype
 if(a==null)return a
 if(!(a instanceof P.d))return J.bs.prototype
 return a}
-J.bg=function(a){if(typeof a=="string")return J.ci.prototype
+J.bh=function(a){if(typeof a=="string")return J.ci.prototype
 if(a==null)return a
 if(!(a instanceof P.d))return J.bs.prototype
 return a}
 J.ao=function(a,b){if(typeof a=="number"&&typeof b=="number")return a+b
 return J.eB(a).aj(a,b)}
-J.b4=function(a,b){if(typeof a=="number"&&typeof b=="number")return a/b
+J.b5=function(a,b){if(typeof a=="number"&&typeof b=="number")return a/b
 return J.am(a).dd(a,b)}
 J.e=function(a,b){if(a==null)return b==null
 if(typeof a!="object")return b!=null&&a===b
@@ -11072,13 +11072,13 @@ J.aN=function(a){return J.L(a).gl(a)}
 J.iW=function(a){return J.o(a).gbz(a)}
 J.iX=function(a,b){return J.L(a).b3(a,b)}
 J.eS=function(a,b){return J.az(a).aJ(a,b)}
-J.iY=function(a,b,c){return J.bg(a).hh(a,b,c)}
-J.dt=function(a,b,c){return J.bg(a).kQ(a,b,c)}
-J.cE=function(a,b,c){return J.bg(a).d5(a,b,c)}
+J.iY=function(a,b,c){return J.bh(a).hh(a,b,c)}
+J.dt=function(a,b,c){return J.bh(a).kQ(a,b,c)}
+J.cE=function(a,b,c){return J.bh(a).d5(a,b,c)}
 J.iZ=function(a){return J.am(a).hx(a)}
 J.j_=function(a,b){return J.az(a).e1(a,b)}
-J.eT=function(a,b){return J.bg(a).dl(a,b)}
-J.j0=function(a,b,c){return J.bg(a).aM(a,b,c)}
+J.eT=function(a,b){return J.bh(a).dl(a,b)}
+J.j0=function(a,b,c){return J.bh(a).aM(a,b,c)}
 J.j1=function(a){return J.az(a).bG(a)}
 J.h=function(a){return J.o(a).k(a)}
 J.c3=function(a,b){return J.am(a).bj(a,b)}
@@ -11103,7 +11103,7 @@ C.L=new P.mX()
 C.v=new P.qA()
 C.M=new P.qT()
 C.i=new P.r7()
-C.x=new P.b7(0)
+C.x=new P.b8(0)
 C.y=new U.cU(0,"ItemType.fist")
 C.z=new U.cU(1,"ItemType.shield")
 C.r=new U.cU(2,"ItemType.spear")
@@ -11149,14 +11149,14 @@ C.a5=new Y.ck("she","her","her","herself")
 C.E=new Y.ck("they","them","their","themselves")
 C.F=new Y.ck("you","you","your","yourself")
 C.c=new Q.nF(0,"Resource.stamina")
-C.a9=H.be("fl")
-C.aa=H.be("at")
-C.ab=H.be("q")
-C.ac=H.be("X")
-C.ad=H.be("aW")
-C.q=H.be("dynamic")
-C.ae=H.be("t")
-C.af=H.be("M")
+C.a9=H.bf("fl")
+C.aa=H.bf("at")
+C.ab=H.bf("q")
+C.ac=H.bf("X")
+C.ad=H.bf("aW")
+C.q=H.bf("dynamic")
+C.ae=H.bf("t")
+C.af=H.bf("M")
 C.ag=new P.bT(null,2)
 $.fQ=1
 $.fJ="$cachedFunction"
@@ -11204,7 +11204,7 @@ y.im(null,z)
 return y},"bY","$get$bY",function(){return[]},"dj","$get$dj",function(){return new K.cc("fist",P.aD(C.a0,null))},"bK","$get$bK",function(){return N.bm("PlannerRecommendation")},"ie","$get$ie",function(){return new K.rU()},"ez","$get$ez",function(){var z=$.$get$ie()
 return K.a1("__END_OF_ROAM__",z,z,null,null,[],"ground")},"a9","$get$a9",function(){return P.e5(null)},"bM","$get$bM",function(){return P.e5(null)},"iv","$get$iv",function(){return N.bm("Storyline")},"ha","$get$ha",function(){return P.bp("(\\w)([\\.\\?\\!])([\"'])\\.(?=$|\\s)",!0,!1)},"bz","$get$bz",function(){return L.ef(new L.tt())},"aL","$get$aL",function(){return L.ef(new L.tP())},"dm","$get$dm",function(){return L.ef(new L.ts())},"dY","$get$dY",function(){return new F.n1("Sometimes, patience pays off. Especially when the other option is potentially dangerous.",!1,!0,!1,null,null)},"ex","$get$ex",function(){return Y.c8(!1,"balance",!0,C.n,$.$get$aL())},"iz","$get$iz",function(){return Y.c8(!1,"pounding",!1,C.n,$.$get$aL())},"fR","$get$fR",function(){return new B.nD("Most moves are easier and more effective when you are firmly in balance.",!1,!0,!1,null,null)},"fV","$get$fV",function(){return new O.nT(null,!1,!0,!1,null,null)},"h9","$get$h9",function(){return new Q.oC(null,!1,!0,!0,C.c,null)},"hz","$get$hz",function(){return new M.pF("",!0,C.c,!1,!0,null)},"hV","$get$hV",function(){return P.e5(null)},"eX","$get$eX",function(){return new Z.jB(!1,!0,!1,null,null)},"iL","$get$iL",function(){return Y.c8(!1,"swing",!0,C.n,$.$get$aL())},"iK","$get$iK",function(){return Y.c8(!1,"swing",!0,C.n,$.$get$aL())},"iJ","$get$iJ",function(){return Y.c8(!1,"swing",!0,C.n,$.$get$aL())},"fH","$get$fH",function(){return X.fF(0,P.M)},"fI","$get$fI",function(){return X.fF(1,P.M)},"h3","$get$h3",function(){return new D.ox(!1,!1,!0,null,null)},"cA","$get$cA",function(){return G.pg(!1,!0,"Orcthorn",!0,2,2)},"eq","$get$eq",function(){return Z.oB(!1,!1,"spear",!1,1)},"ew","$get$ew",function(){return new O.pH(1e4)},"i8","$get$i8",function(){return K.a1("cave_with_agruth_pre",new V.tn(),new V.to(),null,null,H.p([new Q.v("cave_with_agruth","","You look around.",null)],[Q.v]),"ground")},"i7","$get$i7",function(){return K.a1("cave_with_agruth",new V.tl(),new V.tm(),null,null,H.p([new Q.v("underground_church","Go to the Unholy Church","You make it to the Church undetected.",null),new Q.v("war_forge","Go to the war forges","You sneak your way through the black passage, closing towards the sound of hundreds of anvils.",null),new Q.v("slave_quarters_passage","Go to the slave quarters","You and Briana hug the wall and start towards the slave quarters.",null)],[Q.v]),"ground")},"fW","$get$fW",function(){return new V.oi("Search Agruth","search_agruth",!0,null)},"ig","$get$ig",function(){return K.a1("exit_from_bloodrock",new V.tj(),new V.tk(),null,null,H.p([new Q.v("__END_OF_ROAM__"," (UNIMPLEMENTED)","...",null)],[Q.v]),"ground")},"ih","$get$ih",function(){return K.a1("forge_church_crevice",new V.th(),new V.ti(),null,null,H.p([new Q.v("tunnel","Continue along the crevice","You continue until the crevice open into a tunnel. You can smell fresh air.",null)],[Q.v]),"ground")},"ir","$get$ir",function(){return K.a1("guardpost_above_church",new V.te(),new V.tf(),null,null,H.p([new Q.v("underground_church","Descend towards the Underground Church","You take the passage leading down towards the temple.",null),new Q.v("tunnel","Go to the upper gate","You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.",null),new Q.v("smelter","Go to the smelter","You take the slightly downwards passage towards the smelter.",null)],[Q.v]),"ground")},"fd","$get$fd",function(){return new V.lH("Cautiously take the shield","guardpost_above_church_take_shield",!0,null)},"iu","$get$iu",function(){return K.a1("just_after_agruth_fight",new V.tc(),new V.td(),null,null,H.p([],[Q.v]),"ground")},"fy","$get$fy",function(){return new V.mD('"Luck Bringer"',"name_agruth_sword_opportunity",!0,null)},"fz","$get$fz",function(){return new V.mE('"Savior"',"name_agruth_sword_redemption",!0,null)},"fx","$get$fx",function(){return new V.mC("No name","name_agruth_sword_nothing",!0,null)},"ix","$get$ix",function(){return K.a1("orcthorn_door",new V.ta(),new V.tb(),null,null,H.p([new Q.v("cave_with_agruth","Go to the cave with Agruth's corpse","You back out from the door, and go back where you left Agruth's body.",null),new Q.v("slave_quarters","Go further towards the Gate of Screams","TODO",null),new Q.v("orcthorn_room","Open the door","You open the door.",null)],[Q.v]),"ground")},"iy","$get$iy",function(){return K.a1("orcthorn_room",new V.t8(),new V.t9(),O.wV(),null,H.p([new Q.v("slave_quarters_passage","Exit the room","You leave through the door and find yourself back in the corridor of the slave quarters.",null)],[Q.v]),"ground")},"hf","$get$hf",function(){return new V.po("Search for Orcthorn","take_orcthorn",!0,null)},"iA","$get$iA",function(){return K.a1("slave_quarters",new V.t6(),new V.t7(),null,null,H.p([],[Q.v]),"ground")},"h1","$get$h1",function(){return new V.ov("Continue","slave_quarters_continue",!0,null)},"iB","$get$iB",function(){return K.a1("slave_quarters_passage",new V.t3(),new V.t4(),O.wW(),null,H.p([new Q.v("cave_with_agruth","Go back to the cave with Agruth's corpse","You back out from the door, and go back where you left Agruth's body.",null),new Q.v("slave_quarters","Go further towards the Gate of Screams","TODO",null),new Q.v("orcthorn_room","Open the door","You open the door.",null)],[Q.v]),"ground")},"h2","$get$h2",function(){return new V.ow("Examine the door","slave_quarters_passage_examine_door",!0,null)},"iC","$get$iC",function(){return K.a1("smelter",new V.t1(),new V.t2(),null,null,H.p([new Q.v("war_forge","Go to the war forges","You walk through a short passage set in stone, towards the sound of hundreds of anvils.",null),new Q.v("guardpost_above_church","Go through the smooth passage","You take the smooth passage and it leads you slightly upwards.",null)],[Q.v]),"ground")},"h4","$get$h4",function(){return new V.oz("Look around","smelter_look_around",!0,null)},"h5","$get$h5",function(){return new V.oA("Throw spear at the ogre","smelter_throw_spear",!0,null)},"iD","$get$iD",function(){return K.a1("start_adventure",new V.t_(),new V.t0(),O.wT(),null,H.p([new Q.v("just_after_agruth_fight","","You look around. Fortunately, nobody is in sight.",null)],[Q.v]),"ground")},"hh","$get$hh",function(){return new V.pq("Talk to Briana","talk_to_briana_1",!0,null)},"hi","$get$hi",function(){return new V.pr("Ask Briana about her capture","talk_to_briana_2",!0,null)},"hj","$get$hj",function(){return new V.ps("Ask Briana about Orcthorn","talk_to_briana_3",!0,null)},"iM","$get$iM",function(){return K.a1("the_shafts",new V.rY(),new V.rZ(),null,null,H.p([new Q.v("tunnel","Run","You run over the passage. Orcs start to scream and yell commands. As you near the entrance, the air gets better.",null)],[Q.v]),"ground")},"iO","$get$iO",function(){return K.a1("tunnel",new V.tN(),new V.tO(),O.wU(),null,H.p([new Q.v("exit_from_bloodrock","Start running again","You start running again.",null)],[Q.v]),"ground")},"iP","$get$iP",function(){return K.a1("underground_church",new V.tC(),new V.tM(),null,null,H.p([new Q.v("guardpost_above_church","Enter the upwards passage","You take the sloping passage and go a long, slightly rising way.",null),new Q.v("cave_with_agruth","Go back to the cave with Agruth's corpse","You sneak out of the church, back towards where you left Agruth's body.",null),new Q.v("underground_church_altar","Go towards the altar","You sneak towards the front of the temple, trying to stay in the shadows.",null)],[Q.v]),"ground")},"f9","$get$f9",function(){return new V.lc("Look around","examine_underground_church",!0,null)},"iQ","$get$iQ",function(){return K.a1("underground_church_altar",new V.tg(),new V.tr(),null,null,H.p([new Q.v("underground_church","Sneak back","You crouch low and, keeping an eye on the altar, head back to the Church's entrance.",null)],[Q.v]),"ground")},"hB","$get$hB",function(){return new V.pJ("Wait","wait_for_ritual",!0,null)},"hg","$get$hg",function(){return new V.pp("Take the spear","take_spear_in_underground_church",!0,null)},"iR","$get$iR",function(){return K.a1("war_forge",new V.rV(),new V.t5(),null,null,H.p([new Q.v("smelter","Go to smelter","You keep low, ascending the stairs. At the top you sense a draft of hot air coming from a passage through the wall. You make your way through it.",null),new Q.v("cave_with_agruth","Go back to the cave with Agruth's corpse","You sneak back towards where you left Agruth's body.",null)],[Q.v]),"ground")},"hC","$get$hC",function(){return new V.pK("Look around","war_forge_look_around",!0,null)},"hD","$get$hD",function(){return new V.pL("Watch the workers","war_forge_watch_workers",!0,null)},"i2","$get$i2",function(){return H.p([$.$get$i8(),$.$get$i7(),$.$get$ig(),$.$get$ih(),$.$get$ir(),$.$get$iu(),$.$get$ix(),$.$get$iy(),$.$get$iA(),$.$get$iB(),$.$get$iC(),$.$get$iD(),$.$get$iM(),$.$get$iO(),$.$get$iP(),$.$get$iQ(),$.$get$iR()],[K.co])},"i1","$get$i1",function(){return H.p([$.$get$fW(),$.$get$fd(),$.$get$fy(),$.$get$fz(),$.$get$fx(),$.$get$hf(),$.$get$h1(),$.$get$h2(),$.$get$h4(),$.$get$h5(),$.$get$hh(),$.$get$hi(),$.$get$hj(),$.$get$f9(),$.$get$hB(),$.$get$hg(),$.$get$hC(),$.$get$hD()],[A.W])},"dq","$get$dq",function(){return P.pe("")},"cy","$get$cy",function(){var z=new O.ne(0,null,"PointsCounter")
 z.ic()
-return z},"bZ","$get$bZ",function(){return new L.f2(null,H.p([],[L.ac]))},"cD","$get$cD",function(){return H.fo(P.q,P.d)},"cx","$get$cx",function(){return P.ba(null,{func:1,ret:[P.Q,P.at]})},"cN","$get$cN",function(){return P.bp("^\\s*<<<\\s*$",!0,!1)},"d5","$get$d5",function(){return H.fo(P.q,Z.au)},"fv","$get$fv",function(){return N.bm("")},"fu","$get$fu",function(){return P.dN(P.q,N.dP)}])
+return z},"bZ","$get$bZ",function(){return new L.f2(null,H.p([],[L.ac]))},"cD","$get$cD",function(){return H.fo(P.q,P.d)},"cx","$get$cx",function(){return P.bb(null,{func:1,ret:[P.Q,P.at]})},"cN","$get$cN",function(){return P.bp("^\\s*<<<\\s*$",!0,!1)},"d5","$get$d5",function(){return H.fo(P.q,Z.au)},"fv","$get$fv",function(){return N.bm("")},"fu","$get$fu",function(){return P.dN(P.q,N.dP)}])
 I=I.$finishIsolateConstructor(I)
 $=new I()
 init.metadata=[null,!1]
@@ -11267,7 +11267,7 @@ this[t]=z[t]}}Isolate.prototype=a.prototype
 Isolate.prototype.constructor=Isolate
 Isolate.p=z
 Isolate.aX=a.aX
-Isolate.bf=a.bf
+Isolate.bg=a.bg
 return Isolate}}(function(a){if(typeof document==="undefined"){a(null)
 return}if(typeof document.currentScript!='undefined'){a(document.currentScript)
 return}var z=document.scripts
