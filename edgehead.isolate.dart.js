@@ -9533,7 +9533,7 @@ $3:function(a,b,c){c.n(0,"You enter a small, circular room. There are exits on t
 if(O.b3(b,"smelter"))c.n(0,'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.\n',!0)
 c.n(0,"\n",!0)
 if(O.b3(b,"underground_church"))c.n(0,'The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs\' vocabulary. Both of these slope downwards.\n',!0)
-c.n(0,"\nA third passage is marked \"Up Door\", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. \"_Up Door?_\" she whispers, shaking hear head. \"I can't believe we've made it this far.\"\n\n\nLeaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.\n",!0)}},
+c.n(0,"\nA third passage is marked \"Up Door\", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. \"_Up Door?_\" she whispers, shaking hear head. \"I can't believe we've made it this far.\"\n\n\nLeaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a scimitar in one hand, and there's a shield laid on his lap.\n",!0)}},
 tl:{"^":"a:5;",
 $3:function(a,b,c){c.n(0,"",!0)
 if(b.ap("guardpost_above_church_take_shield")&&!b.bX("guardpost_above_church_take_shield"))c.t(0,"The goblin's corpse is sprawled on the ground in the middle of the circular room.")
@@ -9601,7 +9601,7 @@ $3:function(a,b,c){var z=a.gb9()
 if(typeof z!=="number")return z.b7()
 return z>0}},
 lP:{"^":"a:26;",
-$4:function(a,b,c,d){J.c3(c,"You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance.\n\n\nYou hold the shield on your offhand and get ready to fight.",!0)
+$4:function(a,b,c,d){J.c3(c,"You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance, pointing his scimitar at you.\n\n\nYou hold the shield on your offhand and get ready to fight.",!0)
 b.aA()
 O.eG(a,b,c,!1)
 return"GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)"}},
@@ -9840,7 +9840,7 @@ H:function(a,b){var z=b.f
 if(!J.e(H.F(z.length!==0?C.a.gw(z):null,"$isJ").a,"underground_church"))return!1
 if(b.ap(this.d))return!1
 return!0},
-R:[function(a,b,c){c.n(0,'This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.\n\n\n"What are these things?" Briana whispers.\n\n\n_"This place worships the Dead Prince."_\n\n\nSaying the name brings coldness and sweat. You hear the name every night in the Dead Prince\'s tongue \u2014 but it has been a long time since you said it yourself.\n\n\n"Worships?" Briana looks up at the high ceiling, then around the temple. "I though the Dead Prince was a warlord. A shaman. Something like that."\n\n\n_"He is god."_\n\n\n',!0)
+R:[function(a,b,c){c.n(0,'This place was not built by the orcs or their slaves. Walls are straight and smooth. The ceiling is high enough to make you feel small, negligible, unimportant. The columns are decorated with delicate embossments of skulls and tentacles.\n\n\n"What are these things?" Briana whispers, looking at the ornaments.\n\n\n_"This place worships the Dead Prince."_\n\n\nSaying the name brings coldness and sweat. You hear the name every night in the Dead Prince\'s tongue \u2014 but it has been a long time since you said it yourself.\n\n\n"Worships?" Briana looks up at the high ceiling, then around the temple. "I though the Dead Prince was a warlord. A shaman. Something like that."\n\n\n_"He is god."_\n\n\n',!0)
 if(!b.ap("wait_for_ritual"))c.n(0,"Briana smirks. \"Look, no. The Dead Prince is no god. The orcs might think so, you shouldn't. He's some talented illusionist at best.\" ",!0)
 c.n(0,'\nThe glow coming from the altar dims for a moment, then lights up again.\n\n\n_"He is worse than god. He is fear itself."_\n\n\nBriana looks at you, narrowing her eyes.\n\n\n_"I think you have felt it."_\n',!0)
 return H.b(a.gh())+" successfully performs ExamineUndergroundChurch"},"$3","gN",6,0,1],
@@ -9900,7 +9900,7 @@ H:function(a,b){var z=b.f
 if(!J.e(H.F(z.length!==0?C.a.gw(z):null,"$isJ").a,"war_forge"))return!1
 if(b.ap(this.d))return!1
 return!0},
-R:[function(a,b,c){c.n(0,"The cave is natural, but on the side of the smelter there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. \n\n\nAt the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot is almost stronger than the smell of all that orc sweat.\n",!0)
+R:[function(a,b,c){c.n(0,"The cave is natural, but on the side of the smelter there is an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into all parts of the room like huge fiery tentacles. \n\n\nAt the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot is almost stronger than the smell of all that orc sweat.\n\n\nThis place makes Fort Ironcast's military forge look like a doll house, tiny and inconsequential.\n",!0)
 return H.b(a.gh())+" successfully performs WarForgeLookAround"},"$3","gN",6,0,1],
 P:[function(a,b,c){throw H.c(new P.w("Success chance is 100%"))},"$3","gM",6,0,1],
 I:function(a,b){return 1},
