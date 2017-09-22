@@ -94,10 +94,13 @@ _"But we will not."_
 With that, you both start down the road towards the black fort in the distance. 
 
 
+THE END.
+
+
 [[CODE]]
 describeSuccessRate(w, s);
 [[/CODE]]
 
 
 EXITS:
-$__END_OF_ROAM__ (): ...
+$__END_OF_ROAM__ (): N/A

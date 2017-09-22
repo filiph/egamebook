@@ -35,7 +35,9 @@ class TakeExitAction extends ExitAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add(exit.description, wholeSentence: true);
+    if (exit.description.trim() != "N/A") {
+      s.add(exit.description, wholeSentence: true);
+    }
 
     (w.currentSituation as RoomRoamingSituation)
         .moveActor(w, a, exit.destinationRoomName, s);

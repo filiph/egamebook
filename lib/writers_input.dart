@@ -216,6 +216,9 @@ _"But we will not."_
 With that, you both start down the road towards the black fort in the distance. 
 
 
+THE END.
+
+
 ''',
       wholeSentence: true);
   describeSuccessRate(w, s);
@@ -225,7 +228,7 @@ With that, you both start down the road towards the black fort in the distance.
       '''
 ''',
       wholeSentence: true);
-}, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', '...')]);
+}, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
 Room forgeChurchCrevice =
     new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(
