@@ -7,35 +7,24 @@ You enter a small, circular room. There are exits on three sides, all marked wit
 
 [[CODE]]
 if (justCameFrom(w, "smelter")) { 
-  s.add("""The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.""", wholeSentence: true);
+  s.add("""The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.
+""", wholeSentence: true);
 }
 [[/CODE]]
 
 
 [[CODE]]
 if (justCameFrom(w, "underground_church")) { 
-  s.add("""The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.""", wholeSentence: true);
+  s.add("""The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.
+""", wholeSentence: true);
 }
 [[/CODE]]
 
 
-A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years.
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we've made it this far."
 
 
 Leaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.
-
-
-[[CODE]]
-if (!w.actionHasBeenPerformed("smelter_throw_spear") && !w.actionHasBeenPerformed("take_orcthorn")) { 
-  s.add("""For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. Take more. I mean, we might be the first people to be in Mount Bloodrock, and live." 
-
-
-_"Let us keep that second part true, then."_
- """, wholeSentence: true);
-}
-[[/CODE]]
-
-
 
 
 
@@ -43,18 +32,39 @@ _"Let us keep that second part true, then."_
 SHORT_DESCRIPTION: 
 [[CODE]]
   if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") && !w.actionHasBeenPerformedSuccessfully("guardpost_above_church_take_shield")) {
-    s.add("The goblin's corpse is sprawled on the ground.");
+    s.add("The goblin's corpse is sprawled on the ground in the middle of the circular room.");
   } else {
-    s.add("The goblin is sleeping soundly.");
+    s.add("The goblin is sleeping soundly next to the exit to the Upper Door.");
   }
 [[/CODE]]
 
 
 EXITS:
 $underground_church (Descend towards the Underground Church): You take the passage leading down towards the temple. 
-$tunnel (Go to the upper gate): You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.
 $smelter (Go to the smelter): You take the slightly downwards passage towards the smelter.
 
 
-// TODO: make the tunnel exit description more interesting
-// TODO: guard recognizes his spear during fight (if the player has the spear)
+
+
+// ------
+
+
+// $tunnel (Go to the Upper Gate): You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.
+
+
+ACTION: $guardpost_above_church_enter_tunnel_with_cancel
+COMMAND: Go to the Upper Gate
+
+
+FOR_LOCATION: $guardpost_above_church
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION: 
+You take the passage that leads to the Upper Door.
+
+
+SUCCESS_EFFECT: 
+enterTunnelWithCancel(w, s);

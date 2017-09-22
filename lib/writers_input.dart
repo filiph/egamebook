@@ -213,9 +213,19 @@ _"But we will not."_
 "No. We will not."
 
 
-With that, you both start down the road towards the black fort in the distance.
+With that, you both start down the road towards the black fort in the distance. 
+
+
+---
+
+
+### The End
+
+
 ''',
       wholeSentence: true);
+  describeSuccessRate(w, s);
+  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
       '''
@@ -247,7 +257,8 @@ Room guardpostAboveChurch =
       wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
-        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.""",
+        """The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these slope downwards.
+""",
         wholeSentence: true);
   }
   s.add(
@@ -257,49 +268,93 @@ Room guardpostAboveChurch =
       wholeSentence: true);
   if (justCameFrom(w, "underground_church")) {
     s.add(
-        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.""",
+        """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these slope downwards.
+""",
         wholeSentence: true);
   }
   s.add(
       '''
 
-A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end to those three horrible years.
+A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana\'s face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can\'t believe we\'ve made it this far."
 
 
 Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
-
-
 ''',
       wholeSentence: true);
-  if (!w.actionHasBeenPerformed("smelter_throw_spear") &&
-      !w.actionHasBeenPerformed("take_orcthorn")) {
-    s.add(
-        """For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we have made it this far. Although — I'll admit — it feels like we could have taken more from them." She motions at the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. Take more. I mean, we might be the first people to be in Mount Bloodrock, and live." 
-
-
-_"Let us keep that second part true, then."_
- """,
-        wholeSentence: true);
-  }
-  s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add('', wholeSentence: true);
   if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
       !w.actionHasBeenPerformedSuccessfully(
           "guardpost_above_church_take_shield")) {
-    s.add("The goblin's corpse is sprawled on the ground.");
+    s.add(
+        "The goblin's corpse is sprawled on the ground in the middle of the circular room.");
   } else {
-    s.add("The goblin is sleeping soundly.");
+    s.add("The goblin is sleeping soundly next to the exit to the Upper Door.");
   }
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Descend towards the Underground Church',
       'You take the passage leading down towards the temple.'),
-  new Exit('tunnel', 'Go to the upper gate',
-      'You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.'),
   new Exit('smelter', 'Go to the smelter',
       'You take the slightly downwards passage towards the smelter.')
 ]);
+
+class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
+  @override
+  final String command = 'Go to the Upper Gate';
+
+  @override
+  final String name = 'guardpost_above_church_enter_tunnel_with_cancel';
+
+  static final GuardpostAboveChurchEnterTunnelWithCancel singleton =
+      new GuardpostAboveChurchEnterTunnelWithCancel();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'guardpost_above_church') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''You take the passage that leads to the Upper Door.
+''',
+        wholeSentence: true);
+    enterTunnelWithCancel(w, s);
+    return '${a.name} successfully performs GuardpostAboveChurchEnterTunnelWithCancel';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => '';
+
+  @override
+  bool get isAggressive => false;
+}
 
 class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
@@ -421,8 +476,6 @@ You deftly lift the shield, take a few slow steps back, then fix the shield on y
             'Snatch the shield', (a, w, s, self) {
           s.add(
               '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance.
-
-
 
 
 You hold the shield on your offhand and get ready to fight.''',
@@ -1528,6 +1581,29 @@ This must be the guard of the Upper Door. There is no way around them.
   new Exit(
       'exit_from_bloodrock', 'Start running again', 'You start running again.')
 ]);
+Room tunnelCancelChance =
+    new Room('tunnel_cancel_chance', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''After a few strides, you realize Briana still stands in the circular room behind.
+
+
+_"Are you not coming?"_
+
+
+Briana hesitates. "It feels like we could have done more." She motions at the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. Take more. I mean, we might be the first people to be in Mount Bloodrock, and live."
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, null, null, <Exit>[
+  new Exit('tunnel', 'Continue',
+      'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you.'),
+  new Exit('guardpost_above_church', 'Return',
+      'You nod, and step back into the circular room.')
+]);
 Room undergroundChurch =
     new Room('underground_church', (Actor a, WorldState w, Storyline s) {
   s.add(
@@ -2059,12 +2135,14 @@ List<Room> allRooms = <Room>[
   startAdventure,
   theShafts,
   tunnel,
+  tunnelCancelChance,
   undergroundChurch,
   undergroundChurchAltar,
   warForge
 ];
 List<RoamingAction> allActions = <RoamingAction>[
   SearchAgruth.singleton,
+  GuardpostAboveChurchEnterTunnelWithCancel.singleton,
   GuardpostAboveChurchTakeShield.singleton,
   NameAgruthSwordOpportunity.singleton,
   NameAgruthSwordRedemption.singleton,

@@ -130,9 +130,9 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
-  bool get isConfused;
-
   bool get isBarehanded => currentWeapon is Fist;
+
+  bool get isConfused;
 
   bool get isOffBalance => pose == Pose.offBalance;
 
@@ -174,15 +174,14 @@ abstract class Actor extends Object
   @override
   Team get team;
 
-  bool hasItem(ItemType type, {int needed: 1}) {
+  int countItems(ItemType type) {
     int count = 0;
     for (var item in items) {
       if (item.types.contains(type)) {
         count += 1;
       }
-      if (count >= needed) return true;
     }
-    return false;
+    return count;
   }
 
   /// Returns the best weapon (by [Weapon.value]) in [Actor.items].
@@ -199,6 +198,17 @@ abstract class Actor extends Object
       }
     }
     return best;
+  }
+
+  bool hasItem(ItemType type, {int needed: 1}) {
+    int count = 0;
+    for (var item in items) {
+      if (item.types.contains(type)) {
+        count += 1;
+      }
+      if (count >= needed) return true;
+    }
+    return false;
   }
 
   bool hasResource(Resource resource) {

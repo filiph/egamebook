@@ -42,6 +42,61 @@ final _goblinsSpear = new Spear();
 
 final _uniqueId = new UniqueIdMaker();
 
+void enterTunnelWithCancel(WorldState w, Storyline s) {
+  bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
+  bool destroyedIronMonster =
+      w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+  bool hasHadChanceToCancel = w.actionHasBeenPerformedSuccessfully(
+      "guardpost_above_church_enter_tunnel_with_cancel");
+
+  if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
+    movePlayer(w, s, "tunnel");
+    return;
+  }
+
+  movePlayer(w, s, "tunnel_cancel_chance");
+}
+
+void describeSuccessRate(WorldState w, Storyline s) {
+  s.add("Thanks for playing _Insignificant Little Vermin._",
+      wholeSentence: true);
+
+  bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
+  bool destroyed = w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+  final player = getPlayer(w);
+
+  player.report(
+      s, "<subject> ${hasOrcthorn ? 'took' : 'didn\'t find'} Orcthorn");
+  player.report(
+      s,
+      "<subject> ${destroyed ? 'destroyed' : 'didn\'t destroy'} "
+      "the iron monster",
+      but: hasOrcthorn != destroyed);
+
+  String getItemDescription(ItemType type, String name) {
+    final count = player.countItems(type);
+    return count > 1 ? '${name}s' : count == 1 ? 'a $name' : 'no $name';
+  }
+
+  // You're leaving Mount Bloodrock with swords, a scimitar and a shield.
+  final sword = getItemDescription(ItemType.sword, 'sword');
+  final spear = getItemDescription(ItemType.spear, 'spear');
+  final shield = getItemDescription(ItemType.shield, 'shield');
+  player.report(s,
+      "<subject> <is> leaving Mount Bloodrock with $sword, $spear and $shield.",
+      wholeSentence: true);
+
+  // You are in good health and with energy to spare.
+  final health = player.hitpoints >= 2 ? 'in good health' : 'seriously injured';
+  final stamina = player.stamina > 0 ? 'with energy to spare' : 'exhausted';
+  player.report(s, "<subject> <is> $health and $stamina.", wholeSentence: true);
+
+  // Briana is not in good health.
+  final briana = w.getActorById(brianaId);
+  final brianaHealth = briana.hitpoints >= 2 ? 'uninjured' : 'badly wounded';
+  briana.report(s, "<subject> <is> $brianaHealth");
+}
+
 void executeSpearThrowAtOgre(WorldState w, Storyline s) {
   final player = getPlayer(w);
   final spear =
@@ -181,7 +236,7 @@ FightSituation generateEscapeTunnelFight(WorldState w,
           "\"... vermin!\" ${sounds[2]}",
           wholeSentence: true);
       var target = kicking
-          ? ('chest')
+          ? ('knee')
           : (player.currentShield != null
               ? 'shield'
               : player.currentWeapon.name);
@@ -441,7 +496,7 @@ void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
             if (tookSpear) {
               goblin.report(s, "<subject> look<s> at <object-owner's> <object>",
                   objectOwner: player, object: _goblinsSpear);
-              goblin.report(s, "\"Thief,\" <subject> mutter<s>.",
+              goblin.report(s, "\"Thief,\" <subject> hiss<es>.",
                   wholeSentence: true);
             }
           }
