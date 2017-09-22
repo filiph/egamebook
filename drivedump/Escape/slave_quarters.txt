@@ -1,22 +1,16 @@
 ﻿ROOM: $slave_quarters
 
 
-
-
 DESCRIPTION:
-TODO
-
-
+"There is a difference between being brave and being stupid. You're crossing it," she says.
 
 
 SHORT_DESCRIPTION:
-TODO
+"We _really_ shouldn't be pushing our luck," she says.
 
 
-EXIT:
-$slave_quarters_death (Go on): Exhausted, you stumble for a few seconds before seeing another orc patrol.
-
-
+EXITS:
+$slave_quarters_passage (Go back): You nod, and start carefully backing out through the passage.
 
 
 // ---
@@ -33,8 +27,24 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO FIGHT
+_"Do you not want to kill some more orcs?"_
+
+
+"I do, trust me. That's why I don't want to get killed before having a chance to do it."
+
+
+You shake your head and start walking. Briana reluctantly follows, here eyes darting around the familiar tunnel. You're close to where the orcs were keping you during sleep hours.
+
+
+Soon, you see an orc patrol appearing from behind a bend, and here it's impossible to hide. The orcs spot you immediatelly. There are three of them, one with a longsword, second with a spear, and the third one holds a battle axe.
+
+
+The one with the spear throws it, and it rams into Briana's shoulder. She screams in pain. The swordman makes three fast leaps towards you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle in surprise.
+
+
+You look at Briana. As the battle axe cleaves her stomach, she looks directly at you.
 
 
 SUCCESS_EFFECT:
+w.updateActorById(a.id, (b) => b..hitpoints = 0);
 w.popSituation();

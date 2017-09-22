@@ -864,15 +864,18 @@ _"I am not a farm boy. And we still need to get out of here first."_
 Room slaveQuarters =
     new Room('slave_quarters', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO
+      '''"There is a difference between being brave and being stupid. You\'re crossing it," she says.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''TODO
+      '''"We _really_ shouldn\'t be pushing our luck," she says.
 ''',
       wholeSentence: true);
-}, null, null, <Exit>[]);
+}, null, null, <Exit>[
+  new Exit('slave_quarters_passage', 'Go back',
+      'You nod, and start carefully backing out through the passage.')
+]);
 
 class SlaveQuartersContinue extends RoamingAction {
   @override
@@ -895,9 +898,25 @@ class SlaveQuartersContinue extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''TODO FIGHT
+        '''_"Do you not want to kill some more orcs?"_
+
+
+"I do, trust me. That\'s why I don\'t want to get killed before having a chance to do it."
+
+
+You shake your head and start walking. Briana reluctantly follows, here eyes darting around the familiar tunnel. You\'re close to where the orcs were keping you during sleep hours.
+
+
+Soon, you see an orc patrol appearing from behind a bend, and here it\'s impossible to hide. The orcs spot you immediatelly. There are three of them, one with a longsword, second with a spear, and the third one holds a battle axe.
+
+
+The one with the spear throws it, and it rams into Briana\'s shoulder. She screams in pain. The swordman makes three fast leaps towards you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle in surprise.
+
+
+You look at Briana. As the battle axe cleaves her stomach, she looks directly at you.
 ''',
         wholeSentence: true);
+    w.updateActorById(a.id, (b) => b..hitpoints = 0);
     w.popSituation();
     return '${a.name} successfully performs SlaveQuartersContinue';
   }
@@ -986,7 +1005,8 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You back out from the door, and go back where you left Agruth\'s body.'),
-  new Exit('slave_quarters', 'Go further towards the Gate of Screams', 'TODO'),
+  new Exit('slave_quarters', 'Go further towards the Gate of Screams',
+      'You start down the slope of the passage, towards the heart of the slave quarters and the Gate of Screams beyond. Briana tugs at your hand.'),
   new Exit('orcthorn_room', 'Open the door', 'You open the door.')
 ]);
 
