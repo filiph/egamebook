@@ -20,7 +20,7 @@ import 'package:built_value/built_value.dart';
 import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.g.dart';
 
-const bool DEV_MODE = true;
+const bool DEV_MODE = false;
 Room caveWithAgruthPre =
     new Room('cave_with_agruth_pre', (Actor a, WorldState w, Storyline s) {
   s.add(

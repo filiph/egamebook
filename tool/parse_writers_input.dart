@@ -17,7 +17,9 @@ Future<Null> main(List<String> args) async {
     stderr.writeln("[${r.level}] -- ${r.loggerName} -- ${r.message}");
   });
 
-  var devMode = true;
+  // Switch this to true if you want to have more slack during development.
+  // Switch back to false when finishing up.
+  var devMode = false;
 
   var dir = new Directory(args.single);
 
