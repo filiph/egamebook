@@ -31,5 +31,7 @@ dev_dependencies:
   test: ">=0.12.19+1 <1.0.0"
 
 transformers:
+- $dart2js:
+    commandLineOptions: [--trust-type-annotations, --trust-primitives]
 - dart_to_js_script_rewriter
 - sass
