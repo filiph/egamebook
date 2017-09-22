@@ -58,6 +58,7 @@ void enterTunnelWithCancel(WorldState w, Storyline s) {
 }
 
 void describeSuccessRate(WorldState w, Storyline s) {
+  s.add("<p class='meta'>", wholeSentence: true);
   s.add("Thanks for playing _Insignificant Little Vermin._",
       wholeSentence: true);
 
@@ -95,6 +96,8 @@ void describeSuccessRate(WorldState w, Storyline s) {
   final briana = w.getActorById(brianaId);
   final brianaHealth = briana.hitpoints >= 2 ? 'uninjured' : 'badly wounded';
   briana.report(s, "<subject> <is> $brianaHealth");
+
+  s.add("</p>", wholeSentence: true);
 }
 
 void executeSpearThrowAtOgre(WorldState w, Storyline s) {

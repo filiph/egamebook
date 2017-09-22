@@ -216,12 +216,6 @@ _"But we will not."_
 With that, you both start down the road towards the black fort in the distance. 
 
 
----
-
-
-### The End
-
-
 ''',
       wholeSentence: true);
   describeSuccessRate(w, s);
