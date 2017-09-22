@@ -75,6 +75,8 @@ abstract class RoomRoamingSituation extends Situation
   }
 
   /// Returns `true` if [Room] with [roomName] has been visited by [actor].
+  ///
+  /// This works by checking [WorldState.actionRecords].
   bool hasBeenVisited(WorldState w, Actor actor, String roomName) {
     return w
         .getActionRecords(
@@ -103,7 +105,7 @@ abstract class RoomRoamingSituation extends Situation
 
     if (!silent) {
       // Show short description according to world.actionRecords.
-      if (_actorHasVisitedRoom(w, a, room)) {
+      if (hasBeenVisited(w, a, room.name)) {
         room.shortDescribe(a, w, s);
       } else {
         s.addParagraph();
@@ -128,22 +130,5 @@ abstract class RoomRoamingSituation extends Situation
   bool shouldContinue(WorldState world) {
     if (currentRoomName == endOfRoam.name) return false;
     return true;
-  }
-
-  /// Find out if [a] has visited [room] by checking [WorldState.actionRecords].
-  bool _actorHasVisitedRoom(WorldState w, Actor a, Room room) {
-    for (var record in w.actionRecords) {
-      if (record.protagonist != a.id) continue;
-      if (record.actionName != TakeExitAction.className) continue;
-      // This is a hack. There is no guarantee the description will always
-      // contain the room name (and only _that_ room name). Thus, an assert.
-      assert(
-          record.description.contains("went through exit to"),
-          "Description of TakeExitActions has changed. "
-          "Maybe this is a good time to implement actual user data "
-          "in ActionRecords.");
-      if (record.description.contains(room.name)) return true;
-    }
-    return false;
   }
 }
