@@ -225,7 +225,7 @@ With that, you both start down the road towards the black fort in the distance.
       '''
 ''',
       wholeSentence: true);
-}, null, null, <Exit>[new Exit('__END_OF_ROAM__', ' (UNIMPLEMENTED)', '...')]);
+}, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', '...')]);
 Room forgeChurchCrevice =
     new Room('forge_church_crevice', (Actor a, WorldState w, Storyline s) {
   s.add(

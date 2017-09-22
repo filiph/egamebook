@@ -87,7 +87,8 @@ class GeneratedRoom extends GeneratedGameObject {
       var destination = match.group(1).substring(1);
       var command = match.group(2);
       var description = match.group(3);
-      if (!_reachableRooms.contains(destination)) {
+      if (!_reachableRooms.contains(destination) &&
+          destination != endOfRoam.name) {
         log.warning("Room $name registers exit to $destination but that room "
             "is unreachable (it doesn't exist).");
         var unimplementedExit = exitType.newInstance([

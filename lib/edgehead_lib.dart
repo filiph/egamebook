@@ -160,7 +160,7 @@ class EdgeheadGame extends LoopedEvent {
 
       storyline.addParagraph();
       if (world.hasAliveActor(filip.id)) {
-        storyline.add("TO BE CONTINUED.", wholeSentence: true);
+        storyline.add("THE END.", wholeSentence: true);
       } else {
         storyline.add("You died.", wholeSentence: true);
       }

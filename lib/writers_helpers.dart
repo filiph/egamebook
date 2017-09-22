@@ -267,6 +267,9 @@ FightSituation generateEscapeTunnelFight(WorldState w,
           wholeSentence: true);
     },
     12: (w, s) {
+      s.add("The orcs are goblins are halfway here.", wholeSentence: true);
+    },
+    16: (w, s) {
       s.add(
           "Your pursuers reach you from behind and a sword pierces your chest "
           "with formidable power.",
