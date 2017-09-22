@@ -4645,8 +4645,7 @@ s.hf("update() for world at time "+w.fr.r)
 r=w.fr.f
 if(r.length===0){w.r=!0
 v.n(0,"\n\n",!0)
-if(w.fr.ka(w.ch.y))v.n(0,"THE END.",!0)
-else v.n(0,"You died.",!0)
+if(!w.fr.ka(w.ch.y))v.n(0,"You died.",!0)
 w.f.E+=v.cv()
 z=1
 break}q=C.a.gw(r)
@@ -9093,7 +9092,7 @@ gh:function(){return"TakeExitAction"},
 P:[function(a,b,c){throw H.c(new P.Z(null))},"$3","gM",6,0,1],
 R:[function(a,b,c){var z,y
 z=this.b
-c.t(0,z.gb2())
+c.n(0,z.gb2(),!0)
 y=b.f
 H.F(y.length!==0?C.a.gw(y):null,"$isJ").kD(b,a,z.gh2(),c)
 return H.b(a.gh())+" went through exit to "+z.a},"$3","gN",6,0,1],
@@ -9243,6 +9242,7 @@ q=a.A(100)
 w=q.gae()
 if(typeof w!=="number")return w.bC()
 q.a4(b,"<subject> <is> "+(w>=2?"uninjured":"badly wounded"))
+b.n(0,"The important thing, though, is that you survived. Congratulations!",!0)
 b.n(0,"</p>",!0)},
 uk:function(a,b){var z=a.A(1).gaD().cn(0,new O.ul())
 a.X(a.A(1).gi(),new O.um(z))
