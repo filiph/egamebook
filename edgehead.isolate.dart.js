@@ -9219,6 +9219,7 @@ x=a.bX("guardpost_above_church_enter_tunnel_with_cancel")
 if(z||y||x){a.ah("RoomRoamingSituation").c5(a,a.A(1),"tunnel",b,!1)
 return}a.ah("RoomRoamingSituation").c5(a,a.A(1),"tunnel_cancel_chance",b,!1)},
 ub:function(a,b){var z,y,x,w,v,u,t,s,r,q
+b.n(0,"<p class='meta'>",!0)
 b.n(0,"Thanks for playing _Insignificant Little Vermin._",!0)
 z=a.bX("take_orcthorn")
 y=a.bX("smelter_throw_spear")
@@ -9240,7 +9241,8 @@ x.aB(b,"<subject> <is> "+s+" and "+r+".",!0)
 q=a.A(100)
 w=q.gae()
 if(typeof w!=="number")return w.bC()
-q.a4(b,"<subject> <is> "+(w>=2?"uninjured":"badly wounded"))},
+q.a4(b,"<subject> <is> "+(w>=2?"uninjured":"badly wounded"))
+b.n(0,"</p>",!0)},
 uk:function(a,b){var z=a.A(1).gaD().cn(0,new O.ul())
 a.X(a.A(1).gi(),new O.um(z))
 a.ah("RoomRoamingSituation").c5(a,a.A(1),"war_forge",b,!0)},
@@ -9519,7 +9521,7 @@ $3:function(a,b,c){c.n(0,'Only a few bends ahead, the tunnel get blindingly brig
 if(b.ap("take_orcthorn"))c.n(0,'"Orcthorn? Bah, you think they\'ll let you have it? A farm boy?" \n\n\n_"I\'m not a farm boy. And I don\'t mean Orcthorn, no. I have a connection. We both do."_\n',!0)
 c.n(0,"\n",!0)
 if(!b.ap("take_orcthorn"))c.n(0,"\"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy.\" \n\n\n_\"I'm not a farm boy. And I don't mean muscles or brains, no. I have a connection. We both do.\"_\n",!0)
-c.n(0,'\n"A connection."\n\n\n_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too \u2014 I am sure of it \u2014 but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_\n\n\n"So the thing you have that kings don\'t is\u2026 a way to communicate? Negotiate?"\n\n\n_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_\n\n\n"And your plan is?"\n\n\n[IMG long view of the road ahead]\n\n\n_"Not letting him have it. Giving him the exact opposite of what he wants."_\n\n\n"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"\n\n\n_"Yes."_\n\n\n"That others would do exactly that."\n\n\n_"But we will not."_\n\n\n"No. We will not."\n\n\nWith that, you both start down the road towards the black fort in the distance. \n\n\n---\n\n\n### The End\n\n\n',!0)
+c.n(0,'\n"A connection."\n\n\n_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too \u2014 I am sure of it \u2014 but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_\n\n\n"So the thing you have that kings don\'t is\u2026 a way to communicate? Negotiate?"\n\n\n_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_\n\n\n"And your plan is?"\n\n\n[IMG long view of the road ahead]\n\n\n_"Not letting him have it. Giving him the exact opposite of what he wants."_\n\n\n"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"\n\n\n_"Yes."_\n\n\n"That others would do exactly that."\n\n\n_"But we will not."_\n\n\n"No. We will not."\n\n\nWith that, you both start down the road towards the black fort in the distance. \n\n\n',!0)
 O.ub(b,c)
 c.n(0,"",!0)}},
 tp:{"^":"a:5;",
