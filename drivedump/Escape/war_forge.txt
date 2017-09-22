@@ -23,15 +23,15 @@ if (justCameFrom(w, "smelter")) {
 
 SHORT_DESCRIPTION: 
 // TODO: change after the iron monster was destroyed
+// TODO: pure chaos if player has done the throw in smelter.
+
+
 The air in the war forges is heavy and the noise overwhelming.
 
 
 [[CODE]]
 rollBrianaQuote(w, s);
 [[/CODE]]
-
-
-// TODO: pure chaos if player has done the throw in smelter.
 
 
 EXITS:
@@ -65,6 +65,9 @@ The cave is natural, but on the side of the smelter there is an artificial wall,
 
 
 At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot is almost stronger than the smell of all that orc sweat.
+
+
+This place makes Fort Ironcast's military forge look like a doll house: tiny and inconsequential.
 
 
 

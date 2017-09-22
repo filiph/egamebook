@@ -278,7 +278,7 @@ Room guardpostAboveChurch =
 A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you\'re ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana\'s face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can\'t believe we\'ve made it this far."
 
 
-Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a sword in one hand, and there\'s a shield laid on his lap.
+Leaning on the wall next to the third exit is a goblin guard. He\'s sleeping. He holds a scimitar in one hand, and there\'s a shield laid on his lap.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -475,7 +475,7 @@ You deftly lift the shield, take a few slow steps back, then fix the shield on y
             'guardpost_above_church_take_shield_continuation_of_failure',
             'Snatch the shield', (a, w, s, self) {
           s.add(
-              '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance.
+              '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly and gets his bearing suprisingly fast. He jumps up and gets into combat stance, pointing his scimitar at you.
 
 
 You hold the shield on your offhand and get ready to fight.''',
@@ -1665,10 +1665,10 @@ class ExamineUndergroundChurch extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.
+        '''This place was not built by the orcs or their slaves. Walls are straight and smooth. The ceiling is high enough to make you feel small, negligible, unimportant. The columns are decorated with delicate embossments of skulls and tentacles.
 
 
-"What are these things?" Briana whispers.
+"What are these things?" Briana whispers, looking at the ornaments.
 
 
 _"This place worships the Dead Prince."_
@@ -2015,6 +2015,9 @@ class WarForgeLookAround extends RoamingAction {
 
 
 At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot is almost stronger than the smell of all that orc sweat.
+
+
+This place makes Fort Ironcast\'s military forge look like a doll house: tiny and inconsequential.
 ''',
         wholeSentence: true);
     return '${a.name} successfully performs WarForgeLookAround';

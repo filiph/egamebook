@@ -58,10 +58,10 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-This place was not built by the orcs or their slaves. Walls are straight and smooth. The columns are decorated with delicate embossments of skulls and tentacles.
+This place was not built by the orcs or their slaves. Walls are straight and smooth. The ceiling is high enough to make you feel small, negligible, unimportant. The columns are decorated with delicate embossments of skulls and tentacles.
 
 
-"What are these things?" Briana whispers.
+"What are these things?" Briana whispers, looking at the ornaments.
 
 
 _"This place worships the Dead Prince."_

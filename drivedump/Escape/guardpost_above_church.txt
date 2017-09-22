@@ -24,7 +24,7 @@ if (justCameFrom(w, "underground_church")) {
 A third passage is marked "Up Door", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. "_Up Door?_" she whispers, shaking hear head. "I can't believe we've made it this far."
 
 
-Leaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a sword in one hand, and there's a shield laid on his lap.
+Leaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a scimitar in one hand, and there's a shield laid on his lap.
 
 
 
@@ -47,9 +47,6 @@ $smelter (Go to the smelter): You take the slightly downwards passage towards th
 
 
 // ------
-
-
-// $tunnel (Go to the Upper Gate): You take the passage that leads to the Upper Door and soon find yourself climbing a steep, poorly lit stairway.
 
 
 ACTION: $guardpost_above_church_enter_tunnel_with_cancel
