@@ -97,6 +97,9 @@ void describeSuccessRate(WorldState w, Storyline s) {
   final brianaHealth = briana.hitpoints >= 2 ? 'uninjured' : 'badly wounded';
   briana.report(s, "<subject> <is> $brianaHealth");
 
+  s.add("The important thing, though, is that you survived. Congratulations!",
+      wholeSentence: true);
+
   s.add("</p>", wholeSentence: true);
 }
 
