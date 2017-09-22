@@ -94,10 +94,11 @@ void describeSuccessRate(WorldState w, Storyline s) {
 
   // Briana is not in good health.
   final briana = w.getActorById(brianaId);
-  final brianaHealth = briana.hitpoints >= 2 ? 'uninjured' : 'badly wounded';
+  final brianaHealth = briana.hitpoints >= 2 ? 'uninjured' : 'wounded';
   briana.report(s, "<subject> <is> $brianaHealth");
 
-  s.add("The important thing, though, is that you survived. Congratulations!",
+  s.add("The important thing, though, is that you survived. "
+      "<strong>Congratulations!</strong>",
       wholeSentence: true);
 
   s.add("</p>", wholeSentence: true);
