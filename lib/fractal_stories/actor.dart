@@ -174,6 +174,10 @@ abstract class Actor extends Object
   @override
   Team get team;
 
+  /// Returns the number of items of [type] in actor's possession.
+  ///
+  /// This counts items in [items] (kind of an inventory / bag) but also
+  /// in [currentWeapon] and [currentShield].
   int countItems(ItemType type) {
     int count = 0;
     for (var item in items) {
@@ -181,6 +185,8 @@ abstract class Actor extends Object
         count += 1;
       }
     }
+    if (currentWeapon?.types?.contains(type) == true) count += 1;
+    if (currentShield?.types?.contains(type) == true) count += 1;
     return count;
   }
 
@@ -200,16 +206,7 @@ abstract class Actor extends Object
     return best;
   }
 
-  bool hasItem(ItemType type, {int needed: 1}) {
-    int count = 0;
-    for (var item in items) {
-      if (item.types.contains(type)) {
-        count += 1;
-      }
-      if (count >= needed) return true;
-    }
-    return false;
-  }
+  bool hasItem(ItemType type, {int needed: 1}) => countItems(type) >= needed;
 
   bool hasResource(Resource resource) {
     assert(resource == Resource.stamina, "Only stamina implemented");
