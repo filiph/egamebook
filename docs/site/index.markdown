@@ -61,12 +61,12 @@ It looks like you join a mailing list at this point (in case you’re interested
 <ul class="choices">
   <li class="button preferred"><a href="https://groups.google.com/forum/#!forum/egamebook"><strong>Join</strong> the discussion/mailing list.</a></li>
 	<li class="button"><a href="https://plus.google.com/communities/117415708119099457420">Join the Google+ Community.</a></li>
-  <li class="button"><a href="signup.html">Sign up for no more than one email announcement a month.</a></li>
+  <li class="button"><a href="{{ site.url }}/signup">Sign up for no more than one email announcement a month.</a></li>
 </ul>
 
-[egamebook]: http://www.egamebook.com
+[egamebook]: https://www.egamebook.com
 [gamebook]: http://en.wikipedia.org/wiki/Gamebook
-[Dart]: http://www.dartlang.org/
+[Dart]: https://www.dartlang.org/
 [physics simulations]: https://plus.google.com/111783114889748547827/posts/Jguy38GJbsy
 [AAA games]: http://en.wikipedia.org/wiki/AAA#Games
 [Lua]: http://en.wikipedia.org/wiki/Lua_(programming_language)

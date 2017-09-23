@@ -12,4 +12,4 @@ Thanks for subscribing!
 
 [Back to home][egamebook].
 
-[egamebook]: http://www.egamebook.com
+[egamebook]: https://www.egamebook.com

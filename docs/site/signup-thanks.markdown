@@ -12,4 +12,4 @@ To complete the subscription, please click the link in the email that landed in 
 
 [Back to home][egamebook].
 
-[egamebook]: http://www.egamebook.com
+[egamebook]: https://www.egamebook.com
