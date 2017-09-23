@@ -1,0 +1,50 @@
+Title:    Loch Ness
+Author:   Filip Hracek
+UniqueID: net.filiph.lochness.0.0.1
+
+<import 'package:lochness/lochness.dart'/>
+
+<declare>
+    Game game;
+</declare>
+
+<init>
+    game = new Game();
+    game.onFinishedGoto = "endGame";
+</init>
+
+---
+start
+
+You have dwelt in the lake called _Loch Ness_ for long enough. For three thousand years you have eluded those pesky humans, watching them from below the water surface, gaining strength. Now, it's time.
+
+You emerge from the cold lake near the ruins of Castle Urquhart. A small number of foreign looking humans is currently examining the crumbled walls. 
+
+When they see you towering above them, they start screaming and running to the woods. You crush six of them and then round up the rest inside the ruins. You count twelve humans. Not enough to feed the hatchlings, but a good start.
+
+![Map of the area](img/drumnadrochit-map.jpg)
+
+In their posession, you find this map of the area. It could prove useful.
+
+- [gameLoop]
+
+---
+gameLoop
+
+<script>
+  game.run();
+</script>
+
+- [gameLoop]
+
+---
+endGame
+
+The end.
+
+<p class="meta">Hit restart if you want to play again.</p>
+
+---
+DEBUG
+
+ohoho

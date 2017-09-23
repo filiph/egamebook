@@ -68,7 +68,7 @@ It looks like you join a mailing list at this point (in case you’re interested
 [gamebook]: http://en.wikipedia.org/wiki/Gamebook
 [Dart]: https://www.dartlang.org/
 [physics simulations]: https://plus.google.com/111783114889748547827/posts/Jguy38GJbsy
-[AAA games]: http://en.wikipedia.org/wiki/AAA#Games
+[AAA games]: https://en.wikipedia.org/wiki/AAA_(video_game_industry)
 [Lua]: http://en.wikipedia.org/wiki/Lua_(programming_language)
 [Papyrus]: http://www.creationkit.com/Papyrus_Introduction
 [Box2D]: http://pub.dartlang.org/packages/box2d
