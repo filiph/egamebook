@@ -5,6 +5,33 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=300"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=2592000"
+          }
+        ]
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/vermin",
+        "destination": "/vermin/v/ifcomp/",
+        "type": 302
+      }
     ]
   }
 }
