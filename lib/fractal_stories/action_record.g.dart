@@ -4,8 +4,11 @@ part of stranded.action_record;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class ActionRecord
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$ActionRecord extends ActionRecord {
   @override
@@ -116,20 +119,20 @@ class _$ActionRecord extends ActionRecord {
 
   @override
   String toString() {
-    return 'ActionRecord {'
-        'accomplices=${accomplices.toString()},\n'
-        'actionName=${actionName.toString()},\n'
-        'dataString=${dataString.toString()},\n'
-        'description=${description.toString()},\n'
-        'knownTo=${knownTo.toString()},\n'
-        'protagonist=${protagonist.toString()},\n'
-        'sufferers=${sufferers.toString()},\n'
-        'time=${time.toString()},\n'
-        'wasAggressive=${wasAggressive.toString()},\n'
-        'wasFailure=${wasFailure.toString()},\n'
-        'wasProactive=${wasProactive.toString()},\n'
-        'wasSuccess=${wasSuccess.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('ActionRecord')
+          ..add('accomplices', accomplices)
+          ..add('actionName', actionName)
+          ..add('dataString', dataString)
+          ..add('description', description)
+          ..add('knownTo', knownTo)
+          ..add('protagonist', protagonist)
+          ..add('sufferers', sufferers)
+          ..add('time', time)
+          ..add('wasAggressive', wasAggressive)
+          ..add('wasFailure', wasFailure)
+          ..add('wasProactive', wasProactive)
+          ..add('wasSuccess', wasSuccess))
+        .toString();
   }
 }
 
@@ -222,7 +225,7 @@ class ActionRecordBuilder
 
   @override
   _$ActionRecord build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$ActionRecord._(
             accomplices: accomplices?.build(),
             actionName: actionName,
@@ -236,7 +239,7 @@ class ActionRecordBuilder
             wasFailure: wasFailure,
             wasProactive: wasProactive,
             wasSuccess: wasSuccess);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

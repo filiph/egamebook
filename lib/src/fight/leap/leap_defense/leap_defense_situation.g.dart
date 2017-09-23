@@ -4,8 +4,11 @@ part of stranded.fight.leap_defense_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class LeapDefenseSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$LeapDefenseSituation extends LeapDefenseSituation {
   @override
@@ -69,13 +72,13 @@ class _$LeapDefenseSituation extends LeapDefenseSituation {
 
   @override
   String toString() {
-    return 'LeapDefenseSituation {'
-        'attacker=${attacker.toString()},\n'
-        'id=${id.toString()},\n'
-        'predeterminedResult=${predeterminedResult.toString()},\n'
-        'target=${target.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('LeapDefenseSituation')
+          ..add('attacker', attacker)
+          ..add('id', id)
+          ..add('predeterminedResult', predeterminedResult)
+          ..add('target', target)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -131,14 +134,14 @@ class LeapDefenseSituationBuilder
 
   @override
   _$LeapDefenseSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$LeapDefenseSituation._(
             attacker: attacker,
             id: id,
             predeterminedResult: predeterminedResult,
             target: target,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

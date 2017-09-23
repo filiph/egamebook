@@ -4,8 +4,11 @@ part of stranded.actor;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class Actor
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$Actor extends Actor {
   @override
@@ -175,29 +178,29 @@ class _$Actor extends Actor {
 
   @override
   String toString() {
-    return 'Actor {'
-        'categories=${categories.toString()},\n'
-        'combineFunction=${combineFunction.toString()},\n'
-        'currentRoomName=${currentRoomName.toString()},\n'
-        'currentShield=${currentShield.toString()},\n'
-        'currentWeapon=${currentWeapon.toString()},\n'
-        'followingActorId=${followingActorId.toString()},\n'
-        'gold=${gold.toString()},\n'
-        'hitpoints=${hitpoints.toString()},\n'
-        'id=${id.toString()},\n'
-        'initiative=${initiative.toString()},\n'
-        'isActive=${isActive.toString()},\n'
-        'isConfused=${isConfused.toString()},\n'
-        'isPlayer=${isPlayer.toString()},\n'
-        'items=${items.toString()},\n'
-        'maxHitpoints=${maxHitpoints.toString()},\n'
-        'name=${name.toString()},\n'
-        'nameIsProperNoun=${nameIsProperNoun.toString()},\n'
-        'pose=${pose.toString()},\n'
-        'pronoun=${pronoun.toString()},\n'
-        'stamina=${stamina.toString()},\n'
-        'team=${team.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('Actor')
+          ..add('categories', categories)
+          ..add('combineFunction', combineFunction)
+          ..add('currentRoomName', currentRoomName)
+          ..add('currentShield', currentShield)
+          ..add('currentWeapon', currentWeapon)
+          ..add('followingActorId', followingActorId)
+          ..add('gold', gold)
+          ..add('hitpoints', hitpoints)
+          ..add('id', id)
+          ..add('initiative', initiative)
+          ..add('isActive', isActive)
+          ..add('isConfused', isConfused)
+          ..add('isPlayer', isPlayer)
+          ..add('items', items)
+          ..add('maxHitpoints', maxHitpoints)
+          ..add('name', name)
+          ..add('nameIsProperNoun', nameIsProperNoun)
+          ..add('pose', pose)
+          ..add('pronoun', pronoun)
+          ..add('stamina', stamina)
+          ..add('team', team))
+        .toString();
   }
 }
 
@@ -337,7 +340,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   @override
   _$Actor build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$Actor._(
             categories: categories,
             combineFunction: combineFunction,
@@ -360,7 +363,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             pronoun: pronoun,
             stamina: stamina,
             team: team?.build());
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

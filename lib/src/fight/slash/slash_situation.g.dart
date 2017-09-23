@@ -4,8 +4,11 @@ part of stranded.fight.slash_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class SlashSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$SlashSituation extends SlashSituation {
   @override
@@ -55,12 +58,12 @@ class _$SlashSituation extends SlashSituation {
 
   @override
   String toString() {
-    return 'SlashSituation {'
-        'attacker=${attacker.toString()},\n'
-        'id=${id.toString()},\n'
-        'target=${target.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('SlashSituation')
+          ..add('attacker', attacker)
+          ..add('id', id)
+          ..add('target', target)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -110,10 +113,10 @@ class SlashSituationBuilder
 
   @override
   _$SlashSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$SlashSituation._(
             attacker: attacker, id: id, target: target, time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

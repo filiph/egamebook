@@ -4,8 +4,11 @@ part of stranded.fight.fight_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class FightSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$FightSituation extends FightSituation {
   @override
@@ -92,16 +95,16 @@ class _$FightSituation extends FightSituation {
 
   @override
   String toString() {
-    return 'FightSituation {'
-        'droppedItems=${droppedItems.toString()},\n'
-        'enemyTeamIds=${enemyTeamIds.toString()},\n'
-        'events=${events.toString()},\n'
-        'groundMaterial=${groundMaterial.toString()},\n'
-        'id=${id.toString()},\n'
-        'playerTeamIds=${playerTeamIds.toString()},\n'
-        'roomRoamingSituationId=${roomRoamingSituationId.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('FightSituation')
+          ..add('droppedItems', droppedItems)
+          ..add('enemyTeamIds', enemyTeamIds)
+          ..add('events', events)
+          ..add('groundMaterial', groundMaterial)
+          ..add('id', id)
+          ..add('playerTeamIds', playerTeamIds)
+          ..add('roomRoamingSituationId', roomRoamingSituationId)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -181,7 +184,7 @@ class FightSituationBuilder
 
   @override
   _$FightSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$FightSituation._(
             droppedItems: droppedItems?.build(),
             enemyTeamIds: enemyTeamIds?.build(),
@@ -191,7 +194,7 @@ class FightSituationBuilder
             playerTeamIds: playerTeamIds?.build(),
             roomRoamingSituationId: roomRoamingSituationId,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

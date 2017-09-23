@@ -4,8 +4,11 @@ part of writers_input;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class GuardpostAboveChurchTakeShieldRescueSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$GuardpostAboveChurchTakeShieldRescueSituation
     extends GuardpostAboveChurchTakeShieldRescueSituation {
@@ -51,10 +54,11 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
 
   @override
   String toString() {
-    return 'GuardpostAboveChurchTakeShieldRescueSituation {'
-        'id=${id.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper(
+            'GuardpostAboveChurchTakeShieldRescueSituation')
+          ..add('id', id)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -97,10 +101,10 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
 
   @override
   _$GuardpostAboveChurchTakeShieldRescueSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$GuardpostAboveChurchTakeShieldRescueSituation._(
             id: id, time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

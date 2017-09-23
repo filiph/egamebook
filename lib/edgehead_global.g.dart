@@ -4,8 +4,11 @@ part of edgehead_global;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class EdgeheadGlobalState
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   @override
@@ -55,11 +58,11 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
 
   @override
   String toString() {
-    return 'EdgeheadGlobalState {'
-        'bloodrockFollowers=${bloodrockFollowers.toString()},\n'
-        'brianaQuoteIndex=${brianaQuoteIndex.toString()},\n'
-        'hasKegOfBeer=${hasKegOfBeer.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('EdgeheadGlobalState')
+          ..add('bloodrockFollowers', bloodrockFollowers)
+          ..add('brianaQuoteIndex', brianaQuoteIndex)
+          ..add('hasKegOfBeer', hasKegOfBeer))
+        .toString();
   }
 }
 
@@ -127,12 +130,12 @@ class _$EdgeheadGlobalStateBuilder extends EdgeheadGlobalStateBuilder {
 
   @override
   _$EdgeheadGlobalState build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$EdgeheadGlobalState._(
             bloodrockFollowers: bloodrockFollowers,
             brianaQuoteIndex: brianaQuoteIndex,
             hasKegOfBeer: hasKegOfBeer);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

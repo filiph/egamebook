@@ -54,19 +54,19 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.3"
+    version: "0.10.2"
   build_barback:
     description:
       name: build_barback
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0+1"
   build_runner:
     description:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4+1"
+    version: "0.5.0"
   built_collection:
     description:
       name: built_collection
@@ -78,13 +78,13 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "4.1.1"
   built_value_generator:
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "4.1.1"
   charcode:
     description:
       name: charcode
@@ -144,7 +144,7 @@ packages:
       name: dart_to_js_script_rewriter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0+4"
+    version: "1.0.3"
   egamebook:
     description:
       path: "../egamebook"
@@ -324,7 +324,7 @@ packages:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.8"
+    version: "0.7.0"
   shelf_packages_handler:
     description:
       name: shelf_packages_handler
@@ -354,7 +354,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.10+1"
+    version: "0.7.1"
   source_map_stack_trace:
     description:
       name: source_map_stack_trace

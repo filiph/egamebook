@@ -4,8 +4,11 @@ part of stranded.fight.counter_attack_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class CounterAttackSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$CounterAttackSituation extends CounterAttackSituation {
   @override
@@ -60,12 +63,12 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
   @override
   String toString() {
-    return 'CounterAttackSituation {'
-        'counterAttacker=${counterAttacker.toString()},\n'
-        'id=${id.toString()},\n'
-        'target=${target.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('CounterAttackSituation')
+          ..add('counterAttacker', counterAttacker)
+          ..add('id', id)
+          ..add('target', target)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -116,13 +119,13 @@ class CounterAttackSituationBuilder
 
   @override
   _$CounterAttackSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$CounterAttackSituation._(
             counterAttacker: counterAttacker,
             id: id,
             target: target,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

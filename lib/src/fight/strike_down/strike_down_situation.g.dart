@@ -4,8 +4,11 @@ part of stranded.fight.strike_down_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class StrikeDownSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$StrikeDownSituation extends StrikeDownSituation {
   @override
@@ -58,12 +61,12 @@ class _$StrikeDownSituation extends StrikeDownSituation {
 
   @override
   String toString() {
-    return 'StrikeDownSituation {'
-        'attacker=${attacker.toString()},\n'
-        'id=${id.toString()},\n'
-        'targetOnGround=${targetOnGround.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('StrikeDownSituation')
+          ..add('attacker', attacker)
+          ..add('id', id)
+          ..add('targetOnGround', targetOnGround)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -114,13 +117,13 @@ class StrikeDownSituationBuilder
 
   @override
   _$StrikeDownSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$StrikeDownSituation._(
             attacker: attacker,
             id: id,
             targetOnGround: targetOnGround,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

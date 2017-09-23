@@ -4,8 +4,11 @@ part of stranded.fight.loot_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class LootSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$LootSituation extends LootSituation {
   @override
@@ -67,13 +70,13 @@ class _$LootSituation extends LootSituation {
 
   @override
   String toString() {
-    return 'LootSituation {'
-        'droppedItems=${droppedItems.toString()},\n'
-        'groundMaterial=${groundMaterial.toString()},\n'
-        'playerTeamIds=${playerTeamIds.toString()},\n'
-        'id=${id.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('LootSituation')
+          ..add('droppedItems', droppedItems)
+          ..add('groundMaterial', groundMaterial)
+          ..add('playerTeamIds', playerTeamIds)
+          ..add('id', id)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -133,14 +136,14 @@ class LootSituationBuilder
 
   @override
   _$LootSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$LootSituation._(
             droppedItems: droppedItems?.build(),
             groundMaterial: groundMaterial,
             playerTeamIds: playerTeamIds?.build(),
             id: id,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

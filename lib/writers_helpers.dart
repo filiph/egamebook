@@ -42,21 +42,6 @@ final _goblinsSpear = new Spear();
 
 final _uniqueId = new UniqueIdMaker();
 
-void enterTunnelWithCancel(WorldState w, Storyline s) {
-  bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
-  bool destroyedIronMonster =
-      w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-  bool hasHadChanceToCancel = w.actionHasBeenPerformedSuccessfully(
-      "guardpost_above_church_enter_tunnel_with_cancel");
-
-  if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
-    movePlayer(w, s, "tunnel");
-    return;
-  }
-
-  movePlayer(w, s, "tunnel_cancel_chance");
-}
-
 void describeSuccessRate(WorldState w, Storyline s) {
   s.add("<p class='meta'>", wholeSentence: true);
   s.add("Thanks for playing _Insignificant Little Vermin._",
@@ -102,6 +87,21 @@ void describeSuccessRate(WorldState w, Storyline s) {
       wholeSentence: true);
 
   s.add("</p>", wholeSentence: true);
+}
+
+void enterTunnelWithCancel(WorldState w, Storyline s) {
+  bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
+  bool destroyedIronMonster =
+      w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+  bool hasHadChanceToCancel = w.actionHasBeenPerformedSuccessfully(
+      "guardpost_above_church_enter_tunnel_with_cancel");
+
+  if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
+    movePlayer(w, s, "tunnel");
+    return;
+  }
+
+  movePlayer(w, s, "tunnel_cancel_chance");
 }
 
 void executeSpearThrowAtOgre(WorldState w, Storyline s) {

@@ -4,8 +4,11 @@ part of stranded.room_roaming.room_roaming_situation;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class RoomRoamingSituation
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$RoomRoamingSituation extends RoomRoamingSituation {
   @override
@@ -59,12 +62,12 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
   @override
   String toString() {
-    return 'RoomRoamingSituation {'
-        'currentRoomName=${currentRoomName.toString()},\n'
-        'id=${id.toString()},\n'
-        'monstersAlive=${monstersAlive.toString()},\n'
-        'time=${time.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('RoomRoamingSituation')
+          ..add('currentRoomName', currentRoomName)
+          ..add('id', id)
+          ..add('monstersAlive', monstersAlive)
+          ..add('time', time))
+        .toString();
   }
 }
 
@@ -116,13 +119,13 @@ class RoomRoamingSituationBuilder
 
   @override
   _$RoomRoamingSituation build() {
-    final result = _$v ??
+    final _$result = _$v ??
         new _$RoomRoamingSituation._(
             currentRoomName: currentRoomName,
             id: id,
             monstersAlive: monstersAlive,
             time: time);
-    replace(result);
-    return result;
+    replace(_$result);
+    return _$result;
   }
 }

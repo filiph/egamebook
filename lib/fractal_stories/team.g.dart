@@ -4,8 +4,11 @@ part of stranded.team;
 
 // **************************************************************************
 // Generator: BuiltValueGenerator
-// Target: abstract class Team
 // **************************************************************************
+
+// ignore_for_file: annotate_overrides
+// ignore_for_file: prefer_expression_function_bodies
+// ignore_for_file: sort_constructors_first
 
 class _$Team extends Team {
   @override
@@ -39,9 +42,7 @@ class _$Team extends Team {
 
   @override
   String toString() {
-    return 'Team {'
-        'id=${id.toString()},\n'
-        '}';
+    return (newBuiltValueToStringHelper('Team')..add('id', id)).toString();
   }
 }
 
@@ -75,8 +76,8 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
 
   @override
   _$Team build() {
-    final result = _$v ?? new _$Team._(id: id);
-    replace(result);
-    return result;
+    final _$result = _$v ?? new _$Team._(id: id);
+    replace(_$result);
+    return _$result;
   }
 }
