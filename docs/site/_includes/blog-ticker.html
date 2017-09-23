@@ -1,14 +1,13 @@
 
 <div class="panel callout radius row blog-ticker">
 	<div class="small-3 medium-2 large-2 columns blogposts-heading">
-        <span class="label">New</span>
 	    <a href="{{ site.url }}/blog">
             <h3>Blog</h3>
         </a>
 	</div>
 
     <div class="small-9 medium-10 large-10 columns blogpost-snippet-wrapper">
-	{% for post in site.posts %}
+	{% for post in site.posts limit:3 %}
         <div class="row">
     	  <p class="blogpost-snippet">
     		  <a href="{{ post.url }}">{{ post.title }}</a>

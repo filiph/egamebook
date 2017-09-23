@@ -6,7 +6,7 @@ description: "Egamebook is a project which strives to bring the gamebook (aka Ch
 
 <h1 class="blog-title">Blog</h1>
 
-<p>{{ page.description }}</p>
+<p>{{ page.description }} <a href="{{ site.url }}">Back to egamebook.com</a></p>
 
 <div class="blogpost-listing">
 <ul>
@@ -19,7 +19,7 @@ description: "Egamebook is a project which strives to bring the gamebook (aka Ch
       
       <p>
         <strong>{{ post.date | date: "%B %-d, %Y" }}</strong> &mdash;
-        {{ post.excerpt | strip_html}}
+        {{ post.excerpt | strip_html }}
         <a href="{{ post.url }}">Read&nbsp;&rarr;</a>
       </p>
     </div>
