@@ -130,7 +130,7 @@ _"What's Orcthorn?"_
 _"Almost."_
 
 
-"Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
+"Yes. Last full moon, an orcish captain and a company of prime warriors ambushed Lord Glencot. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
 
 
 _"The mad guardian."_

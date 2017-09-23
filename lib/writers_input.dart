@@ -114,7 +114,7 @@ class SearchAgruth extends RoamingAction {
 Room exitFromBloodrock =
     new Room('exit_from_bloodrock', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''Only a few bends ahead, the tunnel get blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. 
+      '''Only a few bends ahead, the tunnel gets blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. 
 
 
 You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
@@ -1180,7 +1180,7 @@ The spear sails over the molten steel and rams into the blind ogre\'s shoulder. 
 The last step takes him over the edge and into the pool of white-hot steel. He doesn\'t even have a chance to scream — the liquid swallows him. The orcs on the other side of the room don\'t notice.
 
 
-"Why would you do that?" Briana says with her hands thrown in the direction of the throw. "You wasted a perfectly good spear on a stupid ogre that posed no threat to us."
+"Why would you do that?" Briana says with her hands extended in the direction of the throw. "You wasted a perfectly good spear on a stupid ogre that posed no threat to us."
 
 
 _"Listen."_
@@ -1447,7 +1447,7 @@ class TalkToBriana3 extends RoamingAction {
 _"Almost."_
 
 
-"Yes. Last full moon, an orcish captain and a company of (TODO: alpha) warriors ambushed Lord TODO. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
+"Yes. Last full moon, an orcish captain and a company of prime warriors ambushed Lord Glencot. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
 
 
 _"The mad guardian."_
@@ -1529,7 +1529,7 @@ Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
 The air gets colder and fresher, but there\'s still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.
 
 
-"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of mount bloodrock just to die of exhaution on its doorstep."
+"I have…" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaution on its doorstep."
 
 
 _"That… that would be disappointing, yes."_
@@ -1756,7 +1756,7 @@ class WaitForRitual extends RoamingAction {
         '''You move to a shadow and wait. After a few heartbeats, there is a scraping sound of stone against stone. You lean out from your hiding and see a part of the wall to the right of the altar opening.
 
 
-An orc priest, tall and pale, enters from the stone door. At that time, the whole temple reverberates with a strong, dissonant tone that is somehow both sickening and appealing at the same time. It\'s like a groan of some large beast awakening.
+An orc priest, tall and pale, enters from the stone door. At that time, the whole temple reverberates with a strong, dissonant tone that is somehow both sickening and appealing at the same time. As if the whole mountain groaned.
 
 
 After the priest, a huge creature enters through the door, crouching below the frame. It\'s unclear what it is, but possibly some large breed of ogre, and judging by the braided hair, a female. Her sword — attached to her hip with a rope — is as long as you are tall. 

@@ -29,7 +29,7 @@ const _brianaQuotes = const [
   '''More yells from the distance.''',
   '''Briana stops and listens for a moment. "Aren, we're pushing our luck. 
   I'd hate to go all this way only to get 
-  my head smashed in by some random orc patrol.''',
+  my head smashed in by some random orc patrol."''',
 ];
 
 final Sword orcthorn = new Sword(
