@@ -117,7 +117,6 @@ class EdgeheadGame extends LoopedEvent {
 
     hitpoints.value = filip.hitpoints / filip.maxHitpoints;
     stamina.value = filip.stamina;
-    gold.value = filip.gold;
 
     briana = new Actor.initialized(brianaId, "Briana",
         nameIsProperNoun: true,
@@ -152,7 +151,6 @@ class EdgeheadGame extends LoopedEvent {
     var currentPlayer = world.getActorById(filip.id);
     hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
-    gold.value = currentPlayer.gold;
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {

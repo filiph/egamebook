@@ -22,7 +22,7 @@ UniqueID: net.filiph.edgehead.0.0.1
     Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🔆",
       description: "Spare physical energy", show: true);
     Stat<int> gold = new Stat<int>("Gold", (int value) => "$value 💰",
-      description: "Gold coins", show: true);
+      description: "Gold coins", show: false);
 </declare>
 
 <init>
