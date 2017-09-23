@@ -12,9 +12,10 @@ dependencies:
   logging: ^0.11.3
   markdown: ^0.10.1
   path: ^1.3.9
-  quiver: any
+  quiver: ^0.25.0
   resource: ^1.1.0
-  slot_machine: ^4.0.0
+  slot_machine:
+    path: ../slot_machine
   test: ^0.12.15+3
   watcher: ^0.9.7+3
 executables:
