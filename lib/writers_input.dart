@@ -1098,6 +1098,16 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
 
 ''',
       wholeSentence: true);
+  if (w.actionHasBeenPerformedSuccessfully("smelter_look_around")) {
+    s.add(
+        "About a spear's throw away, the ogre is {closing the flow of molten steel|waiting for commands from the forges}.",
+        wholeSentence: true);
+  }
+  s.add(
+      '''
+
+''',
+      wholeSentence: true);
   rollBrianaQuote(w, s);
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
