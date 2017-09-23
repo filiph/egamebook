@@ -122,6 +122,10 @@ h1 {
   text-align: left;
   line-height: 2 * $line-height;
   margin-top: 5vh;
+}
+
+p.subheading {
+  font-family: $sans-serif;
   margin-bottom: $line-height;
 }
 

@@ -16,51 +16,28 @@
         Insignificant Little Vermin
       </h1>
 
+      <p class="subheading">An open-world sword &amp; sorcery adventure</p>
+
       <p>
         <img src="img/orc_and_goblin_sketch.jpg" class="title__illustration">
-        This is an open-world sword & sorcery adventure.
-      </p>
-      <p>
-        This egamebook aims to provide the freedom
-        that one would expect from an open-world RPG game &mdash; simulated environment,
-        autonomous AI agents, resources, places to explore &mdash; but instead
-        of rendering all that in 2D or 3D graphics, render it in writing.
-        Think Skyrim, in prose.
+        A violent fight sets you and another slave free deep inside
+        Mount Bloodrock, an enclave of orcs, goblins, and much worse,
+        in the heart of the human kingdom of Grayshore.
+        During your escape, you will catch a glimpse of the secrets
+        and the horrors of this place.
       </p>
 
       <p>
-        You can learn more about the ideas behind this on
-        <a href="http://egamebook.com/">egamebook.com</a>. This project is
-        part of my evil masterplan to create enjoyable long texts, and bring
-        more of the coming generation to reading them.
+        What will you see, and how will you be remembered by your former
+        captors?
       </p>
-
-      <!--<p>-->
-        <!--I would <em>love</em> to hear your feedback. Please <a href="mailto:filip.hracek@gmail.com">send me an email</a> with your comments, critique and bug reports.-->
-      <!--</p>-->
 
       <p>
-        Tap the <em>Start</em> button below and enjoy the ride.
-        (For developers &amp; testers:
-        <a href="javascript:location.reload(true);">force refresh</a>.)
+        Tap the
+        <em><a href="javascript:location.reload(true);" style="color: inherit; text-decoration: none">Start</a></em>
+        button below and enjoy the ride.
       </p>
 
-      <div id="book-about">
-        <h2>About this story</h2>
-
-        <p>
-          A violent fight sets you and another slave free deep inside
-          Mount Bloodrock, an enclave of orcs, goblins, and much worse,
-          in the heart of the human kingdom of Grayshore.
-          During your escape, you will catch a glimpse of the secrets
-          and the horrors of this place.
-        </p>
-
-        <p>
-          What will you see, and how will you be remembered by your former
-          captors?
-        </p>
-      </div>
       <div style="clear:right"></div>
     </div>
     <div class="bottom-fixed-gradient"></div>
@@ -78,6 +55,7 @@
       <div id="top-nav">
         <div id="left-hand-nav">
           <button class="button" id="book-restart">Restart</button>
+          <button class="button" id="book-info-button">Info</button>
         </div>
         <div id="right-hand-nav">
           <button class="button display-none" id="points-button"><span id="points-value">0</span></button><div id="stats"></div>
@@ -99,6 +77,52 @@
     </div>
 
     <footer></footer>
+  </div>
+
+  <div id="book-info-dialog" class="dialog display-none">
+    <div class="overlay"></div>
+    <div class="dialog-window">
+      <h3>Info</h3>
+      <div class="dialog-content">
+        <p>
+          This egamebook aims to provide the freedom
+          that one would expect from an open-world RPG game &mdash; simulated environment,
+          autonomous AI agents, resources, places to explore &mdash; but instead
+          of rendering all that in 2D or 3D graphics, render it in writing.
+          Think Skyrim, in prose.
+        </p>
+
+        <p>
+          You can learn more about the ideas behind this at
+          <a href="http://egamebook.com/">egamebook.com</a>.
+          This project is part of the author's evil masterplan to create
+          enjoyable long texts for the coming generation. Society is better off
+          when its people are able and willing to read substantial
+          written work.
+        </p>
+
+        <p>
+          If the realm of the Dead Prince has piqued your interest, and you
+          would like to continue your journey, explore the kingdom of Grayshore,
+          and maybe even build your own castle, stay tuned for a sequel.
+          <a href="https://egamebook.com/signup/">Sign up</a>
+          to receive updates.
+        </p>
+
+        <p><strong>Credits</strong></p>
+
+        <ol>
+          <li>Writing and programming: Filip Hracek</li>
+          <li>Illustration: Juan Pablo Vega</li>
+          <li>Editing: Mark Aragona</li>
+          <li>Testing: mathbrush</li>
+        </ol>
+
+      </div>
+      <div class="dialog-buttons">
+        <li class="button" role="button">Close</li>
+      </div>
+    </div>
   </div>
 </body>
 
