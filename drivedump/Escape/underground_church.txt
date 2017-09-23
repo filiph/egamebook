@@ -79,7 +79,8 @@ _"He is god."_
 // Don't allow the following paragraph if we've been through "Wait" in altar - by then Briana is not sceptical
 [[CODE]]
 if (!w.actionHasBeenPerformed("wait_for_ritual")) {
-  s.add("""Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, you shouldn't. He's some talented illusionist at best." """, wholeSentence: true);
+  s.add("""Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, you shouldn't. He's some talented illusionist at best." 
+""", wholeSentence: true);
 }
 [[/CODE]]
 
