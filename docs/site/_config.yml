@@ -8,7 +8,7 @@ redcarpet:
     extensions: [smart, footnotes]
 highlighter: pygments
 
-permalink: /blog/:title
+permalink: /blog/:title/
 
 defaults:
   -
