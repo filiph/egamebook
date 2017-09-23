@@ -78,13 +78,13 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.7"
+    version: "1.2.1"
   built_value_generator:
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.7"
+    version: "1.0.1"
   charcode:
     description:
       name: charcode
@@ -276,7 +276,7 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.23.0"
+    version: "0.25.0"
   recase:
     description:
       name: recase
