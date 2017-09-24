@@ -28,7 +28,7 @@ table {
   border-spacing: 0; }
 
 body {
-  font-family: "Garamond", "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
+  font-family: "Georgia", "Palatino", "Cambria", "Times New Roman", "Times", serif;
   line-height: 1.8857142857rem;
   text-align: justify;
   font-size: 1.2rem;
@@ -160,13 +160,13 @@ nav {
       vertical-align: sub; }
 
 #right-hand-nav {
-  -webkit-box-flex: 2;
-  -moz-box-flex: 2;
-  box-flex: 2;
-  -webkit-flex: 2 0 0;
-  -moz-flex: 2 0 0;
-  -ms-flex: 2 0 0;
-  flex: 2 0 0;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1 0 0;
+  -moz-flex: 1 0 0;
+  -ms-flex: 1 0 0;
+  flex: 1 0 0;
   padding-top: 0.5rem;
   padding-right: 1rem;
   display: inline;
@@ -314,20 +314,21 @@ div.dialog h3 {
 
 .dialog-content {
   overflow-y: auto;
-  max-height: 35vh; }
+  max-height: 35vh;
+  text-align: left;
+  font-size: 1.08rem;
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
   .dialog-content > * {
-    padding-right: 1em; }
+    margin-right: 1em; }
+  @media screen and (max-width: 420px) {
+    .dialog-content {
+      font-size: 0.864rem; } }
 
 .dialog-buttons {
   margin-top: 1.5rem; }
 
-div.dialog p {
-  text-align: left;
-  font-size: 1.08rem;
-  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
-
 div.dialog table {
-  width: 100%; }
+  width: 90%; }
   div.dialog table td {
     font-size: 1.08rem;
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
@@ -335,6 +336,9 @@ div.dialog table {
     padding-left: 0;
     padding-right: 1rem;
     border-top: 1px solid lightgray; }
+    @media screen and (max-width: 420px) {
+      div.dialog table td {
+        font-size: 0.864rem; } }
   div.dialog table tr:first-child td {
     border-top: 2px solid lightgray; }
 
