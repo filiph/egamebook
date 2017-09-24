@@ -64,7 +64,7 @@ class Confuse extends EnemyTargetAction {
 
   @override
   num getSuccessChance(Actor a, WorldState world) {
-    return 0.6;
+    return 0.8;
   }
 
   @override
