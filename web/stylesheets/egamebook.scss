@@ -13,6 +13,10 @@ $smaller-serif-font-size: $sans-serif-font-size * 0.8;
 $line-height: $standard-font-size / 14 * 22;
 $border-radius: 0.2rem;
 
+$break-small: 320px;
+$break-medium: 420px;
+$break-large: 1200px;
+
 @import "bourbon/bourbon";
 
 body {
@@ -343,6 +347,10 @@ div.dialog h3 {
   > * {
     margin-right: 1em;
   }
+
+  @media screen and (max-width: $break-medium) {
+    font-size: $sans-serif-font-size * 0.8;
+  }
 }
 
 .dialog-buttons {
@@ -359,6 +367,10 @@ div.dialog table {
     padding-left: 0;
     padding-right: 1rem;
     border-top: 1px solid lightgray;
+
+    @media screen and (max-width: $break-medium) {
+      font-size: $sans-serif-font-size * 0.8;
+    }
   }
 
   tr:first-child td {
