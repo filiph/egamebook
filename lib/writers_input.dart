@@ -782,7 +782,7 @@ In what seems like hours of work, you get to the bottom. Among a slush of decaye
 You fling the weapon and the green-red rot falls to the ground easily, as if it had no traction on the steel. You hold in your hand the brightest, sharpest sword you have ever seen.
 
 
-[IMG orcthorn]
+![Picture of Orcthorn](img/orcthorn.jpg)
 
 
 "Orcthorn," Briana nods and surveys the blade and the hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."
@@ -940,7 +940,7 @@ But at that time, something or someone smashes on that very door from the inside
 The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
 
 
-[IMAGE goblin spearman + orc]
+![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1541,7 +1541,7 @@ The sounds from behind get louder. You can now pick out individual voices, altho
 The light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. 
 
 
-![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)
 
 
 This must be the guard of the Upper Door. There is no way around them.

@@ -22,7 +22,7 @@ The sounds from behind get louder. You can now pick out individual voices, altho
 The light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. 
 
 
-![Orc and Goblin](img/orc_and_goblin_sketch.jpg)
+![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)
 
 
 This must be the guard of the Upper Door. There is no way around them.

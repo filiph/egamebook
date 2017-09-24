@@ -26,7 +26,7 @@ But at that time, something or someone smashes on that very door from the inside
 The door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.
 
 
-[IMAGE goblin spearman + orc]
+![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
 
 
 SHORT_DESCRIPTION:

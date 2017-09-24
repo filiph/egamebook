@@ -38,7 +38,7 @@ In what seems like hours of work, you get to the bottom. Among a slush of decaye
 You fling the weapon and the green-red rot falls to the ground easily, as if it had no traction on the steel. You hold in your hand the brightest, sharpest sword you have ever seen.
 
 
-[IMG orcthorn]
+![Picture of Orcthorn](img/orcthorn.jpg)
 
 
 "Orcthorn," Briana nods and surveys the blade and the hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn't they destroy it? They were terrified of it."
