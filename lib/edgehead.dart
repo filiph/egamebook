@@ -25,7 +25,7 @@ class ScripterImpl extends Scripter {
       }
       return "😐"; // fine, neutral face
       }, description: "Your physical state", initialValue: 100.0, show: true);
-      Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🔆",
+      Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🌟",
         description: "Spare physical energy", show: true);
       Stat<int> gold = new Stat<int>("Gold", (int value) => "$value 💰",
         description: "Gold coins", show: false);
@@ -82,7 +82,7 @@ class ScripterImpl extends Scripter {
   void initBlock() {
     game = null;
     hitpoints = new Stat<double>("Health", (double value) {if (value == 0.0) {return "💀";} if (value <= 0.5) {return "😣";} if (value < 1.0) {return "😧";} return "😐";}, description: "Your physical state", initialValue: 100.0, show: true);
-    stamina = new Stat<int>("Stamina", (int value) => "$value 🔆", description: "Spare physical energy", show: true);
+    stamina = new Stat<int>("Stamina", (int value) => "$value 🌟", description: "Spare physical energy", show: true);
     gold = new Stat<int>("Gold", (int value) => "$value 💰", description: "Gold coins", show: false);
 
         game = new EdgeheadGame(echo, goto, choices, choice, showSlotMachine,

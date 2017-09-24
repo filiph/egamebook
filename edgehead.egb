@@ -19,7 +19,7 @@ UniqueID: net.filiph.edgehead.0.0.1
     }
     return "😐"; // fine, neutral face
     }, description: "Your physical state", initialValue: 100.0, show: true);
-    Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🔆",
+    Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🌟",
       description: "Spare physical energy", show: true);
     Stat<int> gold = new Stat<int>("Gold", (int value) => "$value 💰",
       description: "Gold coins", show: false);
