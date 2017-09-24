@@ -105,6 +105,21 @@ class HtmlPresenter extends Presenter {
       _showLoading(true);
     });
 
+    final infoAnchor = document.querySelector("#book-info-button");
+    final infoDialog = document.querySelector("#book-info-dialog");
+    if (infoAnchor != null && infoDialog != null) {
+      infoAnchor.onClick.listen((_) {
+        infoDialog.classes.remove("display-none");
+      });
+
+      final infoDialogClose = infoDialog.querySelector('.button');
+      infoDialogClose.onClick.listen((_) {
+        infoDialog.classes.add("display-none");
+      });
+    } else {
+      print("Warning: no info button and dialog in the HTML.");
+    }
+
     pointsSpan = document.querySelector("span#points-value");
     document
         .querySelector("#points-button")
