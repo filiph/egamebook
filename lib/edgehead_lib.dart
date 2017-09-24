@@ -266,7 +266,14 @@ class EdgeheadGame extends LoopedEvent {
 
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
       for (Action action in actions) {
-        choiceFunction(action.command, helpMessage: action.helpMessage,
+        final probability = action.getSuccessChance(actor, world);
+        final humanized =
+            Randomly.humanStringifyProbability(probability, precisionSteps: 2);
+        String command = action.command;
+        if (command.isNotEmpty && probability < 1.0) {
+          command = "${action.command} [$humanized]";
+        }
+        choiceFunction(command, helpMessage: action.helpMessage,
             script: () async {
           await _applySelected(action, actor, storyline);
         });
