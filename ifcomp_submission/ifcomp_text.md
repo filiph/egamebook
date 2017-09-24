@@ -5,6 +5,5 @@
      
 # Insignificant Little Vermin
 
-Please visit [https://egamebook.com/vermin/]() to play the game. 
-You can play on your smartphone as well. 
-
+Please visit [egamebook.com/vermin](https://egamebook.com/vermin/)
+to play the game. You can play on your smartphone as well. 
