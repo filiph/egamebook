@@ -95,7 +95,10 @@ h1 {
   font-weight: bold;
   text-align: left;
   line-height: 3.7714285714rem;
-  margin-top: 5vh;
+  margin-top: 5vh; }
+
+p.subheading {
+  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   margin-bottom: 1.8857142857rem; }
 
 .title__illustration {
@@ -204,7 +207,7 @@ nav .button {
   color: #666;
   text-shadow: 1px 1px 0px #ffffff; }
 
-.display-none {
+.display-none, nav .display-none {
   display: none; }
 
 .blink {
@@ -300,7 +303,6 @@ p.toast.non-dimmed {
   margin-left: -40vw;
   max-height: 70vh;
   margin-top: -35vh;
-  box-shadow: 0 0 0.5rem 0.5rem #fff;
   box-sizing: border-box;
   padding: 5vh;
   border-radius: 0.2rem; }
@@ -313,6 +315,8 @@ div.dialog h3 {
 .dialog-content {
   overflow-y: auto;
   max-height: 35vh; }
+  .dialog-content > * {
+    padding-right: 1em; }
 
 .dialog-buttons {
   margin-top: 1.5rem; }
