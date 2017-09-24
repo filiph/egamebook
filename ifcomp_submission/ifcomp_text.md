@@ -1,6 +1,6 @@
 <img class="portrait" 
      width="175"
-     src="https://filiph.github.io/edgehead/img/orc_and_goblin_sketch.jpg"
+     src="https://egamebook.com/vermin/v/ifcomp/img/sadistic-slavers.jpg"
      alt="A picture of an orc and a goblin, armed.">
      
 # Insignificant Little Vermin
