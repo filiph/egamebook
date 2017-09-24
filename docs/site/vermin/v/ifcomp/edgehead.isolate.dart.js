@@ -6011,7 +6011,7 @@ a.b2(c,"<subject> {channel<s>|implant<s>} {terror|confusion} into <object's> min
 z.as(c,"<subject's> eyes go wide with terror",!0)
 b.W(z.y,new N.jS())
 return H.b(a.dx)+" confuses "+H.b(z.dx)},"$3","gM",6,0,1],
-H:function(a,b){return 0.6},
+H:function(a,b){return 0.8},
 G:function(a,b){var z
 if(a.cx)if(a.fr===C.d){z=b.a
 z=new H.I(z,new N.jT(this),[H.j(z,0)])
@@ -9066,7 +9066,7 @@ uq:function(a){return a.W(a.A(1).y,new O.ur())},
 i6:function(a,b){a.W(a.A(1).y,new O.us(b))},
 ep:function(a){var z=a.f
 if(H.A(z.length!==0?C.a.gE(z):null,"$isG").c)return!1
-return C.a.ae(C.Z,H.A(z.length!==0?C.a.gE(z):null,"$isG").a)},
+return C.a.ae(C.a_,H.A(z.length!==0?C.a.gE(z):null,"$isG").a)},
 aZ:function(a,b){var z,y,x,w,v
 z=a.A(1)
 for(y=a.d,y=new P.e7(y,y.c,y.d,y.b,null,[H.j(y,0)]);y.w();){x=y.e
@@ -9099,7 +9099,7 @@ break}}},
 cq:function(a,b){var z,y,x
 z=H.A(a.c,"$iscD").b
 if(z>=5)return
-b.l(0,C.a1[z],!0)
+b.l(0,C.Z[z],!0)
 y=H.A(a.c,"$iscD")
 y.toString
 x=new M.dZ(null,!1,0,0)
@@ -9291,7 +9291,7 @@ a.gc3()
 a.c=z+1
 return a}},
 uW:{"^":"a:0;",
-$1:function(a){var z=P.az(C.a0,null)
+$1:function(a){var z=P.az(C.a1,null)
 a.gk().e=new E.bi("shield",z)
 return a}},
 uX:{"^":"a:0;",
@@ -9380,7 +9380,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 lq:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9456,7 +9456,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 mp:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9471,7 +9471,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 mn:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9485,7 +9485,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rI:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,'Violent grunts and growls are coming through that door. Next to it, an orcish writing on the wall says "Danger mad. Give food go away."\n',!0)}},
@@ -9503,7 +9503,7 @@ else z=!1
 else z=!1
 if(!z)return!1
 return!0},
-R:[function(a,b,c){c.l(0,'You and Briana nod at each other and start sweeping the room. The mad guardian has left many bizarre things scattered around the space. A box of severed orc hands. Crude drawings of tentacles covering one of the walls, with several gouged out eyes below it. A circle made from half-eaten rats, with a single pebble in the middle.\n\n\n"None of this makes any sense," Briana says, turning some useless apparatus made of sticks in hand. "He must _really_ have gone mad. From fear, or magic, or both."\n\n\nSoon, the last place in the room that hasn\'t been searched by either you or Briana is the large pile of rotting corpses. Mostly orcs, but there are also some human slaves, and many rats and bats. The reek of rotten flesh raises above it in visible, pale fumes. Briana hides her nose in an elbow and starts dragging out the upper, less rotten corpses. You join her.\n\n\n"The sword will be at the bottom, I bet."\n\n\n_"Of course. He tried to bury it."_\n\n\nIn what seems like hours of work, you get to the bottom. Among a slush of decayed meat, you feel something hard and cold. Pulling it uncovers a sword.\n\n\nYou fling the weapon and the green-red rot falls to the ground easily, as if it had no traction on the steel. You hold in your hand the brightest, sharpest sword you have ever seen.\n\n\n[IMG orcthorn]\n\n\n"Orcthorn," Briana nods and surveys the blade and the hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."\n\n\n_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_\n\n\n"Well, now they can start fearing again." Briana crouches next to the corpse of the mad guardian. "And all this because of a common soldier and a farm boy," she says to the lifeless face.\n\n\n_"I am not a farm boy. And we still need to get out of here first."_\n',!0)
+R:[function(a,b,c){c.l(0,'You and Briana nod at each other and start sweeping the room. The mad guardian has left many bizarre things scattered around the space. A box of severed orc hands. Crude drawings of tentacles covering one of the walls, with several gouged out eyes below it. A circle made from half-eaten rats, with a single pebble in the middle.\n\n\n"None of this makes any sense," Briana says, turning some useless apparatus made of sticks in hand. "He must _really_ have gone mad. From fear, or magic, or both."\n\n\nSoon, the last place in the room that hasn\'t been searched by either you or Briana is the large pile of rotting corpses. Mostly orcs, but there are also some human slaves, and many rats and bats. The reek of rotten flesh raises above it in visible, pale fumes. Briana hides her nose in an elbow and starts dragging out the upper, less rotten corpses. You join her.\n\n\n"The sword will be at the bottom, I bet."\n\n\n_"Of course. He tried to bury it."_\n\n\nIn what seems like hours of work, you get to the bottom. Among a slush of decayed meat, you feel something hard and cold. Pulling it uncovers a sword.\n\n\nYou fling the weapon and the green-red rot falls to the ground easily, as if it had no traction on the steel. You hold in your hand the brightest, sharpest sword you have ever seen.\n\n\n![Picture of Orcthorn](img/orcthorn.jpg)\n\n\n"Orcthorn," Briana nods and surveys the blade and the hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."\n\n\n_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_\n\n\n"Well, now they can start fearing again." Briana crouches next to the corpse of the mad guardian. "And all this because of a common soldier and a farm boy," she says to the lifeless face.\n\n\n_"I am not a farm boy. And we still need to get out of here first."_\n',!0)
 O.wl(b,a)
 return H.b(a.dx)+" successfully performs TakeOrcthorn"},"$3","gM",6,0,1],
 P:[function(a,b,c){throw H.c(new P.u("Success chance is 100%"))},"$3","gL",6,0,1],
@@ -9511,7 +9511,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rE:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,'"There is a difference between being brave and being stupid. You\'re crossing it," she says.\n',!0)}},
@@ -9530,13 +9530,13 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 oa:{"^":"a:0;",
 $1:function(a){a.gk().y=0
 return a}},
 rC:{"^":"a:5;",
-$3:function(a,b,c){c.l(0,"You can see Briana clutching her fists. \"Are we homesick already?\" she says. But she doesn't wait for reply, and presses on.\n\n\nIt doesn't take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.\n\n\nThe tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn't see you or anything else.\n\n\nBefore you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man's chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.\n\n\nAn orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. \"Vicious throw, small one!\" he roars.\n\n\nYou step back and motion Briana to lean on the wall, hoping that the door's embossed frame will provide enough cover before the two slavers turn again. \n\n\nBut at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.\n\n\nThe door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.\n\n\n[IMAGE goblin spearman + orc]\n",!0)}},
+$3:function(a,b,c){c.l(0,"You can see Briana clutching her fists. \"Are we homesick already?\" she says. But she doesn't wait for reply, and presses on.\n\n\nIt doesn't take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.\n\n\nThe tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn't see you or anything else.\n\n\nBefore you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man's chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.\n\n\nAn orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. \"Vicious throw, small one!\" he roars.\n\n\nYou step back and motion Briana to lean on the wall, hoping that the door's embossed frame will provide enough cover before the two slavers turn again. \n\n\nBut at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.\n\n\nThe door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.\n\n\n![Picture of the sadistic slavers](img/sadistic-slavers.jpg)\n",!0)}},
 rD:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"",!0)
 if(b.a9("RoomRoamingSituation").bU(b,b.A(1),"orcthorn_room")&&!O.aZ(b,"orcthorn_room"))c.l(0,"The small door on the side of the corridor is open.",!0)
@@ -9559,7 +9559,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rz:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"A blast of smoke and heat greets you as you walk out of the passage and into the room. The roaring fire draws your attention to the far wall, where scores of orcs shovel coal into a giant furnace and tilt huge kettles of molten steel into white-hot rivers. This is the smelter.\n\n\n",!0)
@@ -9585,7 +9585,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 of:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9600,7 +9600,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rx:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"The path from slavery to power begins with a single crack of a whip. Briana wheels around, her face red with pain and anger. She is new here, but she knows what will follow. \n\n\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. \n\n\n\n\nAnother crack and there is new blood on Briana's face. Agruth grins.\n\n\n\n\nNobody else is in sight. It's just you, Agruth and Briana. That's Agruth's main mistake.\n",!0)}},
@@ -9616,7 +9616,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 oZ:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){if(!(b.aj("talk_to_briana_1")&&b.da(this.d)==null&&O.ep(b)))return!1
@@ -9628,7 +9628,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 p_:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){if(!(b.aj("talk_to_briana_2")&&b.da(this.d)==null&&O.ep(b)))return!1
@@ -9642,14 +9642,14 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rv:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"This must be the place that the orcs call the Shafts. It's a tall, seemingly endless room, with many walkways across.\n\n\n\n\n\n\nYou realize there is really only one way out, over one of the walkways. You'll have to run, there is no hiding anymore.\n",!0)}},
 rw:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"",!0)}},
 tm:{"^":"a:5;",
-$3:function(a,b,c){c.l(0,'Almost as soon as you lose the circular room from sight, loud yells and shouting rises from the deep of the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear stomping of dozens of orc and goblin feet.\n\n\nThe air gets colder and fresher, but there\'s still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.\n\n\n"I have\u2026" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaution on its doorstep."\n\n\n_"That\u2026 that would be disappointing, yes."_\n\n\nThe sounds from behind get louder. You can now pick out individual voices, although not what they say. The stairway suddenly makes a sharp left and levels out. Tasting blood on the roof of your mouth, your whole body demands to stop \u2014 but you start running anyway. Briana closely follows.\n\n\nThe light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. \n\n\n![Orc and Goblin](img/orc_and_goblin_sketch.jpg)\n\n\nThis must be the guard of the Upper Door. There is no way around them.\n',!0)}},
+$3:function(a,b,c){c.l(0,'Almost as soon as you lose the circular room from sight, loud yells and shouting rises from the deep of the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear stomping of dozens of orc and goblin feet.\n\n\nThe air gets colder and fresher, but there\'s still no end in sight, and the stairs are now so high that the climb feels like walking up a ladder.\n\n\n"I have\u2026" Briana gasps, trying to catch her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaution on its doorstep."\n\n\n_"That\u2026 that would be disappointing, yes."_\n\n\nThe sounds from behind get louder. You can now pick out individual voices, although not what they say. The stairway suddenly makes a sharp left and levels out. Tasting blood on the roof of your mouth, your whole body demands to stop \u2014 but you start running anyway. Briana closely follows.\n\n\nThe light in the tunnel gets brighter and the air colder. Then, suddenly, an orc and a goblin jump in front of you from a slimy crevice, swords in hands. \n\n\n![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)\n\n\nThis must be the guard of the Upper Door. There is no way around them.\n',!0)}},
 rq:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"",!0)}},
 tk:{"^":"a:5;",
@@ -9680,7 +9680,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rL:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,'The altar is a simple block of stone at the back of the temple. On the wall above it, there is a large ornament portraying an octopus with eight tentacles and eight black eyes at their tips. It\'s the sign of the Dead Prince. You have never seen it in real life but you know it well.\n\n\n"You\'re brave, my friend," Briana whispers. "I\'ll give you that. But if we must linger in this mountain, I\'d much rather kill some orcs than spy around a temple."\n\n\n_"You hate orcs? This is what made them."_\n\n\nBriana opens her mouth to reply, but at that point the otherwise steady light from the altar flickers like a flame, and you both slip behind a large column to move out of sight. A spear that lies here on the ground almost trips you up.\n',!0)}},
@@ -9699,7 +9699,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 oX:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9714,7 +9714,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 rp:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"You enter the enormous cave that holds Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Weird bats are circling just below the clouds, their shrieks mixing with the clangs of steel and angry shouts below.\n\n\n",!0)
@@ -9738,7 +9738,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 pi:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
@@ -9752,7 +9752,7 @@ H:function(a,b){return 1},
 gO:function(){return!1},
 a5:function(a,b){return"Will you be successful?"},
 gJ:function(){return},
-gN:function(){return""},
+gN:function(){return},
 gI:function(){return!1}},
 pz:{"^":"eX;q:a<,V:b<",
 af:function(a){var z=new V.dn(null,null,null)
@@ -10936,13 +10936,13 @@ C.a5=new U.cP(1,"Result.failure")
 C.a6=new U.cP(2,"Result.criticalSuccess")
 C.a7=new U.cP(3,"Result.criticalFailure")
 C.Y=I.aS([C.J,C.a5,C.a6,C.a7])
-C.Z=I.aS(["cave_with_agruth","guardpost_above_church","orcthorn_room","slave_quarters_passage","smelter","underground_church","war_forge"])
-C.a_=I.aS([C.F])
-C.a0=I.aS([C.y])
+C.Z=I.aS(['Briana spits on the floor. "Can\'t wait to smell something other than \n  orc sweat and piss."\n  \n  _"You come from the country, then?"_\n  \n  "Not really. I had been living in Fort Ironcast the last five year."\n  \n  _"How does Fort Ironcast smell like?"_ \n  \n  Briana frowns. "Mostly human sweat and piss."',"Somewhere in the distance, there are yells that rise in intensity, \n  then suddenly stop entirely.",'Briana turns to you with an intense whisper.\n  \n  "You know, I _have_ a right to hate orcs." \n  \n  _"I did not know people needed to have a right to hate them, to be honest."_ \n  \n  She observes you for a moment. "I\'m glad we are in agreement."',"More yells from the distance.","Briana stops and listens for a moment. \"Aren, we're pushing our luck. \n  I'd hate to go all this way only to get\n  my head smashed in by some random orc patrol.\""])
+C.a_=I.aS(["cave_with_agruth","guardpost_above_church","orcthorn_room","slave_quarters_passage","smelter","underground_church","war_forge"])
+C.a0=I.aS([C.F])
+C.a1=I.aS([C.y])
 C.G=I.aS([C.v])
 C.r=I.aS([C.z])
 C.h=I.aS([])
-C.a1=I.aS(['Briana spits on the floor. "Can\'t wait to see some actual architecture \n  when we get out of here."',"Somewhere in the distance, there are yells that rise in intensity, \n  then suddenly stop entirely.",'Briana turns to you with an intense whisper. \n  "You know, I _have_ a right to hate orcs." \n  \n  "I didn\'t know people need to have a right to hate them, to be honest." \n  \n  She observes you for a moment. "I\'m glad we are in agreement."',"More yells from the distance.","Briana stops and listens for a moment. \"Aren, we're pushing our luck. \n  I'd hate to go all this way only to get \n  my head smashed in by some random orc patrol.\""])
 C.a2=new H.jW(0,{},C.h,[null,null])
 C.a3=new X.dI(null,[P.L])
 C.d=new R.dL(0,"Pose.standing")
@@ -11004,7 +11004,7 @@ try{(void 0).$method$($argumentsExpr$)}catch(z){return z.message}}())},"hb","$ge
 z=P.ar
 y=new P.K(0,P.ps(),null,[z])
 y.he(null,z)
-return y},"bT","$get$bT",function(){return[]},"T","$get$T",function(){return new Y.rn()},"d7","$get$d7",function(){return new K.V("fist",P.az(C.a_,null))},"bF","$get$bF",function(){return N.bf("PlannerRecommendation")},"hY","$get$hY",function(){return new K.ro()},"ek","$get$ek",function(){var z=$.$get$hY()
+return y},"bT","$get$bT",function(){return[]},"T","$get$T",function(){return new Y.rn()},"d7","$get$d7",function(){return new K.V("fist",P.az(C.a0,null))},"bF","$get$bF",function(){return N.bf("PlannerRecommendation")},"hY","$get$hY",function(){return new K.ro()},"ek","$get$ek",function(){var z=$.$get$hY()
 return K.Y("__END_OF_ROAM__",z,z,null,null,[],"ground")},"a9","$get$a9",function(){return P.dQ(null)},"bH","$get$bH",function(){return P.dQ(null)},"ib","$get$ib",function(){return N.bf("Storyline")},"fV","$get$fV",function(){return P.bh("(\\w)([\\.\\?\\!])([\"'])\\.(?=$|\\s)",!0,!1)},"bs","$get$bs",function(){return L.e_(new L.t0())},"aG","$get$aG",function(){return L.e_(new L.rr())},"da","$get$da",function(){return L.e_(new L.t_())},"dJ","$get$dJ",function(){return new F.mN("Sometimes, patience pays off. Especially when the other option is potentially dangerous.",!1,!0,!1,null,null)},"ei","$get$ei",function(){return Y.c0(!1,"balance",!0,C.p,$.$get$aG())},"ig","$get$ig",function(){return Y.c0(!1,"pounding",!1,C.p,$.$get$aG())},"fB","$get$fB",function(){return new B.nh("Most moves are easier and more effective when you are firmly in balance.",!1,!0,!1,null,null)},"fF","$get$fF",function(){return new O.nx(null,!1,!0,!1,null,null)},"fU","$get$fU",function(){return new Q.oh(null,!1,!0,!0,C.e,null)},"hj","$get$hj",function(){return new M.pc("",!0,C.e,!1,!0,null)},"hD","$get$hD",function(){return P.dQ(null)},"eG","$get$eG",function(){return new Z.jn(!1,!0,!1,null,null)},"it","$get$it",function(){return Y.c0(!1,"swing",!0,C.p,$.$get$aG())},"is","$get$is",function(){return Y.c0(!1,"swing",!0,C.p,$.$get$aG())},"ir","$get$ir",function(){return Y.c0(!1,"swing",!0,C.p,$.$get$aG())},"fr","$get$fr",function(){return X.fp(0,P.L)},"fs","$get$fs",function(){return X.fp(1,P.L)},"fO","$get$fO",function(){return new D.oc(!1,!1,!0,null,null)},"cp","$get$cp",function(){return G.oO(!1,!0,"Orcthorn",!0,2,2)},"eb","$get$eb",function(){return Z.og(!1,!1,"spear",!1,1)},"eh","$get$eh",function(){return new O.pe(1e4)},"hQ","$get$hQ",function(){return K.Y("cave_with_agruth_pre",new V.rV(),new V.rX(),null,null,H.m([new Q.n("cave_with_agruth","","You look around.",null)],[Q.n]),"ground")},"hP","$get$hP",function(){return K.Y("cave_with_agruth",new V.rT(),new V.rU(),null,null,H.m([new Q.n("underground_church","Go to the Unholy Church","You make it to the Church undetected.",null),new Q.n("war_forge","Go to the war forges","You sneak your way through the black passage, closing towards the sound of hundreds of anvils.",null),new Q.n("slave_quarters_passage","Go to the slave quarters","You and Briana hug the wall and start towards the slave quarters.",null)],[Q.n]),"ground")},"fG","$get$fG",function(){return new V.nX("Search Agruth","search_agruth",!0,null)},"hZ","$get$hZ",function(){return K.Y("exit_from_bloodrock",new V.rR(),new V.rS(),null,null,H.m([new Q.n("__END_OF_ROAM__","","N/A",null)],[Q.n]),"ground")},"i_","$get$i_",function(){return K.Y("forge_church_crevice",new V.rP(),new V.rQ(),null,null,H.m([new Q.n("tunnel","Continue along the crevice","You continue until the crevice open into a tunnel. You can smell fresh air.",null)],[Q.n]),"ground")},"i7","$get$i7",function(){return K.Y("guardpost_above_church",new V.rN(),new V.rO(),null,null,H.m([new Q.n("underground_church","Descend towards the Underground Church","You take the passage leading down towards the temple.",null),new Q.n("smelter","Go to the smelter","You take the slightly downwards passage towards the smelter.",null)],[Q.n]),"ground")},"eW","$get$eW",function(){return new V.lp("Go to the Upper Gate","guardpost_above_church_enter_tunnel_with_cancel",!0,null)},"eY","$get$eY",function(){return new V.lq("Cautiously take the shield","guardpost_above_church_take_shield",!0,null)},"ia","$get$ia",function(){return K.Y("just_after_agruth_fight",new V.rK(),new V.rM(),null,null,H.m([],[Q.n]),"ground")},"fi","$get$fi",function(){return new V.mo('"Luck Bringer"',"name_agruth_sword_opportunity",!0,null)},"fj","$get$fj",function(){return new V.mp('"Savior"',"name_agruth_sword_redemption",!0,null)},"fh","$get$fh",function(){return new V.mn("No name","name_agruth_sword_nothing",!0,null)},"id","$get$id",function(){return K.Y("orcthorn_door",new V.rI(),new V.rJ(),null,null,H.m([new Q.n("cave_with_agruth","Go to the cave with Agruth's corpse","You back out from the door, and go back where you left Agruth's body.",null),new Q.n("slave_quarters","Go further towards the Gate of Screams","TODO",null),new Q.n("orcthorn_room","Open the door","You open the door.",null)],[Q.n]),"ground")},"ie","$get$ie",function(){return K.Y("orcthorn_room",new V.rG(),new V.rH(),O.ww(),null,H.m([new Q.n("slave_quarters_passage","Exit the room","You leave through the door and find yourself back in the corridor of the slave quarters.",null)],[Q.n]),"ground")},"h_","$get$h_",function(){return new V.oW("Search for Orcthorn","take_orcthorn",!0,null)},"ih","$get$ih",function(){return K.Y("slave_quarters",new V.rE(),new V.rF(),null,null,H.m([new Q.n("slave_quarters_passage","Go back","You nod, and start carefully backing out through the passage.",null)],[Q.n]),"ground")},"fM","$get$fM",function(){return new V.o9("Continue","slave_quarters_continue",!0,null)},"ii","$get$ii",function(){return K.Y("slave_quarters_passage",new V.rC(),new V.rD(),O.wx(),null,H.m([new Q.n("cave_with_agruth","Go back to the cave with Agruth's corpse","You back out from the door, and go back where you left Agruth's body.",null),new Q.n("slave_quarters","Go further towards the Gate of Screams","You start down the slope of the passage, towards the heart of the slave quarters and the Gate of Screams beyond. Briana tugs at your hand.",null),new Q.n("orcthorn_room","Open the door","You open the door.",null)],[Q.n]),"ground")},"fN","$get$fN",function(){return new V.ob("Examine the door","slave_quarters_passage_examine_door",!0,null)},"ij","$get$ij",function(){return K.Y("smelter",new V.rz(),new V.rB(),null,null,H.m([new Q.n("war_forge","Go to the war forges","You walk through a short passage set in stone, towards the sound of hundreds of anvils.",null),new Q.n("guardpost_above_church","Go through the smooth passage","You take the smooth passage and it leads you slightly upwards.",null)],[Q.n]),"ground")},"fP","$get$fP",function(){return new V.oe("Look around","smelter_look_around",!0,null)},"fQ","$get$fQ",function(){return new V.of("Throw spear at the ogre","smelter_throw_spear",!0,null)},"ik","$get$ik",function(){return K.Y("start_adventure",new V.rx(),new V.ry(),O.wu(),null,H.m([new Q.n("just_after_agruth_fight","","You look around. Fortunately, nobody is in sight.",null)],[Q.n]),"ground")},"h1","$get$h1",function(){return new V.oY("Talk to Briana","talk_to_briana_1",!0,null)},"h2","$get$h2",function(){return new V.oZ("Ask Briana about her capture","talk_to_briana_2",!0,null)},"h3","$get$h3",function(){return new V.p_("Ask Briana about Orcthorn","talk_to_briana_3",!0,null)},"iu","$get$iu",function(){return K.Y("the_shafts",new V.rv(),new V.rw(),null,null,H.m([new Q.n("tunnel","Run","You run over the passage. Orcs start to scream and yell commands. As you near the entrance, the air gets better.",null)],[Q.n]),"ground")},"iw","$get$iw",function(){return K.Y("tunnel",new V.tm(),new V.rq(),O.wv(),null,H.m([new Q.n("exit_from_bloodrock","Start running again","You start running again.",null)],[Q.n]),"ground")},"ix","$get$ix",function(){return K.Y("tunnel_cancel_chance",new V.tk(),new V.tl(),null,null,H.m([new Q.n("tunnel","Continue","You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you.",null),new Q.n("guardpost_above_church","Return","You nod, and step back into the circular room.",null)],[Q.n]),"ground")},"iy","$get$iy",function(){return K.Y("underground_church",new V.t6(),new V.th(),null,null,H.m([new Q.n("guardpost_above_church","Enter the upwards passage","You take the sloping passage and go a long, slightly rising way.",null),new Q.n("cave_with_agruth","Go back to the cave with Agruth's corpse","You sneak out of the church, back towards where you left Agruth's body.",null),new Q.n("underground_church_altar","Go towards the altar","You sneak towards the front of the temple, trying to stay in the shadows.",null)],[Q.n]),"ground")},"eT","$get$eT",function(){return new V.kV("Look around","examine_underground_church",!0,null)},"iz","$get$iz",function(){return K.Y("underground_church_altar",new V.rL(),new V.rW(),null,null,H.m([new Q.n("underground_church","Sneak back","You crouch low and, keeping an eye on the altar, head back to the Church's entrance.",null)],[Q.n]),"ground")},"hl","$get$hl",function(){return new V.pg("Wait","wait_for_ritual",!0,null)},"h0","$get$h0",function(){return new V.oX("Take the spear","take_spear_in_underground_church",!0,null)},"iA","$get$iA",function(){return K.Y("war_forge",new V.rp(),new V.rA(),null,null,H.m([new Q.n("smelter","Go to smelter","You keep low, ascending the stairs. At the top you sense a draft of hot air coming from a passage through the wall. You make your way through it.",null),new Q.n("cave_with_agruth","Go back to the cave with Agruth's corpse","You sneak back towards where you left Agruth's body.",null)],[Q.n]),"ground")},"hm","$get$hm",function(){return new V.ph("Look around","war_forge_look_around",!0,null)},"hn","$get$hn",function(){return new V.pi("Watch the workers","war_forge_watch_workers",!0,null)},"hK","$get$hK",function(){return H.m([$.$get$hQ(),$.$get$hP(),$.$get$hZ(),$.$get$i_(),$.$get$i7(),$.$get$ia(),$.$get$id(),$.$get$ie(),$.$get$ih(),$.$get$ii(),$.$get$ij(),$.$get$ik(),$.$get$iu(),$.$get$iw(),$.$get$ix(),$.$get$iy(),$.$get$iz(),$.$get$iA()],[K.cd])},"hJ","$get$hJ",function(){return H.m([$.$get$fG(),$.$get$eW(),$.$get$eY(),$.$get$fi(),$.$get$fj(),$.$get$fh(),$.$get$h_(),$.$get$fM(),$.$get$fN(),$.$get$fP(),$.$get$fQ(),$.$get$h1(),$.$get$h2(),$.$get$h3(),$.$get$eT(),$.$get$hl(),$.$get$h0(),$.$get$hm(),$.$get$hn()],[A.R])},"dd","$get$dd",function(){return P.oM("")},"cm","$get$cm",function(){var z=new O.n_(0,null,"PointsCounter")
 z.h6()
 return z},"bU","$get$bU",function(){return new L.eM(null,H.m([],[L.ab]))},"cs","$get$cs",function(){return H.f7(P.l,P.d)},"cl","$get$cl",function(){return P.b7(null,{func:1,ret:[P.P,P.ar]})},"cB","$get$cB",function(){return P.bh("^\\s*<<<\\s*$",!0,!1)},"cV","$get$cV",function(){return H.f7(P.l,Z.as)},"ff","$get$ff",function(){return N.bf("")},"fe","$get$fe",function(){return P.dy(P.l,N.dA)}])
