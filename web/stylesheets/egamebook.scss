@@ -341,7 +341,7 @@ div.dialog h3 {
   font-family: $sans-serif;
 
   > * {
-    padding-right: 1em;
+    margin-right: 1em;
   }
 }
 
@@ -350,7 +350,7 @@ div.dialog h3 {
 }
 
 div.dialog table {
-  width: 100%;
+  width: 90%;
 
   td {
     font-size: $sans-serif-font-size;
