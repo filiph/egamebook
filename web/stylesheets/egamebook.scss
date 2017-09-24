@@ -179,7 +179,7 @@ nav {
 }
 
 #right-hand-nav {
-  @include flex(2 0 0);
+  @include flex(1 0 0);
   padding-top: 0.5rem;
   padding-right: 1rem;
 
@@ -321,7 +321,6 @@ p.toast.non-dimmed {
   margin-left: -40vw;
   max-height: 70vh;
   margin-top: -35vh;
-  box-shadow: 0 0 0.5rem 0.5rem #fff;
   box-sizing: border-box;
   padding: 5vh;
   border-radius: $border-radius;
@@ -336,16 +335,18 @@ div.dialog h3 {
 .dialog-content {
   overflow-y: auto;
   max-height: 35vh;
+
+  text-align: left;
+  font-size: $sans-serif-font-size;
+  font-family: $sans-serif;
+
+  > * {
+    padding-right: 1em;
+  }
 }
 
 .dialog-buttons {
   margin-top: 1.5rem;
-}
-
-div.dialog p {
-  text-align: left;
-  font-size: $sans-serif-font-size;
-  font-family: $sans-serif;
 }
 
 div.dialog table {
