@@ -16,19 +16,28 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = const [
-  '''Briana spits on the floor. "Can't wait to see some actual architecture 
-  when we get out of here."''',
+  '''Briana spits on the floor. "Can't wait to smell something other than 
+  orc sweat and piss."
+  
+  _"You come from the country, then?"_
+  
+  "Not really. I had been living in Fort Ironcast the last five year."
+  
+  _"How does Fort Ironcast smell like?"_ 
+  
+  Briana frowns. "Mostly human sweat and piss."''',
   '''Somewhere in the distance, there are yells that rise in intensity, 
   then suddenly stop entirely.''',
-  '''Briana turns to you with an intense whisper. 
+  '''Briana turns to you with an intense whisper.
+  
   "You know, I _have_ a right to hate orcs." 
   
-  "I didn't know people need to have a right to hate them, to be honest." 
+  _"I did not know people needed to have a right to hate them, to be honest."_ 
   
   She observes you for a moment. "I'm glad we are in agreement."''',
   '''More yells from the distance.''',
   '''Briana stops and listens for a moment. "Aren, we're pushing our luck. 
-  I'd hate to go all this way only to get 
+  I'd hate to go all this way only to get
   my head smashed in by some random orc patrol."''',
 ];
 
