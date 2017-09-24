@@ -44,7 +44,7 @@ EnemyTargetAction
             (a, w, enemy) => new PunchDefenseSituation.initialized(a, enemy,
                 predeterminedResult: Predetermination.failureGuaranteed),
             enemy,
-            successChanceGetter: (_, __, ___) => 0.7,
+            successChanceGetter: (_, __, ___) => 0.8,
             applyStartOfFailure: startPunchReportStart,
             defenseSituationWhenFailed:
                 (a, w, enemy) => new PunchDefenseSituation.initialized(a, enemy,

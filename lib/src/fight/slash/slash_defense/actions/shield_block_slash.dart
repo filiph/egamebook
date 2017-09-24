@@ -95,7 +95,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.2 : 0;
-    if (a.isPlayer) return 0.8 - outOfBalancePenalty + enemyOutOfBalanceBonus;
+    if (a.isPlayer) return 0.78 - outOfBalancePenalty + enemyOutOfBalanceBonus;
     SlashDefenseSituation situation = w.currentSituation;
     return situation.predeterminedChance
         .or(0.5 - outOfBalancePenalty + enemyOutOfBalanceBonus);

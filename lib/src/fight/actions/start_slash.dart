@@ -47,7 +47,8 @@ EnemyTargetAction
             enemy,
             successChanceGetter: (a, w, enemy) {
               final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-              return 0.7 - shieldPenalty;
+              final balanceBonus = enemy.isStanding ? 0.0 : 0.2;
+              return 0.7 - shieldPenalty + balanceBonus;
             },
             applyStartOfFailure: startSlashReportStart,
             defenseSituationWhenFailed:

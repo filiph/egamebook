@@ -99,7 +99,7 @@ class Pound extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, WorldState world) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    if (a.isPlayer) return 0.7 - outOfBalancePenalty;
+    if (a.isPlayer) return 0.9 - outOfBalancePenalty;
     return 0.5 - outOfBalancePenalty;
   }
 

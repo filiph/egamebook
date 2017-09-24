@@ -108,7 +108,7 @@ class ThrowSpear extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, WorldState world) {
     final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-    return 0.6 - shieldPenalty;
+    return 0.4 - shieldPenalty;
   }
 
   @override
