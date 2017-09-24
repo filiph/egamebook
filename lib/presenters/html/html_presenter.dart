@@ -614,12 +614,13 @@ class HtmlPresenter extends Presenter {
       ..text = "?";
     Element buildResultSurround() =>
         new Element.span()..classes.add("slot-machine__result-surround");
-    var paragraph = new Element.p()
+    var resultParagraph = new Element.p()
       ..classes.add("slot-machine__result")
+      ..classes.add("display-none")
       ..append(buildResultSurround())
       ..append(machine.resultEl)
       ..append(buildResultSurround()..append(helpButton));
-    div.append(paragraph);
+    div.append(resultParagraph);
     div.append(machine.rerollEl);
     bookDiv.append(div);
     helpButton.onClick.listen((_) {
@@ -648,7 +649,9 @@ class HtmlPresenter extends Presenter {
           "landed on a heart will stay in place. Use your resources "
           "well, they may save your life one day.</p>"));
     });
-    var result = await machine.play();
+    await machine.play();
+    resultParagraph.classes.remove("display-none");
+    final result = await machine.rerollIfNeeded();
     _showLoading(true);
     return result;
   }
