@@ -321,7 +321,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -576,7 +576,7 @@ Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of her
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -637,7 +637,7 @@ Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as q
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -694,7 +694,7 @@ Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s._ I already have m
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -823,7 +823,7 @@ _"I am not a farm boy. And we still need to get out of here first."_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -907,7 +907,7 @@ You look at Briana. As the battle axe cleaves her stomach, she looks directly at
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1026,7 +1026,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1128,7 +1128,7 @@ The ogre is no more than a spear\'s throw away from you. But he doesn\'t notice.
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1242,7 +1242,7 @@ _"As I said, a well placed throw. The less simple you see the world, the easier 
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1340,7 +1340,7 @@ _"Three years."_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1410,7 +1410,7 @@ _"You what?"_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1496,7 +1496,7 @@ _"Somewhere in the slave quarters."_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1698,7 +1698,7 @@ _"I think you have felt it."_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1847,7 +1847,7 @@ _"This place does something weird to people."_
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -1910,7 +1910,7 @@ But it feels right in your hand, a good throwing weapon.
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -2009,7 +2009,7 @@ This place makes Fort Ironcast\'s military forge look like a doll house: tiny an
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -2081,7 +2081,7 @@ A full-sized ogre is pouring water over one part of the form just now, producing
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage => '';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;

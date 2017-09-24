@@ -89,8 +89,8 @@ class GeneratedAction extends GeneratedGameObject {
       ..addAnnotation(overrideAnnotation);
     classBuilder.addMethod(rerollResourceBuilder);
 
-    String helpMessage = _map['HINT'] ?? '';
-    if (helpMessage.isNotEmpty &&
+    String helpMessage = _map['HINT'];
+    if (helpMessage != null &&
         _map.containsKey('ADVANTAGE_HINT_ADDENDUM_NEGATIVE')) {
       helpMessage += " " + _map['ADVANTAGE_HINT_ADDENDUM_NEGATIVE'];
       // TODO: create the other action, with ADVANTAGE_HINT_ADDENDUM
