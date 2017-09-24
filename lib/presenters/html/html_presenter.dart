@@ -760,6 +760,7 @@ class HtmlPresenter extends Presenter {
   void _statsOnClickListener(Event event) {
     var html = new StringBuffer();
     html.writeln("<table>");
+    // TODO: reintroduce once safe
     // html.writeln("<tr><td>Score:</td><td>${_currentPoints}</td></tr>");
     for (int i = 0; i < _stats.length; i++) {
       UIStat stat = _stats[i];

@@ -250,6 +250,23 @@ nav .button {
   vertical-align: top;
   margin-bottom: 0; }
 
+.slot-machine__result-surround {
+  display: inline-block;
+  width: 1.6em;
+  text-align: right; }
+
+.slot-machine__help-button {
+  color: #999;
+  font-size: 0.972rem;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.1rem 0.4rem;
+  line-height: 1.2;
+  cursor: pointer; }
+  .slot-machine__help-button:hover {
+    background-color: #ddd; }
+
 .slot-machine__result {
   text-transform: uppercase; }
 
@@ -319,13 +336,16 @@ div.dialog h3 {
   font-size: 1.08rem;
   font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
   .dialog-content > * {
-    padding-right: 1em; }
+    margin-right: 1em; }
+  @media screen and (max-width: 420px) {
+    .dialog-content {
+      font-size: 0.864rem; } }
 
 .dialog-buttons {
   margin-top: 1.5rem; }
 
 div.dialog table {
-  width: 100%; }
+  width: 90%; }
   div.dialog table td {
     font-size: 1.08rem;
     font-family: "Roboto", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
@@ -333,6 +353,9 @@ div.dialog table {
     padding-left: 0;
     padding-right: 1rem;
     border-top: 1px solid lightgray; }
+    @media screen and (max-width: 420px) {
+      div.dialog table td {
+        font-size: 0.864rem; } }
   div.dialog table tr:first-child td {
     border-top: 2px solid lightgray; }
 
