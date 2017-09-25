@@ -1,9 +1,33 @@
 #!/usr/bin/env bash
 
+set -e
+
+echo "== Test =="
+time pub run -c test --run-skipped
+
+echo "== Upload to github.io =="
+peanut
+git push origin --set-upstream gh-pages
+
+echo "== Building the ifcomp upload file =="
 dart -c ../filiphnet/tool/spanify.dart \
         --html ../filiphnet/src/index.template.html \
         web/ifcomp_submission/ifcomp_text.md \
         > web/ifcomp_submission/insignificant_little_vermin.html
 
+echo "== Running pub build =="
+pub build
+
+echo "== Moving files =="
 mkdir -p ../egamebook/docs/site/vermin/v/ifcomp/
 cp -r build/web/* ../egamebook/docs/site/vermin/v/ifcomp/
+
+echo "== Build egamebook.com =="
+cd ../egamebook/docs/site/
+make clean
+make build
+
+echo "== Upload to egamebook.com =="
+make deploy
+
+echo "== All done =="
