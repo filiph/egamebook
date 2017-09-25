@@ -472,7 +472,7 @@ dV:function(a,b){var z,y
 z=b.length
 y=a.length
 if(z>y)return!1
-return b===this.bf(a,y-z)},
+return b===this.bg(a,y-z)},
 j7:function(a,b,c,d){H.cn(c)
 P.nc(d,0,a.length,"startIndex",null)
 return H.b0(a,b,c,d)},
@@ -488,7 +488,7 @@ if(b<0)throw H.c(P.ca(b,null,null))
 if(b>c)throw H.c(P.ca(b,null,null))
 if(c>a.length)throw H.c(P.ca(c,null,null))
 return a.substring(b,c)},
-bf:function(a,b){return this.aw(a,b,null)},
+bg:function(a,b){return this.aw(a,b,null)},
 de:function(a){var z,y,x,w,v
 z=a.trim()
 y=z.length
@@ -1318,7 +1318,7 @@ if(v==="Object"){u=a.constructor
 if(typeof u=="function"){t=String(u).match(/^\s*function\s*([\w$]*)\s*\(/)
 s=t==null?null:t[1]
 if(typeof s==="string"&&/^\w+$/.test(s))w=s}if(w==null)w=v}else w=v}w=w
-if(w.length>1&&C.c.bR(w,0)===36)w=C.c.bf(w,1)
+if(w.length>1&&C.c.bR(w,0)===36)w=C.c.bg(w,1)
 return function(b,c){return b.replace(/[^<,> ]+/g,function(d){return c[d]||d})}(w+H.d9(H.co(a),0,null),init.mangledGlobalNames)},
 cO:function(a){return"Instance of '"+H.bG(a)+"'"},
 ap:function(a){var z
@@ -1667,8 +1667,8 @@ if(!(H.an(o,n)||H.an(n,o)))return!1}}return H.rh(a.named,b.named)},
 wj:function(a,b,c){var z
 if(typeof b==="string")return a.indexOf(b,c)>=0
 else{z=J.o(b)
-if(!!z.$isf5){z=C.c.bf(a,c)
-return b.b.test(z)}else{z=z.dP(b,C.c.bf(a,c))
+if(!!z.$isf5){z=C.c.bg(a,c)
+return b.b.test(z)}else{z=z.dP(b,C.c.bg(a,c))
 return!z.ga0(z)}}},
 k:function(a,b,c){var z,y,x
 H.cn(c)
@@ -1685,7 +1685,7 @@ for(z=z.dP(b,a),z=new H.ho(z.a,z.b,z.c,null),y=0,x="";z.w();){w=z.d
 v=w.b
 u=v.index
 x=x+H.b(H.hA().$1(C.c.aw(a,y,u)))+H.b(c.$1(w))
-y=u+v[0].length}z=x+H.b(H.hA().$1(C.c.bf(a,y)))
+y=u+v[0].length}z=x+H.b(H.hA().$1(C.c.bg(a,y)))
 return z.charCodeAt(0)==0?z:z},
 b0:function(a,b,c,d){var z,y,x,w,v
 if(typeof b==="string"){z=a.indexOf(b,d)
@@ -2223,7 +2223,7 @@ else b.b5(c,d)},
 qX:function(a,b){return new P.qY(a,b)},
 r_:function(a,b,c){var z=a.ck()
 if(!!J.o(z).$isP&&z!==$.$get$be())z.bI(new P.r0(b,c))
-else b.bh(c)},
+else b.bi(c)},
 p9:function(a,b){var z=$.q
 if(z===C.k){z.toString
 return P.dX(a,b)}return P.dX(a,z.dQ(b,!0))},
@@ -2286,7 +2286,7 @@ $0:function(){var z,y,x
 z=this.b
 y=z.a
 x=y.b
-if((x&1)!==0?(y.gbi().e&4)!==0:(x&2)===0){z.b=!0
+if((x&1)!==0?(y.gbj().e&4)!==0:(x&2)===0){z.b=!0
 return}this.a.$2(null,0)}},
 qT:{"^":"a:0;a,b",
 $1:function(a){var z=this.b.c!=null?2:0
@@ -2362,13 +2362,13 @@ cX:function(a){return this.dS(a,null)}},
 cg:{"^":"hr;a,$ti",
 bz:function(a){var z=this.a
 if(z.a!==0)throw H.c(new P.u("Future already completed"))
-z.bg(a)},
+z.bh(a)},
 f1:function(){return this.bz(null)},
 b5:function(a,b){this.a.ew(a,b)}},
 qM:{"^":"hr;a,$ti",
 bz:function(a){var z=this.a
 if(z.a!==0)throw H.c(new P.u("Future already completed"))
-z.bh(a)},
+z.bi(a)},
 f1:function(){return this.bz(null)},
 b5:function(a,b){this.a.b5(a,b)}},
 e5:{"^":"d;a,b,c,d,e,$ti",
@@ -2427,7 +2427,7 @@ return this.c9(z)},
 c9:function(a){var z,y,x
 for(z=a,y=null;z!=null;y=z,z=x){x=z.a
 z.a=y}return y},
-bh:function(a){var z,y
+bi:function(a){var z,y
 z=this.$ti
 if(H.aR(a,"$isP",z,"$asP"))if(H.aR(a,"$isK",z,null))P.d_(a,this)
 else P.hs(a,this)
@@ -2439,7 +2439,7 @@ b5:[function(a,b){var z=this.dH()
 this.a=8
 this.c=new P.cw(a,b)
 P.bn(this,z)},function(a){return this.b5(a,null)},"ju","$2","$1","gcK",2,2,22,0],
-bg:function(a){var z
+bh:function(a){var z
 if(H.aR(a,"$isP",this.$ti,"$asP")){this.hl(a)
 return}this.a=1
 z=this.b
@@ -2538,7 +2538,7 @@ $0:function(){P.bn(this.b,this.a.a)}},
 qe:{"^":"a:0;a",
 $1:function(a){var z=this.a
 z.a=0
-z.bh(a)}},
+z.bi(a)}},
 qf:{"^":"a:52;a",
 $2:function(a,b){this.a.b5(a,b)},
 $1:function(a){return this.$2(a,null)}},
@@ -2634,20 +2634,20 @@ $0:function(){return this.a.$1(this.b)}},
 oB:{"^":"a:0;",
 $1:function(a){}},
 oD:{"^":"a:2;a",
-$0:function(){this.a.bh(null)}},
+$0:function(){this.a.bi(null)}},
 oG:{"^":"a:0;a",
 $1:function(a){++this.a.a}},
 oH:{"^":"a:2;a,b",
-$0:function(){this.b.bh(this.a.a)}},
+$0:function(){this.b.bi(this.a.a)}},
 oE:{"^":"a:0;a,b",
 $1:function(a){P.r_(this.a.a,this.b,!1)}},
 oF:{"^":"a:2;a",
-$0:function(){this.a.bh(!0)}},
+$0:function(){this.a.bi(!0)}},
 oI:{"^":"a;a,b",
 $1:function(a){this.b.push(a)},
 $S:function(){return H.d5(function(a){return{func:1,args:[a]}},this.a,"bM")}},
 oJ:{"^":"a:2;a,b",
-$0:function(){this.b.bh(this.a)}},
+$0:function(){this.b.bi(this.a)}},
 d0:{"^":"d;ce:b<,$ti",
 ghG:function(){if((this.b&8)===0)return this.a
 return this.a.c},
@@ -2658,7 +2658,7 @@ this.a=z}return z}y=this.a
 z=y.c
 if(z==null){z=new P.e8(null,null,0,this.$ti)
 y.c=z}return z},
-gbi:function(){if((this.b&8)!==0)return this.a.c
+gbj:function(){if((this.b&8)!==0)return this.a.c
 return this.a},
 bQ:function(){if((this.b&4)!==0)return new P.u("Cannot add event after closing")
 return new P.u("Cannot add event while adding a stream")},
@@ -2666,12 +2666,12 @@ i5:function(a,b){var z,y,x,w
 z=this.b
 if(z>=4)throw H.c(this.bQ())
 if((z&2)!==0){z=new P.K(0,$.q,null,[null])
-z.bg(null)
+z.bh(null)
 return z}z=this.a
 y=new P.K(0,$.q,null,[null])
 x=a.bn(this.ghj(),!1,this.ghk(),this.ghg())
 w=this.b
-if((w&1)!==0?(this.gbi().e&4)!==0:(w&2)===0)x.fj()
+if((w&1)!==0?(this.gbj().e&4)!==0:(w&2)===0)x.fj()
 this.a=new P.qG(z,y,x,this.$ti)
 this.b|=8
 return y},
@@ -2697,7 +2697,7 @@ else if((z&3)===0)this.dw().v(0,new P.e3(a,b,null))},"$2","ghg",4,0,40],
 ev:[function(){var z=this.a
 this.a=z.c
 this.b&=4294967287
-z.a.bg(null)},"$0","ghk",0,0,7],
+z.a.bh(null)},"$0","ghk",0,0,7],
 hQ:function(a,b,c,d){var z,y,x,w,v
 if((this.b&3)!==0)throw H.c(new P.u("Stream has already been listened to."))
 z=$.q
@@ -2731,15 +2731,15 @@ qI:{"^":"a:2;a",
 $0:function(){P.eg(this.a.d)}},
 qH:{"^":"a:7;a",
 $0:function(){var z=this.a.c
-if(z!=null&&z.a===0)z.bg(null)}},
+if(z!=null&&z.a===0)z.bh(null)}},
 qP:{"^":"d;$ti",
-cb:function(a){this.gbi().c5(a)},
-cd:function(a,b){this.gbi().dn(a,b)},
-cc:function(){this.gbi().ev()}},
+cb:function(a){this.gbj().c5(a)},
+cd:function(a,b){this.gbj().dn(a,b)},
+cc:function(){this.gbj().ev()}},
 q3:{"^":"d;$ti",
-cb:function(a){this.gbi().bP(new P.e2(a,null,[H.j(this,0)]))},
-cd:function(a,b){this.gbi().bP(new P.e3(a,b,null))},
-cc:function(){this.gbi().bP(C.x)}},
+cb:function(a){this.gbj().bP(new P.e2(a,null,[H.j(this,0)]))},
+cd:function(a,b){this.gbj().bP(new P.e3(a,b,null))},
+cc:function(){this.gbj().bP(C.x)}},
 q2:{"^":"d0+q3;a,b,c,d,e,f,r,$ti"},
 qO:{"^":"d0+qP;a,b,c,d,e,f,r,$ti"},
 cY:{"^":"qJ;a,$ti",
@@ -2758,10 +2758,10 @@ if((z.b&8)!==0)z.a.b.ft()
 P.eg(z.f)},"$0","geO",0,0,7]},
 pN:{"^":"d;$ti",
 ck:function(){var z=this.b.ck()
-if(z==null){this.a.bg(null)
+if(z==null){this.a.bh(null)
 return}return z.bI(new P.pO(this))}},
 pO:{"^":"a:2;a",
-$0:function(){this.a.a.bg(null)}},
+$0:function(){this.a.a.bh(null)}},
 qG:{"^":"pN;c,a,b,$ti"},
 e1:{"^":"d;ce:e<,$ti",
 hO:function(a){if(a==null)return
@@ -2930,7 +2930,7 @@ $0:function(){return this.a.b5(this.b,this.c)}},
 qY:{"^":"a:29;a,b",
 $2:function(a,b){P.qW(this.a,this.b,a,b)}},
 r0:{"^":"a:2;a,b",
-$0:function(){return this.a.bh(this.b)}},
+$0:function(){return this.a.bi(this.b)}},
 cw:{"^":"d;f6:a<,bO:b<",
 i:function(a){return H.b(this.a)},
 $isa6:1},
@@ -3411,7 +3411,7 @@ for(z=new P.ae(this,this.r,null,null,[null]),z.c=this.e;z.w();){y=z.d
 if(b.$1(y))return y}if(c!=null)return c.$0()
 throw H.c(H.aK())},
 cY:function(a,b){return this.aX(a,b,null)},
-be:function(a,b){var z,y,x,w
+bf:function(a,b){var z,y,x,w
 for(z=new P.ae(this,this.r,null,null,[null]),z.c=this.e,y=null,x=!1;z.w();){w=z.d
 if(b.$1(w)){if(x)throw H.c(H.dq())
 y=w
@@ -4060,7 +4060,7 @@ z.a="start"
 z=new O.cT([new N.nC(this),[null,P.a1(["goto","gameLoop"])]],0,null,!1,!1)
 y.u(0,"gameLoop",z)
 z.a="gameLoop"
-z=new O.cT(['<p class="meta">\n  Hit <strong>Restart</strong> (top left) to play again. It will be different.\n</p>'],0,null,!1,!1)
+z=new O.cT(['<p class="meta">\n  Hit <strong>Restart</strong> (top left) to play again. It will be different.\n  Hit <strong>Info</strong> to learn more about this egamebook, and its\n  sequel.\n</p>'],0,null,!1,!1)
 y.u(0,"endGame",z)
 z.a="endGame"
 this.c=y.h(0,"start")},
@@ -4298,7 +4298,7 @@ kI:{"^":"a:2;a",
 $0:function(){var z=this.a.fr.d
 return"- how we got here: "+new H.al(z,new O.kH(),[H.j(z,0),null]).cr(0," <- ")}},
 kH:{"^":"a:0;",
-$1:function(a){return a.gbd()}},
+$1:function(a){return a.gbe()}},
 kJ:{"^":"a:0;a",
 $1:function(a){return this.a.y.U(C.q,a,null,null)}},
 kN:{"^":"a:51;",
@@ -4333,7 +4333,7 @@ z=this.a.fr.d
 y=new H.al(z,new O.kB(),[H.j(z,0),null]).cr(0," <- ")
 return"- how "+H.b(this.b.dx)+" got here: "+y}},
 kB:{"^":"a:0;",
-$1:function(a){return a.gbd()}}}],["","",,Q,{"^":"",
+$1:function(a){return a.gbe()}}}],["","",,Q,{"^":"",
 i1:function(a,b,c){return P.aQ(function(){var z=a,y=b,x=c
 var w=0,v=1,u,t,s,r,q,p
 return function $async$i1(d,e){if(d===1){u=e
@@ -4397,7 +4397,7 @@ case 7:case 6:return P.aO()
 case 1:return P.aP(t)}}})},
 eu:function(a,b,c,d,e,f){var z,y,x,w,v,u,t
 a.x=this
-z=a.a.be(0,new Q.iR(b))
+z=a.a.bf(0,new Q.iR(b))
 y=new O.eE(null,null,null,null,null,null,null,null,null,null,null,null,null)
 x=this.gn()
 y.ga3().c=x
@@ -4472,7 +4472,7 @@ i:function(a){return"ItemAction<"+this.gX()+">"}},
 nj:{"^":"d;a,b",
 i:function(a){return this.b}}}],["","",,O,{"^":"",cu:{"^":"d;",
 i:function(a){return"ActionRecord<"+H.b(this.b)+", "+H.b(this.d)+">"}},m5:{"^":"d;a,b",
-i:function(a){return this.b}},pt:{"^":"cu;a,dK:b<,dU:c<,bd:d<,e,cu:f<,er:r<,V:x<,fF:y<,z,fG:Q<,fH:ch<",
+i:function(a){return this.b}},pt:{"^":"cu;a,dK:b<,dU:c<,be:d<,e,cu:f<,er:r<,V:x<,fF:y<,z,fG:Q<,fH:ch<",
 af:function(a){var z=new O.eE(null,null,null,null,null,null,null,null,null,null,null,null,null)
 z.j(this)
 a.$1(z)
@@ -4524,7 +4524,7 @@ y.m(z,"wasSuccess",this.ch)
 return y.i(z)}},eE:{"^":"d;a,b,c,d,e,f,r,x,y,z,Q,ch,cx",
 gdK:function(){return this.ga3().c},
 gdU:function(){return this.ga3().d},
-gbd:function(){return this.ga3().e},
+gbe:function(){return this.ga3().e},
 gcu:function(){return this.ga3().r},
 ger:function(){var z,y
 z=this.ga3()
@@ -4928,7 +4928,7 @@ case C.y:return"shield"
 case C.v:return"spear"
 case C.z:return"sword"}throw H.c(P.F(a))},
 D:{"^":"mr;fC:a<",
-gbd:function(){return U.ws(C.a.gdY(this.a))},
+gbe:function(){return U.ws(C.a.gdY(this.a))},
 gq:function(){return H.aA(this)},
 gbV:function(){return!0},
 gam:function(){return!1},
@@ -5046,7 +5046,7 @@ while(true)switch(z){case 0:w=x.f
 w.aW(0)
 v=x.c
 u=v.a
-t=u.a.be(0,new G.je(x))
+t=u.a.bf(0,new G.je(x))
 s=t.cE(u)
 r=x.a
 r.U(C.q,"Planning for "+H.b(t.dx)+", initialScore="+s.i(0),null,null)
@@ -5117,7 +5117,7 @@ break
 case 1:v=b1
 z=w}while(true)switch(z){case 0:s={}
 r=a5.a
-q=r.a.be(0,new G.iW(t))
+q=r.a.bf(0,new G.iW(t))
 p=t.a
 p.U(C.l,"=====",null,null)
 p.U(C.l,new G.iX(a6,q),null,null)
@@ -5168,7 +5168,7 @@ i=new H.I(j,new G.j_(t),[H.j(j,0)])
 d=i.gt(i)
 if(d>1)throw H.c(new P.u("World has several duplicates of mainActor: "+J.J(l)))
 else if(d===0){p.U(C.B,"mainActor "+H.b(r)+" dies and is removed in world - will use defaultScoreWhenDead",null,null)
-q=null}else q=j.be(0,new G.j0(t))
+q=null}else q=j.bf(0,new G.j0(t))
 c=J.t(e,q)
 j=e.dx
 p.U(C.j,"- actor: "+H.b(j)+" (isMain=="+c+")",null,null)
@@ -5238,7 +5238,7 @@ return"- situation: "+J.iI(z.length!==0?C.a.gE(z):null).i(0)}},j7:{"^":"a:2;a,b,
 $0:function(){return"- order ("+this.c.ge4()+") higher than maximum ("+this.b+"), or consequences ("+this.a.a+") higher than maximum"}},j8:{"^":"a:2;a",
 $0:function(){var z=this.a.gcA().d
 return"- how we got here: "+new H.al(z,new G.iV(),[H.j(z,0),null]).cr(0," <- ")}},iV:{"^":"a:0;",
-$1:function(a){return a.gbd()}},j9:{"^":"a:0;a",
+$1:function(a){return a.gbe()}},j9:{"^":"a:0;a",
 $1:function(a){var z,y
 z=a.gq()
 y=this.a.b
@@ -5256,7 +5256,7 @@ return z==null?y==null:z===y}},j1:{"^":"a:2;a,b",
 $0:function(){return"- mainActor's score == "+this.b.i(0)+" (initial="+this.a.i(0)+")"}},j2:{"^":"a:2;a",
 $0:function(){var z=this.a.gcA().d
 return"- how we got here: "+new H.al(z,new G.iU(),[H.j(z,0),null]).cr(0," <- ")}},iU:{"^":"a:0;",
-$1:function(a){return a.gbd()}}}],["","",,Z,{"^":"",mO:{"^":"d;a,b",
+$1:function(a){return a.gbe()}}}],["","",,Z,{"^":"",mO:{"^":"d;a,b",
 ga0:function(a){return this.b.length===0},
 fk:function(a,b){var z=this
 return P.aQ(function(){var y=a,x=b
@@ -5374,7 +5374,7 @@ B:{
 Y:function(a,b,c,d,e,f,g){var z=new S.N(null,null,[Q.n])
 z.ac()
 z.j(f)
-return new K.cd(z.p(),a,b,c,d,e,g)}}}}],["","",,Q,{"^":"",n:{"^":"d;a,X:b<,bd:c<,d"}}],["","",,S,{"^":"",ad:{"^":"d;",
+return new K.cd(z.p(),a,b,c,d,e,g)}}}}],["","",,Q,{"^":"",n:{"^":"d;a,X:b<,be:c<,d"}}],["","",,S,{"^":"",ad:{"^":"d;",
 gau:function(){return C.h},
 gbv:function(){return C.h},
 gd3:function(){return 3},
@@ -5416,7 +5416,7 @@ o=o.charCodeAt(0)==0?o:o
 if(u===v-1)return o
 else return S.bI(o)}else if(u===v-1)return a
 else{v=u+1
-return C.c.aw(a,0,v)+H.b(S.bI(C.c.bf(a,v)))}}else return a},
+return C.c.aw(a,0,v)+H.b(S.bI(C.c.bg(a,v)))}}else return a},
 a7:function(a,b,c,d){var z=c!=null?3:2
 switch($.$get$bH().ak(z)){case 0:a.$0()
 break
@@ -5741,7 +5741,7 @@ y=z.length
 if(y===0)return z
 x=z[0].toUpperCase()
 if(y===1)return x
-else return x+C.c.bf(z,1)}}},ou:{"^":"a:0;",
+else return x+C.c.bg(z,1)}}},ou:{"^":"a:0;",
 $1:function(a){return J.t(a.gbc(),"\n\n")}},os:{"^":"a:19;",
 $1:function(a){return C.c.de(H.k(H.k(a,"<also> ",""),"  "," "))}},ov:{"^":"a:48;",
 $2:function(a,b){var z,y,x,w
@@ -5869,7 +5869,7 @@ S:function(a,b){var z
 if(b==null)return!1
 z=J.o(b)
 return!!z.$isa4&&this.gD(this)===z.gD(b)},
-bk:function(a){var z,y
+bd:function(a){var z,y
 z=this.fM(a,!0)
 y=z.ga1(z)
 if(y.w()){y.gT()
@@ -5894,8 +5894,8 @@ return d!=null?z.bJ(0,new A.pn(d)):z},
 fM:function(a,b){return this.cB(a,null,null,null,b)},
 fN:function(a,b,c){return this.cB(a,b,null,null,c)},
 fL:function(a){return this.cB(a,null,null,null,null)},
-A:function(a){return this.a.be(0,new A.po(a))},
-di:function(a){return this.e.be(0,new A.pp(a))},
+A:function(a){return this.a.bf(0,new A.po(a))},
+di:function(a){return this.e.bf(0,new A.pp(a))},
 ek:function(a){var z=this.cO(a)
 if(z==null)return
 return this.f[z]},
@@ -9009,8 +9009,8 @@ return z}}}],["","",,O,{"^":"",
 tE:function(a,b){var z,y,x,w,v,u,t,s,r,q
 b.l(0,"<p class='meta'>",!0)
 b.l(0,"Thanks for playing _Insignificant Little Vermin._",!0)
-z=a.bk("take_orcthorn")
-y=a.bk("smelter_throw_spear")
+z=a.bd("take_orcthorn")
+y=a.bd("smelter_throw_spear")
 x=a.A(1)
 x.a2(b,"<subject> "+(z?"took":"didn't find")+" Orcthorn")
 x.ab(b,"<subject> "+(y?"destroyed":"didn't destroy")+" the iron monster",z!==y)
@@ -9027,9 +9027,9 @@ q.a2(b,"<subject> <is> "+(q.x>=2?"uninjured":"wounded"))
 b.l(0,"The important thing, though, is that you survived. <strong>Congratulations!</strong>",!0)
 b.l(0,"</p>",!0)},
 tL:function(a,b){var z,y,x
-z=a.bk("take_orcthorn")
-y=a.bk("smelter_throw_spear")
-x=a.bk("guardpost_above_church_enter_tunnel_with_cancel")
+z=a.bd("take_orcthorn")
+y=a.bd("smelter_throw_spear")
+x=a.bd("guardpost_above_church_enter_tunnel_with_cancel")
 if(z||y||x){a.a9("RoomRoamingSituation").bD(a,a.A(1),"tunnel",b,!1)
 return}a.a9("RoomRoamingSituation").bD(a,a.A(1),"tunnel_cancel_chance",b,!1)},
 tN:function(a,b){var z=a.A(1).cy.a.aX(0,new O.tO(),null)
@@ -9300,7 +9300,7 @@ uY:{"^":"a:6;a",
 $2:function(a,b){var z,y
 z=a.A(this.a)
 y=a.A(1)
-if(a.bk("take_spear_in_underground_church")){z.e9(b,"<subject> look<s> at <object-owner's> <object>",$.$get$eb(),y)
+if(a.bd("take_spear_in_underground_church")){z.e9(b,"<subject> look<s> at <object-owner's> <object>",$.$get$eb(),y)
 z.ap(b,'"Thief," <subject> hiss<es>.',!0)}}},
 wm:{"^":"a:0;a",
 $1:function(a){var z,y,x
@@ -9344,11 +9344,11 @@ gJ:function(){return},
 gN:function(){return"You have taken his weapon but there might be other useful items in his pocket."},
 gI:function(){return!1}},
 rR:{"^":"a:5;",
-$3:function(a,b,c){c.l(0,'Only a few bends ahead, the tunnel gets blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. \n\n\nYou have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. \n\n\nBut merely two breaths later, you are again in motion, jumping down a sharply descending path. Outside, it\'s you and Briana who have the upper hand \u2014 the orcs and goblins groan and stumble. This is still their territory, but the bright sun and the lack of cave walls rubs against all their instincts. These are cave breeds.\n\n\nSoon, they stop following altogether, presumably leaving the two of you to their aboveground brothers. You don\'t dare to stop but you gradually slow down, and then lift your eyes from the treacherous terrain.\n\n\nAt first, you cannot make much sense of what you see \u2014 this is nothing like the country you left three years ago. You look at Briana but she doesn\'t seem surprised. You turn your eyes to the scenery again, to the black smoke of orc camps and razed villages, to the burned forests, to the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview hill. \n\n\nNo birds, only some horrible dark eagle-like creatures with no head, circling in both directions above Mount Bloodrock.\n\n\n_"We must stop this."_\n\n\nBriana follows your gaze, then shakes her head. "This is much larger than us, Aren. We\'ve both seen what takes place in the mountain. Now you can see what has happend outside. This is a problem for kings, not peasants."\n\n\n_"No king has what we have."_\n\n\n',!0)
-if(b.aj("take_orcthorn"))c.l(0,'"Orcthorn? Bah, you think they\'ll let you have it? A farm boy?" \n\n\n_"I\'m not a farm boy. And I don\'t mean Orcthorn, no. I have a connection. We both do."_\n',!0)
+$3:function(a,b,c){c.l(0,'Only a few bends ahead, the tunnel gets blindingly bright and the empty smell of mountain air fills your nose. After three years, you hear the howling wind. You run through a small stone portal and out of the mountain you thought would be your grave. \n\n\nYou have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. \n\n\nBut merely two breaths later, you are again in motion, jumping down a sharply descending path. Your pursuers are close behind. Outside, it\'s you and Briana who have the upper hand \u2014 the orcs and goblins groan and stumble. This is still their territory but the bright sun and the lack of cave walls rubs against their instincts. These are cave breeds.\n\n\nSoon, they stop following altogether, presumably leaving the two of you to their aboveground brothers. You don\'t dare to stop but you gradually slow down, and then lift your eyes from the treacherous terrain.\n\n\nAt first, you cannot make much sense of what you see \u2014 this is nothing like the country you left three years ago. You look at Briana but she doesn\'t seem surprised. You turn your eyes to the scenery again, to the black smoke of orc camps and razed villages, to the burned forests, to the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview hill. \n\n\nNo birds, only some horrible dark eagle-like creatures with no head, circling in both directions above Mount Bloodrock.\n\n\n_"We must stop this."_\n\n\nBriana follows your gaze, then shakes her head. "This is much larger than us, Aren. We\'ve both seen what takes place in the mountain. Now you can see what has happend outside. This is a problem for kings, not peasants."\n\n\n_"No king has what we have."_\n\n\n',!0)
+if(b.aj("take_orcthorn"))c.l(0,'"Orcthorn? Bah, you think they\'ll let you have it? A farm boy?" \n\n\n_"I am_ not _a farm boy. And I don\'t mean Orcthorn, no. I have a connection. We both do."_\n',!0)
 c.l(0,"\n",!0)
-if(!b.aj("take_orcthorn"))c.l(0,"\"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy.\" \n\n\n_\"I'm not a farm boy. And I don't mean muscles or brains, no. I have a connection. We both do.\"_\n",!0)
-c.l(0,'\n"A connection."\n\n\n_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too \u2014 I am sure of it \u2014 but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_\n\n\n"So the thing you have that kings don\'t is\u2026 a way to communicate? Negotiate?"\n\n\n_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_\n\n\n"And your plan is?"\n\n\n[IMG long view of the road ahead]\n\n\n_"Not letting him have it. Giving him the exact opposite of what he wants."_\n\n\n"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"\n\n\n_"Yes."_\n\n\n"That others would do exactly that."\n\n\n_"But we will not."_\n\n\n"No. We will not."\n\n\nWith that, you both start down the road towards the black fort in the distance. \n\n\nTHE END.\n\n\n',!0)
+if(!b.aj("take_orcthorn"))c.l(0,'"Let me guess. Muscles and a bit of brains? Don\'t be a fool, you\'re still a farm boy." \n\n\n_"I am_ not _a farm boy. And I do not mean muscles or brains, no. I have a connection. We both do."_\n',!0)
+c.l(0,'\n"A connection."\n\n\n_"With the Dead Prince. I dream his dreams. I think I have some of his power. He is more than people think. A lot more. You feel it, too \u2014 I am sure of it \u2014 but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_\n\n\n"So the thing you have that kings don\'t is\u2026 a way to communicate? Negotiate?"\n\n\n_"Negotiate? No. I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_\n\n\n"And your plan is?"\n\n\n[IMG long view of the road ahead]\n\n\n_"Not letting him have it. Giving him the exact opposite of what he wants."_\n\n\n"You know we could just run as fast as we can, slaying some orcs along the way, and getting as far away from this place as possible, right?"\n\n\n_"Yes."_\n\n\n"That others would do exactly that."\n\n\n_"But we will not."_\n\n\n"No. We will not."\n\n\nWith that, you both start down the road towards the black fort in the distance. \n\n\nTHE END.\n\n\n',!0)
 O.tE(b,c)
 c.l(0,"",!0)}},
 rS:{"^":"a:5;",
@@ -9365,7 +9365,7 @@ if(O.aZ(b,"underground_church"))c.l(0,'The passage you came from is marked with 
 c.l(0,"\nA third passage is marked \"Up Door\", and a few paces beyond the opening, it turns into a steep stairway upwards. This is it, if you're ready for it. Your final path to escape, an end to those three horrible years. For the first time, you see a smile on Briana's face. Not a smirk or an angry taunt of a laugh, but a genuine smile. \"_Up Door?_\" she whispers, shaking hear head. \"I can't believe we've made it this far.\"\n\n\nLeaning on the wall next to the third exit is a goblin guard. He's sleeping. He holds a scimitar in one hand, and there's a shield laid on his lap.\n",!0)}},
 rO:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"",!0)
-if(b.aj("guardpost_above_church_take_shield")&&!b.bk("guardpost_above_church_take_shield"))c.v(0,"The goblin's corpse is sprawled on the ground in the middle of the circular room.")
+if(b.aj("guardpost_above_church_take_shield")&&!b.bd("guardpost_above_church_take_shield"))c.v(0,"The goblin's corpse is sprawled on the ground in the middle of the circular room.")
 else c.v(0,"The goblin is sleeping soundly next to the exit to the Upper Door.")
 c.l(0,"",!0)}},
 lp:{"^":"R;X:c<,n:d<,b,a",
@@ -9407,12 +9407,12 @@ z.j(this)
 new V.lw().$1(z)
 return z.p()},
 at:function(a,b){if(a!==0)return
-return b.a.be(0,new V.lx())},
-aM:function(a,b){return[a.be(0,new V.ly())]}},
+return b.a.bf(0,new V.lx())},
+aM:function(a,b){return[a.bf(0,new V.ly())]}},
 tj:{"^":"a:0;",
 $1:function(a){var z=$.$get$a9().ak(1073741823)
-a.gbj().b=z
-a.gbj().c=0
+a.gbk().b=z
+a.gbk().c=0
 return a}},
 lt:{"^":"a:26;",
 $4:function(a,b,c,d){J.bw(c,"You stay frozen in place. After a while, the strain of holding the awkward position start to show. Your left leg is shaking, and a drop of sweat is forming on your nose, threatening to fall on the goblin's leg.\n\n\nFortunately, at about that moment the goblin shifts again and his expression gets visibly more relaxed. His breath is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then fix the shield on your offhand.",!0)
@@ -9432,8 +9432,8 @@ b.ao()
 O.er(a,b,c,!1)
 return"GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)"}},
 lw:{"^":"a:0;",
-$1:function(a){var z=a.gbj().c
-a.gbj().c=z+1
+$1:function(a){var z=a.gbk().c
+a.gbk().c=z+1
 return a}},
 lx:{"^":"a:0;",
 $1:function(a){return a.gb1()}},
@@ -9539,7 +9539,7 @@ rC:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"You can see Briana clutching her fists. \"Are we homesick already?\" she says. But she doesn't wait for reply, and presses on.\n\n\nIt doesn't take long before you start hearing voices. Orcs and goblins shouting commands, mostly. Then human screams.\n\n\nThe tunnel gets wider and better lit by torches. The walls are smoother. You stop down next to a small, reinforced door. Up ahead, something is happening. A human slave is running towards you. His hand is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips are moving but there is no sound anymore, only pain. Eyes in tears, he doesn't see you or anything else.\n\n\nBefore you can so much as call to him, something long and sharp shoots from behind the slave, and into his back. A bloodied spearhead appears in the center of the man's chest, as if growing from there. The tearful eyes go down, looking at the fatal wound. Two more steps and the slave falls face down, the shaft of the spear protruding upwards from his back.\n\n\nAn orc and a goblin appear from the tunnel, walking towards the dead man. The orc is laughing, patting his companion on the back. \"Vicious throw, small one!\" he roars.\n\n\nYou step back and motion Briana to lean on the wall, hoping that the door's embossed frame will provide enough cover before the two slavers turn again. \n\n\nBut at that time, something or someone smashes on that very door from the inside. Then come angry growls and something akin to barking and howling.\n\n\nThe door stays shut but the two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They start towards you.\n\n\n![Picture of the sadistic slavers](img/sadistic-slavers.jpg)\n",!0)}},
 rD:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"",!0)
-if(b.a9("RoomRoamingSituation").bU(b,b.A(1),"orcthorn_room")&&!O.aZ(b,"orcthorn_room"))c.l(0,"The small door on the side of the corridor is open.",!0)
+if(b.a9("RoomRoamingSituation").bU(b,b.A(1),"orcthorn_room")&&!O.aZ(b,"orcthorn_room"))c.l(0,"The small door on the side of the corridor is silent.",!0)
 c.l(0,"\n",!0)
 if(!b.a9("RoomRoamingSituation").bU(b,b.A(1),"orcthorn_room"))c.l(0,"The small door on the side of the corridor is closed.",!0)
 c.l(0,"\n",!0)
@@ -9569,7 +9569,7 @@ if(O.aZ(b,"guardpost_above_church"))c.l(0,"Not far from here there is a short tu
 c.l(0,"",!0)}},
 rB:{"^":"a:5;",
 $3:function(a,b,c){c.l(0,"The reds and whites of the molten steel reflect in the heaps of coal.\n\n\n",!0)
-if(b.bk("smelter_look_around"))c.l(0,"About a spear's throw away, the ogre is {closing the flow of molten steel|waiting for commands from the forges}.",!0)
+if(b.bd("smelter_look_around")&&!b.bd("smelter_throw_spear"))c.l(0,"About a spear's throw away, the ogre is {closing the flow of molten steel|waiting for commands from the forges}.",!0)
 c.l(0,"\n",!0)
 O.cq(b,c)
 c.l(0,"",!0)}},
@@ -9778,17 +9778,17 @@ y.m(z,"id",this.a)
 y.m(z,"time",this.b)
 return y.i(z)}},
 dn:{"^":"d;a,b,c",
-gq:function(){return this.gbj().b},
-gV:function(){return this.gbj().c},
-gbj:function(){var z=this.a
+gq:function(){return this.gbk().b},
+gV:function(){return this.gbk().c},
+gbk:function(){var z=this.a
 if(z!=null){this.b=z.a
 this.c=z.b
 this.a=null}return this},
 j:function(a){this.a=a},
 p:function(){var z,y,x
 z=this.a
-if(z==null){y=this.gbj().b
-x=this.gbj().c
+if(z==null){y=this.gbk().b
+x=this.gbk().c
 z=new V.pz(y,x)
 if(y==null)H.e(P.i("id"))
 if(x==null)H.e(P.i("time"))}this.j(z)
@@ -9816,7 +9816,7 @@ m.toString
 l=new A.p(100,null,null,null,null)
 l.e=n.K()
 m.a.F(l.K())
-new P.K(0,$.q,null,[null]).bg(!0)}if(t.r){n=t.Q
+new P.K(0,$.q,null,[null]).bh(!0)}if(t.r){n=t.Q
 n.toString
 m=new A.p(667,null,null,null,null)
 m.c="Saving player chronology."
@@ -9919,7 +9919,7 @@ n.b=[q,u]
 n.c=o
 r.a.F(n.K())
 r=new P.K(0,$.q,null,[null])
-r.bg(null)
+r.bh(null)
 r.bH(new O.nL(v))
 x=!0
 z=1
@@ -10658,13 +10658,13 @@ K:function(){var z=new H.Q(0,null,null,null,null,null,0,[P.l,P.d])
 this.a.Z(0,new Z.om(z))
 return z},
 Z:function(a,b){this.a.Z(0,b)}},om:{"^":"a:39;a",
-$2:function(a,b){this.a.u(0,a,P.a1(["show",b.a,"string",b.b]))}},hh:{"^":"d;n:a<,bd:b<,c,e6:d<,e,f,bc:r<",B:{
+$2:function(a,b){this.a.u(0,a,P.a1(["show",b.a,"string",b.b]))}},hh:{"^":"d;n:a<,be:b<,c,e6:d<,e,f,bc:r<",B:{
 hi:function(a){var z,y,x,w,v
 z=H.m(new Array(a.length),[Z.hh])
 for(y=a.length,x=0,w=0;w<a.length;a.length===y||(0,H.aw)(a),++w){v=a[w]
 z[x]=new Z.hh(v.h(0,"name"),v.h(0,"description"),v.h(0,"color"),v.h(0,"priority"),v.h(0,"show"),v.h(0,"notifyOnChange"),v.h(0,"string"));++x}C.a.bN(z,new Z.pb())
 return z}}},pb:{"^":"a:6;",
-$2:function(a,b){return b.ge6()-a.ge6()}},as:{"^":"d;n:a<,bd:b<,c,d,e6:e<,f,r,x,i7:y<,f0:z<,$ti",
+$2:function(a,b){return b.ge6()-a.ge6()}},as:{"^":"d;n:a<,be:b<,c,d,e6:e<,f,r,x,i7:y<,f0:z<,$ti",
 gal:function(){return this.f},
 sal:function(a){if(!J.t(this.f,a)){this.f=a
 this.y=!0
@@ -10745,7 +10745,7 @@ if(C.c.cG(z,"."))H.e(P.F("name shouldn't start with a '.'"))
 y=C.c.iO(z,".")
 if(y===-1)x=z!==""?N.bf(""):null
 else{x=N.bf(C.c.aw(z,0,y))
-z=C.c.bf(z,y+1)}w=new H.Q(0,null,null,null,null,null,0,[P.l,N.dA])
+z=C.c.bg(z,y+1)}w=new H.Q(0,null,null,null,null,null,0,[P.l,N.dA])
 w=new N.dA(z,x,null,w,new P.hk(w,[null,null]),null)
 if(x!=null)x.d.u(0,z,w)
 return w}},aV:{"^":"d;n:a<,al:b<",
