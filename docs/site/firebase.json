@@ -17,15 +17,6 @@
         ]
       },
       {
-        "source": "/vermin/v/**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=2592000"
-          }
-        ]
-      },
-      {
         "source": "**/*.@(jpg|jpeg|gif|png|ico)",
         "headers": [
           {
