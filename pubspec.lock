@@ -139,12 +139,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
-  dart_to_js_script_rewriter:
-    description:
-      name: dart_to_js_script_rewriter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
   egamebook:
     description:
       path: "../egamebook"
@@ -348,7 +342,7 @@ packages:
       path: "../slot_machine"
       relative: true
     source: path
-    version: "4.0.0"
+    version: "5.0.0"
   source_gen:
     description:
       name: source_gen

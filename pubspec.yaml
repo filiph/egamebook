@@ -9,7 +9,6 @@ environment:
 
 dependencies:
   browser: ^0.10.0+2
-  dart_to_js_script_rewriter: ^1.0.3
   built_collection: ^1.4.1
   built_value: ^4.1.1
   egamebook:
@@ -33,5 +32,4 @@ dev_dependencies:
 transformers:
 - $dart2js:
     commandLineOptions: [--trust-type-annotations, --trust-primitives]
-- dart_to_js_script_rewriter
 - sass
