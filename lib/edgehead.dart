@@ -72,6 +72,8 @@ class ScripterImpl extends Scripter {
       [
           """<p class="meta">
   Hit <strong>Restart</strong> (top left) to play again. It will be different.
+  Hit <strong>Info</strong> to learn more about this egamebook, and its
+  sequel.
 </p>"""
 ]
     );

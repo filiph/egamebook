@@ -32,7 +32,7 @@ The door stays shut but the two slavers are now looking directly at you. The gob
 SHORT_DESCRIPTION:
 [[CODE]]
 if (playerHasVisited(w, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
-  s.add("The small door on the side of the corridor is open.", wholeSentence: true);
+  s.add("The small door on the side of the corridor is silent.", wholeSentence: true);
 }
 [[/CODE]]
 

@@ -120,7 +120,7 @@ Room exitFromBloodrock =
 You have to close your eyes to keep the blinding sun out. You let the wind chill your muscles. 
 
 
-But merely two breaths later, you are again in motion, jumping down a sharply descending path. Outside, it\'s you and Briana who have the upper hand — the orcs and goblins groan and stumble. This is still their territory, but the bright sun and the lack of cave walls rubs against all their instincts. These are cave breeds.
+But merely two breaths later, you are again in motion, jumping down a sharply descending path. Your pursuers are close behind. Outside, it\'s you and Briana who have the upper hand — the orcs and goblins groan and stumble. This is still their territory but the bright sun and the lack of cave walls rubs against their instincts. These are cave breeds.
 
 
 Soon, they stop following altogether, presumably leaving the two of you to their aboveground brothers. You don\'t dare to stop but you gradually slow down, and then lift your eyes from the treacherous terrain.
@@ -148,7 +148,7 @@ _"No king has what we have."_
 "Orcthorn? Bah, you think they'll let you have it? A farm boy?" 
 
 
-_"I'm not a farm boy. And I don't mean Orcthorn, no. I have a connection. We both do."_
+_"I am_ not _a farm boy. And I don't mean Orcthorn, no. I have a connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -159,7 +159,7 @@ _"I'm not a farm boy. And I don't mean Orcthorn, no. I have a connection. We bot
 "Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
 
 
-_"I'm not a farm boy. And I don't mean muscles or brains, no. I have a connection. We both do."_
+_"I am_ not _a farm boy. And I do not mean muscles or brains, no. I have a connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -173,7 +173,7 @@ _"With the Dead Prince. I dream his dreams. I think I have some of his power. He
 "So the thing you have that kings don\'t is… a way to communicate? Negotiate?"
 
 
-_"I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
+_"Negotiate? No. I do not have anything the Dead Prince wants. No, I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
 
 
 "And your plan is?"
@@ -947,7 +947,7 @@ The door stays shut but the two slavers are now looking directly at you. The gob
   s.add('', wholeSentence: true);
   if (playerHasVisited(w, "orcthorn_room") &&
       !justCameFrom(w, "orcthorn_room")) {
-    s.add("The small door on the side of the corridor is open.",
+    s.add("The small door on the side of the corridor is silent.",
         wholeSentence: true);
   }
   s.add('''
@@ -1056,7 +1056,8 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
 
 
 ''', wholeSentence: true);
-  if (w.actionHasBeenPerformedSuccessfully("smelter_look_around")) {
+  if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
+      !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")) {
     s.add(
         "About a spear's throw away, the ogre is {closing the flow of molten steel|waiting for commands from the forges}.",
         wholeSentence: true);

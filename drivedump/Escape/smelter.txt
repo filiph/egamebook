@@ -24,7 +24,7 @@ The reds and whites of the molten steel reflect in the heaps of coal.
 
 
 [[CODE]]
-if (w.actionHasBeenPerformedSuccessfully("smelter_look_around")) {
+if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") && !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")) {
   s.add("About a spear's throw away, the ogre is {closing the flow of molten steel|waiting for commands from the forges}.", wholeSentence: true);
 }
 [[/CODE]]
