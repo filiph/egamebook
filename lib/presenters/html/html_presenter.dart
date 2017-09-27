@@ -112,7 +112,8 @@ class HtmlPresenter extends Presenter {
         infoDialog.classes.remove("display-none");
       });
 
-      final infoDialogClose = infoDialog.querySelector('.button');
+      final infoDialogClose =
+          infoDialog.querySelectorAll('.dialog-buttons .button').single;
       infoDialogClose.onClick.listen((_) {
         infoDialog.classes.add("display-none");
       });
