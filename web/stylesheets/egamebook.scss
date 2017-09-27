@@ -1,5 +1,5 @@
 @import "reset";
-
+@import "mailchimp";
 
 $max-width: 40rem;
 
@@ -399,6 +399,22 @@ div.dialog table {
   }
 }
 
+.dialog-content h3 {
+  font-weight: bold;
+
+}
+
+// Info dialog
+
+#mc_embed_signup {
+  background:#fff;
+  clear:left;
+  font:14px Helvetica,Arial,sans-serif;
+}
+
+#mc_embed_signup .button {
+  color: black;
+}
 
 // TYPOGRAPHY
 
