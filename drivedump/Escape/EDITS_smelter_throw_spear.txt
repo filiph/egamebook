@@ -1,0 +1,83 @@
+﻿ACTION: $smelter_throw_spear
+COMMAND: Throw spear at the ogre
+
+
+FOR_LOCATION: $smelter
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+&&
+w.actionHasBeenPerformed("war_forge_watch_workers") 
+&&
+w.actionHasBeenPerformed("smelter_look_around") 
+&&
+getPlayer(w).hasItem(ItemType.spear)
+
+
+// TODO (nice-to-have) have a non 100% probability. Failure still leads to ogre falling into molten still, just the throw is a little worse. Should not be rescue-able, as we don't want people to spend their resources for nothing (that would feel unfair).
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+You can't come any closer to the blind ogre — there is the pool of molten steel between you, and going around it would surely cause the nearby orcs to notice you. You wait for the ogre to get an order from bellow and watch him open one of the gates. The molten steel starts flowing.
+
+
+You lean forward to get a little  closer to the ogre and withdraw the spear. 
+
+
+Briana gives you a puzzled look. "Wait…" she whispers.
+
+
+You throw.
+
+
+The spear sails over the molten steel and impales the blind ogre's shoulder. Your heart skips a beat. It wasn’t a killing throw. The ogre will scream, the orcs will hear it — you're dead. 
+
+
+But the gods show mercy. The ogre wheels around, trying to reach the spear with his left hand, stepping back.
+
+
+The last step takes him over the edge and into the pool of white-hot steel. He doesn't even have a chance to scream — the liquid swallows him whole. The orcs working on the other side of the room don't notice a thing.
+
+
+"Why would you do that?" Briana says, pointing where the blind ogre once stood. "You wasted a perfectly good spear on a stupid ogre. And he posed no threat to us."
+
+
+_"Listen."_
+
+
+The distant voices coming from the war forges get slightly louder. Then louder again. Briana hears it. She looks at you and a smile starts to form on her lips. "Let's go," she says.
+
+
+You follow the short passage and crouch on the walkway above the war forges. You see chaos below: Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away. 
+
+
+You notice an orc using a rope ladder to scale the wall to the smelter. He'll be able to get to the gate and close it, but it will take him some time to make the climb. And the damage has already been done.
+
+
+"That, my friend, was the most boring heroic deed in history." Briana seems amused, watching the havoc below. "You just threw a spear…"
+
+
+_"A well placed throw."_
+
+
+"... and killed a _blind_ ogre …"
+
+
+_"One who was doing an important job."_
+
+
+"... a _dam_ worker. Who happened to trip and fall into molten steel."
+
+
+_"As I said, a well placed throw. The more complex you see the world, the easier it is for you to change it."_
+
+
+"Nonsense. You got lucky."
+
+
+
+
+SUCCESS_EFFECT:
+executeSpearThrowAtOgre(w, s);

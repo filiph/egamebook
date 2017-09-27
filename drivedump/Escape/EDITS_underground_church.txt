@@ -1,0 +1,100 @@
+﻿ROOM: $underground_church
+
+
+
+
+DESCRIPTION:
+You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged room with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’s expect the altar to be, but you can't quite see it. There are no torches here. And it’s eerily quiet. 
+
+
+Your bare footsteps reverberate in the room, so you slow down to quiet them. 
+
+
+[[CODE]]
+if (justCameFrom(w, "cave_with_agruth")) { 
+  s.add("""After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.""");
+}
+[[/CODE]]
+[[CODE]]
+if (justCameFrom(w, "guardpost_above_church")) { 
+  s.add("""Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.""");
+}
+[[/CODE]]
+
+
+SHORT_DESCRIPTION: 
+The temple is silent, as if it were holding its breath.
+
+
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
+
+
+EXITS:
+$guardpost_above_church (Enter the upwards passage): You take the sloping passage and walk upward for a long time.
+
+
+$cave_with_agruth (Go back to the cave with Agruth's corpse): You walk slowly out of the church, back toward where you left Agruth's body.
+
+
+$underground_church_altar (Go towards the altar): You sneak toward the front of the temple, trying to stay in the shadows.
+
+
+
+
+// ---------------
+
+
+ACTION: $examine_underground_church
+COMMAND: Look around
+
+
+FOR_LOCATION: $underground_church
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.
+
+
+"What are these things?" Briana whispers, looking at the ornaments.
+
+
+_"This place was made for worshiping the Dead Prince."_
+
+
+Saying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince's tongue — but it has been a long time since you said it yourself.
+
+
+"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I though the Dead Prince was a warlord. Something like that."
+
+
+_"He is a god."_
+
+
+// Don't allow the following paragraph if we've been through "Wait" in altar - by then Briana is not sceptical
+[[CODE]]
+if (!w.actionHasBeenPerformed("wait_for_ritual")) {
+  s.add("""Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, but you really shouldn't. He's a demented illusionist at best." 
+""", wholeSentence: true);
+}
+[[/CODE]]
+
+
+The glow coming from the altar dims for a moment, then lights up again.
+
+
+_"He is worse than a god. He is fear itself."_
+
+
+Briana looks at you, narrowing her eyes.
+
+
+_"I think you have felt it."_

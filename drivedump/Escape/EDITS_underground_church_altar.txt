@@ -1,0 +1,161 @@
+﻿ROOM: $underground_church_altar
+
+
+
+
+DESCRIPTION:
+The altar is a simple block of stone at the back of the temple. On the wall above it, you see a large ornament portraying an octopus with eight black eyes at the tips of its tentacles. It's the sign of the Dead Prince. You have never seen it in real life but you’ve seen it in your dreams often enough.
+
+
+"You're brave, my friend," Briana whispers. "I'll give you that. But if we have to linger in this mountain much longer, I'd rather kill some orcs than sneak around in a temple."
+
+
+_"You hate orcs? This is what made them."_
+
+
+Briana opens her mouth to reply, but the otherwise steady light from the altar flickers like a flame, and you both duck behind a large column. You almost trip over a spear lying on the ground.
+
+
+
+
+SHORT_DESCRIPTION: 
+The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.
+
+
+
+
+EXITS:
+$underground_church (Sneak back): You crouch low and, keeping an eye on the altar, move back to the Church's entrance.
+
+
+
+
+// ---------------
+
+
+
+
+ACTION: $wait_for_ritual
+COMMAND: Wait
+
+
+FOR_LOCATION: $underground_church_altar
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.
+
+
+An orc priest, tall and pale, enters through the stone door. Suddenly, the whole temple reverberates with a strong, dissonant tone that is both sickening and powerful. As if the whole mountain were groaning. 
+
+
+Following the orc priest, a huge creature enters through the door, crouching below its frame. It's unclear what the creature is, exactly, but it could be some large breed of ogre. Judging by the braided hair, it's a female. Her sword — attached to her hip with a rope — is as long as you are tall. 
+
+
+When she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
+
+
+The three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana. 
+
+
+The dissonant tone stops. You lean a little further out from your hiding place to have a better view.
+
+
+Without words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but he obeys. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.
+
+
+When the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.
+
+
+_"Maggots."_
+
+
+Somehow, you know. 
+
+
+Briana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.
+
+
+The ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.
+
+
+But the scream doesn't come. Instead, the dissonant tone sounds again, more powerful than before.
+
+
+The maggots crawl over the edge of the altar's surface, onto the orc's body, and move straight toward his face. They move faster now.
+
+
+// TODO: make this a separate 'ROOM' so we can try and attack or throw spear (and abort the throw)
+// TODO - throw spear - ability to abort, briana says "coming here was bravery. this is madness".
+// Probably NOPE, this will increase confusion.
+
+
+The orc's eyes go wide. He struggles against the ogre's grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.
+
+
+Suddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed. (Your stamina increases by +1.)
+
+
+You notice that the priest inhales deeply as well.
+
+
+Then, the sound stops and the orc's body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc's eyes and cheeks, and that they are now scuttling back to the base of the altar.
+
+
+The priest puts his arms down again and — without saying anything more — heads back to the stone door. The ogre takes the orc's dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.
+
+
+Briana stares ahead. "How did you know it would be maggots?"
+
+
+_"I do not know."_
+
+
+"I _felt_ that sound, somehow. I _felt_ it."
+
+
+_"This place does something weird to people."_
+
+
+"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let's… let's just get out of here."
+
+
+SUCCESS_EFFECT:
+giveStaminaToPlayer(w, 1);
+
+
+
+
+// ---------------
+
+
+ACTION: $take_spear_in_underground_church
+COMMAND: Take the spear
+
+
+FOR_LOCATION: $underground_church_altar
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+It's a primive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
+
+
+But it’s sturdy in your hand. A good throwing weapon.
+
+
+SUCCESS_EFFECT:
+giveGoblinsSpearToPlayer(w);

@@ -1,0 +1,61 @@
+﻿ACTION: $guardpost_above_church_take_shield
+COMMAND: Cautiously take the shield
+
+
+HINT: The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin's lap will likely wake him up.
+
+
+PREREQUISITES: 
+w.actionNeverUsed(name)
+
+
+FOR_LOCATION: $guardpost_above_church
+
+
+COMPLETE_SUCCESS_PROBABILITY: 30%
+
+
+COMPLETE_SUCCESS_DESCRIPTION: 
+You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and  leans his head to the side, but stays asleep.
+
+
+You take a few slow steps back, then grip the shield in your left hand, ready for anything.
+
+
+FAILURE_BEGINNING_DESCRIPTION:
+You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.
+
+
+You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he'll wake up.
+
+
+RESCUE_COMMAND: Stay perfectly still
+RESCUE_HINT: If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)
+RESCUE_PREREQUISITES: a.stamina > 0
+RESCUE_EFFECT: 
+w.updateActorById(a.id, (b) => b..stamina -= 1);
+RESCUE_DESCRIPTION:
+You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin's leg.
+
+
+Fortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.
+
+
+You deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.
+
+
+
+
+CONTINUATION_OF_FAILURE_COMMAND: Snatch the shield
+CONTINUATION_OF_FAILURE_HINT: You can quickly snatch the shield, jump back and prepare for a fight.
+CONTINUATION_OF_FAILURE_EFFECT: 
+setUpStealShield(a, w, s, false);
+CONTINUATION_OF_FAILURE_DESCRIPTION: 
+You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.
+
+
+You look at Briana. Both of you are ready to fight.
+
+
+SUCCESS_EFFECT: 
+setUpStealShield(a, w, s, true);

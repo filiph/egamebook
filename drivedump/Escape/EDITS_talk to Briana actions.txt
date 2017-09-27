@@ -2,38 +2,26 @@
 COMMAND: Talk to Briana
 
 
-
-
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
 isRoamingInBloodrock(w)
 
 
-
-
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
-
-
 COMPLETE_SUCCESS_DESCRIPTION:
-_"You were caught not too long ago, I think. What can you tell me about outside?"_
-
-
+_"You are new here, I think. What news can you tell me about the world outside?"_
 
 
 Briana shrugs. "How long have you been here?"
 
 
-
-
 _"Three years."_
 
 
-
-
-"Three years! Gods. A lot has happened in the last winter alone. The orcs have taken the upper valley, and make raids way beyond Fort Ironcast."
+"Three years! Gods. A lot has happened. Just this winter, he orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."
 
 
 // TODO: some replacement for what's commented out below
@@ -42,7 +30,7 @@ _"Three years."_
 // "So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
 
 
-// "Correct. The closest safe place is the fort."
+// "Correct. The closest refuge is Fort Ironcast."
 
 
 
@@ -74,22 +62,16 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-_"Where did they get you?"_
-
-
+_"Where were you captured?"_
 
 
 "At the Gate of Screams. I was trying to sneak in."
 
 
-
-
 _"You what?"_
 
 
-
-
-"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, help the fight."
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, and help win the war."
 
 
 
@@ -124,28 +106,28 @@ COMPLETE_SUCCESS_DESCRIPTION:
 _"What's Orcthorn?"_
 
 
-"A sword. It has killed hundreds of orc, wielded by many different knights. Even more orcs died trying to seize it, almost to no avail."
+"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."
 
 
 _"Almost."_
 
 
-"Yes. Last full moon, an orcish captain and a company of prime warriors ambushed Lord Glencot. He was the wielder of Orcthorn at that time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs are bolder and more successful."
+"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."
 
 
-_"The mad guardian."_
+_"The Mad Guardian."_
 
 
 "The mad who?"
 
 
-_"That's what Agruth and the other slavers were talking about a couple of weeks back. One orc was tasked with guarding a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days of doing this. Now they keep him in a cell, and call him *grach kamkorr*. The mad guardian. That sword is still with him. Hidden there in the cell."_
+_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him *grach kamkorr*: The Mad Guardian. That sword is still with him. Hidden there in the cell."_
 
 
 "Where is that cell?"
 
 
-_"Somewhere in the slave quarters."_
+_"Down the slave quarters."_
 
 
 [[CODE]]
