@@ -6,7 +6,9 @@
 ## Development
 
 **IMPORTANT:** This code depends on `package:egamebook` which is not yet
-open source.
+open source. Until that happens, you won't be able to build this project
+unless you're part of the development team (reach out to filiphracek@ if you're
+interested).
 
 Run the following when developing:
 
