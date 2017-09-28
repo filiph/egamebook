@@ -10,18 +10,14 @@ The path from slavery to power begins with a single crack of a whip. Briana spin
 Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
 
 
-Another crack and there is new blood pourng from a gash in Briana's face. Agruth grins.
+Another crack and there is new blood pouring from a gash in Briana's face. Agruth grins.
 
 
 Nobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake. 
 
 
-
-
 FIGHT_SITUATION:
 generateAgruthFight
-
-
 
 
 EXITS:

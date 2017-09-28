@@ -425,7 +425,7 @@ _"That one is already dead."_
 ![Agruth\'s sword](img/agruth-sword.jpg)
 
 
-She turns her attention to the sword. "We should name it. When you name a sword, the gods recognize it. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
+She turns her attention to the sword. "We should name it. The gods love named weapons. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -1201,7 +1201,7 @@ Room startAdventure =
 Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
 
 
-Another crack and there is new blood pourng from a gash in Briana\'s face. Agruth grins.
+Another crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.
 
 
 Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.
@@ -1488,7 +1488,7 @@ Briana hesitates. "It feels like we could have done more." She motions toward th
 Room undergroundChurch =
     new Room('underground_church', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged room with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’s expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. 
+      '''You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. 
 
 
 Your bare footsteps reverberate in the room, so you slow down to quiet them. 
@@ -1725,7 +1725,7 @@ You notice that the priest inhales deeply as well.
 Then, the sound stops and the orc\'s body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.
 
 
-The priest puts his arms down again and — without saying anything more — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.
+The priest puts his arms down again and — without saying anything — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.
 
 
 Briana stares ahead. "How did you know it would be maggots?"
