@@ -335,7 +335,7 @@ FightSituation generateMadGuardianFight(WorldState w,
               "<subject> say<s>, laughing.",
               wholeSentence: true);
           guardian.report(
-              s, "<subject> nod<s> towards a heap of rotting bodies nearby");
+              s, "<subject> nod<s> towards the heap of rotting bodies nearby");
           s.addParagraph();
           player.report(
               s, "<subject> glance<s> over at Briana, then back at the orc.",

@@ -30,10 +30,10 @@ Room exitFromBloodrock =
 You run through a small stone doorway and out of the mountain.
 
 
-The blinding sun makes you squint. You let the wind chill your muscles. You jump down a steep descending path. 
+The blinding sun makes you squint. You let the wind chill your muscles and jump down a steep descending path. 
 
 
-Outside, you and Briana who have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when it’s necessary. 
+Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must. 
 
 
 Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers. 
@@ -64,7 +64,7 @@ _"No king has what we have."_
 "Orcthorn? Bah, you think they'll let you keep it? A farm boy?" 
 
 
-_"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connection, almost a power. We both do."_
+_"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -75,7 +75,7 @@ _"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connec
 "Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
 
 
-_"I am_ not _a farm boy. And I don't mean muscles or brains, no. I have a strange connection, almost a power. We both do."_
+_"I am_ not _a farm boy. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -83,7 +83,7 @@ _"I am_ not _a farm boy. And I don't mean muscles or brains, no. I have a strang
 "A connection."
 
 
-_"With the Dead Prince. I dream his dreams. I even think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
+_"With the Dead Prince. I dream his dreams. I think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
 
 
 "So the thing you have that kings don\'t is… a way to communicate? Or negotiate with him?"
@@ -98,7 +98,7 @@ _"Negotiate? No, I do not have anything the Dead Prince wants. I do not think an
 _"Giving him the exact opposite of what he wants."_
 
 
-"You know we could just run as fast as we can, slay some orcs along the way, and get as far away from this place as possible, right?"
+"You know we could just run, slay some orcs along the way, and get as far away from this place as possible, right?"
 
 
 _"Yes."_
@@ -110,7 +110,7 @@ _"Yes."_
 _"But we will not."_
 
 
-Briana sighs. "I suppose not."
+Briana sighs. "No, I suppose we won\'t."
 
 
 With that, you both start down the road toward the black fort in the distance. 
@@ -175,7 +175,7 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
   new Exit('underground_church', 'Descend toward the Underground Church',
       'You take the passage leading down toward the temple.'),
   new Exit('smelter', 'Go to the smelter',
-      'You take the passage down toward the smelter.')
+      'You take the passage down. The temperature gradually rises until you see an opening.')
 ]);
 
 class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
@@ -334,6 +334,9 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
                   '''You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
 
 
+<p class="toast">Your stamina decreases by 1.</p>
+
+
 Fortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.
 
 
@@ -425,7 +428,7 @@ _"That one is already dead."_
 ![Agruth\'s sword](img/agruth-sword.jpg)
 
 
-She turns her attention to the sword. "We should name it. The gods love named weapons. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
+She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -624,7 +627,7 @@ It doesn\'t take long before you start hearing voices. Orcs and goblins shouting
 The tunnel gets wider and more torches light your way. The walls are smoother. 
 
 
- You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door 
+You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door 
 
 
 A human slave runs down the passage toward you. His arm is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips move but he makes no sound. Eyes blurred with tears, he doesn\'t see you.
@@ -639,7 +642,7 @@ An orc and a goblin appear from the tunnel, walking toward the dead man. The orc
 You step back and motion to Briana to lean against the wall, hoping that the door\'s reinforced frame will keep you hidden from the two slavers.
 
 
-But right then, something or someone pounds on the reinforced door from the inside. You press your ear against it and hear angry growls followed by something akin to barking and howling.
+But right then, something or someone pounds on the reinforced door from the inside. You hear loud and angry growls.
 
 
 The two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They run toward you.
@@ -705,9 +708,20 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
     s.add(
-        '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall says "Danger mad. Give food go away."
+        '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
+
+
 ''',
         wholeSentence: true);
+    if (w.actionHasBeenPerformed("talk_to_briana_3")) {
+      s.add("""
+You look at Briana and nod.
+
+
+_"The Mad Guardian."_
+""", wholeSentence: true);
+    }
+    s.add('', wholeSentence: true);
     return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
   }
 
@@ -767,14 +781,78 @@ That leaves two options: the black passage toward the war forges and the deserte
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected.'),
   new Exit('war_forge', 'Go to the war forges',
-      'You sneak through the black passage, and sound of hundreds of anvils gets louder.'),
+      'You sneak through the black passage, toward a sound of hundreds of anvils.'),
   new Exit('slave_quarters_passage', 'Go to the slave quarters',
-      'You and Briana hug the wall and start towards the slave quarters.')
+      'You and Briana hug the wall and start toward the slave quarters.')
 ]);
+
+class SearchAgruth extends RoamingAction {
+  @override
+  final String command = 'Search Agruth';
+
+  @override
+  final String name = 'search_agruth';
+
+  static final SearchAgruth singleton = new SearchAgruth();
+
+  @override
+  bool isApplicable(Actor a, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'cave_with_agruth') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    s.add(
+        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. 
+
+
+<p class="toast">Your stamina increases by 1.</p>
+''',
+        wholeSentence: true);
+    giveStaminaToPlayer(w, 1);
+    return '${a.name} successfully performs SearchAgruth';
+  }
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'You have taken his weapon but there might be other useful items in his pocket.';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room orcthornRoom =
     new Room('orcthorn_room', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The room is dark and wet. As you enter, the noises stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
+      '''The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
 
 
 When your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.
@@ -1364,7 +1442,7 @@ class TalkToBriana3 extends RoamingAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''_"What\'s Orcthorn?"_
+    s.add('''_"What is Orcthorn?"_
 
 
 "A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."
@@ -1394,6 +1472,21 @@ _"Down the slave quarters."_
 ''', wholeSentence: true);
     if (!playerHasVisited(w, "slave_quarters_passage")) {
       s.add("""Briana tenses. "Well then, at least we have that choice." """,
+          wholeSentence: true);
+    }
+    s.add('''
+
+''', wholeSentence: true);
+    if (playerHasVisited(w, "orcthorn_room")) {
+      s.add("""Briana's eyes go wide. "The mad orc behind that door." """,
+          wholeSentence: true);
+    }
+    s.add('''
+
+''', wholeSentence: true);
+    if (playerHasVisited(w, "slave_quarters_passage") &&
+        !playerHasVisited(w, "orcthorn_room")) {
+      s.add("""Briana's eyes go wide. "That door in the slave quarters." """,
           wholeSentence: true);
     }
     s.add('', wholeSentence: true);
@@ -1716,7 +1809,10 @@ The maggots crawl over the edge of the altar\'s surface, onto the orc\'s body, a
 The orc\'s eyes go wide. He struggles against the ogre\'s grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.
 
 
-Suddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed. (Your stamina increases by +1.)
+Suddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.
+
+
+<p class="toast">Your stamina increases by 1.</p>
 
 
 You notice that the priest inhales deeply as well.
@@ -1971,7 +2067,13 @@ class WarForgeWatchWorkers extends RoamingAction {
 Briana shakes her head: "The orcs are working together with ogres." A smirk forms on her lips. "They must be terrified."
 
 
-You scan the workers more closely. The slow-moving ogres tower over the orcs. "And they don\'t use slaves here," you say. "They must be doing something important." Looking again at the molds they are using, you don\'t see anything strange or unexpected. Primitive axes and swords, some armor.
+You scan the workers more closely. The slow-moving ogres tower over the orcs. 
+
+
+_"And they don\'t use slaves here. They must be doing something important."_
+
+
+Looking again at the molds they are using, you don\'t see anything strange or unexpected. Primitive axes and swords, some armor.
 
 
 "What is that thing!" Briana gasps. 
@@ -2038,6 +2140,7 @@ List<RoamingAction> allActions = <RoamingAction>[
   NameAgruthSwordRedemption.singleton,
   NameAgruthSwordNothing.singleton,
   SlaveQuartersPassageExamineDoor.singleton,
+  SearchAgruth.singleton,
   TakeOrcthorn.singleton,
   SlaveQuartersContinue.singleton,
   SmelterLookAround.singleton,

@@ -103,7 +103,10 @@ The maggots crawl over the edge of the altar's surface, onto the orc's body, and
 The orc's eyes go wide. He struggles against the ogre's grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.
 
 
-Suddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed. (Your stamina increases by +1.)
+Suddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.
+
+
+<p class="toast">Your stamina increases by 1.</p>
 
 
 You notice that the priest inhales deeply as well.

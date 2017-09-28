@@ -103,7 +103,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-_"What's Orcthorn?"_
+_"What is Orcthorn?"_
 
 
 "A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."
@@ -137,8 +137,18 @@ if (!playerHasVisited(w, "slave_quarters_passage")) {
 [[/CODE]]
 
 
-// TODO: if player has been to slave quarters but not inside the room: "that door?" - you shrug
-// TODO: if player has been to slave quarters and to the room: "that mad orc behind the door?" - you shrug
+[[CODE]]
+if (playerHasVisited(w, "orcthorn_room")) { 
+  s.add("""Briana's eyes go wide. "The mad orc behind that door." """, wholeSentence: true);
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (playerHasVisited(w, "slave_quarters_passage") && !playerHasVisited(w, "orcthorn_room")) { 
+  s.add("""Briana's eyes go wide. "That door in the slave quarters." """, wholeSentence: true);
+}
+[[/CODE]]
 
 
 // TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breating space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.

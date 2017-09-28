@@ -44,7 +44,7 @@ SHORT_DESCRIPTION:
 
 EXITS:
 $underground_church (Descend toward the Underground Church): You take the passage leading down toward the temple. 
-$smelter (Go to the smelter): You take the passage down toward the smelter.
+$smelter (Go to the smelter): You take the passage down. The temperature gradually rises until you see an opening.
 
 
 
