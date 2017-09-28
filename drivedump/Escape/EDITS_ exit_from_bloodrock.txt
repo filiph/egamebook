@@ -7,19 +7,22 @@ DESCRIPTION:
 Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface!  For the first time in three years, you hear the howling wind. 
 
 
-You run through a small stone doorway and out of the mountain.. 
+You run through a small stone doorway and out of the mountain.
 
 
 The blinding sun makes you squint. You let the wind chill your muscles. You jump down a steep descending path. 
 
 
-Outside, you and Briana who have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when it’s necessary[a][b][c]. 
+Outside, you and Briana who have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when it’s necessary. 
 
 
 Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers. 
 
 
 You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
+
+
+![View of the road ahead](img/path.jpg)
 
 
 Briana doesn't seem surprised.
@@ -73,9 +76,6 @@ _"Negotiate? No, I do not have anything the Dead Prince wants. I do not think an
 "So what’s the plan?"
 
 
-[IMG long view of the road ahead]
-
-
 _"Giving him the exact opposite of what he wants."_
 
 
@@ -107,8 +107,3 @@ describeSuccessRate(w, s);
 
 EXITS:
 $__END_OF_ROAM__ (): N/A
-
-
-[a]When do they come out of the caves? It might be good to add a specific detail like foraging or something here.
-[b]_Označeno jako vyřešené_
-[c]_Znovu otevřeno_

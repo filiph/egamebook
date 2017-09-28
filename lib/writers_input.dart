@@ -27,19 +27,22 @@ Room exitFromBloodrock =
       '''Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface!  For the first time in three years, you hear the howling wind. 
 
 
-You run through a small stone doorway and out of the mountain.. 
+You run through a small stone doorway and out of the mountain.
 
 
 The blinding sun makes you squint. You let the wind chill your muscles. You jump down a steep descending path. 
 
 
-Outside, you and Briana who have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when it’s necessary[a][b][c]. 
+Outside, you and Briana who have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when it’s necessary. 
 
 
 Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers. 
 
 
 You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
+
+
+![View of the road ahead](img/path.jpg)
 
 
 Briana doesn\'t seem surprised.
@@ -90,9 +93,6 @@ _"Negotiate? No, I do not have anything the Dead Prince wants. I do not think an
 
 
 "So what’s the plan?"
-
-
-[IMG long view of the road ahead]
 
 
 _"Giving him the exact opposite of what he wants."_
@@ -419,7 +419,13 @@ _"I know."_
 _"That one is already dead."_
 
 
-"Just making sure," she says. She turns her attention to the sword. "We should name it. When you name a sword, the gods recognize it. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
+"Just making sure," she says. 
+
+
+![Agruth\'s sword](img/agruth-sword.jpg)
+
+
+She turns her attention to the sword. "We should name it. When you name a sword, the gods recognize it. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
@@ -743,12 +749,13 @@ Room caveWithAgruthPre =
 }, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
-  s.add('''[a]
-The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock.[b][c] 
+  s.add(
+      '''The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. 
 
 
 That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock\'s mountaintop.
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add('''The corpse lies still, getting cold.
 
@@ -834,7 +841,7 @@ After what feels like hours, you get to the bottom. Among a slush of decayed mea
 "Orcthorn," Briana nods and surveys its blade and hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."
 
 
-_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword[a]."_
+_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_
 
 
 "Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farm boy," she says to the lifeless face.
@@ -1423,7 +1430,7 @@ _"Down the slave quarters."_
 
 Room tunnel = new Room('tunnel', (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''Almost as soon as the circular room disappears from your line of sight, loud shouting rises from the deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit as you step farther away, and now you can hear dozens of orc and goblin feet stomping. 
+      '''Almost as soon as the circular room disappears from your line of sight, loud shouting rises from deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear dozens of orc and goblin feet stomping. 
 
 
 The air gets colder and fresher, but there\'s still no end in sight. The stairs get steeper and steeper until you feel like you’re climbing a ladder.
@@ -1692,6 +1699,9 @@ Somehow, you know.
 Briana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.
 
 
+![Picture of the sadistic slavers](img/altar.jpg)
+
+
 The ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.
 
 
@@ -1958,7 +1968,7 @@ class WarForgeWatchWorkers extends RoamingAction {
         '''You look out from your hiding spot and scan the room. More likely than not, no human has ever seen this place and lived to tell the tale.
 
 
-Briana shakes her head: "The orcs are working together with ogres. They must be terrified."
+Briana shakes her head: "The orcs are working together with ogres." A smirk forms on her lips. "They must be terrified."
 
 
 You scan the workers more closely. The slow-moving ogres tower over the orcs. "And they don\'t use slaves here," you say. "They must be doing something important." Looking again at the molds they are using, you don\'t see anything strange or unexpected. Primitive axes and swords, some armor.

@@ -25,8 +25,8 @@ ROOM: $cave_with_agruth
 
 
 
-DESCRIPTION:[a]
-The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock.[b][c] 
+DESCRIPTION:
+The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. 
 
 
 That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock's mountaintop.
@@ -50,10 +50,3 @@ $war_forge (Go to the war forges): You sneak through the black passage, and soun
 
 
 $slave_quarters_passage (Go to the slave quarters): You and Briana hug the wall and start towards the slave quarters.
-
-
-
-
-[a]I thought this part was a little unclear, so I edited for clarity.
-[b]This part is confusing if we can't go there. We're getting detail we can't access, so I'd cut.
-[c]we can actually go there, and later the player learns that he must if he wants Orcthorn. But this probably needs a lot more hints, and we might want to tone down the whole 'suicide' thing.

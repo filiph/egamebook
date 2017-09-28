@@ -504,7 +504,7 @@ void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
     w.pushSituation(new FightSituation.initialized(
         playerParty,
         [goblin],
-        "{smooth|} rock",
+        "{smooth |}rock floor",
         roomRoamingSituation,
         {
           1: (w, s) {
