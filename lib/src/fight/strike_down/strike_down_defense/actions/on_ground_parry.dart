@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
+// TODO find a reason why to take this choice. Maybe allow counter?
 class OnGroundParry extends EnemyTargetAction {
   static const String className = "OnGroundParry";
 
@@ -22,7 +23,7 @@ class OnGroundParry extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  final String helpMessage = "TODO" /* TODO , maybe allow counter */;
+  final String helpMessage = "Why would you move? Just put your weapon up.";
 
   OnGroundParry(Actor enemy) : super(enemy);
 
