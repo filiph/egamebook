@@ -860,7 +860,7 @@ When your eyes adjust to the dark, you see a figure standing in front of you. Yo
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add(
-      '''The room is quiet. The Mad Guardian\'s huge body lies on the floor beneath the statue.
+      '''The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.
 ''',
       wholeSentence: true);
 }, generateMadGuardianFight, null, <Exit>[
