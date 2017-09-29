@@ -627,28 +627,12 @@ class HtmlPresenter extends Presenter {
     helpButton.onClick.listen((_) {
       showDialog(new Dialog(
           "Probability in this game",
-          "<p>The outcome of many actions in this game is uncertain. "
-          "Your strike at an opponent can hit, or it can miss, "
-          "and the probability of the hit depends on many things, "
-          "including your gear, your stance, the opponent's stance, "
-          "and so on. "
-          "Remember that this applies for other characters in the game "
-          "as well, so positioning your opponents in disadvantage and "
-          "your friends in advantage goes a long way.</p> "
-          "<p>The reels above are always set up according to the current "
-          "situation. When you're attempting something easy, there will "
-          "be many more hearts than crosses. Conversely, when you're "
-          "trying your luck with something insane, crosses will "
-          "outnumber hearts.</p> "
-          "<p>Evaluating the outcome of the roll is easy. When there "
-          "are more hearts than crosses in the center row, you win. "
-          "Otherwise, you lose. So you always need at least three hearts "
-          "to succeed.</p> "
-          "<p>Sometimes, when you fail a roll, you can spend "
-          "a resource to re-roll. This will only reroll the reels "
-          "<em>without</em> hearts &mdash; the ones that have already "
-          "landed on a heart will stay in place. Use your resources "
-          "well, they may save your life one day.</p>"));
+          "<p>The outcome of many actions in this game is uncertain. Your strike at an opponent can hit, or it can miss, and the probability of the hit depends on many things, including your gear, your stance, the opponent's stance, and so on.</p>"
+          "<p>Evaluating the outcome of the roll is easy. When there are more hearts than crosses in the center row, you succeed. Otherwise, you fail. So you always need at least three hearts to succeed.</p>"
+          "<p>The reels are always set up according to the current situation. When you're attempting something easy, there will be many more hearts than crosses. Conversely, when you're trying your luck with something hard, crosses will vastly outnumber hearts.</p> "
+          "<p><img src='img/slot-machine-setup.jpg'/></p>"
+          "<p>Sometimes, when you fail a roll, you can spend a resource to re-roll. This will only reroll the vertical reels that landed on a cross — the ones that have already landed on a heart will stay in place. Therefore, rerolling often has better chance of success than trying again. Use your resources well, they may save your life one day.</p>"
+          "<p>Remember that the uncertainty applies to other characters in the game as well, so positioning your opponents in disadvantage and your friends in advantage can greatly benefit you.</p>"));
     });
     await machine.play();
     resultParagraph.classes.remove("display-none");
