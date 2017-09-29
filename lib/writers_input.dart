@@ -1279,6 +1279,9 @@ Room startAdventure =
 Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
 
 
+![Agruth whips Briana](img/agruth-attack-small.jpg)
+
+
 Another crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.
 
 
