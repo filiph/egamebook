@@ -1480,7 +1480,8 @@ _"Down the slave quarters."_
     s.add('''
 
 ''', wholeSentence: true);
-    if (playerHasVisited(w, "orcthorn_room")) {
+    if (playerHasVisited(w, "orcthorn_room") &&
+        a.currentRoomName != "orcthorn_room") {
       s.add("""Briana's eyes go wide. "The mad orc behind that door." """,
           wholeSentence: true);
     }
