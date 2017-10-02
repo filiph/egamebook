@@ -9597,7 +9597,7 @@ gJ:function(){return},
 gN:function(){return},
 gI:function(){return!1}},
 rs:{"^":"a:6;",
-$3:function(a,b,c){c.l(0,"The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. \n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. \n\n\n![Agruth whips Briana](img/agruth-attack-small.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana's face. Agruth grins.\n\n\nNobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake.\n",!0)}},
+$3:function(a,b,c){c.l(0,"The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. \n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. \n\n\n![Agruth whips Briana](img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana's face. Agruth grins.\n\n\nNobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake.\n",!0)}},
 rt:{"^":"a:6;",
 $3:function(a,b,c){c.l(0,"",!0)}},
 oV:{"^":"R;X:c<,n:d<,b,a",
@@ -9630,7 +9630,7 @@ return!0},
 R:[function(a,b,c){c.l(0,'_"What is Orcthorn?"_\n\n\n"A sword. It\u2019s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him *grach kamkorr*: The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n_"Down the slave quarters."_\n\n\n',!0)
 if(!b.a7("RoomRoamingSituation").bf(b,b.A(1),"slave_quarters_passage"))c.l(0,'Briana tenses. "Well then, at least we have that choice." ',!0)
 c.l(0,"\n",!0)
-if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room"))c.l(0,'Briana\'s eyes go wide. "The mad orc behind that door." ',!0)
+if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room")&&a.c!=="orcthorn_room")c.l(0,'Briana\'s eyes go wide. "The mad orc behind that door." ',!0)
 c.l(0,"\n",!0)
 if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"slave_quarters_passage")&&!b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room"))c.l(0,'Briana\'s eyes go wide. "That door in the slave quarters." ',!0)
 c.l(0,"",!0)
