@@ -16,8 +16,8 @@ echo "   SKIPPED - uncomment if you want to update it"
 #        web/ifcomp_submission/ifcomp_text.md \
 #        > web/ifcomp_submission/insignificant_little_vermin.html
 
-echo "== Running pub build =="
-pub build
+echo "== Running pub build (production=true) =="
+pub build --define production=true
 
 echo "== Moving files =="
 mkdir -p ../egamebook/docs/site/vermin/v/latest/

@@ -10,6 +10,23 @@ import 'package:logging/logging.dart';
 /// This is the entry point of the egamebook app as implemented through
 /// [HtmlPresenter].
 Future<Null> main() async {
+  // Track conversions.
+  final inProduction =
+      const String.fromEnvironment("production") == "true";
+  final ga = new GoogleAnalytics(failSilently: inProduction);
+  FormElement signUpForm = querySelector("#mc-embedded-subscribe-form");
+  signUpForm.onSubmit.listen((_) {
+    ga.sendSignUp(method: "email");
+  });
+  ElementList<AnchorElement> externalLinks =
+  querySelectorAll("a[target=_blank]");
+  for (final link in externalLinks) {
+    link.onClick.listen((_) {
+      ga.sendCustom("follow_external_link", label: link.href);
+    });
+  }
+
+  // Set up logging.
   final devHostnames = [
     "localhost",
     "127.0.0.1",
@@ -28,18 +45,4 @@ Future<Null> main() async {
   Store store = new LocalStorageStore();
   // run
   await runFromIsolate("edgehead.isolate.dart", presenter, store);
-
-  // Track conversions.
-  final ga = new GoogleAnalytics(failSilently: true);
-  FormElement signUpForm = querySelector("#mc-embedded-subscribe-form");
-  signUpForm.onSubmit.listen((_) {
-    ga.sendSignUp(method: "email");
-  });
-  ElementList<AnchorElement> externalLinks =
-      querySelectorAll("a[target=_blank]");
-  for (final link in externalLinks) {
-    link.onClick.listen((_) {
-      ga.sendCustom("follow_external_link", label: link.href);
-    });
-  }
 }
