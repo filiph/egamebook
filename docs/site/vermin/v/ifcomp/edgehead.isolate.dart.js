@@ -9411,7 +9411,7 @@ $1:function(a){return a.gb1()}},
 lv:{"^":"a:0;",
 $1:function(a){return a.gb1()}},
 rH:{"^":"a:6;",
-$3:function(a,b,c){c.l(0,'You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. \n\n\nBriana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror. \n\n\n"What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords. " She kicks the dead slaver in the hip. \n\n\n_"That one is already dead."_\n\n\n"Just making sure," she says. \n\n\n![Agruth\'s sword](img/agruth-sword.jpg)\n\n\nShe turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.\n',!0)}},
+$3:function(a,b,c){c.l(0,'You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. \n\n\nBriana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror. \n\n\n"What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip. \n\n\n_"That one is already dead."_\n\n\n"Just making sure," she says. \n\n\n![Agruth\'s sword](img/agruth-sword.jpg)\n\n\nShe turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.\n',!0)}},
 rJ:{"^":"a:6;",
 $3:function(a,b,c){c.l(0,"",!0)}},
 ml:{"^":"R;X:c<,n:d<,b,a",
@@ -9514,7 +9514,7 @@ gI:function(){return!1}},
 rz:{"^":"a:6;",
 $3:function(a,b,c){c.l(0,"The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. \n\n\nWhen your eyes adjust to the dark, you see a figure standing in front of you. You realize it's a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.\n",!0)}},
 rA:{"^":"a:6;",
-$3:function(a,b,c){c.l(0,"The room is quiet. The Mad Guardian's huge body lies on the floor beneath the statue.\n",!0)}},
+$3:function(a,b,c){c.l(0,"The room is quiet. The Mad Guardian's huge body lies next to the heap of corpses.\n",!0)}},
 oT:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){var z=b.f
 if(H.A(z.length!==0?C.a.gE(z):null,"$isG").a!=="orcthorn_room")return!1
@@ -9597,7 +9597,7 @@ gJ:function(){return},
 gN:function(){return},
 gI:function(){return!1}},
 rs:{"^":"a:6;",
-$3:function(a,b,c){c.l(0,"The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. \n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. \n\n\nAnother crack and there is new blood pouring from a gash in Briana's face. Agruth grins.\n\n\nNobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake.\n",!0)}},
+$3:function(a,b,c){c.l(0,"The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. \n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. \n\n\n![Agruth whips Briana](img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana's face. Agruth grins.\n\n\nNobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake.\n",!0)}},
 rt:{"^":"a:6;",
 $3:function(a,b,c){c.l(0,"",!0)}},
 oV:{"^":"R;X:c<,n:d<,b,a",
@@ -9630,7 +9630,7 @@ return!0},
 R:[function(a,b,c){c.l(0,'_"What is Orcthorn?"_\n\n\n"A sword. It\u2019s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him *grach kamkorr*: The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n_"Down the slave quarters."_\n\n\n',!0)
 if(!b.a7("RoomRoamingSituation").bf(b,b.A(1),"slave_quarters_passage"))c.l(0,'Briana tenses. "Well then, at least we have that choice." ',!0)
 c.l(0,"\n",!0)
-if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room"))c.l(0,'Briana\'s eyes go wide. "The mad orc behind that door." ',!0)
+if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room")&&a.c!=="orcthorn_room")c.l(0,'Briana\'s eyes go wide. "The mad orc behind that door." ',!0)
 c.l(0,"\n",!0)
 if(b.a7("RoomRoamingSituation").bf(b,b.A(1),"slave_quarters_passage")&&!b.a7("RoomRoamingSituation").bf(b,b.A(1),"orcthorn_room"))c.l(0,'Briana\'s eyes go wide. "That door in the slave quarters." ',!0)
 c.l(0,"",!0)
