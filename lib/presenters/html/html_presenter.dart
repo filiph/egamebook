@@ -8,6 +8,8 @@ library egb_presenter_html;
 import 'dart:async';
 import 'dart:html' hide FormElement;
 
+import 'package:gtag_analytics/gtag_analytics.dart';
+
 import 'package:slot_machine/slot_machine.dart' as slot;
 import 'package:slot_machine/humanize_probability.dart';
 
@@ -74,6 +76,9 @@ class HtmlPresenter extends Presenter {
    */
   final StringBuffer _textHistory = new StringBuffer();
 
+  /// Google Analytics.
+  final GoogleAnalytics ga = new GoogleAnalytics(failSilently: true);
+
   /// Getter returns text history - the text that has been shown to the player
   /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
   @override
@@ -103,6 +108,7 @@ class HtmlPresenter extends Presenter {
       _savegameToBe = null;
       // TODO: clear meta elements
       _showLoading(true);
+      ga.sendCustom("restart_book");
     });
 
     final infoAnchor = document.querySelector("#book-info-button");
@@ -110,6 +116,7 @@ class HtmlPresenter extends Presenter {
     if (infoAnchor != null && infoDialog != null) {
       infoAnchor.onClick.listen((_) {
         infoDialog.classes.remove("display-none");
+        ga.sendCustom("show_info_dialog");
       });
 
       final infoDialogClose =
@@ -164,6 +171,7 @@ class HtmlPresenter extends Presenter {
         bigBottomButtonDiv.style.display = "none";
         currentActivity = UI_ACTIVITY_BOOK;
       });
+      ga.sendCustom("start_book");
     });
   }
 
@@ -505,6 +513,7 @@ class HtmlPresenter extends Presenter {
       _savegameToBe = null;
     }
     event.stopPropagation();
+    ga.sendCustom("choose_choice");
   }
 
   /// Current points awarded.
@@ -680,6 +689,7 @@ class HtmlPresenter extends Presenter {
           });
         }
       });
+      ga.sendCustom("load_bookmark");
     }
   }
 
@@ -760,11 +770,13 @@ class HtmlPresenter extends Presenter {
     html.writeln("</table>");
     var dialog = new Dialog("Stats", html.toString());
     showDialog(dialog);
+    ga.sendCustom("show_stats");
   }
 
   /// Creates a simple error dialog with [title] and [text].
   Future<bool> reportError(String title, String text) {
     Dialog errorDialog = new Dialog(title, "<p>$text</p>");
+    ga.sendException("$title -- $text", fatal: true);
     return showDialog(errorDialog);
   }
 
