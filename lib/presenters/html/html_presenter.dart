@@ -76,8 +76,14 @@ class HtmlPresenter extends Presenter {
    */
   final StringBuffer _textHistory = new StringBuffer();
 
+  /// Production apps should be built with
+  /// `pub run build --define production=true`. That ensures that the [_ga]
+  /// code won't break the whole app when it fails.
+  static final inProduction =
+      const String.fromEnvironment("production") == "true";
+
   /// Google Analytics.
-  final GoogleAnalytics ga = new GoogleAnalytics(failSilently: true);
+  final GoogleAnalytics _ga = new GoogleAnalytics(failSilently: inProduction);
 
   /// Getter returns text history - the text that has been shown to the player
   /// since last savegame bookmark. (Markdown format, pre-HTMLization.)
@@ -108,7 +114,7 @@ class HtmlPresenter extends Presenter {
       _savegameToBe = null;
       // TODO: clear meta elements
       _showLoading(true);
-      ga.sendCustom("restart_book");
+      _ga.sendCustom("restart_book");
     });
 
     final infoAnchor = document.querySelector("#book-info-button");
@@ -116,7 +122,7 @@ class HtmlPresenter extends Presenter {
     if (infoAnchor != null && infoDialog != null) {
       infoAnchor.onClick.listen((_) {
         infoDialog.classes.remove("display-none");
-        ga.sendCustom("show_info_dialog");
+        _ga.sendCustom("show_info_dialog");
       });
 
       final infoDialogClose =
@@ -171,7 +177,7 @@ class HtmlPresenter extends Presenter {
         bigBottomButtonDiv.style.display = "none";
         currentActivity = UI_ACTIVITY_BOOK;
       });
-      ga.sendCustom("start_book");
+      _ga.sendCustom("start_book");
     });
   }
 
@@ -513,7 +519,7 @@ class HtmlPresenter extends Presenter {
       _savegameToBe = null;
     }
     event.stopPropagation();
-    ga.sendCustom("choose_choice");
+    _ga.sendCustom("choose_choice");
   }
 
   /// Current points awarded.
@@ -689,7 +695,7 @@ class HtmlPresenter extends Presenter {
           });
         }
       });
-      ga.sendCustom("load_bookmark");
+      _ga.sendCustom("load_bookmark");
     }
   }
 
@@ -770,13 +776,13 @@ class HtmlPresenter extends Presenter {
     html.writeln("</table>");
     var dialog = new Dialog("Stats", html.toString());
     showDialog(dialog);
-    ga.sendCustom("show_stats");
+    _ga.sendCustom("show_stats");
   }
 
   /// Creates a simple error dialog with [title] and [text].
   Future<bool> reportError(String title, String text) {
     Dialog errorDialog = new Dialog(title, "<p>$text</p>");
-    ga.sendException("$title -- $text", fatal: true);
+    _ga.sendException("$title -- $text", fatal: true);
     return showDialog(errorDialog);
   }
 
