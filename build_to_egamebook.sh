@@ -20,8 +20,8 @@ echo "== Running pub build =="
 pub build
 
 echo "== Moving files =="
-mkdir -p ../egamebook/docs/site/vermin/v/ifcomp/
-cp -r build/web/* ../egamebook/docs/site/vermin/v/ifcomp/
+mkdir -p ../egamebook/docs/site/vermin/v/latest/
+cp -r build/web/* ../egamebook/docs/site/vermin/v/latest/
 
 echo "== Build egamebook.com =="
 cd ../egamebook/docs/site/
