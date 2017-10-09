@@ -13,6 +13,7 @@ dependencies:
   built_value: ^4.1.1
   egamebook:
     path: ../egamebook
+  gtag_analytics: ^0.1.3
   meta: ^1.0.5
   logging: ^0.11.3+1
   path: ^1.4.2

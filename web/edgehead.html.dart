@@ -4,6 +4,7 @@ import 'dart:html';
 import 'package:egamebook/presenters/html/html_presenter.dart';
 import 'package:egamebook/runner.dart';
 import 'package:egamebook/src/persistence/storage.dart';
+import 'package:gtag_analytics/gtag_analytics.dart';
 import 'package:logging/logging.dart';
 
 /// This is the entry point of the egamebook app as implemented through
@@ -27,4 +28,18 @@ Future<Null> main() async {
   Store store = new LocalStorageStore();
   // run
   await runFromIsolate("edgehead.isolate.dart", presenter, store);
+
+  // Track conversions.
+  final ga = new GoogleAnalytics(failSilently: true);
+  FormElement signUpForm = querySelector("#mc-embedded-subscribe-form");
+  signUpForm.onSubmit.listen((_) {
+    ga.sendSignUp(method: "email");
+  });
+  ElementList<AnchorElement> externalLinks =
+      querySelectorAll("a[target=_blank]");
+  for (final link in externalLinks) {
+    link.onClick.listen((_) {
+      ga.sendCustom("follow_external_link", label: link.href);
+    });
+  }
 }
