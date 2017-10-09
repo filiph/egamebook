@@ -29,7 +29,7 @@
     "redirects": [
       {
         "source": "/vermin",
-        "destination": "/vermin/v/ifcomp/",
+        "destination": "/vermin/v/latest/",
         "type": 302
       }
     ]
