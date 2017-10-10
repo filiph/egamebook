@@ -61,10 +61,10 @@ _"No king has what we have."_
       wholeSentence: true);
   if (w.actionHasBeenPerformed("take_orcthorn")) {
     s.add(""" 
-"Orcthorn? Bah, you think they'll let you keep it? A farm boy?" 
+"Orcthorn? Bah, you think they'll let you keep it? A farmhand?" 
 
 
-_"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
+_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -72,10 +72,10 @@ _"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connec
 ''', wholeSentence: true);
   if (!w.actionHasBeenPerformed("take_orcthorn")) {
     s.add("""
-"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
+"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand." 
 
 
-_"I am_ not _a farm boy. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
+_"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
   s.add('''
@@ -922,10 +922,10 @@ After what feels like hours, you get to the bottom. Among a slush of decayed mea
 _"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_
 
 
-"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farm boy," she says to the lifeless face.
+"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farmhand," she says to the lifeless face.
 
 
-_"I am not a farm boy. And we still need to get out of here first."_
+_"I am not a farmhand. And we still need to get out of here first."_
 ''',
         wholeSentence: true);
     takeOrcthorn(w, a);

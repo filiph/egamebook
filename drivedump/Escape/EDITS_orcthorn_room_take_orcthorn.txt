@@ -44,10 +44,10 @@ After what feels like hours, you get to the bottom. Among a slush of decayed mea
 _"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_
 
 
-"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farm boy," she says to the lifeless face.
+"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farmhand," she says to the lifeless face.
 
 
-_"I am not a farm boy. And we still need to get out of here first."_
+_"I am not a farmhand. And we still need to get out of here first."_
 
 
 SUCCESS_EFFECT:

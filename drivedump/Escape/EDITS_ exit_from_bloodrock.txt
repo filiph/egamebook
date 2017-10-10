@@ -40,10 +40,10 @@ _"No king has what we have."_
 [[CODE]]
 if (w.actionHasBeenPerformed("take_orcthorn")) { 
   s.add(""" 
-"Orcthorn? Bah, you think they'll let you keep it? A farm boy?" 
+"Orcthorn? Bah, you think they'll let you keep it? A farmhand?" 
 
 
-_"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
+_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
 }
 [[/CODE]]
@@ -52,10 +52,10 @@ _"I am_ not _a farm boy. And I do not mean Orcthorn, no. I have a strange connec
 [[CODE]]
 if (!w.actionHasBeenPerformed("take_orcthorn")) { 
   s.add("""
-"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farm boy." 
+"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand." 
 
 
-_"I am_ not _a farm boy. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
+_"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
 }
 [[/CODE]]
