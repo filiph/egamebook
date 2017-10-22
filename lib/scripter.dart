@@ -16,15 +16,11 @@ export 'src/presenter/presenter_proxy.dart';
 import 'package:egamebook/stat/stat.dart';
 export 'package:egamebook/stat/stat.dart';
 
-import 'src/shared/form.dart';
-export 'src/shared/form.dart';
-
 import 'src/persistence/saveable.dart';
 import 'dart:async';
 export 'src/persistence/saveable.dart';
 
 import "src/book/scripter_proxy.dart";
-import 'package:egamebook/src/presenter/form_proxy.dart';
 
 part 'src/book/scripter_page.dart';
 part 'src/book/points_counter.dart';
@@ -120,18 +116,6 @@ Choice choice(String string,
       helpMessage: helpMessage);
   choices.add(choice);
   return choice;
-}
-
-/// Current form.
-Form _currentForm;
-
-/// Getter returns current form.
-Form get currentForm => _currentForm;
-/**
- * Show the [form]. Sets current form.
- */
-void showForm(Form form) {
-  _currentForm = form;
 }
 
 /**
@@ -452,36 +436,6 @@ abstract class Scripter extends ScripterViewedFromPresenter {
       }
     }
 
-    if (_currentForm != null) {
-      DEBUG_SCR("We have a form.");
-      // XXX: we shouldn't need to convert Form to Map only to convert it
-      // to FormProxy. Maybe getting rid of FormProxy altogether?
-      FormProxy proxy = new FormProxy.fromMap(_currentForm.toMap());
-      Stream<CurrentState> stream = presenter.showForm(proxy);
-      StreamSubscription subscription;
-      subscription = stream.listen((CurrentState values) {
-        DEBUG_SCR("New values = $values.");
-        FormConfiguration changedConfig;
-        try {
-          changedConfig = _currentForm.receiveUserInput(values);
-        } catch (e, stacktrace) {
-          presenter.reportError(
-              "Error while handling user input in Form", "$e\n$stacktrace");
-          throw e;
-        }
-        if (!values.submitted) {
-          presenter.updateForm(changedConfig);
-        } else {
-          DEBUG_SCR("The form has been submitted.");
-          subscription.cancel();
-          _currentForm = null;
-          walk();
-        }
-      });
-
-      return _STOP;
-    }
-
     if (!_nextScriptStack.isEmpty) {
       // previous script asked for nextScript()
       ScriptBlock script = _nextScriptStack.removeLast();
@@ -652,7 +606,6 @@ abstract class Scripter extends ScripterViewedFromPresenter {
     currentBlockIndex = null;
     _nextScriptStack.clear();
     choices.clear();
-    _currentForm = null;
     vars.clear();
     vars["points"] = _points;
     _points.clear();

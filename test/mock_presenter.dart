@@ -5,8 +5,6 @@ import 'dart:collection';
 
 import 'package:egamebook/presenter.dart';
 import 'package:egamebook/src/persistence/savegame.dart';
-import 'package:egamebook/src/presenter/form_proxy.dart';
-import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/src/shared/points_award.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
@@ -183,11 +181,6 @@ class MockPresenter extends Presenter {
   }
 
   @override
-  Stream<CurrentState> showForm(FormProxy formProxy) {
-    throw new UnimplementedError();
-  }
-
-  @override
   Future<slot.SessionResult> showSlotMachine(
       double probability, String rollReason,
       {bool rerollable, String rerollEffectDescription}) {
@@ -201,11 +194,6 @@ class MockPresenter extends Presenter {
       _debugStreamController.add(TEXTBLOCK_SHOWN_EVENT);
     }
     return new Future.value(true);
-  }
-
-  @override
-  void updateForm(FormConfiguration values) {
-    // TODO: implement updateForm
   }
 
   Future<bool> updateStats(StatUpdateCollection updates) {

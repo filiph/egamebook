@@ -13,7 +13,7 @@ linter:
     - await_only_futures
     - camel_case_types
     - cancel_subscriptions
-    # - close_sinks  # TODO: Pertains to Forms, need to make Forms destroyable
+    - close_sinks
     # - comment_references
     # - constant_identifier_names  # TODO: breaking changes, 47 instances
     - control_flow_in_finally

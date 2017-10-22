@@ -15,10 +15,8 @@ export 'src/persistence/savegame.dart';
 export 'src/persistence/storage.dart';
 
 export 'src/presenter/choice_with_infochips.dart';
-export 'src/presenter/form_proxy.dart';
 export 'src/presenter/presenter_proxy.dart';
 
-export 'src/shared/form.dart';
 export 'src/shared/html_entities.dart';
 export 'src/shared/message.dart';
 export 'src/shared/page.dart';

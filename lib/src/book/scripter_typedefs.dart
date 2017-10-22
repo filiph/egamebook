@@ -1,7 +1,6 @@
 library scripter_typedefs;
 
 import 'package:egamebook/src/shared/user_interaction.dart';
-import 'package:egamebook/src/shared/form.dart';
 
 /**
  * A compendium of typedefs to [Scripter]'s top-level functions such as
@@ -24,8 +23,5 @@ typedef Choice ChoiceFunction(String string,
     String submenu,
     bool deferToEndOfPage,
     bool deferToChoiceList});
-
-/// Corresponds to [Scripter.showForm].
-typedef void ShowFormFunction(Form form);
 
 // TODO: add nextScript(), repeatBlock() _only_ if necessary

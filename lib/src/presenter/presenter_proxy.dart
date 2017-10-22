@@ -11,7 +11,6 @@ import 'package:egamebook/stat/stat.dart';
 import '../shared/user_interaction.dart';
 import '../shared/message.dart';
 import '../../scripter.dart';
-import 'package:egamebook/src/presenter/form_proxy.dart';
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
 
@@ -33,8 +32,6 @@ abstract class PresenterViewedFromScripter {
   void updateStats(StatUpdateCollection updates);
   void savePlayerChronology(Set<String> playerChronology);
   void save(Savegame savegame);
-  Stream<CurrentState> showForm(FormProxy form);
-  void updateForm(FormConfiguration values);
 
   /// Initiate a slot machine session.
   ///
@@ -119,11 +116,6 @@ class IsolatePresenterProxy extends PresenterProxy {
         assert(_choiceSelectedCompleter != null);
         _choiceSelectedCompleter.complete(choiceHash);
         _choiceSelectedCompleter = null;
-        return;
-      case Message.FORM_INPUT:
-        DEBUG_SCR("New form state from player received.");
-        CurrentState state = new CurrentState.fromMap(message.mapContent);
-        _formInputStreamController.add(state);
         return;
       case Message.SLOT_MACHINE_RESULT:
         DEBUG_SCR("Received slot machine result.");
@@ -341,26 +333,6 @@ class IsolatePresenterProxy extends PresenterProxy {
   void DEBUG_SCR(String message) {
     //print(message);
     log(message);
-  }
-
-  /// Form input stream controller.
-  StreamController<CurrentState> _formInputStreamController;
-
-  /// Sends show form message from provided FormBase [form] to Scripter proxy.
-  @override
-  Stream<CurrentState> showForm(FormBase form) {
-    DEBUG_SCR("Scripter asks to show form.");
-    _formInputStreamController = new StreamController<CurrentState>();
-    _send(new Message.showForm(form));
-    return _formInputStreamController.stream;
-  }
-
-  /// Sends update form message from provided FormConfiguration [values]
-  /// to Scripter.
-  @override
-  void updateForm(FormConfiguration values) {
-    DEBUG_SCR("Scripter sends newly updated values.");
-    _send(new Message.updateForm(values));
   }
 
   @override

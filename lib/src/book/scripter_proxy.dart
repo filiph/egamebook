@@ -9,8 +9,6 @@ import '../shared/message.dart';
 import '../shared/points_award.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:egamebook/src/shared/user_interaction.dart';
-import 'package:egamebook/src/presenter/form_proxy.dart';
-import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/scripter.dart';
 import 'package:meta/meta.dart';
 
@@ -173,20 +171,6 @@ class IsolateScripterProxy extends ScripterProxy {
             quit();
           }
         });
-        return;
-      case Message.SHOW_FORM:
-        INT_DEBUG("Showing form.");
-        FormProxy formProxy = new FormProxy.fromMessage(message);
-        presenter.showForm(formProxy).listen((CurrentState state) {
-          INT_DEBUG("Form updated or submitted by player.");
-          _send(new Message.formInput(state));
-        });
-        return;
-      case Message.UPDATE_FORM:
-        INT_DEBUG("Updating form.");
-        FormConfiguration changedConfig =
-            new FormConfiguration.fromMap(message.mapContent);
-        presenter.updateForm(changedConfig);
         return;
       case Message.SHOW_SLOT_MACHINE:
         INT_DEBUG("Showing slot machine");

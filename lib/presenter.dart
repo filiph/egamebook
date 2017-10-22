@@ -6,8 +6,6 @@ import 'package:slot_machine/result.dart' as slot;
 
 import 'package:egamebook/src/book/scripter_proxy.dart';
 import 'package:egamebook/src/persistence/player_profile.dart';
-import 'package:egamebook/src/presenter/form_proxy.dart';
-import 'package:egamebook/src/shared/form.dart';
 
 import 'src/persistence/savegame.dart';
 import 'src/presenter/presenter_proxy.dart';
@@ -119,12 +117,6 @@ abstract class Presenter implements PresenterViewedFromScripter {
    */
   Future<int> showChoices(ChoiceList choices);
 
-  /// Shows a form in the presenter, set with the initial values. Each time the
-  /// user changes a value, the new values are emitted via the returned
-  /// [Stream].
-  /// TODO: make obsolete
-  Stream<CurrentState> showForm(FormProxy formProxy);
-
   /// Show a slot machine visualization and return Future that completes
   /// it has started running.
   ///
@@ -138,9 +130,6 @@ abstract class Presenter implements PresenterViewedFromScripter {
    * Displays the markdown-formatted text.
    */
   Future<bool> showText(String text);
-
-  /// Updates the values and setup of the form with given [values].
-  void updateForm(FormConfiguration values);
 
   /// Tells the presenter about changed stats. Presenter should update the shown
   /// value(s) and show/hide stats according to the [Stat.show] state.

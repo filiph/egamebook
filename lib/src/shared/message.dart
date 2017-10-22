@@ -2,7 +2,6 @@ library egb_message;
 
 import 'dart:convert' show JSON;
 
-import 'package:egamebook/src/shared/form.dart';
 import 'package:egamebook/stat/stat.dart';
 import 'package:slot_machine/result.dart' as slot;
 
@@ -47,12 +46,6 @@ class Message {
   /// Message type update stats.
   static const int UPDATE_STATS = 100;
 
-  /// Message type show form.
-  static const int SHOW_FORM = 110;
-
-  /// Message type update form.
-  static const int UPDATE_FORM = 120;
-
   /// Message type show slot machine.
   static const int SHOW_SLOT_MACHINE = 130;
 
@@ -76,9 +69,6 @@ class Message {
 
   /// Message type choice selected.
   static const int CHOICE_SELECTED = 1050;
-
-  /// Message type form input.
-  static const int FORM_INPUT = 1060;
 
   /// Message type quit.
   static const int QUIT = 1070;
@@ -119,12 +109,6 @@ class Message {
   /// Creates new Message of type [END_OF_BOOK].
   /// It is used during the [IsolatePresenterProxy]'s [:endBook():].
   Message.endOfBook() : type = END_OF_BOOK;
-
-  /// Creates new Message of type [FORM_INPUT] with provided
-  /// [state] used as [mapContent].
-  Message.formInput(CurrentState state) : type = FORM_INPUT {
-    mapContent = state.toMap();
-  }
 
   /// Creates new Message from provided [json] String.
   Message.fromJson(String json)
@@ -198,13 +182,6 @@ class Message {
     strContent = message;
   }
 
-  /// Creates new Message of type [SHOW_FORM] with provided [form]
-  /// used as [mapContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:showForm():].
-  Message.showForm(Form form) : type = SHOW_FORM {
-    mapContent = form.toMap();
-  }
-
   Message.showSlotMachine(num probability, String rollReason, bool rerollable,
       String rerollEffectDescription)
       : type = SHOW_SLOT_MACHINE {
@@ -252,13 +229,6 @@ class Message {
 
   Message.textShown() : type = TEXT_SHOWN;
 
-  /// Creates new Message of type [UPDATE_FORM] with provided
-  /// [formConfiguration] used as [mapContent].
-  /// It is used during the [IsolatePresenterProxy]'s [:updateForm():].
-  Message.updateForm(FormConfiguration formConfiguration) : type = UPDATE_FORM {
-    mapContent = formConfiguration.toMap();
-  }
-
   /// Returns true for message types that are async, ie. sender doesn't wait
   /// for the receiver to do something.
   ///
@@ -295,10 +265,6 @@ class Message {
         return "SET_STATS";
       case UPDATE_STATS:
         return "UPDATE_STATS";
-      case SHOW_FORM:
-        return "SHOW_FORM";
-      case UPDATE_FORM:
-        return "UPDATE_FORM";
       case SCRIPTER_ERROR:
         return "SCRIPTER_ERROR";
       case SCRIPTER_LOG:
@@ -313,8 +279,6 @@ class Message {
         return "PROCEED";
       case CHOICE_SELECTED:
         return "CHOICE_SELECTED";
-      case FORM_INPUT:
-        return "FORM_INPUT";
       case SHOW_SLOT_MACHINE:
         return "SHOW_SLOT_MACHINE";
       case TEXT_SHOWN:
