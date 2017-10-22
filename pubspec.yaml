@@ -1,5 +1,5 @@
 name: egamebook
-version: 0.3.0
+version: 0.4.0
 author: Filip Hracek <filip.hracek@gmail.com>
 dependencies:
   a_star: ^0.3.0
