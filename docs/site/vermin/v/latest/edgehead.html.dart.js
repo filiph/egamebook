@@ -7313,8 +7313,8 @@ eJ:function(a,b){return this.d8(a,null,b,null)},
 aU:function(a){return this.d8(a,null,null,null)},
 cw:function(a,b){var z,y,x
 try{self.gtag("event",a,b)}catch(y){x=H.z(y)
-if(!!J.n(x).$isf3)z=x
-else throw y}}}}],["","",,K,{"^":"",rA:{"^":"cs;","%":""}}],["","",,B,{"^":"",fV:{"^":"c;"},o9:{"^":"c;"},nt:{"^":"c;"},I:{"^":"c;hZ:a'",
+if(!!J.n(x).$isf3){z=x
+if(!this.a)throw H.b(new P.x("gtag function not found. Please make sure you include the Google Analytics script in your HTML. ("+H.d(z)+")"))}else throw y}}}}],["","",,K,{"^":"",rA:{"^":"cs;","%":""}}],["","",,B,{"^":"",fV:{"^":"c;"},o9:{"^":"c;"},nt:{"^":"c;"},I:{"^":"c;hZ:a'",
 gZ:function(a){var z=this.d
 if(z==null){z=new B.iV(this,this.c)
 this.d=z}return z},
@@ -8192,32 +8192,32 @@ if(a>0.95&&a<1)return C.t.h(0,95)
 return C.t.h(0,C.h.af(a*100/5)*5)}}],["","",,M,{"^":"",
 e_:[function(){var z=0,y=P.ac(),x,w,v,u,t,s,r
 var $async$e_=P.aj(function(a,b){if(a===1)return P.ag(b,y)
-while(true)switch(z){case 0:x=C.b.I(["localhost","127.0.0.1","filiph.github.io"],window.location.hostname)
-w=$.$get$cw()
-v=x?C.ab:C.af
-w.toString
-if($.cY&&w.b!=null)w.c=v
-else{if(w.b!=null)H.q(new P.C('Please set "hierarchicalLoggingEnabled" to true if you want to change the level on a non-root logger.'))
-$.hf=v}w.dG().aP(new M.q7())
-w=P.mC(C.Z,null,null)
-v=H.l([],[G.lm])
-z=2
-return P.ao(M.cg("edgehead.isolate.dart",new G.ju(null,null,null,null,null,null,1,new P.am(""),new B.ez(!0),null,null,w,null,v,null,null,new H.K(0,null,null,null,null,null,0,[null,null]),null,null,null,null),new G.li()),$async$e_)
-case 2:u=new B.ez(!0)
+while(true)switch(z){case 0:x=new B.ez(!0)
 w=document
-t=w.querySelector("#mc-embedded-subscribe-form")
-t.toString
-W.M(t,"submit",new M.q8(u),!1,W.ad)
-s=new W.cM(w.querySelectorAll("a[target=_blank]"),[null])
-for(w=new H.bg(s,s.gj(s),0,null,[null]);w.n();){r=w.d
-J.ba(r).aP(new M.q9(u,r))}return P.ah(null,y)}})
+v=w.querySelector("#mc-embedded-subscribe-form")
+v.toString
+W.M(v,"submit",new M.q7(x),!1,W.ad)
+u=new W.cM(w.querySelectorAll("a[target=_blank]"),[null])
+for(w=new H.bg(u,u.gj(u),0,null,[null]);w.n();){t=w.d
+J.ba(t).aP(new M.q8(x,t))}s=C.b.I(["localhost","127.0.0.1","filiph.github.io"],window.location.hostname)
+w=$.$get$cw()
+r=s?C.ab:C.af
+w.toString
+if($.cY&&w.b!=null)w.c=r
+else{if(w.b!=null)H.q(new P.C('Please set "hierarchicalLoggingEnabled" to true if you want to change the level on a non-root logger.'))
+$.hf=r}w.dG().aP(new M.q9())
+w=P.mC(C.Z,null,null)
+r=H.l([],[G.lm])
+z=2
+return P.ao(M.cg("edgehead.isolate.dart",new G.ju(null,null,null,null,null,null,1,new P.am(""),new B.ez(!0),null,null,w,null,r,null,null,new H.K(0,null,null,null,null,null,0,[null,null]),null,null,null,null),new G.li()),$async$e_)
+case 2:return P.ah(null,y)}})
 return P.ai($async$e_,y)},"$0","hu",0,0,30],
-q7:{"^":"a:42;",
-$1:function(a){P.X(a.a.a+" ("+a.d+"): "+a.e.k(0)+": "+H.d(a.b))}},
-q8:{"^":"a:0;a",
+q7:{"^":"a:0;a",
 $1:function(a){this.a.cw("sign_up",{method:"email"})}},
-q9:{"^":"a:0;a,b",
-$1:function(a){this.a.eJ("follow_external_link",J.hO(this.b))}}},1]]
+q8:{"^":"a:0;a,b",
+$1:function(a){this.a.eJ("follow_external_link",J.hO(this.b))}},
+q9:{"^":"a:42;",
+$1:function(a){P.X(a.a.a+" ("+a.d+"): "+a.e.k(0)+": "+H.d(a.b))}}},1]]
 setupProgram(dart,0)
 J.n=function(a){if(typeof a=="number"){if(Math.floor(a)==a)return J.eM.prototype
 return J.eL.prototype}if(typeof a=="string")return J.bX.prototype
