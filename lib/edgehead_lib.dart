@@ -23,7 +23,7 @@ import 'package:logging/logging.dart';
 /// [EdgeheadGame.briana]'s [Actor.id].
 const int brianaId = 100;
 
-/// [EdgeheadGame.filip]'s [Actor.id].
+/// [EdgeheadGame.aren]'s [Actor.id].
 const int playerId = 1;
 
 /// Lesser self-worth than normal combine function as monsters should
@@ -48,7 +48,7 @@ class EdgeheadGame extends LoopedEvent {
 
   bool actionPatternWasHit = false;
 
-  Actor filip;
+  Actor aren;
   Actor briana;
   Actor orc;
   Actor goblin;
@@ -105,7 +105,7 @@ class EdgeheadGame extends LoopedEvent {
         null,
         [new Exit("start_adventure", "", "")]);
 
-    filip = new Actor.initialized(playerId, "Filip",
+    aren = new Actor.initialized(playerId, "Filip",
         nameIsProperNoun: true,
         isPlayer: true,
         pronoun: Pronoun.YOU,
@@ -115,8 +115,8 @@ class EdgeheadGame extends LoopedEvent {
         initiative: 1000,
         currentRoomName: preStartBook.name);
 
-    hitpoints.value = filip.hitpoints / filip.maxHitpoints;
-    stamina.value = filip.stamina;
+    hitpoints.value = aren.hitpoints / aren.maxHitpoints;
+    stamina.value = aren.stamina;
 
     briana = new Actor.initialized(brianaId, "Briana",
         nameIsProperNoun: true,
@@ -124,7 +124,7 @@ class EdgeheadGame extends LoopedEvent {
         hitpoints: 2,
         maxHitpoints: 2,
         currentRoomName: preStartBook.name,
-        followingActorId: filip.id);
+        followingActorId: aren.id);
 
     initialSituation =
         new RoomRoamingSituation.initialized(preStartBook, false);
@@ -134,7 +134,7 @@ class EdgeheadGame extends LoopedEvent {
 
     var global = new EdgeheadGlobalState();
 
-    world = new WorldState([filip, briana], rooms, initialSituation, global);
+    world = new WorldState([aren, briana], rooms, initialSituation, global);
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -148,7 +148,7 @@ class EdgeheadGame extends LoopedEvent {
       return;
     }
 
-    var currentPlayer = world.getActorById(filip.id);
+    var currentPlayer = world.getActorById(aren.id);
     hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
 
@@ -157,7 +157,7 @@ class EdgeheadGame extends LoopedEvent {
       finished = true;
 
       storyline.addParagraph();
-      if (!world.hasAliveActor(filip.id)) {
+      if (!world.hasAliveActor(aren.id)) {
         storyline.add("You die.", wholeSentence: true);
       }
       echo(storyline.realize());
