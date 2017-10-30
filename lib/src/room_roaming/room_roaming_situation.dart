@@ -90,6 +90,9 @@ abstract class RoomRoamingSituation extends Situation
   ///
   /// This will also print out the description of the room (or the short version
   /// as appropriate).
+  ///
+  /// [silent] is used when we are describing the move in a pre-written phrase
+  /// so describing it automatically would be a duplicate.
   void moveActor(WorldState w, Actor a, String destinationRoomName, Storyline s,
       {bool silent: false}) {
     var room = w.getRoomByName(destinationRoomName);

@@ -57,14 +57,15 @@ abstract class FightSituation extends Situation
           Iterable<Actor> enemyTeam,
           String groundMaterial,
           RoomRoamingSituation roomRoamingSituation,
-          Map<int, TimedEventCallback> events) =>
+          Map<int, TimedEventCallback> events,
+          {Iterable<Item> items: const []}) =>
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..playerTeamIds.replace(playerTeam.map((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
         ..groundMaterial = groundMaterial
-        ..droppedItems = new ListBuilder<Item>()
+        ..droppedItems = new ListBuilder<Item>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id
         ..events = new MapBuilder<int, TimedEventCallback>(events));
   FightSituation._();
