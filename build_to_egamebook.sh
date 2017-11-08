@@ -9,6 +9,9 @@ echo "== Upload to github.io =="
 peanut
 git push origin --set-upstream gh-pages
 
+echo "== Ending without pushing to egamebook.com =="
+exit 0
+
 echo "== Building the ifcomp upload file =="
 echo "   SKIPPED - uncomment if you want to update it"
 #dart -c ../filiphnet/tool/spanify.dart \
