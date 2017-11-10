@@ -1325,7 +1325,7 @@ Briana shrugs. "How long have you been here?"
 _"Three years."_
 
 
-"Three years! Gods. A lot has happened. Just this winter, he orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."
+"Three years! Gods. A lot has happened. Just this winter, the orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."
 ''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana1';
