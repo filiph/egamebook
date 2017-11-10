@@ -9561,7 +9561,7 @@ $3:function(a,b,c){c.l(0,"",!0)}},
 oN:{"^":"R;X:c<,n:d<,b,a",
 G:function(a,b){if(!(b.d9(this.d)==null&&O.eo(b)))return!1
 return!0},
-R:[function(a,b,c){c.l(0,'_"You are new here, I think. What news can you tell me about the world outside?"_\n\n\nBriana shrugs. "How long have you been here?"\n\n\n_"Three years."_\n\n\n"Three years! Gods. A lot has happened. Just this winter, he orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."\n',!0)
+R:[function(a,b,c){c.l(0,'_"You are new here, I think. What news can you tell me about the world outside?"_\n\n\nBriana shrugs. "How long have you been here?"\n\n\n_"Three years."_\n\n\n"Three years! Gods. A lot has happened. Just this winter, the orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."\n',!0)
 return H.b(a.dx)+" successfully performs TalkToBriana1"},"$3","gL",6,0,1],
 P:[function(a,b,c){throw H.c(new P.t("Success chance is 100%"))},"$3","gK",6,0,1],
 H:function(a,b){return 1},
