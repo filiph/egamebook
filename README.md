@@ -30,9 +30,9 @@ publishes the bleeding edge version to github.io can look something like
 `pub run -c test --run-skipped && peanut && git push origin --set-upstream gh-pages`.
 
 There is a shorthand for uploading the current version to 
-[https://egamebook.com/vermin](). First, ensure everything is built 
-(`egamebook build`, `dart tool/build.dart`, then `pub build`). 
-Second, make sure the current version runs well 
+[https://egamebook.com/vermin](https://egamebook.com/vermin). First, ensure
+everything is built  (`egamebook build`, `dart tool/build.dart`, then
+`pub build`). Second, make sure the current version runs well 
 (`pub run -c test --run-skipped`). 
 Third, run `./build_ifcomp_submission.sh` to copy the build over to 
 `../egamebook/docs/site` (this assumes `egamebook` directory is a sibling
