@@ -1,0 +1,6 @@
+tags:
+  long-running:
+    skip: >
+      Some tests are extremely long-running. We only run them manually
+      by using `pub run test --run-skipped`.
+  strict:

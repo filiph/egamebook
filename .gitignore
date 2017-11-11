@@ -1,0 +1,8 @@
+.buildlog
+.DS_Store
+.idea
+.packages
+.pub/
+build/
+*.scssc
+.cli_access_credentials.private

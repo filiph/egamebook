@@ -1,0 +1,110 @@
+﻿ROOM: $slave_quarters_passage
+
+
+DESCRIPTION:
+You can see Briana clutching her fists. "Homesick already?" she says. She doesn't wait for reply, and presses on.
+
+
+It doesn't take long before you start hearing voices. Orcs and goblins shouting commands. Then human screams.
+
+
+The tunnel gets wider and more torches light your way. The walls are smoother. 
+
+
+You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door. 
+
+
+A human slave runs down the passage toward you. His arm is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips move but he makes no sound. Eyes blurred with tears, he doesn't see you.
+
+
+Before you can so much as call to him, something long and sharp shoots from behind the slave. A bloodied spearhead appears in the center of the man's chest, as if it grew from his body. His tearful eyes glance at the fatal wound. Two more steps toward you and the slave falls face down, the shaft of the spear protruding from his back.
+
+
+An orc and a goblin appear from the tunnel, walking toward the dead man. The orc is laughing, patting his companion on the back. "Vicious throw, small one!" he roars.
+
+
+You step back and motion to Briana to lean against the wall, hoping that the door's reinforced frame will keep you hidden from the two slavers.
+
+
+But right then, something or someone pounds on the reinforced door from the inside. You hear loud and angry growls.
+
+
+The two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They run toward you.
+
+
+![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
+
+
+SHORT_DESCRIPTION:
+[[CODE]]
+if (playerHasVisited(w, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
+  s.add("The reinforced door on the side of the corridor is silent.", wholeSentence: true);
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (!playerHasVisited(w, "orcthorn_room")) {
+  s.add("The reinforced door on the side of the corridor is closed.", wholeSentence: true);
+}
+[[/CODE]]
+
+
+[[CODE]]
+rollBrianaQuote(w, s);
+[[/CODE]]
+
+
+FIGHT_SITUATION:
+generateSlaveQuartersPassageFight
+
+
+EXITS:
+$cave_with_agruth (Go back to the cave where Agruth's corpse lies): You back away from the door, and go back to where you left Agruth's body.
+
+
+$slave_quarters (Go further toward the Gate of Screams): You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.
+
+
+$orcthorn_room (Open the door): You open the door. 
+
+
+
+
+// ----------
+
+
+
+
+ACTION: $slave_quarters_passage_examine_door
+COMMAND: Examine the door
+
+
+FOR_LOCATION: $slave_quarters_passage
+
+
+PREREQUISITES:
+!w.actionHasBeenPerformed(name)
+&&
+!(w.currentSituation as RoomRoamingSituation).monstersAlive
+&&
+!playerHasVisited(w, "orcthorn_room")
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
+
+
+[[CODE]]
+if (w.actionHasBeenPerformed("talk_to_briana_3")) {
+  s.add("""
+You look at Briana and nod.
+
+
+_"The Mad Guardian."_
+""", wholeSentence: true);
+}
+[[/CODE]]

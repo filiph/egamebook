@@ -1,0 +1,70 @@
+﻿ROOM: $guardpost_above_church
+
+
+DESCRIPTION:
+You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.
+
+
+[[CODE]]
+if (justCameFrom(w, "smelter")) { 
+  s.add("""The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.
+""", wholeSentence: true);
+}
+[[/CODE]]
+
+
+[[CODE]]
+if (justCameFrom(w, "underground_church")) { 
+  s.add("""The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these passages slope downward.
+""", wholeSentence: true);
+}
+[[/CODE]]
+
+
+A third passage is marked "Up Door". Beyond the opening, you see a steep stairway leading upward. This is it. Your final path to escape. 
+
+
+For the first time, you see a smile on Briana's face. Not a smirk or a battle snarl, but a genuine smile. "_Up Door?_" she whispers, shaking her head. "I can't believe we've made it this far."
+
+
+Just inside the “Up Door” path sits a goblin guard. You’re in luck: He's sleeping. He loosely holds a scimitar in one hand, and has a shield laid on his lap.
+
+
+
+
+SHORT_DESCRIPTION: 
+[[CODE]]
+  if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") && !w.actionHasBeenPerformedSuccessfully("guardpost_above_church_take_shield")) {
+    s.add("The goblin's corpse is sprawled on the ground in the middle of the circular room.");
+  } else {
+    s.add("The goblin is sleeping soundly next to the passage to the Upper Door.");
+  }
+[[/CODE]]
+
+
+EXITS:
+$underground_church (Descend toward the Underground Church): You take the passage leading down toward the temple. 
+$smelter (Go to the smelter): You take the passage down. The temperature gradually rises until you see an opening.
+
+
+
+
+// ------
+
+
+ACTION: $guardpost_above_church_enter_tunnel_with_cancel
+COMMAND: Go to the Upper Door
+
+
+FOR_LOCATION: $guardpost_above_church
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION: 
+You take the passage that leads to the Upper Door.
+
+
+SUCCESS_EFFECT: 
+enterTunnelWithCancel(w, s);

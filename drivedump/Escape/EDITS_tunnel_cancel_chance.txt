@@ -1,0 +1,16 @@
+﻿ROOM: $tunnel_cancel_chance
+
+
+DESCRIPTION:
+After a few strides, you realize Briana is still standing in the circular room behind you.
+
+
+_"Are you not coming?"_
+
+
+Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive." 
+
+
+EXITS:
+$tunnel (Continue): You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.
+$guardpost_above_church (Return): You nod and step back into the circular room.

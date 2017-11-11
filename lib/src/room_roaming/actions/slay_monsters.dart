@@ -1,0 +1,73 @@
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+
+class SlayMonstersAction extends Action {
+  static final SlayMonstersAction singleton = new SlayMonstersAction();
+
+  static const String className = "SlayMonstersAction";
+
+  @override
+  final bool isAggressive = false;
+
+  @override
+  final bool rerollable = false;
+
+  @override
+  final bool isProactive = true;
+
+  @override
+  final Resource rerollResource = null;
+
+  @override
+  String get command => "";
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  String get name => className;
+
+  @override
+  String applyFailure(Actor a, WorldState w, Storyline s) {
+    throw new UnimplementedError();
+  }
+
+  @override
+  String applySuccess(Actor a, WorldState w, Storyline s) {
+    RoomRoamingSituation situation = w.currentSituation;
+    Room room = w.getRoomByName(situation.currentRoomName);
+
+    var friends = w.actors.where((other) =>
+        other.isAliveAndActive &&
+        other.team.isFriendWith(a.team) &&
+        other.currentRoomName == room.name);
+
+    var fightSituation = room.fightGenerator(w, situation, friends);
+    assert(
+        fightSituation.enemyTeamIds
+            .every((id) => w.actors.any((a) => a.id == id)),
+        "FightGenerator in $room didn't add its monsters to the world's "
+        "actors. Add a line like `w.actors.addAll(monsters)` to the "
+        "generator. At least one of these actors is missing: "
+        "${fightSituation.enemyTeamIds}");
+
+    w.pushSituation(fightSituation);
+
+    return "${a.name} initiated combat with monsters in $room";
+  }
+
+  @override
+  String getRollReason(Actor a, WorldState w) =>
+      "WARNING should not be user-visible";
+
+  @override
+  num getSuccessChance(Actor a, WorldState w) => 1.0;
+
+  @override
+  bool isApplicable(Actor a, WorldState w) =>
+      (w.currentSituation as RoomRoamingSituation).monstersAlive;
+}
