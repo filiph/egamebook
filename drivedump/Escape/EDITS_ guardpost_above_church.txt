@@ -21,7 +21,7 @@ if (justCameFrom(w, "underground_church")) {
 [[/CODE]]
 
 
-A third passage is marked "Up Door". Beyond the opening, you see a steep stairway leading upward. This is it. Your final path to escape. 
+A third passage is marked "Up Door". Beyond the opening, you see a steep stairway leading upward. This is it. Your final path to escape.
 
 
 For the first time, you see a smile on Briana's face. Not a smirk or a battle snarl, but a genuine smile. "_Up Door?_" she whispers, shaking her head. "I can't believe we've made it this far."

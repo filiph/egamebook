@@ -2,10 +2,10 @@
 
 
 DESCRIPTION:
-You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
+You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.
 
 
-Briana stands towering over Agruth's corpse. She smooths her hair back and looks down into the expanding pool of Agruth's blood, using it as a mirror. 
+Briana stands towering over Agruth's corpse. She smooths her hair back and looks down into the expanding pool of Agruth's blood, using it as a mirror.
 
 
 "What?" she says when she notices you're looking.
@@ -20,19 +20,19 @@ Briana spits down at the body. "He wasn't even the worst of them, you know."
 _"I know."_
 
 
-"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip. 
+"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.
 
 
 _"That one is already dead."_
 
 
-"Just making sure," she says. 
+"Just making sure," she says.
 
 
 ![Agruth's sword](img/agruth-sword.jpg)
 
 
-She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth's sword_." She makes a pained grimace when she says the orc's name.
+She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth's sword_." She makes a pained grimace when she says the orc's name.
 
 
 // -------------
