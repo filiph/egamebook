@@ -63,16 +63,15 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         (a, w, enemy) => new SlashSituation.initialized(a, enemy),
         (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
-        enemy,
-        successChanceGetter: (a, w, enemy) {
-          // This is intentional. Since the action can only lead to either
-          // complete miss (attacker's failure) or guaranteed failure
-          // of enemy's defense (attacker's success), we do need to count
-          // defender's shield here. Let's say the attacking player tries
-          // not to hit the shield and therefore misses completely.
-          final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-          return 0.5 - shieldPenalty;
-        },
+        enemy, successChanceGetter: (a, w, enemy) {
+      // This is intentional. Since the action can only lead to either
+      // complete miss (attacker's failure) or guaranteed failure
+      // of enemy's defense (attacker's success), we do need to count
+      // defender's shield here. Let's say the attacking player tries
+      // not to hit the shield and therefore misses completely.
+      final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
+      return 0.5 - shieldPenalty;
+    },
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 

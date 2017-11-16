@@ -11,15 +11,15 @@ import 'package:logging/logging.dart';
 /// [HtmlPresenter].
 Future<Null> main() async {
   // Track conversions.
-  final inProduction =
-      const String.fromEnvironment("production") == "true";
+  final inProduction = const String.fromEnvironment("production") == "true";
   final ga = new GoogleAnalytics(failSilently: inProduction);
-  FormElement signUpForm = querySelector("#mc-embedded-subscribe-form");
+  final signUpForm =
+      querySelector("#mc-embedded-subscribe-form") as FormElement;
   signUpForm.onSubmit.listen((_) {
     ga.sendSignUp(method: "email");
   });
-  ElementList<AnchorElement> externalLinks =
-  querySelectorAll("a[target=_blank]");
+  final externalLinks =
+      querySelectorAll("a[target=_blank]") as ElementList<AnchorElement>;
   for (final link in externalLinks) {
     link.onClick.listen((_) {
       ga.sendCustom("follow_external_link", label: link.href);

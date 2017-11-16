@@ -36,7 +36,7 @@ Iterable<EnemyTargetAction> generateEnemyTargetActions(
 /// an [actor] and a [builder].
 Iterable<ExitAction> generateExitActions(
     Actor actor, WorldState world, ExitActionBuilder builder) sync* {
-  RoomRoamingSituation situation = world.currentSituation;
+  final situation = world.currentSituation as RoomRoamingSituation;
   var room = world.getRoomByName(situation.currentRoomName);
 
   for (var exit in room.exits) {
@@ -50,7 +50,7 @@ Iterable<ExitAction> generateExitActions(
 /// an [actor] and a [builder].
 Iterable<ItemAction> generateItemActions(
     Actor actor, WorldState world, ItemActionBuilder builder) sync* {
-  FightSituation situation = world.currentSituation;
+  final situation = world.currentSituation as FightSituation;
 
   for (var item in situation.droppedItems) {
     var action = builder(item);
@@ -248,11 +248,11 @@ abstract class Action {
       ..wasAggressive = isAggressive
       ..wasProactive = isProactive;
     if (this is EnemyTargetAction) {
-      EnemyTargetAction action = this;
+      final action = this as EnemyTargetAction;
       builder.sufferers.add(action.enemy.id);
     }
     if (this is ExitAction) {
-      ExitAction action = this;
+      final action = this as ExitAction;
       builder.dataString = action.exit.destinationRoomName;
     }
     return builder;

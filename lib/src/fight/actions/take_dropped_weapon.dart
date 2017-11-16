@@ -42,7 +42,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    FightSituation situation = w.currentSituation;
+    final situation = w.currentSituation as FightSituation;
     w.replaceSituationById(
         situation.id,
         situation.rebuild(
@@ -70,7 +70,7 @@ class TakeDroppedWeapon extends ItemAction {
     // TODO: remove the next condition
     if (item is Spear) return false;
     if (!a.canWield) return false;
-    Weapon weapon = item;
+    final weapon = item as Weapon;
     final isSwordForSpear = a.currentWeapon is Spear && weapon is Sword;
     if (weapon.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(

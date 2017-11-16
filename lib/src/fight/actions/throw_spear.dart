@@ -125,7 +125,7 @@ class ThrowSpear extends EnemyTargetAction {
 
   Spear _findSpear(Actor a) {
     if (a.currentWeapon != null && a.currentWeapon is Spear) {
-      return a.currentWeapon;
+      return a.currentWeapon as Spear;
     }
     for (var item in a.items) {
       if (item is Spear) {

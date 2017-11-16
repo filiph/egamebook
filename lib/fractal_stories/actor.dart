@@ -199,7 +199,7 @@ abstract class Actor extends Object
     for (var item in items) {
       if (item is! Weapon) continue;
       if (item.value > value) {
-        best = item;
+        best = item as Weapon;
         value = item.value;
       }
     }

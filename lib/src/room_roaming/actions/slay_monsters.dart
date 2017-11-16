@@ -38,7 +38,7 @@ class SlayMonstersAction extends Action {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    RoomRoamingSituation situation = w.currentSituation;
+    final situation = w.currentSituation as RoomRoamingSituation;
     Room room = w.getRoomByName(situation.currentRoomName);
 
     var friends = w.actors.where((other) =>

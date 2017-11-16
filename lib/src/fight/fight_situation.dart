@@ -222,8 +222,8 @@ abstract class FightSituation extends Situation
         canFight(world, playerTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
-      RoomRoamingSituation situation =
-          world.getSituationById(roomRoamingSituationId);
+      final situation = world.getSituationById(roomRoamingSituationId)
+          as RoomRoamingSituation;
       world.replaceSituationById(
           situation.id, situation.rebuild((b) => b..monstersAlive = false));
 

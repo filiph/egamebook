@@ -82,7 +82,7 @@ class OnGroundShieldBlock extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, WorldState w) {
     if (a.isPlayer) return 0.8;
-    OnGroundDefenseSituation situation = w.currentSituation;
+    final situation = w.currentSituation as OnGroundDefenseSituation;
     return situation.predeterminedChance.or(0.5);
   }
 

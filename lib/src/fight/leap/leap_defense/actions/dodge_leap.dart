@@ -80,7 +80,7 @@ class DodgeLeap extends EnemyTargetAction {
     if (a.isPlayer) {
       return 0.78 - outOfBalancePenalty + enemyJumpedFromGroundBonus;
     }
-    LeapDefenseSituation situation = w.currentSituation;
+    final situation = w.currentSituation as LeapDefenseSituation;
     return situation.predeterminedChance
         .or(0.5 - outOfBalancePenalty + enemyJumpedFromGroundBonus);
   }

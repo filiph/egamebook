@@ -39,7 +39,7 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   String applySuccess(Actor a, WorldState w, Storyline s) {
-    FightSituation situation = w.currentSituation;
+    final situation = w.currentSituation as FightSituation;
     w.replaceSituationById(
         situation.id,
         situation.rebuild(

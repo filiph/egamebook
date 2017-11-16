@@ -72,7 +72,7 @@ class DodgePunch extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-    PunchDefenseSituation situation = w.currentSituation;
+    final situation = w.currentSituation as PunchDefenseSituation;
     return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
   }
 

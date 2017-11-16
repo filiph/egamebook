@@ -73,7 +73,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
       return;
     }
 
-    while (!finished && _choices.isEmpty && _stringBuffer.isEmpty) {
+    while (!finished && _choices.isEmpty as bool && _stringBuffer.isEmpty) {
       await update();
     }
 

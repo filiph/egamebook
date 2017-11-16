@@ -100,7 +100,7 @@ class ParrySlash extends EnemyTargetAction {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.3 : 0;
     if (a.isPlayer) return 0.6 - outOfBalancePenalty + enemyOutOfBalanceBonus;
-    SlashDefenseSituation situation = w.currentSituation;
+    final situation = w.currentSituation as SlashDefenseSituation;
     return situation.predeterminedChance
         .or(0.3 - outOfBalancePenalty + enemyOutOfBalanceBonus);
   }

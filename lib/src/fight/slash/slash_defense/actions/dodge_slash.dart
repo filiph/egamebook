@@ -77,7 +77,7 @@ class DodgeSlash extends EnemyTargetAction {
   num getSuccessChance(Actor a, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-    SlashDefenseSituation situation = w.currentSituation;
+    final situation = w.currentSituation as SlashDefenseSituation;
     return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
   }
 

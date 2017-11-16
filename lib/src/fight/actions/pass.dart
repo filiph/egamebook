@@ -24,7 +24,6 @@ class Pass extends Action {
   @override
   final Resource rerollResource = null;
 
-
   @override
   String get command => "Stand off.";
 

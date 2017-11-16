@@ -184,7 +184,7 @@ class WorldState {
 
   Actor getActorById(int id) {
     assert(actors.where((actor) => actor.id == id).length > 0,
-    "No actor of id=$id in world: $this.");
+        "No actor of id=$id in world: $this.");
     assert(actors.where((actor) => actor.id == id).length < 2,
         "Too many actors of id=$id in world: $this.");
     return actors.singleWhere((actor) => actor.id == id);

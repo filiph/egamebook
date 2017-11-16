@@ -67,7 +67,7 @@ class DisarmKick extends EnemyTargetAction {
       s.add("<owner's> <subject> fl<ies> away",
           subject: enemy.currentWeapon, owner: enemy);
     });
-    FightSituation situation = w.currentSituation;
+    final situation = w.currentSituation as FightSituation;
     w.replaceSituationById(
         situation.id,
         situation.rebuild((FightSituationBuilder b) =>
