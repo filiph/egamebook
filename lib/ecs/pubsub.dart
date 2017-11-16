@@ -15,8 +15,11 @@ class ActorKilledEvent {
 class PubSub implements Sink<Object> {
   StreamController<ActorKilledEvent> _actorKilled;
 
+  bool _sealed = false;
+
   PubSub() {
-    _actorKilled = new StreamController<ActorKilledEvent>.broadcast(sync: true);
+    _actorKilled = new StreamController<ActorKilledEvent>.broadcast(
+        sync: true, onListen: _assertNoSubscribersAfterSealed);
   }
 
   Stream<ActorKilledEvent> get actorKilled => _actorKilled.stream;
@@ -38,7 +41,21 @@ class PubSub implements Sink<Object> {
   }
 
   void publishActorKilled(ActorKilledEvent e) {
+    _assertSealedBeforePublishing();
     _log.info(() => "New $e about to be published.");
     _actorKilled.add(e);
+  }
+
+  void seal() {
+    _sealed = true;
+  }
+
+  void _assertNoSubscribersAfterSealed() {
+    assert(
+        !_sealed, "Please do not add more subscribers after pubsub is sealed.");
+  }
+
+  void _assertSealedBeforePublishing() {
+    assert(_sealed, "Please seal pubsub before publishing events.");
   }
 }

@@ -27,19 +27,21 @@ void main() {
 
     test("subscription works", () {
       pubsub.actorKilled.listen(record);
+      pubsub.seal();
       pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
       expect(events.length, 1);
       expect(events.single.actor, aren);
     });
 
     test("event doesn't fire when there are no listener", () {
+      pubsub.seal();
       pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
-      pubsub.actorKilled.listen(record);
       expect(events.length, 0);
     });
 
     test("event doesn't fire after subscription cancelled", () {
       final sub = pubsub.actorKilled.listen(record);
+      pubsub.seal();
       pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
       sub.cancel();
       pubsub.publishActorKilled(new ActorKilledEvent(briana, aren));
@@ -62,6 +64,7 @@ void main() {
       pubsub.actorKilled.listen(zerothRecord);
       pubsub.actorKilled.listen(record);
       pubsub.actorKilled.listen(secondRecord);
+      pubsub.seal();
       pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
     });
   });
