@@ -1,36 +1,68 @@
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("type-safe", () {
-    Pubsub<Channel, String> pubsub;
+  group("pubsub", () {
+    PubSub pubsub;
 
-    List<String> messages;
+    Actor aren = new Actor.initialized(1, "Aren");
 
-    void record(String message) {
-      messages.add(message);
+    Actor briana = new Actor.initialized(2, "Briana");
+
+    List<ActorKilledEvent> events;
+
+    void record(ActorKilledEvent event) {
+      events.add(event);
     }
 
     setUp(() {
-      pubsub = new Pubsub<Channel, String>();
-      messages = [];
+      pubsub = new PubSub();
+      events = [];
+    });
+
+    tearDown(() {
+      pubsub.close();
     });
 
     test("subscription works", () {
-      pubsub.subscribe(Channel.one, record); // subscribes on channel one
-      pubsub.publish(Channel.one, 'a message'); // prints out `a message`
-      pubsub.unsubscribe(
-          Channel.one, record); // unsubscribes from channel one
-      pubsub.unsubscribe(
-          Channel.two, record); // tries unsubscribing from channel two
-      pubsub.publish(Channel.one, 'a second message'); // prints out nothing
-      pubsub.subscribe(
-          Channel.one, record); // subscribes again on channel one
-      pubsub.publish(
-          Channel.one, 'a third message'); // prints out `a third message`
-      expect(messages, orderedEquals(['a message', 'a third message']));
+      pubsub.actorKilled.listen(record);
+      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      expect(events.length, 1);
+      expect(events.single.actor, aren);
+    });
+
+    test("event doesn't fire when there are no listener", () {
+      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      pubsub.actorKilled.listen(record);
+      expect(events.length, 0);
+    });
+
+    test("event doesn't fire after subscription cancelled", () {
+      final sub = pubsub.actorKilled.listen(record);
+      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      sub.cancel();
+      pubsub.publishActorKilled(new ActorKilledEvent(briana, aren));
+      expect(events.length, 1);
+      expect(events.single.actor, aren);
+    });
+
+    test("event broadcasted to listeners in order of subscription", () {
+      void zerothRecord(ActorKilledEvent event) {
+        // The [record] function shouldn't have fired yet.
+        expect(events, isEmpty);
+      }
+
+      void secondRecord(ActorKilledEvent event) {
+        // The [record] function should have recorded this same event just now.
+        expect(events.last.actor, event.actor);
+        expect(events.last.perpetrator, event.perpetrator);
+      }
+
+      pubsub.actorKilled.listen(zerothRecord);
+      pubsub.actorKilled.listen(record);
+      pubsub.actorKilled.listen(secondRecord);
+      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
     });
   });
 }
-
-enum Channel { one, two }
