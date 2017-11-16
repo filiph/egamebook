@@ -87,7 +87,6 @@ class Randomly {
   /// When [precisionSteps] is [:5:], then it becomes "45%".
   static String humanStringifyProbability(num probability,
       {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
-
     num humanProbability = probability * 100 / precisionSteps; // ex. 6.4
     humanProbability = humanProbability.round(); // ex. 6.0
     humanProbability *= precisionSteps; // ex. 60

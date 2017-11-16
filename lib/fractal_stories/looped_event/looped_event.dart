@@ -41,7 +41,8 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   LoopedEvent(this._echo, this._goto, this._choices, this.choiceFunction,
       this._slotMachineShowFunction);
 
-  Future<slot.SessionResult> showSlotMachine(double probability, String rollReason,
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
       {bool rerollEnabled, String rerollEffectDescription}) {
     _pushStringBuffer();
     return _slotMachineShowFunction(probability, rollReason,

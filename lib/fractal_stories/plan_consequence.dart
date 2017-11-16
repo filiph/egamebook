@@ -93,7 +93,9 @@ class PlanConsequence {
       this.isSuccess,
       this.order) {
     storyline.time = world.time;
-    assert(world.currentAction == null, "currentAction should only be non-null "
+    assert(
+        world.currentAction == null,
+        "currentAction should only be non-null "
         "while action is applied.");
   }
 
