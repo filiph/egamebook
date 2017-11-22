@@ -18,31 +18,28 @@ Future<Null> main(List<String> args) async {
     actionPattern = new RegExp(args[index + 1], caseSensitive: false);
   }
 
-  IOSink fileLogSink;
-  try {
-    if (logged) {
-      var file = new File("edgehead.log");
-      fileLogSink = file.openWrite();
-    }
-    await run(automated, automated, logged ? fileLogSink : null,
-        actionPattern: actionPattern);
-  } finally {
-    await fileLogSink?.close();
+  File file;
+  if (logged) {
+    file = new File("edgehead.log");
   }
+  await run(automated, automated, logged ? file : null,
+      actionPattern: actionPattern);
 }
 
 final _random = new Random();
 
-Future<Null> run(bool automated, bool silent, StringSink logSink,
+Future<Null> run(bool automated, bool silent, File logFile,
     {Level logLevel: Level.ALL, Pattern actionPattern}) async {
   StreamSubscription loggerSubscription;
-  if (logSink != null) {
+  if (logFile != null) {
     Logger.root.level = logLevel;
     loggerSubscription = Logger.root.onRecord.listen((record) {
-      logSink.writeln('${record.time.toIso8601String()} - '
+      logFile.writeAsStringSync(
+          '${record.time.toIso8601String()} - '
           '[${record.loggerName}] - '
           '[${record.level.name}] - '
-          '${record.message}');
+          '${record.message}\n',
+          mode: FileMode.APPEND);
     });
   }
 
