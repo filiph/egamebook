@@ -184,6 +184,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     });
 
     game.start();
+    await game.closed;
   } finally {
     await loggerSubscription?.cancel();
   }

@@ -104,14 +104,24 @@ abstract class Book {
     acceptCustom(command);
   }
 
+  final Completer<Null> _closedCompleter = new Completer<Null>();
+
+  /// Completes after [close] has been called. Handy to make sure resources
+  /// tied to this [Book] (like logging) stay around for the duration of
+  /// the object's lifetime.
+  Future<Null> get closed => _closedCompleter.future;
+
   /// Override this function when you expect custom commands from the user.
   @protected
   void acceptCustom(CommandBase command) {
     throw new UnimplementedError();
   }
 
+  /// Cleans up
+  @mustCallSuper
   void close() {
     _elementsController.close();
+    _closedCompleter.complete();
   }
 
   /// Show a block of choices. This method returns with a [Future] of the
@@ -181,6 +191,8 @@ class EdgeheadGame extends Book {
   EdgeheadGame({this.actionPattern}) {
     setup();
   }
+
+
 
   void setup() {
     orc = new Actor.initialized(1000, "orc",
