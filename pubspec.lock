@@ -7,12 +7,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.30.0+4"
-  ansicolor:
-    description:
-      name: ansicolor
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.9"
   args:
     description:
       name: args
@@ -133,12 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
-  egamebook:
-    description:
-      path: "../egamebook"
-      relative: true
-    source: path
-    version: "1.0.0-dev.1"
   fixnum:
     description:
       name: fixnum
@@ -223,12 +211,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.3+1"
-  markdown:
-    description:
-      name: markdown
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.1"
   matcher:
     description:
       name: matcher
@@ -301,12 +283,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+1"
-  resource:
-    description:
-      name: resource
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   sass:
     description:
       name: sass

@@ -11,9 +11,6 @@ dependencies:
   browser: ^0.10.0+2
   built_collection: ^1.4.1
   built_value: ^4.1.1
-  egamebook:
-    path: ../egamebook
-    version: ^1.0.0-dev.1
   gtag_analytics: ^0.1.5
   meta: ^1.0.5
   logging: ^0.11.3+1

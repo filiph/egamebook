@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/edgehead_global.dart';
+import 'package:edgehead/egamebook/commands/commands.dart';
+import 'package:edgehead/egamebook/commands/resolve_slot_machine_command.dart';
+import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
-import 'package:edgehead/fractal_stories/looped_event/looped_event.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
 import 'package:edgehead/fractal_stories/room.dart';
@@ -17,8 +20,11 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_input.dart';
-import 'package:egamebook/stat/stat.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
+import 'package:slot_machine/result.dart' as slot;
+
+import 'egamebook/stat/stat.dart';
 
 /// [EdgeheadGame.briana]'s [Actor.id].
 const int brianaId = 100;
@@ -36,8 +42,114 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.teamPreservation -
     scoreChange.enemy;
 
-class EdgeheadGame extends LoopedEvent {
+abstract class Book {
+  StreamController<ElementBase> _elementsController;
+
+  /// The completer for [showChoices]. Should be `null` by default, and only
+  /// `non-null` when there is a [ChoiceBlock] waiting for player input.
+  Completer<Choice> _showChoicesCompleter;
+
+  /// The completer for [showSlotMachine]. Should be `null` by default,
+  /// and only `non-null` when there is a slot machine rolling or waiting
+  /// for player input.
+  Completer<slot.SessionResult> _showSlotMachineCompleter;
+
+  Book() : _elementsController = new StreamController<ElementBase>();
+
+  /// The build identifier. This should probably be autopopulated
+  /// from the commit hash.
+  String get buildId;
+
+  Stream<ElementBase> get elements => _elementsController.stream;
+
+  /// If you want to send custom book elements, use [elementsSink].
+  ///
+  /// Most [Book]s will use methods like [letPlayerPick] which use
+  /// [elementsSink] internally.
+  ///
+  /// If you opt into using the manual method, you also need to make sure
+  /// to deal with custom [Command]s coming from the player.  For example,
+  /// a fancy Map element could be sending a `MapZoom` command which you
+  /// should deal with in [acceptCustom].
+  @protected
+  StreamSink<ElementBase> get elementsSink => _elementsController.sink;
+
+  /// The version in semver form (e.g. "1.0.2").
+  String get semver;
+
+  /// A string uniquely identifying this egamebook.
+  String get uid;
+
+  /// Major player events are sent through this function. For example, player
+  /// picking a [Choice] or requesting a game load.
+  ///
+  /// Custom events are redirected to [acceptCustom].
+  void accept(CommandBase command) {
+    if (command is PickChoice) {
+      assert(_showChoicesCompleter != null);
+      _showChoicesCompleter.complete(command.choice);
+      _showChoicesCompleter = null;
+      return;
+    }
+
+    if (command is ResolveSlotMachine) {
+      assert(_showSlotMachineCompleter != null);
+      _showSlotMachineCompleter.complete(
+          new slot.SessionResult(command.result, command.wasRerolled));
+      _showSlotMachineCompleter = null;
+      return;
+    }
+
+    // else
+    acceptCustom(command);
+  }
+
+  /// Override this function when you expect custom commands from the user.
+  @protected
+  void acceptCustom(CommandBase command) {
+    throw new UnimplementedError();
+  }
+
+  void close() {
+    _elementsController.close();
+  }
+
+  /// Show a block of choices. This method returns with a [Future] of the
+  /// picked [Choice].
+  @protected
+  Future<Choice> showChoices(ChoiceBlock choices) {
+    assert(_showChoicesCompleter == null);
+    _showChoicesCompleter = new Completer<Choice>();
+    _elementsController.add(choices);
+    return _showChoicesCompleter.future;
+  }
+
+  @protected
+  Future<slot.SessionResult> showSlotMachine(
+      double probability, String rollReason,
+      {bool rerollable: false, String rerollEffectDescription}) {
+    assert(_showSlotMachineCompleter == null);
+    _showSlotMachineCompleter = new Completer<slot.SessionResult>();
+    _elementsController.add(new SlotMachine((b) => b
+      ..probability = probability
+      ..rollReason = rollReason
+      ..rerollable = rerollable
+      ..rerollEffectDescription = rerollEffectDescription));
+    return _showSlotMachineCompleter.future;
+  }
+}
+
+class EdgeheadGame extends Book {
   final Logger log = new Logger('EdgeheadGame');
+
+  @override
+  final String uid = "edgehead";
+
+  @override
+  final String semver = "2.0.0-alpha";
+
+  @override
+  final String buildId = "deadbeef";
 
   /// When we hit an action whose [Action.name] matches this pattern,
   /// we'll drop from automatic playthrough.
@@ -61,21 +173,12 @@ class EdgeheadGame extends LoopedEvent {
 
   Storyline storyline = new Storyline();
 
-  final Stat<double> hitpoints;
-  final Stat<int> stamina;
-  final Stat<int> gold;
+  final Stat<double> hitpoints =
+      new Stat<double>("hitpoints", (v) => "$v HP", initialValue: 0.0);
+  final Stat<int> stamina = new Stat<int>("stamina", (v) => "$v HP");
+  final Stat<int> gold = new Stat<int>("gold", (v) => "$v g");
 
-  EdgeheadGame(
-      StringTakingVoidFunction echo,
-      StringTakingVoidFunction goto,
-      dynamic choices /* TODO: make this statically typed */,
-      ChoiceFunction choiceFunction,
-      SlotMachineShowFunction slotMachineShowFunction,
-      this.hitpoints,
-      this.stamina,
-      this.gold,
-      {this.actionPattern})
-      : super(echo, goto, choices, choiceFunction, slotMachineShowFunction) {
+  EdgeheadGame({this.actionPattern}) {
     setup();
   }
 
@@ -139,9 +242,12 @@ class EdgeheadGame extends LoopedEvent {
     consequence = new PlanConsequence.initial(world);
   }
 
-  @override
+  void start() {
+    update();
+  }
+
   Future<Null> update() async {
-    if (storyline.outputFinishedParagraphs(echo)) {
+    if (storyline.outputFinishedParagraphs(_echoDeprecated)) {
       // We had some paragraphs ready and sent them to [echo]. Let's return
       // to the outer loop so that we show the output before planning next
       // moves.
@@ -154,14 +260,16 @@ class EdgeheadGame extends LoopedEvent {
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
-      finished = true;
-
       storyline.addParagraph();
-      if (!world.hasAliveActor(aren.id)) {
-        storyline.add("You die.", wholeSentence: true);
-      }
-      echo(storyline.realize());
+      _echoDeprecated(storyline.realize());
 
+      if (!world.hasAliveActor(aren.id)) {
+        _elementsController
+            .add(new LoseGame((b) => b..markdownText = "You die."));
+      } else {
+        _elementsController
+            .add(new WinGame((b) => b..markdownText = "TODO win text"));
+      }
       return;
     }
 
@@ -249,6 +357,12 @@ class EdgeheadGame extends LoopedEvent {
           .pickMax(situation.maxActionsToShow, normalCombineFunction)
           .toList(growable: false);
 
+      if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
+        /// Only realize storyline when there is an actual choice to show.
+        _echoDeprecated(storyline.realize());
+        storyline.clear();
+      }
+
       // Creates a string just for sorting. Actions with same enemy are
       // sorted next to each other.
       String sortingName(Action a) {
@@ -258,20 +372,24 @@ class EdgeheadGame extends LoopedEvent {
         return "ZZZZZZ ${a.command}";
       }
 
-      if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
-        /// Only realize storyline when there is an actual choice to show.
-        echo(storyline.realize());
-        storyline.clear();
-      }
-
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
+
+      final choices = new ListBuilder<Choice>();
+      final callbacks = new Map<Choice, Future<Null> Function()>();
       for (Action action in actions) {
-        choiceFunction(action.command, helpMessage: action.helpMessage,
-            script: () async {
+        final choice = new Choice((b) => b
+          ..markdownText = action.command
+          ..helpMessage = action.helpMessage);
+        callbacks[choice] = () async {
           await _applySelected(action, actor, storyline);
-        });
+        };
+        choices.add(choice);
       }
-      return;
+      final choiceBlock = new ChoiceBlock((b) => b..choices = choices);
+      final picked = await showChoices(choiceBlock);
+
+      // Execute the picked option.
+      await callbacks[picked]();
     } else {
       // NPC
       // TODO - if more than one action, remove the one that was just made
@@ -280,7 +398,10 @@ class EdgeheadGame extends LoopedEvent {
       await _applySelected(selected, actor, storyline);
     }
 
-    storyline.outputFinishedParagraphs(echo);
+    storyline.outputFinishedParagraphs(_echoDeprecated);
+
+    // ignore: unawaited_futures
+    update();
   }
 
   Future _applyPlayerAction(
@@ -296,7 +417,7 @@ class EdgeheadGame extends LoopedEvent {
           'Non-stamina resource needed for ${action.name}');
       var result = await showSlotMachine(
           chance.toDouble(), action.getRollReason(actor, world),
-          rerollEnabled:
+          rerollable:
               action.rerollable && actor.hasResource(action.rerollResource),
           rerollEffectDescription: "use $resourceName");
       consequence =
@@ -337,5 +458,15 @@ class EdgeheadGame extends LoopedEvent {
       String path = world.actionRecords.map((a) => a.description).join(' <- ');
       return "- how ${actor.name} got here: $path";
     });
+  }
+
+  /// Stop using this indirection and instead send directly through
+  /// [_elementsController].
+  /// TODO: move to [Book] and rename to echo
+  @deprecated
+  void _echoDeprecated(Object string) {
+    assert(string is String);
+    _elementsController
+        .add(new TextOutput((b) => b..markdownText = string.toString()));
   }
 }

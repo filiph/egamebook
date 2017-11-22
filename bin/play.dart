@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:edgehead/edgehead_lib.dart';
+import 'package:edgehead/egamebook/commands/commands.dart';
+import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
-import 'package:egamebook/scripter.dart';
-import 'package:egamebook/src/shared/user_interaction.dart';
 import 'package:logging/logging.dart';
 import 'package:slot_machine/result.dart' as slot;
 
@@ -31,46 +31,7 @@ Future<Null> main(List<String> args) async {
   }
 }
 
-final ChoiceList choices = new ChoiceList();
-
-Stat<double> hitpoints = new Stat<double>("Health", (double value) {
-  if (value == 0.0) {
-    return "💀"; // dead, skull
-  }
-  if (value <= 0.5) {
-    return "😣"; // bleeding, persevering face
-  }
-  if (value < 1.0) {
-    return "😧"; // cut, anguished face
-  }
-  return "😐"; // fine, neutral face
-}, description: "Your physical state", initialValue: 100.0, show: true);
-
-Stat<int> stamina = new Stat<int>("Stamina", (int value) => "$value 🔆",
-    description: "Spare physical energy", show: true);
-
-Stat<int> gold = new Stat<int>("Gold", (int value) => "$value 💰",
-    description: "Gold coins", show: true);
-
 final _random = new Random();
-
-Choice choice(String string,
-    {String goto,
-    ScriptBlock script,
-    String submenu,
-    bool deferToEndOfPage: false,
-    bool deferToChoiceList: false,
-    String helpMessage}) {
-  Choice choice = new Choice(string,
-      goto: goto,
-      script: script,
-      submenu: submenu,
-      deferToEndOfPage: deferToEndOfPage,
-      deferToChoiceList: deferToChoiceList,
-      helpMessage: helpMessage);
-  choices.add(choice);
-  return choice;
-}
 
 Future<Null> run(bool automated, bool silent, StringSink logSink,
     {Level logLevel: Level.ALL, Pattern actionPattern}) async {
@@ -89,6 +50,8 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
   bool silentWithOverride = silent;
 
   final Logger log = new Logger("play_run");
+
+  @deprecated
   void hijackedPrint(Object msg) {
     log.info(msg);
     if (!silentWithOverride) print(msg);
@@ -148,45 +111,79 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     }
   }
 
-  String gotoPage;
-
   try {
-    var game = new EdgeheadGame(hijackedPrint, (String goto) => gotoPage = goto,
-        choices, choice, showSlotMachine, hitpoints, stamina, gold,
-        actionPattern: actionPattern);
-    game.onFinishedGoto = "endGame";
+    var game = new EdgeheadGame(actionPattern: actionPattern);
 
-    while (gotoPage == null) {
-      await game.run();
+    StreamSubscription<ElementBase> subscription;
 
-      if (game.actionPatternWasHit) silentWithOverride = false;
-
-      if (choices.isEmpty) continue;
-
-      if (!silentWithOverride) {
-        print("");
-        for (int i = 0; i < choices.length; i++) {
-          var helpMessage = choices[i].helpMessage ?? '';
-          var shortened = helpMessage.split(' ').take(10).join(' ');
-          print("${i + 1}) ${choices[i].string} ($shortened ...)");
-        }
-      }
-
-      int option;
-
-      if (automated && !game.actionPatternWasHit) {
-        option = _random.nextInt(choices.length);
-      } else if (choices.length == 1 && choices.single.isAutomatic) {
-        option = 0;
-      } else {
-        option = int.parse(stdin.readLineSync()) - 1;
-        print("");
-      }
-      await choices[option].f();
-      choices.clear();
+    void quit() {
+      game.close();
+      subscription.cancel();
     }
 
-    assert(gotoPage == "endGame");
+    subscription = game.elements.listen((element) {
+      if (game.actionPatternWasHit) silentWithOverride = false;
+
+      if (element is TextOutput) {
+        hijackedPrint(element.markdownText);
+        return;
+      }
+
+      if (element is WinGame) {
+        hijackedPrint(element.markdownText);
+        hijackedPrint("Congrats! You won.");
+        quit();
+        return;
+      }
+
+      if (element is LoseGame) {
+        hijackedPrint(element.markdownText);
+        hijackedPrint("Oh noes.");
+        quit();
+        return;
+      }
+
+      if (element is ChoiceBlock) {
+        if (!silentWithOverride) {
+          print("");
+          for (int i = 0; i < element.choices.length; i++) {
+            var helpMessage = element.choices[i].helpMessage ?? '';
+            var shortened = helpMessage.split(' ').take(10).join(' ');
+            print("${i + 1}) "
+                "${element.choices[i].markdownText} ($shortened ...)");
+          }
+        }
+
+        int option;
+
+        if (automated && !game.actionPatternWasHit) {
+          option = _random.nextInt(element.choices.length);
+        } else if (element.choices.length == 1 &&
+            element.choices.single.isAutomatic) {
+          option = 0;
+        } else {
+          option = int.parse(stdin.readLineSync()) - 1;
+          print("");
+        }
+        game.accept(new PickChoice(
+            (b) => b..choice = element.choices[option].toBuilder()));
+        return;
+      }
+
+      if (element is SlotMachine) {
+        final result = showSlotMachine(element.probability, element.rollReason,
+            rerollable: element.rerollable,
+            rerollEffectDescription: element.rerollEffectDescription);
+        result.then((sessionResult) {
+          game.accept(new ResolveSlotMachine((b) => b
+            ..result = sessionResult.result
+            ..wasRerolled = sessionResult.wasRerolled));
+        });
+        return;
+      }
+    });
+
+    game.start();
   } finally {
     await loggerSubscription?.cancel();
   }
