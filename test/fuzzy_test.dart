@@ -10,7 +10,8 @@ import '../bin/play.dart';
 
 void main() {
   test("edgehead runs to completion", () async {
-    await run(true, true, null);
+    final runner = new CliRunner(true, true, null);
+    await runner.play();
   });
 
   group("logged", () {
@@ -46,7 +47,8 @@ Future<Null> testWithStopWords(List<String> stopWords, Directory tempDir,
     print("Running $identifier-aware test #${i + 1}.");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
-    await run(true, true, logFile, logLevel: logLevel);
+    final runner = new CliRunner(true, true, logFile, logLevel: logLevel);
+    await runner.play();
     for (final line in logFile.readAsLinesSync()) {
       for (final word in stopWords) {
         if (line.contains(word)) {
