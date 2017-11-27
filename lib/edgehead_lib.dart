@@ -54,6 +54,19 @@ abstract class Book {
   /// for player input.
   Completer<slot.SessionResult> _showSlotMachineCompleter;
 
+  /// Whether or not the book is waiting for a command from the player.
+  /// If it isn't, commands arriving to the book will throw a runtime error.
+  ///
+  /// This is important because we don't want to allow the player to change
+  /// the Book's state while it's working. For example, drinking a potion
+  /// from the inventory should not be allowed _while_ a combat simulation
+  /// is taking place. It should only be available when it's the player's turn.
+  ///
+  /// TODO: Instead of throwing, buffer the input and send it after we are
+  /// waiting for input again.
+  @protected
+  bool isWaitingForInput = true;
+
   Book() : _elementsController = new StreamController<ElementBase>();
 
   /// The build identifier. This should probably be autopopulated
@@ -85,10 +98,13 @@ abstract class Book {
   ///
   /// Custom events are redirected to [acceptCustom].
   void accept(CommandBase command) {
+    assert(isWaitingForInput);
+
     if (command is PickChoice) {
       assert(_showChoicesCompleter != null);
       _showChoicesCompleter.complete(command.choice);
       _showChoicesCompleter = null;
+      isWaitingForInput = false;
       return;
     }
 
@@ -97,6 +113,7 @@ abstract class Book {
       _showSlotMachineCompleter.complete(
           new slot.SessionResult(command.result, command.wasRerolled));
       _showSlotMachineCompleter = null;
+      isWaitingForInput = false;
       return;
     }
 
@@ -105,6 +122,10 @@ abstract class Book {
   }
 
   /// Override this function when you expect custom commands from the user.
+  ///
+  /// Please make sure to update [isWaitingForInput]. If the command sets
+  /// things in motion (as in, starts the simulation), you should set it
+  /// to `false`. Otherwise, keep it `true`.
   @protected
   void acceptCustom(CommandBase command) {
     throw new UnimplementedError();
@@ -116,6 +137,7 @@ abstract class Book {
     _elementsController.close();
   }
 
+  /// Shows the provided text as regular [TextOutput].
   @protected
   void echo(String markdownText) {
     _elementsController
@@ -129,6 +151,7 @@ abstract class Book {
     assert(_showChoicesCompleter == null);
     _showChoicesCompleter = new Completer<Choice>();
     _elementsController.add(choices);
+    isWaitingForInput = true;
     return _showChoicesCompleter.future;
   }
 
@@ -143,6 +166,7 @@ abstract class Book {
       ..rollReason = rollReason
       ..rerollable = rerollable
       ..rerollEffectDescription = rerollEffectDescription));
+    isWaitingForInput = true;
     return _showSlotMachineCompleter.future;
   }
 
