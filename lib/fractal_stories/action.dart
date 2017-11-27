@@ -1,5 +1,6 @@
 library stranded.action;
 
+import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -68,8 +69,7 @@ typedef T ActionBuilder<T extends Action, V>(V parameter);
 
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].
-typedef String ApplyFunction(
-    Actor actor, WorldState world, Storyline storyline);
+typedef WorldState ApplyFunction(Actor actor, WorldState world, PubSub pubsub);
 
 /// Builder takes an enemy actor and generates an instance of
 /// [EnemyTargetAction] with the given [enemy].
@@ -130,8 +130,8 @@ abstract class Action {
   /// on it.
   Resource get rerollResource;
 
-  Iterable<PlanConsequence> apply(
-      Actor actor, PlanConsequence current, WorldState world) sync* {
+  Iterable<PlanConsequence> apply(Actor actor, PlanConsequence current,
+      WorldState world, PubSub pubsub) sync* {
     var successChance = getSuccessChance(actor, current.world);
     assert(successChance != null);
     assert(successChance >= 0.0);
@@ -140,7 +140,7 @@ abstract class Action {
     if (successChance > 0) {
       var worldCopy = new WorldState.duplicate(world);
       Storyline storyline = _applyToWorldCopy(
-          worldCopy, actor, world, applySuccess,
+          worldCopy, actor, world, applySuccess, pubsub,
           isSuccess: true);
 
       yield new PlanConsequence(
@@ -150,7 +150,7 @@ abstract class Action {
     if (successChance < 1) {
       var worldCopy = new WorldState.duplicate(world);
       Storyline storyline = _applyToWorldCopy(
-          worldCopy, actor, world, applyFailure,
+          worldCopy, actor, world, applyFailure, pubsub,
           isFailure: true);
 
       yield new PlanConsequence(
@@ -159,15 +159,13 @@ abstract class Action {
     }
   }
 
-  /// Called to get the result of failure to do this action. Mutates [w]
-  /// (World). Returns a string useful for logging, such as "player failed to
-  /// slash orc".
-  String applyFailure(Actor a, WorldState w, Storyline s);
+  /// Called to get the result of failure to do this action. Returns
+  /// the mutated [WorldState].
+  WorldState applyFailure(Actor a, WorldState w, PubSub pubsub);
 
-  /// Called to get the result of success of doing this action. Mutates [w]
-  /// (World). Returns a string useful for logging, such as "player slashed
-  /// orc".
-  String applySuccess(Actor a, WorldState w, Storyline s);
+  /// Called to get the result of success of doing this action. Returns
+  /// the mutated [WorldState].
+  WorldState applySuccess(Actor a, WorldState w, PubSub pubsub);
 
   /// Returns a string that will explain why actor needs to roll for success.
   ///
@@ -193,7 +191,7 @@ abstract class Action {
   }
 
   Storyline _applyToWorldCopy(WorldState worldCopy, Actor actor,
-      WorldState world, ApplyFunction applyFunction,
+      WorldState world, ApplyFunction applyFunction, PubSub pubsub,
       {bool isSuccess: false, bool isFailure: false}) {
     // Set currentAction.
     worldCopy.currentAction = this;
@@ -208,7 +206,8 @@ abstract class Action {
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
     assert(worldCopy.hashCode == hashCode,
         "Please don't change the world in onBeforeAction");
-    _description = applyFunction(actorInWorldCopy, worldCopy, storyline);
+    _description =
+        applyFunction(actorInWorldCopy, worldCopy, storyline, pubsub);
     if (worldCopy.situationExists(situationId)) {
       // The current situation could have been removed by [applyFunction].
       // If not, let's update its time.

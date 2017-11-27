@@ -5,6 +5,7 @@ import 'dart:collection';
 
 import 'action.dart';
 import 'actor.dart';
+import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:logging/logging.dart';
@@ -30,9 +31,11 @@ class ActorPlanner {
 
   bool _resultsReady = false;
 
+  PubSub _pubsub;
+
   final Map<Action, ActorScoreChange> firstActionScores = new Map();
 
-  ActorPlanner(Actor actor, WorldState initialWorld)
+  ActorPlanner(Actor actor, WorldState initialWorld, this._pubsub)
       : actorId = actor?.id,
         _initial = new PlanConsequence.initial(initialWorld) {
     if (actor == null) {
@@ -234,7 +237,7 @@ class ActorPlanner {
 
     var initialWorldHash = initial.world.hashCode;
     for (var firstConsequence
-        in firstAction.apply(mainActor, initial, initial.world)) {
+        in firstAction.apply(mainActor, initial, initial.world, _pubsub)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw new StateError("Action $firstAction modified world state when "
             "producing $firstConsequence.");
@@ -342,7 +345,8 @@ class ActorPlanner {
       var originalCount = open.length;
       for (Action action in _generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, current.world)) continue;
-        var consequences = action.apply(currentActor, current, current.world);
+        var consequences =
+            action.apply(currentActor, current, current.world, _pubsub);
 
         for (PlanConsequence next in consequences) {
           planConsequencesComputed++;

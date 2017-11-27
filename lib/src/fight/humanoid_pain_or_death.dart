@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -55,6 +56,7 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
 }
 
 void reportPain(Storyline s, Actor actor) {
+  s.pubsub.publishActorLostHitpoints(new ActorLostHitpointsEvent(actor, null));
   if (actor.id == brianaId && actor.hitpoints == 0) {
     _reportPainBriana(s, actor);
     return;

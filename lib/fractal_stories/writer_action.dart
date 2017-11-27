@@ -1,6 +1,7 @@
 /// Use these classes in sources generated from writer's input.
 library stranded.writer_action;
 
+import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -60,12 +61,12 @@ class SimpleAction extends RoamingAction {
   Resource get rerollResource => throw new StateError("Not rerollable");
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(Actor a, WorldState w, Storyline s, PubSub pubsub) {
     throw new StateError("SimpleAction always succeeds");
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(Actor a, WorldState w, Storyline s, PubSub pubsub) {
     return success(a, w, s, this);
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/commands/resolve_slot_machine_command.dart';
@@ -200,6 +201,8 @@ class EdgeheadGame extends Book {
   Actor orc;
   Actor goblin;
 
+  final PubSub _pubsub = new PubSub();
+
   Room preStartBook;
 
   Situation initialSituation;
@@ -215,6 +218,14 @@ class EdgeheadGame extends Book {
 
   EdgeheadGame({this.actionPattern}) {
     setup();
+    _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
+    _pubsub.seal();
+  }
+
+  @override
+  void close() {
+    _pubsub.close();
+    super.close();
   }
 
   void setup() {
@@ -329,7 +340,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var planner = new ActorPlanner(actor, world);
+    var planner = new ActorPlanner(actor, world, _pubsub);
     await planner.plan();
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
@@ -359,7 +370,8 @@ class EdgeheadGame extends Book {
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $action");
-        for (var consequence in action.apply(actor, consequence, world)) {
+        for (var consequence
+            in action.apply(actor, consequence, world, _pubsub)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
@@ -440,6 +452,13 @@ class EdgeheadGame extends Book {
     update();
   }
 
+  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
+    if (event.actor.isPlayer) {
+      // TODO
+      echo("=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}");
+    }
+  }
+
   Future _applyPlayerAction(
       Action action, Actor actor, List<PlanConsequence> consequences) async {
     num chance = action.getSuccessChance(actor, world);
@@ -476,7 +495,8 @@ class EdgeheadGame extends Book {
 
   Future<Null> _applySelected(
       Action action, Actor actor, Storyline storyline) async {
-    var consequences = action.apply(actor, consequence, world).toList();
+    var consequences =
+        action.apply(actor, consequence, world, _pubsub).toList();
 
     if (actor.isPlayer) {
       await _applyPlayerAction(action, actor, consequences);

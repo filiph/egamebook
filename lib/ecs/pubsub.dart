@@ -12,17 +12,31 @@ class ActorKilledEvent {
   ActorKilledEvent(this.actor, this.perpetrator);
 }
 
+class ActorLostHitpointsEvent {
+  final Actor actor;
+  final int hitpointsLost;
+
+  ActorLostHitpointsEvent(this.actor, this.hitpointsLost);
+}
+
 class PubSub implements Sink<Object> {
   StreamController<ActorKilledEvent> _actorKilled;
+  StreamController<ActorLostHitpointsEvent> _actorLostHitpoints;
 
   bool _sealed = false;
 
   PubSub() {
     _actorKilled = new StreamController<ActorKilledEvent>.broadcast(
         sync: true, onListen: _assertNoSubscribersAfterSealed);
+    _actorLostHitpoints =
+        new StreamController<ActorLostHitpointsEvent>.broadcast(
+            sync: true, onListen: _assertNoSubscribersAfterSealed);
   }
 
   Stream<ActorKilledEvent> get actorKilled => _actorKilled.stream;
+
+  Stream<ActorLostHitpointsEvent> get actorLostHitpoints =>
+      _actorLostHitpoints.stream;
 
   /// Do not use.
   ///
@@ -38,12 +52,19 @@ class PubSub implements Sink<Object> {
   void close() {
     _log.info(() => "Closing pubsub");
     _actorKilled.close();
+    _actorLostHitpoints.close();
   }
 
   void publishActorKilled(ActorKilledEvent e) {
     _assertSealedBeforePublishing();
     _log.info(() => "New $e about to be published.");
     _actorKilled.add(e);
+  }
+
+  void publishActorLostHitpoints(ActorLostHitpointsEvent e) {
+    _assertSealedBeforePublishing();
+    _log.info(() => "New $e about to be published.");
+    _actorLostHitpoints.add(e);
   }
 
   void seal() {
