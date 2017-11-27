@@ -535,7 +535,7 @@ class Storyline {
   /// paragraph), this will output it through [printFunction] and remove it.
   ///
   /// Returns `true` if any paragraphs were output.
-  bool outputFinishedParagraphs(void printFunction(Object msg)) {
+  bool outputFinishedParagraphs(void printFunction(String msg)) {
     var printed = false;
     while (hasManyParagraphs) {
       printFunction(realize(onlyFirstParagraph: true));

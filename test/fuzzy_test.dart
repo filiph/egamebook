@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:edgehead/edgehead_lib.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
@@ -11,7 +12,10 @@ import '../bin/play.dart';
 void main() {
   test("edgehead runs to completion", () async {
     final runner = new CliRunner(true, true, null);
-    await runner.play();
+    await runner.initialize(new EdgeheadGame());
+    runner.startBook();
+    await runner.bookEnd;
+    runner.close();
   });
 
   group("logged", () {
@@ -48,7 +52,10 @@ Future<Null> testWithStopWords(List<String> stopWords, Directory tempDir,
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
     final runner = new CliRunner(true, true, logFile, logLevel: logLevel);
-    await runner.play();
+    await runner.initialize(new EdgeheadGame());
+    runner.startBook();
+    await runner.bookEnd;
+    runner.close();
     for (final line in logFile.readAsLinesSync()) {
       for (final word in stopWords) {
         if (line.contains(word)) {

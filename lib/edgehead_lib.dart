@@ -64,7 +64,7 @@ abstract class Book {
 
   /// If you want to send custom book elements, use [elementsSink].
   ///
-  /// Most [Book]s will use methods like [letPlayerPick] which use
+  /// Most [Book]s will use methods like [showChoices] which use
   /// [elementsSink] internally.
   ///
   /// If you opt into using the manual method, you also need to make sure
@@ -104,13 +104,6 @@ abstract class Book {
     acceptCustom(command);
   }
 
-  final Completer<Null> _closedCompleter = new Completer<Null>();
-
-  /// Completes after [close] has been called. Handy to make sure resources
-  /// tied to this [Book] (like logging) stay around for the duration of
-  /// the object's lifetime.
-  Future<Null> get closed => _closedCompleter.future;
-
   /// Override this function when you expect custom commands from the user.
   @protected
   void acceptCustom(CommandBase command) {
@@ -121,7 +114,12 @@ abstract class Book {
   @mustCallSuper
   void close() {
     _elementsController.close();
-    _closedCompleter.complete();
+  }
+
+  @protected
+  void echo(String markdownText) {
+    _elementsController
+        .add(new TextOutput((b) => b..markdownText = markdownText));
   }
 
   /// Show a block of choices. This method returns with a [Future] of the
@@ -147,6 +145,9 @@ abstract class Book {
       ..rerollEffectDescription = rerollEffectDescription));
     return _showSlotMachineCompleter.future;
   }
+
+  /// Sets the book in motion. Either from the start, or from a saved position.
+  void start();
 }
 
 class EdgeheadGame extends Book {
@@ -191,8 +192,6 @@ class EdgeheadGame extends Book {
   EdgeheadGame({this.actionPattern}) {
     setup();
   }
-
-
 
   void setup() {
     orc = new Actor.initialized(1000, "orc",
@@ -254,12 +253,13 @@ class EdgeheadGame extends Book {
     consequence = new PlanConsequence.initial(world);
   }
 
+  @override
   void start() {
     update();
   }
 
   Future<Null> update() async {
-    if (storyline.outputFinishedParagraphs(_echoDeprecated)) {
+    if (storyline.outputFinishedParagraphs(echo)) {
       // We had some paragraphs ready and sent them to [echo]. Let's return
       // to the outer loop so that we show the output before planning next
       // moves.
@@ -273,7 +273,7 @@ class EdgeheadGame extends Book {
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
       storyline.addParagraph();
-      _echoDeprecated(storyline.realize());
+      echo(storyline.realize());
 
       if (!world.hasAliveActor(aren.id)) {
         _elementsController
@@ -371,7 +371,7 @@ class EdgeheadGame extends Book {
 
       if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
         /// Only realize storyline when there is an actual choice to show.
-        _echoDeprecated(storyline.realize());
+        echo(storyline.realize());
         storyline.clear();
       }
 
@@ -410,7 +410,7 @@ class EdgeheadGame extends Book {
       await _applySelected(selected, actor, storyline);
     }
 
-    storyline.outputFinishedParagraphs(_echoDeprecated);
+    storyline.outputFinishedParagraphs(echo);
 
     // ignore: unawaited_futures
     update();
@@ -470,15 +470,5 @@ class EdgeheadGame extends Book {
       String path = world.actionRecords.map((a) => a.description).join(' <- ');
       return "- how ${actor.name} got here: $path";
     });
-  }
-
-  /// Stop using this indirection and instead send directly through
-  /// [_elementsController].
-  /// TODO: move to [Book] and rename to echo
-  @deprecated
-  void _echoDeprecated(Object string) {
-    assert(string is String);
-    _elementsController
-        .add(new TextOutput((b) => b..markdownText = string.toString()));
   }
 }

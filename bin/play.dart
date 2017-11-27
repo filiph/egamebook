@@ -7,6 +7,7 @@ import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 Future<Null> main(List<String> args) async {
@@ -24,12 +25,18 @@ Future<Null> main(List<String> args) async {
   }
   final runner = new CliRunner(automated, automated, logged ? file : null,
       actionPattern: actionPattern);
-  await runner.play();
+  await runner.initialize(new EdgeheadGame(actionPattern: actionPattern));
+  try {
+    runner.startBook();
+    await runner.bookEnd;
+  } finally {
+    runner.close();
+  }
 }
 
 final _random = new Random();
 
-class CliRunner {
+class CliRunner extends Presenter<EdgeheadGame> {
   final bool automated;
 
   final File _logFile;
@@ -54,6 +61,8 @@ class CliRunner {
     _silent = silent;
 
     if (_logFile != null) {
+      final now = new DateTime.now().toIso8601String();
+      _logFile.writeAsStringSync("== $now ==");
       Logger.root.level = logLevel;
       _loggerSubscription = Logger.root.onRecord.listen((record) {
         _logFile.writeAsStringSync(
@@ -66,15 +75,8 @@ class CliRunner {
     }
   }
 
-  Future<Null> play() async {
-    try {
-      await _runToCompletion();
-    } finally {
-      await _loggerSubscription?.cancel();
-    }
-  }
-
-  void _handleChoiceBlock(ChoiceBlock element, EdgeheadGame game) {
+  @override
+  void addChoiceBlock(ChoiceBlock element) {
     if (!_silent) {
       print("");
       for (int i = 0; i < element.choices.length; i++) {
@@ -87,7 +89,7 @@ class CliRunner {
 
     int option;
 
-    if (automated && !game.actionPatternWasHit) {
+    if (automated && !book.actionPatternWasHit) {
       option = _random.nextInt(element.choices.length);
     } else if (element.choices.length == 1 &&
         element.choices.single.isAutomatic) {
@@ -96,72 +98,69 @@ class CliRunner {
       option = int.parse(stdin.readLineSync()) - 1;
       print("");
     }
-    game.accept(
+    book.accept(
         new PickChoice((b) => b..choice = element.choices[option].toBuilder()));
   }
 
-  void _handleSlotMachine(SlotMachine element, EdgeheadGame game) {
+  @override
+  void addError(ErrorElement error) {
+    _log.severe(error.message);
+  }
+
+  @override
+  void addLog(LogElement log) {
+    _log.info(log.level);
+  }
+
+  @override
+  void addLose(LoseGame loseGame) {
+    _hijackedPrint(loseGame.markdownText);
+    _hijackedPrint("=== YOU LOSE ===");
+  }
+
+  @override
+  void addSavegameBookmark(SaveGame savegame) {
+    throw new UnimplementedError(savegame.toString());
+  }
+
+  @override
+  void addSlotMachine(SlotMachine element) {
     final result = _showSlotMachine(element.probability, element.rollReason,
         rerollable: element.rerollable,
         rerollEffectDescription: element.rerollEffectDescription);
     result.then((sessionResult) {
-      game.accept(new ResolveSlotMachine((b) => b
+      book.accept(new ResolveSlotMachine((b) => b
         ..result = sessionResult.result
         ..wasRerolled = sessionResult.wasRerolled));
     });
   }
 
-  @deprecated
+  @override
+  void addText(TextOutput text) {
+    _hijackedPrint(text.markdownText);
+  }
+
+  @override
+  void addWin(WinGame winGame) {
+    _hijackedPrint(winGame.markdownText);
+    _hijackedPrint("=== YOU WIN ===");
+  }
+
+  @override
+  void beforeElement() {
+    if (book.actionPatternWasHit) _silent = false;
+  }
+
+  @override
+  void close() {
+    super.close();
+    book.close();
+    _loggerSubscription?.cancel();
+  }
+
   void _hijackedPrint(Object msg) {
     _log.info(msg);
     if (!_silent) print(msg);
-  }
-
-  Future<Null> _runToCompletion() async {
-    var game = new EdgeheadGame(actionPattern: actionPattern);
-
-    StreamSubscription<ElementBase> subscription;
-
-    void quit() {
-      game.close();
-      subscription.cancel();
-    }
-
-    subscription = game.elements.listen((element) {
-      if (game.actionPatternWasHit) _silent = false;
-
-      if (element is TextOutput) {
-        _hijackedPrint(element.markdownText);
-        return;
-      }
-
-      if (element is WinGame) {
-        _hijackedPrint(element.markdownText);
-        _hijackedPrint("Congrats! You won.");
-        quit();
-        return;
-      }
-
-      if (element is LoseGame) {
-        _hijackedPrint(element.markdownText);
-        _hijackedPrint("Oh noes.");
-        quit();
-        return;
-      }
-
-      if (element is ChoiceBlock) {
-        _handleChoiceBlock(element, game);
-        return;
-      }
-
-      if (element is SlotMachine) {
-        _handleSlotMachine(element, game);
-        return;
-      }
-    });
-
-    game.start();
-    await game.closed;
   }
 
   Future<slot.SessionResult> _showSlotMachine(
@@ -216,5 +215,119 @@ class CliRunner {
       print("Reroll impossible. So: $initialResult");
       return initialResult;
     }
+  }
+}
+
+/// UI of the book. Egamebook UIs, be they CLI-based, web-based or Flutter-based
+/// all need to subclass [Presenter].
+abstract class Presenter<T extends Book> implements Sink<ElementBase> {
+  @protected
+  T book;
+
+  final Completer<Null> _bookEndCompleter = new Completer<Null>();
+
+  StreamSubscription<ElementBase> _bookSubscription;
+
+  /// Future completes when the underlying [book] ends, either with [WinGame]
+  /// or with [LoseGame].
+  ///
+  /// After this future completes, the caller should call [close]. This will
+  /// close both the [book] and this [Presenter]. Once this happens, there is
+  /// no way to restart either. You have to create new ones.
+  Future<Null> get bookEnd => _bookEndCompleter.future;
+
+  @protected
+  @override
+  void add(ElementBase element) {
+    beforeElement();
+
+    if (element is TextOutput) {
+      addText(element);
+      return;
+    }
+
+    if (element is WinGame) {
+      addWin(element);
+      _bookEndCompleter.complete();
+      return;
+    }
+
+    if (element is LoseGame) {
+      addLose(element);
+      _bookEndCompleter.complete();
+      return;
+    }
+
+    if (element is ChoiceBlock) {
+      addChoiceBlock(element);
+      return;
+    }
+
+    if (element is SlotMachine) {
+      addSlotMachine(element);
+      return;
+    }
+
+    if (element is SaveGame) {
+      addSavegameBookmark(element);
+      return;
+    }
+
+    addCustomElement(element);
+  }
+
+  @protected
+  void addChoiceBlock(ChoiceBlock block);
+
+  /// Implementor of a [Presenter] must make sure that any elements coming
+  /// from the game are handled here.
+  ///
+  /// For example, stats updates, map updates, custom animations, etc.
+  @protected
+  void addCustomElement(ElementBase element) {
+    throw new UnimplementedError("Unexpected type of element: $element");
+  }
+
+  @protected
+  void addError(ErrorElement error);
+
+  @protected
+  void addLog(LogElement log);
+
+  @protected
+  void addLose(LoseGame loseGame);
+
+  @protected
+  void addSavegameBookmark(SaveGame savegame);
+
+  @protected
+  void addSlotMachine(SlotMachine machine);
+
+  @protected
+  void addText(TextOutput text);
+
+  @protected
+  void addWin(WinGame winGame);
+
+  void beforeElement();
+
+  @override
+  @mustCallSuper
+  void close() {
+    book.close();
+    _bookSubscription.cancel();
+  }
+
+  @mustCallSuper
+  Future<Null> initialize(T book) {
+    assert(this.book == null, "Cannot reuse Presenter several times.");
+    this.book = book;
+    _bookSubscription = book.elements.listen(add);
+    return new Future<Null>.value();
+  }
+
+  void startBook() {
+    assert(book != null, "Call and await initialize() first");
+    book.start();
   }
 }
