@@ -195,7 +195,7 @@ FightSituation generateFollowUpFight(WorldState w,
         s.add("<subject> <is> accompanied by a ${enemy2.name}.",
             subject: enemy1, wholeSentence: true);
         if (!enemy2.isBarehanded) {
-          enemy2.report(s, "<subject> wield<s> a ${enemy2.currentWeapon}");
+          enemy2.report(s, "<subject> wield<s> a ${enemy2.currentWeapon.name}");
         } else {
           s.add("<subject> <is> barehanded", subject: enemy2);
         }
