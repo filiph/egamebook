@@ -70,13 +70,13 @@ class ShieldBlockSlash extends EnemyTargetAction {
           owner: enemy, subject: swing);
       a.report(
           s,
-          "<subject> easily {block|stop|deflect} the {swing|attack|strike} "
+          "<subject> easily {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
           "with ${shieldAsObject2(a)}",
           positive: true);
     } else {
       a.report(
           s,
-          "<subject> {block|stop|deflect} the {swing|attack|strike} "
+          "<subject> {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
           "with ${shieldAsObject2(a)}",
           positive: true);
     }
