@@ -159,8 +159,29 @@ Actor _makeRandomOrcOrGoblin(Weapon weapon, Shield shield) {
 FightSituation generateFollowUpFight(WorldState w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party,
     {Iterable<Actor> survivingMonsters}) {
-  final weapon = Randomly.choose([new Sword(), new Spear(), null]);
-  final shield = Randomly.choose([new Shield(), null]);
+  final weapon = Randomly.choose([
+    new Sword(name: "broadsword"),
+    new Sword(),
+    new Sword(),
+    new Sword(name: "broadsword"),
+    new Sword(),
+    new Sword(),
+    new Sword(),
+    new Sword(name: "broadsword"),
+    new Sword(name: "Orcthorn", nameIsProperNoun: true, slashingDamage: 2),
+    new Spear(name: "lance"),
+    new Spear(),
+    new Spear(),
+    new Spear(),
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  final shield =
+      Randomly.choose([new Shield(), new Shield(name: "buckler"), null, null]);
   final enemy1 = _makeRandomOrcOrGoblin(weapon, shield);
   final hasCompanion = _random.nextBool();
   final enemy2 = hasCompanion ? _makeRandomCompanion() : null;
@@ -170,7 +191,7 @@ FightSituation generateFollowUpFight(WorldState w,
 
   return new FightSituation.initialized(
       party,
-      hasCompanion ? [enemy1, enemy2] : [enemy1],
+      survivingMonsters ?? (hasCompanion ? [enemy1, enemy2] : [enemy1]),
       "{rock|cavern} floor",
       roomRoamingSituation, {
     0: (w, s) {
@@ -180,12 +201,16 @@ FightSituation generateFollowUpFight(WorldState w,
         w.updateActorById(playerId, (b) => b..hitpoints = 2);
       }
 
-      s.add("From the {darkness|shadow|blackness|depths} "
+      if (survivingMonsters != null) return;
+
+      s.add(
+          "From the {darkness|shadow|blackness|depths} "
           "of the {caves|tunnels|caverns}, another ${enemy1.name} "
           "{appears|appears|comes into view}.",
           wholeSentence: true);
       s.markEntityAsUnmentioned(enemy1);
-      enemy1.report(s, "<subjectPronoun> {lift|raise}<s> <subjectPronoun's> <object>",
+      enemy1.report(
+          s, "<subjectPronoun> {lift|raise}<s> <subjectPronoun's> <object>",
           object: enemy1.currentWeapon, objectOwner: enemy1);
       if (enemy1.currentShield != null) {
         enemy1.report(s, "<subject> shake<s> a shield");
