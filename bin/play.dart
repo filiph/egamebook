@@ -11,6 +11,7 @@ import 'package:slot_machine/result.dart' as slot;
 
 Future<Null> main(List<String> args) async {
   var automated = args.contains("--automated");
+  var silent = args.contains("--silent");
   var logged = args.contains("--log");
   RegExp actionPattern;
   if (args.contains("--action")) {
@@ -24,7 +25,7 @@ Future<Null> main(List<String> args) async {
       var file = new File("edgehead.log");
       fileLogSink = file.openWrite();
     }
-    await run(automated, automated, logged ? fileLogSink : null,
+    await run(automated, silent, logged ? fileLogSink : null,
         actionPattern: actionPattern);
   } finally {
     await fileLogSink?.close();
@@ -103,7 +104,7 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
         "(enabled: ${rerollable ? 'on' : 'off'}) ]]";
     log.info(msg);
     if (!silentWithOverride) {
-      print("$msg\n");
+//      print("$msg\n");
     }
 
     var success = Randomly.saveAgainst(probability);
@@ -114,12 +115,12 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
     if (success) {
       // Success of initial roll.
       if (!silentWithOverride) {
-        print("result = $initialResult");
+//        print("result = $initialResult");
       }
       return initialResult;
     } else {
       // Failure of initial roll.
-      if (silentWithOverride) {
+      if (automated) {
         // We're in silent mode. TODO: figure out if we want to reroll
         return initialResult;
       }
@@ -163,7 +164,8 @@ Future<Null> run(bool automated, bool silent, StringSink logSink,
 
       if (choices.isEmpty) continue;
 
-      if (!silentWithOverride) {
+      print("");
+      if (false) {
         print("");
         for (int i = 0; i < choices.length; i++) {
           var helpMessage = choices[i].helpMessage ?? '';

@@ -1275,25 +1275,33 @@ Room startAdventure =
   s.add(
       '''The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. 
 
-
 Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
-
-
-![Agruth whips Briana](img/agruth-attack.jpg)
-
 
 Another crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.
 
-
-Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.
+Nobody else is in sight. It\'s just Aren, Agruth, and Briana. That\'s Agruth\'s first mistake.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add('''
 ''', wholeSentence: true);
 }, generateAgruthFight, null, <Exit>[
-  new Exit('just_after_agruth_fight', '',
-      'You look around. Fortunately, there’s no one in sight.')
+  new Exit('follow_up_adventure', '',
+      '')
+]);
+
+Room followUpFight =
+new Room('follow_up_adventure', (Actor a, WorldState w, Storyline s) {
+  s.add(
+      '''
+''',
+      wholeSentence: true);
+}, (Actor a, WorldState w, Storyline s) {
+  s.add('''
+''', wholeSentence: true);
+}, generateFollowUpFight, null, <Exit>[
+  new Exit('follow_up_adventure', '',
+      '')
 ]);
 
 class TalkToBriana1 extends RoamingAction {

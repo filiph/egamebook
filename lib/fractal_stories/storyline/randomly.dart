@@ -6,7 +6,7 @@ class Randomly {
   static final Random _random = new Random();
 
   // Function gets a list of choices, picks one of them randomly.
-  static dynamic choose(List choices) {
+  static T choose<T>(List<T> choices) {
     if (choices == null) throw new ArgumentError("Cannot choose from null.");
     int number = choices.length;
     if (number == 0) {

@@ -71,7 +71,7 @@ class WorldState {
         situations = new List(),
         global = other.global {
     actors.addAll(other.actors);
-    actionRecords.addAll(other.actionRecords);
+    actionRecords.addAll(other.actionRecords.where((rec) => rec.time > (time ?? 0) - 200));
     items.addAll(other.items);
     rooms.addAll(other.rooms);
     situations.addAll(other.situations);
@@ -179,7 +179,7 @@ class WorldState {
     if (wasAggressive != null) {
       records = records.where((rec) => rec.wasAggressive == wasAggressive);
     }
-    return records;
+    return records.take(100);
   }
 
   Actor getActorById(int id) {

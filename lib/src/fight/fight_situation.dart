@@ -30,6 +30,7 @@ import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:edgehead/writers_helpers.dart';
 
 part 'fight_situation.g.dart';
 
@@ -217,26 +218,48 @@ abstract class FightSituation extends Situation
 
   @override
   void onPop(WorldState world) {
+    final situation =
+        world.getSituationById(roomRoamingSituationId) as RoomRoamingSituation;
+
+    if (situation.currentRoomName != 'follow_up_adventure') {
+      world.replaceSituationById(
+          situation.id, situation.rebuild((b) => b..monstersAlive = false));
+    }
+
+    final player = getPlayer(world);
+
+    if (!player.isAlive) {
+      world.updateActorById(getPlayer(world).id, (b) => b..hitpoints = 3);
+
+      world.pushSituation(generateFollowUpFight(
+          world, situation, playerTeamIds.map(world.getActorById),
+          survivingMonsters: enemyTeamIds.map(world.getActorById)));
+    } else {
+      world.pushSituation(new LootSituation.initialized(
+          playerTeamIds, groundMaterial, droppedItems));
+    }
+
     if (roomRoamingSituationId != null &&
         !canFight(world, enemyTeamIds) &&
         canFight(world, playerTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
-      final situation = world.getSituationById(roomRoamingSituationId)
-          as RoomRoamingSituation;
-      world.replaceSituationById(
-          situation.id, situation.rebuild((b) => b..monstersAlive = false));
 
-      for (var id in playerTeamIds) {
-        if (world.getActorById(id).isAliveAndActive) {
-          world.updateActorById(id, (b) => b..pose = Pose.standing);
-        }
-      }
 
-      // Allow player to take and distribute loot.
-      world.pushSituation(new LootSituation.initialized(
-          playerTeamIds, groundMaterial, droppedItems));
+
+//      for (var id in playerTeamIds) {
+//        if (world.getActorById(id).isAliveAndActive) {
+//          world.updateActorById(id, (b) => b..pose = Pose.standing);
+//        }
+//      }
+
+//      world.pushSituation(generateFollowUpFight(world, situation,
+//          playerTeamIds.map((id) => world.getActorById(id)), droppedItems));
+
+//      // Allow player to take and distribute loot.
+
     } else if (!canFight(world, playerTeamIds)) {
+
       // Nothing to do here. The player's team is all dead.
     } else {
       assert(

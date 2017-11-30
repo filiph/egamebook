@@ -105,10 +105,10 @@ class EdgeheadGame extends LoopedEvent {
         null,
         [new Exit("start_adventure", "", "")]);
 
-    aren = new Actor.initialized(playerId, "Filip",
+    aren = new Actor.initialized(playerId, "Briana",
         nameIsProperNoun: true,
         isPlayer: true,
-        pronoun: Pronoun.YOU,
+        pronoun: Pronoun.SHE,
         hitpoints: 2,
         maxHitpoints: 2,
         stamina: 1,
@@ -118,9 +118,9 @@ class EdgeheadGame extends LoopedEvent {
     hitpoints.value = aren.hitpoints / aren.maxHitpoints;
     stamina.value = aren.stamina;
 
-    briana = new Actor.initialized(brianaId, "Briana",
+    briana = new Actor.initialized(brianaId, "Aren",
         nameIsProperNoun: true,
-        pronoun: Pronoun.SHE,
+        pronoun: Pronoun.HE,
         hitpoints: 2,
         maxHitpoints: 2,
         currentRoomName: preStartBook.name,
@@ -130,7 +130,7 @@ class EdgeheadGame extends LoopedEvent {
         new RoomRoamingSituation.initialized(preStartBook, false);
 
     var rooms = new List<Room>.from(allRooms)
-      ..addAll([preStartBook, endOfRoam]);
+      ..addAll([preStartBook, followUpFight, endOfRoam]);
 
     var global = new EdgeheadGlobalState();
 

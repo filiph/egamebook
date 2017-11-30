@@ -1,11 +1,15 @@
+import 'dart:math';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart'
     show brianaId, carelessCombineFunction, playerId;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/unique_id.dart';
@@ -120,6 +124,84 @@ void executeSpearThrowAtOgre(WorldState w, Storyline s) {
       player.items.firstWhere((item) => item.types.contains(ItemType.spear));
   w.updateActorById(getPlayer(w).id, (b) => b..items.remove(spear));
   movePlayer(w, s, "war_forge", silent: true);
+}
+
+final _random = new Random();
+
+Actor _makeRandomCompanion() {
+  final kind = Randomly
+      .choose(["bugbear", "bullywug", "drow", "gnoll", "hobgoblin", "kobold"]);
+  final weapon = Randomly
+      .choose([new Sword(name: "scimitar"), new Spear(name: "lance"), null]);
+  return new Actor.initialized(_random.nextInt(200000000) + 6667, kind,
+      currentWeapon: weapon,
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      hitpoints: 1,
+      maxHitpoints: 1,
+      team: defaultEnemyTeam,
+      initiative: 1000);
+}
+
+Actor _makeRandomOrcOrGoblin(Weapon weapon, Shield shield) {
+  final kind = Randomly.choose(["goblin", "orc", "orc", "orc"]);
+  return new Actor.initialized(_random.nextInt(200000000) + 6667, kind,
+      currentWeapon: weapon,
+      currentShield: shield,
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      hitpoints: 2,
+      maxHitpoints: 2,
+      team: defaultEnemyTeam,
+      initiative: 100);
+}
+
+FightSituation generateFollowUpFight(WorldState w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party,
+    {Iterable<Actor> survivingMonsters}) {
+  final weapon = Randomly.choose([new Sword(), new Spear(), null]);
+  final shield = Randomly.choose([new Shield(), null]);
+  final enemy1 = _makeRandomOrcOrGoblin(weapon, shield);
+  final hasCompanion = _random.nextBool();
+  final enemy2 = hasCompanion ? _makeRandomCompanion() : null;
+
+  w.actors.add(enemy1);
+  if (hasCompanion) w.actors.add(enemy2);
+
+  return new FightSituation.initialized(
+      party,
+      hasCompanion ? [enemy1, enemy2] : [enemy1],
+      "{rock|cavern} floor",
+      roomRoamingSituation, {
+    0: (w, s) {
+      final player = w.getActorById(playerId);
+      if (player.hitpoints == 3) {
+        s.add("But <subject> rise<s> up again.", subject: player);
+        w.updateActorById(playerId, (b) => b..hitpoints = 2);
+      }
+
+      s.add("From the {darkness|shadow|blackness|depths} "
+          "of the {caves|tunnels|caverns}, another ${enemy1.name} "
+          "{appears|appears|comes into view}.",
+          wholeSentence: true);
+      s.markEntityAsUnmentioned(enemy1);
+      enemy1.report(s, "<subjectPronoun> {lift|raise}<s> <subjectPronoun's> <object>",
+          object: enemy1.currentWeapon, objectOwner: enemy1);
+      if (enemy1.currentShield != null) {
+        enemy1.report(s, "<subject> shake<s> a shield");
+      }
+
+      if (hasCompanion) {
+        s.add("<subject> <is> accompanied by a ${enemy2.name}.",
+            subject: enemy1, wholeSentence: true);
+        if (!enemy2.isBarehanded) {
+          enemy2.report(s, "<subject> wield<s> a ${enemy2.currentWeapon}");
+        } else {
+          s.add("<subject> <is> barehanded", subject: enemy2);
+        }
+      }
+    }
+  });
 }
 
 FightSituation generateAgruthFight(WorldState w,

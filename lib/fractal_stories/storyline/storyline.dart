@@ -389,7 +389,7 @@ class Storyline {
     String result = str;
 
     if (subject != null) {
-      if (subject.isPlayer) {
+      if (false) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
         result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
         result =
@@ -446,7 +446,7 @@ class Storyline {
             result.replaceAll("$SUBJECT_PRONOUN_POSSESIVE $OBJECT", OBJECT);
       }
 
-      if (object.isPlayer) {
+      if (false) {
         result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
         result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
       } else {
@@ -820,7 +820,7 @@ class Storyline {
       int reportTime) {
     var result = resultSoFar;
     if (owner != null) {
-      if (owner.isPlayer) {
+      if (false) {
         result =
             result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.YOU.accusative);
         result = result.replaceAll(
