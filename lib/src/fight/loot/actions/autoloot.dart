@@ -135,7 +135,7 @@ class AutoLoot extends Action {
     weapons.sort((a, b) => a.value.compareTo(b.value));
     var barehanded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
-        .where((a) => a.isAliveAndActive && a.isBarehanded);
+        .where((a) => a.isAliveAndActive && a.isBarehanded && a.id != actor.id);
     for (var friend in barehanded) {
       if (weapons.isEmpty) break;
       var weapon = weapons.removeLast();
@@ -159,7 +159,8 @@ class AutoLoot extends Action {
     shields.sort((a, b) => a.value.compareTo(b.value));
     var unshielded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
-        .where((a) => a.isAliveAndActive && a.currentShield == null);
+        .where((a) =>
+            a.isAliveAndActive && a.currentShield == null && a.id != actor.id);
     for (var friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
