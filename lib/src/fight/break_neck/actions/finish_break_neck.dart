@@ -35,19 +35,25 @@ class FinishBreakNeck extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
     if (updatedEnemy.id == brianaId) {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       a.report(
           s,
@@ -56,7 +62,7 @@ class FinishBreakNeck extends EnemyTargetAction {
           "neck" /* TODO: add variants */,
           object: updatedEnemy,
           positive: true);
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }

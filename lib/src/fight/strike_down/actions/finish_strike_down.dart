@@ -35,12 +35,15 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
+  String applyFailure(_) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
     final isBriana = updatedEnemy.id == brianaId;
@@ -48,9 +51,9 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeapon, object: updatedEnemy);
     if (isBriana) {
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     return "${a.name} slains ${enemy.name} on the ground";
   }

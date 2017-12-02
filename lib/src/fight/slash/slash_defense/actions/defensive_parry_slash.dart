@@ -37,7 +37,10 @@ class DefensiveParrySlash extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -56,7 +59,10 @@ class DefensiveParrySlash extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     if (a.isPlayer) {
       a.report(s, "<subject> {step<s>|take<s> a step} back");
     }

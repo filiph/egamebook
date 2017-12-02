@@ -43,7 +43,10 @@ class ThrowSpear extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> hit <object>?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final spear = _findSpear(a);
     _startThrowSpearReportStart(a, w, s, enemy, spear);
     if (enemy.currentShield != null) {
@@ -63,7 +66,10 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final spear = _findSpear(a);
     _startThrowSpearReportStart(a, w, s, enemy, spear);
     if (enemy.currentShield != null) {
@@ -88,7 +94,7 @@ class ThrowSpear extends EnemyTargetAction {
           objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       final bodyPart = _createBodyPartEntity(a, "{chest|eye|neck}");
       spear.report(
@@ -99,7 +105,7 @@ class ThrowSpear extends EnemyTargetAction {
           objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     _moveSpearToGround(w, a, spear);
     return "${a.name} hits ${enemy.name} with spear";

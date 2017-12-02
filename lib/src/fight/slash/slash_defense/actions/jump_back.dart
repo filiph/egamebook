@@ -34,7 +34,10 @@ class JumpBackFromSlash extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> avoid the slash?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> {jump<s>|leap<s>} {back|backward} "
@@ -45,7 +48,10 @@ class JumpBackFromSlash extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",

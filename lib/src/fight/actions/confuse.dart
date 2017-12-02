@@ -37,7 +37,10 @@ class Confuse extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> confuse <object>?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> touch<es> <subject's> temple");
     a.report(
         s,
@@ -49,7 +52,10 @@ class Confuse extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> touch<es> <subject's> temple");
     a.report(
         s,

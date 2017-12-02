@@ -40,7 +40,10 @@ class DodgeThrustSpear extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> dodge?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
     if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -56,7 +59,10 @@ class DodgeThrustSpear extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
         object: enemy, positive: true);
     if (enemy.isStanding) {

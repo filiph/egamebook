@@ -32,12 +32,15 @@ class RegainBalance extends Action {
   String get name => className;
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
+  String applyFailure(_) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     if (a.isPlayer) {
       a.report(s, "<subject> regain<s> <object>",
           object: balance, positive: true);

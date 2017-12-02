@@ -116,7 +116,10 @@ class StartDefensibleAction extends EnemyTargetAction {
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     assert(_successChanceGetter != null);
     if (buildSituationsOnFailure) {
       var mainSituation = _mainSituationBuilder(a, w, enemy);
@@ -132,7 +135,10 @@ class StartDefensibleAction extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     var mainSituation = _mainSituationBuilder(a, w, enemy);
     var defenseSituation = _defenseSituationBuilder(a, w, enemy);
     _applyStartOfSuccess(a, w, s, enemy, mainSituation);

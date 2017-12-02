@@ -41,7 +41,10 @@ class OnGroundShieldBlock extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> block the strike?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the {swing|attack|strike} "
@@ -56,7 +59,10 @@ class OnGroundShieldBlock extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     if (enemy.isOffBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);

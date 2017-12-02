@@ -34,12 +34,18 @@ class FinishPunch extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     assert(!enemy.isOnGround, "Can't punch people on the ground.");
     final updatedPose = enemy.isStanding ? Pose.offBalance : Pose.onGround;
     final thread = getThreadId(w, "PunchSituation");

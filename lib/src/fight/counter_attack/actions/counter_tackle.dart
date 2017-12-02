@@ -36,7 +36,10 @@ class CounterTackle extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> tackle <objectPronoun>?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tr<ies> to tackle <object>", object: enemy);
     Randomly.run(
         () => a.report(s, "<subject> go<es> wide", but: true),
@@ -50,7 +53,10 @@ class CounterTackle extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tackle<s> <object> to the ground", object: enemy);
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);

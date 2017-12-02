@@ -32,12 +32,18 @@ class SlayMonstersAction extends Action {
   String get name => className;
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final situation = w.currentSituation as RoomRoamingSituation;
     Room room = w.getRoomByName(situation.currentRoomName);
 

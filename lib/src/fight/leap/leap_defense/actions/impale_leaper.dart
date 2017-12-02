@@ -40,7 +40,10 @@ class ImpaleLeaper extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> impale <objectPronoun>?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final thread = getThreadId(w, "LeapSituation");
     a.report(
         s,
@@ -69,7 +72,10 @@ class ImpaleLeaper extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final thread = getThreadId(w, "LeapSituation");
     a.report(
         s,
@@ -95,7 +101,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       a.currentWeapon.report(
           s,
@@ -103,7 +109,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "bore<s> through} <object's> {body|chest|stomach|neck}",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> go<es> down", negative: true);
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
 
     w.popSituationsUntil("FightSituation");

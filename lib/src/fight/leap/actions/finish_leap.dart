@@ -35,12 +35,18 @@ class FinishLeap extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
     final updatedEnemy = w.getActorById(enemy.id);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
@@ -58,7 +64,7 @@ class FinishLeap extends EnemyTargetAction {
           "{knocks <object> unconscious|knocks <object> out}",
           object: enemy,
           actionThread: thread);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
       w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
     }
     return "${a.name} finishes leap at ${enemy.name}";

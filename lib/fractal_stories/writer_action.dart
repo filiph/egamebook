@@ -61,13 +61,14 @@ class SimpleAction extends RoamingAction {
   Resource get rerollResource => throw new StateError("Not rerollable");
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s, PubSub pubsub) {
+  String applyFailure(ActionContext context) {
     throw new StateError("SimpleAction always succeeds");
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s, PubSub pubsub) {
-    return success(a, w, s, this);
+  String applySuccess(ActionContext context) {
+    // TODO: Change the signature of `success` to conform to applySuccess
+    return success(context.actor, context.world, context.storyline, this);
   }
 
   @override

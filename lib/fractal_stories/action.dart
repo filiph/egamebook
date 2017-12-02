@@ -69,7 +69,7 @@ typedef T ActionBuilder<T extends Action, V>(V parameter);
 
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].
-typedef WorldState ApplyFunction(Actor actor, WorldState world, PubSub pubsub);
+typedef String ApplyFunction(ActionContext context);
 
 /// Builder takes an enemy actor and generates an instance of
 /// [EnemyTargetAction] with the given [enemy].
@@ -161,11 +161,11 @@ abstract class Action {
 
   /// Called to get the result of failure to do this action. Returns
   /// the mutated [WorldState].
-  WorldState applyFailure(Actor a, WorldState w, PubSub pubsub);
+  String applyFailure(ActionContext context);
 
   /// Called to get the result of success of doing this action. Returns
   /// the mutated [WorldState].
-  WorldState applySuccess(Actor a, WorldState w, PubSub pubsub);
+  String applySuccess(ActionContext context);
 
   /// Returns a string that will explain why actor needs to roll for success.
   ///
@@ -206,8 +206,9 @@ abstract class Action {
     worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
     assert(worldCopy.hashCode == hashCode,
         "Please don't change the world in onBeforeAction");
-    _description =
-        applyFunction(actorInWorldCopy, worldCopy, storyline, pubsub);
+    final context =
+        new ActionContext(actorInWorldCopy, worldCopy, storyline, pubsub);
+    _description = applyFunction(context);
     if (worldCopy.situationExists(situationId)) {
       // The current situation could have been removed by [applyFunction].
       // If not, let's update its time.
@@ -256,6 +257,27 @@ abstract class Action {
     }
     return builder;
   }
+}
+
+/// This all the context an action needs to apply itself. It is provided
+/// to [Action.applySuccess] and [Action.applyFailure] (and [ApplyFunction]s
+/// in general).
+///
+/// [world] is provided as mutable. [storyline] should only be used to
+/// add new reports ([Storyline.add] and [Actor.report]). [pubSub] should
+/// only be used to publish events.
+@immutable
+class ActionContext {
+  final Actor actor;
+
+  /// TODO: WorldState should be WorldStateBuilder when it's a BuiltValue
+  final WorldState world;
+
+  final PubSub pubSub;
+
+  final Storyline storyline;
+
+  const ActionContext(this.actor, this.world, this.storyline, this.pubSub);
 }
 
 /// This [Action] requires an [enemy].

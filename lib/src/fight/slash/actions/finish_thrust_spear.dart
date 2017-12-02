@@ -37,12 +37,18 @@ class FinishThrustSpear extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
     final updatedEnemy = w.getActorById(enemy.id);
@@ -56,7 +62,7 @@ class FinishThrustSpear extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       a.report(
           s,
@@ -66,7 +72,7 @@ class FinishThrustSpear extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     return "${a.name} pierces${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

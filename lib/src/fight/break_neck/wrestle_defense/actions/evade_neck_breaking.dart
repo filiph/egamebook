@@ -36,7 +36,10 @@ class EvadeNeckBreaking extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> evade?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tr<ies> to {dodge it|break free}");
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>}", but: true),
@@ -47,7 +50,10 @@ class EvadeNeckBreaking extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> {dodge<s> it|break<s> free}",
         object: enemy, positive: true);
     w.popSituationsUntil("FightSituation");

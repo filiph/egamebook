@@ -7,7 +7,8 @@ import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
 import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
 import 'package:edgehead/fractal_stories/item.dart' show ItemType;
-import 'package:edgehead/fractal_stories/action.dart' show Resource;
+import 'package:edgehead/fractal_stories/action.dart'
+    show ActionContext, Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
 import 'package:edgehead/fractal_stories/room.dart' show Room;
@@ -60,25 +61,32 @@ _"No king has what we have."_
 ''',
       wholeSentence: true);
   if (w.actionHasBeenPerformed("take_orcthorn")) {
-    s.add(""" 
+    s.add(
+        """ 
 "Orcthorn? Bah, you think they'll let you keep it? A farmhand?" 
 
 
 _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
-""", wholeSentence: true);
+""",
+        wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   if (!w.actionHasBeenPerformed("take_orcthorn")) {
-    s.add("""
+    s.add(
+        """
 "Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand." 
 
 
 _"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
-""", wholeSentence: true);
+""",
+        wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
 "A connection."
 
@@ -119,12 +127,15 @@ With that, you both start down the road toward the black fort in the distance.
 THE END.
 
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   describeSuccessRate(w, s);
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
 Room guardpostAboveChurch =
     new Room('guardpost_above_church', (Actor a, WorldState w, Storyline s) {
@@ -140,16 +151,19 @@ Room guardpostAboveChurch =
 """,
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   if (justCameFrom(w, "underground_church")) {
     s.add(
         """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these passages slope downward.
 """,
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
 A third passage is marked "Up Door".  Beyond the opening, you see  a steep stairway leading upward. This is it. Your final path to escape. 
 
@@ -158,7 +172,8 @@ For the first time, you see a smile on Briana\'s face. Not a smirk or a battle s
 
 
 Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s sleeping. He loosely holds a scimitar in one hand, and has a shield laid on his lap.
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
   s.add('', wholeSentence: true);
   if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
@@ -198,15 +213,23 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''You take the passage that leads to the Upper Door.
-''', wholeSentence: true);
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
+    s.add(
+        '''You take the passage that leads to the Upper Door.
+''',
+        wholeSentence: true);
     enterTunnelWithCancel(w, s);
     return '${a.name} successfully performs GuardpostAboveChurchEnterTunnelWithCancel';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -256,7 +279,10 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and  leans his head to the side, but stays asleep.
 
@@ -269,7 +295,10 @@ You take a few slow steps back, then grip the shield in your left hand, ready fo
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.
 
@@ -432,8 +461,10 @@ She turns her attention to the sword. "We should name it. Named weapons please t
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[]);
 
 class NameAgruthSwordOpportunity extends RoamingAction {
@@ -456,7 +487,10 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_
 
@@ -470,7 +504,10 @@ Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of her
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -517,7 +554,10 @@ class NameAgruthSwordRedemption extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_
 
@@ -531,7 +571,10 @@ Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as q
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -577,18 +620,26 @@ class NameAgruthSwordNothing extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''_"That is foolish. It is just a sword, after all."_
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
+    s.add(
+        '''_"That is foolish. It is just a sword, after all."_
 
 
 Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     movePlayer(w, s, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -658,16 +709,20 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
     s.add("The reinforced door on the side of the corridor is silent.",
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   if (!playerHasVisited(w, "orcthorn_room")) {
     s.add("The reinforced door on the side of the corridor is closed.",
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   rollBrianaQuote(w, s);
   s.add('', wholeSentence: true);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
@@ -706,7 +761,10 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
 
@@ -714,19 +772,24 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
 ''',
         wholeSentence: true);
     if (w.actionHasBeenPerformed("talk_to_briana_3")) {
-      s.add("""
+      s.add(
+          """
 You look at Briana and nod.
 
 
 _"The Mad Guardian."_
-""", wholeSentence: true);
+""",
+          wholeSentence: true);
     }
     s.add('', wholeSentence: true);
     return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -755,11 +818,15 @@ _"The Mad Guardian."_
 
 Room caveWithAgruthPre =
     new Room('cave_with_agruth_pre', (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
 Room caveWithAgruth =
     new Room('cave_with_agruth', (Actor a, WorldState w, Storyline s) {
@@ -771,10 +838,12 @@ That leaves two options: the black passage toward the war forges and the deserte
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''The corpse lies still, getting cold.
+  s.add(
+      '''The corpse lies still, getting cold.
 
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   rollBrianaQuote(w, s);
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
@@ -808,7 +877,10 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. 
 
@@ -821,7 +893,10 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -893,7 +968,10 @@ class TakeOrcthorn extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You and Briana nod at each other and start searching the room. The Mad Guardian has left many bizarre things scattered around: A box of severed orc hands, crude drawings of tentacles covering one of the walls, several gouged out eyes, a circle made from half-eaten rats with a single pebble in the middle.
 
@@ -933,7 +1011,10 @@ _"I am not a farmhand. And we still need to get out of here first."_
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -967,8 +1048,10 @@ Room slaveQuarters =
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''"We _really_ shouldn\'t push our luck," she says.
-''', wholeSentence: true);
+  s.add(
+      '''"We _really_ shouldn\'t push our luck," she says.
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('slave_quarters_passage', 'Go back',
       'You nod, and then start carefully backing out through the passage.')
@@ -993,8 +1076,12 @@ class SlaveQuartersContinue extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''_"Do you not want to kill some more orcs?"_
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
+    s.add(
+        '''_"Do you not want to kill some more orcs?"_
 
 
 "I do, trust me. I just don\'t want to get killed first."
@@ -1016,14 +1103,18 @@ The orc with the sword makes three fast leaps toward you, and swings his weapon.
 
 
 You look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     w.updateActorById(a.id, (b) => b..hitpoints = 0);
     w.popSituation();
     return '${a.name} successfully performs SlaveQuartersContinue';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1070,19 +1161,23 @@ Room smelter = new Room('smelter', (Actor a, WorldState w, Storyline s) {
   }
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''The coals reflects the reds and whites of the molten steel.
+  s.add(
+      '''The coals reflects the reds and whites of the molten steel.
 
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
       !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")) {
     s.add(
         "About a spear's throw away, the blind ogre is {idling|waiting for commands from the forges}.",
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   rollBrianaQuote(w, s);
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
@@ -1114,7 +1209,10 @@ class SmelterLookAround extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''Molten iron runs in rivers across the room, and gathers in a large pool. From that pool, a single ogre distributes the forge-ready liquid into troughs that descend to the war forges below. 
 
@@ -1126,7 +1224,10 @@ The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice.
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1179,7 +1280,10 @@ class SmelterThrowSpear extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You can\'t come any closer to the blind ogre — there is the pool of molten steel between you, and going around it would surely cause the nearby orcs to notice you. You wait for the ogre to get an order from bellow and watch him open one of the gates. The molten steel starts flowing.
 
@@ -1243,7 +1347,10 @@ _"As I said, a well placed throw. The more complex you see the world, the easier
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1289,8 +1396,10 @@ Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s f
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, generateAgruthFight, null, <Exit>[
   new Exit('just_after_agruth_fight', '',
       'You look around. Fortunately, there’s no one in sight.')
@@ -1314,7 +1423,10 @@ class TalkToBriana1 extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''_"You are new here, I think. What news can you tell me about the world outside?"_
 
@@ -1332,7 +1444,10 @@ _"Three years."_
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1380,8 +1495,12 @@ class TalkToBriana2 extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''_"Where were you captured?"_
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
+    s.add(
+        '''_"Where were you captured?"_
 
 
 "At the Gate of Screams. I was trying to sneak in."
@@ -1391,12 +1510,16 @@ _"You what?"_
 
 
 "I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, and help win the war."
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana2';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1444,8 +1567,12 @@ class TalkToBriana3 extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
-    s.add('''_"What is Orcthorn?"_
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
+    s.add(
+        '''_"What is Orcthorn?"_
 
 
 "A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."
@@ -1472,22 +1599,27 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 _"Down the slave quarters."_
 
 
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     if (!playerHasVisited(w, "slave_quarters_passage")) {
       s.add("""Briana tenses. "Well then, at least we have that choice." """,
           wholeSentence: true);
     }
-    s.add('''
+    s.add(
+        '''
 
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     if (playerHasVisited(w, "orcthorn_room") &&
         a.currentRoomName != "orcthorn_room") {
       s.add("""Briana's eyes go wide. "The mad orc behind that door." """,
           wholeSentence: true);
     }
-    s.add('''
+    s.add(
+        '''
 
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     if (playerHasVisited(w, "slave_quarters_passage") &&
         !playerHasVisited(w, "orcthorn_room")) {
       s.add("""Briana's eyes go wide. "That door in the slave quarters." """,
@@ -1498,7 +1630,10 @@ _"Down the slave quarters."_
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1555,8 +1690,10 @@ They must be guarding the Upper Door. There is no way around them.
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, generateEscapeTunnelFight, null, <Exit>[
   new Exit(
       'exit_from_bloodrock', 'Start running again', 'You start running again.')
@@ -1574,8 +1711,10 @@ Briana hesitates. "It feels like we could have done more." She motions toward th
 ''',
       wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''
-''', wholeSentence: true);
+  s.add(
+      '''
+''',
+      wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('tunnel', 'Continue',
       'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.'),
@@ -1604,10 +1743,12 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
   }
   s.add('', wholeSentence: true);
 }, (Actor a, WorldState w, Storyline s) {
-  s.add('''The temple is silent, as if it were holding its breath.
+  s.add(
+      '''The temple is silent, as if it were holding its breath.
 
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   rollBrianaQuote(w, s);
   s.add('', wholeSentence: true);
 }, null, null, <Exit>[
@@ -1642,7 +1783,10 @@ class ExamineUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.
 
@@ -1670,7 +1814,8 @@ _"He is a god."_
 """,
           wholeSentence: true);
     }
-    s.add('''
+    s.add(
+        '''
 
 The glow coming from the altar dims for a moment, then lights up again.
 
@@ -1682,12 +1827,16 @@ Briana looks at you, narrowing her eyes.
 
 
 _"I think you have felt it."_
-''', wholeSentence: true);
+''',
+        wholeSentence: true);
     return '${a.name} successfully performs ExamineUndergroundChurch';
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1761,7 +1910,10 @@ class WaitForRitual extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.
 
@@ -1848,7 +2000,10 @@ _"This place does something weird to people."_
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1898,7 +2053,10 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''It\'s a primive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
 
@@ -1911,7 +2069,10 @@ But it’s sturdy in your hand. A good throwing weapon.
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -1950,9 +2111,11 @@ Room warForge = new Room('war_forge', (Actor a, WorldState w, Storyline s) {
         """You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way. """,
         wholeSentence: true);
   }
-  s.add('''
+  s.add(
+      '''
 
-''', wholeSentence: true);
+''',
+      wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
         """You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way. """,
@@ -1997,7 +2160,10 @@ class WarForgeLookAround extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''The cave is natural, but on the side of the smelter you see an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into every section of the room like huge fiery tentacles. 
 
@@ -2012,7 +2178,10 @@ This place makes Fort Ironcast\'s military forge look like a doll house: tiny an
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -2063,7 +2232,10 @@ class WarForgeWatchWorkers extends RoamingAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     s.add(
         '''You look out from your hiding spot and scan the room. More likely than not, no human has ever seen this place and lived to tell the tale.
 
@@ -2093,7 +2265,10 @@ A full-sized ogre pours water over one section of the creature, making a thick c
   }
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    final a = context.actor;
+    final w = context.world;
+    final s = context.storyline;
     throw new StateError('Success chance is 100%');
   }
 
@@ -2158,4 +2333,3 @@ List<RoamingAction> allActions = <RoamingAction>[
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton
 ];
-

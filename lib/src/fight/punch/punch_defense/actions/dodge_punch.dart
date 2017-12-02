@@ -37,7 +37,10 @@ class DodgePunch extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> dodge the fist?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final thread = getThreadId(w, "PunchSituation");
     a.report(s, "<subject> tr<ies> to {dodge|sidestep|move out of the way}",
         actionThread: thread, isSupportiveActionInThread: true);
@@ -54,7 +57,10 @@ class DodgePunch extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     final thread = getThreadId(w, "PunchSituation");
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
         object: enemy, positive: true, actionThread: thread);

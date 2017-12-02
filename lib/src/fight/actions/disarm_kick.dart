@@ -38,7 +38,10 @@ class DisarmKick extends EnemyTargetAction {
       "the weapon off?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     Randomly.run(() {
       a.report(s, "<subject> kick<s> {at|towards} <object's> weapon",
           object: enemy);
@@ -51,7 +54,10 @@ class DisarmKick extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     Randomly.run(() {
       a.report(
           s,

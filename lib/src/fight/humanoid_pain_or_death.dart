@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_lib.dart' show brianaId;
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 final Random _random = new Random();
@@ -12,7 +11,9 @@ final Random _random = new Random();
 /// Report's a humanoid's death and drops their items.
 ///
 /// Special case is for Briana, who will never die, only lose consciousness.
-void killHumanoid(Storyline s, WorldState w, Actor actor) {
+void killHumanoid(ActionContext context, Actor actor) {
+  final w = context.world;
+  final s = context.storyline;
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   assert(
@@ -55,10 +56,12 @@ void killHumanoid(Storyline s, WorldState w, Actor actor) {
   s.addParagraph();
 }
 
-void reportPain(Storyline s, Actor actor) {
-  s.pubsub.publishActorLostHitpoints(new ActorLostHitpointsEvent(actor, null));
+void reportPain(ActionContext context, Actor actor) {
+  final s = context.storyline;
+  context.pubSub
+      .publishActorLostHitpoints(new ActorLostHitpointsEvent(actor, null));
   if (actor.id == brianaId && actor.hitpoints == 0) {
-    _reportPainBriana(s, actor);
+    _reportPainBriana(context, actor);
     return;
   }
   assert(
@@ -68,7 +71,8 @@ void reportPain(Storyline s, Actor actor) {
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
 }
 
-void _reportPainBriana(Storyline s, Actor actor) {
+void _reportPainBriana(ActionContext context, Actor actor) {
+  final s = context.storyline;
   assert(actor.id == brianaId);
   if (actor.pose == Pose.onGround) {
     actor.report(s, "<subject> stop<s> moving", negative: true);

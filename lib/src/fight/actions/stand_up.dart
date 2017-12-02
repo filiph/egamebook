@@ -32,12 +32,15 @@ class StandUp extends Action {
   String get name => className;
 
   @override
-  String applyFailure(Actor actor, WorldState world, Storyline storyline) {
+  String applyFailure(_) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> {rise<s>|stand<s> up|get<s> to <subject's> feet|"

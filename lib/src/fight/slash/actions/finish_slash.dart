@@ -37,12 +37,18 @@ class FinishSlash extends EnemyTargetAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.slashingDamage);
     final updatedEnemy = w.getActorById(enemy.id);
@@ -56,7 +62,7 @@ class FinishSlash extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       a.report(
           s,
@@ -71,7 +77,7 @@ class FinishSlash extends EnemyTargetAction {
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

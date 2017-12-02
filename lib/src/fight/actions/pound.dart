@@ -45,7 +45,10 @@ class Pound extends EnemyTargetAction {
       "<object> off balance?";
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> {fiercely|violently} "
@@ -63,7 +66,10 @@ class Pound extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(
         s,
         "<subject> {fiercely|violently} "

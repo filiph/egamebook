@@ -37,14 +37,19 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
-  String applyFailure(Actor a, WorldState _, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tr<ies> to stab <object>", object: enemy);
     a.report(s, "<subject> {go<es> wide|fail<s>|miss<es>}", but: true);
     return "${a.name} fails to stab ${enemy.name}";
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     w.updateActorById(
         enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
     final updatedEnemy = w.getActorById(enemy.id);
@@ -56,7 +61,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           "deep into <object's> {shoulder|hip|thigh}",
           object: updatedEnemy,
           positive: true);
-      reportPain(s, updatedEnemy);
+      reportPain(context, updatedEnemy);
     } else {
       a.report(
           s,
@@ -64,7 +69,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           "run<s> ${weaponAsObject2(a)} through} <object>",
           object: updatedEnemy,
           positive: true);
-      killHumanoid(s, w, updatedEnemy);
+      killHumanoid(context, updatedEnemy);
     }
     return "${a.name} stabs ${enemy.name}";
   }

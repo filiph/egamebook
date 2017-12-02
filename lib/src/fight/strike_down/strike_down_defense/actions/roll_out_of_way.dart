@@ -35,7 +35,10 @@ class RollOutOfWay extends EnemyTargetAction {
       "will <subject> evade?"; // TODO: come up with something
 
   @override
-  String applyFailure(Actor a, WorldState w, Storyline s) {
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> tr<ies> to roll out of the way");
     a.report(s, "<subject> can't", but: true);
     w.popSituation();
@@ -43,7 +46,10 @@ class RollOutOfWay extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(Actor a, WorldState w, Storyline s) {
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    WorldState w = context.world;
+    Storyline s = context.storyline;
     a.report(s, "<subject> <is> able to roll out of the way",
         but: true, positive: true);
     if (a.isPlayer) {
