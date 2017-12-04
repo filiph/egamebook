@@ -58,8 +58,8 @@ void killHumanoid(ActionContext context, Actor actor) {
 
 void reportPain(ActionContext context, Actor actor) {
   final s = context.storyline;
-  context.pubSub
-      .publishActorLostHitpoints(new ActorLostHitpointsEvent(actor, null));
+  context.pubSub.publishActorLostHitpoints(
+      new ActorLostHitpointsEvent(context, actor, null));
   if (actor.id == brianaId && actor.hitpoints == 0) {
     _reportPainBriana(context, actor);
     return;

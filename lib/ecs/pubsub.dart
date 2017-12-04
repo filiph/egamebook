@@ -1,22 +1,31 @@
 import 'dart:async';
 
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:logging/logging.dart';
 
 final _log = new Logger("PubSub");
 
-class ActorKilledEvent {
+abstract class PubSubEventBase {
+  final ActionContext context;
+
+  PubSubEventBase(this.context);
+}
+
+class ActorKilledEvent extends PubSubEventBase {
   final Actor actor;
   final Actor perpetrator;
 
-  ActorKilledEvent(this.actor, this.perpetrator);
+  ActorKilledEvent(ActionContext context, this.actor, this.perpetrator)
+      : super(context);
 }
 
-class ActorLostHitpointsEvent {
+class ActorLostHitpointsEvent extends PubSubEventBase {
   final Actor actor;
   final int hitpointsLost;
 
-  ActorLostHitpointsEvent(this.actor, this.hitpointsLost);
+  ActorLostHitpointsEvent(ActionContext context, this.actor, this.hitpointsLost)
+      : super(context);
 }
 
 class PubSub implements Sink<Object> {

@@ -1,5 +1,7 @@
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -12,7 +14,8 @@ void main() {
 
     List<ActorKilledEvent> events;
 
-    void record(ActorKilledEvent event) {
+    /// A helper function to record the fact that an event was received.
+    void _recordEventFired(ActorKilledEvent event) {
       events.add(event);
     }
 
@@ -26,25 +29,28 @@ void main() {
     });
 
     test("subscription works", () {
-      pubsub.actorKilled.listen(record);
+      pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 1);
       expect(events.single.actor, aren);
     });
 
     test("event doesn't fire when there are no listener", () {
       pubsub.seal();
-      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 0);
     });
 
     test("event doesn't fire after subscription cancelled", () {
-      final sub = pubsub.actorKilled.listen(record);
+      final sub = pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       sub.cancel();
-      pubsub.publishActorKilled(new ActorKilledEvent(briana, aren));
+      pubsub.publishActorKilled(new ActorKilledEvent(context, briana, aren));
       expect(events.length, 1);
       expect(events.single.actor, aren);
     });
@@ -62,10 +68,11 @@ void main() {
       }
 
       pubsub.actorKilled.listen(zerothRecord);
-      pubsub.actorKilled.listen(record);
+      pubsub.actorKilled.listen(_recordEventFired);
       pubsub.actorKilled.listen(secondRecord);
       pubsub.seal();
-      pubsub.publishActorKilled(new ActorKilledEvent(aren, briana));
+      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
     });
   });
 }
