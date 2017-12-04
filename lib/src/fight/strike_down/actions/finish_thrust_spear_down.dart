@@ -45,6 +45,7 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
     Actor a = context.actor;
     WorldState w = context.world;
     Storyline s = context.storyline;
+    final damage = enemy.hitpoints;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
     final isBriana = updatedEnemy.id == brianaId;
@@ -55,7 +56,7 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
         subject: a.currentWeapon,
         object: updatedEnemy);
     if (isBriana) {
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       killHumanoid(context, updatedEnemy);
     }

@@ -44,6 +44,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     Actor a = context.actor;
     WorldState w = context.world;
     Storyline s = context.storyline;
+    final damage = enemy.hitpoints;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
     final isBriana = updatedEnemy.id == brianaId;
@@ -51,7 +52,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeapon, object: updatedEnemy);
     if (isBriana) {
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       killHumanoid(context, updatedEnemy);
     }

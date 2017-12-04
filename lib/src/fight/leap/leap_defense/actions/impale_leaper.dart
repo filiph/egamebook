@@ -87,10 +87,11 @@ class ImpaleLeaper extends EnemyTargetAction {
         actionThread: thread);
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
+    final damage = 1;
     w.updateActorById(
         enemy.id,
         (b) => b
-          ..hitpoints -= 1
+          ..hitpoints -= damage
           ..pose = Pose.onGround);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
@@ -101,7 +102,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       a.currentWeapon.report(
           s,

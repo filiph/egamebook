@@ -50,8 +50,9 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     Actor a = context.actor;
     WorldState w = context.world;
     Storyline s = context.storyline;
+    final damage = a.currentWeapon.thrustingDamage;
     w.updateActorById(
-        enemy.id, (b) => b..hitpoints -= a.currentWeapon.thrustingDamage);
+        enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
@@ -61,7 +62,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           "deep into <object's> {shoulder|hip|thigh}",
           object: updatedEnemy,
           positive: true);
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,

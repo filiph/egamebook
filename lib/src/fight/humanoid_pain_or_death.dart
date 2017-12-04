@@ -56,10 +56,10 @@ void killHumanoid(ActionContext context, Actor actor) {
   s.addParagraph();
 }
 
-void reportPain(ActionContext context, Actor actor) {
+void reportPain(ActionContext context, Actor actor, int damage) {
   final s = context.storyline;
   context.pubSub.publishActorLostHitpoints(
-      new ActorLostHitpointsEvent(context, actor, null));
+      new ActorLostHitpointsEvent(context, actor, damage));
   if (actor.id == brianaId && actor.hitpoints == 0) {
     _reportPainBriana(context, actor);
     return;

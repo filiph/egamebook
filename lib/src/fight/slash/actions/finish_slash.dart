@@ -49,8 +49,8 @@ class FinishSlash extends EnemyTargetAction {
     Actor a = context.actor;
     WorldState w = context.world;
     Storyline s = context.storyline;
-    w.updateActorById(
-        enemy.id, (b) => b..hitpoints -= a.currentWeapon.slashingDamage);
+    final damage = a.currentWeapon.slashingDamage;
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     final thread = getThreadId(w, SlashSituation.className);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
@@ -62,7 +62,7 @@ class FinishSlash extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,

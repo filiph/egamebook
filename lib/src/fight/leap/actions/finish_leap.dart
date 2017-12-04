@@ -64,8 +64,9 @@ class FinishLeap extends EnemyTargetAction {
           "{knocks <object> unconscious|knocks <object> out}",
           object: enemy,
           actionThread: thread);
-      reportPain(context, updatedEnemy);
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= 1);
+      final damage = 1;
+      reportPain(context, updatedEnemy, damage);
+      w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }
     return "${a.name} finishes leap at ${enemy.name}";
   }

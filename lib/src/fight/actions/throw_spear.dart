@@ -80,7 +80,8 @@ class ThrowSpear extends EnemyTargetAction {
           owner: a);
     }
 
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= spear.thrustingDamage);
+    final damage = spear.thrustingDamage;
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
@@ -94,7 +95,7 @@ class ThrowSpear extends EnemyTargetAction {
           objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       final bodyPart = _createBodyPartEntity(a, "{chest|eye|neck}");
       spear.report(

@@ -47,13 +47,14 @@ class FinishBreakNeck extends EnemyTargetAction {
     Actor a = context.actor;
     WorldState w = context.world;
     Storyline s = context.storyline;
+    final damage = enemy.hitpoints;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
     if (updatedEnemy.id == brianaId) {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
-      reportPain(context, updatedEnemy);
+      reportPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,

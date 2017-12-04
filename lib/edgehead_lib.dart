@@ -455,7 +455,9 @@ class EdgeheadGame extends Book {
   void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
     if (event.actor.isPlayer) {
       // TODO
-      echo("=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}");
+      event.context.storyline.add(
+          "=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}",
+          wholeSentence: true);
     }
   }
 
