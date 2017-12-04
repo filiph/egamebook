@@ -43,6 +43,15 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.teamPreservation -
     scoreChange.enemy;
 
+void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
+  if (event.actor.isPlayer) {
+    // TODO
+    event.context.storyline.add(
+        "=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}",
+        wholeSentence: true);
+  }
+}
+
 abstract class Book {
   StreamController<ElementBase> _elementsController;
 
@@ -450,15 +459,6 @@ class EdgeheadGame extends Book {
 
     // ignore: unawaited_futures
     update();
-  }
-
-  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
-    if (event.actor.isPlayer) {
-      // TODO
-      event.context.storyline.add(
-          "=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}",
-          wholeSentence: true);
-    }
   }
 
   Future _applyPlayerAction(
