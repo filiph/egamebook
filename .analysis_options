@@ -3,9 +3,7 @@ analyzer:
     implicit-casts: false
   exclude:
     - drivedump/**
-    - lib/egamebook/presenters
-    - lib/egamebook/src
-    - lib/egamebook/*.dart
+    - web/**
 linter:
   rules:
     - annotate_overrides

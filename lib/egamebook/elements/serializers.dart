@@ -2,7 +2,7 @@ library egamebook.element.serializers;
 
 import 'package:built_value/serializer.dart';
 
-import 'package:edgehead/egamebook/stat/stat.dart';
+import 'stat_update_element.dart';
 import 'text_element.dart';
 
 part 'serializers.g.dart';
