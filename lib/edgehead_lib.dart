@@ -20,12 +20,11 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:edgehead/stat.dart';
 import 'package:edgehead/writers_input.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:slot_machine/result.dart' as slot;
-
-import 'egamebook/stat/stat.dart';
 
 /// [EdgeheadGame.briana]'s [Actor.id].
 const int brianaId = 100;
@@ -42,15 +41,6 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
     scoreChange.teamPreservation -
     scoreChange.enemy;
-
-void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
-  if (event.actor.isPlayer) {
-    // TODO
-    event.context.storyline.add(
-        "=== HITPOINTS UPDATE: player is hit for ${event.hitpointsLost}",
-        wholeSentence: true);
-  }
-}
 
 abstract class Book {
   StreamController<ElementBase> _elementsController;
@@ -147,13 +137,6 @@ abstract class Book {
     _elementsController.close();
   }
 
-  /// Shows the provided text as regular [TextOutput].
-  @protected
-  void echo(String markdownText) {
-    _elementsController
-        .add(new TextOutput((b) => b..markdownText = markdownText));
-  }
-
   /// Show a block of choices. This method returns with a [Future] of the
   /// picked [Choice].
   @protected
@@ -220,15 +203,26 @@ class EdgeheadGame extends Book {
 
   Storyline storyline = new Storyline();
 
-  final Stat<double> hitpoints =
-      new Stat<double>("hitpoints", (v) => "$v HP", initialValue: 0.0);
-  final Stat<int> stamina = new Stat<int>("stamina", (v) => "$v HP");
-  final Stat<int> gold = new Stat<int>("gold", (v) => "$v g");
+  static final StatSetting<double> hitpointsSetting = new StatSetting<double>(
+      "hitpoints", "The health of the player.", (v) => "$v HP");
+  static final StatSetting<int> staminaSetting = new StatSetting<int>(
+      "stamina", "The physical energy that the player can use.", (v) => "$v S");
+  final Stat<double> hitpoints = new Stat<double>(hitpointsSetting, 0.0);
+  final Stat<int> stamina = new Stat<int>(staminaSetting, 1);
 
   EdgeheadGame({this.actionPattern}) {
     setup();
     _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
     _pubsub.seal();
+  }
+
+  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
+    if (event.actor.isPlayer) {
+      event.context.storyline
+          .addCustomElement(new StatUpdate<int>((b) => b
+            ..name = hitpointsSetting.name
+            ..newValue = event.actor.hitpoints));
+    }
   }
 
   @override
@@ -303,7 +297,11 @@ class EdgeheadGame extends Book {
   }
 
   Future<Null> update() async {
-    if (storyline.outputFinishedParagraphs(echo)) {
+    final intermediateOutput =
+        storyline.generateFinishedOutput().toList(growable: false);
+    if (intermediateOutput.isNotEmpty) {
+      /// Forward the output to [elementSink].
+      intermediateOutput.forEach(elementsSink.add);
       // We had some paragraphs ready and sent them to [echo]. Let's return
       // to the outer loop so that we show the output before planning next
       // moves.
@@ -317,7 +315,7 @@ class EdgeheadGame extends Book {
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
       storyline.addParagraph();
-      echo(storyline.realize());
+      storyline.generateOutput().forEach(elementsSink.add);
 
       if (!world.hasAliveActor(aren.id)) {
         _elementsController
@@ -384,7 +382,7 @@ class EdgeheadGame extends Book {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
-          logAndPrint("    ${consequence.storyline.realize()}");
+          logAndPrint("    ${consequence.storyline.realizeAsString()}");
         }
       }
     }
@@ -416,8 +414,7 @@ class EdgeheadGame extends Book {
 
       if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
         /// Only realize storyline when there is an actual choice to show.
-        echo(storyline.realize());
-        storyline.clear();
+        storyline.generateOutput().forEach(elementsSink.add);
       }
 
       // Creates a string just for sorting. Actions with same enemy are
@@ -455,7 +452,7 @@ class EdgeheadGame extends Book {
       await _applySelected(selected, actor, storyline);
     }
 
-    storyline.outputFinishedParagraphs(echo);
+    storyline.generateFinishedOutput().forEach(elementsSink.add);
 
     // ignore: unawaited_futures
     update();

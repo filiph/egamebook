@@ -1,6 +1,8 @@
 library storyline;
 
+import 'dart:collection';
 import 'dart:math';
+import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
@@ -122,6 +124,24 @@ class Report {
 // Prevents: "You set up the laser. The laser is now set up to fire at target."
 }
 
+/// Used to store different kinds of user-facing output.
+@immutable
+class _StorylineRecord {
+  final Report report;
+
+  final ElementBase customElement;
+
+  _StorylineRecord({this.report, this.customElement}) {
+    assert(
+        report == null || customElement == null,
+        "_StorylineRecord should be either text or custom element, "
+        "never both.");
+  }
+
+  /// Whether this record contains a (textual) [Report].
+  bool get isReport => report != null;
+}
+
 /// Class for reporting a sequence of events in 'natural' language.
 class Storyline {
   static const String SUBJECT = "<subject>";
@@ -169,7 +189,15 @@ class Storyline {
 
   static const _endOfTime = 9999999;
 
-  final List<Report> reports = new List<Report>();
+  /// Internal list of reports. This is constructed by filtering [_records].
+  List<Report> _reports;
+
+  /// Internal queue of records, mixing [Report] instances with custom
+  /// elements (such as images, maps, stat updates, what have you).
+  ///
+  /// As a general rule, [Report]s are joined into paragraphs of text, and
+  /// custom elements are printed after these paragraphs.
+  final Queue<_StorylineRecord> _records = new Queue<_StorylineRecord>();
 
   int time = 0;
 
@@ -188,7 +216,7 @@ class Storyline {
 
   @visibleForTesting
   bool get hasManyParagraphs =>
-      reports.any((r) => r.string == PARAGRAPH_NEWLINES);
+      _records.any((rec) => rec.report?.string == PARAGRAPH_NEWLINES);
 
   /// Add another event to the story.
   ///
@@ -222,7 +250,7 @@ class Storyline {
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
             str.startsWith(new RegExp("[A-Z]"));
 
-    reports.add(new Report(str,
+    final report = new Report(str,
         subject: subject,
         object: object,
         owner: owner,
@@ -236,7 +264,14 @@ class Storyline {
         wholeSentence: wholeSentenceAutoDetected ? true : wholeSentence,
         actionThread: actionThread,
         isSupportiveActionInThread: isSupportiveActionInThread,
-        time: time ?? this.time));
+        time: time ?? this.time);
+
+    _records.add(new _StorylineRecord(report: report));
+  }
+
+  /// Add an element that is not text.
+  void addCustomElement(ElementBase element) {
+    _records.add(new _StorylineRecord(customElement: element));
   }
 
   /// Add a sentence (or more) enumerating several things ([articles]) at once.
@@ -353,26 +388,27 @@ class Storyline {
   }
 
   void clear() {
-    reports.clear();
+    _records.clear();
   }
 
   /// Appends [other] storyline to this one.
   void concatenate(Storyline other) {
-    reports.addAll(other.reports);
+    _records.addAll(other._records);
   }
 
   bool exchangedSubjectObject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    if (reports[i].subject == null || reports[j].subject == null) return false;
-    if (reports[i].object == null || reports[j].object == null) return false;
-    return reports[i].subject.id == reports[j].object.id &&
-        reports[i].object.id == reports[j].subject.id;
+    if (_reports[i].subject == null || _reports[j].subject == null)
+      return false;
+    if (_reports[i].object == null || _reports[j].object == null) return false;
+    return _reports[i].subject.id == _reports[j].object.id &&
+        _reports[i].object.id == _reports[j].subject.id;
   }
 
   /// Returns an iterable of all the entities present in given report.
   Iterable<Entity> getAllEntities(int i) sync* {
     if (!valid(i)) return;
-    var report = reports[i];
+    var report = _reports[i];
     if (report.subject != null) yield report.subject;
     if (report.object != null) yield report.object;
     if (report.owner != null) yield report.owner;
@@ -513,20 +549,20 @@ class Storyline {
   }
 
   Entity object(int i) {
-    if (i < 0 || i >= reports.length)
+    if (i < 0 || i >= _reports.length)
       return null;
     else
-      return reports[i].object;
+      return _reports[i].object;
   }
 
   bool oppositeSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), both have same sentiment => opposite sentiment
     if (exchangedSubjectObject(i, j) &&
-        reports[i].subjectAndObjectAreEnemies &&
-        reports[j].subjectAndObjectAreEnemies) {
-      if (reports[i].positive && reports[j].positive) return true;
-      if (reports[i].negative && reports[j].negative) return true;
+        _reports[i].subjectAndObjectAreEnemies &&
+        _reports[j].subjectAndObjectAreEnemies) {
+      if (_reports[i].positive && _reports[j].positive) return true;
+      if (_reports[i].negative && _reports[j].negative) return true;
     }
     return false;
   }
@@ -535,24 +571,67 @@ class Storyline {
   /// paragraph), this will output it through [printFunction] and remove it.
   ///
   /// Returns `true` if any paragraphs were output.
+  @deprecated
   bool outputFinishedParagraphs(void printFunction(String msg)) {
     var printed = false;
     while (hasManyParagraphs) {
-      printFunction(realize(onlyFirstParagraph: true));
+      printFunction(realizeAsString(onlyFirstParagraph: true));
       removeFirstParagraph();
       printed = true;
     }
     return printed;
   }
 
+  /// If storyline already has something to show (at least one full
+  /// paragraph), this will output it and remove it.
+  ///
+  /// This is useful for when the output is still being generated (no
+  /// [ChoiceBlock] in sight, actors other than player still haven't finished
+  /// their turns) but we do want to output something to the player.
+  ///
+  /// TODO: output custom elements as well
+  /// TODO: optimize
+  Iterable<ElementBase> generateFinishedOutput() sync* {
+    while (hasManyParagraphs) {
+      yield* realize(onlyFirstParagraph: true);
+      removeFirstParagraph();
+    }
+  }
+
+  /// Like [generateFinishedOutput], but doesn't stop before the last paragraph
+  /// and goes until the end.
+  Iterable<ElementBase> generateOutput() sync* {
+    yield* generateFinishedOutput();
+    yield* realize();
+    _records.clear();
+  }
+
+  /// Old way of getting text out of [Storyline]. Use [realize]
+  /// instead.
+  @deprecated
+  String realizeAsString({bool onlyFirstParagraph: false}) {
+    final buf = new StringBuffer();
+    final list = realize(onlyFirstParagraph: onlyFirstParagraph);
+    for (final element in list) {
+      if (element is TextOutput) {
+        buf.write(element.markdownText);
+      }
+    }
+    return buf.toString();
+  }
+
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
   /// paragraph and will leave the rest of the reports for later.
-  String realize({bool onlyFirstParagraph: false}) {
+  ///
+  /// TODO: deprecate the generated List ([_reports]) and use [_records] instead
+  List<ElementBase> realize({bool onlyFirstParagraph: false}) {
     StringBuffer strBuf = new StringBuffer();
+    _reports =
+        _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
     List<Report> cleanedReports =
-        reports.fold([], (List<Report> list, Report report) {
+        _reports.fold([], (List<Report> list, Report report) {
       Report previousReport = list.isNotEmpty ? list.last : null;
       if (previousReport != null &&
           previousReport.isSupportiveActionInThread &&
@@ -565,13 +644,20 @@ class Storyline {
       }
       return list;
     });
-    reports.retainWhere((Report report) => cleanedReports.contains(report));
+    _reports.retainWhere((Report report) => cleanedReports.contains(report));
+    final hasManyParagraphs = this.hasManyParagraphs;
     final int length = onlyFirstParagraph && hasManyParagraphs
-        ? reports.indexOf(
-                reports.firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
+        ? _reports.indexOf(
+                _reports.firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
             1
-        : reports.length;
-    if (length < 1) return "";
+        : _reports.length;
+    // Same as above, but the index is in [_records].
+    int lengthInRecords = 0;
+    for (final rec in _records) {
+      lengthInRecords += 1;
+      if (rec.isReport && rec.report.string == PARAGRAPH_NEWLINES) break;
+    }
+    if (length < 1) return const [];
     final int MAX_SENTENCE_LENGTH = 3;
     int lastEndSentence = -1;
     bool endPreviousSentence = true; // previous sentence was ended
@@ -585,30 +671,30 @@ class Storyline {
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchangedSubjectObject(i - 1, i);
-        but = (reports[i].but ||
+        but = (_reports[i].but ||
                 (oppositeSentiment(i, i - 1) && someActorsSame(i, i - 1))) &&
-            !reports[i - 1].but;
-        reports[i].but = but;
+            !_reports[i - 1].but;
+        _reports[i].but = but;
         endPreviousSentence = (i - lastEndSentence >= MAX_SENTENCE_LENGTH) ||
             endThisSentence ||
-            reports[i].startSentence ||
-            reports[i - 1].endSentence ||
-            reports[i].wholeSentence ||
+            _reports[i].startSentence ||
+            _reports[i - 1].endSentence ||
+            _reports[i].wholeSentence ||
             // TODO: add possibility to continue sentence even when
             //       object-subject switch is partial (but the second object
             //       must be something like an item)
             !(_sameSubject(i, i - 1) || objectSubjectSwitch) ||
             (but && (i - lastEndSentence > 1)) ||
-            (but && reports[i - 1].but) ||
+            (but && _reports[i - 1].but) ||
             (timeSincePrevious(i) > SHORT_TIME);
         endThisSentence = false;
 
         if (endPreviousSentence) {
-          if (reports[i - 1].wholeSentence) // don't write period after "Boom!"
+          if (_reports[i - 1].wholeSentence) // don't write period after "Boom!"
             strBuf.write(" ");
           else
             strBuf.write(". ");
-          if (but && !reports[i].wholeSentence) strBuf.write("But ");
+          if (but && !_reports[i].wholeSentence) strBuf.write("But ");
         } else {
           // let's try and glue [i-1] and [i] into one sentence
           if (but) {
@@ -650,11 +736,11 @@ class Storyline {
 
       // set variables for next iteration
       if (endPreviousSentence) lastEndSentence = i;
-      if (reports[i].wholeSentence) endThisSentence = true;
+      if (_reports[i].wholeSentence) endThisSentence = true;
     }
 
     // add last dot
-    if (!reports[length - 1].wholeSentence) strBuf.write(".");
+    if (!_reports[length - 1].wholeSentence) strBuf.write(".");
 
     String s = strBuf.toString();
 
@@ -663,34 +749,51 @@ class Storyline {
       return "${m[1]}${m[2]}${m[3]}";
     });
 
-    return s;
+    // Construct the text.
+    final text = new TextOutput((b) => b..markdownText = s);
+
+    if (length == lengthInRecords) {
+      // No records other than of type [Report] found. Safe to just output
+      // the text.
+      return <ElementBase>[text];
+    }
+
+    // We have elements other than text.
+    final result = new List<ElementBase>();
+    result.add(text);
+    int index = 0;
+    for (final rec in _records) {
+      if (!rec.isReport) result.add(rec.customElement);
+      index += 1;
+      if (index >= lengthInRecords) break;
+    }
+
+    return result;
   }
 
   @visibleForTesting
   void removeFirstParagraph() {
     if (!hasManyParagraphs) {
-      reports.clear();
+      _records.clear();
       return;
     }
-    reports.removeRange(
-        0,
-        reports.indexOf(
-                reports.firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
-            1);
+    while (_records.removeFirst().report?.string != PARAGRAPH_NEWLINES) {
+      // Remove everything after the first "PARAGRAPH_LINES".
+    }
   }
 
   bool sameSentiment(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
     // subject(i) == object(j), opposite sentiments => same sentiment
     if (exchangedSubjectObject(i, j) &&
-        reports[i].subjectAndObjectAreEnemies &&
-        reports[j].subjectAndObjectAreEnemies) {
-      if (reports[i].positive && reports[j].negative) return true;
-      if (reports[i].negative && reports[j].positive) return true;
+        _reports[i].subjectAndObjectAreEnemies &&
+        _reports[j].subjectAndObjectAreEnemies) {
+      if (_reports[i].positive && _reports[j].negative) return true;
+      if (_reports[i].negative && _reports[j].positive) return true;
     }
     if (!_sameSubject(i, j)) return false;
-    if (reports[i].positive && reports[j].positive) return true;
-    if (reports[i].negative && reports[j].negative)
+    if (_reports[i].positive && _reports[j].positive) return true;
+    if (_reports[i].negative && _reports[j].negative)
       return true;
     else
       return false;
@@ -710,17 +813,17 @@ class Storyline {
   }
 
   String string(int i) {
-    if (i < 0 || i >= reports.length)
+    if (i < 0 || i >= _reports.length)
       return null;
     else
-      return reports[i].string;
+      return _reports[i].string;
   }
 
   Entity subject(int i) {
-    if (i < 0 || i >= reports.length)
+    if (i < 0 || i >= _reports.length)
       return null;
     else
-      return reports[i].subject;
+      return _reports[i].subject;
   }
 
   /// makes sure the sentence flows well with the previous sentence(s), then
@@ -778,22 +881,24 @@ class Storyline {
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
       result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
     }
-    return getString(result, reports[i]);
+    return getString(result, _reports[i]);
   }
 
   int timeSincePrevious(int i) {
-    if (reports[i].time == null || !valid(i - 1) || reports[i - 1].time == null)
+    if (_reports[i].time == null ||
+        !valid(i - 1) ||
+        _reports[i - 1].time == null)
       return VERY_LONG_TIME;
     else
-      return reports[i].time - reports[i - 1].time;
+      return _reports[i].time - _reports[i - 1].time;
   }
 
   @deprecated
   @override
-  String toString() => realize();
+  String toString() => realizeAsString();
 
   bool valid(int i) {
-    if (i >= reports.length || i < 0)
+    if (i >= _reports.length || i < 0)
       return false;
     else
       return true;
@@ -859,16 +964,17 @@ class Storyline {
 
   bool _sameObject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    if (reports[i].object == null || reports[j].object == null) return false;
-    return reports[i].object.id == reports[j].object.id;
+    if (_reports[i].object == null || _reports[j].object == null) return false;
+    return _reports[i].object.id == _reports[j].object.id;
   }
 
   /// taking care of all the exceptions and rules when comparing different reports
   /// call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    if (reports[i].subject == null || reports[j].subject == null) return false;
-    return reports[i].subject.id == reports[j].subject.id;
+    if (_reports[i].subject == null || _reports[j].subject == null)
+      return false;
+    return _reports[i].subject.id == _reports[j].subject.id;
   }
 
   static String capitalize(String string) {

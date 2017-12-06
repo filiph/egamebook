@@ -22,7 +22,7 @@ void main() {
     storyline.add("<subject> run<s> towards the engine room",
         subject: gorilla, time: 3);
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("The ship trembles. There is something wrong with the "
             "engines. You gesture to Gorilla.+"
             "uns towards the engine room\."));
@@ -42,7 +42,7 @@ void main() {
     storyline.addParagraph();
     storyline.add("<subject> gesture<s> to <subject's> <object>",
         subject: player, object: gorilla);
-    expect(storyline.realize(), contains("\n\n"));
+    expect(storyline.realizeAsString(), contains("\n\n"));
   });
 
   test("fixing .\". in sentences", () {
@@ -55,16 +55,16 @@ void main() {
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: \"Isn't this great?\"",
         subject: gorilla, endSentence: true);
-    expect(storyline.realize(), endsWith("says: \"Isn't this great?\""));
+    expect(storyline.realizeAsString(), endsWith("says: \"Isn't this great?\""));
     storyline.clear();
     storyline.add("<subject> say<s>: \"Well, I think it's great.\"",
         subject: gorilla);
     expect(
-        storyline.realize(), endsWith("says: \"Well, I think it's great.\""));
+        storyline.realizeAsString(), endsWith("says: \"Well, I think it's great.\""));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: \"Well? Say something!\"",
         subject: gorilla);
-    expect(storyline.realize(), endsWith("exclaims: \"Well? Say something!\""));
+    expect(storyline.realizeAsString(), endsWith("exclaims: \"Well? Say something!\""));
   });
 
   test("fixing .'. in sentences", () {
@@ -74,15 +74,15 @@ void main() {
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: 'Isn't this great?'",
         subject: gorilla, endSentence: true);
-    expect(storyline.realize(), endsWith("says: 'Isn't this great?'"));
+    expect(storyline.realizeAsString(), endsWith("says: 'Isn't this great?'"));
     storyline.clear();
     storyline.add("<subject> say<s>: 'Well, I think it's great.'",
         subject: gorilla);
-    expect(storyline.realize(), endsWith("says: 'Well, I think it's great.'"));
+    expect(storyline.realizeAsString(), endsWith("says: 'Well, I think it's great.'"));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: 'Well? Say something!'",
         subject: gorilla);
-    expect(storyline.realize(), endsWith("exclaims: 'Well? Say something!'"));
+    expect(storyline.realizeAsString(), endsWith("exclaims: 'Well? Say something!'"));
   });
 
   test("exchange", () {
@@ -99,7 +99,7 @@ void main() {
     storyline.add("<subject> break<s> <object's> nose",
         subject: enemy, object: player, positive: true, time: 4);
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches(
             "You try to hit the enemy in the stomach.+ he dodges your strike. "
             "He hits back.+ breaks your nose."));
@@ -122,7 +122,7 @@ void main() {
     storyline.add("<subject> give<s> <object> the money",
         subject: enemy, object: enemy2);
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("John meets Jack at the station.+"
             "gives him the money."));
   });
@@ -136,7 +136,7 @@ void main() {
     storyline.add("<subject> find<s> <object>", subject: kid, object: toy);
     storyline.add("<subject> lose<s> <object> again",
         subject: kid, object: toy, but: true);
-    expect(storyline.realize().indexOf("it loses it"), -1);
+    expect(storyline.realizeAsString().indexOf("it loses it"), -1);
   });
 
   test("ignore <owner's> when owner is null", () {
@@ -147,7 +147,7 @@ void main() {
 
     storyline.add("<subject> start<s> programming <owner's> <object> to fire",
         subject: player, object: gun);
-    expect(storyline.realize(), isNot(matches("<owner's>")));
+    expect(storyline.realizeAsString(), isNot(matches("<owner's>")));
   });
 
   test(
@@ -159,7 +159,7 @@ void main() {
 
     storyline.add("<owner's> <subject> fail's to hit <object>",
         subject: player, object: hull);
-    expect(storyline.realize(), matches("You.+"));
+    expect(storyline.realizeAsString(), matches("You.+"));
   });
 
   test("don't substitute pronoun when it was used in the same form", () {
@@ -173,7 +173,7 @@ void main() {
         subject: player, object: gun);
     storyline.add("<subject> go<es> wide of <object>",
         subject: player, object: enemy);
-    expect(storyline.realize().indexOf("wide of it"), -1);
+    expect(storyline.realizeAsString().indexOf("wide of it"), -1);
   });
 
   test("add 'the' to common nouns (default for every Entity)", () {
@@ -182,7 +182,7 @@ void main() {
     var apple = new Entity(name: "apple", pronoun: Pronoun.IT);
     storyline.add("<subject> pick<s> up <object>",
         subject: player, object: apple);
-    expect(storyline.realize(), matches("You pick up the apple."));
+    expect(storyline.realizeAsString(), matches("You pick up the apple."));
   });
 
   test("don't use <owner's> to pronoun", () {
@@ -193,7 +193,7 @@ void main() {
     storyline.add("<subject> hit<s> <object>", subject: player, object: part);
     storyline.add("<owner's> <subject> <is> damaged heavily",
         subject: part, owner: ship);
-    expect(storyline.realize().indexOf("Haijing's it"), -1);
+    expect(storyline.realizeAsString().indexOf("Haijing's it"), -1);
   });
 
   test("put 'and' between two sentences in a complex sentence", () {
@@ -208,7 +208,7 @@ void main() {
     storyline.add("<subject> go<es> wide of <object>",
         subject: player, object: ship, time: 10);
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("You take hold of the front laser's controls,? "
             "and begin to aim at the Haijing\..+"));
   });
@@ -222,7 +222,7 @@ void main() {
     storyline.add("<owner's> <subject> <is> pointed at <object>",
         owner: player, subject: gun, object: enemy, time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
-    expect(storyline.realize(),
+    expect(storyline.realizeAsString(),
         matches("Your gun is pointed at the enemy.+t fires."));
 
     storyline.clear();
@@ -232,7 +232,7 @@ void main() {
         owner: enemy, subject: ship, object: player);
     storyline.add("<owner's> <subject> <is> faster",
         owner: player, subject: gun, but: true);
-    expect(storyline.realize(),
+    expect(storyline.realizeAsString(),
         matches("The enemy's ship aims her guns at you.+ your gun is faster."));
   });
 
@@ -250,7 +250,7 @@ void main() {
         object: enemy,
         time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
-    expect(storyline.realize(),
+    expect(storyline.realizeAsString(),
         matches("Your gun is pointed at *the enemy.+t fires."));
   });
 
@@ -262,7 +262,7 @@ void main() {
         new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
-    expect(storyline.realize(), matches("The orc pounds on your sword."));
+    expect(storyline.realizeAsString(), matches("The orc pounds on your sword."));
   });
 
   group("possessive pronoun", () {
@@ -279,14 +279,14 @@ void main() {
     test("do show with common nouns", () {
       dog = new Entity(name: "dog", pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
-      expect(storyline.realize(), contains("your dog"));
+      expect(storyline.realizeAsString(), contains("your dog"));
     });
 
     test("don't show with proper nouns", () {
       dog = new Entity(
           name: "Buster", nameIsProperNoun: true, pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
-      expect(storyline.realize(), isNot(contains("your Buster")));
+      expect(storyline.realizeAsString(), isNot(contains("your Buster")));
     });
   });
 
@@ -298,7 +298,7 @@ void main() {
     orc.report(storyline, "<subject> drop<s> the whip");
     orc.report(storyline, "<subject> draw<s> <subject's> <object>",
         object: sword);
-    expect(storyline.realize(), isNot(matches("his the scimitar")));
+    expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
   });
 
   test(
@@ -314,7 +314,7 @@ void main() {
           "punch<es> <object's> eye}",
           subject: player,
           object: orc);
-      expect(storyline.realize(), isNot(contains("his eye")));
+      expect(storyline.realizeAsString(), isNot(contains("his eye")));
     }
   });
 
@@ -326,14 +326,14 @@ void main() {
     storyline.add("but it has two paragraphs");
 
     expect(storyline.hasManyParagraphs, isTrue);
-    expect(storyline.realize(), contains("has two paragraphs"));
-    expect(storyline.realize(onlyFirstParagraph: true),
+    expect(storyline.realizeAsString(), contains("has two paragraphs"));
+    expect(storyline.realizeAsString(onlyFirstParagraph: true),
         isNot(contains("has two paragraphs")));
 
     storyline.removeFirstParagraph();
     expect(storyline.hasManyParagraphs, isFalse);
-    expect(storyline.realize(), isNot(contains("lorem ipsum")));
-    expect(storyline.realize(), contains("has two paragraphs"));
+    expect(storyline.realizeAsString(), isNot(contains("lorem ipsum")));
+    expect(storyline.realizeAsString(), contains("has two paragraphs"));
   });
 
   test("nice flow ('briana stands up, orc swings at her')", () {
@@ -345,7 +345,7 @@ void main() {
     storyline.add("<subject> swing<s> at <object>",
         subject: orc, object: briana);
 
-    expect(storyline.realize(), contains("swings at her"));
+    expect(storyline.realizeAsString(), contains("swings at her"));
   });
 
   test("definitive (the) article after first use", () {
@@ -360,12 +360,12 @@ void main() {
         subject: shield, time: 1);
     storyline.add("<subject> <is> rusty", subject: sword, time: 3);
 
-    var first = storyline.realize();
+    var first = storyline.realizeAsString();
 
     expect(first, startsWith("A sword lies"));
     expect(first, contains("The sword is rusty"));
 
-    var second = storyline.realize();
+    var second = storyline.realizeAsString();
 
     expect(second, startsWith("A sword lies"));
     expect(second, contains("The sword is rusty"));
@@ -389,23 +389,23 @@ void main() {
 
     // 0
     storyline.addEnumeration("you see", [], "here");
-    expect(storyline.realize(), "");
+    expect(storyline.realizeAsString(), "");
     storyline.clear();
     // 1
     resetAlreadyMentioned();
     storyline.addEnumeration("you see", [handkerchief], "here");
-    expect(storyline.realize(), matches("You see a handkerchief here."));
+    expect(storyline.realizeAsString(), matches("You see a handkerchief here."));
     storyline.clear();
     // 2
     resetAlreadyMentioned();
     storyline.addEnumeration("you see", [handkerchief, brush], "here");
-    expect(storyline.realize(),
+    expect(storyline.realizeAsString(),
         matches("You see a handkerchief and a brush here."));
     storyline.clear();
     // 3
     resetAlreadyMentioned();
     storyline.addEnumeration("you see", [handkerchief, brush, mirror], "here");
-    expect(storyline.realize(),
+    expect(storyline.realizeAsString(),
         matches("You see a handkerchief, a brush, and a mirror here."));
     storyline.clear();
     // 4
@@ -413,7 +413,7 @@ void main() {
     storyline.addEnumeration(
         "you see", [handkerchief, brush, mirror, lipstick], "here");
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You see a lipstick here."));
     storyline.clear();
@@ -422,7 +422,7 @@ void main() {
     storyline.addEnumeration(
         "you see", [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You see a lipstick and a crate of TNT here."));
     storyline.clear();
@@ -431,7 +431,7 @@ void main() {
     storyline.addEnumeration("you <also> see",
         [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("You see a handkerchief, a brush, and a mirror here. "
             "You also see a lipstick and a crate of TNT here."));
     storyline.clear();
@@ -440,7 +440,7 @@ void main() {
     storyline.addEnumeration("you <also> see",
         [handkerchief, brush, mirror, lipstick, crateOfTnt], null);
     expect(
-        storyline.realize(),
+        storyline.realizeAsString(),
         matches("You see a handkerchief, a brush, and a mirror. "
             "You also see a lipstick and a crate of TNT."));
     storyline.clear();
@@ -458,8 +458,8 @@ void main() {
         storyline.add("<subject> <is> heard from the distance",
             subject: bigbang);
         storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realize(), contains("aim at the sky"));
-        expect(storyline.realize(), contains("shoot a duck"));
+        expect(storyline.realizeAsString(), contains("aim at the sky"));
+        expect(storyline.realizeAsString(), contains("shoot a duck"));
         storyline.clear();
       });
 
@@ -467,8 +467,8 @@ void main() {
         storyline.add("you aim at the sky",
             actionThread: threadA, isSupportiveActionInThread: true);
         storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realize(), isNot(contains("aim at the sky")));
-        expect(storyline.realize(), contains("shoot a duck"));
+        expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
+        expect(storyline.realizeAsString(), contains("shoot a duck"));
         storyline.clear();
       });
 
@@ -485,7 +485,7 @@ void main() {
             isSupportiveActionInThread: true);
         storyline.add("<subject> shoot<s> <object>",
             subject: player, object: enemy, actionThread: threadA);
-        expect(storyline.realize(), "You shoot the orc.");
+        expect(storyline.realizeAsString(), "You shoot the orc.");
         storyline.clear();
       });
 
@@ -495,9 +495,9 @@ void main() {
         storyline.add("you look through the scopes",
             actionThread: threadA, isSupportiveActionInThread: true);
         storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realize(), isNot(contains("aim at the sky")));
-        expect(storyline.realize(), isNot(contains("look through the scopes")));
-        expect(storyline.realize(), contains("shoot a duck"));
+        expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
+        expect(storyline.realizeAsString(), isNot(contains("look through the scopes")));
+        expect(storyline.realizeAsString(), contains("shoot a duck"));
         storyline.clear();
       });
     });

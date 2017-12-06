@@ -103,6 +103,16 @@ class CliRunner extends Presenter<EdgeheadGame> {
   }
 
   @override
+  void addCustomElement(ElementBase element) {
+    if (element is StatUpdate) {
+      _hijackedPrint(
+          "=== Stat(${element.name}) updated to ${element.newValue} ===");
+      return;
+    }
+    super.addCustomElement(element);
+  }
+
+  @override
   void addError(ErrorElement error) {
     _log.severe(error.message);
   }
@@ -283,7 +293,13 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   /// from the game are handled here.
   ///
   /// For example, stats updates, map updates, custom animations, etc.
+  ///
+  /// This method is annotated with [mustCallSuper] so that implementers never
+  /// forget to raise an error when there is an element that this presenter
+  /// cannot handle. Failing fast is much better than ignoring an entire
+  /// class of book elements.
   @protected
+  @mustCallSuper
   void addCustomElement(ElementBase element) {
     throw new UnimplementedError("Unexpected type of element: $element");
   }

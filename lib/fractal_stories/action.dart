@@ -293,7 +293,7 @@ abstract class EnemyTargetAction extends Action {
 
   @override
   String get command =>
-      (new Storyline()..add(commandTemplate, object: enemy)).realize();
+      (new Storyline()..add(commandTemplate, object: enemy)).realizeAsString();
 
   /// EnemyTargetAction should include the [enemy] in the [command]. To make it
   /// easier to implement, this class will automatically construct the name
@@ -315,7 +315,7 @@ abstract class EnemyTargetAction extends Action {
   String getRollReason(Actor a, WorldState w) => (new Storyline()
         ..add(rollReasonTemplate,
             subject: a, object: enemy, wholeSentence: true))
-      .realize();
+      .realizeAsString();
 
   /// Gets the [Situation.id] of the main situation of this action.
   ///
@@ -363,7 +363,7 @@ abstract class ItemAction extends Action {
 
   @override
   String get command =>
-      (new Storyline()..add(commandTemplate, object: item)).realize();
+      (new Storyline()..add(commandTemplate, object: item)).realizeAsString();
 
   /// ItemAction should include the [item] in the [command]. To make it
   /// easier to implement, this class will automatically construct the name
