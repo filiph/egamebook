@@ -90,10 +90,9 @@ class EdgeheadGame extends Book {
 
   void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
     if (event.actor.isPlayer) {
-      event.context.storyline
-          .addCustomElement(new StatUpdate<int>((b) => b
-            ..name = hitpointsSetting.name
-            ..newValue = event.actor.hitpoints));
+      event.context.storyline.addCustomElement(new StatUpdate<int>((b) => b
+        ..name = hitpointsSetting.name
+        ..newValue = event.actor.hitpoints));
     }
   }
 
@@ -158,7 +157,8 @@ class EdgeheadGame extends Book {
 
     var global = new EdgeheadGlobalState();
 
-    world = new WorldState([aren, briana], rooms, initialSituation, global);
+    world = new WorldState<EdgeheadGlobalState>(
+        [aren, briana], rooms, initialSituation, global);
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -190,11 +190,9 @@ class EdgeheadGame extends Book {
       storyline.generateOutput().forEach(elementsSink.add);
 
       if (!world.hasAliveActor(aren.id)) {
-        elementsSink
-            .add(new LoseGame((b) => b..markdownText = "You die."));
+        elementsSink.add(new LoseGame((b) => b..markdownText = "You die."));
       } else {
-        elementsSink
-            .add(new WinGame((b) => b..markdownText = "TODO win text"));
+        elementsSink.add(new WinGame((b) => b..markdownText = "TODO win text"));
       }
       return;
     }

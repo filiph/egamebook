@@ -12,7 +12,7 @@ import 'item.dart';
 import 'room.dart';
 import 'situation.dart';
 
-class WorldState {
+class WorldState<T> {
   final Set<Actor> actors;
   final Set<Item> items;
 
@@ -24,7 +24,7 @@ class WorldState {
   ///
   /// This object must have a hash code that is value-based so that globals
   /// with the same state have the same [Object.hashCode].
-  dynamic global;
+  T global;
 
   /// A 'memory' of actions. The queue is in reverse chronological order,
   /// with the latest record at the beginning of the queue. This is because
@@ -63,7 +63,7 @@ class WorldState {
         time = 0;
 
   /// Creates a deep clone of [other]. TODO: use BuiltValue here as well.
-  WorldState.duplicate(WorldState other)
+  WorldState.duplicate(WorldState<T> other)
       : actors = new Set<Actor>(),
         actionRecords = new Queue<ActionRecord>(),
         items = new Set<Item>(),
