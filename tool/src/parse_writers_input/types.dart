@@ -2,6 +2,9 @@ import 'package:code_builder/code_builder.dart';
 
 // ignore_for_file: type_annotate_public_apis
 
+final actionContextType = new TypeBuilder("ActionContext",
+    importFrom: "package:edgehead/fractal_stories/action.dart");
+
 final actionType = new TypeBuilder("RoamingAction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
 
@@ -9,6 +12,7 @@ final actorType = new TypeBuilder("Actor",
     importFrom: "package:edgehead/fractal_stories/actor.dart");
 
 final allNeededTypes = <TypeBuilder>[
+  actionContextType,
   actionType,
   actorType,
   builtType,
@@ -20,9 +24,11 @@ final allNeededTypes = <TypeBuilder>[
   roomRoamingSituationType,
   roomType,
   simpleActionType,
+  simulationType,
   situationType,
   storylineType,
-  worldStateType
+  worldStateBuilderType,
+  worldStateType,
 ];
 
 final boolType = new TypeBuilder("bool");
@@ -66,6 +72,9 @@ final simpleActionApplyFunction = new TypeBuilder("SimpleActionApplyFunction",
 final simpleActionType = new TypeBuilder("SimpleAction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
 
+final simulationType = new TypeBuilder("Simulation",
+    importFrom: "package:edgehead/fractal_stories/simulation.dart");
+
 final situationType = new TypeBuilder("Situation",
     importFrom: "package:edgehead/fractal_stories/situation.dart");
 
@@ -74,5 +83,8 @@ final storylineType = new TypeBuilder("Storyline",
 
 final stringType = new TypeBuilder("String");
 
+final worldStateBuilderType = new TypeBuilder("WorldStateBuilder",
+    importFrom: "package:edgehead/fractal_stories/world_state.dart");
+
 final worldStateType = new TypeBuilder("WorldState",
-    importFrom: "package:edgehead/fractal_stories/world.dart");
+    importFrom: "package:edgehead/fractal_stories/world_state.dart");

@@ -6,7 +6,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -56,7 +57,7 @@ abstract class LootSituation extends Situation
   LootSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int time, WorldState world) {
+  Actor getActorAtTime(int time, Simulation sim, WorldState world) {
     // Only one turn of looting.
     if (time > 0) return null;
     // Only player can loot at the moment.
@@ -64,12 +65,13 @@ abstract class LootSituation extends Situation
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState world) {
     return [_getPlayer(actors)];
   }
 
   @override
-  bool shouldContinue(WorldState world) => true;
+  bool shouldContinue(Simulation sim, WorldState w) => true;
 
   Actor _getPlayer(Iterable<Actor> actors) =>
       actors.firstWhere((a) => a.isPlayer && a.isAliveAndActive);

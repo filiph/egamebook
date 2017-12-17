@@ -101,7 +101,7 @@ THE END.
 
 
 [[CODE]]
-describeSuccessRate(w, s);
+describeSuccessRate(sim, originalWorld, s);
 [[/CODE]]
 
 

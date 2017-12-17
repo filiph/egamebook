@@ -1,12 +1,13 @@
 library stranded.plan_consequence;
 
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
 import 'action.dart';
 import 'storyline/storyline.dart';
-import 'world.dart';
+import 'simulation.dart';
 
 /// A container for statistics for a [PlanConsequence].
 @immutable
@@ -93,10 +94,6 @@ class PlanConsequence {
       this.isSuccess,
       this.order) {
     storyline.time = world.time;
-    assert(
-        world.currentAction == null,
-        "currentAction should only be non-null "
-        "while action is applied.");
   }
 
   @override

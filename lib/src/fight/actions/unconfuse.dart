@@ -1,7 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
 class Unconfuse extends Action {
@@ -38,8 +39,9 @@ class Unconfuse extends Action {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState world = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder world = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> shake<s> <subject's> head violently");
     if (a.isPlayer) {
       s.add("the {horrible|terrible} spell seems to recede");
@@ -51,18 +53,18 @@ class Unconfuse extends Action {
   }
 
   @override
-  String getRollReason(Actor a, WorldState w) => "WARNING this shouldn't be "
+  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+      "WARNING this shouldn't be "
       "user-visible";
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor actor, WorldState world) =>
-      actor.isConfused &&
-      world.timeSinceLastActionRecord(
-              actionName: Confuse.className,
-              sufferer: actor,
-              wasSuccess: true) >
-          Confuse.minimalEffectLength;
+  bool isApplicable(Actor actor, Simulation sim, WorldState world) {
+    if (!actor.isConfused) return false;
+    final timeSince = world.timeSinceLastActionRecord(
+        actionName: Confuse.className, sufferer: actor, wasSuccess: true);
+    return timeSince > Confuse.minimalEffectLength;
+  }
 }

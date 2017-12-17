@@ -7,7 +7,8 @@ import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
@@ -45,10 +46,11 @@ class ThrowSpear extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     final spear = _findSpear(a);
-    _startThrowSpearReportStart(a, w, s, enemy, spear);
+    _startThrowSpearReportStart(a, sim, w, s, enemy, spear);
     if (enemy.currentShield != null) {
       enemy.report(s, "<subject> deflects it with <subject's> <object>",
           positive: true, but: true, object: enemy.currentShield);
@@ -68,10 +70,11 @@ class ThrowSpear extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     final spear = _findSpear(a);
-    _startThrowSpearReportStart(a, w, s, enemy, spear);
+    _startThrowSpearReportStart(a, sim, w, s, enemy, spear);
     if (enemy.currentShield != null) {
       spear.report(s, "<subject> fl<ies> past <object-owner's> <object>",
           positive: true,
@@ -113,13 +116,13 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState world) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
     final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
     return 0.4 - shieldPenalty;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       a.isPlayer &&
       a.isStanding &&
       (a.currentWeapon.types.contains(ItemType.spear) ||
@@ -151,7 +154,7 @@ class ThrowSpear extends EnemyTargetAction {
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory
   /// ([Actor.items]) to the ground. If actor's hand was emptied, a new
   /// weapon (or [defaultFist]) is put in it.
-  void _moveSpearToGround(WorldState w, Actor a, Spear spear) {
+  void _moveSpearToGround(WorldStateBuilder w, Actor a, Spear spear) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
@@ -168,8 +171,8 @@ class ThrowSpear extends EnemyTargetAction {
         fightSituation.rebuild((b) => b..droppedItems.add(spear)));
   }
 
-  void _startThrowSpearReportStart(
-          Actor a, WorldState w, Storyline s, Actor enemy, Spear spear) =>
+  void _startThrowSpearReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+          Storyline s, Actor enemy, Spear spear) =>
       a.report(
         s,
         "<subject> {throw<s>|hurl<s>|cast<s>} "

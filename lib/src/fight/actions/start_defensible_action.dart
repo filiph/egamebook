@@ -2,14 +2,22 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 
-typedef void _PartialApplyFunction(Actor actor, WorldState world,
-    Storyline storyline, Actor enemy, Situation mainSituation);
+typedef void _PartialApplyFunction(
+    Actor actor,
+    Simulation sim,
+    WorldStateBuilder world,
+    Storyline storyline,
+    Actor enemy,
+    Situation mainSituation);
 
-typedef Situation _SituationBuilder(Actor actor, WorldState world, Actor enemy);
+typedef Situation _SituationBuilder(
+    Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
 
-typedef num _SuccessChanceGetter(Actor a, WorldState w, Actor enemy);
+typedef num _SuccessChanceGetter(
+    Actor a, Simulation sim, WorldState w, Actor enemy);
 
 /// This is a utility class that makes it easier to build actions that put
 /// 2 situations on the stack at once: one is the attack, and on top of it
@@ -25,7 +33,7 @@ typedef num _SuccessChanceGetter(Actor a, WorldState w, Actor enemy);
 /// Look at `start_slash.dart` for an example of how to use this class.
 class StartDefensibleAction extends EnemyTargetAction {
   /// This function should use [storyline] to report the start of the action.
-  /// It can modify [world].
+  /// It can modify [simulation].
   ///
   /// For example, "Orc swings his scimitar at you."
   final _PartialApplyFunction _applyStartOfSuccess;
@@ -34,13 +42,14 @@ class StartDefensibleAction extends EnemyTargetAction {
   final _SuccessChanceGetter _successChanceGetter;
 
   /// This function should use [storyline] to report that the defensible action
-  /// couldn't even start. It can modify [world].
+  /// couldn't even start. It can modify [simulation].
   ///
   /// For example, "Orc tries to swing at you but completely misses."
   final _PartialApplyFunction _applyStartOfFailure;
 
   /// This is used as the usual [Action.isApplicable].
-  final bool Function(Actor a, WorldState w, Actor enemy) _isApplicableFunction;
+  final bool Function(Actor a, Simulation sim, WorldState w, Actor enemy)
+      _isApplicableFunction;
 
   /// This should build the main situation (the orc slashing Aren).
   ///
@@ -118,17 +127,19 @@ class StartDefensibleAction extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     assert(_successChanceGetter != null);
     if (buildSituationsOnFailure) {
-      var mainSituation = _mainSituationBuilder(a, w, enemy);
-      var defenseSituation = _defenseSituationBuilderWhenFailed(a, w, enemy);
-      _applyStartOfFailure(a, w, s, enemy, mainSituation);
+      var mainSituation = _mainSituationBuilder(a, sim, w, enemy);
+      var defenseSituation =
+          _defenseSituationBuilderWhenFailed(a, sim, w, enemy);
+      _applyStartOfFailure(a, sim, w, s, enemy, mainSituation);
       w.pushSituation(mainSituation);
       w.pushSituation(defenseSituation);
     } else {
-      _applyStartOfFailure(a, w, s, enemy, null);
+      _applyStartOfFailure(a, sim, w, s, enemy, null);
     }
     return "${a.name} fails to start a $name (defensible situation) "
         "at ${enemy.name}";
@@ -137,25 +148,26 @@ class StartDefensibleAction extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
-    var mainSituation = _mainSituationBuilder(a, w, enemy);
-    var defenseSituation = _defenseSituationBuilder(a, w, enemy);
-    _applyStartOfSuccess(a, w, s, enemy, mainSituation);
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
+    var mainSituation = _mainSituationBuilder(a, sim, w, enemy);
+    var defenseSituation = _defenseSituationBuilder(a, sim, w, enemy);
+    _applyStartOfSuccess(a, sim, w, s, enemy, mainSituation);
     w.pushSituation(mainSituation);
     w.pushSituation(defenseSituation);
     return "${a.name} starts a $name (defensible situation) at ${enemy.name}";
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (_successChanceGetter != null) {
-      return _successChanceGetter(a, w, enemy);
+      return _successChanceGetter(a, sim, w, enemy);
     }
     return 1.0;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) =>
-      _isApplicableFunction(a, w, enemy);
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+      _isApplicableFunction(a, sim, w, enemy);
 }

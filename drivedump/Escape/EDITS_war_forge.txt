@@ -30,7 +30,7 @@ The air in the war forge is thick and makes breathing difficult, and the constan
 
 
 [[CODE]]
-rollBrianaQuote(w, s);
+rollBrianaQuote(sim, w, s);
 [[/CODE]]
 
 

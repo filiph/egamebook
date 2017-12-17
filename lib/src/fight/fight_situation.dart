@@ -8,7 +8,8 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
@@ -33,13 +34,14 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'fight_situation.g.dart';
 
-String getGroundMaterial(WorldState w) {
+String getGroundMaterial(WorldStateBuilder w) {
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   return groundMaterial;
 }
 
-typedef void TimedEventCallback(WorldState world, Storyline storyline);
+typedef void TimedEventCallback(
+    Simulation sim, WorldStateBuilder world, Storyline storyline);
 
 abstract class FightSituation extends Situation
     implements Built<FightSituation, FightSituationBuilder> {
@@ -139,14 +141,15 @@ abstract class FightSituation extends Situation
 
   /// Returns `true` if any actor among `teamIds` can still fight
   /// (and is active).
-  bool canFight(WorldState world, Iterable<int> teamIds) =>
+  bool canFight(
+          Simulation sim, WorldStateBuilder world, Iterable<int> teamIds) =>
       teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 
   @override
   FightSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int time, WorldState world) {
+  Actor getActorAtTime(int time, Simulation sim, WorldState world) {
     var allActorIds = alternate<int>(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
@@ -202,24 +205,24 @@ abstract class FightSituation extends Situation
   // timed events at a time when an action in FightSituation might have
   // created other (child) situations.
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
+  Iterable<Actor> getActors(Iterable<Actor> actors, _, __) =>
       actors.where((Actor actor) =>
           actor.isAliveAndActive &&
           (playerTeamIds.contains(actor.id) ||
               enemyTeamIds.contains(actor.id)));
 
   @override
-  void onAfterTurn(WorldState world, Storyline s) {
+  void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
     if (events.containsKey(time)) {
-      events[time](world, s);
+      events[time](sim, world, s);
     }
   }
 
   @override
-  void onPop(WorldState world) {
+  void onPop(Simulation sim, WorldStateBuilder world) {
     if (roomRoamingSituationId != null &&
-        !canFight(world, enemyTeamIds) &&
-        canFight(world, playerTeamIds)) {
+        !canFight(sim, world, enemyTeamIds) &&
+        canFight(sim, world, playerTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
       final situation = world.getSituationById(roomRoamingSituationId)
@@ -236,7 +239,7 @@ abstract class FightSituation extends Situation
       // Allow player to take and distribute loot.
       world.pushSituation(new LootSituation.initialized(
           playerTeamIds, groundMaterial, droppedItems));
-    } else if (!canFight(world, playerTeamIds)) {
+    } else if (!canFight(sim, world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.
     } else {
       assert(
@@ -249,14 +252,15 @@ abstract class FightSituation extends Situation
   }
 
   @override
-  bool shouldContinue(WorldState world) {
+  bool shouldContinue(Simulation sim, WorldState world) {
     bool isPlayerAndAlive(int id) {
       var actor = world.getActorById(id);
       return actor.isPlayer && actor.isAliveAndActive;
     }
 
-    return canFight(world, playerTeamIds) &&
-        canFight(world, enemyTeamIds) &&
+    final built = world.toBuilder();
+    return canFight(sim, built, playerTeamIds) &&
+        canFight(sim, built, enemyTeamIds) &&
         playerTeamIds.any(isPlayerAndAlive);
   }
 }

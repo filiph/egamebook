@@ -1,7 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 class JumpBackFromSlash extends EnemyTargetAction {
@@ -36,32 +37,34 @@ class JumpBackFromSlash extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(
         s,
         "<subject> {jump<s>|leap<s>} {back|backward} "
         "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to jump back from ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
         subject: enemy.currentWeapon, owner: enemy);
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     return "${a.name} jumps back from ${enemy.name}'s attack";
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.98;
     final situation = w.currentSituation as SlashDefenseSituation;
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
@@ -69,7 +72,7 @@ class JumpBackFromSlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.isBarehanded && enemy.currentWeapon.isSlashing;
 
   static EnemyTargetAction builder(Actor enemy) => new JumpBackFromSlash(enemy);

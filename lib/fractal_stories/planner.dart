@@ -8,9 +8,10 @@ import 'actor.dart';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
 import 'plan_consequence.dart';
-import 'world.dart';
+import 'simulation.dart';
 
 class ActorPlanner {
   final Logger log = new Logger('ActorPlanner');
@@ -33,9 +34,12 @@ class ActorPlanner {
 
   PubSub _pubsub;
 
+  final Simulation simulation;
+
   final Map<Action, ActorScoreChange> firstActionScores = new Map();
 
-  ActorPlanner(Actor actor, WorldState initialWorld, this._pubsub)
+  ActorPlanner(
+      Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
       : actorId = actor?.id,
         _initial = new PlanConsequence.initial(initialWorld) {
     if (actor == null) {
@@ -141,7 +145,7 @@ class ActorPlanner {
       log.finer(() => "Evaluating action '${action.command}' "
           "for ${currentActor.name}");
 
-      if (!action.isApplicable(currentActor, _initial.world)) {
+      if (!action.isApplicable(currentActor, simulation, _initial.world)) {
         log.finer(() => "- action '${action.command}' isn't applicable");
         // Bail early if action isn't possible at all.
         continue;
@@ -187,11 +191,11 @@ class ActorPlanner {
     yield* world.currentSituation.actions;
     for (var builder in world.currentSituation.actionGenerators) {
       if (builder is EnemyTargetActionBuilder) {
-        yield* generateEnemyTargetActions(actor, world, builder);
+        yield* generateEnemyTargetActions(actor, simulation, world, builder);
       } else if (builder is ExitActionBuilder) {
-        yield* generateExitActions(actor, world, builder);
+        yield* generateExitActions(actor, simulation, world, builder);
       } else if (builder is ItemActionBuilder) {
-        yield* generateItemActions(actor, world, builder);
+        yield* generateItemActions(actor, simulation, world, builder);
       } else {
         throw new StateError("$builder is not one of the supported ones");
       }
@@ -218,7 +222,7 @@ class ActorPlanner {
         "'${firstAction.command}' of ${mainActor.name}");
     log.finer(() => "- firstAction == $firstAction");
 
-    if (!firstAction.isApplicable(mainActor, initial.world)) {
+    if (!firstAction.isApplicable(mainActor, simulation, initial.world)) {
       log.finer("- firstAction not applicable");
       return;
     }
@@ -236,8 +240,8 @@ class ActorPlanner {
     final Set<WorldState> closed = new Set<WorldState>();
 
     var initialWorldHash = initial.world.hashCode;
-    for (var firstConsequence
-        in firstAction.apply(mainActor, initial, initial.world, _pubsub)) {
+    for (var firstConsequence in firstAction.apply(
+        mainActor, initial, simulation, initial.world, _pubsub)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw new StateError("Action $firstAction modified world state when "
             "producing $firstConsequence.");
@@ -302,8 +306,8 @@ class ActorPlanner {
         continue;
       }
 
-      var currentActor =
-          current.world.currentSituation.getCurrentActor(current.world);
+      var currentActor = current.world.currentSituation
+          .getCurrentActor(simulation, current.world);
       assert(
           currentActor != null,
           "Situation ${current.world.currentSituation} "
@@ -344,9 +348,10 @@ class ActorPlanner {
       log.finest("- generating all actions for ${currentActor.name}");
       var originalCount = open.length;
       for (Action action in _generateAllActions(currentActor, current.world)) {
-        if (!action.isApplicable(currentActor, current.world)) continue;
-        var consequences =
-            action.apply(currentActor, current, current.world, _pubsub);
+        if (!action.isApplicable(currentActor, simulation, current.world))
+          continue;
+        var consequences = action.apply(
+            currentActor, current, simulation, current.world, _pubsub);
 
         for (PlanConsequence next in consequences) {
           planConsequencesComputed++;

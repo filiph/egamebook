@@ -2,7 +2,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class SlayMonstersAction extends Action {
@@ -34,28 +35,33 @@ class SlayMonstersAction extends Action {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     throw new UnimplementedError();
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     final situation = w.currentSituation as RoomRoamingSituation;
-    Room room = w.getRoomByName(situation.currentRoomName);
+    Room room = sim.getRoomByName(situation.currentRoomName);
 
-    var friends = w.actors.where((other) =>
+    WorldState built = w.build();
+    var friends = built.actors.where((other) =>
         other.isAliveAndActive &&
         other.team.isFriendWith(a.team) &&
         other.currentRoomName == room.name);
 
-    var fightSituation = room.fightGenerator(w, situation, friends);
-    assert(
-        fightSituation.enemyTeamIds
-            .every((id) => w.actors.any((a) => a.id == id)),
+    var fightSituation = room.fightGenerator(sim, w, situation, friends);
+    assert(() {
+      WorldState rebuilt = w.build();
+      return fightSituation.enemyTeamIds
+          .every((id) => rebuilt.actors.any((a) => a.id == id));
+    },
         "FightGenerator in $room didn't add its monsters to the world's "
         "actors. Add a line like `w.actors.addAll(monsters)` to the "
         "generator. At least one of these actors is missing: "
@@ -67,13 +73,13 @@ class SlayMonstersAction extends Action {
   }
 
   @override
-  String getRollReason(Actor a, WorldState w) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w) =>
       "WARNING should not be user-visible";
 
   @override
-  num getSuccessChance(Actor a, WorldState w) => 1.0;
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       (w.currentSituation as RoomRoamingSituation).monstersAlive;
 }

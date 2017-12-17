@@ -1,7 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 class RollOutOfWay extends EnemyTargetAction {
@@ -37,38 +38,40 @@ class RollOutOfWay extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to roll out of the way");
     a.report(s, "<subject> can't", but: true);
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to roll out of the way";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> <is> able to roll out of the way",
         but: true, positive: true);
     if (a.isPlayer) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       a.report(s, "<subject> jump<s> up on <subject's> feet", positive: true);
     }
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     return "${a.name} rolls out of the way of ${enemy.name}'s strike";
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.98;
     final situation = w.currentSituation as OnGroundDefenseSituation;
     return situation.predeterminedChance.or(0.5);
   }
 
   @override
-  bool isApplicable(Actor actor, WorldState world) => true;
+  bool isApplicable(Actor actor, Simulation sim, WorldState world) => true;
 
   static EnemyTargetAction builder(Actor enemy) => new RollOutOfWay(enemy);
 }

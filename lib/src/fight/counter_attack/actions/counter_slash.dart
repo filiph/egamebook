@@ -1,8 +1,9 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
@@ -16,7 +17,7 @@ const String counterSlashHelpMessage =
     "counters require fast reaction and could throw you out of balance.";
 
 void counterSlashApplyFailure(
-    Actor a, WorldState w, Storyline s, Actor enemy, _) {
+    Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy, _) {
   a.report(s, "<subject> tr<ies> to swing back");
   a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
   if (a.isStanding) {
@@ -36,17 +37,14 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     counterSlashCommandTemplate,
     counterSlashHelpMessage,
     counterSlashReportStart,
-    (a, w, enemy) => !a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
-    (a, w, enemy) => new SlashSituation.initialized(a, enemy),
-    (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
+    (a, sim, w, enemy) =>
+        !a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
+    (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
     enemy,
-    successChanceGetter: (_, __, enemy) => enemy.isStanding ? 0.7 : 0.9,
+    successChanceGetter: (_, __, ___, enemy) => enemy.isStanding ? 0.7 : 0.9,
     applyStartOfFailure: counterSlashApplyFailure,
     buildSituationsOnFailure: false);
-
-void counterSlashReportStart(Actor a, WorldState w, Storyline s, Actor enemy,
-        Situation mainSituation) =>
-    a.report(s, "<subject> swing<s> back", object: enemy);
 
 EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
     new StartDefensibleAction(
@@ -54,15 +52,20 @@ EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
         counterSlashCommandTemplate,
         counterSlashHelpMessage,
         counterSlashReportStart,
-        (a, w, enemy) =>
+        (a, sim, w, enemy) =>
             a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
-        (a, w, enemy) => new SlashSituation.initialized(a, enemy),
-        (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
+        (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (_, __, enemy) => enemy.isStanding ? 0.7 : 0.9,
+        successChanceGetter: (_, __, ___, enemy) =>
+            enemy.isStanding ? 0.7 : 0.9,
         applyStartOfFailure: counterSlashApplyFailure,
         buildSituationsOnFailure: false,
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> hit <objectPronoun>?");
+
+void counterSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+        Storyline s, Actor enemy, Situation mainSituation) =>
+    a.report(s, "<subject> swing<s> back", object: enemy);

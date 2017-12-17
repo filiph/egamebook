@@ -2,12 +2,13 @@ library stranded.situation;
 
 import 'dart:math' show Random;
 
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
 import 'action.dart';
 import 'actor.dart';
 import 'storyline/storyline.dart';
-import 'world.dart';
+import 'simulation.dart';
 
 final int _largeInteger = 0x3FFFFFFF;
 
@@ -78,7 +79,7 @@ abstract class Situation {
   /// Identifies the type of the Situation (i.e. 'FightSituation' for
   /// [FightSituation].
   ///
-  /// This is so that we can do things like [WorldState.popSituationsUntil].
+  /// This is so that we can do things like [Simulation.popSituationsUntil].
   String get name;
 
   /// This is increased every 'turn'. It starts at `0` when the situation is
@@ -92,20 +93,26 @@ abstract class Situation {
   ///
   /// Returns `null` when no actor can act anymore (for example, all
   /// actors are dead, or all have acted).
-  Actor getActorAtTime(int time, WorldState world);
+  Actor getActorAtTime(int time, Simulation sim, WorldState world);
 
   /// Filters the [actors] that are active in this situation.
-  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world);
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState world);
 
   /// Returns the actor whose time it is at the current [time].
-  Actor getCurrentActor(WorldState world) => getActorAtTime(time, world);
+  Actor getCurrentActor(Simulation sim, WorldState world) =>
+      getActorAtTime(time, sim, world);
 
   /// Called after action is executed inside this situation.
   ///
   /// This method is called immediately after executing the action, even when
   /// the action adds more situations to the top of the stack. It _won't_ run
   /// if the situation is popped from the stack by the action.
-  void onAfterAction(WorldState world, Storyline storyline) {
+  ///
+  /// For example, a room roaming situation can remove dead actors from play
+  /// after you've left the area.
+  void onAfterAction(
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
     // No-op by default.
   }
 
@@ -115,35 +122,37 @@ abstract class Situation {
   /// For example, if the action adds new situations at the top of the stack,
   /// those situations will first get resolved (and popped) and only then will
   /// [onAfterTurn] get called.
-  void onAfterTurn(WorldState world, Storyline storyline) {
+  void onAfterTurn(
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
     // No-op by default.
   }
 
   /// Called just before executing an action.
   ///
   /// This should NOT modify the world. This is only for adding to the
-  /// [storyline].
-  void onBeforeAction(WorldState world, Storyline storyline) {
+  /// [outputStoryline].
+  void onBeforeAction(
+      Simulation sim, WorldState world, Storyline outputStoryline) {
     // No-op by default.
   }
 
   /// Called when this situation is about to be popped from the
-  /// [WorldState.situations] stack, either manually (by using
-  /// [WorldState.popSituation]) or automatically (when [shouldContinue] is
+  /// [Simulation.situations] stack, either manually (by using
+  /// [Simulation.popSituation]) or automatically (when [shouldContinue] is
   /// no longer true or [getCurrentActor] returns `null`).
-  void onPop(WorldState world) {
+  void onPop(Simulation sim, WorldStateBuilder world) {
     // No-op by default.
   }
 
   /// Return `false` when this [Situation] should no longer continue.
   ///
   /// This is called at the end of a turn (after [onAfterAction] finished) and
-  /// will remove this action from the [WorldState.situations] stack when
+  /// will remove this action from the [Simulation.situations] stack when
   /// the situation is finished.
   ///
   /// Note that this is not the only way for situations to end. They can
   /// be popped manually from the stack.
-  bool shouldContinue(WorldState world) => true;
+  bool shouldContinue(Simulation sim, WorldState world) => true;
 
   // TODO: toMap (save [time] as well as currentActor (because we want to make
   //       sure that we load with the same actor although some actors may have

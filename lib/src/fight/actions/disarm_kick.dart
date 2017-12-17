@@ -3,7 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class DisarmKick extends EnemyTargetAction {
@@ -40,8 +41,9 @@ class DisarmKick extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     Randomly.run(() {
       a.report(s, "<subject> kick<s> {at|towards} <object's> weapon",
           object: enemy);
@@ -56,8 +58,9 @@ class DisarmKick extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     Randomly.run(() {
       a.report(
           s,
@@ -83,14 +86,14 @@ class DisarmKick extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState world) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     return 0.5 - outOfBalancePenalty;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       (a.isStanding || a.isOffBalance) &&
       enemy.isOnGround &&
       !enemy.isBarehanded;

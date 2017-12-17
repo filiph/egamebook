@@ -51,4 +51,4 @@ _"I am not a farmhand. And we still need to get out of here first."_
 
 
 SUCCESS_EFFECT:
-takeOrcthorn(w, a);
+takeOrcthorn(sim, w, a);

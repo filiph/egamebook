@@ -1,7 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 
 class Confuse extends EnemyTargetAction {
   static const int minimalEffectLength = 8;
@@ -39,8 +40,9 @@ class Confuse extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> touch<es> <subject's> temple");
     a.report(
         s,
@@ -54,8 +56,9 @@ class Confuse extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> touch<es> <subject's> temple");
     a.report(
         s,
@@ -69,12 +72,12 @@ class Confuse extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState world) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
     return 0.8;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       a.isPlayer &&
       a.isStanding &&
       world.actors

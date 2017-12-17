@@ -71,7 +71,7 @@ class GeneratedAction extends GeneratedGameObject {
     classBuilder.addMethod(applyFailureBuilder);
 
     var successChanceBuilder =
-        createActorWorldMethod('getSuccessChance', numType)
+        createActorSimWorldMethod('getSuccessChance', numType)
           ..addStatement(literal(successChance).asReturn());
     classBuilder.addMethod(successChanceBuilder);
 
@@ -80,7 +80,7 @@ class GeneratedAction extends GeneratedGameObject {
       ..addAnnotation(overrideAnnotation);
     classBuilder.addMethod(rerollableBuilder);
 
-    var rollReasonBuilder = createActorWorldMethod('getRollReason', stringType)
+    var rollReasonBuilder = createActorSimWorldMethod('getRollReason', stringType)
       ..addStatement(literal('Will you be successful?').asReturn());
     classBuilder.addMethod(rollReasonBuilder);
 
@@ -134,7 +134,7 @@ class GeneratedAction extends GeneratedGameObject {
   MethodBuilder _createApplyFailureBuilder(num successChance, bool hasRescue,
       String rescueSituationClassName, String className) {
     var applyFailureBuilder =
-        createActorWorldStoryMethod('applyFailure', stringType);
+        createActionContextMethod('applyFailure', stringType);
     if (successChance == 1.0) {
       applyFailureBuilder
           .addStatement(stateErrorThrow('Success chance is 100%'));
@@ -167,7 +167,7 @@ class GeneratedAction extends GeneratedGameObject {
   MethodBuilder _createApplySuccessBuilder(
       num successChance, String className) {
     var applySuccessBuilder =
-        createActorWorldStoryMethod('applySuccess', stringType);
+        createActionContextMethod('applySuccess', stringType);
 
     if (successChance == 0) {
       applySuccessBuilder
@@ -190,7 +190,7 @@ class GeneratedAction extends GeneratedGameObject {
   }
 
   MethodBuilder _createIsApplicableBuilder(String forLocation) {
-    var isApplicableBuilder = createActorWorldMethod("isApplicable", boolType);
+    var isApplicableBuilder = createActorSimWorldMethod("isApplicable", boolType);
     if (forLocation != null) {
       isApplicableBuilder.addStatement((reference(worldParameter.name)
               .property("currentSituation")

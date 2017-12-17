@@ -6,7 +6,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/writers_input.dart' as writers_input;
@@ -59,7 +60,7 @@ abstract class RoomRoamingSituation extends Situation
   RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(_, WorldState world) {
+  Actor getActorAtTime(_, Simulation sim, WorldState world) {
     // Only player can roam at the moment.
     var mainActor = world.actors.firstWhere(
         (a) => a.isPlayer && a.isAliveAndActive,
@@ -68,16 +69,18 @@ abstract class RoomRoamingSituation extends Situation
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
-    var mainActor = getActorAtTime(null, world);
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState world) {
+    var mainActor = getActorAtTime(null, sim, world);
     if (mainActor == null) return [];
     return [mainActor];
   }
 
   /// Returns `true` if [Room] with [roomName] has been visited by [actor].
   ///
-  /// This works by checking [WorldState.actionRecords].
-  bool hasBeenVisited(WorldState w, Actor actor, String roomName) {
+  /// This works by checking [Simulation.actionRecords].
+  bool hasBeenVisited(
+      Simulation sim, WorldState w, Actor actor, String roomName) {
     return w
         .getActionRecords(
             actionName: TakeExitAction.className,
@@ -93,13 +96,18 @@ abstract class RoomRoamingSituation extends Situation
   ///
   /// [silent] is used when we are describing the move in a pre-written phrase
   /// so describing it automatically would be a duplicate.
-  void moveActor(WorldState w, Actor a, String destinationRoomName, Storyline s,
+  void moveActor(ActionContext context, String destinationRoomName,
       {bool silent: false}) {
-    var room = w.getRoomByName(destinationRoomName);
+    final WorldState originalWorld = context.world;
+    final Simulation sim = context.simulation;
+    final Actor a = context.actor;
+    final WorldStateBuilder w = context.outputWorld;
+    final Storyline s = context.outputStoryline;
+    var room = sim.getRoomByName(destinationRoomName);
 
     // Find if monsters were slain by seeing if there was a [TakeExit] action
     // record leading to this room.
-    bool visited = hasBeenVisited(w, a, destinationRoomName);
+    bool visited = hasBeenVisited(sim, originalWorld, a, destinationRoomName);
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(
         room, !visited && room.fightGenerator != null);
@@ -108,29 +116,30 @@ abstract class RoomRoamingSituation extends Situation
 
     if (!silent) {
       // Show short description according to world.actionRecords.
-      if (hasBeenVisited(w, a, room.name)) {
-        room.shortDescribe(a, w, s);
+      if (hasBeenVisited(sim, originalWorld, a, room.name)) {
+        room.shortDescribe(context);
       } else {
         s.addParagraph();
-        room.describe(a, w, s);
+        room.describe(context);
         s.addParagraph();
       }
     }
 
-    for (var actor in getPartyOf(a, w).toList()) {
+    for (var actor in getPartyOf(a, sim, originalWorld).toList()) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
     }
   }
 
   @override
-  void onAfterAction(WorldState world, _) {
+  void onAfterAction(
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
     // When going from place to place, remove the actors that died. It makes
     // sure we don't leak memory.
     world.actors.removeWhere((a) => !a.isAlive);
   }
 
   @override
-  bool shouldContinue(WorldState world) {
+  bool shouldContinue(Simulation sim, WorldState world) {
     if (currentRoomName == endOfRoam.name) return false;
     return true;
   }

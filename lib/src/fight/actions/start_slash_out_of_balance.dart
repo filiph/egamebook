@@ -2,7 +2,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -17,8 +18,8 @@ const String startSlashOutOfBalanceHelp =
     "It's always better to fight with your feet "
     "firmly on the ground. But sometimes, it's necessary to act quickly.";
 
-void startSlashOutOfBalanceApplyFailure(
-        Actor a, WorldState w, Storyline s, Actor enemy, _) =>
+void startSlashOutOfBalanceApplyFailure(Actor a, Simulation sim,
+        WorldStateBuilder w, Storyline s, Actor enemy, _) =>
     a.report(
         s,
         "<subject> completely miss<es> <object> with "
@@ -32,15 +33,15 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
         startSlashOutOfBalanceCommand,
         startSlashOutOfBalanceHelp,
         startSlashOutOfBalanceReportStart,
-        (a, w, enemy) =>
+        (a, sim, w, enemy) =>
             !a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, w, enemy) => new SlashSituation.initialized(a, enemy),
-        (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
         enemy,
-        successChanceGetter: (_, __, ___) =>
+        successChanceGetter: (a, sim, w, enemy) =>
             0.7 /* 30% chance of complete miss */,
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
@@ -55,15 +56,15 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         startSlashOutOfBalanceCommand,
         startSlashOutOfBalanceHelp,
         startSlashOutOfBalanceReportStart,
-        (a, w, enemy) =>
+        (a, sim, w, enemy) =>
             a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, w, enemy) => new SlashSituation.initialized(a, enemy),
-        (a, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
+        (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
-        enemy, successChanceGetter: (a, w, enemy) {
+        enemy, successChanceGetter: (a, sim, w, enemy) {
       // This is intentional. Since the action can only lead to either
       // complete miss (attacker's failure) or guaranteed failure
       // of enemy's defense (attacker's success), we do need to count
@@ -75,6 +76,11 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 
-void startSlashOutOfBalanceReportStart(Actor a, WorldState w, Storyline s,
-        Actor enemy, Situation mainSituation) =>
-    startSlashReportStart(a, w, s, enemy, mainSituation);
+void startSlashOutOfBalanceReportStart(
+        Actor a,
+        Simulation sim,
+        WorldStateBuilder w,
+        Storyline s,
+        Actor enemy,
+        Situation mainSituation) =>
+    startSlashReportStart(a, sim, w, s, enemy, mainSituation);

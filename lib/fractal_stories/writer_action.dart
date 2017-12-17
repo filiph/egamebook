@@ -5,13 +5,14 @@ import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// This is analogous to [SimpleActionApplyFunction], but for the
 /// [Action.isApplicable] closure.
 typedef bool SimpleActionApplicableFunction(
-    Actor a, WorldState w, SimpleAction self);
+    Actor a, Simulation sim, WorldState w, SimpleAction self);
 
 /// This closure signature is here in order to allow [SimpleAction] to be
 /// defined without needing to implement the class.
@@ -19,8 +20,8 @@ typedef bool SimpleActionApplicableFunction(
 /// For example, apply function needs access to the class's
 /// [SimpleAction.movePlayer] method, but a closure won't be able to access it
 /// without the [self] parameter.
-typedef String SimpleActionApplyFunction(
-    Actor a, WorldState w, Storyline s, SimpleAction self);
+typedef String SimpleActionApplyFunction(Actor a, Simulation sim,
+    WorldStateBuilder w, Storyline s, SimpleAction self);
 
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
@@ -67,23 +68,23 @@ class SimpleAction extends RoamingAction {
 
   @override
   String applySuccess(ActionContext context) {
-    // TODO: Change the signature of `success` to conform to applySuccess
-    return success(context.actor, context.world, context.storyline, this);
+    return success(context.actor, context.simulation, context.outputWorld,
+        context.outputStoryline, this);
   }
 
   @override
-  String getRollReason(Actor a, WorldState w) {
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
     throw new StateError("SimpleAction shouldn't have to provide roll reason");
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     return 1.0;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
     if (isApplicableClosure == null) return true;
-    return isApplicableClosure(a, w, this);
+    return isApplicableClosure(a, sim, w, this);
   }
 }

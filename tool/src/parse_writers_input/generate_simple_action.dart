@@ -20,6 +20,7 @@ NewInstanceBuilder generateSimpleAction(
 
   var successClosure = new MethodBuilder.closure()
     ..addPositional(new ParameterBuilder('a'))
+    ..addPositional(new ParameterBuilder('sim'))
     ..addPositional(new ParameterBuilder('w'))
     ..addPositional(new ParameterBuilder('s'))
     ..addPositional(new ParameterBuilder('self'))
@@ -27,7 +28,8 @@ NewInstanceBuilder generateSimpleAction(
         namedArguments: {"wholeSentence": literal(true)}));
 
   // Pop the RescueSituation.
-  successClosure.addStatement(reference('w').property('popSituation').call([]));
+  successClosure.addStatement(
+      reference('w').property('popSituation').call([reference("sim")]));
 
   if (effect != null) {
     addStatements(effect, successClosure);
@@ -41,6 +43,7 @@ NewInstanceBuilder generateSimpleAction(
   if (prerequisites != null) {
     MethodBuilder isApplicableClosure = new MethodBuilder.closure()
       ..addPositional(new ParameterBuilder('a'))
+      ..addPositional(new ParameterBuilder('sim'))
       ..addPositional(new ParameterBuilder('w'))
       ..addPositional(new ParameterBuilder('self'));
     _addIsApplicableFromString(isApplicableClosure, prerequisites);

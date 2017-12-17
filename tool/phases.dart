@@ -15,10 +15,12 @@ final List<BuildAction> phases = [
         'lib/fractal_stories/actor.dart',
         'lib/fractal_stories/room.dart',
         'lib/fractal_stories/team.dart',
+        'lib/fractal_stories/world_state.dart',
         'lib/src/**/*_situation.dart',
         'lib/egamebook/elements/serializers.dart',
         'lib/egamebook/elements/*_element.dart',
         'lib/egamebook/commands/serializers.dart',
         'lib/egamebook/commands/*_command.dart',
+        'lib/built_value_type_error.dart'
       ])
 ];

@@ -3,7 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
@@ -45,8 +46,9 @@ class ShieldBlockSlash extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the {swing|attack|strike} "
@@ -60,15 +62,16 @@ class ShieldBlockSlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to block ${enemy.name} with shield";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     if (enemy.isOffBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
@@ -87,7 +90,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
           positive: true);
     }
 
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
@@ -98,7 +101,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.2 : 0;
     if (a.isPlayer) return 0.78 - outOfBalancePenalty + enemyOutOfBalanceBonus;
@@ -108,7 +111,8 @@ class ShieldBlockSlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.currentShield != null;
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+      a.currentShield != null;
 
   static EnemyTargetAction builder(Actor enemy) => new ShieldBlockSlash(enemy);
 }

@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/leap/actions/finish_leap.dart';

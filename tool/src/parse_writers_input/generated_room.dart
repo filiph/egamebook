@@ -54,7 +54,7 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     ExpressionBuilder createDescriber(String text) {
-      var closure = createActorWorldStoryClosure();
+      var closure = createActionContextClosure();
       closure.addStatements(createDescriptionStatements(text ?? ''));
       return closure;
     }

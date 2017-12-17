@@ -3,7 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
@@ -21,13 +22,13 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
     startLeapCommandTemplate,
     startLeapHelpMessage,
     startLeapReportStart,
-    (a, w, enemy) =>
+    (a, sim, w, enemy) =>
         !a.isPlayer &&
         (a.isBarehanded || a.team.isFriendWith(defaultEnemyTeam)) &&
         !enemy.isOnGround &&
         !recentlyForcedToGround(a, w),
-    (a, w, enemy) => new LeapSituation.initialized(a, enemy),
-    (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => new LeapSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => new LeapDefenseSituation.initialized(a, enemy),
     enemy);
 
 EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
@@ -36,26 +37,26 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         startLeapCommandTemplate,
         startLeapHelpMessage,
         startLeapReportStart,
-        (a, w, enemy) =>
+        (a, sim, w, enemy) =>
             a.isPlayer &&
             a.isBarehanded &&
             !enemy.isOnGround &&
             !recentlyForcedToGround(a, w),
-        (a, w, enemy) => new LeapSituation.initialized(a, enemy),
-        (a, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
+        (a, sim, w, enemy) => new LeapSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (a, __, ___) => a.isStanding ? 0.4 : 0.2,
+        successChanceGetter: (a, sim, w, s) => a.isStanding ? 0.4 : 0.2,
         applyStartOfFailure: startLeapReportStart,
-        defenseSituationWhenFailed: (a, w, enemy) =>
+        defenseSituationWhenFailed: (a, sim, w, enemy) =>
             new LeapDefenseSituation.initialized(a, enemy,
                 predeterminedResult: Predetermination.successGuaranteed),
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> tackle <objectPronoun>?");
 
-void startLeapReportStart(
-    Actor a, WorldState w, Storyline s, Actor enemy, Situation mainSituation) {
+void startLeapReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+    Storyline s, Actor enemy, Situation mainSituation) {
   if (a.isOnGround) {
     a.report(s, "<subject> roll<s>", actionThread: mainSituation.id);
     a.report(

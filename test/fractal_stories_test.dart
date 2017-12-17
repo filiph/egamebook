@@ -44,7 +44,7 @@ void main() {
 
       test("FightSituation", () {
         var roomRoamingSituation = new RoomRoamingSituation.initialized(
-            new Room("something", (a, w, s) {}, (a, w, s) {}, null, null,
+            new Room("something", (c) {}, (c) {}, null, null,
                 const []),
             false);
         checkSituationBuild(() => new FightSituation.initialized(

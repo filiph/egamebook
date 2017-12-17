@@ -31,7 +31,7 @@ if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") && !w.actionHasB
 
 
 [[CODE]]
-rollBrianaQuote(w, s);
+rollBrianaQuote(sim, w, s);
 [[/CODE]]
 
 

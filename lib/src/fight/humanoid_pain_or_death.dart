@@ -12,8 +12,8 @@ final Random _random = new Random();
 ///
 /// Special case is for Briana, who will never die, only lose consciousness.
 void killHumanoid(ActionContext context, Actor actor) {
-  final w = context.world;
-  final s = context.storyline;
+  final w = context.outputWorld;
+  final s = context.outputStoryline;
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   assert(
@@ -57,7 +57,7 @@ void killHumanoid(ActionContext context, Actor actor) {
 }
 
 void reportPain(ActionContext context, Actor actor, int damage) {
-  final s = context.storyline;
+  final s = context.outputStoryline;
   context.pubSub.publishActorLostHitpoints(
       new ActorLostHitpointsEvent(context, actor, damage));
   if (actor.id == brianaId && actor.hitpoints == 0) {
@@ -72,7 +72,7 @@ void reportPain(ActionContext context, Actor actor, int damage) {
 }
 
 void _reportPainBriana(ActionContext context, Actor actor) {
-  final s = context.storyline;
+  final s = context.outputStoryline;
   assert(actor.id == brianaId);
   if (actor.pose == Pose.onGround) {
     actor.report(s, "<subject> stop<s> moving", negative: true);

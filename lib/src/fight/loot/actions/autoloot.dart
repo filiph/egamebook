@@ -8,7 +8,8 @@ import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 
 class AutoLoot extends Action {
@@ -45,8 +46,9 @@ class AutoLoot extends Action {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState world = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder world = context.outputWorld;
+    Storyline s = context.outputStoryline;
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
 
@@ -105,8 +107,8 @@ class AutoLoot extends Action {
       a.report(s, "<subject> wield<s> <object>", object: takenShield);
     }
 
-    _distributeWeapons(takenItems, a, situation, world, s);
-    _distributeShields(takenItems, a, situation, world, s);
+    _distributeWeapons(takenItems, a, situation, sim, world, s);
+    _distributeShields(takenItems, a, situation, sim, world, s);
 
     if (takenItems.isNotEmpty) {
       s.addEnumeration("<subject> <also> take<s>", takenItems, null,
@@ -117,18 +119,25 @@ class AutoLoot extends Action {
   }
 
   @override
-  String getRollReason(Actor a, WorldState w) => "WARNING this shouldn't be "
+  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+      "WARNING this shouldn't be "
       "user-visible";
 
   @override
-  num getSuccessChance(Actor actor, WorldState world) => 1.0;
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor actor, WorldState world) => actor.isPlayer;
+  bool isApplicable(Actor actor, Simulation sim, WorldState world) =>
+      actor.isPlayer;
 
   /// Give weapons to unarmed teammates.
-  void _distributeWeapons(List<Item> takenItems, Actor actor,
-      LootSituation situation, WorldState world, Storyline s) {
+  void _distributeWeapons(
+      List<Item> takenItems,
+      Actor actor,
+      LootSituation situation,
+      Simulation sim,
+      WorldStateBuilder world,
+      Storyline s) {
     var weapons =
         new List<Weapon>.from(takenItems.where((item) => item is Weapon));
     for (var item in actor.items) {
@@ -151,8 +160,13 @@ class AutoLoot extends Action {
   }
 
   /// Give shields to unshielded teammates.
-  void _distributeShields(List<Item> takenItems, Actor actor,
-      LootSituation situation, WorldState world, Storyline s) {
+  void _distributeShields(
+      List<Item> takenItems,
+      Actor actor,
+      LootSituation situation,
+      Simulation sim,
+      WorldStateBuilder world,
+      Storyline s) {
     var shields =
         new List<Shield>.from(takenItems.where((item) => item is Shield));
     for (var item in actor.items) {

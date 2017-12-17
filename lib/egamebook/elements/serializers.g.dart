@@ -14,5 +14,7 @@ part of egamebook.element.serializers;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
-Serializers _$serializers =
-    (new Serializers().toBuilder()..add(TextOutput.serializer)).build();
+Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(StatUpdate.serializer)
+      ..add(TextOutput.serializer))
+    .build();

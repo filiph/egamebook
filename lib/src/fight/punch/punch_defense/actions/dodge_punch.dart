@@ -2,7 +2,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/punch_defense_situation.dart';
 
@@ -39,9 +40,10 @@ class DodgePunch extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
-    final thread = getThreadId(w, "PunchSituation");
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
+    final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> tr<ies> to {dodge|sidestep|move out of the way}",
         actionThread: thread, isSupportiveActionInThread: true);
     Randomly.run(
@@ -52,19 +54,20 @@ class DodgePunch extends EnemyTargetAction {
             but: true,
             actionThread: thread,
             isSupportiveActionInThread: true));
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to dodge ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
-    final thread = getThreadId(w, "PunchSituation");
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
+    final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
         object: enemy, positive: true, actionThread: thread);
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
@@ -75,7 +78,7 @@ class DodgePunch extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     final situation = w.currentSituation as PunchDefenseSituation;
@@ -83,7 +86,7 @@ class DodgePunch extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => true;
+  bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
 
   static EnemyTargetAction builder(Actor enemy) => new DodgePunch(enemy);
 }

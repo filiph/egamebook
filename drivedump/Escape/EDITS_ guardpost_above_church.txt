@@ -67,4 +67,4 @@ You take the passage that leads to the Upper Door.
 
 
 SUCCESS_EFFECT: 
-enterTunnelWithCancel(w, s);
+enterTunnelWithCancel(c);

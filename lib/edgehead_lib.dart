@@ -17,7 +17,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/stat.dart';
 import 'package:edgehead/writers_input.dart';
@@ -71,6 +72,7 @@ class EdgeheadGame extends Book {
 
   Situation initialSituation;
   WorldState world;
+  Simulation simulation;
   PlanConsequence consequence;
 
   Storyline storyline = new Storyline();
@@ -90,9 +92,10 @@ class EdgeheadGame extends Book {
 
   void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
     if (event.actor.isPlayer) {
-      event.context.storyline.addCustomElement(new StatUpdate<int>((b) => b
-        ..name = hitpointsSetting.name
-        ..newValue = event.actor.hitpoints));
+      event.context.outputStoryline
+          .addCustomElement(new StatUpdate<int>((b) => b
+            ..name = hitpointsSetting.name
+            ..newValue = event.actor.hitpoints));
     }
   }
 
@@ -121,9 +124,9 @@ class EdgeheadGame extends Book {
 
     preStartBook = new Room(
         "preStartBook",
-        (a, w, s) => s.add("UNUSED because this is the first choice",
+        (c) => c.outputStoryline.add("UNUSED because this is the first choice",
             wholeSentence: true),
-        (a, w, s) => throw new StateError("Room isn't to be revisited"),
+        (c) => throw new StateError("Room isn't to be revisited"),
         null,
         null,
         [new Exit("start_adventure", "", "")]);
@@ -157,8 +160,13 @@ class EdgeheadGame extends Book {
 
     var global = new EdgeheadGlobalState();
 
-    world = new WorldState<EdgeheadGlobalState>(
-        [aren, briana], rooms, initialSituation, global);
+    world = new WorldState((b) => b
+      ..actors = new SetBuilder<Actor>([aren, briana])
+      ..situations = new ListBuilder<Situation>([initialSituation])
+      ..global = global
+      ..time = 0);
+
+    simulation = new Simulation(rooms);
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -198,7 +206,7 @@ class EdgeheadGame extends Book {
     }
 
     var situation = world.currentSituation;
-    var actor = situation.getCurrentActor(world);
+    var actor = situation.getCurrentActor(simulation, world);
 
     assert(
         actor != null,
@@ -212,12 +220,14 @@ class EdgeheadGame extends Book {
         "${world.actionRecords.map((a) => a.description).join('<-')}");
     if (actor == null) {
       // In prod, silently remove the Situation and continue.
-      world.popSituation();
-      world.time += 1;
+      final builder = world.toBuilder();
+      builder.popSituation(simulation);
+      builder.elapseWorldTime();
+      world = builder.build();
       return;
     }
 
-    var planner = new ActorPlanner(actor, world, _pubsub);
+    var planner = new ActorPlanner(actor, simulation, world, _pubsub);
     await planner.plan();
     var recs = planner.getRecommendations();
     if (recs.isEmpty) {
@@ -229,8 +239,10 @@ class EdgeheadGame extends Book {
             world.actionRecords.map((a) => a.description).join(' <- ');
         return "- how we got here: $path";
       });
-      world.elapseSituationTime(situation.id);
-      world.time += 1;
+      final builder = world.toBuilder();
+      builder.elapseSituationTimeIfExists(situation.id);
+      builder.elapseWorldTime();
+      world = builder.build();
       return;
     }
 
@@ -248,7 +260,7 @@ class EdgeheadGame extends Book {
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $action");
         for (var consequence
-            in action.apply(actor, consequence, world, _pubsub)) {
+            in action.apply(actor, consequence, simulation, world, _pubsub)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
@@ -330,7 +342,7 @@ class EdgeheadGame extends Book {
 
   Future _applyPlayerAction(
       Action action, Actor actor, List<PlanConsequence> consequences) async {
-    num chance = action.getSuccessChance(actor, world);
+    num chance = action.getSuccessChance(actor, simulation, world);
     if (chance == 1.0) {
       consequence = consequences.single;
     } else if (chance == 0.0) {
@@ -340,7 +352,7 @@ class EdgeheadGame extends Book {
       assert(!action.rerollable || action.rerollResource == Resource.stamina,
           'Non-stamina resource needed for ${action.name}');
       var result = await showSlotMachine(
-          chance.toDouble(), action.getRollReason(actor, world),
+          chance.toDouble(), action.getRollReason(actor, simulation, world),
           rerollable:
               action.rerollable && actor.hasResource(action.rerollResource),
           rerollEffectDescription: "use $resourceName");
@@ -353,10 +365,13 @@ class EdgeheadGame extends Book {
             action.rerollResource != null,
             "Action.rerollable is true but "
             "no Action.rerollResource is specified.");
-        var world = new WorldState.duplicate(consequence.world);
         assert(action.rerollResource == Resource.stamina,
             "Only stamina is supported as reroll resource right now");
-        world.updateActorById(actor.id, (b) => b..stamina -= 1);
+        // TODO: find out if we can do away without modifying world outside
+        //       planner
+        final builder = world.toBuilder();
+        builder.updateActorById(actor.id, (b) => b..stamina -= 1);
+        world = builder.build();
         consequence = new PlanConsequence.withUpdatedWorld(consequence, world);
       }
     }
@@ -365,7 +380,7 @@ class EdgeheadGame extends Book {
   Future<Null> _applySelected(
       Action action, Actor actor, Storyline storyline) async {
     var consequences =
-        action.apply(actor, consequence, world, _pubsub).toList();
+        action.apply(actor, consequence, simulation, world, _pubsub).toList();
 
     if (actor.isPlayer) {
       await _applyPlayerAction(action, actor, consequences);

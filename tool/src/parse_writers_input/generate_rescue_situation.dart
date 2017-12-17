@@ -144,6 +144,7 @@ AstBuilder<AstNode> generateRescueSituation(
   var getActorAtTimeMethod = new MethodBuilder('getActorAtTime',
       returnType: actorType)
     ..addPositional(new ParameterBuilder('time', type: intType))
+    ..addPositional(simulationParameter)
     ..addPositional(worldParameter)
     ..addStatement(reference('time').notEquals(literal(0)).asIf()
       ..addStatement(literal(null).asReturn()))
@@ -164,6 +165,7 @@ AstBuilder<AstNode> generateRescueSituation(
   var getActorsMethod = new MethodBuilder('getActors',
       returnType: actorIterablesType)
     ..addPositional(new ParameterBuilder('actors', type: actorIterablesType))
+    ..addPositional(simulationParameter)
     ..addPositional(worldParameter)
     ..addStatement(list(<ExpressionBuilder>[
       reference('actors').property('singleWhere').call([

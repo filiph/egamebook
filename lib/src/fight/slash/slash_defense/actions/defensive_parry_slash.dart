@@ -2,7 +2,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
@@ -39,8 +40,9 @@ class DefensiveParrySlash extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
@@ -54,15 +56,16 @@ class DefensiveParrySlash extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     if (a.isPlayer) {
       a.report(s, "<subject> {step<s>|take<s> a step} back");
     }
@@ -79,12 +82,12 @@ class DefensiveParrySlash extends EnemyTargetAction {
         a.report(s, "<subject> regain<s> balance");
       }
     }
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     return "${a.name} steps back and parries ${enemy.name}";
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.98;
     final situation = w.currentSituation as SlashDefenseSituation;
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
@@ -92,7 +95,8 @@ class DefensiveParrySlash extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.currentWeapon.canParrySlash;
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+      a.currentWeapon.canParrySlash;
 
   static EnemyTargetAction builder(Actor enemy) =>
       new DefensiveParrySlash(enemy);

@@ -3,7 +3,8 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
@@ -42,8 +43,9 @@ class DodgeThrustSpear extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
     if (a.isOffBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -54,15 +56,16 @@ class DodgeThrustSpear extends EnemyTargetAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    w.popSituation();
+    w.popSituation(sim);
     return "${a.name} fails to dodge ${enemy.name}'s spear";
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
         object: enemy, positive: true);
     if (enemy.isStanding) {
@@ -70,7 +73,7 @@ class DodgeThrustSpear extends EnemyTargetAction {
           endSentence: true, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
-    w.popSituationsUntil("FightSituation");
+    w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
@@ -81,7 +84,7 @@ class DodgeThrustSpear extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
     final situation = w.currentSituation as SlashDefenseSituation;
@@ -89,7 +92,7 @@ class DodgeThrustSpear extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       !a.isOnGround && enemy.currentWeapon is Spear;
 
   static EnemyTargetAction builder(Actor enemy) => new DodgeThrustSpear(enemy);

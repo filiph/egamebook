@@ -1,6 +1,7 @@
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart'
     show brianaId, carelessCombineFunction, playerId;
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
@@ -9,7 +10,8 @@ import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/unique_id.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -51,7 +53,7 @@ final _goblinsSpear = new Spear();
 
 final _uniqueId = new UniqueIdMaker();
 
-void describeSuccessRate(WorldState w, Storyline s) {
+void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
   s.add("<p class='meta'>", wholeSentence: true);
   s.add("Thanks for playing _Insignificant Little Vermin._",
       wholeSentence: true);
@@ -99,7 +101,8 @@ void describeSuccessRate(WorldState w, Storyline s) {
   s.add("</p>", wholeSentence: true);
 }
 
-void enterTunnelWithCancel(WorldState w, Storyline s) {
+void enterTunnelWithCancel(ActionContext c) {
+  final w = c.world;
   bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
   bool destroyedIronMonster =
       w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
@@ -107,24 +110,24 @@ void enterTunnelWithCancel(WorldState w, Storyline s) {
       "guardpost_above_church_enter_tunnel_with_cancel");
 
   if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
-    movePlayer(w, s, "tunnel");
+    movePlayer(c, "tunnel");
     return;
   }
 
-  movePlayer(w, s, "tunnel_cancel_chance");
+  movePlayer(c, "tunnel_cancel_chance");
 }
 
-void executeSpearThrowAtOgre(WorldState w, Storyline s) {
-  final player = getPlayer(w);
+void executeSpearThrowAtOgre(ActionContext c) {
+  final player = getPlayer(c.world);
   final spear =
       player.items.firstWhere((item) => item.types.contains(ItemType.spear));
-  w.updateActorById(getPlayer(w).id, (b) => b..items.remove(spear));
-  movePlayer(w, s, "war_forge", silent: true);
+  c.outputWorld.updateActorById(player.id, (b) => b..items.remove(spear));
+  movePlayer(c, "war_forge", silent: true);
 }
 
-FightSituation generateAgruthFight(WorldState w,
+FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var agruth = _generateAgruth(w);
+  var agruth = _generateAgruth();
   var agruthId = agruth.id;
   w.actors.add(agruth);
   return new FightSituation.initialized(
@@ -133,7 +136,7 @@ FightSituation generateAgruthFight(WorldState w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: (w, s) {
+        1: (sim, w, s) {
           var agruth = w.getActorById(agruthId);
           var sword = new Sword();
           agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
@@ -144,14 +147,14 @@ FightSituation generateAgruthFight(WorldState w,
               s,
               "\"You're dead, slave,\" <subject> growl<s> at <object> "
               "with hatred.",
-              object: getPlayer(w),
+              object: getPlayer(w.build()),
               wholeSentence: true);
         },
-        5: (w, s) {
+        5: (sim, w, s) {
           var agruth = w.getActorById(agruthId);
           agruth.report(s, "<subject> spit<s> on the cavern floor");
         },
-        9: (w, s) {
+        9: (sim, w, s) {
           var agruth = w.getActorById(agruthId);
           s.addParagraph();
           agruth.report(
@@ -161,19 +164,19 @@ FightSituation generateAgruthFight(WorldState w,
               wholeSentence: true);
           s.addParagraph();
         },
-        12: (w, s) {
+        12: (sim, w, s) {
           var agruth = w.getActorById(agruthId);
           agruth.report(s, "<subject> grit<s> <subject's> teeth");
           agruth.report(s, "<subject> do<es>n't talk any more", but: true);
         },
-        17: (w, s) {
+        17: (sim, w, s) {
           var agruth = w.getActorById(agruthId);
           agruth.report(s, "<subject> scowl<s> with pure hatred");
         }
       });
 }
 
-FightSituation generateEscapeTunnelFight(WorldState w,
+FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var orc = _makeOrc();
   var goblin = _makeGoblin();
@@ -190,10 +193,11 @@ FightSituation generateEscapeTunnelFight(WorldState w,
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rock|cavern} floor", roomRoamingSituation, {
-    1: (w, s) {
-      final orc = getOrc(w);
-      final goblin = getGoblin(w);
-      final player = getPlayer(w);
+    1: (sim, w, s) {
+      final built = w.build();
+      final orc = getOrc(built);
+      final goblin = getGoblin(built);
+      final player = getPlayer(built);
       if (bothAreAlive(orc, goblin)) {
         final actor = orc.isConfused ? goblin : orc;
         final otherActor = actor == orc ? goblin : orc;
@@ -229,11 +233,12 @@ FightSituation generateEscapeTunnelFight(WorldState w,
         }
       }
     },
-    4: (w, s) {
-      final orc = getOrc(w);
-      final goblin = getGoblin(w);
+    4: (sim, w, s) {
+      final built = w.build();
+      final orc = getOrc(built);
+      final goblin = getGoblin(built);
       final actor = orc.isAliveAndActive ? orc : goblin;
-      final player = getPlayer(w);
+      final player = getPlayer(built);
       assert(actor.isAliveAndActive);
       assert(player.isAliveAndActive);
       final kicking = actor.isBarehanded ||
@@ -267,38 +272,39 @@ FightSituation generateEscapeTunnelFight(WorldState w,
       s.add("<owner's> <subject> glint<s> with intensity",
           owner: actor, subject: eyes);
     },
-    6: (w, s) {
+    6: (sim, w, s) {
       s.add(
           "From behind, you hear loud cries. Your pursuers must have reached "
           "the top of the stairs.",
           wholeSentence: true);
     },
-    9: (w, s) {
+    9: (sim, w, s) {
       s.add(
           "Ear-splitting shouts come from behind. You wheel around and see "
           "a body of orcs and goblins approaching at top speed, their "
           "swords and spears at the ready.",
           wholeSentence: true);
     },
-    12: (w, s) {
+    12: (sim, w, s) {
       s.add("The orcs are goblins are halfway here.", wholeSentence: true);
     },
-    16: (w, s) {
+    16: (sim, w, s) {
+      final built = w.build();
       s.add(
           "Your pursuers reach you from behind and a sword pierces your chest "
           "with formidable power.",
           wholeSentence: true);
-      w.updateActorById(getPlayer(w).id, (b) => b..hitpoints = 0);
-      w.popSituationsUntil(RoomRoamingSituation.className);
-      w.popSituation();
+      w.updateActorById(getPlayer(built).id, (b) => b..hitpoints = 0);
+      w.popSituationsUntil(RoomRoamingSituation.className, sim);
+      w.popSituation(sim);
     }
   });
 }
 
-FightSituation generateMadGuardianFight(WorldState w,
+FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
-  var madGuardian = _generateMadGuardian(w, knowsAboutGuardian);
+  var madGuardian = _generateMadGuardian(knowsAboutGuardian);
   var madGuardianId = madGuardian.id;
   w.actors.add(madGuardian);
   return new FightSituation.initialized(
@@ -307,13 +313,13 @@ FightSituation generateMadGuardianFight(WorldState w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: (w, s) {
+        1: (sim, w, s) {
           var guardian = w.getActorById(madGuardianId);
           guardian.report(
               s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
-              object: getPlayer(w), wholeSentence: true);
+              object: getPlayer(w.build()), wholeSentence: true);
         },
-        3: (w, s) {
+        3: (sim, w, s) {
           var guardian = w.getActorById(madGuardianId);
           var briana = w.getActorById(brianaId);
           s.addParagraph();
@@ -326,9 +332,9 @@ FightSituation generateMadGuardianFight(WorldState w,
             s.addParagraph();
           }
         },
-        5: (w, s) {
+        5: (sim, w, s) {
           var guardian = w.getActorById(madGuardianId);
-          var player = getPlayer(w);
+          var player = getPlayer(w.build());
           s.addParagraph();
           guardian.report(
               s,
@@ -348,8 +354,11 @@ FightSituation generateMadGuardianFight(WorldState w,
       });
 }
 
-FightSituation generateMountainPassGuardPostFight(WorldState w,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+FightSituation generateMountainPassGuardPostFight(
+    Simulation sim,
+    WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party) {
   List<Actor> monsters;
   if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards") ||
       w.actionHasBeenPerformedSuccessfully("take_out_gate_guards_rescue")) {
@@ -363,15 +372,18 @@ FightSituation generateMountainPassGuardPostFight(WorldState w,
       party, monsters, "ground", roomRoamingSituation, {});
 }
 
-FightSituation generateSlaveQuartersPassageFight(WorldState w,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+FightSituation generateSlaveQuartersPassageFight(
+    Simulation sim,
+    WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party) {
   var orc = _makeOrc();
   var goblin = _makeGoblin(spear: true);
   final orcId = orc.id;
   final goblinId = goblin.id;
 
-  Actor getOrc(WorldState w) => w.getActorById(orcId);
-  Actor getGoblin(WorldState w) => w.getActorById(goblinId);
+  Actor getOrc(WorldStateBuilder w) => w.getActorById(orcId);
+  Actor getGoblin(WorldStateBuilder w) => w.getActorById(goblinId);
   bool bothAreAlive(Actor orc, Actor goblin) {
     return orc.isAliveAndActive && goblin.isAliveAndActive;
   }
@@ -380,7 +392,7 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rough|stone} floor", roomRoamingSituation, {
-    1: (w, s) {
+    1: (sim, w, s) {
       final orc = getOrc(w);
       final goblin = getGoblin(w);
       if (!goblin.isAlive) {
@@ -396,7 +408,7 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
             object: goblin, wholeSentence: true);
       }
     },
-    3: (w, s) {
+    3: (sim, w, s) {
       final orc = getOrc(w);
       final goblin = getGoblin(w);
       final actor = orc.isAliveAndActive ? orc : goblin;
@@ -412,7 +424,8 @@ FightSituation generateSlaveQuartersPassageFight(WorldState w,
   });
 }
 
-EdgeheadGlobalState getGlobal(WorldState w) => w.global as EdgeheadGlobalState;
+EdgeheadGlobalState getGlobal(WorldStateBuilder w) =>
+    w.global as EdgeheadGlobalState;
 
 Actor getPlayer(WorldState w) => w.getActorById(playerId);
 
@@ -421,15 +434,15 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
       .getSituationByName<RoomRoamingSituation>(RoomRoamingSituation.className);
 }
 
-void giveGoblinsSpearToPlayer(WorldState w) =>
-    w.updateActorById(getPlayer(w).id, (b) => b..items.add(_goblinsSpear));
+void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
+    getPlayer(w.build()).id, (b) => b..items.add(_goblinsSpear));
 
-void giveGoldToPlayer(WorldState w, int amount) {
-  w.updateActorById(getPlayer(w).id, (b) => b..gold += amount);
+void giveGoldToPlayer(WorldStateBuilder w, int amount) {
+  w.updateActorById(getPlayer(w.build()).id, (b) => b..gold += amount);
 }
 
-void giveStaminaToPlayer(WorldState w, int amount) {
-  w.updateActorById(getPlayer(w).id, (b) => b..stamina += amount);
+void giveStaminaToPlayer(WorldStateBuilder w, int amount) {
+  w.updateActorById(getPlayer(w.build()).id, (b) => b..stamina += amount);
 }
 
 /// Returns `true` while player is roaming through Bloodrock. Note that the list
@@ -452,9 +465,10 @@ bool isRoamingInBloodrock(WorldState w) {
 }
 
 /// Checks whether player was just now at [roomName].
-bool justCameFrom(WorldState w, String roomName) {
-  var player = getPlayer(w);
-  for (final rec in w.actionRecords) {
+bool justCameFrom(WorldStateBuilder w, String roomName) {
+  final built = w.build();
+  final player = getPlayer(built);
+  for (final rec in built.actionRecords) {
     if (rec.protagonist != player.id) continue;
     if (rec.actionName != TakeExitAction.className) continue;
     if (rec.dataString == roomName) return true;
@@ -463,14 +477,16 @@ bool justCameFrom(WorldState w, String roomName) {
   return false;
 }
 
-void movePlayer(WorldState w, Storyline s, String locationName,
+void movePlayer(ActionContext context, String locationName,
     {bool silent: false}) {
-  getRoomRoaming(w).moveActor(w, getPlayer(w), locationName, s, silent: silent);
+  getRoomRoaming(context.world)
+      .moveActor(context, locationName, silent: silent);
 }
 
-void nameAgruthSword(WorldState w, String name) {
+void nameAgruthSword(WorldStateBuilder w, String name) {
+  final built = w.build();
   // Assume only one sword wielded by either Aren or Briana.
-  for (var actor in w.actors.where((a) => a.team == playerTeam)) {
+  for (var actor in built.actors.where((a) => a.team == playerTeam)) {
     if (!actor.isBarehanded) {
       var sword = actor.currentWeapon as Sword;
       var named = new Sword.from(sword, name: name, nameIsProperNoun: true);
@@ -480,37 +496,41 @@ void nameAgruthSword(WorldState w, String name) {
   }
 }
 
-bool playerHasVisited(WorldState w, String roomName) =>
-    getRoomRoaming(w).hasBeenVisited(w, getPlayer(w), roomName);
+bool playerHasVisited(Simulation sim, WorldState built, String roomName) {
+  return getRoomRoaming(built)
+      .hasBeenVisited(sim, built, getPlayer(built), roomName);
+}
 
-void rollBrianaQuote(WorldState w, Storyline s) {
+void rollBrianaQuote(Simulation sim, WorldStateBuilder w, Storyline s) {
   int index = (w.global as EdgeheadGlobalState).brianaQuoteIndex;
   if (index >= _brianaQuotes.length) return;
   final current = _brianaQuotes[index];
   s.add(current, wholeSentence: true);
-  updateGlobal(w, (b) => b..brianaQuoteIndex += 1);
+  updateGlobal(sim, w, (b) => b..brianaQuoteIndex += 1);
 }
 
 /// Updates state according to whatever happened when Aren tried to steal
 /// the shield from the sleeping guard. If he was successful, there will be
 /// no fight, otherwise, there will be fight.
-void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
+void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
+    bool wasSuccess) {
   w.updateActorById(a.id, (b) => b..currentShield = new Shield());
   if (!wasSuccess) {
-    final playerParty = w.actors.where((a) => a.team == playerTeam);
+    final built = w.build();
+    final playerParty = built.actors.where((a) => a.team == playerTeam);
     final goblin = _makeGoblin();
     final goblinId = goblin.id;
     w.actors.add(goblin);
-    final roomRoamingSituation = getRoomRoaming(w);
+    final roomRoamingSituation = getRoomRoaming(built);
     w.pushSituation(new FightSituation.initialized(
         playerParty,
         [goblin],
         "{smooth |}rock floor",
         roomRoamingSituation,
         {
-          1: (w, s) {
+          1: (sim, w, s) {
             final goblin = w.getActorById(goblinId);
-            final player = getPlayer(w);
+            final player = getPlayer(w.build());
             final tookSpear = w.actionHasBeenPerformedSuccessfully(
                 "take_spear_in_underground_church");
             if (tookSpear) {
@@ -524,7 +544,7 @@ void setUpStealShield(Actor a, WorldState w, Storyline s, bool wasSuccess) {
   }
 }
 
-void takeOrcthorn(WorldState w, Actor a) {
+void takeOrcthorn(Simulation sim, WorldStateBuilder w, Actor a) {
   w.updateActorById(a.id, (b) {
     if (!a.isBarehanded) {
       b.items.add(a.currentWeapon);
@@ -533,13 +553,13 @@ void takeOrcthorn(WorldState w, Actor a) {
   });
 }
 
-void updateGlobal(WorldState w,
+void updateGlobal(Simulation sim, WorldStateBuilder w,
     EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
   var builder = (w.global as EdgeheadGlobalState).toBuilder();
   w.global = updates(builder).build();
 }
 
-Actor _generateAgruth(WorldState w) {
+Actor _generateAgruth() {
   return new Actor.initialized(6666, "Agruth",
       nameIsProperNoun: true,
       pronoun: Pronoun.HE,
@@ -549,7 +569,7 @@ Actor _generateAgruth(WorldState w) {
       initiative: 100);
 }
 
-Actor _generateMadGuardian(WorldState w, bool playerKnowsAboutGuardian) {
+Actor _generateMadGuardian(bool playerKnowsAboutGuardian) {
   return new Actor.initialized(
       6667, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,

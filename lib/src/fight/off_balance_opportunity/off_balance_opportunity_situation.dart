@@ -4,7 +4,8 @@ import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 
@@ -55,7 +56,7 @@ abstract class OffBalanceOpportunitySituation extends Situation
   OffBalanceOpportunitySituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int time, WorldState world) {
+  Actor getActorAtTime(int time, Simulation sim, WorldState world) {
     if (time > 0) return null;
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
@@ -71,14 +72,15 @@ abstract class OffBalanceOpportunitySituation extends Situation
         OffBalanceOpportunityThrust.builder(actor);
 
     // Only change the situation when the candidate can actually pull it off.
-    if (offBalanceOpportunityThrust.isApplicable(candidate, world)) {
+    if (offBalanceOpportunityThrust.isApplicable(candidate, sim, world)) {
       return candidate;
     }
     return null;
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState world) {
     var actor = world.getActorById(actorId);
     return actors.where((a) => a == actor || a.hates(actor, world));
   }

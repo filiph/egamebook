@@ -4,6 +4,7 @@ import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
@@ -11,8 +12,8 @@ import 'package:meta/meta.dart';
 import 'action_record.dart';
 import 'actor.dart';
 import 'plan_consequence.dart';
+import 'simulation.dart';
 import 'storyline/storyline.dart';
-import 'world.dart';
 
 /// Generator generates multiple [Action] instances given a [world] and
 /// an [actor] and a [builder].
@@ -21,8 +22,12 @@ import 'world.dart';
 /// world and output as many actions as there are enemies to hit with a stick.
 /// Each generated action will encapsulate the enemy to hit.
 Iterable<EnemyTargetAction> generateEnemyTargetActions(
-    Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
-  var situationActors = world.currentSituation.getActors(world.actors, world);
+    Actor actor,
+    Simulation simulation,
+    WorldState world,
+    EnemyTargetActionBuilder builder) sync* {
+  var situationActors =
+      world.currentSituation.getActors(world.actors, simulation, world);
   var enemies = situationActors
       .where((other) => other != actor && other.isAliveAndActive);
   for (var enemy in enemies) {
@@ -35,10 +40,10 @@ Iterable<EnemyTargetAction> generateEnemyTargetActions(
 
 /// Generator generates multiple [ExitAction] instances given a [world] and
 /// an [actor] and a [builder].
-Iterable<ExitAction> generateExitActions(
-    Actor actor, WorldState world, ExitActionBuilder builder) sync* {
+Iterable<ExitAction> generateExitActions(Actor actor, Simulation simulation,
+    WorldState world, ExitActionBuilder builder) sync* {
   final situation = world.currentSituation as RoomRoamingSituation;
-  var room = world.getRoomByName(situation.currentRoomName);
+  var room = simulation.getRoomByName(situation.currentRoomName);
 
   for (var exit in room.exits) {
     var action = builder(exit);
@@ -49,8 +54,8 @@ Iterable<ExitAction> generateExitActions(
 
 /// Generator generates multiple [ItemAction] instances given a [world] and
 /// an [actor] and a [builder].
-Iterable<ItemAction> generateItemActions(
-    Actor actor, WorldState world, ItemActionBuilder builder) sync* {
+Iterable<ItemAction> generateItemActions(Actor actor, Simulation simulation,
+    WorldState world, ItemActionBuilder builder) sync* {
   final situation = world.currentSituation as FightSituation;
 
   for (var item in situation.droppedItems) {
@@ -131,40 +136,40 @@ abstract class Action {
   Resource get rerollResource;
 
   Iterable<PlanConsequence> apply(Actor actor, PlanConsequence current,
-      WorldState world, PubSub pubsub) sync* {
-    var successChance = getSuccessChance(actor, current.world);
+      Simulation sim, WorldState world, PubSub pubsub) sync* {
+    var successChance = getSuccessChance(actor, sim, current.world);
     assert(successChance != null);
     assert(successChance >= 0.0);
     assert(successChance <= 1.0);
 
     if (successChance > 0) {
-      var worldCopy = new WorldState.duplicate(world);
+      final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          worldCopy, actor, world, applySuccess, pubsub,
+          actor, sim, worldOutput, applySuccess, pubsub,
           isSuccess: true);
 
       yield new PlanConsequence(
-          worldCopy, current, this, storyline, successChance,
+          worldOutput.build(), current, this, storyline, successChance,
           isSuccess: true);
     }
     if (successChance < 1) {
-      var worldCopy = new WorldState.duplicate(world);
+      final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          worldCopy, actor, world, applyFailure, pubsub,
+          actor, sim, worldOutput, applyFailure, pubsub,
           isFailure: true);
 
       yield new PlanConsequence(
-          worldCopy, current, this, storyline, 1 - successChance,
+          worldOutput.build(), current, this, storyline, 1 - successChance,
           isFailure: true);
     }
   }
 
   /// Called to get the result of failure to do this action. Returns
-  /// the mutated [WorldState].
+  /// the mutated [Simulation].
   String applyFailure(ActionContext context);
 
   /// Called to get the result of success of doing this action. Returns
-  /// the mutated [WorldState].
+  /// the mutated [Simulation].
   String applySuccess(ActionContext context);
 
   /// Returns a string that will explain why actor needs to roll for success.
@@ -173,72 +178,71 @@ abstract class Action {
   ///
   /// * "Will you hit him?"
   /// * "Will you dodge the swing?"
-  String getRollReason(Actor a, WorldState w);
+  String getRollReason(Actor a, Simulation sim, WorldState w);
 
   /// Success chance of the action given the actor and the state of the world.
-  num getSuccessChance(Actor a, WorldState w);
+  num getSuccessChance(Actor a, Simulation sim, WorldState w);
 
-  bool isApplicable(Actor a, WorldState w);
+  bool isApplicable(Actor a, Simulation sim, WorldState w);
 
-  void _addWorldRecord(ActionRecordBuilder builder, WorldState world) {
+  void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
     if (_description == null) {
       throw new StateError("No description given when executing $this. You "
           "should return it from your world-modifying function.");
     }
     builder.description = _description;
     builder.time = world.time;
-    world.actionRecords.addFirst(builder.build());
+    world.actionRecords.insert(0, builder.build());
   }
 
-  Storyline _applyToWorldCopy(WorldState worldCopy, Actor actor,
-      WorldState world, ApplyFunction applyFunction, PubSub pubsub,
+  Storyline _applyToWorldCopy(Actor actor, Simulation sim,
+      WorldStateBuilder output, ApplyFunction applyFunction, PubSub pubsub,
       {bool isSuccess: false, bool isFailure: false}) {
-    // Set currentAction.
-    worldCopy.currentAction = this;
-    // Find actor by id.
-    var actorInWorldCopy =
-        worldCopy.actors.singleWhere((a) => a.id == actor.id);
-    var builder = _prepareWorldRecord(actor, world, isSuccess, isFailure);
-    var storyline = new Storyline();
+    final initialWorld = output.build();
+    final builder =
+        _prepareWorldRecord(actor, sim, initialWorld, isSuccess, isFailure);
+    final outputStoryline = new Storyline();
     // Remember situation as it can be changed during applySuccess.
-    var situationId = worldCopy.currentSituation.id;
-    int hashCode = worldCopy.hashCode;
-    worldCopy.currentSituation.onBeforeAction(worldCopy, storyline);
-    assert(worldCopy.hashCode == hashCode,
-        "Please don't change the world in onBeforeAction");
-    final context =
-        new ActionContext(actorInWorldCopy, worldCopy, storyline, pubsub);
+    final situationId = initialWorld.currentSituation.id;
+    initialWorld.currentSituation
+        .onBeforeAction(sim, initialWorld, outputStoryline);
+    final context = new ActionContext(
+        this, actor, sim, initialWorld, pubsub, output, outputStoryline);
     _description = applyFunction(context);
-    if (worldCopy.situationExists(situationId)) {
-      // The current situation could have been removed by [applyFunction].
-      // If not, let's update its time.
-      worldCopy.elapseSituationTime(situationId);
-    }
-    worldCopy.elapseTime();
-    worldCopy
-        .getSituationById(situationId)
-        ?.onAfterAction(worldCopy, storyline);
 
-    worldCopy.currentAction = null;
+    // The current situation could have been removed by [applyFunction].
+    // If not, let's update its time.
+    output.elapseSituationTimeIfExists(situationId);
+
+    output.elapseWorldTime();
+    output
+        .build()
+        .getSituationById(situationId)
+        ?.onAfterAction(sim, output, outputStoryline);
 
     // Remove ended situations: the ones that don't return an actor anymore,
     // and the ones that return shouldContinue(world) != true.
-    while (worldCopy.currentSituation?.getCurrentActor(worldCopy) == null ||
-        worldCopy.currentSituation?.shouldContinue(worldCopy) != true) {
-      if (worldCopy.currentSituation == null) break;
-      worldCopy.popSituation();
+    var builtOutput = output.build();
+    while (builtOutput.currentSituation?.getCurrentActor(sim, builtOutput) ==
+            null ||
+        builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
+            true) {
+      // TODO: move the if statement below to the while expression above
+      if (builtOutput.currentSituation == null) break;
+      output.popSituation(sim);
+      builtOutput = output.build();
     }
 
     // Only 'surviving' (non-popped) situations get to run their `onAfterTurn`
     // methods.
-    worldCopy.currentSituation?.onAfterTurn(worldCopy, storyline);
+    output.currentSituation?.onAfterTurn(sim, output, outputStoryline);
 
-    _addWorldRecord(builder, worldCopy);
-    return storyline;
+    _addWorldRecord(builder, output);
+    return outputStoryline;
   }
 
-  ActionRecordBuilder _prepareWorldRecord(
-      Actor actor, WorldState world, bool isSuccess, bool isFailure) {
+  ActionRecordBuilder _prepareWorldRecord(Actor actor, Simulation sim,
+      WorldState world, bool isSuccess, bool isFailure) {
     var builder = new ActionRecordBuilder()
       ..actionName = name
       ..protagonist = actor.id
@@ -263,21 +267,46 @@ abstract class Action {
 /// to [Action.applySuccess] and [Action.applyFailure] (and [ApplyFunction]s
 /// in general).
 ///
-/// [world] is provided as mutable. [storyline] should only be used to
+/// [outputStoryline] should only be used to
 /// add new reports ([Storyline.add] and [Actor.report]). [pubSub] should
 /// only be used to publish events.
+///
+/// [actor] is the perpetrator of the action. The [target] (with the generic
+/// parameter [T]) is the entity that the action is directed to. It can be
+/// `null`.
 @immutable
-class ActionContext {
+class ActionContext<T> {
   final Actor actor;
 
-  /// TODO: WorldState should be WorldStateBuilder when it's a BuiltValue
+  final Simulation simulation;
+
   final WorldState world;
+
+  final WorldStateBuilder outputWorld;
+
+  /// This is set to the current action as that action is being applied.
+  ///
+  /// This is so that, for example, descriptions of Rooms can access this
+  /// information and provide text according to how the Room is being reached.
+  final Action currentAction;
 
   final PubSub pubSub;
 
-  final Storyline storyline;
+  final Storyline outputStoryline;
 
-  const ActionContext(this.actor, this.world, this.storyline, this.pubSub);
+  final T target;
+
+  const ActionContext(this.currentAction, this.actor, this.simulation,
+      this.world, this.pubSub, this.outputWorld, this.outputStoryline,
+      {this.target});
+}
+
+/// TODO: use this instead of `String` for apply action output?
+/// TODO: gradually make apply functions pure, with no changes to Storyline
+class ActionOutput {
+  final WorldStateBuilder state;
+
+  ActionOutput(this.state);
 }
 
 /// This [Action] requires an [enemy].
@@ -312,10 +341,11 @@ abstract class EnemyTargetAction extends Action {
   String get rollReasonTemplate;
 
   @override
-  String getRollReason(Actor a, WorldState w) => (new Storyline()
-        ..add(rollReasonTemplate,
-            subject: a, object: enemy, wholeSentence: true))
-      .realizeAsString();
+  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+      (new Storyline()
+            ..add(rollReasonTemplate,
+                subject: a, object: enemy, wholeSentence: true))
+          .realizeAsString();
 
   /// Gets the [Situation.id] of the main situation of this action.
   ///
@@ -324,7 +354,8 @@ abstract class EnemyTargetAction extends Action {
   /// other actions will add themselves to that same thread, so that [Storyline]
   /// can discard the supportive actions when they are to be reported next
   /// to each other. The thread id is taken from the [Situation.id].
-  int getThreadId(WorldState w, String mainSituationName) =>
+  int getThreadId(
+          Simulation sim, WorldStateBuilder w, String mainSituationName) =>
       w.getSituationByName<Situation>(mainSituationName).id;
 
   @override

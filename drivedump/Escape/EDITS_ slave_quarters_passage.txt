@@ -11,7 +11,7 @@ It doesn't take long before you start hearing voices. Orcs and goblins shouting 
 The tunnel gets wider and more torches light your way. The walls are smoother. 
 
 
-You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door. 
+You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door.
 
 
 A human slave runs down the passage toward you. His arm is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips move but he makes no sound. Eyes blurred with tears, he doesn't see you.
@@ -37,21 +37,21 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
 
 SHORT_DESCRIPTION:
 [[CODE]]
-if (playerHasVisited(w, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
+if (playerHasVisited(sim, originalWorld, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
   s.add("The reinforced door on the side of the corridor is silent.", wholeSentence: true);
 }
 [[/CODE]]
 
 
 [[CODE]]
-if (!playerHasVisited(w, "orcthorn_room")) {
+if (!playerHasVisited(sim, originalWorld, "orcthorn_room")) {
   s.add("The reinforced door on the side of the corridor is closed.", wholeSentence: true);
 }
 [[/CODE]]
 
 
 [[CODE]]
-rollBrianaQuote(w, s);
+rollBrianaQuote(sim, w, s);
 [[/CODE]]
 
 
@@ -88,7 +88,7 @@ PREREQUISITES:
 &&
 !(w.currentSituation as RoomRoamingSituation).monstersAlive
 &&
-!playerHasVisited(w, "orcthorn_room")
+!playerHasVisited(sim, w, "orcthorn_room")
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%

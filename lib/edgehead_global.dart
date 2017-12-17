@@ -1,12 +1,15 @@
 library edgehead_global;
 
 import 'package:built_value/built_value.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
 part 'edgehead_global.g.dart';
 
 abstract class EdgeheadGlobalState
-    implements Built<EdgeheadGlobalState, EdgeheadGlobalStateBuilder> {
+    implements
+        WorldStateFlags,
+        Built<EdgeheadGlobalState, EdgeheadGlobalStateBuilder> {
   factory EdgeheadGlobalState([void updates(EdgeheadGlobalStateBuilder b)]) =
       _$EdgeheadGlobalState;
 

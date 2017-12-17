@@ -2,7 +2,8 @@ import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
@@ -39,7 +40,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    Storyline s = context.storyline;
+    Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to stab <object>", object: enemy);
     a.report(s, "<subject> {go<es> wide|fail<s>|miss<es>}", but: true);
     return "${a.name} fails to stab ${enemy.name}";
@@ -48,11 +49,11 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.thrustingDamage;
-    w.updateActorById(
-        enemy.id, (b) => b..hitpoints -= damage);
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
@@ -76,13 +77,13 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) {
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.6;
     return 0.5;
   }
 
   @override
-  bool isApplicable(Actor a, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.isStanding && enemy.isOffBalance && a.currentWeapon.isThrusting;
 
   static EnemyTargetAction builder(Actor enemy) =>

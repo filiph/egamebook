@@ -3,7 +3,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
@@ -39,20 +40,22 @@ class FinishThrustSpear extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     throw new UnimplementedError();
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
-    final thread = getThreadId(w, SlashSituation.className);
+    final thread = getThreadId(sim, w, SlashSituation.className);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.report(
@@ -78,10 +81,11 @@ class FinishThrustSpear extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) => 1.0;
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => a.currentWeapon is Spear;
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+      a.currentWeapon is Spear;
 
   static EnemyTargetAction builder(Actor enemy) => new FinishThrustSpear(enemy);
 }

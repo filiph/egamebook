@@ -31,7 +31,8 @@ void main() {
     test("subscription works", () {
       pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      final context = new ActionContext(
+          null, briana, null, null, pubsub, null, new Storyline());
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 1);
       expect(events.single.actor, aren);
@@ -39,7 +40,8 @@ void main() {
 
     test("event doesn't fire when there are no listener", () {
       pubsub.seal();
-      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      final context = new ActionContext(
+          null, briana, null, null, pubsub, null, new Storyline());
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 0);
     });
@@ -47,7 +49,8 @@ void main() {
     test("event doesn't fire after subscription cancelled", () {
       final sub = pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      final context = new ActionContext(
+          null, briana, null, null, pubsub, null, new Storyline());
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       sub.cancel();
       pubsub.publishActorKilled(new ActorKilledEvent(context, briana, aren));
@@ -71,7 +74,8 @@ void main() {
       pubsub.actorKilled.listen(_recordEventFired);
       pubsub.actorKilled.listen(secondRecord);
       pubsub.seal();
-      final context = new ActionContext(briana, null, new Storyline(), pubsub);
+      final context = new ActionContext(
+          null, briana, null, null, pubsub, null, new Storyline());
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
     });
   });

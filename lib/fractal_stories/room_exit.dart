@@ -1,7 +1,8 @@
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 
-typedef bool CheckFunction(WorldState world);
+typedef bool CheckFunction(Simulation sim, WorldState world);
 
 /// An exit leading from a location (a `Room`, perhaps), to another location.
 @immutable

@@ -4,7 +4,8 @@ import 'package:built_value/built_value.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/leap/actions/finish_leap.dart';
 
 part 'leap_situation.g.dart';
@@ -43,12 +44,12 @@ abstract class LeapSituation extends Situation
   LeapSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int time, WorldState w) {
+  Actor getActorAtTime(int time, Simulation sim, WorldState w) {
     if (time == 0) return w.getActorById(attacker);
     return null;
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _) =>
+  Iterable<Actor> getActors(Iterable<Actor> actors, _, __) =>
       actors.where((actor) => actor.id == attacker || actor.id == target);
 }

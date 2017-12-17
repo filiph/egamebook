@@ -1,7 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishPunch extends EnemyTargetAction {
@@ -36,19 +37,21 @@ class FinishPunch extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     throw new UnimplementedError();
   }
 
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    WorldState w = context.world;
-    Storyline s = context.storyline;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
     assert(!enemy.isOnGround, "Can't punch people on the ground.");
     final updatedPose = enemy.isStanding ? Pose.offBalance : Pose.onGround;
-    final thread = getThreadId(w, "PunchSituation");
+    final thread = getThreadId(sim, w, "PunchSituation");
     final groundMaterial = getGroundMaterial(w);
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
     switch (updatedPose) {
@@ -80,10 +83,10 @@ class FinishPunch extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, WorldState w) => 1.0;
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
 
   @override
-  bool isApplicable(Actor a, WorldState w) => true;
+  bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
 
   static EnemyTargetAction builder(Actor enemy) => new FinishPunch(enemy);
 }

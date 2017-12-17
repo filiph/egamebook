@@ -9,17 +9,19 @@ import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
 import 'item.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
-import 'world.dart';
+import 'simulation.dart';
 
 part 'actor.g.dart';
 
-Iterable<Actor> getPartyOf(Actor actor, WorldState world) sync* {
+Iterable<Actor> getPartyOf(
+    Actor actor, Simulation sim, WorldState world) sync* {
   yield actor;
   yield* world.actors.where((other) => other.followingActorId == actor.id);
 }

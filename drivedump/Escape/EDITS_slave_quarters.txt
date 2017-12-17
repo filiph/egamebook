@@ -53,4 +53,4 @@ You look at Briana. As the battle axe cleaves her stomach, the two of you hold e
 
 SUCCESS_EFFECT:
 w.updateActorById(a.id, (b) => b..hitpoints = 0);
-w.popSituation();
+w.popSituation(sim);
