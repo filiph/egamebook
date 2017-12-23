@@ -21,6 +21,5 @@ final List<BuildAction> phases = [
         'lib/egamebook/elements/*_element.dart',
         'lib/egamebook/commands/serializers.dart',
         'lib/egamebook/commands/*_command.dart',
-        'lib/built_value_type_error.dart'
       ])
 ];
