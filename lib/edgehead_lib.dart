@@ -13,11 +13,11 @@ import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/stat.dart';
@@ -41,6 +41,12 @@ num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.enemy;
 
 class EdgeheadGame extends Book {
+  static final StatSetting<double> hitpointsSetting = new StatSetting<double>(
+      "hitpoints", "The health of the player.", (v) => "$v HP");
+
+  static final StatSetting<int> staminaSetting = new StatSetting<int>(
+      "stamina", "The physical energy that the player can use.", (v) => "$v S");
+
   final Logger log = new Logger('EdgeheadGame');
 
   @override
@@ -58,29 +64,23 @@ class EdgeheadGame extends Book {
   /// This field exist in order to allow skipping to an action, as a way of
   /// play-testing.
   final Pattern actionPattern;
-
   bool actionPatternWasHit = false;
-
   Actor aren;
   Actor briana;
+
   Actor orc;
+
   Actor goblin;
 
   final PubSub _pubsub = new PubSub();
-
   Room preStartBook;
-
   Situation initialSituation;
   WorldState world;
+
   Simulation simulation;
+
   PlanConsequence consequence;
-
   Storyline storyline = new Storyline();
-
-  static final StatSetting<double> hitpointsSetting = new StatSetting<double>(
-      "hitpoints", "The health of the player.", (v) => "$v HP");
-  static final StatSetting<int> staminaSetting = new StatSetting<int>(
-      "stamina", "The physical energy that the player can use.", (v) => "$v S");
   final Stat<double> hitpoints = new Stat<double>(hitpointsSetting, 0.0);
   final Stat<int> stamina = new Stat<int>(staminaSetting, 1);
 
@@ -88,15 +88,6 @@ class EdgeheadGame extends Book {
     setup();
     _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
     _pubsub.seal();
-  }
-
-  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
-    if (event.actor.isPlayer) {
-      event.context.outputStoryline
-          .addCustomElement(new StatUpdate<int>((b) => b
-            ..name = hitpointsSetting.name
-            ..newValue = event.actor.hitpoints));
-    }
   }
 
   @override
@@ -336,8 +327,17 @@ class EdgeheadGame extends Book {
 
     storyline.generateFinishedOutput().forEach(elementsSink.add);
 
-    // ignore: unawaited_futures
-    update();
+    // Run the next step asynchronously.
+    Timer.run(() => update());
+  }
+
+  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
+    if (event.actor.isPlayer) {
+      event.context.outputStoryline
+          .addCustomElement(new StatUpdate<int>((b) => b
+            ..name = hitpointsSetting.name
+            ..newValue = event.actor.hitpoints));
+    }
   }
 
   Future _applyPlayerAction(
