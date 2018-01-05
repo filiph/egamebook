@@ -15,6 +15,17 @@ part of egamebook.element.serializers;
 // ignore_for_file: sort_constructors_first
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(Choice.serializer)
+      ..add(ChoiceBlock.serializer)
+      ..add(ErrorElement.serializer)
+      ..add(LogElement.serializer)
+      ..add(LoseGame.serializer)
+      ..add(SaveGame.serializer)
+      ..add(SlotMachine.serializer)
       ..add(StatUpdate.serializer)
-      ..add(TextOutput.serializer))
+      ..add(TextOutput.serializer)
+      ..add(WinGame.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Choice)]),
+          () => new ListBuilder<Choice>()))
     .build();
