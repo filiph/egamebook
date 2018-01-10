@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -93,7 +94,7 @@ class DodgeThrustSpear extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      !a.isOnGround && enemy.currentWeapon is Spear;
+      !a.isOnGround && enemy.currentWeapon.type == WeaponType.spear;
 
   static EnemyTargetAction builder(Actor enemy) => new DodgeThrustSpear(enemy);
 }

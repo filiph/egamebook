@@ -14,6 +14,72 @@ part of stranded.fight.counter_attack_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<CounterAttackSituation> _$counterAttackSituationSerializer =
+    new _$CounterAttackSituationSerializer();
+
+class _$CounterAttackSituationSerializer
+    implements StructuredSerializer<CounterAttackSituation> {
+  @override
+  final Iterable<Type> types = const [
+    CounterAttackSituation,
+    _$CounterAttackSituation
+  ];
+  @override
+  final String wireName = 'CounterAttackSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, CounterAttackSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'counterAttacker',
+      serializers.serialize(object.counterAttacker,
+          specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'target',
+      serializers.serialize(object.target, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  CounterAttackSituation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new CounterAttackSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'counterAttacker':
+          result.counterAttacker = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'target':
+          result.target = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$CounterAttackSituation extends CounterAttackSituation {
   @override
   final int counterAttacker;

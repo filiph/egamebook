@@ -19,14 +19,15 @@ final allNeededTypes = <TypeBuilder>[
   builderType,
   exitType,
   getRandomIdFunction,
-  itemTypeType,
   resourceType,
   roomRoamingSituationType,
   roomType,
+  serializerType,
   simpleActionType,
   simulationType,
   situationType,
   storylineType,
+  weaponTypeType,
   worldStateBuilderType,
   worldStateType,
 ];
@@ -47,9 +48,6 @@ final getRandomIdFunction =
 
 final intType = new TypeBuilder("int");
 
-final itemTypeType = new TypeBuilder("ItemType",
-    importFrom: "package:edgehead/fractal_stories/item.dart");
-
 final listOfActionType = new TypeBuilder('List', genericTypes: [actionType]);
 
 final listOfRoomsType = new TypeBuilder('List', genericTypes: [roomType]);
@@ -65,6 +63,9 @@ final roomRoamingSituationType = new TypeBuilder('RoomRoamingSituation',
 
 final roomType = new TypeBuilder("Room",
     importFrom: "package:edgehead/fractal_stories/room.dart");
+
+final serializerType = new TypeBuilder("Serializer",
+    importFrom: "package:built_value/serializer.dart");
 
 final simpleActionApplyFunction = new TypeBuilder("SimpleActionApplyFunction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
@@ -82,6 +83,9 @@ final storylineType = new TypeBuilder("Storyline",
     importFrom: "package:edgehead/fractal_stories/storyline/storyline.dart");
 
 final stringType = new TypeBuilder("String");
+
+final weaponTypeType = new TypeBuilder("WeaponType",
+    importFrom: "package:edgehead/fractal_stories/items/weapon_type.dart");
 
 final worldStateBuilderType = new TypeBuilder("WorldStateBuilder",
     importFrom: "package:edgehead/fractal_stories/world_state.dart");

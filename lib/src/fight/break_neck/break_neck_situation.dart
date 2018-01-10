@@ -1,10 +1,11 @@
 library stranded.fight.break_neck_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/break_neck/actions/finish_break_neck.dart';
 
@@ -13,6 +14,8 @@ part 'break_neck_situation.g.dart';
 abstract class BreakNeckOnGroundSituation extends Situation
     implements
         Built<BreakNeckOnGroundSituation, BreakNeckOnGroundSituationBuilder> {
+  static Serializer<BreakNeckOnGroundSituation> get serializer =>
+      _$breakNeckOnGroundSituationSerializer;
   factory BreakNeckOnGroundSituation(
           [void updates(BreakNeckOnGroundSituationBuilder b)]) =
       _$BreakNeckOnGroundSituation;

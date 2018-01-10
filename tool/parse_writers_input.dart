@@ -50,6 +50,7 @@ Future<Null> main(List<String> args) async {
 
   lib.addDirectives(allNeededTypes.map((b) => b.toImportBuilder()));
   lib.addDirective(new ImportBuilder("package:built_value/built_value.dart"));
+  lib.addDirective(new ImportBuilder("package:built_value/serializer.dart"));
   lib.addDirective(new ImportBuilder("package:edgehead/writers_helpers.dart"));
 
   lib.addDirective(new PartBuilder("writers_input.g.dart"));

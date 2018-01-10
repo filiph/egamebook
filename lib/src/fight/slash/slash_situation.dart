@@ -1,6 +1,7 @@
 library stranded.fight.slash_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -13,6 +14,9 @@ part 'slash_situation.g.dart';
 
 abstract class SlashSituation extends Situation
     implements Built<SlashSituation, SlashSituationBuilder> {
+  static Serializer<SlashSituation> get serializer =>
+      _$slashSituationSerializer;
+
   static const String className = "SlashSituation";
 
   factory SlashSituation([void updates(SlashSituationBuilder b)]) =

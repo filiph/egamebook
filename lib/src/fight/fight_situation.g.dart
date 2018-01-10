@@ -14,13 +14,117 @@ part of stranded.fight.fight_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<FightSituation> _$fightSituationSerializer =
+    new _$FightSituationSerializer();
+
+class _$FightSituationSerializer
+    implements StructuredSerializer<FightSituation> {
+  @override
+  final Iterable<Type> types = const [FightSituation, _$FightSituation];
+  @override
+  final String wireName = 'FightSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, FightSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'droppedItems',
+      serializers.serialize(object.droppedItems,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Item)])),
+      'enemyTeamIds',
+      serializers.serialize(object.enemyTeamIds,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(int)])),
+      'events',
+      serializers.serialize(object.events,
+          specifiedType: const FullType(
+              BuiltMap, const [const FullType(int), const FullType(String)])),
+      'groundMaterial',
+      serializers.serialize(object.groundMaterial,
+          specifiedType: const FullType(String)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'playerTeamIds',
+      serializers.serialize(object.playerTeamIds,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(int)])),
+      'roomRoamingSituationId',
+      serializers.serialize(object.roomRoamingSituationId,
+          specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  FightSituation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new FightSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'droppedItems':
+          result.droppedItems.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
+          break;
+        case 'enemyTeamIds':
+          result.enemyTeamIds.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<int>);
+          break;
+        case 'events':
+          result.events.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(int),
+                const FullType(String)
+              ])) as BuiltMap<int, String>);
+          break;
+        case 'groundMaterial':
+          result.groundMaterial = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'playerTeamIds':
+          result.playerTeamIds.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<int>);
+          break;
+        case 'roomRoamingSituationId':
+          result.roomRoamingSituationId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$FightSituation extends FightSituation {
   @override
   final BuiltList<Item> droppedItems;
   @override
   final BuiltList<int> enemyTeamIds;
   @override
-  final BuiltMap<int, TimedEventCallback> events;
+  final BuiltMap<int, String> events;
   @override
   final String groundMaterial;
   @override
@@ -128,11 +232,10 @@ class FightSituationBuilder
   set enemyTeamIds(ListBuilder<int> enemyTeamIds) =>
       _$this._enemyTeamIds = enemyTeamIds;
 
-  MapBuilder<int, TimedEventCallback> _events;
-  MapBuilder<int, TimedEventCallback> get events =>
-      _$this._events ??= new MapBuilder<int, TimedEventCallback>();
-  set events(MapBuilder<int, TimedEventCallback> events) =>
-      _$this._events = events;
+  MapBuilder<int, String> _events;
+  MapBuilder<int, String> get events =>
+      _$this._events ??= new MapBuilder<int, String>();
+  set events(MapBuilder<int, String> events) => _$this._events = events;
 
   String _groundMaterial;
   String get groundMaterial => _$this._groundMaterial;

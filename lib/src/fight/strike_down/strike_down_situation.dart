@@ -1,6 +1,7 @@
 library stranded.fight.strike_down_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -13,6 +14,9 @@ part 'strike_down_situation.g.dart';
 
 abstract class StrikeDownSituation extends Situation
     implements Built<StrikeDownSituation, StrikeDownSituationBuilder> {
+  static Serializer<StrikeDownSituation> get serializer =>
+      _$strikeDownSituationSerializer;
+
   factory StrikeDownSituation([void updates(StrikeDownSituationBuilder b)]) =
       _$StrikeDownSituation;
 

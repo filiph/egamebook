@@ -14,6 +14,47 @@ part of stranded.team;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<Team> _$teamSerializer = new _$TeamSerializer();
+
+class _$TeamSerializer implements StructuredSerializer<Team> {
+  @override
+  final Iterable<Type> types = const [Team, _$Team];
+  @override
+  final String wireName = 'Team';
+
+  @override
+  Iterable serialize(Serializers serializers, Team object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  Team deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new TeamBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$Team extends Team {
   @override
   final int id;

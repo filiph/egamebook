@@ -2,6 +2,7 @@ library stranded.action_record;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:meta/meta.dart';
 
 import 'actor.dart';
@@ -12,6 +13,8 @@ part 'action_record.g.dart';
 @immutable
 abstract class ActionRecord
     implements Built<ActionRecord, ActionRecordBuilder> {
+  static Serializer<ActionRecord> get serializer => _$actionRecordSerializer;
+
   factory ActionRecord([void updates(ActionRecordBuilder b)]) = _$ActionRecord;
 
   ActionRecord._();
@@ -33,9 +36,6 @@ abstract class ActionRecord
   String get dataString;
 
   String get description;
-
-  /// The actors who know about this.
-  KnownToMode get knownTo;
 
   /// The [Actor.id] of the protagonist. The single person responsible for
   /// this action.
@@ -70,5 +70,3 @@ abstract class ActionRecord
   @override
   String toString() => "ActionRecord<$actionName, $description>";
 }
-
-enum KnownToMode { all, protagonistOnly, custom }

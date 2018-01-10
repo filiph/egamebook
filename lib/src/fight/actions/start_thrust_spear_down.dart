@@ -1,6 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -26,7 +26,7 @@ EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
             !a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.currentWeapon is Spear,
+            a.currentWeapon.type == WeaponType.spear,
         (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
         (a, sim, w, enemy) =>
             new OnGroundDefenseSituation.initialized(a, enemy),
@@ -42,7 +42,7 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.currentWeapon is Spear,
+            a.currentWeapon.type == WeaponType.spear,
         (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
         (a, sim, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),

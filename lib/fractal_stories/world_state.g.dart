@@ -14,6 +14,84 @@ part of stranded.world_state;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<WorldState> _$worldStateSerializer = new _$WorldStateSerializer();
+
+class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
+  @override
+  final Iterable<Type> types = const [WorldState, _$WorldState];
+  @override
+  final String wireName = 'WorldState';
+
+  @override
+  Iterable serialize(Serializers serializers, WorldState object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'actionRecords',
+      serializers.serialize(object.actionRecords,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(ActionRecord)])),
+      'actors',
+      serializers.serialize(object.actors,
+          specifiedType:
+              const FullType(BuiltSet, const [const FullType(Actor)])),
+      'global',
+      serializers.serialize(object.global,
+          specifiedType: const FullType(Object)),
+      'situations',
+      serializers.serialize(object.situations,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Situation)])),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  WorldState deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new WorldStateBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'actionRecords':
+          result.actionRecords.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ActionRecord)]))
+              as BuiltList<ActionRecord>);
+          break;
+        case 'actors':
+          result.actors.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltSet, const [const FullType(Actor)]))
+              as BuiltSet<Actor>);
+          break;
+        case 'global':
+          result.global = serializers.deserialize(value,
+              specifiedType: const FullType(Object));
+          break;
+        case 'situations':
+          result.situations.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(Situation)]))
+              as BuiltList<Situation>);
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$WorldState extends WorldState {
   @override
   final BuiltList<ActionRecord> actionRecords;

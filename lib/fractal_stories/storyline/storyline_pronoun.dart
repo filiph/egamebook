@@ -1,35 +1,53 @@
-part of storyline;
+library storyline.pronoun;
+
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+part 'storyline_pronoun.g.dart';
 
 /// The pronouns and their different forms.
-class Pronoun {
-  // see http://en.wikipedia.org/wiki/Latin_declension
-  static const Pronoun YOU =
-      const Pronoun("you", "you", "your", "yourself"); // He (kdo? co?)
-  // vocative // not used
-  static const Pronoun HE =
-      const Pronoun("he", "him", "his", "himself"); // Him (koho? co?)
-  static const Pronoun SHE =
-      const Pronoun("she", "her", "her", "herself"); // His (koho? ceho?)
-  // dative // not used
-  // ablative
-  // locative
-  static const Pronoun IT =
-      const Pronoun("it", "it", "its", "itself"); // Himself
+///
+/// Not used (and therefore unimplemented): dative, ablative, locative,
+/// vocative.
+///
+/// See http://en.wikipedia.org/wiki/Latin_declension.
+abstract class Pronoun extends Built<Pronoun, PronounBuilder> {
+  static final Pronoun YOU = new Pronoun("you", "you", "your", "yourself");
 
-  static const Pronoun THEY =
-      const Pronoun("they", "them", "their", "themselves");
+  static final Pronoun HE = new Pronoun("he", "him", "his", "himself");
 
-  static const Pronoun WE = const Pronoun("we", "us", "our", "ourselves");
+  static final Pronoun SHE = new Pronoun("she", "her", "her", "herself");
 
-  final String nominative;
+  static final Pronoun IT = new Pronoun("it", "it", "its", "itself");
 
-  final String accusative;
+  static final Pronoun THEY =
+      new Pronoun("they", "them", "their", "themselves");
 
-  final String genitive;
+  static final Pronoun WE = new Pronoun("we", "us", "our", "ourselves");
 
-  final String self;
+  static Serializer<Pronoun> get serializer => _$pronounSerializer;
 
-  const Pronoun(this.nominative, this.accusative, this.genitive, this.self);
+  factory Pronoun(
+          String nominative, String accusative, String genitive, String self) =>
+      new _$Pronoun((b) => b
+        ..nominative = nominative
+        ..accusative = accusative
+        ..genitive = genitive
+        ..self = self);
+
+  Pronoun._();
+
+  /// Him (koho? co?)
+  String get accusative;
+
+  /// His (koho? ceho?)
+  String get genitive;
+
+  /// He (kdo? co?)
+  String get nominative;
+
+  /// Himself
+  String get self;
 
   @override
   String toString() => nominative;

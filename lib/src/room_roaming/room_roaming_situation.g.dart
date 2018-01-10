@@ -14,6 +14,72 @@ part of stranded.room_roaming.room_roaming_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<RoomRoamingSituation> _$roomRoamingSituationSerializer =
+    new _$RoomRoamingSituationSerializer();
+
+class _$RoomRoamingSituationSerializer
+    implements StructuredSerializer<RoomRoamingSituation> {
+  @override
+  final Iterable<Type> types = const [
+    RoomRoamingSituation,
+    _$RoomRoamingSituation
+  ];
+  @override
+  final String wireName = 'RoomRoamingSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, RoomRoamingSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'currentRoomName',
+      serializers.serialize(object.currentRoomName,
+          specifiedType: const FullType(String)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'monstersAlive',
+      serializers.serialize(object.monstersAlive,
+          specifiedType: const FullType(bool)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  RoomRoamingSituation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new RoomRoamingSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'currentRoomName':
+          result.currentRoomName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'monstersAlive':
+          result.monstersAlive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$RoomRoamingSituation extends RoomRoamingSituation {
   @override
   final String currentRoomName;

@@ -1,6 +1,7 @@
 library stranded.fight.slash_defense_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -17,6 +18,9 @@ part 'slash_defense_situation.g.dart';
 
 abstract class SlashDefenseSituation extends DefenseSituation
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
+  static Serializer<SlashDefenseSituation> get serializer =>
+      _$slashDefenseSituationSerializer;
+
   factory SlashDefenseSituation(
       [void updates(SlashDefenseSituationBuilder b)]) = _$SlashDefenseSituation;
 

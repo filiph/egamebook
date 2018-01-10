@@ -1,6 +1,7 @@
 library stranded.fight.counter_attack_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -14,6 +15,8 @@ part 'counter_attack_situation.g.dart';
 
 abstract class CounterAttackSituation extends Situation
     implements Built<CounterAttackSituation, CounterAttackSituationBuilder> {
+  static Serializer<CounterAttackSituation> get serializer =>
+      _$counterAttackSituationSerializer;
   factory CounterAttackSituation(
           [void updates(CounterAttackSituationBuilder b)]) =
       _$CounterAttackSituation;

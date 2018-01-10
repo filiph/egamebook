@@ -116,7 +116,7 @@ class ParrySlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.currentWeapon.canParrySlash;
+      a.currentWeapon.type.canParrySlash;
 
   static EnemyTargetAction builder(Actor enemy) => new ParrySlash(enemy);
 }

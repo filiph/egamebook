@@ -2,6 +2,7 @@ import 'package:analyzer/analyzer.dart';
 import 'package:code_builder/code_builder.dart';
 
 import 'generate_simple_action.dart';
+
 /// Generates the Situation class for a particular Action.
 ///
 /// Each Situation needs to be implemented as its own class. Can't use deeper
@@ -13,6 +14,7 @@ import 'generate_simple_action.dart';
 /// because we need the situation to filter actions (rescue action and
 /// continuation of failure action).
 import 'method_builders.dart';
+import 'package:recase/recase.dart';
 import 'parameters.dart';
 import 'types.dart';
 
@@ -44,15 +46,27 @@ AstBuilder<AstNode> generateRescueSituation(
         ])
       ]);
 
-  var generatedSituationClass = new TypeBuilder("_\$$className");
+  var situationClassType = new TypeBuilder(className);
+  var generatedSituationClassType = new TypeBuilder("_\$$className");
   var situationBuilderClass = new TypeBuilder(situationBuilderClassName);
+  var camelCaseSituation = new ReCase(className).camelCase;
+  var generatedSerializerName = reference("_\$${camelCaseSituation}Serializer");
+
+  // static Serializer<AbcRescueSituation> get serializer =>
+  //     _$abcRescueSituationSerializer;
+  var serializerGetter = new MethodBuilder.getter("serializer",
+      returnType:
+          new TypeBuilder("Serializer", genericTypes: [situationClassType]),
+      returns: generatedSerializerName);
+
+  situationClass.addMethod(serializerGetter, asStatic: true);
 
   //  factory AbcRescueSituation([updates(AbcRescueSituationBuilder b)]) =
   //      _$AbcRescueSituation;
   var updatesParameter = new FunctionParameterBuilder('updates')
     ..addPositional(new ParameterBuilder("b", type: situationBuilderClass));
   var defaultConst =
-      new ConstructorBuilder.redirectTo(null, generatedSituationClass)
+      new ConstructorBuilder.redirectTo(null, generatedSituationClassType)
         ..addPositional(updatesParameter.asOptional());
   situationClass.addConstructor(defaultConst);
 
@@ -92,8 +106,14 @@ AstBuilder<AstNode> generateRescueSituation(
   var actionsGetter = new MethodBuilder.getter("actions",
       returnType: new TypeBuilder("List", genericTypes: [actionType]),
       returns: list(<NewInstanceBuilder>[
-        generateSimpleAction("${writersName}_rescue", rescueCommand,
-            rescueDescription, rescuePrerequisites, effect, rescueHint, className),
+        generateSimpleAction(
+            "${writersName}_rescue",
+            rescueCommand,
+            rescueDescription,
+            rescuePrerequisites,
+            effect,
+            rescueHint,
+            className),
         generateSimpleAction(
             "${writersName}_continuation_of_failure",
             continuationCommand,
@@ -102,27 +122,30 @@ AstBuilder<AstNode> generateRescueSituation(
             continuationEffect,
             continuationHint,
             className)
-      ]))..addAnnotation(overrideAnnotation);
+      ]))
+    ..addAnnotation(overrideAnnotation);
 
   situationClass.addMethod(actionsGetter);
 
   //    @override
   //    int get id;
-  var idGetter = new MethodBuilder.getter('id',
-      returnType: intType, asAbstract: true)..addAnnotation(overrideAnnotation);
+  var idGetter =
+      new MethodBuilder.getter('id', returnType: intType, asAbstract: true)
+        ..addAnnotation(overrideAnnotation);
   situationClass.addMethod(idGetter);
 
   //    @override
   //    int get time;
-  var timeGetter = new MethodBuilder.getter('time',
-      returnType: intType, asAbstract: true)..addAnnotation(overrideAnnotation);
+  var timeGetter =
+      new MethodBuilder.getter('time', returnType: intType, asAbstract: true)
+        ..addAnnotation(overrideAnnotation);
   situationClass.addMethod(timeGetter);
 
   //    @override
   //    String get name => "RoomRoamingSituation";
   var nameGetter = new MethodBuilder.getter('name',
-      returnType: stringType,
-      returns: literal(writersName))..addAnnotation(overrideAnnotation);
+      returnType: stringType, returns: literal(writersName))
+    ..addAnnotation(overrideAnnotation);
   situationClass.addMethod(nameGetter);
 
   //    @override
@@ -134,7 +157,8 @@ AstBuilder<AstNode> generateRescueSituation(
           ..addPositional(new ParameterBuilder('b'))
           ..addStatement(reference('b').property('time').increment())
           ..addStatement(reference('b').asReturn())
-      ]))..addAnnotation(overrideAnnotation);
+      ]))
+    ..addAnnotation(overrideAnnotation);
   situationClass.addMethod(elapseTime);
 
   //    @override

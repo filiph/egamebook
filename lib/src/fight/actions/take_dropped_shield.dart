@@ -1,14 +1,18 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/shield.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class TakeDroppedShield extends ItemAction {
   static const String className = "TakeDroppedShield";
+
+  @override
+  final bool isProactive = true;
 
   TakeDroppedShield(Item item) : super(item);
 
@@ -20,9 +24,6 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   bool get isAggressive => false;
-
-  @override
-  final bool isProactive = true;
 
   @override
   String get name => className;
@@ -54,7 +55,7 @@ class TakeDroppedShield extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) {
-      b.currentShield = item as Shield;
+      b.currentShield = (item as Weapon).toBuilder();
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -69,7 +70,8 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if (item is! Shield) return false;
+    if (item is! Weapon) return false;
+    if ((item as Weapon).type != WeaponType.shield) return false;
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
     return true;

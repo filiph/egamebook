@@ -1,20 +1,21 @@
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart'
     show brianaId, carelessCombineFunction, playerId;
+import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/shield.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
-import 'package:edgehead/fractal_stories/items/sword.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/unique_id.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+
+const int agruthId = 6666;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = const [
@@ -43,13 +44,13 @@ const _brianaQuotes = const [
   my head smashed in by some random orc patrol."''',
 ];
 
-final Sword orcthorn = new Sword(
+final Weapon orcthorn = new Weapon(WeaponType.sword,
     name: "Orcthorn",
     nameIsProperNoun: true,
     slashingDamage: 2,
     thrustingDamage: 2);
 
-final _goblinsSpear = new Spear();
+final Weapon sleepingGoblinsSpear = new Weapon(WeaponType.spear);
 
 final _uniqueId = new UniqueIdMaker();
 
@@ -70,15 +71,15 @@ void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
       "the iron monster",
       but: hasOrcthorn != destroyed);
 
-  String getItemDescription(ItemType type, String name) {
-    final count = player.countItems(type);
+  String getWeaponDescription(WeaponType type, String name) {
+    final count = player.countWeapons(type);
     return count > 1 ? '${name}s' : count == 1 ? 'a $name' : 'no $name';
   }
 
   // You're leaving Mount Bloodrock with swords, a scimitar and a shield.
-  final sword = getItemDescription(ItemType.sword, 'sword');
-  final spear = getItemDescription(ItemType.spear, 'spear');
-  final shield = getItemDescription(ItemType.shield, 'shield');
+  final sword = getWeaponDescription(WeaponType.sword, 'sword');
+  final spear = getWeaponDescription(WeaponType.spear, 'spear');
+  final shield = getWeaponDescription(WeaponType.shield, 'shield');
   player.report(s,
       "<subject> <is> leaving Mount Bloodrock with $sword, $spear and $shield.",
       wholeSentence: true);
@@ -120,7 +121,7 @@ void enterTunnelWithCancel(ActionContext c) {
 void executeSpearThrowAtOgre(ActionContext c) {
   final player = getPlayer(c.world);
   final spear =
-      player.items.firstWhere((item) => item.types.contains(ItemType.spear));
+      player.weapons.firstWhere((item) => item.type == WeaponType.spear);
   c.outputWorld.updateActorById(player.id, (b) => b..items.remove(spear));
   movePlayer(c, "war_forge", silent: true);
 }
@@ -128,7 +129,6 @@ void executeSpearThrowAtOgre(ActionContext c) {
 FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var agruth = _generateAgruth();
-  var agruthId = agruth.id;
   w.actors.add(agruth);
   return new FightSituation.initialized(
       party,
@@ -136,176 +136,52 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: (sim, w, s) {
-          var agruth = w.getActorById(agruthId);
-          var sword = new Sword();
-          agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
-          agruth.report(s, "<subject> draw<s> <subject's> <object>",
-              object: sword);
-          w.updateActorById(agruthId, (b) => b..currentWeapon = sword);
-          agruth.report(
-              s,
-              "\"You're dead, slave,\" <subject> growl<s> at <object> "
-              "with hatred.",
-              object: getPlayer(w.build()),
-              wholeSentence: true);
-        },
-        5: (sim, w, s) {
-          var agruth = w.getActorById(agruthId);
-          agruth.report(s, "<subject> spit<s> on the cavern floor");
-        },
-        9: (sim, w, s) {
-          var agruth = w.getActorById(agruthId);
-          s.addParagraph();
-          agruth.report(
-              s,
-              "\"I'll enjoy eating your flesh, human,\" "
-              "<subject> snarl<s>.",
-              wholeSentence: true);
-          s.addParagraph();
-        },
-        12: (sim, w, s) {
-          var agruth = w.getActorById(agruthId);
-          agruth.report(s, "<subject> grit<s> <subject's> teeth");
-          agruth.report(s, "<subject> do<es>n't talk any more", but: true);
-        },
-        17: (sim, w, s) {
-          var agruth = w.getActorById(agruthId);
-          agruth.report(s, "<subject> scowl<s> with pure hatred");
-        }
+        1: "youre_dead_slave",
+        5: "agruth_spits",
+        9: "agruth_enjoy_eating_flesh",
+        12: "agruth_grit_teeth",
+        17: "agruth_scowls",
       });
+}
+
+const int escapeTunnelOrcId = 12344;
+
+const int escapeTunnelGoblinId = 12345;
+
+Actor getEscapeTunnelOrc(WorldState w) => w.getActorById(escapeTunnelOrcId);
+
+Actor getEscapeTunnelGoblin(WorldState w) =>
+    w.getActorById(escapeTunnelGoblinId);
+
+bool bothAreAlive(Actor a, Actor b) {
+  return a.isAliveAndActive && b.isAliveAndActive;
 }
 
 FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var orc = _makeOrc();
-  var goblin = _makeGoblin();
-  final orcId = orc.id;
-  final goblinId = goblin.id;
-
-  Actor getOrc(WorldState w) => w.getActorById(orcId);
-  Actor getGoblin(WorldState w) => w.getActorById(goblinId);
-  bool bothAreAlive(Actor orc, Actor goblin) {
-    return orc.isAliveAndActive && goblin.isAliveAndActive;
-  }
-
+  var orc = _makeOrc(id: escapeTunnelOrcId);
+  var goblin = _makeGoblin(id: escapeTunnelGoblinId);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rock|cavern} floor", roomRoamingSituation, {
-    1: (sim, w, s) {
-      final built = w.build();
-      final orc = getOrc(built);
-      final goblin = getGoblin(built);
-      final player = getPlayer(built);
-      if (bothAreAlive(orc, goblin)) {
-        final actor = orc.isConfused ? goblin : orc;
-        final otherActor = actor == orc ? goblin : orc;
-        actor.report(
-            s,
-            "\"Look, Sgarr,\" <subject> say<s>. \"Look at them. "
-            "Give a puny slave some steel and suddenly they think "
-            "they're mighty slayers.\"",
-            wholeSentence: true);
-        otherActor.report(s, "<subject> laugh<s>");
-        if (player.currentWeapon.name == orcthorn.name) {
-          otherActor.report(s, "<subject> stop<s> almost instantly", but: true);
-          otherActor.report(s, "<subject> see<s> <object> in your hand.",
-              object: player.currentWeapon, wholeSentence: true);
-        }
-      } else {
-        final actor = orc.isAliveAndActive ? orc : goblin;
-        assert(actor.isAliveAndActive);
-        actor.report(
-            s,
-            "\"Look at you,\" <subject> laugh<s>. "
-            "\"Give a puny slave some steel and suddenly you think "
-            "you're mighty slayers.\"",
-            wholeSentence: true);
-        if (player.currentWeapon.name == orcthorn.name) {
-          actor.report(
-              s,
-              "But then <subject> see<s> <object> in your hand "
-              "and his face hardens.",
-              object: player.currentWeapon,
-              but: true,
-              wholeSentence: true);
-        }
-      }
-    },
-    4: (sim, w, s) {
-      final built = w.build();
-      final orc = getOrc(built);
-      final goblin = getGoblin(built);
-      final actor = orc.isAliveAndActive ? orc : goblin;
-      final player = getPlayer(built);
-      assert(actor.isAliveAndActive);
-      assert(player.isAliveAndActive);
-      final kicking = actor.isBarehanded ||
-          (player.isBarehanded && player.currentShield == null);
-      var assaultVerbing = kicking ? 'kicking' : 'slashing';
-      var sounds = kicking
-          ? ['Whoosh!', 'Swah!', 'Slam!']
-          : ['Swish!', 'Whoosh!', 'Thunk!'];
-      actor.report(
-          s,
-          "<subject> start<s> wildly $assaultVerbing "
-          "in your direction",
-          positive: true);
-      s.add(
-          "\"Insignificant...\" ${sounds[0]} "
-          "\"... little ...\" ${sounds[1]} "
-          "\"... vermin!\" ${sounds[2]}",
-          wholeSentence: true);
-      var target = kicking
-          ? ('knee')
-          : (player.currentShield != null
-              ? 'shield'
-              : player.currentWeapon.name);
-      s.add(
-          "That last blow hits your $target hard"
-          "${player.isOnGround ?
-            '' :
-            ' and sends you a couple of steps back'}.",
-          wholeSentence: true);
-      final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
-      s.add("<owner's> <subject> glint<s> with intensity",
-          owner: actor, subject: eyes);
-    },
-    6: (sim, w, s) {
-      s.add(
-          "From behind, you hear loud cries. Your pursuers must have reached "
-          "the top of the stairs.",
-          wholeSentence: true);
-    },
-    9: (sim, w, s) {
-      s.add(
-          "Ear-splitting shouts come from behind. You wheel around and see "
-          "a body of orcs and goblins approaching at top speed, their "
-          "swords and spears at the ready.",
-          wholeSentence: true);
-    },
-    12: (sim, w, s) {
-      s.add("The orcs are goblins are halfway here.", wholeSentence: true);
-    },
-    16: (sim, w, s) {
-      final built = w.build();
-      s.add(
-          "Your pursuers reach you from behind and a sword pierces your chest "
-          "with formidable power.",
-          wholeSentence: true);
-      w.updateActorById(getPlayer(built).id, (b) => b..hitpoints = 0);
-      w.popSituationsUntil(RoomRoamingSituation.className, sim);
-      w.popSituation(sim);
-    }
+    1: "escape_tunnel_look",
+    4: "escape_tunnel_insignificant",
+    6: "escape_tunnel_loud_cries",
+    9: "escape_tunnel_earsplitting",
+    12: "escape_tunnel_halfway",
+    16: "escape_pursuers_reach",
   });
 }
+
+const int madGuardianId = 50615;
+
+const int brianaId = 100;
 
 FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
   var madGuardian = _generateMadGuardian(knowsAboutGuardian);
-  var madGuardianId = madGuardian.id;
   w.actors.add(madGuardian);
   return new FightSituation.initialized(
       party,
@@ -313,44 +189,9 @@ FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: (sim, w, s) {
-          var guardian = w.getActorById(madGuardianId);
-          guardian.report(
-              s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
-              object: getPlayer(w.build()), wholeSentence: true);
-        },
-        3: (sim, w, s) {
-          var guardian = w.getActorById(madGuardianId);
-          var briana = w.getActorById(brianaId);
-          s.addParagraph();
-          guardian.report(s, "\"Pain is good,\" <subject> chuckle<s>.",
-              wholeSentence: true);
-          s.addParagraph();
-          if (briana.isAliveAndActive) {
-            briana.report(s, "<subject> glare<s> at him");
-            briana.report(s, "\"Shut up and die.\"", wholeSentence: true);
-            s.addParagraph();
-          }
-        },
-        5: (sim, w, s) {
-          var guardian = w.getActorById(madGuardianId);
-          var player = getPlayer(w.build());
-          s.addParagraph();
-          guardian.report(
-              s,
-              "\"You'll make a nice addition to my collection,\" "
-              "<subject> say<s>, laughing.",
-              wholeSentence: true);
-          guardian.report(
-              s, "<subject> nod<s> towards the heap of rotting bodies nearby");
-          s.addParagraph();
-          player.report(
-              s, "<subject> glance<s> over at Briana, then back at the orc.",
-              wholeSentence: true);
-          player.report(s, "_\"You had better shut up, and die.\"_",
-              wholeSentence: true);
-          s.addParagraph();
-        },
+        1: "mad_guardian_good",
+        3: "mad_guardian_pain",
+        5: "mad_guardian_shut_up",
       });
 }
 
@@ -372,55 +213,29 @@ FightSituation generateMountainPassGuardPostFight(
       party, monsters, "ground", roomRoamingSituation, {});
 }
 
+const int slaveQuartersOrcId = 789456;
+
+const int slaveQuartersGoblinId = 789457;
+
+Actor getSlaveQuartersOrc(WorldStateBuilder w) =>
+    w.getActorById(slaveQuartersOrcId);
+
+Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
+    w.getActorById(slaveQuartersGoblinId);
+
 FightSituation generateSlaveQuartersPassageFight(
     Simulation sim,
     WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation,
     Iterable<Actor> party) {
-  var orc = _makeOrc();
-  var goblin = _makeGoblin(spear: true);
-  final orcId = orc.id;
-  final goblinId = goblin.id;
-
-  Actor getOrc(WorldStateBuilder w) => w.getActorById(orcId);
-  Actor getGoblin(WorldStateBuilder w) => w.getActorById(goblinId);
-  bool bothAreAlive(Actor orc, Actor goblin) {
-    return orc.isAliveAndActive && goblin.isAliveAndActive;
-  }
-
+  var orc = _makeOrc(id: slaveQuartersOrcId);
+  var goblin = _makeGoblin(id: slaveQuartersGoblinId, spear: true);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rough|stone} floor", roomRoamingSituation, {
-    1: (sim, w, s) {
-      final orc = getOrc(w);
-      final goblin = getGoblin(w);
-      if (!goblin.isAlive) {
-        orc.report(s, "<subject> look<s> at <object's> body", object: goblin);
-        orc.report(s, "\"You'll pay for this, vermin,\" <subject> snarl<s>.",
-            wholeSentence: true);
-        return;
-      }
-      if (bothAreAlive(orc, goblin)) {
-        orc.report(s, "<subject> look<s> at <object>", object: goblin);
-        orc.report(
-            s, "\"Now that is practice,\" <subject> say<s> to <objectPronoun>.",
-            object: goblin, wholeSentence: true);
-      }
-    },
-    3: (sim, w, s) {
-      final orc = getOrc(w);
-      final goblin = getGoblin(w);
-      final actor = orc.isAliveAndActive ? orc : goblin;
-      actor.report(
-          s,
-          "\"You don't understand,\" <subject> growl<s>. "
-          "\"No matter how many of us you kill, there will be more. "
-          "And when we get you, we will eat your face alive.\"",
-          wholeSentence: true);
-      actor.report(s, "<subject> smirk<s>");
-      actor.report(s, "\"You mean nothing.\"", wholeSentence: true);
-    }
+    1: "slave_quarters_orc_looks",
+    3: "slave_quarters_mean_nothing",
   });
 }
 
@@ -435,7 +250,7 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
 }
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
-    getPlayer(w.build()).id, (b) => b..items.add(_goblinsSpear));
+    getPlayer(w.build()).id, (b) => b..items.add(sleepingGoblinsSpear));
 
 void giveGoldToPlayer(WorldStateBuilder w, int amount) {
   w.updateActorById(getPlayer(w.build()).id, (b) => b..gold += amount);
@@ -488,8 +303,10 @@ void nameAgruthSword(WorldStateBuilder w, String name) {
   // Assume only one sword wielded by either Aren or Briana.
   for (var actor in built.actors.where((a) => a.team == playerTeam)) {
     if (!actor.isBarehanded) {
-      var sword = actor.currentWeapon as Sword;
-      var named = new Sword.from(sword, name: name, nameIsProperNoun: true);
+      var sword = actor.currentWeapon;
+      var named = sword.toBuilder()
+        ..name = name
+        ..nameIsProperNoun = true;
       w.updateActorById(actor.id, (b) => b..currentWeapon = named);
       break;
     }
@@ -509,17 +326,19 @@ void rollBrianaQuote(Simulation sim, WorldStateBuilder w, Storyline s) {
   updateGlobal(sim, w, (b) => b..brianaQuoteIndex += 1);
 }
 
+const int sleepingGoblinId = 4445655;
+
 /// Updates state according to whatever happened when Aren tried to steal
 /// the shield from the sleeping guard. If he was successful, there will be
 /// no fight, otherwise, there will be fight.
 void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
     bool wasSuccess) {
-  w.updateActorById(a.id, (b) => b..currentShield = new Shield());
+  w.updateActorById(a.id,
+      (b) => b..currentShield = new Weapon(WeaponType.shield).toBuilder());
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
-    final goblin = _makeGoblin();
-    final goblinId = goblin.id;
+    final goblin = _makeGoblin(id: sleepingGoblinId);
     w.actors.add(goblin);
     final roomRoamingSituation = getRoomRoaming(built);
     w.pushSituation(new FightSituation.initialized(
@@ -528,18 +347,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
         "{smooth |}rock floor",
         roomRoamingSituation,
         {
-          1: (sim, w, s) {
-            final goblin = w.getActorById(goblinId);
-            final player = getPlayer(w.build());
-            final tookSpear = w.actionHasBeenPerformedSuccessfully(
-                "take_spear_in_underground_church");
-            if (tookSpear) {
-              goblin.report(s, "<subject> look<s> at <object-owner's> <object>",
-                  objectOwner: player, object: _goblinsSpear);
-              goblin.report(s, "\"Thief,\" <subject> hiss<es>.",
-                  wholeSentence: true);
-            }
-          }
+          1: "sleeping_goblin_thief",
         }));
   }
 }
@@ -549,7 +357,7 @@ void takeOrcthorn(Simulation sim, WorldStateBuilder w, Actor a) {
     if (!a.isBarehanded) {
       b.items.add(a.currentWeapon);
     }
-    b.currentWeapon = orcthorn;
+    b.currentWeapon = orcthorn.toBuilder();
   });
 }
 
@@ -560,7 +368,7 @@ void updateGlobal(Simulation sim, WorldStateBuilder w,
 }
 
 Actor _generateAgruth() {
-  return new Actor.initialized(6666, "Agruth",
+  return new Actor.initialized(agruthId, "Agruth",
       nameIsProperNoun: true,
       pronoun: Pronoun.HE,
       hitpoints: 2,
@@ -571,29 +379,31 @@ Actor _generateAgruth() {
 
 Actor _generateMadGuardian(bool playerKnowsAboutGuardian) {
   return new Actor.initialized(
-      6667, playerKnowsAboutGuardian ? "guardian" : "orc",
+      madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
-      currentWeapon: new Sword(name: "rusty sword"),
+      currentWeapon: new Weapon(WeaponType.sword, name: "rusty sword"),
       hitpoints: 3,
       maxHitpoints: 3,
       team: defaultEnemyTeam,
       initiative: 100);
 }
 
-Actor _makeGoblin({bool spear: false}) =>
-    new Actor.initialized(_uniqueId.generateNext(), "goblin",
+Actor _makeGoblin({int id, bool spear: false}) =>
+    new Actor.initialized(id ?? _uniqueId.generateNext(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: spear ? new Spear() : new Sword(name: "scimitar"),
+        currentWeapon: spear
+            ? new Weapon(WeaponType.spear)
+            : new Weapon(WeaponType.sword, name: "scimitar"),
         team: defaultEnemyTeam,
-        combineFunction: carelessCombineFunction);
+        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
-Actor _makeOrc({int hitpoints: 2}) =>
-    new Actor.initialized(_uniqueId.generateNext(), "orc",
+Actor _makeOrc({int id, int hitpoints: 2}) =>
+    new Actor.initialized(id ?? _uniqueId.generateNext(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Sword(),
+        currentWeapon: new Weapon(WeaponType.sword),
         hitpoints: hitpoints,
         maxHitpoints: hitpoints,
         team: defaultEnemyTeam,
-        combineFunction: carelessCombineFunction);
+        combineFunctionHandle: carelessMonsterCombineFunctionHandle);

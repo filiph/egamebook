@@ -14,6 +14,81 @@ part of stranded.fight.loot_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<LootSituation> _$lootSituationSerializer =
+    new _$LootSituationSerializer();
+
+class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
+  @override
+  final Iterable<Type> types = const [LootSituation, _$LootSituation];
+  @override
+  final String wireName = 'LootSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, LootSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'droppedItems',
+      serializers.serialize(object.droppedItems,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Item)])),
+      'groundMaterial',
+      serializers.serialize(object.groundMaterial,
+          specifiedType: const FullType(String)),
+      'playerTeamIds',
+      serializers.serialize(object.playerTeamIds,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(int)])),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  LootSituation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new LootSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'droppedItems':
+          result.droppedItems.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
+          break;
+        case 'groundMaterial':
+          result.groundMaterial = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'playerTeamIds':
+          result.playerTeamIds.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<int>);
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$LootSituation extends LootSituation {
   @override
   final BuiltList<Item> droppedItems;

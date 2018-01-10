@@ -1,44 +1,28 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_global.dart';
+import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/actor_score.dart';
-import 'package:edgehead/fractal_stories/items/sword.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
-import 'package:edgehead/fractal_stories/room.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/stat.dart';
-import 'package:edgehead/writers_input.dart';
 import 'package:logging/logging.dart';
 
-/// [EdgeheadGame.briana]'s [Actor.id].
-const int brianaId = 100;
-
-/// [EdgeheadGame.aren]'s [Actor.id].
-const int playerId = 1;
-
-/// Lesser self-worth than normal combine function as monsters should
-/// kind of carelessly attack to make fights more action-packed.
-num carelessCombineFunction(ActorScoreChange scoreChange) =>
-    scoreChange.selfPreservation - 2 * scoreChange.enemy;
-
-num normalCombineFunction(ActorScoreChange scoreChange) =>
-    scoreChange.selfPreservation +
-    scoreChange.teamPreservation -
-    scoreChange.enemy;
+import 'edgehead_serializers.dart' as edgehead_serializer;
 
 class EdgeheadGame extends Book {
   static final StatSetting<double> hitpointsSetting = new StatSetting<double>(
@@ -73,7 +57,6 @@ class EdgeheadGame extends Book {
   Actor goblin;
 
   final PubSub _pubsub = new PubSub();
-  Room preStartBook;
   Situation initialSituation;
   WorldState world;
 
@@ -100,54 +83,27 @@ class EdgeheadGame extends Book {
     orc = new Actor.initialized(1000, "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Sword(),
+        currentWeapon: new Weapon(WeaponType.sword),
         hitpoints: 2,
         maxHitpoints: 2,
         team: defaultEnemyTeam,
-        combineFunction: carelessCombineFunction);
+        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
     goblin = new Actor.initialized(1001, "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Sword(name: "scimitar"),
+        currentWeapon: new Weapon(WeaponType.sword, name: "scimitar"),
         team: defaultEnemyTeam,
-        combineFunction: carelessCombineFunction);
+        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
-    preStartBook = new Room(
-        "preStartBook",
-        (c) => c.outputStoryline.add("UNUSED because this is the first choice",
-            wholeSentence: true),
-        (c) => throw new StateError("Room isn't to be revisited"),
-        null,
-        null,
-        [new Exit("start_adventure", "", "")]);
-
-    aren = new Actor.initialized(playerId, "Filip",
-        nameIsProperNoun: true,
-        isPlayer: true,
-        pronoun: Pronoun.YOU,
-        hitpoints: 2,
-        maxHitpoints: 2,
-        stamina: 1,
-        initiative: 1000,
-        currentRoomName: preStartBook.name);
+    aren = edgeheadPlayer;
 
     hitpoints.value = aren.hitpoints / aren.maxHitpoints;
     stamina.value = aren.stamina;
 
-    briana = new Actor.initialized(brianaId, "Briana",
-        nameIsProperNoun: true,
-        pronoun: Pronoun.SHE,
-        hitpoints: 2,
-        maxHitpoints: 2,
-        currentRoomName: preStartBook.name,
-        followingActorId: aren.id);
+    briana = edgeheadBriana;
 
-    initialSituation =
-        new RoomRoamingSituation.initialized(preStartBook, false);
-
-    var rooms = new List<Room>.from(allRooms)
-      ..addAll([preStartBook, endOfRoam]);
+    initialSituation = edgeheadInitialSituation;
 
     var global = new EdgeheadGlobalState();
 
@@ -157,7 +113,7 @@ class EdgeheadGame extends Book {
       ..global = global
       ..time = 0);
 
-    simulation = new Simulation(rooms);
+    simulation = edgeheadSimulation;
 
     consequence = new PlanConsequence.initial(world);
   }
@@ -215,6 +171,7 @@ class EdgeheadGame extends Book {
       builder.popSituation(simulation);
       builder.elapseWorldTime();
       world = builder.build();
+      Timer.run(() => update());
       return;
     }
 
@@ -234,6 +191,7 @@ class EdgeheadGame extends Book {
       builder.elapseSituationTimeIfExists(situation.id);
       builder.elapseWorldTime();
       world = builder.build();
+      Timer.run(() => update());
       return;
     }
 
@@ -312,7 +270,12 @@ class EdgeheadGame extends Book {
         };
         choices.add(choice);
       }
-      final choiceBlock = new ChoiceBlock((b) => b..choices = choices);
+      final savegame = new SaveGameBuilder()
+        ..saveGameSerialized =
+            JSON.encode(edgehead_serializer.serializers.serialize(world));
+      final choiceBlock = new ChoiceBlock((b) => b
+        ..choices = choices
+        ..saveGame = savegame);
       final picked = await showChoices(choiceBlock);
 
       // Execute the picked option.
@@ -320,8 +283,9 @@ class EdgeheadGame extends Book {
     } else {
       // NPC
       // TODO - if more than one action, remove the one that was just made
-      selected =
-          recs.pickRandomly(actor.combineFunction ?? normalCombineFunction);
+      final combineFunction =
+          simulation.combineFunctions[actor.combineFunctionHandle];
+      selected = recs.pickRandomly(combineFunction);
       await _applySelected(selected, actor, storyline);
     }
 

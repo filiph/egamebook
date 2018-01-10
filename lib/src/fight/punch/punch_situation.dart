@@ -1,6 +1,7 @@
 library stranded.fight.punch_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -12,6 +13,9 @@ part 'punch_situation.g.dart';
 
 abstract class PunchSituation extends Situation
     implements Built<PunchSituation, PunchSituationBuilder> {
+  static Serializer<PunchSituation> get serializer =>
+      _$punchSituationSerializer;
+
   factory PunchSituation([void updates(PunchSituationBuilder b)]) =
       _$PunchSituation;
 

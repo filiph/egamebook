@@ -14,6 +14,72 @@ part of stranded.fight.strike_down_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<StrikeDownSituation> _$strikeDownSituationSerializer =
+    new _$StrikeDownSituationSerializer();
+
+class _$StrikeDownSituationSerializer
+    implements StructuredSerializer<StrikeDownSituation> {
+  @override
+  final Iterable<Type> types = const [
+    StrikeDownSituation,
+    _$StrikeDownSituation
+  ];
+  @override
+  final String wireName = 'StrikeDownSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, StrikeDownSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'attacker',
+      serializers.serialize(object.attacker,
+          specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'targetOnGround',
+      serializers.serialize(object.targetOnGround,
+          specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  StrikeDownSituation deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new StrikeDownSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'attacker':
+          result.attacker = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'targetOnGround':
+          result.targetOnGround = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$StrikeDownSituation extends StrikeDownSituation {
   @override
   final int attacker;

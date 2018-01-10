@@ -1,9 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
-import 'package:edgehead/fractal_stories/items/sword.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -59,9 +58,9 @@ class TakeDroppedWeapon extends ItemAction {
     w.updateActorById(a.id, (b) {
       if (!a.isBarehanded) {
         // Move current weapon to inventory.
-        b.items.add(b.currentWeapon);
+        b.weapons.add(b.currentWeapon.build());
       }
-      b.currentWeapon = item as Weapon;
+      b.currentWeapon = (item as Weapon).toBuilder();
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -77,11 +76,12 @@ class TakeDroppedWeapon extends ItemAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
     if (item is! Weapon) return false;
-    // TODO: remove the next condition
-    if (item is Spear) return false;
-    if (!a.canWield) return false;
     final weapon = item as Weapon;
-    final isSwordForSpear = a.currentWeapon is Spear && weapon is Sword;
+    // TODO: remove the next condition
+    if (weapon.type == WeaponType.spear) return false;
+    if (!a.canWield) return false;
+    final isSwordForSpear = a.currentWeapon.type == WeaponType.spear &&
+        weapon.type == WeaponType.sword;
     if (weapon.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);

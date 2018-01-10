@@ -2,21 +2,23 @@ library stranded.actor;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
-import 'package:edgehead/fractal_stories/items/shield.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
 
 import 'item.dart';
+import 'pose.dart';
+import 'simulation.dart';
 import 'storyline/storyline.dart';
 import 'team.dart';
-import 'simulation.dart';
 
 part 'actor.g.dart';
 
@@ -37,14 +39,16 @@ abstract class Actor extends Object
   /// provide this default score.
   static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
 
+  static Serializer<Actor> get serializer => _$actorSerializer;
+
   factory Actor([void updates(ActorBuilder b)]) = _$Actor;
 
   factory Actor.initialized(int id, String name,
           {bool isPlayer: false,
           bool nameIsProperNoun: false,
-          Pronoun pronoun: Pronoun.IT,
+          Pronoun pronoun,
           Weapon currentWeapon,
-          Shield currentShield,
+          Weapon currentShield,
           int hitpoints: 1,
           int maxHitpoints: 1,
           int stamina: 0,
@@ -54,15 +58,15 @@ abstract class Actor extends Object
           int followingActorId,
           Team team,
           bool isConfused: false,
-          CombineFunction combineFunction}) =>
+          String combineFunctionHandle: "normal"}) =>
       new _$Actor((b) => b
         ..id = id
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
-        ..pronoun = pronoun
-        ..currentWeapon = currentWeapon ?? defaultFist
-        ..currentShield = currentShield
-        ..categories = []
+        ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
+        ..currentWeapon = currentWeapon?.toBuilder() ?? defaultFist.toBuilder()
+        ..currentShield = currentShield?.toBuilder()
+        ..categories = new ListBuilder<String>()
         ..pose = Pose.standing
         ..hitpoints = hitpoints
         ..maxHitpoints = maxHitpoints
@@ -71,12 +75,12 @@ abstract class Actor extends Object
         ..initiative = initiative
         ..isActive = true
         ..isPlayer = isPlayer
-        ..items = new SetBuilder<Item>()
+        ..weapons = new ListBuilder<Weapon>()
         ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
         ..currentRoomName = currentRoomName
         ..followingActorId = followingActorId
         ..isConfused = isConfused
-        ..combineFunction = combineFunction);
+        ..combineFunctionHandle = combineFunctionHandle);
 
   Actor._();
 
@@ -88,10 +92,10 @@ abstract class Actor extends Object
   bool get canWield => true;
 
   @override
-  List<String> get categories;
+  BuiltList<String> get categories;
 
-  @nullable
-  CombineFunction get combineFunction;
+  /// The string handle to the combine function that this actor should use.
+  String get combineFunctionHandle;
 
   @nullable
   String get currentRoomName;
@@ -99,7 +103,7 @@ abstract class Actor extends Object
   /// The shield that the actor is currently wielding. This can be `null`
   /// of there is no shield.
   @nullable
-  Shield get currentShield;
+  Weapon get currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
@@ -132,7 +136,7 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
-  bool get isBarehanded => currentWeapon is Fist;
+  bool get isBarehanded => currentWeapon.type == WeaponType.fist;
 
   bool get isConfused;
 
@@ -146,17 +150,8 @@ abstract class Actor extends Object
 
   bool get isStanding => pose == Pose.standing;
 
-  /// How safe does [this] Actor feel in the presence of the different other
-  /// actors.
-  ///
-  /// For example, a Bob's failed attempt at murder of Alice will lead to Alice
-  /// feeling much less safe near Bob. This will greatly decrease her world
-  /// score, btw, so this automatically makes an attempted murder something
-  /// people don't appreciate.
-  // TODO: for 'Skyrim', we don't need this most of the time (simple friend or foe suffices) -- maybe create PsychologicalActor?
-//  ActorRelationshipMap get safetyFear;
-
-  BuiltSet<Item> get items;
+  /// Items (that are not [Weapon] nor [Shield]) possessed by the actor.
+  BuiltList<Item> get items;
 
   int get maxHitpoints;
 
@@ -176,39 +171,49 @@ abstract class Actor extends Object
   @override
   Team get team;
 
-  /// Returns the number of items of [type] in actor's possession.
+  /// How safe does [this] Actor feel in the presence of the different other
+  /// actors.
   ///
-  /// This counts items in [items] (kind of an inventory / bag) but also
-  /// in [currentWeapon] and [currentShield].
-  int countItems(ItemType type) {
-    int count = 0;
-    for (var item in items) {
-      if (item.types.contains(type)) {
-        count += 1;
-      }
-    }
-    if (currentWeapon?.types?.contains(type) == true) count += 1;
-    if (currentShield?.types?.contains(type) == true) count += 1;
-    return count;
-  }
+  /// For example, a Bob's failed attempt at murder of Alice will lead to Alice
+  /// feeling much less safe near Bob. This will greatly decrease her world
+  /// score, btw, so this automatically makes an attempted murder something
+  /// people don't appreciate.
+  // TODO: for 'Skyrim', we don't need this most of the time (simple friend or foe suffices) -- maybe create PsychologicalActor?
+//  ActorRelationshipMap get safetyFear;
 
-  /// Returns the best weapon (by [Weapon.value]) in [Actor.items].
+  /// A list of all weapons possessed by the actor.
+  ///
+  /// This is a list because we want to allow having duplicate items
+  /// (2 apples).
+  ///
+  /// Not that [WeaponType.shield] is also a [Weapon].
+  BuiltList<Weapon> get weapons;
+
+  /// Returns the best weapon (by [Weapon.value]) in [Actor.weapons].
   ///
   /// Returns `null` when there are no weapons available.
   Weapon findBestWeapon() {
     Weapon best;
     int value = -9999999;
-    for (var item in items) {
-      if (item is! Weapon) continue;
-      if (item.value > value) {
-        best = item as Weapon;
-        value = item.value;
+    for (var weapon in weapons) {
+      if (weapon.value > value) {
+        best = weapon;
+        value = weapon.value;
       }
     }
     return best;
   }
 
-  bool hasItem(ItemType type, {int needed: 1}) => countItems(type) >= needed;
+  int countWeapons(WeaponType type) {
+    int count = 0;
+    if (currentWeapon.type == type) count += 1;
+    for (final weapon in weapons) {
+      if (weapon.type == type) count += 1;
+    }
+    return count;
+  }
+
+  bool hasWeapon(WeaponType type) => currentWeapon.type == type || weapons.any((w) => w.type == type);
 
   bool hasResource(Resource resource) {
     assert(resource == Resource.stamina, "Only stamina implemented");
@@ -268,7 +273,10 @@ abstract class Actor extends Object
     if (!actor.isBarehanded) selfPreservation += 4;
     // Add points for weapon value.
     selfPreservation += actor.currentWeapon.value / 2;
-    // Add points for item values.
+    // Add points for weapon/shield/item values.
+    for (var weapon in actor.weapons) {
+      selfPreservation += weapon.value / 10;
+    }
     for (var item in actor.items) {
       selfPreservation += item.value / 10;
     }
@@ -280,7 +288,7 @@ abstract class Actor extends Object
       teamPreservation += (friend.isAliveAndActive ? 2 : 0);
       teamPreservation += 2 * friend.hitpoints;
       teamPreservation += friend.currentWeapon.value / 2;
-      for (var item in friend.items) {
+      for (var item in friend.weapons) {
         teamPreservation += item.value / 10;
       }
     }
@@ -322,5 +330,3 @@ class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
   @override
   bool operator ==(Object o) => o is ActorMap && hashCode == o.hashCode;
 }
-
-enum Pose { standing, offBalance, onGround }

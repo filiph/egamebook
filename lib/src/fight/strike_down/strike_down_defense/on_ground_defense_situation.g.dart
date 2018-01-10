@@ -14,6 +14,80 @@ part of stranded.fight.on_ground_defense_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<OnGroundDefenseSituation> _$onGroundDefenseSituationSerializer =
+    new _$OnGroundDefenseSituationSerializer();
+
+class _$OnGroundDefenseSituationSerializer
+    implements StructuredSerializer<OnGroundDefenseSituation> {
+  @override
+  final Iterable<Type> types = const [
+    OnGroundDefenseSituation,
+    _$OnGroundDefenseSituation
+  ];
+  @override
+  final String wireName = 'OnGroundDefenseSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, OnGroundDefenseSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'attacker',
+      serializers.serialize(object.attacker,
+          specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'predeterminedResult',
+      serializers.serialize(object.predeterminedResult,
+          specifiedType: const FullType(Predetermination)),
+      'target',
+      serializers.serialize(object.target, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  OnGroundDefenseSituation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new OnGroundDefenseSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'attacker':
+          result.attacker = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'predeterminedResult':
+          result.predeterminedResult = serializers.deserialize(value,
+                  specifiedType: const FullType(Predetermination))
+              as Predetermination;
+          break;
+        case 'target':
+          result.target = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$OnGroundDefenseSituation extends OnGroundDefenseSituation {
   @override
   final int attacker;

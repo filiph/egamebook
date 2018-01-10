@@ -7,20 +7,23 @@ import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
 import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
-import 'package:edgehead/fractal_stories/item.dart' show ItemType;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
 import 'package:edgehead/fractal_stories/room.dart' show Room;
+import 'package:built_value/serializer.dart' show Serializer;
 import 'package:edgehead/fractal_stories/writer_action.dart' show SimpleAction;
 import 'package:edgehead/fractal_stories/simulation.dart' show Simulation;
 import 'package:edgehead/fractal_stories/situation.dart' show Situation;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart'
     show Storyline;
+import 'package:edgehead/fractal_stories/items/weapon_type.dart'
+    show WeaponType;
 import 'package:edgehead/fractal_stories/world_state.dart'
     show WorldStateBuilder;
 import 'package:edgehead/fractal_stories/world_state.dart' show WorldState;
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.g.dart';
 
@@ -366,6 +369,10 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
   }
 
   GuardpostAboveChurchTakeShieldRescueSituation._();
+
+  static Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
+      get serializer =>
+          _$guardpostAboveChurchTakeShieldRescueSituationSerializer;
 
   @override
   List<RoamingAction> get actions => [
@@ -1361,7 +1368,7 @@ class SmelterThrowSpear extends RoamingAction {
     if ((!w.actionHasBeenPerformed(name) &&
             w.actionHasBeenPerformed("war_forge_watch_workers") &&
             w.actionHasBeenPerformed("smelter_look_around") &&
-            getPlayer(w).hasItem(ItemType.spear)) !=
+            getPlayer(w).hasWeapon(WeaponType.spear)) !=
         true) {
       return false;
     }

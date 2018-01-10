@@ -14,6 +14,62 @@ part of writers_input;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
+    _$guardpostAboveChurchTakeShieldRescueSituationSerializer =
+    new _$GuardpostAboveChurchTakeShieldRescueSituationSerializer();
+
+class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
+    implements
+        StructuredSerializer<GuardpostAboveChurchTakeShieldRescueSituation> {
+  @override
+  final Iterable<Type> types = const [
+    GuardpostAboveChurchTakeShieldRescueSituation,
+    _$GuardpostAboveChurchTakeShieldRescueSituation
+  ];
+  @override
+  final String wireName = 'GuardpostAboveChurchTakeShieldRescueSituation';
+
+  @override
+  Iterable serialize(Serializers serializers,
+      GuardpostAboveChurchTakeShieldRescueSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  GuardpostAboveChurchTakeShieldRescueSituation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new GuardpostAboveChurchTakeShieldRescueSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$GuardpostAboveChurchTakeShieldRescueSituation
     extends GuardpostAboveChurchTakeShieldRescueSituation {
   @override

@@ -1,6 +1,7 @@
 library stranded.fight.leap_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -12,6 +13,8 @@ part 'leap_situation.g.dart';
 
 abstract class LeapSituation extends Situation
     implements Built<LeapSituation, LeapSituationBuilder> {
+  static Serializer<LeapSituation> get serializer => _$leapSituationSerializer;
+
   factory LeapSituation([void updates(LeapSituationBuilder b)]) =
       _$LeapSituation;
 

@@ -32,7 +32,7 @@ class Entity extends Object with EntityBehavior {
   /// laser" has several categories, like "gun" or "laser". Whenever possible,
   /// these categories are used. When two entities have overlapping categories
   /// in one sentence, only the non-overlapping ones are used.
-  final List<String> categories = new List<String>();
+  final BuiltList<String> categories = new BuiltList<String>();
 
   @override
   final Team team;
@@ -43,11 +43,12 @@ class Entity extends Object with EntityBehavior {
 
   Entity(
       {this.name,
-      this.pronoun: Pronoun.IT,
+      Pronoun pronoun,
       Team team,
       this.isPlayer: false,
       this.nameIsProperNoun: false})
-      : this.team = team ?? neutralTeam;
+      : this.team = team ?? neutralTeam,
+        pronoun = pronoun ?? Pronoun.IT;
 
   Entity._(
       this.name, this.nameIsProperNoun, this.pronoun, Team team, this.isPlayer)

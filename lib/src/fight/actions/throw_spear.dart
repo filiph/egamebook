@@ -1,10 +1,9 @@
 import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -12,6 +11,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/writers_helpers.dart';
 
 class ThrowSpear extends EnemyTargetAction {
   static const String className = "ThrowSpear";
@@ -125,21 +125,21 @@ class ThrowSpear extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       a.isPlayer &&
       a.isStanding &&
-      (a.currentWeapon.types.contains(ItemType.spear) ||
-          a.hasItem(ItemType.spear)) &&
+      (a.currentWeapon.type == WeaponType.spear ||
+          a.hasWeapon(WeaponType.spear)) &&
       _isFirstTurnInFightSituation(world);
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return new Entity(name: Randomly.parse(name), team: a.team);
   }
 
-  Spear _findSpear(Actor a) {
-    if (a.currentWeapon != null && a.currentWeapon is Spear) {
-      return a.currentWeapon as Spear;
+  Weapon _findSpear(Actor a) {
+    if (a.currentWeapon != null && a.currentWeapon.type == WeaponType.spear) {
+      return a.currentWeapon;
     }
-    for (var item in a.items) {
-      if (item is Spear) {
-        return item;
+    for (var weapon in a.weapons) {
+      if (weapon.type == WeaponType.spear) {
+        return weapon;
       }
     }
     throw new StateError("No spear found in $a");
@@ -152,9 +152,9 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory
-  /// ([Actor.items]) to the ground. If actor's hand was emptied, a new
+  /// ([Actor.weapons]) to the ground. If actor's hand was emptied, a new
   /// weapon (or [defaultFist]) is put in it.
-  void _moveSpearToGround(WorldStateBuilder w, Actor a, Spear spear) {
+  void _moveSpearToGround(WorldStateBuilder w, Actor a, Weapon spear) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
@@ -162,17 +162,17 @@ class ThrowSpear extends EnemyTargetAction {
       w.updateActorById(
           a.id,
           (b) => b
-            ..currentWeapon = weapon
-            ..items.remove(weapon));
+            ..currentWeapon = weapon.toBuilder()
+            ..weapons.remove(weapon));
     } else {
-      w.updateActorById(a.id, (b) => b..items.remove(spear));
+      w.updateActorById(a.id, (b) => b..weapons.remove(spear));
     }
     w.replaceSituationById(fightSituation.id,
         fightSituation.rebuild((b) => b..droppedItems.add(spear)));
   }
 
   void _startThrowSpearReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-          Storyline s, Actor enemy, Spear spear) =>
+          Storyline s, Actor enemy, Weapon spear) =>
       a.report(
         s,
         "<subject> {throw<s>|hurl<s>|cast<s>} "

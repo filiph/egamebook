@@ -2,6 +2,7 @@ library storyline;
 
 import 'dart:collection';
 import 'dart:math';
+import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -9,8 +10,11 @@ import 'package:meta/meta.dart';
 import '../team.dart';
 import 'randomly.dart';
 
+import 'storyline_pronoun.dart';
+export 'storyline_pronoun.dart';
+
 part 'storyline_entity.dart';
-part 'storyline_pronoun.dart';
+
 
 final Logger log = new Logger('Storyline');
 

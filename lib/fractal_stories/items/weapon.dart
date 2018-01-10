@@ -1,37 +1,62 @@
+library fractal_stories.items.weapon;
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 
-abstract class Weapon extends Item {
-  Weapon(Iterable<ItemType> types) : super(types);
+part 'weapon.g.dart';
 
-  int get bluntDamage => 0;
+abstract class Weapon extends Item implements Built<Weapon, WeaponBuilder> {
+  static Serializer<Weapon> get serializer => _$weaponSerializer;
 
-  /// The weapon can block thrusts. Typical examples are shields.
-  bool get canBlockThrust => false;
+  factory Weapon(WeaponType type,
+          {String name,
+          bool nameIsProperNoun: false,
+          int bluntDamage,
+          int slashingDamage,
+          int thrustingDamage,
+          int length}) =>
+      new _$Weapon((b) => b
+        ..type = type
+        ..name = name ?? type.name
+        ..nameIsProperNoun = nameIsProperNoun
+        ..bluntDamage = bluntDamage ?? type.defaultBluntDamage
+        ..slashingDamage = slashingDamage ?? type.defaultSlashingDamage
+        ..thrustingDamage = thrustingDamage ?? type.defaultThrustingDamage
+        ..length = length ?? type.defaultLength);
 
-  /// The weapon can parry blunt weapons (like clubs and warhammers).
-  /// Typical examples include other blunt weapons, and shields. Rapiers and
-  /// knives, on the other hand, cannot parry blunt weapons.
-  bool get canParryBlunt => false;
+  Weapon._();
 
-  /// The weapon can parry a slashing weapon (like a sword). Typical examples
-  /// are swords and reinforced blunt weapons. Knives and non-reinforced staffs
-  /// cannot parry slashes.
-  bool get canParrySlash => false;
+  int get bluntDamage;
 
   @override
-  List<String> get categories => const ["weapon"];
+  BuiltList<String> get categories => new BuiltList(["weapon"]);
 
   bool get isBlunt => bluntDamage > 0;
 
+  bool get isShield => type == WeaponType.shield;
+
+  // TODO: add categories like sword when appropriate
   bool get isSlashing => slashingDamage > 0;
 
   bool get isThrusting => thrustingDamage > 0;
 
-  int get length => 2;
+  int get length;
 
-  int get slashingDamage => 0;
+  @override
+  String get name;
 
-  int get thrustingDamage => 0;
+  @override
+  bool get nameIsProperNoun;
+
+  int get slashingDamage;
+
+  int get thrustingDamage;
+
+  WeaponType get type;
 
   /// Intrinsic value of the weapon.
   ///
@@ -42,6 +67,7 @@ abstract class Weapon extends Item {
   /// is `true`), such us "Excalibur".
   @override
   int get value =>
+      (isShield ? 1 : 0) +
       length +
       slashingDamage +
       thrustingDamage +

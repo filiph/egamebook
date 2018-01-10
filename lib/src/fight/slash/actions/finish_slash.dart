@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
-import 'package:edgehead/writers_helpers.dart' show orcthorn;
+import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
 class FinishSlash extends EnemyTargetAction {
   static const String className = "FinishSlash";

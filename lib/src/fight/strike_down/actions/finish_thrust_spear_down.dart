@@ -1,11 +1,12 @@
 import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/items/spear.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/writers_helpers.dart';
 
 class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
   static const String className = "FinishThrustSpearAtGroundedEnemy";
@@ -71,7 +72,7 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.isOnGround && a.currentWeapon is Spear;
+      enemy.isOnGround && a.currentWeapon.type == WeaponType.spear;
 
   static EnemyTargetAction builder(Actor enemy) =>
       new FinishThrustSpearAtGroundedEnemy(enemy);

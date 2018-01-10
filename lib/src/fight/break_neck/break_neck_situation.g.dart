@@ -14,6 +14,72 @@ part of stranded.fight.break_neck_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<BreakNeckOnGroundSituation> _$breakNeckOnGroundSituationSerializer =
+    new _$BreakNeckOnGroundSituationSerializer();
+
+class _$BreakNeckOnGroundSituationSerializer
+    implements StructuredSerializer<BreakNeckOnGroundSituation> {
+  @override
+  final Iterable<Type> types = const [
+    BreakNeckOnGroundSituation,
+    _$BreakNeckOnGroundSituation
+  ];
+  @override
+  final String wireName = 'BreakNeckOnGroundSituation';
+
+  @override
+  Iterable serialize(Serializers serializers, BreakNeckOnGroundSituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'attacker',
+      serializers.serialize(object.attacker,
+          specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'target',
+      serializers.serialize(object.target, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  BreakNeckOnGroundSituation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new BreakNeckOnGroundSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'attacker':
+          result.attacker = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'target':
+          result.target = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$BreakNeckOnGroundSituation extends BreakNeckOnGroundSituation {
   @override
   final int attacker;

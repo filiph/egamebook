@@ -81,7 +81,8 @@ class DisarmKick extends EnemyTargetAction {
         situation.id,
         situation.rebuild((FightSituationBuilder b) =>
             b..droppedItems.add(enemy.currentWeapon)));
-    w.updateActorById(enemy.id, (b) => b..currentWeapon = defaultFist);
+    w.updateActorById(
+        enemy.id, (b) => b..currentWeapon = defaultFist.toBuilder());
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
 

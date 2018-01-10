@@ -1,6 +1,7 @@
 library stranded.fight.on_ground_defense_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -15,6 +16,9 @@ part 'on_ground_defense_situation.g.dart';
 abstract class OnGroundDefenseSituation extends DefenseSituation
     implements
         Built<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
+  static Serializer<OnGroundDefenseSituation> get serializer =>
+      _$onGroundDefenseSituationSerializer;
+
   factory OnGroundDefenseSituation(
           [void updates(OnGroundDefenseSituationBuilder b)]) =
       _$OnGroundDefenseSituation;

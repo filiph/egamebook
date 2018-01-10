@@ -14,15 +14,216 @@ part of stranded.actor;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<Actor> _$actorSerializer = new _$ActorSerializer();
+
+class _$ActorSerializer implements StructuredSerializer<Actor> {
+  @override
+  final Iterable<Type> types = const [Actor, _$Actor];
+  @override
+  final String wireName = 'Actor';
+
+  @override
+  Iterable serialize(Serializers serializers, Actor object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'categories',
+      serializers.serialize(object.categories,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
+      'combineFunctionHandle',
+      serializers.serialize(object.combineFunctionHandle,
+          specifiedType: const FullType(String)),
+      'currentWeapon',
+      serializers.serialize(object.currentWeapon,
+          specifiedType: const FullType(Weapon)),
+      'gold',
+      serializers.serialize(object.gold, specifiedType: const FullType(int)),
+      'hitpoints',
+      serializers.serialize(object.hitpoints,
+          specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'initiative',
+      serializers.serialize(object.initiative,
+          specifiedType: const FullType(int)),
+      'isActive',
+      serializers.serialize(object.isActive,
+          specifiedType: const FullType(bool)),
+      'isConfused',
+      serializers.serialize(object.isConfused,
+          specifiedType: const FullType(bool)),
+      'isPlayer',
+      serializers.serialize(object.isPlayer,
+          specifiedType: const FullType(bool)),
+      'items',
+      serializers.serialize(object.items,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Item)])),
+      'maxHitpoints',
+      serializers.serialize(object.maxHitpoints,
+          specifiedType: const FullType(int)),
+      'name',
+      serializers.serialize(object.name, specifiedType: const FullType(String)),
+      'nameIsProperNoun',
+      serializers.serialize(object.nameIsProperNoun,
+          specifiedType: const FullType(bool)),
+      'pose',
+      serializers.serialize(object.pose, specifiedType: const FullType(Pose)),
+      'pronoun',
+      serializers.serialize(object.pronoun,
+          specifiedType: const FullType(Pronoun)),
+      'stamina',
+      serializers.serialize(object.stamina, specifiedType: const FullType(int)),
+      'team',
+      serializers.serialize(object.team, specifiedType: const FullType(Team)),
+      'weapons',
+      serializers.serialize(object.weapons,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Weapon)])),
+    ];
+    if (object.currentRoomName != null) {
+      result
+        ..add('currentRoomName')
+        ..add(serializers.serialize(object.currentRoomName,
+            specifiedType: const FullType(String)));
+    }
+    if (object.currentShield != null) {
+      result
+        ..add('currentShield')
+        ..add(serializers.serialize(object.currentShield,
+            specifiedType: const FullType(Weapon)));
+    }
+    if (object.followingActorId != null) {
+      result
+        ..add('followingActorId')
+        ..add(serializers.serialize(object.followingActorId,
+            specifiedType: const FullType(int)));
+    }
+
+    return result;
+  }
+
+  @override
+  Actor deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new ActorBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'categories':
+          result.categories.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<String>);
+          break;
+        case 'combineFunctionHandle':
+          result.combineFunctionHandle = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'currentRoomName':
+          result.currentRoomName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'currentShield':
+          result.currentShield.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Weapon)) as Weapon);
+          break;
+        case 'currentWeapon':
+          result.currentWeapon.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Weapon)) as Weapon);
+          break;
+        case 'followingActorId':
+          result.followingActorId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'gold':
+          result.gold = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'hitpoints':
+          result.hitpoints = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'initiative':
+          result.initiative = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'isActive':
+          result.isActive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isConfused':
+          result.isConfused = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isPlayer':
+          result.isPlayer = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'items':
+          result.items.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
+          break;
+        case 'maxHitpoints':
+          result.maxHitpoints = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'nameIsProperNoun':
+          result.nameIsProperNoun = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'pose':
+          result.pose = serializers.deserialize(value,
+              specifiedType: const FullType(Pose)) as Pose;
+          break;
+        case 'pronoun':
+          result.pronoun.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Pronoun)) as Pronoun);
+          break;
+        case 'stamina':
+          result.stamina = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'team':
+          result.team.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Team)) as Team);
+          break;
+        case 'weapons':
+          result.weapons.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Weapon)]))
+              as BuiltList<Weapon>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$Actor extends Actor {
   @override
-  final List<String> categories;
+  final BuiltList<String> categories;
   @override
-  final CombineFunction combineFunction;
+  final String combineFunctionHandle;
   @override
   final String currentRoomName;
   @override
-  final Shield currentShield;
+  final Weapon currentShield;
   @override
   final Weapon currentWeapon;
   @override
@@ -42,7 +243,7 @@ class _$Actor extends Actor {
   @override
   final bool isPlayer;
   @override
-  final BuiltSet<Item> items;
+  final BuiltList<Item> items;
   @override
   final int maxHitpoints;
   @override
@@ -57,13 +258,15 @@ class _$Actor extends Actor {
   final int stamina;
   @override
   final Team team;
+  @override
+  final BuiltList<Weapon> weapons;
 
   factory _$Actor([void updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
       {this.categories,
-      this.combineFunction,
+      this.combineFunctionHandle,
       this.currentRoomName,
       this.currentShield,
       this.currentWeapon,
@@ -82,9 +285,12 @@ class _$Actor extends Actor {
       this.pose,
       this.pronoun,
       this.stamina,
-      this.team})
+      this.team,
+      this.weapons})
       : super._() {
     if (categories == null) throw new ArgumentError.notNull('categories');
+    if (combineFunctionHandle == null)
+      throw new ArgumentError.notNull('combineFunctionHandle');
     if (currentWeapon == null) throw new ArgumentError.notNull('currentWeapon');
     if (gold == null) throw new ArgumentError.notNull('gold');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
@@ -102,6 +308,7 @@ class _$Actor extends Actor {
     if (pronoun == null) throw new ArgumentError.notNull('pronoun');
     if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (team == null) throw new ArgumentError.notNull('team');
+    if (weapons == null) throw new ArgumentError.notNull('weapons');
   }
 
   @override
@@ -116,7 +323,7 @@ class _$Actor extends Actor {
     if (identical(other, this)) return true;
     if (other is! Actor) return false;
     return categories == other.categories &&
-        combineFunction == other.combineFunction &&
+        combineFunctionHandle == other.combineFunctionHandle &&
         currentRoomName == other.currentRoomName &&
         currentShield == other.currentShield &&
         currentWeapon == other.currentWeapon &&
@@ -135,7 +342,8 @@ class _$Actor extends Actor {
         pose == other.pose &&
         pronoun == other.pronoun &&
         stamina == other.stamina &&
-        team == other.team;
+        team == other.team &&
+        weapons == other.weapons;
   }
 
   @override
@@ -158,33 +366,33 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc(0, categories.hashCode), combineFunction.hashCode),
-                                                                                currentRoomName.hashCode),
-                                                                            currentShield.hashCode),
-                                                                        currentWeapon.hashCode),
-                                                                    followingActorId.hashCode),
-                                                                gold.hashCode),
-                                                            hitpoints.hashCode),
-                                                        id.hashCode),
-                                                    initiative.hashCode),
-                                                isActive.hashCode),
-                                            isConfused.hashCode),
-                                        isPlayer.hashCode),
-                                    items.hashCode),
-                                maxHitpoints.hashCode),
-                            name.hashCode),
-                        nameIsProperNoun.hashCode),
-                    pose.hashCode),
-                pronoun.hashCode),
-            stamina.hashCode),
-        team.hashCode));
+                                                                            $jc($jc($jc($jc(0, categories.hashCode), combineFunctionHandle.hashCode), currentRoomName.hashCode),
+                                                                                currentShield.hashCode),
+                                                                            currentWeapon.hashCode),
+                                                                        followingActorId.hashCode),
+                                                                    gold.hashCode),
+                                                                hitpoints.hashCode),
+                                                            id.hashCode),
+                                                        initiative.hashCode),
+                                                    isActive.hashCode),
+                                                isConfused.hashCode),
+                                            isPlayer.hashCode),
+                                        items.hashCode),
+                                    maxHitpoints.hashCode),
+                                name.hashCode),
+                            nameIsProperNoun.hashCode),
+                        pose.hashCode),
+                    pronoun.hashCode),
+                stamina.hashCode),
+            team.hashCode),
+        weapons.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
           ..add('categories', categories)
-          ..add('combineFunction', combineFunction)
+          ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('currentRoomName', currentRoomName)
           ..add('currentShield', currentShield)
           ..add('currentWeapon', currentWeapon)
@@ -203,7 +411,8 @@ class _$Actor extends Actor {
           ..add('pose', pose)
           ..add('pronoun', pronoun)
           ..add('stamina', stamina)
-          ..add('team', team))
+          ..add('team', team)
+          ..add('weapons', weapons))
         .toString();
   }
 }
@@ -211,28 +420,32 @@ class _$Actor extends Actor {
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
 
-  List<String> _categories;
-  List<String> get categories => _$this._categories;
-  set categories(List<String> categories) => _$this._categories = categories;
+  ListBuilder<String> _categories;
+  ListBuilder<String> get categories =>
+      _$this._categories ??= new ListBuilder<String>();
+  set categories(ListBuilder<String> categories) =>
+      _$this._categories = categories;
 
-  CombineFunction _combineFunction;
-  CombineFunction get combineFunction => _$this._combineFunction;
-  set combineFunction(CombineFunction combineFunction) =>
-      _$this._combineFunction = combineFunction;
+  String _combineFunctionHandle;
+  String get combineFunctionHandle => _$this._combineFunctionHandle;
+  set combineFunctionHandle(String combineFunctionHandle) =>
+      _$this._combineFunctionHandle = combineFunctionHandle;
 
   String _currentRoomName;
   String get currentRoomName => _$this._currentRoomName;
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  Shield _currentShield;
-  Shield get currentShield => _$this._currentShield;
-  set currentShield(Shield currentShield) =>
+  WeaponBuilder _currentShield;
+  WeaponBuilder get currentShield =>
+      _$this._currentShield ??= new WeaponBuilder();
+  set currentShield(WeaponBuilder currentShield) =>
       _$this._currentShield = currentShield;
 
-  Weapon _currentWeapon;
-  Weapon get currentWeapon => _$this._currentWeapon;
-  set currentWeapon(Weapon currentWeapon) =>
+  WeaponBuilder _currentWeapon;
+  WeaponBuilder get currentWeapon =>
+      _$this._currentWeapon ??= new WeaponBuilder();
+  set currentWeapon(WeaponBuilder currentWeapon) =>
       _$this._currentWeapon = currentWeapon;
 
   int _followingActorId;
@@ -268,9 +481,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isPlayer => _$this._isPlayer;
   set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
 
-  SetBuilder<Item> _items;
-  SetBuilder<Item> get items => _$this._items ??= new SetBuilder<Item>();
-  set items(SetBuilder<Item> items) => _$this._items = items;
+  ListBuilder<Item> _items;
+  ListBuilder<Item> get items => _$this._items ??= new ListBuilder<Item>();
+  set items(ListBuilder<Item> items) => _$this._items = items;
 
   int _maxHitpoints;
   int get maxHitpoints => _$this._maxHitpoints;
@@ -289,9 +502,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   Pose get pose => _$this._pose;
   set pose(Pose pose) => _$this._pose = pose;
 
-  Pronoun _pronoun;
-  Pronoun get pronoun => _$this._pronoun;
-  set pronoun(Pronoun pronoun) => _$this._pronoun = pronoun;
+  PronounBuilder _pronoun;
+  PronounBuilder get pronoun => _$this._pronoun ??= new PronounBuilder();
+  set pronoun(PronounBuilder pronoun) => _$this._pronoun = pronoun;
 
   int _stamina;
   int get stamina => _$this._stamina;
@@ -301,15 +514,20 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   TeamBuilder get team => _$this._team ??= new TeamBuilder();
   set team(TeamBuilder team) => _$this._team = team;
 
+  ListBuilder<Weapon> _weapons;
+  ListBuilder<Weapon> get weapons =>
+      _$this._weapons ??= new ListBuilder<Weapon>();
+  set weapons(ListBuilder<Weapon> weapons) => _$this._weapons = weapons;
+
   ActorBuilder();
 
   ActorBuilder get _$this {
     if (_$v != null) {
-      _categories = _$v.categories;
-      _combineFunction = _$v.combineFunction;
+      _categories = _$v.categories?.toBuilder();
+      _combineFunctionHandle = _$v.combineFunctionHandle;
       _currentRoomName = _$v.currentRoomName;
-      _currentShield = _$v.currentShield;
-      _currentWeapon = _$v.currentWeapon;
+      _currentShield = _$v.currentShield?.toBuilder();
+      _currentWeapon = _$v.currentWeapon?.toBuilder();
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
@@ -323,9 +541,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
       _pose = _$v.pose;
-      _pronoun = _$v.pronoun;
+      _pronoun = _$v.pronoun?.toBuilder();
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
+      _weapons = _$v.weapons?.toBuilder();
       _$v = null;
     }
     return this;
@@ -346,11 +565,11 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor build() {
     final _$result = _$v ??
         new _$Actor._(
-            categories: categories,
-            combineFunction: combineFunction,
+            categories: categories?.build(),
+            combineFunctionHandle: combineFunctionHandle,
             currentRoomName: currentRoomName,
-            currentShield: currentShield,
-            currentWeapon: currentWeapon,
+            currentShield: _currentShield?.build(),
+            currentWeapon: currentWeapon?.build(),
             followingActorId: followingActorId,
             gold: gold,
             hitpoints: hitpoints,
@@ -364,9 +583,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             name: name,
             nameIsProperNoun: nameIsProperNoun,
             pose: pose,
-            pronoun: pronoun,
+            pronoun: pronoun?.build(),
             stamina: stamina,
-            team: team?.build());
+            team: team?.build(),
+            weapons: weapons?.build());
     replace(_$result);
     return _$result;
   }

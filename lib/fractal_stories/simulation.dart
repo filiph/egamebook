@@ -1,11 +1,17 @@
 library stranded.world;
 
 import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:meta/meta.dart';
 
 import 'actor.dart';
 import 'room.dart';
+
+typedef void EventCallback(
+    Simulation sim, WorldStateBuilder world, Storyline storyline);
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.
@@ -21,6 +27,7 @@ import 'room.dart';
 ///
 /// In other words, the state of the system should go to [WorldState], while
 /// the behavior and immutable structure of the system goes here.
+@immutable
 class Simulation {
   /// The (immutable) rooms of this world.
   ///
@@ -28,7 +35,19 @@ class Simulation {
   /// TODO: create "RoomState" in [_state] for rooms that can change
   final Set<Room> rooms;
 
-  Simulation(Iterable<Room> rooms) : rooms = new Set<Room>.from(rooms) {
+  /// All [EventCallback] functions that need to be persisted (meaning that
+  /// a savegame can include a notion of "call this function when x").
+  ///
+  /// This is useful for things like `FightSituation`, where a savegame during
+  /// a fight needs to "remember" that Agruth has to draw his sword at some
+  /// point.
+  final Map<String, EventCallback> events;
+
+  /// Combine functions are the different ways an actor can score the world.
+  final Map<String, CombineFunction> combineFunctions;
+
+  Simulation(Iterable<Room> rooms, this.events, this.combineFunctions)
+      : rooms = new Set<Room>.from(rooms) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
   }
 

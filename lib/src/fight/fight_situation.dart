@@ -2,13 +2,15 @@ library stranded.fight.fight_situation;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
@@ -40,9 +42,6 @@ String getGroundMaterial(WorldStateBuilder w) {
   return groundMaterial;
 }
 
-typedef void TimedEventCallback(
-    Simulation sim, WorldStateBuilder world, Storyline storyline);
-
 abstract class FightSituation extends Situation
     implements Built<FightSituation, FightSituationBuilder> {
   /// The advantage that player has over all other actors in terms of frequency
@@ -50,6 +49,9 @@ abstract class FightSituation extends Situation
   static const double _playerTurnAdvantage = 1.5;
 
   static const String className = "FightSituation";
+
+  static Serializer<FightSituation> get serializer =>
+      _$fightSituationSerializer;
 
   factory FightSituation([void updates(FightSituationBuilder b)]) =
       _$FightSituation;
@@ -59,7 +61,7 @@ abstract class FightSituation extends Situation
           Iterable<Actor> enemyTeam,
           String groundMaterial,
           RoomRoamingSituation roomRoamingSituation,
-          Map<int, TimedEventCallback> events,
+          Map<int, String> events,
           {Iterable<Item> items: const []}) =>
       new FightSituation((b) => b
         ..id = getRandomId()
@@ -69,7 +71,7 @@ abstract class FightSituation extends Situation
         ..groundMaterial = groundMaterial
         ..droppedItems = new ListBuilder<Item>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id
-        ..events = new MapBuilder<int, TimedEventCallback>(events));
+        ..events = new MapBuilder<int, String>(events));
   FightSituation._();
 
   @override
@@ -113,7 +115,7 @@ abstract class FightSituation extends Situation
 
   BuiltList<int> get enemyTeamIds;
 
-  BuiltMap<int, TimedEventCallback> get events;
+  BuiltMap<int, String> get events;
 
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   ///
@@ -150,6 +152,11 @@ abstract class FightSituation extends Situation
 
   @override
   Actor getActorAtTime(int time, Simulation sim, WorldState world) {
+    assert(
+        () => events.values.every((handle) => sim.events.keys.contains(handle)),
+        "Some events of $this are missing in Simulation.events. "
+        "Situation's events: $events. Simulation events: ${sim.events.keys}.");
+
     var allActorIds = alternate<int>(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
@@ -214,7 +221,14 @@ abstract class FightSituation extends Situation
   @override
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
     if (events.containsKey(time)) {
-      events[time](sim, world, s);
+      final key = events[time];
+      assert(
+          sim.events.containsKey(key),
+          "Simulation.events lacks key $key "
+          "which is scheduled for time $time in $this. All scheduled "
+          "events: ${events}. All defined callbacks: ${sim.events.keys}");
+      final callback = sim.events[key];
+      callback(sim, world, s);
     }
   }
 

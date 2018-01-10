@@ -1,6 +1,7 @@
 library stranded.fight.wrestle_defense_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -14,6 +15,8 @@ abstract class OnGroundWrestleDefenseSituation extends DefenseSituation
     implements
         Built<OnGroundWrestleDefenseSituation,
             OnGroundWrestleDefenseSituationBuilder> {
+  static Serializer<OnGroundWrestleDefenseSituation> get serializer =>
+      _$onGroundWrestleDefenseSituationSerializer;
   factory OnGroundWrestleDefenseSituation(
           [void updates(OnGroundWrestleDefenseSituationBuilder b)]) =
       _$OnGroundWrestleDefenseSituation;

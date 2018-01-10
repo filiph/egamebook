@@ -246,7 +246,6 @@ abstract class Action {
     var builder = new ActionRecordBuilder()
       ..actionName = name
       ..protagonist = actor.id
-      ..knownTo = KnownToMode.all
       ..wasSuccess = isSuccess
       ..wasFailure = isFailure
       ..wasAggressive = isAggressive

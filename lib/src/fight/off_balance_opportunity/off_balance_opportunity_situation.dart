@@ -1,6 +1,7 @@
 library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -15,6 +16,9 @@ abstract class OffBalanceOpportunitySituation extends Situation
     implements
         Built<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
+  static Serializer<OffBalanceOpportunitySituation> get serializer =>
+      _$offBalanceOpportunitySituationSerializer;
+
   factory OffBalanceOpportunitySituation(
           [void updates(OffBalanceOpportunitySituationBuilder b)]) =
       _$OffBalanceOpportunitySituation;

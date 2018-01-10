@@ -1,4 +1,5 @@
-import 'package:edgehead/fractal_stories/items/sword.dart';
+import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -22,7 +23,7 @@ void main() {
         Actor filip = new Actor.initialized(1, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
-            currentWeapon: new Sword(),
+            currentWeapon: new Weapon(WeaponType.sword),
             hitpoints: 2,
             maxHitpoints: 2,
             stamina: 1,

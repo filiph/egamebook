@@ -3,26 +3,8 @@ library stranded.item;
 import 'storyline/storyline.dart';
 import 'team.dart';
 
-String typeToDescription(ItemType type) {
-  switch (type) {
-    case ItemType.fist:
-      return "fist";
-    case ItemType.shield:
-      return "shield";
-    case ItemType.spear:
-      return "spear";
-    case ItemType.sword:
-      return "sword";
-  }
-  throw new ArgumentError(type);
-}
-
 abstract class Item extends Object with EntityBehavior implements Entity {
-  final List<ItemType> types;
-
-  Item(Iterable<ItemType> types) : types = new List.unmodifiable(types);
-
-  String get description => typeToDescription(types.first);
+  String get description => throw new UnimplementedError();
 
   @override
   int get id => hashCode;
@@ -37,7 +19,7 @@ abstract class Item extends Object with EntityBehavior implements Entity {
   bool get isPlayer => false;
 
   @override
-  bool get nameIsProperNoun => false;
+  bool get nameIsProperNoun;
 
   @override
   Pronoun get pronoun => Pronoun.IT;
@@ -45,7 +27,6 @@ abstract class Item extends Object with EntityBehavior implements Entity {
   @override
   Team get team => neutralTeam;
 
+  /// Heuristic value of the item.
   int get value;
 }
-
-enum ItemType { fist, shield, spear, sword }

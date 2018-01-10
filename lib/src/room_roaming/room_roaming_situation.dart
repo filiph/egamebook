@@ -1,12 +1,13 @@
 library stranded.room_roaming.room_roaming_situation;
 
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
@@ -17,6 +18,9 @@ part 'room_roaming_situation.g.dart';
 abstract class RoomRoamingSituation extends Situation
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
   static const String className = "RoomRoamingSituation";
+
+  static Serializer<RoomRoamingSituation> get serializer =>
+      _$roomRoamingSituationSerializer;
 
   factory RoomRoamingSituation([void updates(RoomRoamingSituationBuilder b)]) =
       _$RoomRoamingSituation;

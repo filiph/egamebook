@@ -61,8 +61,6 @@ class CliRunner extends Presenter<EdgeheadGame> {
     _silent = silent;
 
     if (_logFile != null) {
-      final now = new DateTime.now().toIso8601String();
-      _logFile.writeAsStringSync("== $now ==");
       Logger.root.level = logLevel;
       _loggerSubscription = Logger.root.onRecord.listen((record) {
         _logFile.writeAsStringSync(

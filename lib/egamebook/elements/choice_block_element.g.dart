@@ -26,6 +26,9 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   Iterable serialize(Serializers serializers, ChoiceBlock object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
+      'saveGame',
+      serializers.serialize(object.saveGame,
+          specifiedType: const FullType(SaveGame)),
       'choices',
       serializers.serialize(object.choices,
           specifiedType:
@@ -46,6 +49,10 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'saveGame':
+          result.saveGame.replace(serializers.deserialize(value,
+              specifiedType: const FullType(SaveGame)) as SaveGame);
+          break;
         case 'choices':
           result.choices.replace(serializers.deserialize(value,
                   specifiedType:
@@ -61,12 +68,15 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
 
 class _$ChoiceBlock extends ChoiceBlock {
   @override
+  final SaveGame saveGame;
+  @override
   final BuiltList<Choice> choices;
 
   factory _$ChoiceBlock([void updates(ChoiceBlockBuilder b)]) =>
       (new ChoiceBlockBuilder()..update(updates)).build();
 
-  _$ChoiceBlock._({this.choices}) : super._() {
+  _$ChoiceBlock._({this.saveGame, this.choices}) : super._() {
+    if (saveGame == null) throw new ArgumentError.notNull('saveGame');
     if (choices == null) throw new ArgumentError.notNull('choices');
   }
 
@@ -81,23 +91,29 @@ class _$ChoiceBlock extends ChoiceBlock {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! ChoiceBlock) return false;
-    return choices == other.choices;
+    return saveGame == other.saveGame && choices == other.choices;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, choices.hashCode));
+    return $jf($jc($jc(0, saveGame.hashCode), choices.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ChoiceBlock')..add('choices', choices))
+    return (newBuiltValueToStringHelper('ChoiceBlock')
+          ..add('saveGame', saveGame)
+          ..add('choices', choices))
         .toString();
   }
 }
 
 class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   _$ChoiceBlock _$v;
+
+  SaveGameBuilder _saveGame;
+  SaveGameBuilder get saveGame => _$this._saveGame ??= new SaveGameBuilder();
+  set saveGame(SaveGameBuilder saveGame) => _$this._saveGame = saveGame;
 
   ListBuilder<Choice> _choices;
   ListBuilder<Choice> get choices =>
@@ -108,6 +124,7 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
 
   ChoiceBlockBuilder get _$this {
     if (_$v != null) {
+      _saveGame = _$v.saveGame?.toBuilder();
       _choices = _$v.choices?.toBuilder();
       _$v = null;
     }
@@ -127,7 +144,9 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
 
   @override
   _$ChoiceBlock build() {
-    final _$result = _$v ?? new _$ChoiceBlock._(choices: choices?.build());
+    final _$result = _$v ??
+        new _$ChoiceBlock._(
+            saveGame: saveGame?.build(), choices: choices?.build());
     replace(_$result);
     return _$result;
   }

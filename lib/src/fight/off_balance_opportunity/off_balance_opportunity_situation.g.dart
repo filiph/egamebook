@@ -14,6 +14,77 @@ part of stranded.fight.off_balance_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<OffBalanceOpportunitySituation>
+    _$offBalanceOpportunitySituationSerializer =
+    new _$OffBalanceOpportunitySituationSerializer();
+
+class _$OffBalanceOpportunitySituationSerializer
+    implements StructuredSerializer<OffBalanceOpportunitySituation> {
+  @override
+  final Iterable<Type> types = const [
+    OffBalanceOpportunitySituation,
+    _$OffBalanceOpportunitySituation
+  ];
+  @override
+  final String wireName = 'OffBalanceOpportunitySituation';
+
+  @override
+  Iterable serialize(
+      Serializers serializers, OffBalanceOpportunitySituation object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'actorId',
+      serializers.serialize(object.actorId, specifiedType: const FullType(int)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+    ];
+    if (object.culpritId != null) {
+      result
+        ..add('culpritId')
+        ..add(serializers.serialize(object.culpritId,
+            specifiedType: const FullType(int)));
+    }
+
+    return result;
+  }
+
+  @override
+  OffBalanceOpportunitySituation deserialize(
+      Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new OffBalanceOpportunitySituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'actorId':
+          result.actorId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'culpritId':
+          result.culpritId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   @override
   final int actorId;

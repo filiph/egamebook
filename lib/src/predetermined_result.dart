@@ -1,11 +1,28 @@
+library edgehead.predetermination;
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+part 'predetermined_result.g.dart';
+
 /// A defense situation can be predetermined to succeed or fail.
-enum Predetermination {
+class Predetermination extends EnumClass {
   /// Actions should behave as normal.
-  none,
+  static const Predetermination none = _$none;
 
   /// All actions have 100% chance of success.
-  successGuaranteed,
+  static const Predetermination successGuaranteed = _$successGuaranteed;
 
   /// All actions have 0% chance of success.
-  failureGuaranteed
+  static const Predetermination failureGuaranteed = _$failureGuaranteed;
+
+  static Serializer<Predetermination> get serializer =>
+      _$predeterminationSerializer;
+
+  static BuiltSet<Predetermination> get values => _$values;
+
+  const Predetermination._(String name) : super(name);
+
+  static Predetermination valueOf(String name) => _$valueOf(name);
 }

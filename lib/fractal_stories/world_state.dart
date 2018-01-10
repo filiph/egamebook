@@ -2,6 +2,7 @@ library stranded.world_state;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -11,6 +12,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 part 'world_state.g.dart';
 
 abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
+  static Serializer<WorldState> get serializer => _$worldStateSerializer;
+
   factory WorldState([updates(WorldStateBuilder b)]) = _$WorldState;
 
   WorldState._();

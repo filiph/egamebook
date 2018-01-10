@@ -14,6 +14,125 @@ part of stranded.action_record;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<ActionRecord> _$actionRecordSerializer =
+    new _$ActionRecordSerializer();
+
+class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
+  @override
+  final Iterable<Type> types = const [ActionRecord, _$ActionRecord];
+  @override
+  final String wireName = 'ActionRecord';
+
+  @override
+  Iterable serialize(Serializers serializers, ActionRecord object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'accomplices',
+      serializers.serialize(object.accomplices,
+          specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
+      'actionName',
+      serializers.serialize(object.actionName,
+          specifiedType: const FullType(String)),
+      'description',
+      serializers.serialize(object.description,
+          specifiedType: const FullType(String)),
+      'protagonist',
+      serializers.serialize(object.protagonist,
+          specifiedType: const FullType(int)),
+      'sufferers',
+      serializers.serialize(object.sufferers,
+          specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'wasAggressive',
+      serializers.serialize(object.wasAggressive,
+          specifiedType: const FullType(bool)),
+      'wasFailure',
+      serializers.serialize(object.wasFailure,
+          specifiedType: const FullType(bool)),
+      'wasProactive',
+      serializers.serialize(object.wasProactive,
+          specifiedType: const FullType(bool)),
+      'wasSuccess',
+      serializers.serialize(object.wasSuccess,
+          specifiedType: const FullType(bool)),
+    ];
+    if (object.dataString != null) {
+      result
+        ..add('dataString')
+        ..add(serializers.serialize(object.dataString,
+            specifiedType: const FullType(String)));
+    }
+
+    return result;
+  }
+
+  @override
+  ActionRecord deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new ActionRecordBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'accomplices':
+          result.accomplices.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltSet, const [const FullType(int)]))
+              as BuiltSet<int>);
+          break;
+        case 'actionName':
+          result.actionName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'dataString':
+          result.dataString = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'protagonist':
+          result.protagonist = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'sufferers':
+          result.sufferers.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltSet, const [const FullType(int)]))
+              as BuiltSet<int>);
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'wasAggressive':
+          result.wasAggressive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'wasFailure':
+          result.wasFailure = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'wasProactive':
+          result.wasProactive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'wasSuccess':
+          result.wasSuccess = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$ActionRecord extends ActionRecord {
   @override
   final BuiltSet<int> accomplices;
@@ -23,8 +142,6 @@ class _$ActionRecord extends ActionRecord {
   final String dataString;
   @override
   final String description;
-  @override
-  final KnownToMode knownTo;
   @override
   final int protagonist;
   @override
@@ -48,7 +165,6 @@ class _$ActionRecord extends ActionRecord {
       this.actionName,
       this.dataString,
       this.description,
-      this.knownTo,
       this.protagonist,
       this.sufferers,
       this.time,
@@ -60,7 +176,6 @@ class _$ActionRecord extends ActionRecord {
     if (accomplices == null) throw new ArgumentError.notNull('accomplices');
     if (actionName == null) throw new ArgumentError.notNull('actionName');
     if (description == null) throw new ArgumentError.notNull('description');
-    if (knownTo == null) throw new ArgumentError.notNull('knownTo');
     if (protagonist == null) throw new ArgumentError.notNull('protagonist');
     if (sufferers == null) throw new ArgumentError.notNull('sufferers');
     if (time == null) throw new ArgumentError.notNull('time');
@@ -85,7 +200,6 @@ class _$ActionRecord extends ActionRecord {
         actionName == other.actionName &&
         dataString == other.dataString &&
         description == other.description &&
-        knownTo == other.knownTo &&
         protagonist == other.protagonist &&
         sufferers == other.sufferers &&
         time == other.time &&
@@ -106,12 +220,10 @@ class _$ActionRecord extends ActionRecord {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc(
-                                            $jc($jc(0, accomplices.hashCode),
-                                                actionName.hashCode),
-                                            dataString.hashCode),
-                                        description.hashCode),
-                                    knownTo.hashCode),
+                                        $jc($jc(0, accomplices.hashCode),
+                                            actionName.hashCode),
+                                        dataString.hashCode),
+                                    description.hashCode),
                                 protagonist.hashCode),
                             sufferers.hashCode),
                         time.hashCode),
@@ -143,10 +255,6 @@ class ActionRecordBuilder
   String _description;
   String get description => _$this._description;
   set description(String description) => _$this._description = description;
-
-  KnownToMode _knownTo;
-  KnownToMode get knownTo => _$this._knownTo;
-  set knownTo(KnownToMode knownTo) => _$this._knownTo = knownTo;
 
   int _protagonist;
   int get protagonist => _$this._protagonist;
@@ -185,7 +293,6 @@ class ActionRecordBuilder
       _actionName = _$v.actionName;
       _dataString = _$v.dataString;
       _description = _$v.description;
-      _knownTo = _$v.knownTo;
       _protagonist = _$v.protagonist;
       _sufferers = _$v.sufferers?.toBuilder();
       _time = _$v.time;
@@ -217,7 +324,6 @@ class ActionRecordBuilder
             actionName: actionName,
             dataString: dataString,
             description: description,
-            knownTo: knownTo,
             protagonist: protagonist,
             sufferers: sufferers?.build(),
             time: time,
