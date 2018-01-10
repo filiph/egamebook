@@ -8,5 +8,5 @@ import 'phases.dart';
 /// Import the generators you want and pass them to [build] as shown,
 /// specifying which files in which packages you want to run against.
 void main() {
-  watch(phases, deleteFilesByDefault: true);
+  watch(phases);
 }
