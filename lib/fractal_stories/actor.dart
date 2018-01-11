@@ -213,7 +213,8 @@ abstract class Actor extends Object
     return count;
   }
 
-  bool hasWeapon(WeaponType type) => currentWeapon.type == type || weapons.any((w) => w.type == type);
+  bool hasWeapon(WeaponType type) =>
+      currentWeapon.type == type || weapons.any((w) => w.type == type);
 
   bool hasResource(Resource resource) {
     assert(resource == Resource.stamina, "Only stamina implemented");

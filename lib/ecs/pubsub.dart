@@ -59,20 +59,20 @@ class PubSub implements Sink<Object> {
 
   @override
   void close() {
-    _log.info(() => "Closing pubsub");
+    _log.fine(() => "Closing pubsub");
     _actorKilled.close();
     _actorLostHitpoints.close();
   }
 
   void publishActorKilled(ActorKilledEvent e) {
     _assertSealedBeforePublishing();
-    _log.info(() => "New $e about to be published.");
+    _log.finest(() => "New $e about to be published.");
     _actorKilled.add(e);
   }
 
   void publishActorLostHitpoints(ActorLostHitpointsEvent e) {
     _assertSealedBeforePublishing();
-    _log.info(() => "New $e about to be published.");
+    _log.finest(() => "New $e about to be published.");
     _actorLostHitpoints.add(e);
   }
 
