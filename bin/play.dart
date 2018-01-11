@@ -75,6 +75,9 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   @override
   void addChoiceBlock(ChoiceBlock element) {
+    final saveGameJson = element.saveGame.saveGameSerialized;
+    _log.info("savegame = $saveGameJson");
+
     if (!_silent) {
       print("");
       for (int i = 0; i < element.choices.length; i++) {
