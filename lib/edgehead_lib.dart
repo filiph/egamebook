@@ -333,7 +333,7 @@ class EdgeheadGame extends Book {
             "Only stamina is supported as reroll resource right now");
         // TODO: find out if we can do away without modifying world outside
         //       planner
-        final builder = world.toBuilder();
+        final builder = consequence.world.toBuilder();
         builder.updateActorById(actor.id, (b) => b..stamina -= 1);
         world = builder.build();
         consequence = new PlanConsequence.withUpdatedWorld(consequence, world);
