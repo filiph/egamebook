@@ -51,14 +51,14 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(Situation)]),
           () => new ListBuilder<Situation>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Item)]),
-          () => new ListBuilder<Item>())
+          const FullType(BuiltList, const [const FullType(ItemLike)]),
+          () => new ListBuilder<ItemLike>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Item)]),
-          () => new ListBuilder<Item>())
+          const FullType(BuiltList, const [const FullType(ItemLike)]),
+          () => new ListBuilder<ItemLike>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())

@@ -24,14 +24,14 @@ abstract class LootSituation extends Situation
       _$LootSituation;
 
   factory LootSituation.initialized(Iterable<int> playerTeamIds,
-          String groundMaterial, Iterable<Item> droppedItems,
+          String groundMaterial, Iterable<ItemLike> droppedItems,
           {RoomRoamingSituation roomRoamingSituation}) =>
       new LootSituation((b) => b
         ..id = getRandomId()
         ..time = 0
         ..groundMaterial = groundMaterial
         ..playerTeamIds = new ListBuilder<int>(playerTeamIds)
-        ..droppedItems = new ListBuilder<Item>(droppedItems));
+        ..droppedItems = new ListBuilder<ItemLike>(droppedItems));
 
   LootSituation._();
 
@@ -39,7 +39,7 @@ abstract class LootSituation extends Situation
   List<Action> get actions => <Action>[AutoLoot.singleton];
 
   /// The items dropped by dead combatants.
-  BuiltList<Item> get droppedItems;
+  BuiltList<ItemLike> get droppedItems;
 
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   String get groundMaterial;

@@ -14,7 +14,7 @@ class TakeDroppedShield extends ItemAction {
   @override
   final bool isProactive = true;
 
-  TakeDroppedShield(Item item) : super(item);
+  TakeDroppedShield(ItemLike item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -77,5 +77,5 @@ class TakeDroppedShield extends ItemAction {
     return true;
   }
 
-  static ItemAction builder(Item item) => new TakeDroppedShield(item);
+  static ItemAction builder(ItemLike item) => new TakeDroppedShield(item);
 }

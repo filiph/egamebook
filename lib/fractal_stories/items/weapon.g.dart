@@ -26,6 +26,8 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
   Iterable serialize(Serializers serializers, Weapon object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'bluntDamage',
       serializers.serialize(object.bluntDamage,
           specifiedType: const FullType(int)),
@@ -61,6 +63,10 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'bluntDamage':
           result.bluntDamage = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -98,6 +104,8 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
 
 class _$Weapon extends Weapon {
   @override
+  final int id;
+  @override
   final int bluntDamage;
   @override
   final int length;
@@ -116,7 +124,8 @@ class _$Weapon extends Weapon {
       (new WeaponBuilder()..update(updates)).build();
 
   _$Weapon._(
-      {this.bluntDamage,
+      {this.id,
+      this.bluntDamage,
       this.length,
       this.name,
       this.nameIsProperNoun,
@@ -124,6 +133,7 @@ class _$Weapon extends Weapon {
       this.thrustingDamage,
       this.type})
       : super._() {
+    if (id == null) throw new ArgumentError.notNull('id');
     if (bluntDamage == null) throw new ArgumentError.notNull('bluntDamage');
     if (length == null) throw new ArgumentError.notNull('length');
     if (name == null) throw new ArgumentError.notNull('name');
@@ -147,7 +157,8 @@ class _$Weapon extends Weapon {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! Weapon) return false;
-    return bluntDamage == other.bluntDamage &&
+    return id == other.id &&
+        bluntDamage == other.bluntDamage &&
         length == other.length &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
@@ -162,7 +173,9 @@ class _$Weapon extends Weapon {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, bluntDamage.hashCode), length.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), bluntDamage.hashCode),
+                            length.hashCode),
                         name.hashCode),
                     nameIsProperNoun.hashCode),
                 slashingDamage.hashCode),
@@ -173,6 +186,7 @@ class _$Weapon extends Weapon {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Weapon')
+          ..add('id', id)
           ..add('bluntDamage', bluntDamage)
           ..add('length', length)
           ..add('name', name)
@@ -186,6 +200,10 @@ class _$Weapon extends Weapon {
 
 class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
   _$Weapon _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
 
   int _bluntDamage;
   int get bluntDamage => _$this._bluntDamage;
@@ -222,6 +240,7 @@ class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
 
   WeaponBuilder get _$this {
     if (_$v != null) {
+      _id = _$v.id;
       _bluntDamage = _$v.bluntDamage;
       _length = _$v.length;
       _name = _$v.name;
@@ -249,6 +268,7 @@ class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
   _$Weapon build() {
     final _$result = _$v ??
         new _$Weapon._(
+            id: id,
             bluntDamage: bluntDamage,
             length: length,
             name: name,

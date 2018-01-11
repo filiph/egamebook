@@ -52,8 +52,6 @@ final Weapon orcthorn = new Weapon(WeaponType.sword,
 
 final Weapon sleepingGoblinsSpear = new Weapon(WeaponType.spear);
 
-final _uniqueId = new UniqueIdMaker();
-
 void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
   s.add("<p class='meta'>", wholeSentence: true);
   s.add("Thanks for playing _Insignificant Little Vermin._",
@@ -250,7 +248,7 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
 }
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
-    getPlayer(w.build()).id, (b) => b..items.add(sleepingGoblinsSpear));
+    getPlayer(w.build()).id, (b) => b..weapons.add(sleepingGoblinsSpear));
 
 void giveGoldToPlayer(WorldStateBuilder w, int amount) {
   w.updateActorById(getPlayer(w.build()).id, (b) => b..gold += amount);
@@ -355,7 +353,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
 void takeOrcthorn(Simulation sim, WorldStateBuilder w, Actor a) {
   w.updateActorById(a.id, (b) {
     if (!a.isBarehanded) {
-      b.items.add(a.currentWeapon);
+      b.weapons.add(a.currentWeapon);
     }
     b.currentWeapon = orcthorn.toBuilder();
   });
@@ -389,7 +387,7 @@ Actor _generateMadGuardian(bool playerKnowsAboutGuardian) {
 }
 
 Actor _makeGoblin({int id, bool spear: false}) =>
-    new Actor.initialized(id ?? _uniqueId.generateNext(), "goblin",
+    new Actor.initialized(id ?? uniqueIdMaker.generateNext(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear
@@ -399,7 +397,7 @@ Actor _makeGoblin({int id, bool spear: false}) =>
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
 Actor _makeOrc({int id, int hitpoints: 2}) =>
-    new Actor.initialized(id ?? _uniqueId.generateNext(), "orc",
+    new Actor.initialized(id ?? uniqueIdMaker.generateNext(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: new Weapon(WeaponType.sword),

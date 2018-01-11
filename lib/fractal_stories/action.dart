@@ -86,7 +86,7 @@ typedef ExitAction ExitActionBuilder(Exit exit);
 
 /// Builder takes situation's items and generates an instance of [ItemAction]
 /// with the given [item] and its [description].
-typedef ItemAction ItemActionBuilder(Item item);
+typedef ItemAction ItemActionBuilder(ItemLike item);
 
 abstract class Action {
   String _description;
@@ -386,7 +386,7 @@ abstract class ExitAction extends Action {
 ///
 ///     static ItemAction builder(Item enemy) => new Example(item);
 abstract class ItemAction extends Action {
-  final Item item;
+  final ItemLike item;
 
   @mustCallSuper
   ItemAction(this.item);

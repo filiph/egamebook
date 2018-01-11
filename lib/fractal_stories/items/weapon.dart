@@ -1,25 +1,29 @@
 library fractal_stories.items.weapon;
 
+import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/unique_id.dart';
 
 part 'weapon.g.dart';
 
-abstract class Weapon extends Item implements Built<Weapon, WeaponBuilder> {
+abstract class Weapon extends ItemLike implements
+ Built<Weapon, WeaponBuilder> {
   static Serializer<Weapon> get serializer => _$weaponSerializer;
 
   factory Weapon(WeaponType type,
-          {String name,
+          {int id, String name,
           bool nameIsProperNoun: false,
           int bluntDamage,
           int slashingDamage,
           int thrustingDamage,
           int length}) =>
       new _$Weapon((b) => b
+        ..id = (id ?? uniqueIdMaker.generateNext())
         ..type = type
         ..name = name ?? type.name
         ..nameIsProperNoun = nameIsProperNoun
@@ -29,6 +33,9 @@ abstract class Weapon extends Item implements Built<Weapon, WeaponBuilder> {
         ..length = length ?? type.defaultLength);
 
   Weapon._();
+
+  @override
+  int get id;
 
   int get bluntDamage;
 

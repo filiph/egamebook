@@ -16,3 +16,6 @@ class UniqueIdMaker {
     return _next++;
   }
 }
+
+/// Global way of getting simple unique ids.
+final UniqueIdMaker uniqueIdMaker = new UniqueIdMaker();

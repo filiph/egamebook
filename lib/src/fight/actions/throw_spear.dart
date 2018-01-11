@@ -125,8 +125,7 @@ class ThrowSpear extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       a.isPlayer &&
       a.isStanding &&
-      (a.currentWeapon.type == WeaponType.spear ||
-          a.hasWeapon(WeaponType.spear)) &&
+      a.hasWeapon(WeaponType.spear) &&
       _isFirstTurnInFightSituation(world);
 
   Entity _createBodyPartEntity(Actor a, String name) {

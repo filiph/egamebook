@@ -68,7 +68,7 @@ class AutoLoot extends Action {
 
     Weapon takenWeapon;
     Weapon takenShield;
-    List<Item> takenItems = [];
+    List<ItemLike> takenItems = [];
     for (var item in situation.droppedItems) {
       // TODO: generalize sword for spear for other weapons
       final currentActor = world.getActorById(a.id);
@@ -94,9 +94,14 @@ class AutoLoot extends Action {
           currentActor.currentShield == null) {
         world.updateActorById(a.id, (b) => b.currentShield = item.toBuilder());
         takenShield = item;
+      } else if (item is Weapon) {
+        // Put the rest to weapons.
+        world.updateActorById(a.id, (b) => b..weapons.add(item));
+        takenItems.add(item);
       } else {
         // Put the rest to inventory.
-        world.updateActorById(a.id, (b) => b..items.add(item));
+        assert(item is Item);
+        world.updateActorById(a.id, (b) => b..items.add(item as Item));
         takenItems.add(item);
       }
     }
@@ -136,7 +141,7 @@ class AutoLoot extends Action {
 
   /// Give weapons to unarmed teammates.
   void _distributeWeapons(
-      List<Item> takenItems,
+      List<ItemLike> takenItems,
       Actor actor,
       LootSituation situation,
       Simulation sim,
@@ -166,7 +171,7 @@ class AutoLoot extends Action {
 
   /// Give shields to unshielded teammates.
   void _distributeShields(
-      List<Item> takenItems,
+      List<ItemLike> takenItems,
       Actor actor,
       LootSituation situation,
       Simulation sim,

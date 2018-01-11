@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class TakeDroppedWeapon extends ItemAction {
   static const String className = "TakeDroppedWeapon";
 
-  TakeDroppedWeapon(Item item) : super(item);
+  TakeDroppedWeapon(ItemLike item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -94,5 +94,5 @@ class TakeDroppedWeapon extends ItemAction {
     return true;
   }
 
-  static ItemAction builder(Item item) => new TakeDroppedWeapon(item);
+  static ItemAction builder(ItemLike item) => new TakeDroppedWeapon(item);
 }
