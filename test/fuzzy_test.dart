@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
+import '../bin/default_savegames.dart';
 import '../bin/play.dart';
 
 void main() {
@@ -30,10 +31,16 @@ void main() {
       await testWithStopWords(stopWords, tempDir, Level.INFO, 10);
     }, timeout: new Timeout.factor(10), tags: ["strict", "long-running"]);
 
-    test("edgehead runs to completion 20 times", () async {
+    test("edgehead runs to completion 10 times from beginning", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
-      await testWithStopWords(stopWords, tempDir, Level.WARNING, 20);
-    }, timeout: new Timeout.factor(20), tags: ["long-running"]);
+      await testWithStopWords(stopWords, tempDir, Level.WARNING, 10);
+    }, timeout: new Timeout.factor(10), tags: ["long-running"]);
+
+    test("edgehead runs to completion 10 times from slaveQuarters", () async {
+      final stopWords = ["[SEVERE]", "[SHOUT]"];
+      await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
+          savegame: "slaveQuarters");
+    }, timeout: new Timeout.factor(10), tags: ["long-running"]);
   });
 }
 
@@ -41,18 +48,22 @@ String createLogFilePath(Directory tempDir, int i, String description) =>
     path.absolute(path.join(
         tempDir.path, "${description}_${i.toString().padLeft(3, '0')}.log"));
 
-Future<Null> testWithStopWords(List<String> stopWords, Directory tempDir,
-    Level logLevel, int iterations) async {
+Future<Null> testWithStopWords(
+    List<String> stopWords, Directory tempDir, Level logLevel, int iterations,
+    {String savegame}) async {
   final identifier =
       stopWords.join("_").replaceAll("[", "").replaceAll("]", "").toLowerCase();
   for (int i = 0; i < iterations; i++) {
     var logPath = createLogFilePath(tempDir, i, identifier);
     var logFile = new File(logPath);
-    print("Running $identifier-aware test #${i + 1}.");
+    var saveComment = savegame == null ? '' : " (from savegame '$savegame')";
+    print("Running $identifier-aware test #${i + 1}$saveComment.");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
     final runner = new CliRunner(true, true, logFile, logLevel: logLevel);
-    await runner.initialize(new EdgeheadGame());
+    await runner.initialize(new EdgeheadGame(
+      saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
+    ));
     runner.startBook();
     await runner.bookEnd;
     runner.close();
