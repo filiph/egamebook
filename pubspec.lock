@@ -12,7 +12,7 @@ packages:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.7"
+    version: "1.2.0"
   async:
     description:
       name: async
@@ -120,7 +120,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.7+1"
+    version: "0.14.1"
   dart_style:
     description:
       name: dart_style
@@ -162,7 +162,7 @@ packages:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.2+2"
+    version: "0.13.2+2"
   http:
     description:
       name: http

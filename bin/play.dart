@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:args/args.dart';
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
@@ -10,14 +11,59 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
 import 'package:slot_machine/result.dart' as slot;
 
+import 'default_savegames.dart' as savegames;
+
 Future<Null> main(List<String> args) async {
-  var automated = args.contains("--automated");
-  var logged = args.contains("--log");
-  RegExp actionPattern;
-  if (args.contains("--action")) {
-    int index = args.indexOf("--action");
-    actionPattern = new RegExp(args[index + 1], caseSensitive: false);
+  var parser = new ArgParser()
+    ..addFlag('automated',
+        defaultsTo: false,
+        negatable: false,
+        help: "Autoselect options for the player.")
+    ..addFlag('log',
+        defaultsTo: false,
+        negatable: false,
+        help: "Log to edgehead.log in current directory.")
+    ..addOption('action',
+        help: "Turn off automated mode after encountering an action "
+            "that matches the specified name. Useful for playtesting "
+            "a specific Action.")
+    ..addOption('load',
+        allowed: savegames.defaultSavegames.keys,
+        help: "Load one of the default savegames.")
+    ..addFlag('help', abbr: 'h', negatable: false, help: 'Show this help.');
+
+  void showUsage() {
+    print("Usage:\n");
+    print("  dart play.dart [options]\n");
+    print(parser.usage);
   }
+
+  ArgResults results;
+  try {
+    results = parser.parse(args);
+  } on FormatException {
+    print("Error parsing command line options.");
+    showUsage();
+    exitCode = 2;
+    return;
+  }
+
+  if (results['help'] == true) {
+    showUsage();
+    exitCode = 0;
+    return;
+  }
+
+  final automated = results['automated'] as bool;
+  final logged = results['log'] as bool;
+  RegExp actionPattern;
+  if (results.wasParsed('action')) {
+    actionPattern =
+        new RegExp(results['action'] as String, caseSensitive: false);
+  }
+  final savegame = results.wasParsed('load')
+      ? savegames.defaultSavegames[results['load']]
+      : null;
 
   File file;
   if (logged) {
@@ -25,7 +71,10 @@ Future<Null> main(List<String> args) async {
   }
   final runner = new CliRunner(automated, automated, logged ? file : null,
       actionPattern: actionPattern);
-  await runner.initialize(new EdgeheadGame(actionPattern: actionPattern));
+  await runner.initialize(new EdgeheadGame(
+    actionPattern: actionPattern,
+    saveGameSerialized: savegame,
+  ));
   try {
     runner.startBook();
     await runner.bookEnd;

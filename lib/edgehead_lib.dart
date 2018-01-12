@@ -67,8 +67,8 @@ class EdgeheadGame extends Book {
   final Stat<double> hitpoints = new Stat<double>(hitpointsSetting, 0.0);
   final Stat<int> stamina = new Stat<int>(staminaSetting, 1);
 
-  EdgeheadGame({this.actionPattern}) {
-    setup();
+  EdgeheadGame({this.actionPattern, String saveGameSerialized}) {
+    setup(saveGameSerialized);
     _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
     _pubsub.seal();
   }
@@ -79,7 +79,7 @@ class EdgeheadGame extends Book {
     super.close();
   }
 
-  void setup() {
+  void setup(String saveGameSerialized) {
     orc = new Actor.initialized(1000, "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
@@ -107,11 +107,16 @@ class EdgeheadGame extends Book {
 
     var global = new EdgeheadGlobalState();
 
-    world = new WorldState((b) => b
-      ..actors = new SetBuilder<Actor>([aren, briana])
-      ..situations = new ListBuilder<Situation>([initialSituation])
-      ..global = global
-      ..time = 0);
+    if (saveGameSerialized != null) {
+      world = edgehead_serializer.serializers.deserializeWith(
+          WorldState.serializer, JSON.decode(saveGameSerialized));
+    } else {
+      world = new WorldState((b) => b
+        ..actors = new SetBuilder<Actor>([aren, briana])
+        ..situations = new ListBuilder<Situation>([initialSituation])
+        ..global = global
+        ..time = 0);
+    }
 
     simulation = edgeheadSimulation;
 
@@ -271,8 +276,8 @@ class EdgeheadGame extends Book {
         choices.add(choice);
       }
       final savegame = new SaveGameBuilder()
-        ..saveGameSerialized =
-            JSON.encode(edgehead_serializer.serializers.serialize(world));
+        ..saveGameSerialized = JSON.encode(edgehead_serializer.serializers
+            .serializeWith(WorldState.serializer, world));
       final choiceBlock = new ChoiceBlock((b) => b
         ..choices = choices
         ..saveGame = savegame);
