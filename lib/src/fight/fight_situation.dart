@@ -61,7 +61,7 @@ abstract class FightSituation extends Situation
           Iterable<Actor> enemyTeam,
           String groundMaterial,
           RoomRoamingSituation roomRoamingSituation,
-          Map<int, String> events,
+          Map<int, EventCallback> events,
           {Iterable<Item> items: const []}) =>
       new FightSituation((b) => b
         ..id = getRandomId()
@@ -71,7 +71,7 @@ abstract class FightSituation extends Situation
         ..groundMaterial = groundMaterial
         ..droppedItems = new ListBuilder<ItemLike>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id
-        ..events = new MapBuilder<int, String>(events));
+        ..events = new MapBuilder<int, EventCallback>(events));
   FightSituation._();
 
   @override
@@ -115,7 +115,7 @@ abstract class FightSituation extends Situation
 
   BuiltList<int> get enemyTeamIds;
 
-  BuiltMap<int, String> get events;
+  BuiltMap<int, EventCallback> get events;
 
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   ///
@@ -152,11 +152,6 @@ abstract class FightSituation extends Situation
 
   @override
   Actor getActorAtTime(int time, Simulation sim, WorldState world) {
-    assert(
-        () => events.values.every((handle) => sim.events.keys.contains(handle)),
-        "Some events of $this are missing in Simulation.events. "
-        "Situation's events: $events. Simulation events: ${sim.events.keys}.");
-
     var allActorIds = alternate<int>(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
@@ -221,13 +216,7 @@ abstract class FightSituation extends Situation
   @override
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
     if (events.containsKey(time)) {
-      final key = events[time];
-      assert(
-          sim.events.containsKey(key),
-          "Simulation.events lacks key $key "
-          "which is scheduled for time $time in $this. All scheduled "
-          "events: ${events}. All defined callbacks: ${sim.events.keys}");
-      final callback = sim.events[key];
+      final callback = events[time];
       callback(sim, world, s);
     }
   }

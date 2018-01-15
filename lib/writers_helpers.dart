@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_event_callbacks.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_lib.dart'
     show brianaId, carelessCombineFunction, playerId;
@@ -16,6 +17,20 @@ import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 const int agruthId = 6666;
+
+const int brianaId = 100;
+
+const int escapeTunnelGoblinId = 12345;
+
+const int escapeTunnelOrcId = 12344;
+
+const int madGuardianId = 50615;
+
+const int slaveQuartersGoblinId = 789457;
+
+const int slaveQuartersOrcId = 789456;
+
+const int sleepingGoblinId = 4445655;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = const [
@@ -51,6 +66,10 @@ final Weapon orcthorn = new Weapon(WeaponType.sword,
     thrustingDamage: 2);
 
 final Weapon sleepingGoblinsSpear = new Weapon(WeaponType.spear);
+
+bool bothAreAlive(Actor a, Actor b) {
+  return a.isAliveAndActive && b.isAliveAndActive;
+}
 
 void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
   s.add("<p class='meta'>", wholeSentence: true);
@@ -134,25 +153,12 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: "youre_dead_slave",
-        5: "agruth_spits",
-        9: "agruth_enjoy_eating_flesh",
-        12: "agruth_grit_teeth",
-        17: "agruth_scowls",
+        1: youre_dead_slave,
+        5: agruth_spits,
+        9: agruth_enjoy_eating_flesh,
+        12: agruth_grit_teeth,
+        17: agruth_scowls,
       });
-}
-
-const int escapeTunnelOrcId = 12344;
-
-const int escapeTunnelGoblinId = 12345;
-
-Actor getEscapeTunnelOrc(WorldState w) => w.getActorById(escapeTunnelOrcId);
-
-Actor getEscapeTunnelGoblin(WorldState w) =>
-    w.getActorById(escapeTunnelGoblinId);
-
-bool bothAreAlive(Actor a, Actor b) {
-  return a.isAliveAndActive && b.isAliveAndActive;
 }
 
 FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
@@ -163,18 +169,14 @@ FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rock|cavern} floor", roomRoamingSituation, {
-    1: "escape_tunnel_look",
-    4: "escape_tunnel_insignificant",
-    6: "escape_tunnel_loud_cries",
-    9: "escape_tunnel_earsplitting",
-    12: "escape_tunnel_halfway",
-    16: "escape_pursuers_reach",
+    1: escape_tunnel_look,
+    4: escape_tunnel_insignificant,
+    6: escape_tunnel_loud_cries,
+    9: escape_tunnel_earsplitting,
+    12: escape_tunnel_halfway,
+    16: escape_pursuers_reach,
   });
 }
-
-const int madGuardianId = 50615;
-
-const int brianaId = 100;
 
 FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
@@ -187,9 +189,9 @@ FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
       "{rock|cavern} floor",
       roomRoamingSituation,
       {
-        1: "mad_guardian_good",
-        3: "mad_guardian_pain",
-        5: "mad_guardian_shut_up",
+        1: mad_guardian_good,
+        3: mad_guardian_pain,
+        5: mad_guardian_shut_up,
       });
 }
 
@@ -211,16 +213,6 @@ FightSituation generateMountainPassGuardPostFight(
       party, monsters, "ground", roomRoamingSituation, {});
 }
 
-const int slaveQuartersOrcId = 789456;
-
-const int slaveQuartersGoblinId = 789457;
-
-Actor getSlaveQuartersOrc(WorldStateBuilder w) =>
-    w.getActorById(slaveQuartersOrcId);
-
-Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
-    w.getActorById(slaveQuartersGoblinId);
-
 FightSituation generateSlaveQuartersPassageFight(
     Simulation sim,
     WorldStateBuilder w,
@@ -232,10 +224,15 @@ FightSituation generateSlaveQuartersPassageFight(
   w.actors.addAll(monsters);
   return new FightSituation.initialized(
       party, monsters, "{rough|stone} floor", roomRoamingSituation, {
-    1: "slave_quarters_orc_looks",
-    3: "slave_quarters_mean_nothing",
+    1: slave_quarters_orc_looks,
+    3: slave_quarters_mean_nothing,
   });
 }
+
+Actor getEscapeTunnelGoblin(WorldState w) =>
+    w.getActorById(escapeTunnelGoblinId);
+
+Actor getEscapeTunnelOrc(WorldState w) => w.getActorById(escapeTunnelOrcId);
 
 EdgeheadGlobalState getGlobal(WorldStateBuilder w) =>
     w.global as EdgeheadGlobalState;
@@ -246,6 +243,12 @@ RoomRoamingSituation getRoomRoaming(WorldState w) {
   return w
       .getSituationByName<RoomRoamingSituation>(RoomRoamingSituation.className);
 }
+
+Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
+    w.getActorById(slaveQuartersGoblinId);
+
+Actor getSlaveQuartersOrc(WorldStateBuilder w) =>
+    w.getActorById(slaveQuartersOrcId);
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
     getPlayer(w.build()).id, (b) => b..weapons.add(sleepingGoblinsSpear));
@@ -324,8 +327,6 @@ void rollBrianaQuote(Simulation sim, WorldStateBuilder w, Storyline s) {
   updateGlobal(sim, w, (b) => b..brianaQuoteIndex += 1);
 }
 
-const int sleepingGoblinId = 4445655;
-
 /// Updates state according to whatever happened when Aren tried to steal
 /// the shield from the sleeping guard. If he was successful, there will be
 /// no fight, otherwise, there will be fight.
@@ -345,7 +346,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
         "{smooth |}rock floor",
         roomRoamingSituation,
         {
-          1: "sleeping_goblin_thief",
+          1: sleeping_goblin_thief,
         }));
   }
 }

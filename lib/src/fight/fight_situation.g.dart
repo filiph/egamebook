@@ -38,8 +38,8 @@ class _$FightSituationSerializer
               const FullType(BuiltList, const [const FullType(int)])),
       'events',
       serializers.serialize(object.events,
-          specifiedType: const FullType(
-              BuiltMap, const [const FullType(int), const FullType(String)])),
+          specifiedType: const FullType(BuiltMap,
+              const [const FullType(int), const FullType(EventCallback)])),
       'groundMaterial',
       serializers.serialize(object.groundMaterial,
           specifiedType: const FullType(String)),
@@ -86,8 +86,8 @@ class _$FightSituationSerializer
           result.events.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
-                const FullType(String)
-              ])) as BuiltMap<int, String>);
+                const FullType(EventCallback)
+              ])) as BuiltMap<int, EventCallback>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -124,7 +124,7 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltList<int> enemyTeamIds;
   @override
-  final BuiltMap<int, String> events;
+  final BuiltMap<int, EventCallback> events;
   @override
   final String groundMaterial;
   @override
@@ -232,10 +232,10 @@ class FightSituationBuilder
   set enemyTeamIds(ListBuilder<int> enemyTeamIds) =>
       _$this._enemyTeamIds = enemyTeamIds;
 
-  MapBuilder<int, String> _events;
-  MapBuilder<int, String> get events =>
-      _$this._events ??= new MapBuilder<int, String>();
-  set events(MapBuilder<int, String> events) => _$this._events = events;
+  MapBuilder<int, EventCallback> _events;
+  MapBuilder<int, EventCallback> get events =>
+      _$this._events ??= new MapBuilder<int, EventCallback>();
+  set events(MapBuilder<int, EventCallback> events) => _$this._events = events;
 
   String _groundMaterial;
   String get groundMaterial => _$this._groundMaterial;

@@ -2,6 +2,7 @@ library edgehead.serializers;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -9,6 +10,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -63,4 +65,5 @@ part 'edgehead_serializers.g.dart';
   WeaponType,
   WorldState,
 ])
-final Serializers serializers = _$serializers;
+final Serializers serializers =
+    (_$serializers.toBuilder()..add(event_callbacks.serializer)).build();

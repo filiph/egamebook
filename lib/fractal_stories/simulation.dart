@@ -35,18 +35,10 @@ class Simulation {
   /// TODO: create "RoomState" in [_state] for rooms that can change
   final Set<Room> rooms;
 
-  /// All [EventCallback] functions that need to be persisted (meaning that
-  /// a savegame can include a notion of "call this function when x").
-  ///
-  /// This is useful for things like `FightSituation`, where a savegame during
-  /// a fight needs to "remember" that Agruth has to draw his sword at some
-  /// point.
-  final Map<String, EventCallback> events;
-
   /// Combine functions are the different ways an actor can score the world.
   final Map<String, CombineFunction> combineFunctions;
 
-  Simulation(Iterable<Room> rooms, this.events, this.combineFunctions)
+  Simulation(Iterable<Room> rooms, this.combineFunctions)
       : rooms = new Set<Room>.from(rooms) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
   }

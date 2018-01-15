@@ -63,9 +63,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
       ..addBuilderFactory(
-          const FullType(
-              BuiltMap, const [const FullType(int), const FullType(String)]),
-          () => new MapBuilder<int, String>())
+          const FullType(BuiltMap,
+              const [const FullType(int), const FullType(EventCallback)]),
+          () => new MapBuilder<int, EventCallback>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
