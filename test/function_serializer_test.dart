@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 void main() {
   test("simple function serialization works", () {
     FunctionSerializer getSerializer() =>
-        new FunctionSerializer<String Function()>({
+        new FunctionSerializer<StringReturner>({
           "hello": hello,
           "bye": bye,
         });
@@ -18,14 +18,16 @@ void main() {
     String str;
     {
       final serializers = getSerializers();
-      final object = serializers.serialize(hello);
+      final object = serializers.serialize(hello,
+          specifiedType: const FullType(StringReturner));
       str = JSON.encode(object);
     }
 
     // Simulate completely new load.
     final serializers = getSerializers();
     final json = JSON.decode(str);
-    final deserialized = serializers.deserialize(json);
+    final deserialized = serializers.deserialize(json,
+        specifiedType: const FullType(StringReturner));
     expect(deserialized(), "Hello.");
   });
 
@@ -33,7 +35,7 @@ void main() {
       "serialization of function with custom types "
       "(and side effects) works", () {
     FunctionSerializer getSerializer() =>
-        new FunctionSerializer<void Function(A, B)>({
+        new FunctionSerializer<CustomTypesFunction>({
           "functionWithCustomTypes": functionWithCustomTypes,
         });
 
@@ -43,13 +45,15 @@ void main() {
     String str;
     {
       final serializers = getSerializers();
-      final object = serializers.serialize(functionWithCustomTypes);
+      final object = serializers.serialize(functionWithCustomTypes,
+          specifiedType: const FullType(CustomTypesFunction));
       str = JSON.encode(object);
     }
 
     // Simulate completely new load.
     final json = JSON.decode(str);
-    final deserialized = getSerializers().deserialize(json);
+    final deserialized = getSerializers()
+        .deserialize(json, specifiedType: const FullType(CustomTypesFunction));
     final a = new A()
       ..x = 1
       ..y = 2;
@@ -60,6 +64,7 @@ void main() {
     expect(b.z, a.x);
   });
 }
+
 A _latestA;
 
 String bye() => "Bye.";
@@ -70,6 +75,10 @@ void functionWithCustomTypes(A a, B b) {
 }
 
 String hello() => "Hello.";
+
+typedef String StringReturner();
+
+typedef void CustomTypesFunction(A a, B b);
 
 class A {
   int x, y;

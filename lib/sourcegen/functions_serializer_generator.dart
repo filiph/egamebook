@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -20,6 +21,29 @@ class FunctionSerializerGenerator extends Generator {
       throw new InvalidGenerationSourceError(
           "${library.element.source.fullName} lacks part directive: "
           "part '$fileName.g.dart';");
+    }
+
+    // Extract serialized generic type argument from
+    // final FunctionSerializer<EventCallback> serializer = _$serializer;
+    String functionType;
+    for (final element in library.allElements) {
+      if (element is! TopLevelVariableElement) continue;
+      final variable = element as TopLevelVariableElement;
+      if (variable.type is! InterfaceType) continue;
+      final interfaceType = variable.type as InterfaceType;
+      if (interfaceType.name != 'FunctionSerializer') continue;
+
+      functionType = interfaceType.typeArguments.single.name;
+      final functionSignature = interfaceType.typeArguments.single.element
+          as FunctionTypeAliasElement;
+      final returnType = functionSignature.returnType;
+      final normalParameters =
+          functionSignature.parameters.toList(growable: false);
+
+      // TODO: gather functions from elsewhere
+      //       https://trello.com/c/ExaPFQVX/577-improve-function-serialization-by-gathering-functions-automatically
+      // buildStep.findAssets(glob);
+      // buildStep.resolver.libraryFor(assetId);
     }
 
     // Extract function signature from first top-level function.
@@ -46,10 +70,9 @@ class FunctionSerializerGenerator extends Generator {
       }
     }
 
-    // final _$serializer = new FunctionSerializer<void Function()>({
-    result.writeln("final _\$serializer = new FunctionSerializer<"
-        "$returnType Function($parameters)"
-        ">({");
+    // final _$serializer = new FunctionSerializer<SomeCallback>({
+    result.writeln("final _\$serializer = "
+        "new FunctionSerializer<$functionType>({");
 
     for (final export in library.allElements) {
       if (export is! FunctionElement) continue;

@@ -11,7 +11,7 @@ import 'package:edgehead/writers_helpers.dart';
 
 part 'edgehead_event_callbacks.g.dart';
 
-final serializer = _$serializer;
+final FunctionSerializer<EventCallback> serializer = _$serializer;
 
 void agruth_enjoy_eating_flesh(
     Simulation sim, WorldStateBuilder w, Storyline s) {

@@ -7,6 +7,8 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   /// Precomputed map that leads from the [Function]s to the [string]s.
   final Map<T, String> _inverseMap = {};
 
+  String _wireName;
+
   /// Creates a serializer for functions. Provide a [Map] from strings
   /// to the functions.
   ///
@@ -20,13 +22,16 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   ///         "bye": bye,
   ///     });
   ///
-  /// Note that you **must** provide the generic argument as a fully specified
-  /// function type, _not_ a `typedef`.
+  /// Note that you don't need to provide the generic argument as a fully
+  /// specified function type. You can use a `typedef`.
   ///
-  /// Wrong:
+  /// Example:
   ///
-  ///     typedef Wrong = void Function();
-  ///     final serializer = new FunctionSerializer<Wrong>(...);
+  ///     typedef String StringReturningFunc();
+  ///     final serializer = new FunctionSerializer<StringReturningFunc>(...);
+  ///
+  /// This is important in Dart 1.x, where the fully specified function type
+  /// (`void Function()`) isn't fully supported and breaks dart analyzer.
   FunctionSerializer(this._map) {
     for (final key in _map.keys) {
       final value = _map[key];
@@ -49,6 +54,12 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   }
 
   @override
+  Iterable<Type> get types => [T];
+
+  @override
+  String get wireName => "Function[$_wireName]";
+
+  @override
   T deserialize(Serializers serializers, Object serialized,
       {FullType specifiedType: FullType.unspecified}) {
     return _map[serialized];
@@ -59,12 +70,4 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
       {FullType specifiedType: FullType.unspecified}) {
     return _inverseMap[object];
   }
-
-  @override
-  Iterable<Type> get types => [T];
-
-  String _wireName;
-
-  @override
-  String get wireName => "Function[$_wireName]";
 }

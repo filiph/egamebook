@@ -6,8 +6,7 @@ part of edgehead.event_callbacks;
 // Generator: FunctionSerializerGenerator
 // **************************************************************************
 
-final _$serializer = new FunctionSerializer<
-    void Function(Simulation, WorldStateBuilder, Storyline)>({
+final _$serializer = new FunctionSerializer<EventCallback>({
   'agruth_enjoy_eating_flesh': agruth_enjoy_eating_flesh,
   'agruth_grit_teeth': agruth_grit_teeth,
   'agruth_scowls': agruth_scowls,
