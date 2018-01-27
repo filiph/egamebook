@@ -1,5 +1,17 @@
 import 'package:built_value/serializer.dart';
 
+/// Used for annotating [FunctionSerializer] top-level variables for
+/// source generation.
+class GatherFunctionsFrom {
+  final List<String> globs;
+
+  const GatherFunctionsFrom(this.globs);
+
+  @override
+  String toString() => "Functions for this FunctionSerializer will be gathered "
+      "from given globs.";
+}
+
 /// Serializes top-level and static functions.
 class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   final Map<String, T> _map;

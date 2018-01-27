@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
+import 'package:edgehead/sourcegen/functions_serializer.dart';
+import 'package:glob/glob.dart';
+import 'package:recase/recase.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// Generator for FunctionSerializer.
@@ -23,71 +27,67 @@ class FunctionSerializerGenerator extends Generator {
           "part '$fileName.g.dart';");
     }
 
-    // Extract serialized generic type argument from
-    // final FunctionSerializer<EventCallback> serializer = _$serializer;
-    String functionType;
-    for (final element in library.allElements) {
-      if (element is! TopLevelVariableElement) continue;
+    final annotated = library
+        .annotatedWith(new TypeChecker.fromRuntime(GatherFunctionsFrom))
+        .toList(growable: false);
+    if (annotated.isEmpty) {
+      log.info("File $fileName has no FunctionSerializer declarations that "
+          "are annotated with @GatherFunctionsFrom.");
+      return null;
+    }
+
+    for (final declaration in annotated) {
+      final element = declaration.element;
+      if (element is! TopLevelVariableElement) {
+        throw new InvalidGenerationSourceError(
+            "Elements annotated with @GatherFunctionsFrom "
+            "must be top level variable declarations.");
+      }
       final variable = element as TopLevelVariableElement;
-      if (variable.type is! InterfaceType) continue;
+      if (variable.type is! InterfaceType) {
+        throw new InvalidGenerationSourceError(
+            "Type of variable must be FunctionSerializer<SomeCallback>");
+      }
       final interfaceType = variable.type as InterfaceType;
-      if (interfaceType.name != 'FunctionSerializer') continue;
-
-      functionType = interfaceType.typeArguments.single.name;
-      final functionSignature = interfaceType.typeArguments.single.element
-          as FunctionTypeAliasElement;
-      final returnType = functionSignature.returnType;
-      final normalParameters =
-          functionSignature.parameters.toList(growable: false);
-
-      // TODO: gather functions from elsewhere
-      //       https://trello.com/c/ExaPFQVX/577-improve-function-serialization-by-gathering-functions-automatically
-      // buildStep.findAssets(glob);
-      // buildStep.resolver.libraryFor(assetId);
-    }
-
-    // Extract function signature from first top-level function.
-    final FunctionElement firstFunction = library.allElements
-        .firstWhere((e) => e is FunctionElement) as FunctionElement;
-    final returnType = firstFunction.type.returnType;
-    final normalParameters = firstFunction.type.normalParameterTypes;
-    final parameters = normalParameters.map((p) => p.name).join(", ");
-
-    if (firstFunction.type.optionalParameterTypes.isNotEmpty ||
-        firstFunction.type.namedParameterTypes.isNotEmpty) {
-      throw new InvalidGenerationSourceError(
-          "FunctionSerializerGenerator currently only support "
-          "functions with normal parameters (no named or optional ones)");
-    }
-
-    for (int i = 0; i < normalParameters.length; i++) {
-      final type = normalParameters[i];
-      if (type.isDynamic) {
-        final name = firstFunction.type.normalParameterNames[i];
+      if (interfaceType.name != 'FunctionSerializer') {
+        // TODO: find out how to create a DartType() and use it to check
+        //       via interfaceType.isAssignableTo(functionSerializerType)
         throw new InvalidGenerationSourceError(
-            "Function contains dynamic parameter $name. "
-            "Please make sure you import all types.");
+            "Top level declarations with the @GatherFunctionsFrom "
+            "annotation need to be of type FunctionSerializer, but we found "
+            "one with type ${interfaceType.name}");
       }
-    }
+      final functionType = interfaceType.typeArguments.single;
+      final variableName =
+          "_\$" "${new ReCase(functionType.name).camelCase}" "Serializer";
 
-    // final _$serializer = new FunctionSerializer<SomeCallback>({
-    result.writeln("final _\$serializer = "
-        "new FunctionSerializer<$functionType>({");
+      // final _$someCallbackSerializer = new FunctionSerializer<SomeCallback>({
+      result.writeln("final $variableName = "
+          "new FunctionSerializer<${functionType.name}>({");
 
-    for (final export in library.allElements) {
-      if (export is! FunctionElement) continue;
-      final func = export as FunctionElement;
-      if (func.returnType != returnType ||
-          _listsUnequal(func.type.normalParameterTypes, normalParameters)) {
-        throw new InvalidGenerationSourceError(
-            "FunctionSerializerGenerator assumes only one "
-            "type of function per file. We encountered ${func.name} that has "
-            "a different signature than ${firstFunction.name}");
+      final globs = declaration.annotation
+          .read("globs")
+          .listValue
+          .map((dartObject) => dartObject.toStringValue());
+
+      for (final glob in globs) {
+        final assetIds = buildStep.findAssets(new Glob(glob));
+        for (final id in assetIds) {
+          final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
+          final globbedLibrary = new LibraryReader(globbedLibraryElement);
+
+          for (final element in globbedLibrary.allElements) {
+            if (element is! FunctionElement) continue;
+            final func = element as FunctionElement;
+            if (!func.type.isAssignableTo(functionType)) continue;
+
+            result.writeln("'${func.name}': ${func.name},");
+          }
+        }
       }
-      result.writeln("'${func.name}': ${func.name},");
-    }
 
-    result.writeln("});");
+      result.writeln("});");
+    }
 
     if (result.isNotEmpty) {
       return result.toString();
