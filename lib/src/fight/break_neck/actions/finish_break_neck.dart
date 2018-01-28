@@ -1,11 +1,13 @@
-import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
+
+EnemyTargetAction finishBreakNeckBuilder(Actor enemy) =>
+    new FinishBreakNeck(enemy);
 
 class FinishBreakNeck extends EnemyTargetAction {
   static const String className = "FinishBreakNeck";
@@ -28,10 +30,10 @@ class FinishBreakNeck extends EnemyTargetAction {
   FinishBreakNeck(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "";
 
   @override
-  String get commandTemplate => "";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
@@ -77,6 +79,4 @@ class FinishBreakNeck extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new FinishBreakNeck(enemy);
 }

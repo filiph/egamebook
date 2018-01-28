@@ -25,7 +25,7 @@ EnemyTargetAction startPunchBuilder(Actor enemy) => new StartDefensibleAction(
         (a.isStanding || a.isOffBalance) &&
         !enemy.isOnGround &&
         a.isBarehanded,
-    (a, sim, w, enemy) => new PunchSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => createPunchSituation(a, enemy),
     (a, sim, w, enemy) => new PunchDefenseSituation.initialized(a, enemy),
     enemy);
 
@@ -41,7 +41,7 @@ EnemyTargetAction
                 (a.isStanding || a.isOffBalance) &&
                 !enemy.isOnGround &&
                 a.isBarehanded,
-            (a, sim, w, enemy) => new PunchSituation.initialized(a, enemy),
+            (a, sim, w, enemy) => createPunchSituation(a, enemy),
             (a, sim, w, enemy) => new PunchDefenseSituation.initialized(
                 a, enemy,
                 predeterminedResult: Predetermination.failureGuaranteed),

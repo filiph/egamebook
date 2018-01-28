@@ -27,7 +27,7 @@ EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
             a.isBarehanded &&
             enemy.isBarehanded,
         (a, sim, w, enemy) =>
-            new BreakNeckOnGroundSituation.initialized(a, enemy),
+            createBreakNeckOnGroundSituation(a, enemy),
         (a, sim, w, enemy) =>
             new OnGroundWrestleDefenseSituation.initialized(a, enemy),
         enemy);
@@ -44,7 +44,7 @@ EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
             a.isBarehanded &&
             enemy.isBarehanded,
         (a, sim, w, enemy) =>
-            new BreakNeckOnGroundSituation.initialized(a, enemy),
+            createBreakNeckOnGroundSituation(a, enemy),
         (a, sim, w, enemy) => new OnGroundWrestleDefenseSituation.initialized(
             a, enemy, predeterminedResult: Predetermination.failureGuaranteed),
         enemy,

@@ -58,7 +58,7 @@ void main() {
             () => new OnGroundDefenseSituation.initialized(a, b));
       });
       test("StrikeDownSituation", () {
-        checkSituationBuild(() => new StrikeDownSituation.initialized(a, b));
+        checkSituationBuild(() => createStrikeDownSituation(a, b));
       });
       test("CounterAttackSituation", () {
         checkSituationBuild(() => new CounterAttackSituation.initialized(a, b));
@@ -73,11 +73,11 @@ void main() {
         checkSituationBuild(() => new SlashDefenseSituation.initialized(a, b));
       });
       test("SlashSituation", () {
-        checkSituationBuild(() => new SlashSituation.initialized(a, b));
+        checkSituationBuild(() => createSlashSituation(a, b));
       });
       test("BreakNeckOnGroundSituation", () {
         checkSituationBuild(
-            () => new BreakNeckOnGroundSituation.initialized(a, b));
+            () => createBreakNeckOnGroundSituation(a, b));
       });
     });
   });

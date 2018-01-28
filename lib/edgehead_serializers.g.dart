@@ -17,13 +17,12 @@ part of edgehead.serializers;
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ActionRecord.serializer)
       ..add(Actor.serializer)
-      ..add(BreakNeckOnGroundSituation.serializer)
+      ..add(AttackerSituation.serializer)
       ..add(CounterAttackSituation.serializer)
       ..add(EdgeheadGlobalState.serializer)
       ..add(FightSituation.serializer)
       ..add(GuardpostAboveChurchTakeShieldRescueSituation.serializer)
       ..add(LeapDefenseSituation.serializer)
-      ..add(LeapSituation.serializer)
       ..add(LootSituation.serializer)
       ..add(OffBalanceOpportunitySituation.serializer)
       ..add(OnGroundDefenseSituation.serializer)
@@ -32,11 +31,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Predetermination.serializer)
       ..add(Pronoun.serializer)
       ..add(PunchDefenseSituation.serializer)
-      ..add(PunchSituation.serializer)
       ..add(RoomRoamingSituation.serializer)
       ..add(SlashDefenseSituation.serializer)
-      ..add(SlashSituation.serializer)
-      ..add(StrikeDownSituation.serializer)
       ..add(Team.serializer)
       ..add(Weapon.serializer)
       ..add(WeaponType.serializer)
@@ -50,6 +46,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Situation)]),
           () => new ListBuilder<Situation>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltList, const [const FullType(EnemyTargetActionBuilder)]),
+          () => new ListBuilder<EnemyTargetActionBuilder>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ItemLike)]),
           () => new ListBuilder<ItemLike>())

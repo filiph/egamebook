@@ -28,7 +28,7 @@ EnemyTargetAction startThrustSpearBuilder(
             a.isStanding &&
             !enemy.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createSlashSituation(a, enemy),
         (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
         enemy);
 
@@ -43,7 +43,7 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
             a.isStanding &&
             !enemy.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createSlashSituation(a, enemy),
         (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,

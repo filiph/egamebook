@@ -26,7 +26,7 @@ EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) =>
             new OnGroundDefenseSituation.initialized(a, enemy),
         enemy);
@@ -42,7 +42,7 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,

@@ -27,7 +27,7 @@ EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) =>
             new OnGroundDefenseSituation.initialized(a, enemy),
         enemy);
@@ -43,7 +43,7 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => new StrikeDownSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,

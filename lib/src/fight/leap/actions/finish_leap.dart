@@ -1,11 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+
+EnemyTargetAction finishLeapBuilder(Actor enemy) => new FinishLeap(enemy);
 
 class FinishLeap extends EnemyTargetAction {
   static const String className = "FinishLeap";
@@ -28,10 +30,10 @@ class FinishLeap extends EnemyTargetAction {
   FinishLeap(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "";
 
   @override
-  String get commandTemplate => "";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
@@ -80,6 +82,4 @@ class FinishLeap extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new FinishLeap(enemy);
 }

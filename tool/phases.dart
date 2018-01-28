@@ -9,7 +9,10 @@ final List<BuildAction> phases = [
         new FunctionSerializerGenerator(),
       ]),
       'edgehead',
-      inputs: const ['lib/edgehead_event_callbacks.dart']),
+      inputs: const [
+        'lib/edgehead_action_builders.dart',
+        'lib/edgehead_event_callbacks.dart',
+      ]),
   new BuildAction(
       new PartBuilder([
         new BuiltValueGenerator(),

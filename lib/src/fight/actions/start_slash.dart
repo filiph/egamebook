@@ -26,7 +26,7 @@ EnemyTargetAction startSlashBuilder(Actor enemy) => new StartDefensibleAction(
         a.isStanding &&
         !enemy.isOnGround &&
         a.currentWeapon.isSlashing,
-    (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => createSlashSituation(a, enemy),
     (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
     enemy);
 
@@ -42,7 +42,7 @@ EnemyTargetAction
                 a.isStanding &&
                 !enemy.isOnGround &&
                 a.currentWeapon.isSlashing,
-            (a, sim, w, enemy) => new SlashSituation.initialized(a, enemy),
+            (a, sim, w, enemy) => createSlashSituation(a, enemy),
             (a, sim, w, enemy) => new SlashDefenseSituation.initialized(
                 a, enemy,
                 predeterminedResult: Predetermination.failureGuaranteed),

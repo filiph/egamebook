@@ -27,7 +27,7 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
         (a.isBarehanded || a.team.isFriendWith(defaultEnemyTeam)) &&
         !enemy.isOnGround &&
         !recentlyForcedToGround(a, w),
-    (a, sim, w, enemy) => new LeapSituation.initialized(a, enemy),
+    (a, sim, w, enemy) => createLeapSituation(a, enemy),
     (a, sim, w, enemy) => new LeapDefenseSituation.initialized(a, enemy),
     enemy);
 
@@ -42,7 +42,7 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
             a.isBarehanded &&
             !enemy.isOnGround &&
             !recentlyForcedToGround(a, w),
-        (a, sim, w, enemy) => new LeapSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createLeapSituation(a, enemy),
         (a, sim, w, enemy) => new LeapDefenseSituation.initialized(a, enemy,
             predeterminedResult: Predetermination.failureGuaranteed),
         enemy,

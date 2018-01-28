@@ -82,6 +82,12 @@ class FunctionSerializerGenerator extends Generator {
             if (!func.type.isAssignableTo(functionType)) continue;
 
             result.writeln("'${func.name}': ${func.name},");
+
+            if (!func.isAccessibleIn(library.element)) {
+              log.warning("${func.name} isn't accessible "
+                  "in ${library.element.displayName}. Consider adding import "
+                  "of ${func.library.source.uri}");
+            }
           }
         }
       }

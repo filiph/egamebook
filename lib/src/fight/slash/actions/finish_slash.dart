@@ -1,12 +1,13 @@
-import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
+
+EnemyTargetAction finishSlashBuilder(Actor enemy) => new FinishSlash(enemy);
 
 class FinishSlash extends EnemyTargetAction {
   static const String className = "FinishSlash";
@@ -55,7 +56,7 @@ class FinishSlash extends EnemyTargetAction {
     final damage = a.currentWeapon.slashingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
-    final thread = getThreadId(sim, w, SlashSituation.className);
+    final thread = getThreadId(sim, w, slashSituationName);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
       a.report(
@@ -91,6 +92,4 @@ class FinishSlash extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.currentWeapon.isSlashing;
-
-  static EnemyTargetAction builder(Actor enemy) => new FinishSlash(enemy);
 }

@@ -6,6 +6,8 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
+EnemyTargetAction finishPunchBuilder(Actor enemy) => new FinishPunch(enemy);
+
 class FinishPunch extends EnemyTargetAction {
   static const String className = "FinishPunch";
 
@@ -88,6 +90,4 @@ class FinishPunch extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new FinishPunch(enemy);
 }
