@@ -16,7 +16,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'slash_defense_situation.g.dart';
 
-abstract class SlashDefenseSituation extends DefenseSituation
+abstract class SlashDefenseSituation extends DefenseSituationInterface
     implements Built<SlashDefenseSituation, SlashDefenseSituationBuilder> {
   static Serializer<SlashDefenseSituation> get serializer =>
       _$slashDefenseSituationSerializer;

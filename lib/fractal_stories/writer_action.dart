@@ -1,7 +1,6 @@
 /// Use these classes in sources generated from writer's input.
 library stranded.writer_action;
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';

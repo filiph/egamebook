@@ -12,7 +12,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'leap_defense_situation.g.dart';
 
-abstract class LeapDefenseSituation extends DefenseSituation
+abstract class LeapDefenseSituation extends DefenseSituationInterface
     implements Built<LeapDefenseSituation, LeapDefenseSituationBuilder> {
   static Serializer<LeapDefenseSituation> get serializer =>
       _$leapDefenseSituationSerializer;

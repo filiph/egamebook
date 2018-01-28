@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:edgehead/ecs/pubsub.dart';
-import 'package:edgehead/edgehead_lib.dart' show brianaId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';

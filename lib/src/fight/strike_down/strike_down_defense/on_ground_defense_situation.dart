@@ -13,7 +13,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'on_ground_defense_situation.g.dart';
 
-abstract class OnGroundDefenseSituation extends DefenseSituation
+abstract class OnGroundDefenseSituation extends DefenseSituationInterface
     implements
         Built<OnGroundDefenseSituation, OnGroundDefenseSituationBuilder> {
   static Serializer<OnGroundDefenseSituation> get serializer =>

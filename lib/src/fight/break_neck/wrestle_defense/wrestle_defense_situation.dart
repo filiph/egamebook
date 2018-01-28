@@ -11,7 +11,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'wrestle_defense_situation.g.dart';
 
-abstract class OnGroundWrestleDefenseSituation extends DefenseSituation
+abstract class OnGroundWrestleDefenseSituation extends DefenseSituationInterface
     implements
         Built<OnGroundWrestleDefenseSituation,
             OnGroundWrestleDefenseSituationBuilder> {

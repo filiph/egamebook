@@ -1,7 +1,5 @@
 import 'package:edgehead/edgehead_event_callbacks.dart';
 import 'package:edgehead/edgehead_global.dart';
-import 'package:edgehead/edgehead_lib.dart'
-    show brianaId, carelessCombineFunction, playerId;
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';

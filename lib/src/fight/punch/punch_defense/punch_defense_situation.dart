@@ -11,7 +11,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'punch_defense_situation.g.dart';
 
-abstract class PunchDefenseSituation extends DefenseSituation
+abstract class PunchDefenseSituation extends DefenseSituationInterface
     implements Built<PunchDefenseSituation, PunchDefenseSituationBuilder> {
   static Serializer<PunchDefenseSituation> get serializer =>
       _$punchDefenseSituationSerializer;

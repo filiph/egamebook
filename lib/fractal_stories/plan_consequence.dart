@@ -7,7 +7,6 @@ import 'package:quiver/core.dart';
 
 import 'action.dart';
 import 'storyline/storyline.dart';
-import 'simulation.dart';
 
 /// A container for statistics for a [PlanConsequence].
 @immutable

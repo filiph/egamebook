@@ -1,6 +1,5 @@
 library stranded.world;
 
-import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';

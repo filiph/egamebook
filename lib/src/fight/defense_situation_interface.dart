@@ -6,10 +6,11 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/predeterminable_situation.dart';
 
-/// All defense situations should extend [DefenseSituation] (to
+/// All defense situations should extend [DefenseSituationInterface] (to
 /// get the [attacker] and [target] and [predeterminedResult] fields and
 /// to get the [getActorAtTime] and [getActors] methods).
-abstract class DefenseSituation extends Situation with Predeterminable {
+@deprecated
+abstract class DefenseSituationInterface extends Situation with Predeterminable {
   /// The attacker whose action this situation is hoping to prevent.
   int get attacker;
 

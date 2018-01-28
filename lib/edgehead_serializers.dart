@@ -17,7 +17,6 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';

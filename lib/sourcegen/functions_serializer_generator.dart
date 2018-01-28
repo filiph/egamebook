@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/visitor.dart';
 import 'package:build/build.dart';
 import 'package:edgehead/sourcegen/functions_serializer.dart';
 import 'package:glob/glob.dart';
@@ -101,12 +100,4 @@ class FunctionSerializerGenerator extends Generator {
       return null;
     }
   }
-}
-
-bool _listsUnequal<T>(List<T> a, List<T> b) {
-  if (a.length != b.length) return true;
-  for (int i = 0; i < a.length; i++) {
-    if (a[i] != b[i]) return true;
-  }
-  return false;
 }
