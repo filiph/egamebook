@@ -1,8 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
@@ -39,7 +39,8 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
         (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
+        (a, sim, w, enemy) =>
+            createSlashDefenseSituation(a, enemy, Predetermination.none),
         enemy,
         successChanceGetter: (a, sim, w, enemy) =>
             0.7 /* 30% chance of complete miss */,
@@ -62,8 +63,8 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
         (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
-            predeterminedResult: Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createSlashDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy, successChanceGetter: (a, sim, w, enemy) {
       // This is intentional. Since the action can only lead to either
       // complete miss (attacker's failure) or guaranteed failure

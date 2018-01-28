@@ -1,5 +1,7 @@
 library writers_input;
 
+// ignore_for_file: unused_local_variable
+
 import 'package:edgehead/fractal_stories/action.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
 import 'package:edgehead/fractal_stories/actor.dart' show Actor;

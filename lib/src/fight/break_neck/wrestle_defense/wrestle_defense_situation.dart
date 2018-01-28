@@ -1,60 +1,15 @@
 library stranded.fight.wrestle_defense_situation;
 
-import 'package:built_value/built_value.dart';
-import 'package:built_value/serializer.dart';
-import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart';
-import 'package:edgehead/src/fight/defense_situation_interface.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
-part 'wrestle_defense_situation.g.dart';
+const String onGroundWrestleDefenseSituationName =
+    "OnGroundWrestleDefenseSituation";
 
-abstract class OnGroundWrestleDefenseSituation extends DefenseSituationInterface
-    implements
-        Built<OnGroundWrestleDefenseSituation,
-            OnGroundWrestleDefenseSituationBuilder> {
-  static Serializer<OnGroundWrestleDefenseSituation> get serializer =>
-      _$onGroundWrestleDefenseSituationSerializer;
-  factory OnGroundWrestleDefenseSituation(
-          [void updates(OnGroundWrestleDefenseSituationBuilder b)]) =
-      _$OnGroundWrestleDefenseSituation;
-
-  factory OnGroundWrestleDefenseSituation.initialized(
-          Actor attacker, Actor target,
-          {Predetermination predeterminedResult: Predetermination.none}) =>
-      new OnGroundWrestleDefenseSituation((b) => b
-        ..id = getRandomId()
-        ..time = 0
-        ..attacker = attacker.id
-        ..target = target.id
-        ..predeterminedResult = predeterminedResult);
-
-  OnGroundWrestleDefenseSituation._();
-
-  @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      [EvadeNeckBreaking.builder];
-
-  @override
-  int get attacker;
-
-  @override
-  int get id;
-
-  @override
-  String get name => "OnGroundWrestleDefenseSituation";
-
-  @override
-  Predetermination get predeterminedResult;
-
-  @override
-  int get target;
-
-  @override
-  int get time;
-
-  @override
-  OnGroundWrestleDefenseSituation elapseTime() => rebuild((b) => b..time += 1);
-}
+Situation createOnGroundWrestleDefenseSituation(
+        Actor attacker, Actor target, Predetermination predetermination) =>
+    new DefenseSituation.initialized(onGroundWrestleDefenseSituationName,
+        [evadeNeckBreakingBuilder], attacker, target, predetermination);

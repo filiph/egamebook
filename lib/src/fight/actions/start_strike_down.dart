@@ -1,7 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -28,7 +28,7 @@ EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
             a.currentWeapon.isSlashing,
         (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) =>
-            new OnGroundDefenseSituation.initialized(a, enemy),
+            createOnGroundDefenseSituation(a, enemy, Predetermination.none),
         enemy);
 
 EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
@@ -43,8 +43,8 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
             !a.isOnGround &&
             a.currentWeapon.isSlashing,
         (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
-        (a, sim, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
-            predeterminedResult: Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createOnGroundDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy,
         rerollable: true,
         rerollResource: Resource.stamina,
@@ -56,8 +56,8 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
         },
         applyStartOfFailure: startStrikeDownReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            new OnGroundDefenseSituation.initialized(a, enemy,
-                predeterminedResult: Predetermination.successGuaranteed));
+            createOnGroundDefenseSituation(
+                a, enemy, Predetermination.successGuaranteed));
 
 void startStrikeDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, _) =>

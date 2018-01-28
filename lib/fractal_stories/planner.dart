@@ -187,7 +187,7 @@ class ActorPlanner {
     assert(
         world.currentSituation.actions.isNotEmpty ||
             world.currentSituation.actionGenerators.isNotEmpty,
-        "There are no action defined for ${world.currentSituation}");
+        "There are no actions defined for ${world.currentSituation}");
     yield* world.currentSituation.actions;
     for (var builder in world.currentSituation.actionGenerators) {
       if (builder is EnemyTargetActionBuilder) {

@@ -1,11 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/punch/punch_defense/punch_defense_situation.dart';
+
+EnemyTargetAction dodgePunchBuilder(Actor enemy) => new DodgePunch(enemy);
 
 class DodgePunch extends EnemyTargetAction {
   static const String className = "DodgePunch";
@@ -81,12 +83,10 @@ class DodgePunch extends EnemyTargetAction {
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-    final situation = w.currentSituation as PunchDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new DodgePunch(enemy);
 }

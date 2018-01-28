@@ -27,7 +27,8 @@ EnemyTargetAction startSlashBuilder(Actor enemy) => new StartDefensibleAction(
         !enemy.isOnGround &&
         a.currentWeapon.isSlashing,
     (a, sim, w, enemy) => createSlashSituation(a, enemy),
-    (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
+    (a, sim, w, enemy) =>
+        createSlashDefenseSituation(a, enemy, Predetermination.none),
     enemy);
 
 EnemyTargetAction
@@ -43,9 +44,8 @@ EnemyTargetAction
                 !enemy.isOnGround &&
                 a.currentWeapon.isSlashing,
             (a, sim, w, enemy) => createSlashSituation(a, enemy),
-            (a, sim, w, enemy) => new SlashDefenseSituation.initialized(
-                a, enemy,
-                predeterminedResult: Predetermination.failureGuaranteed),
+            (a, sim, w, enemy) => createSlashDefenseSituation(
+                a, enemy, Predetermination.failureGuaranteed),
             enemy,
             successChanceGetter: (a, sim, w, enemy) {
               final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
@@ -54,10 +54,8 @@ EnemyTargetAction
             },
             applyStartOfFailure: startSlashReportStart,
             defenseSituationWhenFailed:
-                (a, sim, w, enemy) => new SlashDefenseSituation.initialized(
-                    a,
-                    enemy,
-                    predeterminedResult: Predetermination.successGuaranteed),
+                (a, sim, w, enemy) => createSlashDefenseSituation(
+                    a, enemy, Predetermination.successGuaranteed),
             rerollable: true,
             rerollResource: Resource.stamina,
             rollReasonTemplate: "will <subject> hit <objectPronoun>?");

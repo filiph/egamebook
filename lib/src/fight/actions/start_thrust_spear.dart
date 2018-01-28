@@ -1,9 +1,9 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -15,22 +15,22 @@ const String startThrustCommandTemplate = "thrust at <object>";
 
 const String startThrustHelpMessage = "The basic move with a spear.";
 
-EnemyTargetAction startThrustSpearBuilder(
-        Actor enemy) =>
-    new StartDefensibleAction(
-        "StartThrustSpear",
-        startThrustCommandTemplate,
-        startThrustHelpMessage,
-        startThrustSpearReportStart,
-        (a, sim, w,
-                enemy) =>
-            !a.isPlayer &&
-            a.isStanding &&
-            !enemy.isOnGround &&
-            a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy),
-        enemy);
+EnemyTargetAction
+    startThrustSpearBuilder(Actor enemy) =>
+        new StartDefensibleAction(
+            "StartThrustSpear",
+            startThrustCommandTemplate,
+            startThrustHelpMessage,
+            startThrustSpearReportStart,
+            (a, sim, w, enemy) =>
+                !a.isPlayer &&
+                a.isStanding &&
+                !enemy.isOnGround &&
+                a.currentWeapon.type == WeaponType.spear,
+            (a, sim, w, enemy) => createSlashSituation(a, enemy),
+            (a, sim, w, enemy) =>
+                createSlashDefenseSituation(a, enemy, Predetermination.none),
+            enemy);
 
 EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
     new StartDefensibleAction(
@@ -44,8 +44,8 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
             !enemy.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
         (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) => new SlashDefenseSituation.initialized(a, enemy,
-            predeterminedResult: Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createSlashDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (a, sim, w, enemy) {
           final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
@@ -53,8 +53,8 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
         },
         applyStartOfFailure: startThrustSpearReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            new SlashDefenseSituation.initialized(a, enemy,
-                predeterminedResult: Predetermination.successGuaranteed),
+            createSlashDefenseSituation(
+                a, enemy, Predetermination.successGuaranteed),
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> hit <objectPronoun>?");

@@ -1,13 +1,15 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
-import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 
 // TODO find a reason why to take this choice. Maybe allow counter?
+EnemyTargetAction onGroundParryBuilder(Actor enemy) => new OnGroundParry(enemy);
+
 class OnGroundParry extends EnemyTargetAction {
   static const String className = "OnGroundParry";
 
@@ -29,10 +31,10 @@ class OnGroundParry extends EnemyTargetAction {
   OnGroundParry(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "parry it";
 
   @override
-  String get commandTemplate => "parry it";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> parry it?";
@@ -73,13 +75,11 @@ class OnGroundParry extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.6;
-    final situation = w.currentSituation as OnGroundDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(0.3);
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
       enemy.currentWeapon.isSlashing && a.currentWeapon.type.canParrySlash;
-
-  static EnemyTargetAction builder(Actor enemy) => new OnGroundParry(enemy);
 }

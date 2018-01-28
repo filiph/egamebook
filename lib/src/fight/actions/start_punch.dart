@@ -26,7 +26,8 @@ EnemyTargetAction startPunchBuilder(Actor enemy) => new StartDefensibleAction(
         !enemy.isOnGround &&
         a.isBarehanded,
     (a, sim, w, enemy) => createPunchSituation(a, enemy),
-    (a, sim, w, enemy) => new PunchDefenseSituation.initialized(a, enemy),
+    (a, sim, w, enemy) =>
+        createPunchDefenseSituation(a, enemy, Predetermination.none),
     enemy);
 
 EnemyTargetAction
@@ -42,17 +43,14 @@ EnemyTargetAction
                 !enemy.isOnGround &&
                 a.isBarehanded,
             (a, sim, w, enemy) => createPunchSituation(a, enemy),
-            (a, sim, w, enemy) => new PunchDefenseSituation.initialized(
-                a, enemy,
-                predeterminedResult: Predetermination.failureGuaranteed),
+            (a, sim, w, enemy) => createPunchDefenseSituation(
+                a, enemy, Predetermination.failureGuaranteed),
             enemy,
             successChanceGetter: (a, sim, w, enemy) => 0.8,
             applyStartOfFailure: startPunchReportStart,
             defenseSituationWhenFailed:
-                (a, sim, w, enemy) => new PunchDefenseSituation.initialized(
-                    a,
-                    enemy,
-                    predeterminedResult: Predetermination.successGuaranteed),
+                (a, sim, w, enemy) => createPunchDefenseSituation(
+                    a, enemy, Predetermination.successGuaranteed),
             rerollable: true,
             rerollResource: Resource.stamina,
             rollReasonTemplate: "will <subject> hit <objectPronoun>?");

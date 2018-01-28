@@ -1,14 +1,16 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
+
+EnemyTargetAction impaleLeaperBuilder(Actor enemy) => new ImpaleLeaper(enemy);
 
 class ImpaleLeaper extends EnemyTargetAction {
   static const String className = "ImpaleLeaper";
@@ -128,7 +130,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     if (a.isPlayer) {
       return 0.5 - outOfBalancePenalty + enemyJumpedFromGroundBonus;
     }
-    final situation = w.currentSituation as LeapDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
         .or(0.4 - outOfBalancePenalty + enemyJumpedFromGroundBonus);
   }
@@ -136,6 +138,4 @@ class ImpaleLeaper extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       !a.isOnGround && a.currentWeapon.isThrusting;
-
-  static EnemyTargetAction builder(Actor enemy) => new ImpaleLeaper(enemy);
 }

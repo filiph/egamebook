@@ -1,12 +1,15 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+
+EnemyTargetAction defensiveParrySlashBuilder(Actor enemy) =>
+    new DefensiveParrySlash(enemy);
 
 class DefensiveParrySlash extends EnemyTargetAction {
   static const String className = "DefensiveParrySlash";
@@ -90,7 +93,7 @@ class DefensiveParrySlash extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.98;
-    final situation = w.currentSituation as SlashDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     return situation.predeterminedChance.or(0.5 - outOfBalancePenalty);
   }
@@ -98,7 +101,4 @@ class DefensiveParrySlash extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.currentWeapon.type.canParrySlash;
-
-  static EnemyTargetAction builder(Actor enemy) =>
-      new DefensiveParrySlash(enemy);
 }

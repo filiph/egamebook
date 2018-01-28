@@ -16,20 +16,22 @@ const String startThrustSpearDownHelpMessage =
     "Opponents on the ground are often the most "
     "vulnerable.";
 
-EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
+EnemyTargetAction startThrustSpearDownBuilder(
+        Actor enemy) =>
     new StartDefensibleAction(
         "StartThrustSpearDown",
         startThrustSpearDownCommandTemplate,
         startThrustSpearDownHelpMessage,
         startThrustSpearDownReportStart,
-        (a, sim, w, enemy) =>
+        (a, sim, w,
+                enemy) =>
             !a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
         (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) =>
-            new OnGroundDefenseSituation.initialized(a, enemy),
+            createOnGroundDefenseSituation(a, enemy, Predetermination.none),
         enemy);
 
 EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
@@ -44,8 +46,8 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
             !a.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
         (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
-        (a, sim, w, enemy) => new OnGroundDefenseSituation.initialized(a, enemy,
-            predeterminedResult: Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createOnGroundDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy,
         rerollable: true,
         rerollResource: Resource.stamina,
@@ -57,8 +59,8 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
         },
         applyStartOfFailure: startThrustSpearDownReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            new OnGroundDefenseSituation.initialized(a, enemy,
-                predeterminedResult: Predetermination.successGuaranteed));
+            createOnGroundDefenseSituation(
+                a, enemy, Predetermination.successGuaranteed));
 
 void startThrustSpearDownReportStart(Actor a, Simulation sim,
         WorldStateBuilder w, Storyline s, Actor enemy, _) =>

@@ -1,16 +1,18 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+
+EnemyTargetAction parrySlashBuilder(Actor enemy) => new ParrySlash(enemy);
 
 class ParrySlash extends EnemyTargetAction {
   static const String className = "ParrySlash";
@@ -37,10 +39,10 @@ class ParrySlash extends EnemyTargetAction {
   ParrySlash(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "parry and counter";
 
   @override
-  String get commandTemplate => "parry and counter";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> parry?";
@@ -109,7 +111,7 @@ class ParrySlash extends EnemyTargetAction {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.3 : 0;
     if (a.isPlayer) return 0.6 - outOfBalancePenalty + enemyOutOfBalanceBonus;
-    final situation = w.currentSituation as SlashDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
         .or(0.3 - outOfBalancePenalty + enemyOutOfBalanceBonus);
   }
@@ -117,6 +119,4 @@ class ParrySlash extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.currentWeapon.type.canParrySlash;
-
-  static EnemyTargetAction builder(Actor enemy) => new ParrySlash(enemy);
 }

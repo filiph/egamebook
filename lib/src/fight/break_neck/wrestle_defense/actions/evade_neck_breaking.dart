@@ -1,10 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
+
+EnemyTargetAction evadeNeckBreakingBuilder(Actor enemy) =>
+    new EvadeNeckBreaking(enemy);
 
 class EvadeNeckBreaking extends EnemyTargetAction {
   static const String className = "EvadeNeckBreaking";
@@ -66,12 +69,10 @@ class EvadeNeckBreaking extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.6;
-    final situation = w.currentSituation as OnGroundWrestleDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(0.5);
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new EvadeNeckBreaking(enemy);
 }

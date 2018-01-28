@@ -2,12 +2,15 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+
+EnemyTargetAction dodgeThrustSpearBuilder(Actor enemy) =>
+    new DodgeThrustSpear(enemy);
 
 class DodgeThrustSpear extends EnemyTargetAction {
   static const String className = "DodgeThrustSpear";
@@ -88,13 +91,11 @@ class DodgeThrustSpear extends EnemyTargetAction {
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     if (a.isPlayer) return 0.7 - outOfBalancePenalty;
-    final situation = w.currentSituation as SlashDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       !a.isOnGround && enemy.currentWeapon.type == WeaponType.spear;
-
-  static EnemyTargetAction builder(Actor enemy) => new DodgeThrustSpear(enemy);
 }

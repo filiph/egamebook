@@ -1,12 +1,14 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
+
+EnemyTargetAction dodgeLeapBuilder(Actor enemy) => new DodgeLeap(enemy);
 
 class DodgeLeap extends EnemyTargetAction {
   static const String className = "DodgeLeap";
@@ -90,13 +92,11 @@ class DodgeLeap extends EnemyTargetAction {
     if (a.isPlayer) {
       return 0.78 - outOfBalancePenalty + enemyJumpedFromGroundBonus;
     }
-    final situation = w.currentSituation as LeapDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
         .or(0.5 - outOfBalancePenalty + enemyJumpedFromGroundBonus);
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) => !a.isOnGround;
-
-  static EnemyTargetAction builder(Actor enemy) => new DodgeLeap(enemy);
 }

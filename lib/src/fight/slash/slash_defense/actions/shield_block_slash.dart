@@ -1,16 +1,19 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 
 final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+
+EnemyTargetAction shieldBlockSlashBuilder(Actor enemy) =>
+    new ShieldBlockSlash(enemy);
 
 class ShieldBlockSlash extends EnemyTargetAction {
   static const String className = "ShieldBlockSlash";
@@ -105,7 +108,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
     num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
     num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.2 : 0;
     if (a.isPlayer) return 0.78 - outOfBalancePenalty + enemyOutOfBalanceBonus;
-    final situation = w.currentSituation as SlashDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
         .or(0.5 - outOfBalancePenalty + enemyOutOfBalanceBonus);
   }
@@ -113,6 +116,4 @@ class ShieldBlockSlash extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.currentShield != null;
-
-  static EnemyTargetAction builder(Actor enemy) => new ShieldBlockSlash(enemy);
 }

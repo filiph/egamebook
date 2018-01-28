@@ -1,3 +1,4 @@
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/room.dart';
@@ -11,10 +12,9 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:test/test.dart';
-
-import 'package:edgehead/fractal_stories/actor.dart';
 
 void main() {
   group("fractal_stories", () {
@@ -45,9 +45,7 @@ void main() {
 
       test("FightSituation", () {
         var roomRoamingSituation = new RoomRoamingSituation.initialized(
-            new Room("something", (c) {}, (c) {}, null, null,
-                const []),
-            false);
+            new Room("something", (c) {}, (c) {}, null, null, const []), false);
         checkSituationBuild(() => new FightSituation.initialized(
             [], [], "ground", roomRoamingSituation, {}));
         checkSituationBuild(() => new FightSituation.initialized(
@@ -55,7 +53,7 @@ void main() {
       });
       test("OnGroundDefenseSituation", () {
         checkSituationBuild(
-            () => new OnGroundDefenseSituation.initialized(a, b));
+            () => createOnGroundDefenseSituation(a, b, Predetermination.none));
       });
       test("StrikeDownSituation", () {
         checkSituationBuild(() => createStrikeDownSituation(a, b));
@@ -70,14 +68,14 @@ void main() {
             new OffBalanceOpportunitySituation.initialized(a, culprit: b));
       });
       test("SlashDefenseSituation", () {
-        checkSituationBuild(() => new SlashDefenseSituation.initialized(a, b));
+        checkSituationBuild(
+            () => createSlashDefenseSituation(a, b, Predetermination.none));
       });
       test("SlashSituation", () {
         checkSituationBuild(() => createSlashSituation(a, b));
       });
       test("BreakNeckOnGroundSituation", () {
-        checkSituationBuild(
-            () => createBreakNeckOnGroundSituation(a, b));
+        checkSituationBuild(() => createBreakNeckOnGroundSituation(a, b));
       });
     });
   });

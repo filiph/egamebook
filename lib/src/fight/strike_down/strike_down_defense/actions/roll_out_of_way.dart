@@ -1,10 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
+
+EnemyTargetAction rollOutOfWayBuilder(Actor enemy) => new RollOutOfWay(enemy);
 
 class RollOutOfWay extends EnemyTargetAction {
   static const String className = "RollOutOfWay";
@@ -27,10 +29,10 @@ class RollOutOfWay extends EnemyTargetAction {
   RollOutOfWay(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "roll out of way";
 
   @override
-  String get commandTemplate => "roll out of way";
+  String get name => className;
 
   @override
   String get rollReasonTemplate =>
@@ -67,12 +69,10 @@ class RollOutOfWay extends EnemyTargetAction {
   @override
   num getSuccessChance(Actor a, Simulation sim, WorldState w) {
     if (a.isPlayer) return 0.98;
-    final situation = w.currentSituation as OnGroundDefenseSituation;
+    final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(0.5);
   }
 
   @override
   bool isApplicable(Actor actor, Simulation sim, WorldState world) => true;
-
-  static EnemyTargetAction builder(Actor enemy) => new RollOutOfWay(enemy);
 }

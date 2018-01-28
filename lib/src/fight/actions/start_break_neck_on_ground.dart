@@ -26,10 +26,9 @@ EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
             enemy.isOnGround &&
             a.isBarehanded &&
             enemy.isBarehanded,
-        (a, sim, w, enemy) =>
-            createBreakNeckOnGroundSituation(a, enemy),
-        (a, sim, w, enemy) =>
-            new OnGroundWrestleDefenseSituation.initialized(a, enemy),
+        (a, sim, w, enemy) => createBreakNeckOnGroundSituation(a, enemy),
+        (a, sim, w, enemy) => createOnGroundWrestleDefenseSituation(
+            a, enemy, Predetermination.none),
         enemy);
 
 EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
@@ -43,15 +42,14 @@ EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(Actor enemy) =>
             enemy.isOnGround &&
             a.isBarehanded &&
             enemy.isBarehanded,
-        (a, sim, w, enemy) =>
-            createBreakNeckOnGroundSituation(a, enemy),
-        (a, sim, w, enemy) => new OnGroundWrestleDefenseSituation.initialized(
-            a, enemy, predeterminedResult: Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createBreakNeckOnGroundSituation(a, enemy),
+        (a, sim, w, enemy) => createOnGroundWrestleDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (a, sim, w, enemy) => 0.7,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            new OnGroundWrestleDefenseSituation.initialized(a, enemy,
-                predeterminedResult: Predetermination.successGuaranteed),
+            createOnGroundWrestleDefenseSituation(
+                a, enemy, Predetermination.successGuaranteed),
         applyStartOfFailure: startBreakNeckOnGroundReportStart,
         rerollable: true,
         rerollResource: Resource.stamina,
