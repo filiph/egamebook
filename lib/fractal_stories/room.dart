@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/shared_constants.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -16,7 +17,7 @@ final RoomDescriber emptyRoomDescription = (c) {};
 
 /// This is the magic [currentRoomGame] that, when reached, makes
 /// the room roaming situation stop.
-final Room endOfRoam = new Room("__END_OF_ROAM__", emptyRoomDescription,
+final Room endOfRoam = new Room(endOfRoamName, emptyRoomDescription,
     emptyRoomDescription, null, null, []);
 
 /// This generator creates a [FightSituation].

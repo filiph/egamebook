@@ -7,10 +7,10 @@ import 'package:code_builder/code_builder.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 
-import 'src/parse_writers_input/generated_action.dart';
-import 'src/parse_writers_input/generated_game_object.dart';
-import 'src/parse_writers_input/generated_room.dart';
-import 'src/parse_writers_input/types.dart';
+import 'parse_writers_input/generated_action.dart';
+import 'parse_writers_input/generated_game_object.dart';
+import 'parse_writers_input/generated_room.dart';
+import 'parse_writers_input/types.dart';
 
 Future<Null> main(List<String> args) async {
   Logger.root.onRecord.listen((r) {
@@ -72,8 +72,8 @@ Future<Null> main(List<String> args) async {
     lib.addMembers(object.finalizeAst());
   }
 
-  lib.addMember(_generateAllRooms(objects));
-  lib.addMember(_generateAllActionInstances(objects));
+  lib.addMember(generateAllRooms(objects));
+  lib.addMember(generateAllActionInstances(objects));
 
   print(prettyToSource(lib.buildAst()));
 
@@ -91,6 +91,24 @@ final RegExp keyPattern = new RegExp(r"^([A-Z_]+):");
 
 /// Logger for the writer's input.
 Logger log = new Logger('WritersInputParser');
+
+StatementBuilder generateAllActionInstances(
+    List<GeneratedGameObject> objects) {
+  var listLiteral = list(
+      objects.where((o) => o.type == actionType).map<ExpressionBuilder>(
+          (o) => reference(o.name).property('singleton')),
+      type: actionType);
+  return listLiteral.asVar('allActions', listOfActionType);
+}
+
+StatementBuilder generateAllRooms(List<GeneratedGameObject> objects) {
+  var listLiteral = list(
+      objects
+          .where((o) => o.type == roomType)
+          .map<ReferenceBuilder>((o) => reference(o.name)),
+      type: roomType);
+  return listLiteral.asVar('allRooms', listOfRoomsType);
+}
 
 /// Parses a file and returns all objects specified in that file as a raw
 /// map of keys and values.
@@ -151,22 +169,4 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
   }
 
   yield result;
-}
-
-StatementBuilder _generateAllActionInstances(
-    List<GeneratedGameObject> objects) {
-  var listLiteral = list(
-      objects.where((o) => o.type == actionType).map<ExpressionBuilder>(
-          (o) => reference(o.name).property('singleton')),
-      type: actionType);
-  return listLiteral.asVar('allActions', listOfActionType);
-}
-
-StatementBuilder _generateAllRooms(List<GeneratedGameObject> objects) {
-  var listLiteral = list(
-      objects
-          .where((o) => o.type == roomType)
-          .map<ReferenceBuilder>((o) => reference(o.name)),
-      type: roomType);
-  return listLiteral.asVar('allRooms', listOfRoomsType);
 }

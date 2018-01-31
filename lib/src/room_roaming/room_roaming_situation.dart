@@ -11,7 +11,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
-import 'package:edgehead/writers_input.dart' as writers_input;
+import 'package:edgehead/writers_input.g.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
 

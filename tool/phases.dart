@@ -1,9 +1,19 @@
 import 'package:build_runner/build_runner.dart';
 import 'package:built_value_generator/built_value_generator.dart';
 import 'package:edgehead/sourcegen/functions_serializer_generator.dart';
+import 'package:edgehead/sourcegen/writers_input_generator.dart';
 import 'package:source_gen/source_gen.dart';
 
 final List<BuildAction> phases = [
+  new BuildAction(
+      new LibraryBuilder(
+        new WritersInputGenerator(),
+      ),
+      'edgehead',
+      inputs: const [
+        'drivedump/**/*.txt',
+        'lib/writers_input.dart',
+      ]),
   new BuildAction(
       new PartBuilder([
         new FunctionSerializerGenerator(),
@@ -19,7 +29,8 @@ final List<BuildAction> phases = [
       ]),
       'edgehead',
       inputs: const [
-        'lib/writers_input.dart',
+        /* generating built_values for the file generated above */
+        'lib/writers_input.g.dart',
         'lib/edgehead_global.dart',
         'lib/edgehead_serializers.dart',
         'lib/fractal_stories/action_record.dart',

@@ -1,4 +1,4 @@
-import '../tool/src/parse_writers_input/parse_code_blocks.dart';
+import 'package:edgehead/sourcegen/src/parse_writers_input/parse_code_blocks.dart';
 import 'package:test/test.dart';
 
 void main() {

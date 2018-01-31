@@ -14,11 +14,21 @@ Run the following when developing:
 
     dart -c tool/watch.dart
     
-This will make sure that built_value files (`*.g.dart`) are regenerated when
+This will make sure that generated files (`*.g.dart`) are regenerated when
 needed. If you add a new built_value class, make sure it's covered by the
 globs in `tool/phases.dart`.
 
-To get latest writing, run `./update_from_drive.sh`.
+Most writing is in text files in the `drivedump/` directory. 
+(There's a shell script to update these text files from
+a Google Drive directory: `get_writers_input_dev.sh`. But you'd need access
+to a specific Google Drive folder for this to work. Feel free to just
+change the text files directly in the git repository.) 
+When the `tool/watch.dart` watcher is running, it will, among other things,
+watch for changes of the text files. It will compile the texts into the 
+`lib/writers_input.g.dart` file, which is then used by the game itself.
+
+Most behavior and game-related code is in the other files in `lib/`. You
+might want to start with `lib/edgehead_lib.dart`.  
 
 To test, run `pub run test`, and to include long-running fuzzy tests,
 run `pub run -c test --run-skipped`.

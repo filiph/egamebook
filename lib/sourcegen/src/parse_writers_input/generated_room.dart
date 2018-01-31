@@ -1,6 +1,6 @@
 import 'package:analyzer/analyzer.dart';
 import 'package:code_builder/code_builder.dart';
-import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/shared_constants.dart';
 import 'package:path/path.dart' as p;
 
 import 'escape_dollar_sign.dart';
@@ -88,11 +88,11 @@ class GeneratedRoom extends GeneratedGameObject {
       var command = match.group(2);
       var description = match.group(3);
       if (!_reachableRooms.contains(destination) &&
-          destination != endOfRoam.name) {
+          destination != endOfRoamName) {
         log.warning("Room $name registers exit to $destination but that room "
             "is unreachable (it doesn't exist).");
         var unimplementedExit = exitType.newInstance([
-          literal(endOfRoam.name),
+          literal(endOfRoamName),
           literal(escapeDollarSign(command + ' (UNIMPLEMENTED)')),
           literal(escapeDollarSign(description))
         ]);

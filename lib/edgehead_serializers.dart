@@ -25,7 +25,7 @@ import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:edgehead/writers_input.dart';
+import 'package:edgehead/writers_input.g.dart';
 
 part 'edgehead_serializers.g.dart';
 

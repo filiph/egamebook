@@ -4,6 +4,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:edgehead/sourcegen/functions_serializer.dart';
+import 'package:edgehead/sourcegen/src/ensure_part_import.dart';
 import 'package:glob/glob.dart';
 import 'package:recase/recase.dart';
 import 'package:source_gen/source_gen.dart';
@@ -19,12 +20,7 @@ class FunctionSerializerGenerator extends Generator {
 
     // Assert part import.
     final fileName = library.element.source.shortName.replaceAll('.dart', '');
-    final source = library.element.source.contents.data;
-    if (!source.contains("part '$fileName.g.dart';")) {
-      throw new InvalidGenerationSourceError(
-          "${library.element.source.fullName} lacks part directive: "
-          "part '$fileName.g.dart';");
-    }
+    ensurePartImport(library, fileName);
 
     final annotated = library
         .annotatedWith(new TypeChecker.fromRuntime(GatherFunctionsFrom))
