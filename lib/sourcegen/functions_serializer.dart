@@ -80,6 +80,9 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   @override
   Object serialize(Serializers serializers, T object,
       {FullType specifiedType: FullType.unspecified}) {
+    assert(_inverseMap.containsKey(object), "Incomplete map in $this. "
+        "Make sure you're gathering all the functions that you need. "
+        "Function without a string representation: $object.");
     return _inverseMap[object];
   }
 }
