@@ -611,8 +611,7 @@ class Storyline {
   }
 
   /// Old way of getting text out of [Storyline]. Use [realize]
-  /// instead.
-  @deprecated
+  /// instead unless you want only plain (markdown) text.
   String realizeAsString({bool onlyFirstParagraph: false}) {
     final buf = new StringBuffer();
     final list = realize(onlyFirstParagraph: onlyFirstParagraph);
