@@ -23,6 +23,9 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
   final bool isProactive = true;
 
   @override
+  final bool isImplicit = true;
+
+  @override
   final bool rerollable = true;
 
   @override
@@ -31,7 +34,7 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
   FinishThrustSpearAtGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
-  String get commandTemplate => "";
+  String get commandTemplate => null;
 
   @override
   String get name => className;

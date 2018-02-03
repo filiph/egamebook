@@ -105,6 +105,15 @@ abstract class Action {
   /// aggressive although it doesn't harm the intended target.
   bool get isAggressive;
 
+  /// Returns `true` for actions that shouldn't be presented to the player
+  /// because they are the only thing that _can_ be done in a situation.
+  ///
+  /// It is a runtime error when there is more than one action valid at a time
+  /// and one of them is implicit.
+  ///
+  /// Returns `false` for ordinary actions.
+  bool get isImplicit;
+
   /// Returns `false` if this action is a reaction to someone else's action.
   /// Returns `true` if the actor chose this action pro-actively.
   ///
@@ -320,8 +329,21 @@ abstract class EnemyTargetAction extends Action {
   EnemyTargetAction(this.enemy);
 
   @override
-  String get command =>
-      (new Storyline()..add(commandTemplate, object: enemy)).realizeAsString();
+  String get command {
+    if (isImplicit) {
+      assert(
+          commandTemplate == null,
+          "When action is implicit, commandTemplate should be null. "
+          "Found '$commandTemplate' instead in $this.");
+      return "";
+    }
+    assert(
+        commandTemplate != "",
+        "Never create actions with empty commandTemplate. "
+        "Use isImplicit instead. Culprit: $this");
+    return (new Storyline()..add(commandTemplate, object: enemy))
+        .realizeAsString();
+  }
 
   /// EnemyTargetAction should include the [enemy] in the [command]. To make it
   /// easier to implement, this class will automatically construct the name
@@ -330,6 +352,10 @@ abstract class EnemyTargetAction extends Action {
   /// For example, "kill <object>" is a valid name template that might realize
   /// into something like "Kill the orc."
   String get commandTemplate;
+
+  /// By default, [EnemyTargetAction] is not implicit. But it can be.
+  @override
+  bool get isImplicit => false;
 
   /// EnemyTargetActions might want to mention the [enemy] in the output
   /// of [getRollReason]. To make this easier to implement, this class will
@@ -390,6 +416,9 @@ abstract class ItemAction extends Action {
 
   @mustCallSuper
   ItemAction(this.item);
+
+  @override
+  final bool isImplicit = false;
 
   @override
   String get command =>

@@ -22,6 +22,9 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   final bool isProactive = true;
 
   @override
+  final bool isImplicit = true;
+
+  @override
   final bool rerollable = true;
 
   @override
@@ -30,7 +33,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
   FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
 
   @override
-  String get commandTemplate => "";
+  String get commandTemplate => null;
 
   @override
   String get name => className;

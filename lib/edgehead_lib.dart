@@ -264,12 +264,18 @@ class EdgeheadGame extends Book {
 
       actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
 
+      assert(
+          actions.length == 1 || !actions.any((a) => a.isImplicit),
+          "Cannot have an implicit action when there are more "
+          "than one presented.");
+
       final choices = new ListBuilder<Choice>();
       final callbacks = new Map<Choice, Future<Null> Function()>();
       for (Action action in actions) {
         final choice = new Choice((b) => b
           ..markdownText = action.command
-          ..helpMessage = action.helpMessage);
+          ..helpMessage = action.helpMessage
+          ..isImplicit = action.isImplicit);
         callbacks[choice] = () async {
           await _applySelected(action, actor, storyline);
         };

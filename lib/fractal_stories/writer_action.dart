@@ -3,8 +3,8 @@ library stranded.writer_action;
 
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -27,6 +27,9 @@ typedef String SimpleActionApplyFunction(Actor a, Simulation sim,
 abstract class RoamingAction extends Action {
   @override
   final bool isProactive = true;
+
+  @override
+  final bool isImplicit = false;
 }
 
 /// This is a simple actions that, once taken, always succeed.

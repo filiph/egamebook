@@ -19,10 +19,8 @@ abstract class Choice extends ElementBase
   String get helpMessage;
 
   /// Returns [:true:] when the choice is automatic (scripter picks it
-  /// silently).
-  @Deprecated("Move to something more robust, like explicitly marking options "
-      "'implicit'. The current approach is hacky.")
-  bool get isAutomatic => markdownText.isEmpty;
+  /// silently). Corresponds to `Action.isImplicit`.
+  bool get isImplicit;
 
   String get markdownText;
 }

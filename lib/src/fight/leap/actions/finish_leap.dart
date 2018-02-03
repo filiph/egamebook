@@ -22,6 +22,9 @@ class FinishLeap extends EnemyTargetAction {
   final bool isProactive = true;
 
   @override
+  final bool isImplicit = true;
+
+  @override
   final bool rerollable = true;
 
   @override
@@ -30,7 +33,7 @@ class FinishLeap extends EnemyTargetAction {
   FinishLeap(Actor enemy) : super(enemy);
 
   @override
-  String get commandTemplate => "";
+  String get commandTemplate => null;
 
   @override
   String get name => className;

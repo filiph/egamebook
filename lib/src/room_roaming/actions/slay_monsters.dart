@@ -20,6 +20,9 @@ class SlayMonstersAction extends Action {
   final bool isProactive = true;
 
   @override
+  final bool isImplicit = true;
+
+  @override
   final Resource rerollResource = null;
 
   @override

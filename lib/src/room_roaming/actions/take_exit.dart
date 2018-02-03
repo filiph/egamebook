@@ -1,8 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -14,6 +14,9 @@ class TakeExitAction extends ExitAction {
 
   @override
   final bool isProactive = true;
+
+  @override
+  final bool isImplicit = false;
 
   @override
   final bool rerollable = false;

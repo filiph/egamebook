@@ -142,9 +142,13 @@ class CliRunner extends Presenter<EdgeheadGame> {
     if (automated && !book.actionPatternWasHit) {
       option = _random.nextInt(element.choices.length);
     } else if (element.choices.length == 1 &&
-        element.choices.single.isAutomatic) {
+        element.choices.single.isImplicit) {
       option = 0;
     } else {
+      assert(
+          !element.choices.any((ch) => ch.isImplicit),
+          "Cannot have an implicit choice "
+          "when there is more than one of them.");
       option = int.parse(stdin.readLineSync()) - 1;
       print("");
     }

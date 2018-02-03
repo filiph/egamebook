@@ -26,6 +26,9 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   Iterable serialize(Serializers serializers, Choice object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
+      'isImplicit',
+      serializers.serialize(object.isImplicit,
+          specifiedType: const FullType(bool)),
       'markdownText',
       serializers.serialize(object.markdownText,
           specifiedType: const FullType(String)),
@@ -55,6 +58,10 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           result.helpMessage = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'isImplicit':
+          result.isImplicit = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'markdownText':
           result.markdownText = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -70,12 +77,16 @@ class _$Choice extends Choice {
   @override
   final String helpMessage;
   @override
+  final bool isImplicit;
+  @override
   final String markdownText;
 
   factory _$Choice([void updates(ChoiceBuilder b)]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
-  _$Choice._({this.helpMessage, this.markdownText}) : super._() {
+  _$Choice._({this.helpMessage, this.isImplicit, this.markdownText})
+      : super._() {
+    if (isImplicit == null) throw new ArgumentError.notNull('isImplicit');
     if (markdownText == null) throw new ArgumentError.notNull('markdownText');
   }
 
@@ -91,18 +102,21 @@ class _$Choice extends Choice {
     if (identical(other, this)) return true;
     if (other is! Choice) return false;
     return helpMessage == other.helpMessage &&
+        isImplicit == other.isImplicit &&
         markdownText == other.markdownText;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, helpMessage.hashCode), markdownText.hashCode));
+    return $jf($jc($jc($jc(0, helpMessage.hashCode), isImplicit.hashCode),
+        markdownText.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Choice')
           ..add('helpMessage', helpMessage)
+          ..add('isImplicit', isImplicit)
           ..add('markdownText', markdownText))
         .toString();
   }
@@ -115,6 +129,10 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   String get helpMessage => _$this._helpMessage;
   set helpMessage(String helpMessage) => _$this._helpMessage = helpMessage;
 
+  bool _isImplicit;
+  bool get isImplicit => _$this._isImplicit;
+  set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
+
   String _markdownText;
   String get markdownText => _$this._markdownText;
   set markdownText(String markdownText) => _$this._markdownText = markdownText;
@@ -124,6 +142,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   ChoiceBuilder get _$this {
     if (_$v != null) {
       _helpMessage = _$v.helpMessage;
+      _isImplicit = _$v.isImplicit;
       _markdownText = _$v.markdownText;
       _$v = null;
     }
@@ -144,7 +163,10 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   @override
   _$Choice build() {
     final _$result = _$v ??
-        new _$Choice._(helpMessage: helpMessage, markdownText: markdownText);
+        new _$Choice._(
+            helpMessage: helpMessage,
+            isImplicit: isImplicit,
+            markdownText: markdownText);
     replace(_$result);
     return _$result;
   }

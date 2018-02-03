@@ -26,6 +26,9 @@ class Unconfuse extends Action {
   final bool isProactive = true;
 
   @override
+  final bool isImplicit = false;
+
+  @override
   String get command => "Regain clarity.";
 
   @override
