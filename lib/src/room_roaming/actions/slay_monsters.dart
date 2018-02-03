@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/room.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -34,10 +33,6 @@ class SlayMonstersAction extends Action {
 
   @override
   String applyFailure(ActionContext context) {
-    Actor a = context.actor;
-    Simulation sim = context.simulation;
-    WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
     throw new UnimplementedError();
   }
 
@@ -46,7 +41,6 @@ class SlayMonstersAction extends Action {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
     final situation = w.currentSituation as RoomRoamingSituation;
     Room room = sim.getRoomByName(situation.currentRoomName);
 

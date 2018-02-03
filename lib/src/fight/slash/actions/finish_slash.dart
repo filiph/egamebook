@@ -40,10 +40,6 @@ class FinishSlash extends EnemyTargetAction {
 
   @override
   String applyFailure(ActionContext context) {
-    Actor a = context.actor;
-    Simulation sim = context.simulation;
-    WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
     throw new UnimplementedError();
   }
 

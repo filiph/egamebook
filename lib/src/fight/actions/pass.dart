@@ -39,8 +39,6 @@ class Pass extends Action {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
-    WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
       a.report(s, "<subject> stand<s> off");

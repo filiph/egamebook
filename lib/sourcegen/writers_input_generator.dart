@@ -52,7 +52,6 @@ class WritersInputGenerator extends Generator {
           "Elements annotated with @GatherFunctionsFrom "
           "must be libraries.");
     }
-    final inputLibrary = element as LibraryElement;
 
     final globs = annotation.annotation
         .read("globs")
@@ -85,7 +84,8 @@ class WritersInputGenerator extends Generator {
     lib.addDirectives(allNeededTypes.map((b) => b.toImportBuilder()));
     lib.addDirective(new ImportBuilder("package:built_value/built_value.dart"));
     lib.addDirective(new ImportBuilder("package:built_value/serializer.dart"));
-    lib.addDirective(new ImportBuilder("package:edgehead/writers_helpers.dart"));
+    lib.addDirective(
+        new ImportBuilder("package:edgehead/writers_helpers.dart"));
 
     lib.addDirective(new cb.PartBuilder("$fileName.g.g.dart"));
 
@@ -112,7 +112,11 @@ class WritersInputGenerator extends Generator {
 
     final source = cb.prettyToSource(lib.buildAst());
 
-    result.writeln(source);
+    final sourceWithUnusedLinterIgnore =
+        "// ignore_for_file: unused_local_variable\n\n"
+        "$source";
+
+    result.writeln(sourceWithUnusedLinterIgnore);
 //
 //
 //

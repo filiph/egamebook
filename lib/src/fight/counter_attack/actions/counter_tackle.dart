@@ -40,7 +40,6 @@ class CounterTackle extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to tackle <object>", object: enemy);
@@ -58,7 +57,6 @@ class CounterTackle extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tackle<s> <object> to the ground", object: enemy);

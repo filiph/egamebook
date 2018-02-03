@@ -49,8 +49,6 @@ class Pound extends EnemyTargetAction {
   @override
   String applyFailure(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
-    WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
         s,
@@ -71,7 +69,6 @@ class Pound extends EnemyTargetAction {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(

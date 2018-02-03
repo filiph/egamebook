@@ -39,7 +39,6 @@ class Unconfuse extends Action {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> shake<s> <subject's> head violently");

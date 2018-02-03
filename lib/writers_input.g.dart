@@ -4,6 +4,8 @@
 // Generator: WritersInputGenerator
 // **************************************************************************
 
+// ignore_for_file: unused_local_variable
+
 library writers_input;
 
 import 'package:edgehead/fractal_stories/action.dart' show ActionContext;

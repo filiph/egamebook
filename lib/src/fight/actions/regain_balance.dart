@@ -41,7 +41,6 @@ class RegainBalance extends Action {
   @override
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
