@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:args/args.dart';
+import 'package:cli_menu/cli_menu.dart';
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
@@ -127,16 +128,6 @@ class CliRunner extends Presenter<EdgeheadGame> {
     final saveGameJson = element.saveGame.saveGameSerialized;
     _log.info("savegame = $saveGameJson");
 
-    if (!_silent) {
-      print("");
-      for (int i = 0; i < element.choices.length; i++) {
-        var helpMessage = element.choices[i].helpMessage ?? '';
-        var shortened = helpMessage.split(' ').take(10).join(' ');
-        print("${i + 1}) "
-            "${element.choices[i].markdownText} ($shortened ...)");
-      }
-    }
-
     int option;
 
     if (automated && !book.actionPatternWasHit) {
@@ -149,11 +140,14 @@ class CliRunner extends Presenter<EdgeheadGame> {
           !element.choices.any((ch) => ch.isImplicit),
           "Cannot have an implicit choice "
           "when there is more than one of them.");
-      option = int.parse(stdin.readLineSync()) - 1;
+      final menu = new Menu(element.choices.map((ch) => ch.markdownText));
+      print("");
+      option = menu.choose().index;
       print("");
     }
-    book.accept(
-        new PickChoice((b) => b..choice = element.choices[option].toBuilder()));
+
+    final selectedChoice = element.choices[option];
+    book.accept(new PickChoice((b) => b..choice = selectedChoice.toBuilder()));
   }
 
   @override
@@ -260,9 +254,10 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
       if (rerollable) {
         print(rerollEffectDescription);
-        print("Reroll? (y/n)");
-        var input = stdin.readLineSync().trim().toLowerCase();
-        if (input != 'y') {
+        print("Reroll?");
+        final menu = new Menu(["Yes", "No"]);
+        final input = menu.choose();
+        if (input.value == 'No') {
           print('No reroll');
           return initialResult;
         }
