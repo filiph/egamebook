@@ -2,8 +2,7 @@
 ///
 /// The ids are guaranteed to be unique only to the extent of the size of [int]
 /// (~63 bits), and only inside one instance of [UniqueIdMaker]. In current
-/// implementation, the ids raise sequentially. Please don't use this for
-/// cryptographic reasons.
+/// implementation, the ids raise sequentially.
 class UniqueIdMaker {
   int _next;
 
