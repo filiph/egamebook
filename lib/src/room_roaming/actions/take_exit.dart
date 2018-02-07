@@ -16,9 +16,6 @@ class TakeExitAction extends ExitAction {
   final bool isProactive = true;
 
   @override
-  final bool isImplicit = false;
-
-  @override
   final bool rerollable = false;
 
   @override
@@ -28,6 +25,9 @@ class TakeExitAction extends ExitAction {
 
   @override
   String get helpMessage => null;
+
+  @override
+  bool get isImplicit => exit.command.isEmpty;
 
   @override
   String get name => className;

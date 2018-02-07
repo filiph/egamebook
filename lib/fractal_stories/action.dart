@@ -400,7 +400,8 @@ abstract class ExitAction extends Action {
   ExitAction(this.exit);
 
   @override
-  String get command => exit.command;
+  String get command =>
+      exit.command.isNotEmpty ? exit.command : "IMPLICIT EXIT";
 
   @override
   String toString() => "ExitAction<$command>";
@@ -414,11 +415,11 @@ abstract class ExitAction extends Action {
 abstract class ItemAction extends Action {
   final ItemLike item;
 
-  @mustCallSuper
-  ItemAction(this.item);
-
   @override
   final bool isImplicit = false;
+
+  @mustCallSuper
+  ItemAction(this.item);
 
   @override
   String get command =>
