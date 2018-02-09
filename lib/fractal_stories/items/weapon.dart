@@ -38,7 +38,7 @@ abstract class Weapon extends ItemLike implements
   int get bluntDamage;
 
   @override
-  BuiltList<String> get categories => new BuiltList(["weapon"]);
+  BuiltList<String> get categories => new BuiltList(<String>["weapon"]);
 
   bool get isBlunt => bluntDamage > 0;
 

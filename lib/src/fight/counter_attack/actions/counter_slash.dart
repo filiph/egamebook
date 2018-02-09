@@ -17,8 +17,8 @@ const String counterSlashHelpMessage =
     "because your opponent is often caught off guard. On the other hand, "
     "counters require fast reaction and could throw you out of balance.";
 
-void counterSlashApplyFailure(
-    Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy, _) {
+void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
+    Storyline s, Actor enemy, Situation situation) {
   a.report(s, "<subject> tr<ies> to swing back");
   a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
   if (a.isStanding) {
@@ -41,7 +41,8 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     (a, sim, w, enemy) =>
         !a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
     (a, sim, w, enemy) => createSlashSituation(a, enemy),
-    (a, sim, w, enemy) => createSlashDefenseSituation(a, enemy, Predetermination.none),
+    (a, sim, w, enemy) =>
+        createSlashDefenseSituation(a, enemy, Predetermination.none),
     enemy,
     successChanceGetter: (_, __, ___, enemy) => enemy.isStanding ? 0.7 : 0.9,
     applyStartOfFailure: counterSlashApplyFailure,
@@ -56,8 +57,8 @@ EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
         (a, sim, w, enemy) =>
             a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
         (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) => createSlashDefenseSituation(a, enemy,
-            Predetermination.failureGuaranteed),
+        (a, sim, w, enemy) => createSlashDefenseSituation(
+            a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (_, __, ___, enemy) =>
             enemy.isStanding ? 0.7 : 0.9,

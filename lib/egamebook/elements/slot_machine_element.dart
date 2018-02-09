@@ -11,7 +11,7 @@ abstract class SlotMachine extends ElementBase
     implements Built<SlotMachine, SlotMachineBuilder> {
   static Serializer<SlotMachine> get serializer => _$slotMachineSerializer;
 
-  factory SlotMachine([updates(SlotMachineBuilder b)]) = _$SlotMachine;
+  factory SlotMachine([void updates(SlotMachineBuilder b)]) = _$SlotMachine;
 
   SlotMachine._();
 

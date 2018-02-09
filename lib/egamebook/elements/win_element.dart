@@ -11,7 +11,7 @@ abstract class WinGame extends ElementBase
     implements Built<WinGame, WinGameBuilder> {
   static Serializer<WinGame> get serializer => _$winGameSerializer;
 
-  factory WinGame([updates(WinGameBuilder b)]) = _$WinGame;
+  factory WinGame([void updates(WinGameBuilder b)]) = _$WinGame;
 
   WinGame._();
 

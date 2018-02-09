@@ -14,7 +14,7 @@ part 'world_state.g.dart';
 abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   static Serializer<WorldState> get serializer => _$worldStateSerializer;
 
-  factory WorldState([updates(WorldStateBuilder b)]) = _$WorldState;
+  factory WorldState([void updates(WorldStateBuilder b)]) = _$WorldState;
 
   WorldState._();
 

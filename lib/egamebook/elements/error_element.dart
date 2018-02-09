@@ -11,7 +11,7 @@ abstract class ErrorElement extends ElementBase
     implements Built<ErrorElement, ErrorElementBuilder> {
   static Serializer<ErrorElement> get serializer => _$errorElementSerializer;
 
-  factory ErrorElement([updates(ErrorElementBuilder b)]) = _$ErrorElement;
+  factory ErrorElement([void updates(ErrorElementBuilder b)]) = _$ErrorElement;
 
   ErrorElement._();
 

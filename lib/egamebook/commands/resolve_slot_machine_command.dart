@@ -13,7 +13,7 @@ abstract class ResolveSlotMachine extends CommandBase
   static Serializer<ResolveSlotMachine> get serializer =>
       _$resolveSlotMachineSerializer;
 
-  factory ResolveSlotMachine([updates(ResolveSlotMachineBuilder b)]) =
+  factory ResolveSlotMachine([void updates(ResolveSlotMachineBuilder b)]) =
       _$ResolveSlotMachine;
 
   ResolveSlotMachine._();

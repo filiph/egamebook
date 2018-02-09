@@ -112,8 +112,8 @@ class EdgeheadGame extends Book {
           WorldState.serializer, JSON.decode(saveGameSerialized));
     } else {
       world = new WorldState((b) => b
-        ..actors = new SetBuilder<Actor>([aren, briana])
-        ..situations = new ListBuilder<Situation>([initialSituation])
+        ..actors = new SetBuilder<Actor>(<Actor>[aren, briana])
+        ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..time = 0);
     }

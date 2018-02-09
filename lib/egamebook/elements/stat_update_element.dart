@@ -12,7 +12,7 @@ abstract class StatUpdate<T> extends ElementBase
     implements Built<StatUpdate<T>, StatUpdateBuilder<T>> {
   static Serializer<StatUpdate> get serializer => _$statUpdateSerializer;
 
-  factory StatUpdate([updates(StatUpdateBuilder<T> b)]) = _$StatUpdate<T>;
+  factory StatUpdate([void updates(StatUpdateBuilder<T> b)]) = _$StatUpdate<T>;
 
   StatUpdate._();
 

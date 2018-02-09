@@ -63,7 +63,8 @@ AstBuilder<AstNode> generateRescueSituation(
 
   //  factory AbcRescueSituation([updates(AbcRescueSituationBuilder b)]) =
   //      _$AbcRescueSituation;
-  var updatesParameter = new FunctionParameterBuilder('updates')
+  var updatesParameter = new FunctionParameterBuilder('updates',
+      returnType: new TypeBuilder('void'))
     ..addPositional(new ParameterBuilder("b", type: situationBuilderClass));
   var defaultConst =
       new ConstructorBuilder.redirectTo(null, generatedSituationClassType)
@@ -85,7 +86,6 @@ AstBuilder<AstNode> generateRescueSituation(
             ..addStatement(getRandomIdFunction
                 .call([]).asAssign(reference("b").property("id")))
             ..addStatement(literal(0).asAssign(reference("b").property("time")))
-            ..addStatement(reference("b").asReturn())
         ]).asReturn());
   situationClass.addConstructor(initializedConstructor);
 

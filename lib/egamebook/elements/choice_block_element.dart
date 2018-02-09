@@ -18,7 +18,7 @@ abstract class ChoiceBlock extends ElementBase
   /// so that players can jump back to each decision point.
   SaveGame get saveGame;
 
-  factory ChoiceBlock([updates(ChoiceBlockBuilder b)]) = _$ChoiceBlock;
+  factory ChoiceBlock([void updates(ChoiceBlockBuilder b)]) = _$ChoiceBlock;
 
   ChoiceBlock._();
 

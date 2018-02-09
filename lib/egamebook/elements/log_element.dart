@@ -11,7 +11,7 @@ abstract class LogElement extends ElementBase
     implements Built<LogElement, LogElementBuilder> {
   static Serializer<LogElement> get serializer => _$logElementSerializer;
 
-  factory LogElement([updates(LogElementBuilder b)]) = _$LogElement;
+  factory LogElement([void updates(LogElementBuilder b)]) = _$LogElement;
 
   LogElement._();
 

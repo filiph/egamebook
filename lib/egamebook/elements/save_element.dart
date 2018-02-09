@@ -11,7 +11,7 @@ abstract class SaveGame extends ElementBase
     implements Built<SaveGame, SaveGameBuilder> {
   static Serializer<SaveGame> get serializer => _$saveGameSerializer;
 
-  factory SaveGame([updates(SaveGameBuilder b)]) = _$SaveGame;
+  factory SaveGame([void updates(SaveGameBuilder b)]) = _$SaveGame;
 
   SaveGame._();
 

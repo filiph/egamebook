@@ -1384,14 +1384,14 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
         Built<GuardpostAboveChurchTakeShieldRescueSituation,
             GuardpostAboveChurchTakeShieldRescueSituationBuilder> {
   factory GuardpostAboveChurchTakeShieldRescueSituation(
-          [updates(GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =
+          [void updates(
+              GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =
       _$GuardpostAboveChurchTakeShieldRescueSituation;
 
   factory GuardpostAboveChurchTakeShieldRescueSituation.initialized() {
     return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
       b.id = getRandomId();
       b.time = 0;
-      return b;
     });
   }
 

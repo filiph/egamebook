@@ -25,7 +25,7 @@ void main() {
 
     // Simulate completely new load.
     final serializers = getSerializers();
-    final json = JSON.decode(str);
+    final Object json = JSON.decode(str);
     final deserialized = serializers.deserialize(json,
         specifiedType: const FullType(StringReturner));
     expect(deserialized(), "Hello.");
@@ -51,7 +51,7 @@ void main() {
     }
 
     // Simulate completely new load.
-    final json = JSON.decode(str);
+    final Object json = JSON.decode(str);
     final deserialized = getSerializers()
         .deserialize(json, specifiedType: const FullType(CustomTypesFunction));
     final a = new A()

@@ -12,7 +12,7 @@ abstract class PickChoice extends CommandBase
     implements Built<PickChoice, PickChoiceBuilder> {
   static Serializer<PickChoice> get serializer => _$pickChoiceSerializer;
 
-  factory PickChoice([updates(PickChoiceBuilder b)]) = _$PickChoice;
+  factory PickChoice([void updates(PickChoiceBuilder b)]) = _$PickChoice;
 
   PickChoice._();
 

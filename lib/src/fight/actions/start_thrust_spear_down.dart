@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -63,7 +64,7 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
                 a, enemy, Predetermination.successGuaranteed));
 
 void startThrustSpearDownReportStart(Actor a, Simulation sim,
-        WorldStateBuilder w, Storyline s, Actor enemy, _) =>
+        WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) =>
     a.report(
         s,
         "<subject> thrust<s> down "

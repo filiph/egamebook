@@ -11,7 +11,7 @@ abstract class LoseGame extends ElementBase
     implements Built<LoseGame, LoseGameBuilder> {
   static Serializer<LoseGame> get serializer => _$loseGameSerializer;
 
-  factory LoseGame([updates(LoseGameBuilder b)]) = _$LoseGame;
+  factory LoseGame([void updates(LoseGameBuilder b)]) = _$LoseGame;
 
   LoseGame._();
 

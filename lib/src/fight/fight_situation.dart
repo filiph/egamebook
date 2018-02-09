@@ -66,8 +66,8 @@ abstract class FightSituation extends Situation
       new FightSituation((b) => b
         ..id = getRandomId()
         ..time = 0
-        ..playerTeamIds.replace(playerTeam.map((a) => a.id))
-        ..enemyTeamIds.replace(enemyTeam.map((a) => a.id))
+        ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
+        ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
         ..groundMaterial = groundMaterial
         ..droppedItems = new ListBuilder<ItemLike>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id

@@ -15,7 +15,6 @@ export 'storyline_pronoun.dart';
 
 part 'storyline_entity.dart';
 
-
 final Logger log = new Logger('Storyline');
 
 /// A single report about an event, atomic part of a story. It can be "John
@@ -701,12 +700,12 @@ class Storyline {
         } else {
           // let's try and glue [i-1] and [i] into one sentence
           if (but) {
-            strBuf.write(
-                Randomly.choose([" but ", " but ", /*" yet ",*/ ", but "]));
+            strBuf.write(Randomly
+                .choose(<String>[" but ", " but ", /*" yet ",*/ ", but "]));
             if (!sameSentiment(i, i + 1)) endThisSentence = true;
           } else {
             // TODO: add ", " but only when we can be sure it's not in the end of the sentence
-            strBuf.write(Randomly.choose([" and ", " and ", ", and "]));
+            strBuf.write(Randomly.choose(<String>[" and ", " and ", ", and "]));
             endThisSentence = true;
           }
         }

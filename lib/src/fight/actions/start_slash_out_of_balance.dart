@@ -19,7 +19,7 @@ const String startSlashOutOfBalanceHelp =
     "firmly on the ground. But sometimes, it's necessary to act quickly.";
 
 void startSlashOutOfBalanceApplyFailure(Actor a, Simulation sim,
-        WorldStateBuilder w, Storyline s, Actor enemy, _) =>
+        WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) =>
     a.report(
         s,
         "<subject> completely miss<es> <object> with "

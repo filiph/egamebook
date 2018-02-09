@@ -11,7 +11,7 @@ abstract class Choice extends ElementBase
     implements Built<Choice, ChoiceBuilder> {
   static Serializer<Choice> get serializer => _$choiceSerializer;
 
-  factory Choice([updates(ChoiceBuilder b)]) = _$Choice;
+  factory Choice([void updates(ChoiceBuilder b)]) = _$Choice;
 
   Choice._();
 

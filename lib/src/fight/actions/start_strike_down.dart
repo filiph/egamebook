@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
@@ -60,7 +61,7 @@ EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
                 a, enemy, Predetermination.successGuaranteed));
 
 void startStrikeDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-        Storyline s, Actor enemy, _) =>
+        Storyline s, Actor enemy, Situation situation) =>
     a.report(
         s,
         "<subject> strike<s> down "

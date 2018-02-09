@@ -279,11 +279,10 @@ abstract class Action {
 /// add new reports ([Storyline.add] and [Actor.report]). [pubSub] should
 /// only be used to publish events.
 ///
-/// [actor] is the perpetrator of the action. The [target] (with the generic
-/// parameter [T]) is the entity that the action is directed to. It can be
-/// `null`.
+/// [actor] is the perpetrator of the action. The [target] is the entity that
+/// the action is directed to. It can be `null`.
 @immutable
-class ActionContext<T> {
+class ActionContext {
   final Actor actor;
 
   final Simulation simulation;
@@ -302,7 +301,7 @@ class ActionContext<T> {
 
   final Storyline outputStoryline;
 
-  final T target;
+  final Object target;
 
   const ActionContext(this.currentAction, this.actor, this.simulation,
       this.world, this.pubSub, this.outputWorld, this.outputStoryline,

@@ -81,7 +81,7 @@ class Ruleset {
       Storyline storylineOutput, PubSub pubSub) {
     // TODO: rewrite inline so that we don't need to create a new list
     //       every time
-    final all = new List<Rule>.unmodifiable([
+    final all = new List<Rule>.unmodifiable(<Rule>[
       rule1,
       rule2,
       rule3,

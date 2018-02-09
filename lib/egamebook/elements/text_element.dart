@@ -11,7 +11,7 @@ abstract class TextOutput extends ElementBase
     implements Built<TextOutput, TextOutputBuilder> {
   static Serializer<TextOutput> get serializer => _$textOutputSerializer;
 
-  factory TextOutput([updates(TextOutputBuilder b)]) = _$TextOutput;
+  factory TextOutput([void updates(TextOutputBuilder b)]) = _$TextOutput;
 
   TextOutput._();
 
