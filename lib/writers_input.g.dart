@@ -42,16 +42,12 @@ Room caveWithAgruthPre = new Room('cave_with_agruth_pre', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
 Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -63,8 +59,7 @@ Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
       '''The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. 
 
 
-That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock\'s mountaintop.
-''',
+That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock\'s mountaintop.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -72,12 +67,8 @@ That leaves two options: the black passage toward the war forges and the deserte
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The corpse lies still, getting cold.
-
-
-''', wholeSentence: true);
+  s.add('The corpse lies still, getting cold.', wholeSentence: true);
   rollBrianaQuote(sim, w, s);
-  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected.'),
@@ -119,8 +110,7 @@ class SearchAgruth extends RoamingAction {
         '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. 
 
 
-<p class="toast">Your stamina increases by 1.</p>
-''',
+<p class="toast">Your stamina increases by 1.</p>''',
         wholeSentence: true);
     giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs SearchAgruth';
@@ -191,8 +181,7 @@ The light in the tunnel gets brighter and the air gets colder. Suddenly, just wh
 ![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)
 
 
-They must be guarding the Upper Door. There is no way around them.
-''',
+They must be guarding the Upper Door. There is no way around them.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -200,8 +189,6 @@ They must be guarding the Upper Door. There is no way around them.
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, generateEscapeTunnelFight, null, <Exit>[
   new Exit(
       'exit_from_bloodrock', 'Start running again', 'You start running again.')
@@ -244,8 +231,7 @@ _"That one is already dead."_
 ![Agruth\'s sword](img/agruth-sword.jpg)
 
 
-She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
-''',
+She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -253,8 +239,6 @@ She turns her attention to the sword. "We should name it. Named weapons please t
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, null, null, <Exit>[]);
 
 class NameAgruthSwordOpportunity extends RoamingAction {
@@ -287,8 +271,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '''_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_
 
 
-Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''',
+Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
     movePlayer(c, "cave_with_agruth_pre");
@@ -358,8 +341,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
         '''_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_
 
 
-Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''',
+Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
     movePlayer(c, "cave_with_agruth_pre");
@@ -427,8 +409,8 @@ class NameAgruthSwordNothing extends RoamingAction {
     s.add('''_"That is foolish. It is just a sword, after all."_
 
 
-Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''', wholeSentence: true);
+Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."''',
+        wholeSentence: true);
     movePlayer(c, "cave_with_agruth_pre");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
@@ -500,8 +482,7 @@ Briana shrugs. "How long have you been here?"
 _"Three years."_
 
 
-"Three years! Gods. A lot has happened. Just this winter, the orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."
-''',
+"Three years! Gods. A lot has happened. Just this winter, the orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."''',
         wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana1';
   }
@@ -575,8 +556,8 @@ class TalkToBriana2 extends RoamingAction {
 _"You what?"_
 
 
-"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, and help win the war."
-''', wholeSentence: true);
+"I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, and help win the war."''',
+        wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana2';
   }
 
@@ -664,38 +645,25 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 "Where is that cell?"
 
 
-_"Down the slave quarters."_
-
-
-''', wholeSentence: true);
+_"Down the slave quarters."_''', wholeSentence: true);
     if (!playerHasVisited(sim, originalWorld, "slave_quarters_passage")) {
       s.add("""Briana tenses. "Well then, at least we have that choice." """,
           wholeSentence: true);
     }
-    s.add('''
-
-''', wholeSentence: true);
     if (playerHasVisited(sim, originalWorld, "orcthorn_room") &&
         a.currentRoomName != "orcthorn_room") {
       s.add("""Briana's eyes go wide. "The mad orc behind that door." """,
           wholeSentence: true);
     }
-    s.add('''
-
-''', wholeSentence: true);
     if (playerHasVisited(sim, originalWorld, "slave_quarters_passage") &&
         !playerHasVisited(sim, originalWorld, "orcthorn_room")) {
       s.add("""Briana's eyes go wide. "That door in the slave quarters." """,
           wholeSentence: true);
     }
-    s.add('''
-
-''', wholeSentence: true);
     if (a.currentRoomName == "orcthorn_room") {
       s.add("""Briana's eyes go wide as she looks around the room. """,
           wholeSentence: true);
     }
-    s.add('', wholeSentence: true);
     return '${a.name} successfully performs TalkToBriana3';
   }
 
@@ -739,25 +707,18 @@ Room warForge = new Room('war_forge', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.
-
-
-''',
+      'You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.',
       wholeSentence: true);
   if (justCameFrom(w, "cave_with_agruth")) {
     s.add(
         """You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way. """,
         wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
         """You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way. """,
         wholeSentence: true);
   }
-  s.add('', wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -765,13 +726,9 @@ Room warForge = new Room('war_forge', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''The air in the war forge is thick and makes breathing difficult, and the constant noise is overwhelming.
-
-
-''',
+      'The air in the war forge is thick and makes breathing difficult, and the constant noise is overwhelming.',
       wholeSentence: true);
   rollBrianaQuote(sim, w, s);
-  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('smelter', 'Go to smelter',
       'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
@@ -814,8 +771,7 @@ class WarForgeLookAround extends RoamingAction {
 At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot mixes with the stench of all that orc sweat.
 
 
-This place makes Fort Ironcast\'s military forge look like a doll house: tiny and inconsequential.
-''',
+This place makes Fort Ironcast\'s military forge look like a doll house: tiny and inconsequential.''',
         wholeSentence: true);
     return '${a.name} successfully performs WarForgeLookAround';
   }
@@ -905,8 +861,7 @@ Looking again at the molds they are using, you don\'t see anything strange or un
 You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. It’s an enormous, repulsive, half-assembled insect. Each leg reaches as far as you could throw a rock. And there are eight of them. Then there\'s the body — a huge cockroach-like contraption forged from steel. The teeth are already completed, sharp and menacing, and as long as a man is tall. 
 
 
-A full-sized ogre pours water over one section of the creature, making a thick cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
-''',
+A full-sized ogre pours water over one section of the creature, making a thick cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.''',
         wholeSentence: true);
     return '${a.name} successfully performs WarForgeWatchWorkers';
   }
@@ -957,8 +912,7 @@ Room tunnelCancelChance = new Room('tunnel_cancel_chance', (ActionContext c) {
 _"Are you not coming?"_
 
 
-Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive."
-''',
+Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive."''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -966,8 +920,6 @@ Briana hesitates. "It feels like we could have done more." She motions toward th
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('tunnel', 'Continue',
       'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.'),
@@ -1012,8 +964,7 @@ But right then, something or someone pounds on the reinforced door from the insi
 The two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They run toward you.
 
 
-![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
-''',
+![Picture of the sadistic slavers](img/sadistic-slavers.jpg)''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1021,24 +972,16 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
   if (playerHasVisited(sim, originalWorld, "orcthorn_room") &&
       !justCameFrom(w, "orcthorn_room")) {
     s.add("The reinforced door on the side of the corridor is silent.",
         wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   if (!playerHasVisited(sim, originalWorld, "orcthorn_room")) {
     s.add("The reinforced door on the side of the corridor is closed.",
         wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   rollBrianaQuote(sim, w, s);
-  s.add('', wholeSentence: true);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit(
       'cave_with_agruth',
@@ -1082,10 +1025,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
-
-
-''',
+        'You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."',
         wholeSentence: true);
     if (w.actionHasBeenPerformed("talk_to_briana_3")) {
       s.add("""
@@ -1095,7 +1035,6 @@ You look at Briana and nod.
 _"The Mad Guardian."_
 """, wholeSentence: true);
     }
-    s.add('', wholeSentence: true);
     return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
   }
 
@@ -1194,8 +1133,7 @@ _"Fear. It is the ultimate authority. I do not think it was the orcs who decided
 "Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farmhand," she says to the lifeless face.
 
 
-_"I am not a farmhand. And we still need to get out of here first."_
-''',
+_"I am not a farmhand. And we still need to get out of here first."_''',
         wholeSentence: true);
     takeOrcthorn(sim, w, a);
     return '${a.name} successfully performs TakeOrcthorn';
@@ -1244,8 +1182,7 @@ Room orcthornRoom = new Room('orcthorn_room', (ActionContext c) {
       '''The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
 
 
-When your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.
-''',
+When your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1254,8 +1191,7 @@ When your eyes adjust to the dark, you see a figure standing in front of you. Yo
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.
-''',
+      'The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.',
       wholeSentence: true);
 }, generateMadGuardianFight, null, <Exit>[
   new Exit('slave_quarters_passage', 'Exit the room',
@@ -1280,8 +1216,7 @@ Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slave
 Another crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.
 
 
-Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.
-''',
+Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1289,8 +1224,6 @@ Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s f
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, generateAgruthFight, null, <Exit>[
   new Exit('just_after_agruth_fight', '',
       'You look around. Fortunately, there’s no one in sight.')
@@ -1329,8 +1262,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
         '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and  leans his head to the side, but stays asleep.
 
 
-You take a few slow steps back, then grip the shield in your left hand, ready for anything.
-''',
+You take a few slow steps back, then grip the shield in your left hand, ready for anything.''',
         wholeSentence: true);
     setUpStealShield(a, sim, w, s, true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
@@ -1347,8 +1279,7 @@ You take a few slow steps back, then grip the shield in your left hand, ready fo
         '''You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.
 
 
-You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.
-''',
+You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.''',
         wholeSentence: true);
     w.pushSituation(
         new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
@@ -1483,33 +1414,25 @@ Room undergroundChurch = new Room('underground_church', (ActionContext c) {
       '''You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. 
 
 
-Your bare footsteps reverberate in the room, so you slow down to quiet them. 
-
-
-''',
+Your bare footsteps reverberate in the room, so you slow down to quiet them.''',
       wholeSentence: true);
   if (justCameFrom(w, "cave_with_agruth")) {
     s.add(
         """After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.""");
   }
-  s.add('', wholeSentence: true);
   if (justCameFrom(w, "guardpost_above_church")) {
     s.add(
         """Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.""");
   }
-  s.add('', wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The temple is silent, as if it were holding its breath.
-
-
-''', wholeSentence: true);
+  s.add('The temple is silent, as if it were holding its breath.',
+      wholeSentence: true);
   rollBrianaQuote(sim, w, s);
-  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('guardpost_above_church', 'Enter the upwards passage',
       'You take the sloping passage and walk upward for a long time.'),
@@ -1564,10 +1487,7 @@ Saying the name brings coldness and sweat to your brow. You hear the name every 
 "Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I though the Dead Prince was a warlord. Something like that."
 
 
-_"He is a god."_
-
-
-''',
+_"He is a god."_''',
         wholeSentence: true);
     if (!w.actionHasBeenPerformed("wait_for_ritual")) {
       s.add(
@@ -1575,9 +1495,8 @@ _"He is a god."_
 """,
           wholeSentence: true);
     }
-    s.add('''
-
-The glow coming from the altar dims for a moment, then lights up again.
+    s.add(
+        '''The glow coming from the altar dims for a moment, then lights up again.
 
 
 _"He is worse than a god. He is fear itself."_
@@ -1586,8 +1505,8 @@ _"He is worse than a god. He is fear itself."_
 Briana looks at you, narrowing her eyes.
 
 
-_"I think you have felt it."_
-''', wholeSentence: true);
+_"I think you have felt it."_''',
+        wholeSentence: true);
     return '${a.name} successfully performs ExamineUndergroundChurch';
   }
 
@@ -1631,44 +1550,33 @@ Room smelter = new Room('smelter', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
-
-
-''',
+      'A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.',
       wholeSentence: true);
   if (justCameFrom(w, "war_forge")) {
     s.add(
         """You notice a smooth passage leading up and out of the smelter. You'll be able to go there unnoticed.""",
         wholeSentence: true);
   }
-  s.add('', wholeSentence: true);
   if (justCameFrom(w, "guardpost_above_church")) {
     s.add(
         """Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You'll be able to go there unnoticed.""",
         wholeSentence: true);
   }
-  s.add('', wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The coals reflects the reds and whites of the molten steel.
-
-
-''', wholeSentence: true);
+  s.add('The coals reflects the reds and whites of the molten steel.',
+      wholeSentence: true);
   if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
       !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")) {
     s.add(
         "About a spear's throw away, the blind ogre is {idling|waiting for commands from the forges}.",
         wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   rollBrianaQuote(sim, w, s);
-  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('war_forge', 'Go to the war forges',
       'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.'),
@@ -1708,8 +1616,7 @@ class SmelterLookAround extends RoamingAction {
         '''Molten iron runs in rivers across the room, and gathers in a large pool. From that pool, a single ogre distributes the forge-ready liquid into troughs that descend to the war forges below. 
 
 
-The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice. In fact, since you’re able to get so close, you would even guess that he\'s blind, probably because of all the sudden flashes from the molten steel around him. Yet he\'s performing his job perfectly, listening to commands from orcs in the war forges beyond the wall, and operating the floodgates accordingly.
-''',
+The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice. In fact, since you’re able to get so close, you would even guess that he\'s blind, probably because of all the sudden flashes from the molten steel around him. Yet he\'s performing his job perfectly, listening to commands from orcs in the war forges beyond the wall, and operating the floodgates accordingly.''',
         wholeSentence: true);
     return '${a.name} successfully performs SmelterLookAround';
   }
@@ -1755,10 +1662,7 @@ Room guardpostAboveChurch =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.
-
-
-''',
+      'You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.',
       wholeSentence: true);
   if (justCameFrom(w, "smelter")) {
     s.add(
@@ -1766,32 +1670,27 @@ Room guardpostAboveChurch =
 """,
         wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   if (justCameFrom(w, "underground_church")) {
     s.add(
         """The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these passages slope downward.
 """,
         wholeSentence: true);
   }
-  s.add('''
-
-A third passage is marked "Up Door".  Beyond the opening, you see  a steep stairway leading upward. This is it. Your final path to escape. 
+  s.add(
+      '''A third passage is marked "Up Door".  Beyond the opening, you see  a steep stairway leading upward. This is it. Your final path to escape. 
 
 
 For the first time, you see a smile on Briana\'s face. Not a smirk or a battle snarl, but a genuine smile. "_Up Door?_" she whispers, shaking her head. "I can\'t believe we\'ve made it this far."
 
 
-Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s sleeping. He loosely holds a scimitar in one hand, and has a shield laid on his lap.
-''', wholeSentence: true);
+Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s sleeping. He loosely holds a scimitar in one hand, and has a shield laid on his lap.''',
+      wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
   if (w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
       !w.actionHasBeenPerformedSuccessfully(
           "guardpost_above_church_take_shield")) {
@@ -1801,7 +1700,6 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
     s.add(
         "The goblin is sleeping soundly next to the passage to the Upper Door.");
   }
-  s.add('', wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Descend toward the Underground Church',
       'You take the passage leading down toward the temple.'),
@@ -1835,8 +1733,8 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('''You take the passage that leads to the Upper Door.
-''', wholeSentence: true);
+    s.add('You take the passage that leads to the Upper Door.',
+        wholeSentence: true);
     enterTunnelWithCancel(c);
     return '${a.name} successfully performs GuardpostAboveChurchEnterTunnelWithCancel';
   }
@@ -1911,10 +1809,7 @@ _"We have to stop this."_
 Briana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."
 
 
-_"No king has what we have."_
-
-
-''',
+_"No king has what we have."_''',
       wholeSentence: true);
   if (w.actionHasBeenPerformed("take_orcthorn")) {
     s.add(""" 
@@ -1924,9 +1819,6 @@ _"No king has what we have."_
 _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
-  s.add('''
-
-''', wholeSentence: true);
   if (!w.actionHasBeenPerformed("take_orcthorn")) {
     s.add("""
 "Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand." 
@@ -1935,9 +1827,7 @@ _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connec
 _"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
 """, wholeSentence: true);
   }
-  s.add('''
-
-"A connection."
+  s.add('''"A connection."
 
 
 _"With the Dead Prince. I dream his dreams. I think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
@@ -1973,20 +1863,14 @@ Briana sighs. "No, I suppose we won\'t."
 With that, you both start down the road toward the black fort in the distance. 
 
 
-THE END.
-
-
-''', wholeSentence: true);
+THE END.''', wholeSentence: true);
   describeSuccessRate(sim, originalWorld, s);
-  s.add('', wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''
-''', wholeSentence: true);
 }, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (ActionContext c) {
@@ -2005,8 +1889,7 @@ Room undergroundChurchAltar =
 _"You hate orcs? This is what made them."_
 
 
-Briana opens her mouth to reply, but the otherwise steady light from the altar flickers like a flame, and you both duck behind a large column. You almost trip over a spear lying on the ground.
-''',
+Briana opens her mouth to reply, but the otherwise steady light from the altar flickers like a flame, and you both duck behind a large column. You almost trip over a spear lying on the ground.''',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2015,8 +1898,7 @@ Briana opens her mouth to reply, but the otherwise steady light from the altar f
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.
-''',
+      'The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.',
       wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Sneak back',
@@ -2129,8 +2011,7 @@ _"I do not know."_
 _"This place does something weird to people."_
 
 
-"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."
-''',
+"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."''',
         wholeSentence: true);
     giveStaminaToPlayer(w, 1);
     return '${a.name} successfully performs WaitForRitual';
@@ -2202,8 +2083,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
         '''It\'s a primive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
 
 
-But it’s sturdy in your hand. A good throwing weapon.
-''',
+But it’s sturdy in your hand. A good throwing weapon.''',
         wholeSentence: true);
     giveGoblinsSpearToPlayer(w);
     return '${a.name} successfully performs TakeSpearInUndergroundChurch';
@@ -2249,8 +2129,7 @@ Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''"There is a difference between being brave and being stupid. You\'re crossing it right now," she says.
-''',
+      '"There is a difference between being brave and being stupid. You\'re crossing it right now," she says.',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2258,8 +2137,8 @@ Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''"We _really_ shouldn\'t push our luck," she says.
-''', wholeSentence: true);
+  s.add('"We _really_ shouldn\'t push our luck," she says.',
+      wholeSentence: true);
 }, null, null, <Exit>[
   new Exit('slave_quarters_passage', 'Go back',
       'You nod, and then start carefully backing out through the passage.')
@@ -2311,8 +2190,8 @@ The orc with the spear hurls it, and it pierces Briana\'s shoulder. She screams 
 The orc with the sword makes three fast leaps toward you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle and your arms flail in surprise.
 
 
-You look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.
-''', wholeSentence: true);
+You look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.''',
+        wholeSentence: true);
     w.updateActorById(a.id, (b) => b..hitpoints = 0);
     w.popSituation(sim);
     return '${a.name} successfully performs SlaveQuartersContinue';
@@ -2438,8 +2317,7 @@ _"One who was doing an important job."_
 _"As I said, a well placed throw. The more complex you see the world, the easier it is for you to change it."_
 
 
-"Nonsense. You got lucky."
-''',
+"Nonsense. You got lucky."''',
         wholeSentence: true);
     executeSpearThrowAtOgre(c);
     return '${a.name} successfully performs SmelterThrowSpear';
