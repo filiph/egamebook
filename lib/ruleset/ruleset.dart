@@ -60,8 +60,12 @@ class Ruleset {
     final ordered = new List.generate(10, (_) {
       if (!iter.moveNext()) return null;
       return iter.current;
-    })
-      ..sort((a, b) => -a.priority.compareTo(b.priority));
+    }, growable: false)
+      ..sort((a, b) {
+        if (a == null) return 1;
+        if (b == null) return -1;
+        return -a.priority.compareTo(b.priority);
+      });
     assert(ordered.length == 10);
     return new Ruleset(
       ordered[0],
