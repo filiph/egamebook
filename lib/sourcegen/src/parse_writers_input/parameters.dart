@@ -8,6 +8,9 @@ final ParameterBuilder actionContextParameter =
 final ParameterBuilder actorParameter =
     new ParameterBuilder("a", type: actorType);
 
+final ParameterBuilder originalWorldParameter =
+    new ParameterBuilder("originalWorld", type: worldStateType);
+
 final ParameterBuilder simulationParameter =
     new ParameterBuilder("sim", type: simulationType);
 
@@ -16,3 +19,6 @@ final ParameterBuilder storylineParameter =
 
 final ParameterBuilder worldParameter =
     new ParameterBuilder("w", type: worldStateType);
+
+final ParameterBuilder worldStateBuilderParameter =
+    new ParameterBuilder("w", type: worldStateBuilderType);

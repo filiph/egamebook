@@ -1,6 +1,5 @@
 library edgehead.ruleset;
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -8,9 +7,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
 typedef void RuleApplyCallback(Actor a, Simulation sim, WorldState w,
-    WorldStateBuilder output, Storyline storylineOutput, PubSub pubSub);
+    WorldStateBuilder output, Storyline storylineOutput);
 
-typedef bool RuleIsApplicableCallback(Actor a, Simulation sim, WorldState w);
+typedef bool RuleIsApplicableCallback(
+    Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w);
 
 @immutable
 class Rule {
@@ -82,7 +82,7 @@ class Ruleset {
   }
 
   void apply(Actor a, Simulation sim, WorldState w, WorldStateBuilder output,
-      Storyline storylineOutput, PubSub pubSub) {
+      Storyline storylineOutput) {
     // TODO: rewrite inline so that we don't need to create a new list
     //       every time
     final all = new List<Rule>.unmodifiable(<Rule>[
@@ -100,12 +100,14 @@ class Ruleset {
 
     for (final rule in all) {
       if (rule == null) break;
-      if (rule.isApplicableCallback(a, sim, w)) {
-        rule.applyCallback(a, sim, w, output, storylineOutput, pubSub);
+      if (rule.isApplicableCallback(a, sim, w, output)) {
+        rule.applyCallback(a, sim, w, output, storylineOutput);
         // TODO: record the fact that we've already used rule (via hash)
         // TODO: when 2+ rules of same priority is applicable, use sim.random
-        break;
+        return;
       }
     }
+
+    throw new StateError("No rule was applicable");
   }
 }

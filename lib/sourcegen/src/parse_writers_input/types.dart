@@ -22,6 +22,8 @@ final allNeededTypes = <TypeBuilder>[
   resourceType,
   roomRoamingSituationType,
   roomType,
+  ruleType,
+  rulesetType,
   serializerType,
   simpleActionType,
   simulationType,
@@ -63,6 +65,12 @@ final roomRoamingSituationType = new TypeBuilder('RoomRoamingSituation',
 
 final roomType = new TypeBuilder("Room",
     importFrom: "package:edgehead/fractal_stories/room.dart");
+
+final rulesetType = new TypeBuilder("Ruleset",
+    importFrom: "package:edgehead/ruleset/ruleset.dart");
+
+final ruleType = new TypeBuilder("Rule",
+    importFrom: "package:edgehead/ruleset/ruleset.dart");
 
 final serializerType = new TypeBuilder("Serializer",
     importFrom: "package:built_value/serializer.dart");

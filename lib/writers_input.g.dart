@@ -19,6 +19,8 @@ import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
 import 'package:edgehead/fractal_stories/room.dart' show Room;
+import 'package:edgehead/ruleset/ruleset.dart' show Rule;
+import 'package:edgehead/ruleset/ruleset.dart' show Ruleset;
 import 'package:built_value/serializer.dart' show Serializer;
 import 'package:edgehead/fractal_stories/writer_action.dart' show SimpleAction;
 import 'package:edgehead/fractal_stories/simulation.dart' show Simulation;
@@ -972,15 +974,33 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  if (playerHasVisited(sim, originalWorld, "orcthorn_room") &&
-      !justCameFrom(w, "orcthorn_room")) {
-    s.add("The reinforced door on the side of the corridor is silent.",
-        wholeSentence: true);
-  }
-  if (!playerHasVisited(sim, originalWorld, "orcthorn_room")) {
-    s.add("The reinforced door on the side of the corridor is closed.",
-        wholeSentence: true);
-  }
+  new Ruleset(
+      new Rule(
+          299502294,
+          2,
+          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
+              playerHasVisited(sim, originalWorld, "orcthorn_room") && !justCameFrom(w, "orcthorn_room"),
+          (Actor a, Simulation sim, WorldState originalWorld,
+              WorldStateBuilder w, Storyline s) {
+        s.add('The reinforced door on the side of the corridor is silent.',
+            wholeSentence: true);
+      }),
+      new Rule(
+          871855510,
+          1,
+          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
+              playerHasVisited(sim, originalWorld, "orcthorn_room"),
+          (Actor a, Simulation sim, WorldState originalWorld,
+              WorldStateBuilder w, Storyline s) {}),
+      new Rule(
+          233666017,
+          1,
+          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
+              !playerHasVisited(sim, originalWorld, "orcthorn_room"),
+          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w, Storyline s) {
+        s.add('The reinforced door on the side of the corridor is closed.',
+            wholeSentence: true);
+      })).apply(a, sim, originalWorld, w, s);
   rollBrianaQuote(sim, w, s);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit(

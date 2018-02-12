@@ -36,19 +36,25 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
 
 
 SHORT_DESCRIPTION:
-[[CODE]]
-if (playerHasVisited(sim, originalWorld, "orcthorn_room") && !justCameFrom(w, "orcthorn_room")) {
-  s.add("The reinforced door on the side of the corridor is silent.", wholeSentence: true);
-}
-[[/CODE]]
 
-
-[[CODE]]
-if (!playerHasVisited(sim, originalWorld, "orcthorn_room")) {
-  s.add("The reinforced door on the side of the corridor is closed.", wholeSentence: true);
-}
-[[/CODE]]
-
+- RULESET
+- RULE:
+  playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+  !justCameFrom(w, "orcthorn_room")
+- THEN:
+  The reinforced door on the side of the corridor is silent.
+- END RULE
+- RULE:
+  playerHasVisited(sim, originalWorld, "orcthorn_room")
+- THEN:
+// Intentionally left blank.
+- END RULE
+- RULE:
+  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+- THEN:
+  The reinforced door on the side of the corridor is closed.
+- END RULE
+- END RULESET
 
 [[CODE]]
 rollBrianaQuote(sim, w, s);

@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:edgehead/sourcegen/src/parse_writers_input/types.dart';
 import 'package:meta/meta.dart' hide literal;
 
 import 'escape_dollar_sign.dart';
@@ -247,6 +248,8 @@ enum BlockType {
 class SequenceBlockVisitor {
   final List<StatementBuilder> statements = [];
 
+  final RegExp _logicalAndPattern = new RegExp(r"\s+&&\s+");
+
   void visit(Block block) {
     // A leaf node (block with no children).
     switch (block.type) {
@@ -274,25 +277,74 @@ class SequenceBlockVisitor {
     }
   }
 
-  NewInstanceBuilder _visitRule(Block rule) {
+  _ParsedRule _visitRule(Block rule) {
     assert(rule.type == BlockType.rule);
-    return new TypeBuilder("Rule").newInstance([/* TODO: add members */]);
+    assert(rule.children.length == 2);
+    final int hashCode = rule.content.hashCode;
+    final conditionCode = rule.children.first.content;
+    int specificity = _logicalAndPattern.allMatches(conditionCode).length + 1;
+    if (specificity == 1 && conditionCode.trim() == "true") {
+      specificity = 0;
+    }
+
+    final isApplicable = new MethodBuilder.closure(
+        returns: new ExpressionBuilder.raw((_) => conditionCode))
+      ..addPositional(actorParameter)
+      ..addPositional(simulationParameter)
+      ..addPositional(originalWorldParameter)
+      ..addPositional(worldStateBuilderParameter);
+
+    final consequenceVisitor = new SequenceBlockVisitor();
+    rule.children.last.accept(consequenceVisitor);
+
+    final applyClosure = new MethodBuilder.closure()
+      ..addPositional(actorParameter)
+      ..addPositional(simulationParameter)
+      ..addPositional(originalWorldParameter)
+      ..addPositional(worldStateBuilderParameter)
+      ..addPositional(storylineParameter)
+      ..addStatements(consequenceVisitor.statements);
+
+    final instanceBuilder = ruleType.newInstance(
+        [literal(hashCode), literal(specificity), isApplicable, applyClosure]);
+    return new _ParsedRule(specificity, instanceBuilder);
   }
 
   StatementBuilder _visitRuleset(Block ruleset) {
     //     final ruleset = new Ruleset.unordered([
     //       new Rule(42, 1, (a, sim, w) => a.isPlayer,
-    //           (a, sim, w, output, s, pubSub) => outcome = 42),
+    //           (a, sim, w, output, s) => outcome = 42),
     //       new Rule(43, 2, (a, sim, w) => a.isPlayer && a.name == "Aren",
-    //           (a, sim, w, output, s, pubSub) => outcome = 43),
+    //           (a, sim, w, output, s) => outcome = 43),
     //       new Rule(44, 0, (a, sim, w) => true,
-    //           (a, sim, w, output, s, pubSub) => outcome = 44),
+    //           (a, sim, w, output, s) => outcome = 44),
     //     ]);
     assert(ruleset.type == BlockType.ruleset);
-    final NewInstanceBuilder rulesetConstructor =
-        new TypeBuilder("Ruleset").newInstance([
-      list(ruleset.children.map<NewInstanceBuilder>(_visitRule)),
+    final parsedRules =
+        ruleset.children.map<_ParsedRule>(_visitRule).toList(growable: false);
+    parsedRules.sort();
+    final NewInstanceBuilder rulesetConstructor = rulesetType.newInstance(
+        parsedRules.map<NewInstanceBuilder>((rule) => rule.instanceBuilder));
+    return rulesetConstructor.invoke("apply", [
+      reference("a"),
+      reference("sim"),
+      reference("originalWorld"),
+      reference("w"),
+      reference("s")
     ]);
-    return rulesetConstructor.invoke("apply", [/* TODO: apply a, w, s, ... */]);
   }
+}
+
+/// The rule as it is parsed and generated, with the added information
+/// of [specificity]. This class implements [Comparable], which allows to
+/// easily sort rules according from most specific to least specific.
+class _ParsedRule implements Comparable<_ParsedRule> {
+  final int specificity;
+
+  final NewInstanceBuilder instanceBuilder;
+
+  _ParsedRule(this.specificity, this.instanceBuilder);
+
+  @override
+  int compareTo(_ParsedRule other) => -specificity.compareTo(other.specificity);
 }
