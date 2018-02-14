@@ -32,6 +32,8 @@ final RegExp rulesetOpenTag = new RegExp(r"^\s*- RULESET\s*$");
 /// of a [BlockType.rule] parent block.
 final RegExp ruleThenTag = new RegExp(r"^\s*- THEN:\s*$");
 
+final RegExp _whiteSpaceOnly = new RegExp(r"^\s*$");
+
 /// Parses a block of text (containing a `[[CODE]]` block or not) and returns
 /// an iterable of statements.
 Iterable<StatementBuilder> createDescriptionStatements(String text) {
@@ -86,6 +88,8 @@ Iterable<List<String>> _getBlockContents(
   }
 }
 
+bool _isNotEmpty(String string) => !_whiteSpaceOnly.hasMatch(string);
+
 Block _parseRule(String text) {
   final lines = text.split('\n');
 
@@ -126,8 +130,8 @@ Block _parseSequence(String text) {
             "Cannot make a code block inside a code block.\n"
             "$text");
       }
-      final currentText = currentContent.toString().trim();
-      if (currentText.isNotEmpty) {
+      final currentText = currentContent.toString();
+      if (_isNotEmpty(currentText)) {
         children.add(new Block(BlockType.text, currentText));
       }
       currentContent.clear();
@@ -159,8 +163,8 @@ Block _parseSequence(String text) {
             "$text");
       }
 
-      final currentText = currentContent.toString().trim();
-      if (currentText.isNotEmpty) {
+      final currentText = currentContent.toString();
+      if (_isNotEmpty(currentText)) {
         children.add(new Block(BlockType.text, currentText));
       }
       currentContent.clear();
@@ -194,8 +198,8 @@ Block _parseSequence(String text) {
     throw new FormatException("Unclosed [[CODE]] tag.\n"
         "$text");
   }
-  final currentText = currentContent.toString().trim();
-  if (currentText.isNotEmpty) {
+  final currentText = currentContent.toString();
+  if (_isNotEmpty(currentText)) {
     children.add(new Block(BlockType.text, currentText));
   }
 
@@ -281,10 +285,13 @@ class SequenceBlockVisitor {
     assert(rule.type == BlockType.rule);
     assert(rule.children.length == 2);
     final int hashCode = rule.content.hashCode;
-    final conditionCode = rule.children.first.content;
+    String conditionCode = rule.children.first.content.trim();
     int specificity = _logicalAndPattern.allMatches(conditionCode).length + 1;
-    if (specificity == 1 && conditionCode.trim() == "true") {
+    if (conditionCode == "default") {
+      // We can use 'default' as a condition to have a kind of
+      // a switch-statement-like default rule.
       specificity = 0;
+      conditionCode = "true";
     }
 
     final isApplicable = new MethodBuilder.closure(
