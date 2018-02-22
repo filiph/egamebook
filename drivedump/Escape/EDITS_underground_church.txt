@@ -9,22 +9,24 @@ You enter a room that at first looks like a large, twisting cave. But then it op
 
 Your bare footsteps reverberate in the room, so you slow down to quiet them. 
 
+- RULESET
+- RULE:
+  justCameFrom(w, "cave_with_agruth")
+- THEN:
+After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.
 
-[[CODE]]
-if (justCameFrom(w, "cave_with_agruth")) { 
-  s.add("""After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.""");
-}
-[[/CODE]]
-[[CODE]]
-if (justCameFrom(w, "guardpost_above_church")) { 
-  s.add("""Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.""");
-}
-[[/CODE]]
+- END RULE
+- RULE:
+  justCameFrom(w, "guardpost_above_church")
+- THEN:
+Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.
+
+- END RULE
+- END RULESET
 
 
 SHORT_DESCRIPTION: 
 The temple is silent, as if it were holding its breath.
-
 
 [[CODE]]
 rollBrianaQuote(sim, w, s);

@@ -127,35 +127,57 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 "Where is that cell?"
 
 
+- RULESET
+- RULE:
+  a.currentRoomName == "slave_quarters_passage" &&
+  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+- THEN:
+_"Somewhere here in the slave quarters."_
+
+Briana's eyes go wide and nods towards the door.
+
+
+- END RULE
+- RULE:
+  playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+  a.currentRoomName != "orcthorn_room"
+- THEN:
 _"Down the slave quarters."_
 
-
-[[CODE]]
-if (!playerHasVisited(sim, originalWorld, "slave_quarters_passage")) { 
-  s.add("""Briana tenses. "Well then, at least we have that choice." """, wholeSentence: true);
-}
-[[/CODE]]
+Briana's eyes go wide. "The mad orc behind that door."
 
 
-[[CODE]]
-if (playerHasVisited(sim, originalWorld, "orcthorn_room") && a.currentRoomName != "orcthorn_room") { 
-  s.add("""Briana's eyes go wide. "The mad orc behind that door." """, wholeSentence: true);
-}
-[[/CODE]]
+- END RULE
+- RULE:
+  playerHasVisited(sim, originalWorld, "slave_quarters_passage") &&
+  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+- THEN:
+_"Down the slave quarters."_
+
+Briana's eyes go wide. "That door in the slave quarters."
 
 
-[[CODE]]
-if (playerHasVisited(sim, originalWorld, "slave_quarters_passage") && !playerHasVisited(sim, originalWorld, "orcthorn_room")) { 
-  s.add("""Briana's eyes go wide. "That door in the slave quarters." """, wholeSentence: true);
-}
-[[/CODE]]
+- END RULE
+- RULE:
+  a.currentRoomName == "orcthorn_room"
+- THEN:
+_"Somewhere here in the slave quarters."_
+
+Briana's eyes go wide as she looks around the room.
 
 
-[[CODE]]
-if (a.currentRoomName == "orcthorn_room") { 
-  s.add("""Briana's eyes go wide as she looks around the room. """, wholeSentence: true);
-}
-[[/CODE]]
+- END RULE
+- RULE:
+  default
+- THEN:
+_"Down the slave quarters."_
+
+Briana tenses. "Well then, at least we have that choice."
 
 
-// TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breating space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.
+- END RULE
+- END RULESET
+
+
+
+// TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breathing space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.

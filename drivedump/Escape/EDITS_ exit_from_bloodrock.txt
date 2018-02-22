@@ -30,35 +30,27 @@ Briana doesn't seem surprised.
 
 _"We have to stop this."_
 
-
 Briana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."
-
 
 _"No king has what we have."_
 
 
-[[CODE]]
-if (w.actionHasBeenPerformed("take_orcthorn")) { 
-  s.add(""" 
-"Orcthorn? Bah, you think they'll let you keep it? A farmhand?" 
-
+- RULESET
+- RULE:
+  w.actionHasBeenPerformed("take_orcthorn")
+- THEN:
+"Orcthorn? Bah, you think they'll let you keep it? A farmhand?"
 
 _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
-""", wholeSentence: true);
-}
-[[/CODE]]
-
-
-[[CODE]]
-if (!w.actionHasBeenPerformed("take_orcthorn")) { 
-  s.add("""
-"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand." 
-
+- END RULE
+- RULE:
+  default
+- THEN:
+"Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand."
 
 _"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
-""", wholeSentence: true);
-}
-[[/CODE]]
+- END RULE
+- END RULESET
 
 
 "A connection."

@@ -4,31 +4,37 @@
 DESCRIPTION: 
 A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
 
-
-[[CODE]]
-if (justCameFrom(w, "war_forge")) { 
-  s.add("""You notice a smooth passage leading up and out of the smelter. You'll be able to go there unnoticed.""", wholeSentence: true);
-}
-[[/CODE]]
-[[CODE]]
-if (justCameFrom(w, "guardpost_above_church")) { 
-  s.add("""Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You'll be able to go there unnoticed.""", wholeSentence: true);
-}
-[[/CODE]]
-
-
-
+- RULESET
+- RULE:
+  justCameFrom(w, "war_forge")
+- THEN:
+You notice a smooth passage leading up and out of the smelter. You'll be able to go there unnoticed.
+- END RULE
+- RULE:
+  justCameFrom(w, "guardpost_above_church")
+- THEN:
+Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You'll be able to go there unnoticed.
+- END RULE
+- END RULESET
 
 SHORT_DESCRIPTION: 
 The coals reflects the reds and whites of the molten steel.
 
+- RULESET
+- RULE:
+  w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
+  !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")
+- THEN:
+About a spear's throw away, the blind ogre is {idling|waiting for commands from the forges}.
 
-[[CODE]]
-if (w.actionHasBeenPerformedSuccessfully("smelter_look_around") && !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")) {
-  s.add("About a spear's throw away, the blind ogre is {idling|waiting for commands from the forges}.", wholeSentence: true);
-}
-[[/CODE]]
 
+- END RULE
+- RULE:
+  default
+- THEN:
+// Nothing
+- END RULE
+- END RULESET
 
 [[CODE]]
 rollBrianaQuote(sim, w, s);

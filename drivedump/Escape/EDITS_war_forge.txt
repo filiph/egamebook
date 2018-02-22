@@ -5,26 +5,25 @@ DESCRIPTION:
 You enter the enormous cave that houses Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.
 
 
-[[CODE]]
-if (justCameFrom(w, "cave_with_agruth")) { 
-  s.add("""You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way. """, wholeSentence: true);
-}
-[[/CODE]]
+- RULESET
+- RULE:
+  justCameFrom(w, "cave_with_agruth")
+- THEN:
+You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.
 
+- END RULE
+- RULE:
+  justCameFrom(w, "smelter")
+- THEN:
+You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way.
 
-[[CODE]]
-if (justCameFrom(w, "smelter")) { 
-  s.add("""You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way. """, wholeSentence: true);
-}
-[[/CODE]]
-
-
+- END RULE
+- END RULESET
 
 
 SHORT_DESCRIPTION: 
 // TODO: change after the iron monster was destroyed
 // TODO: pure chaos if player has done the throw in smelter.
-
 
 The air in the war forge is thick and makes breathing difficult, and the constant noise is overwhelming.
 
