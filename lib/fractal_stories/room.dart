@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/shared_constants.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
@@ -15,10 +16,10 @@ import 'package:meta/meta.dart';
 /// Describer that doesn't output any text at all.
 final RoomDescriber emptyRoomDescription = (c) {};
 
-/// This is the magic [currentRoomGame] that, when reached, makes
+/// This is the magic [Room.name] that, when reached, makes
 /// the room roaming situation stop.
-final Room endOfRoam = new Room(endOfRoamName, emptyRoomDescription,
-    emptyRoomDescription, null, null, []);
+final Room endOfRoam = new Room(
+    endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null, []);
 
 /// This generator creates a [FightSituation].
 ///
@@ -59,6 +60,21 @@ class Room {
   /// it once.
   final RoomDescriber shortDescribe;
 
+  /// Optionally, a [Room] can have a parent room. In that case, this room
+  /// is a specialized version (variant) of the parent.
+  ///
+  /// For example, a forge can have a variant after it has burned down. The
+  /// `burned_down_forge` variant would specify `forge` as its parent, and
+  /// would have a [prerequisite] that checks if the forge has burned down.
+  ///
+  /// [parent] is specified as a String. It must correspond to the parent's
+  /// [Room.name].
+  final String parent;
+
+  /// If present, and if [Prerequisite.isSatisfiedBy] evaluates to
+  /// `true`, then this room will override its [parent] room.
+  final Prerequisite prerequisite;
+
   /// A function that builds the fight situation in the Room when player arrives
   /// for the first time.
   ///
@@ -84,7 +100,7 @@ class Room {
 
   Room(this.name, this.describe, this.shortDescribe, this.fightGenerator,
       this.itemGenerator, Iterable<Exit> exits,
-      {this.groundMaterial: "ground"})
+      {this.groundMaterial: "ground", this.parent, this.prerequisite})
       : _exits = new ListBuilder<Exit>(exits).build();
 
   BuiltList<Exit> get exits => _exits;

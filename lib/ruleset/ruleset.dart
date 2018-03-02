@@ -6,6 +6,10 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
+bool _alwaysApplicableCallback(Actor a, Simulation sim,
+        WorldState originalWorld, WorldStateBuilder w) =>
+    true;
+
 typedef void RuleApplyCallback(Actor a, Simulation sim, WorldState w,
     WorldStateBuilder output, Storyline storylineOutput);
 
@@ -13,17 +17,40 @@ typedef bool RuleIsApplicableCallback(
     Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w);
 
 @immutable
+class Prerequisite implements Comparable<Prerequisite> {
+  final int priority;
+
+  final RuleIsApplicableCallback _isApplicableCallback;
+
+  const Prerequisite(this.priority, this._isApplicableCallback);
+
+  const Prerequisite.alwaysTrue()
+      : priority = 0,
+        _isApplicableCallback = _alwaysApplicableCallback;
+
+  @override
+  int compareTo(Prerequisite other) => -priority.compareTo(other.priority);
+
+  bool isSatisfiedBy(Actor a, Simulation sim, WorldState originalWorld,
+          WorldStateBuilder w) =>
+      _isApplicableCallback(a, sim, originalWorld, w);
+}
+
+@immutable
 class Rule {
   final int hash;
 
-  final int priority;
-
-  final RuleIsApplicableCallback isApplicableCallback;
+  final Prerequisite prerequisite;
 
   final RuleApplyCallback applyCallback;
 
-  const Rule(
-      this.hash, this.priority, this.isApplicableCallback, this.applyCallback);
+  Rule(
+    this.hash,
+    int priority,
+    RuleIsApplicableCallback isApplicableCallback,
+    this.applyCallback,
+  )
+      : prerequisite = new Prerequisite(priority, isApplicableCallback);
 }
 
 @immutable
@@ -40,7 +67,7 @@ class Ruleset {
   final Rule rule10;
 
   /// When using this constructor, you **MUST** provide the rules in order
-  /// from highest [Rule.priority] to lowest.
+  /// from highest [Prerequisite.priority] to lowest.
   const Ruleset(this.rule1,
       [this.rule2,
       this.rule3,
@@ -64,7 +91,7 @@ class Ruleset {
       ..sort((a, b) {
         if (a == null) return 1;
         if (b == null) return -1;
-        return -a.priority.compareTo(b.priority);
+        return a.prerequisite.compareTo(b.prerequisite);
       });
     assert(ordered.length == 10);
     return new Ruleset(
@@ -100,7 +127,7 @@ class Ruleset {
 
     for (final rule in all) {
       if (rule == null) break;
-      if (rule.isApplicableCallback(a, sim, w, output)) {
+      if (rule.prerequisite.isSatisfiedBy(a, sim, w, output)) {
         rule.applyCallback(a, sim, w, output, storylineOutput);
         // TODO: record the fact that we've already used rule (via hash)
         // TODO: when 2+ rules of same priority is applicable, use sim.random

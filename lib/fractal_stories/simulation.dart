@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
@@ -43,6 +44,17 @@ class Simulation {
   Simulation(Iterable<Room> rooms, this.combineFunctions)
       : rooms = new Set<Room>.from(rooms) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
+    assert(() {
+      for (final room in rooms) {
+        if (room.parent != null) {
+          final parent = getRoomByName(room.parent);
+          if (parent.parent != null) return false;
+        }
+      }
+      return true;
+    },
+        "Cannot have more than one level of parent-child variants in Rooms: "
+        "$rooms");
   }
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
@@ -70,13 +82,101 @@ class Simulation {
     }
   }
 
+  /// Lists all applicable exits from [room] in current [world].
+  ///
+  /// Algorithm
+  ///
+  ///   * Take all exits from current room and its parent (if this room is
+  ///     a variant) or children (when this room has variants)
+  ///   * Create rule for each, where RULE is compiled thusly:
+  ///     * First part comes from the source variant's RULE (or is just
+  ///       `null` for generic rooms)
+  ///     * Second part comes from the destination variant's RULE (or is just
+  ///       `null` for generic rooms)
+  ///     * Parts are combined thusly: `(FIRST_PART) && (SECOND_PART)`.
+  ///       * When both parts are null, then we use `default` (0 specificity)
+  ///       * When one is null, we just use the other
+  ///       * Priorities (== specificities) are summed
+  ///   * For each rule, get its destination (always the parent room name)
+  ///   * Group together rules with same destination, and choose according
+  ///     to RULESET
+  @visibleForTesting
+  Iterable<Exit> getAvailableExits(
+      Room room, Actor a, WorldState originalWorld) sync* {
+    final List<_ExitRule> allExits =
+        room.exits.map((exit) => _createExitRule(room, exit)).toList();
+
+    if (room.parent != null) {
+      final parent = getRoomByName(room.parent);
+      allExits
+          .addAll(parent.exits.map((exit) => _createExitRule(parent, exit)));
+    }
+
+    for (final variant in rooms.where((r) => r.parent == room.name)) {
+      allExits
+          .addAll(variant.exits.map((exit) => _createExitRule(variant, exit)));
+    }
+
+    final Map<int, List<_ExitRule>> paths = {};
+    for (final exitRule in allExits) {
+      paths.putIfAbsent(
+          exitRule.sourceDestinationHash, () => new List<_ExitRule>());
+      paths[exitRule.sourceDestinationHash].add(exitRule);
+    }
+
+    for (final hash in paths.keys) {
+      // For each source -> destination path, pick only the most specific
+      // exit.
+      final alternatives = paths[hash];
+      if (alternatives.length == 1) {
+        yield alternatives.single.exit;
+        continue;
+      }
+      alternatives.sort();
+      for (final rule in alternatives) {
+        if (rule.prerequisite.isSatisfiedBy(
+            a, this, originalWorld, originalWorld?.toBuilder())) {
+          yield rule.exit;
+          // Break from alternatives.
+          break;
+        }
+      }
+    }
+  }
+
   Room getRoomByName(String roomName) {
     assert(
         rooms.any((room) => room.name == roomName),
         "Room with name $roomName not defined.\n"
         "Rooms: ${rooms.map((r) => r.name).join(', ')}.\n"
         "Current world: $this.");
+
+    /// TODO: make this O(1) by having a helper Map<String,Room>
     return rooms.singleWhere((room) => room.name == roomName);
+  }
+
+  _ExitRule _createExitRule(Room room, Exit exit) {
+    final String source = room.parent ?? room.name;
+    final destinationRoom = getRoomByName(exit.destinationRoomName);
+    final String destination = destinationRoom.parent ?? destinationRoom.name;
+    final firstPart = room.prerequisite;
+    final secondPart = destinationRoom.prerequisite;
+    Prerequisite combinedRule;
+    if (firstPart == null && secondPart == null) {
+      combinedRule = const Prerequisite.alwaysTrue();
+    } else if (secondPart == null) {
+      combinedRule = firstPart;
+    } else if (firstPart == null) {
+      combinedRule = secondPart;
+    } else {
+      final combinedPriority = firstPart.priority + secondPart.priority;
+      final combinedPrerequisite = (Actor a, Simulation sim,
+              WorldState originalWorld, WorldStateBuilder w) =>
+          firstPart.isSatisfiedBy(a, sim, originalWorld, w) &&
+          secondPart.isSatisfiedBy(a, sim, originalWorld, w);
+      combinedRule = new Prerequisite(combinedPriority, combinedPrerequisite);
+    }
+    return new _ExitRule(exit, source, destination, combinedRule);
   }
 
   /// Generator generates multiple [Action] instances given a [world] and
@@ -106,7 +206,7 @@ class Simulation {
     final situation = world.currentSituation as RoomRoamingSituation;
     var room = getRoomByName(situation.currentRoomName);
 
-    for (var exit in room.exits) {
+    for (var exit in getAvailableExits(room, actor, world)) {
       var action = builder(exit);
       assert(action.exit == exit);
       yield action;
@@ -125,4 +225,21 @@ class Simulation {
       yield action;
     }
   }
+}
+
+class _ExitRule implements Comparable<_ExitRule> {
+  final Exit exit;
+
+  final String source;
+
+  final String destination;
+
+  final Prerequisite prerequisite;
+
+  const _ExitRule(this.exit, this.source, this.destination, this.prerequisite);
+
+  int get sourceDestinationHash => "$source>>>$destination".hashCode;
+
+  @override
+  int compareTo(_ExitRule other) => prerequisite.compareTo(other.prerequisite);
 }

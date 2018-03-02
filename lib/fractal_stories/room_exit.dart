@@ -1,6 +1,6 @@
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 
 typedef bool CheckFunction(Simulation sim, WorldState world);
 
@@ -17,4 +17,7 @@ class Exit {
 
   const Exit(this.destinationRoomName, this.command, this.description,
       {this.isAccessible});
+
+  @override
+  String toString() => "Exit<$destinationRoomName,$command>";
 }

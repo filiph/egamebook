@@ -2,8 +2,11 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -76,6 +79,62 @@ void main() {
       });
       test("BreakNeckOnGroundSituation", () {
         checkSituationBuild(() => createBreakNeckOnGroundSituation(a, b));
+      });
+    });
+    group("Exits", () {
+      bool forgeIsAfterFire;
+
+      setUp(() {
+        forgeIsAfterFire = false;
+      });
+
+      final afterFireCrevice = new Room("after_fire_hidden_crevice",
+          emptyRoomDescription, emptyRoomDescription, null, null, []);
+
+      final creviceExit =
+          new Exit(afterFireCrevice.name, "explore to hidden crevice", "");
+
+      final _forgeName = "forge";
+
+      final _forgeAfterFireName = "forge_after_fire";
+
+      final forgeEntry = new Exit(_forgeName, "enter the forge", "");
+
+      final forgeEntryAfterFire =
+          new Exit(_forgeAfterFireName, "enter the charred forge", "");
+
+      final outside = new Room("outside", emptyRoomDescription,
+          emptyRoomDescription, null, null, [forgeEntry, forgeEntryAfterFire]);
+
+      final outsideExit = new Exit(outside.name, "go outside", "");
+
+      final forge = new Room(_forgeName, emptyRoomDescription,
+          emptyRoomDescription, null, null, [outsideExit]);
+
+      final forgeAfterFire = new Room(_forgeAfterFireName, emptyRoomDescription,
+          emptyRoomDescription, null, null, [creviceExit],
+          parent: _forgeName,
+          prerequisite:
+              new Prerequisite(1, (_, __, ___, ____) => forgeIsAfterFire));
+
+      final simulation = new Simulation(
+          [forge, forgeAfterFire, afterFireCrevice, outside], {});
+
+      test("the default is picked when no more specific apply", () {
+        expect(simulation.getAvailableExits(outside, null, null),
+            unorderedEquals(<Exit>[forgeEntry]));
+      });
+
+      test("variants get parent's exits if not overridden", () {
+        forgeIsAfterFire = true;
+        expect(simulation.getAvailableExits(forgeAfterFire, null, null),
+            unorderedEquals(<Exit>[outsideExit, creviceExit]));
+      });
+
+      test("variants use own exits over parent's when overridden", () {
+        forgeIsAfterFire = true;
+        expect(simulation.getAvailableExits(outside, null, null),
+            unorderedEquals(<Exit>[forgeEntryAfterFire]));
       });
     });
   });
