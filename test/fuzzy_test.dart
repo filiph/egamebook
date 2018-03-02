@@ -16,7 +16,7 @@ void main() {
     runner.startBook();
     await runner.bookEnd;
     runner.close();
-  });
+  }, tags: ["long-running"]);
 
   group("logged", () {
     Directory tempDir;
