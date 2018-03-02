@@ -5,8 +5,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 import 'action_record.dart';
@@ -14,56 +12,6 @@ import 'actor.dart';
 import 'plan_consequence.dart';
 import 'simulation.dart';
 import 'storyline/storyline.dart';
-
-/// Generator generates multiple [Action] instances given a [world] and
-/// an [actor] and a [builder].
-///
-/// For example, a builder called `hitWithStick` can take the current
-/// world and output as many actions as there are enemies to hit with a stick.
-/// Each generated action will encapsulate the enemy to hit.
-Iterable<EnemyTargetAction> generateEnemyTargetActions(
-    Actor actor,
-    Simulation simulation,
-    WorldState world,
-    EnemyTargetActionBuilder builder) sync* {
-  var situationActors =
-      world.currentSituation.getActors(world.actors, simulation, world);
-  var enemies = situationActors
-      .where((other) => other != actor && other.isAliveAndActive);
-  for (var enemy in enemies) {
-    var action = builder(enemy);
-    assert(action.enemy == enemy);
-    if (action.isAggressive && !actor.hates(enemy, world)) continue;
-    yield action;
-  }
-}
-
-/// Generator generates multiple [ExitAction] instances given a [world] and
-/// an [actor] and a [builder].
-Iterable<ExitAction> generateExitActions(Actor actor, Simulation simulation,
-    WorldState world, ExitActionBuilder builder) sync* {
-  final situation = world.currentSituation as RoomRoamingSituation;
-  var room = simulation.getRoomByName(situation.currentRoomName);
-
-  for (var exit in room.exits) {
-    var action = builder(exit);
-    assert(action.exit == exit);
-    yield action;
-  }
-}
-
-/// Generator generates multiple [ItemAction] instances given a [world] and
-/// an [actor] and a [builder].
-Iterable<ItemAction> generateItemActions(Actor actor, Simulation simulation,
-    WorldState world, ItemActionBuilder builder) sync* {
-  final situation = world.currentSituation as FightSituation;
-
-  for (var item in situation.droppedItems) {
-    var action = builder(item);
-    assert(action.item == item);
-    yield action;
-  }
-}
 
 /// A generic type for builder functions that take a parameter to build
 /// a concrete implementation of an action.

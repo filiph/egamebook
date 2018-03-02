@@ -141,7 +141,8 @@ class ActorPlanner {
 
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
 
-    for (var action in _generateAllActions(currentActor, _initial.world)) {
+    for (var action
+        in simulation.generateAllActions(currentActor, _initial.world)) {
       log.finer(() => "Evaluating action '${action.command}' "
           "for ${currentActor.name}");
 
@@ -175,31 +176,6 @@ class ActorPlanner {
     }
 
     _resultsReady = true;
-  }
-
-  /// Generates all applicable actions for [actor] given a [world]. This goes
-  /// through all [Situation.actions] as well as [Situation.actionGenerators].
-  ///
-  /// TODO: remove dependency on [ExitActionBuilder], [ItemActionBuilder], etc.
-  ///       because that leads to dependency of core fractal_stories on
-  ///       things like [Room] (which should be in `RoomRoamingSituation`).
-  Iterable<Action> _generateAllActions(Actor actor, WorldState world) sync* {
-    assert(
-        world.currentSituation.actions.isNotEmpty ||
-            world.currentSituation.actionGenerators.isNotEmpty,
-        "There are no actions defined for ${world.currentSituation}");
-    yield* world.currentSituation.actions;
-    for (var builder in world.currentSituation.actionGenerators) {
-      if (builder is EnemyTargetActionBuilder) {
-        yield* generateEnemyTargetActions(actor, simulation, world, builder);
-      } else if (builder is ExitActionBuilder) {
-        yield* generateExitActions(actor, simulation, world, builder);
-      } else if (builder is ItemActionBuilder) {
-        yield* generateItemActions(actor, simulation, world, builder);
-      } else {
-        throw new StateError("$builder is not one of the supported ones");
-      }
-    }
   }
 
   /// Returns the stats for consequences of a given [initial] state after
@@ -347,7 +323,8 @@ class ActorPlanner {
 
       log.finest("- generating all actions for ${currentActor.name}");
       var originalCount = open.length;
-      for (Action action in _generateAllActions(currentActor, current.world)) {
+      for (Action action
+          in simulation.generateAllActions(currentActor, current.world)) {
         if (!action.isApplicable(currentActor, simulation, current.world))
           continue;
         var consequences = action.apply(
