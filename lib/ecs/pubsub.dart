@@ -1,16 +1,10 @@
 import 'dart:async';
 
-import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:logging/logging.dart';
 
 final _log = new Logger("PubSub");
-
-abstract class PubSubEventBase {
-  final ActionContext context;
-
-  PubSubEventBase(this.context);
-}
 
 class ActorKilledEvent extends PubSubEventBase {
   final Actor actor;
@@ -88,4 +82,10 @@ class PubSub implements Sink<Object> {
   void _assertSealedBeforePublishing() {
     assert(_sealed, "Please seal pubsub before publishing events.");
   }
+}
+
+abstract class PubSubEventBase {
+  final ActionContext context;
+
+  PubSubEventBase(this.context);
 }

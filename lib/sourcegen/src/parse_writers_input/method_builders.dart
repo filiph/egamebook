@@ -20,7 +20,7 @@ void addTodoToMethod(MethodBuilder method, String message) {
 MethodBuilder createActionContextClosure() {
   final method = new MethodBuilder.closure()
     ..addPositional(actionContextParameter);
-  _addConvenienceAccessors(method);
+  _addActionContextConvenienceAccessors(method);
   return method;
 }
 
@@ -33,7 +33,7 @@ MethodBuilder createActionContextMethod(
   final method = new MethodBuilder(methodName, returnType: returnType)
     ..addPositional(actionContextParameter)
     ..addAnnotation(overrideAnnotation);
-  _addConvenienceAccessors(method);
+  _addActionContextConvenienceAccessors(method);
   return method;
 }
 
@@ -56,6 +56,14 @@ MethodBuilder createActorSimWorldStoryClosure() {
     ..addPositional(storylineParameter);
 }
 
+/// Same as [createActionContextClosure], but for `ApplicabilityContext`.
+MethodBuilder createApplicabilityContextClosure() {
+  final method = new MethodBuilder.closure()
+    ..addPositional(applicabilityContextParameter);
+  _addApplicabilityContextConvenienceAccessors(method);
+  return method;
+}
+
 StatementBuilder stateErrorThrow(String message) =>
     reference('StateError').newInstance([literal(message)]).asThrow();
 
@@ -66,7 +74,7 @@ StatementBuilder stateErrorThrow(String message) =>
 ///     Actor a = c.actor;
 ///     WorldStateBuilder w = c.outputWorld;
 ///     Storyline s = c.outputStoryline;
-void _addConvenienceAccessors(MethodBuilder method) {
+void _addActionContextConvenienceAccessors(MethodBuilder method) {
   method
     ..addStatement(reference("c")
         .property("world")
@@ -79,4 +87,18 @@ void _addConvenienceAccessors(MethodBuilder method) {
         .asFinal("w", worldStateBuilderType))
     ..addStatement(
         reference("c").property("outputStoryline").asFinal("s", storylineType));
+}
+
+/// Add convenience assignments at the top of a method:
+///
+///     WorldState w = c.world;
+///     Simulation sim = c.simulation;
+///     Actor a = c.actor;
+void _addApplicabilityContextConvenienceAccessors(MethodBuilder method) {
+  method
+    ..addStatement(
+        reference("c").property("world").asFinal("w", worldStateType))
+    ..addStatement(
+        reference("c").property("simulation").asFinal("sim", simulationType))
+    ..addStatement(reference("c").property("actor").asFinal("a", actorType));
 }

@@ -8,9 +8,11 @@
 
 library writers_input;
 
-import 'package:edgehead/fractal_stories/action.dart' show ActionContext;
+import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
 import 'package:edgehead/fractal_stories/actor.dart' show Actor;
+import 'package:edgehead/fractal_stories/context.dart'
+    show ApplicabilityContext;
 import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
@@ -659,11 +661,18 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 
 ''', wholeSentence: true);
     new Ruleset(
-        new Rule(675414120, 2, (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) => a.currentRoomName == "slave_quarters_passage" && !playerHasVisited(sim, originalWorld, "orcthorn_room"), (Actor a,
-            Simulation sim,
-            WorldState originalWorld,
-            WorldStateBuilder w,
-            Storyline s) {
+        new Rule(675414120, 2, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return a.currentRoomName == "slave_quarters_passage" &&
+              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
           s.add('''_"Somewhere here in the slave quarters."_
 
 Briana\'s eyes go wide and nods towards the door.
@@ -671,9 +680,18 @@ Briana\'s eyes go wide and nods towards the door.
 
 ''', wholeSentence: true);
         }),
-        new Rule(363993062, 2, (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) => playerHasVisited(sim, originalWorld, "orcthorn_room") && a.currentRoomName != "orcthorn_room",
-            (Actor a, Simulation sim, WorldState originalWorld,
-                WorldStateBuilder w, Storyline s) {
+        new Rule(363993062, 2, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+              a.currentRoomName != "orcthorn_room";
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
           s.add('''_"Down the slave quarters."_
 
 Briana\'s eyes go wide. "The mad orc behind that door."
@@ -681,9 +699,19 @@ Briana\'s eyes go wide. "The mad orc behind that door."
 
 ''', wholeSentence: true);
         }),
-        new Rule(392088263, 2, (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) => playerHasVisited(sim, originalWorld, "slave_quarters_passage") && !playerHasVisited(sim, originalWorld, "orcthorn_room"),
-            (Actor a, Simulation sim, WorldState originalWorld,
-                WorldStateBuilder w, Storyline s) {
+        new Rule(392088263, 2, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return playerHasVisited(
+                  sim, originalWorld, "slave_quarters_passage") &&
+              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
           s.add('''_"Down the slave quarters."_
 
 Briana\'s eyes go wide. "That door in the slave quarters."
@@ -691,9 +719,17 @@ Briana\'s eyes go wide. "That door in the slave quarters."
 
 ''', wholeSentence: true);
         }),
-        new Rule(361178650, 1, (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) => a.currentRoomName == "orcthorn_room",
-            (Actor a, Simulation sim, WorldState originalWorld,
-                WorldStateBuilder w, Storyline s) {
+        new Rule(361178650, 1, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return a.currentRoomName == "orcthorn_room";
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
           s.add('''_"Somewhere here in the slave quarters."_
 
 Briana\'s eyes go wide as she looks around the room.
@@ -701,16 +737,24 @@ Briana\'s eyes go wide as she looks around the room.
 
 ''', wholeSentence: true);
         }),
-        new Rule(974180978, 0, (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) => true,
-            (Actor a, Simulation sim, WorldState originalWorld,
-                WorldStateBuilder w, Storyline s) {
+        new Rule(974180978, 0, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
           s.add('''_"Down the slave quarters."_
 
 Briana tenses. "Well then, at least we have that choice."
 
 
 ''', wholeSentence: true);
-        })).apply(a, sim, originalWorld, w, s);
+        })).apply(c);
     return '${a.name} successfully performs TalkToBriana3';
   }
 
@@ -760,34 +804,40 @@ Room warForge = new Room('war_forge', (ActionContext c) {
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(
-          1010631821,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "cave_with_agruth"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(1010631821, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "cave_with_agruth");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.
 
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          383419248,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "smelter"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(383419248, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "smelter");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way.
 
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1049,32 +1099,47 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   new Ruleset(
-      new Rule(
-          299502294,
-          2,
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
-              playerHasVisited(sim, originalWorld, "orcthorn_room") && !justCameFrom(w, "orcthorn_room"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(299502294, 2, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+            !justCameFrom(w, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add('''  The reinforced door on the side of the corridor is silent.
 ''', wholeSentence: true);
       }),
-      new Rule(
-          871855510,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
-              playerHasVisited(sim, originalWorld, "orcthorn_room"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {}),
-      new Rule(
-          233666017,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
-              !playerHasVisited(sim, originalWorld, "orcthorn_room"),
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w, Storyline s) {
+      new Rule(871855510, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, originalWorld, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+      }),
+      new Rule(233666017, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return !playerHasVisited(sim, originalWorld, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add('''  The reinforced door on the side of the corridor is closed.
 ''', wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
   rollBrianaQuote(sim, w, s);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit(
@@ -1522,34 +1587,40 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(
-          404031087,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "cave_with_agruth"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(404031087, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "cave_with_agruth");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.
 
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          1058415809,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "guardpost_above_church"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(1058415809, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "guardpost_above_church");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.
 
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1686,32 +1757,38 @@ Room smelter = new Room('smelter', (ActionContext c) {
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(
-          1010398177,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "war_forge"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(1010398177, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "war_forge");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          9791310,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "guardpost_above_church"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(9791310, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "guardpost_above_church");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You\'ll be able to go there unnoticed.
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1722,31 +1799,37 @@ Room smelter = new Room('smelter', (ActionContext c) {
 
 ''', wholeSentence: true);
   new Ruleset(
-          new Rule(
-              988691356,
-              2,
-              (Actor a, Simulation sim, WorldState originalWorld,
-                      WorldStateBuilder w) =>
-                  w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
-                  !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear"),
-              (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w, Storyline s) {
-            s.add(
-                '''About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.
+      new Rule(988691356, 2, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
+            !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.
 
 
 ''',
-                wholeSentence: true);
-          }),
-          new Rule(
-              978029961,
-              0,
-              (Actor a, Simulation sim, WorldState originalWorld,
-                      WorldStateBuilder w) =>
-                  true,
-              (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w, Storyline s) {}))
-      .apply(a, sim, originalWorld, w, s);
+            wholeSentence: true);
+      }),
+      new Rule(978029961, 0, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+      })).apply(c);
   rollBrianaQuote(sim, w, s);
 }, null, null, <Exit>[
   new Exit('war_forge', 'Go to the war forges',
@@ -1839,34 +1922,40 @@ Room guardpostAboveChurch =
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(
-          133764767,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "smelter"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(133764767, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "smelter");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.
 
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          318594253,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              justCameFrom(w, "underground_church"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(318594253, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "underground_church");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs\' vocabulary. Both of these passages slope downward.
 
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
   s.add('''
 A third passage is marked "Up Door".  Beyond the opening, you see a steep stairway leading upward. This is it. Your final path to escape.
 
@@ -1881,34 +1970,40 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   new Ruleset(
-      new Rule(
-          1049200592,
-          2,
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
-              w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
-              !w.actionHasBeenPerformedSuccessfully(
-                  "guardpost_above_church_take_shield"), (Actor a,
-              Simulation sim,
-              WorldState originalWorld,
-              WorldStateBuilder w,
-              Storyline s) {
+      new Rule(1049200592, 2, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
+            !w.actionHasBeenPerformedSuccessfully(
+                "guardpost_above_church_take_shield");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''The goblin\'s corpse is sprawled on the ground in the middle of the circular room.
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          948011826,
-          0,
-          (Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w) =>
-              true,
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(948011826, 0, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''The goblin is sleeping soundly next to the passage to the Upper Door.
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Descend toward the Underground Church',
       'You take the passage leading down toward the temple.'),
@@ -2022,14 +2117,17 @@ _"No king has what we have."_
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(
-          937280785,
-          1,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              w.actionHasBeenPerformed("take_orcthorn"),
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(937280785, 1, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.actionHasBeenPerformed("take_orcthorn");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''"Orcthorn? Bah, you think they\'ll let you keep it? A farmhand?"
 
@@ -2037,21 +2135,24 @@ _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connec
 ''',
             wholeSentence: true);
       }),
-      new Rule(
-          36322634,
-          0,
-          (Actor a, Simulation sim, WorldState originalWorld,
-                  WorldStateBuilder w) =>
-              true,
-          (Actor a, Simulation sim, WorldState originalWorld,
-              WorldStateBuilder w, Storyline s) {
+      new Rule(36322634, 0, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             '''"Let me guess. Muscles and a bit of brains? Don\'t be a fool, you\'re still a farmhand."
 
 _"I am_ not _a farmhand. And I don\'t mean muscles or brains, no. I have a strange connection. We both do."_
 ''',
             wholeSentence: true);
-      })).apply(a, sim, originalWorld, w, s);
+      })).apply(c);
   s.add('''
 
 "A connection."

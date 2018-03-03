@@ -4,6 +4,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -107,7 +108,8 @@ abstract class RoomRoamingSituation extends Situation
     final Actor a = context.actor;
     final WorldStateBuilder w = context.outputWorld;
     final Storyline s = context.outputStoryline;
-    var room = sim.getRoomByName(destinationRoomName);
+    final specifiedRoom = sim.getRoomByName(destinationRoomName);
+    final room = sim.getVariantIfApplicable(specifiedRoom, context);
 
     // Find if monsters were slain by seeing if there was a [TakeExit] action
     // record leading to this room.

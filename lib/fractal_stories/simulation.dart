@@ -1,6 +1,8 @@
 library stranded.world;
 
 import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -14,8 +16,20 @@ import 'package:meta/meta.dart';
 import 'actor.dart';
 import 'room.dart';
 
+/// Builder takes an enemy actor and generates an instance of
+/// [EnemyTargetAction] with the given [enemy].
+typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
+
 typedef void EventCallback(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
+
+/// Builder takes an enemy actor and generates an instance of
+/// [ExitAction] with the given [exit].
+typedef ExitAction ExitActionBuilder(Exit exit);
+
+/// Builder takes situation's items and generates an instance of [ItemAction]
+/// with the given [item] and its [description].
+typedef ItemAction ItemActionBuilder(ItemLike item);
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.
@@ -63,19 +77,20 @@ class Simulation {
   /// TODO: Let this be overridden by implementations. The [Simulation]
   ///       abstraction should support whatever game mechanic, not just
   ///       edgehead [EnemyTargetActionBuilder], [ExitActionBuilder], etc.
-  Iterable<Action> generateAllActions(Actor actor, WorldState world) sync* {
+  Iterable<Action> generateAllActions(ApplicabilityContext context) sync* {
     assert(
-        world.currentSituation.actions.isNotEmpty ||
-            world.currentSituation.actionGenerators.isNotEmpty,
-        "There are no actions defined for ${world.currentSituation}");
-    yield* world.currentSituation.actions;
-    for (var builder in world.currentSituation.actionGenerators) {
+        context.world.currentSituation.actions.isNotEmpty ||
+            context.world.currentSituation.actionGenerators.isNotEmpty,
+        "There are no actions defined for ${context.world.currentSituation}");
+    yield* context.world.currentSituation.actions;
+    for (var builder in context.world.currentSituation.actionGenerators) {
       if (builder is EnemyTargetActionBuilder) {
-        yield* _generateEnemyTargetActions(actor, world, builder);
+        yield* _generateEnemyTargetActions(
+            context.actor, context.world, builder);
       } else if (builder is ExitActionBuilder) {
-        yield* _generateExitActions(actor, world, builder);
+        yield* _generateExitActions(context, builder);
       } else if (builder is ItemActionBuilder) {
-        yield* _generateItemActions(actor, world, builder);
+        yield* _generateItemActions(context.actor, context.world, builder);
       } else {
         throw new StateError("$builder is not one of the supported ones");
       }
@@ -102,7 +117,7 @@ class Simulation {
   ///     to RULESET
   @visibleForTesting
   Iterable<Exit> getAvailableExits(
-      Room room, Actor a, WorldState originalWorld) sync* {
+      Room room, ApplicabilityContext context) sync* {
     final List<_ExitRule> allExits =
         room.exits.map((exit) => _createExitRule(room, exit)).toList();
 
@@ -112,7 +127,7 @@ class Simulation {
           .addAll(parent.exits.map((exit) => _createExitRule(parent, exit)));
     }
 
-    for (final variant in rooms.where((r) => r.parent == room.name)) {
+    for (final variant in _getVariants(room)) {
       allExits
           .addAll(variant.exits.map((exit) => _createExitRule(variant, exit)));
     }
@@ -134,8 +149,7 @@ class Simulation {
       }
       alternatives.sort();
       for (final rule in alternatives) {
-        if (rule.prerequisite.isSatisfiedBy(
-            a, this, originalWorld, originalWorld?.toBuilder())) {
+        if (rule.prerequisite.isSatisfiedBy(context)) {
           yield rule.exit;
           // Break from alternatives.
           break;
@@ -144,6 +158,7 @@ class Simulation {
     }
   }
 
+  /// Fetches the [Room] with the [roomName].
   Room getRoomByName(String roomName) {
     assert(
         rooms.any((room) => room.name == roomName),
@@ -153,6 +168,19 @@ class Simulation {
 
     /// TODO: make this O(1) by having a helper Map<String,Room>
     return rooms.singleWhere((room) => room.name == roomName);
+  }
+
+  /// Returns the most specific variant of the room, when available. Otherwise,
+  /// returns [room].
+  Room getVariantIfApplicable(Room room, ApplicabilityContext context) {
+    final variants = _getVariants(room).toList(growable: false);
+    variants.sort((a, b) => a.prerequisite.compareTo(b.prerequisite));
+    for (final variant in variants) {
+      if (variant.prerequisite.isSatisfiedBy(context)) {
+        return variant;
+      }
+    }
+    return room;
   }
 
   _ExitRule _createExitRule(Room room, Exit exit) {
@@ -170,10 +198,8 @@ class Simulation {
       combinedRule = secondPart;
     } else {
       final combinedPriority = firstPart.priority + secondPart.priority;
-      final combinedPrerequisite = (Actor a, Simulation sim,
-              WorldState originalWorld, WorldStateBuilder w) =>
-          firstPart.isSatisfiedBy(a, sim, originalWorld, w) &&
-          secondPart.isSatisfiedBy(a, sim, originalWorld, w);
+      final combinedPrerequisite = (ApplicabilityContext context) =>
+          firstPart.isSatisfiedBy(context) && secondPart.isSatisfiedBy(context);
       combinedRule = new Prerequisite(combinedPriority, combinedPrerequisite);
     }
     return new _ExitRule(exit, source, destination, combinedRule);
@@ -202,11 +228,11 @@ class Simulation {
   /// Generator generates multiple [ExitAction] instances given a [world] and
   /// an [actor] and a [builder].
   Iterable<ExitAction> _generateExitActions(
-      Actor actor, WorldState world, ExitActionBuilder builder) sync* {
-    final situation = world.currentSituation as RoomRoamingSituation;
+      ApplicabilityContext context, ExitActionBuilder builder) sync* {
+    final situation = context.world.currentSituation as RoomRoamingSituation;
     var room = getRoomByName(situation.currentRoomName);
 
-    for (var exit in getAvailableExits(room, actor, world)) {
+    for (var exit in getAvailableExits(room, context)) {
       var action = builder(exit);
       assert(action.exit == exit);
       yield action;
@@ -224,6 +250,10 @@ class Simulation {
       assert(action.item == item);
       yield action;
     }
+  }
+
+  Iterable<Room> _getVariants(Room room) {
+    return rooms.where((r) => r.parent == room.name);
   }
 }
 

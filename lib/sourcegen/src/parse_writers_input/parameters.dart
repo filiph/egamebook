@@ -5,6 +5,9 @@ import 'types.dart';
 final ParameterBuilder actionContextParameter =
     new ParameterBuilder("c", type: actionContextType);
 
+final ParameterBuilder applicabilityContextParameter =
+    new ParameterBuilder("c", type: applicabilityContextType);
+
 final ParameterBuilder actorParameter =
     new ParameterBuilder("a", type: actorType);
 

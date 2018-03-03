@@ -1,8 +1,8 @@
 import 'package:edgehead/edgehead_event_callbacks.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_simulation.dart';
-import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -279,10 +279,9 @@ bool isRoamingInBloodrock(WorldState w) {
 }
 
 /// Checks whether player was just now at [roomName].
-bool justCameFrom(WorldStateBuilder w, String roomName) {
-  final built = w.build();
-  final player = getPlayer(built);
-  for (final rec in built.actionRecords) {
+bool justCameFrom(WorldState w, String roomName) {
+  final player = getPlayer(w);
+  for (final rec in w.actionRecords) {
     if (rec.protagonist != player.id) continue;
     if (rec.actionName != TakeExitAction.className) continue;
     if (rec.dataString == roomName) return true;

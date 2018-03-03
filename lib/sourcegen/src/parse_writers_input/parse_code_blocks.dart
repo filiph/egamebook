@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:edgehead/sourcegen/src/parse_writers_input/method_builders.dart';
 import 'package:edgehead/sourcegen/src/parse_writers_input/types.dart';
 import 'package:meta/meta.dart' hide literal;
 
@@ -294,22 +295,14 @@ class SequenceBlockVisitor {
       conditionCode = "true";
     }
 
-    final isApplicable = new MethodBuilder.closure(
-        returns: new ExpressionBuilder.raw((_) => conditionCode))
-      ..addPositional(actorParameter)
-      ..addPositional(simulationParameter)
-      ..addPositional(originalWorldParameter)
-      ..addPositional(worldStateBuilderParameter);
+    final isApplicable = createApplicabilityContextClosure()
+      ..addStatement(
+          new ExpressionBuilder.raw((_) => conditionCode).asReturn());
 
     final consequenceVisitor = new SequenceBlockVisitor();
     rule.children.last.accept(consequenceVisitor);
 
-    final applyClosure = new MethodBuilder.closure()
-      ..addPositional(actorParameter)
-      ..addPositional(simulationParameter)
-      ..addPositional(originalWorldParameter)
-      ..addPositional(worldStateBuilderParameter)
-      ..addPositional(storylineParameter)
+    final applyClosure = createActionContextClosure()
       ..addStatements(consequenceVisitor.statements);
 
     final instanceBuilder = ruleType.newInstance(
@@ -318,27 +311,21 @@ class SequenceBlockVisitor {
   }
 
   StatementBuilder _visitRuleset(Block ruleset) {
-    //     final ruleset = new Ruleset.unordered([
-    //       new Rule(42, 1, (a, sim, w) => a.isPlayer,
-    //           (a, sim, w, output, s) => outcome = 42),
-    //       new Rule(43, 2, (a, sim, w) => a.isPlayer && a.name == "Aren",
-    //           (a, sim, w, output, s) => outcome = 43),
-    //       new Rule(44, 0, (a, sim, w) => true,
-    //           (a, sim, w, output, s) => outcome = 44),
-    //     ]);
+    //     final ruleset = new Ruleset(
+    //       new Rule(42, 1, (c) => a.isPlayer,
+    //           (c) => outcome = 42),
+    //       new Rule(43, 2, (c) => a.isPlayer && a.name == "Aren",
+    //           (c) => outcome = 43),
+    //       new Rule(44, 0, (c) => true,
+    //           (c) => outcome = 44),
+    //     ).apply(context);
     assert(ruleset.type == BlockType.ruleset);
     final parsedRules =
         ruleset.children.map<_ParsedRule>(_visitRule).toList(growable: false);
     parsedRules.sort();
     final NewInstanceBuilder rulesetConstructor = rulesetType.newInstance(
         parsedRules.map<NewInstanceBuilder>((rule) => rule.instanceBuilder));
-    return rulesetConstructor.invoke("apply", [
-      reference("a"),
-      reference("sim"),
-      reference("originalWorld"),
-      reference("w"),
-      reference("s")
-    ]);
+    return rulesetConstructor.invoke("apply", [reference("c")]);
   }
 }
 

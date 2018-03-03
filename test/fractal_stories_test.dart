@@ -1,4 +1,5 @@
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/room.dart';
@@ -114,26 +115,27 @@ void main() {
       final forgeAfterFire = new Room(_forgeAfterFireName, emptyRoomDescription,
           emptyRoomDescription, null, null, [creviceExit],
           parent: _forgeName,
-          prerequisite:
-              new Prerequisite(1, (_, __, ___, ____) => forgeIsAfterFire));
+          prerequisite: new Prerequisite(1, (_) => forgeIsAfterFire));
 
       final simulation = new Simulation(
           [forge, forgeAfterFire, afterFireCrevice, outside], {});
 
+      final context = new ApplicabilityContext(null, simulation, null);
+
       test("the default is picked when no more specific apply", () {
-        expect(simulation.getAvailableExits(outside, null, null),
+        expect(simulation.getAvailableExits(outside, context),
             unorderedEquals(<Exit>[forgeEntry]));
       });
 
       test("variants get parent's exits if not overridden", () {
         forgeIsAfterFire = true;
-        expect(simulation.getAvailableExits(forgeAfterFire, null, null),
+        expect(simulation.getAvailableExits(forgeAfterFire, context),
             unorderedEquals(<Exit>[outsideExit, creviceExit]));
       });
 
       test("variants use own exits over parent's when overridden", () {
         forgeIsAfterFire = true;
-        expect(simulation.getAvailableExits(outside, null, null),
+        expect(simulation.getAvailableExits(outside, context),
             unorderedEquals(<Exit>[forgeEntryAfterFire]));
       });
     });

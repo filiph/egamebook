@@ -1,20 +1,13 @@
 library edgehead.ruleset;
 
-import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:meta/meta.dart';
 
-bool _alwaysApplicableCallback(Actor a, Simulation sim,
-        WorldState originalWorld, WorldStateBuilder w) =>
-    true;
+bool _alwaysApplicableCallback(ApplicabilityContext _) => true;
 
-typedef void RuleApplyCallback(Actor a, Simulation sim, WorldState w,
-    WorldStateBuilder output, Storyline storylineOutput);
+typedef void RuleApplyCallback(ActionContext context);
 
-typedef bool RuleIsApplicableCallback(
-    Actor a, Simulation sim, WorldState originalWorld, WorldStateBuilder w);
+typedef bool RuleIsApplicableCallback(ApplicabilityContext context);
 
 @immutable
 class Prerequisite implements Comparable<Prerequisite> {
@@ -31,9 +24,8 @@ class Prerequisite implements Comparable<Prerequisite> {
   @override
   int compareTo(Prerequisite other) => -priority.compareTo(other.priority);
 
-  bool isSatisfiedBy(Actor a, Simulation sim, WorldState originalWorld,
-          WorldStateBuilder w) =>
-      _isApplicableCallback(a, sim, originalWorld, w);
+  bool isSatisfiedBy(ApplicabilityContext context) =>
+      _isApplicableCallback(context);
 }
 
 @immutable
@@ -108,8 +100,7 @@ class Ruleset {
     );
   }
 
-  void apply(Actor a, Simulation sim, WorldState w, WorldStateBuilder output,
-      Storyline storylineOutput) {
+  void apply(ActionContext context) {
     // TODO: rewrite inline so that we don't need to create a new list
     //       every time
     final all = new List<Rule>.unmodifiable(<Rule>[
@@ -127,8 +118,8 @@ class Ruleset {
 
     for (final rule in all) {
       if (rule == null) break;
-      if (rule.prerequisite.isSatisfiedBy(a, sim, w, output)) {
-        rule.applyCallback(a, sim, w, output, storylineOutput);
+      if (rule.prerequisite.isSatisfiedBy(context)) {
+        rule.applyCallback(context);
         // TODO: record the fact that we've already used rule (via hash)
         // TODO: when 2+ rules of same priority is applicable, use sim.random
         return;

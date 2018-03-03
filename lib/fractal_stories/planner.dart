@@ -7,6 +7,7 @@ import 'action.dart';
 import 'actor.dart';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
@@ -141,8 +142,10 @@ class ActorPlanner {
 
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
 
-    for (var action
-        in simulation.generateAllActions(currentActor, _initial.world)) {
+    final context =
+        new ApplicabilityContext(currentActor, simulation, _initial.world);
+
+    for (var action in simulation.generateAllActions(context)) {
       log.finer(() => "Evaluating action '${action.command}' "
           "for ${currentActor.name}");
 
@@ -323,8 +326,11 @@ class ActorPlanner {
 
       log.finest("- generating all actions for ${currentActor.name}");
       var originalCount = open.length;
-      for (Action action
-          in simulation.generateAllActions(currentActor, current.world)) {
+
+      final context =
+          new ApplicabilityContext(currentActor, simulation, current.world);
+
+      for (Action action in simulation.generateAllActions(context)) {
         if (!action.isApplicable(currentActor, simulation, current.world))
           continue;
         var consequences = action.apply(

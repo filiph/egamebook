@@ -1,6 +1,7 @@
 library stranded.action;
 
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -23,18 +24,6 @@ typedef T ActionBuilder<T extends Action, V>(V parameter);
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].
 typedef String ApplyFunction(ActionContext context);
-
-/// Builder takes an enemy actor and generates an instance of
-/// [EnemyTargetAction] with the given [enemy].
-typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
-
-/// Builder takes an enemy actor and generates an instance of
-/// [ExitAction] with the given [exit].
-typedef ExitAction ExitActionBuilder(Exit exit);
-
-/// Builder takes situation's items and generates an instance of [ItemAction]
-/// with the given [item] and its [description].
-typedef ItemAction ItemActionBuilder(ItemLike item);
 
 abstract class Action {
   String _description;
@@ -217,51 +206,6 @@ abstract class Action {
     }
     return builder;
   }
-}
-
-/// This all the context an action needs to apply itself. It is provided
-/// to [Action.applySuccess] and [Action.applyFailure] (and [ApplyFunction]s
-/// in general).
-///
-/// [outputStoryline] should only be used to
-/// add new reports ([Storyline.add] and [Actor.report]). [pubSub] should
-/// only be used to publish events.
-///
-/// [actor] is the perpetrator of the action. The [target] is the entity that
-/// the action is directed to. It can be `null`.
-@immutable
-class ActionContext {
-  final Actor actor;
-
-  final Simulation simulation;
-
-  final WorldState world;
-
-  final WorldStateBuilder outputWorld;
-
-  /// This is set to the current action as that action is being applied.
-  ///
-  /// This is so that, for example, descriptions of Rooms can access this
-  /// information and provide text according to how the Room is being reached.
-  final Action currentAction;
-
-  final PubSub pubSub;
-
-  final Storyline outputStoryline;
-
-  final Object target;
-
-  const ActionContext(this.currentAction, this.actor, this.simulation,
-      this.world, this.pubSub, this.outputWorld, this.outputStoryline,
-      {this.target});
-}
-
-/// TODO: use this instead of `String` for apply action output?
-/// TODO: gradually make apply functions pure, with no changes to Storyline
-class ActionOutput {
-  final WorldStateBuilder state;
-
-  ActionOutput(this.state);
 }
 
 /// This [Action] requires an [enemy].

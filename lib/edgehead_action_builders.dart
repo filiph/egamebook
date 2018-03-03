@@ -1,6 +1,6 @@
 library edgehead.action_builders;
 
-import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/sourcegen/functions_serializer.dart';
 
 import 'src/fight/break_neck/actions/finish_break_neck.dart';

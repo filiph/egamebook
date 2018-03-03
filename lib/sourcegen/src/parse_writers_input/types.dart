@@ -3,7 +3,7 @@ import 'package:code_builder/code_builder.dart';
 // ignore_for_file: type_annotate_public_apis
 
 final actionContextType = new TypeBuilder("ActionContext",
-    importFrom: "package:edgehead/fractal_stories/action.dart");
+    importFrom: "package:edgehead/fractal_stories/context.dart");
 
 final actionType = new TypeBuilder("RoamingAction",
     importFrom: "package:edgehead/fractal_stories/writer_action.dart");
@@ -15,6 +15,7 @@ final allNeededTypes = <TypeBuilder>[
   actionContextType,
   actionType,
   actorType,
+  applicabilityContextType,
   builtType,
   builderType,
   exitType,
@@ -33,6 +34,9 @@ final allNeededTypes = <TypeBuilder>[
   worldStateBuilderType,
   worldStateType,
 ];
+
+final applicabilityContextType = new TypeBuilder("ApplicabilityContext",
+    importFrom: "package:edgehead/fractal_stories/context.dart");
 
 final boolType = new TypeBuilder("bool");
 
