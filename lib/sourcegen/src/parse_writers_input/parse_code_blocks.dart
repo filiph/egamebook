@@ -33,6 +33,8 @@ final RegExp rulesetOpenTag = new RegExp(r"^\s*- RULESET\s*$");
 /// of a [BlockType.rule] parent block.
 final RegExp ruleThenTag = new RegExp(r"^\s*- THEN:\s*$");
 
+final RegExp _logicalAndPattern = new RegExp(r"\s+&&\s+");
+
 final RegExp _whiteSpaceOnly = new RegExp(r"^\s*$");
 
 /// Parses a block of text (containing a `[[CODE]]` block or not) and returns
@@ -42,6 +44,11 @@ Iterable<StatementBuilder> createDescriptionStatements(String text) {
   final visitor = new SequenceBlockVisitor();
   root.accept(visitor);
   return visitor.statements;
+}
+
+int getSpecificity(String conditionCode) {
+  if (conditionCode == "default") return 0;
+  return _logicalAndPattern.allMatches(conditionCode).length + 1;
 }
 
 /// Parses a block of text (with `\n` newlines) and returns a list of block,
@@ -253,8 +260,6 @@ enum BlockType {
 class SequenceBlockVisitor {
   final List<StatementBuilder> statements = [];
 
-  final RegExp _logicalAndPattern = new RegExp(r"\s+&&\s+");
-
   void visit(Block block) {
     // A leaf node (block with no children).
     switch (block.type) {
@@ -284,14 +289,16 @@ class SequenceBlockVisitor {
 
   _ParsedRule _visitRule(Block rule) {
     assert(rule.type == BlockType.rule);
-    assert(rule.children.length == 2);
+    assert(
+        rule.children.length == 2,
+        "Every rule must have a condition (prerequisite) "
+        "and a consequence.");
     final int hashCode = rule.content.hashCode;
     String conditionCode = rule.children.first.content.trim();
-    int specificity = _logicalAndPattern.allMatches(conditionCode).length + 1;
-    if (conditionCode == "default") {
+    final specificity = getSpecificity(conditionCode);
+    if (specificity == 0) {
       // We can use 'default' as a condition to have a kind of
       // a switch-statement-like default rule.
-      specificity = 0;
       conditionCode = "true";
     }
 

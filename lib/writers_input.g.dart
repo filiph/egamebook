@@ -17,6 +17,7 @@ import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
 import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
 import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
+import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
     show RoomRoamingSituation;
@@ -2076,6 +2077,43 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   bool get isAggressive => false;
 }
 
+Room warForgeAfterIronMonster =
+    new Room('war_forge_after_iron_monster', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''The chaos! It\'s palpable.
+''', wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''Pure chaos everywhere.
+
+''', wholeSentence: true);
+  rollBrianaQuote(sim, w, s);
+},
+        null,
+        null,
+        <Exit>[
+          new Exit('smelter', 'Go to smelter',
+              'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
+          new Exit(
+              'cave_with_agruth',
+              'Go back to the cave with Agruth\'s corpse',
+              'You sneak back toward where you left Agruth\'s body.')
+        ],
+        parent: 'war_forge',
+        prerequisite: new Prerequisite(1, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+        }));
 Room exitFromBloodrock = new Room('exit_from_bloodrock', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2706,6 +2744,7 @@ List<Room> allRooms = <Room>[
   undergroundChurch,
   smelter,
   guardpostAboveChurch,
+  warForgeAfterIronMonster,
   exitFromBloodrock,
   undergroundChurchAltar,
   slaveQuarters

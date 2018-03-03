@@ -16,7 +16,7 @@ abstract class GeneratedGameObject {
   /// For example, `ironcast_road` or `enter_tomb_of_warriors`.
   final String writersName;
 
-  static String _validateAndRemoveDollarSign(String writersName) {
+  static String validateAndRemoveDollarSign(String writersName) {
     if (!writersName.startsWith(r'$')) {
       throw new ArgumentError("Writer's name doesn't contain a dollar sign: "
           "$writersName");
@@ -25,7 +25,7 @@ abstract class GeneratedGameObject {
   }
 
   GeneratedGameObject(String writersName, this.name, this.type, this.dirPath)
-      : writersName = _validateAndRemoveDollarSign(writersName);
+      : writersName = validateAndRemoveDollarSign(writersName);
 
   String get path;
 

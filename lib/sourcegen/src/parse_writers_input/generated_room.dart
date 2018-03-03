@@ -59,6 +59,27 @@ class GeneratedRoom extends GeneratedGameObject {
       return closure;
     }
 
+    final Map<String, ExpressionBuilder> namedArguments = {};
+    // TODO: add named argument for groundMaterial
+
+    if (_map.containsKey('VARIANT_OF')) {
+      if (!_map.containsKey('RULE')) {
+        throw new FormatException("Room $writersName has VARIANT_OF "
+            "but no RULE");
+      }
+
+      namedArguments["parent"] = literal(GeneratedGameObject
+          .validateAndRemoveDollarSign(_map['VARIANT_OF'].trim()));
+
+      final specificity = getSpecificity(_map['RULE']);
+      final isApplicable = createApplicabilityContextClosure()
+        ..addStatement(
+            new ExpressionBuilder.raw((_) => _map['RULE']).asReturn());
+      final prerequisite =
+          prerequisiteType.newInstance([literal(specificity), isApplicable]);
+      namedArguments["prerequisite"] = prerequisite;
+    }
+
     var newInstance = roomType.newInstance([
       literal(writersName),
       createDescriber(_map['DESCRIPTION']),
@@ -66,8 +87,7 @@ class GeneratedRoom extends GeneratedGameObject {
       fightGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: exitType)
-    ]);
-    // TODO: add named constructor for groundMaterial
+    ], named: namedArguments);
     var assignment = newInstance.asVar(instanceName, roomType);
     yield assignment;
   }

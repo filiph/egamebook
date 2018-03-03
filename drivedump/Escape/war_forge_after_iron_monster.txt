@@ -1,0 +1,25 @@
+ROOM: $war_forge_after_iron_monster
+
+VARIANT_OF: $war_forge
+
+RULE: w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")
+
+DESCRIPTION: 
+The chaos! It's palpable.
+
+
+SHORT_DESCRIPTION: 
+Pure chaos everywhere.
+
+[[CODE]]
+rollBrianaQuote(sim, w, s);
+[[/CODE]]
+
+
+EXITS:
+$smelter (Go to smelter): You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.
+
+
+$cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak back toward where you left Agruth's body.
+
+

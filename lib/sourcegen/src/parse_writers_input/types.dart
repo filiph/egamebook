@@ -20,6 +20,7 @@ final allNeededTypes = <TypeBuilder>[
   builderType,
   exitType,
   getRandomIdFunction,
+  prerequisiteType,
   resourceType,
   roomRoamingSituationType,
   roomType,
@@ -59,6 +60,9 @@ final listOfActionType = new TypeBuilder('List', genericTypes: [actionType]);
 final listOfRoomsType = new TypeBuilder('List', genericTypes: [roomType]);
 
 final numType = new TypeBuilder("num");
+
+final prerequisiteType = new TypeBuilder("Prerequisite",
+    importFrom: "package:edgehead/ruleset/ruleset.dart");
 
 final resourceType = new TypeBuilder("Resource",
     importFrom: "package:edgehead/fractal_stories/action.dart");
