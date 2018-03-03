@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
@@ -7,6 +8,7 @@ import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
@@ -40,6 +42,7 @@ void main() {
         expect(filip.hashCode, isNot(richard.hashCode));
       });
     });
+
     group("Situation", () {
       Actor a, b;
       setUp(() {
@@ -82,6 +85,7 @@ void main() {
         checkSituationBuild(() => createBreakNeckOnGroundSituation(a, b));
       });
     });
+
     group("Exits", () {
       bool forgeIsAfterFire;
 
@@ -104,7 +108,9 @@ void main() {
       final forgeEntryAfterFire =
           new Exit(_forgeAfterFireName, "enter the charred forge", "");
 
-      final outside = new Room("outside", emptyRoomDescription,
+      final _outsideName = "outside";
+
+      final outside = new Room(_outsideName, emptyRoomDescription,
           emptyRoomDescription, null, null, [forgeEntry, forgeEntryAfterFire]);
 
       final outsideExit = new Exit(outside.name, "go outside", "");
@@ -137,6 +143,41 @@ void main() {
         forgeIsAfterFire = true;
         expect(simulation.getAvailableExits(outside, context),
             unorderedEquals(<Exit>[forgeEntryAfterFire]));
+      });
+
+      group("RoomRoamingSituation.moveActor", () {
+        final aren =
+            new Actor.initialized(42, "Aren", currentRoomName: _outsideName);
+        final initialSituation =
+            new RoomRoamingSituation.initialized(outside, false);
+        final world = new WorldState((b) => b
+          ..actors = new SetBuilder<Actor>(<Actor>[aren])
+          ..situations =
+              new ListBuilder<Situation>(<Situation>[initialSituation])
+          ..global = ["bogus"]
+          ..time = 0);
+
+        test(" uses default if no variant is applicable", () {
+          final actionContext = new ActionContext(
+              null, aren, simulation, world, null, world.toBuilder(), null);
+
+          initialSituation.moveActor(actionContext, _forgeName, silent: true);
+          final result = actionContext.outputWorld.build();
+
+          expect(result.getActorById(aren.id).currentRoomName, _forgeName);
+        });
+
+        test("uses variant if applicable", () {
+          final actionContext = new ActionContext(
+              null, aren, simulation, world, null, world.toBuilder(), null);
+          forgeIsAfterFire = true;
+
+          initialSituation.moveActor(actionContext, _forgeName, silent: true);
+          final result = actionContext.outputWorld.build();
+
+          expect(result.getActorById(aren.id).currentRoomName,
+              _forgeAfterFireName);
+        });
       });
     });
   });
