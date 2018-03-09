@@ -18,7 +18,7 @@ Not far from here there is a short tunnel, sloping down. It leads into the same 
 - END RULESET
 
 SHORT_DESCRIPTION: 
-The coals reflects the reds and whites of the molten steel.
+The coal reflects the reds and whites of the molten steel.
 
 - RULESET
 - RULE:

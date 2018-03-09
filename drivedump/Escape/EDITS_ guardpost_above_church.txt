@@ -1,4 +1,4 @@
-﻿ROOM: $guardpost_above_church
+ROOM: $guardpost_above_church
 
 
 DESCRIPTION:

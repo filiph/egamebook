@@ -82,7 +82,7 @@ That leaves two options: the black passage toward the war forges and the deserte
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected.'),
   new Exit('war_forge', 'Go to the war forges',
-      'You sneak through the black passage, toward a sound of hundreds of anvils.'),
+      'You sneak through the black passage, toward the sound of hundreds of anvils.'),
   new Exit('slave_quarters_passage', 'Go to the slave quarters',
       'You and Briana hug the wall and start toward the slave quarters.')
 ]);
@@ -116,7 +116,7 @@ class SearchAgruth extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a troma herb. This boosts your energy right when you need it--very handy. 
+        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. 
 
 
 <p class="toast">Your stamina increases by 1.</p>
@@ -167,25 +167,25 @@ Room tunnel = new Room('tunnel', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''Almost as soon as the circular room disappears from your line of sight, loud shouting rises from deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear dozens of orc and goblin feet stomping. 
+      '''Almost as soon as the circular room disappears from your line of sight, loud shouting rises from deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear dozens of orc and goblin feet stomping.
 
 
 The air gets colder and fresher, but there\'s still no end in sight. The stairs get steeper and steeper until you feel like you’re climbing a ladder.
 
 
-"I have…" Briana gasps, catching her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaution on its doorstep."
+"I have…" Briana gasps, catching her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaustion on its doorstep."
 
 
 _"That… that would be disappointing, yes."_
 
 
-The sounds from behind grow louder. You can now pick out individual voices, although not what they are saying. 
+The sounds from behind grow louder. You can now pick out individual voices, although not what they are saying.
 
 
 The stairway suddenly makes a sharp left turn and levels out. Tasting blood on the roof of your mouth, your whole body demands that you stop — but you start running anyway. Briana follows close behind.
 
 
-The light in the tunnel gets brighter and the air gets colder. Suddenly, just when you can smell fresh air, an orc and a goblin jump out in front of you from a slimy crevice, swords in hands. 
+The light in the tunnel gets brighter and the air gets colder. Suddenly, just when you can smell fresh air, an orc and a goblin jump out in front of you from a slimy crevice, swords in hands.
 
 
 ![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)
@@ -212,10 +212,10 @@ Room justAfterAgruthFight =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''You are Aren, a slave. You have spent three painful years inside this mountain, between the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here. 
+      '''You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.
 
 
-Briana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror. 
+Briana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.
 
 
 "What?" she says when she notices you\'re looking.
@@ -230,19 +230,19 @@ Briana spits down at the body. "He wasn\'t even the worst of them, you know."
 _"I know."_
 
 
-"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip. 
+"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.
 
 
 _"That one is already dead."_
 
 
-"Just making sure," she says. 
+"Just making sure," she says.
 
 
 ![Agruth\'s sword](img/agruth-sword.jpg)
 
 
-She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as  _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
+She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
 }, (ActionContext c) {
@@ -654,7 +654,7 @@ _"The Mad Guardian."_
 "The mad who?"
 
 
-_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed wierd enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him *grach kamkorr*: The Mad Guardian. That sword is still with him. Hidden there in the cell."_
+_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_
 
 
 "Where is that cell?"
@@ -854,7 +854,7 @@ Room warForge = new Room('war_forge', (ActionContext c) {
   rollBrianaQuote(sim, w, s);
 }, null, null, <Exit>[
   new Exit('smelter', 'Go to smelter',
-      'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
+      'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
   new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
       'You sneak back toward where you left Agruth\'s body.')
 ]);
@@ -1370,10 +1370,10 @@ Room startAdventure = new Room('start_adventure', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming. 
+      '''The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.
 
 
-Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves. 
+Once Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.
 
 
 ![Agruth whips Briana](img/agruth-attack.jpg)
@@ -1426,7 +1426,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and  leans his head to the side, but stays asleep.
+        '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.
 
 
 You take a few slow steps back, then grip the shield in your left hand, ready for anything.
@@ -1683,7 +1683,7 @@ _"This place was made for worshiping the Dead Prince."_
 Saying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.
 
 
-"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I though the Dead Prince was a warlord. Something like that."
+"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I thought the Dead Prince was a warlord. Something like that."
 
 
 _"He is a god."_
@@ -1796,7 +1796,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The coals reflects the reds and whites of the molten steel.
+  s.add('''The coal reflects the reds and whites of the molten steel.
 
 ''', wholeSentence: true);
   new Ruleset(
@@ -2121,19 +2121,19 @@ Room exitFromBloodrock = new Room('exit_from_bloodrock', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface!  For the first time in three years, you hear the howling wind. 
+      '''Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.
 
 
 You run through a small stone doorway and out of the mountain.
 
 
-The blinding sun makes you squint. You let the wind chill your muscles and jump down a steep descending path. 
+The blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.
 
 
-Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must. 
+Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.
 
 
-Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers. 
+Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.
 
 
 You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
@@ -2226,7 +2226,7 @@ _"But we will not."_
 Briana sighs. "No, I suppose we won\'t."
 
 
-With that, you both start down the road toward the black fort in the distance. 
+With that, you both start down the road toward the black fort in the distance.
 
 
 THE END.
@@ -2317,7 +2317,7 @@ Following the orc priest, a huge creature enters through the door, crouching bel
 When she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
 
 
-The three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana. 
+The three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.
 
 
 The dissonant tone stops. You lean a little further out from your hiding place to have a better view.
@@ -2329,10 +2329,10 @@ Without words, the priest beckons the orc to lie at the altar. The orc is now sh
 When the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.
 
 
+Somehow, you know.
+
+
 _"Maggots."_
-
-
-Somehow, you know. 
 
 
 Briana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.
@@ -2452,7 +2452,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''It\'s a primive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
+        '''It\'s a primitive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
 
 
 But it’s sturdy in your hand. A good throwing weapon.
@@ -2640,7 +2640,7 @@ class SmelterThrowSpear extends RoamingAction {
         '''You can\'t come any closer to the blind ogre — there is the pool of molten steel between you, and going around it would surely cause the nearby orcs to notice you. You wait for the ogre to get an order from bellow and watch him open one of the gates. The molten steel starts flowing.
 
 
-You lean forward to get a little  closer to the ogre and withdraw the spear. 
+You lean forward to get a little closer to the ogre and withdraw the spear.
 
 
 Briana gives you a puzzled look. "Wait…" she whispers.
@@ -2649,7 +2649,7 @@ Briana gives you a puzzled look. "Wait…" she whispers.
 You throw.
 
 
-The spear sails over the molten steel and impales the blind ogre\'s shoulder. Your heart skips a beat. It wasn’t a killing throw. The ogre will scream, the orcs will hear it — you\'re dead. 
+The spear sails over the molten steel and impales the blind ogre\'s shoulder. Your heart skips a beat. It wasn’t a killing throw. The ogre will scream, the orcs will hear it — you\'re dead.
 
 
 But the gods show mercy. The ogre wheels around, trying to reach the spear with his left hand, stepping back.
@@ -2667,7 +2667,7 @@ _"Listen."_
 The distant voices coming from the war forges get slightly louder. Then louder again. Briana hears it. She looks at you and a smile starts to form on her lips. "Let\'s go," she says.
 
 
-You follow the short passage and crouch on the walkway above the war forges. You see chaos below: Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away. 
+You follow the short passage and crouch on the walkway above the war forges. You see chaos below: Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away.
 
 
 You notice an orc using a rope ladder to scale the wall to the smelter. He\'ll be able to get to the gate and close it, but it will take him some time to make the climb. And the damage has already been done.

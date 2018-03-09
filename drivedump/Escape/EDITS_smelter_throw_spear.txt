@@ -1,4 +1,4 @@
-﻿ACTION: $smelter_throw_spear
+ACTION: $smelter_throw_spear
 COMMAND: Throw spear at the ogre
 
 
@@ -23,7 +23,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 You can't come any closer to the blind ogre — there is the pool of molten steel between you, and going around it would surely cause the nearby orcs to notice you. You wait for the ogre to get an order from bellow and watch him open one of the gates. The molten steel starts flowing.
 
 
-You lean forward to get a little  closer to the ogre and withdraw the spear. 
+You lean forward to get a little closer to the ogre and withdraw the spear.
 
 
 Briana gives you a puzzled look. "Wait…" she whispers.
@@ -32,7 +32,7 @@ Briana gives you a puzzled look. "Wait…" she whispers.
 You throw.
 
 
-The spear sails over the molten steel and impales the blind ogre's shoulder. Your heart skips a beat. It wasn’t a killing throw. The ogre will scream, the orcs will hear it — you're dead. 
+The spear sails over the molten steel and impales the blind ogre's shoulder. Your heart skips a beat. It wasn’t a killing throw. The ogre will scream, the orcs will hear it — you're dead.
 
 
 But the gods show mercy. The ogre wheels around, trying to reach the spear with his left hand, stepping back.
@@ -50,7 +50,7 @@ _"Listen."_
 The distant voices coming from the war forges get slightly louder. Then louder again. Briana hears it. She looks at you and a smile starts to form on her lips. "Let's go," she says.
 
 
-You follow the short passage and crouch on the walkway above the war forges. You see chaos below: Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away. 
+You follow the short passage and crouch on the walkway above the war forges. You see chaos below: Most orcs and ogres have stopped working and watch molten steel overflowing the troughs and raining down on the forges. A large part of the iron monster is obliterated and the orcs working there are either dead or running away.
 
 
 You notice an orc using a rope ladder to scale the wall to the smelter. He'll be able to get to the gate and close it, but it will take him some time to make the climb. And the damage has already been done.

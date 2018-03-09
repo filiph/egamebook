@@ -72,7 +72,7 @@ $cave_with_agruth (Go back to the cave where Agruth's corpse lies): You back awa
 $slave_quarters (Go further toward the Gate of Screams): You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.
 
 
-$orcthorn_room (Open the door): You open the door. 
+$orcthorn_room (Open the door): You open the door.
 
 
 
