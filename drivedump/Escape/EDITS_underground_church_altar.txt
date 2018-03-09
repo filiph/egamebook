@@ -62,7 +62,7 @@ Following the orc priest, a huge creature enters through the door, crouching bel
 When she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.
 
 
-The three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana. 
+The three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.
 
 
 The dissonant tone stops. You lean a little further out from your hiding place to have a better view.
@@ -74,10 +74,10 @@ Without words, the priest beckons the orc to lie at the altar. The orc is now sh
 When the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.
 
 
+Somehow, you know.
+
+
 _"Maggots."_
-
-
-Somehow, you know. 
 
 
 Briana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.
@@ -157,7 +157,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-It's a primive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
+It's a primitive short spear that probably belonged to a goblin. You take it in your hand, feeling the cool, wet wood and patches of mold along it. It must have been here for a while. 
 
 
 But it’s sturdy in your hand. A good throwing weapon.

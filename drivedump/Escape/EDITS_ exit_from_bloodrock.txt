@@ -4,19 +4,19 @@
 
 
 DESCRIPTION:
-Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface!  For the first time in three years, you hear the howling wind. 
+Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.
 
 
 You run through a small stone doorway and out of the mountain.
 
 
-The blinding sun makes you squint. You let the wind chill your muscles and jump down a steep descending path. 
+The blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.
 
 
-Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must. 
+Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.
 
 
-Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers. 
+Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.
 
 
 You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
@@ -94,7 +94,7 @@ _"But we will not."_
 Briana sighs. "No, I suppose we won't."
 
 
-With that, you both start down the road toward the black fort in the distance. 
+With that, you both start down the road toward the black fort in the distance.
 
 
 THE END.
