@@ -16,7 +16,7 @@ COMPLETE_SUCCESS_PROBABILITY: 30%
 
 
 COMPLETE_SUCCESS_DESCRIPTION: 
-You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and  leans his head to the side, but stays asleep.
+You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.
 
 
 You take a few slow steps back, then grip the shield in your left hand, ready for anything.
