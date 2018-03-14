@@ -158,12 +158,6 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
     return actor.isAlive;
   }
 
-  SerialQueryResult<VisitRecord> queryVisit(Actor actor, Room room,
-      {bool includeVariants: false}) {
-    return visitHistory.query(actor.id, room.name,
-        includeVariants: includeVariants);
-  }
-
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 

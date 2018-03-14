@@ -37,13 +37,13 @@ void main() {
         ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = ["bogus"]
         ..time = 0);
-      expect(world.queryVisit(aren, outside).hasHappened, isFalse);
-      expect(world.queryVisit(aren, inside).hasHappened, isFalse);
+      expect(world.visitHistory.query(aren, outside).hasHappened, isFalse);
+      expect(world.visitHistory.query(aren, inside).hasHappened, isFalse);
       final w = world.toBuilder();
       w.recordVisit(aren, outside);
-      final updatedWorld = w.build();
-      expect(updatedWorld.queryVisit(aren, outside).hasHappened, isTrue);
-      expect(updatedWorld.queryVisit(aren, inside).hasHappened, isFalse);
+      final updated = w.build();
+      expect(updated.visitHistory.query(aren, outside).hasHappened, isTrue);
+      expect(updated.visitHistory.query(aren, inside).hasHappened, isFalse);
     });
   });
 }

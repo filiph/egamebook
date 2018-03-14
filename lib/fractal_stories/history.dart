@@ -3,6 +3,8 @@ library stranded.history;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:meta/meta.dart';
 
 part 'history.g.dart';
@@ -122,14 +124,14 @@ abstract class VisitHistory
   /// The records are grouped for faster access.
   BuiltListMultimap<String, VisitRecord> get records;
 
-  SerialQueryResult<VisitRecord> query(int actorId, String roomName,
+  SerialQueryResult<VisitRecord> query(Actor actor, Room room,
       {bool includeVariants: false}) {
-    assert(actorId != null);
-    assert(roomName != null);
-    final key = getKey(roomName);
+    assert(actor != null);
+    assert(room != null);
+    final key = getKey(room.name);
     return new SerialQueryResult(records[key].where((rec) {
-      if (rec.roomName == roomName) return true;
-      if (includeVariants && rec.parentRoomName == roomName) return true;
+      if (rec.roomName == room.name) return true;
+      if (includeVariants && rec.parentRoomName == room.name) return true;
       return false;
     }));
   }
