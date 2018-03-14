@@ -7,6 +7,7 @@ import 'package:edgehead/edgehead_action_builders.dart' as action_builders;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -46,6 +47,7 @@ part 'edgehead_serializers.g.dart';
   RoomRoamingSituation,
   Situation,
   Team,
+  VisitHistory,
   Weapon,
   WeaponType,
   WorldState,

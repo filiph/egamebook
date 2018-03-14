@@ -43,6 +43,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
               const FullType(BuiltList, const [const FullType(Situation)])),
       'time',
       serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'visitHistory',
+      serializers.serialize(object.visitHistory,
+          specifiedType: const FullType(VisitHistory)),
     ];
 
     return result;
@@ -85,6 +88,10 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.time = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'visitHistory':
+          result.visitHistory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(VisitHistory)) as VisitHistory);
+          break;
       }
     }
 
@@ -103,6 +110,8 @@ class _$WorldState extends WorldState {
   final BuiltList<Situation> situations;
   @override
   final int time;
+  @override
+  final VisitHistory visitHistory;
 
   factory _$WorldState([void updates(WorldStateBuilder b)]) =>
       (new WorldStateBuilder()..update(updates)).build() as _$WorldState;
@@ -112,13 +121,15 @@ class _$WorldState extends WorldState {
       this.actors,
       this.global,
       this.situations,
-      this.time})
+      this.time,
+      this.visitHistory})
       : super._() {
     if (actionRecords == null) throw new ArgumentError.notNull('actionRecords');
     if (actors == null) throw new ArgumentError.notNull('actors');
     if (global == null) throw new ArgumentError.notNull('global');
     if (situations == null) throw new ArgumentError.notNull('situations');
     if (time == null) throw new ArgumentError.notNull('time');
+    if (visitHistory == null) throw new ArgumentError.notNull('visitHistory');
   }
 
   @override
@@ -136,17 +147,20 @@ class _$WorldState extends WorldState {
         actors == other.actors &&
         global == other.global &&
         situations == other.situations &&
-        time == other.time;
+        time == other.time &&
+        visitHistory == other.visitHistory;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, actionRecords.hashCode), actors.hashCode),
-                global.hashCode),
-            situations.hashCode),
-        time.hashCode));
+            $jc(
+                $jc($jc($jc(0, actionRecords.hashCode), actors.hashCode),
+                    global.hashCode),
+                situations.hashCode),
+            time.hashCode),
+        visitHistory.hashCode));
   }
 }
 
@@ -213,6 +227,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
     super.time = time;
   }
 
+  @override
+  VisitHistoryBuilder get visitHistory {
+    _$this;
+    return super.visitHistory ??= new VisitHistoryBuilder();
+  }
+
+  @override
+  set visitHistory(VisitHistoryBuilder visitHistory) {
+    _$this;
+    super.visitHistory = visitHistory;
+  }
+
   _$WorldStateBuilder() : super._();
 
   WorldStateBuilder get _$this {
@@ -222,6 +248,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.global = _$v.global;
       super.situations = _$v.situations?.toBuilder();
       super.time = _$v.time;
+      super.visitHistory = _$v.visitHistory?.toBuilder();
       _$v = null;
     }
     return this;
@@ -246,7 +273,8 @@ class _$WorldStateBuilder extends WorldStateBuilder {
             actors: actors?.build(),
             global: global,
             situations: situations?.build(),
-            time: time);
+            time: time,
+            visitHistory: visitHistory?.build());
     replace(_$result);
     return _$result;
   }

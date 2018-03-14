@@ -7,6 +7,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/history.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 
@@ -52,6 +54,9 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   /// The age of this WorldState. Every 'turn', this number increases by one.
   // TODO: make this into a DateTime.
   int get time;
+
+  /// A record of all visits made by any actor to any room.
+  VisitHistory get visitHistory;
 
   /// Returns `true` if any action in the action records (past actions)
   /// has the [Action.name] of [actionName].
@@ -153,6 +158,12 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
     return actor.isAlive;
   }
 
+  SerialQueryResult<VisitRecord> queryVisit(Actor actor, Room room,
+      {bool includeVariants: false}) {
+    return visitHistory.query(actor.id, room.name,
+        includeVariants: includeVariants);
+  }
+
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
@@ -206,6 +217,8 @@ abstract class WorldStateBuilder
   ListBuilder<Situation> situations;
 
   int time;
+
+  VisitHistoryBuilder visitHistory;
 
   factory WorldStateBuilder() = _$WorldStateBuilder;
 
@@ -281,6 +294,17 @@ abstract class WorldStateBuilder
 
   void pushSituation(Situation situation) {
     situations.add(situation);
+  }
+
+  void recordVisit(Actor actor, Room room) {
+    final key = VisitHistory.getKey(room.name);
+    visitHistory.records.add(
+        key,
+        new VisitRecord(
+            time: new DateTime.utc(1000) /* TODO use time */,
+            actorId: actor.id,
+            roomName: room.name,
+            parentRoomName: room.parent));
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {

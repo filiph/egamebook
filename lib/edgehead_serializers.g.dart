@@ -30,6 +30,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Pronoun.serializer)
       ..add(RoomRoamingSituation.serializer)
       ..add(Team.serializer)
+      ..add(VisitHistory.serializer)
       ..add(Weapon.serializer)
       ..add(WeaponType.serializer)
       ..add(WorldState.serializer)
@@ -78,6 +79,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Weapon)]),
           () => new ListBuilder<Weapon>())
+      ..addBuilderFactory(
+          const FullType(BuiltListMultimap,
+              const [const FullType(String), const FullType(VisitRecord)]),
+          () => new ListMultimapBuilder<String, VisitRecord>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
           () => new SetBuilder<int>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),

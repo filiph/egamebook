@@ -14,6 +14,53 @@ part of stranded.history;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+Serializer<VisitHistory> _$visitHistorySerializer =
+    new _$VisitHistorySerializer();
+
+class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
+  @override
+  final Iterable<Type> types = const [VisitHistory, _$VisitHistory];
+  @override
+  final String wireName = 'VisitHistory';
+
+  @override
+  Iterable serialize(Serializers serializers, VisitHistory object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'records',
+      serializers.serialize(object.records,
+          specifiedType: const FullType(BuiltListMultimap,
+              const [const FullType(String), const FullType(VisitRecord)])),
+    ];
+
+    return result;
+  }
+
+  @override
+  VisitHistory deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new VisitHistoryBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'records':
+          result.records.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltListMultimap, const [
+                const FullType(String),
+                const FullType(VisitRecord)
+              ])) as BuiltListMultimap<String, VisitRecord>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$RuleHistory extends RuleHistory {
   @override
   final BuiltMap<int, RuleRecord> records;
@@ -90,7 +137,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
 
 class _$VisitHistory extends VisitHistory {
   @override
-  final BuiltListMultimap<int, VisitRecord> records;
+  final BuiltListMultimap<String, VisitRecord> records;
 
   factory _$VisitHistory([void updates(VisitHistoryBuilder b)]) =>
       (new VisitHistoryBuilder()..update(updates)).build();
@@ -130,10 +177,10 @@ class VisitHistoryBuilder
     implements Builder<VisitHistory, VisitHistoryBuilder> {
   _$VisitHistory _$v;
 
-  ListMultimapBuilder<int, VisitRecord> _records;
-  ListMultimapBuilder<int, VisitRecord> get records =>
-      _$this._records ??= new ListMultimapBuilder<int, VisitRecord>();
-  set records(ListMultimapBuilder<int, VisitRecord> records) =>
+  ListMultimapBuilder<String, VisitRecord> _records;
+  ListMultimapBuilder<String, VisitRecord> get records =>
+      _$this._records ??= new ListMultimapBuilder<String, VisitRecord>();
+  set records(ListMultimapBuilder<String, VisitRecord> records) =>
       _$this._records = records;
 
   VisitHistoryBuilder();
