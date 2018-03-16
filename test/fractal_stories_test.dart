@@ -155,7 +155,7 @@ void main() {
           ..situations =
               new ListBuilder<Situation>(<Situation>[initialSituation])
           ..global = ["bogus"]
-          ..time = 0);
+          ..time = new DateTime.utc(1000));
 
         test(" uses default if no variant is applicable", () {
           final actionContext = new ActionContext(

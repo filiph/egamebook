@@ -42,7 +42,8 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           specifiedType:
               const FullType(BuiltList, const [const FullType(Situation)])),
       'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      serializers.serialize(object.time,
+          specifiedType: const FullType(DateTime)),
       'visitHistory',
       serializers.serialize(object.visitHistory,
           specifiedType: const FullType(VisitHistory)),
@@ -86,7 +87,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(DateTime)) as DateTime;
           break;
         case 'visitHistory':
           result.visitHistory.replace(serializers.deserialize(value,
@@ -109,7 +110,7 @@ class _$WorldState extends WorldState {
   @override
   final BuiltList<Situation> situations;
   @override
-  final int time;
+  final DateTime time;
   @override
   final VisitHistory visitHistory;
 
@@ -216,13 +217,13 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  int get time {
+  DateTime get time {
     _$this;
     return super.time;
   }
 
   @override
-  set time(int time) {
+  set time(DateTime time) {
     _$this;
     super.time = time;
   }

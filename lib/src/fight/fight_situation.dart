@@ -176,15 +176,16 @@ abstract class FightSituation extends Situation
       var latestProactiveRecord = world.actionRecords.firstWhere(
           (rec) => rec.protagonist == actor.id && rec.wasProactive,
           orElse: () => null);
-      int latestProactiveTime = latestProactiveRecord?.time ?? -1;
-      int proactiveRecency = world.time - latestProactiveTime;
+      final pastInfinity = new DateTime.utc(-10000);
+      DateTime latestProactiveTime = latestProactiveRecord?.time ?? pastInfinity;
+      int proactiveRecency = world.time.difference(latestProactiveTime).inSeconds;
       // If actor did something just now, they shouldn't be chosen.
       if (proactiveRecency <= 0) continue;
       // Otherwise, let's look at who was aggressive recently.
       var latestAnyRecord = world.actionRecords
           .firstWhere((rec) => rec.protagonist == actor.id, orElse: () => null);
-      int latestAnyTime = latestAnyRecord?.time ?? -1;
-      int anyRecency = world.time - latestAnyTime;
+      DateTime latestAnyTime = latestAnyRecord?.time ?? pastInfinity;
+      int anyRecency = world.time.difference(latestAnyTime).inSeconds;
       // We care about how long ago someone acted, but we especially care
       // about how long ago they made a pro-active action. This is because
       // otherwise an actor can be perpetually reacting to opponents and

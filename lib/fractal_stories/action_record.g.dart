@@ -43,7 +43,8 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
       serializers.serialize(object.sufferers,
           specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
       'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      serializers.serialize(object.time,
+          specifiedType: const FullType(DateTime)),
       'wasAggressive',
       serializers.serialize(object.wasAggressive,
           specifiedType: const FullType(bool)),
@@ -108,7 +109,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(DateTime)) as DateTime;
           break;
         case 'wasAggressive':
           result.wasAggressive = serializers.deserialize(value,
@@ -147,7 +148,7 @@ class _$ActionRecord extends ActionRecord {
   @override
   final BuiltSet<int> sufferers;
   @override
-  final int time;
+  final DateTime time;
   @override
   final bool wasAggressive;
   @override
@@ -264,9 +265,9 @@ class ActionRecordBuilder
   SetBuilder<int> get sufferers => _$this._sufferers ??= new SetBuilder<int>();
   set sufferers(SetBuilder<int> sufferers) => _$this._sufferers = sufferers;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  DateTime _time;
+  DateTime get time => _$this._time;
+  set time(DateTime time) => _$this._time = time;
 
   bool _wasAggressive;
   bool get wasAggressive => _$this._wasAggressive;

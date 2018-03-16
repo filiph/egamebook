@@ -105,6 +105,8 @@ class EdgeheadGame extends Book {
 
     initialSituation = edgeheadInitialSituation;
 
+    final startingTime = new DateTime.utc(1294, 5, 9, 10, 0);
+
     var global = new EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
@@ -115,7 +117,7 @@ class EdgeheadGame extends Book {
         ..actors = new SetBuilder<Actor>(<Actor>[aren, briana])
         ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
-        ..time = 0);
+        ..time = startingTime);
     }
 
     simulation = edgeheadSimulation;

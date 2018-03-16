@@ -53,7 +53,7 @@ abstract class ActionRecord
   BuiltSet<int> get sufferers;
 
   /// Specifies at what WorldState time this ActionRecord took place.
-  int get time;
+  DateTime get time;
 
   /// Specifies whether this action was _intentionally_ harmful towards
   /// the [sufferers].

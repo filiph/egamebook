@@ -52,8 +52,7 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   BuiltList<Situation> get situations;
 
   /// The age of this WorldState. Every 'turn', this number increases by one.
-  // TODO: make this into a DateTime.
-  int get time;
+  DateTime get time;
 
   /// A record of all visits made by any actor to any room.
   VisitHistory get visitHistory;
@@ -161,7 +160,7 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
-  /// Returns number of turns since an [ActionRecord] that conforms to
+  /// Returns number of seconds since an [ActionRecord] that conforms to
   /// the specified named parameters was performed.
   ///
   /// Returns `null` when such a record doesn't exist.
@@ -178,7 +177,7 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
         wasSuccess: wasSuccess,
         wasAggressive: wasAggressive);
     for (var record in records) {
-      return time - record.time;
+      return record.time.difference(time).inSeconds;
     }
     return null;
   }
@@ -210,7 +209,7 @@ abstract class WorldStateBuilder
 
   ListBuilder<Situation> situations;
 
-  int time;
+  DateTime time;
 
   VisitHistoryBuilder visitHistory;
 
@@ -249,7 +248,7 @@ abstract class WorldStateBuilder
   }
 
   void elapseWorldTime() {
-    time += 1;
+    time = time.add(const Duration(seconds: 1));
   }
 
   Actor getActorById(int id) {
@@ -295,7 +294,7 @@ abstract class WorldStateBuilder
     visitHistory.records.add(
         key,
         new VisitRecord(
-            time: new DateTime.utc(1000, 1, 1, 0, w.time) /* TODO use time */,
+            time: w.time,
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent));

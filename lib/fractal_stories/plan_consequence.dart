@@ -92,7 +92,7 @@ class PlanConsequence {
       this.isFailure,
       this.isSuccess,
       this.order) {
-    storyline.time = world.time;
+    storyline.time = world.time.millisecondsSinceEpoch ~/ 1000;
   }
 
   @override
