@@ -81,19 +81,6 @@ abstract class RoomRoamingSituation extends Situation
     return [mainActor];
   }
 
-  /// Returns `true` if [Room] with [roomName] has been visited by [actor].
-  ///
-  /// This works by checking [Simulation.actionRecords].
-  bool hasBeenVisited(
-      Simulation sim, WorldState w, Actor actor, String roomName) {
-    return w
-        .getActionRecords(
-            actionName: TakeExitAction.className,
-            protagonist: actor,
-            wasSuccess: true)
-        .any((r) => r.dataString == roomName);
-  }
-
   /// Moves [a] with their party to [destination].
   ///
   /// This will also print out the description of the room (or the short version
@@ -113,16 +100,17 @@ abstract class RoomRoamingSituation extends Situation
 
     // Find if monsters were slain by seeing if there was a [TakeExit] action
     // record leading to this room.
-    bool visited = hasBeenVisited(sim, originalWorld, a, destinationRoomName);
+    bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(
         room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
+    w.recordVisit(w, a, room);
 
     if (!silent) {
-      // Show short description according to world.actionRecords.
-      if (hasBeenVisited(sim, originalWorld, a, room.name)) {
+      // Show short description according to whether the actor has been here.
+      if (originalWorld.visitHistory.query(a, room).hasHappened) {
         room.shortDescribe(context);
       } else {
         s.addParagraph();
@@ -131,8 +119,9 @@ abstract class RoomRoamingSituation extends Situation
       }
     }
 
-    for (var actor in getPartyOf(a, sim, originalWorld).toList()) {
+    for (var actor in getPartyOf(a, sim, originalWorld)) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
+      w.recordVisit(w, actor, room);
     }
   }
 

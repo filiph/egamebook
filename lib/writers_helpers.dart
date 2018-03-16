@@ -11,7 +11,6 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/unique_id.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 const int agruthId = 6666;
@@ -278,16 +277,17 @@ bool isRoamingInBloodrock(WorldState w) {
       .contains((w.currentSituation as RoomRoamingSituation).currentRoomName);
 }
 
-/// Checks whether player was just now at [roomName].
-bool justCameFrom(WorldState w, String roomName) {
+/// Checks whether player was just now at [fromRoomName].
+///
+/// This only returns `true` if no other room was visited since then.
+///
+/// If player was in a variant of [fromRoomName], then that counts as well.
+bool justCameFrom(WorldState w, String fromRoomName) {
   final player = getPlayer(w);
-  for (final rec in w.actionRecords) {
-    if (rec.protagonist != player.id) continue;
-    if (rec.actionName != TakeExitAction.className) continue;
-    if (rec.dataString == roomName) return true;
-    return false;
-  }
-  return false;
+  final latest = w.visitHistory.getLatestOnly(player);
+  if (latest == null) return false;
+  return latest.roomName == fromRoomName ||
+      latest.parentRoomName == fromRoomName;
 }
 
 void movePlayer(ActionContext context, String locationName,
@@ -312,8 +312,9 @@ void nameAgruthSword(WorldStateBuilder w, String name) {
 }
 
 bool playerHasVisited(Simulation sim, WorldState built, String roomName) {
-  return getRoomRoaming(built)
-      .hasBeenVisited(sim, built, getPlayer(built), roomName);
+  final room = sim.getRoomByName(roomName);
+  final player = getPlayer(built);
+  return built.visitHistory.query(player, room).hasHappened;
 }
 
 void rollBrianaQuote(Simulation sim, WorldStateBuilder w, Storyline s) {

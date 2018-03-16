@@ -16,6 +16,7 @@ part of stranded.history;
 
 Serializer<VisitHistory> _$visitHistorySerializer =
     new _$VisitHistorySerializer();
+Serializer<VisitRecord> _$visitRecordSerializer = new _$VisitRecordSerializer();
 
 class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
   @override
@@ -53,6 +54,69 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
                 const FullType(String),
                 const FullType(VisitRecord)
               ])) as BuiltListMultimap<String, VisitRecord>);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
+  @override
+  final Iterable<Type> types = const [VisitRecord, _$VisitRecord];
+  @override
+  final String wireName = 'VisitRecord';
+
+  @override
+  Iterable serialize(Serializers serializers, VisitRecord object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'actorId',
+      serializers.serialize(object.actorId, specifiedType: const FullType(int)),
+      'roomName',
+      serializers.serialize(object.roomName,
+          specifiedType: const FullType(String)),
+      'time',
+      serializers.serialize(object.time,
+          specifiedType: const FullType(DateTime)),
+    ];
+    if (object.parentRoomName != null) {
+      result
+        ..add('parentRoomName')
+        ..add(serializers.serialize(object.parentRoomName,
+            specifiedType: const FullType(String)));
+    }
+
+    return result;
+  }
+
+  @override
+  VisitRecord deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new VisitRecordBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'actorId':
+          result.actorId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'parentRoomName':
+          result.parentRoomName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'roomName':
+          result.roomName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime;
           break;
       }
     }

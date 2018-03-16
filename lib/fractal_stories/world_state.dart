@@ -290,12 +290,12 @@ abstract class WorldStateBuilder
     situations.add(situation);
   }
 
-  void recordVisit(Actor actor, Room room) {
-    final key = VisitHistory.getKey(room.name);
+  void recordVisit(WorldStateBuilder w, Actor actor, Room room) {
+    final key = VisitHistory.getKey(room);
     visitHistory.records.add(
         key,
         new VisitRecord(
-            time: new DateTime.utc(1000) /* TODO use time */,
+            time: new DateTime.utc(1000, 1, 1, 0, w.time) /* TODO use time */,
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent));
