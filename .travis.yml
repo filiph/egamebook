@@ -1,0 +1,9 @@
+language: dart
+
+branches:
+  only:
+    - dev
+
+script:
+  - pub run -c test
+  - pub run -c test -t long-running --run-skipped
