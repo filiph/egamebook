@@ -94,9 +94,6 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
   Iterable serialize(Serializers serializers, ActionRecord object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
-      'accomplices',
-      serializers.serialize(object.accomplices,
-          specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
       'actionName',
       serializers.serialize(object.actionName,
           specifiedType: const FullType(String)),
@@ -146,12 +143,6 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'accomplices':
-          result.accomplices.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<int>);
-          break;
         case 'actionName':
           result.actionName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -315,8 +306,6 @@ class ActionHistoryBuilder
 
 class _$ActionRecord extends ActionRecord {
   @override
-  final BuiltSet<int> accomplices;
-  @override
   final String actionName;
   @override
   final String dataString;
@@ -341,8 +330,7 @@ class _$ActionRecord extends ActionRecord {
       (new ActionRecordBuilder()..update(updates)).build();
 
   _$ActionRecord._(
-      {this.accomplices,
-      this.actionName,
+      {this.actionName,
       this.dataString,
       this.description,
       this.protagonist,
@@ -353,7 +341,6 @@ class _$ActionRecord extends ActionRecord {
       this.wasProactive,
       this.wasSuccess})
       : super._() {
-    if (accomplices == null) throw new ArgumentError.notNull('accomplices');
     if (actionName == null) throw new ArgumentError.notNull('actionName');
     if (description == null) throw new ArgumentError.notNull('description');
     if (protagonist == null) throw new ArgumentError.notNull('protagonist');
@@ -376,8 +363,7 @@ class _$ActionRecord extends ActionRecord {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! ActionRecord) return false;
-    return accomplices == other.accomplices &&
-        actionName == other.actionName &&
+    return actionName == other.actionName &&
         dataString == other.dataString &&
         description == other.description &&
         protagonist == other.protagonist &&
@@ -399,9 +385,7 @@ class _$ActionRecord extends ActionRecord {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc(
-                                        $jc($jc(0, accomplices.hashCode),
-                                            actionName.hashCode),
+                                    $jc($jc(0, actionName.hashCode),
                                         dataString.hashCode),
                                     description.hashCode),
                                 protagonist.hashCode),
@@ -417,12 +401,6 @@ class _$ActionRecord extends ActionRecord {
 class ActionRecordBuilder
     implements Builder<ActionRecord, ActionRecordBuilder> {
   _$ActionRecord _$v;
-
-  SetBuilder<int> _accomplices;
-  SetBuilder<int> get accomplices =>
-      _$this._accomplices ??= new SetBuilder<int>();
-  set accomplices(SetBuilder<int> accomplices) =>
-      _$this._accomplices = accomplices;
 
   String _actionName;
   String get actionName => _$this._actionName;
@@ -469,7 +447,6 @@ class ActionRecordBuilder
 
   ActionRecordBuilder get _$this {
     if (_$v != null) {
-      _accomplices = _$v.accomplices?.toBuilder();
       _actionName = _$v.actionName;
       _dataString = _$v.dataString;
       _description = _$v.description;
@@ -500,7 +477,6 @@ class ActionRecordBuilder
   _$ActionRecord build() {
     final _$result = _$v ??
         new _$ActionRecord._(
-            accomplices: accomplices?.build(),
             actionName: actionName,
             dataString: dataString,
             description: description,

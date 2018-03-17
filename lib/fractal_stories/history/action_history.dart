@@ -105,12 +105,6 @@ abstract class ActionRecord extends Record
 
   ActionRecord._();
 
-  /// The other actors also responsible for this action, or an empty set if
-  /// only the [protagonist] is to blame (default).
-  ///
-  /// IMPLEMENTATION DETAIL: Currently, there can be no accomplices.
-  BuiltSet<int> get accomplices;
-
   String get actionName;
 
   /// Additional data that a specific type of [Action] could save.

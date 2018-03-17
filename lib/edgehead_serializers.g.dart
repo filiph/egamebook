@@ -94,7 +94,5 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(Situation)]),
           () => new ListBuilder<Situation>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
-          () => new SetBuilder<int>())
-      ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
           () => new SetBuilder<int>()))
     .build();
