@@ -1,6 +1,6 @@
 name: edgehead
 version: 2.0.0-dev.1
-description: A game of fractal_stories.
+description: A game of fractal stories.
 author: Filip Hracek <filip.hracek@gmail.com>
 homepage: https://www.egamebook.com
 
@@ -18,8 +18,7 @@ dependencies:
   path: ^1.4.2
   quiver: ^0.25.0
   sass: ^0.4.2+7
-  slot_machine:
-    path: ../slot_machine
+  slot_machine: ^5.0.0
 
 dev_dependencies:
   args: ^1.2.0

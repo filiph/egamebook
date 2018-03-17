@@ -321,9 +321,9 @@ packages:
     version: "0.2.2"
   slot_machine:
     description:
-      path: "../slot_machine"
-      relative: true
-    source: path
+      name: slot_machine
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "5.0.0"
   source_gen:
     description:
