@@ -177,7 +177,7 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
         wasSuccess: wasSuccess,
         wasAggressive: wasAggressive);
     for (var record in records) {
-      return record.time.difference(time).inSeconds;
+      return time.difference(record.time).inSeconds;
     }
     return null;
   }
