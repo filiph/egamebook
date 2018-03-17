@@ -2,6 +2,8 @@
 
 set -e
 
+echo "== NOTE: THIS SCRIPT ASSUMES YOU'RE ON THE vermin2017 BRANCH =="
+
 echo "== Test =="
 time pub run -c test --run-skipped
 
