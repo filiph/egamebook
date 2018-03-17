@@ -2,12 +2,12 @@ library edgehead.serializers;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
-import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
 import 'package:edgehead/edgehead_action_builders.dart' as action_builders;
+import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/history.dart';
+import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
