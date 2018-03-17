@@ -166,12 +166,12 @@ class EdgeheadGame extends Book {
         actor != null,
         "situation.getCurrentActor(world) returned null. "
         "Some action that you added should make sure it removes the "
-        "Situation (maybe '${world.actionRecords.first.description}'?) or that "
-        "the actor has at least one way to resolve the situation. "
+        "Situation (maybe '${world.actionHistory.getLatest().description}'?) "
+        "or that the actor has at least one way to resolve the situation. "
         "World: $world. "
         "Situation: ${world.currentSituation}. "
         "Action Records: "
-        "${world.actionRecords.map((a) => a.description).join('<-')}");
+        "${world.actionHistory.describe()}");
     if (actor == null) {
       // In prod, silently remove the Situation and continue.
       final builder = world.toBuilder();
@@ -190,8 +190,7 @@ class EdgeheadGame extends Book {
       // TODO: maybe this should remove the currentSituation from stack?
       log.severe("No recommendation for ${actor.name}");
       log.severe(() {
-        String path =
-            world.actionRecords.map((a) => a.description).join(' <- ');
+        String path = world.actionHistory.describe();
         return "- how we got here: $path";
       });
       final builder = world.toBuilder();
@@ -372,7 +371,7 @@ class EdgeheadGame extends Book {
 
     log.fine(() => "${actor.name} selected ${action.name}");
     log.finest(() {
-      String path = world.actionRecords.map((a) => a.description).join(' <- ');
+      String path = world.actionHistory.describe();
       return "- how ${actor.name} got here: $path";
     });
   }

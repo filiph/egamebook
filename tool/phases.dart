@@ -33,7 +33,6 @@ final List<BuildAction> phases = [
         'lib/writers_input.g.dart',
         'lib/edgehead_global.dart',
         'lib/edgehead_serializers.dart',
-        'lib/fractal_stories/action_record.dart',
         'lib/fractal_stories/actor.dart',
         'lib/fractal_stories/pose.dart',
         'lib/fractal_stories/room.dart',

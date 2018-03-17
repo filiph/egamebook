@@ -4,9 +4,9 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
-import 'package:edgehead/fractal_stories/action_record.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -21,10 +21,8 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
 
   WorldState._();
 
-  /// A 'memory' of actions. The queue is in reverse chronological order,
-  /// with the latest record at the beginning of the queue. This is because
-  /// we often want to process only the latest (or the latest few) records.
-  BuiltList<ActionRecord> get actionRecords;
+  /// A 'memory' of actions.
+  ActionHistory get actionHistory;
 
   /// All the actors currently in the game.
   BuiltSet<Actor> get actors;
@@ -62,58 +60,22 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   ///
   /// This returns `true` regardless of success or failure.
   bool actionHasBeenPerformed(String actionName) {
-    var records = getActionRecords(actionName: actionName);
-    for (var _ in records) {
-      return true;
-    }
-    return false;
+    return actionHistory.hasHappened(actionName: actionName);
   }
 
   /// Returns `true` if any action in the action records (past actions)
   /// has the [Action.name] of [actionName] and was ever performed
   /// _successfully_.
   bool actionHasBeenPerformedSuccessfully(String actionName) {
-    var records = getActionRecords(actionName: actionName, wasSuccess: true);
-    for (var _ in records) {
-      return true;
-    }
-    return false;
+    return actionHistory
+        .query(actionName: actionName, wasSuccess: true)
+        .hasHappened;
   }
 
   /// Returns `true` if action with [Action.name] equal to [name] has never been
   /// used, regardless if it was used successfully or not.
-  bool actionNeverUsed(String name) {
-    return timeSinceLastActionRecord(actionName: name) == null;
-  }
-
-  /// Returns a lazy iterable of action records conforming to specified input,
-  /// in reverse chronological order.
-  ///
-  /// When none of the named parameters is provided, all [actionRecords] are
-  /// returned.
-  Iterable<ActionRecord> getActionRecords(
-      {String actionName,
-      Actor protagonist,
-      Actor sufferer,
-      bool wasSuccess,
-      bool wasAggressive}) {
-    Iterable<ActionRecord> records = actionRecords;
-    if (actionName != null) {
-      records = records.where((rec) => rec.actionName == actionName);
-    }
-    if (protagonist != null) {
-      records = records.where((rec) => rec.protagonist == protagonist.id);
-    }
-    if (sufferer != null) {
-      records = records.where((rec) => rec.sufferers.contains(sufferer.id));
-    }
-    if (wasSuccess != null) {
-      records = records.where((rec) => rec.wasSuccess == wasSuccess);
-    }
-    if (wasAggressive != null) {
-      records = records.where((rec) => rec.wasAggressive == wasAggressive);
-    }
-    return records;
+  bool actionNeverUsed(String actionName) {
+    return !actionHasBeenPerformed(actionName);
   }
 
   Actor getActorById(int id) {
@@ -170,16 +132,16 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
-    var records = getActionRecords(
-        actionName: actionName,
-        protagonist: protagonist,
-        sufferer: sufferer,
-        wasSuccess: wasSuccess,
-        wasAggressive: wasAggressive);
-    for (var record in records) {
-      return time.difference(record.time).inSeconds;
-    }
-    return null;
+    final latest = actionHistory
+        .query(
+            actionName: actionName,
+            actor: protagonist,
+            sufferer: sufferer,
+            wasSuccess: wasSuccess,
+            wasAggressive: wasAggressive)
+        .latest;
+    if (latest == null) return null;
+    return time.difference(latest.time).inSeconds;
   }
 
   @override
@@ -201,7 +163,7 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
 
 abstract class WorldStateBuilder
     implements Builder<WorldState, WorldStateBuilder> {
-  ListBuilder<ActionRecord> actionRecords;
+  ActionHistoryBuilder actionHistory;
 
   SetBuilder<Actor> actors;
 
@@ -298,6 +260,14 @@ abstract class WorldStateBuilder
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent));
+  }
+
+  void recordAction(ActionRecord record) {
+    actionHistory.records.add(record);
+    actionHistory.latestByActorId[record.protagonist] = record.time;
+    if (record.wasProactive) {
+      actionHistory.latestProactiveByActorId[record.protagonist] = record.time;
+    }
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {

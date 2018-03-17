@@ -25,6 +25,22 @@ abstract class VisitHistory
   /// The records are grouped for faster access.
   BuiltListMultimap<String, VisitRecord> get records;
 
+  /// Returns the latest visit performed by [actor].
+  VisitRecord getLatestOnly(Actor actor) {
+    final visited = records.values.where((rec) => rec.actorId == actor.id);
+    VisitRecord latest;
+    for (final rec in visited) {
+      if (latest == null) {
+        latest = rec;
+        continue;
+      }
+      if (rec.time.isAfter(latest.time)) {
+        latest = rec;
+      }
+    }
+    return latest;
+  }
+
   /// Returns the record for the particular [actor] and the [room].
   ///
   /// By default, this only asks for record of the particular variant of the
@@ -40,22 +56,6 @@ abstract class VisitHistory
       if (includeVariants && rec.parentRoomName == room.name) return true;
       return false;
     }));
-  }
-
-  /// Returns the latest visit performed by [actor].
-  VisitRecord getLatestOnly(Actor actor) {
-    final visited = records.values.where((rec) => rec.actorId == actor.id);
-    VisitRecord latest;
-    for (final rec in visited) {
-      if (latest == null) {
-        latest = rec;
-        continue;
-      }
-      if (rec.time.isAfter(latest.time)) {
-        latest = rec;
-      }
-    }
-    return latest;
   }
 
   /// Visits are grouped by rooms. More specifically, they are grouped by

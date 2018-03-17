@@ -15,6 +15,7 @@ part of edgehead.serializers;
 // ignore_for_file: sort_constructors_first
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(ActionHistory.serializer)
       ..add(ActionRecord.serializer)
       ..add(Actor.serializer)
       ..add(AttackerSituation.serializer)
@@ -35,15 +36,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Weapon.serializer)
       ..add(WeaponType.serializer)
       ..add(WorldState.serializer)
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(ActionRecord)]),
-          () => new ListBuilder<ActionRecord>())
-      ..addBuilderFactory(
-          const FullType(BuiltSet, const [const FullType(Actor)]),
-          () => new SetBuilder<Actor>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Situation)]),
-          () => new ListBuilder<Situation>())
       ..addBuilderFactory(
           const FullType(
               BuiltList, const [const FullType(EnemyTargetActionBuilder)]),
@@ -84,6 +76,23 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltListMultimap,
               const [const FullType(String), const FullType(VisitRecord)]),
           () => new ListMultimapBuilder<String, VisitRecord>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(int), const FullType(DateTime)]),
+          () => new MapBuilder<int, DateTime>())
+      ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(int), const FullType(DateTime)]),
+          () => new MapBuilder<int, DateTime>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ActionRecord)]),
+          () => new ListBuilder<ActionRecord>())
+      ..addBuilderFactory(
+          const FullType(BuiltSet, const [const FullType(Actor)]),
+          () => new SetBuilder<Actor>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Situation)]),
+          () => new ListBuilder<Situation>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
           () => new SetBuilder<int>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),

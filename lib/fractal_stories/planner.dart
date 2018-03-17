@@ -47,11 +47,12 @@ class ActorPlanner {
       throw new ArgumentError("Called ActorPlanner with actor == null. "
           "That may mean that a Situation returns getCurrentActor as null. "
           "Some action that you added should make sure it removes the "
-          "Situation (maybe ${initialWorld.actionRecords.first.description}?). "
+          "Situation "
+          "(maybe ${initialWorld.actionHistory.getLatest().description}?). "
           "World: $initialWorld. "
           "Situation: ${initialWorld.currentSituation}. "
           "Action Records: "
-          "${initialWorld.actionRecords.map((a) => a.description).join('<-')}");
+          "${initialWorld.actionHistory.describe()}");
     }
     assert(actor.isAlive);
   }
@@ -252,9 +253,7 @@ class ActorPlanner {
             "maximum ($maxOrder), "
             "or consequences ($consequences) higher than maximum");
         log.finest(() {
-          String path = current.world.actionRecords
-              .map((a) => a.description)
-              .join(' <- ');
+          String path = current.world.actionHistory.describe();
           return "- how we got here: $path";
         });
 
@@ -317,8 +316,7 @@ class ActorPlanner {
 
       log.finest(() => "- mainActor's score == $stats (initial=$initialScore)");
       log.finest(() {
-        String path =
-            current.world.actionRecords.map((a) => a.description).join(' <- ');
+        String path = current.world.actionHistory.describe();
         return "- how we got here: $path";
       });
 

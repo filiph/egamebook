@@ -2,13 +2,13 @@ library stranded.action;
 
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
-import 'action_record.dart';
 import 'actor.dart';
 import 'plan_consequence.dart';
 import 'simulation.dart';
@@ -138,7 +138,7 @@ abstract class Action {
     }
     builder.description = _description;
     builder.time = world.time;
-    world.actionRecords.insert(0, builder.build());
+    world.recordAction(builder.build());
   }
 
   Storyline _applyToWorldCopy(Actor actor, Simulation sim,

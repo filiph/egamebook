@@ -26,10 +26,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
   Iterable serialize(Serializers serializers, WorldState object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
-      'actionRecords',
-      serializers.serialize(object.actionRecords,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(ActionRecord)])),
+      'actionHistory',
+      serializers.serialize(object.actionHistory,
+          specifiedType: const FullType(ActionHistory)),
       'actors',
       serializers.serialize(object.actors,
           specifiedType:
@@ -63,11 +62,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'actionRecords':
-          result.actionRecords.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(ActionRecord)]))
-              as BuiltList<ActionRecord>);
+        case 'actionHistory':
+          result.actionHistory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(ActionHistory)) as ActionHistory);
           break;
         case 'actors':
           result.actors.replace(serializers.deserialize(value,
@@ -102,7 +99,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
 
 class _$WorldState extends WorldState {
   @override
-  final BuiltList<ActionRecord> actionRecords;
+  final ActionHistory actionHistory;
   @override
   final BuiltSet<Actor> actors;
   @override
@@ -118,14 +115,14 @@ class _$WorldState extends WorldState {
       (new WorldStateBuilder()..update(updates)).build() as _$WorldState;
 
   _$WorldState._(
-      {this.actionRecords,
+      {this.actionHistory,
       this.actors,
       this.global,
       this.situations,
       this.time,
       this.visitHistory})
       : super._() {
-    if (actionRecords == null) throw new ArgumentError.notNull('actionRecords');
+    if (actionHistory == null) throw new ArgumentError.notNull('actionHistory');
     if (actors == null) throw new ArgumentError.notNull('actors');
     if (global == null) throw new ArgumentError.notNull('global');
     if (situations == null) throw new ArgumentError.notNull('situations');
@@ -144,7 +141,7 @@ class _$WorldState extends WorldState {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! WorldState) return false;
-    return actionRecords == other.actionRecords &&
+    return actionHistory == other.actionHistory &&
         actors == other.actors &&
         global == other.global &&
         situations == other.situations &&
@@ -157,7 +154,7 @@ class _$WorldState extends WorldState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, actionRecords.hashCode), actors.hashCode),
+                $jc($jc($jc(0, actionHistory.hashCode), actors.hashCode),
                     global.hashCode),
                 situations.hashCode),
             time.hashCode),
@@ -169,15 +166,15 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   _$WorldState _$v;
 
   @override
-  ListBuilder<ActionRecord> get actionRecords {
+  ActionHistoryBuilder get actionHistory {
     _$this;
-    return super.actionRecords ??= new ListBuilder<ActionRecord>();
+    return super.actionHistory ??= new ActionHistoryBuilder();
   }
 
   @override
-  set actionRecords(ListBuilder<ActionRecord> actionRecords) {
+  set actionHistory(ActionHistoryBuilder actionHistory) {
     _$this;
-    super.actionRecords = actionRecords;
+    super.actionHistory = actionHistory;
   }
 
   @override
@@ -244,7 +241,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
 
   WorldStateBuilder get _$this {
     if (_$v != null) {
-      super.actionRecords = _$v.actionRecords?.toBuilder();
+      super.actionHistory = _$v.actionHistory?.toBuilder();
       super.actors = _$v.actors?.toBuilder();
       super.global = _$v.global;
       super.situations = _$v.situations?.toBuilder();
@@ -270,7 +267,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   _$WorldState build() {
     final _$result = _$v ??
         new _$WorldState._(
-            actionRecords: actionRecords?.build(),
+            actionHistory: actionHistory?.build(),
             actors: actors?.build(),
             global: global,
             situations: situations?.build(),
