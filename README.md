@@ -44,6 +44,19 @@ Here are some additional "philosophical" pillars:
 
 ## Development
 
+### Installation
+
+1. [Install Dart](https://www.dartlang.org/install)
+2. Clone this repository (`git clone https://github.com/filiph/edgehead.git`)
+   or download the zip file containing it
+3. Go to the repository's directory (`cd edgehead`)
+4. Install Dart packages (`pub get`)
+
+Now you can try running tests (`pub run test`) or play the game on the command
+line (`dart bin/play.dart`).
+
+### Development flow
+
 Run the following when developing:
 
     dart -c tool/watch.dart
