@@ -106,7 +106,7 @@ abstract class RoomRoamingSituation extends Situation
         room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
-    w.recordVisit(w, a, room);
+    w.recordVisit(a, room);
 
     if (!silent) {
       // Show short description according to whether the actor has been here.
@@ -121,7 +121,7 @@ abstract class RoomRoamingSituation extends Situation
 
     for (var actor in getPartyOf(a, sim, originalWorld)) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
-      w.recordVisit(w, actor, room);
+      w.recordVisit(actor, room);
     }
   }
 
