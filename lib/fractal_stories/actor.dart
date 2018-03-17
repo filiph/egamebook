@@ -233,12 +233,13 @@ abstract class Actor extends Object
     return hateTowards(other, w) > 0.0;
   }
 
-  // TODO: loveIndifference
-  // other feelings?
-
   /// Returns the intensity of hate towards the actor. Very high when
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
+  ///
+  /// TODO: Optimize. This function takes ~4% of CPU.
+  ///       Actors could keep track of "aggro" themselves, instead of querying
+  ///       action history.
   double hateTowards(Actor other, WorldState w) {
     if (isConfused && team.isFriendWith(other.team)) {
       return 1000.0;
@@ -250,12 +251,6 @@ abstract class Actor extends Object
 
     return team.isEnemyWith(other.team) ? 1.0 : 0.0;
   }
-
-  /// The resources this actor knows about.
-  ///
-  /// They can share this information with others (or not).
-  /// TODO: uncomment and implement
-  //  final UnmodifiableSetView<LocationResource> knownResources;
 
   /// Scores the state of the [world] in the eyes of [this] Actor.
   ///
@@ -303,8 +298,8 @@ abstract class Actor extends Object
     return new ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
-  /// Returns true if this actor has ever been attacked by [actor] in the past
-  /// [time] turns.
+  /// Returns true if this actor was attacked by [actor] in the past
+  /// [time] seconds.
   bool _hasBeenAttackedBy(Actor other, WorldState w, int time) {
     int recency = w.timeSinceLastActionRecord(
         protagonist: other, sufferer: this, wasAggressive: true);
