@@ -343,12 +343,12 @@ class ActorPlanner {
             continue;
           }
 
-          // Ignore consequences that have already been visited.
-          if (closed.contains(next.world)) {
-            // TODO: is this a bug? shouldn't we add score even for visited worlds?
-            continue;
-          }
-
+          // Normally, we would check whether the consequence world doesn't
+          // already exist (in closed). But that is almost impossible
+          // (remember: WorldState includes the action history),
+          // and the computation required to check involves computing
+          // hashCode for the whole WorldState, which is expensive
+          // (6.4% CPU time of a long-running test).
           open.add(next);
         }
       }
