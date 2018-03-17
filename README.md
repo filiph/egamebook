@@ -1,6 +1,4 @@
-# Edgehead
-
-<a href="https://travis-ci.org/filiph/edgehead"><img src="https://travis-ci.org/filiph/edgehead.svg?branch=master"></a>
+# Edgehead <a href="https://travis-ci.org/filiph/edgehead"><img src="https://travis-ci.org/filiph/edgehead.svg?branch=master"></a>
 
 > "Skyrim, if it was Choose-Your-Own-Adventure, but still allowed the same
 > freedom."
