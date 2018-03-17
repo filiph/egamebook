@@ -57,6 +57,7 @@ Future<Null> testWithStopWords(
     var logFile = new File(logPath);
     var saveComment = savegame == null ? '' : " (from savegame '$savegame')";
     print("Running $identifier-aware test #${i + 1}$saveComment.");
+    print(" - log: $logPath");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
     final runner = new CliRunner(true, true, logFile, logLevel: logLevel);
