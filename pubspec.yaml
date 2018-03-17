@@ -8,16 +8,13 @@ environment:
   sdk: '>=1.22.0 <2.0.0'
 
 dependencies:
-  browser: ^0.10.0+2
   built_collection: ^1.4.1
   built_value: ^4.1.1
   cli_menu: ^0.1.0
-  gtag_analytics: ^0.1.5
   meta: ^1.0.5
   logging: ^0.11.3+1
   path: ^1.4.2
   quiver: ^0.25.0
-  sass: ^0.4.2+7
   slot_machine: ^5.0.0
 
 dev_dependencies:
@@ -28,8 +25,3 @@ dev_dependencies:
   recase: ^1.0.0+1
   source_gen: ^0.7.1
   test: ">=0.12.19+1 <1.0.0"
-
-transformers:
-- $dart2js:
-    commandLineOptions: [--trust-type-annotations, --trust-primitives]
-- sass
