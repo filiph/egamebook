@@ -1,14 +1,50 @@
 # Edgehead
 
+<a href="https://travis-ci.org/filiph/edgehead"><img src="https://travis-ci.org/filiph/edgehead.svg?branch=dev"></a>
+
 > "Skyrim, if it was Choose-Your-Own-Adventure, but still allowed the same
 > freedom."
 
-## Development
+## Architecture
 
-**IMPORTANT:** This code depends on `package:egamebook` which is not yet
-open source. Until that happens, you won't be able to build this project
-unless you're part of the development team (reach out to filiphracek@ if you're
-interested).
+(This section is a stub. Some aspects of the design are better explained
+at [medium.com/@filiph](http://medium.com/@filiph).)
+
+Here are the pillars of the design:
+
+* At any moment, we're in a `Situation`. Situations define who can act,
+  whose turn it is, and what `Action`s are available. Example: combat situation,
+  conversation, dodging a slash.
+* `Action`s are the only things that can change the state of the world.
+* `Actor`s are the entities that are active in the world, and who can perform
+  `Action`s. Player is one of them,
+  but NPCs and monsters are also actors. More esoteric actors can also exist,
+  like a Director (who stealthily changes the world so that the player's
+  experience is as fun/interesting as possible).
+* `WorldState` is the state of the world at any moment in time. It is 
+  an immutable object, and completely serializable.
+* An important part of `WorldState` are the different histories. Instead of
+  putting state into variables that change during play, we often just create
+  a record that something happened, which we can later recall.
+* `Planner` figures out what are the best actions to take next. This is the
+  AI that drives all NPCs, but it doubles as the system that shows only the
+  best choices to the player (instead of showing all choices).
+* History is where much of the game's states resides
+
+Most of the classes mentioned above are located at `lib/fractal_stories`.
+
+Here are some additional "philosophical" pillars:
+
+* Make it as easy as possible for writers to write stories / quests / actions, 
+  but don't sacrifice flexibility. This is not a system for writers
+  non-programmers, this is a system for small indie game development teams.
+* Source generation over magic. Even writer's input is all transformed into
+  code that you can inspect and debug.
+* Use fractal design. In one game, the player should be able to make strategic
+  choices (e.g. move to a different state, marry, invade Poland) _and_ 
+  micro-choices (e.g. duck the punch, feint swing), and everything in between.
+
+## Development
 
 Run the following when developing:
 
@@ -21,8 +57,8 @@ globs in `tool/phases.dart`.
 Most writing is in text files in the `drivedump/` directory. 
 (There's a shell script to update these text files from
 a Google Drive directory: `get_writers_input_dev.sh`. But you'd need access
-to a specific Google Drive folder for this to work. Feel free to just
-change the text files directly in the git repository.) 
+to a specific Google Drive folder for this to work, so this workflow
+is deprecated. The files in `drivedump/` are now the canonical source of truth.) 
 When the `tool/watch.dart` watcher is running, it will, among other things,
 watch for changes of the text files. It will compile the texts into the 
 `lib/writers_input.g.dart` file, which is then used by the game itself.
@@ -35,9 +71,13 @@ run `pub run -c test --run-skipped`.
 
 ### Deployment
 
+#### To github pages (`gh-pages`)
+
 A one-line command that tests and then, if those are successful, immediately 
 publishes the bleeding edge version to github.io can look something like
 `pub run -c test --run-skipped && peanut && git push origin --set-upstream gh-pages`.
+
+#### To official site (egamebook.com/vermin)
 
 There is a shorthand for uploading the current version to 
 [https://egamebook.com/vermin](https://egamebook.com/vermin). First, ensure
@@ -53,15 +93,22 @@ and `make deploy`.
 
 Run `pub run test` or setup your IDE for continuous unit testing.
 
-Also included are long-running tests that are skipped by default. Some of these
+Also included are long-running tests that are skipped by default. These
 tests are "fuzzy" -- meaning that they will try to play the game randomly until
 completion or error. 
 
 Run all the tests, including the long-running ones, using this command:
 
     pub run --checked test --run-skipped
+    
+The `--checked` flag tells Dart to run assertions and generally be more 
+fail-fast. It also makes the code run a few percent slower.
 
 ### Playing on the command line
+
+**Note:** As of March 2018, this is the only way to play the game. I have 
+temporarily dropped all UI work while I focus on mechanics, authorship
+tools, etc.
 
 For a more hands-on approach, you can manually play on the command line.
 This is not meant to be pretty, but it's faster than in the browser.
@@ -71,6 +118,8 @@ following command to also log progress and catch more bugs through checked mode:
     dart -c bin/play.dart --log
 
 The log is in `edgehead.log`.
+
+Use up and down arrow to choose options, enter to select.
 
 ### Building new actions
 
