@@ -3,3 +3,6 @@ language: dart
 script:
   - pub run -c test
   - pub run -c test -t long-running --run-skipped
+
+after_failure:
+  - cat /tmp/edgehead_fuzzy_test*/*.log
