@@ -662,7 +662,7 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 
 ''', wholeSentence: true);
     new Ruleset(
-        new Rule(675414120, 2, (ApplicabilityContext c) {
+        new Rule(675414120, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -681,7 +681,7 @@ Briana\'s eyes go wide and nods towards the door.
 
 ''', wholeSentence: true);
         }),
-        new Rule(363993062, 2, (ApplicabilityContext c) {
+        new Rule(363993062, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -700,7 +700,7 @@ Briana\'s eyes go wide. "The mad orc behind that door."
 
 ''', wholeSentence: true);
         }),
-        new Rule(392088263, 2, (ApplicabilityContext c) {
+        new Rule(392088263, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -720,7 +720,7 @@ Briana\'s eyes go wide. "That door in the slave quarters."
 
 ''', wholeSentence: true);
         }),
-        new Rule(361178650, 1, (ApplicabilityContext c) {
+        new Rule(361178650, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -738,7 +738,7 @@ Briana\'s eyes go wide as she looks around the room.
 
 ''', wholeSentence: true);
         }),
-        new Rule(974180978, 0, (ApplicabilityContext c) {
+        new Rule(974180978, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -805,7 +805,7 @@ Room warForge = new Room('war_forge', (ActionContext c) {
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(1010631821, 1, (ApplicabilityContext c) {
+      new Rule(1010631821, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -822,7 +822,7 @@ Room warForge = new Room('war_forge', (ActionContext c) {
 ''',
             wholeSentence: true);
       }),
-      new Rule(383419248, 1, (ApplicabilityContext c) {
+      new Rule(383419248, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1100,7 +1100,7 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   new Ruleset(
-      new Rule(299502294, 2, (ApplicabilityContext c) {
+      new Rule(299502294, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1115,7 +1115,7 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
         s.add('''  The reinforced door on the side of the corridor is silent.
 ''', wholeSentence: true);
       }),
-      new Rule(871855510, 1, (ApplicabilityContext c) {
+      new Rule(871855510, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1127,7 +1127,7 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       }),
-      new Rule(233666017, 1, (ApplicabilityContext c) {
+      new Rule(233666017, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1588,7 +1588,7 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(404031087, 1, (ApplicabilityContext c) {
+      new Rule(404031087, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1605,7 +1605,7 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
 ''',
             wholeSentence: true);
       }),
-      new Rule(1058415809, 1, (ApplicabilityContext c) {
+      new Rule(1058415809, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1758,7 +1758,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(1010398177, 1, (ApplicabilityContext c) {
+      new Rule(1010398177, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1774,7 +1774,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
 ''',
             wholeSentence: true);
       }),
-      new Rule(9791310, 1, (ApplicabilityContext c) {
+      new Rule(9791310, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1800,7 +1800,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
 
 ''', wholeSentence: true);
   new Ruleset(
-      new Rule(988691356, 2, (ApplicabilityContext c) {
+      new Rule(988691356, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1819,7 +1819,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
 ''',
             wholeSentence: true);
       }),
-      new Rule(978029961, 0, (ApplicabilityContext c) {
+      new Rule(978029961, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1923,7 +1923,7 @@ Room guardpostAboveChurch =
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(133764767, 1, (ApplicabilityContext c) {
+      new Rule(133764767, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1940,7 +1940,7 @@ Room guardpostAboveChurch =
 ''',
             wholeSentence: true);
       }),
-      new Rule(318594253, 1, (ApplicabilityContext c) {
+      new Rule(318594253, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1971,7 +1971,7 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   new Ruleset(
-      new Rule(1049200592, 2, (ApplicabilityContext c) {
+      new Rule(1049200592, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1989,7 +1989,7 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
 ''',
             wholeSentence: true);
       }),
-      new Rule(948011826, 0, (ApplicabilityContext c) {
+      new Rule(948011826, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2077,8 +2077,8 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   bool get isAggressive => false;
 }
 
-Room warForgeAfterIronMonster =
-    new Room('war_forge_after_iron_monster', (ActionContext c) {
+Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2097,23 +2097,22 @@ Room warForgeAfterIronMonster =
 ''', wholeSentence: true);
   rollBrianaQuote(sim, w, s);
 },
-        null,
-        null,
-        <Exit>[
-          new Exit('smelter', 'Go to smelter',
-              'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
-          new Exit(
-              'cave_with_agruth',
-              'Go back to the cave with Agruth\'s corpse',
-              'You sneak back toward where you left Agruth\'s body.')
-        ],
-        parent: 'war_forge',
-        prerequisite: new Prerequisite(1, (ApplicabilityContext c) {
-          final WorldState w = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-        }));
+    null,
+    null,
+    <Exit>[
+      new Exit('smelter', 'Go to smelter',
+          'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
+      new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+          'You sneak back toward where you left Agruth\'s body.')
+    ],
+    parent: 'war_forge',
+    prerequisite:
+        new Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+    }));
 Room exitFromBloodrock = new Room('exit_from_bloodrock', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2155,7 +2154,7 @@ _"No king has what we have."_
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(937280785, 1, (ApplicabilityContext c) {
+      new Rule(937280785, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2173,7 +2172,7 @@ _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connec
 ''',
             wholeSentence: true);
       }),
-      new Rule(36322634, 0, (ApplicabilityContext c) {
+      new Rule(36322634, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;

@@ -189,20 +189,30 @@ class Simulation {
     final String destination = destinationRoom.parent ?? destinationRoom.name;
     final firstPart = room.prerequisite;
     final secondPart = destinationRoom.prerequisite;
-    Prerequisite combinedRule;
+    // Combine the prerequisites of the source and the destination rooms.
+    // Only when both prerequisites are true will we allow the exit to be used.
+    // This also gives advantage to more specific exits (those with higher
+    // combined [Prerequisite.priority]).
+    Prerequisite prerequisite;
     if (firstPart == null && secondPart == null) {
-      combinedRule = const Prerequisite.alwaysTrue();
+      prerequisite = const Prerequisite.alwaysTrue();
     } else if (secondPart == null) {
-      combinedRule = firstPart;
+      prerequisite = firstPart;
     } else if (firstPart == null) {
-      combinedRule = secondPart;
+      prerequisite = secondPart;
     } else {
+      // TODO: better combine function
+      final combinedHash = firstPart.hash + secondPart.hash;
       final combinedPriority = firstPart.priority + secondPart.priority;
+      // We shouldn't prevent using exit when the source room is `onlyOnce`.
+      // Therefore, we're only using the destination's `onlyOnce` value.
+      final combinedOnlyOnce = secondPart.onlyOnce;
       final combinedPrerequisite = (ApplicabilityContext context) =>
           firstPart.isSatisfiedBy(context) && secondPart.isSatisfiedBy(context);
-      combinedRule = new Prerequisite(combinedPriority, combinedPrerequisite);
+      prerequisite = new Prerequisite(combinedHash, combinedPriority,
+          combinedOnlyOnce, combinedPrerequisite);
     }
-    return new _ExitRule(exit, source, destination, combinedRule);
+    return new _ExitRule(exit, source, destination, prerequisite);
   }
 
   /// Generator generates multiple [Action] instances given a [world] and

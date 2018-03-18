@@ -295,6 +295,11 @@ class SequenceBlockVisitor {
         "and a consequence.");
     final int hashCode = rule.content.hashCode;
     String conditionCode = rule.children.first.content.trim();
+    bool onlyOnce = false;
+    if (conditionCode.startsWith("onlyOnce &&")) {
+      onlyOnce = true;
+      conditionCode = conditionCode.replaceFirst("onlyOnce &&", "");
+    }
     final specificity = getSpecificity(conditionCode);
     if (specificity == 0) {
       // We can use 'default' as a condition to have a kind of
@@ -312,18 +317,23 @@ class SequenceBlockVisitor {
     final applyClosure = createActionContextClosure()
       ..addStatements(consequenceVisitor.statements);
 
-    final instanceBuilder = ruleType.newInstance(
-        [literal(hashCode), literal(specificity), isApplicable, applyClosure]);
+    final instanceBuilder = ruleType.newInstance([
+      literal(hashCode),
+      literal(specificity),
+      literal(onlyOnce),
+      isApplicable,
+      applyClosure
+    ]);
     return new _ParsedRule(specificity, instanceBuilder);
   }
 
   StatementBuilder _visitRuleset(Block ruleset) {
     //     final ruleset = new Ruleset(
-    //       new Rule(42, 1, (c) => a.isPlayer,
+    //       new Rule(42, 1, true, (c) => a.isPlayer,
     //           (c) => outcome = 42),
-    //       new Rule(43, 2, (c) => a.isPlayer && a.name == "Aren",
+    //       new Rule(43, 2, false, (c) => a.isPlayer && a.name == "Aren",
     //           (c) => outcome = 43),
-    //       new Rule(44, 0, (c) => true,
+    //       new Rule(44, 0, false, (c) => true,
     //           (c) => outcome = 44),
     //     ).apply(context);
     assert(ruleset.type == BlockType.ruleset);

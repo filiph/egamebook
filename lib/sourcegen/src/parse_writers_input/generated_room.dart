@@ -71,12 +71,17 @@ class GeneratedRoom extends GeneratedGameObject {
       namedArguments["parent"] = literal(GeneratedGameObject
           .validateAndRemoveDollarSign(_map['VARIANT_OF'].trim()));
 
+      final roomNameHash = writersName.hashCode;
       final specificity = getSpecificity(_map['RULE']);
       final isApplicable = createApplicabilityContextClosure()
         ..addStatement(
             new ExpressionBuilder.raw((_) => _map['RULE']).asReturn());
-      final prerequisite =
-          prerequisiteType.newInstance([literal(specificity), isApplicable]);
+      final prerequisite = prerequisiteType.newInstance([
+        literal(roomNameHash),
+        literal(specificity),
+        literal(true) /* TODO: allow onlyOnce rooms/variants */,
+        isApplicable
+      ]);
       namedArguments["prerequisite"] = prerequisite;
     }
 

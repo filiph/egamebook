@@ -73,6 +73,8 @@ class Room {
 
   /// If present, and if [Prerequisite.isSatisfiedBy] evaluates to
   /// `true`, then this room will override its [parent] room.
+  ///
+  /// For [Prerequisite.hash], use [Room.name.hashCode].
   final Prerequisite prerequisite;
 
   /// A function that builds the fight situation in the Room when player arrives

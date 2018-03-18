@@ -121,7 +121,8 @@ void main() {
       final forgeAfterFire = new Room(_forgeAfterFireName, emptyRoomDescription,
           emptyRoomDescription, null, null, [creviceExit],
           parent: _forgeName,
-          prerequisite: new Prerequisite(1, (_) => forgeIsAfterFire));
+          prerequisite: new Prerequisite(
+              _forgeAfterFireName.hashCode, 1, false, (_) => forgeIsAfterFire));
 
       final simulation = new Simulation(
           [forge, forgeAfterFire, afterFireCrevice, outside], {});

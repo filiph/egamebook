@@ -11,21 +11,44 @@ typedef bool RuleIsApplicableCallback(ApplicabilityContext context);
 
 @immutable
 class Prerequisite implements Comparable<Prerequisite> {
+  /// The priority of a [Rule]. The higher the priority, the sooner the
+  /// rule will be tried.
   final int priority;
+
+  /// When `true`, the prerequisite will check whether the rule has been
+  /// applied.
+  final bool onlyOnce;
+
+  /// The unique identifier of the prerequisite, or the rule / event / object
+  /// to which this prerequisite is attached.
+  ///
+  /// When used in [Rule], this is the same as [Rule.hash]. When used
+  /// as a prerequisite for something else, like a room, this is some kind
+  /// of unique hash of that object.
+  final int hash;
 
   final RuleIsApplicableCallback _isApplicableCallback;
 
-  const Prerequisite(this.priority, this._isApplicableCallback);
+  const Prerequisite(
+      this.hash, this.priority, this.onlyOnce, this._isApplicableCallback);
 
   const Prerequisite.alwaysTrue()
-      : priority = 0,
+      : hash = -1,
+        priority = 0,
+        onlyOnce = false,
         _isApplicableCallback = _alwaysApplicableCallback;
 
   @override
   int compareTo(Prerequisite other) => -priority.compareTo(other.priority);
 
-  bool isSatisfiedBy(ApplicabilityContext context) =>
-      _isApplicableCallback(context);
+  bool isSatisfiedBy(ApplicabilityContext context) {
+    if (onlyOnce && context.world.ruleHistory.query(hash).hasHappened) {
+      // This prerequisite+rule is applicable only once, and that has already
+      // happened.
+      return false;
+    }
+    return _isApplicableCallback(context);
+  }
 }
 
 @immutable
@@ -37,12 +60,15 @@ class Rule {
   final RuleApplyCallback applyCallback;
 
   Rule(
-    this.hash,
+    int hash,
     int priority,
+    bool onlyOnce,
     RuleIsApplicableCallback isApplicableCallback,
     this.applyCallback,
   )
-      : prerequisite = new Prerequisite(priority, isApplicableCallback);
+      : hash = hash,
+        prerequisite =
+            new Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
 }
 
 @immutable

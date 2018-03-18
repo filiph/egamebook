@@ -13,7 +13,7 @@ void main() {
   test("ruleset with 1 rule applies that rule", () {
     var triggered = false;
     final ruleset = new Ruleset(
-      new Rule(42, 1, (c) => c.actor.isPlayer, (_) => triggered = true),
+      new Rule(42, 1, false, (c) => c.actor.isPlayer, (_) => triggered = true),
     );
     final context = new ActionContext(null, aren, null, null, null, null, null);
     ruleset.apply(context);
@@ -22,7 +22,7 @@ void main() {
 
   test("ruleset that doesn't have any applicable rule throws", () {
     final ruleset = new Ruleset(
-      new Rule(42, 1, (c) => c.actor.isPlayer, (_) {}),
+      new Rule(42, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
     final context = new ActionContext(null, orc, null, null, null, null, null);
     expect(() => ruleset.apply(context), throwsStateError);
@@ -31,10 +31,10 @@ void main() {
   test("ruleset with 3 rules applies the most specific one", () {
     var outcome = 0;
     final ruleset = new Ruleset.unordered([
-      new Rule(42, 1, (c) => c.actor.isPlayer, (_) => outcome = 42),
-      new Rule(43, 2, (c) => c.actor.isPlayer && c.actor.name == "Aren",
+      new Rule(42, 1, false, (c) => c.actor.isPlayer, (_) => outcome = 42),
+      new Rule(43, 2, false, (c) => c.actor.isPlayer && c.actor.name == "Aren",
           (_) => outcome = 43),
-      new Rule(44, 0, (_) => true, (_) => outcome = 44),
+      new Rule(44, 0, false, (_) => true, (_) => outcome = 44),
     ]);
     final orcContext =
         new ActionContext(null, orc, null, null, null, null, null);
@@ -49,7 +49,7 @@ void main() {
   test("ruleset saves used rules", () {
     final ruleId = 42;
     final ruleset = new Ruleset(
-      new Rule(ruleId, 1, (c) => c.actor.isPlayer, (_) {}),
+      new Rule(ruleId, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
     final world = new WorldStateBuilder()
       ..actors = new SetBuilder<Actor>(<Actor>[aren])
@@ -61,5 +61,27 @@ void main() {
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isFalse);
     ruleset.apply(context);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isTrue);
+  });
+
+  test("onlyOnce rule is only triggered once", () {
+    int state = 0;
+    final ruleset = new Ruleset(
+      new Rule(42, 1, true, (c) => c.actor.isPlayer, (_) => state = 1),
+      new Rule(43, 0, false, (_) => true, (_) => state = 2),
+    );
+    final world = new WorldStateBuilder()
+      ..actors = new SetBuilder<Actor>(<Actor>[aren])
+      ..situations = new ListBuilder<Situation>(<Situation>[])
+      ..global = ["bogus"]
+      ..time = new DateTime.utc(1000);
+    final context =
+        new ActionContext(null, aren, null, world.build(), null, world, null);
+    ruleset.apply(context);
+    expect(state, 1);
+    final nextWorld = context.outputWorld;
+    final nextContext = new ActionContext(
+        null, aren, null, nextWorld.build(), null, nextWorld, null);
+    ruleset.apply(nextContext);
+    expect(state, 2);
   });
 }
