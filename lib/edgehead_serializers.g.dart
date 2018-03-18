@@ -30,6 +30,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Predetermination.serializer)
       ..add(Pronoun.serializer)
       ..add(RoomRoamingSituation.serializer)
+      ..add(RuleHistory.serializer)
+      ..add(RuleRecord.serializer)
       ..add(Team.serializer)
       ..add(VisitHistory.serializer)
       ..add(VisitRecord.serializer)
@@ -87,6 +89,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ActionRecord)]),
           () => new ListBuilder<ActionRecord>())
+      ..addBuilderFactory(
+          const FullType(BuiltMap,
+              const [const FullType(int), const FullType(RuleRecord)]),
+          () => new MapBuilder<int, RuleRecord>())
       ..addBuilderFactory(
           const FullType(BuiltSet, const [const FullType(Actor)]),
           () => new SetBuilder<Actor>())

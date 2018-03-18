@@ -36,6 +36,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       'global',
       serializers.serialize(object.global,
           specifiedType: const FullType(Object)),
+      'ruleHistory',
+      serializers.serialize(object.ruleHistory,
+          specifiedType: const FullType(RuleHistory)),
       'situations',
       serializers.serialize(object.situations,
           specifiedType:
@@ -76,6 +79,10 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.global = serializers.deserialize(value,
               specifiedType: const FullType(Object));
           break;
+        case 'ruleHistory':
+          result.ruleHistory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(RuleHistory)) as RuleHistory);
+          break;
         case 'situations':
           result.situations.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -105,6 +112,8 @@ class _$WorldState extends WorldState {
   @override
   final Object global;
   @override
+  final RuleHistory ruleHistory;
+  @override
   final BuiltList<Situation> situations;
   @override
   final DateTime time;
@@ -118,6 +127,7 @@ class _$WorldState extends WorldState {
       {this.actionHistory,
       this.actors,
       this.global,
+      this.ruleHistory,
       this.situations,
       this.time,
       this.visitHistory})
@@ -125,6 +135,7 @@ class _$WorldState extends WorldState {
     if (actionHistory == null) throw new ArgumentError.notNull('actionHistory');
     if (actors == null) throw new ArgumentError.notNull('actors');
     if (global == null) throw new ArgumentError.notNull('global');
+    if (ruleHistory == null) throw new ArgumentError.notNull('ruleHistory');
     if (situations == null) throw new ArgumentError.notNull('situations');
     if (time == null) throw new ArgumentError.notNull('time');
     if (visitHistory == null) throw new ArgumentError.notNull('visitHistory');
@@ -144,6 +155,7 @@ class _$WorldState extends WorldState {
     return actionHistory == other.actionHistory &&
         actors == other.actors &&
         global == other.global &&
+        ruleHistory == other.ruleHistory &&
         situations == other.situations &&
         time == other.time &&
         visitHistory == other.visitHistory;
@@ -154,8 +166,10 @@ class _$WorldState extends WorldState {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, actionHistory.hashCode), actors.hashCode),
-                    global.hashCode),
+                $jc(
+                    $jc($jc($jc(0, actionHistory.hashCode), actors.hashCode),
+                        global.hashCode),
+                    ruleHistory.hashCode),
                 situations.hashCode),
             time.hashCode),
         visitHistory.hashCode));
@@ -202,6 +216,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
+  RuleHistoryBuilder get ruleHistory {
+    _$this;
+    return super.ruleHistory ??= new RuleHistoryBuilder();
+  }
+
+  @override
+  set ruleHistory(RuleHistoryBuilder ruleHistory) {
+    _$this;
+    super.ruleHistory = ruleHistory;
+  }
+
+  @override
   ListBuilder<Situation> get situations {
     _$this;
     return super.situations ??= new ListBuilder<Situation>();
@@ -244,6 +270,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.actionHistory = _$v.actionHistory?.toBuilder();
       super.actors = _$v.actors?.toBuilder();
       super.global = _$v.global;
+      super.ruleHistory = _$v.ruleHistory?.toBuilder();
       super.situations = _$v.situations?.toBuilder();
       super.time = _$v.time;
       super.visitHistory = _$v.visitHistory?.toBuilder();
@@ -270,6 +297,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
             actionHistory: actionHistory?.build(),
             actors: actors?.build(),
             global: global,
+            ruleHistory: ruleHistory?.build(),
             situations: situations?.build(),
             time: time,
             visitHistory: visitHistory?.build());

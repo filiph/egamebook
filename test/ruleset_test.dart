@@ -1,5 +1,8 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:test/test.dart';
 
@@ -41,5 +44,22 @@ void main() {
         new ActionContext(null, aren, null, null, null, null, null);
     ruleset.apply(arenContext);
     expect(outcome, 43);
+  });
+
+  test("ruleset saves used rules", () {
+    final ruleId = 42;
+    final ruleset = new Ruleset(
+      new Rule(ruleId, 1, (c) => c.actor.isPlayer, (_) {}),
+    );
+    final world = new WorldStateBuilder()
+      ..actors = new SetBuilder<Actor>(<Actor>[aren])
+      ..situations = new ListBuilder<Situation>(<Situation>[])
+      ..global = ["bogus"]
+      ..time = new DateTime.utc(1000);
+    final context =
+        new ActionContext(null, aren, null, world.build(), null, world, null);
+    expect(world.build().ruleHistory.query(ruleId).hasHappened, isFalse);
+    ruleset.apply(context);
+    expect(world.build().ruleHistory.query(ruleId).hasHappened, isTrue);
   });
 }

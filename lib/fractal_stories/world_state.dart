@@ -7,10 +7,12 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
+import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 
 part 'world_state.g.dart';
 
@@ -43,6 +45,9 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   /// This object must have a hash code that is value-based so that globals
   /// with the same state have the same [Object.hashCode].
   Object get global;
+
+  /// The history of rules as they were triggered through different rulesets.
+  RuleHistory get ruleHistory;
 
   /// A stack of situations. The top-most (last) one is the [currentSituation].
   ///
@@ -165,6 +170,8 @@ abstract class WorldStateBuilder
     implements Builder<WorldState, WorldStateBuilder> {
   ActionHistoryBuilder actionHistory;
 
+  RuleHistoryBuilder ruleHistory;
+
   SetBuilder<Actor> actors;
 
   Object global;
@@ -251,6 +258,14 @@ abstract class WorldStateBuilder
     situations.add(situation);
   }
 
+  void recordAction(ActionRecord record) {
+    actionHistory.records.add(record);
+    actionHistory.latestByActorId[record.protagonist] = record.time;
+    if (record.wasProactive) {
+      actionHistory.latestProactiveByActorId[record.protagonist] = record.time;
+    }
+  }
+
   void recordVisit(Actor actor, Room room) {
     final key = VisitHistory.getKey(room);
     visitHistory.records.add(
@@ -262,12 +277,9 @@ abstract class WorldStateBuilder
             parentRoomName: room.parent));
   }
 
-  void recordAction(ActionRecord record) {
-    actionHistory.records.add(record);
-    actionHistory.latestByActorId[record.protagonist] = record.time;
-    if (record.wasProactive) {
-      actionHistory.latestProactiveByActorId[record.protagonist] = record.time;
-    }
+  void recordRule(Rule rule) {
+    ruleHistory.records[rule.hash] =
+        new RuleRecord(ruleId: rule.hash, time: time);
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {

@@ -100,6 +100,10 @@ class Ruleset {
     );
   }
 
+  /// Runs the ruleset, choosing the most specific rule and running its
+  /// [Rule.applyCallback].
+  ///
+  /// This also record the used rule into [context.outputWorld]'s history.
   void apply(ActionContext context) {
     // TODO: rewrite inline so that we don't need to create a new list
     //       every time
@@ -120,7 +124,7 @@ class Ruleset {
       if (rule == null) break;
       if (rule.prerequisite.isSatisfiedBy(context)) {
         rule.applyCallback(context);
-        // TODO: record the fact that we've already used rule (via hash)
+        context.outputWorld?.recordRule(rule);
         // TODO: when 2+ rules of same priority is applicable, use sim.random
         return;
       }
