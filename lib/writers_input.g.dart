@@ -77,7 +77,7 @@ That leaves two options: the black passage toward the war forges and the deserte
 
 
 ''', wholeSentence: true);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 }, null, null, <Exit>[
   new Exit('underground_church', 'Go to the Unholy Church',
       'You make it to the Church undetected.'),
@@ -851,7 +851,7 @@ Room warForge = new Room('war_forge', (ActionContext c) {
 
 ''',
       wholeSentence: true);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 }, null, null, <Exit>[
   new Exit('smelter', 'Go to smelter',
       'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
@@ -1141,7 +1141,7 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
         s.add('''  The reinforced door on the side of the corridor is closed.
 ''', wholeSentence: true);
       })).apply(c);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 }, generateSlaveQuartersPassageFight, null, <Exit>[
   new Exit(
       'cave_with_agruth',
@@ -1631,7 +1631,7 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
   s.add('''The temple is silent, as if it were holding its breath.
 
 ''', wholeSentence: true);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 }, null, null, <Exit>[
   new Exit('guardpost_above_church', 'Enter the upwards passage',
       'You take the sloping passage and walk upward for a long time.'),
@@ -1831,7 +1831,7 @@ Room smelter = new Room('smelter', (ActionContext c) {
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       })).apply(c);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 }, null, null, <Exit>[
   new Exit('war_forge', 'Go to the war forges',
       'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.'),
@@ -2095,7 +2095,7 @@ Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
   s.add('''Pure chaos everywhere.
 
 ''', wholeSentence: true);
-  rollBrianaQuote(sim, w, s);
+  rollBrianaQuote(c);
 },
     null,
     null,

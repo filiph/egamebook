@@ -29,7 +29,7 @@ SHORT_DESCRIPTION:
 The temple is silent, as if it were holding its breath.
 
 [[CODE]]
-rollBrianaQuote(sim, w, s);
+rollBrianaQuote(c);
 [[/CODE]]
 
 

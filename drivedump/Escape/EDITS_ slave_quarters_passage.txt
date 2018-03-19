@@ -57,7 +57,7 @@ SHORT_DESCRIPTION:
 - END RULESET
 
 [[CODE]]
-rollBrianaQuote(sim, w, s);
+rollBrianaQuote(c);
 [[/CODE]]
 
 

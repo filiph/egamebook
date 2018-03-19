@@ -12,7 +12,7 @@ SHORT_DESCRIPTION:
 Pure chaos everywhere.
 
 [[CODE]]
-rollBrianaQuote(sim, w, s);
+rollBrianaQuote(c);
 [[/CODE]]
 
 

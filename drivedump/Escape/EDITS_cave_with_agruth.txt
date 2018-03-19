@@ -37,7 +37,7 @@ The corpse lies still, getting cold.
 
 
 [[CODE]]
-rollBrianaQuote(sim, w, s);
+rollBrianaQuote(c);
 [[/CODE]]
 
 

@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/unique_id.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -54,6 +55,7 @@ const _brianaQuotes = const [
   '''Briana stops and listens for a moment. "Aren, we're pushing our luck. 
   I'd hate to go all this way only to get
   my head smashed in by some random orc patrol."''',
+  '''END''',
 ];
 
 final Weapon orcthorn = new Weapon(WeaponType.sword,
@@ -63,6 +65,16 @@ final Weapon orcthorn = new Weapon(WeaponType.sword,
     thrustingDamage: 2);
 
 final Weapon sleepingGoblinsSpear = new Weapon(WeaponType.spear);
+
+/// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
+/// quote is `"END"`, which will not print, and is there as the terminal
+/// point.
+final _brianaQuotesRuleset = new Ruleset.unordered(_brianaQuotes.map((quote) {
+  return new Rule(quote.hashCode, 1, quote != 'END', (_) => true, (c) {
+    if (quote == 'END') return;
+    c.outputStoryline.add(quote, wholeSentence: true);
+  });
+}));
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAliveAndActive && b.isAliveAndActive;
@@ -317,12 +329,8 @@ bool playerHasVisited(Simulation sim, WorldState built, String roomName) {
   return built.visitHistory.query(player, room).hasHappened;
 }
 
-void rollBrianaQuote(Simulation sim, WorldStateBuilder w, Storyline s) {
-  int index = (w.global as EdgeheadGlobalState).brianaQuoteIndex;
-  if (index >= _brianaQuotes.length) return;
-  final current = _brianaQuotes[index];
-  s.add(current, wholeSentence: true);
-  updateGlobal(sim, w, (b) => b..brianaQuoteIndex += 1);
+void rollBrianaQuote(ActionContext context) {
+  _brianaQuotesRuleset.apply(context);
 }
 
 /// Updates state according to whatever happened when Aren tried to steal
