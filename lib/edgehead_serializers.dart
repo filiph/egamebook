@@ -7,6 +7,7 @@ import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -35,6 +36,7 @@ part 'edgehead_serializers.g.dart';
   Actor,
   AttackerSituation,
   CounterAttackSituation,
+  CustomEventHistory,
   DefenseSituation,
   EdgeheadGlobalState,
   FightSituation,

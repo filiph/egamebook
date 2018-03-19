@@ -33,6 +33,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.actors,
           specifiedType:
               const FullType(BuiltSet, const [const FullType(Actor)])),
+      'customHistory',
+      serializers.serialize(object.customHistory,
+          specifiedType: const FullType(CustomEventHistory)),
       'global',
       serializers.serialize(object.global,
           specifiedType: const FullType(Object)),
@@ -75,6 +78,11 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
                       const FullType(BuiltSet, const [const FullType(Actor)]))
               as BuiltSet<Actor>);
           break;
+        case 'customHistory':
+          result.customHistory.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(CustomEventHistory))
+              as CustomEventHistory);
+          break;
         case 'global':
           result.global = serializers.deserialize(value,
               specifiedType: const FullType(Object));
@@ -110,6 +118,8 @@ class _$WorldState extends WorldState {
   @override
   final BuiltSet<Actor> actors;
   @override
+  final CustomEventHistory customHistory;
+  @override
   final Object global;
   @override
   final RuleHistory ruleHistory;
@@ -126,6 +136,7 @@ class _$WorldState extends WorldState {
   _$WorldState._(
       {this.actionHistory,
       this.actors,
+      this.customHistory,
       this.global,
       this.ruleHistory,
       this.situations,
@@ -134,6 +145,7 @@ class _$WorldState extends WorldState {
       : super._() {
     if (actionHistory == null) throw new ArgumentError.notNull('actionHistory');
     if (actors == null) throw new ArgumentError.notNull('actors');
+    if (customHistory == null) throw new ArgumentError.notNull('customHistory');
     if (global == null) throw new ArgumentError.notNull('global');
     if (ruleHistory == null) throw new ArgumentError.notNull('ruleHistory');
     if (situations == null) throw new ArgumentError.notNull('situations');
@@ -154,6 +166,7 @@ class _$WorldState extends WorldState {
     if (other is! WorldState) return false;
     return actionHistory == other.actionHistory &&
         actors == other.actors &&
+        customHistory == other.customHistory &&
         global == other.global &&
         ruleHistory == other.ruleHistory &&
         situations == other.situations &&
@@ -167,7 +180,11 @@ class _$WorldState extends WorldState {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, actionHistory.hashCode), actors.hashCode),
+                    $jc(
+                        $jc(
+                            $jc($jc(0, actionHistory.hashCode),
+                                actors.hashCode),
+                            customHistory.hashCode),
                         global.hashCode),
                     ruleHistory.hashCode),
                 situations.hashCode),
@@ -201,6 +218,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   set actors(SetBuilder<Actor> actors) {
     _$this;
     super.actors = actors;
+  }
+
+  @override
+  CustomEventHistoryBuilder get customHistory {
+    _$this;
+    return super.customHistory ??= new CustomEventHistoryBuilder();
+  }
+
+  @override
+  set customHistory(CustomEventHistoryBuilder customHistory) {
+    _$this;
+    super.customHistory = customHistory;
   }
 
   @override
@@ -269,6 +298,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
     if (_$v != null) {
       super.actionHistory = _$v.actionHistory?.toBuilder();
       super.actors = _$v.actors?.toBuilder();
+      super.customHistory = _$v.customHistory?.toBuilder();
       super.global = _$v.global;
       super.ruleHistory = _$v.ruleHistory?.toBuilder();
       super.situations = _$v.situations?.toBuilder();
@@ -296,6 +326,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
         new _$WorldState._(
             actionHistory: actionHistory?.build(),
             actors: actors?.build(),
+            customHistory: customHistory?.build(),
             global: global,
             ruleHistory: ruleHistory?.build(),
             situations: situations?.build(),

@@ -1971,13 +1971,11 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   new Ruleset(
-      new Rule(1049200592, 2, false, (ApplicabilityContext c) {
+      new Rule(438680119, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return w.actionHasBeenPerformed("guardpost_above_church_take_shield") &&
-            !w.actionHasBeenPerformedSuccessfully(
-                "guardpost_above_church_take_shield");
+        return w.isDead(sleepingGoblinId);
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;

@@ -3,7 +3,6 @@ library edgehead_global;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:meta/meta.dart';
 
 part 'edgehead_global.g.dart';
 

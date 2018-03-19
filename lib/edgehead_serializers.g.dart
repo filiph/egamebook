@@ -20,6 +20,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Actor.serializer)
       ..add(AttackerSituation.serializer)
       ..add(CounterAttackSituation.serializer)
+      ..add(CustomEvent.serializer)
+      ..add(CustomEventHistory.serializer)
       ..add(DefenseSituation.serializer)
       ..add(EdgeheadGlobalState.serializer)
       ..add(FightSituation.serializer)
@@ -74,6 +76,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Weapon)]),
           () => new ListBuilder<Weapon>())
+      ..addBuilderFactory(
+          const FullType(BuiltListMultimap,
+              const [const FullType(String), const FullType(CustomEvent)]),
+          () => new ListMultimapBuilder<String, CustomEvent>())
       ..addBuilderFactory(
           const FullType(BuiltListMultimap,
               const [const FullType(String), const FullType(VisitRecord)]),

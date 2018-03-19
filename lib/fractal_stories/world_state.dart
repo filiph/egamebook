@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
@@ -34,6 +35,9 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
     if (situations.isEmpty) return null;
     return situations.last;
   }
+
+  /// History of custom events, such as "killed Akatosh" or "saw rainbow".
+  CustomEventHistory get customHistory;
 
   /// The global flags and counters that make up the state of the world that
   /// doesn't fit into [actors], [actionRecords], etc.
@@ -66,6 +70,11 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   /// This returns `true` regardless of success or failure.
   bool actionHasBeenPerformed(String actionName) {
     return actionHistory.hasHappened(actionName: actionName);
+  }
+
+  /// Returns true if [Actor] with [actorId] has been slain.
+  bool isDead(int actorId) {
+    return customHistory.query(name: "${actorId}_is_dead").hasHappened;
   }
 
   /// Returns `true` if any action in the action records (past actions)
@@ -178,6 +187,8 @@ abstract class WorldStateBuilder
 
   ListBuilder<Situation> situations;
 
+  CustomEventHistoryBuilder customHistory;
+
   DateTime time;
 
   VisitHistoryBuilder visitHistory;
@@ -266,6 +277,21 @@ abstract class WorldStateBuilder
     }
   }
 
+  void recordCustom(String eventName, Object data) {
+    customHistory.records.add(CustomEventHistory.getKey(eventName),
+        new CustomEvent(time: time, name: eventName, data: data));
+  }
+
+  void recordDeath(int actorId) {
+    final eventName = "${actorId}_is_dead";
+    recordCustom(eventName, null);
+  }
+
+  void recordRule(Rule rule) {
+    ruleHistory.records[rule.hash] =
+        new RuleRecord(ruleId: rule.hash, time: time);
+  }
+
   void recordVisit(Actor actor, Room room) {
     final key = VisitHistory.getKey(room);
     visitHistory.records.add(
@@ -275,11 +301,6 @@ abstract class WorldStateBuilder
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent));
-  }
-
-  void recordRule(Rule rule) {
-    ruleHistory.records[rule.hash] =
-        new RuleRecord(ruleId: rule.hash, time: time);
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {

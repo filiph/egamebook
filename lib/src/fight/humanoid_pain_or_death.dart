@@ -22,6 +22,11 @@ void killHumanoid(ActionContext context, Actor actor) {
       "Briana cannot die. Never call killHumanoid "
       "with Briana as actor.");
 
+  context.pubSub
+      .publishActorKilled(new ActorKilledEvent(context, actor, context.actor));
+
+  w.recordDeath(actor.id);
+
   w.replaceSituationById(fight.id, fight.rebuild((b) {
     if (!actor.isBarehanded) {
       // Drop weapon.
