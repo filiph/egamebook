@@ -201,8 +201,7 @@ class Simulation {
     } else if (firstPart == null) {
       prerequisite = secondPart;
     } else {
-      // TODO: better combine function
-      final combinedHash = firstPart.hash + secondPart.hash;
+      final combinedHash = firstPart.hash * 31 + secondPart.hash;
       final combinedPriority = firstPart.priority + secondPart.priority;
       // We shouldn't prevent using exit when the source room is `onlyOnce`.
       // Therefore, we're only using the destination's `onlyOnce` value.
