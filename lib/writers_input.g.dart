@@ -41,65 +41,88 @@ import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.g.g.dart';
 
 const bool DEV_MODE = false;
-Room caveWithAgruthPre = new Room('cave_with_agruth_pre', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-}, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
-Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
+Room undergroundChurch = new Room('underground_church', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. 
+      '''You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. 
 
 
-That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock\'s mountaintop.
+Your bare footsteps reverberate in the room, so you slow down to quiet them. 
+
 ''',
       wholeSentence: true);
+  new Ruleset(
+      new Rule(404031087, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "cave_with_agruth");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.
+
+''',
+            wholeSentence: true);
+      }),
+      new Rule(1058415809, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "guardpost_above_church");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.
+
+''',
+            wholeSentence: true);
+      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The corpse lies still, getting cold.
-
+  s.add('''The temple is silent, as if it were holding its breath.
 
 ''', wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null, <Exit>[
-  new Exit('underground_church', 'Go to the Unholy Church',
-      'You make it to the Church undetected.'),
-  new Exit('war_forge', 'Go to the war forges',
-      'You sneak through the black passage, toward the sound of hundreds of anvils.'),
-  new Exit('slave_quarters_passage', 'Go to the slave quarters',
-      'You and Briana hug the wall and start toward the slave quarters.')
+  new Exit('guardpost_above_church', 'Enter the upwards passage',
+      'You take the sloping passage and walk upward for a long time.'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You walk slowly out of the church, back toward where you left Agruth\'s body.'),
+  new Exit('underground_church_altar', 'Go towards the altar',
+      'You sneak toward the front of the temple, trying to stay in the shadows.')
 ]);
 
-class SearchAgruth extends RoamingAction {
+class ExamineUndergroundChurch extends RoamingAction {
   @override
-  final String command = 'Search Agruth';
+  final String command = 'Look around';
 
   @override
-  final String name = 'search_agruth';
+  final String name = 'examine_underground_church';
 
-  static final SearchAgruth singleton = new SearchAgruth();
+  static final ExamineUndergroundChurch singleton =
+      new ExamineUndergroundChurch();
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'cave_with_agruth') {
+        'underground_church') {
       return false;
     }
     if ((!w.actionHasBeenPerformed(name)) != true) {
@@ -116,14 +139,46 @@ class SearchAgruth extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. 
+        '''This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.
 
 
-<p class="toast">Your stamina increases by 1.</p>
+"What are these things?" Briana whispers, looking at the ornaments.
+
+
+_"This place was made for worshiping the Dead Prince."_
+
+
+Saying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.
+
+
+"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I thought the Dead Prince was a warlord. Something like that."
+
+
+_"He is a god."_
+
+
 ''',
         wholeSentence: true);
-    giveStaminaToPlayer(w, 1);
-    return '${a.name} successfully performs SearchAgruth';
+    if (!w.actionHasBeenPerformed("wait_for_ritual")) {
+      s.add(
+          """Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, but you really shouldn't. He's a demented illusionist at best." 
+""",
+          wholeSentence: true);
+    }
+    s.add('''
+
+The glow coming from the altar dims for a moment, then lights up again.
+
+
+_"He is worse than a god. He is fear itself."_
+
+
+Briana looks at you, narrowing her eyes.
+
+
+_"I think you have felt it."_
+''', wholeSentence: true);
+    return '${a.name} successfully performs ExamineUndergroundChurch';
   }
 
   @override
@@ -153,8 +208,7 @@ class SearchAgruth extends RoamingAction {
   Resource get rerollResource => null;
 
   @override
-  String get helpMessage =>
-      'You have taken his weapon but there might be other useful items in his pocket.';
+  String get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -204,45 +258,20 @@ They must be guarding the Upper Door. There is no way around them.
   new Exit(
       'exit_from_bloodrock', 'Start running again', 'You start running again.')
 ]);
-Room justAfterAgruthFight =
-    new Room('just_after_agruth_fight', (ActionContext c) {
+Room tunnelCancelChance = new Room('tunnel_cancel_chance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.
+      '''After a few strides, you realize Briana is still standing in the circular room behind you.
 
 
-Briana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.
+_"Are you not coming?"_
 
 
-"What?" she says when she notices you\'re looking.
-
-
-_"We either go now, or die."_
-
-
-Briana spits down at the body. "He wasn\'t even the worst of them, you know."
-
-
-_"I know."_
-
-
-"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.
-
-
-_"That one is already dead."_
-
-
-"Just making sure," she says.
-
-
-![Agruth\'s sword](img/agruth-sword.jpg)
-
-
-She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
+Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive."
 ''',
       wholeSentence: true);
 }, (ActionContext c) {
@@ -251,216 +280,12 @@ She turns her attention to the sword. "We should name it. Named weapons please t
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-}, null, null, <Exit>[]);
-
-class NameAgruthSwordOpportunity extends RoamingAction {
-  @override
-  final String command = '"Luck Bringer"';
-
-  @override
-  final String name = 'name_agruth_sword_opportunity';
-
-  static final NameAgruthSwordOpportunity singleton =
-      new NameAgruthSwordOpportunity();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_
-
-
-Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''',
-        wholeSentence: true);
-    nameAgruthSword(w, "Luck Bringer");
-    movePlayer(c, "cave_with_agruth_pre");
-    return '${a.name} successfully performs NameAgruthSwordOpportunity';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-class NameAgruthSwordRedemption extends RoamingAction {
-  @override
-  final String command = '"Savior"';
-
-  @override
-  final String name = 'name_agruth_sword_redemption';
-
-  static final NameAgruthSwordRedemption singleton =
-      new NameAgruthSwordRedemption();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_
-
-
-Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''',
-        wholeSentence: true);
-    nameAgruthSword(w, "Savior");
-    movePlayer(c, "cave_with_agruth_pre");
-    return '${a.name} successfully performs NameAgruthSwordRedemption';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-class NameAgruthSwordNothing extends RoamingAction {
-  @override
-  final String command = 'No name';
-
-  @override
-  final String name = 'name_agruth_sword_nothing';
-
-  static final NameAgruthSwordNothing singleton = new NameAgruthSwordNothing();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('''_"That is foolish. It is just a sword, after all."_
-
-
-Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."
-''', wholeSentence: true);
-    movePlayer(c, "cave_with_agruth_pre");
-    return '${a.name} successfully performs NameAgruthSwordNothing';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
+}, null, null, <Exit>[
+  new Exit('tunnel', 'Continue',
+      'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.'),
+  new Exit('guardpost_above_church', 'Return',
+      'You nod and step back into the circular room.')
+]);
 
 class TalkToBriana1 extends RoamingAction {
   @override
@@ -792,577 +617,6 @@ Briana tenses. "Well then, at least we have that choice."
   bool get isAggressive => false;
 }
 
-Room warForge = new Room('war_forge', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.
-
-
-''',
-      wholeSentence: true);
-  new Ruleset(
-      new Rule(1010631821, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "cave_with_agruth");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.
-
-''',
-            wholeSentence: true);
-      }),
-      new Rule(383419248, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "smelter");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way.
-
-''',
-            wholeSentence: true);
-      })).apply(c);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''The air in the war forge is thick and makes breathing difficult, and the constant noise is overwhelming.
-
-
-''',
-      wholeSentence: true);
-  rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('smelter', 'Go to smelter',
-      'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
-  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-      'You sneak back toward where you left Agruth\'s body.')
-]);
-
-class WarForgeLookAround extends RoamingAction {
-  @override
-  final String command = 'Look around';
-
-  @override
-  final String name = 'war_forge_look_around';
-
-  static final WarForgeLookAround singleton = new WarForgeLookAround();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'war_forge') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name)) != true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''The cave is natural, but on the side of the smelter you see an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into every section of the room like huge fiery tentacles. 
-
-
-At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot mixes with the stench of all that orc sweat.
-
-
-This place makes Fort Ironcast\'s military forge look like a doll house: tiny and inconsequential.
-''',
-        wholeSentence: true);
-    return '${a.name} successfully performs WarForgeLookAround';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-class WarForgeWatchWorkers extends RoamingAction {
-  @override
-  final String command = 'Watch the workers';
-
-  @override
-  final String name = 'war_forge_watch_workers';
-
-  static final WarForgeWatchWorkers singleton = new WarForgeWatchWorkers();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'war_forge') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name) &&
-            w.actionHasBeenPerformed("war_forge_look_around")) !=
-        true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''You look out from your hiding spot and scan the room. More likely than not, no human has ever seen this place and lived to tell the tale.
-
-
-Briana shakes her head: "The orcs are working together with ogres." A smirk forms on her lips. "They must be terrified."
-
-
-You scan the workers more closely. The slow-moving ogres tower over the orcs. 
-
-
-_"And they don\'t use slaves here. They must be doing something important."_
-
-
-Looking again at the molds they are using, you don\'t see anything strange or unexpected. Primitive axes and swords, some armor.
-
-
-"What is that thing!" Briana gasps. 
-
-
-You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. It’s an enormous, repulsive, half-assembled insect. Each leg reaches as far as you could throw a rock. And there are eight of them. Then there\'s the body — a huge cockroach-like contraption forged from steel. The teeth are already completed, sharp and menacing, and as long as a man is tall. 
-
-
-A full-sized ogre pours water over one section of the creature, making a thick cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
-''',
-        wholeSentence: true);
-    return '${a.name} successfully performs WarForgeWatchWorkers';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-Room tunnelCancelChance = new Room('tunnel_cancel_chance', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''After a few strides, you realize Briana is still standing in the circular room behind you.
-
-
-_"Are you not coming?"_
-
-
-Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive."
-''',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-}, null, null, <Exit>[
-  new Exit('tunnel', 'Continue',
-      'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.'),
-  new Exit('guardpost_above_church', 'Return',
-      'You nod and step back into the circular room.')
-]);
-Room slaveQuartersPassage =
-    new Room('slave_quarters_passage', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''You can see Briana clutching her fists. "Homesick already?" she says. She doesn\'t wait for reply, and presses on.
-
-
-It doesn\'t take long before you start hearing voices. Orcs and goblins shouting commands. Then human screams.
-
-
-The tunnel gets wider and more torches light your way. The walls are smoother. 
-
-
-You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door.
-
-
-A human slave runs down the passage toward you. His arm is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips move but he makes no sound. Eyes blurred with tears, he doesn\'t see you.
-
-
-Before you can so much as call to him, something long and sharp shoots from behind the slave. A bloodied spearhead appears in the center of the man\'s chest, as if it grew from his body. His tearful eyes glance at the fatal wound. Two more steps toward you and the slave falls face down, the shaft of the spear protruding from his back.
-
-
-An orc and a goblin appear from the tunnel, walking toward the dead man. The orc is laughing, patting his companion on the back. "Vicious throw, small one!" he roars.
-
-
-You step back and motion to Briana to lean against the wall, hoping that the door\'s reinforced frame will keep you hidden from the two slavers.
-
-
-But right then, something or someone pounds on the reinforced door from the inside. You hear loud and angry growls.
-
-
-The two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They run toward you.
-
-
-![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
-''',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  new Ruleset(
-      new Rule(299502294, 2, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
-            !justCameFrom(w, "orcthorn_room");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add('''  The reinforced door on the side of the corridor is silent.
-''', wholeSentence: true);
-      }),
-      new Rule(871855510, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return playerHasVisited(sim, originalWorld, "orcthorn_room");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-      }),
-      new Rule(233666017, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return !playerHasVisited(sim, originalWorld, "orcthorn_room");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add('''  The reinforced door on the side of the corridor is closed.
-''', wholeSentence: true);
-      })).apply(c);
-  rollBrianaQuote(c);
-}, generateSlaveQuartersPassageFight, null, <Exit>[
-  new Exit(
-      'cave_with_agruth',
-      'Go back to the cave where Agruth\'s corpse lies',
-      'You back away from the door, and go back to where you left Agruth\'s body.'),
-  new Exit('slave_quarters', 'Go further toward the Gate of Screams',
-      'You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.'),
-  new Exit('orcthorn_room', 'Open the door', 'You open the door.')
-]);
-
-class SlaveQuartersPassageExamineDoor extends RoamingAction {
-  @override
-  final String command = 'Examine the door';
-
-  @override
-  final String name = 'slave_quarters_passage_examine_door';
-
-  static final SlaveQuartersPassageExamineDoor singleton =
-      new SlaveQuartersPassageExamineDoor();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'slave_quarters_passage') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name) &&
-            !(w.currentSituation as RoomRoamingSituation).monstersAlive &&
-            !playerHasVisited(sim, w, "orcthorn_room")) !=
-        true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
-
-
-''',
-        wholeSentence: true);
-    if (w.actionHasBeenPerformed("talk_to_briana_3")) {
-      s.add("""
-You look at Briana and nod.
-
-
-_"The Mad Guardian."_
-""", wholeSentence: true);
-    }
-    return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-class TakeOrcthorn extends RoamingAction {
-  @override
-  final String command = 'Search for Orcthorn';
-
-  @override
-  final String name = 'take_orcthorn';
-
-  static final TakeOrcthorn singleton = new TakeOrcthorn();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'orcthorn_room') {
-      return false;
-    }
-    if ((w.actionHasBeenPerformed("talk_to_briana_3") &&
-            !w.actionHasBeenPerformed(name) &&
-            !(w.currentSituation as RoomRoamingSituation).monstersAlive) !=
-        true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''You and Briana nod at each other and start searching the room. The Mad Guardian has left many bizarre things scattered around: A box of severed orc hands, crude drawings of tentacles covering one of the walls, several gouged out eyes, a circle made from half-eaten rats with a single pebble in the middle.
-
-
-"None of this makes any sense," Briana says, turning some useless apparatus made of sticks in her hand. "He must _really_ have gone mad. From fear or magic, or both."
-
-
-Soon, the last place in the room that hasn\'t been searched by either you or Briana is the large pile of rotting corpses. Mostly orcs, but there are also some human slaves, and many rats and bats. The stench of rotten flesh is so strong you see pale fumes coming from the pile. Briana shields her nose with an elbow and starts dragging the less rotten corpses from the top. You join her.
-
-
-"The sword will be at the bottom, I bet."
-
-
-_"Of course. He tried to bury it."_
-
-
-After what feels like hours, you get to the bottom. Among a slush of decayed meat, you feel something hard and cold. You pull it from the pile and hold it in the air: the brightest, sharpest sword you have ever seen.
-
-
-![Picture of Orcthorn](img/orcthorn.jpg)
-
-
-"Orcthorn," Briana nods and surveys its blade and hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."
-
-
-_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_
-
-
-"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farmhand," she says to the lifeless face.
-
-
-_"I am not a farmhand. And we still need to get out of here first."_
-''',
-        wholeSentence: true);
-    takeOrcthorn(sim, w, a);
-    return '${a.name} successfully performs TakeOrcthorn';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
-Room orcthornRoom = new Room('orcthorn_room', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
-
-
-When your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.
-''',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.
-''',
-      wholeSentence: true);
-}, generateMadGuardianFight, null, <Exit>[
-  new Exit('slave_quarters_passage', 'Exit the room',
-      'You leave through the door and find yourself back in the passage to the slave quarters.')
-]);
 Room startAdventure = new Room('start_adventure', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1395,269 +649,42 @@ Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s f
   new Exit('just_after_agruth_fight', '',
       'You look around. Fortunately, there’s no one in sight.')
 ]);
-
-class GuardpostAboveChurchTakeShield extends RoamingAction {
-  @override
-  final String command = 'Cautiously take the shield';
-
-  @override
-  final String name = 'guardpost_above_church_take_shield';
-
-  static final GuardpostAboveChurchTakeShield singleton =
-      new GuardpostAboveChurchTakeShield();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'guardpost_above_church') {
-      return false;
-    }
-    if ((w.actionNeverUsed(name)) != true) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.
-
-
-You take a few slow steps back, then grip the shield in your left hand, ready for anything.
-''',
-        wholeSentence: true);
-    setUpStealShield(a, sim, w, s, true);
-    return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '''You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.
-
-
-You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.
-''',
-        wholeSentence: true);
-    w.pushSituation(
-        new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
-    return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 0.3;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage =>
-      'The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin\'s lap will likely wake him up.';
-
-  @override
-  bool get isAggressive => false;
-}
-
-abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
-    implements
-        Built<GuardpostAboveChurchTakeShieldRescueSituation,
-            GuardpostAboveChurchTakeShieldRescueSituationBuilder> {
-  factory GuardpostAboveChurchTakeShieldRescueSituation(
-          [void updates(
-              GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =
-      _$GuardpostAboveChurchTakeShieldRescueSituation;
-
-  factory GuardpostAboveChurchTakeShieldRescueSituation.initialized() {
-    return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
-      b.id = getRandomId();
-      b.time = 0;
-    });
-  }
-
-  GuardpostAboveChurchTakeShieldRescueSituation._();
-
-  static Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
-      get serializer =>
-          _$guardpostAboveChurchTakeShieldRescueSituationSerializer;
-
-  @override
-  List<RoamingAction> get actions => [
-        new SimpleAction(
-            'guardpost_above_church_take_shield_rescue',
-            'Stay perfectly still',
-            (a, sim, w, s, self) {
-              s.add(
-                  '''You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
-
-
-<p class="toast">Your stamina decreases by 1.</p>
-
-
-Fortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.
-
-
-You deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.''',
-                  wholeSentence: true);
-              w.popSituation(sim);
-              w.updateActorById(a.id, (b) => b..stamina -= 1);
-              setUpStealShield(a, sim, w, s, true);
-              return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
-            },
-            'If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)',
-            isApplicableClosure: (a, sim, w, self) {
-              return (a.stamina > 0);
-            }),
-        new SimpleAction(
-            'guardpost_above_church_take_shield_continuation_of_failure',
-            'Snatch the shield', (a, sim, w, s, self) {
-          s.add(
-              '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.
-
-
-You look at Briana. Both of you are ready to fight.''',
-              wholeSentence: true);
-          w.popSituation(sim);
-          setUpStealShield(a, sim, w, s, false);
-          return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
-        }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
-      ];
-
-  @override
-  int get id;
-
-  @override
-  int get time;
-
-  @override
-  String get name => 'guardpost_above_church_take_shield';
-
-  @override
-  Situation elapseTime() => rebuild((b) {
-        b.time++;
-        return b;
-      });
-
-  @override
-  Actor getActorAtTime(int time, Simulation sim, WorldState w) {
-    if (time != 0) {
-      return null;
-    }
-    return w.actors.singleWhere((a) => a.isPlayer);
-  }
-
-  @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState w) {
-    return [actors.singleWhere((a) => a.isPlayer)];
-  }
-}
-
-Room undergroundChurch = new Room('underground_church', (ActionContext c) {
+Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. 
-
-
-Your bare footsteps reverberate in the room, so you slow down to quiet them. 
-
+      '''"There is a difference between being brave and being stupid. You\'re crossing it right now," she says.
 ''',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(404031087, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "cave_with_agruth");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.
-
-''',
-            wholeSentence: true);
-      }),
-      new Rule(1058415809, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "guardpost_above_church");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.
-
-''',
-            wholeSentence: true);
-      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The temple is silent, as if it were holding its breath.
-
+  s.add('''"We _really_ shouldn\'t push our luck," she says.
 ''', wholeSentence: true);
-  rollBrianaQuote(c);
 }, null, null, <Exit>[
-  new Exit('guardpost_above_church', 'Enter the upwards passage',
-      'You take the sloping passage and walk upward for a long time.'),
-  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-      'You walk slowly out of the church, back toward where you left Agruth\'s body.'),
-  new Exit('underground_church_altar', 'Go towards the altar',
-      'You sneak toward the front of the temple, trying to stay in the shadows.')
+  new Exit('slave_quarters_passage', 'Go back',
+      'You nod, and then start carefully backing out through the passage.')
 ]);
 
-class ExamineUndergroundChurch extends RoamingAction {
+class SlaveQuartersContinue extends RoamingAction {
   @override
-  final String command = 'Look around';
+  final String command = 'Continue';
 
   @override
-  final String name = 'examine_underground_church';
+  final String name = 'slave_quarters_continue';
 
-  static final ExamineUndergroundChurch singleton =
-      new ExamineUndergroundChurch();
+  static final SlaveQuartersContinue singleton = new SlaveQuartersContinue();
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'underground_church') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name)) != true) {
+        'slave_quarters') {
       return false;
     }
     return true;
@@ -1670,47 +697,32 @@ class ExamineUndergroundChurch extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        '''This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.
+    s.add('''_"Do you not want to kill some more orcs?"_
 
 
-"What are these things?" Briana whispers, looking at the ornaments.
+"I do, trust me. I just don\'t want to get killed first."
 
 
-_"This place was made for worshiping the Dead Prince."_
+You shake your head and start walking. Briana reluctantly follows, her eyes darting around the familiar tunnel. You\'re close to where the orcs had kept you during sleeping hours.
 
 
-Saying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.
+Soon, you see an orc patrol appear from behind a bend. Here, it\'s impossible to hide. The orcs spot you immediatelly. 
 
 
-"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I thought the Dead Prince was a warlord. Something like that."
+There are three of them, one has a longsword, the second has a spear, and the third holds a large battle axe.
 
 
-_"He is a god."_
+The orc with the spear hurls it, and it pierces Briana\'s shoulder. She screams in pain. 
 
 
-''',
-        wholeSentence: true);
-    if (!w.actionHasBeenPerformed("wait_for_ritual")) {
-      s.add(
-          """Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, but you really shouldn't. He's a demented illusionist at best." 
-""",
-          wholeSentence: true);
-    }
-    s.add('''
-
-The glow coming from the altar dims for a moment, then lights up again.
+The orc with the sword makes three fast leaps toward you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle and your arms flail in surprise.
 
 
-_"He is worse than a god. He is fear itself."_
-
-
-Briana looks at you, narrowing her eyes.
-
-
-_"I think you have felt it."_
+You look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.
 ''', wholeSentence: true);
-    return '${a.name} successfully performs ExamineUndergroundChurch';
+    w.updateActorById(a.id, (b) => b..hitpoints = 0);
+    w.popSituation(sim);
+    return '${a.name} successfully performs SlaveQuartersContinue';
   }
 
   @override
@@ -1746,115 +758,69 @@ _"I think you have felt it."_
   bool get isAggressive => false;
 }
 
-Room smelter = new Room('smelter', (ActionContext c) {
+Room justAfterAgruthFight =
+    new Room('just_after_agruth_fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
+      '''You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.
 
+
+Briana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.
+
+
+"What?" she says when she notices you\'re looking.
+
+
+_"We either go now, or die."_
+
+
+Briana spits down at the body. "He wasn\'t even the worst of them, you know."
+
+
+_"I know."_
+
+
+"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.
+
+
+_"That one is already dead."_
+
+
+"Just making sure," she says.
+
+
+![Agruth\'s sword](img/agruth-sword.jpg)
+
+
+She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(1010398177, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "war_forge");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.
-''',
-            wholeSentence: true);
-      }),
-      new Rule(9791310, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return justCameFrom(w, "guardpost_above_church");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You\'ll be able to go there unnoticed.
-''',
-            wholeSentence: true);
-      })).apply(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('''The coal reflects the reds and whites of the molten steel.
+}, null, null, <Exit>[]);
 
-''', wholeSentence: true);
-  new Ruleset(
-      new Rule(988691356, 2, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
-            !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '''About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.
-
-
-''',
-            wholeSentence: true);
-      }),
-      new Rule(978029961, 0, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return true;
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-      })).apply(c);
-  rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('war_forge', 'Go to the war forges',
-      'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.'),
-  new Exit('guardpost_above_church', 'Go through the smooth passage',
-      'You take the smooth passage and it leads you slightly upwards.')
-]);
-
-class SmelterLookAround extends RoamingAction {
+class NameAgruthSwordOpportunity extends RoamingAction {
   @override
-  final String command = 'Look around';
+  final String command = '"Luck Bringer"';
 
   @override
-  final String name = 'smelter_look_around';
+  final String name = 'name_agruth_sword_opportunity';
 
-  static final SmelterLookAround singleton = new SmelterLookAround();
+  static final NameAgruthSwordOpportunity singleton =
+      new NameAgruthSwordOpportunity();
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'smelter') {
-      return false;
-    }
-    if ((!w.actionHasBeenPerformed(name)) != true) {
+        'just_after_agruth_fight') {
       return false;
     }
     return true;
@@ -1868,13 +834,153 @@ class SmelterLookAround extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '''Molten iron runs in rivers across the room, and gathers in a large pool. From that pool, a single ogre distributes the forge-ready liquid into troughs that descend to the war forges below. 
+        '''_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_
 
 
-The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice. In fact, since you’re able to get so close, you would even guess that he\'s blind, probably because of all the sudden flashes from the molten steel around him. Yet he\'s performing his job perfectly, listening to commands from orcs in the war forges beyond the wall, and operating the floodgates accordingly.
+Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
 ''',
         wholeSentence: true);
-    return '${a.name} successfully performs SmelterLookAround';
+    nameAgruthSword(w, "Luck Bringer");
+    movePlayer(c, "cave_with_agruth_pre");
+    return '${a.name} successfully performs NameAgruthSwordOpportunity';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+class NameAgruthSwordRedemption extends RoamingAction {
+  @override
+  final String command = '"Savior"';
+
+  @override
+  final String name = 'name_agruth_sword_redemption';
+
+  static final NameAgruthSwordRedemption singleton =
+      new NameAgruthSwordRedemption();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'just_after_agruth_fight') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_
+
+
+Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."
+''',
+        wholeSentence: true);
+    nameAgruthSword(w, "Savior");
+    movePlayer(c, "cave_with_agruth_pre");
+    return '${a.name} successfully performs NameAgruthSwordRedemption';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+class NameAgruthSwordNothing extends RoamingAction {
+  @override
+  final String command = 'No name';
+
+  @override
+  final String name = 'name_agruth_sword_nothing';
+
+  static final NameAgruthSwordNothing singleton = new NameAgruthSwordNothing();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'just_after_agruth_fight') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('''_"That is foolish. It is just a sword, after all."_
+
+
+Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."
+''', wholeSentence: true);
+    movePlayer(c, "cave_with_agruth_pre");
+    return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
   @override
@@ -2075,88 +1181,302 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   bool get isAggressive => false;
 }
 
-Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('''The chaos! It\'s palpable.
-''', wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('''Pure chaos everywhere.
+class TakeOrcthorn extends RoamingAction {
+  @override
+  final String command = 'Search for Orcthorn';
 
-''', wholeSentence: true);
-  rollBrianaQuote(c);
-},
-    null,
-    null,
-    <Exit>[
-      new Exit('smelter', 'Go to smelter',
-          'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
-      new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-          'You sneak back toward where you left Agruth\'s body.')
-    ],
-    parent: 'war_forge',
-    prerequisite:
-        new Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
-      final WorldState w = c.world;
-      final Simulation sim = c.simulation;
-      final Actor a = c.actor;
-      return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-    }));
-Room exitFromBloodrock = new Room('exit_from_bloodrock', (ActionContext c) {
+  @override
+  final String name = 'take_orcthorn';
+
+  static final TakeOrcthorn singleton = new TakeOrcthorn();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'orcthorn_room') {
+      return false;
+    }
+    if ((w.actionHasBeenPerformed("talk_to_briana_3") &&
+            !w.actionHasBeenPerformed(name) &&
+            !(w.currentSituation as RoomRoamingSituation).monstersAlive) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You and Briana nod at each other and start searching the room. The Mad Guardian has left many bizarre things scattered around: A box of severed orc hands, crude drawings of tentacles covering one of the walls, several gouged out eyes, a circle made from half-eaten rats with a single pebble in the middle.
+
+
+"None of this makes any sense," Briana says, turning some useless apparatus made of sticks in her hand. "He must _really_ have gone mad. From fear or magic, or both."
+
+
+Soon, the last place in the room that hasn\'t been searched by either you or Briana is the large pile of rotting corpses. Mostly orcs, but there are also some human slaves, and many rats and bats. The stench of rotten flesh is so strong you see pale fumes coming from the pile. Briana shields her nose with an elbow and starts dragging the less rotten corpses from the top. You join her.
+
+
+"The sword will be at the bottom, I bet."
+
+
+_"Of course. He tried to bury it."_
+
+
+After what feels like hours, you get to the bottom. Among a slush of decayed meat, you feel something hard and cold. You pull it from the pile and hold it in the air: the brightest, sharpest sword you have ever seen.
+
+
+![Picture of Orcthorn](img/orcthorn.jpg)
+
+
+"Orcthorn," Briana nods and surveys its blade and hilt. Gradually, she starts shaking her head. "Why would they keep the sword at all? Why wouldn\'t they destroy it? They were terrified of it."
+
+
+_"Fear. It is the ultimate authority. I do not think it was the orcs who decided to keep the sword."_
+
+
+"Well, now they can start fearing again." Briana crouches next to the corpse of The Mad Guardian." And all this because of a common soldier and a farmhand," she says to the lifeless face.
+
+
+_"I am not a farmhand. And we still need to get out of here first."_
+''',
+        wholeSentence: true);
+    takeOrcthorn(sim, w, a);
+    return '${a.name} successfully performs TakeOrcthorn';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+class GuardpostAboveChurchTakeShield extends RoamingAction {
+  @override
+  final String command = 'Cautiously take the shield';
+
+  @override
+  final String name = 'guardpost_above_church_take_shield';
+
+  static final GuardpostAboveChurchTakeShield singleton =
+      new GuardpostAboveChurchTakeShield();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'guardpost_above_church') {
+      return false;
+    }
+    if ((w.actionNeverUsed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.
+
+
+You take a few slow steps back, then grip the shield in your left hand, ready for anything.
+''',
+        wholeSentence: true);
+    setUpStealShield(a, sim, w, s, true);
+    return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.
+
+
+You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.
+''',
+        wholeSentence: true);
+    w.pushSituation(
+        new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
+    return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 0.3;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin\'s lap will likely wake him up.';
+
+  @override
+  bool get isAggressive => false;
+}
+
+abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
+    implements
+        Built<GuardpostAboveChurchTakeShieldRescueSituation,
+            GuardpostAboveChurchTakeShieldRescueSituationBuilder> {
+  factory GuardpostAboveChurchTakeShieldRescueSituation(
+          [void updates(
+              GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =
+      _$GuardpostAboveChurchTakeShieldRescueSituation;
+
+  factory GuardpostAboveChurchTakeShieldRescueSituation.initialized() {
+    return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
+      b.id = getRandomId();
+      b.time = 0;
+    });
+  }
+
+  GuardpostAboveChurchTakeShieldRescueSituation._();
+
+  static Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
+      get serializer =>
+          _$guardpostAboveChurchTakeShieldRescueSituationSerializer;
+
+  @override
+  List<RoamingAction> get actions => [
+        new SimpleAction(
+            'guardpost_above_church_take_shield_rescue',
+            'Stay perfectly still',
+            (a, sim, w, s, self) {
+              s.add(
+                  '''You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.
+
+
+<p class="toast">Your stamina decreases by 1.</p>
+
+
+Fortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.
+
+
+You deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.''',
+                  wholeSentence: true);
+              w.popSituation(sim);
+              w.updateActorById(a.id, (b) => b..stamina -= 1);
+              setUpStealShield(a, sim, w, s, true);
+              return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
+            },
+            'If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)',
+            isApplicableClosure: (a, sim, w, self) {
+              return (a.stamina > 0);
+            }),
+        new SimpleAction(
+            'guardpost_above_church_take_shield_continuation_of_failure',
+            'Snatch the shield', (a, sim, w, s, self) {
+          s.add(
+              '''You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.
+
+
+You look at Briana. Both of you are ready to fight.''',
+              wholeSentence: true);
+          w.popSituation(sim);
+          setUpStealShield(a, sim, w, s, false);
+          return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
+        }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
+      ];
+
+  @override
+  int get id;
+
+  @override
+  int get time;
+
+  @override
+  String get name => 'guardpost_above_church_take_shield';
+
+  @override
+  Situation elapseTime() => rebuild((b) {
+        b.time++;
+        return b;
+      });
+
+  @override
+  Actor getActorAtTime(int time, Simulation sim, WorldState w) {
+    if (time != 0) {
+      return null;
+    }
+    return w.actors.singleWhere((a) => a.isPlayer);
+  }
+
+  @override
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState w) {
+    return [actors.singleWhere((a) => a.isPlayer)];
+  }
+}
+
+Room smelter = new Room('smelter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '''Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.
-
-
-You run through a small stone doorway and out of the mountain.
-
-
-The blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.
-
-
-Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.
-
-
-Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.
-
-
-You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
-
-
-![View of the road ahead](img/path.jpg)
-
-
-Briana doesn\'t seem surprised.
-
-
-_"We have to stop this."_
-
-Briana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."
-
-_"No king has what we have."_
-
+      '''A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
 
 ''',
       wholeSentence: true);
   new Ruleset(
-      new Rule(937280785, 1, false, (ApplicabilityContext c) {
+      new Rule(1010398177, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return w.actionHasBeenPerformed("take_orcthorn");
+        return justCameFrom(w, "war_forge");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2164,13 +1484,56 @@ _"No king has what we have."_
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            '''"Orcthorn? Bah, you think they\'ll let you keep it? A farmhand?"
-
-_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
+            '''You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.
 ''',
             wholeSentence: true);
       }),
-      new Rule(36322634, 0, false, (ApplicabilityContext c) {
+      new Rule(9791310, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "guardpost_above_church");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You\'ll be able to go there unnoticed.
+''',
+            wholeSentence: true);
+      })).apply(c);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''The coal reflects the reds and whites of the molten steel.
+
+''', wholeSentence: true);
+  new Ruleset(
+      new Rule(988691356, 2, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
+            !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.
+
+
+''',
+            wholeSentence: true);
+      }),
+      new Rule(978029961, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2181,63 +1544,205 @@ _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connec
         final Actor a = c.actor;
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
-        s.add(
-            '''"Let me guess. Muscles and a bit of brains? Don\'t be a fool, you\'re still a farmhand."
-
-_"I am_ not _a farmhand. And I don\'t mean muscles or brains, no. I have a strange connection. We both do."_
-''',
-            wholeSentence: true);
       })).apply(c);
-  s.add('''
+  rollBrianaQuote(c);
+}, null, null, <Exit>[
+  new Exit('war_forge', 'Go to the war forges',
+      'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.'),
+  new Exit('guardpost_above_church', 'Go through the smooth passage',
+      'You take the smooth passage and it leads you slightly upwards.')
+]);
 
-"A connection."
+class SmelterLookAround extends RoamingAction {
+  @override
+  final String command = 'Look around';
+
+  @override
+  final String name = 'smelter_look_around';
+
+  static final SmelterLookAround singleton = new SmelterLookAround();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'smelter') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''Molten iron runs in rivers across the room, and gathers in a large pool. From that pool, a single ogre distributes the forge-ready liquid into troughs that descend to the war forges below. 
 
 
-_"With the Dead Prince. I dream his dreams. I think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
+The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice. In fact, since you’re able to get so close, you would even guess that he\'s blind, probably because of all the sudden flashes from the molten steel around him. Yet he\'s performing his job perfectly, listening to commands from orcs in the war forges beyond the wall, and operating the floodgates accordingly.
+''',
+        wholeSentence: true);
+    return '${a.name} successfully performs SmelterLookAround';
+  }
 
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
 
-"So the thing you have that kings don\'t is… a way to communicate? Or negotiate with him?"
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
 
+  @override
+  bool get rerollable => false;
 
-_"Negotiate? No, I do not have anything the Dead Prince wants. I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
 
+  @override
+  Resource get rerollResource => null;
 
-"So what’s the plan?"
+  @override
+  String get helpMessage => null;
 
+  @override
+  bool get isAggressive => false;
+}
 
-_"Giving him the exact opposite of what he wants."_
-
-
-"You know we could just run, slay some orcs along the way, and get as far away from this place as possible, right?"
-
-
-_"Yes."_
-
-
-"Anyone else would do exactly that."
-
-
-_"But we will not."_
-
-
-Briana sighs. "No, I suppose we won\'t."
-
-
-With that, you both start down the road toward the black fort in the distance.
-
-
-THE END.
-
-
-''', wholeSentence: true);
-  describeSuccessRate(sim, originalWorld, s);
+Room caveWithAgruthPre = new Room('cave_with_agruth_pre', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-}, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
+}, null, null, <Exit>[new Exit('cave_with_agruth', '', 'You look around.')]);
+Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''The tunnel back to the main slave quarters is likely suicide. There will be too many orcs, and the Gate of Screams is a long way beyond, at the very base of Mount Bloodrock. 
+
+
+That leaves two options: the black passage toward the war forges and the deserted tunnel to the Unholy Church, an underground temple. Both these paths eventually lead to the Upper Door, which will bring you out of the caves close to Mount Bloodrock\'s mountaintop.
+''',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''The corpse lies still, getting cold.
+
+
+''', wholeSentence: true);
+  rollBrianaQuote(c);
+}, null, null, <Exit>[
+  new Exit('underground_church', 'Go to the Unholy Church',
+      'You make it to the Church undetected.'),
+  new Exit('war_forge', 'Go to the war forges',
+      'You sneak through the black passage, toward the sound of hundreds of anvils.'),
+  new Exit('slave_quarters_passage', 'Go to the slave quarters',
+      'You and Briana hug the wall and start toward the slave quarters.')
+]);
+
+class SearchAgruth extends RoamingAction {
+  @override
+  final String command = 'Search Agruth';
+
+  @override
+  final String name = 'search_agruth';
+
+  static final SearchAgruth singleton = new SearchAgruth();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'cave_with_agruth') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. 
+
+
+<p class="toast">Your stamina increases by 1.</p>
+''',
+        wholeSentence: true);
+    giveStaminaToPlayer(w, 1);
+    return '${a.name} successfully performs SearchAgruth';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage =>
+      'You have taken his weapon but there might be other useful items in his pocket.';
+
+  @override
+  bool get isAggressive => false;
+}
+
 Room undergroundChurchAltar =
     new Room('underground_church_altar', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2492,115 +1997,6 @@ But it’s sturdy in your hand. A good throwing weapon.
   bool get isAggressive => false;
 }
 
-Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '''"There is a difference between being brave and being stupid. You\'re crossing it right now," she says.
-''',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('''"We _really_ shouldn\'t push our luck," she says.
-''', wholeSentence: true);
-}, null, null, <Exit>[
-  new Exit('slave_quarters_passage', 'Go back',
-      'You nod, and then start carefully backing out through the passage.')
-]);
-
-class SlaveQuartersContinue extends RoamingAction {
-  @override
-  final String command = 'Continue';
-
-  @override
-  final String name = 'slave_quarters_continue';
-
-  static final SlaveQuartersContinue singleton = new SlaveQuartersContinue();
-
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'slave_quarters') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('''_"Do you not want to kill some more orcs?"_
-
-
-"I do, trust me. I just don\'t want to get killed first."
-
-
-You shake your head and start walking. Briana reluctantly follows, her eyes darting around the familiar tunnel. You\'re close to where the orcs had kept you during sleeping hours.
-
-
-Soon, you see an orc patrol appear from behind a bend. Here, it\'s impossible to hide. The orcs spot you immediatelly. 
-
-
-There are three of them, one has a longsword, the second has a spear, and the third holds a large battle axe.
-
-
-The orc with the spear hurls it, and it pierces Briana\'s shoulder. She screams in pain. 
-
-
-The orc with the sword makes three fast leaps toward you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle and your arms flail in surprise.
-
-
-You look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.
-''', wholeSentence: true);
-    w.updateActorById(a.id, (b) => b..hitpoints = 0);
-    w.popSituation(sim);
-    return '${a.name} successfully performs SlaveQuartersContinue';
-  }
-
-  @override
-  String applyFailure(ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw new StateError('Success chance is 100%');
-  }
-
-  @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
-  }
-
-  @override
-  bool get rerollable => false;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isAggressive => false;
-}
-
 class SmelterThrowSpear extends RoamingAction {
   @override
   final String command = 'Throw spear at the ogre';
@@ -2728,42 +2124,646 @@ _"As I said, a well placed throw. The more complex you see the world, the easier
   bool get isAggressive => false;
 }
 
+Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''The chaos! It\'s palpable.
+''', wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''Pure chaos everywhere.
+
+''', wholeSentence: true);
+  rollBrianaQuote(c);
+},
+    null,
+    null,
+    <Exit>[
+      new Exit('smelter', 'Go to smelter',
+          'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
+      new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+          'You sneak back toward where you left Agruth\'s body.')
+    ],
+    parent: 'war_forge',
+    prerequisite:
+        new Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
+    }));
+Room slaveQuartersPassage =
+    new Room('slave_quarters_passage', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You can see Briana clutching her fists. "Homesick already?" she says. She doesn\'t wait for reply, and presses on.
+
+
+It doesn\'t take long before you start hearing voices. Orcs and goblins shouting commands. Then human screams.
+
+
+The tunnel gets wider and more torches light your way. The walls are smoother. 
+
+
+You hear heavy breathing and rustling up ahead, and you stop in your tracks, next to a small reinforced door.
+
+
+A human slave runs down the passage toward you. His arm is visibly broken just above the elbow and blood is streaming down his limping left leg. His lips move but he makes no sound. Eyes blurred with tears, he doesn\'t see you.
+
+
+Before you can so much as call to him, something long and sharp shoots from behind the slave. A bloodied spearhead appears in the center of the man\'s chest, as if it grew from his body. His tearful eyes glance at the fatal wound. Two more steps toward you and the slave falls face down, the shaft of the spear protruding from his back.
+
+
+An orc and a goblin appear from the tunnel, walking toward the dead man. The orc is laughing, patting his companion on the back. "Vicious throw, small one!" he roars.
+
+
+You step back and motion to Briana to lean against the wall, hoping that the door\'s reinforced frame will keep you hidden from the two slavers.
+
+
+But right then, something or someone pounds on the reinforced door from the inside. You hear loud and angry growls.
+
+
+The two slavers are now looking directly at you. The goblin yanks his spear from the corpse, and the orc unsheathes his sword. They run toward you.
+
+
+![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
+''',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  new Ruleset(
+      new Rule(299502294, 2, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+            !justCameFrom(w, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('''  The reinforced door on the side of the corridor is silent.
+''', wholeSentence: true);
+      }),
+      new Rule(871855510, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, originalWorld, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+      }),
+      new Rule(233666017, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return !playerHasVisited(sim, originalWorld, "orcthorn_room");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('''  The reinforced door on the side of the corridor is closed.
+''', wholeSentence: true);
+      })).apply(c);
+  rollBrianaQuote(c);
+}, generateSlaveQuartersPassageFight, null, <Exit>[
+  new Exit(
+      'cave_with_agruth',
+      'Go back to the cave where Agruth\'s corpse lies',
+      'You back away from the door, and go back to where you left Agruth\'s body.'),
+  new Exit('slave_quarters', 'Go further toward the Gate of Screams',
+      'You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.'),
+  new Exit('orcthorn_room', 'Open the door', 'You open the door.')
+]);
+
+class SlaveQuartersPassageExamineDoor extends RoamingAction {
+  @override
+  final String command = 'Examine the door';
+
+  @override
+  final String name = 'slave_quarters_passage_examine_door';
+
+  static final SlaveQuartersPassageExamineDoor singleton =
+      new SlaveQuartersPassageExamineDoor();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'slave_quarters_passage') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name) &&
+            !(w.currentSituation as RoomRoamingSituation).monstersAlive &&
+            !playerHasVisited(sim, w, "orcthorn_room")) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."
+
+
+''',
+        wholeSentence: true);
+    if (w.actionHasBeenPerformed("talk_to_briana_3")) {
+      s.add("""
+You look at Briana and nod.
+
+
+_"The Mad Guardian."_
+""", wholeSentence: true);
+    }
+    return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room exitFromBloodrock = new Room('exit_from_bloodrock', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.
+
+
+You run through a small stone doorway and out of the mountain.
+
+
+The blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.
+
+
+Outside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.
+
+
+Soon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.
+
+
+You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
+
+
+![View of the road ahead](img/path.jpg)
+
+
+Briana doesn\'t seem surprised.
+
+
+_"We have to stop this."_
+
+Briana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."
+
+_"No king has what we have."_
+
+
+''',
+      wholeSentence: true);
+  new Ruleset(
+      new Rule(937280785, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.actionHasBeenPerformed("take_orcthorn");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''"Orcthorn? Bah, you think they\'ll let you keep it? A farmhand?"
+
+_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
+''',
+            wholeSentence: true);
+      }),
+      new Rule(36322634, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''"Let me guess. Muscles and a bit of brains? Don\'t be a fool, you\'re still a farmhand."
+
+_"I am_ not _a farmhand. And I don\'t mean muscles or brains, no. I have a strange connection. We both do."_
+''',
+            wholeSentence: true);
+      })).apply(c);
+  s.add('''
+
+"A connection."
+
+
+_"With the Dead Prince. I dream his dreams. I think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_
+
+
+"So the thing you have that kings don\'t is… a way to communicate? Or negotiate with him?"
+
+
+_"Negotiate? No, I do not have anything the Dead Prince wants. I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_
+
+
+"So what’s the plan?"
+
+
+_"Giving him the exact opposite of what he wants."_
+
+
+"You know we could just run, slay some orcs along the way, and get as far away from this place as possible, right?"
+
+
+_"Yes."_
+
+
+"Anyone else would do exactly that."
+
+
+_"But we will not."_
+
+
+Briana sighs. "No, I suppose we won\'t."
+
+
+With that, you both start down the road toward the black fort in the distance.
+
+
+THE END.
+
+
+''', wholeSentence: true);
+  describeSuccessRate(sim, originalWorld, s);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
+Room warForge = new Room('war_forge', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.
+
+
+''',
+      wholeSentence: true);
+  new Ruleset(
+      new Rule(1010631821, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "cave_with_agruth");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.
+
+''',
+            wholeSentence: true);
+      }),
+      new Rule(383419248, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return justCameFrom(w, "smelter");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '''You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way.
+
+''',
+            wholeSentence: true);
+      })).apply(c);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''The air in the war forge is thick and makes breathing difficult, and the constant noise is overwhelming.
+
+
+''',
+      wholeSentence: true);
+  rollBrianaQuote(c);
+}, null, null, <Exit>[
+  new Exit('smelter', 'Go to smelter',
+      'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
+  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
+      'You sneak back toward where you left Agruth\'s body.')
+]);
+
+class WarForgeLookAround extends RoamingAction {
+  @override
+  final String command = 'Look around';
+
+  @override
+  final String name = 'war_forge_look_around';
+
+  static final WarForgeLookAround singleton = new WarForgeLookAround();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'war_forge') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name)) != true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''The cave is natural, but on the side of the smelter you see an artificial wall, like a stone dam. From an opening high on that wall, suspended troughs of molten steel descend into every section of the room like huge fiery tentacles. 
+
+
+At the end of each of the troughs, teams of orcs pour the steel into molds for axes, war hammers, and greatswords. The clamor of hammers hitting anvils is deafening, and the strong smell of iron and soot mixes with the stench of all that orc sweat.
+
+
+This place makes Fort Ironcast\'s military forge look like a doll house: tiny and inconsequential.
+''',
+        wholeSentence: true);
+    return '${a.name} successfully performs WarForgeLookAround';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+class WarForgeWatchWorkers extends RoamingAction {
+  @override
+  final String command = 'Watch the workers';
+
+  @override
+  final String name = 'war_forge_watch_workers';
+
+  static final WarForgeWatchWorkers singleton = new WarForgeWatchWorkers();
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'war_forge') {
+      return false;
+    }
+    if ((!w.actionHasBeenPerformed(name) &&
+            w.actionHasBeenPerformed("war_forge_look_around")) !=
+        true) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '''You look out from your hiding spot and scan the room. More likely than not, no human has ever seen this place and lived to tell the tale.
+
+
+Briana shakes her head: "The orcs are working together with ogres." A smirk forms on her lips. "They must be terrified."
+
+
+You scan the workers more closely. The slow-moving ogres tower over the orcs. 
+
+
+_"And they don\'t use slaves here. They must be doing something important."_
+
+
+Looking again at the molds they are using, you don\'t see anything strange or unexpected. Primitive axes and swords, some armor.
+
+
+"What is that thing!" Briana gasps. 
+
+
+You follow her stare and at first all you see is just a cluster of slightly larger forges. Then you squint and an image appears. It’s an enormous, repulsive, half-assembled insect. Each leg reaches as far as you could throw a rock. And there are eight of them. Then there\'s the body — a huge cockroach-like contraption forged from steel. The teeth are already completed, sharp and menacing, and as long as a man is tall. 
+
+
+A full-sized ogre pours water over one section of the creature, making a thick cloud of steam. You can\'t see much else. From the high opening in the smelter wall, molten steel is starting to flow down to fill another part of the iron monster.
+''',
+        wholeSentence: true);
+    return '${a.name} successfully performs WarForgeWatchWorkers';
+  }
+
+  @override
+  String applyFailure(ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw new StateError('Success chance is 100%');
+  }
+
+  @override
+  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+    return 1.0;
+  }
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+}
+
+Room orcthornRoom = new Room('orcthorn_room', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
+
+
+When your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.
+''',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.
+''',
+      wholeSentence: true);
+}, generateMadGuardianFight, null, <Exit>[
+  new Exit('slave_quarters_passage', 'Exit the room',
+      'You leave through the door and find yourself back in the passage to the slave quarters.')
+]);
 List<Room> allRooms = <Room>[
+  undergroundChurch,
+  tunnel,
+  tunnelCancelChance,
+  startAdventure,
+  slaveQuarters,
+  justAfterAgruthFight,
+  guardpostAboveChurch,
+  smelter,
   caveWithAgruthPre,
   caveWithAgruth,
-  tunnel,
-  justAfterAgruthFight,
-  warForge,
-  tunnelCancelChance,
-  slaveQuartersPassage,
-  orcthornRoom,
-  startAdventure,
-  undergroundChurch,
-  smelter,
-  guardpostAboveChurch,
-  warForgeAfterIronMonster,
-  exitFromBloodrock,
   undergroundChurchAltar,
-  slaveQuarters
+  warForgeAfterIronMonster,
+  slaveQuartersPassage,
+  exitFromBloodrock,
+  warForge,
+  orcthornRoom
 ];
 List<RoamingAction> allActions = <RoamingAction>[
-  SearchAgruth.singleton,
-  NameAgruthSwordOpportunity.singleton,
-  NameAgruthSwordRedemption.singleton,
-  NameAgruthSwordNothing.singleton,
+  ExamineUndergroundChurch.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,
   TalkToBriana3.singleton,
-  WarForgeLookAround.singleton,
-  WarForgeWatchWorkers.singleton,
-  SlaveQuartersPassageExamineDoor.singleton,
+  SlaveQuartersContinue.singleton,
+  NameAgruthSwordOpportunity.singleton,
+  NameAgruthSwordRedemption.singleton,
+  NameAgruthSwordNothing.singleton,
+  GuardpostAboveChurchEnterTunnelWithCancel.singleton,
   TakeOrcthorn.singleton,
   GuardpostAboveChurchTakeShield.singleton,
-  ExamineUndergroundChurch.singleton,
   SmelterLookAround.singleton,
-  GuardpostAboveChurchEnterTunnelWithCancel.singleton,
+  SearchAgruth.singleton,
   WaitForRitual.singleton,
   TakeSpearInUndergroundChurch.singleton,
-  SlaveQuartersContinue.singleton,
-  SmelterThrowSpear.singleton
+  SmelterThrowSpear.singleton,
+  SlaveQuartersPassageExamineDoor.singleton,
+  WarForgeLookAround.singleton,
+  WarForgeWatchWorkers.singleton
 ];
