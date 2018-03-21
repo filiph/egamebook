@@ -1,8 +1,6 @@
 ﻿ROOM: $underground_church
 
 
-
-
 FIRST_DESCRIPTION:
 You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can't quite see it. There are no torches here. And it’s eerily quiet. 
 
@@ -41,8 +39,6 @@ $cave_with_agruth (Go back to the cave with Agruth's corpse): You walk slowly ou
 
 
 $underground_church_altar (Go towards the altar): You sneak toward the front of the temple, trying to stay in the shadows.
-
-
 
 
 // ---------------

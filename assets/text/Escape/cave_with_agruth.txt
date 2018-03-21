@@ -17,8 +17,6 @@ rollBrianaQuote(c);
 [[/CODE]]
 
 
-
-
 EXITS:
 $underground_church (Go to the Unholy Church): You make it to the Church undetected.
  
@@ -29,8 +27,6 @@ $slave_quarters_passage (Go to the slave quarters): You and Briana hug the wall 
 
 
 // -------------
-
-
 
 
 ACTION: $search_agruth
@@ -50,15 +46,11 @@ PREREQUISITES:
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 
-
-
 COMPLETE_SUCCESS_DESCRIPTION:
 You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. 
 
 
 <p class="toast">Your stamina increases by 1.</p>
-
-
 
 
 SUCCESS_EFFECT:

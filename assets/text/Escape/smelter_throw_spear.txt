@@ -77,7 +77,5 @@ _"As I said, a well placed throw. The more complex you see the world, the easier
 "Nonsense. You got lucky."
 
 
-
-
 SUCCESS_EFFECT:
 executeSpearThrowAtOgre(c);

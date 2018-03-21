@@ -1,8 +1,6 @@
 ﻿ROOM: $underground_church_altar
 
 
-
-
 FIRST_DESCRIPTION:
 The altar is a simple block of stone at the back of the temple. On the wall above it, you see a large ornament portraying an octopus with eight black eyes at the tips of its tentacles. It's the sign of the Dead Prince. You have never seen it in real life but you’ve seen it in your dreams often enough.
 
@@ -16,23 +14,15 @@ _"You hate orcs? This is what made them."_
 Briana opens her mouth to reply, but the otherwise steady light from the altar flickers like a flame, and you both duck behind a large column. You almost trip over a spear lying on the ground.
 
 
-
-
 DESCRIPTION:
 The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.
-
-
 
 
 EXITS:
 $underground_church (Sneak back): You crouch low and, keeping an eye on the altar, move back to the Church's entrance.
 
 
-
-
 // ---------------
-
-
 
 
 ACTION: $wait_for_ritual
@@ -135,8 +125,6 @@ _"This place does something weird to people."_
 
 SUCCESS_EFFECT:
 giveStaminaToPlayer(w, 1);
-
-
 
 
 // ---------------

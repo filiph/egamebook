@@ -46,8 +46,6 @@ $underground_church (Descend toward the Underground Church): You take the passag
 $smelter (Go to the smelter): You take the passage down. The temperature gradually rises until you see an opening.
 
 
-
-
 // ------
 
 

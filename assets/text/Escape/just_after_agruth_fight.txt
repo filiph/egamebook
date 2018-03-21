@@ -55,29 +55,19 @@ _"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only c
 Briana nods. "Luck Bringer it is. Now, you're right, let's just get out of here as quickly as possible."
 
 
-
-
 SUCCESS_EFFECT:
 nameAgruthSword(w, "Luck Bringer");
 movePlayer(c, "cave_with_agruth");
 
 
-
-
 // -------------
-
-
 
 
 ACTION: $name_agruth_sword_redemption
 COMMAND: "Savior"
 
 
-
-
 FOR_LOCATION: $just_after_agruth_fight
-
-
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
@@ -96,8 +86,6 @@ movePlayer(c, "cave_with_agruth");
 
 
 // -------------
-
-
 
 
 ACTION: $name_agruth_sword_nothing

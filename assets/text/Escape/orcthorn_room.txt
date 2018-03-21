@@ -1,8 +1,6 @@
 ﻿ROOM: $orcthorn_room
 
 
-
-
 FIRST_DESCRIPTION:
 The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
 
@@ -10,18 +8,12 @@ The room is dark and wet. As you enter, the growls stop suddenly. You smell rott
 When your eyes adjust to the dark, you see a figure standing in front of you. You realize it's a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.
 
 
-
-
 DESCRIPTION:
 The room is quiet. The Mad Guardian's huge body lies next to the heap of corpses.
 
 
-
-
 FIGHT_SITUATION:
 generateMadGuardianFight
-
-
 
 
 EXITS:

@@ -48,8 +48,6 @@ $war_forge (Go to the war forges): You walk through a short passage lined with s
 $guardpost_above_church (Go through the smooth passage): You take the smooth passage and it leads you slightly upwards.
 
 
-
-
 // ---------------------
 
 

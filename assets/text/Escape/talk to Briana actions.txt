@@ -33,17 +33,11 @@ _"Three years."_
 // "Correct. The closest refuge is Fort Ironcast."
 
 
-
-
 // -----
-
-
 
 
 ACTION: $talk_to_briana_2
 COMMAND: Ask Briana about her capture
-
-
 
 
 PREREQUISITES:
@@ -54,11 +48,7 @@ w.actionNeverUsed(name)
 isRoamingInBloodrock(w)
 
 
-
-
 COMPLETE_SUCCESS_PROBABILITY: 100%
-
-
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -74,17 +64,11 @@ _"You what?"_
 "I know. It seemed like a stupid idea even then. I wanted to get in, steal back the Orcthorn, get out, and help win the war."
 
 
-
-
 // ----
-
-
 
 
 ACTION: $talk_to_briana_3
 COMMAND: Ask Briana about Orcthorn
-
-
 
 
 PREREQUISITES:
@@ -95,11 +79,7 @@ w.actionNeverUsed(name)
 isRoamingInBloodrock(w)
 
 
-
-
 COMPLETE_SUCCESS_PROBABILITY: 100%
-
-
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -177,7 +157,6 @@ Briana tenses. "Well then, at least we have that choice."
 
 - END RULE
 - END RULESET
-
 
 
 // TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breathing space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.

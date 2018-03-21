@@ -47,8 +47,6 @@ Fortunately, the goblin shifts again and his expression gets visibly more relaxe
 You deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.
 
 
-
-
 CONTINUATION_OF_FAILURE_COMMAND: Snatch the shield
 CONTINUATION_OF_FAILURE_HINT: You can quickly snatch the shield, jump back and prepare for a fight.
 CONTINUATION_OF_FAILURE_EFFECT: 

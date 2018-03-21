@@ -1,8 +1,6 @@
 ﻿ROOM: $exit_from_bloodrock
 
 
-
-
 FIRST_DESCRIPTION:
 Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.
 

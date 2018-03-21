@@ -75,11 +75,7 @@ $slave_quarters (Go further toward the Gate of Screams): You start down the slop
 $orcthorn_room (Open the door): You open the door.
 
 
-
-
 // ----------
-
-
 
 
 ACTION: $slave_quarters_passage_examine_door
