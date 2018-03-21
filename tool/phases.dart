@@ -11,7 +11,7 @@ final List<BuildAction> phases = [
       ),
       'edgehead',
       inputs: const [
-        'drivedump/**/*.txt',
+        'assets/text/**/*.txt',
         'lib/writers_input.dart',
       ]),
   new BuildAction(

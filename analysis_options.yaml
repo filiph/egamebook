@@ -3,7 +3,6 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
   exclude:
-    - drivedump/**
     - web/**
 linter:
   rules:

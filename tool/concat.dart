@@ -2,7 +2,7 @@ import 'dart:io';
 
 
 void main() {
-  Directory d = new Directory("drivedump");
+  Directory d = new Directory("assets/text/");
 
   for (var entity in d.listSync(recursive: true)) {
     if (!entity.path.endsWith(".txt")) continue;
