@@ -1,6 +1,8 @@
 import 'dart:io';
 
-
+/// This simple tool exists for the sole purpose of generating a single
+/// file from all the text in `assets/text/`. The file can be then sent
+/// to Kindle or another reader for a read-through.
 void main() {
   Directory d = new Directory("assets/text/");
 
