@@ -109,10 +109,17 @@ abstract class RoomRoamingSituation extends Situation
     w.recordVisit(a, room);
 
     if (!silent) {
-      // Show short description according to whether the actor has been here.
-      if (originalWorld.visitHistory.query(a, room).hasHappened) {
+      if (room.describe == null ||
+          originalWorld.visitHistory.query(a, room).hasHappened) {
+        // Show short description if there is no long description or
+        // if the actor has been here.
+        assert(
+            room.shortDescribe != null,
+            "$room visited for the second time but "
+            "no regular description available.");
         room.shortDescribe(context);
       } else {
+        // Otherwise, show long description.
         s.addParagraph();
         room.describe(context);
         s.addParagraph();

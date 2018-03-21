@@ -156,6 +156,7 @@ class Ruleset {
       }
     }
 
-    throw new StateError("No rule was applicable");
+    throw new StateError("No rule was applicable. "
+        "Action history: ${context.world?.actionHistory?.describe()}");
   }
 }

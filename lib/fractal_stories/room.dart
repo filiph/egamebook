@@ -54,10 +54,16 @@ class Room {
   final String name;
 
   /// Fully describes the room according to current state of the world.
+  ///
+  /// When this is `null`, then [shortDescribe] is used for the first
+  /// visit as well for all other visits.
   final RoomDescriber describe;
 
   /// Describes the room with a short blurb, after player has already visited
   /// it once.
+  ///
+  /// When this is `null` and the player visits the room more than once,
+  /// an [AssertionError] is thrown.
   final RoomDescriber shortDescribe;
 
   /// Optionally, a [Room] can have a parent room. In that case, this room
@@ -97,13 +103,18 @@ class Room {
 
   final String groundMaterial;
 
-  // TODO: add possibility to make custom events for FightSituation
-  // these will be "copied" to the fight situation in TakeExitAction
-
+  /// Creates a new room. [name], [shortDescribe] and [exits] cannot be `null`.
   Room(this.name, this.describe, this.shortDescribe, this.fightGenerator,
       this.itemGenerator, Iterable<Exit> exits,
       {this.groundMaterial: "ground", this.parent, this.prerequisite})
-      : _exits = new ListBuilder<Exit>(exits).build();
+      : _exits = new ListBuilder<Exit>(exits).build() {
+    assert(name != null);
+    assert(
+        shortDescribe != null || describe != null,
+        "You must provide at least one description of the room. "
+        "Ideally, you also provide both the first description and the regular "
+        "one.");
+  }
 
   BuiltList<Exit> get exits => _exits;
 

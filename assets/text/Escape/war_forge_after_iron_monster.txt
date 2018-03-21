@@ -7,7 +7,6 @@ RULE: w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")
 DESCRIPTION: 
 The chaos! It's palpable.
 
-
 SHORT_DESCRIPTION: 
 Pure chaos everywhere.
 
