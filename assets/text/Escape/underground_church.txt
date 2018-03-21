@@ -3,7 +3,7 @@
 
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can't quite see it. There are no torches here. And it’s eerily quiet. 
 
 
@@ -25,7 +25,7 @@ Not far from here, a tunnel leads slightly downward, back to where you killed Ag
 - END RULESET
 
 
-SHORT_DESCRIPTION: 
+DESCRIPTION:
 The temple is silent, as if it were holding its breath.
 
 [[CODE]]

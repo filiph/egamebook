@@ -1,7 +1,7 @@
 ﻿ROOM: $war_forge
 
 
-DESCRIPTION: 
+FIRST_DESCRIPTION:
 You enter the enormous cave that houses Mount Bloodrock's war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.
 
 
@@ -21,7 +21,7 @@ You and Briana stand on a walkway high above the cave’s floor. You can see a f
 - END RULESET
 
 
-SHORT_DESCRIPTION: 
+DESCRIPTION:
 // TODO: change after the iron monster was destroyed
 // TODO: pure chaos if player has done the throw in smelter.
 

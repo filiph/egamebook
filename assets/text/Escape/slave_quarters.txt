@@ -1,11 +1,11 @@
 ﻿ROOM: $slave_quarters
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 "There is a difference between being brave and being stupid. You're crossing it right now," she says.
 
 
-SHORT_DESCRIPTION:
+DESCRIPTION:
 "We _really_ shouldn't push our luck," she says.
 
 

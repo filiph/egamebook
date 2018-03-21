@@ -4,10 +4,10 @@ VARIANT_OF: $war_forge
 
 RULE: w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")
 
-DESCRIPTION: 
+FIRST_DESCRIPTION:
 The chaos! It's palpable.
 
-SHORT_DESCRIPTION: 
+DESCRIPTION:
 Pure chaos everywhere.
 
 [[CODE]]

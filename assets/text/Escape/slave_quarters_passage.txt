@@ -1,7 +1,7 @@
 ﻿ROOM: $slave_quarters_passage
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 You can see Briana clutching her fists. "Homesick already?" she says. She doesn't wait for reply, and presses on.
 
 
@@ -35,7 +35,7 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
 ![Picture of the sadistic slavers](img/sadistic-slavers.jpg)
 
 
-SHORT_DESCRIPTION:
+DESCRIPTION:
 
 - RULESET
 - RULE:

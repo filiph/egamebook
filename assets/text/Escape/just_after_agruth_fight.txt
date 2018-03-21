@@ -1,7 +1,7 @@
 ROOM: $just_after_agruth_fight
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.
 
 
@@ -59,7 +59,7 @@ Briana nods. "Luck Bringer it is. Now, you're right, let's just get out of here 
 
 SUCCESS_EFFECT:
 nameAgruthSword(w, "Luck Bringer");
-movePlayer(c, "cave_with_agruth_pre");
+movePlayer(c, "cave_with_agruth");
 
 
 
@@ -92,7 +92,7 @@ Briana nods. "Savior it is. Now, you're right, let's just get out of here as qui
 
 SUCCESS_EFFECT:
 nameAgruthSword(w, "Savior");
-movePlayer(c, "cave_with_agruth_pre");
+movePlayer(c, "cave_with_agruth");
 
 
 // -------------
@@ -118,4 +118,4 @@ Briana shrugs. "Whatever, just don't ever call it _Agruth's sword._ I already ha
 
 
 SUCCESS_EFFECT:
-movePlayer(c, "cave_with_agruth_pre");
+movePlayer(c, "cave_with_agruth");

@@ -3,7 +3,7 @@
 
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. 
 
 
@@ -12,7 +12,7 @@ When your eyes adjust to the dark, you see a figure standing in front of you. Yo
 
 
 
-SHORT_DESCRIPTION: 
+DESCRIPTION:
 The room is quiet. The Mad Guardian's huge body lies next to the heap of corpses.
 
 

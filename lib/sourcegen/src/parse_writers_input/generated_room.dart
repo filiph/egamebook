@@ -88,8 +88,8 @@ class GeneratedRoom extends GeneratedGameObject {
 
     var newInstance = roomType.newInstance([
       literal(writersName),
+      createDescriber(_map['FIRST_DESCRIPTION']),
       createDescriber(_map['DESCRIPTION']),
-      createDescriber(_map['SHORT_DESCRIPTION']),
       fightGenerator,
       literal(null) /* TODO: add item generator */,
       list(parseExits(_map['EXITS']), type: exitType)

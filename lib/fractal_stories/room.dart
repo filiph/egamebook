@@ -53,18 +53,19 @@ class Room {
 
   final String name;
 
-  /// Fully describes the room according to current state of the world.
+  /// Fully describes the room according to current state of the world when
+  /// the actor first sees it.
   ///
-  /// When this is `null`, then [shortDescribe] is used for the first
+  /// When this is `null`, then [describe] is used for the first
   /// visit as well for all other visits.
-  final RoomDescriber describe;
+  final RoomDescriber firstDescribe;
 
   /// Describes the room with a short blurb, after player has already visited
-  /// it once.
+  /// it at least once.
   ///
   /// When this is `null` and the player visits the room more than once,
   /// an [AssertionError] is thrown.
-  final RoomDescriber shortDescribe;
+  final RoomDescriber describe;
 
   /// Optionally, a [Room] can have a parent room. In that case, this room
   /// is a specialized version (variant) of the parent.
@@ -103,14 +104,14 @@ class Room {
 
   final String groundMaterial;
 
-  /// Creates a new room. [name], [shortDescribe] and [exits] cannot be `null`.
-  Room(this.name, this.describe, this.shortDescribe, this.fightGenerator,
+  /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
+  Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
       this.itemGenerator, Iterable<Exit> exits,
       {this.groundMaterial: "ground", this.parent, this.prerequisite})
       : _exits = new ListBuilder<Exit>(exits).build() {
     assert(name != null);
     assert(
-        shortDescribe != null || describe != null,
+        describe != null || firstDescribe != null,
         "You must provide at least one description of the room. "
         "Ideally, you also provide both the first description and the regular "
         "one.");

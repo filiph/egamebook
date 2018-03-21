@@ -1,7 +1,7 @@
 ﻿ROOM: $tunnel_cancel_chance
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 After a few strides, you realize Briana is still standing in the circular room behind you.
 
 

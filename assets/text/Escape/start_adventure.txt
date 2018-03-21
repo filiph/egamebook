@@ -3,7 +3,7 @@
 
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.
 
 

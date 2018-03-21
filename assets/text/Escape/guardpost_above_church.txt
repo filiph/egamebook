@@ -1,7 +1,7 @@
 ROOM: $guardpost_above_church
 
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.
 
 - RULESET
@@ -26,7 +26,7 @@ For the first time, you see a smile on Briana's face. Not a smirk or a battle sn
 Just inside the “Up Door” path sits a goblin guard. You’re in luck: He's sleeping. He loosely holds a scimitar in one hand, and has a shield laid on his lap.
 
 
-SHORT_DESCRIPTION:
+DESCRIPTION:
 - RULESET
 - RULE:
   w.isDead(sleepingGoblinId)

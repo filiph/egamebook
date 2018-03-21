@@ -4,7 +4,7 @@ VARIANT_OF: $underground_church_altar
 
 RULE: w.actionHasBeenPerformedSuccessfully("wait_for_ritual")
 
-SHORT_DESCRIPTION:
+DESCRIPTION:
 The altar is covered with black blood.
 
 [[CODE]]

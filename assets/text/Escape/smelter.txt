@@ -1,7 +1,7 @@
 ﻿ROOM: $smelter
 
 
-DESCRIPTION: 
+FIRST_DESCRIPTION:
 A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
 
 - RULESET
@@ -17,7 +17,7 @@ Not far from here there is a short tunnel, sloping down. It leads into the same 
 - END RULE
 - END RULESET
 
-SHORT_DESCRIPTION: 
+DESCRIPTION:
 The coal reflects the reds and whites of the molten steel.
 
 - RULESET
