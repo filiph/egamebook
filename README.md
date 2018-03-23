@@ -47,6 +47,8 @@ Here are some additional "philosophical" pillars:
 ### Installation
 
 1. [Install Dart](https://www.dartlang.org/install)
+   * As of March 2018, Dart 2 is not supported. See discussion
+     [here](https://github.com/filiph/edgehead/issues/13#issuecomment-375698672).
 2. Clone this repository (`git clone https://github.com/filiph/edgehead.git`)
    or download the zip file containing it
 3. Go to the repository's directory (`cd edgehead`)
