@@ -33,15 +33,18 @@ rollBrianaQuote(c);
 [[/CODE]]
 
 
-EXITS:
-$smelter (Go to smelter): You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.
+// ---
+APPROACH: $war_forge FROM $smelter
+COMMAND: Go to the war forges
+DESCRIPTION: You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.
 
-
-$cave_with_agruth (Go back to the cave with Agruth's corpse): You sneak back toward where you left Agruth's body.
+// ---
+APPROACH: $war_forge FROM $cave_with_agruth
+COMMAND: Go to the war forges
+DESCRIPTION: You sneak through the black passage, toward the sound of hundreds of anvils.
 
 
 // ---------------------
-
 
 ACTION: $war_forge_look_around
 COMMAND: Look around

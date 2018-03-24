@@ -10,9 +10,9 @@ void main() {
   group("VisitHistory", () {
     final _outsideName = "outside";
     final outside = new Room(_outsideName, emptyRoomDescription,
-        emptyRoomDescription, null, null, []);
+        emptyRoomDescription, null, null);
     final inside = new Room(
-        "inside", emptyRoomDescription, emptyRoomDescription, null, null, []);
+        "inside", emptyRoomDescription, emptyRoomDescription, null, null);
     final aren =
         new Actor.initialized(42, "Aren", currentRoomName: _outsideName);
 

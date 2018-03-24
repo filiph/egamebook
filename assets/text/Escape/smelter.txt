@@ -41,11 +41,17 @@ rollBrianaQuote(c);
 [[/CODE]]
 
 
-EXITS:
-$war_forge (Go to the war forges): You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.
+// ---
+APPROACH: $smelter FROM $war_forge
+COMMAND: Go to smelter
+DESCRIPTION: You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.
+
+// ---
+APPROACH: $smelter FROM $guardpost_above_church
+COMMAND: Go to the smelter
+DESCRIPTION: You take the passage down. The temperature gradually rises until you see an opening.
 
 
-$guardpost_above_church (Go through the smooth passage): You take the smooth passage and it leads you slightly upwards.
 
 
 // ---------------------

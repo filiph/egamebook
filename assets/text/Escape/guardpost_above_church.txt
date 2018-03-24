@@ -40,10 +40,20 @@ The goblin is sleeping soundly next to the passage to the Upper Door.
 - END RULE
 - END RULESET
 
+// ---
+APPROACH: $guardpost_above_church FROM $underground_church
+COMMAND: Enter the upwards passage
+DESCRIPTION: You take the sloping passage and walk upward for a long time.
 
-EXITS:
-$underground_church (Descend toward the Underground Church): You take the passage leading down toward the temple. 
-$smelter (Go to the smelter): You take the passage down. The temperature gradually rises until you see an opening.
+// ---
+APPROACH: $guardpost_above_church FROM $tunnel_cancel_chance
+COMMAND: Return
+DESCRIPTION: You nod and step back into the circular room.
+
+// ---
+APPROACH: $guardpost_above_church FROM $smelter
+COMMAND: Go through the smooth passage
+DESCRIPTION: You take the smooth passage and it leads you slightly upwards.
 
 
 // ------

@@ -16,14 +16,20 @@ The corpse lies still, getting cold.
 rollBrianaQuote(c);
 [[/CODE]]
 
+// ---
+APPROACH: $cave_with_agruth FROM $underground_church
+COMMAND: Go back to the cave with Agruth's corpse
+DESCRIPTION: You walk slowly out of the church, back toward where you left Agruth's body.
 
-EXITS:
-$underground_church (Go to the Unholy Church): You make it to the Church undetected.
- 
-$war_forge (Go to the war forges): You sneak through the black passage, toward the sound of hundreds of anvils.  
+// ---
+APPROACH: $cave_with_agruth FROM $slave_quarters_passage
+COMMAND: Go back to the cave where Agruth's corpse lies
+DESCRIPTION: You back away from the door, and go back to where you left Agruth's body.
 
-
-$slave_quarters_passage (Go to the slave quarters): You and Briana hug the wall and start toward the slave quarters.
+// ---
+APPROACH: $cave_with_agruth FROM $war_forge
+COMMAND: Go back to the cave with Agruth's corpse
+DESCRIPTION: You sneak back toward where you left Agruth's body.
 
 
 // -------------

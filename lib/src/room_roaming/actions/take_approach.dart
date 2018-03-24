@@ -1,14 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class TakeExitAction extends ExitAction {
-  static const String className = "TakeExitAction";
+class TakeApproachAction extends ApproachAction {
+  static const String className = "TakeApproachAction";
 
   @override
   final bool isAggressive = false;
@@ -22,13 +21,13 @@ class TakeExitAction extends ExitAction {
   @override
   final Resource rerollResource = null;
 
-  TakeExitAction(Exit exit) : super(exit);
+  TakeApproachAction(Approach approach) : super(approach);
 
   @override
   String get helpMessage => null;
 
   @override
-  bool get isImplicit => exit.command.isEmpty;
+  bool get isImplicit => approach.command.isEmpty;
 
   @override
   String get name => className;
@@ -42,15 +41,14 @@ class TakeExitAction extends ExitAction {
   String applySuccess(ActionContext context) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
-    if (exit.description.trim() != "N/A") {
-      s.add(exit.description, wholeSentence: true);
+    if (approach.description != null) {
+      approach.description(context);
     }
 
     (w.currentSituation as RoomRoamingSituation)
-        .moveActor(context, exit.destinationRoomName);
+        .moveActor(context, approach.to);
 
-    return "${a.name} went through exit to ${exit.destinationRoomName}";
+    return "${a.name} went through approach to ${approach.to}";
   }
 
   @override
@@ -66,13 +64,9 @@ class TakeExitAction extends ExitAction {
       // Don't allow exit taking when monsters in this room are still alive.
       return false;
     }
-    if (exit.isAccessible != null && !exit.isAccessible(sim, w)) {
-      // Don't allow if `isAccessible` is defined on [exit] and it returns
-      // `false`.
-      return false;
-    }
     return true;
   }
 
-  static ExitAction builder(Exit exit) => new TakeExitAction(exit);
+  static ApproachAction builder(Approach approach) =>
+      new TakeApproachAction(approach);
 }

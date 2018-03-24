@@ -11,7 +11,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
-import 'package:edgehead/src/room_roaming/actions/take_exit.dart';
+import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
 import 'package:edgehead/writers_input.g.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
@@ -38,7 +38,7 @@ abstract class RoomRoamingSituation extends Situation
 
   /// TODO: add all other actions that player can do while exploring
   @override
-  List<ExitActionBuilder> get actionGenerators => [TakeExitAction.builder];
+  List<ApproachActionBuilder> get actionGenerators => [TakeApproachAction.builder];
 
   @override
   List<Action> get actions => []

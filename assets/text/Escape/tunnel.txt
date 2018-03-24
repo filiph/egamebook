@@ -33,5 +33,7 @@ FIGHT_SITUATION:
 generateEscapeTunnelFight
 
 
-EXITS:
-$exit_from_bloodrock (Start running again): You start running again.
+// ---
+APPROACH: $tunnel FROM $tunnel_cancel_chance
+COMMAND: Continue
+DESCRIPTION: You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.

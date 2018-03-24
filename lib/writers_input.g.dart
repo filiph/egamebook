@@ -11,11 +11,11 @@ library writers_input;
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
 import 'package:edgehead/fractal_stories/actor.dart' show Actor;
+import 'package:edgehead/fractal_stories/room_approach.dart' show Approach;
 import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
 import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
-import 'package:edgehead/fractal_stories/room_exit.dart' show Exit;
 import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
 import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
@@ -100,14 +100,43 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
 
 ''', wholeSentence: true);
   rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('guardpost_above_church', 'Enter the upwards passage',
-      'You take the sloping passage and walk upward for a long time.'),
-  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-      'You walk slowly out of the church, back toward where you left Agruth\'s body.'),
-  new Exit('underground_church_altar', 'Go towards the altar',
-      'You sneak toward the front of the temple, trying to stay in the shadows.')
-]);
+}, null, null);
+Approach undergroundChurchFromCaveWithAgruth = new Approach(
+    'cave_with_agruth', 'underground_church', 'Go to the Unholy Church',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You make it to the Church undetected.
+''', wholeSentence: true);
+});
+Approach undergroundChurchFromGuardpostAboveChurch = new Approach(
+    'guardpost_above_church',
+    'underground_church',
+    'Descend toward the Underground Church', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You take the passage leading down toward the temple.
+''', wholeSentence: true);
+});
+Approach undergroundChurchFromUndergroundChurchAltar =
+    new Approach('underground_church_altar', 'underground_church', 'Sneak back',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You crouch low and, keeping an eye on the altar, move back to the Church\'s entrance.
+''',
+      wholeSentence: true);
+});
 
 class ExamineUndergroundChurch extends RoamingAction {
   @override
@@ -248,10 +277,19 @@ The light in the tunnel gets brighter and the air gets colder. Suddenly, just wh
 They must be guarding the Upper Door. There is no way around them.
 ''',
       wholeSentence: true);
-}, null, generateEscapeTunnelFight, null, <Exit>[
-  new Exit(
-      'exit_from_bloodrock', 'Start running again', 'You start running again.')
-]);
+}, null, generateEscapeTunnelFight, null);
+Approach tunnelFromTunnelCancelChance = new Approach(
+    'tunnel_cancel_chance', 'tunnel', 'Continue', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.
+''',
+      wholeSentence: true);
+});
 Room tunnelCancelChance = new Room('tunnel_cancel_chance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -268,12 +306,7 @@ _"Are you not coming?"_
 Briana hesitates. "It feels like we could have done more." She motions toward the goblin, then extends her gesture to the rest of the mountain. "Wreak more havoc. I mean, we might be the first slaves in Mount Bloodrock to survive."
 ''',
       wholeSentence: true);
-}, null, null, null, <Exit>[
-  new Exit('tunnel', 'Continue',
-      'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.'),
-  new Exit('guardpost_above_church', 'Return',
-      'You nod and step back into the circular room.')
-]);
+}, null, null, null);
 
 class TalkToBriana1 extends RoamingAction {
   @override
@@ -627,10 +660,16 @@ Another crack and there is new blood pouring from a gash in Briana\'s face. Agru
 Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.
 ''',
       wholeSentence: true);
-}, null, generateAgruthFight, null, <Exit>[
-  new Exit('just_after_agruth_fight', '',
-      'You look around. Fortunately, there’s no one in sight.')
-]);
+}, null, generateAgruthFight, null);
+Approach startAdventureFromPreStartBook =
+    new Approach('pre_start_book', 'start_adventure', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 Room undergroundChurchAltarAfterCeremony = new Room(
     'underground_church_altar_after_ceremony', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -642,13 +681,7 @@ Room undergroundChurchAltarAfterCeremony = new Room(
 
 ''', wholeSentence: true);
   rollBrianaQuote(c);
-},
-    null,
-    null,
-    <Exit>[
-      new Exit('underground_church', 'Sneak back',
-          'You crouch low and, keeping an eye on the altar, move back to the Church\'s entrance.')
-    ],
+}, null, null,
     parent: 'underground_church_altar',
     prerequisite:
         new Prerequisite(840572377, 1, true, (ApplicabilityContext c) {
@@ -675,10 +708,21 @@ Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('''"We _really_ shouldn\'t push our luck," she says.
 ''', wholeSentence: true);
-}, null, null, <Exit>[
-  new Exit('slave_quarters_passage', 'Go back',
-      'You nod, and then start carefully backing out through the passage.')
-]);
+}, null, null);
+Approach slaveQuartersFromSlaveQuartersPassage = new Approach(
+    'slave_quarters_passage',
+    'slave_quarters',
+    'Go further toward the Gate of Screams', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.
+''',
+      wholeSentence: true);
+});
 
 class SlaveQuartersContinue extends RoamingAction {
   @override
@@ -807,7 +851,17 @@ _"That one is already dead."_
 She turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.
 ''',
       wholeSentence: true);
-}, null, null, null, <Exit>[]);
+}, null, null, null);
+Approach justAfterAgruthFightFromStartAdventure = new Approach(
+    'start_adventure', 'just_after_agruth_fight', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You look around. Fortunately, there’s no one in sight.
+''', wholeSentence: true);
+});
 
 class NameAgruthSwordOpportunity extends RoamingAction {
   @override
@@ -1111,12 +1165,40 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He\'s 
 ''',
             wholeSentence: true);
       })).apply(c);
-}, null, null, <Exit>[
-  new Exit('underground_church', 'Descend toward the Underground Church',
-      'You take the passage leading down toward the temple.'),
-  new Exit('smelter', 'Go to the smelter',
-      'You take the passage down. The temperature gradually rises until you see an opening.')
-]);
+}, null, null);
+Approach guardpostAboveChurchFromUndergroundChurch = new Approach(
+    'underground_church', 'guardpost_above_church', 'Enter the upwards passage',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You take the sloping passage and walk upward for a long time.
+''', wholeSentence: true);
+});
+Approach guardpostAboveChurchFromTunnelCancelChance =
+    new Approach('tunnel_cancel_chance', 'guardpost_above_church', 'Return',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You nod and step back into the circular room.
+''', wholeSentence: true);
+});
+Approach guardpostAboveChurchFromSmelter = new Approach(
+    'smelter', 'guardpost_above_church', 'Go through the smooth passage',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You take the smooth passage and it leads you slightly upwards.
+''', wholeSentence: true);
+});
 
 class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   @override
@@ -1548,12 +1630,32 @@ Room smelter = new Room('smelter', (ActionContext c) {
         final Storyline s = c.outputStoryline;
       })).apply(c);
   rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('war_forge', 'Go to the war forges',
-      'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.'),
-  new Exit('guardpost_above_church', 'Go through the smooth passage',
-      'You take the smooth passage and it leads you slightly upwards.')
-]);
+}, null, null);
+Approach smelterFromWarForge =
+    new Approach('war_forge', 'smelter', 'Go to smelter', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.
+''',
+      wholeSentence: true);
+});
+Approach smelterFromGuardpostAboveChurch =
+    new Approach('guardpost_above_church', 'smelter', 'Go to the smelter',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You take the passage down. The temperature gradually rises until you see an opening.
+''',
+      wholeSentence: true);
+});
 
 class SmelterLookAround extends RoamingAction {
   @override
@@ -1650,14 +1752,47 @@ That leaves two options: the black passage toward the war forges and the deserte
 
 ''', wholeSentence: true);
   rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('underground_church', 'Go to the Unholy Church',
-      'You make it to the Church undetected.'),
-  new Exit('war_forge', 'Go to the war forges',
-      'You sneak through the black passage, toward the sound of hundreds of anvils.'),
-  new Exit('slave_quarters_passage', 'Go to the slave quarters',
-      'You and Briana hug the wall and start toward the slave quarters.')
-]);
+}, null, null);
+Approach caveWithAgruthFromUndergroundChurch = new Approach(
+    'underground_church',
+    'cave_with_agruth',
+    'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You walk slowly out of the church, back toward where you left Agruth\'s body.
+''',
+      wholeSentence: true);
+});
+Approach caveWithAgruthFromSlaveQuartersPassage = new Approach(
+    'slave_quarters_passage',
+    'cave_with_agruth',
+    'Go back to the cave where Agruth\'s corpse lies', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You back away from the door, and go back to where you left Agruth\'s body.
+''',
+      wholeSentence: true);
+});
+Approach caveWithAgruthFromWarForge = new Approach(
+    'war_forge',
+    'cave_with_agruth',
+    'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You sneak back toward where you left Agruth\'s body.
+''', wholeSentence: true);
+});
 
 class SearchAgruth extends RoamingAction {
   @override
@@ -1762,10 +1897,20 @@ Briana opens her mouth to reply, but the otherwise steady light from the altar f
       '''The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.
 ''',
       wholeSentence: true);
-}, null, null, <Exit>[
-  new Exit('underground_church', 'Sneak back',
-      'You crouch low and, keeping an eye on the altar, move back to the Church\'s entrance.')
-]);
+}, null, null);
+Approach undergroundChurchAltarFromUndergroundChurch = new Approach(
+    'underground_church', 'underground_church_altar', 'Go towards the altar',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You sneak toward the front of the temple, trying to stay in the shadows.
+''',
+      wholeSentence: true);
+});
 
 class WaitForRitual extends RoamingAction {
   @override
@@ -2132,15 +2277,7 @@ Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
 
 ''', wholeSentence: true);
   rollBrianaQuote(c);
-},
-    null,
-    null,
-    <Exit>[
-      new Exit('smelter', 'Go to smelter',
-          'You keep low, ascending the stairs. When you reach the top,  you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
-      new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-          'You sneak back toward where you left Agruth\'s body.')
-    ],
+}, null, null,
     parent: 'war_forge',
     prerequisite:
         new Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
@@ -2239,15 +2376,41 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
 ''', wholeSentence: true);
       })).apply(c);
   rollBrianaQuote(c);
-}, generateSlaveQuartersPassageFight, null, <Exit>[
-  new Exit(
-      'cave_with_agruth',
-      'Go back to the cave where Agruth\'s corpse lies',
-      'You back away from the door, and go back to where you left Agruth\'s body.'),
-  new Exit('slave_quarters', 'Go further toward the Gate of Screams',
-      'You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.'),
-  new Exit('orcthorn_room', 'Open the door', 'You open the door.')
-]);
+}, generateSlaveQuartersPassageFight, null);
+Approach slaveQuartersPassageFromCaveWithAgruth = new Approach(
+    'cave_with_agruth', 'slave_quarters_passage', 'Go to the slave quarters',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You and Briana hug the wall and start toward the slave quarters.
+''', wholeSentence: true);
+});
+Approach slaveQuartersPassageFromSlaveQuarters = new Approach(
+    'slave_quarters', 'slave_quarters_passage', 'Go back', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You nod, and then start carefully backing out through the passage.
+''', wholeSentence: true);
+});
+Approach slaveQuartersPassageFromOrcthornRoom =
+    new Approach('orcthorn_room', 'slave_quarters_passage', 'Exit the room',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You leave through the door and find yourself back in the passage to the slave quarters.
+''',
+      wholeSentence: true);
+});
 
 class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
@@ -2451,7 +2614,26 @@ THE END.
 
 ''', wholeSentence: true);
   describeSuccessRate(sim, originalWorld, s);
-}, null, null, null, <Exit>[new Exit('__END_OF_ROAM__', '', 'N/A')]);
+}, null, null, null);
+Approach exitFromBloodrockFromTunnel = new Approach(
+    'tunnel', 'exit_from_bloodrock', 'Start running again', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You start running again.
+''', wholeSentence: true);
+});
+Approach endOfRoamFromExitFromBloodrock = new Approach(
+    'exit_from_bloodrock', '__END_OF_ROAM__', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 Room warForge = new Room('war_forge', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2512,12 +2694,31 @@ Room warForge = new Room('war_forge', (ActionContext c) {
 ''',
       wholeSentence: true);
   rollBrianaQuote(c);
-}, null, null, <Exit>[
-  new Exit('smelter', 'Go to smelter',
-      'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.'),
-  new Exit('cave_with_agruth', 'Go back to the cave with Agruth\'s corpse',
-      'You sneak back toward where you left Agruth\'s body.')
-]);
+}, null, null);
+Approach warForgeFromSmelter = new Approach(
+    'smelter', 'war_forge', 'Go to the war forges', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.
+''',
+      wholeSentence: true);
+});
+Approach warForgeFromCaveWithAgruth = new Approach(
+    'cave_with_agruth', 'war_forge', 'Go to the war forges', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''You sneak through the black passage, toward the sound of hundreds of anvils.
+''',
+      wholeSentence: true);
+});
 
 class WarForgeLookAround extends RoamingAction {
   @override
@@ -2707,10 +2908,18 @@ When your eyes adjust to the dark, you see a figure standing in front of you. Yo
       '''The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.
 ''',
       wholeSentence: true);
-}, generateMadGuardianFight, null, <Exit>[
-  new Exit('slave_quarters_passage', 'Exit the room',
-      'You leave through the door and find yourself back in the passage to the slave quarters.')
-]);
+}, generateMadGuardianFight, null);
+Approach orcthornRoomFromSlaveQuartersPassage =
+    new Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You open the door.
+''', wholeSentence: true);
+});
 List<Room> allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2728,6 +2937,32 @@ List<Room> allRooms = <Room>[
   exitFromBloodrock,
   warForge,
   orcthornRoom
+];
+List<Approach> allApproaches = <Approach>[
+  undergroundChurchFromCaveWithAgruth,
+  undergroundChurchFromGuardpostAboveChurch,
+  undergroundChurchFromUndergroundChurchAltar,
+  tunnelFromTunnelCancelChance,
+  startAdventureFromPreStartBook,
+  slaveQuartersFromSlaveQuartersPassage,
+  justAfterAgruthFightFromStartAdventure,
+  guardpostAboveChurchFromUndergroundChurch,
+  guardpostAboveChurchFromTunnelCancelChance,
+  guardpostAboveChurchFromSmelter,
+  smelterFromWarForge,
+  smelterFromGuardpostAboveChurch,
+  caveWithAgruthFromUndergroundChurch,
+  caveWithAgruthFromSlaveQuartersPassage,
+  caveWithAgruthFromWarForge,
+  undergroundChurchAltarFromUndergroundChurch,
+  slaveQuartersPassageFromCaveWithAgruth,
+  slaveQuartersPassageFromSlaveQuarters,
+  slaveQuartersPassageFromOrcthornRoom,
+  exitFromBloodrockFromTunnel,
+  endOfRoamFromExitFromBloodrock,
+  warForgeFromSmelter,
+  warForgeFromCaveWithAgruth,
+  orcthornRoomFromSlaveQuartersPassage
 ];
 List<RoamingAction> allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

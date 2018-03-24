@@ -21,5 +21,7 @@ FIGHT_SITUATION:
 generateAgruthFight
 
 
-EXITS:
-$just_after_agruth_fight (): You look around. Fortunately, there’s no one in sight.
+// ---
+APPROACH: $start_adventure FROM $pre_start_book
+COMMAND:
+DESCRIPTION: N/A

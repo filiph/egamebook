@@ -140,7 +140,7 @@ Block _parseSequence(String text) {
       }
       final currentText = currentContent.toString();
       if (_isNotEmpty(currentText)) {
-        children.add(new Block(BlockType.text, currentText));
+        children.add(new Block.textContent(currentText));
       }
       currentContent.clear();
       typeStack.removeLast();
@@ -173,7 +173,7 @@ Block _parseSequence(String text) {
 
       final currentText = currentContent.toString();
       if (_isNotEmpty(currentText)) {
-        children.add(new Block(BlockType.text, currentText));
+        children.add(new Block.textContent(currentText));
       }
       currentContent.clear();
       typeStack.removeLast();
@@ -208,7 +208,7 @@ Block _parseSequence(String text) {
   }
   final currentText = currentContent.toString();
   if (_isNotEmpty(currentText)) {
-    children.add(new Block(BlockType.text, currentText));
+    children.add(new Block.textContent(currentText));
   }
 
   return new Block(BlockType.sequence, text, children: children);
@@ -227,6 +227,12 @@ class Block {
   final List<Block> children;
 
   const Block(this.type, this.content, {this.children: const []});
+
+  factory Block.textContent(String content) {
+    final sanitized = content.trim() == "N/A" ? "" : content;
+
+    return new Block(BlockType.text, sanitized);
+  }
 
   void accept(SequenceBlockVisitor visitor) {
     visitor.visit(this);

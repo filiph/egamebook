@@ -31,14 +31,21 @@ rollBrianaQuote(c);
 [[/CODE]]
 
 
-EXITS:
-$guardpost_above_church (Enter the upwards passage): You take the sloping passage and walk upward for a long time.
+// ---
+APPROACH: $underground_church FROM $cave_with_agruth
+COMMAND: Go to the Unholy Church
+DESCRIPTION: You make it to the Church undetected.
 
+// ---
+APPROACH: $underground_church FROM $guardpost_above_church
+COMMAND: Descend toward the Underground Church
+DESCRIPTION: You take the passage leading down toward the temple.
 
-$cave_with_agruth (Go back to the cave with Agruth's corpse): You walk slowly out of the church, back toward where you left Agruth's body.
+// ---
+APPROACH: $underground_church FROM $underground_church_altar
+COMMAND: Sneak back
+DESCRIPTION: You crouch low and, keeping an eye on the altar, move back to the Church's entrance.
 
-
-$underground_church_altar (Go towards the altar): You sneak toward the front of the temple, trying to stay in the shadows.
 
 
 // ---------------

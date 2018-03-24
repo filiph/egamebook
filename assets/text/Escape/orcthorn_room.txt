@@ -16,5 +16,7 @@ FIGHT_SITUATION:
 generateMadGuardianFight
 
 
-EXITS:
-$slave_quarters_passage (Exit the room): You leave through the door and find yourself back in the passage to the slave quarters.
+// ---
+APPROACH: $orcthorn_room FROM $slave_quarters_passage
+COMMAND: Open the door
+DESCRIPTION: You open the door.

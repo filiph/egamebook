@@ -81,7 +81,7 @@ Future<Null> main(List<String> args) async {
 }
 
 /// A map of types of object that can be defined by writer.
-const List<String> objectTypes = const ["ROOM", "ACTION"];
+const List<String> objectTypes = const ["ROOM", "ACTION", "APPROACH"];
 
 final RegExp commentPattern = new RegExp(r"^//.*");
 
@@ -108,6 +108,15 @@ StatementBuilder generateAllRooms(List<GeneratedGameObject> objects) {
           .map<ReferenceBuilder>((o) => reference(o.name)),
       type: roomType);
   return listLiteral.asVar('allRooms', listOfRoomsType);
+}
+
+StatementBuilder generateAllApproaches(List<GeneratedGameObject> objects) {
+  var listLiteral = list(
+      objects
+          .where((o) => o.type == approachType)
+          .map<ReferenceBuilder>((o) => reference(o.name)),
+      type: approachType);
+  return listLiteral.asVar('allApproaches', listOfApproachType);
 }
 
 /// Parses a file and returns all objects specified in that file as a raw
@@ -153,7 +162,7 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
     currentKey = keyMatch.group(1);
 
     if (objectTypes.contains(currentKey) && result.isNotEmpty) {
-      // We have encountered a new object (ROOM, LOCATION, etc.). Finalize the
+      // We have encountered a new object (ROOM, ACTION, etc.). Finalize the
       // last one.
       yield result;
       result.clear();

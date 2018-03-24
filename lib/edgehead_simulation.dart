@@ -2,7 +2,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/room.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -38,7 +37,8 @@ final Actor edgeheadPlayer = new Actor.initialized(playerId, "Aren",
     initiative: 1000,
     currentRoomName: _preStartBook.name);
 
-final Simulation edgeheadSimulation = new Simulation(_rooms, _combineFunctions);
+final Simulation edgeheadSimulation =
+    new Simulation(_rooms, allApproaches, _combineFunctions);
 
 final Map<String, CombineFunction> _combineFunctions = {
   normalCombineFunctionHandle: normalCombineFunction,
@@ -46,13 +46,12 @@ final Map<String, CombineFunction> _combineFunctions = {
 };
 
 final _preStartBook = new Room(
-    "preStartBook",
+    "pre_start_book",
     (c) => c.outputStoryline
         .add("UNUSED because this is the first choice", wholeSentence: true),
     (c) => throw new StateError("Room isn't to be revisited"),
     null,
-    null,
-    [new Exit("start_adventure", "", "")]);
+    null);
 
 final List<Room> _rooms = new List<Room>.from(allRooms)
   ..addAll([_preStartBook, endOfRoam]);

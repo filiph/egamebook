@@ -7,6 +7,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:edgehead/sourcegen/src/parse_writers_input.dart' hide log;
 import 'package:edgehead/sourcegen/src/parse_writers_input/generated_action.dart'
     hide log;
+import 'package:edgehead/sourcegen/src/parse_writers_input/generated_approach.dart';
 import 'package:edgehead/sourcegen/src/parse_writers_input/generated_game_object.dart';
 import 'package:edgehead/sourcegen/src/parse_writers_input/generated_room.dart';
 import 'package:edgehead/sourcegen/src/parse_writers_input/types.dart';
@@ -65,17 +66,21 @@ class WritersInputGenerator extends Generator {
       final assetIds = buildStep.findAssets(new Glob(glob, recursive: true));
       for (final id in assetIds) {
         if (!validExtensions.contains(id.extension)) continue;
+        final path = id.uri.toString();
         final List<String> lines =
             (await buildStep.readAsString(id)).split("\n");
         final rawMaps = parseWritersOutput(lines);
         for (var rawMap in rawMaps) {
           if (rawMap.keys.contains("ROOM")) {
             // TODO: remove dirPath if not needed
-            var room = generateRoom(rawMap, './UNKNOWN/');
+            var room = generateRoom(rawMap, path);
             objects.add(room);
           } else if (rawMap.keys.contains("ACTION")) {
-            var action = generateAction(rawMap, './UNKNOWN/');
+            var action = generateAction(rawMap, path);
             objects.add(action);
+          } else if (rawMap.keys.contains("APPROACH")) {
+            final approach = generateApproach(rawMap, path);
+            objects.add(approach);
           }
         }
       }
@@ -108,6 +113,7 @@ class WritersInputGenerator extends Generator {
     }
 
     lib.addMember(generateAllRooms(objects));
+    lib.addMember(generateAllApproaches(objects));
     lib.addMember(generateAllActionInstances(objects));
 
     final source = cb.prettyToSource(lib.buildAst());

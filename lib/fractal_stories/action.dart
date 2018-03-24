@@ -4,7 +4,7 @@ import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
@@ -200,10 +200,6 @@ abstract class Action {
       final action = this as EnemyTargetAction;
       builder.sufferers.add(action.enemy.id);
     }
-    if (this is ExitAction) {
-      final action = this as ExitAction;
-      builder.dataString = action.exit.destinationRoomName;
-    }
     return builder;
   }
 }
@@ -279,23 +275,23 @@ abstract class EnemyTargetAction extends Action {
       "enemy=${enemy.id}/${enemy.name}>";
 }
 
-/// This [Action] requires an [exit].
+/// This [Action] requires an [approach].
 ///
-/// Every [ExitAction] should contain a static builder like this:
+/// Every [ApproachAction] should contain a static builder like this:
 ///
-///     static ExitAction builder(Exit enemy) => new Example(exit);
-abstract class ExitAction extends Action {
-  final Exit exit;
+///     static ApproachAction builder(Approach enemy) => new Example(exit);
+abstract class ApproachAction extends Action {
+  final Approach approach;
 
   @mustCallSuper
-  ExitAction(this.exit);
+  ApproachAction(this.approach);
 
   @override
   String get command =>
-      exit.command.isNotEmpty ? exit.command : "IMPLICIT EXIT";
+      approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
 
   @override
-  String toString() => "ExitAction<$command>";
+  String toString() => "ApproachAction<$command>";
 }
 
 /// This [Action] requires an [item].

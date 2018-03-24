@@ -9,8 +9,10 @@ DESCRIPTION:
 "We _really_ shouldn't push our luck," she says.
 
 
-EXITS:
-$slave_quarters_passage (Go back): You nod, and then start carefully backing out through the passage.
+// ---
+APPROACH: $slave_quarters FROM $slave_quarters_passage
+COMMAND: Go further toward the Gate of Screams
+DESCRIPTION: You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.
 
 
 // ---

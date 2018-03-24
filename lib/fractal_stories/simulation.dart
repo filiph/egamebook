@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
+import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -24,8 +24,8 @@ typedef void EventCallback(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
 
 /// Builder takes an enemy actor and generates an instance of
-/// [ExitAction] with the given [exit].
-typedef ExitAction ExitActionBuilder(Exit exit);
+/// [ApproachAction] with the given [approach].
+typedef ApproachAction ApproachActionBuilder(Approach approach);
 
 /// Builder takes situation's items and generates an instance of [ItemAction]
 /// with the given [item] and its [description].
@@ -52,11 +52,18 @@ class Simulation {
   /// Rooms are the same no matter what happens to the world.
   final Set<Room> rooms;
 
+  final Set<Approach> approaches;
+
   /// Combine functions are the different ways an actor can score the world.
   final Map<String, CombineFunction> combineFunctions;
 
-  Simulation(Iterable<Room> rooms, this.combineFunctions)
-      : rooms = new Set<Room>.from(rooms) {
+  Simulation(
+    Iterable<Room> rooms,
+    Iterable<Approach> approaches,
+    this.combineFunctions,
+  )
+      : rooms = new Set<Room>.from(rooms),
+        approaches = new Set<Approach>.from(approaches) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
     assert(() {
       for (final room in rooms) {
@@ -69,6 +76,20 @@ class Simulation {
     },
         "Cannot have more than one level of parent-child variants in Rooms: "
         "$rooms");
+    assert(() {
+      final allNames = rooms.map((r) => r.name);
+      for (final approach in approaches) {
+        if (!allNames.contains(approach.from)) {
+          print("MISSING FROM: ${approach.from}");
+          return false;
+        }
+        if (!allNames.contains(approach.to)) {
+          print("MISSING TO: ${approach.to}");
+          return false;
+        }
+      }
+      return true;
+    }, "Approaches must specify existing rooms");
   }
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
@@ -87,7 +108,7 @@ class Simulation {
       if (builder is EnemyTargetActionBuilder) {
         yield* _generateEnemyTargetActions(
             context.actor, context.world, builder);
-      } else if (builder is ExitActionBuilder) {
+      } else if (builder is ApproachActionBuilder) {
         yield* _generateExitActions(context, builder);
       } else if (builder is ItemActionBuilder) {
         yield* _generateItemActions(context.actor, context.world, builder);
@@ -97,11 +118,11 @@ class Simulation {
     }
   }
 
-  /// Lists all applicable exits from [room] in current [world].
+  /// Lists all applicable approaches from [room] in current [world].
   ///
   /// Algorithm
   ///
-  ///   * Take all exits from current room and its parent (if this room is
+  ///   * Take all approaches from current room and its parent (if this room is
   ///     a variant) or children (when this room has variants)
   ///   * Create rule for each, where RULE is compiled thusly:
   ///     * First part comes from the source variant's RULE (or is just
@@ -116,27 +137,24 @@ class Simulation {
   ///   * Group together rules with same destination, and choose according
   ///     to RULESET
   @visibleForTesting
-  Iterable<Exit> getAvailableExits(
+  Iterable<Approach> getAvailableApproaches(
       Room room, ApplicabilityContext context) sync* {
-    final List<_ExitRule> allExits =
-        room.exits.map((exit) => _createExitRule(room, exit)).toList();
-
-    if (room.parent != null) {
-      final parent = getRoomByName(room.parent);
-      allExits
-          .addAll(parent.exits.map((exit) => _createExitRule(parent, exit)));
-    }
+    final List<_ApproachRule> allExits = context.simulation.approaches
+        .where((a) => a.from == room.name || a.from == room.parent)
+        .map((a) => _createApproachRule(room, a))
+        .toList();
 
     for (final variant in _getVariants(room)) {
-      allExits
-          .addAll(variant.exits.map((exit) => _createExitRule(variant, exit)));
+      allExits.addAll(context.simulation.approaches
+          .where((a) => a.from == variant.name)
+          .map((a) => _createApproachRule(variant, a)));
     }
 
-    final Map<int, List<_ExitRule>> paths = {};
-    for (final exitRule in allExits) {
+    final Map<int, List<_ApproachRule>> paths = {};
+    for (final approachRule in allExits) {
       paths.putIfAbsent(
-          exitRule.sourceDestinationHash, () => new List<_ExitRule>());
-      paths[exitRule.sourceDestinationHash].add(exitRule);
+          approachRule.sourceDestinationHash, () => new List<_ApproachRule>());
+      paths[approachRule.sourceDestinationHash].add(approachRule);
     }
 
     for (final hash in paths.keys) {
@@ -144,13 +162,13 @@ class Simulation {
       // exit.
       final alternatives = paths[hash];
       if (alternatives.length == 1) {
-        yield alternatives.single.exit;
+        yield alternatives.single.approach;
         continue;
       }
       alternatives.sort();
       for (final rule in alternatives) {
         if (rule.prerequisite.isSatisfiedBy(context)) {
-          yield rule.exit;
+          yield rule.approach;
           // Break from alternatives.
           break;
         }
@@ -183,9 +201,9 @@ class Simulation {
     return room;
   }
 
-  _ExitRule _createExitRule(Room room, Exit exit) {
+  _ApproachRule _createApproachRule(Room room, Approach approach) {
     final String source = room.parent ?? room.name;
-    final destinationRoom = getRoomByName(exit.destinationRoomName);
+    final destinationRoom = getRoomByName(approach.to);
     final String destination = destinationRoom.parent ?? destinationRoom.name;
     final firstPart = room.prerequisite;
     final secondPart = destinationRoom.prerequisite;
@@ -211,7 +229,7 @@ class Simulation {
       prerequisite = new Prerequisite(combinedHash, combinedPriority,
           combinedOnlyOnce, combinedPrerequisite);
     }
-    return new _ExitRule(exit, source, destination, prerequisite);
+    return new _ApproachRule(approach, source, destination, prerequisite);
   }
 
   /// Generator generates multiple [Action] instances given a [world] and
@@ -234,16 +252,16 @@ class Simulation {
     }
   }
 
-  /// Generator generates multiple [ExitAction] instances given a [world] and
+  /// Generator generates multiple [ApproachAction] instances given a [world] and
   /// an [actor] and a [builder].
-  Iterable<ExitAction> _generateExitActions(
-      ApplicabilityContext context, ExitActionBuilder builder) sync* {
+  Iterable<ApproachAction> _generateExitActions(
+      ApplicabilityContext context, ApproachActionBuilder builder) sync* {
     final situation = context.world.currentSituation as RoomRoamingSituation;
     var room = getRoomByName(situation.currentRoomName);
 
-    for (var exit in getAvailableExits(room, context)) {
-      var action = builder(exit);
-      assert(action.exit == exit);
+    for (var approach in getAvailableApproaches(room, context)) {
+      var action = builder(approach);
+      assert(action.approach == approach);
       yield action;
     }
   }
@@ -266,19 +284,21 @@ class Simulation {
   }
 }
 
-class _ExitRule implements Comparable<_ExitRule> {
-  final Exit exit;
+class _ApproachRule implements Comparable<_ApproachRule> {
+  final Approach approach;
+
+  final Prerequisite prerequisite;
 
   final String source;
 
   final String destination;
 
-  final Prerequisite prerequisite;
-
-  const _ExitRule(this.exit, this.source, this.destination, this.prerequisite);
+  const _ApproachRule(
+      this.approach, this.source, this.destination, this.prerequisite);
 
   int get sourceDestinationHash => "$source>>>$destination".hashCode;
 
   @override
-  int compareTo(_ExitRule other) => prerequisite.compareTo(other.prerequisite);
+  int compareTo(_ApproachRule other) =>
+      prerequisite.compareTo(other.prerequisite);
 }

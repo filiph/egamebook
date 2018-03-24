@@ -1,10 +1,8 @@
 library stranded.room;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/room_exit.dart';
 import 'package:edgehead/fractal_stories/shared_constants.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -19,7 +17,7 @@ final RoomDescriber emptyRoomDescription = (c) {};
 /// This is the magic [Room.name] that, when reached, makes
 /// the room roaming situation stop.
 final Room endOfRoam = new Room(
-    endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null, []);
+    endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null);
 
 /// This generator creates a [FightSituation].
 ///
@@ -44,13 +42,8 @@ typedef void RoomDescriber(ActionContext context);
 ///
 /// In that, they differ from [Location], which is a place on a map that
 /// allows the player to go to any other location on that map.
-///
-/// Rooms define [Room.exits] that explicitly specify which other Rooms are
-/// connected.
 @immutable
 class Room {
-  final BuiltList<Exit> _exits;
-
   final String name;
 
   /// Fully describes the room according to current state of the world when
@@ -106,9 +99,8 @@ class Room {
 
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
-      this.itemGenerator, Iterable<Exit> exits,
-      {this.groundMaterial: "ground", this.parent, this.prerequisite})
-      : _exits = new ListBuilder<Exit>(exits).build() {
+      this.itemGenerator,
+      {this.groundMaterial: "ground", this.parent, this.prerequisite}) {
     assert(name != null);
     assert(
         describe != null || firstDescribe != null,
@@ -116,8 +108,6 @@ class Room {
         "Ideally, you also provide both the first description and the regular "
         "one.");
   }
-
-  BuiltList<Exit> get exits => _exits;
 
   @override
   int get hashCode => name.hashCode;

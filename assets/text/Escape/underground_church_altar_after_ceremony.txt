@@ -10,7 +10,3 @@ The altar is covered with black blood.
 [[CODE]]
 rollBrianaQuote(c);
 [[/CODE]]
-
-
-EXITS:
-$underground_church (Sneak back): You crouch low and, keeping an eye on the altar, move back to the Church's entrance.

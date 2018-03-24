@@ -95,5 +95,13 @@ describeSuccessRate(sim, originalWorld, s);
 [[/CODE]]
 
 
-EXITS:
-$__END_OF_ROAM__ (): N/A
+// ---
+APPROACH: $exit_from_bloodrock FROM $tunnel
+COMMAND: Start running again
+DESCRIPTION: You start running again.
+
+
+// ---
+APPROACH: $__END_OF_ROAM__ FROM $exit_from_bloodrock
+COMMAND:
+DESCRIPTION: N/A

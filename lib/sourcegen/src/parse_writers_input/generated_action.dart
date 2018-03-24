@@ -26,13 +26,10 @@ GeneratedGameObject generateAction(Map<String, String> map, String dirPath) {
 class GeneratedAction extends GeneratedGameObject {
   final Map<String, String> _map;
 
-  GeneratedAction(Map<String, String> map, String dirPath)
+  GeneratedAction(Map<String, String> map, String path)
       : _map = map,
-        super(map['ACTION'], reCase(map['ACTION']).pascalCase, actionType,
-            dirPath);
-
-  @override
-  String get path => 'TODO ADD';
+        super(
+            map['ACTION'], reCase(map['ACTION']).pascalCase, actionType, path);
 
   @override
   Iterable<AstBuilder<AstNode>> finalizeAst() sync* {
@@ -80,8 +77,9 @@ class GeneratedAction extends GeneratedGameObject {
       ..addAnnotation(overrideAnnotation);
     classBuilder.addMethod(rerollableBuilder);
 
-    var rollReasonBuilder = createActorSimWorldMethod('getRollReason', stringType)
-      ..addStatement(literal('Will you be successful?').asReturn());
+    var rollReasonBuilder =
+        createActorSimWorldMethod('getRollReason', stringType)
+          ..addStatement(literal('Will you be successful?').asReturn());
     classBuilder.addMethod(rollReasonBuilder);
 
     var rerollResourceBuilder = new MethodBuilder.getter('rerollResource',
@@ -190,7 +188,8 @@ class GeneratedAction extends GeneratedGameObject {
   }
 
   MethodBuilder _createIsApplicableBuilder(String forLocation) {
-    var isApplicableBuilder = createActorSimWorldMethod("isApplicable", boolType);
+    var isApplicableBuilder =
+        createActorSimWorldMethod("isApplicable", boolType);
     if (forLocation != null) {
       isApplicableBuilder.addStatement((reference(worldParameter.name)
               .property("currentSituation")

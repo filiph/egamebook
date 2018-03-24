@@ -15,10 +15,10 @@ final allNeededTypes = <TypeBuilder>[
   actionContextType,
   actionType,
   actorType,
+  approachType,
   applicabilityContextType,
   builtType,
   builderType,
-  exitType,
   getRandomIdFunction,
   prerequisiteType,
   resourceType,
@@ -39,6 +39,9 @@ final allNeededTypes = <TypeBuilder>[
 final applicabilityContextType = new TypeBuilder("ApplicabilityContext",
     importFrom: "package:edgehead/fractal_stories/context.dart");
 
+final approachType = new TypeBuilder("Approach",
+    importFrom: "package:edgehead/fractal_stories/room_approach.dart");
+
 final boolType = new TypeBuilder("bool");
 
 final builderType = new TypeBuilder("Builder",
@@ -47,15 +50,15 @@ final builderType = new TypeBuilder("Builder",
 final builtType = new TypeBuilder("Built",
     importFrom: "package:built_value/built_value.dart");
 
-final exitType = new TypeBuilder("Exit",
-    importFrom: "package:edgehead/fractal_stories/room_exit.dart");
-
 final getRandomIdFunction =
     reference("getRandomId", "package:edgehead/fractal_stories/situation.dart");
 
 final intType = new TypeBuilder("int");
 
 final listOfActionType = new TypeBuilder('List', genericTypes: [actionType]);
+
+final listOfApproachType =
+    new TypeBuilder('List', genericTypes: [approachType]);
 
 final listOfRoomsType = new TypeBuilder('List', genericTypes: [roomType]);
 

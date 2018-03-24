@@ -65,14 +65,21 @@ FIGHT_SITUATION:
 generateSlaveQuartersPassageFight
 
 
-EXITS:
-$cave_with_agruth (Go back to the cave where Agruth's corpse lies): You back away from the door, and go back to where you left Agruth's body.
+// ---
+APPROACH: $slave_quarters_passage FROM $cave_with_agruth
+COMMAND: Go to the slave quarters
+DESCRIPTION: You and Briana hug the wall and start toward the slave quarters.
 
+// ---
+APPROACH: $slave_quarters_passage FROM $slave_quarters
+COMMAND: Go back
+DESCRIPTION: You nod, and then start carefully backing out through the passage.
 
-$slave_quarters (Go further toward the Gate of Screams): You start down the slope of the passage, toward the heart of the slave’s quarters and the Gate of Screams beyond. Briana tugs at your hand.
+// ---
+APPROACH: $slave_quarters_passage FROM $orcthorn_room
+COMMAND: Exit the room
+DESCRIPTION: You leave through the door and find yourself back in the passage to the slave quarters.
 
-
-$orcthorn_room (Open the door): You open the door.
 
 
 // ----------
