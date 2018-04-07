@@ -8,7 +8,7 @@ class UniqueIdMaker {
 
   /// Creates a maker of unique ids. The ids won't go under [startAt], which
   /// is useful if you need to reserve some ids.
-  UniqueIdMaker({int startAt: 10000}) : _next = startAt;
+  UniqueIdMaker._({int startAt: 1000000}) : _next = startAt;
 
   /// Generates a unique id. Consecutive calls will generate different ids.
   int generateNext() {
@@ -17,4 +17,4 @@ class UniqueIdMaker {
 }
 
 /// Global way of getting simple unique ids.
-final UniqueIdMaker uniqueIdMaker = new UniqueIdMaker();
+final UniqueIdMaker uniqueIdMaker = new UniqueIdMaker._();
