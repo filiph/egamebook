@@ -19,8 +19,7 @@ const int playerId = 1;
 final Actor edgeheadBriana = new Actor.initialized(brianaId, "Briana",
     nameIsProperNoun: true,
     pronoun: Pronoun.SHE,
-    hitpoints: 2,
-    maxHitpoints: 2,
+    constitution: 2,
     currentRoomName: _preStartBook.name,
     followingActorId: playerId);
 
@@ -31,8 +30,7 @@ final Actor edgeheadPlayer = new Actor.initialized(playerId, "Aren",
     nameIsProperNoun: true,
     isPlayer: true,
     pronoun: Pronoun.YOU,
-    hitpoints: 2,
-    maxHitpoints: 2,
+    constitution: 2,
     stamina: 1,
     initiative: 1000,
     currentRoomName: _preStartBook.name);

@@ -376,8 +376,7 @@ Actor _generateAgruth() {
   return new Actor.initialized(agruthId, "Agruth",
       nameIsProperNoun: true,
       pronoun: Pronoun.HE,
-      hitpoints: 2,
-      maxHitpoints: 2,
+      constitution: 2,
       team: defaultEnemyTeam,
       initiative: 100);
 }
@@ -387,8 +386,7 @@ Actor _generateMadGuardian(bool playerKnowsAboutGuardian) {
       madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
       currentWeapon: new Weapon(WeaponType.sword, name: "rusty sword"),
-      hitpoints: 3,
-      maxHitpoints: 3,
+      constitution: 3,
       team: defaultEnemyTeam,
       initiative: 100);
 }
@@ -403,12 +401,11 @@ Actor _makeGoblin({int id, bool spear: false}) =>
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
-Actor _makeOrc({int id, int hitpoints: 2}) =>
+Actor _makeOrc({int id, int constitution: 2}) =>
     new Actor.initialized(id ?? uniqueIdMaker.generateNext(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: new Weapon(WeaponType.sword),
-        hitpoints: hitpoints,
-        maxHitpoints: hitpoints,
+        constitution: constitution,
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);

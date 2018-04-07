@@ -6,6 +6,8 @@ import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -48,10 +50,12 @@ abstract class Actor extends Object
           Pronoun pronoun,
           Weapon currentWeapon,
           Weapon currentShield,
-          int hitpoints: 1,
-          int maxHitpoints: 1,
+          int hitpoints,
+          int maxHitpoints,
+          int constitution: 1,
           int stamina: 0,
           int initiative: 0,
+          BodyPart torso,
           int gold: 0,
           String currentRoomName,
           int followingActorId,
@@ -67,8 +71,10 @@ abstract class Actor extends Object
         ..currentShield = currentShield?.toBuilder()
         ..categories = new ListBuilder<String>()
         ..pose = Pose.standing
-        ..hitpoints = hitpoints
-        ..maxHitpoints = maxHitpoints
+        ..constitution = constitution ?? 1
+        ..maxHitpoints = maxHitpoints ?? constitution ?? 1
+        ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
+        ..torso = (torso ?? buildHumanoid()).toBuilder()
         ..gold = gold
         ..stamina = stamina
         ..initiative = initiative
@@ -95,6 +101,12 @@ abstract class Actor extends Object
 
   /// The string handle to the combine function that this actor should use.
   String get combineFunctionHandle;
+
+  /// Similar to the idea of constitution in Dungeons and Dragons. The higher
+  /// the constitution, the more the actor will withstand.
+  ///
+  /// By default, this is the same as [maxHitpoints].
+  int get constitution;
 
   @nullable
   String get currentRoomName;
@@ -143,10 +155,10 @@ abstract class Actor extends Object
 
   bool get isOnGround => pose == Pose.onGround;
 
-  // TODO: make non-nullable
   @override
   bool get isPlayer;
 
+  // TODO: make non-nullable
   bool get isStanding => pose == Pose.standing;
 
   /// Items (that are not [Weapon] nor [Shield]) possessed by the actor.
@@ -170,6 +182,9 @@ abstract class Actor extends Object
   @override
   Team get team;
 
+  /// This is the root of the [Actor]'s anatomy.
+  BodyPart get torso;
+
   /// How safe does [this] Actor feel in the presence of the different other
   /// actors.
   ///
@@ -188,6 +203,15 @@ abstract class Actor extends Object
   /// Not that [WeaponType.shield] is also a [Weapon].
   BuiltList<Weapon> get weapons;
 
+  int countWeapons(WeaponType type) {
+    int count = 0;
+    if (currentWeapon.type == type) count += 1;
+    for (final weapon in weapons) {
+      if (weapon.type == type) count += 1;
+    }
+    return count;
+  }
+
   /// Returns the best weapon (by [Weapon.value]) in [Actor.weapons].
   ///
   /// Returns `null` when there are no weapons available.
@@ -203,22 +227,13 @@ abstract class Actor extends Object
     return best;
   }
 
-  int countWeapons(WeaponType type) {
-    int count = 0;
-    if (currentWeapon.type == type) count += 1;
-    for (final weapon in weapons) {
-      if (weapon.type == type) count += 1;
-    }
-    return count;
-  }
-
-  bool hasWeapon(WeaponType type) =>
-      currentWeapon.type == type || weapons.any((w) => w.type == type);
-
   bool hasResource(Resource resource) {
     assert(resource == Resource.stamina, "Only stamina implemented");
     return stamina >= 1;
   }
+
+  bool hasWeapon(WeaponType type) =>
+      currentWeapon.type == type || weapons.any((w) => w.type == type);
 
   /// When an [Actor] hates another actor, they will be willing and eager to
   /// attack them.

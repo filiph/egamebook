@@ -30,8 +30,7 @@ void main() {
             isPlayer: true,
             pronoun: Pronoun.YOU,
             currentWeapon: new Weapon(WeaponType.sword),
-            hitpoints: 2,
-            maxHitpoints: 2,
+            constitution: 2,
             stamina: 1,
             initiative: 1000);
 

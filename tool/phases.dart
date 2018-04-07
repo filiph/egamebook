@@ -38,6 +38,7 @@ final List<BuildAction> phases = [
         'lib/fractal_stories/room.dart',
         'lib/fractal_stories/team.dart',
         'lib/fractal_stories/world_state.dart',
+        'lib/fractal_stories/anatomy/*.dart',
         'lib/fractal_stories/history/*.dart',
         'lib/fractal_stories/items/weapon.dart',
         'lib/fractal_stories/items/weapon_type.dart',

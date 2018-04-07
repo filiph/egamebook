@@ -84,8 +84,7 @@ class EdgeheadGame extends Book {
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: new Weapon(WeaponType.sword),
-        hitpoints: 2,
-        maxHitpoints: 2,
+        constitution: 2,
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
