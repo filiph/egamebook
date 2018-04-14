@@ -102,10 +102,148 @@ final BuiltSet<BodyPartFunction> _$bodyPartFunctionValues =
   _$noFunction,
 ]);
 
+Serializer<BodyPart> _$bodyPartSerializer = new _$BodyPartSerializer();
 Serializer<BodyPartDesignation> _$bodyPartDesignationSerializer =
     new _$BodyPartDesignationSerializer();
 Serializer<BodyPartFunction> _$bodyPartFunctionSerializer =
     new _$BodyPartFunctionSerializer();
+
+class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
+  @override
+  final Iterable<Type> types = const [BodyPart, _$BodyPart];
+  @override
+  final String wireName = 'BodyPart';
+
+  @override
+  Iterable serialize(Serializers serializers, BodyPart object,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = <Object>[
+      'bluntHitsCount',
+      serializers.serialize(object.bluntHitsCount,
+          specifiedType: const FullType(int)),
+      'categories',
+      serializers.serialize(object.categories,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
+      'children',
+      serializers.serialize(object.children,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(BodyPart)])),
+      'designation',
+      serializers.serialize(object.designation,
+          specifiedType: const FullType(BodyPartDesignation)),
+      'function',
+      serializers.serialize(object.function,
+          specifiedType: const FullType(BodyPartFunction)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'isActive',
+      serializers.serialize(object.isActive,
+          specifiedType: const FullType(bool)),
+      'isAlive',
+      serializers.serialize(object.isAlive,
+          specifiedType: const FullType(bool)),
+      'isSeverable',
+      serializers.serialize(object.isSeverable,
+          specifiedType: const FullType(bool)),
+      'isSevered',
+      serializers.serialize(object.isSevered,
+          specifiedType: const FullType(bool)),
+      'isVital',
+      serializers.serialize(object.isVital,
+          specifiedType: const FullType(bool)),
+      'majorCutsCount',
+      serializers.serialize(object.majorCutsCount,
+          specifiedType: const FullType(int)),
+      'minorCutsCount',
+      serializers.serialize(object.minorCutsCount,
+          specifiedType: const FullType(int)),
+      'name',
+      serializers.serialize(object.name, specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  BodyPart deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType: FullType.unspecified}) {
+    final result = new BodyPartBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'bluntHitsCount':
+          result.bluntHitsCount = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'categories':
+          result.categories.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<String>);
+          break;
+        case 'children':
+          result.children.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(BodyPart)]))
+              as BuiltList<BodyPart>);
+          break;
+        case 'designation':
+          result.designation = serializers.deserialize(value,
+                  specifiedType: const FullType(BodyPartDesignation))
+              as BodyPartDesignation;
+          break;
+        case 'function':
+          result.function = serializers.deserialize(value,
+                  specifiedType: const FullType(BodyPartFunction))
+              as BodyPartFunction;
+          break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'isActive':
+          result.isActive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isAlive':
+          result.isAlive = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isSeverable':
+          result.isSeverable = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isSevered':
+          result.isSevered = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isVital':
+          result.isVital = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'majorCutsCount':
+          result.majorCutsCount = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'minorCutsCount':
+          result.minorCutsCount = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$BodyPartDesignationSerializer
     implements PrimitiveSerializer<BodyPartDesignation> {
@@ -161,11 +299,11 @@ class _$BodyPart extends BodyPart {
   @override
   final bool isAlive;
   @override
-  final bool isVital;
-  @override
   final bool isSeverable;
   @override
   final bool isSevered;
+  @override
+  final bool isVital;
   @override
   final int majorCutsCount;
   @override
@@ -185,9 +323,9 @@ class _$BodyPart extends BodyPart {
       this.id,
       this.isActive,
       this.isAlive,
-      this.isVital,
       this.isSeverable,
       this.isSevered,
+      this.isVital,
       this.majorCutsCount,
       this.minorCutsCount,
       this.name})
@@ -201,9 +339,9 @@ class _$BodyPart extends BodyPart {
     if (id == null) throw new ArgumentError.notNull('id');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
     if (isAlive == null) throw new ArgumentError.notNull('isAlive');
-    if (isVital == null) throw new ArgumentError.notNull('isVital');
     if (isSeverable == null) throw new ArgumentError.notNull('isSeverable');
     if (isSevered == null) throw new ArgumentError.notNull('isSevered');
+    if (isVital == null) throw new ArgumentError.notNull('isVital');
     if (majorCutsCount == null)
       throw new ArgumentError.notNull('majorCutsCount');
     if (minorCutsCount == null)
@@ -230,9 +368,9 @@ class _$BodyPart extends BodyPart {
         id == other.id &&
         isActive == other.isActive &&
         isAlive == other.isAlive &&
-        isVital == other.isVital &&
         isSeverable == other.isSeverable &&
         isSevered == other.isSevered &&
+        isVital == other.isVital &&
         majorCutsCount == other.majorCutsCount &&
         minorCutsCount == other.minorCutsCount &&
         name == other.name;
@@ -264,9 +402,9 @@ class _$BodyPart extends BodyPart {
                                         id.hashCode),
                                     isActive.hashCode),
                                 isAlive.hashCode),
-                            isVital.hashCode),
-                        isSeverable.hashCode),
-                    isSevered.hashCode),
+                            isSeverable.hashCode),
+                        isSevered.hashCode),
+                    isVital.hashCode),
                 majorCutsCount.hashCode),
             minorCutsCount.hashCode),
         name.hashCode));
@@ -283,9 +421,9 @@ class _$BodyPart extends BodyPart {
           ..add('id', id)
           ..add('isActive', isActive)
           ..add('isAlive', isAlive)
-          ..add('isVital', isVital)
           ..add('isSeverable', isSeverable)
           ..add('isSevered', isSevered)
+          ..add('isVital', isVital)
           ..add('majorCutsCount', majorCutsCount)
           ..add('minorCutsCount', minorCutsCount)
           ..add('name', name))
@@ -333,10 +471,6 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   bool get isAlive => _$this._isAlive;
   set isAlive(bool isAlive) => _$this._isAlive = isAlive;
 
-  bool _isVital;
-  bool get isVital => _$this._isVital;
-  set isVital(bool isVital) => _$this._isVital = isVital;
-
   bool _isSeverable;
   bool get isSeverable => _$this._isSeverable;
   set isSeverable(bool isSeverable) => _$this._isSeverable = isSeverable;
@@ -344,6 +478,10 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   bool _isSevered;
   bool get isSevered => _$this._isSevered;
   set isSevered(bool isSevered) => _$this._isSevered = isSevered;
+
+  bool _isVital;
+  bool get isVital => _$this._isVital;
+  set isVital(bool isVital) => _$this._isVital = isVital;
 
   int _majorCutsCount;
   int get majorCutsCount => _$this._majorCutsCount;
@@ -371,9 +509,9 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _id = _$v.id;
       _isActive = _$v.isActive;
       _isAlive = _$v.isAlive;
-      _isVital = _$v.isVital;
       _isSeverable = _$v.isSeverable;
       _isSevered = _$v.isSevered;
+      _isVital = _$v.isVital;
       _majorCutsCount = _$v.majorCutsCount;
       _minorCutsCount = _$v.minorCutsCount;
       _name = _$v.name;
@@ -405,9 +543,9 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
             id: id,
             isActive: isActive,
             isAlive: isAlive,
-            isVital: isVital,
             isSeverable: isSeverable,
             isSevered: isSevered,
+            isVital: isVital,
             majorCutsCount: majorCutsCount,
             minorCutsCount: minorCutsCount,
             name: name);

@@ -19,6 +19,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ActionRecord.serializer)
       ..add(Actor.serializer)
       ..add(AttackerSituation.serializer)
+      ..add(BodyPart.serializer)
+      ..add(BodyPartDesignation.serializer)
+      ..add(BodyPartFunction.serializer)
       ..add(CounterAttackSituation.serializer)
       ..add(CustomEvent.serializer)
       ..add(CustomEventHistory.serializer)
@@ -67,6 +70,12 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(BodyPart)]),
+          () => new ListBuilder<BodyPart>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

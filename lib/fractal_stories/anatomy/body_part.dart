@@ -19,6 +19,8 @@ part 'body_part.g.dart';
 abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
     with EntityBehavior
     implements Entity {
+  static Serializer<BodyPart> get serializer => _$bodyPartSerializer;
+
   factory BodyPart(
     String name, {
     int id,
@@ -65,6 +67,16 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
 
   BodyPartFunction get function;
 
+  /// Returns `true` if any [BodyPart] attached (even indirectly) to this one
+  /// is vital.
+  bool get hasVitalDescendants {
+    for (final child in children) {
+      if (child.isVital) return true;
+      if (child.hasVitalDescendants) return true;
+    }
+    return false;
+  }
+
   /// How many hitpoints does this body part take before being destroyed
   /// or severed.
   int get health => 1;
@@ -77,9 +89,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
 
   @override
   bool get isAlive;
-
-  /// When this body part is destroyed or severed, does the owner die?
-  bool get isVital;
 
   @override
   bool get isPlayer => false;
@@ -98,6 +107,9 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   /// It's descendants are not severed (they just happen to be attached to
   /// a severed part).
   bool get isSevered;
+
+  /// When this body part is destroyed or severed, does the owner die?
+  bool get isVital;
 
   /// The number of unhealed major cuts (from slashes and thrusts) that the
   /// body part received.
@@ -166,16 +178,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
       if (result != null) return result;
     }
     return null;
-  }
-
-  /// Returns `true` if any [BodyPart] attached (even indirectly) to this one
-  /// is vital.
-  bool get hasVitalDescendants {
-    for (final child in children) {
-      if (child.isVital) return true;
-      if (child.hasVitalDescendants) return true;
-    }
-    return false;
   }
 }
 
