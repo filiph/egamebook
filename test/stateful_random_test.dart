@@ -46,4 +46,15 @@ void main() {
     }
     expect(truesSeen / count, closeTo(0.5, 0.001));
   });
+
+  test("StatefulRandom.nextDouble returns about below 0.5, half above", () {
+    final random = new StatefulRandom(1337);
+    int belowHalf = 0;
+    const int count = 100000;
+    for (int i = 0; i < count; i++) {
+      final result = random.nextDouble();
+      if (result < 0.5) belowHalf += 1;
+    }
+    expect(belowHalf / count, closeTo(0.5, 0.001));
+  });
 }

@@ -23,6 +23,7 @@ void main() {
         ..actors = new SetBuilder<Actor>(<Actor>[aren])
         ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = ["bogus"]
+        ..statefulRandomState = 1337
         ..time = new DateTime.utc(1000));
       expect(world.visitHistory.query(aren, outside).hasHappened, isFalse);
       expect(world.visitHistory.query(aren, inside).hasHappened, isFalse);

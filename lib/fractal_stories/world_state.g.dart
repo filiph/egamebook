@@ -46,6 +46,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.situations,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Situation)])),
+      'statefulRandomState',
+      serializers.serialize(object.statefulRandomState,
+          specifiedType: const FullType(int)),
       'time',
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
@@ -97,6 +100,10 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
                       BuiltList, const [const FullType(Situation)]))
               as BuiltList<Situation>);
           break;
+        case 'statefulRandomState':
+          result.statefulRandomState = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'time':
           result.time = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
@@ -126,6 +133,8 @@ class _$WorldState extends WorldState {
   @override
   final BuiltList<Situation> situations;
   @override
+  final int statefulRandomState;
+  @override
   final DateTime time;
   @override
   final VisitHistory visitHistory;
@@ -140,6 +149,7 @@ class _$WorldState extends WorldState {
       this.global,
       this.ruleHistory,
       this.situations,
+      this.statefulRandomState,
       this.time,
       this.visitHistory})
       : super._() {
@@ -149,6 +159,8 @@ class _$WorldState extends WorldState {
     if (global == null) throw new ArgumentError.notNull('global');
     if (ruleHistory == null) throw new ArgumentError.notNull('ruleHistory');
     if (situations == null) throw new ArgumentError.notNull('situations');
+    if (statefulRandomState == null)
+      throw new ArgumentError.notNull('statefulRandomState');
     if (time == null) throw new ArgumentError.notNull('time');
     if (visitHistory == null) throw new ArgumentError.notNull('visitHistory');
   }
@@ -170,6 +182,7 @@ class _$WorldState extends WorldState {
         global == other.global &&
         ruleHistory == other.ruleHistory &&
         situations == other.situations &&
+        statefulRandomState == other.statefulRandomState &&
         time == other.time &&
         visitHistory == other.visitHistory;
   }
@@ -182,12 +195,14 @@ class _$WorldState extends WorldState {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc(0, actionHistory.hashCode),
-                                actors.hashCode),
-                            customHistory.hashCode),
-                        global.hashCode),
-                    ruleHistory.hashCode),
-                situations.hashCode),
+                            $jc(
+                                $jc($jc(0, actionHistory.hashCode),
+                                    actors.hashCode),
+                                customHistory.hashCode),
+                            global.hashCode),
+                        ruleHistory.hashCode),
+                    situations.hashCode),
+                statefulRandomState.hashCode),
             time.hashCode),
         visitHistory.hashCode));
   }
@@ -269,6 +284,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
+  int get statefulRandomState {
+    _$this;
+    return super.statefulRandomState;
+  }
+
+  @override
+  set statefulRandomState(int statefulRandomState) {
+    _$this;
+    super.statefulRandomState = statefulRandomState;
+  }
+
+  @override
   DateTime get time {
     _$this;
     return super.time;
@@ -302,6 +329,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.global = _$v.global;
       super.ruleHistory = _$v.ruleHistory?.toBuilder();
       super.situations = _$v.situations?.toBuilder();
+      super.statefulRandomState = _$v.statefulRandomState;
       super.time = _$v.time;
       super.visitHistory = _$v.visitHistory?.toBuilder();
       _$v = null;
@@ -330,6 +358,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
             global: global,
             ruleHistory: ruleHistory?.build(),
             situations: situations?.build(),
+            statefulRandomState: statefulRandomState,
             time: time,
             visitHistory: visitHistory?.build());
     replace(_$result);

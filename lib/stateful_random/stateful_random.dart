@@ -28,6 +28,12 @@ class StatefulRandom {
   /// implementations could have a more involved state than just one integer.
   StatefulRandom.fromState(int state) : this(state);
 
+  void loadState(int state) {
+    assert(state != null);
+    assert(state != 0);
+    _state = state;
+  }
+
   /// Returns a new number from `0` to [_maxInt32]. Clients should use
   /// [maxInt] instead.
   @visibleForTesting
@@ -49,9 +55,15 @@ class StatefulRandom {
     return next() > _halfInt32;
   }
 
+  /// Returns a floating point number from `0.0` (inclusive)
+  /// to `1.0` (exclusive).
+  double nextDouble() {
+    return next() / _maxInt32;
+  }
+
   /// Returns a number from `0` (inclusive) to [max] (exclusive).
   int nextInt(int max) {
-    return ((next() / _maxInt32) * max).floor();
+    return (nextDouble() * max).floor();
   }
 
   /// Returns the state that can be later fed int [StatefulRandom.fromState] to

@@ -159,6 +159,7 @@ void main() {
           ..situations =
               new ListBuilder<Situation>(<Situation>[initialSituation])
           ..global = ["bogus"]
+          ..statefulRandomState = 1337
           ..time = new DateTime.utc(1000));
 
         test(" uses default if no variant is applicable", () {

@@ -14,8 +14,13 @@ import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 
 part 'world_state.g.dart';
+
+/// A reusable instance of [StatefulRandom]. Never use this before
+/// first calling [StatefulRandom.loadState].
+final _rnd = new StatefulRandom(42);
 
 abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   static Serializer<WorldState> get serializer => _$worldStateSerializer;
@@ -58,6 +63,11 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   /// This is a push-down automaton.
   BuiltList<Situation> get situations;
 
+  /// The state of statefulRandom. This is changed every time
+  /// [WorldStateBuilder.randomInt] or [WorldStateBuilder.randomDouble]
+  /// or [WorldStateBuilder.randomChoose] is called.
+  int get statefulRandomState;
+
   /// The age of this WorldState. Every 'turn', this number increases by one.
   DateTime get time;
 
@@ -70,11 +80,6 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
   /// This returns `true` regardless of success or failure.
   bool actionHasBeenPerformed(String actionName) {
     return actionHistory.hasHappened(actionName: actionName);
-  }
-
-  /// Returns true if [Actor] with [actorId] has been slain.
-  bool isDead(int actorId) {
-    return customHistory.query(name: "${actorId}_is_dead").hasHappened;
   }
 
   /// Returns `true` if any action in the action records (past actions)
@@ -133,6 +138,11 @@ abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
     return actor.isAlive;
   }
 
+  /// Returns true if [Actor] with [actorId] has been slain.
+  bool isDead(int actorId) {
+    return customHistory.query(name: "${actorId}_is_dead").hasHappened;
+  }
+
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
@@ -182,6 +192,9 @@ abstract class WorldStateBuilder
   RuleHistoryBuilder ruleHistory;
 
   SetBuilder<Actor> actors;
+
+  int statefulRandomState;
+
 
   Object global;
 
@@ -267,6 +280,36 @@ abstract class WorldStateBuilder
 
   void pushSituation(Situation situation) {
     situations.add(situation);
+  }
+
+  XXX START HERE: use instead of random.
+
+  bool randomBool() {
+    _rnd.loadState(statefulRandomState);
+    final result = _rnd.nextBool();
+    statefulRandomState = _rnd.saveState();
+    return result;
+  }
+
+  T randomChoose<T>(List<T> options) {
+    _rnd.loadState(statefulRandomState);
+    final result = _rnd.nextInt(options.length);
+    statefulRandomState = _rnd.saveState();
+    return options[result];
+  }
+
+  double randomDouble() {
+    _rnd.loadState(statefulRandomState);
+    final result = _rnd.nextDouble();
+    statefulRandomState = _rnd.saveState();
+    return result;
+  }
+
+  int randomInt(int max) {
+    _rnd.loadState(statefulRandomState);
+    final result = _rnd.nextInt(max);
+    statefulRandomState = _rnd.saveState();
+    return result;
   }
 
   void recordAction(ActionRecord record) {

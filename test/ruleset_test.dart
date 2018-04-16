@@ -55,6 +55,7 @@ void main() {
       ..actors = new SetBuilder<Actor>(<Actor>[aren])
       ..situations = new ListBuilder<Situation>(<Situation>[])
       ..global = ["bogus"]
+      ..statefulRandomState = 1337
       ..time = new DateTime.utc(1000);
     final context =
         new ActionContext(null, aren, null, world.build(), null, world, null);
@@ -73,6 +74,7 @@ void main() {
       ..actors = new SetBuilder<Actor>(<Actor>[aren])
       ..situations = new ListBuilder<Situation>(<Situation>[])
       ..global = ["bogus"]
+      ..statefulRandomState = 1337
       ..time = new DateTime.utc(1000);
     final context =
         new ActionContext(null, aren, null, world.build(), null, world, null);
