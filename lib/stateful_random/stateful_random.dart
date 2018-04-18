@@ -1,16 +1,18 @@
 library stateful_random;
 
+import 'dart:math';
+
 import 'package:meta/meta.dart';
 
 /// A pseudo-random number generator that can save its complete state.
 ///
 /// This allows users to get a predictable string of random numbers. This is
-/// different from Dart library's `Random` class, which allows you to seed the
+/// different from Dart library's [Random] class, which allows you to seed the
 /// initial state but not states after that.
 ///
 /// Currently implements algorithm "xor" from p. 4 of Marsaglia,
 /// "Xorshift RNGs". https://en.wikipedia.org/wiki/Xorshift
-class StatefulRandom {
+class StatefulRandom implements Random {
   static const int _maxInt32 = 0xFFFFFFFF;
 
   static const int _halfInt32 = 0x7FFFFFFF;
@@ -51,17 +53,20 @@ class StatefulRandom {
   }
 
   /// Returns `true` or `false` randomly.
+  @override
   bool nextBool() {
     return next() > _halfInt32;
   }
 
   /// Returns a floating point number from `0.0` (inclusive)
   /// to `1.0` (exclusive).
+  @override
   double nextDouble() {
     return next() / _maxInt32;
   }
 
   /// Returns a number from `0` (inclusive) to [max] (exclusive).
+  @override
   int nextInt(int max) {
     return (nextDouble() * max).floor();
   }
