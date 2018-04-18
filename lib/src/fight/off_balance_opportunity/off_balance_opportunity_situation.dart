@@ -23,10 +23,10 @@ abstract class OffBalanceOpportunitySituation extends Situation
           [void updates(OffBalanceOpportunitySituationBuilder b)]) =
       _$OffBalanceOpportunitySituation;
 
-  factory OffBalanceOpportunitySituation.initialized(Actor actor,
+  factory OffBalanceOpportunitySituation.initialized(int id, Actor actor,
           {Actor culprit}) =>
       new OffBalanceOpportunitySituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..time = 0
         ..actorId = actor.id
         ..culpritId = culprit?.id);

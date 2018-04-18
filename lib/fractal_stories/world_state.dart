@@ -282,8 +282,6 @@ abstract class WorldStateBuilder
     situations.add(situation);
   }
 
-  XXX START HERE: use instead of random.
-
   bool randomBool() {
     _rnd.loadState(statefulRandomState);
     final result = _rnd.nextBool();
@@ -305,9 +303,9 @@ abstract class WorldStateBuilder
     return result;
   }
 
-  int randomInt(int max) {
+  int randomInt([int max]) {
     _rnd.loadState(statefulRandomState);
-    final result = _rnd.nextInt(max);
+    final result = max == null ? _rnd.next() : _rnd.nextInt(max);
     statefulRandomState = _rnd.saveState();
     return result;
   }

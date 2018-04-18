@@ -85,8 +85,9 @@ class Pound extends EnemyTargetAction {
           object: balance, negative: true);
       w.updateActorById(enemy.id, (b) => b..pose = Pose.offBalance);
 
-      var situation =
-          new OffBalanceOpportunitySituation.initialized(enemy, culprit: a);
+      var situation = new OffBalanceOpportunitySituation.initialized(
+          w.randomInt(), enemy,
+          culprit: a);
       w.pushSituation(situation);
       return "${a.name} pounds ${enemy.name} off balance";
     } else if (enemy.isOffBalance) {

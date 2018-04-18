@@ -27,9 +27,9 @@ EnemyTargetAction
                 a.isStanding &&
                 !enemy.isOnGround &&
                 a.currentWeapon.type == WeaponType.spear,
-            (a, sim, w, enemy) => createSlashSituation(a, enemy),
-            (a, sim, w, enemy) =>
-                createSlashDefenseSituation(a, enemy, Predetermination.none),
+            (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+            (a, sim, w, enemy) => createSlashDefenseSituation(
+                w.randomInt(), a, enemy, Predetermination.none),
             enemy);
 
 EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
@@ -43,9 +43,9 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
             a.isStanding &&
             !enemy.isOnGround &&
             a.currentWeapon.type == WeaponType.spear,
-        (a, sim, w, enemy) => createSlashSituation(a, enemy),
+        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
-            a, enemy, Predetermination.failureGuaranteed),
+            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (a, sim, w, enemy) {
           final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
@@ -54,7 +54,7 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
         applyStartOfFailure: startThrustSpearReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
             createSlashDefenseSituation(
-                a, enemy, Predetermination.successGuaranteed),
+                w.randomInt(), a, enemy, Predetermination.successGuaranteed),
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> hit <objectPronoun>?");

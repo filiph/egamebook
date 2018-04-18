@@ -9,7 +9,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 const String onGroundWrestleDefenseSituationName =
     "OnGroundWrestleDefenseSituation";
 
-Situation createOnGroundWrestleDefenseSituation(
-        Actor attacker, Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(onGroundWrestleDefenseSituationName,
+Situation createOnGroundWrestleDefenseSituation(int id, Actor attacker,
+        Actor target, Predetermination predetermination) =>
+    new DefenseSituation.initialized(id, onGroundWrestleDefenseSituationName,
         [evadeNeckBreakingBuilder], attacker, target, predetermination);

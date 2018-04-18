@@ -40,9 +40,9 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     counterSlashReportStart,
     (a, sim, w, enemy) =>
         !a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
-    (a, sim, w, enemy) => createSlashSituation(a, enemy),
-    (a, sim, w, enemy) =>
-        createSlashDefenseSituation(a, enemy, Predetermination.none),
+    (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+    (a, sim, w, enemy) => createSlashDefenseSituation(
+        w.randomInt(), a, enemy, Predetermination.none),
     enemy,
     successChanceGetter: (_, __, ___, enemy) => enemy.isStanding ? 0.7 : 0.9,
     applyStartOfFailure: counterSlashApplyFailure,
@@ -56,9 +56,9 @@ EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
         counterSlashReportStart,
         (a, sim, w, enemy) =>
             a.isPlayer && a.currentWeapon.isSlashing && !a.isOnGround,
-        (a, sim, w, enemy) => createSlashSituation(a, enemy),
+        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
-            a, enemy, Predetermination.failureGuaranteed),
+            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (_, __, ___, enemy) =>
             enemy.isStanding ? 0.7 : 0.9,

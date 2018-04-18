@@ -1,46 +1,52 @@
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 
-BodyPart buildHumanoid() {
-  final leftLeg = new BodyPart("left leg",
+/// Builds a standard humanoid body (two legs, two arms, etc.).
+/// Provide a unique seed (probably the actor's ID) so we can create
+/// random ids for each body part.
+BodyPart buildHumanoid(int seed) {
+  final random = new StatefulRandom(seed);
+
+  final leftLeg = new BodyPart(random.next(), "left leg",
       designation: BodyPartDesignation.leftLeg,
       function: BodyPartFunction.mobile,
       isSeverable: true);
 
-  final rightLeg = new BodyPart("right leg",
+  final rightLeg = new BodyPart(random.next(), "right leg",
       designation: BodyPartDesignation.rightLeg,
       function: BodyPartFunction.mobile,
       isSeverable: true);
 
-  final primaryArm = new BodyPart("wielding arm",
+  final primaryArm = new BodyPart(random.next(), "wielding arm",
       designation: BodyPartDesignation.primaryArm,
       function: BodyPartFunction.wielding,
       isSeverable: true);
 
-  final secondaryArm = new BodyPart("shield arm",
+  final secondaryArm = new BodyPart(random.next(), "shield arm",
       designation: BodyPartDesignation.secondaryArm,
       function: BodyPartFunction.wielding,
       isSeverable: true);
 
-  final leftEye = new BodyPart("left eye",
+  final leftEye = new BodyPart(random.next(), "left eye",
       designation: BodyPartDesignation.leftEye,
       function: BodyPartFunction.vision);
 
-  final rightEye = new BodyPart("right eye",
+  final rightEye = new BodyPart(random.next(), "right eye",
       designation: BodyPartDesignation.rightEye,
       function: BodyPartFunction.vision);
 
-  final head = new BodyPart("head",
+  final head = new BodyPart(random.next(), "head",
       designation: BodyPartDesignation.head,
       isVital: true,
       children: [leftEye, rightEye]);
 
-  final neck = new BodyPart("neck",
+  final neck = new BodyPart(random.next(), "neck",
       designation: BodyPartDesignation.neck,
       isVital: true,
       isSeverable: true,
       children: [head]);
 
-  final torso = new BodyPart("torso",
+  final torso = new BodyPart(random.next(), "torso",
       designation: BodyPartDesignation.torso,
       isVital: true,
       children: [neck, primaryArm, secondaryArm, leftLeg, rightLeg]);

@@ -3,12 +3,8 @@ library fractal_stories.anatomy.body_part;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/unique_id.dart';
-import 'package:meta/meta.dart';
 
 part 'body_part.g.dart';
 
@@ -22,8 +18,8 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   static Serializer<BodyPart> get serializer => _$bodyPartSerializer;
 
   factory BodyPart(
+      int id,
     String name, {
-    int id,
     List<String> categories,
     Iterable<BodyPart> children,
     BodyPartDesignation designation,
@@ -37,7 +33,7 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
     int minorCutsCount,
   }) =>
       new _$BodyPart((b) => b
-        ..id = id ?? uniqueIdMaker.generateNext()
+        ..id = id
         ..name = name
         ..categories = new ListBuilder<String>(categories ?? const <String>[])
         ..children = new ListBuilder<BodyPart>(children ?? const <BodyPart>[])

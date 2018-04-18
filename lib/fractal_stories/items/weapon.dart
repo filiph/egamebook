@@ -5,7 +5,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
-import 'package:edgehead/fractal_stories/unique_id.dart';
 
 part 'weapon.g.dart';
 
@@ -13,15 +12,15 @@ abstract class Weapon extends ItemLike implements
  Built<Weapon, WeaponBuilder> {
   static Serializer<Weapon> get serializer => _$weaponSerializer;
 
-  factory Weapon(WeaponType type,
-          {int id, String name,
+  factory Weapon(int id, WeaponType type,
+          {String name,
           bool nameIsProperNoun: false,
           int bluntDamage,
           int slashingDamage,
           int thrustingDamage,
           int length}) =>
       new _$Weapon((b) => b
-        ..id = (id ?? uniqueIdMaker.generateNext())
+        ..id = id
         ..type = type
         ..name = name ?? type.name
         ..nameIsProperNoun = nameIsProperNoun

@@ -29,7 +29,7 @@ void main() {
         Actor filip = new Actor.initialized(1, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
-            currentWeapon: new Weapon(WeaponType.sword),
+            currentWeapon: new Weapon(42, WeaponType.sword),
             constitution: 2,
             stamina: 1,
             initiative: 1000);
@@ -45,43 +45,43 @@ void main() {
     group("Situation", () {
       Actor a, b;
       setUp(() {
-        a = new Actor.initialized(1, "A");
-        b = new Actor.initialized(2, "B");
+        a = new Actor.initialized(1001, "A");
+        b = new Actor.initialized(1002, "B");
       });
 
       test("FightSituation", () {
         var roomRoamingSituation = new RoomRoamingSituation.initialized(
-            new Room("something", (c) {}, (c) {}, null, null), false);
+            1, new Room("something", (c) {}, (c) {}, null, null), false);
         checkSituationBuild(() => new FightSituation.initialized(
-            [], [], "ground", roomRoamingSituation, {}));
+            2, [], [], "ground", roomRoamingSituation, {}));
         checkSituationBuild(() => new FightSituation.initialized(
-            [a], [b], "ground", roomRoamingSituation, {}));
+            3, [a], [b], "ground", roomRoamingSituation, {}));
       });
       test("OnGroundDefenseSituation", () {
         checkSituationBuild(
-            () => createOnGroundDefenseSituation(a, b, Predetermination.none));
+            () => createOnGroundDefenseSituation(1, a, b, Predetermination.none));
       });
       test("StrikeDownSituation", () {
-        checkSituationBuild(() => createStrikeDownSituation(a, b));
+        checkSituationBuild(() => createStrikeDownSituation(1, a, b));
       });
       test("CounterAttackSituation", () {
-        checkSituationBuild(() => new CounterAttackSituation.initialized(a, b));
+        checkSituationBuild(() => new CounterAttackSituation.initialized(1, a, b));
       });
       test("OffBalanceOpportunitySituation", () {
         checkSituationBuild(
-            () => new OffBalanceOpportunitySituation.initialized(a));
+            () => new OffBalanceOpportunitySituation.initialized(1, a));
         checkSituationBuild(() =>
-            new OffBalanceOpportunitySituation.initialized(a, culprit: b));
+            new OffBalanceOpportunitySituation.initialized(2, a, culprit: b));
       });
       test("SlashDefenseSituation", () {
         checkSituationBuild(
-            () => createSlashDefenseSituation(a, b, Predetermination.none));
+            () => createSlashDefenseSituation(1,a, b, Predetermination.none));
       });
       test("SlashSituation", () {
-        checkSituationBuild(() => createSlashSituation(a, b));
+        checkSituationBuild(() => createSlashSituation(1, a, b));
       });
       test("BreakNeckOnGroundSituation", () {
-        checkSituationBuild(() => createBreakNeckOnGroundSituation(a, b));
+        checkSituationBuild(() => createBreakNeckOnGroundSituation(1, a, b));
       });
     });
 
@@ -153,7 +153,7 @@ void main() {
         final aren =
             new Actor.initialized(42, "Aren", currentRoomName: _outsideName);
         final initialSituation =
-            new RoomRoamingSituation.initialized(outside, false);
+            new RoomRoamingSituation.initialized(1, outside, false);
         final world = new WorldState((b) => b
           ..actors = new SetBuilder<Actor>(<Actor>[aren])
           ..situations =
@@ -196,7 +196,6 @@ void main() {
 /// is called.
 void checkSituationBuild(Situation build()) {
   Situation a;
-  Situation b;
 
   // Building returns normally.
   expect(() {
@@ -209,24 +208,14 @@ void checkSituationBuild(Situation build()) {
   // Situations initialize with time == 0.
   expect(a.time, 0);
 
-  expect(() {
-    b = build();
-  }, returnsNormally);
-
-  // Different situations have different hashcodes.
-  expect(a.hashCode, isNot(b.hashCode));
-
-  // Situations get unique id.
-  expect(a.id, isNot(b.id));
-
-  var c = a.elapseTime();
+  var b = a.elapseTime();
 
   // Situation.elapseTime() works
-  expect(c.time, a.time + 1);
+  expect(b.time, a.time + 1);
 
   // Situations keep id when elapsing time.
-  expect(a.id, equals(c.id));
+  expect(a.id, equals(b.id));
 
   // Hashcode for same situation with different [time] data is different.
-  expect(a.hashCode, isNot(c.hashCode));
+  expect(a.hashCode, isNot(b.hashCode));
 }

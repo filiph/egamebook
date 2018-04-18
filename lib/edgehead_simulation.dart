@@ -24,7 +24,7 @@ final Actor edgeheadBriana = new Actor.initialized(brianaId, "Briana",
     followingActorId: playerId);
 
 final Situation edgeheadInitialSituation =
-    new RoomRoamingSituation.initialized(_preStartBook, false);
+    new RoomRoamingSituation.initialized(100, _preStartBook, false);
 
 final Actor edgeheadPlayer = new Actor.initialized(playerId, "Aren",
     nameIsProperNoun: true,

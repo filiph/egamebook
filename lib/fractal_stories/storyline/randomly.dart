@@ -20,8 +20,9 @@ class Randomly {
   /// For example, when [weights] is `[0.5, 0.5]`, this function will return
   /// `0` or `1` without bias. If the input is `[0.1, 0.1, 0.8]`, the output
   /// will be `2` (index of the last weight) 80% of the time.
-  static int chooseWeighted(Iterable<num> weights, {num total: 1}) {
-    num pick = _random.nextDouble() * total;
+  static int chooseWeighted(Iterable<num> weights,
+      {num total: 1, Random random}) {
+    num pick = (random ?? _random).nextDouble() * total;
     num sum = 0;
     int index = 0;
     for (num weight in weights) {
@@ -36,8 +37,9 @@ class Randomly {
   ///
   /// Same as [Randomly.chooseWeighted], but weights and total are [int] so that
   /// we avoid rounding errors.
-  static int chooseWeightedPrecise(Iterable<int> weights, {int max: 1000}) {
-    int pick = _random.nextInt(max);
+  static int chooseWeightedPrecise(Iterable<int> weights,
+      {int max: 1000, Random random}) {
+    int pick = (random ?? _random).nextInt(max);
     int sum = 0;
     int index = 0;
     for (int weight in weights) {
@@ -177,14 +179,14 @@ class Randomly {
   }
 
   /// Resolve a 'coin toss' of the given probability.
-  static bool saveAgainst(num probability) {
+  static bool saveAgainst(num probability, {Random random}) {
     if (probability < 0 || probability > 1.0) {
       throw new RangeError.range(
           probability, 0, 1, "Probability needs to be within <0,1>.");
     }
     if (probability == 0) return false;
     if (probability == 1.0) return true;
-    return _random.nextDouble() < probability;
+    return (random ?? _random).nextDouble() < probability;
   }
 
   static bool tossCoin() => saveAgainst(0.5);

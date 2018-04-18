@@ -18,7 +18,7 @@ void main() {
 
     test("saves events in world state", () {
       final initialSituation =
-          new RoomRoamingSituation.initialized(outside, false);
+          new RoomRoamingSituation.initialized(1, outside, false);
       final WorldState world = new WorldState((b) => b
         ..actors = new SetBuilder<Actor>(<Actor>[aren])
         ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])

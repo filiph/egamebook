@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 void main() {
   test("decapitating kills", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final deadOrc = executeSlashingHit(
             orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
@@ -18,7 +18,7 @@ void main() {
 
   test("cleaving neck removes head", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final deadOrc = executeSlashingHit(
             orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
@@ -29,7 +29,7 @@ void main() {
 
   test("cleaving neck disables it", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final deadOrc = executeSlashingHit(
             orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
@@ -43,7 +43,7 @@ void main() {
 
   test("cleaving neck returns neck and head", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final severed = executeSlashingHit(
             orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
@@ -54,7 +54,7 @@ void main() {
 
   test("cleaving non-severable body part kills it and its descendants", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final deadOrc = executeSlashingHit(
             orc, BodyPartDesignation.head, sword, SlashSuccessLevel.cleave)
@@ -73,7 +73,7 @@ void main() {
 
   test("major-cutting actor with Con=2 once does not kill him", () {
     final orc = new Actor.initialized(1000, "orc", constitution: 2);
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final cutOrc = executeSlashingHit(
             orc, BodyPartDesignation.torso, sword, SlashSuccessLevel.majorCut)
@@ -85,7 +85,7 @@ void main() {
       "major-cutting actor with Con=2 two times on a vital body part "
       "kills him", () {
     final orc = new Actor.initialized(1000, "orc", constitution: 2);
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final cutOrc = executeSlashingHit(
             orc, BodyPartDesignation.torso, sword, SlashSuccessLevel.majorCut)
@@ -100,7 +100,7 @@ void main() {
       "major-cutting actor with Con=2 two times on a non-vital body part "
       "does not kill him", () {
     final orc = new Actor.initialized(1000, "orc", constitution: 2);
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final cutOrc = executeSlashingHit(orc, BodyPartDesignation.rightLeg, sword,
             SlashSuccessLevel.majorCut)
@@ -115,7 +115,7 @@ void main() {
       "major-cutting actor with Con=2 two times on a non-vital body part "
       "disables it", () {
     final orc = new Actor.initialized(1000, "orc", constitution: 2);
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final cutOrc = executeSlashingHit(orc, BodyPartDesignation.rightLeg, sword,
             SlashSuccessLevel.majorCut)
@@ -132,7 +132,7 @@ void main() {
 
   test("minor-cutting several times does not kill", () {
     final orc = new Actor.initialized(1000, "orc");
-    final sword = new Weapon(WeaponType.sword);
+    final sword = new Weapon(42, WeaponType.sword);
 
     final cutOrc = executeSlashingHit(
             orc, BodyPartDesignation.head, sword, SlashSuccessLevel.minorCut)

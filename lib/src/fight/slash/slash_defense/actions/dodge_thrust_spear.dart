@@ -83,7 +83,7 @@ class DodgeThrustSpear extends EnemyTargetAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} dodges ${enemy.name}'s spear";
   }

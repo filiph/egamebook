@@ -157,7 +157,7 @@ class ThrowSpear extends EnemyTargetAction {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
-      final Weapon weapon = a.findBestWeapon() ?? defaultFist;
+      final Weapon weapon = a.findBestWeapon() ?? createFist(w.randomInt());
       w.updateActorById(
           a.id,
           (b) => b

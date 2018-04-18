@@ -7,6 +7,7 @@ import 'package:edgehead/src/fight/common/attacker_situation.dart';
 
 const String breakNeckOnGroundSituationName = "BreakNeckOnGroundSituation";
 
-Situation createBreakNeckOnGroundSituation(Actor attacker, Actor target) =>
-    new AttackerSituation.initialized(breakNeckOnGroundSituationName,
+Situation createBreakNeckOnGroundSituation(
+        int id, Actor attacker, Actor target) =>
+    new AttackerSituation.initialized(id, breakNeckOnGroundSituationName,
         [finishBreakNeckBuilder], attacker, target);

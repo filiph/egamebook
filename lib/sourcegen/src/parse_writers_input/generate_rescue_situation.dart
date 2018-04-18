@@ -78,15 +78,15 @@ AstBuilder<AstNode> generateRescueSituation(
   //    ..time = 0
   //    ..currentRoomName = currentRoom.name
   //    ..monstersAlive = monstersAlive);
-  var initializedConstructor =
-      new ConstructorBuilder(name: "initialized", asFactory: true)
-        ..addStatement(situationClass.newInstance([
-          new MethodBuilder.closure()
-            ..addPositional(new ParameterBuilder("b"))
-            ..addStatement(getRandomIdFunction
-                .call([]).asAssign(reference("b").property("id")))
-            ..addStatement(literal(0).asAssign(reference("b").property("time")))
-        ]).asReturn());
+  var initializedConstructor = new ConstructorBuilder(
+      name: "initialized", asFactory: true)
+    ..addPositional(new ParameterBuilder("id", type: intType))
+    ..addStatement(situationClass.newInstance([
+      new MethodBuilder.closure()
+        ..addPositional(new ParameterBuilder("b"))
+        ..addStatement(reference("id").asAssign(reference("b").property("id")))
+        ..addStatement(literal(0).asAssign(reference("b").property("time")))
+    ]).asReturn());
   situationClass.addConstructor(initializedConstructor);
 
   //    TakeOutGateGuardsRescueSituation._();

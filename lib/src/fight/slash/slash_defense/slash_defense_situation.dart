@@ -13,9 +13,10 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 const String slashDefenseSituationName = "SlashDefenseSituation";
 
-Situation createSlashDefenseSituation(
-        Actor attacker, Actor target, Predetermination predetermination) =>
+Situation createSlashDefenseSituation(int id, Actor attacker, Actor target,
+        Predetermination predetermination) =>
     new DefenseSituation.initialized(
+        id,
         slashDefenseSituationName,
         [
           defensiveParrySlashBuilder,

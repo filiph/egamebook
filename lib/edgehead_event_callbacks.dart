@@ -240,7 +240,7 @@ void sleeping_goblin_thief(Simulation sim, WorldStateBuilder w, Storyline s) {
 
 void youre_dead_slave(Simulation sim, WorldStateBuilder w, Storyline s) {
   var agruth = w.getActorById(agruthId);
-  var sword = new Weapon(WeaponType.sword);
+  var sword = new Weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
   agruth.report(s, "<subject> draw<s> <subject's> <object>", object: sword);
   w.updateActorById(agruthId, (b) => b..currentWeapon = sword.toBuilder());

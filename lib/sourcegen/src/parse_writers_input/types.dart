@@ -19,7 +19,6 @@ final allNeededTypes = <TypeBuilder>[
   applicabilityContextType,
   builtType,
   builderType,
-  getRandomIdFunction,
   prerequisiteType,
   resourceType,
   roomRoamingSituationType,
@@ -49,9 +48,6 @@ final builderType = new TypeBuilder("Builder",
 
 final builtType = new TypeBuilder("Built",
     importFrom: "package:built_value/built_value.dart");
-
-final getRandomIdFunction =
-    reference("getRandomId", "package:edgehead/fractal_stories/situation.dart");
 
 final intType = new TypeBuilder("int");
 

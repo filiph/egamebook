@@ -7,6 +7,6 @@ import 'package:edgehead/src/fight/punch/actions/finish_punch.dart';
 
 const String punchSituationName = "PunchSituation";
 
-Situation createPunchSituation(Actor attacker, Actor target) =>
-    new AttackerSituation.initialized(punchSituationName,
-        [finishPunchBuilder], attacker, target);
+Situation createPunchSituation(int id, Actor attacker, Actor target) =>
+    new AttackerSituation.initialized(
+        id, punchSituationName, [finishPunchBuilder], attacker, target);

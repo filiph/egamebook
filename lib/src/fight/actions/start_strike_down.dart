@@ -27,38 +27,41 @@ EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
             enemy.isOnGround &&
             !a.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
         (a, sim, w, enemy) =>
-            createOnGroundDefenseSituation(a, enemy, Predetermination.none),
+            createStrikeDownSituation(w.randomInt(), a, enemy),
+        (a, sim, w, enemy) => createOnGroundDefenseSituation(
+            w.randomInt(), a, enemy, Predetermination.none),
         enemy);
 
-EnemyTargetAction startStrikeDownPlayerBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-        "StartStrikeDownPlayer",
-        startStrikeDownCommandTemplate,
-        startStrikeDownHelpMessage,
-        startStrikeDownReportStart,
-        (a, sim, w, enemy) =>
-            a.isPlayer &&
-            enemy.isOnGround &&
-            !a.isOnGround &&
-            a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => createStrikeDownSituation(a, enemy),
-        (a, sim, w, enemy) => createOnGroundDefenseSituation(
-            a, enemy, Predetermination.failureGuaranteed),
-        enemy,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> hit?",
-        successChanceGetter: (a, sim, w, enemy) {
-          final outOfBalancePenalty = a.isOffBalance ? 0.2 : 0.0;
-          final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-          return 0.7 - outOfBalancePenalty - shieldPenalty;
-        },
-        applyStartOfFailure: startStrikeDownReportStart,
-        defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            createOnGroundDefenseSituation(
-                a, enemy, Predetermination.successGuaranteed));
+EnemyTargetAction
+    startStrikeDownPlayerBuilder(Actor enemy) =>
+        new StartDefensibleAction(
+            "StartStrikeDownPlayer",
+            startStrikeDownCommandTemplate,
+            startStrikeDownHelpMessage,
+            startStrikeDownReportStart,
+            (a, sim, w, enemy) =>
+                a.isPlayer &&
+                enemy.isOnGround &&
+                !a.isOnGround &&
+                a.currentWeapon.isSlashing,
+            (a, sim, w, enemy) =>
+                createStrikeDownSituation(w.randomInt(), a, enemy),
+            (a, sim, w, enemy) => createOnGroundDefenseSituation(
+                w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
+            enemy,
+            rerollable: true,
+            rerollResource: Resource.stamina,
+            rollReasonTemplate: "will <subject> hit?",
+            successChanceGetter: (a, sim, w, enemy) {
+              final outOfBalancePenalty = a.isOffBalance ? 0.2 : 0.0;
+              final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
+              return 0.7 - outOfBalancePenalty - shieldPenalty;
+            },
+            applyStartOfFailure: startStrikeDownReportStart,
+            defenseSituationWhenFailed: (a, sim, w, enemy) =>
+                createOnGroundDefenseSituation(w.randomInt(), a, enemy,
+                    Predetermination.successGuaranteed));
 
 void startStrikeDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation situation) =>

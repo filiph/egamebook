@@ -19,12 +19,13 @@ abstract class AttackerSituation extends Situation
       _$AttackerSituation;
 
   factory AttackerSituation.initialized(
+          int id,
           String situationName,
           Iterable<EnemyTargetActionBuilder> actionGenerators,
           Actor attacker,
           Actor target) =>
       new AttackerSituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..name = situationName
         ..builtActionGenerators =
             new ListBuilder<EnemyTargetActionBuilder>(actionGenerators)

@@ -10,6 +10,7 @@ import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/egamebook/presenter.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 import 'default_savegames.dart' as savegames;
@@ -84,9 +85,9 @@ Future<Null> main(List<String> args) async {
   }
 }
 
-final _random = new Random();
-
 class CliRunner extends Presenter<EdgeheadGame> {
+  final Random _random;
+
   final bool automated;
 
   final File _logFile;
@@ -100,14 +101,25 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// Silent mode can be overridden when [actionPattern] is encountered.
   bool _silent;
 
+  /// The latest savegame received from the [book].
+  @visibleForTesting
+  String latestSaveGame;
+
   /// Instantiate the runner.
   ///
   /// The runner will not print anything if [silent] is `true`.
   /// But, when [actionPattern] is encountered, the [silent] bit will
   /// flipped to true.
+  ///
+  /// If [random] is provided, it will be used for choosing options. Injecting
+  /// a seeded [Random] will therefore lead to a predictable walkthrough.
+  /// (Two walkthroughs with the same seed will have exactly the same result,
+  /// because edgehead itself has predictable randomness, and the injected
+  /// [random] makes sure we predictably choose the same options.)
   CliRunner(this.automated, bool silent, File logFile,
-      {Level logLevel: Level.FINE, this.actionPattern})
-      : _logFile = logFile {
+      {Level logLevel: Level.FINE, this.actionPattern, Random random})
+      : _logFile = logFile,
+        _random = random ?? new Random() {
     _silent = silent;
 
     if (_logFile != null) {
@@ -126,6 +138,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @override
   void addChoiceBlock(ChoiceBlock element) {
     final saveGameJson = element.saveGame.saveGameSerialized;
+    latestSaveGame = saveGameJson;
     _log.info("savegame = $saveGameJson");
 
     int option;
@@ -233,7 +246,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
       print("$msg\n");
     }
 
-    var success = Randomly.saveAgainst(probability);
+    var success = Randomly.saveAgainst(probability, random: _random);
     var initialResult = new slot.SessionResult(
         success ? slot.Result.success : slot.Result.failure, false);
     _log.info('result = $initialResult');
@@ -262,7 +275,8 @@ class CliRunner extends Presenter<EdgeheadGame> {
           return initialResult;
         }
 
-        var rerollSuccess = Randomly.saveAgainst(1 - pow(1 - probability, 2));
+        var rerollSuccess =
+            Randomly.saveAgainst(1 - pow(1 - probability, 2), random: _random);
         if (rerollSuccess) {
           print("Reroll success!");
           return new slot.SessionResult(slot.Result.success, true);

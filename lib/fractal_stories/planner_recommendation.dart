@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
@@ -94,7 +95,7 @@ class PlannerRecommendation {
 
   /// Pick an action randomly, but with more weight given to actions that
   /// are scored more highly according to [combineFunction].
-  Action pickRandomly(CombineFunction combineFunction) {
+  Action pickRandomly(CombineFunction combineFunction, int statefulRandomState) {
     if (_actions.length == 1) {
       return _actions.single;
     }
@@ -134,10 +135,17 @@ class PlannerRecommendation {
     int weightsDifference = weightsResolution - weights.fold<int>(0, _sumInts);
     weights[weights.length - 1] += weightsDifference;
 
-    int index = Randomly.chooseWeightedPrecise(weights, max: weightsResolution);
+    // This initializes the random state based on current
+    // [WorldState.statefulRandomState]. We don't save the state after use
+    // because that would be changing state outside an action.
+    _reusableRandom.loadState(statefulRandomState ~/ 2 + 1);
+    int index = Randomly.chooseWeightedPrecise(weights, max: weightsResolution,
+        random: _reusableRandom);
 
     return _actions[index];
   }
+
+  final StatefulRandom _reusableRandom = new StatefulRandom(42);
 
   Action _findBest(CombineFunction combineFunction,
       {List<Action> skip: const []}) {

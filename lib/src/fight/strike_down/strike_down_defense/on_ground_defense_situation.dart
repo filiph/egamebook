@@ -10,9 +10,10 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 const String onGroundDefenseSituationName = "OnGroundDefenseSituation";
 
-Situation createOnGroundDefenseSituation(
-        Actor attacker, Actor target, Predetermination predetermination) =>
+Situation createOnGroundDefenseSituation(int id, Actor attacker, Actor target,
+        Predetermination predetermination) =>
     new DefenseSituation.initialized(
+        id,
         onGroundDefenseSituationName,
         [
           onGroundParryBuilder,

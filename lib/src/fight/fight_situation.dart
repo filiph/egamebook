@@ -57,6 +57,7 @@ abstract class FightSituation extends Situation
       _$FightSituation;
 
   factory FightSituation.initialized(
+          int id,
           Iterable<Actor> playerTeam,
           Iterable<Actor> enemyTeam,
           String groundMaterial,
@@ -64,7 +65,7 @@ abstract class FightSituation extends Situation
           Map<int, EventCallback> events,
           {Iterable<Item> items: const []}) =>
       new FightSituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..time = 0
         ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
@@ -173,10 +174,12 @@ abstract class FightSituation extends Situation
 
     for (var actor in actors) {
       // Compute the last time this actor did any pro-active action.
-      var latestProactiveRecord = world.actionHistory.getLatestProactiveTime(actor);
+      var latestProactiveRecord =
+          world.actionHistory.getLatestProactiveTime(actor);
       final pastInfinity = new DateTime.utc(-10000);
       DateTime latestProactiveTime = latestProactiveRecord ?? pastInfinity;
-      int proactiveRecency = world.time.difference(latestProactiveTime).inSeconds;
+      int proactiveRecency =
+          world.time.difference(latestProactiveTime).inSeconds;
       // If actor did something just now, they shouldn't be chosen.
       if (proactiveRecency <= 0) continue;
       // Otherwise, let's look at who was active recently.
@@ -239,7 +242,7 @@ abstract class FightSituation extends Situation
 
       // Allow player to take and distribute loot.
       world.pushSituation(new LootSituation.initialized(
-          playerTeamIds, groundMaterial, droppedItems));
+          world.randomInt(), playerTeamIds, groundMaterial, droppedItems));
     } else if (!canFight(sim, world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.
     } else {

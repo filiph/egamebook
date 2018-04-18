@@ -22,13 +22,14 @@ abstract class DefenseSituation extends Situation
       _$DefenseSituation;
 
   factory DefenseSituation.initialized(
+      int id,
           String situationName,
           Iterable<EnemyTargetActionBuilder> actionGenerators,
           Actor attacker,
           Actor target,
           Predetermination predetermination) =>
       new DefenseSituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..name = situationName
         ..builtActionGenerators =
             new ListBuilder<EnemyTargetActionBuilder>(actionGenerators)

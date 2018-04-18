@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'dart:math';
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
@@ -16,6 +17,24 @@ void main() {
     runner.startBook();
     await runner.bookEnd;
     runner.close();
+  }, tags: ["long-running"]);
+
+  test("2 run-throughs with same seed end up with the same state", () async {
+    final seed = new Random().nextInt(0xffffff);
+
+    Future<String> runAndGetFinalWorld(int seed) async {
+      final runner = new CliRunner(true, true, null, random: new Random(seed));
+      await runner.initialize(new EdgeheadGame(randomSeed: seed));
+      runner.startBook();
+      await runner.bookEnd;
+      runner.close();
+      return runner.latestSaveGame;
+    }
+
+    final first = await runAndGetFinalWorld(seed);
+    final second = await runAndGetFinalWorld(seed);
+
+    expect(first, second);
   }, tags: ["long-running"]);
 
   group("logged", () {

@@ -27,9 +27,9 @@ abstract class RoomRoamingSituation extends Situation
       _$RoomRoamingSituation;
 
   factory RoomRoamingSituation.initialized(
-          Room currentRoom, bool monstersAlive) =>
+          int id, Room currentRoom, bool monstersAlive) =>
       new RoomRoamingSituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..time = 0
         ..currentRoomName = currentRoom.name
         ..monstersAlive = monstersAlive);
@@ -38,7 +38,8 @@ abstract class RoomRoamingSituation extends Situation
 
   /// TODO: add all other actions that player can do while exploring
   @override
-  List<ApproachActionBuilder> get actionGenerators => [TakeApproachAction.builder];
+  List<ApproachActionBuilder> get actionGenerators =>
+      [TakeApproachAction.builder];
 
   @override
   List<Action> get actions => []
@@ -103,7 +104,7 @@ abstract class RoomRoamingSituation extends Situation
     bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
 
     var nextRoomSituation = new RoomRoamingSituation.initialized(
-        room, !visited && room.fightGenerator != null);
+        w.randomInt(), room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
     w.recordVisit(a, room);

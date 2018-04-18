@@ -1,7 +1,5 @@
 library stranded.situation;
 
-import 'dart:math' show Random;
-
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
@@ -9,12 +7,6 @@ import 'action.dart';
 import 'actor.dart';
 import 'storyline/storyline.dart';
 import 'simulation.dart';
-
-final int _largeInteger = 0x3FFFFFFF;
-
-final Random _random = new Random();
-
-int getRandomId() => _random.nextInt(_largeInteger);
 
 /// Situation is a phase during play. It governs which actions are available,
 /// and what actors can act (and in what order).

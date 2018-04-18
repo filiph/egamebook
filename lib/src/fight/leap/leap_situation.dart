@@ -7,6 +7,6 @@ import 'package:edgehead/src/fight/leap/actions/finish_leap.dart';
 
 const String leapSituationName = "LeapSituation";
 
-Situation createLeapSituation(Actor attacker, Actor target) =>
-    new AttackerSituation.initialized(leapSituationName,
-        [finishLeapBuilder], attacker, target);
+Situation createLeapSituation(int id, Actor attacker, Actor target) =>
+    new AttackerSituation.initialized(
+        id, leapSituationName, [finishLeapBuilder], attacker, target);

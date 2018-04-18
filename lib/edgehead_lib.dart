@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_global.dart';
@@ -9,17 +10,15 @@ import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/stat.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
 
 import 'edgehead_serializers.dart' as edgehead_serializer;
@@ -52,10 +51,6 @@ class EdgeheadGame extends Book {
   Actor aren;
   Actor briana;
 
-  Actor orc;
-
-  Actor goblin;
-
   final PubSub _pubsub = new PubSub();
   Situation initialSituation;
   WorldState world;
@@ -67,8 +62,27 @@ class EdgeheadGame extends Book {
   final Stat<double> hitpoints = new Stat<double>(hitpointsSetting, 0.0);
   final Stat<int> stamina = new Stat<int>(staminaSetting, 1);
 
-  EdgeheadGame({this.actionPattern, String saveGameSerialized}) {
-    setup(saveGameSerialized);
+  /// Create a new Edgehead game.
+  ///
+  /// The optional [actionPattern] will stop the automated playthrough
+  /// once an action with a matching name is encountered.
+  ///
+  /// Reloads game state from [saveGameSerialized] when provided.
+  ///
+  /// Initializes a new game with [randomSeed] when provided.
+  ///
+  /// If [saveGameSerialized] is provided, [randomSeed] mustn't be provided,
+  /// and vice versa.
+  EdgeheadGame({
+    this.actionPattern,
+    String saveGameSerialized,
+    int randomSeed,
+  }) {
+    if (randomSeed != null && saveGameSerialized != null) {
+      throw new ArgumentError(
+          "Either provide randomSeed or saveGameSerialized, never both.");
+    }
+    _setup(saveGameSerialized, randomSeed);
     _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
     _pubsub.seal();
   }
@@ -79,22 +93,9 @@ class EdgeheadGame extends Book {
     super.close();
   }
 
-  void setup(String saveGameSerialized) {
-    orc = new Actor.initialized(1000, "orc",
-        nameIsProperNoun: false,
-        pronoun: Pronoun.HE,
-        currentWeapon: new Weapon(WeaponType.sword),
-        constitution: 2,
-        team: defaultEnemyTeam,
-        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
-
-    goblin = new Actor.initialized(1001, "goblin",
-        nameIsProperNoun: false,
-        pronoun: Pronoun.HE,
-        currentWeapon: new Weapon(WeaponType.sword, name: "scimitar"),
-        team: defaultEnemyTeam,
-        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
-
+  /// Sets up the game, either as a load from [saveGameSerialized] or
+  /// as a new game from scratch.
+  void _setup(String saveGameSerialized, int randomSeed) {
     aren = edgeheadPlayer;
 
     hitpoints.value = aren.hitpoints / aren.maxHitpoints;
@@ -109,13 +110,16 @@ class EdgeheadGame extends Book {
     var global = new EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
+      // Loading existing game from [saveGameSerialized].
       world = edgehead_serializer.serializers.deserializeWith(
           WorldState.serializer, JSON.decode(saveGameSerialized));
     } else {
+      // Creating a new game from start.
       world = new WorldState((b) => b
         ..actors = new SetBuilder<Actor>(<Actor>[aren, briana])
         ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
+        ..statefulRandomState = randomSeed ?? new Random().nextInt(0xffffffff)
         ..time = startingTime);
     }
 
@@ -296,7 +300,7 @@ class EdgeheadGame extends Book {
       // TODO - if more than one action, remove the one that was just made
       final combineFunction =
           simulation.combineFunctions[actor.combineFunctionHandle];
-      selected = recs.pickRandomly(combineFunction);
+      selected = recs.pickRandomly(combineFunction, world.statefulRandomState);
       await _applySelected(selected, actor, storyline);
     }
 
@@ -352,6 +356,10 @@ class EdgeheadGame extends Book {
     }
   }
 
+  /// An instance that can be reused to generate randomness, provided that
+  /// it's always seeded with a new state before use.
+  final StatefulRandom _reusableRandom = new StatefulRandom(42);
+
   Future<Null> _applySelected(
       Action action, Actor actor, Storyline storyline) async {
     var consequences =
@@ -360,8 +368,13 @@ class EdgeheadGame extends Book {
     if (actor.isPlayer) {
       await _applyPlayerAction(action, actor, consequences);
     } else {
-      int index =
-          Randomly.chooseWeighted(consequences.map((c) => c.probability));
+      // This initializes the random state based on current
+      // [WorldState.statefulRandomState]. We don't save the state after use
+      // because that would be changing state outside an action.
+      _reusableRandom.loadState(world.statefulRandomState ~/ 3 * 2 + 1);
+      int index = Randomly.chooseWeighted(
+          consequences.map((c) => c.probability),
+          random: _reusableRandom);
       consequence = consequences[index];
     }
 

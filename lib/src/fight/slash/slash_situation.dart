@@ -8,6 +8,6 @@ import 'package:edgehead/src/fight/slash/actions/finish_thrust_spear.dart';
 
 const String slashSituationName = "SlashSituation";
 
-Situation createSlashSituation(Actor attacker, Actor target) =>
-    new AttackerSituation.initialized(slashSituationName,
+Situation createSlashSituation(int id, Actor attacker, Actor target) =>
+    new AttackerSituation.initialized(id, slashSituationName,
         [finishSlashBuilder, finishThrustSpearBuilder], attacker, target);

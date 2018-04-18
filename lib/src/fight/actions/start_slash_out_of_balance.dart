@@ -38,9 +38,9 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
             a.isOffBalance &&
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => createSlashSituation(a, enemy),
-        (a, sim, w, enemy) =>
-            createSlashDefenseSituation(a, enemy, Predetermination.none),
+        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+        (a, sim, w, enemy) => createSlashDefenseSituation(
+            w.randomInt(), a, enemy, Predetermination.none),
         enemy,
         successChanceGetter: (a, sim, w, enemy) =>
             0.7 /* 30% chance of complete miss */,
@@ -62,9 +62,9 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
             a.isOffBalance &&
             !enemy.isOnGround &&
             a.currentWeapon.isSlashing,
-        (a, sim, w, enemy) => createSlashSituation(a, enemy),
+        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
-            a, enemy, Predetermination.failureGuaranteed),
+            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy, successChanceGetter: (a, sim, w, enemy) {
       // This is intentional. Since the action can only lead to either
       // complete miss (attacker's failure) or guaranteed failure

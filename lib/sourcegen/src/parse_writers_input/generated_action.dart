@@ -141,11 +141,11 @@ class GeneratedAction extends GeneratedGameObject {
       applyFailureBuilder.addStatements(
           createDescriptionStatements(failureBeginningDescription ?? ''));
       if (hasRescue) {
-        applyFailureBuilder.addStatement(reference('w')
-            .property('pushSituation')
-            .call([
-          reference(rescueSituationClassName)
-              .newInstance([], constructor: 'initialized')
+        applyFailureBuilder
+            .addStatement(reference('w').property('pushSituation').call([
+          reference(rescueSituationClassName).newInstance(
+              [reference('w').invoke('randomInt', [])],
+              constructor: 'initialized')
         ]));
       } else {
         // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION

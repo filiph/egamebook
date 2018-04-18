@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:test/test.dart';
 
@@ -7,6 +8,16 @@ void main() {
     final nextInt = random.next();
     final dupe = new StatefulRandom.fromState(nextInt);
     expect(random.next(), dupe.next());
+  });
+
+  test("same sequence after seed", () {
+    final seed = new Random().nextInt(1000);
+    final random = new StatefulRandom(seed);
+    final ints = new List.generate(100, (_) => random.nextInt(0xffff));
+
+    final random2 = new StatefulRandom(seed);
+    final ints2 = new List.generate(100, (_) => random2.nextInt(0xffff));
+    expect(ints, orderedEquals(ints2));
   });
 
   test("Elements sufficiently random", () {

@@ -16,7 +16,6 @@ import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
 import 'package:built_value/built_value.dart' show Built;
 import 'package:built_value/built_value.dart' show Builder;
-import 'package:edgehead/fractal_stories/situation.dart' show getRandomId;
 import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart' show Resource;
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart'
@@ -1422,7 +1421,8 @@ You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts
 ''',
         wholeSentence: true);
     w.pushSituation(
-        new GuardpostAboveChurchTakeShieldRescueSituation.initialized());
+        new GuardpostAboveChurchTakeShieldRescueSituation.initialized(
+            w.randomInt()));
     return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
   }
 
@@ -1459,9 +1459,9 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Situation
               GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =
       _$GuardpostAboveChurchTakeShieldRescueSituation;
 
-  factory GuardpostAboveChurchTakeShieldRescueSituation.initialized() {
+  factory GuardpostAboveChurchTakeShieldRescueSituation.initialized(int id) {
     return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
-      b.id = getRandomId();
+      b.id = id;
       b.time = 0;
     });
   }

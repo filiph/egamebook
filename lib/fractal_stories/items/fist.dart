@@ -1,5 +1,7 @@
 import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 
-/// The default instance of [Fist]. Disarmed actors will receive [defaultFist].
-final Weapon defaultFist = new Weapon(WeaponType.fist);
+/// Creates an instance of [Fist]. Disarmed actors will receive this.
+Weapon createFist(int seed) =>
+    new Weapon(new StatefulRandom(seed << 2).next(), WeaponType.fist);

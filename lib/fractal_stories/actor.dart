@@ -67,14 +67,14 @@ abstract class Actor extends Object
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
         ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
-        ..currentWeapon = currentWeapon?.toBuilder() ?? defaultFist.toBuilder()
+        ..currentWeapon = currentWeapon?.toBuilder() ?? createFist(id).toBuilder()
         ..currentShield = currentShield?.toBuilder()
         ..categories = new ListBuilder<String>()
         ..pose = Pose.standing
         ..constitution = constitution ?? 1
         ..maxHitpoints = maxHitpoints ?? constitution ?? 1
         ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
-        ..torso = (torso ?? buildHumanoid()).toBuilder()
+        ..torso = (torso ?? buildHumanoid(id)).toBuilder()
         ..gold = gold
         ..stamina = stamina
         ..initiative = initiative

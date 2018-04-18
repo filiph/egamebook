@@ -27,9 +27,9 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
         (a.isBarehanded || a.team.isFriendWith(defaultEnemyTeam)) &&
         !enemy.isOnGround &&
         !recentlyForcedToGround(a, w),
-    (a, sim, w, enemy) => createLeapSituation(a, enemy),
-    (a, sim, w, enemy) =>
-        createLeapDefenseSituation(a, enemy, Predetermination.none),
+    (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
+    (a, sim, w, enemy) => createLeapDefenseSituation(
+        w.randomInt(), a, enemy, Predetermination.none),
     enemy);
 
 EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
@@ -43,15 +43,15 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
             a.isBarehanded &&
             !enemy.isOnGround &&
             !recentlyForcedToGround(a, w),
-        (a, sim, w, enemy) => createLeapSituation(a, enemy),
+        (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createLeapDefenseSituation(
-            a, enemy, Predetermination.failureGuaranteed),
+            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
         successChanceGetter: (a, sim, w, s) => a.isStanding ? 0.4 : 0.2,
         applyStartOfFailure: startLeapReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
             createLeapDefenseSituation(
-                a, enemy, Predetermination.successGuaranteed),
+                w.randomInt(), a, enemy, Predetermination.successGuaranteed),
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> tackle <objectPronoun>?");

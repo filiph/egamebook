@@ -25,9 +25,9 @@ EnemyTargetAction startPunchBuilder(Actor enemy) => new StartDefensibleAction(
         (a.isStanding || a.isOffBalance) &&
         !enemy.isOnGround &&
         a.isBarehanded,
-    (a, sim, w, enemy) => createPunchSituation(a, enemy),
-    (a, sim, w, enemy) =>
-        createPunchDefenseSituation(a, enemy, Predetermination.none),
+    (a, sim, w, enemy) => createPunchSituation(w.randomInt(), a, enemy),
+    (a, sim, w, enemy) => createPunchDefenseSituation(
+        w.randomInt(), a, enemy, Predetermination.none),
     enemy);
 
 EnemyTargetAction
@@ -42,14 +42,14 @@ EnemyTargetAction
                 (a.isStanding || a.isOffBalance) &&
                 !enemy.isOnGround &&
                 a.isBarehanded,
-            (a, sim, w, enemy) => createPunchSituation(a, enemy),
+            (a, sim, w, enemy) => createPunchSituation(w.randomInt(), a, enemy),
             (a, sim, w, enemy) => createPunchDefenseSituation(
-                a, enemy, Predetermination.failureGuaranteed),
+                w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
             enemy,
             successChanceGetter: (a, sim, w, enemy) => 0.8,
             applyStartOfFailure: startPunchReportStart,
             defenseSituationWhenFailed:
-                (a, sim, w, enemy) => createPunchDefenseSituation(
+                (a, sim, w, enemy) => createPunchDefenseSituation(w.randomInt(),
                     a, enemy, Predetermination.successGuaranteed),
             rerollable: true,
             rerollResource: Resource.stamina,

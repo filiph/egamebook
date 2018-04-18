@@ -99,7 +99,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} blocks ${enemy.name} with a shield";
   }

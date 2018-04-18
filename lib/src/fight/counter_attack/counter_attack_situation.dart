@@ -22,9 +22,9 @@ abstract class CounterAttackSituation extends Situation
       _$CounterAttackSituation;
 
   factory CounterAttackSituation.initialized(
-          Actor counterAttacker, Actor target) =>
+          int id, Actor counterAttacker, Actor target) =>
       new CounterAttackSituation((b) => b
-        ..id = getRandomId()
+        ..id = id
         ..time = 0
         ..counterAttacker = counterAttacker.id
         ..target = target.id);

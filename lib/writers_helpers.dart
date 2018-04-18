@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/unique_id.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -24,11 +23,15 @@ const int escapeTunnelOrcId = 12344;
 
 const int madGuardianId = 50615;
 
+const int orcthornId = 425015;
+
 const int slaveQuartersGoblinId = 789457;
 
 const int slaveQuartersOrcId = 789456;
 
 const int sleepingGoblinId = 4445655;
+
+const int sleepingGoblinsSpearId = 45234205;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = const [
@@ -58,13 +61,14 @@ const _brianaQuotes = const [
   '''END''',
 ];
 
-final Weapon orcthorn = new Weapon(WeaponType.sword,
+final Weapon orcthorn = new Weapon(orcthornId, WeaponType.sword,
     name: "Orcthorn",
     nameIsProperNoun: true,
     slashingDamage: 2,
     thrustingDamage: 2);
 
-final Weapon sleepingGoblinsSpear = new Weapon(WeaponType.spear);
+final Weapon sleepingGoblinsSpear =
+    new Weapon(sleepingGoblinsSpearId, WeaponType.spear);
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
@@ -157,6 +161,7 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
   var agruth = _generateAgruth();
   w.actors.add(agruth);
   return new FightSituation.initialized(
+      w.randomInt(),
       party,
       [agruth],
       "{rock|cavern} floor",
@@ -172,12 +177,12 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
 
 FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var orc = _makeOrc(id: escapeTunnelOrcId);
-  var goblin = _makeGoblin(id: escapeTunnelGoblinId);
+  var orc = _makeOrc(w, id: escapeTunnelOrcId);
+  var goblin = _makeGoblin(w, id: escapeTunnelGoblinId);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
-  return new FightSituation.initialized(
-      party, monsters, "{rock|cavern} floor", roomRoamingSituation, {
+  return new FightSituation.initialized(w.randomInt(), party, monsters,
+      "{rock|cavern} floor", roomRoamingSituation, {
     1: escape_tunnel_look,
     4: escape_tunnel_insignificant,
     6: escape_tunnel_loud_cries,
@@ -190,9 +195,10 @@ FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
 FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
-  var madGuardian = _generateMadGuardian(knowsAboutGuardian);
+  var madGuardian = _generateMadGuardian(w, knowsAboutGuardian);
   w.actors.add(madGuardian);
   return new FightSituation.initialized(
+      w.randomInt(),
       party,
       [madGuardian],
       "{rock|cavern} floor",
@@ -212,14 +218,14 @@ FightSituation generateMountainPassGuardPostFight(
   List<Actor> monsters;
   if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards") ||
       w.actionHasBeenPerformedSuccessfully("take_out_gate_guards_rescue")) {
-    monsters = [_makeOrc()];
+    monsters = [_makeOrc(w)];
   } else {
-    monsters = [_makeOrc(), _makeGoblin()];
+    monsters = [_makeOrc(w), _makeGoblin(w)];
   }
   w.actors.addAll(monsters);
 
   return new FightSituation.initialized(
-      party, monsters, "ground", roomRoamingSituation, {});
+      w.randomInt(), party, monsters, "ground", roomRoamingSituation, {});
 }
 
 FightSituation generateSlaveQuartersPassageFight(
@@ -227,12 +233,12 @@ FightSituation generateSlaveQuartersPassageFight(
     WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation,
     Iterable<Actor> party) {
-  var orc = _makeOrc(id: slaveQuartersOrcId);
-  var goblin = _makeGoblin(id: slaveQuartersGoblinId, spear: true);
+  var orc = _makeOrc(w, id: slaveQuartersOrcId);
+  var goblin = _makeGoblin(w, id: slaveQuartersGoblinId, spear: true);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
-  return new FightSituation.initialized(
-      party, monsters, "{rough|stone} floor", roomRoamingSituation, {
+  return new FightSituation.initialized(w.randomInt(), party, monsters,
+      "{rough|stone} floor", roomRoamingSituation, {
     1: slave_quarters_orc_looks,
     3: slave_quarters_mean_nothing,
   });
@@ -338,15 +344,19 @@ void rollBrianaQuote(ActionContext context) {
 /// no fight, otherwise, there will be fight.
 void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
     bool wasSuccess) {
-  w.updateActorById(a.id,
-      (b) => b..currentShield = new Weapon(WeaponType.shield).toBuilder());
+  w.updateActorById(
+      a.id,
+      (b) => b
+        ..currentShield =
+            new Weapon(w.randomInt(), WeaponType.shield).toBuilder());
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
-    final goblin = _makeGoblin(id: sleepingGoblinId);
+    final goblin = _makeGoblin(w, id: sleepingGoblinId);
     w.actors.add(goblin);
     final roomRoamingSituation = getRoomRoaming(built);
     w.pushSituation(new FightSituation.initialized(
+        w.randomInt(),
         playerParty,
         [goblin],
         "{smooth |}rock floor",
@@ -381,31 +391,32 @@ Actor _generateAgruth() {
       initiative: 100);
 }
 
-Actor _generateMadGuardian(bool playerKnowsAboutGuardian) {
+Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
   return new Actor.initialized(
       madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
-      currentWeapon: new Weapon(WeaponType.sword, name: "rusty sword"),
+      currentWeapon:
+          new Weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
       constitution: 3,
       team: defaultEnemyTeam,
       initiative: 100);
 }
 
-Actor _makeGoblin({int id, bool spear: false}) =>
-    new Actor.initialized(id ?? uniqueIdMaker.generateNext(), "goblin",
+Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear: false}) =>
+    new Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear
-            ? new Weapon(WeaponType.spear)
-            : new Weapon(WeaponType.sword, name: "scimitar"),
+            ? new Weapon(w.randomInt(), WeaponType.spear)
+            : new Weapon(w.randomInt(), WeaponType.sword, name: "scimitar"),
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
-Actor _makeOrc({int id, int constitution: 2}) =>
-    new Actor.initialized(id ?? uniqueIdMaker.generateNext(), "orc",
+Actor _makeOrc(WorldStateBuilder w, {int id, int constitution: 2}) =>
+    new Actor.initialized(id ?? w.randomInt(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Weapon(WeaponType.sword),
+        currentWeapon: new Weapon(w.randomInt(), WeaponType.sword),
         constitution: constitution,
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
