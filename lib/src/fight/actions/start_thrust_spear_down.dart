@@ -27,7 +27,7 @@ EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
             !a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.currentWeapon.type == WeaponType.spear,
+            a.currentWeapon.damageCapability.type == WeaponType.spear,
         (a, sim, w, enemy) =>
             createStrikeDownSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createOnGroundDefenseSituation(
@@ -44,7 +44,7 @@ EnemyTargetAction startThrustSpearDownPlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.currentWeapon.type == WeaponType.spear,
+            a.currentWeapon.damageCapability.type == WeaponType.spear,
         (a, sim, w, enemy) =>
             createStrikeDownSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createOnGroundDefenseSituation(

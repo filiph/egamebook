@@ -25,10 +25,12 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CounterAttackSituation.serializer)
       ..add(CustomEvent.serializer)
       ..add(CustomEventHistory.serializer)
+      ..add(DamageCapability.serializer)
       ..add(DefenseSituation.serializer)
       ..add(EdgeheadGlobalState.serializer)
       ..add(FightSituation.serializer)
       ..add(GuardpostAboveChurchTakeShieldRescueSituation.serializer)
+      ..add(Item.serializer)
       ..add(LootSituation.serializer)
       ..add(OffBalanceOpportunitySituation.serializer)
       ..add(Pose.serializer)
@@ -40,26 +42,34 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Team.serializer)
       ..add(VisitHistory.serializer)
       ..add(VisitRecord.serializer)
-      ..add(Weapon.serializer)
       ..add(WeaponType.serializer)
       ..add(WorldState.serializer)
       ..addBuilderFactory(
-          const FullType(
-              BuiltList, const [const FullType(EnemyTargetActionBuilder)]),
-          () => new ListBuilder<EnemyTargetActionBuilder>())
+          const FullType(BuiltList, const [const FullType(BodyPart)]),
+          () => new ListBuilder<BodyPart>())
       ..addBuilderFactory(
           const FullType(
               BuiltList, const [const FullType(EnemyTargetActionBuilder)]),
           () => new ListBuilder<EnemyTargetActionBuilder>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(ItemLike)]),
-          () => new ListBuilder<ItemLike>())
+          const FullType(
+              BuiltList, const [const FullType(EnemyTargetActionBuilder)]),
+          () => new ListBuilder<EnemyTargetActionBuilder>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Item)]),
+          () => new ListBuilder<Item>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Item)]),
+          () => new ListBuilder<Item>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Item)]),
+          () => new ListBuilder<Item>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(ItemLike)]),
-          () => new ListBuilder<ItemLike>())
+          const FullType(BuiltList, const [const FullType(Item)]),
+          () => new ListBuilder<Item>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
@@ -70,21 +80,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(BodyPart)]),
-          () => new ListBuilder<BodyPart>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Item)]),
-          () => new ListBuilder<Item>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Weapon)]),
-          () => new ListBuilder<Weapon>())
       ..addBuilderFactory(
           const FullType(BuiltListMultimap,
               const [const FullType(String), const FullType(CustomEvent)]),

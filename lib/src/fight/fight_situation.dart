@@ -70,7 +70,7 @@ abstract class FightSituation extends Situation
         ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
         ..groundMaterial = groundMaterial
-        ..droppedItems = new ListBuilder<ItemLike>(items)
+        ..droppedItems = new ListBuilder<Item>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id
         ..events = new MapBuilder<int, EventCallback>(events));
   FightSituation._();
@@ -112,7 +112,7 @@ abstract class FightSituation extends Situation
 
   /// The items dropped by dead combatants. The Map's `value` is a qualified
   /// name, such as "goblin's scimitar". The `key` is the actual item.
-  BuiltList<ItemLike> get droppedItems;
+  BuiltList<Item> get droppedItems;
 
   BuiltList<int> get enemyTeamIds;
 

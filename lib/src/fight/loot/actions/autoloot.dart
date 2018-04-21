@@ -2,7 +2,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -69,17 +68,18 @@ class AutoLoot extends Action {
             ..hitpoints = 1);
     }
 
-    Weapon takenWeapon;
-    Weapon takenShield;
-    List<ItemLike> takenItems = [];
+    Item takenWeapon;
+    Item takenShield;
+    List<Item> takenItems = [];
     for (var item in situation.droppedItems) {
       // TODO: generalize sword for spear for other weapons
       final currentActor = world.getActorById(a.id);
       final isSwordForSpear =
-          currentActor.currentWeapon.type == WeaponType.spear &&
-              item is Weapon &&
-              item.type == WeaponType.sword;
-      if (item is Weapon &&
+          currentActor.currentWeapon.damageCapability.type ==
+                  WeaponType.spear &&
+              item.isWeapon &&
+              item.damageCapability.type == WeaponType.sword;
+      if (item.isWeapon &&
           !item.isShield &&
           (item.value > currentActor.currentWeapon.value || isSwordForSpear)) {
         // Arm player with the best weapon available.
@@ -92,19 +92,16 @@ class AutoLoot extends Action {
           b.currentWeapon = item.toBuilder();
         });
         takenWeapon = item;
-      } else if (item is Weapon &&
-          item.isShield &&
-          currentActor.currentShield == null) {
+      } else if (item.isShield && currentActor.currentShield == null) {
         world.updateActorById(a.id, (b) => b.currentShield = item.toBuilder());
         takenShield = item;
-      } else if (item is Weapon) {
+      } else if (item.isWeapon) {
         // Put the rest to weapons.
         world.updateActorById(a.id, (b) => b..weapons.add(item));
         takenItems.add(item);
       } else {
         // Put the rest to inventory.
-        assert(item is Item);
-        world.updateActorById(a.id, (b) => b..items.add(item as Item));
+        world.updateActorById(a.id, (b) => b..items.add(item));
         takenItems.add(item);
       }
     }
@@ -144,14 +141,14 @@ class AutoLoot extends Action {
 
   /// Give weapons to unarmed teammates.
   void _distributeWeapons(
-      List<ItemLike> takenItems,
+      List<Item> takenItems,
       Actor actor,
       LootSituation situation,
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
     var weapons =
-        new List<Weapon>.from(takenItems.where((item) => item is Weapon));
+        new List<Item>.from(takenItems.where((item) => item.isWeapon));
     for (var item in actor.weapons) {
       weapons.add(item);
     }
@@ -174,14 +171,14 @@ class AutoLoot extends Action {
 
   /// Give shields to unshielded teammates.
   void _distributeShields(
-      List<ItemLike> takenItems,
+      List<Item> takenItems,
       Actor actor,
       LootSituation situation,
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
-    var shields = new List<Weapon>.from(
-        takenItems.where((item) => item is Weapon && item.isShield));
+    var shields =
+        new List<Item>.from(takenItems.where((item) => item.isShield));
     for (var item in actor.weapons.where((item) => item.isShield)) {
       shields.add(item);
     }

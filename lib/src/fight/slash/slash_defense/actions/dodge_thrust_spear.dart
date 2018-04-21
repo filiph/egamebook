@@ -98,5 +98,6 @@ class DodgeThrustSpear extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      !a.isOnGround && enemy.currentWeapon.type == WeaponType.spear;
+      !a.isOnGround &&
+      enemy.currentWeapon.damageCapability.type == WeaponType.spear;
 }

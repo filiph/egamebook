@@ -2,8 +2,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -15,7 +13,7 @@ class TakeDroppedShield extends ItemAction {
   @override
   final bool isProactive = true;
 
-  TakeDroppedShield(ItemLike item) : super(item);
+  TakeDroppedShield(Item item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -42,6 +40,7 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   String applySuccess(ActionContext context) {
+    assert(item.isShield);
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -51,7 +50,7 @@ class TakeDroppedShield extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) {
-      b.currentShield = (item as Weapon).toBuilder();
+      b.currentShield = item.toBuilder();
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -66,12 +65,11 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if (item is! Weapon) return false;
-    if ((item as Weapon).type != WeaponType.shield) return false;
+    if (!item.isShield) return false;
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
     return true;
   }
 
-  static ItemAction builder(ItemLike item) => new TakeDroppedShield(item);
+  static ItemAction builder(Item item) => new TakeDroppedShield(item);
 }

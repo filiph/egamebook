@@ -28,12 +28,6 @@ class Entity extends Object with EntityBehavior {
   /// and it's their name, but it's not their proper name.
   final String name;
 
-  /// Categories are secondary ways to refer to the entity. For example, "front
-  /// laser" has several categories, like "gun" or "laser". Whenever possible,
-  /// these categories are used. When two entities have overlapping categories
-  /// in one sentence, only the non-overlapping ones are used.
-  final BuiltList<String> categories = new BuiltList<String>();
-
   @override
   final Team team;
 

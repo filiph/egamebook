@@ -101,5 +101,5 @@ class DefensiveParrySlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.currentWeapon.type.canParrySlash;
+      a.currentWeapon.damageCapability.type.canParrySlash;
 }

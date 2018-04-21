@@ -37,7 +37,7 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
             !a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
-            a.currentWeapon.isSlashing,
+            a.currentWeapon.damageCapability.isSlashing,
         (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.none),
@@ -61,7 +61,7 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             a.isOffBalance &&
             !enemy.isOnGround &&
-            a.currentWeapon.isSlashing,
+            a.currentWeapon.damageCapability.isSlashing,
         (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),

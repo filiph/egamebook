@@ -26,10 +26,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
   Iterable serialize(Serializers serializers, Actor object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
-      'categories',
-      serializers.serialize(object.categories,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(String)])),
       'combineFunctionHandle',
       serializers.serialize(object.combineFunctionHandle,
           specifiedType: const FullType(String)),
@@ -38,7 +34,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           specifiedType: const FullType(int)),
       'currentWeapon',
       serializers.serialize(object.currentWeapon,
-          specifiedType: const FullType(Weapon)),
+          specifiedType: const FullType(Item)),
       'gold',
       serializers.serialize(object.gold, specifiedType: const FullType(int)),
       'hitpoints',
@@ -85,7 +81,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'weapons',
       serializers.serialize(object.weapons,
           specifiedType:
-              const FullType(BuiltList, const [const FullType(Weapon)])),
+              const FullType(BuiltList, const [const FullType(Item)])),
     ];
     if (object.currentRoomName != null) {
       result
@@ -97,7 +93,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       result
         ..add('currentShield')
         ..add(serializers.serialize(object.currentShield,
-            specifiedType: const FullType(Weapon)));
+            specifiedType: const FullType(Item)));
     }
     if (object.followingActorId != null) {
       result
@@ -120,12 +116,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'categories':
-          result.categories.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList<String>);
-          break;
         case 'combineFunctionHandle':
           result.combineFunctionHandle = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -140,11 +130,11 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'currentShield':
           result.currentShield.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Weapon)) as Weapon);
+              specifiedType: const FullType(Item)) as Item);
           break;
         case 'currentWeapon':
           result.currentWeapon.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Weapon)) as Weapon);
+              specifiedType: const FullType(Item)) as Item);
           break;
         case 'followingActorId':
           result.followingActorId = serializers.deserialize(value,
@@ -219,8 +209,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'weapons':
           result.weapons.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Weapon)]))
-              as BuiltList<Weapon>);
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
           break;
       }
     }
@@ -231,17 +221,15 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 
 class _$Actor extends Actor {
   @override
-  final BuiltList<String> categories;
-  @override
   final String combineFunctionHandle;
   @override
   final int constitution;
   @override
   final String currentRoomName;
   @override
-  final Weapon currentShield;
+  final Item currentShield;
   @override
-  final Weapon currentWeapon;
+  final Item currentWeapon;
   @override
   final int followingActorId;
   @override
@@ -277,14 +265,13 @@ class _$Actor extends Actor {
   @override
   final BodyPart torso;
   @override
-  final BuiltList<Weapon> weapons;
+  final BuiltList<Item> weapons;
 
   factory _$Actor([void updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
-      {this.categories,
-      this.combineFunctionHandle,
+      {this.combineFunctionHandle,
       this.constitution,
       this.currentRoomName,
       this.currentShield,
@@ -308,7 +295,6 @@ class _$Actor extends Actor {
       this.torso,
       this.weapons})
       : super._() {
-    if (categories == null) throw new ArgumentError.notNull('categories');
     if (combineFunctionHandle == null)
       throw new ArgumentError.notNull('combineFunctionHandle');
     if (constitution == null) throw new ArgumentError.notNull('constitution');
@@ -344,8 +330,7 @@ class _$Actor extends Actor {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! Actor) return false;
-    return categories == other.categories &&
-        combineFunctionHandle == other.combineFunctionHandle &&
+    return combineFunctionHandle == other.combineFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
         currentShield == other.currentShield &&
@@ -390,7 +375,7 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, categories.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode),
+                                                                            $jc($jc($jc($jc($jc(0, combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode),
                                                                                 currentWeapon.hashCode),
                                                                             followingActorId.hashCode),
                                                                         gold.hashCode),
@@ -415,7 +400,6 @@ class _$Actor extends Actor {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
-          ..add('categories', categories)
           ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
@@ -446,12 +430,6 @@ class _$Actor extends Actor {
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
 
-  ListBuilder<String> _categories;
-  ListBuilder<String> get categories =>
-      _$this._categories ??= new ListBuilder<String>();
-  set categories(ListBuilder<String> categories) =>
-      _$this._categories = categories;
-
   String _combineFunctionHandle;
   String get combineFunctionHandle => _$this._combineFunctionHandle;
   set combineFunctionHandle(String combineFunctionHandle) =>
@@ -466,16 +444,14 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  WeaponBuilder _currentShield;
-  WeaponBuilder get currentShield =>
-      _$this._currentShield ??= new WeaponBuilder();
-  set currentShield(WeaponBuilder currentShield) =>
+  ItemBuilder _currentShield;
+  ItemBuilder get currentShield => _$this._currentShield ??= new ItemBuilder();
+  set currentShield(ItemBuilder currentShield) =>
       _$this._currentShield = currentShield;
 
-  WeaponBuilder _currentWeapon;
-  WeaponBuilder get currentWeapon =>
-      _$this._currentWeapon ??= new WeaponBuilder();
-  set currentWeapon(WeaponBuilder currentWeapon) =>
+  ItemBuilder _currentWeapon;
+  ItemBuilder get currentWeapon => _$this._currentWeapon ??= new ItemBuilder();
+  set currentWeapon(ItemBuilder currentWeapon) =>
       _$this._currentWeapon = currentWeapon;
 
   int _followingActorId;
@@ -548,16 +524,14 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   BodyPartBuilder get torso => _$this._torso ??= new BodyPartBuilder();
   set torso(BodyPartBuilder torso) => _$this._torso = torso;
 
-  ListBuilder<Weapon> _weapons;
-  ListBuilder<Weapon> get weapons =>
-      _$this._weapons ??= new ListBuilder<Weapon>();
-  set weapons(ListBuilder<Weapon> weapons) => _$this._weapons = weapons;
+  ListBuilder<Item> _weapons;
+  ListBuilder<Item> get weapons => _$this._weapons ??= new ListBuilder<Item>();
+  set weapons(ListBuilder<Item> weapons) => _$this._weapons = weapons;
 
   ActorBuilder();
 
   ActorBuilder get _$this {
     if (_$v != null) {
-      _categories = _$v.categories?.toBuilder();
       _combineFunctionHandle = _$v.combineFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
@@ -601,7 +575,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor build() {
     final _$result = _$v ??
         new _$Actor._(
-            categories: categories?.build(),
             combineFunctionHandle: combineFunctionHandle,
             constitution: constitution,
             currentRoomName: currentRoomName,

@@ -53,7 +53,7 @@ class FinishSlash extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentWeapon.slashingDamage;
+    final damage = a.currentWeapon.damageCapability.slashingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     final thread = getThreadId(sim, w, slashSituationName);
@@ -91,5 +91,5 @@ class FinishSlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.currentWeapon.isSlashing;
+      a.currentWeapon.damageCapability.isSlashing;
 }

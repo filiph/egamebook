@@ -1,12 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -74,6 +74,7 @@ class ThrowSpear extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final spear = _findSpear(a);
+    assert(spear.isWeapon);
     _startThrowSpearReportStart(a, sim, w, s, enemy, spear);
     if (enemy.currentShield != null) {
       spear.report(s, "<subject> fl<ies> past <object-owner's> <object>",
@@ -83,7 +84,7 @@ class ThrowSpear extends EnemyTargetAction {
           owner: a);
     }
 
-    final damage = spear.thrustingDamage;
+    final damage = spear.damageCapability.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
@@ -132,12 +133,13 @@ class ThrowSpear extends EnemyTargetAction {
     return new Entity(name: Randomly.parse(name), team: a.team);
   }
 
-  Weapon _findSpear(Actor a) {
-    if (a.currentWeapon != null && a.currentWeapon.type == WeaponType.spear) {
+  Item _findSpear(Actor a) {
+    if (a.currentWeapon != null &&
+        a.currentWeapon.damageCapability.type == WeaponType.spear) {
       return a.currentWeapon;
     }
     for (var weapon in a.weapons) {
-      if (weapon.type == WeaponType.spear) {
+      if (weapon.damageCapability.type == WeaponType.spear) {
         return weapon;
       }
     }
@@ -153,11 +155,11 @@ class ThrowSpear extends EnemyTargetAction {
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory
   /// ([Actor.weapons]) to the ground. If actor's hand was emptied, a new
   /// weapon (or [defaultFist]) is put in it.
-  void _moveSpearToGround(WorldStateBuilder w, Actor a, Weapon spear) {
+  void _moveSpearToGround(WorldStateBuilder w, Actor a, Item spear) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
-      final Weapon weapon = a.findBestWeapon() ?? createFist(w.randomInt());
+      final Item weapon = a.findBestWeapon() ?? createFist(w.randomInt());
       w.updateActorById(
           a.id,
           (b) => b
@@ -171,7 +173,7 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   void _startThrowSpearReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-          Storyline s, Actor enemy, Weapon spear) =>
+          Storyline s, Actor enemy, Item spear) =>
       a.report(
         s,
         "<subject> {throw<s>|hurl<s>|cast<s>} "

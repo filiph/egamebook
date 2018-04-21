@@ -3,7 +3,7 @@ import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -61,14 +61,14 @@ const _brianaQuotes = const [
   '''END''',
 ];
 
-final Weapon orcthorn = new Weapon(orcthornId, WeaponType.sword,
+final Item orcthorn = new Item.weapon(orcthornId, WeaponType.sword,
     name: "Orcthorn",
     nameIsProperNoun: true,
     slashingDamage: 2,
     thrustingDamage: 2);
 
-final Weapon sleepingGoblinsSpear =
-    new Weapon(sleepingGoblinsSpearId, WeaponType.spear);
+final Item sleepingGoblinsSpear =
+    new Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
@@ -150,8 +150,8 @@ void enterTunnelWithCancel(ActionContext c) {
 
 void executeSpearThrowAtOgre(ActionContext c) {
   final player = getPlayer(c.world);
-  final spear =
-      player.weapons.firstWhere((item) => item.type == WeaponType.spear);
+  final spear = player.weapons
+      .firstWhere((item) => item.damageCapability.type == WeaponType.spear);
   c.outputWorld.updateActorById(player.id, (b) => b..items.remove(spear));
   movePlayer(c, "war_forge", silent: true);
 }
@@ -348,7 +348,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
       a.id,
       (b) => b
         ..currentShield =
-            new Weapon(w.randomInt(), WeaponType.shield).toBuilder());
+            new Item.weapon(w.randomInt(), WeaponType.shield).toBuilder());
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
@@ -396,7 +396,7 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
       madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
       currentWeapon:
-          new Weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+          new Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
       constitution: 3,
       team: defaultEnemyTeam,
       initiative: 100);
@@ -407,8 +407,9 @@ Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear: false}) =>
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear
-            ? new Weapon(w.randomInt(), WeaponType.spear)
-            : new Weapon(w.randomInt(), WeaponType.sword, name: "scimitar"),
+            ? new Item.weapon(w.randomInt(), WeaponType.spear)
+            : new Item.weapon(w.randomInt(), WeaponType.sword,
+                name: "scimitar"),
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
@@ -416,7 +417,7 @@ Actor _makeOrc(WorldStateBuilder w, {int id, int constitution: 2}) =>
     new Actor.initialized(id ?? w.randomInt(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Weapon(w.randomInt(), WeaponType.sword),
+        currentWeapon: new Item.weapon(w.randomInt(), WeaponType.sword),
         constitution: constitution,
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);

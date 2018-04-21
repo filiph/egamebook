@@ -2,10 +2,9 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -13,7 +12,10 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class TakeDroppedWeapon extends ItemAction {
   static const String className = "TakeDroppedWeapon";
 
-  TakeDroppedWeapon(ItemLike item) : super(item);
+  @override
+  final bool isProactive = true;
+
+  TakeDroppedWeapon(Item item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -23,9 +25,6 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   bool get isAggressive => false;
-
-  @override
-  final bool isProactive = true;
 
   @override
   String get name => className;
@@ -43,6 +42,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   String applySuccess(ActionContext context) {
+    assert(item.isWeapon);
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -56,7 +56,7 @@ class TakeDroppedWeapon extends ItemAction {
         // Move current weapon to inventory.
         b.weapons.add(b.currentWeapon.build());
       }
-      b.currentWeapon = (item as Weapon).toBuilder();
+      b.currentWeapon = item.toBuilder();
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -71,14 +71,16 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    if (item is! Weapon) return false;
-    final weapon = item as Weapon;
-    // TODO: remove the next condition
-    if (weapon.type == WeaponType.spear) return false;
+    if (!item.isWeapon) return false;
+    // TODO: remove the next condition, but not before we figure out
+    //       how to make this hard (dropped spears are probably much
+    //       farther away than dropped swords).
+    if (item.damageCapability.type == WeaponType.spear) return false;
     if (!a.canWield) return false;
-    final isSwordForSpear = a.currentWeapon.type == WeaponType.spear &&
-        weapon.type == WeaponType.sword;
-    if (weapon.value <= a.currentWeapon.value && !isSwordForSpear) return false;
+    final isSwordForSpear =
+        a.currentWeapon.damageCapability.type == WeaponType.spear &&
+            item.damageCapability.type == WeaponType.sword;
+    if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     var disarmedRecency = w.timeSinceLastActionRecord(
         actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
     // We're using 2 here because it's safer. Sometimes, an action by another
@@ -90,5 +92,5 @@ class TakeDroppedWeapon extends ItemAction {
     return true;
   }
 
-  static ItemAction builder(ItemLike item) => new TakeDroppedWeapon(item);
+  static ItemAction builder(Item item) => new TakeDroppedWeapon(item);
 }

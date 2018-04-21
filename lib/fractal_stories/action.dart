@@ -300,7 +300,7 @@ abstract class ApproachAction extends Action {
 ///
 ///     static ItemAction builder(Item enemy) => new Example(item);
 abstract class ItemAction extends Action {
-  final ItemLike item;
+  final Item item;
 
   @override
   final bool isImplicit = false;

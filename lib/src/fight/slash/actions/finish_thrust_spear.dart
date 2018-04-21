@@ -55,7 +55,7 @@ class FinishThrustSpear extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentWeapon.thrustingDamage;
+    final damage = a.currentWeapon.damageCapability.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     final thread = getThreadId(sim, w, slashSituationName);
@@ -88,5 +88,5 @@ class FinishThrustSpear extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.currentWeapon.type == WeaponType.spear;
+      a.currentWeapon.damageCapability.type == WeaponType.spear;
 }

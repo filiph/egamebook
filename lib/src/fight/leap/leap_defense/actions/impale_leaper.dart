@@ -138,5 +138,5 @@ class ImpaleLeaper extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      !a.isOnGround && a.currentWeapon.isThrusting;
+      !a.isOnGround && a.currentWeapon.damageCapability.isThrusting;
 }

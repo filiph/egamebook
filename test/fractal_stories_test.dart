@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
@@ -29,7 +29,7 @@ void main() {
         Actor filip = new Actor.initialized(1, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
-            currentWeapon: new Weapon(42, WeaponType.sword),
+            currentWeapon: new Item.weapon(42, WeaponType.sword),
             constitution: 2,
             stamina: 1,
             initiative: 1000);
@@ -58,14 +58,15 @@ void main() {
             3, [a], [b], "ground", roomRoamingSituation, {}));
       });
       test("OnGroundDefenseSituation", () {
-        checkSituationBuild(
-            () => createOnGroundDefenseSituation(1, a, b, Predetermination.none));
+        checkSituationBuild(() =>
+            createOnGroundDefenseSituation(1, a, b, Predetermination.none));
       });
       test("StrikeDownSituation", () {
         checkSituationBuild(() => createStrikeDownSituation(1, a, b));
       });
       test("CounterAttackSituation", () {
-        checkSituationBuild(() => new CounterAttackSituation.initialized(1, a, b));
+        checkSituationBuild(
+            () => new CounterAttackSituation.initialized(1, a, b));
       });
       test("OffBalanceOpportunitySituation", () {
         checkSituationBuild(
@@ -75,7 +76,7 @@ void main() {
       });
       test("SlashDefenseSituation", () {
         checkSituationBuild(
-            () => createSlashDefenseSituation(1,a, b, Predetermination.none));
+            () => createSlashDefenseSituation(1, a, b, Predetermination.none));
       });
       test("SlashSituation", () {
         checkSituationBuild(() => createSlashSituation(1, a, b));

@@ -73,5 +73,5 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.isOnGround && a.currentWeapon.isSlashing;
+      enemy.isOnGround && a.currentWeapon.damageCapability.isSlashing;
 }

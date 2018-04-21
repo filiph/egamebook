@@ -14,30 +14,25 @@ part of fractal_stories.items.weapon;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
-Serializer<Weapon> _$weaponSerializer = new _$WeaponSerializer();
+Serializer<DamageCapability> _$damageCapabilitySerializer =
+    new _$DamageCapabilitySerializer();
 
-class _$WeaponSerializer implements StructuredSerializer<Weapon> {
+class _$DamageCapabilitySerializer
+    implements StructuredSerializer<DamageCapability> {
   @override
-  final Iterable<Type> types = const [Weapon, _$Weapon];
+  final Iterable<Type> types = const [DamageCapability, _$DamageCapability];
   @override
-  final String wireName = 'Weapon';
+  final String wireName = 'DamageCapability';
 
   @override
-  Iterable serialize(Serializers serializers, Weapon object,
+  Iterable serialize(Serializers serializers, DamageCapability object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'bluntDamage',
       serializers.serialize(object.bluntDamage,
           specifiedType: const FullType(int)),
       'length',
       serializers.serialize(object.length, specifiedType: const FullType(int)),
-      'name',
-      serializers.serialize(object.name, specifiedType: const FullType(String)),
-      'nameIsProperNoun',
-      serializers.serialize(object.nameIsProperNoun,
-          specifiedType: const FullType(bool)),
       'slashingDamage',
       serializers.serialize(object.slashingDamage,
           specifiedType: const FullType(int)),
@@ -53,9 +48,9 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
   }
 
   @override
-  Weapon deserialize(Serializers serializers, Iterable serialized,
+  DamageCapability deserialize(Serializers serializers, Iterable serialized,
       {FullType specifiedType: FullType.unspecified}) {
-    final result = new WeaponBuilder();
+    final result = new DamageCapabilityBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -63,10 +58,6 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
         case 'bluntDamage':
           result.bluntDamage = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -74,14 +65,6 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
         case 'length':
           result.length = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
-          break;
-        case 'name':
-          result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'nameIsProperNoun':
-          result.nameIsProperNoun = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
           break;
         case 'slashingDamage':
           result.slashingDamage = serializers.deserialize(value,
@@ -102,17 +85,11 @@ class _$WeaponSerializer implements StructuredSerializer<Weapon> {
   }
 }
 
-class _$Weapon extends Weapon {
-  @override
-  final int id;
+class _$DamageCapability extends DamageCapability {
   @override
   final int bluntDamage;
   @override
   final int length;
-  @override
-  final String name;
-  @override
-  final bool nameIsProperNoun;
   @override
   final int slashingDamage;
   @override
@@ -120,25 +97,18 @@ class _$Weapon extends Weapon {
   @override
   final WeaponType type;
 
-  factory _$Weapon([void updates(WeaponBuilder b)]) =>
-      (new WeaponBuilder()..update(updates)).build();
+  factory _$DamageCapability([void updates(DamageCapabilityBuilder b)]) =>
+      (new DamageCapabilityBuilder()..update(updates)).build();
 
-  _$Weapon._(
-      {this.id,
-      this.bluntDamage,
+  _$DamageCapability._(
+      {this.bluntDamage,
       this.length,
-      this.name,
-      this.nameIsProperNoun,
       this.slashingDamage,
       this.thrustingDamage,
       this.type})
       : super._() {
-    if (id == null) throw new ArgumentError.notNull('id');
     if (bluntDamage == null) throw new ArgumentError.notNull('bluntDamage');
     if (length == null) throw new ArgumentError.notNull('length');
-    if (name == null) throw new ArgumentError.notNull('name');
-    if (nameIsProperNoun == null)
-      throw new ArgumentError.notNull('nameIsProperNoun');
     if (slashingDamage == null)
       throw new ArgumentError.notNull('slashingDamage');
     if (thrustingDamage == null)
@@ -147,21 +117,19 @@ class _$Weapon extends Weapon {
   }
 
   @override
-  Weapon rebuild(void updates(WeaponBuilder b)) =>
+  DamageCapability rebuild(void updates(DamageCapabilityBuilder b)) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  WeaponBuilder toBuilder() => new WeaponBuilder()..replace(this);
+  DamageCapabilityBuilder toBuilder() =>
+      new DamageCapabilityBuilder()..replace(this);
 
   @override
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
-    if (other is! Weapon) return false;
-    return id == other.id &&
-        bluntDamage == other.bluntDamage &&
+    if (other is! DamageCapability) return false;
+    return bluntDamage == other.bluntDamage &&
         length == other.length &&
-        name == other.name &&
-        nameIsProperNoun == other.nameIsProperNoun &&
         slashingDamage == other.slashingDamage &&
         thrustingDamage == other.thrustingDamage &&
         type == other.type;
@@ -171,13 +139,7 @@ class _$Weapon extends Weapon {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc($jc(0, id.hashCode), bluntDamage.hashCode),
-                            length.hashCode),
-                        name.hashCode),
-                    nameIsProperNoun.hashCode),
+            $jc($jc($jc(0, bluntDamage.hashCode), length.hashCode),
                 slashingDamage.hashCode),
             thrustingDamage.hashCode),
         type.hashCode));
@@ -185,12 +147,9 @@ class _$Weapon extends Weapon {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Weapon')
-          ..add('id', id)
+    return (newBuiltValueToStringHelper('DamageCapability')
           ..add('bluntDamage', bluntDamage)
           ..add('length', length)
-          ..add('name', name)
-          ..add('nameIsProperNoun', nameIsProperNoun)
           ..add('slashingDamage', slashingDamage)
           ..add('thrustingDamage', thrustingDamage)
           ..add('type', type))
@@ -198,12 +157,9 @@ class _$Weapon extends Weapon {
   }
 }
 
-class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
-  _$Weapon _$v;
-
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+class DamageCapabilityBuilder
+    implements Builder<DamageCapability, DamageCapabilityBuilder> {
+  _$DamageCapability _$v;
 
   int _bluntDamage;
   int get bluntDamage => _$this._bluntDamage;
@@ -212,15 +168,6 @@ class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
   int _length;
   int get length => _$this._length;
   set length(int length) => _$this._length = length;
-
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
-
-  bool _nameIsProperNoun;
-  bool get nameIsProperNoun => _$this._nameIsProperNoun;
-  set nameIsProperNoun(bool nameIsProperNoun) =>
-      _$this._nameIsProperNoun = nameIsProperNoun;
 
   int _slashingDamage;
   int get slashingDamage => _$this._slashingDamage;
@@ -236,15 +183,12 @@ class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
   WeaponType get type => _$this._type;
   set type(WeaponType type) => _$this._type = type;
 
-  WeaponBuilder();
+  DamageCapabilityBuilder();
 
-  WeaponBuilder get _$this {
+  DamageCapabilityBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
       _bluntDamage = _$v.bluntDamage;
       _length = _$v.length;
-      _name = _$v.name;
-      _nameIsProperNoun = _$v.nameIsProperNoun;
       _slashingDamage = _$v.slashingDamage;
       _thrustingDamage = _$v.thrustingDamage;
       _type = _$v.type;
@@ -254,25 +198,22 @@ class WeaponBuilder implements Builder<Weapon, WeaponBuilder> {
   }
 
   @override
-  void replace(Weapon other) {
+  void replace(DamageCapability other) {
     if (other == null) throw new ArgumentError.notNull('other');
-    _$v = other as _$Weapon;
+    _$v = other as _$DamageCapability;
   }
 
   @override
-  void update(void updates(WeaponBuilder b)) {
+  void update(void updates(DamageCapabilityBuilder b)) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$Weapon build() {
+  _$DamageCapability build() {
     final _$result = _$v ??
-        new _$Weapon._(
-            id: id,
+        new _$DamageCapability._(
             bluntDamage: bluntDamage,
             length: length,
-            name: name,
-            nameIsProperNoun: nameIsProperNoun,
             slashingDamage: slashingDamage,
             thrustingDamage: thrustingDamage,
             type: type);

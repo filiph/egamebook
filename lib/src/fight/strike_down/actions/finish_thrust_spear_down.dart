@@ -77,7 +77,8 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.isOnGround && a.currentWeapon.type == WeaponType.spear;
+      enemy.isOnGround &&
+      a.currentWeapon.damageCapability.type == WeaponType.spear;
 
   static EnemyTargetAction builder(Actor enemy) =>
       new FinishThrustSpearAtGroundedEnemy(enemy);

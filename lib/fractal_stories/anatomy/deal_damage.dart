@@ -1,12 +1,13 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 
 /// Executes the business logic of dealing damage to [bodyPart] with [weapon]
 /// and [success]. Supports anything from minor cuts to decapitation.
 SlashingResult executeSlashingHit(Actor target, BodyPartDesignation bodyPart,
-    Weapon weapon, SlashSuccessLevel success) {
+    Item weapon, SlashSuccessLevel success) {
   assert(target.hitpoints > 0);
+  assert(weapon.isWeapon);
 
   final designated = BodyPart.findByDesignation(bodyPart, target.torso);
   if (designated == null) {
@@ -20,7 +21,7 @@ SlashingResult executeSlashingHit(Actor target, BodyPartDesignation bodyPart,
       } else {
         return _disableBySlash(target, designated, weapon);
       }
-      throw new StateError("Please fix non-exhaustive if-else above.");
+      break;
     case SlashSuccessLevel.majorCut:
       return _addMajorCut(target, designated, weapon);
     case SlashSuccessLevel.minorCut:
@@ -30,7 +31,7 @@ SlashingResult executeSlashingHit(Actor target, BodyPartDesignation bodyPart,
   throw new UnimplementedError("this type of slash not implemented yet");
 }
 
-SlashingResult _addMajorCut(Actor target, BodyPart designated, Weapon weapon) {
+SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
   assert(
       designated.isAlive, "Slashing a dead body part is not yet implemented");
   final ActorBuilder victim = target.toBuilder();
@@ -63,7 +64,7 @@ SlashingResult _addMajorCut(Actor target, BodyPart designated, Weapon weapon) {
 
 /// Minor cuts are merely recorded on the body part. They don't have any
 /// combat effect.
-SlashingResult _addMinorCut(Actor target, BodyPart designated, Weapon weapon) {
+SlashingResult _addMinorCut(Actor target, BodyPart designated, Item weapon) {
   assert(
       designated.isAlive, "Slashing a dead body part is not yet implemented");
 
@@ -85,7 +86,7 @@ SlashingResult _addMinorCut(Actor target, BodyPart designated, Weapon weapon) {
 }
 
 /// Cuts off the body part. The [bodyPart] must be severable.
-SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Weapon weapon) {
+SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   assert(bodyPart.isSeverable);
 
   final ActorBuilder victim = target.toBuilder();
@@ -134,7 +135,7 @@ void _deepReplaceBodyPart(Actor actor, ActorBuilder builder,
       torsoAfflicted);
 }
 
-SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Weapon weapon) {
+SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Item weapon) {
   final ActorBuilder victim = target.toBuilder();
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
     // TODO: move from hitpoints to something else

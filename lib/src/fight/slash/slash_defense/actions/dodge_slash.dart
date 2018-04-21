@@ -96,5 +96,5 @@ class DodgeSlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      !a.isOnGround && enemy.currentWeapon.isSlashing;
+      !a.isOnGround && enemy.currentWeapon.damageCapability.isSlashing;
 }

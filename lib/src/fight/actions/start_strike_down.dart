@@ -26,7 +26,7 @@ EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
             !a.isPlayer &&
             enemy.isOnGround &&
             !a.isOnGround &&
-            a.currentWeapon.isSlashing,
+            a.currentWeapon.damageCapability.isSlashing,
         (a, sim, w, enemy) =>
             createStrikeDownSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createOnGroundDefenseSituation(
@@ -44,7 +44,7 @@ EnemyTargetAction
                 a.isPlayer &&
                 enemy.isOnGround &&
                 !a.isOnGround &&
-                a.currentWeapon.isSlashing,
+                a.currentWeapon.damageCapability.isSlashing,
             (a, sim, w, enemy) =>
                 createStrikeDownSituation(w.randomInt(), a, enemy),
             (a, sim, w, enemy) => createOnGroundDefenseSituation(

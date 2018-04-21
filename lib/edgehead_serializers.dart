@@ -12,7 +12,7 @@ import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -53,7 +53,7 @@ part 'edgehead_serializers.g.dart';
   Situation,
   Team,
   VisitHistory,
-  Weapon,
+  DamageCapability,
   WeaponType,
   WorldState,
 ])

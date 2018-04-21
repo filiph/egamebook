@@ -121,10 +121,6 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'bluntHitsCount',
       serializers.serialize(object.bluntHitsCount,
           specifiedType: const FullType(int)),
-      'categories',
-      serializers.serialize(object.categories,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(String)])),
       'children',
       serializers.serialize(object.children,
           specifiedType:
@@ -179,12 +175,6 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
         case 'bluntHitsCount':
           result.bluntHitsCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
-          break;
-        case 'categories':
-          result.categories.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList<String>);
           break;
         case 'children':
           result.children.replace(serializers.deserialize(value,
@@ -285,8 +275,6 @@ class _$BodyPart extends BodyPart {
   @override
   final int bluntHitsCount;
   @override
-  final BuiltList<String> categories;
-  @override
   final BuiltList<BodyPart> children;
   @override
   final BodyPartDesignation designation;
@@ -316,7 +304,6 @@ class _$BodyPart extends BodyPart {
 
   _$BodyPart._(
       {this.bluntHitsCount,
-      this.categories,
       this.children,
       this.designation,
       this.function,
@@ -332,7 +319,6 @@ class _$BodyPart extends BodyPart {
       : super._() {
     if (bluntHitsCount == null)
       throw new ArgumentError.notNull('bluntHitsCount');
-    if (categories == null) throw new ArgumentError.notNull('categories');
     if (children == null) throw new ArgumentError.notNull('children');
     if (designation == null) throw new ArgumentError.notNull('designation');
     if (function == null) throw new ArgumentError.notNull('function');
@@ -361,7 +347,6 @@ class _$BodyPart extends BodyPart {
     if (identical(other, this)) return true;
     if (other is! BodyPart) return false;
     return bluntHitsCount == other.bluntHitsCount &&
-        categories == other.categories &&
         children == other.children &&
         designation == other.designation &&
         function == other.function &&
@@ -391,11 +376,9 @@ class _$BodyPart extends BodyPart {
                                             $jc(
                                                 $jc(
                                                     $jc(
-                                                        $jc(
-                                                            0,
-                                                            bluntHitsCount
-                                                                .hashCode),
-                                                        categories.hashCode),
+                                                        0,
+                                                        bluntHitsCount
+                                                            .hashCode),
                                                     children.hashCode),
                                                 designation.hashCode),
                                             function.hashCode),
@@ -414,7 +397,6 @@ class _$BodyPart extends BodyPart {
   String toString() {
     return (newBuiltValueToStringHelper('BodyPart')
           ..add('bluntHitsCount', bluntHitsCount)
-          ..add('categories', categories)
           ..add('children', children)
           ..add('designation', designation)
           ..add('function', function)
@@ -438,12 +420,6 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   int get bluntHitsCount => _$this._bluntHitsCount;
   set bluntHitsCount(int bluntHitsCount) =>
       _$this._bluntHitsCount = bluntHitsCount;
-
-  ListBuilder<String> _categories;
-  ListBuilder<String> get categories =>
-      _$this._categories ??= new ListBuilder<String>();
-  set categories(ListBuilder<String> categories) =>
-      _$this._categories = categories;
 
   ListBuilder<BodyPart> _children;
   ListBuilder<BodyPart> get children =>
@@ -502,7 +478,6 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   BodyPartBuilder get _$this {
     if (_$v != null) {
       _bluntHitsCount = _$v.bluntHitsCount;
-      _categories = _$v.categories?.toBuilder();
       _children = _$v.children?.toBuilder();
       _designation = _$v.designation;
       _function = _$v.function;
@@ -536,7 +511,6 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
     final _$result = _$v ??
         new _$BodyPart._(
             bluntHitsCount: bluntHitsCount,
-            categories: categories?.build(),
             children: children?.build(),
             designation: designation,
             function: function,

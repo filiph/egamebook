@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
-import 'package:edgehead/fractal_stories/items/weapon.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
@@ -48,8 +47,8 @@ abstract class Actor extends Object
           {bool isPlayer: false,
           bool nameIsProperNoun: false,
           Pronoun pronoun,
-          Weapon currentWeapon,
-          Weapon currentShield,
+          Item currentWeapon,
+          Item currentShield,
           int hitpoints,
           int maxHitpoints,
           int constitution: 1,
@@ -67,9 +66,9 @@ abstract class Actor extends Object
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
         ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
-        ..currentWeapon = currentWeapon?.toBuilder() ?? createFist(id).toBuilder()
+        ..currentWeapon =
+            currentWeapon?.toBuilder() ?? createFist(id).toBuilder()
         ..currentShield = currentShield?.toBuilder()
-        ..categories = new ListBuilder<String>()
         ..pose = Pose.standing
         ..constitution = constitution ?? 1
         ..maxHitpoints = maxHitpoints ?? constitution ?? 1
@@ -80,7 +79,7 @@ abstract class Actor extends Object
         ..initiative = initiative
         ..isActive = true
         ..isPlayer = isPlayer
-        ..weapons = new ListBuilder<Weapon>()
+        ..weapons = new ListBuilder<Item>()
         ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
         ..currentRoomName = currentRoomName
         ..followingActorId = followingActorId
@@ -95,9 +94,6 @@ abstract class Actor extends Object
   /// Humans, goblins and octopus-kings can wield. Wolves, bats and zombies
   /// cannot wield.
   bool get canWield => true;
-
-  @override
-  BuiltList<String> get categories;
 
   /// The string handle to the combine function that this actor should use.
   String get combineFunctionHandle;
@@ -114,12 +110,12 @@ abstract class Actor extends Object
   /// The shield that the actor is currently wielding. This can be `null`
   /// of there is no shield.
   @nullable
-  Weapon get currentShield;
+  Item get currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
   /// Changing a weapon should ordinarily take a turn.
-  Weapon get currentWeapon;
+  Item get currentWeapon;
 
   /// The actor that [this] actor is following around.
   @nullable
@@ -147,7 +143,8 @@ abstract class Actor extends Object
   @override
   bool get isAlive => hitpoints > 0;
 
-  bool get isBarehanded => currentWeapon.type == WeaponType.fist;
+  bool get isBarehanded =>
+      currentWeapon.damageCapability.type == WeaponType.fist;
 
   bool get isConfused;
 
@@ -158,10 +155,13 @@ abstract class Actor extends Object
   @override
   bool get isPlayer;
 
-  // TODO: make non-nullable
   bool get isStanding => pose == Pose.standing;
 
-  /// Items (that are not [Weapon] nor [Shield]) possessed by the actor.
+  /// Inventory of items possessed by the actor.
+  ///
+  /// This does not include things that are wield-able (weapons, shields) or
+  /// otherwise equip-able (armor). Consider [items] more like "contents of
+  /// actor's backpack": potions, books, scrolls.
   BuiltList<Item> get items;
 
   int get maxHitpoints;
@@ -193,32 +193,34 @@ abstract class Actor extends Object
   /// score, btw, so this automatically makes an attempted murder something
   /// people don't appreciate.
   // TODO: for 'Skyrim', we don't need this most of the time (simple friend or foe suffices) -- maybe create PsychologicalActor?
-//  ActorRelationshipMap get safetyFear;
+  //  ActorRelationshipMap get safetyFear;
 
   /// A list of all weapons possessed by the actor.
   ///
   /// This is a list because we want to allow having duplicate items
   /// (2 apples).
   ///
-  /// Not that [WeaponType.shield] is also a [Weapon].
-  BuiltList<Weapon> get weapons;
+  /// Not that [WeaponType.shield] is also a weapon.
+  BuiltList<Item> get weapons;
 
   int countWeapons(WeaponType type) {
     int count = 0;
-    if (currentWeapon.type == type) count += 1;
+    if (currentWeapon.damageCapability.type == type) count += 1;
     for (final weapon in weapons) {
-      if (weapon.type == type) count += 1;
+      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
+      if (weapon.damageCapability.type == type) count += 1;
     }
     return count;
   }
 
-  /// Returns the best weapon (by [Weapon.value]) in [Actor.weapons].
+  /// Returns the best weapon (by [Item.value]) in [Actor.weapons].
   ///
   /// Returns `null` when there are no weapons available.
-  Weapon findBestWeapon() {
-    Weapon best;
+  Item findBestWeapon() {
+    Item best;
     int value = -9999999;
     for (var weapon in weapons) {
+      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
       if (weapon.value > value) {
         best = weapon;
         value = weapon.value;
@@ -233,7 +235,8 @@ abstract class Actor extends Object
   }
 
   bool hasWeapon(WeaponType type) =>
-      currentWeapon.type == type || weapons.any((w) => w.type == type);
+      currentWeapon.damageCapability.type == type ||
+      weapons.any((w) => w.damageCapability.type == type);
 
   /// When an [Actor] hates another actor, they will be willing and eager to
   /// attack them.

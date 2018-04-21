@@ -77,5 +77,5 @@ class JumpBackFromSlash extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.isBarehanded && enemy.currentWeapon.isSlashing;
+      a.isBarehanded && enemy.currentWeapon.damageCapability.isSlashing;
 }

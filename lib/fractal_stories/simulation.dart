@@ -29,7 +29,7 @@ typedef ApproachAction ApproachActionBuilder(Approach approach);
 
 /// Builder takes situation's items and generates an instance of [ItemAction]
 /// with the given [item] and its [description].
-typedef ItemAction ItemActionBuilder(ItemLike item);
+typedef ItemAction ItemActionBuilder(Item item);
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.

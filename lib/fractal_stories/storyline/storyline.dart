@@ -2,7 +2,6 @@ library storyline;
 
 import 'dart:collection';
 import 'dart:math';
-import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';

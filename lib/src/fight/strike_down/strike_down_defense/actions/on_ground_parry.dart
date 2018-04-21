@@ -82,5 +82,6 @@ class OnGroundParry extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.currentWeapon.isSlashing && a.currentWeapon.type.canParrySlash;
+      enemy.currentWeapon.damageCapability.isSlashing &&
+      a.currentWeapon.damageCapability.type.canParrySlash;
 }

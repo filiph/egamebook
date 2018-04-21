@@ -31,7 +31,7 @@ class _$FightSituationSerializer
       'droppedItems',
       serializers.serialize(object.droppedItems,
           specifiedType:
-              const FullType(BuiltList, const [const FullType(ItemLike)])),
+              const FullType(BuiltList, const [const FullType(Item)])),
       'enemyTeamIds',
       serializers.serialize(object.enemyTeamIds,
           specifiedType:
@@ -72,9 +72,9 @@ class _$FightSituationSerializer
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(ItemLike)]))
-              as BuiltList<ItemLike>);
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
           break;
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
@@ -120,7 +120,7 @@ class _$FightSituationSerializer
 
 class _$FightSituation extends FightSituation {
   @override
-  final BuiltList<ItemLike> droppedItems;
+  final BuiltList<Item> droppedItems;
   @override
   final BuiltList<int> enemyTeamIds;
   @override
@@ -220,10 +220,10 @@ class FightSituationBuilder
     implements Builder<FightSituation, FightSituationBuilder> {
   _$FightSituation _$v;
 
-  ListBuilder<ItemLike> _droppedItems;
-  ListBuilder<ItemLike> get droppedItems =>
-      _$this._droppedItems ??= new ListBuilder<ItemLike>();
-  set droppedItems(ListBuilder<ItemLike> droppedItems) =>
+  ListBuilder<Item> _droppedItems;
+  ListBuilder<Item> get droppedItems =>
+      _$this._droppedItems ??= new ListBuilder<Item>();
+  set droppedItems(ListBuilder<Item> droppedItems) =>
       _$this._droppedItems = droppedItems;
 
   ListBuilder<int> _enemyTeamIds;

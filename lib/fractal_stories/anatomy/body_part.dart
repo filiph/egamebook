@@ -20,7 +20,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   factory BodyPart(
       int id,
     String name, {
-    List<String> categories,
     Iterable<BodyPart> children,
     BodyPartDesignation designation,
     BodyPartFunction function,
@@ -35,7 +34,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
       new _$BodyPart((b) => b
         ..id = id
         ..name = name
-        ..categories = new ListBuilder<String>(categories ?? const <String>[])
         ..children = new ListBuilder<BodyPart>(children ?? const <BodyPart>[])
         ..designation = designation ?? BodyPartDesignation.none
         ..function = function ?? BodyPartFunction.none
@@ -53,9 +51,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   /// The number of blunt hits (from fists, clubs, falls, etc.) that the
   /// body part received.
   int get bluntHitsCount;
-
-  @override
-  BuiltList<String> get categories;
 
   BuiltList<BodyPart> get children;
 

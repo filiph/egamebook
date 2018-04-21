@@ -1,6 +1,6 @@
 library edgehead.event_callbacks;
 
-import 'package:edgehead/fractal_stories/items/weapon.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -240,7 +240,7 @@ void sleeping_goblin_thief(Simulation sim, WorldStateBuilder w, Storyline s) {
 
 void youre_dead_slave(Simulation sim, WorldStateBuilder w, Storyline s) {
   var agruth = w.getActorById(agruthId);
-  var sword = new Weapon(w.randomInt(), WeaponType.sword);
+  var sword = new Item.weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
   agruth.report(s, "<subject> draw<s> <subject's> <object>", object: sword);
   w.updateActorById(agruthId, (b) => b..currentWeapon = sword.toBuilder());

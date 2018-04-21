@@ -30,7 +30,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
       'droppedItems',
       serializers.serialize(object.droppedItems,
           specifiedType:
-              const FullType(BuiltList, const [const FullType(ItemLike)])),
+              const FullType(BuiltList, const [const FullType(Item)])),
       'groundMaterial',
       serializers.serialize(object.groundMaterial,
           specifiedType: const FullType(String)),
@@ -60,9 +60,9 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(ItemLike)]))
-              as BuiltList<ItemLike>);
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList<Item>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -91,7 +91,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
 
 class _$LootSituation extends LootSituation {
   @override
-  final BuiltList<ItemLike> droppedItems;
+  final BuiltList<Item> droppedItems;
   @override
   final String groundMaterial;
   @override
@@ -163,10 +163,10 @@ class LootSituationBuilder
     implements Builder<LootSituation, LootSituationBuilder> {
   _$LootSituation _$v;
 
-  ListBuilder<ItemLike> _droppedItems;
-  ListBuilder<ItemLike> get droppedItems =>
-      _$this._droppedItems ??= new ListBuilder<ItemLike>();
-  set droppedItems(ListBuilder<ItemLike> droppedItems) =>
+  ListBuilder<Item> _droppedItems;
+  ListBuilder<Item> get droppedItems =>
+      _$this._droppedItems ??= new ListBuilder<Item>();
+  set droppedItems(ListBuilder<Item> droppedItems) =>
       _$this._droppedItems = droppedItems;
 
   String _groundMaterial;
