@@ -44,47 +44,53 @@ abstract class Actor extends Object
   factory Actor([void updates(ActorBuilder b)]) = _$Actor;
 
   factory Actor.initialized(int id, String name,
-          {bool isPlayer: false,
-          bool nameIsProperNoun: false,
-          Pronoun pronoun,
-          Item currentWeapon,
-          Item currentShield,
-          int hitpoints,
-          int maxHitpoints,
-          int constitution: 1,
-          int stamina: 0,
-          int initiative: 0,
-          BodyPart torso,
-          int gold: 0,
-          String currentRoomName,
-          int followingActorId,
-          Team team,
-          bool isConfused: false,
-          String combineFunctionHandle: "normal"}) =>
-      new _$Actor((b) => b
-        ..id = id
-        ..name = name
-        ..nameIsProperNoun = nameIsProperNoun
-        ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
-        ..currentWeapon =
-            currentWeapon?.toBuilder() ?? createFist(id).toBuilder()
-        ..currentShield = currentShield?.toBuilder()
-        ..pose = Pose.standing
-        ..constitution = constitution ?? 1
-        ..maxHitpoints = maxHitpoints ?? constitution ?? 1
-        ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
-        ..torso = (torso ?? buildHumanoid(id)).toBuilder()
-        ..gold = gold
-        ..stamina = stamina
-        ..initiative = initiative
-        ..isActive = true
-        ..isPlayer = isPlayer
-        ..weapons = new ListBuilder<Item>()
-        ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
-        ..currentRoomName = currentRoomName
-        ..followingActorId = followingActorId
-        ..isConfused = isConfused
-        ..combineFunctionHandle = combineFunctionHandle);
+      {bool isPlayer: false,
+      bool nameIsProperNoun: false,
+      Pronoun pronoun,
+      Item currentWeapon,
+      Item currentShield,
+      int hitpoints,
+      int maxHitpoints,
+      int constitution: 1,
+      int stamina: 0,
+      int initiative: 0,
+      BodyPart torso,
+      int gold: 0,
+      String currentRoomName,
+      int followingActorId,
+      Team team,
+      bool isConfused: false,
+      String combineFunctionHandle: "normal"}) {
+    BodyPart currentTorso = (torso ?? buildHumanoid(id));
+    Item weapon = currentWeapon;
+    if (weapon == null) {
+      weapon = createBodyPartWeapon(currentTorso);
+    }
+
+    return new _$Actor((b) => b
+      ..id = id
+      ..name = name
+      ..nameIsProperNoun = nameIsProperNoun
+      ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
+      ..currentWeapon = weapon?.toBuilder()
+      ..currentShield = currentShield?.toBuilder()
+      ..pose = Pose.standing
+      ..constitution = constitution ?? 1
+      ..maxHitpoints = maxHitpoints ?? constitution ?? 1
+      ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
+      ..torso = currentTorso.toBuilder()
+      ..gold = gold
+      ..stamina = stamina
+      ..initiative = initiative
+      ..isActive = true
+      ..isPlayer = isPlayer
+      ..weapons = new ListBuilder<Item>()
+      ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
+      ..currentRoomName = currentRoomName
+      ..followingActorId = followingActorId
+      ..isConfused = isConfused
+      ..combineFunctionHandle = combineFunctionHandle);
+  }
 
   Actor._();
 
@@ -323,6 +329,25 @@ abstract class Actor extends Object
         protagonist: other, sufferer: this, wasAggressive: true);
     if (recency == null) return false;
     return recency <= time;
+  }
+
+  /// Creates an [Item] from a [BodyPart] in [torso] that acts as a weapon.
+  static Item createBodyPartWeapon(BodyPart torso) {
+    // TODO: get the best one, not just the first one
+    final part = _getDamageDealingBodyParts(torso).first;
+    return createFist(part);
+  }
+
+  /// Walks [part]  and returns all body parts that can be used as a weapon.
+  static Iterable<BodyPart> _getDamageDealingBodyParts([BodyPart part]) =>
+      _walkBodyPartTree(part).where((p) => p.damageCapability != null);
+
+  /// Returns an iterable of all body parts that are descendants of [part].
+  static Iterable<BodyPart> _walkBodyPartTree(BodyPart part) sync* {
+    yield part;
+    for (final child in part.children) {
+      yield* _walkBodyPartTree(child);
+    }
   }
 }
 

@@ -2,9 +2,9 @@ library stranded.item;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+
 import 'storyline/storyline.dart';
 import 'team.dart';
 
@@ -52,9 +52,6 @@ abstract class Item extends Object
   int get id;
 
   @override
-  String get name;
-
-  @override
   bool get isActive => true;
 
   @override
@@ -67,6 +64,9 @@ abstract class Item extends Object
       damageCapability != null && damageCapability.type == WeaponType.shield;
 
   bool get isWeapon => damageCapability != null;
+
+  @override
+  String get name;
 
   @override
   bool get nameIsProperNoun;

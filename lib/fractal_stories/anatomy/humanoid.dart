@@ -1,4 +1,6 @@
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/items/damage_capability.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
 /// Builds a standard humanoid body (two legs, two arms, etc.).
@@ -17,15 +19,28 @@ BodyPart buildHumanoid(int seed) {
       function: BodyPartFunction.mobile,
       isSeverable: true);
 
+  final primaryHand = new BodyPart(random.next(), "wielding hand",
+      designation: BodyPartDesignation.primaryHand,
+      function: BodyPartFunction.wielding,
+      damageCapability: new DamageCapability(WeaponType.fist).toBuilder(),
+      isSeverable: true);
+
   final primaryArm = new BodyPart(random.next(), "wielding arm",
       designation: BodyPartDesignation.primaryArm,
+      isSeverable: true,
+      children: [primaryHand]);
+
+  final secondaryHand = new BodyPart(random.next(), "wielding hand",
+      designation: BodyPartDesignation.secondaryHand,
       function: BodyPartFunction.wielding,
+      damageCapability: new DamageCapability(WeaponType.fist).toBuilder(),
       isSeverable: true);
 
   final secondaryArm = new BodyPart(random.next(), "shield arm",
       designation: BodyPartDesignation.secondaryArm,
       function: BodyPartFunction.wielding,
-      isSeverable: true);
+      isSeverable: true,
+      children: [secondaryHand]);
 
   final leftEye = new BodyPart(random.next(), "left eye",
       designation: BodyPartDesignation.leftEye,

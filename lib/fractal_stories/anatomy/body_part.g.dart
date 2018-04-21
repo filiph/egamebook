@@ -22,8 +22,12 @@ const BodyPartDesignation _$leftEye = const BodyPartDesignation._('leftEye');
 const BodyPartDesignation _$rightEye = const BodyPartDesignation._('rightEye');
 const BodyPartDesignation _$primaryArm =
     const BodyPartDesignation._('primaryArm');
+const BodyPartDesignation _$primaryHand =
+    const BodyPartDesignation._('primaryHand');
 const BodyPartDesignation _$secondaryArm =
     const BodyPartDesignation._('secondaryArm');
+const BodyPartDesignation _$secondaryHand =
+    const BodyPartDesignation._('secondaryHand');
 const BodyPartDesignation _$torso = const BodyPartDesignation._('torso');
 const BodyPartDesignation _$noSpecification =
     const BodyPartDesignation._('none');
@@ -44,8 +48,12 @@ BodyPartDesignation _$valueOfSpecifiedBodyPart(String name) {
       return _$rightEye;
     case 'primaryArm':
       return _$primaryArm;
+    case 'primaryHand':
+      return _$primaryHand;
     case 'secondaryArm':
       return _$secondaryArm;
+    case 'secondaryHand':
+      return _$secondaryHand;
     case 'torso':
       return _$torso;
     case 'none':
@@ -64,7 +72,9 @@ final BuiltSet<BodyPartDesignation> _$specificBodyPartValues =
   _$leftEye,
   _$rightEye,
   _$primaryArm,
+  _$primaryHand,
   _$secondaryArm,
+  _$secondaryHand,
   _$torso,
   _$noSpecification,
 ]);
@@ -157,6 +167,12 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
     ];
+    if (object.damageCapability != null) {
+      result
+        ..add('damageCapability')
+        ..add(serializers.serialize(object.damageCapability,
+            specifiedType: const FullType(DamageCapability)));
+    }
 
     return result;
   }
@@ -181,6 +197,11 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(BodyPart)]))
               as BuiltList<BodyPart>);
+          break;
+        case 'damageCapability':
+          result.damageCapability.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(DamageCapability))
+              as DamageCapability);
           break;
         case 'designation':
           result.designation = serializers.deserialize(value,
@@ -277,6 +298,8 @@ class _$BodyPart extends BodyPart {
   @override
   final BuiltList<BodyPart> children;
   @override
+  final DamageCapability damageCapability;
+  @override
   final BodyPartDesignation designation;
   @override
   final BodyPartFunction function;
@@ -305,6 +328,7 @@ class _$BodyPart extends BodyPart {
   _$BodyPart._(
       {this.bluntHitsCount,
       this.children,
+      this.damageCapability,
       this.designation,
       this.function,
       this.id,
@@ -348,6 +372,7 @@ class _$BodyPart extends BodyPart {
     if (other is! BodyPart) return false;
     return bluntHitsCount == other.bluntHitsCount &&
         children == other.children &&
+        damageCapability == other.damageCapability &&
         designation == other.designation &&
         function == other.function &&
         id == other.id &&
@@ -376,10 +401,12 @@ class _$BodyPart extends BodyPart {
                                             $jc(
                                                 $jc(
                                                     $jc(
-                                                        0,
-                                                        bluntHitsCount
-                                                            .hashCode),
-                                                    children.hashCode),
+                                                        $jc(
+                                                            0,
+                                                            bluntHitsCount
+                                                                .hashCode),
+                                                        children.hashCode),
+                                                    damageCapability.hashCode),
                                                 designation.hashCode),
                                             function.hashCode),
                                         id.hashCode),
@@ -398,6 +425,7 @@ class _$BodyPart extends BodyPart {
     return (newBuiltValueToStringHelper('BodyPart')
           ..add('bluntHitsCount', bluntHitsCount)
           ..add('children', children)
+          ..add('damageCapability', damageCapability)
           ..add('designation', designation)
           ..add('function', function)
           ..add('id', id)
@@ -425,6 +453,12 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   ListBuilder<BodyPart> get children =>
       _$this._children ??= new ListBuilder<BodyPart>();
   set children(ListBuilder<BodyPart> children) => _$this._children = children;
+
+  DamageCapabilityBuilder _damageCapability;
+  DamageCapabilityBuilder get damageCapability =>
+      _$this._damageCapability ??= new DamageCapabilityBuilder();
+  set damageCapability(DamageCapabilityBuilder damageCapability) =>
+      _$this._damageCapability = damageCapability;
 
   BodyPartDesignation _designation;
   BodyPartDesignation get designation => _$this._designation;
@@ -479,6 +513,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
     if (_$v != null) {
       _bluntHitsCount = _$v.bluntHitsCount;
       _children = _$v.children?.toBuilder();
+      _damageCapability = _$v.damageCapability?.toBuilder();
       _designation = _$v.designation;
       _function = _$v.function;
       _id = _$v.id;
@@ -512,6 +547,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
         new _$BodyPart._(
             bluntHitsCount: bluntHitsCount,
             children: children?.build(),
+            damageCapability: _damageCapability?.build(),
             designation: designation,
             function: function,
             id: id,

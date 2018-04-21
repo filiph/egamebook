@@ -3,6 +3,7 @@ library fractal_stories.anatomy.body_part;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 
@@ -18,7 +19,7 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   static Serializer<BodyPart> get serializer => _$bodyPartSerializer;
 
   factory BodyPart(
-      int id,
+    int id,
     String name, {
     Iterable<BodyPart> children,
     BodyPartDesignation designation,
@@ -30,6 +31,7 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
     int bluntHitsCount,
     int majorCutsCount,
     int minorCutsCount,
+    DamageCapabilityBuilder damageCapability,
   }) =>
       new _$BodyPart((b) => b
         ..id = id
@@ -44,6 +46,7 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
         ..bluntHitsCount = bluntHitsCount ?? 0
         ..majorCutsCount = majorCutsCount ?? 0
         ..minorCutsCount = minorCutsCount ?? 0
+        ..damageCapability = damageCapability
         ..isActive = true);
 
   BodyPart._();
@@ -53,6 +56,12 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   int get bluntHitsCount;
 
   BuiltList<BodyPart> get children;
+
+  /// Fists, thorns, tails and similar body parts can have the ability
+  /// to deal damage. Actor can spawn an item that acts as a weapon
+  /// and which uses this [damageCapability].
+  @nullable
+  DamageCapability get damageCapability;
 
   BodyPartDesignation get designation;
 
@@ -199,12 +208,22 @@ class BodyPartDesignation extends EnumClass {
   /// Right eye of a humanoid (two-eyed) creature.
   static const BodyPartDesignation rightEye = _$rightEye;
 
-  /// The arm of a humanoid (two-armed) creature that wields a weapon.
+  /// The arm of a humanoid (two-armed) creature that wields a weapon
+  /// and ends with [primaryHand].
   static const BodyPartDesignation primaryArm = _$primaryArm;
+
+  /// The hand of a humanoid (two-armed) creature that holds the weapon
+  /// or deals fist damage.
+  static const BodyPartDesignation primaryHand = _$primaryHand;
 
   /// The arm of a humanoid (two-armed) creature that does not normally
   /// wield a weapon. It might not wield anything, or it can wield a shield.
+  /// It ends with a [secondaryHand].
   static const BodyPartDesignation secondaryArm = _$secondaryArm;
+
+  /// The hand of a humanoid (two-armed) creature that does not normally
+  /// hold the weapon. It might not hold anything, or it might hold a shield.
+  static const BodyPartDesignation secondaryHand = _$secondaryHand;
 
   /// The central part of a creature. This is normally where the heart is,
   /// and so this tends to be the root of the anatomy.

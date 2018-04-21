@@ -2,7 +2,6 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
@@ -154,12 +153,13 @@ class ThrowSpear extends EnemyTargetAction {
 
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory
   /// ([Actor.weapons]) to the ground. If actor's hand was emptied, a new
-  /// weapon (or [defaultFist]) is put in it.
+  /// weapon (or a fist/claw) is put in it.
   void _moveSpearToGround(WorldStateBuilder w, Actor a, Item spear) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
-      final Item weapon = a.findBestWeapon() ?? createFist(w.randomInt());
+      final Item weapon =
+          a.findBestWeapon() ?? Actor.createBodyPartWeapon(a.torso);
       w.updateActorById(
           a.id,
           (b) => b
