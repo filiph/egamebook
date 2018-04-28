@@ -59,7 +59,7 @@ SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
     return _disableBySlash(victim.build(), designated, weapon);
   }
 
-  return new SlashingResult(victim.build(), null);
+  return new SlashingResult(victim.build(), null, SlashSuccessLevel.majorCut);
 }
 
 /// Minor cuts are merely recorded on the body part. They don't have any
@@ -82,7 +82,7 @@ SlashingResult _addMinorCut(Actor target, BodyPart designated, Item weapon) {
     },
   );
 
-  return new SlashingResult(victim.build(), null);
+  return new SlashingResult(victim.build(), null, SlashSuccessLevel.minorCut);
 }
 
 /// Cuts off the body part. The [bodyPart] must be severable.
@@ -114,7 +114,8 @@ SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   severedPart.isSevered = true;
   severedPart.isAlive = false;
 
-  return new SlashingResult(victim.build(), severedPart.build());
+  return new SlashingResult(
+      victim.build(), severedPart.build(), SlashSuccessLevel.cleave);
 }
 
 /// Walks body parts from torso down the anatomy-tree, and calls [update]
@@ -154,7 +155,7 @@ SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Item weapon) {
     },
   );
 
-  return new SlashingResult(victim.build(), null);
+  return new SlashingResult(victim.build(), null, SlashSuccessLevel.majorCut);
 }
 
 void _updateWalker(
@@ -189,7 +190,16 @@ class SlashingResult {
   /// This can be (and often _will_ be) `null`.
   final BodyPart severedPart;
 
-  const SlashingResult(this.actor, this.severedPart);
+  /// Normally, this is the [SlashSuccessLevel] that [executeSlashingHit]
+  /// was called with. But in some cases, the success level is upgraded
+  /// or downgraded.
+  ///
+  /// For example, if the provided success level is [SlashSuccessLevel.cleave]
+  /// but the body part is not severable, the final [successLevel] will be
+  /// [SlashSuccessLevel.majorCut].
+  final SlashSuccessLevel successLevel;
+
+  const SlashingResult(this.actor, this.severedPart, this.successLevel);
 }
 
 enum SlashSuccessLevel {

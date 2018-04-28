@@ -71,6 +71,15 @@ void main() {
         isFalse);
   });
 
+  test("cleaving non-severable body part downgrades to major cut", () {
+    final orc = new Actor.initialized(1000, "orc");
+    final sword = new Item.weapon(42, WeaponType.sword);
+
+    final slashResult = executeSlashingHit(
+        orc, BodyPartDesignation.head, sword, SlashSuccessLevel.cleave);
+    expect(slashResult.successLevel, SlashSuccessLevel.majorCut);
+  });
+
   test("major-cutting actor with Con=2 once does not kill him", () {
     final orc = new Actor.initialized(1000, "orc", constitution: 2);
     final sword = new Item.weapon(42, WeaponType.sword);
