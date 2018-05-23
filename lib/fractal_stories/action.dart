@@ -204,6 +204,25 @@ abstract class Action {
   }
 }
 
+/// This [Action] requires an [approach].
+///
+/// Every [ApproachAction] should contain a static builder like this:
+///
+///     static ApproachAction builder(Approach enemy) => new Example(exit);
+abstract class ApproachAction extends Action {
+  final Approach approach;
+
+  @mustCallSuper
+  ApproachAction(this.approach);
+
+  @override
+  String get command =>
+      approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
+
+  @override
+  String toString() => "ApproachAction<$command>";
+}
+
 /// This [Action] requires an [enemy].
 ///
 /// Every [EnemyTargetAction] should contain a static builder like this:
@@ -273,25 +292,6 @@ abstract class EnemyTargetAction extends Action {
   @override
   String toString() => "EnemyTargetAction<$commandTemplate::"
       "enemy=${enemy.id}/${enemy.name}>";
-}
-
-/// This [Action] requires an [approach].
-///
-/// Every [ApproachAction] should contain a static builder like this:
-///
-///     static ApproachAction builder(Approach enemy) => new Example(exit);
-abstract class ApproachAction extends Action {
-  final Approach approach;
-
-  @mustCallSuper
-  ApproachAction(this.approach);
-
-  @override
-  String get command =>
-      approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
-
-  @override
-  String toString() => "ApproachAction<$command>";
 }
 
 /// This [Action] requires an [item].
