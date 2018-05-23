@@ -350,21 +350,3 @@ abstract class Actor extends Object
     }
   }
 }
-
-class ActorMap<T> extends CanonicalizedMap<int, Actor, T> {
-  ActorMap() : super((Actor key) => key.id, isValidKey: (key) => key != null);
-
-  factory ActorMap.from(ActorMap<T> other) {
-    var map = new ActorMap<T>();
-    other.forEach((Actor key, T value) => map[key] = value);
-    return map;
-  }
-
-  @override
-  int get hashCode {
-    return hash2(hashObjects(values), hashObjects(keys));
-  }
-
-  @override
-  bool operator ==(Object o) => o is ActorMap && hashCode == o.hashCode;
-}
