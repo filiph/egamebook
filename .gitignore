@@ -3,6 +3,7 @@
 .idea
 .packages
 .pub/
+.dart_tool/
 build/
 *.scssc
 .cli_access_credentials.private
