@@ -110,9 +110,17 @@ class EdgeheadGame extends Book {
     var global = new EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
-      // Loading existing game from [saveGameSerialized].
-      world = edgehead_serializer.serializers.deserializeWith(
-          WorldState.serializer, JSON.decode(saveGameSerialized));
+      // Load existing game from [saveGameSerialized].
+      try {
+        world = edgehead_serializer.serializers.deserializeWith(
+            WorldState.serializer, JSON.decode(saveGameSerialized));
+      } on ArgumentError {
+        const message = "Error when parsing savegame. Maybe the savegame needs "
+            "to be updated to the newest version of the runtime?";
+        log.severe(message);
+        print("ERROR: $message");
+        rethrow;
+      }
     } else {
       // Creating a new game from start.
       world = new WorldState((b) => b
