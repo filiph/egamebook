@@ -85,27 +85,27 @@ abstract class Action {
       Simulation sim, WorldState world, PubSub pubsub) sync* {
     var successChance = getSuccessChance(actor, sim, current.world);
     assert(successChance != null);
-    assert(successChance >= 0.0);
-    assert(successChance <= 1.0);
+    assert(successChance.value >= 0.0);
+    assert(successChance.value <= 1.0);
 
-    if (successChance > 0) {
+    if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applySuccess, pubsub,
+          actor, sim, worldOutput, applySuccess, pubsub, successChance,
           isSuccess: true);
 
       yield new PlanConsequence(
-          worldOutput.build(), current, this, storyline, successChance,
+          worldOutput.build(), current, this, storyline, successChance.value,
           isSuccess: true);
     }
-    if (successChance < 1) {
+    if (successChance.value < 1) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applyFailure, pubsub,
+          actor, sim, worldOutput, applyFailure, pubsub, successChance,
           isFailure: true);
 
-      yield new PlanConsequence(
-          worldOutput.build(), current, this, storyline, 1 - successChance,
+      yield new PlanConsequence(worldOutput.build(), current, this, storyline,
+          1 - successChance.value,
           isFailure: true);
     }
   }
@@ -127,7 +127,7 @@ abstract class Action {
   String getRollReason(Actor a, Simulation sim, WorldState w);
 
   /// Success chance of the action given the actor and the state of the world.
-  num getSuccessChance(Actor a, Simulation sim, WorldState w);
+  ReasonedSuccessChance getSuccessChance(Actor a, Simulation sim, WorldState w);
 
   bool isApplicable(Actor a, Simulation sim, WorldState w);
 
@@ -141,9 +141,15 @@ abstract class Action {
     world.recordAction(builder.build());
   }
 
-  Storyline _applyToWorldCopy(Actor actor, Simulation sim,
-      WorldStateBuilder output, ApplyFunction applyFunction, PubSub pubsub,
-      {bool isSuccess: false, bool isFailure: false}) {
+  Storyline _applyToWorldCopy(
+      Actor actor,
+      Simulation sim,
+      WorldStateBuilder output,
+      ApplyFunction applyFunction,
+      PubSub pubsub,
+      ReasonedSuccessChance successChance,
+      {bool isSuccess: false,
+      bool isFailure: false}) {
     final initialWorld = output.build();
     final builder =
         _prepareWorldRecord(actor, sim, initialWorld, isSuccess, isFailure);
@@ -152,8 +158,8 @@ abstract class Action {
     final situationId = initialWorld.currentSituation.id;
     initialWorld.currentSituation
         .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = new ActionContext(
-        this, actor, sim, initialWorld, pubsub, output, outputStoryline);
+    final context = new ActionContext(this, actor, sim, initialWorld, pubsub,
+        output, outputStoryline, successChance);
     _description = applyFunction(context);
 
     // The current situation could have been removed by [applyFunction].
@@ -319,6 +325,73 @@ abstract class ItemAction extends Action {
 
   @override
   String toString() => "ItemAction<$command>";
+}
+
+/// This class encapsulates a singular reason why an action might have
+/// succeeded or failed.
+///
+/// For example, when actor successfully slashes an opponent, the reasons
+/// might include:
+///
+/// * actor was faster than the target
+/// * actor was better trained in sword-fighting than the target
+/// * the target was paralyzed and couldn't move
+/// * the target was out of balance
+@immutable
+class Reason<T> {
+  /// The data for the reason. It can be merely a number, or an [enum] instance,
+  /// or it can be a full-blown object.
+  final T payload;
+
+  /// The relative weight of this reason.
+  ///
+  /// For example, for a failure to dodge, paralysis will have
+  /// a much higher weight than clumsiness. When you're paralyzed, it's obvious
+  /// you won't be able to dodge properly.
+  final num weight;
+
+  const Reason(this.payload, this.weight);
+}
+
+/// This is what [Action.getSuccessChance] returns. It's injected into
+/// [ActionContext].
+@immutable
+class ReasonedSuccessChance<R> {
+  /// Sure failure without any reason given.
+  static const ReasonedSuccessChance<Object> sureFailure =
+      const ReasonedSuccessChance<Object>(0.0);
+
+  /// Sure success without any reason given.
+  static const ReasonedSuccessChance<Object> sureSuccess =
+      const ReasonedSuccessChance<Object>(1.0);
+
+  /// The probability of success, as a number between `0.0` and `1.0`.
+  final num value;
+
+  /// List of possible reasons for success.
+  final List<Reason<R>> successReasons;
+
+  /// List of possible reasons for failure.
+  final List<Reason<R>> failureReasons;
+
+  const ReasonedSuccessChance(this.value,
+      {List<Reason<R>> successReasons, List<Reason<R>> failureReasons})
+      : successReasons = successReasons ?? const <Reason<Null>>[],
+        failureReasons = failureReasons ?? const <Reason<Null>>[];
+
+  /// Creates an inversion of this [ReasonedSuccessChance].
+  ///
+  /// For example, if the success chance of actor A pushing actor B
+  /// to the ground is X, then the success chance of actor B withstanding
+  /// the push from actor A is the inverse of X.
+  ///
+  /// This not only inverts [value], but also switches [successReasons]
+  /// with [failureReasons].
+  ReasonedSuccessChance<R> inverted() => new ReasonedSuccessChance(1 - value,
+      successReasons: failureReasons, failureReasons: successReasons);
+
+  @override
+  String toString() => "ReasonedSuccessChance(${(value * 100).round()}%)";
 }
 
 /// This enum defines all the different resources (Stats) that player can use

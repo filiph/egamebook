@@ -3,7 +3,6 @@ library stranded.actor;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -12,7 +11,6 @@ import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
-import 'package:quiver/core.dart';
 
 import 'item.dart';
 import 'pose.dart';
@@ -52,6 +50,7 @@ abstract class Actor extends Object
       int hitpoints,
       int maxHitpoints,
       int constitution: 1,
+      int dexterity: 100,
       int stamina: 0,
       int initiative: 0,
       BodyPart torso,
@@ -70,26 +69,28 @@ abstract class Actor extends Object
     return new _$Actor((b) => b
       ..id = id
       ..name = name
+      ..isPlayer = isPlayer
       ..nameIsProperNoun = nameIsProperNoun
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
       ..currentWeapon = weapon?.toBuilder()
       ..currentShield = currentShield?.toBuilder()
-      ..pose = Pose.standing
-      ..constitution = constitution ?? 1
-      ..maxHitpoints = maxHitpoints ?? constitution ?? 1
       ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
-      ..torso = currentTorso.toBuilder()
-      ..gold = gold
+      ..maxHitpoints = maxHitpoints ?? constitution ?? 1
+      ..constitution = constitution ?? 1
+      ..dexterity = dexterity
       ..stamina = stamina
       ..initiative = initiative
-      ..isActive = true
-      ..isPlayer = isPlayer
-      ..weapons = new ListBuilder<Item>()
-      ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
+      ..torso = currentTorso.toBuilder()
+      ..gold = gold
       ..currentRoomName = currentRoomName
       ..followingActorId = followingActorId
       ..isConfused = isConfused
-      ..combineFunctionHandle = combineFunctionHandle);
+      ..combineFunctionHandle = combineFunctionHandle
+      ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
+      ..pose = Pose.standing
+      ..isActive = true
+      ..weapons = new ListBuilder<Item>()
+    );
   }
 
   Actor._();
@@ -122,6 +123,12 @@ abstract class Actor extends Object
   ///
   /// Changing a weapon should ordinarily take a turn.
   Item get currentWeapon;
+
+  /// The general ability to move: swiftly, precisely, with agility.
+  /// Useful in combat and most other physical action.
+  ///
+  /// Average human has [dexterity] of `100`.
+  int get dexterity;
 
   /// The actor that [this] actor is following around.
   @nullable

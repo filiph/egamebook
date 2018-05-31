@@ -6,12 +6,21 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 final Entity swing =
     new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+
+ReasonedSuccessChance computeShieldBlockSlash(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.7, [
+    const Bonus(50, CombatReason.dexterity),
+    const Bonus(30, CombatReason.balance),
+  ]);
+}
 
 EnemyTargetAction shieldBlockSlashBuilder(Actor enemy) =>
     new ShieldBlockSlash(enemy);
@@ -105,13 +114,11 @@ class ShieldBlockSlash extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    num enemyOutOfBalanceBonus = enemy.isOffBalance ? 0.2 : 0;
-    if (a.isPlayer) return 0.78 - outOfBalancePenalty + enemyOutOfBalanceBonus;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(0.5 - outOfBalancePenalty + enemyOutOfBalanceBonus);
+        .or(computeShieldBlockSlash(a, sim, w, enemy));
   }
 
   @override

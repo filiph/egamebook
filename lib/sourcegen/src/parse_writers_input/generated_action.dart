@@ -67,9 +67,12 @@ class GeneratedAction extends GeneratedGameObject {
         successChance, hasRescue, rescueSituationClassName, className);
     classBuilder.addMethod(applyFailureBuilder);
 
+    final reasonedChance =
+        reasonedSuccessChanceType.constInstance([literal(successChance)]);
+
     var successChanceBuilder =
-        createActorSimWorldMethod('getSuccessChance', numType)
-          ..addStatement(literal(successChance).asReturn());
+        createActorSimWorldMethod('getSuccessChance', reasonedSuccessChanceType)
+          ..addStatement(reasonedChance.asReturn());
     classBuilder.addMethod(successChanceBuilder);
 
     var rerollableBuilder = new MethodBuilder.getter('rerollable',

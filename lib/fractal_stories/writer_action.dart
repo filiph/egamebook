@@ -81,8 +81,9 @@ class SimpleAction extends RoamingAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    return 1.0;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override

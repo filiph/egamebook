@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
@@ -81,11 +82,11 @@ class DodgePunch extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    if (a.isPlayer) return 0.7 - outOfBalancePenalty;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    return situation.predeterminedChance.or(0.4 - outOfBalancePenalty);
+    return situation.predeterminedChance
+        .or(computeStartPunch(enemy, sim, w, a).inverted());
   }
 
   @override

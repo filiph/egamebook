@@ -1,10 +1,11 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/punch_defense_situation.dart';
 import 'package:edgehead/src/fight/punch/punch_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -14,6 +15,14 @@ const String startPunchCommandTemplate = "punch <object>";
 const String startPunchHelpMessage =
     "Punching someone hard enough can cause them to lose their footing. "
     "And it hurts.";
+
+ReasonedSuccessChance computeStartPunch(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.6, [
+    const Bonus(75, CombatReason.dexterity),
+    const Bonus(30, CombatReason.balance),
+  ]);
+}
 
 EnemyTargetAction startPunchBuilder(Actor enemy) => new StartDefensibleAction(
     "StartPunch",
@@ -46,7 +55,7 @@ EnemyTargetAction
             (a, sim, w, enemy) => createPunchDefenseSituation(
                 w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
             enemy,
-            successChanceGetter: (a, sim, w, enemy) => 0.8,
+            successChanceGetter: computeStartPunch,
             applyStartOfFailure: startPunchReportStart,
             defenseSituationWhenFailed:
                 (a, sim, w, enemy) => createPunchDefenseSituation(w.randomInt(),

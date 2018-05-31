@@ -5,7 +5,15 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+
+ReasonedSuccessChance computeRollOutOfWay(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.9, [
+    const Bonus(95, CombatReason.dexterity),
+  ]);
+}
 
 EnemyTargetAction rollOutOfWayBuilder(Actor enemy) => new RollOutOfWay(enemy);
 
@@ -68,10 +76,11 @@ class RollOutOfWay extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.98;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    return situation.predeterminedChance.or(0.5);
+    return situation.predeterminedChance
+        .or(computeRollOutOfWay(a, sim, w, enemy));
   }
 
   @override

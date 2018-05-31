@@ -1,8 +1,8 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
@@ -61,7 +61,9 @@ class Unconfuse extends Action {
       "user-visible";
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(Actor actor, Simulation sim, WorldState world) {

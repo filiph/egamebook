@@ -321,7 +321,7 @@ class EdgeheadGame extends Book {
 
   Future _applyPlayerAction(
       Action action, Actor actor, List<PlanConsequence> consequences) async {
-    num chance = action.getSuccessChance(actor, simulation, world);
+    num chance = action.getSuccessChance(actor, simulation, world).value;
     if (chance == 1.0) {
       consequence = consequences.single;
     } else if (chance == 0.0) {

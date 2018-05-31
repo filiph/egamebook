@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 EnemyTargetAction evadeNeckBreakingBuilder(Actor enemy) =>
@@ -68,10 +69,11 @@ class EvadeNeckBreaking extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.6;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    return situation.predeterminedChance.or(0.5);
+    return situation.predeterminedChance
+        .or(computeBreakNeckOnGroundChance(enemy, sim, w, a).inverted());
   }
 
   @override

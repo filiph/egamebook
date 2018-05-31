@@ -61,7 +61,9 @@ class TakeDroppedShield extends ItemAction {
       throw new UnimplementedError();
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) {

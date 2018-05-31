@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -16,6 +17,20 @@ const String counterSlashHelpMessage =
     "You can deal serious damage when countering "
     "because your opponent is often caught off guard. On the other hand, "
     "counters require fast reaction and could throw you out of balance.";
+
+/// Will the actor be able to even execute the counter slash?
+///
+/// If not, then the slash completely misses the mark. If so, then
+/// it either automatically does damage (if the actor is player) or
+/// it lets the enemy defend (otherwise).
+ReasonedSuccessChance computeCounterSlash(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.6, [
+    const Bonus(50, CombatReason.dexterity),
+    const Bonus(50, CombatReason.targetWithoutShield),
+    const Bonus(50, CombatReason.balance),
+  ]);
+}
 
 void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation situation) {
@@ -46,7 +61,7 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     (a, sim, w, enemy) => createSlashDefenseSituation(
         w.randomInt(), a, enemy, Predetermination.none),
     enemy,
-    successChanceGetter: (_, __, ___, enemy) => enemy.isStanding ? 0.7 : 0.9,
+    successChanceGetter: computeCounterSlash,
     applyStartOfFailure: counterSlashApplyFailure,
     buildSituationsOnFailure: false);
 
@@ -64,8 +79,7 @@ EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (_, __, ___, enemy) =>
-            enemy.isStanding ? 0.7 : 0.9,
+        successChanceGetter: computeCounterSlash,
         applyStartOfFailure: counterSlashApplyFailure,
         buildSituationsOnFailure: false,
         rerollable: true,

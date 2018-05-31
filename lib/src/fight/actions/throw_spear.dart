@@ -7,10 +7,20 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
+
+ReasonedSuccessChance computeThrowSpear(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.1, [
+    const Bonus(20, CombatReason.dexterity),
+    const Bonus(20, CombatReason.targetWithoutShield),
+    const Bonus(20, CombatReason.balance),
+  ]);
+}
 
 class ThrowSpear extends EnemyTargetAction {
   static const String className = "ThrowSpear";
@@ -116,9 +126,9 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
-    final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-    return 0.4 - shieldPenalty;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState world) {
+    return computeThrowSpear(a, sim, world, enemy);
   }
 
   @override

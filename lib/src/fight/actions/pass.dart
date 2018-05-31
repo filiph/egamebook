@@ -56,7 +56,9 @@ class Pass extends Action {
       "user-visible";
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(Actor actor, Simulation sim, WorldState world) => true;

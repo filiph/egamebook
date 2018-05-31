@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
@@ -17,6 +18,19 @@ const String startSlashOutOfBalanceCommand =
 const String startSlashOutOfBalanceHelp =
     "It's always better to fight with your feet "
     "firmly on the ground. But sometimes, it's necessary to act quickly.";
+
+ReasonedSuccessChance computeStartSlashOutOfBalance(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.4, [
+    const Bonus(50, CombatReason.dexterity),
+    // This is intentional. Since the action can only lead to either
+    // complete miss (attacker's failure) or guaranteed failure
+    // of enemy's defense (attacker's success), we do need to count
+    // defender's shield here. Let's say the attacking player tries
+    // not to hit the shield and therefore misses completely.
+    const Bonus(30, CombatReason.targetWithoutShield),
+  ]);
+}
 
 void startSlashOutOfBalanceApplyFailure(Actor a, Simulation sim,
         WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) =>
@@ -42,8 +56,7 @@ EnemyTargetAction startSlashOutOfBalanceBuilder(Actor enemy) =>
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.none),
         enemy,
-        successChanceGetter: (a, sim, w, enemy) =>
-            0.7 /* 30% chance of complete miss */,
+        successChanceGetter: computeStartSlashOutOfBalance,
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 
@@ -65,15 +78,7 @@ EnemyTargetAction startSlashOutOfBalancePlayerBuilder(Actor enemy) =>
         (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-        enemy, successChanceGetter: (a, sim, w, enemy) {
-      // This is intentional. Since the action can only lead to either
-      // complete miss (attacker's failure) or guaranteed failure
-      // of enemy's defense (attacker's success), we do need to count
-      // defender's shield here. Let's say the attacking player tries
-      // not to hit the shield and therefore misses completely.
-      final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-      return 0.5 - shieldPenalty;
-    },
+        enemy, successChanceGetter: computeStartSlashOutOfBalance,
         applyStartOfFailure: startSlashOutOfBalanceApplyFailure,
         buildSituationsOnFailure: false);
 

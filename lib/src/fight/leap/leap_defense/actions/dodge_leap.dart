@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
@@ -87,15 +88,11 @@ class DodgeLeap extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    num enemyJumpedFromGroundBonus = enemy.isOnGround ? 0.2 : 0;
-    if (a.isPlayer) {
-      return 0.78 - outOfBalancePenalty + enemyJumpedFromGroundBonus;
-    }
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(0.5 - outOfBalancePenalty + enemyJumpedFromGroundBonus);
+        .or(computeStartLeap(enemy, sim, w, a).inverted());
   }
 
   @override

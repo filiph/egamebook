@@ -2,11 +2,20 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+
+ReasonedSuccessChance computeCounterTackle(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.5, [
+    const Bonus(90, CombatReason.dexterity),
+    const Bonus(50, CombatReason.balance),
+  ]);
+}
 
 class CounterTackle extends EnemyTargetAction {
   static const String className = "CounterTackle";
@@ -67,10 +76,9 @@ class CounterTackle extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    num offBalanceBonus = enemy.isOffBalance ? 0.2 : 0.0;
-    if (a.isPlayer) return 0.7 + offBalanceBonus;
-    return 0.5 + offBalanceBonus;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
+    return computeCounterTackle(a, sim, w, enemy);
   }
 
   @override

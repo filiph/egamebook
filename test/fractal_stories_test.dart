@@ -1,4 +1,5 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -163,9 +164,11 @@ void main() {
           ..statefulRandomState = 1337
           ..time = new DateTime.utc(1000));
 
-        test(" uses default if no variant is applicable", () {
-          final actionContext = new ActionContext(
-              null, aren, simulation, world, null, world.toBuilder(), null);
+        final sureSuccess = ReasonedSuccessChance.sureSuccess;
+
+        test("uses default if no variant is applicable", () {
+          final actionContext = new ActionContext(null, aren, simulation, world,
+              null, world.toBuilder(), null, sureSuccess);
 
           initialSituation.moveActor(actionContext, _forgeName, silent: true);
           final result = actionContext.outputWorld.build();
@@ -174,8 +177,8 @@ void main() {
         });
 
         test("uses variant if applicable", () {
-          final actionContext = new ActionContext(
-              null, aren, simulation, world, null, world.toBuilder(), null);
+          final actionContext = new ActionContext(null, aren, simulation, world,
+              null, world.toBuilder(), null, sureSuccess);
           forgeIsAfterFire = true;
 
           initialSituation.moveActor(actionContext, _forgeName, silent: true);

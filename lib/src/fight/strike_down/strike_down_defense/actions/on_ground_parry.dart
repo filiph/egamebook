@@ -5,12 +5,20 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 
-// TODO find a reason why to take this choice. Maybe allow counter?
+ReasonedSuccessChance computeOnGroundParry(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.5, [
+    const Bonus(70, CombatReason.dexterity),
+  ]);
+}
+
 EnemyTargetAction onGroundParryBuilder(Actor enemy) => new OnGroundParry(enemy);
 
+/// TODO: find a reason why to take this choice. Maybe allow counter?
 class OnGroundParry extends EnemyTargetAction {
   static const String className = "OnGroundParry";
 
@@ -74,10 +82,11 @@ class OnGroundParry extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.6;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    return situation.predeterminedChance.or(0.3);
+    return situation.predeterminedChance
+        .or(computeOnGroundParry(a, sim, w, enemy));
   }
 
   @override

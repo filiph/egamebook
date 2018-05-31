@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
@@ -106,10 +107,12 @@ class Pound extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    if (a.isPlayer) return 0.9 - outOfBalancePenalty;
-    return 0.5 - outOfBalancePenalty;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState world) {
+    return getCombatMoveChance(a, enemy, 0.8, [
+      const Bonus(95, CombatReason.dexterity),
+      const Bonus(30, CombatReason.balance),
+    ]);
   }
 
   @override

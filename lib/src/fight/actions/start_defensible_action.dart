@@ -1,10 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+
+typedef ReasonedSuccessChance SuccessChanceGetter(
+    Actor a, Simulation sim, WorldState w, Actor enemy);
 
 typedef void _PartialApplyFunction(
     Actor actor,
@@ -16,9 +19,6 @@ typedef void _PartialApplyFunction(
 
 typedef Situation _SituationBuilder(
     Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
-
-typedef num _SuccessChanceGetter(
-    Actor a, Simulation sim, WorldState w, Actor enemy);
 
 /// This is a utility class that makes it easier to build actions that put
 /// 2 situations on the stack at once: one is the attack, and on top of it
@@ -40,7 +40,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   final _PartialApplyFunction _applyStartOfSuccess;
 
   /// Provide this to get another success chance than the default `1.0`.
-  final _SuccessChanceGetter _successChanceGetter;
+  final SuccessChanceGetter _successChanceGetter;
 
   /// This function should use [storyline] to report that the defensible action
   /// couldn't even start. It can modify [simulation].
@@ -106,7 +106,7 @@ class StartDefensibleAction extends EnemyTargetAction {
       this._mainSituationBuilder,
       this._defenseSituationBuilder,
       Actor enemy,
-      {_SuccessChanceGetter successChanceGetter,
+      {SuccessChanceGetter successChanceGetter,
       this.buildSituationsOnFailure: true,
       _SituationBuilder defenseSituationWhenFailed,
       _PartialApplyFunction applyStartOfFailure,
@@ -161,11 +161,12 @@ class StartDefensibleAction extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     if (_successChanceGetter != null) {
       return _successChanceGetter(a, sim, w, enemy);
     }
-    return 1.0;
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override

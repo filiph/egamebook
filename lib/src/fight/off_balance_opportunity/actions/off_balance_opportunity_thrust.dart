@@ -1,12 +1,22 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
+
+ReasonedSuccessChance computeOpportunityThrust(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.4, [
+    const Bonus(20, CombatReason.dexterity),
+    const Bonus(20, CombatReason.targetWithoutShield),
+    const Bonus(20, CombatReason.balance),
+  ]);
+}
 
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
   static const String className = "OffBalanceOpportunityThrust";
@@ -77,9 +87,9 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.6;
-    return 0.5;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
+    return computeOpportunityThrust(a, sim, w, enemy);
   }
 
   @override

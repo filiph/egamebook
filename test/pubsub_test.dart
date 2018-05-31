@@ -1,4 +1,5 @@
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -11,6 +12,8 @@ void main() {
     Actor aren = new Actor.initialized(1, "Aren");
 
     Actor briana = new Actor.initialized(2, "Briana");
+
+    final sureSuccess = ReasonedSuccessChance.sureSuccess;
 
     List<ActorKilledEvent> events;
 
@@ -32,7 +35,7 @@ void main() {
       pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
       final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline());
+          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 1);
       expect(events.single.actor, aren);
@@ -41,7 +44,7 @@ void main() {
     test("event doesn't fire when there are no listener", () {
       pubsub.seal();
       final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline());
+          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       expect(events.length, 0);
     });
@@ -50,7 +53,7 @@ void main() {
       final sub = pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
       final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline());
+          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
       sub.cancel();
       pubsub.publishActorKilled(new ActorKilledEvent(context, briana, aren));
@@ -75,7 +78,7 @@ void main() {
       pubsub.actorKilled.listen(secondRecord);
       pubsub.seal();
       final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline());
+          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
       pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
     });
   });

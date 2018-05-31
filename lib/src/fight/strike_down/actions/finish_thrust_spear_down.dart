@@ -2,8 +2,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
@@ -73,7 +73,9 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
 
   /// All action takes place in the OnGroundDefenseSituation.
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>

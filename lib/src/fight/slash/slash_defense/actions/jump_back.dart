@@ -4,7 +4,16 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+
+ReasonedSuccessChance computeJumpBackSlash(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.9, [
+    const Bonus(90, CombatReason.dexterity),
+    const Bonus(10, CombatReason.balance),
+  ]);
+}
 
 EnemyTargetAction jumpBackFromSlashBuilder(Actor enemy) =>
     new JumpBackFromSlash(enemy);
@@ -68,11 +77,11 @@ class JumpBackFromSlash extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.98;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    return situation.predeterminedChance.or(0.5 - outOfBalancePenalty);
+    return situation.predeterminedChance
+        .or(computeJumpBackSlash(a, sim, w, enemy));
   }
 
   @override

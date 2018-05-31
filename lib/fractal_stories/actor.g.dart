@@ -35,6 +35,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'currentWeapon',
       serializers.serialize(object.currentWeapon,
           specifiedType: const FullType(Item)),
+      'dexterity',
+      serializers.serialize(object.dexterity,
+          specifiedType: const FullType(int)),
       'gold',
       serializers.serialize(object.gold, specifiedType: const FullType(int)),
       'hitpoints',
@@ -136,6 +139,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.currentWeapon.replace(serializers.deserialize(value,
               specifiedType: const FullType(Item)) as Item);
           break;
+        case 'dexterity':
+          result.dexterity = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'followingActorId':
           result.followingActorId = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -231,6 +238,8 @@ class _$Actor extends Actor {
   @override
   final Item currentWeapon;
   @override
+  final int dexterity;
+  @override
   final int followingActorId;
   @override
   final int gold;
@@ -276,6 +285,7 @@ class _$Actor extends Actor {
       this.currentRoomName,
       this.currentShield,
       this.currentWeapon,
+      this.dexterity,
       this.followingActorId,
       this.gold,
       this.hitpoints,
@@ -299,6 +309,7 @@ class _$Actor extends Actor {
       throw new ArgumentError.notNull('combineFunctionHandle');
     if (constitution == null) throw new ArgumentError.notNull('constitution');
     if (currentWeapon == null) throw new ArgumentError.notNull('currentWeapon');
+    if (dexterity == null) throw new ArgumentError.notNull('dexterity');
     if (gold == null) throw new ArgumentError.notNull('gold');
     if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (id == null) throw new ArgumentError.notNull('id');
@@ -335,6 +346,7 @@ class _$Actor extends Actor {
         currentRoomName == other.currentRoomName &&
         currentShield == other.currentShield &&
         currentWeapon == other.currentWeapon &&
+        dexterity == other.dexterity &&
         followingActorId == other.followingActorId &&
         gold == other.gold &&
         hitpoints == other.hitpoints &&
@@ -375,8 +387,8 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc(0, combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode),
-                                                                                currentWeapon.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc(0, combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode), currentWeapon.hashCode),
+                                                                                dexterity.hashCode),
                                                                             followingActorId.hashCode),
                                                                         gold.hashCode),
                                                                     hitpoints.hashCode),
@@ -405,6 +417,7 @@ class _$Actor extends Actor {
           ..add('currentRoomName', currentRoomName)
           ..add('currentShield', currentShield)
           ..add('currentWeapon', currentWeapon)
+          ..add('dexterity', dexterity)
           ..add('followingActorId', followingActorId)
           ..add('gold', gold)
           ..add('hitpoints', hitpoints)
@@ -453,6 +466,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   ItemBuilder get currentWeapon => _$this._currentWeapon ??= new ItemBuilder();
   set currentWeapon(ItemBuilder currentWeapon) =>
       _$this._currentWeapon = currentWeapon;
+
+  int _dexterity;
+  int get dexterity => _$this._dexterity;
+  set dexterity(int dexterity) => _$this._dexterity = dexterity;
 
   int _followingActorId;
   int get followingActorId => _$this._followingActorId;
@@ -537,6 +554,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _currentRoomName = _$v.currentRoomName;
       _currentShield = _$v.currentShield?.toBuilder();
       _currentWeapon = _$v.currentWeapon?.toBuilder();
+      _dexterity = _$v.dexterity;
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
@@ -580,6 +598,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             currentRoomName: currentRoomName,
             currentShield: _currentShield?.build(),
             currentWeapon: currentWeapon?.build(),
+            dexterity: dexterity,
             followingActorId: followingActorId,
             gold: gold,
             hitpoints: hitpoints,

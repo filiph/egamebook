@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class KickToGround extends EnemyTargetAction {
@@ -81,10 +82,12 @@ class KickToGround extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.3;
-    if (a.isPlayer) return 0.8 - outOfBalancePenalty;
-    return 0.5 - outOfBalancePenalty;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState world) {
+    return getCombatMoveChance(a, enemy, 0.6, [
+      const Bonus(70, CombatReason.dexterity),
+      const Bonus(50, CombatReason.balance),
+    ]);
   }
 
   @override

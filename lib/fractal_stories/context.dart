@@ -20,6 +20,8 @@ import 'package:meta/meta.dart';
 /// the action is directed to. It can be `null`.
 @immutable
 class ActionContext extends ApplicabilityContext {
+  /// This is the object which should be mutated in order to provide the
+  /// result of the action.
   final WorldStateBuilder outputWorld;
 
   /// This is set to the current action as that action is being applied.
@@ -28,12 +30,24 @@ class ActionContext extends ApplicabilityContext {
   /// information and provide text according to how the Room is being reached.
   final Action currentAction;
 
+  /// This is the output of [Action.getSuccessChance]. It is possible to
+  /// check this for reasons that we can report in [Action.applySuccess]
+  /// or [Action.applyFailure].
+  final ReasonedSuccessChance successChance;
+
   final PubSub pubSub;
 
   final Storyline outputStoryline;
 
-  const ActionContext(this.currentAction, Actor actor, Simulation simulation,
-      WorldState world, this.pubSub, this.outputWorld, this.outputStoryline,
+  const ActionContext(
+      this.currentAction,
+      Actor actor,
+      Simulation simulation,
+      WorldState world,
+      this.pubSub,
+      this.outputWorld,
+      this.outputStoryline,
+      this.successChance,
       {Object target})
       : super(actor, simulation, world, target: target);
 }

@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
@@ -15,6 +16,22 @@ const String startSlashCommandTemplate = "swing at <object>";
 const String startSlashHelpMessage =
     "The basic swordfighting move is also often the "
     "most effective.";
+
+/// There are several ways to defend against a slash. But, for simplicity,
+/// _player's_ slash will assume an average effort from the defender,
+/// and will compute a predetermined result from that.
+///
+/// The reaction is then basically selected randomly. Because success/failure
+/// are predetermined, there is little difference for the planner between
+/// the various defense moves.
+ReasonedSuccessChance computeStartSlashPlayer(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.5, [
+    const Bonus(50, CombatReason.dexterity),
+    const Bonus(30, CombatReason.targetWithoutShield),
+    const Bonus(30, CombatReason.balance),
+  ]);
+}
 
 EnemyTargetAction startSlashBuilder(Actor enemy) => new StartDefensibleAction(
     "StartSlash",
@@ -47,11 +64,7 @@ EnemyTargetAction
             (a, sim, w, enemy) => createSlashDefenseSituation(
                 w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
             enemy,
-            successChanceGetter: (a, sim, w, enemy) {
-              final shieldPenalty = enemy.currentShield != null ? 0.2 : 0.0;
-              final balanceBonus = enemy.isStanding ? 0.0 : 0.2;
-              return 0.7 - shieldPenalty + balanceBonus;
-            },
+            successChanceGetter: computeStartSlashPlayer,
             applyStartOfFailure: startSlashReportStart,
             defenseSituationWhenFailed:
                 (a, sim, w, enemy) => createSlashDefenseSituation(w.randomInt(),

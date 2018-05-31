@@ -1,4 +1,5 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -9,13 +10,15 @@ import 'package:test/test.dart';
 void main() {
   final orc = new Actor.initialized(1, "orc");
   final aren = new Actor.initialized(2, "Aren", isPlayer: true);
+  final sureSuccess = ReasonedSuccessChance.sureSuccess;
 
   test("ruleset with 1 rule applies that rule", () {
     var triggered = false;
     final ruleset = new Ruleset(
       new Rule(42, 1, false, (c) => c.actor.isPlayer, (_) => triggered = true),
     );
-    final context = new ActionContext(null, aren, null, null, null, null, null);
+    final context = new ActionContext(
+        null, aren, null, null, null, null, null, sureSuccess);
     ruleset.apply(context);
     expect(triggered, isTrue);
   });
@@ -24,7 +27,8 @@ void main() {
     final ruleset = new Ruleset(
       new Rule(42, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
-    final context = new ActionContext(null, orc, null, null, null, null, null);
+    final context =
+        new ActionContext(null, orc, null, null, null, null, null, sureSuccess);
     expect(() => ruleset.apply(context), throwsStateError);
   });
 
@@ -37,11 +41,11 @@ void main() {
       new Rule(44, 0, false, (_) => true, (_) => outcome = 44),
     ]);
     final orcContext =
-        new ActionContext(null, orc, null, null, null, null, null);
+        new ActionContext(null, orc, null, null, null, null, null, sureSuccess);
     ruleset.apply(orcContext);
     expect(outcome, 44);
-    final arenContext =
-        new ActionContext(null, aren, null, null, null, null, null);
+    final arenContext = new ActionContext(
+        null, aren, null, null, null, null, null, sureSuccess);
     ruleset.apply(arenContext);
     expect(outcome, 43);
   });
@@ -57,8 +61,8 @@ void main() {
       ..global = ["bogus"]
       ..statefulRandomState = 1337
       ..time = new DateTime.utc(1000);
-    final context =
-        new ActionContext(null, aren, null, world.build(), null, world, null);
+    final context = new ActionContext(
+        null, aren, null, world.build(), null, world, null, sureSuccess);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isFalse);
     ruleset.apply(context);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isTrue);
@@ -76,13 +80,13 @@ void main() {
       ..global = ["bogus"]
       ..statefulRandomState = 1337
       ..time = new DateTime.utc(1000);
-    final context =
-        new ActionContext(null, aren, null, world.build(), null, world, null);
+    final context = new ActionContext(
+        null, aren, null, world.build(), null, world, null, sureSuccess);
     ruleset.apply(context);
     expect(state, 1);
     final nextWorld = context.outputWorld;
-    final nextContext = new ActionContext(
-        null, aren, null, nextWorld.build(), null, nextWorld, null);
+    final nextContext = new ActionContext(null, aren, null, nextWorld.build(),
+        null, nextWorld, null, sureSuccess);
     ruleset.apply(nextContext);
     expect(state, 2);
   });

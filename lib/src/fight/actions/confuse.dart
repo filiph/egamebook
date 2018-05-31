@@ -70,8 +70,9 @@ class Confuse extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState world) {
-    return 0.8;
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState world) {
+    return new ReasonedSuccessChance<Object>(0.8);
   }
 
   @override

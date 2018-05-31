@@ -6,8 +6,17 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
+
+ReasonedSuccessChance computeDefensiveParrySlash(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.9, [
+    const Bonus(95, CombatReason.dexterity),
+    const Bonus(30, CombatReason.balance),
+  ]);
+}
 
 EnemyTargetAction defensiveParrySlashBuilder(Actor enemy) =>
     new DefensiveParrySlash(enemy);
@@ -92,11 +101,9 @@ class DefensiveParrySlash extends EnemyTargetAction {
   }
 
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) {
-    if (a.isPlayer) return 0.98;
+  ReasonedSuccessChance getSuccessChance(Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    num outOfBalancePenalty = a.isStanding ? 0 : 0.2;
-    return situation.predeterminedChance.or(0.5 - outOfBalancePenalty);
+    return situation.predeterminedChance.or(computeDefensiveParrySlash(a, sim, w, enemy));
   }
 
   @override

@@ -20,6 +20,7 @@ final allNeededTypes = <TypeBuilder>[
   builtType,
   builderType,
   prerequisiteType,
+  reasonedSuccessChanceType,
   resourceType,
   roomRoamingSituationType,
   roomType,
@@ -62,6 +63,9 @@ final numType = new TypeBuilder("num");
 
 final prerequisiteType = new TypeBuilder("Prerequisite",
     importFrom: "package:edgehead/ruleset/ruleset.dart");
+
+final reasonedSuccessChanceType = new TypeBuilder("ReasonedSuccessChance",
+    importFrom: "package:edgehead/fractal_stories/action.dart");
 
 final resourceType = new TypeBuilder("Resource",
     importFrom: "package:edgehead/fractal_stories/action.dart");

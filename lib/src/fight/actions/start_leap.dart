@@ -1,11 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
+import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
@@ -16,6 +17,14 @@ const String startLeapCommandTemplate = "leap at <object>";
 const String startLeapHelpMessage =
     "Jumping and tackling an opponent is one of the most risky moves but it's "
     "a quick way to neutralize someone.";
+
+ReasonedSuccessChance computeStartLeap(
+        Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.2, [
+      const Bonus(50, CombatReason.balance),
+      const Bonus(50, CombatReason.height),
+    ]);
+}
 
 EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
     "StartLeap",
@@ -47,7 +56,7 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         (a, sim, w, enemy) => createLeapDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
-        successChanceGetter: (a, sim, w, s) => a.isStanding ? 0.4 : 0.2,
+        successChanceGetter: computeStartLeap,
         applyStartOfFailure: startLeapReportStart,
         defenseSituationWhenFailed: (a, sim, w, enemy) =>
             createLeapDefenseSituation(

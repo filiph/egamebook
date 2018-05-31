@@ -69,7 +69,9 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   /// All action takes place in the OnGroundDefenseSituation.
   @override
-  num getSuccessChance(Actor a, Simulation sim, WorldState w) => 1.0;
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
