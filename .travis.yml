@@ -1,6 +1,7 @@
 language: dart
 
 script:
+  - dart -c tool/build.dart
   - pub run test
   - pub run test -t long-running --run-skipped
 
