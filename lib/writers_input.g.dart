@@ -222,9 +222,9 @@ _"I think you have felt it."_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -361,9 +361,9 @@ _"Three years."_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -436,9 +436,9 @@ _"You what?"_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -620,9 +620,9 @@ Briana tenses. "Well then, at least we have that choice."
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -793,9 +793,9 @@ You look at Briana. As the battle axe cleaves her stomach, the two of you hold e
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -918,9 +918,9 @@ Briana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of her
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -990,9 +990,9 @@ Briana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as q
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -1058,9 +1058,9 @@ Briana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already 
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -1252,9 +1252,9 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -1355,9 +1355,9 @@ _"I am not a farmhand. And we still need to get out of here first."_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -1439,9 +1439,9 @@ You touch the shield to lift it, but freeze. The goblin sniffs again, and shifts
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(0.3);
+    return const ReasonedSuccessChance<Null>(0.3);
   }
 
   @override
@@ -1719,9 +1719,9 @@ The ogre is no more than a spear\'s throw away from you, but he doesn\'t notice.
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -1858,9 +1858,9 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2051,9 +2051,9 @@ _"This place does something weird to people."_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2125,9 +2125,9 @@ But it’s sturdy in your hand. A good throwing weapon.
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2253,9 +2253,9 @@ _"As I said, a well placed throw. The more complex you see the world, the easier
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2490,9 +2490,9 @@ _"The Mad Guardian."_
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2791,9 +2791,9 @@ This place makes Fort Ironcast\'s military forge look like a doll house: tiny an
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override
@@ -2883,9 +2883,9 @@ A full-sized ogre pours water over one section of the creature, making a thick c
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
+  ReasonedSuccessChance<Null> getSuccessChance(
       Actor a, Simulation sim, WorldState w) {
-    return const ReasonedSuccessChance(1.0);
+    return const ReasonedSuccessChance<Null>(1.0);
   }
 
   @override

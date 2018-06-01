@@ -65,6 +65,7 @@ final prerequisiteType = new TypeBuilder("Prerequisite",
     importFrom: "package:edgehead/ruleset/ruleset.dart");
 
 final reasonedSuccessChanceType = new TypeBuilder("ReasonedSuccessChance",
+    genericTypes: [new TypeBuilder("Null")],
     importFrom: "package:edgehead/fractal_stories/action.dart");
 
 final resourceType = new TypeBuilder("Resource",
