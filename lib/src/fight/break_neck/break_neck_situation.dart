@@ -10,4 +10,4 @@ const String breakNeckOnGroundSituationName = "BreakNeckOnGroundSituation";
 Situation createBreakNeckOnGroundSituation(
         int id, Actor attacker, Actor target) =>
     new AttackerSituation.initialized(id, breakNeckOnGroundSituationName,
-        [finishBreakNeckBuilder], attacker, target);
+        [finishBreakNeckBuilder], [], attacker, target);

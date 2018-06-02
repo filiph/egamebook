@@ -2,14 +2,14 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-EnemyTargetAction finishPunchBuilder(Actor enemy) => new FinishPunch(enemy);
+OtherActorAction finishPunchBuilder(Actor enemy) => new FinishPunch(enemy);
 
-class FinishPunch extends EnemyTargetAction {
+class FinishPunch extends OtherActorAction {
   static const String className = "FinishPunch";
 
   @override
@@ -52,11 +52,11 @@ class FinishPunch extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    assert(!enemy.isOnGround, "Can't punch people on the ground.");
-    final updatedPose = enemy.isStanding ? Pose.offBalance : Pose.onGround;
+    assert(!target.isOnGround, "Can't punch people on the ground.");
+    final updatedPose = target.isStanding ? Pose.offBalance : Pose.onGround;
     final thread = getThreadId(sim, w, "PunchSituation");
     final groundMaterial = getGroundMaterial(w);
-    w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
+    w.updateActorById(target.id, (b) => b..pose = updatedPose);
     switch (updatedPose) {
       case Pose.standing:
         throw new StateError("Enemy's pose should never be 'standing' after "
@@ -66,10 +66,10 @@ class FinishPunch extends EnemyTargetAction {
             "<subject> {punch<es> <object> in the {face|nose|eye|jaw}|"
             "punch<es> <object's> {face|nose|eye|jaw}}",
             subject: a,
-            object: enemy,
+            object: target,
             actionThread: thread,
             positive: true);
-        enemy.report(s, "<subject> {stagger<s>|stumble<s>} off balance",
+        target.report(s, "<subject> {stagger<s>|stumble<s>} off balance",
             negative: true);
         break;
       case Pose.onGround:
@@ -77,12 +77,12 @@ class FinishPunch extends EnemyTargetAction {
             "<subject> send<s> <object> to the $groundMaterial with "
             "a {massive punch|well-placed fist} to the {face|nose|eye|jaw}",
             subject: a,
-            object: enemy,
+            object: target,
             actionThread: thread,
             positive: true);
         break;
     }
-    return "${a.name} punches ${enemy.name} to $updatedPose";
+    return "${a.name} punches ${target.name} to $updatedPose";
   }
 
   @override

@@ -196,6 +196,10 @@ class EdgeheadGame extends Book {
     var planner = new ActorPlanner(actor, simulation, world, _pubsub);
     await planner.plan();
     var recs = planner.getRecommendations();
+
+    // Fail fast for no recommendations.
+    assert(
+        !recs.isEmpty, "No recommendations for ${actor.name} in ${situation}");
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?

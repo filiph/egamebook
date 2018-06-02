@@ -17,6 +17,7 @@ Situation createPunchDefenseSituation(int id, Actor attacker, Actor target,
           dodgePunchBuilder,
           // TODO: CutOffArm.builder,
         ],
+        [],
         attacker,
         target,
         predetermination);

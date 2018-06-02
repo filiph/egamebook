@@ -16,5 +16,6 @@ Situation createStrikeDownSituation(int id, Actor attacker, Actor target) =>
           finishSlashGroundedEnemyBuilder,
           finishThrustSpearAtGroundedEnemyBuilder
         ],
+        [],
         attacker,
         target);

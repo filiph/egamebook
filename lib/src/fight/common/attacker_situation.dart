@@ -21,14 +21,19 @@ abstract class AttackerSituation extends Situation
   factory AttackerSituation.initialized(
           int id,
           String situationName,
-          Iterable<EnemyTargetActionBuilder> actionGenerators,
+          Iterable<OtherActorActionBuilder> builtOtherActorActionGenerators,
+          Iterable<EnemyTargetActionBuilder> builtEnemyTargetActionGenerators,
           Actor attacker,
           Actor target) =>
       new AttackerSituation((b) => b
         ..id = id
         ..name = situationName
-        ..builtActionGenerators =
-            new ListBuilder<EnemyTargetActionBuilder>(actionGenerators)
+        ..builtOtherActorActionGenerators =
+            new ListBuilder<OtherActorActionBuilder>(
+                builtOtherActorActionGenerators)
+        ..builtEnemyTargetActionGenerators =
+            new ListBuilder<EnemyTargetActionBuilder>(
+                builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id);
@@ -36,12 +41,16 @@ abstract class AttackerSituation extends Situation
   AttackerSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      builtActionGenerators.toList(growable: false);
-
-  BuiltList<EnemyTargetActionBuilder> get builtActionGenerators;
+  List<OtherActorActionBaseBuilder> get actionGenerators =>
+      new List<OtherActorActionBaseBuilder>.from(
+          builtOtherActorActionGenerators)
+        ..addAll(builtEnemyTargetActionGenerators);
 
   int get attacker;
+
+  BuiltList<OtherActorActionBuilder> get builtOtherActorActionGenerators;
+
+  BuiltList<EnemyTargetActionBuilder> get builtEnemyTargetActionGenerators;
 
   @override
   int get id;

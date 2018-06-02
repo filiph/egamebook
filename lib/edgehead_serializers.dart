@@ -59,5 +59,6 @@ part 'edgehead_serializers.g.dart';
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(event_callbacks.serializer)
-      ..add(action_builders.serializer))
+      ..add(action_builders.otherActorActionSerializer)
+      ..add(action_builders.enemyTargetActionSerializer))
     .build();

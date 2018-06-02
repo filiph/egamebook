@@ -6,8 +6,8 @@ part of edgehead.action_builders;
 // Generator: FunctionSerializerGenerator
 // **************************************************************************
 
-final _$enemyTargetActionBuilderSerializer =
-    new FunctionSerializer<EnemyTargetActionBuilder>({
+final _$otherActorActionBuilderSerializer =
+    new FunctionSerializer<OtherActorActionBuilder>({
   'onGroundShieldBlockBuilder': onGroundShieldBlockBuilder,
   'onGroundParryBuilder': onGroundParryBuilder,
   'rollOutOfWayBuilder': rollOutOfWayBuilder,
@@ -16,11 +16,8 @@ final _$enemyTargetActionBuilderSerializer =
       finishThrustSpearAtGroundedEnemyBuilder,
   'finishBreakNeckBuilder': finishBreakNeckBuilder,
   'evadeNeckBreakingBuilder': evadeNeckBreakingBuilder,
-  'impaleLeaperBuilder': impaleLeaperBuilder,
   'dodgeLeapBuilder': dodgeLeapBuilder,
   'finishLeapBuilder': finishLeapBuilder,
-  'counterSlashBuilder': counterSlashBuilder,
-  'counterSlashPlayerBuilder': counterSlashPlayerBuilder,
   'jumpBackFromSlashBuilder': jumpBackFromSlashBuilder,
   'dodgeThrustSpearBuilder': dodgeThrustSpearBuilder,
   'shieldBlockSlashBuilder': shieldBlockSlashBuilder,
@@ -31,4 +28,10 @@ final _$enemyTargetActionBuilderSerializer =
   'finishThrustSpearBuilder': finishThrustSpearBuilder,
   'dodgePunchBuilder': dodgePunchBuilder,
   'finishPunchBuilder': finishPunchBuilder,
+});
+final _$enemyTargetActionBuilderSerializer =
+    new FunctionSerializer<EnemyTargetActionBuilder>({
+  'impaleLeaperBuilder': impaleLeaperBuilder,
+  'counterSlashBuilder': counterSlashBuilder,
+  'counterSlashPlayerBuilder': counterSlashPlayerBuilder,
 });

@@ -8,10 +8,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-EnemyTargetAction finishThrustSpearAtGroundedEnemyBuilder(Actor enemy) =>
+OtherActorAction finishThrustSpearAtGroundedEnemyBuilder(Actor enemy) =>
     new FinishThrustSpearAtGroundedEnemy(enemy);
 
-class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
+class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
   static const String className = "FinishThrustSpearAtGroundedEnemy";
 
   @override
@@ -53,9 +53,9 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    final updatedEnemy = w.getActorById(enemy.id);
+    final damage = target.hitpoints;
+    w.updateActorById(target.id, (b) => b..hitpoints = 0);
+    final updatedEnemy = w.getActorById(target.id);
     final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|heart}';
     s.add(
@@ -68,7 +68,7 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
     } else {
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} slains ${enemy.name} on the ground with a spear";
+    return "${a.name} slains ${target.name} on the ground with a spear";
   }
 
   /// All action takes place in the OnGroundDefenseSituation.
@@ -79,9 +79,6 @@ class FinishThrustSpearAtGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.isOnGround &&
+      target.isOnGround &&
       a.currentWeapon.damageCapability.type == WeaponType.spear;
-
-  static EnemyTargetAction builder(Actor enemy) =>
-      new FinishThrustSpearAtGroundedEnemy(enemy);
 }

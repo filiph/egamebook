@@ -9,4 +9,4 @@ const String leapSituationName = "LeapSituation";
 
 Situation createLeapSituation(int id, Actor attacker, Actor target) =>
     new AttackerSituation.initialized(
-        id, leapSituationName, [finishLeapBuilder], attacker, target);
+        id, leapSituationName, [finishLeapBuilder], [], attacker, target);

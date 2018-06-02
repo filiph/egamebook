@@ -15,10 +15,10 @@ ReasonedSuccessChance computeJumpBackSlash(
   ]);
 }
 
-EnemyTargetAction jumpBackFromSlashBuilder(Actor enemy) =>
+OtherActorAction jumpBackFromSlashBuilder(Actor enemy) =>
     new JumpBackFromSlash(enemy);
 
-class JumpBackFromSlash extends EnemyTargetAction {
+class JumpBackFromSlash extends OtherActorAction {
   static const String className = "JumpBackFromSlash";
 
   @override
@@ -59,7 +59,7 @@ class JumpBackFromSlash extends EnemyTargetAction {
         "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
     w.popSituation(sim);
-    return "${a.name} fails to jump back from ${enemy.name}";
+    return "${a.name} fails to jump back from ${target.name}";
   }
 
   @override
@@ -71,9 +71,9 @@ class JumpBackFromSlash extends EnemyTargetAction {
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
-        subject: enemy.currentWeapon, owner: enemy);
+        subject: target.currentWeapon, owner: target);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} jumps back from ${enemy.name}'s attack";
+    return "${a.name} jumps back from ${target.name}'s attack";
   }
 
   @override
@@ -81,10 +81,10 @@ class JumpBackFromSlash extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeJumpBackSlash(a, sim, w, enemy));
+        .or(computeJumpBackSlash(a, sim, w, target));
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.isBarehanded && enemy.currentWeapon.damageCapability.isSlashing;
+      a.isBarehanded && target.currentWeapon.damageCapability.isSlashing;
 }

@@ -18,10 +18,10 @@ ReasonedSuccessChance computeDefensiveParrySlash(
   ]);
 }
 
-EnemyTargetAction defensiveParrySlashBuilder(Actor enemy) =>
+OtherActorAction defensiveParrySlashBuilder(Actor enemy) =>
     new DefensiveParrySlash(enemy);
 
-class DefensiveParrySlash extends EnemyTargetAction {
+class DefensiveParrySlash extends OtherActorAction {
   static const String className = "DefensiveParrySlash";
 
   @override
@@ -67,11 +67,11 @@ class DefensiveParrySlash extends EnemyTargetAction {
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-          () => enemy.report(s, "<subject> <is> too quick for <object>",
+          () => target.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to parry ${enemy.name}";
+    return "${a.name} fails to parry ${target.name}";
   }
 
   @override
@@ -97,13 +97,15 @@ class DefensiveParrySlash extends EnemyTargetAction {
       }
     }
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} steps back and parries ${enemy.name}";
+    return "${a.name} steps back and parries ${target.name}";
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(Actor a, Simulation sim, WorldState w) {
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
-    return situation.predeterminedChance.or(computeDefensiveParrySlash(a, sim, w, enemy));
+    return situation.predeterminedChance
+        .or(computeDefensiveParrySlash(a, sim, w, target));
   }
 
   @override

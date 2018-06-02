@@ -7,10 +7,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-EnemyTargetAction finishSlashGroundedEnemyBuilder(Actor enemy) =>
+OtherActorAction finishSlashGroundedEnemyBuilder(Actor enemy) =>
     new FinishSlashGroundedEnemy(enemy);
 
-class FinishSlashGroundedEnemy extends EnemyTargetAction {
+class FinishSlashGroundedEnemy extends OtherActorAction {
   static const String className = "FinishSlashGroundedEnemy";
 
   @override
@@ -52,9 +52,9 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    final updatedEnemy = w.getActorById(enemy.id);
+    final damage = target.hitpoints;
+    w.updateActorById(target.id, (b) => b..hitpoints = 0);
+    final updatedEnemy = w.getActorById(target.id);
     final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
@@ -64,7 +64,7 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
     } else {
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} slains ${enemy.name} on the ground";
+    return "${a.name} slains ${target.name} on the ground";
   }
 
   /// All action takes place in the OnGroundDefenseSituation.
@@ -75,5 +75,5 @@ class FinishSlashGroundedEnemy extends EnemyTargetAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.isOnGround && a.currentWeapon.damageCapability.isSlashing;
+      target.isOnGround && a.currentWeapon.damageCapability.isSlashing;
 }

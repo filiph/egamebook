@@ -10,4 +10,4 @@ const String slashSituationName = "SlashSituation";
 
 Situation createSlashSituation(int id, Actor attacker, Actor target) =>
     new AttackerSituation.initialized(id, slashSituationName,
-        [finishSlashBuilder, finishThrustSpearBuilder], attacker, target);
+        [finishSlashBuilder, finishThrustSpearBuilder], [], attacker, target);

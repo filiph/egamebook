@@ -12,4 +12,4 @@ const String onGroundWrestleDefenseSituationName =
 Situation createOnGroundWrestleDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
     new DefenseSituation.initialized(id, onGroundWrestleDefenseSituationName,
-        [evadeNeckBreakingBuilder], attacker, target, predetermination);
+        [evadeNeckBreakingBuilder], [], attacker, target, predetermination);

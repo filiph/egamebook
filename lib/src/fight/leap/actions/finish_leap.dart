@@ -8,9 +8,9 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
-EnemyTargetAction finishLeapBuilder(Actor enemy) => new FinishLeap(enemy);
+OtherActorAction finishLeapBuilder(Actor enemy) => new FinishLeap(enemy);
 
-class FinishLeap extends EnemyTargetAction {
+class FinishLeap extends OtherActorAction {
   static const String className = "FinishLeap";
 
   @override
@@ -53,28 +53,28 @@ class FinishLeap extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    final updatedEnemy = w.getActorById(enemy.id);
+    w.updateActorById(target.id, (b) => b..pose = Pose.onGround);
+    final updatedEnemy = w.getActorById(target.id);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     final thread = getThreadId(sim, w, "LeapSituation");
     final ground = getGroundMaterial(w);
     a.report(s, "<subject> {ram<s>|smash<es>} into <object>",
-        object: enemy, positive: true, actionThread: thread);
+        object: target, positive: true, actionThread: thread);
     s.add(
-        "both ${a.isPlayer || enemy.isPlayer ? 'of you' : ''} "
+        "both ${a.isPlayer || target.isPlayer ? 'of you' : ''} "
         "{land on|fall to} the $ground",
         actionThread: thread);
-    if (enemy.hitpoints > 1) {
+    if (target.hitpoints > 1) {
       s.add(
           "the impact almost "
           "{knocks <object> unconscious|knocks <object> out}",
-          object: enemy,
+          object: target,
           actionThread: thread);
       final damage = 1;
       reportPain(context, updatedEnemy, damage);
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+      w.updateActorById(target.id, (b) => b..hitpoints -= damage);
     }
-    return "${a.name} finishes leap at ${enemy.name}";
+    return "${a.name} finishes leap at ${target.name}";
   }
 
   @override

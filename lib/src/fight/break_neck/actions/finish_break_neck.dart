@@ -7,10 +7,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-EnemyTargetAction finishBreakNeckBuilder(Actor enemy) =>
+OtherActorAction finishBreakNeckBuilder(Actor enemy) =>
     new FinishBreakNeck(enemy);
 
-class FinishBreakNeck extends EnemyTargetAction {
+class FinishBreakNeck extends OtherActorAction {
   static const String className = "FinishBreakNeck";
 
   @override
@@ -52,9 +52,9 @@ class FinishBreakNeck extends EnemyTargetAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
-    final updatedEnemy = w.getActorById(enemy.id);
+    final damage = target.hitpoints;
+    w.updateActorById(target.id, (b) => b..hitpoints = 0);
+    final updatedEnemy = w.getActorById(target.id);
     if (updatedEnemy.id == brianaId) {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
@@ -70,7 +70,7 @@ class FinishBreakNeck extends EnemyTargetAction {
           positive: true);
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} breaks ${enemy.name}'s neck on ground";
+    return "${a.name} breaks ${target.name}'s neck on ground";
   }
 
   @override

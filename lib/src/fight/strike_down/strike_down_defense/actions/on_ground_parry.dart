@@ -16,10 +16,10 @@ ReasonedSuccessChance computeOnGroundParry(
   ]);
 }
 
-EnemyTargetAction onGroundParryBuilder(Actor enemy) => new OnGroundParry(enemy);
+OtherActorAction onGroundParryBuilder(Actor enemy) => new OnGroundParry(enemy);
 
 /// TODO: find a reason why to take this choice. Maybe allow counter?
-class OnGroundParry extends EnemyTargetAction {
+class OnGroundParry extends OtherActorAction {
   static const String className = "OnGroundParry";
 
   @override
@@ -60,10 +60,10 @@ class OnGroundParry extends EnemyTargetAction {
         "stop it{| with ${weaponAsObject2(a)}}}");
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-        () => enemy.report(s, "<subject> <is> too quick for <object>",
+        () => target.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
     w.popSituation(sim);
-    return "${a.name} fails to parry ${enemy.name}";
+    return "${a.name} fails to parry ${target.name}";
   }
 
   @override
@@ -78,7 +78,7 @@ class OnGroundParry extends EnemyTargetAction {
         "stop<s> it with ${weaponAsObject2(a)}}",
         positive: true);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} parries ${enemy.name}";
+    return "${a.name} parries ${target.name}";
   }
 
   @override
@@ -86,11 +86,11 @@ class OnGroundParry extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeOnGroundParry(a, sim, w, enemy));
+        .or(computeOnGroundParry(a, sim, w, target));
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      enemy.currentWeapon.damageCapability.isSlashing &&
+      target.currentWeapon.damageCapability.isSlashing &&
       a.currentWeapon.damageCapability.type.canParrySlash;
 }

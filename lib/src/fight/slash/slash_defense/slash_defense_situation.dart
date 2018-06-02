@@ -26,6 +26,7 @@ Situation createSlashDefenseSituation(int id, Actor attacker, Actor target,
           parrySlashBuilder,
           shieldBlockSlashBuilder,
         ],
+        [],
         attacker,
         target,
         predetermination);

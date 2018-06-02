@@ -22,9 +22,9 @@ ReasonedSuccessChance computeParrySlash(
   ]);
 }
 
-EnemyTargetAction parrySlashBuilder(Actor enemy) => new ParrySlash(enemy);
+OtherActorAction parrySlashBuilder(Actor enemy) => new ParrySlash(enemy);
 
-class ParrySlash extends EnemyTargetAction {
+class ParrySlash extends OtherActorAction {
   static const String className = "ParrySlash";
 
   @override
@@ -73,11 +73,11 @@ class ParrySlash extends EnemyTargetAction {
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-          () => enemy.report(s, "<subject> <is> too quick for <object>",
+          () => target.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to parry ${enemy.name}";
+    return "${a.name} fails to parry ${target.name}";
   }
 
   @override
@@ -86,11 +86,11 @@ class ParrySlash extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    if (enemy.isOffBalance) {
+    if (target.isOffBalance) {
       s.add("<subject> <is> out of balance",
-          subject: enemy, negative: true, startSentence: true);
+          subject: target, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: enemy, subject: swing);
+          owner: target, subject: swing);
       a.report(
           s,
           "<subject> {parr<ies> it easily|"
@@ -111,9 +111,9 @@ class ParrySlash extends EnemyTargetAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, target);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} parries ${enemy.name}";
+    return "${a.name} parries ${target.name}";
   }
 
   @override
@@ -121,7 +121,7 @@ class ParrySlash extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeParrySlash(a, sim, w, enemy));
+        .or(computeParrySlash(a, sim, w, target));
   }
 
   @override

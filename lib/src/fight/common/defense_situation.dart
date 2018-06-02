@@ -22,17 +22,22 @@ abstract class DefenseSituation extends Situation
       _$DefenseSituation;
 
   factory DefenseSituation.initialized(
-      int id,
+          int id,
           String situationName,
-          Iterable<EnemyTargetActionBuilder> actionGenerators,
+      Iterable<OtherActorActionBuilder> builtOtherActorActionGenerators,
+      Iterable<EnemyTargetActionBuilder> builtEnemyTargetActionGenerators,
           Actor attacker,
           Actor target,
           Predetermination predetermination) =>
       new DefenseSituation((b) => b
         ..id = id
         ..name = situationName
-        ..builtActionGenerators =
-            new ListBuilder<EnemyTargetActionBuilder>(actionGenerators)
+        ..builtOtherActorActionGenerators =
+        new ListBuilder<OtherActorActionBuilder>(
+            builtOtherActorActionGenerators)
+        ..builtEnemyTargetActionGenerators =
+        new ListBuilder<EnemyTargetActionBuilder>(
+            builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id
@@ -41,15 +46,16 @@ abstract class DefenseSituation extends Situation
   DefenseSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      builtActionGenerators.toList(growable: false);
-
-  BuiltList<EnemyTargetActionBuilder> get builtActionGenerators;
-
-  @override
-  Predetermination get predeterminedResult;
+  List<OtherActorActionBaseBuilder> get actionGenerators =>
+      new List<OtherActorActionBaseBuilder>.from(
+          builtOtherActorActionGenerators)
+        ..addAll(builtEnemyTargetActionGenerators);
 
   int get attacker;
+
+  BuiltList<OtherActorActionBuilder> get builtOtherActorActionGenerators;
+
+  BuiltList<EnemyTargetActionBuilder> get builtEnemyTargetActionGenerators;
 
   @override
   int get id;
@@ -59,6 +65,9 @@ abstract class DefenseSituation extends Situation
 
   @override
   String get name;
+
+  @override
+  Predetermination get predeterminedResult;
 
   /// The defender.
   int get target;

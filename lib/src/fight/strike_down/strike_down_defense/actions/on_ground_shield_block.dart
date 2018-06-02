@@ -20,10 +20,10 @@ ReasonedSuccessChance computeOnGroundShieldBlock(
   ]);
 }
 
-EnemyTargetAction onGroundShieldBlockBuilder(Actor enemy) =>
+OtherActorAction onGroundShieldBlockBuilder(Actor enemy) =>
     new OnGroundShieldBlock(enemy);
 
-class OnGroundShieldBlock extends EnemyTargetAction {
+class OnGroundShieldBlock extends OtherActorAction {
   static const String className = "OnGroundShieldBlock";
 
   @override
@@ -66,10 +66,10 @@ class OnGroundShieldBlock extends EnemyTargetAction {
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => a.report(s, "<subject> <is> too slow", but: true),
-        () => enemy.report(s, "<subject> <is> too quick for <object>",
+        () => target.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
     w.popSituation(sim);
-    return "${a.name} fails to block ${enemy.name} with shield on ground";
+    return "${a.name} fails to block ${target.name} with shield on ground";
   }
 
   @override
@@ -78,11 +78,11 @@ class OnGroundShieldBlock extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    if (enemy.isOffBalance) {
+    if (target.isOffBalance) {
       s.add("<subject> <is> out of balance",
-          subject: enemy, negative: true, startSentence: true);
+          subject: target, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: enemy, subject: swing);
+          owner: target, subject: swing);
       a.report(
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} "
@@ -98,7 +98,7 @@ class OnGroundShieldBlock extends EnemyTargetAction {
     }
 
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} blocks ${enemy.name} with a shield on ground";
+    return "${a.name} blocks ${target.name} with a shield on ground";
   }
 
   @override
@@ -106,7 +106,7 @@ class OnGroundShieldBlock extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeOnGroundShieldBlock(a, sim, w, enemy));
+        .or(computeOnGroundShieldBlock(a, sim, w, target));
   }
 
   @override

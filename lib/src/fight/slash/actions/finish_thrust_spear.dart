@@ -9,10 +9,10 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-EnemyTargetAction finishThrustSpearBuilder(Actor enemy) =>
+OtherActorAction finishThrustSpearBuilder(Actor enemy) =>
     new FinishThrustSpear(enemy);
 
-class FinishThrustSpear extends EnemyTargetAction {
+class FinishThrustSpear extends OtherActorAction {
   static const String className = "FinishThrustSpear";
 
   @override
@@ -56,8 +56,8 @@ class FinishThrustSpear extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.damageCapability.thrustingDamage;
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
-    final updatedEnemy = w.getActorById(enemy.id);
+    w.updateActorById(target.id, (b) => b..hitpoints -= damage);
+    final updatedEnemy = w.getActorById(target.id);
     final thread = getThreadId(sim, w, slashSituationName);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
@@ -80,7 +80,7 @@ class FinishThrustSpear extends EnemyTargetAction {
           actionThread: thread);
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} pierces${killed ? ' (and kills)' : ''} ${enemy.name}";
+    return "${a.name} pierces${killed ? ' (and kills)' : ''} ${target.name}";
   }
 
   @override

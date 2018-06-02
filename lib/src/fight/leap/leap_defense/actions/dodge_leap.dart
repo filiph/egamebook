@@ -10,9 +10,9 @@ import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-EnemyTargetAction dodgeLeapBuilder(Actor enemy) => new DodgeLeap(enemy);
+OtherActorAction dodgeLeapBuilder(Actor enemy) => new DodgeLeap(enemy);
 
-class DodgeLeap extends EnemyTargetAction {
+class DodgeLeap extends OtherActorAction {
   static const String className = "DodgeLeap";
 
   @override
@@ -67,7 +67,7 @@ class DodgeLeap extends EnemyTargetAction {
               isSupportiveActionInThread: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${enemy.name}";
+    return "${a.name} fails to dodge ${target.name}";
   }
 
   @override
@@ -79,12 +79,12 @@ class DodgeLeap extends EnemyTargetAction {
     final thread = getThreadId(sim, w, "LeapSituation");
     final ground = getGroundMaterial(w);
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object>",
-        object: enemy, positive: true, actionThread: thread);
-    enemy.report(s, "<subject> {crash<es> to|fall<s> to|hit<s>} the $ground",
+        object: target, positive: true, actionThread: thread);
+    target.report(s, "<subject> {crash<es> to|fall<s> to|hit<s>} the $ground",
         negative: true);
-    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
+    w.updateActorById(target.id, (b) => b..pose = Pose.onGround);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} dodges ${enemy.name}";
+    return "${a.name} dodges ${target.name}";
   }
 
   @override
@@ -92,7 +92,7 @@ class DodgeLeap extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeStartLeap(enemy, sim, w, a).inverted());
+        .or(computeStartLeap(target, sim, w, a).inverted());
   }
 
   @override

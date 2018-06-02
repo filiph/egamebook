@@ -17,19 +17,26 @@ import 'actor.dart';
 import 'room.dart';
 
 /// Builder takes an enemy actor and generates an instance of
+/// [ApproachAction] with the given [approach].
+typedef ApproachAction ApproachActionBuilder(Approach approach);
+
+/// Builder takes an enemy actor and generates an instance of
 /// [EnemyTargetAction] with the given [enemy].
 typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
 
 typedef void EventCallback(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
 
-/// Builder takes an enemy actor and generates an instance of
-/// [ApproachAction] with the given [approach].
-typedef ApproachAction ApproachActionBuilder(Approach approach);
-
 /// Builder takes situation's items and generates an instance of [ItemAction]
 /// with the given [item] and its [description].
 typedef ItemAction ItemActionBuilder(Item item);
+
+/// Builder takes an actor and generates an instance of
+/// [OtherActorAction] with the given [target].
+typedef OtherActorAction OtherActorActionBuilder(Actor target);
+
+/// A base typedef for [OtherActorActionBuilder] and [EnemyTargetActionBuilder].
+typedef OtherActorActionBase OtherActorActionBaseBuilder(Actor target);
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.
@@ -107,6 +114,9 @@ class Simulation {
     for (var builder in context.world.currentSituation.actionGenerators) {
       if (builder is EnemyTargetActionBuilder) {
         yield* _generateEnemyTargetActions(
+            context.actor, context.world, builder);
+      } else if (builder is OtherActorActionBuilder) {
+        yield* _generateOtherActorActions(
             context.actor, context.world, builder);
       } else if (builder is ApproachActionBuilder) {
         yield* _generateExitActions(context, builder);
@@ -232,20 +242,14 @@ class Simulation {
     return new _ApproachRule(approach, source, destination, prerequisite);
   }
 
-  /// Generator generates multiple [Action] instances given a [world] and
-  /// an [actor] and a [builder].
-  ///
-  /// For example, a builder called `hitWithStick` can take the current
-  /// world and output as many actions as there are enemies to hit with a stick.
-  /// Each generated action will encapsulate the enemy to hit.
+  /// Like [_generateOtherActorActions()], but only filters to other actors
+  /// who are enemies of [actor] if the generated action is aggressive.
   Iterable<EnemyTargetAction> _generateEnemyTargetActions(
       Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
-    var situationActors =
-        world.currentSituation.getActors(world.actors, this, world);
-    var enemies = situationActors
-        .where((other) => other != actor && other.isAliveAndActive);
+    final enemies = _getOtherActors(actor, world);
     for (var enemy in enemies) {
       var action = builder(enemy);
+      assert(action is EnemyTargetAction);
       assert(action.enemy == enemy);
       if (action.isAggressive && !actor.hates(enemy, world)) continue;
       yield action;
@@ -277,6 +281,26 @@ class Simulation {
       assert(action.item == item);
       yield action;
     }
+  }
+
+  /// Generator generates multiple [Action] instances given a [world] and
+  /// an [actor] and a [builder].
+  ///
+  /// For example, a builder called `hitWithStick` can take the current
+  /// world and output as many actions as there are enemies to hit with a stick.
+  /// Each generated action will encapsulate the enemy to hit.
+  Iterable<OtherActorAction> _generateOtherActorActions(
+      Actor actor, WorldState world, OtherActorActionBuilder builder) {
+    return _getOtherActors(actor, world).map(builder);
+  }
+
+  /// Returns the other actors who are active in the current situation
+  /// ([WorldState.currentSituation]).
+  Iterable<Actor> _getOtherActors(Actor actor, WorldState world) {
+    var situationActors =
+        world.currentSituation.getActors(world.actors, this, world);
+    return situationActors
+        .where((other) => other != actor && other.isAliveAndActive);
   }
 
   Iterable<Room> _getVariants(Room room) {

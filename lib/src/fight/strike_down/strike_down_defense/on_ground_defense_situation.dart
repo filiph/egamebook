@@ -20,6 +20,7 @@ Situation createOnGroundDefenseSituation(int id, Actor attacker, Actor target,
           onGroundShieldBlockBuilder,
           rollOutOfWayBuilder,
         ],
+        [],
         attacker,
         target,
         predetermination);

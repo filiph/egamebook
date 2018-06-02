@@ -9,9 +9,9 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
-EnemyTargetAction dodgePunchBuilder(Actor enemy) => new DodgePunch(enemy);
+OtherActorAction dodgePunchBuilder(Actor enemy) => new DodgePunch(enemy);
 
-class DodgePunch extends EnemyTargetAction {
+class DodgePunch extends OtherActorAction {
   static const String className = "DodgePunch";
 
   @override
@@ -53,13 +53,13 @@ class DodgePunch extends EnemyTargetAction {
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
             but: true, actionThread: thread, isSupportiveActionInThread: true),
-        () => enemy.report(s, "<subject> <is> too quick for <object>",
+        () => target.report(s, "<subject> <is> too quick for <object>",
             object: a,
             but: true,
             actionThread: thread,
             isSupportiveActionInThread: true));
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${enemy.name}";
+    return "${a.name} fails to dodge ${target.name}";
   }
 
   @override
@@ -70,15 +70,15 @@ class DodgePunch extends EnemyTargetAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
-        object: enemy, positive: true, actionThread: thread);
+        object: target, positive: true, actionThread: thread);
     w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, target);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} dodges punch from ${enemy.name}";
+    return "${a.name} dodges punch from ${target.name}";
   }
 
   @override
@@ -86,7 +86,7 @@ class DodgePunch extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeStartPunch(enemy, sim, w, a).inverted());
+        .or(computeStartPunch(target, sim, w, a).inverted());
   }
 
   @override

@@ -11,10 +11,10 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 
-EnemyTargetAction dodgeThrustSpearBuilder(Actor enemy) =>
+OtherActorAction dodgeThrustSpearBuilder(Actor enemy) =>
     new DodgeThrustSpear(enemy);
 
-class DodgeThrustSpear extends EnemyTargetAction {
+class DodgeThrustSpear extends OtherActorAction {
   static const String className = "DodgeThrustSpear";
 
   @override
@@ -59,11 +59,11 @@ class DodgeThrustSpear extends EnemyTargetAction {
       Randomly.run(
           () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
               but: true),
-          () => enemy.report(s, "<subject> <is> too quick for <object>",
+          () => target.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${enemy.name}'s spear";
+    return "${a.name} fails to dodge ${target.name}'s spear";
   }
 
   @override
@@ -73,20 +73,20 @@ class DodgeThrustSpear extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
-        object: enemy, positive: true);
-    if (enemy.isStanding) {
-      enemy.report(s, "<subject> lose<s> balance because of that",
+        object: target, positive: true);
+    if (target.isStanding) {
+      target.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);
-      w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
+      w.updateActorById(target.id, (b) => b.pose = Pose.offBalance);
     }
     w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, target);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} dodges ${enemy.name}'s spear";
+    return "${a.name} dodges ${target.name}'s spear";
   }
 
   @override
@@ -94,11 +94,11 @@ class DodgeThrustSpear extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeDodgeSlashOrThrust(a, sim, w, enemy));
+        .or(computeDodgeSlashOrThrust(a, sim, w, target));
   }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       !a.isOnGround &&
-      enemy.currentWeapon.damageCapability.type == WeaponType.spear;
+      target.currentWeapon.damageCapability.type == WeaponType.spear;
 }

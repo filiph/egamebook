@@ -22,10 +22,10 @@ ReasonedSuccessChance computeShieldBlockSlash(
   ]);
 }
 
-EnemyTargetAction shieldBlockSlashBuilder(Actor enemy) =>
+OtherActorAction shieldBlockSlashBuilder(Actor enemy) =>
     new ShieldBlockSlash(enemy);
 
-class ShieldBlockSlash extends EnemyTargetAction {
+class ShieldBlockSlash extends OtherActorAction {
   static const String className = "ShieldBlockSlash";
 
   @override
@@ -72,11 +72,11 @@ class ShieldBlockSlash extends EnemyTargetAction {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
           () => a.report(s, "<subject> <is> too slow", but: true),
-          () => enemy.report(s, "<subject> <is> too quick for <object>",
+          () => target.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to block ${enemy.name} with shield";
+    return "${a.name} fails to block ${target.name} with shield";
   }
 
   @override
@@ -85,11 +85,11 @@ class ShieldBlockSlash extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    if (enemy.isOffBalance) {
+    if (target.isOffBalance) {
       s.add("<subject> <is> out of balance",
-          subject: enemy, negative: true, startSentence: true);
+          subject: target, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: enemy, subject: swing);
+          owner: target, subject: swing);
       a.report(
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
@@ -108,9 +108,9 @@ class ShieldBlockSlash extends EnemyTargetAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        new CounterAttackSituation.initialized(w.randomInt(), a, target);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} blocks ${enemy.name} with a shield";
+    return "${a.name} blocks ${target.name} with a shield";
   }
 
   @override
@@ -118,7 +118,7 @@ class ShieldBlockSlash extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeShieldBlockSlash(a, sim, w, enemy));
+        .or(computeShieldBlockSlash(a, sim, w, target));
   }
 
   @override

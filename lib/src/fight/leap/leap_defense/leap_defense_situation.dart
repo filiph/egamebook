@@ -15,9 +15,10 @@ Situation createLeapDefenseSituation(int id, Actor attacker, Actor target,
         id,
         leapDefenseSituationName,
         [
-          dodgeLeapBuilder, impaleLeaperBuilder,
+          dodgeLeapBuilder,
           // TODO: WithstandImpactOfLeap.builder,
         ],
+        [impaleLeaperBuilder],
         attacker,
         target,
         predetermination);

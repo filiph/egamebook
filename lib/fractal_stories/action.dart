@@ -234,66 +234,11 @@ abstract class ApproachAction extends Action {
 /// Every [EnemyTargetAction] should contain a static builder like this:
 ///
 ///     static EnemyTargetAction builder(Actor enemy) => new Kick(enemy);
-abstract class EnemyTargetAction extends Action {
-  final Actor enemy;
-
+abstract class EnemyTargetAction extends OtherActorActionBase {
   @mustCallSuper
-  EnemyTargetAction(this.enemy);
+  EnemyTargetAction(Actor enemy) : super(enemy);
 
-  @override
-  String get command {
-    if (isImplicit) {
-      assert(
-          commandTemplate == null,
-          "When action is implicit, commandTemplate should be null. "
-          "Found '$commandTemplate' instead in $this.");
-      return "";
-    }
-    assert(
-        commandTemplate != "",
-        "Never create actions with empty commandTemplate. "
-        "Use isImplicit instead. Culprit: $this");
-    return (new Storyline()..add(commandTemplate, object: enemy))
-        .realizeAsString();
-  }
-
-  /// EnemyTargetAction should include the [enemy] in the [command]. To make it
-  /// easier to implement, this class will automatically construct the name
-  /// given a [Storyline] template.
-  ///
-  /// For example, "kill <object>" is a valid name template that might realize
-  /// into something like "Kill the orc."
-  String get commandTemplate;
-
-  /// By default, [EnemyTargetAction] is not implicit. But it can be.
-  @override
-  bool get isImplicit => false;
-
-  /// EnemyTargetActions might want to mention the [enemy] in the output
-  /// of [getRollReason]. To make this easier to implement, this class will
-  /// automatically construct the roll reason given a [Storyline] template.
-  ///
-  /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
-  /// template that might realize into something like "Will you hit him?"
-  String get rollReasonTemplate;
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
-      (new Storyline()
-            ..add(rollReasonTemplate,
-                subject: a, object: enemy, wholeSentence: true))
-          .realizeAsString();
-
-  /// Gets the [Situation.id] of the main situation of this action.
-  ///
-  /// This is useful for using [Storyline] threads. Actions at the start
-  /// of a situation can mark themselves as supportive in a thread, and then
-  /// other actions will add themselves to that same thread, so that [Storyline]
-  /// can discard the supportive actions when they are to be reported next
-  /// to each other. The thread id is taken from the [Situation.id].
-  int getThreadId(
-          Simulation sim, WorldStateBuilder w, String mainSituationName) =>
-      w.getSituationByName<Situation>(mainSituationName).id;
+  Actor get enemy => target;
 
   @override
   String toString() => "EnemyTargetAction<$commandTemplate::"
@@ -325,6 +270,28 @@ abstract class ItemAction extends Action {
 
   @override
   String toString() => "ItemAction<$command>";
+}
+
+/// This [Action] requires a another [Actor], a [target]. The [target]
+/// doesn't need to be an enemy or a friend.
+///
+/// Every [OtherActorAction] should contain a static builder like this:
+///
+///     static OtherActorAction builder(Actor target) => new Kick(target);
+///
+/// Many aggressive and combat actions are [OtherActorAction]s instead of
+/// [EnemyTargetActions] because we can't guarantee that the opponent
+/// is in an adversarial relation with the performing actor. For example,
+/// when actor A initiates a defensible slash on actor B, and during
+/// that action, A loses all hatred for actor B, we still want him
+/// to finish that slash.
+abstract class OtherActorAction extends OtherActorActionBase {
+  @mustCallSuper
+  OtherActorAction(Actor target) : super(target);
+
+  @override
+  String toString() => "OtherActorAction<$commandTemplate::"
+      "target=${target.id}/${target.name}>";
 }
 
 /// This class encapsulates a singular reason why an action might have
@@ -406,4 +373,75 @@ enum Resource {
   balance,
 
   // TODO: Ideas: weaponGrip (throw sword), shield (let the shield break)
+}
+
+/// A base class for [OtherActorAction] and [EnemyTargetAction].
+///
+/// [OtherActorAction] cannot be a direct superclass of [EnemyTargetAction]
+/// because then our `if (builder is EnemyTargetActionBuilder)` logic
+/// would have false positives (at least in Dart 1).
+abstract class OtherActorActionBase extends Action {
+  final Actor target;
+
+  @mustCallSuper
+  OtherActorActionBase(this.target);
+
+  @override
+  String get command {
+    if (isImplicit) {
+      assert(
+          commandTemplate == null,
+          "When action is implicit, commandTemplate should be null. "
+          "Found '$commandTemplate' instead in $this.");
+      return "";
+    }
+    assert(
+        commandTemplate != "",
+        "Never create actions with empty commandTemplate. "
+        "Use isImplicit instead. Culprit: $this");
+    return (new Storyline()..add(commandTemplate, object: target))
+        .realizeAsString();
+  }
+
+  /// [OtherActorActionBase] should include the [target] in the [command].
+  /// To make it easier to implement, this class will automatically
+  /// construct the name given a [Storyline] template.
+  ///
+  /// For example, "kill <object>" is a valid name template that might realize
+  /// into something like "Kill the orc."
+  String get commandTemplate;
+
+  /// By default, [OtherActorActionBase] is not implicit. But it can be.
+  @override
+  bool get isImplicit => false;
+
+  /// [OtherActorActionBase] might want to mention the [target] in the output
+  /// of [getRollReason]. To make this easier to implement, this class will
+  /// automatically construct the roll reason given a [Storyline] template.
+  ///
+  /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
+  /// template that might realize into something like "Will you hit him?"
+  String get rollReasonTemplate;
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+      (new Storyline()
+            ..add(rollReasonTemplate,
+                subject: a, object: target, wholeSentence: true))
+          .realizeAsString();
+
+  /// Gets the [Situation.id] of the main situation of this action.
+  ///
+  /// This is useful for using [Storyline] threads. Actions at the start
+  /// of a situation can mark themselves as supportive in a thread, and then
+  /// other actions will add themselves to that same thread, so that [Storyline]
+  /// can discard the supportive actions when they are to be reported next
+  /// to each other. The thread id is taken from the [Situation.id].
+  int getThreadId(
+          Simulation sim, WorldStateBuilder w, String mainSituationName) =>
+      w.getSituationByName<Situation>(mainSituationName).id;
+
+  @override
+  String toString() => "_OtherActorActionBase<$commandTemplate::"
+      "target=${target.id}/${target.name}>";
 }

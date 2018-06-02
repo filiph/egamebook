@@ -15,9 +15,9 @@ ReasonedSuccessChance computeRollOutOfWay(
   ]);
 }
 
-EnemyTargetAction rollOutOfWayBuilder(Actor enemy) => new RollOutOfWay(enemy);
+OtherActorAction rollOutOfWayBuilder(Actor enemy) => new RollOutOfWay(enemy);
 
-class RollOutOfWay extends EnemyTargetAction {
+class RollOutOfWay extends OtherActorAction {
   static const String className = "RollOutOfWay";
 
   @override
@@ -72,7 +72,7 @@ class RollOutOfWay extends EnemyTargetAction {
       a.report(s, "<subject> jump<s> up on <subject's> feet", positive: true);
     }
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} rolls out of the way of ${enemy.name}'s strike";
+    return "${a.name} rolls out of the way of ${target.name}'s strike";
   }
 
   @override
@@ -80,7 +80,7 @@ class RollOutOfWay extends EnemyTargetAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeRollOutOfWay(a, sim, w, enemy));
+        .or(computeRollOutOfWay(a, sim, w, target));
   }
 
   @override

@@ -28,5 +28,9 @@ import 'src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
 part 'edgehead_action_builders.g.dart';
 
 @GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
-final FunctionSerializer<EnemyTargetActionBuilder> serializer =
+final FunctionSerializer<OtherActorActionBuilder> otherActorActionSerializer =
+    _$otherActorActionBuilderSerializer;
+
+@GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
+final FunctionSerializer<EnemyTargetActionBuilder> enemyTargetActionSerializer =
     _$enemyTargetActionBuilderSerializer;

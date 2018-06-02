@@ -8,9 +8,9 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
-EnemyTargetAction finishSlashBuilder(Actor enemy) => new FinishSlash(enemy);
+OtherActorAction finishSlashBuilder(Actor enemy) => new FinishSlash(enemy);
 
-class FinishSlash extends EnemyTargetAction {
+class FinishSlash extends OtherActorAction {
   static const String className = "FinishSlash";
 
   @override
@@ -54,8 +54,8 @@ class FinishSlash extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.damageCapability.slashingDamage;
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
-    final updatedEnemy = w.getActorById(enemy.id);
+    w.updateActorById(target.id, (b) => b..hitpoints -= damage);
+    final updatedEnemy = w.getActorById(target.id);
     final thread = getThreadId(sim, w, slashSituationName);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
@@ -76,14 +76,15 @@ class FinishSlash extends EnemyTargetAction {
           object: updatedEnemy,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon.name == orcthorn.name && enemy.name.contains('orc')) {
+      if (a.currentWeapon.name == orcthorn.name &&
+          target.name.contains('orc')) {
         a.currentWeapon.report(
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
+    return "${a.name} slashes${killed ? ' (and kills)' : ''} ${target.name}";
   }
 
   @override
