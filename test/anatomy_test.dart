@@ -13,8 +13,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final deadOrc = executeSlashingHit(
-              orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
+      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.neck)
           .actor;
       expect(deadOrc.isAlive, isFalse);
     });
@@ -23,8 +23,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final deadOrc = executeSlashingHit(
-              orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
+      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.neck)
           .actor;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.head), isNull);
@@ -34,8 +34,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final deadOrc = executeSlashingHit(
-              orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
+      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.neck)
           .actor;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.neck).isAlive,
@@ -46,8 +46,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final severed = executeSlashingHit(
-              orc, BodyPartDesignation.neck, sword, SlashSuccessLevel.cleave)
+      final severed = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.neck)
           .severedPart;
       expect(
           Anatomy.findByDesignationFromPart(BodyPartDesignation.head, severed),
@@ -58,8 +58,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final deadOrc = executeSlashingHit(
-              orc, BodyPartDesignation.head, sword, SlashSuccessLevel.cleave)
+      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.head)
           .actor;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.head).isAlive,
@@ -76,7 +76,8 @@ void main() {
       final sword = new Item.weapon(42, WeaponType.sword);
 
       final slashResult = executeSlashingHit(
-          orc, BodyPartDesignation.head, sword, SlashSuccessLevel.cleave);
+          orc, sword, SlashSuccessLevel.cleave,
+          designation: BodyPartDesignation.head);
       expect(slashResult.successLevel, SlashSuccessLevel.majorCut);
     });
 
@@ -84,8 +85,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc", constitution: 2);
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final cutOrc = executeSlashingHit(
-              orc, BodyPartDesignation.torso, sword, SlashSuccessLevel.majorCut)
+      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.torso)
           .actor;
       expect(cutOrc.isAlive, isTrue);
     });
@@ -96,11 +97,12 @@ void main() {
       final orc = new Actor.initialized(1000, "orc", constitution: 2);
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final cutOrc = executeSlashingHit(
-              orc, BodyPartDesignation.torso, sword, SlashSuccessLevel.majorCut)
+      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.torso)
           .actor;
-      final doublyCutOrc = executeSlashingHit(cutOrc, BodyPartDesignation.torso,
-              sword, SlashSuccessLevel.majorCut)
+      final doublyCutOrc = executeSlashingHit(
+              cutOrc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.torso)
           .actor;
       expect(doublyCutOrc.isAlive, isFalse);
     });
@@ -111,11 +113,12 @@ void main() {
       final orc = new Actor.initialized(1000, "orc", constitution: 2);
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final cutOrc = executeSlashingHit(orc, BodyPartDesignation.rightLeg,
-              sword, SlashSuccessLevel.majorCut)
+      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.rightLeg)
           .actor;
-      final doublyCutOrc = executeSlashingHit(cutOrc,
-              BodyPartDesignation.rightLeg, sword, SlashSuccessLevel.majorCut)
+      final doublyCutOrc = executeSlashingHit(
+              cutOrc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.rightLeg)
           .actor;
       expect(doublyCutOrc.isAlive, isTrue);
     });
@@ -126,11 +129,12 @@ void main() {
       final orc = new Actor.initialized(1000, "orc", constitution: 2);
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final cutOrc = executeSlashingHit(orc, BodyPartDesignation.rightLeg,
-              sword, SlashSuccessLevel.majorCut)
+      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.rightLeg)
           .actor;
-      final doublyCutOrc = executeSlashingHit(cutOrc,
-              BodyPartDesignation.rightLeg, sword, SlashSuccessLevel.majorCut)
+      final doublyCutOrc = executeSlashingHit(
+              cutOrc, sword, SlashSuccessLevel.majorCut,
+              designation: BodyPartDesignation.rightLeg)
           .actor;
       expect(
           doublyCutOrc.anatomy
@@ -143,39 +147,41 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
       final sword = new Item.weapon(42, WeaponType.sword);
 
-      final cutOrc = executeSlashingHit(
-              orc, BodyPartDesignation.head, sword, SlashSuccessLevel.minorCut)
+      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.minorCut,
+              designation: BodyPartDesignation.head)
           .actor;
-      final doublyCutOrc = executeSlashingHit(cutOrc, BodyPartDesignation.head,
-              sword, SlashSuccessLevel.minorCut)
+      final doublyCutOrc = executeSlashingHit(
+              cutOrc, sword, SlashSuccessLevel.minorCut,
+              designation: BodyPartDesignation.head)
           .actor;
       expect(doublyCutOrc.isAlive, isTrue);
     });
   });
 
   group("pickRandomBodyPartFromLeft/Right", () {
-    test("attack from right side (attacker's perspective) "
+    final random = new Random();
+    final randomIntGetter = (int max) => random.nextInt(max);
+
+    test(
+        "attack from right side (attacker's perspective) "
         "never hits right (primary) arm", () {
       // By default, all humanoids are right handed.
       final orc = new Actor.initialized(1000, "orc");
 
-      final random = new Random();
-
       for (int i = 0; i < 1000; i++) {
-        final hit = orc.anatomy.pickRandomBodyPartFromRight(random);
+        final hit = orc.anatomy.pickRandomBodyPartFromRight(randomIntGetter);
         expect(hit.designation, isNot(BodyPartDesignation.primaryArm));
       }
     });
 
-    test("attack from left side (attacker's perspective) "
+    test(
+        "attack from left side (attacker's perspective) "
         "never hits left (secondary) arm", () {
       // By default, all humanoids are right handed.
       final orc = new Actor.initialized(1000, "orc");
 
-      final random = new Random();
-
       for (int i = 0; i < 1000; i++) {
-        final hit = orc.anatomy.pickRandomBodyPartFromLeft(random);
+        final hit = orc.anatomy.pickRandomBodyPartFromLeft(randomIntGetter);
         expect(hit.designation, isNot(BodyPartDesignation.secondaryArm));
       }
     });
@@ -185,13 +191,15 @@ void main() {
     final head = new BodyPart(1, "head");
     final neck = new BodyPart(2, "neck");
     final random = new Random();
+    final randomIntGetter = (int max) => random.nextInt(max);
 
     test("gets the one body part", () {
       final bodyPartsWithWeights = {
         head: 1,
       };
 
-      final part = Anatomy.pickRandomBodyPart(bodyPartsWithWeights, random);
+      final part =
+          Anatomy.pickRandomBodyPart(bodyPartsWithWeights, randomIntGetter);
       expect(part, head);
     });
 
@@ -201,12 +209,14 @@ void main() {
         neck: 10,
       };
 
-      final part = Anatomy.pickRandomBodyPart(bodyPartsWithWeights, random);
+      final part =
+          Anatomy.pickRandomBodyPart(bodyPartsWithWeights, randomIntGetter);
       expect(part, anyOf(head, neck));
     });
 
     test("throws if there are no body parts", () {
-      expect(() => Anatomy.pickRandomBodyPart({}, random), throwsArgumentError);
+      expect(() => Anatomy.pickRandomBodyPart({}, randomIntGetter),
+          throwsArgumentError);
     });
   });
 }

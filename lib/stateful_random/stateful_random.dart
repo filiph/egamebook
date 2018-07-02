@@ -75,3 +75,11 @@ class StatefulRandom implements Random {
   /// recreate the exact state of the random number generator.
   int saveState() => _state;
 }
+
+/// A function that takes a [max] argument and returns a random
+/// integer between `0` (inclusive) and [max] (exclusive).
+///
+/// Corresponds to the [StatefulRandom.nextInt()] function. This typedef is used
+/// for functions that wrap [StatefulRandom.nextInt()] with other logic, such
+/// as [WorldState.randomInt].
+typedef int RandomIntGetter(int max);

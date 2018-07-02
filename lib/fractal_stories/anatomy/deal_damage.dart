@@ -1,34 +1,77 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart'
+    show RandomIntGetter;
+import 'package:meta/meta.dart';
 
-/// Executes the business logic of dealing damage to [bodyPart] with [weapon]
+/// Executes the business logic of dealing damage to a body part with [weapon]
 /// and [success]. Supports anything from minor cuts to decapitation.
-SlashingResult executeSlashingHit(Actor target, BodyPartDesignation bodyPart,
-    Item weapon, SlashSuccessLevel success) {
+///
+/// The affected body part is specified either directly with [bodyPart]
+/// or inderectly with [designation]. For example, a slash can either
+/// directly target a specific body part (selected at random in a previous
+/// step), or at a body part "designation" (such as head, neck, etc.).
+@visibleForTesting
+SlashingResult executeSlashingHit(
+  Actor target,
+  Item weapon,
+  SlashSuccessLevel success, {
+  BodyPartDesignation designation,
+  BodyPart bodyPart,
+}) {
   assert(target.hitpoints > 0);
   assert(weapon.isWeapon);
+  assert(designation != null || bodyPart != null);
+  assert(designation == null || bodyPart == null);
 
-  final designated = target.anatomy.findByDesignation(bodyPart);
-  if (designated == null) {
-    throw new ArgumentError("$bodyPart not found in $target");
+  BodyPart part = bodyPart;
+
+  if (part == null) {
+    // Part not defined directly. We must find it first.
+    part = target.anatomy.findByDesignation(designation);
+    if (part == null) {
+      throw new ArgumentError("$designation not found in $target");
+    }
   }
 
   switch (success) {
     case SlashSuccessLevel.cleave:
-      if (designated.isSeverable) {
-        return _cleaveOff(target, designated, weapon);
+      if (part.isSeverable) {
+        return _cleaveOff(target, part, weapon);
       } else {
-        return _disableBySlash(target, designated, weapon);
+        return _disableBySlash(target, part, weapon);
       }
       break;
     case SlashSuccessLevel.majorCut:
-      return _addMajorCut(target, designated, weapon);
+      return _addMajorCut(target, part, weapon);
     case SlashSuccessLevel.minorCut:
-      return _addMinorCut(target, designated, weapon);
+      return _addMinorCut(target, part, weapon);
   }
 
   throw new UnimplementedError("this type of slash not implemented yet");
+}
+
+/// Resolves the logic of randomly selecting a body part based on
+/// the [direction] of a slash, then dealing the damage to that part
+/// with [weapon] and [success].
+///
+/// Supports anything from minor cuts to decapitation.
+SlashingResult executeSlashingHitFromDirection(
+    Actor target,
+    SlashDirection direction,
+    Item weapon,
+    SlashSuccessLevel success,
+    RandomIntGetter randomIntGenerator) {
+  final fromLeft = direction == SlashDirection.left;
+  assert(fromLeft || direction == SlashDirection.right,
+      "The logic below assumes only two possible directions. Update it.");
+
+  final bodyPart = fromLeft
+      ? target.anatomy.pickRandomBodyPartFromLeft(randomIntGenerator)
+      : target.anatomy.pickRandomBodyPartFromRight(randomIntGenerator);
+
+  return executeSlashingHit(target, weapon, success, bodyPart: bodyPart);
 }
 
 SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
@@ -181,6 +224,16 @@ void _updateWalker(
 /// An update function that modifies [b]. It also takes [afflictedDescendant],
 /// which is `true` when the body part is a descendant of the target body part.
 typedef void BodyPartUpdater(BodyPartBuilder b, bool afflictedDescendant);
+
+/// Direction from which the slash is executed. This is from the attacker's
+/// perspective.
+///
+/// Therefore, an attack from the (attacker's) [left] will likely land
+/// on the target's _right_ hand.
+enum SlashDirection {
+  left,
+  right,
+}
 
 class SlashingResult {
   /// The victim in their state after the slash (e.g. missing a limb).

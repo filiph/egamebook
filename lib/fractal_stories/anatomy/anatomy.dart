@@ -1,10 +1,9 @@
 library fractal_stories.anatomy;
 
-import 'dart:math';
-
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
 part 'anatomy.g.dart';
@@ -44,15 +43,15 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   /// Returns a body part that is about to be hit by an attack from the left.
-  BodyPart pickRandomBodyPartFromLeft(Random random) {
+  BodyPart pickRandomBodyPartFromLeft(RandomIntGetter randomIntGetter) {
     final parts = _getLeftPartsWithWeights();
-    return pickRandomBodyPart(parts, random);
+    return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Returns a body part that is about to be hit by an attack from the right.
-  BodyPart pickRandomBodyPartFromRight(Random random) {
+  BodyPart pickRandomBodyPartFromRight(RandomIntGetter randomIntGetter) {
     final parts = _getRightPartsWithWeights();
-    return pickRandomBodyPart(parts, random);
+    return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Creates a map of parts to their weight. The weight is the [Map.value]
@@ -105,13 +104,13 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// This works as a wheel of fortune, with the weight being the proportional
   /// size of each body part's slice.
   @visibleForTesting
-  static BodyPart pickRandomBodyPart(
-      Map<BodyPart, int> bodyPartsWithWeights, Random random) {
+  static BodyPart pickRandomBodyPart(Map<BodyPart, int> bodyPartsWithWeights,
+      RandomIntGetter randomIntGetter) {
     if (bodyPartsWithWeights.isEmpty) {
       throw new ArgumentError("bodyPartsWithWeights cannot be empty");
     }
     final weightsTotal = bodyPartsWithWeights.values.reduce(_sum);
-    final needle = random.nextInt(weightsTotal);
+    final needle = randomIntGetter(weightsTotal);
     int current = 0;
     for (final part in bodyPartsWithWeights.keys) {
       current += bodyPartsWithWeights[part];
