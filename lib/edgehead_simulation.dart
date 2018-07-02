@@ -31,6 +31,7 @@ final Actor edgeheadPlayer = new Actor.initialized(playerId, "Aren",
     isPlayer: true,
     pronoun: Pronoun.YOU,
     constitution: 2,
+    dexterity: 150,
     stamina: 1,
     initiative: 1000,
     currentRoomName: _preStartBook.name);
