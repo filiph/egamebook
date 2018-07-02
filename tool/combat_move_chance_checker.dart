@@ -8,7 +8,6 @@ import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash.dart';
-import 'package:edgehead/src/fight/actions/start_slash_out_of_balance.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
@@ -45,7 +44,6 @@ void main() {
     "jump back slash": computeJumpBackSlash,
     "parry slash": computeParrySlash,
     "shield block slash": computeShieldBlockSlash,
-    "start slash out of balance": computeStartSlashOutOfBalance,
     "start strike down": computeStartStrikeDownPlayer,
     "on ground parry": computeOnGroundParry,
     "on ground shield block": computeOnGroundShieldBlock,
