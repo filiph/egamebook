@@ -9,7 +9,7 @@ SlashingResult executeSlashingHit(Actor target, BodyPartDesignation bodyPart,
   assert(target.hitpoints > 0);
   assert(weapon.isWeapon);
 
-  final designated = BodyPart.findByDesignation(bodyPart, target.torso);
+  final designated = target.anatomy.findByDesignation(bodyPart);
   if (designated == null) {
     throw new ArgumentError("$bodyPart not found in $target");
   }
@@ -126,14 +126,14 @@ SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
 /// values that need to be updated.
 void _deepReplaceBodyPart(Actor actor, ActorBuilder builder,
     bool whereFilter(BodyPart bodyPart), BodyPartUpdater update) {
-  final torsoAfflicted = whereFilter(actor.torso);
+  final torsoAfflicted = whereFilter(actor.anatomy.torso);
 
   if (torsoAfflicted) {
-    update(builder.torso, false);
+    update(builder.anatomy.torso, false);
   }
 
-  _updateWalker(builder.torso.build(), builder.torso, whereFilter, update,
-      torsoAfflicted);
+  _updateWalker(builder.anatomy.torso.build(), builder.anatomy.torso,
+      whereFilter, update, torsoAfflicted);
 }
 
 SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Item weapon) {

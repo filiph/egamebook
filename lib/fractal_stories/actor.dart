@@ -5,6 +5,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
@@ -53,17 +54,17 @@ abstract class Actor extends Object
       int dexterity: 100,
       int stamina: 0,
       int initiative: 0,
-      BodyPart torso,
+      Anatomy anatomy,
       int gold: 0,
       String currentRoomName,
       int followingActorId,
       Team team,
       bool isConfused: false,
       String combineFunctionHandle: "normal"}) {
-    BodyPart currentTorso = (torso ?? buildHumanoid(id));
+    Anatomy currentAnatomy = (anatomy ?? buildHumanoid(id));
     Item weapon = currentWeapon;
     if (weapon == null) {
-      weapon = createBodyPartWeapon(currentTorso);
+      weapon = createBodyPartWeapon(currentAnatomy);
     }
 
     return new _$Actor((b) => b
@@ -80,7 +81,7 @@ abstract class Actor extends Object
       ..dexterity = dexterity
       ..stamina = stamina
       ..initiative = initiative
-      ..torso = currentTorso.toBuilder()
+      ..anatomy = currentAnatomy.toBuilder()
       ..gold = gold
       ..currentRoomName = currentRoomName
       ..followingActorId = followingActorId
@@ -89,11 +90,13 @@ abstract class Actor extends Object
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = Pose.standing
       ..isActive = true
-      ..weapons = new ListBuilder<Item>()
-    );
+      ..weapons = new ListBuilder<Item>());
   }
 
   Actor._();
+
+  /// This is the root of the [Actor]'s anatomy.
+  Anatomy get anatomy;
 
   /// Actor can wield weapons other than [Fist].
   ///
@@ -194,9 +197,6 @@ abstract class Actor extends Object
 
   @override
   Team get team;
-
-  /// This is the root of the [Actor]'s anatomy.
-  BodyPart get torso;
 
   /// How safe does [this] Actor feel in the presence of the different other
   /// actors.
@@ -338,10 +338,10 @@ abstract class Actor extends Object
     return recency <= time;
   }
 
-  /// Creates an [Item] from a [BodyPart] in [torso] that acts as a weapon.
-  static Item createBodyPartWeapon(BodyPart torso) {
+  /// Creates an [Item] from a [BodyPart] in [anatomy] that acts as a weapon.
+  static Item createBodyPartWeapon(Anatomy anatomy) {
     // TODO: get the best one, not just the first one
-    final part = _getDamageDealingBodyParts(torso).first;
+    final part = _getDamageDealingBodyParts(anatomy.torso).first;
     return createFist(part);
   }
 

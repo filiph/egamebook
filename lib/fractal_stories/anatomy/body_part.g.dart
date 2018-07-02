@@ -166,6 +166,12 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
+      'swingSurfaceLeft',
+      serializers.serialize(object.swingSurfaceLeft,
+          specifiedType: const FullType(int)),
+      'swingSurfaceRight',
+      serializers.serialize(object.swingSurfaceRight,
+          specifiedType: const FullType(int)),
     ];
     if (object.damageCapability != null) {
       result
@@ -249,6 +255,14 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'swingSurfaceLeft':
+          result.swingSurfaceLeft = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'swingSurfaceRight':
+          result.swingSurfaceRight = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -321,6 +335,10 @@ class _$BodyPart extends BodyPart {
   final int minorCutsCount;
   @override
   final String name;
+  @override
+  final int swingSurfaceLeft;
+  @override
+  final int swingSurfaceRight;
 
   factory _$BodyPart([void updates(BodyPartBuilder b)]) =>
       (new BodyPartBuilder()..update(updates)).build();
@@ -339,7 +357,9 @@ class _$BodyPart extends BodyPart {
       this.isVital,
       this.majorCutsCount,
       this.minorCutsCount,
-      this.name})
+      this.name,
+      this.swingSurfaceLeft,
+      this.swingSurfaceRight})
       : super._() {
     if (bluntHitsCount == null)
       throw new ArgumentError.notNull('bluntHitsCount');
@@ -357,6 +377,10 @@ class _$BodyPart extends BodyPart {
     if (minorCutsCount == null)
       throw new ArgumentError.notNull('minorCutsCount');
     if (name == null) throw new ArgumentError.notNull('name');
+    if (swingSurfaceLeft == null)
+      throw new ArgumentError.notNull('swingSurfaceLeft');
+    if (swingSurfaceRight == null)
+      throw new ArgumentError.notNull('swingSurfaceRight');
   }
 
   @override
@@ -383,7 +407,9 @@ class _$BodyPart extends BodyPart {
         isVital == other.isVital &&
         majorCutsCount == other.majorCutsCount &&
         minorCutsCount == other.minorCutsCount &&
-        name == other.name;
+        name == other.name &&
+        swingSurfaceLeft == other.swingSurfaceLeft &&
+        swingSurfaceRight == other.swingSurfaceRight;
   }
 
   @override
@@ -402,22 +428,28 @@ class _$BodyPart extends BodyPart {
                                                 $jc(
                                                     $jc(
                                                         $jc(
-                                                            0,
-                                                            bluntHitsCount
+                                                            $jc(
+                                                                $jc(
+                                                                    0,
+                                                                    bluntHitsCount
+                                                                        .hashCode),
+                                                                children
+                                                                    .hashCode),
+                                                            damageCapability
                                                                 .hashCode),
-                                                        children.hashCode),
-                                                    damageCapability.hashCode),
-                                                designation.hashCode),
-                                            function.hashCode),
-                                        id.hashCode),
-                                    isActive.hashCode),
-                                isAlive.hashCode),
-                            isSeverable.hashCode),
-                        isSevered.hashCode),
-                    isVital.hashCode),
-                majorCutsCount.hashCode),
-            minorCutsCount.hashCode),
-        name.hashCode));
+                                                        designation.hashCode),
+                                                    function.hashCode),
+                                                id.hashCode),
+                                            isActive.hashCode),
+                                        isAlive.hashCode),
+                                    isSeverable.hashCode),
+                                isSevered.hashCode),
+                            isVital.hashCode),
+                        majorCutsCount.hashCode),
+                    minorCutsCount.hashCode),
+                name.hashCode),
+            swingSurfaceLeft.hashCode),
+        swingSurfaceRight.hashCode));
   }
 
   @override
@@ -436,7 +468,9 @@ class _$BodyPart extends BodyPart {
           ..add('isVital', isVital)
           ..add('majorCutsCount', majorCutsCount)
           ..add('minorCutsCount', minorCutsCount)
-          ..add('name', name))
+          ..add('name', name)
+          ..add('swingSurfaceLeft', swingSurfaceLeft)
+          ..add('swingSurfaceRight', swingSurfaceRight))
         .toString();
   }
 }
@@ -507,6 +541,16 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  int _swingSurfaceLeft;
+  int get swingSurfaceLeft => _$this._swingSurfaceLeft;
+  set swingSurfaceLeft(int swingSurfaceLeft) =>
+      _$this._swingSurfaceLeft = swingSurfaceLeft;
+
+  int _swingSurfaceRight;
+  int get swingSurfaceRight => _$this._swingSurfaceRight;
+  set swingSurfaceRight(int swingSurfaceRight) =>
+      _$this._swingSurfaceRight = swingSurfaceRight;
+
   BodyPartBuilder();
 
   BodyPartBuilder get _$this {
@@ -525,6 +569,8 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _majorCutsCount = _$v.majorCutsCount;
       _minorCutsCount = _$v.minorCutsCount;
       _name = _$v.name;
+      _swingSurfaceLeft = _$v.swingSurfaceLeft;
+      _swingSurfaceRight = _$v.swingSurfaceRight;
       _$v = null;
     }
     return this;
@@ -558,7 +604,9 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
             isVital: isVital,
             majorCutsCount: majorCutsCount,
             minorCutsCount: minorCutsCount,
-            name: name);
+            name: name,
+            swingSurfaceLeft: swingSurfaceLeft,
+            swingSurfaceRight: swingSurfaceRight);
     replace(_$result);
     return _$result;
   }

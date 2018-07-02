@@ -26,6 +26,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
   Iterable serialize(Serializers serializers, Actor object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
+      'anatomy',
+      serializers.serialize(object.anatomy,
+          specifiedType: const FullType(Anatomy)),
       'combineFunctionHandle',
       serializers.serialize(object.combineFunctionHandle,
           specifiedType: const FullType(String)),
@@ -78,9 +81,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       serializers.serialize(object.stamina, specifiedType: const FullType(int)),
       'team',
       serializers.serialize(object.team, specifiedType: const FullType(Team)),
-      'torso',
-      serializers.serialize(object.torso,
-          specifiedType: const FullType(BodyPart)),
       'weapons',
       serializers.serialize(object.weapons,
           specifiedType:
@@ -119,6 +119,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'anatomy':
+          result.anatomy.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Anatomy)) as Anatomy);
+          break;
         case 'combineFunctionHandle':
           result.combineFunctionHandle = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -209,10 +213,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.team.replace(serializers.deserialize(value,
               specifiedType: const FullType(Team)) as Team);
           break;
-        case 'torso':
-          result.torso.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BodyPart)) as BodyPart);
-          break;
         case 'weapons':
           result.weapons.replace(serializers.deserialize(value,
                   specifiedType:
@@ -227,6 +227,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 }
 
 class _$Actor extends Actor {
+  @override
+  final Anatomy anatomy;
   @override
   final String combineFunctionHandle;
   @override
@@ -272,15 +274,14 @@ class _$Actor extends Actor {
   @override
   final Team team;
   @override
-  final BodyPart torso;
-  @override
   final BuiltList<Item> weapons;
 
   factory _$Actor([void updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
-      {this.combineFunctionHandle,
+      {this.anatomy,
+      this.combineFunctionHandle,
       this.constitution,
       this.currentRoomName,
       this.currentShield,
@@ -302,9 +303,9 @@ class _$Actor extends Actor {
       this.pronoun,
       this.stamina,
       this.team,
-      this.torso,
       this.weapons})
       : super._() {
+    if (anatomy == null) throw new ArgumentError.notNull('anatomy');
     if (combineFunctionHandle == null)
       throw new ArgumentError.notNull('combineFunctionHandle');
     if (constitution == null) throw new ArgumentError.notNull('constitution');
@@ -326,7 +327,6 @@ class _$Actor extends Actor {
     if (pronoun == null) throw new ArgumentError.notNull('pronoun');
     if (stamina == null) throw new ArgumentError.notNull('stamina');
     if (team == null) throw new ArgumentError.notNull('team');
-    if (torso == null) throw new ArgumentError.notNull('torso');
     if (weapons == null) throw new ArgumentError.notNull('weapons');
   }
 
@@ -341,7 +341,8 @@ class _$Actor extends Actor {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! Actor) return false;
-    return combineFunctionHandle == other.combineFunctionHandle &&
+    return anatomy == other.anatomy &&
+        combineFunctionHandle == other.combineFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
         currentShield == other.currentShield &&
@@ -363,7 +364,6 @@ class _$Actor extends Actor {
         pronoun == other.pronoun &&
         stamina == other.stamina &&
         team == other.team &&
-        torso == other.torso &&
         weapons == other.weapons;
   }
 
@@ -387,31 +387,32 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode), currentWeapon.hashCode),
-                                                                                dexterity.hashCode),
-                                                                            followingActorId.hashCode),
-                                                                        gold.hashCode),
-                                                                    hitpoints.hashCode),
-                                                                id.hashCode),
-                                                            initiative.hashCode),
-                                                        isActive.hashCode),
-                                                    isConfused.hashCode),
-                                                isPlayer.hashCode),
-                                            items.hashCode),
-                                        maxHitpoints.hashCode),
-                                    name.hashCode),
-                                nameIsProperNoun.hashCode),
-                            pose.hashCode),
-                        pronoun.hashCode),
-                    stamina.hashCode),
-                team.hashCode),
-            torso.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode),
+                                                                                currentWeapon.hashCode),
+                                                                            dexterity.hashCode),
+                                                                        followingActorId.hashCode),
+                                                                    gold.hashCode),
+                                                                hitpoints.hashCode),
+                                                            id.hashCode),
+                                                        initiative.hashCode),
+                                                    isActive.hashCode),
+                                                isConfused.hashCode),
+                                            isPlayer.hashCode),
+                                        items.hashCode),
+                                    maxHitpoints.hashCode),
+                                name.hashCode),
+                            nameIsProperNoun.hashCode),
+                        pose.hashCode),
+                    pronoun.hashCode),
+                stamina.hashCode),
+            team.hashCode),
         weapons.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
+          ..add('anatomy', anatomy)
           ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
@@ -434,7 +435,6 @@ class _$Actor extends Actor {
           ..add('pronoun', pronoun)
           ..add('stamina', stamina)
           ..add('team', team)
-          ..add('torso', torso)
           ..add('weapons', weapons))
         .toString();
   }
@@ -442,6 +442,10 @@ class _$Actor extends Actor {
 
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
+
+  AnatomyBuilder _anatomy;
+  AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
+  set anatomy(AnatomyBuilder anatomy) => _$this._anatomy = anatomy;
 
   String _combineFunctionHandle;
   String get combineFunctionHandle => _$this._combineFunctionHandle;
@@ -537,10 +541,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   TeamBuilder get team => _$this._team ??= new TeamBuilder();
   set team(TeamBuilder team) => _$this._team = team;
 
-  BodyPartBuilder _torso;
-  BodyPartBuilder get torso => _$this._torso ??= new BodyPartBuilder();
-  set torso(BodyPartBuilder torso) => _$this._torso = torso;
-
   ListBuilder<Item> _weapons;
   ListBuilder<Item> get weapons => _$this._weapons ??= new ListBuilder<Item>();
   set weapons(ListBuilder<Item> weapons) => _$this._weapons = weapons;
@@ -549,6 +549,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   ActorBuilder get _$this {
     if (_$v != null) {
+      _anatomy = _$v.anatomy?.toBuilder();
       _combineFunctionHandle = _$v.combineFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
@@ -571,7 +572,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _pronoun = _$v.pronoun?.toBuilder();
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
-      _torso = _$v.torso?.toBuilder();
       _weapons = _$v.weapons?.toBuilder();
       _$v = null;
     }
@@ -593,6 +593,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor build() {
     final _$result = _$v ??
         new _$Actor._(
+            anatomy: anatomy?.build(),
             combineFunctionHandle: combineFunctionHandle,
             constitution: constitution,
             currentRoomName: currentRoomName,
@@ -615,7 +616,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             pronoun: pronoun?.build(),
             stamina: stamina,
             team: team?.build(),
-            torso: torso?.build(),
             weapons: weapons?.build());
     replace(_$result);
     return _$result;

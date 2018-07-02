@@ -32,6 +32,8 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
     int majorCutsCount,
     int minorCutsCount,
     DamageCapabilityBuilder damageCapability,
+    int swingSurfaceLeft: 1,
+    int swingSurfaceRight: 1,
   }) =>
       new _$BodyPart((b) => b
         ..id = id
@@ -47,6 +49,8 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
         ..majorCutsCount = majorCutsCount ?? 0
         ..minorCutsCount = minorCutsCount ?? 0
         ..damageCapability = damageCapability
+        ..swingSurfaceLeft = swingSurfaceLeft
+        ..swingSurfaceRight = swingSurfaceRight
         ..isActive = true);
 
   BodyPart._();
@@ -150,10 +154,10 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   /// When a limb is severed, its surface area is no longer counted.
   /// So, severing the right arm in this scenario will suddenly make the head
   /// be much more easily hit: 1 / (1 + 0 + 3 + 1) == 20%.
-  int get swingSurfaceLeft => 1;
+  int get swingSurfaceLeft;
 
   /// See [swingSurfaceLeft] doc comment.
-  int get swingSurfaceRight => 1;
+  int get swingSurfaceRight;
 
   /// See [swingSurfaceLeft] doc comment.
   int get swingSurfaceTop => 1;
@@ -163,22 +167,6 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
 
   /// See [swingSurfaceLeft] doc comment.
   int get thrustSurface => 1;
-
-  /// Finds [BodyPart] of [designation] or returns `null`.
-  ///
-  /// There should be at most one [BodyPart] of any [BodyPartDesignation]. This
-  /// function does not enforce that (if you have an invalid anatomy, it will
-  /// return the first body part that satisfies the designation, and will
-  /// not throw).
-  static BodyPart findByDesignation(
-      BodyPartDesignation designation, BodyPart root) {
-    if (root.designation == designation) return root;
-    for (final child in root.children) {
-      final result = findByDesignation(designation, child);
-      if (result != null) return result;
-    }
-    return null;
-  }
 }
 
 /// This uniquely identifies a [BodyPart] in a body.
@@ -209,11 +197,14 @@ class BodyPartDesignation extends EnumClass {
   static const BodyPartDesignation rightEye = _$rightEye;
 
   /// The arm of a humanoid (two-armed) creature that wields a weapon
-  /// and ends with [primaryHand].
+  /// and ends with [primaryHand]. Also known as 'weapon arm'.
+  ///
+  /// This will normally be the humanoid's right arm. From the perspective
+  /// of an attacker, it will be on the left.
   static const BodyPartDesignation primaryArm = _$primaryArm;
 
   /// The hand of a humanoid (two-armed) creature that holds the weapon
-  /// or deals fist damage.
+  /// or deals fist damage. Also known as 'weapon hand'.
   static const BodyPartDesignation primaryHand = _$primaryHand;
 
   /// The arm of a humanoid (two-armed) creature that does not normally

@@ -83,7 +83,7 @@ class DisarmKick extends EnemyTargetAction {
         enemy.id,
         (b) => b
           ..currentWeapon =
-              Actor.createBodyPartWeapon(enemy.torso).toBuilder());
+              Actor.createBodyPartWeapon(enemy.anatomy).toBuilder());
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
 
