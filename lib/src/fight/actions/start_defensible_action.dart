@@ -49,8 +49,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   final _PartialApplyFunction _applyStartOfFailure;
 
   /// This is used as the usual [Action.isApplicable].
-  final bool Function(Actor a, Simulation sim, WorldState w, Actor enemy)
-      _isApplicableFunction;
+  final OtherActorApplicabilityFunction _isApplicableFunction;
 
   /// This should build the main situation (the orc slashing Aren).
   ///

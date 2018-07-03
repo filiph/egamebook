@@ -75,12 +75,14 @@ SlashingResult executeSlashingHitFromDirection(
 }
 
 SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
-  assert(
-      designated.isAlive, "Slashing a dead body part is not yet implemented");
+  if (designated.hitpoints == 1) {
+    return _disableBySlash(target, designated, weapon);
+  }
+
   final ActorBuilder victim = target.toBuilder();
 
-  // When a body part is vital, each major cut removes a hitpoint.
-  if (designated.isVital) {
+  // When a body part is vital, each major cut removes one actor's hitpoint.
+  if (designated.isVital && designated.isAlive) {
     victim.hitpoints -= 1;
   }
 
@@ -93,16 +95,12 @@ SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
       if (!isDescendant) {
         b.majorCutsCount += 1;
       }
+      b.hitpoints -= 1;
     },
   );
 
-  // When a body part takes as many hits as is the target's constitution,
-  // it is disabled.
-  if (designated.majorCutsCount + 1 == target.constitution) {
-    return _disableBySlash(victim.build(), designated, weapon);
-  }
-
-  return new SlashingResult(victim.build(), null, SlashSuccessLevel.majorCut);
+  return new SlashingResult(
+      victim.build(), designated, null, SlashSuccessLevel.majorCut);
 }
 
 /// Minor cuts are merely recorded on the body part. They don't have any
@@ -125,7 +123,8 @@ SlashingResult _addMinorCut(Actor target, BodyPart designated, Item weapon) {
     },
   );
 
-  return new SlashingResult(victim.build(), null, SlashSuccessLevel.minorCut);
+  return new SlashingResult(
+      victim.build(), designated, null, SlashSuccessLevel.minorCut);
 }
 
 /// Cuts off the body part. The [bodyPart] must be severable.
@@ -134,7 +133,6 @@ SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
 
   final ActorBuilder victim = target.toBuilder();
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
-    // TODO: move from hitpoints to something else
     victim.hitpoints = 0;
   }
 
@@ -149,16 +147,16 @@ SlashingResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
       }
       b.children.clear();
       b.isSevered = true;
-      b.isAlive = false;
+      b.hitpoints = 0;
     },
   );
 
   final BodyPartBuilder severedPart = bodyPart.toBuilder();
   severedPart.isSevered = true;
-  severedPart.isAlive = false;
+  severedPart.hitpoints = 0;
 
   return new SlashingResult(
-      victim.build(), severedPart.build(), SlashSuccessLevel.cleave);
+      victim.build(), bodyPart, severedPart.build(), SlashSuccessLevel.cleave);
 }
 
 /// Walks body parts from torso down the anatomy-tree, and calls [update]
@@ -191,14 +189,15 @@ SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Item weapon) {
     victim,
     (part) => part.id == bodyPart.id,
     (b, isDescendant) {
-      b.isAlive = false;
       if (!isDescendant) {
         b.majorCutsCount += 1;
       }
+      b.hitpoints = 0;
     },
   );
 
-  return new SlashingResult(victim.build(), null, SlashSuccessLevel.majorCut);
+  return new SlashingResult(
+      victim.build(), bodyPart, null, SlashSuccessLevel.majorCut);
 }
 
 void _updateWalker(
@@ -243,6 +242,9 @@ class SlashingResult {
   /// This can be (and often _will_ be) `null`.
   final BodyPart severedPart;
 
+  /// The body part that was slashed.
+  final BodyPart slashedPart;
+
   /// Normally, this is the [SlashSuccessLevel] that [executeSlashingHit]
   /// was called with. But in some cases, the success level is upgraded
   /// or downgraded.
@@ -252,7 +254,8 @@ class SlashingResult {
   /// [SlashSuccessLevel.majorCut].
   final SlashSuccessLevel successLevel;
 
-  const SlashingResult(this.actor, this.severedPart, this.successLevel);
+  const SlashingResult(
+      this.actor, this.slashedPart, this.severedPart, this.successLevel);
 }
 
 enum SlashSuccessLevel {

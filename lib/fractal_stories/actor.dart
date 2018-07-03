@@ -61,7 +61,8 @@ abstract class Actor extends Object
       Team team,
       bool isConfused: false,
       String combineFunctionHandle: "normal"}) {
-    Anatomy currentAnatomy = (anatomy ?? buildHumanoid(id));
+    Anatomy currentAnatomy =
+        (anatomy ?? buildHumanoid(id, constitution: constitution));
     Item weapon = currentWeapon;
     if (weapon == null) {
       weapon = createBodyPartWeapon(currentAnatomy);

@@ -1,9 +1,11 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
@@ -54,26 +56,37 @@ class FinishSlash extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.damageCapability.slashingDamage;
-    w.updateActorById(target.id, (b) => b..hitpoints -= damage);
-    final updatedEnemy = w.getActorById(target.id);
+    final situation = context.world.currentSituation as AttackerSituation;
+    assert(situation.name == slashSituationName);
+    assert(situation.attackDirection == AttackDirection.left ||
+        situation.attackDirection == AttackDirection.right);
+    final direction = situation.attackDirection == AttackDirection.left
+        ? SlashDirection.left
+        : SlashDirection.right;
+    // TODO: change to cleave automatically when at last hitpoint
+    final result = executeSlashingHitFromDirection(target, direction,
+        a.currentWeapon, SlashSuccessLevel.majorCut, w.randomInt);
+    w.actors.removeWhere((actor) => actor.id == target.id);
+    w.actors.add(result.actor);
     final thread = getThreadId(sim, w, slashSituationName);
-    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
+    // TODO: revert kill if it's briana.
+    bool killed = !result.actor.isAlive && result.actor.id != brianaId;
     if (!killed) {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} <object's> "
-          "{shoulder|abdomen|thigh}",
-          object: updatedEnemy,
+          "${result.slashedPart.randomDesignation}",
+          object: result.actor,
           positive: true,
           actionThread: thread);
-      reportPain(context, updatedEnemy, damage);
+      reportPain(context, result.actor, damage);
     } else {
       a.report(
           s,
           "<subject> {slash<es>|cut<s>} "
           "{across|through} <object's> "
-          "{neck|abdomen|lower body}",
-          object: updatedEnemy,
+          "${result.slashedPart.randomDesignation}",
+          object: result.actor,
           positive: true,
           actionThread: thread);
       if (a.currentWeapon.name == orcthorn.name &&
@@ -82,7 +95,7 @@ class FinishSlash extends OtherActorAction {
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
-      killHumanoid(context, updatedEnemy);
+      killHumanoid(context, result.actor);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${target.name}";
   }

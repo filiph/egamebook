@@ -21,10 +21,11 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   factory BodyPart(
     int id,
     String name, {
+    String randomDesignation,
     Iterable<BodyPart> children,
     BodyPartDesignation designation,
     BodyPartFunction function,
-    bool isAlive,
+    int hitpoints,
     bool isVital,
     bool isSeverable,
     bool isSevered,
@@ -38,10 +39,11 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
       new _$BodyPart((b) => b
         ..id = id
         ..name = name
+        ..randomDesignation = randomDesignation ?? name
         ..children = new ListBuilder<BodyPart>(children ?? const <BodyPart>[])
         ..designation = designation ?? BodyPartDesignation.none
         ..function = function ?? BodyPartFunction.none
-        ..isAlive = isAlive ?? true
+        ..hitpoints = hitpoints ?? 1
         ..isVital = isVital ?? false
         ..isSeverable = isSeverable ?? false
         ..isSevered = isSevered ?? false
@@ -81,9 +83,11 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
     return false;
   }
 
-  /// How many hitpoints does this body part take before being destroyed
-  /// or severed.
-  int get health => 1;
+  /// How many hitpoints does this body part have. After this goes
+  /// to `0`, the body part is disabled.
+  ///
+  /// This is `1` by default.
+  int get hitpoints;
 
   @override
   int get id;
@@ -92,7 +96,7 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
   bool get isActive;
 
   @override
-  bool get isAlive;
+  bool get isAlive => hitpoints > 0;
 
   @override
   bool get isPlayer => false;
@@ -132,6 +136,20 @@ abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
 
   @override
   Pronoun get pronoun => Pronoun.IT;
+
+  /// A designation that can be used in storyline to refer to this part, e.g.
+  /// `"{abdomen|chest|belly}"` for torso.
+  ///
+  /// Note that the resulting string (after being processed by [Randomly.parse])
+  /// will really be random. Don't use [randomDesignation] of the same
+  /// body part two times in a row.
+  ///
+  /// This is useful when you want to, for example, report a slash of a torso,
+  /// and you'd like to make the report a little more specific, with something
+  /// like "you cut the orc's abdomen" or "you slash across the orc's chest".
+  ///
+  /// By default, this is the same as [name].
+  String get randomDesignation;
 
   /// See [swingSurfaceLeft] doc comment.
   int get swingSurfaceBottom => 1;

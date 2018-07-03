@@ -5,6 +5,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -86,8 +87,10 @@ abstract class FightSituation extends Situation
         startLeapPlayerBuilder,
         startPunchBuilder,
         startPunchPlayerBuilder,
-        startSlashBuilder,
-        startSlashPlayerBuilder,
+        startSlashFromDirectionGenerator(SlashDirection.left),
+        startSlashFromDirectionGenerator(SlashDirection.right),
+        startSlashPlayerFromDirectionGenerator(SlashDirection.left),
+        startSlashPlayerFromDirectionGenerator(SlashDirection.right),
         startStrikeDownBuilder,
         startStrikeDownPlayerBuilder,
         startThrustSpearBuilder,

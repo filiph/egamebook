@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -48,6 +49,9 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
   }
 }
 
+/// TODO: This currently assumes that actor will always want to counter slash
+/// from left. Add another option or make explicit that
+/// this is what's happening.
 EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     "CounterSlash",
     counterSlashCommandTemplate,
@@ -57,7 +61,8 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
         !a.isPlayer &&
         a.currentWeapon.damageCapability.isSlashing &&
         !a.isOnGround,
-    (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+    (a, sim, w, enemy) =>
+        createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
     (a, sim, w, enemy) => createSlashDefenseSituation(
         w.randomInt(), a, enemy, Predetermination.none),
     enemy,
@@ -65,6 +70,9 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
     applyStartOfFailure: counterSlashApplyFailure,
     buildSituationsOnFailure: false);
 
+/// TODO: This currently assumes that actor will always want to counter slash
+/// from left. Add another option or make explicit that
+/// this is what's happening.
 EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
     new StartDefensibleAction(
         "CounterSlashPlayer",
@@ -75,7 +83,8 @@ EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
             a.isPlayer &&
             a.currentWeapon.damageCapability.isSlashing &&
             !a.isOnGround,
-        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+        (a, sim, w, enemy) =>
+            createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,

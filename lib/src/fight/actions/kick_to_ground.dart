@@ -2,12 +2,20 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+
+ReasonedSuccessChance computeKickToGround(
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
+  return getCombatMoveChance(a, enemy, 0.6, [
+    const Bonus(70, CombatReason.dexterity),
+    const Bonus(50, CombatReason.balance),
+  ]);
+}
 
 class KickToGround extends EnemyTargetAction {
   static const String className = "KickToGround";
@@ -32,10 +40,10 @@ class KickToGround extends EnemyTargetAction {
   KickToGround(Actor enemy) : super(enemy);
 
   @override
-  String get name => className;
+  String get commandTemplate => "kick <object> to the ground";
 
   @override
-  String get commandTemplate => "kick <object> to the ground";
+  String get name => className;
 
   @override
   String get rollReasonTemplate => "will <subject> kick "
@@ -83,12 +91,8 @@ class KickToGround extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState world) {
-    return getCombatMoveChance(a, enemy, 0.6, [
-      const Bonus(70, CombatReason.dexterity),
-      const Bonus(50, CombatReason.balance),
-    ]);
-  }
+          Actor a, Simulation sim, WorldState world) =>
+      computeKickToGround(a, sim, world, enemy);
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world) =>

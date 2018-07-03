@@ -14,8 +14,52 @@ part of stranded.fight.attacker_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+const AttackDirection _$left = const AttackDirection._('left');
+const AttackDirection _$right = const AttackDirection._('right');
+const AttackDirection _$unspecified = const AttackDirection._('unspecified');
+
+AttackDirection _$valueOfAttackDirection(String name) {
+  switch (name) {
+    case 'left':
+      return _$left;
+    case 'right':
+      return _$right;
+    case 'unspecified':
+      return _$unspecified;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<AttackDirection> _$attackDirectionValues =
+    new BuiltSet<AttackDirection>(const <AttackDirection>[
+  _$left,
+  _$right,
+  _$unspecified,
+]);
+
+Serializer<AttackDirection> _$attackDirectionSerializer =
+    new _$AttackDirectionSerializer();
 Serializer<AttackerSituation> _$attackerSituationSerializer =
     new _$AttackerSituationSerializer();
+
+class _$AttackDirectionSerializer
+    implements PrimitiveSerializer<AttackDirection> {
+  @override
+  final Iterable<Type> types = const <Type>[AttackDirection];
+  @override
+  final String wireName = 'AttackDirection';
+
+  @override
+  Object serialize(Serializers serializers, AttackDirection object,
+          {FullType specifiedType: FullType.unspecified}) =>
+      object.name;
+
+  @override
+  AttackDirection deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType: FullType.unspecified}) =>
+      AttackDirection.valueOf(serialized as String);
+}
 
 class _$AttackerSituationSerializer
     implements StructuredSerializer<AttackerSituation> {
@@ -28,17 +72,20 @@ class _$AttackerSituationSerializer
   Iterable serialize(Serializers serializers, AttackerSituation object,
       {FullType specifiedType: FullType.unspecified}) {
     final result = <Object>[
+      'attackDirection',
+      serializers.serialize(object.attackDirection,
+          specifiedType: const FullType(AttackDirection)),
       'attacker',
       serializers.serialize(object.attacker,
           specifiedType: const FullType(int)),
-      'builtOtherActorActionGenerators',
-      serializers.serialize(object.builtOtherActorActionGenerators,
-          specifiedType: const FullType(
-              BuiltList, const [const FullType(OtherActorActionBuilder)])),
       'builtEnemyTargetActionGenerators',
       serializers.serialize(object.builtEnemyTargetActionGenerators,
           specifiedType: const FullType(
               BuiltList, const [const FullType(EnemyTargetActionBuilder)])),
+      'builtOtherActorActionGenerators',
+      serializers.serialize(object.builtOtherActorActionGenerators,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(OtherActorActionBuilder)])),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
@@ -63,16 +110,14 @@ class _$AttackerSituationSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'attackDirection':
+          result.attackDirection = serializers.deserialize(value,
+                  specifiedType: const FullType(AttackDirection))
+              as AttackDirection;
+          break;
         case 'attacker':
           result.attacker = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
-          break;
-        case 'builtOtherActorActionGenerators':
-          result.builtOtherActorActionGenerators.replace(
-              serializers.deserialize(value,
-                  specifiedType: const FullType(BuiltList, const [
-                    const FullType(OtherActorActionBuilder)
-                  ])) as BuiltList<OtherActorActionBuilder>);
           break;
         case 'builtEnemyTargetActionGenerators':
           result.builtEnemyTargetActionGenerators.replace(
@@ -80,6 +125,13 @@ class _$AttackerSituationSerializer
                   specifiedType: const FullType(BuiltList, const [
                     const FullType(EnemyTargetActionBuilder)
                   ])) as BuiltList<EnemyTargetActionBuilder>);
+          break;
+        case 'builtOtherActorActionGenerators':
+          result.builtOtherActorActionGenerators.replace(
+              serializers.deserialize(value,
+                  specifiedType: const FullType(BuiltList, const [
+                    const FullType(OtherActorActionBuilder)
+                  ])) as BuiltList<OtherActorActionBuilder>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -106,11 +158,13 @@ class _$AttackerSituationSerializer
 
 class _$AttackerSituation extends AttackerSituation {
   @override
+  final AttackDirection attackDirection;
+  @override
   final int attacker;
   @override
-  final BuiltList<OtherActorActionBuilder> builtOtherActorActionGenerators;
-  @override
   final BuiltList<EnemyTargetActionBuilder> builtEnemyTargetActionGenerators;
+  @override
+  final BuiltList<OtherActorActionBuilder> builtOtherActorActionGenerators;
   @override
   final int id;
   @override
@@ -124,19 +178,22 @@ class _$AttackerSituation extends AttackerSituation {
       (new AttackerSituationBuilder()..update(updates)).build();
 
   _$AttackerSituation._(
-      {this.attacker,
-      this.builtOtherActorActionGenerators,
+      {this.attackDirection,
+      this.attacker,
       this.builtEnemyTargetActionGenerators,
+      this.builtOtherActorActionGenerators,
       this.id,
       this.name,
       this.target,
       this.time})
       : super._() {
+    if (attackDirection == null)
+      throw new ArgumentError.notNull('attackDirection');
     if (attacker == null) throw new ArgumentError.notNull('attacker');
-    if (builtOtherActorActionGenerators == null)
-      throw new ArgumentError.notNull('builtOtherActorActionGenerators');
     if (builtEnemyTargetActionGenerators == null)
       throw new ArgumentError.notNull('builtEnemyTargetActionGenerators');
+    if (builtOtherActorActionGenerators == null)
+      throw new ArgumentError.notNull('builtOtherActorActionGenerators');
     if (id == null) throw new ArgumentError.notNull('id');
     if (name == null) throw new ArgumentError.notNull('name');
     if (target == null) throw new ArgumentError.notNull('target');
@@ -155,11 +212,12 @@ class _$AttackerSituation extends AttackerSituation {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! AttackerSituation) return false;
-    return attacker == other.attacker &&
-        builtOtherActorActionGenerators ==
-            other.builtOtherActorActionGenerators &&
+    return attackDirection == other.attackDirection &&
+        attacker == other.attacker &&
         builtEnemyTargetActionGenerators ==
             other.builtEnemyTargetActionGenerators &&
+        builtOtherActorActionGenerators ==
+            other.builtOtherActorActionGenerators &&
         id == other.id &&
         name == other.name &&
         target == other.target &&
@@ -173,9 +231,11 @@ class _$AttackerSituation extends AttackerSituation {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc(0, attacker.hashCode),
-                            builtOtherActorActionGenerators.hashCode),
-                        builtEnemyTargetActionGenerators.hashCode),
+                        $jc(
+                            $jc($jc(0, attackDirection.hashCode),
+                                attacker.hashCode),
+                            builtEnemyTargetActionGenerators.hashCode),
+                        builtOtherActorActionGenerators.hashCode),
                     id.hashCode),
                 name.hashCode),
             target.hashCode),
@@ -185,11 +245,12 @@ class _$AttackerSituation extends AttackerSituation {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AttackerSituation')
+          ..add('attackDirection', attackDirection)
           ..add('attacker', attacker)
-          ..add('builtOtherActorActionGenerators',
-              builtOtherActorActionGenerators)
           ..add('builtEnemyTargetActionGenerators',
               builtEnemyTargetActionGenerators)
+          ..add('builtOtherActorActionGenerators',
+              builtOtherActorActionGenerators)
           ..add('id', id)
           ..add('name', name)
           ..add('target', target)
@@ -202,18 +263,14 @@ class AttackerSituationBuilder
     implements Builder<AttackerSituation, AttackerSituationBuilder> {
   _$AttackerSituation _$v;
 
+  AttackDirection _attackDirection;
+  AttackDirection get attackDirection => _$this._attackDirection;
+  set attackDirection(AttackDirection attackDirection) =>
+      _$this._attackDirection = attackDirection;
+
   int _attacker;
   int get attacker => _$this._attacker;
   set attacker(int attacker) => _$this._attacker = attacker;
-
-  ListBuilder<OtherActorActionBuilder> _builtOtherActorActionGenerators;
-  ListBuilder<OtherActorActionBuilder> get builtOtherActorActionGenerators =>
-      _$this._builtOtherActorActionGenerators ??=
-          new ListBuilder<OtherActorActionBuilder>();
-  set builtOtherActorActionGenerators(
-          ListBuilder<OtherActorActionBuilder>
-              builtOtherActorActionGenerators) =>
-      _$this._builtOtherActorActionGenerators = builtOtherActorActionGenerators;
 
   ListBuilder<EnemyTargetActionBuilder> _builtEnemyTargetActionGenerators;
   ListBuilder<EnemyTargetActionBuilder> get builtEnemyTargetActionGenerators =>
@@ -224,6 +281,15 @@ class AttackerSituationBuilder
               builtEnemyTargetActionGenerators) =>
       _$this._builtEnemyTargetActionGenerators =
           builtEnemyTargetActionGenerators;
+
+  ListBuilder<OtherActorActionBuilder> _builtOtherActorActionGenerators;
+  ListBuilder<OtherActorActionBuilder> get builtOtherActorActionGenerators =>
+      _$this._builtOtherActorActionGenerators ??=
+          new ListBuilder<OtherActorActionBuilder>();
+  set builtOtherActorActionGenerators(
+          ListBuilder<OtherActorActionBuilder>
+              builtOtherActorActionGenerators) =>
+      _$this._builtOtherActorActionGenerators = builtOtherActorActionGenerators;
 
   int _id;
   int get id => _$this._id;
@@ -245,11 +311,12 @@ class AttackerSituationBuilder
 
   AttackerSituationBuilder get _$this {
     if (_$v != null) {
+      _attackDirection = _$v.attackDirection;
       _attacker = _$v.attacker;
-      _builtOtherActorActionGenerators =
-          _$v.builtOtherActorActionGenerators?.toBuilder();
       _builtEnemyTargetActionGenerators =
           _$v.builtEnemyTargetActionGenerators?.toBuilder();
+      _builtOtherActorActionGenerators =
+          _$v.builtOtherActorActionGenerators?.toBuilder();
       _id = _$v.id;
       _name = _$v.name;
       _target = _$v.target;
@@ -274,11 +341,12 @@ class AttackerSituationBuilder
   _$AttackerSituation build() {
     final _$result = _$v ??
         new _$AttackerSituation._(
+            attackDirection: attackDirection,
             attacker: attacker,
-            builtOtherActorActionGenerators:
-                builtOtherActorActionGenerators?.build(),
             builtEnemyTargetActionGenerators:
                 builtEnemyTargetActionGenerators?.build(),
+            builtOtherActorActionGenerators:
+                builtOtherActorActionGenerators?.build(),
             id: id,
             name: name,
             target: target,

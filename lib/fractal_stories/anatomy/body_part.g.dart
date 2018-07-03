@@ -141,13 +141,13 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'function',
       serializers.serialize(object.function,
           specifiedType: const FullType(BodyPartFunction)),
+      'hitpoints',
+      serializers.serialize(object.hitpoints,
+          specifiedType: const FullType(int)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'isActive',
       serializers.serialize(object.isActive,
-          specifiedType: const FullType(bool)),
-      'isAlive',
-      serializers.serialize(object.isAlive,
           specifiedType: const FullType(bool)),
       'isSeverable',
       serializers.serialize(object.isSeverable,
@@ -166,6 +166,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
+      'randomDesignation',
+      serializers.serialize(object.randomDesignation,
+          specifiedType: const FullType(String)),
       'swingSurfaceLeft',
       serializers.serialize(object.swingSurfaceLeft,
           specifiedType: const FullType(int)),
@@ -219,16 +222,16 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
                   specifiedType: const FullType(BodyPartFunction))
               as BodyPartFunction;
           break;
+        case 'hitpoints':
+          result.hitpoints = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'id':
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
         case 'isActive':
           result.isActive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
-        case 'isAlive':
-          result.isAlive = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'isSeverable':
@@ -253,6 +256,10 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           break;
         case 'name':
           result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'randomDesignation':
+          result.randomDesignation = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'swingSurfaceLeft':
@@ -318,11 +325,11 @@ class _$BodyPart extends BodyPart {
   @override
   final BodyPartFunction function;
   @override
+  final int hitpoints;
+  @override
   final int id;
   @override
   final bool isActive;
-  @override
-  final bool isAlive;
   @override
   final bool isSeverable;
   @override
@@ -335,6 +342,8 @@ class _$BodyPart extends BodyPart {
   final int minorCutsCount;
   @override
   final String name;
+  @override
+  final String randomDesignation;
   @override
   final int swingSurfaceLeft;
   @override
@@ -349,15 +358,16 @@ class _$BodyPart extends BodyPart {
       this.damageCapability,
       this.designation,
       this.function,
+      this.hitpoints,
       this.id,
       this.isActive,
-      this.isAlive,
       this.isSeverable,
       this.isSevered,
       this.isVital,
       this.majorCutsCount,
       this.minorCutsCount,
       this.name,
+      this.randomDesignation,
       this.swingSurfaceLeft,
       this.swingSurfaceRight})
       : super._() {
@@ -366,9 +376,9 @@ class _$BodyPart extends BodyPart {
     if (children == null) throw new ArgumentError.notNull('children');
     if (designation == null) throw new ArgumentError.notNull('designation');
     if (function == null) throw new ArgumentError.notNull('function');
+    if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
     if (id == null) throw new ArgumentError.notNull('id');
     if (isActive == null) throw new ArgumentError.notNull('isActive');
-    if (isAlive == null) throw new ArgumentError.notNull('isAlive');
     if (isSeverable == null) throw new ArgumentError.notNull('isSeverable');
     if (isSevered == null) throw new ArgumentError.notNull('isSevered');
     if (isVital == null) throw new ArgumentError.notNull('isVital');
@@ -377,6 +387,8 @@ class _$BodyPart extends BodyPart {
     if (minorCutsCount == null)
       throw new ArgumentError.notNull('minorCutsCount');
     if (name == null) throw new ArgumentError.notNull('name');
+    if (randomDesignation == null)
+      throw new ArgumentError.notNull('randomDesignation');
     if (swingSurfaceLeft == null)
       throw new ArgumentError.notNull('swingSurfaceLeft');
     if (swingSurfaceRight == null)
@@ -399,15 +411,16 @@ class _$BodyPart extends BodyPart {
         damageCapability == other.damageCapability &&
         designation == other.designation &&
         function == other.function &&
+        hitpoints == other.hitpoints &&
         id == other.id &&
         isActive == other.isActive &&
-        isAlive == other.isAlive &&
         isSeverable == other.isSeverable &&
         isSevered == other.isSevered &&
         isVital == other.isVital &&
         majorCutsCount == other.majorCutsCount &&
         minorCutsCount == other.minorCutsCount &&
         name == other.name &&
+        randomDesignation == other.randomDesignation &&
         swingSurfaceLeft == other.swingSurfaceLeft &&
         swingSurfaceRight == other.swingSurfaceRight;
   }
@@ -430,24 +443,27 @@ class _$BodyPart extends BodyPart {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    bluntHitsCount
+                                                                    $jc(
+                                                                        0,
+                                                                        bluntHitsCount
+                                                                            .hashCode),
+                                                                    children
                                                                         .hashCode),
-                                                                children
+                                                                damageCapability
                                                                     .hashCode),
-                                                            damageCapability
+                                                            designation
                                                                 .hashCode),
-                                                        designation.hashCode),
-                                                    function.hashCode),
+                                                        function.hashCode),
+                                                    hitpoints.hashCode),
                                                 id.hashCode),
                                             isActive.hashCode),
-                                        isAlive.hashCode),
-                                    isSeverable.hashCode),
-                                isSevered.hashCode),
-                            isVital.hashCode),
-                        majorCutsCount.hashCode),
-                    minorCutsCount.hashCode),
-                name.hashCode),
+                                        isSeverable.hashCode),
+                                    isSevered.hashCode),
+                                isVital.hashCode),
+                            majorCutsCount.hashCode),
+                        minorCutsCount.hashCode),
+                    name.hashCode),
+                randomDesignation.hashCode),
             swingSurfaceLeft.hashCode),
         swingSurfaceRight.hashCode));
   }
@@ -460,15 +476,16 @@ class _$BodyPart extends BodyPart {
           ..add('damageCapability', damageCapability)
           ..add('designation', designation)
           ..add('function', function)
+          ..add('hitpoints', hitpoints)
           ..add('id', id)
           ..add('isActive', isActive)
-          ..add('isAlive', isAlive)
           ..add('isSeverable', isSeverable)
           ..add('isSevered', isSevered)
           ..add('isVital', isVital)
           ..add('majorCutsCount', majorCutsCount)
           ..add('minorCutsCount', minorCutsCount)
           ..add('name', name)
+          ..add('randomDesignation', randomDesignation)
           ..add('swingSurfaceLeft', swingSurfaceLeft)
           ..add('swingSurfaceRight', swingSurfaceRight))
         .toString();
@@ -503,6 +520,10 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   BodyPartFunction get function => _$this._function;
   set function(BodyPartFunction function) => _$this._function = function;
 
+  int _hitpoints;
+  int get hitpoints => _$this._hitpoints;
+  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
+
   int _id;
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
@@ -510,10 +531,6 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   bool _isActive;
   bool get isActive => _$this._isActive;
   set isActive(bool isActive) => _$this._isActive = isActive;
-
-  bool _isAlive;
-  bool get isAlive => _$this._isAlive;
-  set isAlive(bool isAlive) => _$this._isAlive = isAlive;
 
   bool _isSeverable;
   bool get isSeverable => _$this._isSeverable;
@@ -541,6 +558,11 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  String _randomDesignation;
+  String get randomDesignation => _$this._randomDesignation;
+  set randomDesignation(String randomDesignation) =>
+      _$this._randomDesignation = randomDesignation;
+
   int _swingSurfaceLeft;
   int get swingSurfaceLeft => _$this._swingSurfaceLeft;
   set swingSurfaceLeft(int swingSurfaceLeft) =>
@@ -560,15 +582,16 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _damageCapability = _$v.damageCapability?.toBuilder();
       _designation = _$v.designation;
       _function = _$v.function;
+      _hitpoints = _$v.hitpoints;
       _id = _$v.id;
       _isActive = _$v.isActive;
-      _isAlive = _$v.isAlive;
       _isSeverable = _$v.isSeverable;
       _isSevered = _$v.isSevered;
       _isVital = _$v.isVital;
       _majorCutsCount = _$v.majorCutsCount;
       _minorCutsCount = _$v.minorCutsCount;
       _name = _$v.name;
+      _randomDesignation = _$v.randomDesignation;
       _swingSurfaceLeft = _$v.swingSurfaceLeft;
       _swingSurfaceRight = _$v.swingSurfaceRight;
       _$v = null;
@@ -596,15 +619,16 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
             damageCapability: _damageCapability?.build(),
             designation: designation,
             function: function,
+            hitpoints: hitpoints,
             id: id,
             isActive: isActive,
-            isAlive: isAlive,
             isSeverable: isSeverable,
             isSevered: isSevered,
             isVital: isVital,
             majorCutsCount: majorCutsCount,
             minorCutsCount: minorCutsCount,
             name: name,
+            randomDesignation: randomDesignation,
             swingSurfaceLeft: swingSurfaceLeft,
             swingSurfaceRight: swingSurfaceRight);
     replace(_$result);

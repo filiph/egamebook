@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -32,22 +33,23 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
   ]);
 }
 
-EnemyTargetAction
-    startThrustSpearBuilder(Actor enemy) =>
-        new StartDefensibleAction(
-            "StartThrustSpear",
-            startThrustCommandTemplate,
-            startThrustHelpMessage,
-            startThrustSpearReportStart,
-            (a, sim, w, enemy) =>
-                !a.isPlayer &&
-                a.isStanding &&
-                !enemy.isOnGround &&
-                a.currentWeapon.damageCapability.type == WeaponType.spear,
-            (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
-            (a, sim, w, enemy) => createSlashDefenseSituation(
-                w.randomInt(), a, enemy, Predetermination.none),
-            enemy);
+EnemyTargetAction startThrustSpearBuilder(Actor enemy) =>
+    new StartDefensibleAction(
+        "StartThrustSpear",
+        startThrustCommandTemplate,
+        startThrustHelpMessage,
+        startThrustSpearReportStart,
+        (a, sim, w, enemy) =>
+            !a.isPlayer &&
+            a.isStanding &&
+            !enemy.isOnGround &&
+            a.currentWeapon.damageCapability.type == WeaponType.spear,
+        // TODO: FIX to create a THRUST situation
+        (a, sim, w, enemy) =>
+            createSlashSituation(w.randomInt(), a, enemy, SlashDirection.right),
+        (a, sim, w, enemy) => createSlashDefenseSituation(
+            w.randomInt(), a, enemy, Predetermination.none),
+        enemy);
 
 EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
     new StartDefensibleAction(
@@ -60,7 +62,9 @@ EnemyTargetAction startThrustSpearPlayerBuilder(Actor enemy) =>
             a.isStanding &&
             !enemy.isOnGround &&
             a.currentWeapon.damageCapability.type == WeaponType.spear,
-        (a, sim, w, enemy) => createSlashSituation(w.randomInt(), a, enemy),
+        // TODO: FIX to create a THRUST situation
+        (a, sim, w, enemy) =>
+            createSlashSituation(w.randomInt(), a, enemy, SlashDirection.right),
         (a, sim, w, enemy) => createSlashDefenseSituation(
             w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
         enemy,
