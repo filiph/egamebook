@@ -12,6 +12,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:slot_machine/result.dart' as slot;
+import 'package:slot_machine/result.dart';
 
 import 'default_savegames.dart' as savegames;
 
@@ -105,6 +106,14 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @visibleForTesting
   String latestSaveGame;
 
+  /// When user selects an option using `s` instead of enter, they will
+  /// succeed on the next slot-machine roll.
+  bool _forceSuccessOnNextSlotMachine = false;
+
+  /// When user selects an option using `f` instead of enter, they will
+  /// fail on the next slot-machine roll.
+  bool _forceFailureOnNextSlotMachine = false;
+
   /// Instantiate the runner.
   ///
   /// The runner will not print anything if [silent] is `true`.
@@ -153,9 +162,13 @@ class CliRunner extends Presenter<EdgeheadGame> {
           !element.choices.any((ch) => ch.isImplicit),
           "Cannot have an implicit choice "
           "when there is more than one of them.");
-      final menu = new Menu(element.choices.map((ch) => ch.markdownText));
+      final menu = new Menu(element.choices.map((ch) => ch.markdownText),
+          modifierKeys: ["s" /* force success */, "f" /* force failure */]);
       print("");
-      option = menu.choose().index;
+      final choice = menu.choose();
+      option = choice.index;
+      _forceSuccessOnNextSlotMachine = choice.modifierKey == "s";
+      _forceFailureOnNextSlotMachine = choice.modifierKey == "f";
       print("");
     }
 
@@ -196,6 +209,15 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   @override
   void addSlotMachine(SlotMachine element) {
+    if (_forceSuccessOnNextSlotMachine || _forceFailureOnNextSlotMachine) {
+      book.accept(new ResolveSlotMachine((b) => b
+        ..result =
+            _forceSuccessOnNextSlotMachine ? Result.success : Result.failure
+        ..wasRerolled = false));
+      _forceSuccessOnNextSlotMachine = false;
+      _forceFailureOnNextSlotMachine = false;
+      return;
+    }
     final result = _showSlotMachine(element.probability, element.rollReason,
         rerollable: element.rerollable,
         rerollEffectDescription: element.rerollEffectDescription);
