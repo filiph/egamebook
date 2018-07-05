@@ -54,7 +54,7 @@ ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
       startSlashReportStart,
       (Actor a, Simulation sim, WorldState w, Actor enemy) =>
           !a.isPlayer &&
-          a.isStanding &&
+          !a.isOnGround &&
           !enemy.isOnGround &&
           a.currentWeapon.damageCapability.isSlashing,
       (a, sim, w, enemy) =>
@@ -75,7 +75,7 @@ ActionBuilder<EnemyTargetAction, Actor> startSlashPlayerFromDirectionGenerator(
       startSlashReportStart,
       (Actor a, Simulation sim, WorldState w, Actor enemy) =>
           a.isPlayer &&
-          a.isStanding &&
+          !a.isOnGround &&
           !enemy.isOnGround &&
           a.currentWeapon.damageCapability.isSlashing,
       (a, sim, w, enemy) =>
