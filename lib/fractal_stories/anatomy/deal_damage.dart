@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart'
     show RandomIntGetter;
 import 'package:meta/meta.dart';
@@ -9,7 +10,7 @@ import 'package:meta/meta.dart';
 /// and [success]. Supports anything from minor cuts to decapitation.
 ///
 /// The affected body part is specified either directly with [bodyPart]
-/// or inderectly with [designation]. For example, a slash can either
+/// or indirectly with [designation]. For example, a slash can either
 /// directly target a specific body part (selected at random in a previous
 /// step), or at a body part "designation" (such as head, neck, etc.).
 @visibleForTesting
@@ -196,8 +197,20 @@ SlashingResult _disableBySlash(Actor target, BodyPart bodyPart, Item weapon) {
     },
   );
 
+  bool victimDidFall = false;
+  if (bodyPart.function == BodyPartFunction.mobile &&
+      target.pose != Pose.onGround) {
+    victim.pose = Pose.onGround;
+    victimDidFall = true;
+  }
+
   return new SlashingResult(
-      victim.build(), bodyPart, null, SlashSuccessLevel.majorCut);
+    victim.build(),
+    bodyPart,
+    null,
+    SlashSuccessLevel.majorCut,
+    fell: victimDidFall,
+  );
 }
 
 void _updateWalker(
@@ -245,6 +258,9 @@ class SlashingResult {
   /// The body part that was slashed.
   final BodyPart slashedPart;
 
+  /// The victim fell as a result of the slash.
+  final bool fell;
+
   /// Normally, this is the [SlashSuccessLevel] that [executeSlashingHit]
   /// was called with. But in some cases, the success level is upgraded
   /// or downgraded.
@@ -255,7 +271,8 @@ class SlashingResult {
   final SlashSuccessLevel successLevel;
 
   const SlashingResult(
-      this.actor, this.slashedPart, this.severedPart, this.successLevel);
+      this.actor, this.slashedPart, this.severedPart, this.successLevel,
+      {this.fell: false});
 }
 
 enum SlashSuccessLevel {

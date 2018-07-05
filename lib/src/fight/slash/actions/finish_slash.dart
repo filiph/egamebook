@@ -79,6 +79,10 @@ class FinishSlash extends OtherActorAction {
           object: result.actor,
           positive: true,
           actionThread: thread);
+      if (result.fell) {
+        result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
+            negative: true, actionThread: thread);
+      }
       reportPain(context, result.actor, damage);
     } else {
       a.report(
