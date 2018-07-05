@@ -33,7 +33,6 @@ EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
     startLeapReportStart,
     (a, sim, w, enemy) =>
         !a.isPlayer &&
-        (a.isBarehanded || a.team.isFriendWith(defaultEnemyTeam)) &&
         !enemy.isOnGround &&
         !recentlyForcedToGround(a, w),
     (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
@@ -49,7 +48,6 @@ EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
         startLeapReportStart,
         (a, sim, w, enemy) =>
             a.isPlayer &&
-            a.isBarehanded &&
             !enemy.isOnGround &&
             !recentlyForcedToGround(a, w),
         (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
