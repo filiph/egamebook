@@ -10,18 +10,6 @@ import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
-import 'package:edgehead/src/predetermined_result.dart';
-
-String startSlashCommandTemplate(SlashDirection direction) {
-  switch (direction) {
-    case SlashDirection.left:
-      return "swing at <object> >> from left (<objectPronoun's> weapon hand)";
-    case SlashDirection.right:
-      return "swing at <object> >> from right (<objectPronoun's> shield hand)";
-  }
-  throw new StateError(
-      "The switch statement above doesn't cover all directions: $direction");
-}
 
 const String startSlashHelpMessage =
     "The basic swordfighting move is also often the "
@@ -43,54 +31,41 @@ ReasonedSuccessChance computeStartSlashPlayer(
   ]);
 }
 
-/// Higher order function that generates an [ActionBuilder] depending on
-/// the provided [direction].
-ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
-    SlashDirection direction) {
-  return (Actor enemy) => new StartDefensibleAction(
-      "StartSlashFrom$direction",
-      startSlashCommandTemplate(direction),
-      startSlashHelpMessage,
-      startSlashReportStart,
-      (Actor a, Simulation sim, WorldState w, Actor enemy) =>
-          !a.isPlayer &&
-          !a.isOnGround &&
-          !enemy.isOnGround &&
-          a.currentWeapon.damageCapability.isSlashing,
-      (a, sim, w, enemy) =>
-          createSlashSituation(w.randomInt(), a, enemy, direction),
-      (a, sim, w, enemy) => createSlashDefenseSituation(
-          w.randomInt(), a, enemy, Predetermination.none),
-      enemy);
+String startSlashCommandTemplate(SlashDirection direction) {
+  switch (direction) {
+    case SlashDirection.left:
+      return "swing at <object> >> from left (<objectPronoun's> weapon hand)";
+    case SlashDirection.right:
+      return "swing at <object> >> from right (<objectPronoun's> shield hand)";
+  }
+  throw new StateError(
+      "The switch statement above doesn't cover all directions: $direction");
 }
 
 /// Higher order function that generates an [ActionBuilder] depending on
 /// the provided [direction].
-ActionBuilder<EnemyTargetAction, Actor> startSlashPlayerFromDirectionGenerator(
+ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
     SlashDirection direction) {
-  return (Actor enemy) => new StartDefensibleAction(
-      "StartSlashPlayerFrom$direction",
-      startSlashCommandTemplate(direction),
-      startSlashHelpMessage,
-      startSlashReportStart,
-      (Actor a, Simulation sim, WorldState w, Actor enemy) =>
-          a.isPlayer &&
-          !a.isOnGround &&
-          !enemy.isOnGround &&
-          a.currentWeapon.damageCapability.isSlashing,
-      (a, sim, w, enemy) =>
-          createSlashSituation(w.randomInt(), a, enemy, direction),
-      (a, sim, w, enemy) => createSlashDefenseSituation(
-          w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-      enemy,
-      successChanceGetter: computeStartSlashPlayer,
-      applyStartOfFailure: startSlashReportStart,
-      defenseSituationWhenFailed: (a, sim, w, enemy) =>
-          createSlashDefenseSituation(
-              w.randomInt(), a, enemy, Predetermination.successGuaranteed),
-      rerollable: true,
-      rerollResource: Resource.stamina,
-      rollReasonTemplate: "will <subject> hit <objectPronoun>?");
+  return (Actor enemy) => new StartDefensibleActionNEW(
+        enemy,
+        name: "StartSlashFrom$direction",
+        commandTemplate: startSlashCommandTemplate(direction),
+        helpMessage: startSlashHelpMessage,
+        applyStart: startSlashReportStart,
+        isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
+            !a.isOnGround &&
+            !enemy.isOnGround &&
+            a.currentWeapon.damageCapability.isSlashing,
+        mainSituationBuilder: (a, sim, w, enemy) =>
+            createSlashSituation(w.randomInt(), a, enemy, direction),
+        defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+            createSlashDefenseSituation(
+                w.randomInt(), a, enemy, predetermination),
+        successChanceGetter: computeStartSlashPlayer,
+        rerollable: true,
+        rerollResource: Resource.stamina,
+        rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+      );
 }
 
 void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
