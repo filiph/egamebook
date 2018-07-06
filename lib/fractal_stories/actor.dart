@@ -44,6 +44,7 @@ abstract class Actor extends Object
 
   factory Actor.initialized(int id, String name,
       {bool isPlayer: false,
+      bool isSurvivor: false,
       bool nameIsProperNoun: false,
       Pronoun pronoun,
       Item currentWeapon,
@@ -72,6 +73,7 @@ abstract class Actor extends Object
       ..id = id
       ..name = name
       ..isPlayer = isPlayer
+      ..isSurvivor = isSurvivor
       ..nameIsProperNoun = nameIsProperNoun
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
       ..currentWeapon = weapon?.toBuilder()
@@ -173,6 +175,19 @@ abstract class Actor extends Object
   bool get isPlayer;
 
   bool get isStanding => pose == Pose.standing;
+
+  /// When `true`, this actor is important to the story (e.g. it is the player
+  /// or an important NPC) and so the game should go out of its way to keep them
+  /// alive.
+  ///
+  /// In practice, this means that while a non-survivor can get killed in
+  /// a single lucky swing, a survivor won't.
+  ///
+  /// This does not mean that the actor is invincible. It just means that the
+  /// impact of random chance is minimized.
+  ///
+  /// By default, this is `false`.
+  bool get isSurvivor;
 
   /// Inventory of items possessed by the actor.
   ///

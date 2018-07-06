@@ -60,6 +60,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'isPlayer',
       serializers.serialize(object.isPlayer,
           specifiedType: const FullType(bool)),
+      'isSurvivor',
+      serializers.serialize(object.isSurvivor,
+          specifiedType: const FullType(bool)),
       'items',
       serializers.serialize(object.items,
           specifiedType:
@@ -179,6 +182,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.isPlayer = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'isSurvivor':
+          result.isSurvivor = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'items':
           result.items.replace(serializers.deserialize(value,
                   specifiedType:
@@ -258,6 +265,8 @@ class _$Actor extends Actor {
   @override
   final bool isPlayer;
   @override
+  final bool isSurvivor;
+  @override
   final BuiltList<Item> items;
   @override
   final int maxHitpoints;
@@ -295,6 +304,7 @@ class _$Actor extends Actor {
       this.isActive,
       this.isConfused,
       this.isPlayer,
+      this.isSurvivor,
       this.items,
       this.maxHitpoints,
       this.name,
@@ -318,6 +328,7 @@ class _$Actor extends Actor {
     if (isActive == null) throw new ArgumentError.notNull('isActive');
     if (isConfused == null) throw new ArgumentError.notNull('isConfused');
     if (isPlayer == null) throw new ArgumentError.notNull('isPlayer');
+    if (isSurvivor == null) throw new ArgumentError.notNull('isSurvivor');
     if (items == null) throw new ArgumentError.notNull('items');
     if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
     if (name == null) throw new ArgumentError.notNull('name');
@@ -356,6 +367,7 @@ class _$Actor extends Actor {
         isActive == other.isActive &&
         isConfused == other.isConfused &&
         isPlayer == other.isPlayer &&
+        isSurvivor == other.isSurvivor &&
         items == other.items &&
         maxHitpoints == other.maxHitpoints &&
         name == other.name &&
@@ -387,17 +399,17 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode),
-                                                                                currentWeapon.hashCode),
-                                                                            dexterity.hashCode),
-                                                                        followingActorId.hashCode),
-                                                                    gold.hashCode),
-                                                                hitpoints.hashCode),
-                                                            id.hashCode),
-                                                        initiative.hashCode),
-                                                    isActive.hashCode),
-                                                isConfused.hashCode),
-                                            isPlayer.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode), currentWeapon.hashCode),
+                                                                                dexterity.hashCode),
+                                                                            followingActorId.hashCode),
+                                                                        gold.hashCode),
+                                                                    hitpoints.hashCode),
+                                                                id.hashCode),
+                                                            initiative.hashCode),
+                                                        isActive.hashCode),
+                                                    isConfused.hashCode),
+                                                isPlayer.hashCode),
+                                            isSurvivor.hashCode),
                                         items.hashCode),
                                     maxHitpoints.hashCode),
                                 name.hashCode),
@@ -427,6 +439,7 @@ class _$Actor extends Actor {
           ..add('isActive', isActive)
           ..add('isConfused', isConfused)
           ..add('isPlayer', isPlayer)
+          ..add('isSurvivor', isSurvivor)
           ..add('items', items)
           ..add('maxHitpoints', maxHitpoints)
           ..add('name', name)
@@ -508,6 +521,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isPlayer => _$this._isPlayer;
   set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
 
+  bool _isSurvivor;
+  bool get isSurvivor => _$this._isSurvivor;
+  set isSurvivor(bool isSurvivor) => _$this._isSurvivor = isSurvivor;
+
   ListBuilder<Item> _items;
   ListBuilder<Item> get items => _$this._items ??= new ListBuilder<Item>();
   set items(ListBuilder<Item> items) => _$this._items = items;
@@ -564,6 +581,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _isActive = _$v.isActive;
       _isConfused = _$v.isConfused;
       _isPlayer = _$v.isPlayer;
+      _isSurvivor = _$v.isSurvivor;
       _items = _$v.items?.toBuilder();
       _maxHitpoints = _$v.maxHitpoints;
       _name = _$v.name;
@@ -608,6 +626,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
             isActive: isActive,
             isConfused: isConfused,
             isPlayer: isPlayer,
+            isSurvivor: isSurvivor,
             items: items?.build(),
             maxHitpoints: maxHitpoints,
             name: name,
