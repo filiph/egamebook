@@ -82,7 +82,6 @@ abstract class FightSituation extends Situation
         KickToGround.builder,
         Pound.builder,
         startBreakNeckOnGroundBuilder,
-        startBreakNeckOnGroundPlayerBuilder,
         startLeapBuilder,
         startLeapPlayerBuilder,
         startPunchBuilder,

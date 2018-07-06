@@ -5,9 +5,15 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
+import 'package:meta/meta.dart';
 
 typedef ReasonedSuccessChance SuccessChanceGetter(
     Actor a, Simulation sim, WorldState w, Actor enemy);
+
+typedef DefenseSituation _DefenseSituationBuilder(Actor actor, Simulation sim,
+    WorldStateBuilder world, Actor enemy, Predetermination predetermination);
 
 typedef void _PartialApplyFunction(
     Actor actor,
@@ -183,4 +189,134 @@ class StartDefensibleAction extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       _isApplicableFunction(a, sim, w, enemy);
+}
+
+/// This is a utility class that makes it easier to build actions that put
+/// 2 situations on the stack at once: one is the attack, and on top of it
+/// is the defense situation.
+///
+/// For example, when orc wants to slash Aren, a "SlashSituation" is added,
+/// and then on top of it a "SlashDefenseSituation" is added. First, the
+/// top-most situation is resolved (will Aren successfully parry or dodge
+/// the attack?) and then either the "SlashSituation" is completely skipped
+/// (popped by "SlashDefenseSituation") or it is run to completion (orc
+/// slashes Aren).
+///
+/// Look at `start_slash.dart` for an example of how to use this class.
+class StartDefensibleActionNEW extends EnemyTargetAction {
+  /// This function should use [storyline] to report the start of the action.
+  /// It can modify [world].
+  ///
+  /// This defines what happens before the [enemy] has a chance to react.
+  ///
+  /// For example, "Orc swings his scimitar at you."
+  final _PartialApplyFunction applyStart;
+
+  final _SituationBuilder mainSituationBuilder;
+
+  final _DefenseSituationBuilder defenseSituationBuilder;
+
+  final SuccessChanceGetter successChanceGetter;
+
+  @override
+  final String helpMessage;
+
+  @override
+  final bool isAggressive = true;
+
+  final OtherActorApplicabilityFunction _isApplicable;
+
+  @override
+  final bool isProactive = true;
+
+  @override
+  final bool rerollable;
+
+  @override
+  final Resource rerollResource;
+
+  @override
+  final String commandTemplate;
+
+  @override
+  final String rollReasonTemplate;
+
+  @override
+  final String name;
+
+  StartDefensibleActionNEW(
+    Actor enemy, {
+    @required this.name,
+    @required this.commandTemplate,
+    @required this.helpMessage,
+    @required OtherActorApplicabilityFunction isApplicable,
+    @required this.applyStart,
+    @required this.mainSituationBuilder,
+    @required this.defenseSituationBuilder,
+    @required this.successChanceGetter,
+    this.rerollable,
+    this.rerollResource,
+    this.rollReasonTemplate,
+  })
+      : _isApplicable = isApplicable,
+        super(enemy) {
+    assert(!rerollable || rerollResource != null);
+    assert(!rerollable || rollReasonTemplate != null);
+  }
+
+  @override
+  String applyFailure(ActionContext context) {
+    Actor a = context.actor;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
+    assert(successChanceGetter != null);
+    final mainSituation = mainSituationBuilder(a, sim, w, enemy);
+    // If this action is performed by the player and it failed, then
+    // we need to make sure that the defense situation (performed by the enemy)
+    // succeeds.
+    final predetermination =
+        a.isPlayer ? Predetermination.successGuaranteed : Predetermination.none;
+    final defenseSituation =
+        defenseSituationBuilder(a, sim, w, enemy, predetermination);
+    applyStart(a, sim, w, s, enemy, mainSituation);
+    w.pushSituation(mainSituation);
+    w.pushSituation(defenseSituation);
+    return "${a.name} fails at $name (DefensibleAction) "
+        "directed at ${enemy.name}";
+  }
+
+  @override
+  String applySuccess(ActionContext context) {
+    Actor a = context.actor;
+    Simulation sim = context.simulation;
+    WorldStateBuilder w = context.outputWorld;
+    Storyline s = context.outputStoryline;
+    final mainSituation = mainSituationBuilder(a, sim, w, enemy);
+    // If this action is performed by the player and it succeeded, then
+    // we need to make sure that the defense situation (performed by the enemy)
+    // fails.
+    final predetermination =
+        a.isPlayer ? Predetermination.failureGuaranteed : Predetermination.none;
+    final defenseSituation =
+        defenseSituationBuilder(a, sim, w, enemy, predetermination);
+    applyStart(a, sim, w, s, enemy, mainSituation);
+    w.pushSituation(mainSituation);
+    w.pushSituation(defenseSituation);
+    return "${a.name} starts a $name (defensible situation) at ${enemy.name}";
+  }
+
+  @override
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w) {
+    if (a.isPlayer) {
+      return successChanceGetter(a, sim, w, enemy);
+    }
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+    return _isApplicable(a, sim, w, enemy);
+  }
 }

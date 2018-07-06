@@ -46,6 +46,14 @@ void main() {
 
     group("Situation", () {
       Actor a, b;
+      final sim = new Simulation([], [], {});
+      final world = new WorldState((b) => b
+        ..actors = new SetBuilder<Actor>(<Actor>[])
+        ..situations = new ListBuilder<Situation>(<Situation>[])
+        ..global = <String>[]
+        ..statefulRandomState = 1337
+        ..time = new DateTime.utc(1000)).toBuilder();
+
       setUp(() {
         a = new Actor.initialized(1001, "A");
         b = new Actor.initialized(1002, "B");
@@ -85,7 +93,8 @@ void main() {
             () => createSlashSituation(1, a, b, SlashDirection.left));
       });
       test("BreakNeckOnGroundSituation", () {
-        checkSituationBuild(() => createBreakNeckOnGroundSituation(1, a, b));
+        checkSituationBuild(
+            () => createBreakNeckOnGroundSituation(a, sim, world, b));
       });
     });
 

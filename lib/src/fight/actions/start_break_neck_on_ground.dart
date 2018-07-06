@@ -23,47 +23,21 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
     ]);
 
 EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-        "StartBreakNeckOnGround",
-        startBreakNeckOnGroundCommandTemplate,
-        startBreakNeckOnGroundHelpMessage,
-        startBreakNeckOnGroundReportStart,
-        (a, sim, w, enemy) =>
-            !a.isPlayer &&
-            enemy.isOnGround &&
-            a.isBarehanded &&
-            enemy.isBarehanded,
-        (a, sim, w, enemy) =>
-            createBreakNeckOnGroundSituation(w.randomInt(), a, enemy),
-        (a, sim, w, enemy) => createOnGroundWrestleDefenseSituation(
-            w.randomInt(), a, enemy, Predetermination.none),
-        enemy);
-
-EnemyTargetAction startBreakNeckOnGroundPlayerBuilder(
-        Actor enemy) =>
-    new StartDefensibleAction(
-        "StartBreakNeckOnGroundPlayer",
-        startBreakNeckOnGroundCommandTemplate,
-        startBreakNeckOnGroundHelpMessage,
-        startBreakNeckOnGroundReportStart,
-        (a, sim, w, enemy) =>
-            a.isPlayer &&
-            enemy.isOnGround &&
-            a.isBarehanded &&
-            enemy.isBarehanded,
-        (a, sim, w, enemy) =>
-            createBreakNeckOnGroundSituation(w.randomInt(), a, enemy),
-        (a, sim, w, enemy) => createOnGroundWrestleDefenseSituation(
-            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-        enemy,
-        successChanceGetter: computeBreakNeckOnGroundChance,
-        defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            createOnGroundWrestleDefenseSituation(
-                w.randomInt(), a, enemy, Predetermination.successGuaranteed),
-        applyStartOfFailure: startBreakNeckOnGroundReportStart,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> succeed?");
+    new StartDefensibleActionNEW(
+      enemy,
+      name: "StartBreakNeckOnGround",
+      commandTemplate: startBreakNeckOnGroundCommandTemplate,
+      helpMessage: startBreakNeckOnGroundHelpMessage,
+      isApplicable: (a, sim, w, enemy) =>
+          enemy.isOnGround && a.isBarehanded && enemy.isBarehanded,
+      applyStart: startBreakNeckOnGroundReportStart,
+      mainSituationBuilder: createBreakNeckOnGroundSituation,
+      defenseSituationBuilder: createOnGroundWrestleDefenseSituation,
+      successChanceGetter: computeBreakNeckOnGroundChance,
+      rerollable: true,
+      rerollResource: Resource.stamina,
+      rollReasonTemplate: "will <subject> succeed?",
+    );
 
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
