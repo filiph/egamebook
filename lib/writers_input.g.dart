@@ -42,6 +42,39 @@ import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.g.g.dart';
 
 const bool DEV_MODE = false;
+Room testFight = new Room('test_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '''This is a development-only test fight. If you still see this in a production
+build, it\'s a bug.
+''',
+      wholeSentence: true);
+}, null, generateTestFight, null);
+Approach testFightFromPreStartBook = new Approach(
+    'pre_start_book', 'test_fight', 'Start test fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You get transported to the development testing arena.
+''', wholeSentence: true);
+});
+Approach startAdventureFromTestFight = new Approach(
+    'test_fight', 'start_adventure', 'Continue with the adventure proper',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('''You get transported to the game.
+''', wholeSentence: true);
+});
 Room undergroundChurch = new Room('underground_church', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -666,8 +699,9 @@ Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s f
 ''',
       wholeSentence: true);
 }, null, generateAgruthFight, null);
-Approach startAdventureFromPreStartBook =
-    new Approach('pre_start_book', 'start_adventure', '', (ActionContext c) {
+Approach startAdventureFromPreStartBook = new Approach(
+    'pre_start_book', 'start_adventure', 'REMOVE_THIS_FOR_PRODUCTION',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2942,6 +2976,7 @@ Approach orcthornRoomFromSlaveQuartersPassage =
 ''', wholeSentence: true);
 });
 List<Room> allRooms = <Room>[
+  testFight,
   undergroundChurch,
   tunnel,
   tunnelCancelChance,
@@ -2960,6 +2995,8 @@ List<Room> allRooms = <Room>[
   orcthornRoom
 ];
 List<Approach> allApproaches = <Approach>[
+  testFightFromPreStartBook,
+  startAdventureFromTestFight,
   undergroundChurchFromCaveWithAgruth,
   undergroundChurchFromGuardpostAboveChurch,
   undergroundChurchFromUndergroundChurchAltar,

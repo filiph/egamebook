@@ -23,5 +23,5 @@ generateAgruthFight
 
 // ---
 APPROACH: $start_adventure FROM $pre_start_book
-COMMAND:
+COMMAND: REMOVE_THIS_FOR_PRODUCTION
 DESCRIPTION: N/A

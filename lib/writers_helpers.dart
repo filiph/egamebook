@@ -244,6 +244,26 @@ FightSituation generateSlaveQuartersPassageFight(
   });
 }
 
+/// Test fight. Do not use in production.
+FightSituation generateTestFight(Simulation sim, WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final aguthsSword = new Item.weapon(89892130, WeaponType.sword);
+  final playersSword = new Item.weapon(89892131, WeaponType.sword);
+  var agruth = _generateAgruth()
+      .rebuild((b) => b..currentWeapon = aguthsSword.toBuilder());
+  w.actors.add(agruth);
+  w.updateActorById(
+      playerId, (b) => b..currentWeapon = playersSword.toBuilder());
+  return new FightSituation.initialized(
+    w.randomInt(),
+    party.where((a) => a.isPlayer),
+    [agruth],
+    "{rock|cavern} floor",
+    roomRoamingSituation,
+    {},
+  );
+}
+
 Actor getEscapeTunnelGoblin(WorldState w) =>
     w.getActorById(escapeTunnelGoblinId);
 

@@ -1,0 +1,21 @@
+ROOM: $test_fight
+
+
+FIRST_DESCRIPTION:
+This is a development-only test fight. If you still see this in a production
+build, it's a bug.
+
+FIGHT_SITUATION:
+generateTestFight
+
+
+// ---
+APPROACH: $test_fight FROM $pre_start_book
+COMMAND: Start test fight
+DESCRIPTION: You get transported to the development testing arena.
+
+
+// ---
+APPROACH: $start_adventure FROM $test_fight
+COMMAND: Continue with the adventure proper
+DESCRIPTION: You get transported to the game.

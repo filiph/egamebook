@@ -47,7 +47,7 @@ final Map<String, CombineFunction> _combineFunctions = {
 final _preStartBook = new Room(
     "pre_start_book",
     (c) => c.outputStoryline
-        .add("UNUSED because this is the first choice", wholeSentence: true),
+        .add("UNUSED because this is the first room", wholeSentence: true),
     (c) => throw new StateError("Room isn't to be revisited"),
     null,
     null);

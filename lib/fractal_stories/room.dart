@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 /// Describer that doesn't output any text at all.
 final RoomDescriber emptyRoomDescription = (c) {};
 
-/// This is the magic [Room.name] that, when reached, makes
+/// This is the magic [Room] that, when reached, makes
 /// the room roaming situation stop.
 final Room endOfRoam = new Room(
     endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null);
