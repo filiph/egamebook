@@ -43,7 +43,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   final SuccessChanceGetter _successChanceGetter;
 
   /// This function should use [storyline] to report that the defensible action
-  /// couldn't even start. It can modify [simulation].
+  /// couldn't even start. It can modify [world].
   ///
   /// For example, "Orc tries to swing at you but completely misses."
   final _PartialApplyFunction _applyStartOfFailure;
@@ -63,11 +63,23 @@ class StartDefensibleAction extends EnemyTargetAction {
 
   /// This should build the defense situation (Aren is trying to deflect
   /// the orc's swing) when action ended up with failure.
+  ///
+  /// It will probably be similar to the one that's used when the situation
+  /// succeeds, but will have predetermined success. Because if this (attack)
+  /// action fails, it means that the defense action should succeed.
   final _SituationBuilder _defenseSituationBuilderWhenFailed;
 
-  /// If this is set to `true`, and when the action results in a failure,
-  /// [Situation]s will still be added (but [_defenseSituationBuilderWhenFailed]
-  /// will be used instead of [_defenseSituationBuilder]).
+  /// Whether failure of this action is deferred to later (by building
+  /// a defense situation that will succeed in defending against this action)
+  /// or if it fails immediately.
+  ///
+  /// When set to `true`, and when the action fails, then
+  /// [_defenseSituationBuilderWhenFailed] will be used.
+  ///
+  /// If it's set to `false`, then no defense situation will be created.
+  /// Only [_applyStartOfFailure] will fire. This is useful for actions that,
+  /// when failed, totally miss. For example, we can have a out-of-balance
+  /// slash that will not even threaten the target if it fails.
   ///
   /// Default is `true`.
   final bool buildSituationsOnFailure;
