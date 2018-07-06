@@ -9,7 +9,6 @@ import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/predetermined_result.dart';
 
 const String startBreakNeckOnGroundCommandTemplate = "break <object's> neck";
 

@@ -9,7 +9,6 @@ import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
-import 'package:edgehead/src/predetermined_result.dart';
 
 const String startLeapCommandTemplate = "leap at <object>";
 
@@ -18,49 +17,29 @@ const String startLeapHelpMessage =
     "a quick way to neutralize someone.";
 
 ReasonedSuccessChance computeStartLeap(
-        Actor a, Simulation sim, WorldState w, Actor enemy) {
+    Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.2, [
-      const Bonus(50, CombatReason.balance),
-      const Bonus(50, CombatReason.height),
-    ]);
+    const Bonus(50, CombatReason.balance),
+    const Bonus(50, CombatReason.height),
+  ]);
 }
 
-EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
-    "StartLeap",
-    startLeapCommandTemplate,
-    startLeapHelpMessage,
-    startLeapReportStart,
-    (a, sim, w, enemy) =>
-        !a.isPlayer &&
-        !enemy.isOnGround &&
-        !recentlyForcedToGround(a, w),
-    (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
-    (a, sim, w, enemy) => createLeapDefenseSituation(
-        w.randomInt(), a, enemy, Predetermination.none),
-    enemy);
-
-EnemyTargetAction startLeapPlayerBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-        "StartLeapPlayer",
-        startLeapCommandTemplate,
-        startLeapHelpMessage,
-        startLeapReportStart,
-        (a, sim, w, enemy) =>
-            a.isPlayer &&
-            !enemy.isOnGround &&
-            !recentlyForcedToGround(a, w),
-        (a, sim, w, enemy) => createLeapSituation(w.randomInt(), a, enemy),
-        (a, sim, w, enemy) => createLeapDefenseSituation(
-            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-        enemy,
-        successChanceGetter: computeStartLeap,
-        applyStartOfFailure: startLeapReportStart,
-        defenseSituationWhenFailed: (a, sim, w, enemy) =>
-            createLeapDefenseSituation(
-                w.randomInt(), a, enemy, Predetermination.successGuaranteed),
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> tackle <objectPronoun>?");
+EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleActionNEW(
+    enemy,
+    name: "StartLeap",
+    commandTemplate: startLeapCommandTemplate,
+    helpMessage: startLeapHelpMessage,
+    applyStart: startLeapReportStart,
+    isApplicable: (a, sim, w, enemy) =>
+        !enemy.isOnGround && !recentlyForcedToGround(a, w),
+    mainSituationBuilder: (a, sim, w, enemy) =>
+        createLeapSituation(w.randomInt(), a, enemy),
+    defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+        createLeapDefenseSituation(w.randomInt(), a, enemy, predetermination),
+    successChanceGetter: computeStartLeap,
+    rerollable: true,
+    rerollResource: Resource.stamina,
+    rollReasonTemplate: "will <subject> tackle <objectPronoun>?");
 
 void startLeapReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation mainSituation) {

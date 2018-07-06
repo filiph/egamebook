@@ -38,6 +38,7 @@ typedef Situation _SituationBuilder(
 /// slashes Aren).
 ///
 /// Look at `start_slash.dart` for an example of how to use this class.
+@deprecated
 class StartDefensibleAction extends EnemyTargetAction {
   /// This function should use [storyline] to report the start of the action.
   /// It can modify [world].
@@ -212,10 +213,24 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
   /// For example, "Orc swings his scimitar at you."
   final _PartialApplyFunction applyStart;
 
+  /// This should build the main situation (the orc slashing Aren).
+  ///
+  /// Normally, this is just one call of the constructor, such as
+  /// `new SomeSituation(actor, enemy)`.
   final _SituationBuilder mainSituationBuilder;
 
+  /// This should build the defense situation (Aren is trying to deflect
+  /// the orc's swing).
   final _DefenseSituationBuilder defenseSituationBuilder;
 
+  /// This is the chance of successfully _finishing_ this move.
+  ///
+  /// [successChanceGetter] is used only for the player (when [Actor.isPlayer]
+  /// is `true`). The [DefenseSituation] will be created with the
+  /// corresponding [Predetermination].
+  ///
+  /// Non-players will always succeed with starting the move. The final outcome
+  /// is decided in the defensive situation.
   final SuccessChanceGetter successChanceGetter;
 
   @override
@@ -224,6 +239,7 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
   @override
   final bool isAggressive = true;
 
+  /// This is used as the usual [Action.isApplicable].
   final OtherActorApplicabilityFunction _isApplicable;
 
   @override
@@ -254,7 +270,7 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
     @required this.mainSituationBuilder,
     @required this.defenseSituationBuilder,
     @required this.successChanceGetter,
-    this.rerollable,
+    @required this.rerollable,
     this.rerollResource,
     this.rollReasonTemplate,
   })
