@@ -8,7 +8,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 const String punchDefenseSituationName = "PunchDefenseSituation";
 
-Situation createPunchDefenseSituation(int id, Actor attacker, Actor target,
+DefenseSituation createPunchDefenseSituation(int id, Actor attacker, Actor target,
         Predetermination predetermination) =>
     new DefenseSituation.initialized(
         id,

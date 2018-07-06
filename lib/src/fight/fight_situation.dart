@@ -84,7 +84,6 @@ abstract class FightSituation extends Situation
         startBreakNeckOnGroundBuilder,
         startLeapBuilder,
         startPunchBuilder,
-        startPunchPlayerBuilder,
         startSlashFromDirectionGenerator(SlashDirection.left),
         startSlashFromDirectionGenerator(SlashDirection.right),
         startSlashPlayerFromDirectionGenerator(SlashDirection.left),

@@ -8,7 +8,6 @@ import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/punch_defense_situation.dart';
 import 'package:edgehead/src/fight/punch/punch_situation.dart';
-import 'package:edgehead/src/predetermined_result.dart';
 
 const String startPunchCommandTemplate = "punch <object>";
 
@@ -24,45 +23,27 @@ ReasonedSuccessChance computeStartPunch(
   ]);
 }
 
-EnemyTargetAction startPunchBuilder(Actor enemy) => new StartDefensibleAction(
-    "StartPunch",
-    startPunchCommandTemplate,
-    startPunchHelpMessage,
-    startPunchReportStart,
-    (a, sim, w, enemy) =>
-        !a.isPlayer &&
-        (a.isStanding || a.isOffBalance) &&
-        !enemy.isOnGround &&
-        a.isBarehanded,
-    (a, sim, w, enemy) => createPunchSituation(w.randomInt(), a, enemy),
-    (a, sim, w, enemy) => createPunchDefenseSituation(
-        w.randomInt(), a, enemy, Predetermination.none),
-    enemy);
-
-EnemyTargetAction
-    startPunchPlayerBuilder(Actor enemy) =>
-        new StartDefensibleAction(
-            "StartPunchPlayer",
-            startPunchCommandTemplate,
-            startPunchHelpMessage,
-            startPunchReportStart,
-            (a, sim, w, enemy) =>
-                a.isPlayer &&
-                (a.isStanding || a.isOffBalance) &&
-                !enemy.isOnGround &&
-                a.isBarehanded,
-            (a, sim, w, enemy) => createPunchSituation(w.randomInt(), a, enemy),
-            (a, sim, w, enemy) => createPunchDefenseSituation(
-                w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-            enemy,
-            successChanceGetter: computeStartPunch,
-            applyStartOfFailure: startPunchReportStart,
-            defenseSituationWhenFailed:
-                (a, sim, w, enemy) => createPunchDefenseSituation(w.randomInt(),
-                    a, enemy, Predetermination.successGuaranteed),
-            rerollable: true,
-            rerollResource: Resource.stamina,
-            rollReasonTemplate: "will <subject> hit <objectPronoun>?");
+EnemyTargetAction startPunchBuilder(Actor enemy) =>
+    new StartDefensibleActionNEW(
+      enemy,
+      name: "StartPunch",
+      commandTemplate: startPunchCommandTemplate,
+      helpMessage: startPunchHelpMessage,
+      applyStart: startPunchReportStart,
+      isApplicable: (a, sim, w, enemy) =>
+          (a.isStanding || a.isOffBalance) &&
+          !enemy.isOnGround &&
+          a.isBarehanded,
+      mainSituationBuilder: (a, sim, w, enemy) =>
+          createPunchSituation(w.randomInt(), a, enemy),
+      defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+          createPunchDefenseSituation(
+              w.randomInt(), a, enemy, predetermination),
+      successChanceGetter: computeStartPunch,
+      rerollable: true,
+      rerollResource: Resource.stamina,
+      rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+    );
 
 void startPunchReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation mainSituation) {
