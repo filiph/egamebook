@@ -33,5 +33,4 @@ final _$enemyTargetActionBuilderSerializer =
     new FunctionSerializer<EnemyTargetActionBuilder>({
   'impaleLeaperBuilder': impaleLeaperBuilder,
   'counterSlashBuilder': counterSlashBuilder,
-  'counterSlashPlayerBuilder': counterSlashPlayerBuilder,
 });

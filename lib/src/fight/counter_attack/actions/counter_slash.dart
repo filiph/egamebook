@@ -10,7 +10,6 @@ import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
-import 'package:edgehead/src/predetermined_result.dart';
 
 const String counterSlashCommandTemplate = "swing back at <object>";
 
@@ -52,48 +51,26 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
 /// TODO: This currently assumes that actor will always want to counter slash
 /// from left. Add another option or make explicit that
 /// this is what's happening.
-EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
-    "CounterSlash",
-    counterSlashCommandTemplate,
-    counterSlashHelpMessage,
-    counterSlashReportStart,
-    (a, sim, w, enemy) =>
-        !a.isPlayer &&
-        a.currentWeapon.damageCapability.isSlashing &&
-        !a.isOnGround,
-    (a, sim, w, enemy) =>
-        createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
-    (a, sim, w, enemy) => createSlashDefenseSituation(
-        w.randomInt(), a, enemy, Predetermination.none),
-    enemy,
-    successChanceGetter: computeCounterSlash,
-    applyStartOfFailure: counterSlashApplyFailure,
-    buildSituationsOnFailure: false);
-
-/// TODO: This currently assumes that actor will always want to counter slash
-/// from left. Add another option or make explicit that
-/// this is what's happening.
-EnemyTargetAction counterSlashPlayerBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-        "CounterSlashPlayer",
-        counterSlashCommandTemplate,
-        counterSlashHelpMessage,
-        counterSlashReportStart,
-        (a, sim, w, enemy) =>
-            a.isPlayer &&
-            a.currentWeapon.damageCapability.isSlashing &&
-            !a.isOnGround,
-        (a, sim, w, enemy) =>
-            createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
-        (a, sim, w, enemy) => createSlashDefenseSituation(
-            w.randomInt(), a, enemy, Predetermination.failureGuaranteed),
-        enemy,
-        successChanceGetter: computeCounterSlash,
-        applyStartOfFailure: counterSlashApplyFailure,
-        buildSituationsOnFailure: false,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> hit <objectPronoun>?");
+EnemyTargetAction counterSlashBuilder(Actor enemy) =>
+    new StartDefensibleActionNEW(
+      enemy,
+      name: "CounterSlash",
+      commandTemplate: counterSlashCommandTemplate,
+      helpMessage: counterSlashHelpMessage,
+      applyStart: counterSlashReportStart,
+      applyWhenFailed: counterSlashApplyFailure,
+      isApplicable: (a, sim, w, enemy) =>
+          a.currentWeapon.damageCapability.isSlashing && !a.isOnGround,
+      mainSituationBuilder: (a, sim, w, enemy) =>
+          createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
+      defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+          createSlashDefenseSituation(
+              w.randomInt(), a, enemy, predetermination),
+      successChanceGetter: computeCounterSlash,
+      rerollable: true,
+      rerollResource: Resource.stamina,
+      rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+    );
 
 void counterSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>

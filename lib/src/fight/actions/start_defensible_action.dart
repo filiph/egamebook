@@ -211,7 +211,20 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
   /// This defines what happens before the [enemy] has a chance to react.
   ///
   /// For example, "Orc swings his scimitar at you."
+  ///
+  /// When the action fails and [applyWhenFailed] is non-null, then that
+  /// function will be called instead (and no situation will be created).
   final _PartialApplyFunction applyStart;
+
+  /// This function should use [storyline] to report that the defensible action
+  /// couldn't even start. It can modify [world].
+  ///
+  /// For example, "Orc tries to swing at you but completely misses."
+  ///
+  /// When this function is non-null, and the action fails, [applyStart] won't
+  /// be called. Nor will the action generate any situations (using
+  /// [mainSituationBuilder] and [defenseSituationBuilder].
+  final _PartialApplyFunction applyWhenFailed;
 
   /// This should build the main situation (the orc slashing Aren).
   ///
@@ -273,6 +286,7 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
     @required this.rerollable,
     this.rerollResource,
     this.rollReasonTemplate,
+    this.applyWhenFailed,
   })
       : _isApplicable = isApplicable,
         super(enemy) {
@@ -282,11 +296,20 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
 
   @override
   String applyFailure(ActionContext context) {
+    assert(successChanceGetter != null);
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    assert(successChanceGetter != null);
+
+    if (applyWhenFailed != null) {
+      // Short-circuit the whole logic. Actor failed to even start to execute
+      // the action.
+      applyWhenFailed(a, sim, w, s, enemy, null);
+      return "${a.name} fails to even start $name (DefensibleAction) "
+          "directed at ${enemy.name}";
+    }
+
     final mainSituation = mainSituationBuilder(a, sim, w, enemy);
     // If this action is performed by the player and it failed, then
     // we need to make sure that the defense situation (performed by the enemy)
@@ -332,7 +355,6 @@ class StartDefensibleActionNEW extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
-    return _isApplicable(a, sim, w, enemy);
-  }
+  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+      _isApplicable(a, sim, w, enemy);
 }
