@@ -33,7 +33,7 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
 }
 
 EnemyTargetAction startStrikeDownBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "StartStrikeDown",
       commandTemplate: startStrikeDownCommandTemplate,

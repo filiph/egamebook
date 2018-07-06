@@ -34,7 +34,7 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
 
 /// TODO: Fix to create a thrust situation, not a slash one
 EnemyTargetAction startThrustSpearBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "StartThrustSpear",
       commandTemplate: startThrustCommandTemplate,

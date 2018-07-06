@@ -18,7 +18,7 @@ const String startThrustSpearDownHelpMessage =
     "vulnerable.";
 
 EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "StartThrustSpearDown",
       commandTemplate: startThrustSpearDownCommandTemplate,

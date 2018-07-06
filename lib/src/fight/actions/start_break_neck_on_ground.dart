@@ -22,7 +22,7 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
     ]);
 
 EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "StartBreakNeckOnGround",
       commandTemplate: startBreakNeckOnGroundCommandTemplate,

@@ -24,7 +24,7 @@ ReasonedSuccessChance computeStartPunch(
 }
 
 EnemyTargetAction startPunchBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "StartPunch",
       commandTemplate: startPunchCommandTemplate,

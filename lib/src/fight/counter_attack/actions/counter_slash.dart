@@ -52,7 +52,7 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
 /// from left. Add another option or make explicit that
 /// this is what's happening.
 EnemyTargetAction counterSlashBuilder(Actor enemy) =>
-    new StartDefensibleActionNEW(
+    new StartDefensibleAction(
       enemy,
       name: "CounterSlash",
       commandTemplate: counterSlashCommandTemplate,

@@ -46,7 +46,7 @@ String startSlashCommandTemplate(SlashDirection direction) {
 /// the provided [direction].
 ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
     SlashDirection direction) {
-  return (Actor enemy) => new StartDefensibleActionNEW(
+  return (Actor enemy) => new StartDefensibleAction(
         enemy,
         name: "StartSlashFrom$direction",
         commandTemplate: startSlashCommandTemplate(direction),
