@@ -34,7 +34,7 @@ typedef Situation _SituationBuilder(
 /// Look at `start_slash.dart` for an example of how to use this class.
 class StartDefensibleAction extends EnemyTargetAction {
   /// This function should use [storyline] to report the start of the action.
-  /// It can modify [simulation].
+  /// It can modify [world].
   ///
   /// For example, "Orc swings his scimitar at you."
   final _PartialApplyFunction _applyStartOfSuccess;
