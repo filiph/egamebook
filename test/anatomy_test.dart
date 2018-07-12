@@ -169,7 +169,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
 
       for (int i = 0; i < 1000; i++) {
-        final hit = orc.anatomy.pickRandomBodyPartFromRight(randomIntGetter);
+        final hit =
+            orc.anatomy.pickRandomBodyPartFromRight(randomIntGetter, false);
         expect(hit.designation, isNot(BodyPartDesignation.primaryArm));
       }
     });
@@ -181,7 +182,8 @@ void main() {
       final orc = new Actor.initialized(1000, "orc");
 
       for (int i = 0; i < 1000; i++) {
-        final hit = orc.anatomy.pickRandomBodyPartFromLeft(randomIntGetter);
+        final hit =
+            orc.anatomy.pickRandomBodyPartFromLeft(randomIntGetter, false);
         expect(hit.designation, isNot(BodyPartDesignation.secondaryArm));
       }
     });

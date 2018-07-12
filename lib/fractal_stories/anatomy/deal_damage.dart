@@ -68,9 +68,14 @@ SlashingResult executeSlashingHitFromDirection(
   assert(fromLeft || direction == SlashDirection.right,
       "The logic below assumes only two possible directions. Update it.");
 
+  // Only slash vital parts if the enemy is almost ready to go down.
+  final avoidVital = target.hitpoints > 1 || target.isSurvivor;
+
   final bodyPart = fromLeft
-      ? target.anatomy.pickRandomBodyPartFromLeft(randomIntGenerator)
-      : target.anatomy.pickRandomBodyPartFromRight(randomIntGenerator);
+      ? target.anatomy
+          .pickRandomBodyPartFromLeft(randomIntGenerator, avoidVital)
+      : target.anatomy
+          .pickRandomBodyPartFromRight(randomIntGenerator, avoidVital);
 
   return executeSlashingHit(target, weapon, success, bodyPart: bodyPart);
 }

@@ -43,24 +43,29 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   /// Returns a body part that is about to be hit by an attack from the left.
-  BodyPart pickRandomBodyPartFromLeft(RandomIntGetter randomIntGetter) {
-    final parts = _getLeftPartsWithWeights();
+  BodyPart pickRandomBodyPartFromLeft(
+      RandomIntGetter randomIntGetter, bool avoidVital) {
+    final parts = _getLeftPartsWithWeights(avoidVital);
     return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Returns a body part that is about to be hit by an attack from the right.
-  BodyPart pickRandomBodyPartFromRight(RandomIntGetter randomIntGetter) {
-    final parts = _getRightPartsWithWeights();
+  BodyPart pickRandomBodyPartFromRight(
+      RandomIntGetter randomIntGetter, bool avoidVital) {
+    final parts = _getRightPartsWithWeights(avoidVital);
     return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Creates a map of parts to their weight. The weight is the [Map.value]
   /// part.
-  Map<BodyPart, int> _getLeftPartsWithWeights() {
+  ///
+  /// When [avoidVital] is `true`, no vital parts will be in the resulting map.
+  Map<BodyPart, int> _getLeftPartsWithWeights(bool avoidVital) {
     final map = <BodyPart, int>{};
 
     for (final part in _walk(torso)) {
       if (part.swingSurfaceLeft == 0) continue;
+      if (avoidVital && part.isVital) continue;
       map[part] = part.swingSurfaceLeft;
     }
     return map;
@@ -68,11 +73,14 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
   /// Creates a map of parts to their weight. The weight is the [Map.value]
   /// part.
-  Map<BodyPart, int> _getRightPartsWithWeights() {
+  ///
+  /// When [avoidVital] is `true`, no vital parts will be in the resulting map.
+  Map<BodyPart, int> _getRightPartsWithWeights(bool avoidVital) {
     final map = <BodyPart, int>{};
 
     for (final part in _walk(torso)) {
       if (part.swingSurfaceRight == 0) continue;
+      if (avoidVital && part.isVital) continue;
       map[part] = part.swingSurfaceRight;
     }
     return map;
