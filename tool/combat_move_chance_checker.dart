@@ -8,7 +8,7 @@ import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
-import 'package:edgehead/src/fight/actions/start_slash.dart';
+import 'package:edgehead/src/fight/actions/start_slash_from_direction.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
@@ -39,7 +39,7 @@ void main() {
     "break neck on ground": computeBreakNeckOnGroundChance,
     "leap": computeStartLeap,
     "punch": computeStartPunch,
-    "slash (player)": computeStartSlashPlayer,
+    "slash from direction": computeStartSlashFromDirection,
     "defensive parry slash": computeDefensiveParrySlash,
     "dodge slash": computeDodgeSlashOrThrust,
     "jump back slash": computeJumpBackSlash,

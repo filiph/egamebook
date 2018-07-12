@@ -22,7 +22,7 @@ const String startSlashHelpMessage =
 /// The reaction is then basically selected randomly. Because success/failure
 /// are predetermined, there is little difference for the planner between
 /// the various defense moves.
-ReasonedSuccessChance computeStartSlashPlayer(
+ReasonedSuccessChance computeStartSlashFromDirection(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.5, [
     const Bonus(50, CombatReason.dexterity),
@@ -57,11 +57,11 @@ ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
             !enemy.isOnGround &&
             a.currentWeapon.damageCapability.isSlashing,
         mainSituationBuilder: (a, sim, w, enemy) =>
-            createSlashSituation(w.randomInt(), a, enemy, direction),
+            createSlashSituation(w.randomInt(), a, enemy, direction: direction),
         defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
             createSlashDefenseSituation(
                 w.randomInt(), a, enemy, predetermination),
-        successChanceGetter: computeStartSlashPlayer,
+        successChanceGetter: computeStartSlashFromDirection,
         rerollable: true,
         rerollResource: Resource.stamina,
         rollReasonTemplate: "will <subject> hit <objectPronoun>?",

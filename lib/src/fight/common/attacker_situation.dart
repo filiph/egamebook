@@ -12,10 +12,22 @@ part 'attacker_situation.g.dart';
 
 class AttackDirection extends EnumClass {
   /// The attack comes from the (attacker's) left.
-  static const AttackDirection left = _$left;
+  static const AttackDirection fromLeft = _$left;
 
   /// The attack comes from the (attacker's) right.
-  static const AttackDirection right = _$right;
+  static const AttackDirection fromRight = _$right;
+
+  /// The attack is directed at the target's primary (weapon-wielding) arm.
+  static const AttackDirection primaryArm = _$primaryArm;
+
+  /// The attack is directed at the target's secondary (shield-wielding) arm.
+  static const AttackDirection secondaryArm = _$secondaryArm;
+
+  static const AttackDirection neck = _$neck;
+
+  static const AttackDirection leftLeg = _$leftLeg;
+
+  static const AttackDirection rightLeg = _$rightLeg;
 
   /// The direction of attack is neither of the options above.
   ///

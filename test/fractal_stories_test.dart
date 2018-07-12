@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -88,9 +89,13 @@ void main() {
         checkSituationBuild(
             () => createSlashDefenseSituation(1, a, b, Predetermination.none));
       });
-      test("SlashSituation", () {
-        checkSituationBuild(
-            () => createSlashSituation(1, a, b, SlashDirection.left));
+      test("SlashSituation from direction", () {
+        checkSituationBuild(() =>
+            createSlashSituation(1, a, b, direction: SlashDirection.left));
+      });
+      test("SlashSituation as designation", () {
+        checkSituationBuild(() => createSlashSituation(1, a, b,
+            designation: BodyPartDesignation.primaryArm));
       });
       test("BreakNeckOnGroundSituation", () {
         checkSituationBuild(

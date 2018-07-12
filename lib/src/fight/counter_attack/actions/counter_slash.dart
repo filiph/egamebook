@@ -51,8 +51,7 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
 /// TODO: This currently assumes that actor will always want to counter slash
 /// from left. Add another option or make explicit that
 /// this is what's happening.
-EnemyTargetAction counterSlashBuilder(Actor enemy) =>
-    new StartDefensibleAction(
+EnemyTargetAction counterSlashBuilder(Actor enemy) => new StartDefensibleAction(
       enemy,
       name: "CounterSlash",
       commandTemplate: counterSlashCommandTemplate,
@@ -61,8 +60,9 @@ EnemyTargetAction counterSlashBuilder(Actor enemy) =>
       applyWhenFailed: counterSlashApplyFailure,
       isApplicable: (a, sim, w, enemy) =>
           a.currentWeapon.damageCapability.isSlashing && !a.isOnGround,
-      mainSituationBuilder: (a, sim, w, enemy) =>
-          createSlashSituation(w.randomInt(), a, enemy, SlashDirection.left),
+      mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
+          w.randomInt(), a, enemy,
+          direction: SlashDirection.left),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
           createSlashDefenseSituation(
               w.randomInt(), a, enemy, predetermination),

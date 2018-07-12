@@ -76,6 +76,8 @@ SlashingResult executeSlashingHitFromDirection(
 }
 
 SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
+  assert(designated.hitpoints >= 0);
+
   if (designated.hitpoints == 1) {
     return _disableBySlash(target, designated, weapon);
   }
@@ -93,10 +95,14 @@ SlashingResult _addMajorCut(Actor target, BodyPart designated, Item weapon) {
     victim,
     (part) => part.id == designated.id,
     (b, isDescendant) {
-      if (!isDescendant) {
-        b.majorCutsCount += 1;
+      if (isDescendant) {
+        // Ignore descendants, they aren't affected.
+        return;
       }
-      b.hitpoints -= 1;
+      b.majorCutsCount += 1;
+      if (b.hitpoints > 0) {
+        b.hitpoints -= 1;
+      }
     },
   );
 
@@ -118,9 +124,11 @@ SlashingResult _addMinorCut(Actor target, BodyPart designated, Item weapon) {
     victim,
     (part) => part.id == designated.id,
     (b, isDescendant) {
-      if (!isDescendant) {
-        b.minorCutsCount += 1;
+      if (isDescendant) {
+        // Ignore descendants, they aren't affected.
+        return;
       }
+      b.minorCutsCount += 1;
     },
   );
 

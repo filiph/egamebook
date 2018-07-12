@@ -14,16 +14,31 @@ part of stranded.fight.attacker_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
-const AttackDirection _$left = const AttackDirection._('left');
-const AttackDirection _$right = const AttackDirection._('right');
+const AttackDirection _$left = const AttackDirection._('fromLeft');
+const AttackDirection _$right = const AttackDirection._('fromRight');
+const AttackDirection _$primaryArm = const AttackDirection._('primaryArm');
+const AttackDirection _$secondaryArm = const AttackDirection._('secondaryArm');
+const AttackDirection _$neck = const AttackDirection._('neck');
+const AttackDirection _$leftLeg = const AttackDirection._('leftLeg');
+const AttackDirection _$rightLeg = const AttackDirection._('rightLeg');
 const AttackDirection _$unspecified = const AttackDirection._('unspecified');
 
 AttackDirection _$valueOfAttackDirection(String name) {
   switch (name) {
-    case 'left':
+    case 'fromLeft':
       return _$left;
-    case 'right':
+    case 'fromRight':
       return _$right;
+    case 'primaryArm':
+      return _$primaryArm;
+    case 'secondaryArm':
+      return _$secondaryArm;
+    case 'neck':
+      return _$neck;
+    case 'leftLeg':
+      return _$leftLeg;
+    case 'rightLeg':
+      return _$rightLeg;
     case 'unspecified':
       return _$unspecified;
     default:
@@ -35,6 +50,11 @@ final BuiltSet<AttackDirection> _$attackDirectionValues =
     new BuiltSet<AttackDirection>(const <AttackDirection>[
   _$left,
   _$right,
+  _$primaryArm,
+  _$secondaryArm,
+  _$neck,
+  _$leftLeg,
+  _$rightLeg,
   _$unspecified,
 ]);
 

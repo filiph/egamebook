@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -8,12 +9,17 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
 OtherActorAction finishSlashBuilder(Actor enemy) => new FinishSlash(enemy);
 
 class FinishSlash extends OtherActorAction {
   static const String className = "FinishSlash";
+
+  /// The default severity of the slash that is dealt. Can be upgraded
+  /// or downgraded depending on specific rules.
+  static final _defaultSlashSuccessLevel = SlashSuccessLevel.majorCut;
 
   @override
   final String helpMessage = null;
@@ -58,14 +64,19 @@ class FinishSlash extends OtherActorAction {
     final damage = a.currentWeapon.damageCapability.slashingDamage;
     final situation = context.world.currentSituation as AttackerSituation;
     assert(situation.name == slashSituationName);
-    assert(situation.attackDirection == AttackDirection.left ||
-        situation.attackDirection == AttackDirection.right);
-    final direction = situation.attackDirection == AttackDirection.left
-        ? SlashDirection.left
-        : SlashDirection.right;
-    // TODO: change to cleave automatically when at last hitpoint
-    final result = executeSlashingHitFromDirection(target, direction,
-        a.currentWeapon, SlashSuccessLevel.majorCut, w.randomInt);
+
+    SlashingResult result;
+    if (situation.attackDirection == AttackDirection.fromLeft ||
+        situation.attackDirection == AttackDirection.fromRight) {
+      // Just the general direction was given.
+      result = _executeFromDirection(
+          situation, situation.attackDirection, a, w.randomInt);
+    } else {
+      // This attack targets a specific body part.
+      result = _executeAtDesignation(
+          situation, situation.attackDirection, a, w.randomInt);
+    }
+
     w.actors.removeWhere((actor) => actor.id == target.id);
     w.actors.add(result.actor);
     final thread = getThreadId(sim, w, slashSituationName);
@@ -112,4 +123,44 @@ class FinishSlash extends OtherActorAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
       a.currentWeapon.damageCapability.isSlashing;
+
+  SlashingResult _executeAtDesignation(AttackerSituation situation,
+      AttackDirection direction, Actor attacker, RandomIntGetter randomGetter) {
+    final designation = _convert(direction);
+    return executeSlashingHit(
+        target, attacker.currentWeapon, _defaultSlashSuccessLevel,
+        designation: designation);
+  }
+
+  BodyPartDesignation _convert(AttackDirection direction) {
+    assert(
+        direction != AttackDirection.fromRight &&
+            direction != AttackDirection.fromLeft,
+        "This method only supports specific body targets.");
+
+    switch (direction) {
+      case AttackDirection.primaryArm:
+        return BodyPartDesignation.primaryArm;
+      case AttackDirection.secondaryArm:
+        return BodyPartDesignation.secondaryArm;
+      case AttackDirection.leftLeg:
+        return BodyPartDesignation.leftLeg;
+      case AttackDirection.rightLeg:
+        return BodyPartDesignation.rightLeg;
+      case AttackDirection.neck:
+        return BodyPartDesignation.neck;
+    }
+
+    throw new ArgumentError("Cannot convert $direction, it's missing in "
+        "the switch statement above");
+  }
+
+  SlashingResult _executeFromDirection(AttackerSituation situation,
+      AttackDirection direction, Actor attacker, RandomIntGetter randomGetter) {
+    final slashDirection = situation.attackDirection == AttackDirection.fromLeft
+        ? SlashDirection.left
+        : SlashDirection.right;
+    return executeSlashingHitFromDirection(target, slashDirection,
+        attacker.currentWeapon, _defaultSlashSuccessLevel, randomGetter);
+  }
 }

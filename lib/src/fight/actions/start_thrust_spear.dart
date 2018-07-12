@@ -44,8 +44,9 @@ EnemyTargetAction startThrustSpearBuilder(Actor enemy) =>
           a.isStanding &&
           !enemy.isOnGround &&
           a.currentWeapon.damageCapability.type == WeaponType.spear,
-      mainSituationBuilder: (a, sim, w, enemy) =>
-          createSlashSituation(w.randomInt(), a, enemy, SlashDirection.right),
+      mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
+          w.randomInt(), a, enemy,
+          direction: SlashDirection.right),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
           createSlashDefenseSituation(
               w.randomInt(), a, enemy, predetermination),

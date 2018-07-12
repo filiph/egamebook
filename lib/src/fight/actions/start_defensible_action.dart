@@ -37,7 +37,7 @@ typedef Situation _SituationBuilder(
 /// (popped by "SlashDefenseSituation") or it is run to completion (orc
 /// slashes Aren).
 ///
-/// Look at `start_slash.dart` for an example of how to use this class.
+/// Look at `start_slash_from_direction.dart` for an example of how to use this class.
 class StartDefensibleAction extends EnemyTargetAction {
   /// This function should use [storyline] to report the start of the action.
   /// It can modify [world].
