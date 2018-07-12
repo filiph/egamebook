@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 OtherActorAction finishPunchBuilder(Actor enemy) => new FinishPunch(enemy);
@@ -80,6 +81,7 @@ class FinishPunch extends OtherActorAction {
             object: target,
             actionThread: thread,
             positive: true);
+        w.recordCustom(fellToGroundCustomEventName, actor: target);
         break;
     }
     return "${a.name} punches ${target.name} to $updatedPose";

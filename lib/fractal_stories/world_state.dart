@@ -195,7 +195,6 @@ abstract class WorldStateBuilder
 
   int statefulRandomState;
 
-
   Object global;
 
   ListBuilder<Situation> situations;
@@ -318,14 +317,20 @@ abstract class WorldStateBuilder
     }
   }
 
-  void recordCustom(String eventName, Object data) {
-    customHistory.records.add(CustomEventHistory.getKey(eventName),
-        new CustomEvent(time: time, name: eventName, data: data));
+  void recordCustom(String eventName, {Object data, Actor actor}) {
+    customHistory.records.add(
+        CustomEventHistory.getKey(eventName),
+        new CustomEvent(
+          time: time,
+          name: eventName,
+          data: data,
+          actorId: actor?.id,
+        ));
   }
 
-  void recordDeath(int actorId) {
-    final eventName = "${actorId}_is_dead";
-    recordCustom(eventName, null);
+  void recordDeath(Actor actor) {
+    final eventName = "actor_dies";
+    recordCustom(eventName, actor: actor);
   }
 
   void recordRule(Rule rule) {

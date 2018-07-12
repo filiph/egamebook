@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
@@ -99,6 +100,7 @@ class Pound extends EnemyTargetAction {
           "to the $groundMaterial",
           subject: pounding,
           object: enemy);
+      w.recordCustom(fellToGroundCustomEventName, actor: enemy);
       w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
 
       return "${a.name} pounds ${enemy.name} to the ground";

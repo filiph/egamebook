@@ -25,7 +25,7 @@ void killHumanoid(ActionContext context, Actor actor) {
   context.pubSub
       .publishActorKilled(new ActorKilledEvent(context, actor, context.actor));
 
-  w.recordDeath(actor.id);
+  w.recordDeath(actor);
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
     if (!actor.isBarehanded) {

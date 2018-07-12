@@ -34,6 +34,12 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
+    if (object.actorId != null) {
+      result
+        ..add('actorId')
+        ..add(serializers.serialize(object.actorId,
+            specifiedType: const FullType(int)));
+    }
     if (object.data != null) {
       result
         ..add('data')
@@ -55,13 +61,17 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'name':
-          result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'actorId':
+          result.actorId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'data':
           result.data = serializers.deserialize(value,
               specifiedType: const FullType(Object));
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
@@ -121,16 +131,18 @@ class _$CustomEventHistorySerializer
 
 class _$CustomEvent extends CustomEvent {
   @override
-  final String name;
+  final int actorId;
   @override
   final Object data;
+  @override
+  final String name;
   @override
   final DateTime time;
 
   factory _$CustomEvent([void updates(CustomEventBuilder b)]) =>
       (new CustomEventBuilder()..update(updates)).build();
 
-  _$CustomEvent._({this.name, this.data, this.time}) : super._() {
+  _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
     if (name == null) throw new ArgumentError.notNull('name');
     if (time == null) throw new ArgumentError.notNull('time');
   }
@@ -146,19 +158,25 @@ class _$CustomEvent extends CustomEvent {
   bool operator ==(dynamic other) {
     if (identical(other, this)) return true;
     if (other is! CustomEvent) return false;
-    return name == other.name && data == other.data && time == other.time;
+    return actorId == other.actorId &&
+        data == other.data &&
+        name == other.name &&
+        time == other.time;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, name.hashCode), data.hashCode), time.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, actorId.hashCode), data.hashCode), name.hashCode),
+        time.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('CustomEvent')
-          ..add('name', name)
+          ..add('actorId', actorId)
           ..add('data', data)
+          ..add('name', name)
           ..add('time', time))
         .toString();
   }
@@ -167,13 +185,17 @@ class _$CustomEvent extends CustomEvent {
 class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   _$CustomEvent _$v;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  int _actorId;
+  int get actorId => _$this._actorId;
+  set actorId(int actorId) => _$this._actorId = actorId;
 
   Object _data;
   Object get data => _$this._data;
   set data(Object data) => _$this._data = data;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
 
   DateTime _time;
   DateTime get time => _$this._time;
@@ -183,8 +205,9 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
 
   CustomEventBuilder get _$this {
     if (_$v != null) {
-      _name = _$v.name;
+      _actorId = _$v.actorId;
       _data = _$v.data;
+      _name = _$v.name;
       _time = _$v.time;
       _$v = null;
     }
@@ -204,8 +227,9 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
 
   @override
   _$CustomEvent build() {
-    final _$result =
-        _$v ?? new _$CustomEvent._(name: name, data: data, time: time);
+    final _$result = _$v ??
+        new _$CustomEvent._(
+            actorId: actorId, data: data, name: name, time: time);
     replace(_$result);
     return _$result;
   }

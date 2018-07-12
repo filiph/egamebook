@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
@@ -93,6 +94,7 @@ class FinishSlash extends OtherActorAction {
       if (result.fell) {
         result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
             negative: true, actionThread: thread);
+        w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
       }
       reportPain(context, result.actor, damage);
     } else {
