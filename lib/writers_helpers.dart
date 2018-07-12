@@ -150,9 +150,23 @@ void enterTunnelWithCancel(ActionContext c) {
 
 void executeSpearThrowAtOgre(ActionContext c) {
   final player = getPlayer(c.world);
-  final spear = player.weapons
-      .firstWhere((item) => item.damageCapability.type == WeaponType.spear);
-  c.outputWorld.updateActorById(player.id, (b) => b..items.remove(spear));
+  final inventorySpears = player.weapons
+      .where((item) => item.damageCapability.type == WeaponType.spear)
+      .toList(growable: false);
+  if (inventorySpears.isNotEmpty) {
+    c.outputWorld.updateActorById(
+        player.id, (b) => b..items.remove(inventorySpears.first));
+  } else {
+    // No spear in inventory but we know that the actor has a spear. So it
+    // must be in their hand.
+    final replacementWeapon =
+        player.findBestWeapon() ?? Actor.createBodyPartWeapon(player.anatomy);
+    c.outputWorld.updateActorById(
+        player.id,
+        (b) => b
+          ..currentWeapon = replacementWeapon.toBuilder()
+          ..items.remove(replacementWeapon));
+  }
   movePlayer(c, "war_forge", silent: true);
 }
 
