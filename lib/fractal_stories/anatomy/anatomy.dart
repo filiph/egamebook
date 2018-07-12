@@ -23,6 +23,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
   Anatomy._();
 
+  /// Returns in iterable of all the parts in this anatomy.
+  @memoized
+  Iterable<BodyPart> get allParts => _walk(torso);
+
   /// The root of the anatomy tree. Often the part of the anatomy with
   /// a heart or a similarly 'core' organ.
   BodyPart get torso;

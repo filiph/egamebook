@@ -34,9 +34,11 @@ ReasonedSuccessChance computeStartSlashFromDirection(
 String startSlashCommandTemplate(SlashDirection direction) {
   switch (direction) {
     case SlashDirection.left:
-      return "swing at <object> >> from left (<objectPronoun's> weapon hand)";
+      return "attack <object> >> by slashing >> "
+          "from left (<objectPronoun's> weapon hand)";
     case SlashDirection.right:
-      return "swing at <object> >> from right (<objectPronoun's> shield hand)";
+      return "attack <object> >> by slashing >> "
+          "from right (<objectPronoun's> shield hand)";
   }
   throw new StateError(
       "The switch statement above doesn't cover all directions: $direction");

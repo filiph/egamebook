@@ -59,6 +59,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 class _$Anatomy extends Anatomy {
   @override
   final BodyPart torso;
+  Iterable<BodyPart> __allParts;
 
   factory _$Anatomy([void updates(AnatomyBuilder b)]) =>
       (new AnatomyBuilder()..update(updates)).build();
@@ -66,6 +67,9 @@ class _$Anatomy extends Anatomy {
   _$Anatomy._({this.torso}) : super._() {
     if (torso == null) throw new ArgumentError.notNull('torso');
   }
+
+  @override
+  Iterable<BodyPart> get allParts => __allParts ??= super.allParts;
 
   @override
   Anatomy rebuild(void updates(AnatomyBuilder b)) =>

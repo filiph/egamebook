@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -21,18 +23,34 @@ const String startSlashHelpMessage =
 /// The reaction is then basically selected randomly. Because success/failure
 /// are predetermined, there is little difference for the planner between
 /// the various defense moves.
-ReasonedSuccessChance computeStartSlashAtBodyPart(
-    Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.3 /* varies by slash surface */, [
-    const Bonus(30, CombatReason.dexterity),
-    const Bonus(30, CombatReason.targetWithoutShield),
-    const Bonus(30, CombatReason.balance),
-    // TODO: target is at hp == 1 and not a survivor - big 50% bonus
-  ]);
+///
+/// Note that this is a higher order function, returning a [SuccessChanceGetter]
+/// function. This is because the success chance varies depending on
+/// the targeted [bodyPart].
+SuccessChanceGetter computeStartSlashAtBodyPartGenerator(BodyPart bodyPart) {
+  return (Actor a, Simulation sim, WorldState w, Actor enemy) {
+    const minBase = 0.05;
+    const maxBase = 0.3;
+    final relativeSlashSurface = math.min(
+        math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 5, 1);
+    final base = minBase + maxBase * relativeSlashSurface;
+
+    return getCombatMoveChance(a, enemy, base, [
+      const Bonus(30, CombatReason.dexterity),
+      const Bonus(30, CombatReason.targetWithoutShield),
+      const Bonus(30, CombatReason.balance),
+      const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+      const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
+      const Bonus(30, CombatReason.targetHasOneLegDisabled),
+      const Bonus(50, CombatReason.targetHasAllLegsDisabled),
+      const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+      const Bonus(50, CombatReason.targetHasAllEyesDisabled),
+    ]);
+  };
 }
 
 String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by slashing <object's> $designation";
+  return "attack <object> >> by slashing >> <object's> $designation";
 }
 
 void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
@@ -46,26 +64,28 @@ void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
 /// the provided [BodyPartDesignation].
 ActionBuilder<EnemyTargetAction, Actor> startSlashAtBodyPartGenerator(
     BodyPartDesignation designation) {
-  return (Actor enemy) => new StartDefensibleAction(
-        enemy,
-        name: "StartSlashAt$designation",
-        commandTemplate: startSlashCommandTemplate(designation),
-        helpMessage: startSlashHelpMessage,
-        applyStart: startSlashReportStart,
-        isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
-            !a.isOnGround &&
-            !enemy.isOnGround &&
-            a.currentWeapon.damageCapability.isSlashing,
-        mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
-            w.randomInt(), a, enemy,
-            designation: designation),
-        defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
-            createSlashDefenseSituation(
-                w.randomInt(), a, enemy, predetermination),
-        successChanceGetter: computeStartSlashAtBodyPart,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate:
-            "will <subject> hit <objectPronoun's> $designation?",
-      );
+  return (Actor enemy) {
+    final bodyPart = enemy.anatomy.findByDesignation(designation);
+    return new StartDefensibleAction(
+      enemy,
+      name: "StartSlashAt$designation",
+      commandTemplate: startSlashCommandTemplate(designation),
+      helpMessage: startSlashHelpMessage,
+      applyStart: startSlashReportStart,
+      isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
+          !a.isOnGround &&
+          !enemy.isOnGround &&
+          a.currentWeapon.damageCapability.isSlashing,
+      mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
+          w.randomInt(), a, enemy,
+          designation: designation),
+      defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+          createSlashDefenseSituation(
+              w.randomInt(), a, enemy, predetermination),
+      successChanceGetter: computeStartSlashAtBodyPartGenerator(bodyPart),
+      rerollable: true,
+      rerollResource: Resource.stamina,
+      rollReasonTemplate: "will <subject> hit <objectPronoun's> $designation?",
+    );
+  };
 }

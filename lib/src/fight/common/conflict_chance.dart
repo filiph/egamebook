@@ -1,49 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:meta/meta.dart';
-
-/// Reasons for the performer of a move (e.g. attacker) to be successful
-/// or unsuccessful.
-///
-/// For example, if a [Bonus] has a [CombatReason.dexterity] and the
-/// [Bonus.maxAdjustment] is positive, it means that the (possible) success was
-/// partly because the performer was more dexterous than the target
-/// (e.g. fast slash). If [Bonus.maxAdjustment] is negative, than the
-/// (possible) failure was because the target was more dexterous
-/// (e.g. dodged slash).
-enum CombatReason {
-  /// The general ability to move during combat. Includes ability to use
-  /// weapons in case of humanoids.
-  dexterity,
-
-  /// The relative balance. Attacking out of balance is bad, especially if
-  /// the enemy has good combat stance. And vice versa, defending while
-  /// out of balance is bad.
-  balance,
-
-  /// Advantage for the actor who is standing above the enemy thanks to
-  /// a) terrain or b) posture. For example, an actor on a table has
-  /// a height advantage. An actor lying on the ground has a height
-  /// disadvantage towards an actor who is standing (regardless whether
-  /// the standing actor is in balance or not).
-  height,
-
-  /// The fact that the target doesn't have (or can't use) a shield to deflect
-  /// or foil the move.
-  targetWithoutShield,
-
-  // TODO: weaponDexterity /// Lightness of weapon
-  // TODO: reach /// Advantage of longer limbs and longer weapons
-  // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
-}
-
-@immutable
-class Bonus<R> {
-  final int maxAdjustment;
-  final R reason;
-
-  const Bonus(this.maxAdjustment, this.reason);
-}
 
 /// This is a convenience method for constructing [ReasonedSuccessChance]
 /// for the combat in Edgehead.
@@ -105,6 +63,25 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
       successReasons: successReasons, failureReasons: failureReasons);
 }
 
+/// Returns the portion of body parts with given [function] that are disabled
+/// ([BodyPart.isAlive] is `false`).
+///
+/// When [actor] has no parts with that [function], this method returns `1.0`.
+/// It's possible that these parts were cleaved off.
+double _fractionDisabled(Actor actor, BodyPartFunction function) {
+  int total = 0;
+  int disabled = 0;
+  for (final part in actor.anatomy.allParts) {
+    if (part.function != function) continue;
+    total += 1;
+    if (!part.isAlive) {
+      disabled += 1;
+    }
+  }
+  if (total == 0) return 1.0;
+  return disabled / total;
+}
+
 double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
   switch (reason) {
     case CombatReason.dexterity:
@@ -134,6 +111,52 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 0.0;
       }
       throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasPrimaryArmDisabled:
+      if (_partDisabled(target, BodyPartDesignation.primaryArm)) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasSecondaryArmDisabled:
+      if (_partDisabled(target, BodyPartDesignation.secondaryArm)) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasOneLegDisabled:
+      final percent = _fractionDisabled(target, BodyPartFunction.mobile);
+      if (percent > 0 && percent < 1) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasAllLegsDisabled:
+      final percent = _fractionDisabled(target, BodyPartFunction.mobile);
+      if (percent == 1.0) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasOneEyeDisabled:
+      final percent = _fractionDisabled(target, BodyPartFunction.vision);
+      if (percent > 0 && percent < 1) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.targetHasAllEyesDisabled:
+      final percent = _fractionDisabled(target, BodyPartFunction.vision);
+      if (percent == 1.0) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw new StateError("Forgotten logic branch"); // ignore: dead_code
   }
 
   throw new ArgumentError("no rule for $reason");
@@ -146,4 +169,77 @@ double _lerp(double current, int bonus) {
   final distance = bonus.isNegative ? current : 1.0 - current;
   final portion = bonus / 100;
   return current + portion * distance;
+}
+
+/// Returns `true` if the (single) part that's defined by [designation]
+/// is dead ([BodyPart.isAlive] is `false`).
+bool _partDisabled(Actor actor, BodyPartDesignation designation) {
+  return !actor.anatomy.findByDesignation(designation).isAlive;
+}
+
+@immutable
+class Bonus<R> {
+  final int maxAdjustment;
+  final R reason;
+
+  const Bonus(this.maxAdjustment, this.reason);
+}
+
+/// Reasons for the performer of a move (e.g. attacker) to be successful
+/// or unsuccessful.
+///
+/// For example, if a [Bonus] has a [CombatReason.dexterity] and the
+/// [Bonus.maxAdjustment] is positive, it means that the (possible) success was
+/// partly because the performer was more dexterous than the target
+/// (e.g. fast slash). If [Bonus.maxAdjustment] is negative, than the
+/// (possible) failure was because the target was more dexterous
+/// (e.g. dodged slash).
+enum CombatReason {
+  /// The general ability to move during combat. Includes ability to use
+  /// weapons in case of humanoids.
+  dexterity,
+
+  /// The relative balance. Attacking out of balance is bad, especially if
+  /// the enemy has good combat stance. And vice versa, defending while
+  /// out of balance is bad.
+  balance,
+
+  /// Advantage for the actor who is standing above the enemy thanks to
+  /// a) terrain or b) posture. For example, an actor on a table has
+  /// a height advantage. An actor lying on the ground has a height
+  /// disadvantage towards an actor who is standing (regardless whether
+  /// the standing actor is in balance or not).
+  height,
+
+  /// The fact that the target doesn't have (or can't use) a shield to deflect
+  /// or foil the move.
+  targetWithoutShield,
+
+  /// The fact that the target has disabled (or cleaved off) primary arm,
+  /// meaning that he cannot move it to defend themselves.
+  targetHasPrimaryArmDisabled,
+
+  /// The fact that the target has disabled (or cleaved off) secondary arm,
+  /// meaning that he cannot move it to defend themselves.
+  targetHasSecondaryArmDisabled,
+
+  /// One of the (probably two) legs is disabled. Dodging and movement
+  /// is harder.
+  targetHasOneLegDisabled,
+
+  /// All legs (i.e. _both_ legs in case of humanoids) are disabled or
+  /// cleaved-off. No dodging for the target, and severely impacted
+  /// ability to defend oneself.
+  targetHasAllLegsDisabled,
+
+  /// One of target's eyes is non-functional. Makes fighting harder.
+  targetHasOneEyeDisabled,
+
+  /// All eyes (i.e. _both_ eyes, for most creatures) are non-functional.
+  /// Severely impacts the target's ability to defend themselves.
+  targetHasAllEyesDisabled,
+
+  // TODO: weaponDexterity /// Lightness of weapon
+  // TODO: reach /// Advantage of longer limbs and longer weapons
+  // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
 }
