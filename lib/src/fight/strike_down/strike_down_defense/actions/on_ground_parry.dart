@@ -13,6 +13,8 @@ ReasonedSuccessChance computeOnGroundParry(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.5, [
     const Bonus(70, CombatReason.dexterity),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

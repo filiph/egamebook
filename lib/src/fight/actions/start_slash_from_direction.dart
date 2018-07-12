@@ -28,6 +28,12 @@ ReasonedSuccessChance computeStartSlashFromDirection(
     const Bonus(50, CombatReason.dexterity),
     const Bonus(30, CombatReason.targetWithoutShield),
     const Bonus(30, CombatReason.balance),
+    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
+    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

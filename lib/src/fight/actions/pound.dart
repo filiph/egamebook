@@ -114,6 +114,10 @@ class Pound extends EnemyTargetAction {
     return getCombatMoveChance(a, enemy, 0.8, [
       const Bonus(95, CombatReason.dexterity),
       const Bonus(30, CombatReason.balance),
+      const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
+      const Bonus(30, CombatReason.targetHasOneLegDisabled),
+      const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+      const Bonus(50, CombatReason.targetHasAllEyesDisabled),
     ]);
   }
 

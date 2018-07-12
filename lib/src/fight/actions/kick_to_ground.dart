@@ -15,6 +15,9 @@ ReasonedSuccessChance computeKickToGround(
   return getCombatMoveChance(a, enemy, 0.6, [
     const Bonus(70, CombatReason.dexterity),
     const Bonus(50, CombatReason.balance),
+    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(50, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

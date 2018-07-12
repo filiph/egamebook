@@ -15,6 +15,10 @@ ReasonedSuccessChance computeDodgeSlashOrThrust(
   return getCombatMoveChance(a, enemy, 0.6, [
     const Bonus(60, CombatReason.dexterity),
     const Bonus(50, CombatReason.balance),
+    const Bonus(50, CombatReason.targetHasOneLegDisabled),
+    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

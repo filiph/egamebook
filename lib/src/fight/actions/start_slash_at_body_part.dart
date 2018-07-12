@@ -42,9 +42,9 @@ SuccessChanceGetter computeStartSlashAtBodyPartGenerator(BodyPart bodyPart) {
       const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
       const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
       const Bonus(30, CombatReason.targetHasOneLegDisabled),
-      const Bonus(50, CombatReason.targetHasAllLegsDisabled),
+      const Bonus(90, CombatReason.targetHasAllLegsDisabled),
       const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-      const Bonus(50, CombatReason.targetHasAllEyesDisabled),
+      const Bonus(90, CombatReason.targetHasAllEyesDisabled),
     ]);
   };
 }

@@ -19,6 +19,10 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
         Actor a, Simulation sim, WorldState w, Actor enemy) =>
     getCombatMoveChance(a, enemy, 0.6, [
       const Bonus(50, CombatReason.dexterity),
+      const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+      const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
+      const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+      const Bonus(50, CombatReason.targetHasAllEyesDisabled),
     ]);
 
 EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>

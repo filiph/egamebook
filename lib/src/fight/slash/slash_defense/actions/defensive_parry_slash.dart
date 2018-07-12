@@ -15,6 +15,11 @@ ReasonedSuccessChance computeDefensiveParrySlash(
   return getCombatMoveChance(a, enemy, 0.9, [
     const Bonus(95, CombatReason.dexterity),
     const Bonus(30, CombatReason.balance),
+    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
+    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

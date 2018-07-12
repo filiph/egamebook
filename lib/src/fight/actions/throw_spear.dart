@@ -19,6 +19,12 @@ ReasonedSuccessChance computeThrowSpear(
     const Bonus(20, CombatReason.dexterity),
     const Bonus(20, CombatReason.targetWithoutShield),
     const Bonus(20, CombatReason.balance),
+    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+    const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
+    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    const Bonus(50, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(80, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

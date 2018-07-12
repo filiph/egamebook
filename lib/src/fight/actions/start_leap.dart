@@ -21,6 +21,12 @@ ReasonedSuccessChance computeStartLeap(
   return getCombatMoveChance(a, enemy, 0.2, [
     const Bonus(50, CombatReason.balance),
     const Bonus(50, CombatReason.height),
+    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+    const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
+    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    const Bonus(50, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(50, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 
