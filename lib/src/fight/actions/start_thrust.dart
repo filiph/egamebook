@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -14,7 +13,7 @@ import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 const String startThrustCommandTemplate = "thrust at <object>";
 
-const String startThrustHelpMessage = "The basic move with a spear.";
+const String startThrustHelpMessage = "The basic move with a pointy weapon.";
 
 /// There are several ways to defend against a thrust. But, for simplicity,
 /// _player's_ thrust will assume an average effort from the defender,
@@ -39,17 +38,17 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
 }
 
 /// TODO: Fix to create a thrust situation, not a slash one
-EnemyTargetAction startThrustSpearBuilder(Actor enemy) =>
+EnemyTargetAction startThrustBuilder(Actor enemy) =>
     new StartDefensibleAction(
       enemy,
-      name: "StartThrustSpear",
+      name: "StartThrust",
       commandTemplate: startThrustCommandTemplate,
       helpMessage: startThrustHelpMessage,
-      applyStart: startThrustSpearReportStart,
+      applyStart: startThrustReportStart,
       isApplicable: (a, sim, w, enemy) =>
-          a.isStanding &&
+          !a.isOnGround &&
           !enemy.isOnGround &&
-          a.currentWeapon.damageCapability.type == WeaponType.spear,
+          a.currentWeapon.damageCapability.isThrusting,
       mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
           w.randomInt(), a, enemy,
           direction: SlashDirection.right),
@@ -62,7 +61,7 @@ EnemyTargetAction startThrustSpearBuilder(Actor enemy) =>
       rollReasonTemplate: "will <subject> hit <objectPronoun>?",
     );
 
-void startThrustSpearReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>
     a.report(s, "<subject> thrust<s> {${weaponAsObject2(a)} |}at <object>",
         object: enemy,
