@@ -47,8 +47,10 @@ Here are some additional "philosophical" pillars:
 ### Installation
 
 1. [Install Dart](https://www.dartlang.org/install)
-   * As of March 2018, Dart 2 is not supported. See discussion
-     [here](https://github.com/filiph/edgehead/issues/13#issuecomment-375698672).
+   * As of July 2018, Dart 2 works but is not fully supported. See discussion
+     [here](https://github.com/filiph/edgehead/issues/13#issuecomment-375698672)
+     to see why. As of Dart version 2.0.0-dev.58 everything works just fine,
+     just don't use the `--preview-dart-2` option.
 2. Clone this repository (`git clone https://github.com/filiph/edgehead.git`)
    or download the zip file containing it
 3. Go to the repository's directory (`cd edgehead`)
@@ -56,6 +58,89 @@ Here are some additional "philosophical" pillars:
 
 Now you can try running tests (`pub run test`) or play the game on the command
 line (`dart bin/play.dart`).
+
+### Playtesting
+
+First of all, thank you. Even by just _thinking_ about helping this project
+by playtesting means you genuinely want to see the game finished and successful,
+and that means a lot to me.
+
+If you want to play the web-based IFCOMP 2017 entry (Insignificant Little 
+Vermin), [go here](https://egamebook.com/vermin). It will
+give you an idea of what the interface of the final game will be like.
+But, both UI-wise and gameplay-wise, it's only a prototype.
+
+Since that IFCOMP version, I've implemented a lot of background functionality, 
+like saving, easier authoring system, and richer world-simulation. 
+
+To support these fundamental and frequent changes, I temporarily got rid of
+the user interface. The current game only runs on command line. 
+I want to find what's fun to do in the game before I build a new interface 
+around it.
+
+To playtest the current version of the game, install it
+([see above](https://github.com/filiph/edgehead#installation)),
+then run:
+
+```bash
+dart -c bin/play.dart --log
+```
+
+You will be able to choose from options by using the arrow keys and hitting
+`enter` or `space`.
+
+![Animated screenshot of the CLI menu](https://raw.githubusercontent.com/filiph/cli_menu/master/example/mac_screencast.gif)
+
+Output will be presented in raw Markdown text format, punctuated with
+"UI" things like the slot machine (which, in text, looks rather
+underwhelming, something like `[[ SLOT MACHINE 'Will you succeed?' 0.98 ]]`).
+
+#### Debug cheat codes
+
+Normally, if you choose an action that depends on chance,
+the game will "throw dice" (use randomness). In the command line interface,
+this happens in less than a millisecond, but it does happen.
+
+You can force each option to either succeed or fail by using a key other
+than the default `enter` or `space`. By navigating to your chosen 
+option and pressing `s`, that action will succeed no matter how low your odds
+are. By pressing `f`, that action will fail. (Mnemonic: `s` is for
+success, `f` is for fail.) You will not see the `[[ SLOT MACHINE ... ]]`
+output in either case.
+
+Ultimately, you should default to playtesting *without* these cheats. 
+If playing the game is only fun if you can force each action to succeed
+or fail, then the game is broken. But the cheats are useful for predictably
+getting yourself into an interesting situation, and for seeing "what happens". 
+
+#### What to playtest
+
+Right now, the focus is on making the combat system fun and interesting.
+This means that, in the end of this development cycle, you as a player should:
+
+1. Think that the combat is fair
+2. Feel that you can do things that are your own idea (emergent gameplay)
+3. Feel powerful
+
+You should focus on the set combat piece(s) at the start of the game. You
+can go and play Insignificant Little Vermin, but that's there mostly for
+automated testing (we are fuzzy-testing that no change to the combat
+system crashes the long-form adventure). When the combat system is improved,
+we are going to rewrite the adventure to take advantage of it.
+
+#### How to give feedback
+
+Use [this Trello board](https://trello.com/b/6epMZ2JP/edgehead-own-work)
+(you might need to get permission to edit it). Add a card to the "Playtest"
+list.
+
+If it's a feature request or general feedback, just write it as a new card.
+
+If it's a bug report, please attach `edgehead.log` (which you'll find
+in the game's root directory, and which gets rewritten every time you play) 
+and at least the last page of the command
+line output (screenshot, text file or copy-paste). You can attach files
+to Trello cards by dragging and dropping them.
 
 ### Development flow
 
