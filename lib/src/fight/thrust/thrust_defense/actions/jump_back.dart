@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 
-ReasonedSuccessChance computeJumpBackSlash(
+ReasonedSuccessChance computeJumpBackThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.9, [
     const Bonus(90, CombatReason.dexterity),
@@ -19,11 +19,11 @@ ReasonedSuccessChance computeJumpBackSlash(
   ]);
 }
 
-OtherActorAction jumpBackFromSlashBuilder(Actor enemy) =>
-    new JumpBackFromSlash(enemy);
+OtherActorAction jumpBackFromThrustBuilder(Actor enemy) =>
+    new JumpBackFromThrust(enemy);
 
-class JumpBackFromSlash extends OtherActorAction {
-  static const String className = "JumpBackFromSlash";
+class JumpBackFromThrust extends OtherActorAction {
+  static const String className = "JumpBackFromThrust";
 
   @override
   final String helpMessage = "Jump back and the weapon can't reach you.";
@@ -40,7 +40,7 @@ class JumpBackFromSlash extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  JumpBackFromSlash(Actor enemy) : super(enemy);
+  JumpBackFromThrust(Actor enemy) : super(enemy);
 
   @override
   String get commandTemplate => "jump back";
@@ -85,7 +85,7 @@ class JumpBackFromSlash extends OtherActorAction {
       Actor a, Simulation sim, WorldState w) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeJumpBackSlash(a, sim, w, target));
+        .or(computeJumpBackThrust(a, sim, w, target));
   }
 
   @override

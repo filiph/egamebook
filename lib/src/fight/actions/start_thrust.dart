@@ -1,6 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -8,10 +8,12 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_situation.dart';
+import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
+import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
-const String startThrustCommandTemplate = "thrust at <object>";
+String startThrustCommandTemplate(BodyPartDesignation designation) {
+  return "attack <object> >> by thrusting at >> <object's> $designation";
+}
 
 const String startThrustHelpMessage = "The basic move with a pointy weapon.";
 
@@ -37,29 +39,30 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
   ]);
 }
 
-/// TODO: Fix to create a thrust situation, not a slash one
-EnemyTargetAction startThrustBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-      enemy,
-      name: "StartThrust",
-      commandTemplate: startThrustCommandTemplate,
-      helpMessage: startThrustHelpMessage,
-      applyStart: startThrustReportStart,
-      isApplicable: (a, sim, w, enemy) =>
-          !a.isOnGround &&
-          !enemy.isOnGround &&
-          a.currentWeapon.damageCapability.isThrusting,
-      mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
-          w.randomInt(), a, enemy,
-          direction: SlashDirection.right),
-      defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
-          createSlashDefenseSituation(
-              w.randomInt(), a, enemy, predetermination),
-      successChanceGetter: computeStartThrustSpearPlayer,
-      rerollable: true,
-      rerollResource: Resource.stamina,
-      rollReasonTemplate: "will <subject> hit <objectPronoun>?",
-    );
+ActionBuilder<EnemyTargetAction, Actor> startThrustAtBodyPartGenerator(
+    BodyPartDesignation designation) {
+  return (Actor enemy) => new StartDefensibleAction(
+        enemy,
+        name: "StartThrust",
+        commandTemplate: startThrustCommandTemplate(designation),
+        helpMessage: startThrustHelpMessage,
+        applyStart: startThrustReportStart,
+        isApplicable: (a, sim, w, enemy) =>
+            !a.isOnGround &&
+            !enemy.isOnGround &&
+            a.currentWeapon.damageCapability.isThrusting,
+        mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
+            w.randomInt(), a, enemy,
+            designation: designation),
+        defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+            createThrustDefenseSituation(
+                w.randomInt(), a, enemy, predetermination),
+        successChanceGetter: computeStartThrustSpearPlayer,
+        rerollable: true,
+        rerollResource: Resource.stamina,
+        rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+      );
+}
 
 void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>
@@ -67,3 +70,4 @@ void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         object: enemy,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
+

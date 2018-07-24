@@ -6,7 +6,7 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -94,7 +94,10 @@ abstract class FightSituation extends Situation
         startSlashFromDirectionGenerator(SlashDirection.left),
         startSlashFromDirectionGenerator(SlashDirection.right),
         startStrikeDownBuilder,
-        startThrustBuilder,
+        startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.head),
         startThrustSpearDownBuilder,
         TakeDroppedShield.builder,
         TakeDroppedWeapon.builder,

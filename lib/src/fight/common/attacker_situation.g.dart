@@ -14,21 +14,25 @@ part of stranded.fight.attacker_situation;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
-const AttackDirection _$left = const AttackDirection._('fromLeft');
-const AttackDirection _$right = const AttackDirection._('fromRight');
+const AttackDirection _$fromLeft = const AttackDirection._('fromLeft');
+const AttackDirection _$fromRight = const AttackDirection._('fromRight');
 const AttackDirection _$primaryArm = const AttackDirection._('primaryArm');
 const AttackDirection _$secondaryArm = const AttackDirection._('secondaryArm');
 const AttackDirection _$neck = const AttackDirection._('neck');
 const AttackDirection _$leftLeg = const AttackDirection._('leftLeg');
 const AttackDirection _$rightLeg = const AttackDirection._('rightLeg');
+const AttackDirection _$leftEye = const AttackDirection._('leftEye');
+const AttackDirection _$rightEye = const AttackDirection._('rightEye');
+const AttackDirection _$torso = const AttackDirection._('torso');
+const AttackDirection _$head = const AttackDirection._('head');
 const AttackDirection _$unspecified = const AttackDirection._('unspecified');
 
 AttackDirection _$valueOfAttackDirection(String name) {
   switch (name) {
     case 'fromLeft':
-      return _$left;
+      return _$fromLeft;
     case 'fromRight':
-      return _$right;
+      return _$fromRight;
     case 'primaryArm':
       return _$primaryArm;
     case 'secondaryArm':
@@ -39,6 +43,14 @@ AttackDirection _$valueOfAttackDirection(String name) {
       return _$leftLeg;
     case 'rightLeg':
       return _$rightLeg;
+    case 'leftEye':
+      return _$leftEye;
+    case 'rightEye':
+      return _$rightEye;
+    case 'torso':
+      return _$torso;
+    case 'head':
+      return _$head;
     case 'unspecified':
       return _$unspecified;
     default:
@@ -48,13 +60,17 @@ AttackDirection _$valueOfAttackDirection(String name) {
 
 final BuiltSet<AttackDirection> _$attackDirectionValues =
     new BuiltSet<AttackDirection>(const <AttackDirection>[
-  _$left,
-  _$right,
+  _$fromLeft,
+  _$fromRight,
   _$primaryArm,
   _$secondaryArm,
   _$neck,
   _$leftLeg,
   _$rightLeg,
+  _$leftEye,
+  _$rightEye,
+  _$torso,
+  _$head,
   _$unspecified,
 ]);
 

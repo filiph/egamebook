@@ -4,7 +4,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_thrust_spear.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/shield_block_slash.dart';
@@ -20,7 +19,6 @@ DefenseSituation createSlashDefenseSituation(int id, Actor attacker,
         [
           defensiveParrySlashBuilder,
           dodgeSlashBuilder,
-          dodgeThrustSpearBuilder,
           jumpBackFromSlashBuilder,
           parrySlashBuilder,
           shieldBlockSlashBuilder,

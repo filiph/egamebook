@@ -11,7 +11,7 @@ generateTestFight
 
 // ---
 APPROACH: $test_fight FROM $pre_start_book
-COMMAND: Start test fight
+COMMAND: Start one-on-one test fight with an orc
 DESCRIPTION: You get transported to the development testing arena.
 
 

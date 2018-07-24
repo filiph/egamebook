@@ -55,7 +55,8 @@ build, it\'s a bug.
       wholeSentence: true);
 }, null, generateTestFight, null);
 Approach testFightFromPreStartBook = new Approach(
-    'pre_start_book', 'test_fight', 'Start test fight', (ActionContext c) {
+    'pre_start_book', 'test_fight', 'Start one-on-one test fight with an orc',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -700,7 +701,9 @@ Nobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s f
       wholeSentence: true);
 }, null, generateAgruthFight, null);
 Approach startAdventureFromPreStartBook = new Approach(
-    'pre_start_book', 'start_adventure', 'REMOVE_THIS_FOR_PRODUCTION',
+    'pre_start_book',
+    'start_adventure',
+    'Start \'Insignificant Little Vermin\' (DEBUG: this is here as a smoke test)',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

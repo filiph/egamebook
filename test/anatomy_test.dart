@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:test/test.dart';
@@ -78,7 +78,7 @@ void main() {
       final slashResult = executeSlashingHit(
           orc, sword, SlashSuccessLevel.cleave,
           designation: BodyPartDesignation.head);
-      expect(slashResult.successLevel, SlashSuccessLevel.majorCut);
+      expect(slashResult.slashSuccessLevel, SlashSuccessLevel.majorCut);
     });
 
     test("major-cutting actor with Con=2 once does not kill him", () {

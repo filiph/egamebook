@@ -12,10 +12,8 @@ import 'src/fight/leap/leap_defense/actions/impale_leaper.dart';
 import 'src/fight/punch/actions/finish_punch.dart';
 import 'src/fight/punch/punch_defense/actions/dodge_punch.dart';
 import 'src/fight/slash/actions/finish_slash.dart';
-import 'src/fight/slash/actions/finish_thrust_spear.dart';
 import 'src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'src/fight/slash/slash_defense/actions/dodge_slash.dart';
-import 'src/fight/slash/slash_defense/actions/dodge_thrust_spear.dart';
 import 'src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'src/fight/slash/slash_defense/actions/parry_slash.dart';
 import 'src/fight/slash/slash_defense/actions/shield_block_slash.dart';
@@ -24,13 +22,17 @@ import 'src/fight/strike_down/actions/finish_thrust_spear_down.dart';
 import 'src/fight/strike_down/strike_down_defense/actions/on_ground_parry.dart';
 import 'src/fight/strike_down/strike_down_defense/actions/on_ground_shield_block.dart';
 import 'src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
+import 'src/fight/thrust/actions/finish_thrust.dart';
+import 'src/fight/thrust/thrust_defense/actions/dodge_thrust.dart';
+import 'src/fight/thrust/thrust_defense/actions/jump_back.dart';
+import 'src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 
 part 'edgehead_action_builders.g.dart';
 
 @GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
-final FunctionSerializer<OtherActorActionBuilder> otherActorActionSerializer =
-    _$otherActorActionBuilderSerializer;
-
-@GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
 final FunctionSerializer<EnemyTargetActionBuilder> enemyTargetActionSerializer =
     _$enemyTargetActionBuilderSerializer;
+
+@GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
+final FunctionSerializer<OtherActorActionBuilder> otherActorActionSerializer =
+    _$otherActorActionBuilderSerializer;

@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -9,18 +10,13 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/slash/slash_situation.dart';
-import 'package:edgehead/stateful_random/stateful_random.dart';
+import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
-OtherActorAction finishSlashBuilder(Actor enemy) => new FinishSlash(enemy);
+OtherActorAction finishThrustBuilder(Actor enemy) => new FinishThrust(enemy);
 
-class FinishSlash extends OtherActorAction {
-  static const String className = "FinishSlash";
-
-  /// The default severity of the slash that is dealt. Can be upgraded
-  /// or downgraded depending on specific rules.
-  static final _defaultSlashSuccessLevel = SlashSuccessLevel.majorCut;
+class FinishThrust extends OtherActorAction {
+  static const String className = "FinishThrust";
 
   @override
   final String helpMessage = null;
@@ -40,7 +36,7 @@ class FinishSlash extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishSlash(Actor enemy) : super(enemy);
+  FinishThrust(Actor enemy) : super(enemy);
 
   @override
   String get commandTemplate => null;
@@ -64,29 +60,22 @@ class FinishSlash extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final damage = a.currentWeapon.damageCapability.slashingDamage;
     final situation = context.world.currentSituation as AttackerSituation;
-    assert(situation.name == slashSituationName);
+    assert(situation.name == thrustSituationName);
+    assert(situation.attackDirection != AttackDirection.fromLeft ||
+        situation.attackDirection != AttackDirection.fromRight);
 
-    WeaponAssaultResult result;
-    if (situation.attackDirection == AttackDirection.fromLeft ||
-        situation.attackDirection == AttackDirection.fromRight) {
-      // Just the general direction was given.
-      result = _executeFromDirection(
-          situation, situation.attackDirection, a, w.randomInt);
-    } else {
-      // This attack targets a specific body part.
-      result = _executeAtDesignation(
-          situation, situation.attackDirection, a, w.randomInt);
-    }
+    final result = _executeAtDesignation(
+        a, situation.attackDirection.toBodyPartDesignation());
 
     w.actors.removeWhere((actor) => actor.id == target.id);
     w.actors.add(result.actor);
-    final thread = getThreadId(sim, w, slashSituationName);
+    final thread = getThreadId(sim, w, thrustSituationName);
     // TODO: revert kill if it's briana.
     bool killed = !result.actor.isAlive && result.actor.id != brianaId;
     if (!killed) {
       a.report(
           s,
-          "<subject> {slash<es>|cut<s>} <object's> "
+          "<subject> {pierce<s>|stab<s>|bore<s> through} <object's> "
           "${result.touchedPart.randomDesignation}",
           object: result.actor,
           positive: true,
@@ -100,8 +89,8 @@ class FinishSlash extends OtherActorAction {
     } else {
       a.report(
           s,
-          "<subject> {slash<es>|cut<s>} "
-          "{across|through} <object's> "
+          "<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} "
+          "<object's> "
           "${result.touchedPart.randomDesignation}",
           object: result.actor,
           positive: true,
@@ -114,7 +103,7 @@ class FinishSlash extends OtherActorAction {
       }
       killHumanoid(context, result.actor);
     }
-    return "${a.name} slashes${killed ? ' (and kills)' : ''} ${target.name}";
+    return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${target.name}";
   }
 
   @override
@@ -124,22 +113,10 @@ class FinishSlash extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w) =>
-      a.currentWeapon.damageCapability.isSlashing;
+      a.currentWeapon.damageCapability.isThrusting;
 
-  WeaponAssaultResult _executeAtDesignation(AttackerSituation situation,
-      AttackDirection direction, Actor attacker, RandomIntGetter randomGetter) {
-    final designation = direction.toBodyPartDesignation();
-    return executeSlashingHit(
-        target, attacker.currentWeapon, _defaultSlashSuccessLevel,
-        designation: designation);
-  }
-
-  WeaponAssaultResult _executeFromDirection(AttackerSituation situation,
-      AttackDirection direction, Actor attacker, RandomIntGetter randomGetter) {
-    final slashDirection = situation.attackDirection == AttackDirection.fromLeft
-        ? SlashDirection.left
-        : SlashDirection.right;
-    return executeSlashingHitFromDirection(target, slashDirection,
-        attacker.currentWeapon, _defaultSlashSuccessLevel, randomGetter);
+  WeaponAssaultResult _executeAtDesignation(
+      Actor attacker, BodyPartDesignation designation) {
+    return executeThrustingHit(target, attacker.currentWeapon, designation);
   }
 }

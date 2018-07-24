@@ -41,7 +41,7 @@ void main() {
     "punch": computeStartPunch,
     "slash from direction": computeStartSlashFromDirection,
     "defensive parry slash": computeDefensiveParrySlash,
-    "dodge slash": computeDodgeSlashOrThrust,
+    "dodge slash": computeDodgeSlash,
     "jump back slash": computeJumpBackSlash,
     "parry slash": computeParrySlash,
     "shield block slash": computeShieldBlockSlash,
