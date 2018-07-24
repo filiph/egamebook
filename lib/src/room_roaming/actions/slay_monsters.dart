@@ -59,7 +59,7 @@ class SlayMonstersAction extends Action {
       WorldState rebuilt = w.build();
       return fightSituation.enemyTeamIds
           .every((id) => rebuilt.actors.any((a) => a.id == id));
-    },
+    }(),
         "FightGenerator in $room didn't add its monsters to the world's "
         "actors. Add a line like `w.actors.addAll(monsters)` to the "
         "generator. At least one of these actors is missing: "

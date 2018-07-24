@@ -60,7 +60,7 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
         if (!_inverseMap.containsKey(value)) return false;
       }
       return true;
-    },
+    }(),
         "Some functions used in map are defined as function expressions. "
         "Please define them as static or top-level functions.");
   }

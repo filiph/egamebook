@@ -80,7 +80,7 @@ class Simulation {
         }
       }
       return true;
-    },
+    }(),
         "Cannot have more than one level of parent-child variants in Rooms: "
         "$rooms");
     assert(() {
@@ -96,7 +96,7 @@ class Simulation {
         }
       }
       return true;
-    }, "Approaches must specify existing rooms");
+    }(), "Approaches must specify existing rooms");
   }
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
