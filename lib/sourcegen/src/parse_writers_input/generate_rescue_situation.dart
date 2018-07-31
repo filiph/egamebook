@@ -1,7 +1,11 @@
 import 'package:analyzer/analyzer.dart';
 import 'package:code_builder/code_builder.dart';
+import 'package:edgehead/sourcegen/src/recase/recase.dart';
 
 import 'generate_simple_action.dart';
+import 'method_builders.dart';
+import 'parameters.dart';
+import 'types.dart';
 
 /// Generates the Situation class for a particular Action.
 ///
@@ -13,11 +17,6 @@ import 'generate_simple_action.dart';
 /// We can't have a generic `ActionRescueSituation` with some data attached
 /// because we need the situation to filter actions (rescue action and
 /// continuation of failure action).
-import 'method_builders.dart';
-import 'package:recase/recase.dart';
-import 'parameters.dart';
-import 'types.dart';
-
 AstBuilder<AstNode> generateRescueSituation(
     String className,
     String writersName,

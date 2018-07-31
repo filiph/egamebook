@@ -5,8 +5,8 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:edgehead/sourcegen/actions_serializer.dart';
 import 'package:edgehead/sourcegen/src/ensure_part_import.dart';
+import 'package:edgehead/sourcegen/src/recase/recase.dart';
 import 'package:glob/glob.dart';
-import 'package:recase/recase.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// Generator for ActionSerializer.

@@ -1,5 +1,5 @@
 import 'package:edgehead/fractal_stories/shared_constants.dart';
-import 'package:recase/recase.dart' as rc;
+import 'package:edgehead/sourcegen/src/recase/recase.dart' as rc;
 
 ReCase reCase(String string) {
   assert(string.startsWith(r'$'), "Identifier $string doesn't start with \$.");
