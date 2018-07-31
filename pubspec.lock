@@ -9,12 +9,12 @@ packages:
     source: hosted
     version: "0.32.4"
   analyzer_plugin:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-alpha.3"
+    version: "0.0.1-alpha.4"
   args:
     dependency: "direct dev"
     description:
@@ -344,13 +344,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0+1"
-  recase:
-    dependency: "direct dev"
-    description:
-      name: recase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0+1"
   shelf:
     dependency: transitive
     description:
@@ -499,4 +492,4 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.0.0-dev.65 <=2.0.0-dev.69.3"
+  dart: ">=2.0.0-dev.65 <3.0.0"
