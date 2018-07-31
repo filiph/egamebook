@@ -65,17 +65,17 @@ class ActorScoreChange {
 
   /// Action outcome cannot be computed at all.
   const ActorScoreChange.undefined()
-      : this(double.NEGATIVE_INFINITY, double.NEGATIVE_INFINITY,
-            double.NEGATIVE_INFINITY);
+      : this(double.negativeInfinity, double.negativeInfinity,
+            double.negativeInfinity);
 
   /// Outcome has zero effect on the world from the scoring actor's perspective.
   const ActorScoreChange.zero() : this(0, 0, 0);
 
   /// Action outcome could not be computed at all.
   bool get isUndefined =>
-      selfPreservation == double.NEGATIVE_INFINITY &&
-      teamPreservation == double.NEGATIVE_INFINITY &&
-      enemy == double.NEGATIVE_INFINITY;
+      selfPreservation == double.negativeInfinity &&
+      teamPreservation == double.negativeInfinity &&
+      enemy == double.negativeInfinity;
 
   /// A simple combination of different scores, for AI.
   num get simpleCombination => selfPreservation + teamPreservation - enemy;

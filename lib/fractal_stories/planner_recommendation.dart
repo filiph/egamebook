@@ -107,8 +107,8 @@ class PlannerRecommendation {
         -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
 
     num minimum = scores.values.fold<num>(
-        double.INFINITY, (prev, el) => math.min(prev, combineFunction(el)));
-    num maximum = scores.values.fold<num>(double.NEGATIVE_INFINITY,
+        double.infinity, (prev, el) => math.min(prev, combineFunction(el)));
+    num maximum = scores.values.fold<num>(double.negativeInfinity,
         (prev, el) => math.max(prev, combineFunction(el)));
     assert(!minimum.isNaN);
     assert(!maximum.isNaN);

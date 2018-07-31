@@ -139,7 +139,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
             '[${record.loggerName}] - '
             '[${record.level.name}] - '
             '${record.message}\n',
-            mode: FileMode.APPEND);
+            mode: FileMode.append);
       });
     }
   }

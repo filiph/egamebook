@@ -113,7 +113,7 @@ class EdgeheadGame extends Book {
       // Load existing game from [saveGameSerialized].
       try {
         world = edgehead_serializer.serializers.deserializeWith(
-            WorldState.serializer, JSON.decode(saveGameSerialized));
+            WorldState.serializer, json.decode(saveGameSerialized));
       } on ArgumentError {
         const message = "Error when parsing savegame. Maybe the savegame needs "
             "to be updated to the newest version of the runtime?";
@@ -300,7 +300,7 @@ class EdgeheadGame extends Book {
         choices.add(choice);
       }
       final savegame = new SaveGameBuilder()
-        ..saveGameSerialized = JSON.encode(edgehead_serializer.serializers
+        ..saveGameSerialized = json.encode(edgehead_serializer.serializers
             .serializeWith(WorldState.serializer, world));
       final choiceBlock = new ChoiceBlock((b) => b
         ..choices = choices

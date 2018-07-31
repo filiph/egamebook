@@ -20,13 +20,13 @@ void main() {
       final serializers = getSerializers();
       final object = serializers.serialize(hello,
           specifiedType: const FullType(StringReturner));
-      str = JSON.encode(object);
+      str = json.encode(object);
     }
 
     // Simulate completely new load.
     final serializers = getSerializers();
-    final Object json = JSON.decode(str);
-    final deserialized = serializers.deserialize(json,
+    final Object jsonObject = json.decode(str);
+    final deserialized = serializers.deserialize(jsonObject,
         specifiedType: const FullType(StringReturner)) as Function;
     expect(deserialized(), "Hello.");
   });
@@ -47,12 +47,12 @@ void main() {
       final serializers = getSerializers();
       final object = serializers.serialize(functionWithCustomTypes,
           specifiedType: const FullType(CustomTypesFunction));
-      str = JSON.encode(object);
+      str = json.encode(object);
     }
 
     // Simulate completely new load.
-    final Object json = JSON.decode(str);
-    final deserialized = getSerializers().deserialize(json,
+    final Object jsonObject = json.decode(str);
+    final deserialized = getSerializers().deserialize(jsonObject,
         specifiedType: const FullType(CustomTypesFunction)) as Function;
     final a = new A()
       ..x = 1
