@@ -7,10 +7,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-OtherActorAction finishSlashGroundedEnemyBuilder(Actor enemy) =>
-    new FinishSlashGroundedEnemy(enemy);
-
 class FinishSlashGroundedEnemy extends OtherActorAction {
+  static final FinishSlashGroundedEnemy singleton =
+      new FinishSlashGroundedEnemy();
+
   static const String className = "FinishSlashGroundedEnemy";
 
   @override
@@ -31,8 +31,6 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishSlashGroundedEnemy(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => null;
 
@@ -43,18 +41,18 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = target.hitpoints;
-    w.updateActorById(target.id, (b) => b..hitpoints = 0);
-    final updatedEnemy = w.getActorById(target.id);
+    final damage = enemy.hitpoints;
+    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
+    final updatedEnemy = w.getActorById(enemy.id);
     final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
@@ -64,16 +62,16 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
     } else {
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} slains ${target.name} on the ground";
+    return "${a.name} slains ${enemy.name} on the ground";
   }
 
   /// All action takes place in the OnGroundDefenseSituation.
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      target.isOnGround && a.currentWeapon.damageCapability.isSlashing;
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+      enemy.isOnGround && a.currentWeapon.damageCapability.isSlashing;
 }

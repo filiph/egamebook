@@ -39,29 +39,27 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
   ]);
 }
 
-ActionBuilder<EnemyTargetAction, Actor> startThrustAtBodyPartGenerator(
+EnemyTargetAction startThrustAtBodyPartGenerator(
     BodyPartDesignation designation) {
-  return (Actor enemy) => new StartDefensibleAction(
-        enemy,
-        name: "StartThrust",
-        commandTemplate: startThrustCommandTemplate(designation),
-        helpMessage: startThrustHelpMessage,
-        applyStart: startThrustReportStart,
-        isApplicable: (a, sim, w, enemy) =>
-            !a.isOnGround &&
-            !enemy.isOnGround &&
-            a.currentWeapon.damageCapability.isThrusting,
-        mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
-            w.randomInt(), a, enemy,
-            designation: designation),
-        defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
-            createThrustDefenseSituation(
-                w.randomInt(), a, enemy, predetermination),
-        successChanceGetter: computeStartThrustSpearPlayer,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> hit <objectPronoun>?",
-      );
+  return new StartDefensibleAction(
+    name: "StartThrust",
+    commandTemplate: startThrustCommandTemplate(designation),
+    helpMessage: startThrustHelpMessage,
+    applyStart: startThrustReportStart,
+    isApplicable: (a, sim, w, enemy) =>
+        !a.isOnGround &&
+        !enemy.isOnGround &&
+        a.currentWeapon.damageCapability.isThrusting,
+    mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
+        w.randomInt(), a, enemy,
+        designation: designation),
+    defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+        createThrustDefenseSituation(w.randomInt(), a, enemy, predetermination),
+    successChanceGetter: computeStartThrustSpearPlayer,
+    rerollable: true,
+    rerollResource: Resource.stamina,
+    rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+  );
 }
 
 void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
@@ -70,4 +68,3 @@ void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         object: enemy,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
-

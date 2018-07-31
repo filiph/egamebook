@@ -5,6 +5,7 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/edgehead_action_builders.dart' as action_builders;
 import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -61,6 +62,5 @@ part 'edgehead_serializers.g.dart';
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(event_callbacks.serializer)
-      ..add(action_builders.otherActorActionSerializer)
-      ..add(action_builders.enemyTargetActionSerializer))
+      ..add(action_builders.actionSerializer))
     .build();

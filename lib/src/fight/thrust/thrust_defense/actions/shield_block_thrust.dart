@@ -27,10 +27,9 @@ ReasonedSuccessChance computeShieldBlockThrust(
   ]);
 }
 
-OtherActorAction shieldBlockThrustBuilder(Actor enemy) =>
-    new ShieldBlockThrust(enemy);
-
 class ShieldBlockThrust extends OtherActorAction {
+  static final ShieldBlockThrust singleton = new ShieldBlockThrust();
+
   static const String className = "ShieldBlockThrust";
 
   @override
@@ -50,8 +49,6 @@ class ShieldBlockThrust extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  ShieldBlockThrust(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "block with shield and counter";
 
@@ -62,7 +59,7 @@ class ShieldBlockThrust extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> block the slash?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -77,24 +74,24 @@ class ShieldBlockThrust extends OtherActorAction {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
           () => a.report(s, "<subject> <is> too slow", but: true),
-          () => target.report(s, "<subject> <is> too quick for <object>",
+          () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to block ${target.name} with shield";
+    return "${a.name} fails to block ${enemy.name} with shield";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    if (target.isOffBalance) {
+    if (enemy.isOffBalance) {
       s.add("<subject> <is> out of balance",
-          subject: target, negative: true, startSentence: true);
+          subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: target, subject: swing);
+          owner: enemy, subject: swing);
       a.report(
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
@@ -113,20 +110,20 @@ class ShieldBlockThrust extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, target);
+        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} blocks ${target.name} with a shield";
+    return "${a.name} blocks ${enemy.name} with a shield";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeShieldBlockThrust(a, sim, w, target));
+        .or(computeShieldBlockThrust(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.currentShield != null;
 }

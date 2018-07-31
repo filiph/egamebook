@@ -31,6 +31,8 @@ ReasonedSuccessChance computeThrowSpear(
 class ThrowSpear extends EnemyTargetAction {
   static const String className = "ThrowSpear";
 
+  static final ThrowSpear singleton = new ThrowSpear();
+
   @override
   final bool isAggressive = true;
 
@@ -47,8 +49,6 @@ class ThrowSpear extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  ThrowSpear(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "throw spear at <object>";
 
@@ -59,7 +59,7 @@ class ThrowSpear extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> hit <object>?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -83,7 +83,7 @@ class ThrowSpear extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -133,16 +133,16 @@ class ThrowSpear extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState world) {
+      Actor a, Simulation sim, WorldState world, Actor enemy) {
     return computeThrowSpear(a, sim, world, enemy);
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
       a.isStanding &&
       a.hasWeapon(WeaponType.spear) &&
-      _isFirstTurnInFightSituation(world);
+      _isFirstTurnInFightSituation(world, enemy);
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return new Entity(name: Randomly.parse(name), team: a.team);
@@ -161,7 +161,7 @@ class ThrowSpear extends EnemyTargetAction {
     throw new StateError("No spear found in $a");
   }
 
-  bool _isFirstTurnInFightSituation(WorldState world) {
+  bool _isFirstTurnInFightSituation(WorldState world, Actor enemy) {
     final situation =
         world.getSituationByName<FightSituation>(FightSituation.className);
     return situation.time == 0;
@@ -196,6 +196,4 @@ class ThrowSpear extends EnemyTargetAction {
             "${entityAsObject2(a, spear)} at <object>",
         object: enemy,
       );
-
-  static EnemyTargetAction builder(Actor enemy) => new ThrowSpear(enemy);
 }

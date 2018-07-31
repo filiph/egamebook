@@ -16,7 +16,7 @@ Situation createSlashSituation(int id, Actor attacker, Actor target,
           (direction == null && designation != null),
       "You must define only one of direction or designation.");
   return new AttackerSituation.initialized(
-      id, slashSituationName, [finishSlashBuilder], [], attacker, target,
+      id, slashSituationName, [FinishSlash.singleton], [], attacker, target,
       attackDirection: _convert(direction, designation));
 }
 

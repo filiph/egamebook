@@ -19,7 +19,7 @@ DefenseSituation createOnGroundWrestleDefenseSituation(
     new DefenseSituation.initialized(
         world.randomInt(),
         onGroundWrestleDefenseSituationName,
-        [evadeNeckBreakingBuilder],
+        [EvadeNeckBreaking.singleton],
         [],
         actor,
         enemy,

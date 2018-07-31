@@ -19,9 +19,9 @@ ReasonedSuccessChance computeRollOutOfWay(
   ]);
 }
 
-OtherActorAction rollOutOfWayBuilder(Actor enemy) => new RollOutOfWay(enemy);
-
 class RollOutOfWay extends OtherActorAction {
+  static final RollOutOfWay singleton = new RollOutOfWay();
+
   static const String className = "RollOutOfWay";
 
   @override
@@ -39,8 +39,6 @@ class RollOutOfWay extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  RollOutOfWay(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "roll out of way";
 
@@ -52,7 +50,7 @@ class RollOutOfWay extends OtherActorAction {
       "will <subject> evade?"; // TODO: come up with something
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -64,7 +62,7 @@ class RollOutOfWay extends OtherActorAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -76,17 +74,19 @@ class RollOutOfWay extends OtherActorAction {
       a.report(s, "<subject> jump<s> up on <subject's> feet", positive: true);
     }
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} rolls out of the way of ${target.name}'s strike";
+    return "${a.name} rolls out of the way of ${enemy.name}'s strike";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeRollOutOfWay(a, sim, w, target));
+        .or(computeRollOutOfWay(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world) => true;
+  bool isApplicable(
+          Actor actor, Simulation sim, WorldState world, Actor enemy) =>
+      true;
 }

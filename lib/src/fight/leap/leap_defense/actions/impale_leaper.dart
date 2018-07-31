@@ -12,9 +12,9 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-EnemyTargetAction impaleLeaperBuilder(Actor enemy) => new ImpaleLeaper(enemy);
-
 class ImpaleLeaper extends EnemyTargetAction {
+  static final ImpaleLeaper singleton = new ImpaleLeaper();
+
   static const String className = "ImpaleLeaper";
 
   @override
@@ -34,8 +34,6 @@ class ImpaleLeaper extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  ImpaleLeaper(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "impale";
 
@@ -46,7 +44,7 @@ class ImpaleLeaper extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> impale <objectPronoun>?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -79,7 +77,7 @@ class ImpaleLeaper extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -127,7 +125,7 @@ class ImpaleLeaper extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final chance = getCombatMoveChance(a, enemy, 0.4, [
       const Bonus(50, CombatReason.dexterity),
       const Bonus(30, CombatReason.height),
@@ -141,6 +139,6 @@ class ImpaleLeaper extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.isOnGround && a.currentWeapon.damageCapability.isThrusting;
 }

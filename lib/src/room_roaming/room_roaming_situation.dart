@@ -38,13 +38,11 @@ abstract class RoomRoamingSituation extends Situation
 
   /// TODO: add all other actions that player can do while exploring
   @override
-  List<ApproachActionBuilder> get actionGenerators =>
-      [TakeApproachAction.builder];
-
-  @override
-  List<Action> get actions => []
-    ..addAll(writers_input.allActions)
-    ..add(SlayMonstersAction.singleton);
+  List<Action> get actions => [
+        TakeApproachAction.singleton,
+      ]
+        ..addAll(writers_input.allActions)
+        ..add(SlayMonstersAction.singleton);
 
   String get currentRoomName;
 

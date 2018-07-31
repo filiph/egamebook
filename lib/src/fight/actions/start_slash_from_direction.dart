@@ -52,28 +52,25 @@ String startSlashCommandTemplate(SlashDirection direction) {
 
 /// Higher order function that generates an [ActionBuilder] depending on
 /// the provided [direction].
-ActionBuilder<EnemyTargetAction, Actor> startSlashFromDirectionGenerator(
-    SlashDirection direction) {
-  return (Actor enemy) => new StartDefensibleAction(
-        enemy,
-        name: "StartSlashFrom$direction",
-        commandTemplate: startSlashCommandTemplate(direction),
-        helpMessage: startSlashHelpMessage,
-        applyStart: startSlashReportStart,
-        isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
-            !a.isOnGround &&
-            !enemy.isOnGround &&
-            a.currentWeapon.damageCapability.isSlashing,
-        mainSituationBuilder: (a, sim, w, enemy) =>
-            createSlashSituation(w.randomInt(), a, enemy, direction: direction),
-        defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
-            createSlashDefenseSituation(
-                w.randomInt(), a, enemy, predetermination),
-        successChanceGetter: computeStartSlashFromDirection,
-        rerollable: true,
-        rerollResource: Resource.stamina,
-        rollReasonTemplate: "will <subject> hit <objectPronoun>?",
-      );
+EnemyTargetAction startSlashFromDirectionGenerator(SlashDirection direction) {
+  return new StartDefensibleAction(
+    name: "StartSlashFrom$direction",
+    commandTemplate: startSlashCommandTemplate(direction),
+    helpMessage: startSlashHelpMessage,
+    applyStart: startSlashReportStart,
+    isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
+        !a.isOnGround &&
+        !enemy.isOnGround &&
+        a.currentWeapon.damageCapability.isSlashing,
+    mainSituationBuilder: (a, sim, w, enemy) =>
+        createSlashSituation(w.randomInt(), a, enemy, direction: direction),
+    defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
+        createSlashDefenseSituation(w.randomInt(), a, enemy, predetermination),
+    successChanceGetter: computeStartSlashFromDirection,
+    rerollable: true,
+    rerollResource: Resource.stamina,
+    rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+  );
 }
 
 void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,

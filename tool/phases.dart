@@ -1,5 +1,6 @@
 import 'package:build_runner/build_runner.dart';
 import 'package:built_value_generator/built_value_generator.dart';
+import 'package:edgehead/sourcegen/actions_serializer_generator.dart';
 import 'package:edgehead/sourcegen/functions_serializer_generator.dart';
 import 'package:edgehead/sourcegen/writers_input_generator.dart';
 import 'package:source_gen/source_gen.dart';
@@ -16,11 +17,18 @@ final List<BuildAction> phases = [
       ]),
   new BuildAction(
       new PartBuilder([
-        new FunctionSerializerGenerator(),
+        new ActionsSerializerGenerator(),
       ]),
       'edgehead',
       inputs: const [
         'lib/edgehead_action_builders.dart',
+      ]),
+  new BuildAction(
+      new PartBuilder([
+        new FunctionSerializerGenerator(),
+      ]),
+      'edgehead',
+      inputs: const [
         'lib/edgehead_event_callbacks.dart',
       ]),
   new BuildAction(

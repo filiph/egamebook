@@ -1,15 +1,17 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class DisarmKick extends EnemyTargetAction {
   static const String className = "DisarmKick";
+
+  static final EnemyTargetAction singleton = new DisarmKick();
 
   @override
   final bool rerollable = true;
@@ -27,8 +29,6 @@ class DisarmKick extends EnemyTargetAction {
   String helpMessage = "When enemies are on the ground, you can try to "
       "kick their weapon off to disarm them.";
 
-  DisarmKick(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "kick <object's> weapon off";
 
@@ -40,7 +40,7 @@ class DisarmKick extends EnemyTargetAction {
       "the weapon off?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     Randomly.run(() {
@@ -55,7 +55,7 @@ class DisarmKick extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -89,7 +89,7 @@ class DisarmKick extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState world) {
+      Actor a, Simulation sim, WorldState world, Actor enemy) {
     return getCombatMoveChance(a, enemy, 0.6, [
       const Bonus(50, CombatReason.dexterity),
       const Bonus(30, CombatReason.balance),
@@ -97,10 +97,8 @@ class DisarmKick extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       (a.isStanding || a.isOffBalance) &&
       enemy.isOnGround &&
       !enemy.isBarehanded;
-
-  static EnemyTargetAction builder(Actor enemy) => new DisarmKick(enemy);
 }

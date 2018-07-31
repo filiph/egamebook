@@ -19,10 +19,9 @@ ReasonedSuccessChance computeJumpBackSlash(
   ]);
 }
 
-OtherActorAction jumpBackFromSlashBuilder(Actor enemy) =>
-    new JumpBackFromSlash(enemy);
-
 class JumpBackFromSlash extends OtherActorAction {
+  static final JumpBackFromSlash singleton = new JumpBackFromSlash();
+
   static const String className = "JumpBackFromSlash";
 
   @override
@@ -40,8 +39,6 @@ class JumpBackFromSlash extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  JumpBackFromSlash(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "jump back";
 
@@ -52,7 +49,7 @@ class JumpBackFromSlash extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> avoid the slash?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -63,11 +60,11 @@ class JumpBackFromSlash extends OtherActorAction {
         "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
     w.popSituation(sim);
-    return "${a.name} fails to jump back from ${target.name}";
+    return "${a.name} fails to jump back from ${enemy.name}";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -75,19 +72,20 @@ class JumpBackFromSlash extends OtherActorAction {
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
-        subject: target.currentWeapon, owner: target);
+        subject: enemy.currentWeapon, owner: enemy);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} jumps back from ${target.name}'s attack";
+    return "${a.name} jumps back from ${enemy.name}'s attack";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeJumpBackSlash(a, sim, w, target));
+        .or(computeJumpBackSlash(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) => a.isBarehanded;
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      a.isBarehanded;
 }

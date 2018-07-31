@@ -8,10 +8,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-OtherActorAction finishThrustSpearAtGroundedEnemyBuilder(Actor enemy) =>
-    new FinishThrustSpearAtGroundedEnemy(enemy);
-
 class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
+  static final FinishThrustSpearAtGroundedEnemy singleton =
+      new FinishThrustSpearAtGroundedEnemy();
+
   static const String className = "FinishThrustSpearAtGroundedEnemy";
 
   @override
@@ -32,8 +32,6 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishThrustSpearAtGroundedEnemy(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => null;
 
@@ -44,18 +42,18 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = target.hitpoints;
-    w.updateActorById(target.id, (b) => b..hitpoints = 0);
-    final updatedEnemy = w.getActorById(target.id);
+    final damage = enemy.hitpoints;
+    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
+    final updatedEnemy = w.getActorById(enemy.id);
     final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|heart}';
     s.add(
@@ -68,17 +66,17 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
     } else {
       killHumanoid(context, updatedEnemy);
     }
-    return "${a.name} slains ${target.name} on the ground with a spear";
+    return "${a.name} slains ${enemy.name} on the ground with a spear";
   }
 
   /// All action takes place in the OnGroundDefenseSituation.
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      target.isOnGround &&
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+      enemy.isOnGround &&
       a.currentWeapon.damageCapability.type == WeaponType.spear;
 }

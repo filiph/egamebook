@@ -14,10 +14,10 @@ DefenseSituation createLeapDefenseSituation(int id, Actor attacker, Actor target
         id,
         leapDefenseSituationName,
         [
-          dodgeLeapBuilder,
+          DodgeLeap.singleton,
           // TODO: WithstandImpactOfLeap.builder,
         ],
-        [impaleLeaperBuilder],
+        [ImpaleLeaper.singleton],
         attacker,
         target,
         predetermination);

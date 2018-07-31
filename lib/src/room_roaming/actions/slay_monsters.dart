@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class SlayMonstersAction extends Action {
+class SlayMonstersAction extends Action<Null> {
   static final SlayMonstersAction singleton = new SlayMonstersAction();
 
   static const String className = "SlayMonstersAction";
@@ -27,21 +27,18 @@ class SlayMonstersAction extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "";
-
-  @override
   String get helpMessage => null;
 
   @override
   String get name => className;
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Null _) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -71,15 +68,18 @@ class SlayMonstersAction extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "WARNING should not be user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) =>
       (w.currentSituation as RoomRoamingSituation).monstersAlive;
 }

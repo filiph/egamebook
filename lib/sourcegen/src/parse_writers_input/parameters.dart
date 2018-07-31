@@ -5,11 +5,14 @@ import 'types.dart';
 final ParameterBuilder actionContextParameter =
     new ParameterBuilder("c", type: actionContextType);
 
+final ParameterBuilder actorParameter =
+    new ParameterBuilder("a", type: actorType);
+
 final ParameterBuilder applicabilityContextParameter =
     new ParameterBuilder("c", type: applicabilityContextType);
 
-final ParameterBuilder actorParameter =
-    new ParameterBuilder("a", type: actorType);
+final ParameterBuilder nullParameter =
+    new ParameterBuilder("_", type: new TypeBuilder('Null'));
 
 final ParameterBuilder originalWorldParameter =
     new ParameterBuilder("originalWorld", type: worldStateType);

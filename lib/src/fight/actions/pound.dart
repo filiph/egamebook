@@ -2,9 +2,9 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
@@ -18,6 +18,8 @@ final Entity pounding = new Entity(name: "pounding", team: neutralTeam);
 
 class Pound extends EnemyTargetAction {
   static const String className = "Pound";
+
+  static final Pound singleton = new Pound();
 
   @override
   final bool rerollable = true;
@@ -37,8 +39,6 @@ class Pound extends EnemyTargetAction {
       "force the opponent to lose control of their combat stance. It can also "
       "give members of your party an opportunity to strike.";
 
-  Pound(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "force <object> off balance";
 
@@ -50,7 +50,7 @@ class Pound extends EnemyTargetAction {
       "<object> off balance?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     a.report(
@@ -70,7 +70,7 @@ class Pound extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -110,7 +110,7 @@ class Pound extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState world) {
+      Actor a, Simulation sim, WorldState world, Actor enemy) {
     return getCombatMoveChance(a, enemy, 0.8, [
       const Bonus(95, CombatReason.dexterity),
       const Bonus(30, CombatReason.balance),
@@ -122,13 +122,11 @@ class Pound extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
       (a.currentWeapon.damageCapability.isSlashing ||
           a.currentWeapon.damageCapability.isBlunt) &&
       (enemy.currentWeapon.damageCapability.type.canParrySlash ||
           enemy.currentWeapon.damageCapability.type.canParryBlunt) &&
       !enemy.isOnGround;
-
-  static EnemyTargetAction builder(Actor enemy) => new Pound(enemy);
 }

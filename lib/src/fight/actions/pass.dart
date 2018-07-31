@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Pass extends Action {
+class Pass extends Action<Null> {
   static final Pass singleton = new Pass();
 
   static const String className = "Pass";
@@ -30,18 +30,15 @@ class Pass extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "Stand off.";
-
-  @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
@@ -51,15 +48,19 @@ class Pass extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "Stand off.";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "WARNING this shouldn't be "
       "user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world) => true;
+  bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
+      true;
 }

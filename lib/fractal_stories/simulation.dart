@@ -9,34 +9,13 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 import 'actor.dart';
 import 'room.dart';
 
-/// Builder takes an enemy actor and generates an instance of
-/// [ApproachAction] with the given [approach].
-typedef ApproachAction ApproachActionBuilder(Approach approach);
-
-/// Builder takes an enemy actor and generates an instance of
-/// [EnemyTargetAction] with the given [enemy].
-typedef EnemyTargetAction EnemyTargetActionBuilder(Actor enemy);
-
 typedef void EventCallback(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
-
-/// Builder takes situation's items and generates an instance of [ItemAction]
-/// with the given [item] and its [description].
-typedef ItemAction ItemActionBuilder(Item item);
-
-/// Builder takes an actor and generates an instance of
-/// [OtherActorAction] with the given [target].
-typedef OtherActorAction OtherActorActionBuilder(Actor target);
-
-/// A base typedef for [OtherActorActionBuilder] and [EnemyTargetActionBuilder].
-typedef OtherActorActionBase OtherActorActionBaseBuilder(Actor target);
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.
@@ -101,29 +80,21 @@ class Simulation {
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
   /// through all [Situation.actions] as well as [Situation.actionGenerators].
-  ///
-  /// TODO: Let this be overridden by implementations. The [Simulation]
-  ///       abstraction should support whatever game mechanic, not just
-  ///       edgehead [EnemyTargetActionBuilder], [ExitActionBuilder], etc.
-  Iterable<Action> generateAllActions(ApplicabilityContext context) sync* {
-    assert(
-        context.world.currentSituation.actions.isNotEmpty ||
-            context.world.currentSituation.actionGenerators.isNotEmpty,
+  Iterable<Performance<dynamic>> generateAllPerformances(
+      ApplicabilityContext context) sync* {
+    assert(context.world.currentSituation.actions.isNotEmpty,
         "There are no actions defined for ${context.world.currentSituation}");
-    yield* context.world.currentSituation.actions;
-    for (var builder in context.world.currentSituation.actionGenerators) {
-      if (builder is EnemyTargetActionBuilder) {
-        yield* _generateEnemyTargetActions(
-            context.actor, context.world, builder);
-      } else if (builder is OtherActorActionBuilder) {
-        yield* _generateOtherActorActions(
-            context.actor, context.world, builder);
-      } else if (builder is ApproachActionBuilder) {
-        yield* _generateExitActions(context, builder);
-      } else if (builder is ItemActionBuilder) {
-        yield* _generateItemActions(context.actor, context.world, builder);
-      } else {
-        throw new StateError("$builder is not one of the supported ones");
+
+    for (final action in context.world.currentSituation.actions) {
+      if (action is Action<Null>) {
+        yield new Performance<Null>(action, null);
+        continue;
+      }
+
+      final targets = action.generateObjects(context);
+
+      for (final target in targets) {
+        yield new Performance<dynamic>(action, target);
       }
     }
   }
@@ -240,67 +211,6 @@ class Simulation {
           combinedOnlyOnce, combinedPrerequisite);
     }
     return new _ApproachRule(approach, source, destination, prerequisite);
-  }
-
-  /// Like [_generateOtherActorActions()], but only filters to other actors
-  /// who are enemies of [actor] if the generated action is aggressive.
-  Iterable<EnemyTargetAction> _generateEnemyTargetActions(
-      Actor actor, WorldState world, EnemyTargetActionBuilder builder) sync* {
-    final enemies = _getOtherActors(actor, world);
-    for (var enemy in enemies) {
-      var action = builder(enemy);
-      assert(action is EnemyTargetAction);
-      assert(action.enemy == enemy);
-      if (action.isAggressive && !actor.hates(enemy, world)) continue;
-      yield action;
-    }
-  }
-
-  /// Generator generates multiple [ApproachAction] instances given a [world] and
-  /// an [actor] and a [builder].
-  Iterable<ApproachAction> _generateExitActions(
-      ApplicabilityContext context, ApproachActionBuilder builder) sync* {
-    final situation = context.world.currentSituation as RoomRoamingSituation;
-    var room = getRoomByName(situation.currentRoomName);
-
-    for (var approach in getAvailableApproaches(room, context)) {
-      var action = builder(approach);
-      assert(action.approach == approach);
-      yield action;
-    }
-  }
-
-  /// Generator generates multiple [ItemAction] instances given a [world] and
-  /// an [actor] and a [builder].
-  Iterable<ItemAction> _generateItemActions(
-      Actor actor, WorldState world, ItemActionBuilder builder) sync* {
-    final situation = world.currentSituation as FightSituation;
-
-    for (var item in situation.droppedItems) {
-      var action = builder(item);
-      assert(action.item == item);
-      yield action;
-    }
-  }
-
-  /// Generator generates multiple [Action] instances given a [world] and
-  /// an [actor] and a [builder].
-  ///
-  /// For example, a builder called `hitWithStick` can take the current
-  /// world and output as many actions as there are enemies to hit with a stick.
-  /// Each generated action will encapsulate the enemy to hit.
-  Iterable<OtherActorAction> _generateOtherActorActions(
-      Actor actor, WorldState world, OtherActorActionBuilder builder) {
-    return _getOtherActors(actor, world).map(builder);
-  }
-
-  /// Returns the other actors who are active in the current situation
-  /// ([WorldState.currentSituation]).
-  Iterable<Actor> _getOtherActors(Actor actor, WorldState world) {
-    var situationActors =
-        world.currentSituation.getActors(world.actors, this, world);
-    return situationActors
-        .where((other) => other != actor && other.isAliveAndActive);
   }
 
   Iterable<Room> _getVariants(Room room) {

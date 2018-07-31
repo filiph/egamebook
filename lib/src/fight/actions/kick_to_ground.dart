@@ -41,8 +41,6 @@ class KickToGround extends EnemyTargetAction {
       "damage but on the ground they will be much easier targets for you "
       "and your allies.";
 
-  KickToGround(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "kick <object> to the ground";
 
@@ -54,7 +52,7 @@ class KickToGround extends EnemyTargetAction {
       "<object> prone?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     Randomly.run(() {
@@ -69,7 +67,7 @@ class KickToGround extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -96,12 +94,12 @@ class KickToGround extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState world) =>
+          Actor a, Simulation sim, WorldState world, Actor enemy) =>
       computeKickToGround(a, sim, world, enemy);
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       (a.isStanding || a.isOffBalance) && !enemy.isOnGround;
-
-  static EnemyTargetAction builder(Actor enemy) => new KickToGround(enemy);
+  
+  static final KickToGround singleton = new KickToGround();
 }

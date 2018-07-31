@@ -24,20 +24,20 @@ class PlannerRecommendation {
   static const int weightsResolution = 1000;
   static const num _worstOptionWeight = 0.1;
 
-  final UnmodifiableMapView<Action, ActorScoreChange> scores;
-  final List<Action> _actions;
+  final UnmodifiableMapView<Performance, ActorScoreChange> scores;
+  final List<Performance> _performances;
 
-  PlannerRecommendation(Map<Action, ActorScoreChange> scores)
+  PlannerRecommendation(Map<Performance, ActorScoreChange> scores)
       : scores = new UnmodifiableMapView(scores),
-        _actions = _getAttainableActions(scores) {
+        _performances = _getAttainablePerformances(scores) {
     if (scores.isEmpty) {
       log.warning("Created with no recommendations.");
     }
   }
 
-  List<Action> get actions => _actions;
+  List<Performance> get performances => _performances;
 
-  bool get isEmpty => _actions.isEmpty;
+  bool get isEmpty => _performances.isEmpty;
 
   /// Picks a maximum of [maximum] actions. The first three are going to be
   /// best for self-preservation, team-preservation, and enemy-damage. The rest
@@ -49,9 +49,10 @@ class PlannerRecommendation {
   /// action that preserves player's health. Otherwise, we could force player
   /// to risk his life when a life-saving action would be a perfectly valid
   /// option.
-  Iterable<Action> pickMax(int maximum, CombineFunction combineFunction) sync* {
-    if (_actions.length <= maximum) {
-      yield* _actions;
+  Iterable<Performance> pickMax(
+      int maximum, CombineFunction combineFunction) sync* {
+    if (_performances.length <= maximum) {
+      yield* _performances;
       return;
     }
 
@@ -80,28 +81,29 @@ class PlannerRecommendation {
     }
     if (count == maximum) return;
 
-    _actions.sort((a, b) =>
+    _performances.sort((a, b) =>
         -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
 
-    for (var action in _actions) {
-      if (action == bestSelfPreserving) continue;
-      if (action == bestEnemyDamaging) continue;
-      if (action == bestTeamPreserving) continue;
-      yield action;
+    for (var performance in _performances) {
+      if (performance == bestSelfPreserving) continue;
+      if (performance == bestEnemyDamaging) continue;
+      if (performance == bestTeamPreserving) continue;
+      yield performance;
       count += 1;
       if (count == maximum) break;
     }
   }
 
-  /// Pick an action randomly, but with more weight given to actions that
+  /// Pick a performance randomly, but with more weight given to ones that
   /// are scored more highly according to [combineFunction].
-  Action pickRandomly(CombineFunction combineFunction, int statefulRandomState) {
-    if (_actions.length == 1) {
-      return _actions.single;
+  Performance pickRandomly(
+      CombineFunction combineFunction, int statefulRandomState) {
+    if (_performances.length == 1) {
+      return _performances.single;
     }
 
-    // Make the first action be the best one.
-    _actions.sort((a, b) =>
+    // Make the first performance be the best one.
+    _performances.sort((a, b) =>
         -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
 
     num minimum = scores.values.fold<num>(
@@ -121,8 +123,8 @@ class PlannerRecommendation {
     }
     num totalLength = maximum - lowerBound;
 
-    var fractionWeights = new List<num>.generate(_actions.length, (int i) {
-      var action = _actions[i];
+    var fractionWeights = new List<num>.generate(_performances.length, (int i) {
+      var action = _performances[i];
       var score = combineFunction(scores[action]);
       return (score - lowerBound) / totalLength;
     }, growable: false);
@@ -139,38 +141,39 @@ class PlannerRecommendation {
     // [WorldState.statefulRandomState]. We don't save the state after use
     // because that would be changing state outside an action.
     _reusableRandom.loadState(statefulRandomState ~/ 2 + 1);
-    int index = Randomly.chooseWeightedPrecise(weights, max: weightsResolution,
-        random: _reusableRandom);
+    int index = Randomly.chooseWeightedPrecise(weights,
+        max: weightsResolution, random: _reusableRandom);
 
-    return _actions[index];
+    return _performances[index];
   }
 
   final StatefulRandom _reusableRandom = new StatefulRandom(42);
 
-  Action _findBest(CombineFunction combineFunction,
-      {List<Action> skip: const []}) {
-    Action best;
+  Performance _findBest(CombineFunction combineFunction,
+      {List<Performance> skip: const []}) {
+    Performance best;
     num bestScore;
-    for (var action in _actions) {
-      if (skip.contains(action)) continue;
-      if (best == null || combineFunction(scores[action]) > bestScore) {
-        best = action;
-        bestScore = combineFunction(scores[action]);
+    for (var performance in _performances) {
+      if (skip.contains(performance)) continue;
+      if (best == null || combineFunction(scores[performance]) > bestScore) {
+        best = performance;
+        bestScore = combineFunction(scores[performance]);
         continue;
       }
     }
     return best;
   }
 
-  /// Remove impossible actions. TODO: make sure we don't duplicate effort here
-  static List<Action> _getAttainableActions(
-      Map<Action, ActorScoreChange> scores) {
-    List<Action> result = scores.keys
+  /// Remove impossible performances.
+  /// TODO: make sure we don't duplicate effort here
+  static List<Performance> _getAttainablePerformances(
+      Map<Performance, ActorScoreChange> scores) {
+    List<Performance> result = scores.keys
         .where((a) => !scores[a].isUndefined)
         .toList(growable: false);
     if (result.isEmpty) {
-      log.warning("After removing actions scored by undefined, there are no "
-          "recommendations.");
+      log.warning("After removing performances scored by undefined, "
+          "there are no recommendations.");
     }
     return result;
   }

@@ -217,8 +217,8 @@ class EdgeheadGame extends Book {
     }
 
     if (actionPattern != null && actor.isPlayer) {
-      for (var action in recs.actions) {
-        if (!action.name.contains(actionPattern)) {
+      for (var performance in recs.performances) {
+        if (!performance.action.name.contains(actionPattern)) {
           continue;
         }
         actionPatternWasHit = true;
@@ -228,9 +228,9 @@ class EdgeheadGame extends Book {
         }
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
-        logAndPrint("Found action that matches '$actionPattern': $action");
-        for (var consequence
-            in action.apply(actor, consequence, simulation, world, _pubsub)) {
+        logAndPrint("Found action that matches '$actionPattern': $performance");
+        for (var consequence in performance.action.apply(actor, consequence,
+            simulation, world, _pubsub, performance.object)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
@@ -239,19 +239,19 @@ class EdgeheadGame extends Book {
       }
     }
 
-    Action selected;
+    Performance<dynamic> selected;
     if (actor.isPlayer) {
       // Player
-      if (recs.actions.length > 1) {
-        // If we have more than one action, none of them should have
+      if (recs.performances.length > 1) {
+        // If we have more than one performance, none of them should have
         // blank command (which signifies an action that should be
         // auto-selected).
-        for (var action in recs.actions) {
+        for (var performance in recs.performances) {
           assert(
-              action.command.isNotEmpty,
+              performance.command.isNotEmpty,
               "Action can have an empty ('') command "
               "only if it is the only action presented. But now we have "
-              "these commands: ${recs.actions}. One of these actions "
+              "these commands: ${recs.performances}. One of these actions "
               "should probably have a stricter PREREQUISITE (isApplicable).");
         }
       }
@@ -260,40 +260,42 @@ class EdgeheadGame extends Book {
       planner.generateTable().forEach((line) => log.fine(line));
 
       // Take only the first few best actions.
-      List<Action> actions = recs
+      List<Performance> performances = recs
           .pickMax(situation.maxActionsToShow, normalCombineFunction)
           .toList(growable: false);
 
-      if (actions.isNotEmpty && actions.any((a) => a.command != "")) {
+      if (performances.isNotEmpty && performances.any((a) => a.command != "")) {
         /// Only realize storyline when there is an actual choice to show.
         storyline.generateOutput().forEach(elementsSink.add);
       }
 
       // Creates a string just for sorting. Actions with same enemy are
       // sorted next to each other.
-      String sortingName(Action a) {
-        if (a is EnemyTargetAction) {
-          return "${a.enemy.name} ${a.command}";
+      String sortingName(Performance a) {
+        if (a.action is EnemyTargetAction) {
+          return "${a.object} ${a.command}";
         }
         return "ZZZZZZ ${a.command}";
       }
 
-      actions.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
+      performances.sort(
+          (a, b) => sortingName(a).compareTo(sortingName(b)));
 
       assert(
-          actions.length == 1 || !actions.any((a) => a.isImplicit),
+          performances.length == 1 ||
+              !performances.any((a) => a.action.isImplicit),
           "Cannot have an implicit action when there are more "
           "than one presented.");
 
       final choices = new ListBuilder<Choice>();
       final callbacks = new Map<Choice, Future<Null> Function()>();
-      for (Action action in actions) {
+      for (Performance performance in performances) {
         final choice = new Choice((b) => b
-          ..markdownText = action.command
-          ..helpMessage = action.helpMessage
-          ..isImplicit = action.isImplicit);
+          ..markdownText = performance.command
+          ..helpMessage = performance.action.helpMessage
+          ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
-          await _applySelected(action, actor, storyline);
+          await _applySelected(performance, actor, storyline);
         };
         choices.add(choice);
       }
@@ -331,21 +333,28 @@ class EdgeheadGame extends Book {
     }
   }
 
-  Future _applyPlayerAction(
-      Action action, Actor actor, List<PlanConsequence> consequences) async {
-    num chance = action.getSuccessChance(actor, simulation, world).value;
+  Future _applyPlayerAction(Performance<dynamic> performance, Actor actor,
+      List<PlanConsequence> consequences) async {
+    num chance = performance.action
+        .getSuccessChance(actor, simulation, world, performance.object)
+        .value;
     if (chance == 1.0) {
       consequence = consequences.single;
     } else if (chance == 0.0) {
       consequence = consequences.single;
     } else {
-      var resourceName = action.rerollResource.toString().split('.').last;
-      assert(!action.rerollable || action.rerollResource == Resource.stamina,
-          'Non-stamina resource needed for ${action.name}');
+      var resourceName =
+          performance.action.rerollResource.toString().split('.').last;
+      assert(
+          !performance.action.rerollable ||
+              performance.action.rerollResource == Resource.stamina,
+          'Non-stamina resource needed for ${performance.action.name}');
       var result = await showSlotMachine(
-          chance.toDouble(), action.getRollReason(actor, simulation, world),
-          rerollable:
-              action.rerollable && actor.hasResource(action.rerollResource),
+          chance.toDouble(),
+          performance.action
+              .getRollReason(actor, simulation, world, performance.object),
+          rerollable: performance.action.rerollable &&
+              actor.hasResource(performance.action.rerollResource),
           rerollEffectDescription: "use $resourceName");
       consequence =
           consequences.where((c) => c.isSuccess == result.isSuccess).single;
@@ -353,10 +362,10 @@ class EdgeheadGame extends Book {
       if (result.wasRerolled) {
         // Deduct player's stats (stamina, etc.) according to wasRerolled.
         assert(
-            action.rerollResource != null,
+            performance.action.rerollResource != null,
             "Action.rerollable is true but "
             "no Action.rerollResource is specified.");
-        assert(action.rerollResource == Resource.stamina,
+        assert(performance.action.rerollResource == Resource.stamina,
             "Only stamina is supported as reroll resource right now");
         // TODO: find out if we can do away without modifying world outside
         //       planner
@@ -373,12 +382,14 @@ class EdgeheadGame extends Book {
   final StatefulRandom _reusableRandom = new StatefulRandom(42);
 
   Future<Null> _applySelected(
-      Action action, Actor actor, Storyline storyline) async {
-    var consequences =
-        action.apply(actor, consequence, simulation, world, _pubsub).toList();
+      Performance performance, Actor actor, Storyline storyline) async {
+    var consequences = performance.action
+        .apply(
+            actor, consequence, simulation, world, _pubsub, performance.object)
+        .toList();
 
     if (actor.isPlayer) {
-      await _applyPlayerAction(action, actor, consequences);
+      await _applyPlayerAction(performance, actor, consequences);
     } else {
       // This initializes the random state based on current
       // [WorldState.statefulRandomState]. We don't save the state after use
@@ -393,7 +404,7 @@ class EdgeheadGame extends Book {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
 
-    log.fine(() => "${actor.name} selected ${action.name}");
+    log.fine(() => "${actor.name} selected ${performance.action.name}");
     log.finest(() {
       String path = world.actionHistory.describe();
       return "- how ${actor.name} got here: $path";

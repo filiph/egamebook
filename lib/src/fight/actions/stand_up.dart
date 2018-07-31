@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action {
+class StandUp extends Action<Null> {
   static final StandUp singleton = new StandUp();
 
   static const String className = "StandUp";
@@ -32,18 +32,15 @@ class StandUp extends Action {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get command => "Stand up.";
-
-  @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -60,16 +57,19 @@ class StandUp extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "Stand up.";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "Will ${a.pronoun.nominative} stand up?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) {
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) {
     if (!a.isOnGround) return false;
     // If this actor just fell, do not let him stand up.
     if (recentlyForcedToGround(a, world)) return false;

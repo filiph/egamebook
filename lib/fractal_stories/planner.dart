@@ -37,7 +37,7 @@ class ActorPlanner {
 
   final Simulation simulation;
 
-  final Map<Action, ActorScoreChange> firstActionScores = new Map();
+  final Map<Performance, ActorScoreChange> firstActionScores = new Map();
 
   ActorPlanner(
       Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
@@ -146,51 +146,52 @@ class ActorPlanner {
     final context =
         new ApplicabilityContext(currentActor, simulation, _initial.world);
 
-    for (var action in simulation.generateAllActions(context)) {
-      log.finer(() => "Evaluating action '${action.command}' "
+    for (var performance in simulation.generateAllPerformances(context)) {
+      log.finer(() => "Evaluating action '${performance.command}' "
           "for ${currentActor.name}");
 
-      if (!action.isApplicable(currentActor, simulation, _initial.world)) {
-        log.finer(() => "- action '${action.command}' isn't applicable");
+      if (!performance.action.isApplicable(
+          currentActor, simulation, _initial.world, performance.object)) {
+        log.finer(() => "- action '${performance.command}' isn't applicable");
         // Bail early if action isn't possible at all.
         continue;
       }
       var consequenceStats = await _getConsequenceStats(
-              _initial, action, maxOrder, maxConsequences, waitFunction)
+              _initial, performance, maxOrder, maxConsequences, waitFunction)
           .toList();
 
       if (consequenceStats.isEmpty) {
-        log.finer(() => "- action '${action.command}' is possible but we "
+        log.finer(() => "- action '${performance.command}' is possible but we "
             "couldn't get to any outcomes while planning. "
             "Scoring with negative infinity.");
         // For example, at the very end of a book, it is possible to have
         // 'no future'.
-        firstActionScores[action] = const ActorScoreChange.undefined();
+        firstActionScores[performance] = const ActorScoreChange.undefined();
         continue;
       }
 
-      log.finer(() => "- action '${action.command}' leads "
+      log.finer(() => "- action '${performance.command}' leads "
           "to ${consequenceStats.length} "
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
 
-      firstActionScores[action] = score;
+      firstActionScores[performance] = score;
 
-      log.finer(() => "- action '${action.command}' was scored $score");
+      log.finer(() => "- action '${performance.command}' was scored $score");
     }
 
     _resultsReady = true;
   }
 
   /// Returns the stats for consequences of a given [initial] state after
-  /// applying [firstAction] and then up to [maxOrder] other steps.
+  /// applying [firstPerformance] and then up to [maxOrder] other steps.
   ///
-  /// [firstAction] is the action which we evaluate. All following actions are
-  /// consequences -- actions taken by the different actors after the main actor
-  /// ([actorId]) chooses this path.
+  /// [firstPerformance] is the action which we evaluate. All following
+  /// actions are consequences -- actions taken by the different actors
+  /// after the main actor ([actorId]) chooses this path.
   Stream<ConsequenceStats> _getConsequenceStats(
       PlanConsequence initial,
-      Action firstAction,
+      Performance<dynamic> firstPerformance,
       int maxOrder,
       int maxConsequences,
       Future<Null> waitFunction()) async* {
@@ -199,10 +200,11 @@ class ActorPlanner {
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
-        "'${firstAction.command}' of ${mainActor.name}");
-    log.finer(() => "- firstAction == $firstAction");
+        "'${firstPerformance.command}' of ${mainActor.name}");
+    log.finer(() => "- firstAction == $firstPerformance");
 
-    if (!firstAction.isApplicable(mainActor, simulation, initial.world)) {
+    if (!firstPerformance.action.isApplicable(
+        mainActor, simulation, initial.world, firstPerformance.object)) {
       log.finer("- firstAction not applicable");
       return;
     }
@@ -214,16 +216,17 @@ class ActorPlanner {
         "(prob=${initial.probability}, "
         "ord=${initial.order})");
     log.finer(() => "- initial action: "
-        "${' ' * initial.order}- ${initial.action}");
+        "${' ' * initial.order}- ${initial.performance}");
 
     Queue<PlanConsequence> open = new Queue<PlanConsequence>();
     final Set<WorldState> closed = new Set<WorldState>();
 
     var initialWorldHash = initial.world.hashCode;
-    for (var firstConsequence in firstAction.apply(
-        mainActor, initial, simulation, initial.world, _pubsub)) {
+    for (var firstConsequence in firstPerformance.action.apply(mainActor,
+        initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
-        throw new StateError("Action $firstAction modified world state when "
+        throw new StateError(
+            "Action $firstPerformance modified world state when "
             "producing $firstConsequence.");
       }
       open.add(firstConsequence);
@@ -244,7 +247,7 @@ class ActorPlanner {
 
       log.finest("----");
       log.finest(() => "evaluating a PlanConsequence "
-          "of '${current.action.command}'");
+          "of '${current.performance.command}'");
       log.finest(() => "- situation: "
           "${current.world.currentSituation.runtimeType}");
 
@@ -328,11 +331,13 @@ class ActorPlanner {
       final context =
           new ApplicabilityContext(currentActor, simulation, current.world);
 
-      for (Action action in simulation.generateAllActions(context)) {
-        if (!action.isApplicable(currentActor, simulation, current.world))
+      for (final performance in simulation.generateAllPerformances(context)) {
+        if (!performance.action.isApplicable(
+            currentActor, simulation, current.world, performance.object)) {
           continue;
-        var consequences = action.apply(
-            currentActor, current, simulation, current.world, _pubsub);
+        }
+        var consequences = performance.action.apply(currentActor, current,
+            simulation, current.world, _pubsub, performance.object);
 
         for (PlanConsequence next in consequences) {
           planConsequencesComputed++;

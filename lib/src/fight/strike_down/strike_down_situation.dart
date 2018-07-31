@@ -13,8 +13,8 @@ Situation createStrikeDownSituation(int id, Actor attacker, Actor target) =>
         id,
         strikeDownSituationName,
         [
-          finishSlashGroundedEnemyBuilder,
-          finishThrustSpearAtGroundedEnemyBuilder
+          FinishSlashGroundedEnemy.singleton,
+          FinishThrustSpearAtGroundedEnemy.singleton,
         ],
         [],
         attacker,

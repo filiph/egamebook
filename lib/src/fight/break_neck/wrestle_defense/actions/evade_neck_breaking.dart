@@ -8,11 +8,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 
-OtherActorAction evadeNeckBreakingBuilder(Actor enemy) =>
-    new EvadeNeckBreaking(enemy);
-
 class EvadeNeckBreaking extends OtherActorAction {
   static const String className = "EvadeNeckBreaking";
+
+  static final EvadeNeckBreaking singleton = new EvadeNeckBreaking();
 
   @override
   final String helpMessage = "This looks dangerous. Trying to evade this "
@@ -30,8 +29,6 @@ class EvadeNeckBreaking extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  EvadeNeckBreaking(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "evade";
 
@@ -42,7 +39,7 @@ class EvadeNeckBreaking extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> evade?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -50,32 +47,32 @@ class EvadeNeckBreaking extends OtherActorAction {
     a.report(s, "<subject> tr<ies> to {dodge it|break free}");
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>}", but: true),
-        () => target.report(s, "<subject> <is> too quick for <object>",
+        () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${target.name}";
+    return "${a.name} fails to dodge ${enemy.name}";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s> it|break<s> free}",
-        object: target, positive: true);
+        object: enemy, positive: true);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} evades ${target.name}";
+    return "${a.name} evades ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeBreakNeckOnGroundChance(target, sim, w, a).inverted());
+        .or(computeBreakNeckOnGroundChance(enemy, sim, w, a).inverted());
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) => true;
 }

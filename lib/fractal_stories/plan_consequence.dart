@@ -25,7 +25,7 @@ class ConsequenceStats {
 @immutable
 class PlanConsequence {
   final WorldState world;
-  final Action action;
+  final Performance performance;
   final Storyline storyline;
   final num probability;
   final num cumulativeProbability;
@@ -43,8 +43,8 @@ class PlanConsequence {
   /// the newly updated [world], the [action] that lead to this world,
   /// the associated [storyline], and the [probability] with which
   /// the previous world turns into this world.
-  PlanConsequence(WorldState world, PlanConsequence previous, Action action,
-      Storyline storyline, num probability,
+  PlanConsequence(WorldState world, PlanConsequence previous,
+      Performance<dynamic> action, Storyline storyline, num probability,
       {bool isInitial: false, bool isFailure: false, bool isSuccess: false})
       : this._(
             world,
@@ -72,7 +72,7 @@ class PlanConsequence {
       PlanConsequence consequence, WorldState world) {
     return new PlanConsequence._(
         world,
-        consequence.action,
+        consequence.performance,
         new Storyline()..concatenate(consequence.storyline),
         consequence.probability,
         consequence.cumulativeProbability,
@@ -84,7 +84,7 @@ class PlanConsequence {
 
   PlanConsequence._(
       this.world,
-      this.action,
+      this.performance,
       this.storyline,
       this.probability,
       this.cumulativeProbability,
@@ -99,7 +99,7 @@ class PlanConsequence {
   int get hashCode => hashObjects(<Object>[
         world,
         cumulativeProbability,
-        action,
+        performance,
         probability,
         order,
         isInitial,
@@ -116,6 +116,6 @@ class PlanConsequence {
 
   @override
   String toString() =>
-      "PlanConsequence<${world.hashCode}, $world, $action, $probability, "
+      "PlanConsequence<${world.hashCode}, $world, $performance, $probability, "
       "$order, ${isSuccess ? 'isSuccess' : ''}>";
 }

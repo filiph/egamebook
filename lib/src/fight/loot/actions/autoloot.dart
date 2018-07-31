@@ -4,13 +4,13 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-class AutoLoot extends Action {
+class AutoLoot extends Action<Null> {
   static final AutoLoot singleton = new AutoLoot();
 
   static const String className = "AutoLoot";
@@ -31,21 +31,18 @@ class AutoLoot extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "";
-
-  @override
   String get helpMessage => null;
 
   @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder world = context.outputWorld;
@@ -128,48 +125,21 @@ class AutoLoot extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "WARNING this shouldn't be "
       "user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
       actor.isPlayer;
-
-  /// Give weapons to unarmed teammates.
-  void _distributeWeapons(
-      List<Item> takenItems,
-      Actor actor,
-      LootSituation situation,
-      Simulation sim,
-      WorldStateBuilder world,
-      Storyline s) {
-    var weapons =
-        new List<Item>.from(takenItems.where((item) => item.isWeapon));
-    for (var item in actor.weapons) {
-      weapons.add(item);
-    }
-    if (weapons.isEmpty) return;
-    weapons.sort((a, b) => a.value.compareTo(b.value));
-    var barehanded = situation.playerTeamIds
-        .map((id) => world.getActorById(id))
-        .where((a) => a.isAliveAndActive && a.isBarehanded && a.id != actor.id);
-    for (var friend in barehanded) {
-      if (weapons.isEmpty) break;
-      var weapon = weapons.removeLast();
-      world.updateActorById(
-          friend.id, (b) => b..currentWeapon = weapon.toBuilder());
-      takenItems.remove(weapon);
-      world.updateActorById(actor.id, (b) => b..items.remove(weapon));
-      actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
-          object: friend);
-    }
-  }
 
   /// Give shields to unshielded teammates.
   void _distributeShields(
@@ -198,6 +168,36 @@ class AutoLoot extends Action {
       takenItems.remove(shield);
       world.updateActorById(actor.id, (b) => b..items.remove(shield));
       actor.report(s, "<subject> give<s> the ${shield.name} to <object>",
+          object: friend);
+    }
+  }
+
+  /// Give weapons to unarmed teammates.
+  void _distributeWeapons(
+      List<Item> takenItems,
+      Actor actor,
+      LootSituation situation,
+      Simulation sim,
+      WorldStateBuilder world,
+      Storyline s) {
+    var weapons =
+        new List<Item>.from(takenItems.where((item) => item.isWeapon));
+    for (var item in actor.weapons) {
+      weapons.add(item);
+    }
+    if (weapons.isEmpty) return;
+    weapons.sort((a, b) => a.value.compareTo(b.value));
+    var barehanded = situation.playerTeamIds
+        .map((id) => world.getActorById(id))
+        .where((a) => a.isAliveAndActive && a.isBarehanded && a.id != actor.id);
+    for (var friend in barehanded) {
+      if (weapons.isEmpty) break;
+      var weapon = weapons.removeLast();
+      world.updateActorById(
+          friend.id, (b) => b..currentWeapon = weapon.toBuilder());
+      takenItems.remove(weapon);
+      world.updateActorById(actor.id, (b) => b..items.remove(weapon));
+      actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
           object: friend);
     }
   }

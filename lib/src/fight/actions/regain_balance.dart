@@ -2,12 +2,12 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 
-class RegainBalance extends Action {
+class RegainBalance extends Action<Null> {
   static final RegainBalance singleton = new RegainBalance();
 
   static const String className = "RegainBalance";
@@ -32,18 +32,15 @@ class RegainBalance extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "Regain balance.";
-
-  @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -56,15 +53,18 @@ class RegainBalance extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "Regain balance.";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "Will ${a.pronoun.nominative} regain balance?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
       a.isOffBalance;
 }

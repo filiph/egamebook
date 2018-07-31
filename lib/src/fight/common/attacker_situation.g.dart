@@ -117,11 +117,11 @@ class _$AttackerSituationSerializer
       'builtEnemyTargetActionGenerators',
       serializers.serialize(object.builtEnemyTargetActionGenerators,
           specifiedType: const FullType(
-              BuiltList, const [const FullType(EnemyTargetActionBuilder)])),
+              BuiltList, const [const FullType(EnemyTargetAction)])),
       'builtOtherActorActionGenerators',
       serializers.serialize(object.builtOtherActorActionGenerators,
           specifiedType: const FullType(
-              BuiltList, const [const FullType(OtherActorActionBuilder)])),
+              BuiltList, const [const FullType(OtherActorAction)])),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
@@ -158,16 +158,16 @@ class _$AttackerSituationSerializer
         case 'builtEnemyTargetActionGenerators':
           result.builtEnemyTargetActionGenerators.replace(
               serializers.deserialize(value,
-                  specifiedType: const FullType(BuiltList, const [
-                    const FullType(EnemyTargetActionBuilder)
-                  ])) as BuiltList<EnemyTargetActionBuilder>);
+                      specifiedType: const FullType(
+                          BuiltList, const [const FullType(EnemyTargetAction)]))
+                  as BuiltList<EnemyTargetAction>);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
-                  specifiedType: const FullType(BuiltList, const [
-                    const FullType(OtherActorActionBuilder)
-                  ])) as BuiltList<OtherActorActionBuilder>);
+                      specifiedType: const FullType(
+                          BuiltList, const [const FullType(OtherActorAction)]))
+                  as BuiltList<OtherActorAction>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -198,9 +198,9 @@ class _$AttackerSituation extends AttackerSituation {
   @override
   final int attacker;
   @override
-  final BuiltList<EnemyTargetActionBuilder> builtEnemyTargetActionGenerators;
+  final BuiltList<EnemyTargetAction> builtEnemyTargetActionGenerators;
   @override
-  final BuiltList<OtherActorActionBuilder> builtOtherActorActionGenerators;
+  final BuiltList<OtherActorAction> builtOtherActorActionGenerators;
   @override
   final int id;
   @override
@@ -308,23 +308,21 @@ class AttackerSituationBuilder
   int get attacker => _$this._attacker;
   set attacker(int attacker) => _$this._attacker = attacker;
 
-  ListBuilder<EnemyTargetActionBuilder> _builtEnemyTargetActionGenerators;
-  ListBuilder<EnemyTargetActionBuilder> get builtEnemyTargetActionGenerators =>
+  ListBuilder<EnemyTargetAction> _builtEnemyTargetActionGenerators;
+  ListBuilder<EnemyTargetAction> get builtEnemyTargetActionGenerators =>
       _$this._builtEnemyTargetActionGenerators ??=
-          new ListBuilder<EnemyTargetActionBuilder>();
+          new ListBuilder<EnemyTargetAction>();
   set builtEnemyTargetActionGenerators(
-          ListBuilder<EnemyTargetActionBuilder>
-              builtEnemyTargetActionGenerators) =>
+          ListBuilder<EnemyTargetAction> builtEnemyTargetActionGenerators) =>
       _$this._builtEnemyTargetActionGenerators =
           builtEnemyTargetActionGenerators;
 
-  ListBuilder<OtherActorActionBuilder> _builtOtherActorActionGenerators;
-  ListBuilder<OtherActorActionBuilder> get builtOtherActorActionGenerators =>
+  ListBuilder<OtherActorAction> _builtOtherActorActionGenerators;
+  ListBuilder<OtherActorAction> get builtOtherActorActionGenerators =>
       _$this._builtOtherActorActionGenerators ??=
-          new ListBuilder<OtherActorActionBuilder>();
+          new ListBuilder<OtherActorAction>();
   set builtOtherActorActionGenerators(
-          ListBuilder<OtherActorActionBuilder>
-              builtOtherActorActionGenerators) =>
+          ListBuilder<OtherActorAction> builtOtherActorActionGenerators) =>
       _$this._builtOtherActorActionGenerators = builtOtherActorActionGenerators;
 
   int _id;

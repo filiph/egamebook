@@ -30,8 +30,7 @@ ReasonedSuccessChance computeStartLeap(
   ]);
 }
 
-EnemyTargetAction startLeapBuilder(Actor enemy) => new StartDefensibleAction(
-    enemy,
+EnemyTargetAction startLeapBuilder() => new StartDefensibleAction(
     name: "StartLeap",
     commandTemplate: startLeapCommandTemplate,
     helpMessage: startLeapHelpMessage,

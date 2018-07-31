@@ -18,10 +18,10 @@ ReasonedSuccessChance computeOnGroundParry(
   ]);
 }
 
-OtherActorAction onGroundParryBuilder(Actor enemy) => new OnGroundParry(enemy);
-
 /// TODO: find a reason why to take this choice. Maybe allow counter?
 class OnGroundParry extends OtherActorAction {
+  static final OnGroundParry singleton = new OnGroundParry();
+
   static const String className = "OnGroundParry";
 
   @override
@@ -39,8 +39,6 @@ class OnGroundParry extends OtherActorAction {
   @override
   final String helpMessage = "Why would you move? Just put your weapon up.";
 
-  OnGroundParry(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "parry it";
 
@@ -51,7 +49,7 @@ class OnGroundParry extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -62,14 +60,14 @@ class OnGroundParry extends OtherActorAction {
         "stop it{| with ${weaponAsObject2(a)}}}");
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-        () => target.report(s, "<subject> <is> too quick for <object>",
+        () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
     w.popSituation(sim);
-    return "${a.name} fails to parry ${target.name}";
+    return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -80,19 +78,19 @@ class OnGroundParry extends OtherActorAction {
         "stop<s> it with ${weaponAsObject2(a)}}",
         positive: true);
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} parries ${target.name}";
+    return "${a.name} parries ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeOnGroundParry(a, sim, w, target));
+        .or(computeOnGroundParry(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
-      target.currentWeapon.damageCapability.isSlashing &&
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+      enemy.currentWeapon.damageCapability.isSlashing &&
       a.currentWeapon.damageCapability.type.canParrySlash;
 }

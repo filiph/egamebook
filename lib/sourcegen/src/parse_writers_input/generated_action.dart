@@ -46,9 +46,10 @@ class GeneratedAction extends GeneratedGameObject {
 
     var classType = new TypeBuilder(className);
 
-    classBuilder.addField(new FieldBuilder.asFinal("command",
-        type: stringType, value: literal(_map['COMMAND']))
-      ..addAnnotation(overrideAnnotation));
+    MethodBuilder getCommandBuilder =
+        createNullObjectMethod('getCommand', new TypeBuilder('String'))
+          ..addStatement(literal(_map['COMMAND']).asReturn());
+    classBuilder.addMethod(getCommandBuilder);
 
     classBuilder.addField(new FieldBuilder.asFinal("name",
         type: stringType, value: literal(writersName))
@@ -70,9 +71,9 @@ class GeneratedAction extends GeneratedGameObject {
     final reasonedChance =
         reasonedSuccessChanceType.constInstance([literal(successChance)]);
 
-    var successChanceBuilder =
-        createActorSimWorldMethod('getSuccessChance', reasonedSuccessChanceType)
-          ..addStatement(reasonedChance.asReturn());
+    var successChanceBuilder = createActorSimWorldNullMethod(
+        'getSuccessChance', reasonedSuccessChanceType)
+      ..addStatement(reasonedChance.asReturn());
     classBuilder.addMethod(successChanceBuilder);
 
     var rerollableBuilder = new MethodBuilder.getter('rerollable',
@@ -81,7 +82,7 @@ class GeneratedAction extends GeneratedGameObject {
     classBuilder.addMethod(rerollableBuilder);
 
     var rollReasonBuilder =
-        createActorSimWorldMethod('getRollReason', stringType)
+        createActorSimWorldNullMethod('getRollReason', stringType)
           ..addStatement(literal('Will you be successful?').asReturn());
     classBuilder.addMethod(rollReasonBuilder);
 
@@ -135,7 +136,7 @@ class GeneratedAction extends GeneratedGameObject {
   MethodBuilder _createApplyFailureBuilder(num successChance, bool hasRescue,
       String rescueSituationClassName, String className) {
     var applyFailureBuilder =
-        createActionContextMethod('applyFailure', stringType);
+        createActionContextNullMethod('applyFailure', stringType);
     if (successChance == 1.0) {
       applyFailureBuilder
           .addStatement(stateErrorThrow('Success chance is 100%'));
@@ -168,7 +169,7 @@ class GeneratedAction extends GeneratedGameObject {
   MethodBuilder _createApplySuccessBuilder(
       num successChance, String className) {
     var applySuccessBuilder =
-        createActionContextMethod('applySuccess', stringType);
+        createActionContextNullMethod('applySuccess', stringType);
 
     if (successChance == 0) {
       applySuccessBuilder
@@ -192,7 +193,7 @@ class GeneratedAction extends GeneratedGameObject {
 
   MethodBuilder _createIsApplicableBuilder(String forLocation) {
     var isApplicableBuilder =
-        createActorSimWorldMethod("isApplicable", boolType);
+        createActorSimWorldNullMethod("isApplicable", boolType);
     if (forLocation != null) {
       isApplicableBuilder.addStatement((reference(worldParameter.name)
               .property("currentSituation")

@@ -9,9 +9,9 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
-OtherActorAction dodgePunchBuilder(Actor enemy) => new DodgePunch(enemy);
-
 class DodgePunch extends OtherActorAction {
+  static final DodgePunch singleton = new DodgePunch();
+
   static const String className = "DodgePunch";
 
   @override
@@ -30,8 +30,6 @@ class DodgePunch extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  DodgePunch(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "dodge";
 
@@ -42,7 +40,7 @@ class DodgePunch extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> dodge the fist?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -53,42 +51,42 @@ class DodgePunch extends OtherActorAction {
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
             but: true, actionThread: thread, isSupportiveActionInThread: true),
-        () => target.report(s, "<subject> <is> too quick for <object>",
+        () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a,
             but: true,
             actionThread: thread,
             isSupportiveActionInThread: true));
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${target.name}";
+    return "${a.name} fails to dodge ${enemy.name}";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
-        object: target, positive: true, actionThread: thread);
+        object: enemy, positive: true, actionThread: thread);
     w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, target);
+        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} dodges punch from ${target.name}";
+    return "${a.name} dodges punch from ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeStartPunch(target, sim, w, a).inverted());
+        .or(computeStartPunch(enemy, sim, w, a).inverted());
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) => true;
 }

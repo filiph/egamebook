@@ -3,6 +3,7 @@ library stranded.fight.attacker_situation;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
@@ -152,8 +153,8 @@ abstract class AttackerSituation extends Situation
   factory AttackerSituation.initialized(
     int id,
     String situationName,
-    Iterable<OtherActorActionBuilder> builtOtherActorActionGenerators,
-    Iterable<EnemyTargetActionBuilder> builtEnemyTargetActionGenerators,
+    Iterable<OtherActorAction> builtOtherActorActionGenerators,
+    Iterable<EnemyTargetAction> builtEnemyTargetActionGenerators,
     Actor attacker,
     Actor target, {
     AttackDirection attackDirection: AttackDirection.unspecified,
@@ -162,11 +163,9 @@ abstract class AttackerSituation extends Situation
         ..id = id
         ..name = situationName
         ..builtOtherActorActionGenerators =
-            new ListBuilder<OtherActorActionBuilder>(
-                builtOtherActorActionGenerators)
+            new ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
-            new ListBuilder<EnemyTargetActionBuilder>(
-                builtEnemyTargetActionGenerators)
+            new ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id
@@ -175,18 +174,17 @@ abstract class AttackerSituation extends Situation
   AttackerSituation._();
 
   @override
-  List<OtherActorActionBaseBuilder> get actionGenerators =>
-      new List<OtherActorActionBaseBuilder>.from(
-          builtOtherActorActionGenerators)
+  List<Action<dynamic>> get actions =>
+      new List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
         ..addAll(builtEnemyTargetActionGenerators);
 
   AttackDirection get attackDirection;
 
   int get attacker;
 
-  BuiltList<EnemyTargetActionBuilder> get builtEnemyTargetActionGenerators;
+  BuiltList<EnemyTargetAction> get builtEnemyTargetActionGenerators;
 
-  BuiltList<OtherActorActionBuilder> get builtOtherActorActionGenerators;
+  BuiltList<OtherActorAction> get builtOtherActorActionGenerators;
 
   @override
   int get id;

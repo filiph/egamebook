@@ -1,12 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class Scramble extends Action {
+class Scramble extends Action<Null> {
   static final Scramble singleton = new Scramble();
 
   static const String className = "Scramble";
@@ -30,18 +30,15 @@ class Scramble extends Action {
   final Resource rerollResource = null;
 
   @override
-  String get command => "Scramble.";
-
-  @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     a.report(
@@ -52,16 +49,19 @@ class Scramble extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "Scramble.";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "Will ${a.pronoun.nominative} crawl out of harm's way?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) {
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) {
     if (!a.isOnGround) return false;
     // Actor must have just fallen.
     if (recentlyForcedToGround(a, world)) return true;

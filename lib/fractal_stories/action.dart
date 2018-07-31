@@ -7,6 +7,8 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 import 'actor.dart';
@@ -14,16 +16,9 @@ import 'plan_consequence.dart';
 import 'simulation.dart';
 import 'storyline/storyline.dart';
 
-/// A generic type for builder functions that take a parameter to build
-/// a concrete implementation of an action.
-///
-/// For example, a "kick-someone" builder can take an Actor Joe as [parameter]
-/// and can output "kick Joe" action.
-typedef T ActionBuilder<T extends Action, V>(V parameter);
-
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].
-typedef String ApplyFunction(ActionContext context);
+typedef String ApplyFunction<T>(ActionContext context, T object);
 
 /// A convenience typedef for actions whose applicability depends on another
 /// [Actor] as [target].
@@ -32,13 +27,18 @@ typedef String ApplyFunction(ActionContext context);
 typedef bool OtherActorApplicabilityFunction(
     Actor a, Simulation sim, WorldState w, Actor target);
 
-abstract class Action {
+/// An action. Will be performed by an [Actor] and will change [WorldState]
+/// using [applyFailure] or [applySuccess].
+///
+/// The generic argument [T] refers to the _object_ of the function.
+/// For example, an attack action would have another [Actor] as an object.
+/// Therefore, [applyFailure] and [applySuccess] would be called with
+/// an [Actor] object as the second parameter.
+abstract class Action<T> {
   String _description;
 
-  /// The command that describes this action.
-  ///
-  /// For example: "open the door" or "swing at the orc".
-  String get command;
+  @Deprecated('use getCommand')
+  String get command => getCommand(null);
 
   String get helpMessage;
 
@@ -89,41 +89,60 @@ abstract class Action {
   Resource get rerollResource;
 
   Iterable<PlanConsequence> apply(Actor actor, PlanConsequence current,
-      Simulation sim, WorldState world, PubSub pubsub) sync* {
-    var successChance = getSuccessChance(actor, sim, current.world);
+      Simulation sim, WorldState world, PubSub pubsub, T object) sync* {
+    var successChance = getSuccessChance(actor, sim, current.world, object);
     assert(successChance != null);
     assert(successChance.value >= 0.0);
     assert(successChance.value <= 1.0);
 
+    final performance = new Performance<T>(this, object);
+
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applySuccess, pubsub, successChance,
+          actor, sim, worldOutput, applySuccess, pubsub, object, successChance,
           isSuccess: true);
 
-      yield new PlanConsequence(
-          worldOutput.build(), current, this, storyline, successChance.value,
+      yield new PlanConsequence(worldOutput.build(), current, performance,
+          storyline, successChance.value,
           isSuccess: true);
     }
     if (successChance.value < 1) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applyFailure, pubsub, successChance,
+          actor, sim, worldOutput, applyFailure, pubsub, object, successChance,
           isFailure: true);
 
-      yield new PlanConsequence(worldOutput.build(), current, this, storyline,
-          1 - successChance.value,
+      yield new PlanConsequence(worldOutput.build(), current, performance,
+          storyline, 1 - successChance.value,
           isFailure: true);
     }
   }
 
   /// Called to get the result of failure to do this action. Returns
   /// the mutated [Simulation].
-  String applyFailure(ActionContext context);
+  String applyFailure(ActionContext context, T object);
 
   /// Called to get the result of success of doing this action. Returns
   /// the mutated [Simulation].
-  String applySuccess(ActionContext context);
+  String applySuccess(ActionContext context, T object);
+
+  /// Given the current state of the world, returns all the possible
+  /// objects (targets) of this action.
+  ///
+  /// If the action doesn't need an object (like "stand up") then this
+  /// method will never be run. Such an action needs to be defined
+  /// as `Action<Null>`.
+  Iterable<T> generateObjects(ApplicabilityContext context) {
+    throw new UnimplementedError('generateObjects not implemented for $this. '
+        'If this is an Action<Null>, then this method shouldn\'t have been '
+        'called in the first place.');
+  }
+
+  /// The command that describes this action.
+  ///
+  /// For example: "open the door" or "swing at the orc".
+  String getCommand(T object);
 
   /// Returns a string that will explain why actor needs to roll for success.
   ///
@@ -131,12 +150,13 @@ abstract class Action {
   ///
   /// * "Will you hit him?"
   /// * "Will you dodge the swing?"
-  String getRollReason(Actor a, Simulation sim, WorldState w);
+  String getRollReason(Actor a, Simulation sim, WorldState w, T object);
 
   /// Success chance of the action given the actor and the state of the world.
-  ReasonedSuccessChance getSuccessChance(Actor a, Simulation sim, WorldState w);
+  ReasonedSuccessChance getSuccessChance(
+      Actor a, Simulation sim, WorldState w, T object);
 
-  bool isApplicable(Actor a, Simulation sim, WorldState w);
+  bool isApplicable(Actor a, Simulation sim, WorldState w, T object);
 
   void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
     if (_description == null) {
@@ -152,14 +172,15 @@ abstract class Action {
       Actor actor,
       Simulation sim,
       WorldStateBuilder output,
-      ApplyFunction applyFunction,
+      ApplyFunction<T> applyFunction,
       PubSub pubsub,
+      T object,
       ReasonedSuccessChance successChance,
       {bool isSuccess: false,
       bool isFailure: false}) {
     final initialWorld = output.build();
-    final builder =
-        _prepareWorldRecord(actor, sim, initialWorld, isSuccess, isFailure);
+    final builder = _prepareWorldRecord(
+        actor, sim, initialWorld, object, isSuccess, isFailure);
     final outputStoryline = new Storyline();
     // Remember situation as it can be changed during applySuccess.
     final situationId = initialWorld.currentSituation.id;
@@ -167,7 +188,7 @@ abstract class Action {
         .onBeforeAction(sim, initialWorld, outputStoryline);
     final context = new ActionContext(this, actor, sim, initialWorld, pubsub,
         output, outputStoryline, successChance);
-    _description = applyFunction(context);
+    _description = applyFunction(context, object);
 
     // The current situation could have been removed by [applyFunction].
     // If not, let's update its time.
@@ -201,7 +222,7 @@ abstract class Action {
   }
 
   ActionRecordBuilder _prepareWorldRecord(Actor actor, Simulation sim,
-      WorldState world, bool isSuccess, bool isFailure) {
+      WorldState world, T object, bool isSuccess, bool isFailure) {
     var builder = new ActionRecordBuilder()
       ..actionName = name
       ..protagonist = actor.id
@@ -210,8 +231,7 @@ abstract class Action {
       ..wasAggressive = isAggressive
       ..wasProactive = isProactive;
     if (this is EnemyTargetAction) {
-      final action = this as EnemyTargetAction;
-      builder.sufferers.add(action.enemy.id);
+      builder.sufferers.add((object as Actor).id);
     }
     return builder;
   }
@@ -222,18 +242,22 @@ abstract class Action {
 /// Every [ApproachAction] should contain a static builder like this:
 ///
 ///     static ApproachAction builder(Approach enemy) => new Example(exit);
-abstract class ApproachAction extends Action {
-  final Approach approach;
-
-  @mustCallSuper
-  ApproachAction(this.approach);
-
-  @override
-  String get command =>
-      approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
+abstract class ApproachAction extends Action<Approach> {
+  // TODO: override command with this
+  // @override
+  // String get command =>
+  //     approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
 
   @override
-  String toString() => "ApproachAction<$command>";
+  Iterable<Approach> generateObjects(ApplicabilityContext context) {
+    final situation = context.world.currentSituation as RoomRoamingSituation;
+    var room = context.simulation.getRoomByName(situation.currentRoomName);
+
+    return context.simulation.getAvailableApproaches(room, context);
+  }
+
+  @override
+  String toString() => "ApproachAction";
 }
 
 /// This [Action] requires an [enemy].
@@ -242,14 +266,22 @@ abstract class ApproachAction extends Action {
 ///
 ///     static EnemyTargetAction builder(Actor enemy) => new Kick(enemy);
 abstract class EnemyTargetAction extends OtherActorActionBase {
-  @mustCallSuper
-  EnemyTargetAction(Actor enemy) : super(enemy);
-
-  Actor get enemy => target;
+  @override
+  Iterable<Actor> generateObjects(ApplicabilityContext context) {
+    var actors = context.world.currentSituation
+        .getActors(context.world.actors, context.simulation, context.world);
+    return actors.where((other) {
+      if (other == context.actor || !other.isAliveAndActive) return false;
+      return context.actor.hates(other, context.world);
+      // TODO: figure out if we need the following instead.
+      // Only provide true enemies if action is aggressive.
+      // if (this.isAggressive && !actor.hates(other, world)) return false;
+      // return true;
+    });
+  }
 
   @override
-  String toString() => "EnemyTargetAction<$commandTemplate::"
-      "enemy=${enemy.id}/${enemy.name}>";
+  String toString() => "EnemyTargetAction<$commandTemplate>";
 }
 
 /// This [Action] requires an [item].
@@ -257,48 +289,51 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
 /// Every [ItemAction] should contain a static builder like this:
 ///
 ///     static ItemAction builder(Item enemy) => new Example(item);
-abstract class ItemAction extends Action {
-  final Item item;
-
+abstract class ItemAction extends Action<Item> {
   @override
   final bool isImplicit = false;
 
-  @mustCallSuper
-  ItemAction(this.item);
-
-  @override
-  String get command =>
-      (new Storyline()..add(commandTemplate, object: item)).realizeAsString();
-
-  /// ItemAction should include the [item] in the [command]. To make it
-  /// easier to implement, this class will automatically construct the name
-  /// given a [Storyline] template.
+  /// ItemAction should include the [item] in the result of [getCommand].
+  /// To make it easier to implement, this class will automatically construct
+  /// the command string given a [Storyline] template.
   String get commandTemplate;
 
   @override
-  String toString() => "ItemAction<$command>";
+  Iterable<Item> generateObjects(ApplicabilityContext context) {
+    final situation = context.world.currentSituation as FightSituation;
+    return situation.droppedItems;
+  }
+
+  @override
+  String getCommand(Item item) =>
+      (new Storyline()..add(commandTemplate, object: item)).realizeAsString();
+
+  @override
+  String toString() => "ItemAction<$commandTemplate>";
 }
 
-/// This [Action] requires a another [Actor], a [target]. The [target]
-/// doesn't need to be an enemy or a friend.
-///
-/// Every [OtherActorAction] should contain a static builder like this:
-///
-///     static OtherActorAction builder(Actor target) => new Kick(target);
+/// This [Action] requires a another [Actor], a target. The target
+/// doesn't need to be an enemy or a friend. Just any actor other than
+/// the one performing the action.
 ///
 /// Many aggressive and combat actions are [OtherActorAction]s instead of
 /// [EnemyTargetActions] because we can't guarantee that the opponent
 /// is in an adversarial relation with the performing actor. For example,
 /// when actor A initiates a defensible slash on actor B, and during
-/// that action, A loses all hatred for actor B, we still want him
+/// that action, A loses all hatred for actor B, we still need him
 /// to finish that slash.
 abstract class OtherActorAction extends OtherActorActionBase {
-  @mustCallSuper
-  OtherActorAction(Actor target) : super(target);
+  @override
+  String toString() => "OtherActorAction<$commandTemplate>";
 
   @override
-  String toString() => "OtherActorAction<$commandTemplate::"
-      "target=${target.id}/${target.name}>";
+  Iterable<Actor> generateObjects(ApplicabilityContext context) {
+    var actors = context.world.currentSituation
+        .getActors(context.world.actors, context.simulation, context.world);
+    return actors.where((other) {
+      return other != context.actor && other.isAliveAndActive;
+    });
+  }
 }
 
 /// A base class for [OtherActorAction] and [EnemyTargetAction].
@@ -306,32 +341,10 @@ abstract class OtherActorAction extends OtherActorActionBase {
 /// [OtherActorAction] cannot be a direct superclass of [EnemyTargetAction]
 /// because then our `if (builder is EnemyTargetActionBuilder)` logic
 /// would have false positives (at least in Dart 1).
-abstract class OtherActorActionBase extends Action {
-  final Actor target;
-
-  @mustCallSuper
-  OtherActorActionBase(this.target);
-
-  @override
-  String get command {
-    if (isImplicit) {
-      assert(
-          commandTemplate == null,
-          "When action is implicit, commandTemplate should be null. "
-          "Found '$commandTemplate' instead in $this.");
-      return "";
-    }
-    assert(
-        commandTemplate != "",
-        "Never create actions with empty commandTemplate. "
-        "Use isImplicit instead. Culprit: $this");
-    return (new Storyline()..add(commandTemplate, object: target))
-        .realizeAsString();
-  }
-
-  /// [OtherActorActionBase] should include the [target] in the [command].
-  /// To make it easier to implement, this class will automatically
-  /// construct the name given a [Storyline] template.
+abstract class OtherActorActionBase extends Action<Actor> {
+  /// [OtherActorActionBase] should include the [target] in the result of
+  /// [getCommand]. To make it easier to implement, this class will
+  /// automatically construct the name given a [Storyline] template.
   ///
   /// For example, "kill <object>" is a valid name template that might realize
   /// into something like "Kill the orc."
@@ -350,7 +363,24 @@ abstract class OtherActorActionBase extends Action {
   String get rollReasonTemplate;
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Actor target) {
+    if (isImplicit) {
+      assert(
+          commandTemplate == null,
+          "When action is implicit, commandTemplate should be null. "
+          "Found '$commandTemplate' instead in $this.");
+      return "";
+    }
+    assert(
+        commandTemplate != "",
+        "Never create actions with empty commandTemplate. "
+        "Use isImplicit instead. Culprit: $this");
+    return (new Storyline()..add(commandTemplate, object: target))
+        .realizeAsString();
+  }
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) =>
       (new Storyline()
             ..add(rollReasonTemplate,
                 subject: a, object: target, wholeSentence: true))
@@ -368,8 +398,28 @@ abstract class OtherActorActionBase extends Action {
       w.getSituationByName<Situation>(mainSituationName).id;
 
   @override
-  String toString() => "_OtherActorActionBase<$commandTemplate::"
-      "target=${target.id}/${target.name}>";
+  String toString() => "_OtherActorActionBase<$commandTemplate>";
+}
+
+/// The [action] to use and the [object] to use it on. The _performing_
+/// of an action.
+///
+/// For example, an attack action like `Punch` could take an enemy actor
+/// as the object. Therefore, assuming there are two different enemies
+/// available for punching, the planner would create two instances
+/// of `Performance`, one for each enemy.
+class Performance<T> {
+  /// The action to be performed on the [object]. For example, punch (if
+  /// the object is an enemy actor) or take (if the object is an item).
+  final Action<T> action;
+
+  /// The object the [action] is performed on.
+  final T object;
+
+  /// Creates a performance object.
+  const Performance(this.action, this.object);
+
+  String get command => action.getCommand(object);
 }
 
 /// This class encapsulates a singular reason why an action might have

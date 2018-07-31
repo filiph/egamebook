@@ -9,10 +9,10 @@ import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
-OtherActorAction finishLeapBuilder(Actor enemy) => new FinishLeap(enemy);
-
 class FinishLeap extends OtherActorAction {
   static const String className = "FinishLeap";
+
+  static final FinishLeap singleton = new FinishLeap();
 
   @override
   final String helpMessage = null;
@@ -32,8 +32,6 @@ class FinishLeap extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishLeap(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => null;
 
@@ -44,46 +42,46 @@ class FinishLeap extends OtherActorAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    w.updateActorById(target.id, (b) => b..pose = Pose.onGround);
-    final updatedEnemy = w.getActorById(target.id);
-    w.recordCustom(fellToGroundCustomEventName, actor: target);
+    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
+    final updatedEnemy = w.getActorById(enemy.id);
+    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     final thread = getThreadId(sim, w, "LeapSituation");
     final ground = getGroundMaterial(w);
     a.report(s, "<subject> {ram<s>|smash<es>} into <object>",
-        object: target, positive: true, actionThread: thread);
+        object: enemy, positive: true, actionThread: thread);
     s.add(
-        "both ${a.isPlayer || target.isPlayer ? 'of you' : ''} "
+        "both ${a.isPlayer || enemy.isPlayer ? 'of you' : ''} "
         "{land on|fall to} the $ground",
         actionThread: thread);
-    if (target.hitpoints > 1) {
+    if (enemy.hitpoints > 1) {
       s.add(
           "the impact almost "
           "{knocks <object> unconscious|knocks <object> out}",
-          object: target,
+          object: enemy,
           actionThread: thread);
       final damage = 1;
       reportPain(context, updatedEnemy, damage);
-      w.updateActorById(target.id, (b) => b..hitpoints -= damage);
+      w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }
-    return "${a.name} finishes leap at ${target.name}";
+    return "${a.name} finishes leap at ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) => true;
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) => true;
 }

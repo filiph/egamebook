@@ -36,27 +36,8 @@ abstract class Situation {
   /// Default value for [maxActionsToShow].
   static const int defaultMaxActionsToShow = 3;
 
-  /// The actions with objects available to the actors.
-  ///
-  /// For every actor, every turn, these action generators will be called
-  /// in order to provide all the possible actions.
-  ///
-  /// For example, an action generator called 'pick up {something}' might
-  /// generate two actions: 'pick up lamp' and 'pick up sword'.
-  List<ActionBuilder> get actionGenerators => const [];
-
   /// The actions available to the actors.
-  ///
-  /// These are the actions that only have a subject (the actor), and not any
-  /// object. Therefore, the is only one possible instance of such action
-  /// per actor per turn.
-  ///
-  /// For example, things like 'stand up' or 'reload weapon' are only acting
-  /// on the subject.
-  ///
-  /// If you need actions that act on an 'object' (such as 'hit {someone}' or
-  /// 'pick up {something}', use [actionGenerators].
-  List<Action> get actions => const [];
+  List<Action<dynamic>> get actions => const [];
 
   /// Identifies the situation even after it has changed (for example, the time
   /// has been increased, or an actor has changed).

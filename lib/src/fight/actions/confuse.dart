@@ -1,14 +1,16 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
 class Confuse extends EnemyTargetAction {
   static const int minimalEffectLength = 8;
 
   static const String className = "Confuse";
+
+  static final EnemyTargetAction singleton = new Confuse();
 
   @override
   final bool isAggressive = true;
@@ -27,8 +29,6 @@ class Confuse extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  Confuse(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "confuse <object>";
 
@@ -39,7 +39,7 @@ class Confuse extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> confuse <object>?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> touch<es> <subject's> temple");
@@ -53,7 +53,7 @@ class Confuse extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -71,12 +71,12 @@ class Confuse extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState world) {
+      Actor a, Simulation sim, WorldState world, Actor enemy) {
     return new ReasonedSuccessChance<Object>(0.8);
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
       a.isStanding &&
       world.actors
@@ -84,6 +84,4 @@ class Confuse extends EnemyTargetAction {
               .length >=
           2 &&
       !enemy.isConfused;
-
-  static EnemyTargetAction builder(Actor enemy) => new Confuse(enemy);
 }

@@ -3,36 +3,34 @@
 part of edgehead.action_builders;
 
 // **************************************************************************
-// Generator: FunctionSerializerGenerator
+// Generator: ActionsSerializerGenerator
 // **************************************************************************
 
-final _$enemyTargetActionBuilderSerializer =
-    new FunctionSerializer<EnemyTargetActionBuilder>({
-  'impaleLeaperBuilder': impaleLeaperBuilder,
-  'counterSlashBuilder': counterSlashBuilder,
-});
-final _$otherActorActionBuilderSerializer =
-    new FunctionSerializer<OtherActorActionBuilder>({
-  'onGroundShieldBlockBuilder': onGroundShieldBlockBuilder,
-  'onGroundParryBuilder': onGroundParryBuilder,
-  'rollOutOfWayBuilder': rollOutOfWayBuilder,
-  'finishSlashGroundedEnemyBuilder': finishSlashGroundedEnemyBuilder,
-  'finishThrustSpearAtGroundedEnemyBuilder':
-      finishThrustSpearAtGroundedEnemyBuilder,
-  'finishBreakNeckBuilder': finishBreakNeckBuilder,
-  'evadeNeckBreakingBuilder': evadeNeckBreakingBuilder,
-  'dodgeLeapBuilder': dodgeLeapBuilder,
-  'finishLeapBuilder': finishLeapBuilder,
-  'jumpBackFromSlashBuilder': jumpBackFromSlashBuilder,
-  'shieldBlockSlashBuilder': shieldBlockSlashBuilder,
-  'dodgeSlashBuilder': dodgeSlashBuilder,
-  'parrySlashBuilder': parrySlashBuilder,
-  'defensiveParrySlashBuilder': defensiveParrySlashBuilder,
-  'finishSlashBuilder': finishSlashBuilder,
-  'dodgePunchBuilder': dodgePunchBuilder,
-  'finishPunchBuilder': finishPunchBuilder,
-  'jumpBackFromThrustBuilder': jumpBackFromThrustBuilder,
-  'finishThrustBuilder': finishThrustBuilder,
-  'shieldBlockThrustBuilder': shieldBlockThrustBuilder,
-  'dodgeThrustBuilder': dodgeThrustBuilder,
+final _$actionSerializer = new ActionSerializer({
+  'OnGroundShieldBlock': OnGroundShieldBlock.singleton,
+  'OnGroundParry': OnGroundParry.singleton,
+  'RollOutOfWay': RollOutOfWay.singleton,
+  'FinishSlashGroundedEnemy': FinishSlashGroundedEnemy.singleton,
+  'FinishThrustSpearAtGroundedEnemy':
+      FinishThrustSpearAtGroundedEnemy.singleton,
+  'OffBalanceOpportunityThrust': OffBalanceOpportunityThrust.singleton,
+  'FinishBreakNeck': FinishBreakNeck.singleton,
+  'EvadeNeckBreaking': EvadeNeckBreaking.singleton,
+  'AutoLoot': AutoLoot.singleton,
+  'ImpaleLeaper': ImpaleLeaper.singleton,
+  'DodgeLeap': DodgeLeap.singleton,
+  'FinishLeap': FinishLeap.singleton,
+  'CounterTackle': CounterTackle.singleton,
+  'JumpBackFromSlash': JumpBackFromSlash.singleton,
+  'ShieldBlockSlash': ShieldBlockSlash.singleton,
+  'DodgeSlash': DodgeSlash.singleton,
+  'ParrySlash': ParrySlash.singleton,
+  'DefensiveParrySlash': DefensiveParrySlash.singleton,
+  'FinishSlash': FinishSlash.singleton,
+  'DodgePunch': DodgePunch.singleton,
+  'FinishPunch': FinishPunch.singleton,
+  'JumpBackFromThrust': JumpBackFromThrust.singleton,
+  'ShieldBlockThrust': ShieldBlockThrust.singleton,
+  'DodgeThrust': DodgeThrust.singleton,
+  'FinishThrust': FinishThrust.singleton,
 });

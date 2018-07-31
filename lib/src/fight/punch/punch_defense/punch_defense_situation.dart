@@ -13,7 +13,7 @@ DefenseSituation createPunchDefenseSituation(int id, Actor attacker, Actor targe
         id,
         punchDefenseSituationName,
         [
-          dodgePunchBuilder,
+          DodgePunch.singleton,
           // TODO: CutOffArm.builder,
         ],
         [],

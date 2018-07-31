@@ -4,11 +4,11 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
+import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 
 part 'counter_attack_situation.g.dart';
@@ -32,13 +32,11 @@ abstract class CounterAttackSituation extends Situation
   CounterAttackSituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators => [
-        counterSlashBuilder,
-        CounterTackle.builder,
+  List<Action<dynamic>> get actions => [
+        Pass.singleton,
+        counterSlashBuilder(),
+        CounterTackle.singleton,
       ];
-
-  @override
-  List<Action> get actions => [Pass.singleton];
 
   int get counterAttacker;
 

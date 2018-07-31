@@ -27,6 +27,9 @@ ReasonedSuccessChance computeOpportunityThrust(
 class OffBalanceOpportunityThrust extends EnemyTargetAction {
   static const String className = "OffBalanceOpportunityThrust";
 
+  static final OffBalanceOpportunityThrust singleton =
+      new OffBalanceOpportunityThrust();
+
   @override
   final String helpMessage = "When an opponent is out of balance they are the "
       "most vulnerable.";
@@ -43,8 +46,6 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  OffBalanceOpportunityThrust(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "stab <object>";
 
@@ -55,7 +56,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to stab <object>", object: enemy);
@@ -64,7 +65,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -94,16 +95,13 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     return computeOpportunityThrust(a, sim, w, enemy);
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.isStanding &&
       enemy.isOffBalance &&
       a.currentWeapon.damageCapability.isThrusting;
-
-  static EnemyTargetAction builder(Actor enemy) =>
-      new OffBalanceOpportunityThrust(enemy);
 }

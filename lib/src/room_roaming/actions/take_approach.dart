@@ -9,6 +9,8 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 class TakeApproachAction extends ApproachAction {
   static const String className = "TakeApproachAction";
 
+  static final TakeApproachAction singleton = new TakeApproachAction();
+
   @override
   final bool isAggressive = false;
 
@@ -21,24 +23,22 @@ class TakeApproachAction extends ApproachAction {
   @override
   final Resource rerollResource = null;
 
-  TakeApproachAction(Approach approach) : super(approach);
-
   @override
   String get helpMessage => null;
 
   @override
-  bool get isImplicit => approach.command.isEmpty;
+  bool get isImplicit => false;
 
   @override
   String get name => className;
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Approach approach) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Approach approach) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     if (approach.description != null) {
@@ -52,23 +52,23 @@ class TakeApproachAction extends ApproachAction {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Approach approach) => approach.command;
+
+  @override
+  String getRollReason(
+          Actor a, Simulation sim, WorldState w, Approach approach) =>
       "WARNING should not be user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Approach approach) =>
       ReasonedSuccessChance.sureSuccess;
-
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Approach approach) {
     if ((w.currentSituation as RoomRoamingSituation).monstersAlive) {
       // Don't allow exit taking when monsters in this room are still alive.
       return false;
     }
     return true;
   }
-
-  static ApproachAction builder(Approach approach) =>
-      new TakeApproachAction(approach);
 }

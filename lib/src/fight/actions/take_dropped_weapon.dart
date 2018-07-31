@@ -12,10 +12,10 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class TakeDroppedWeapon extends ItemAction {
   static const String className = "TakeDroppedWeapon";
 
+  static final TakeDroppedWeapon singleton = new TakeDroppedWeapon();
+
   @override
   final bool isProactive = true;
-
-  TakeDroppedWeapon(Item item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -36,12 +36,12 @@ class TakeDroppedWeapon extends ItemAction {
   Resource get rerollResource => null;
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Item item) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Item item) {
     assert(item.isWeapon);
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
@@ -63,16 +63,16 @@ class TakeDroppedWeapon extends ItemAction {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, Item item) =>
       throw new UnimplementedError();
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Item item) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (!item.isWeapon) return false;
     // TODO: remove the next condition, but not before we figure out
     //       how to make this hard (dropped spears are probably much
@@ -93,6 +93,4 @@ class TakeDroppedWeapon extends ItemAction {
     }
     return true;
   }
-
-  static ItemAction builder(Item item) => new TakeDroppedWeapon(item);
 }

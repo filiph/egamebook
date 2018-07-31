@@ -13,9 +13,9 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
-OtherActorAction finishThrustBuilder(Actor enemy) => new FinishThrust(enemy);
-
 class FinishThrust extends OtherActorAction {
+  static final FinishThrust singleton = new FinishThrust();
+
   static const String className = "FinishThrust";
 
   @override
@@ -36,8 +36,6 @@ class FinishThrust extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  FinishThrust(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => null;
 
@@ -48,12 +46,12 @@ class FinishThrust extends OtherActorAction {
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -65,9 +63,9 @@ class FinishThrust extends OtherActorAction {
         situation.attackDirection != AttackDirection.fromRight);
 
     final result = _executeAtDesignation(
-        a, situation.attackDirection.toBodyPartDesignation());
+        a, enemy, situation.attackDirection.toBodyPartDesignation());
 
-    w.actors.removeWhere((actor) => actor.id == target.id);
+    w.actors.removeWhere((actor) => actor.id == enemy.id);
     w.actors.add(result.actor);
     final thread = getThreadId(sim, w, thrustSituationName);
     // TODO: revert kill if it's briana.
@@ -95,28 +93,27 @@ class FinishThrust extends OtherActorAction {
           object: result.actor,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon.name == orcthorn.name &&
-          target.name.contains('orc')) {
+      if (a.currentWeapon.name == orcthorn.name && enemy.name.contains('orc')) {
         a.currentWeapon.report(
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
       killHumanoid(context, result.actor);
     }
-    return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${target.name}";
+    return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.currentWeapon.damageCapability.isThrusting;
 
   WeaponAssaultResult _executeAtDesignation(
-      Actor attacker, BodyPartDesignation designation) {
-    return executeThrustingHit(target, attacker.currentWeapon, designation);
+      Actor attacker, Actor enemy, BodyPartDesignation designation) {
+    return executeThrustingHit(enemy, attacker.currentWeapon, designation);
   }
 }

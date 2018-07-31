@@ -9,4 +9,4 @@ const String punchSituationName = "PunchSituation";
 
 Situation createPunchSituation(int id, Actor attacker, Actor target) =>
     new AttackerSituation.initialized(
-        id, punchSituationName, [finishPunchBuilder], [], attacker, target);
+        id, punchSituationName, [FinishPunch.singleton], [], attacker, target);

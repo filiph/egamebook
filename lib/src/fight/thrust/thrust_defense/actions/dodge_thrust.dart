@@ -22,9 +22,9 @@ ReasonedSuccessChance computeDodgeThrust(
   ]);
 }
 
-OtherActorAction dodgeThrustBuilder(Actor enemy) => new DodgeThrust(enemy);
-
 class DodgeThrust extends OtherActorAction {
+  static final DodgeThrust singleton = new DodgeThrust();
+
   static const String className = "DodgeThrust";
 
   @override
@@ -45,8 +45,6 @@ class DodgeThrust extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  DodgeThrust(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "dodge and counter";
 
@@ -57,7 +55,7 @@ class DodgeThrust extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> dodge?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -69,44 +67,45 @@ class DodgeThrust extends OtherActorAction {
       Randomly.run(
           () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
               but: true),
-          () => target.report(s, "<subject> <is> too quick for <object>",
+          () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to dodge ${target.name}'s thrust";
+    return "${a.name} fails to dodge ${enemy.name}'s thrust";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
-        object: target, positive: true);
-    if (target.isStanding) {
-      target.report(s, "<subject> lose<s> balance because of that",
+        object: enemy, positive: true);
+    if (enemy.isStanding) {
+      enemy.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);
-      w.updateActorById(target.id, (b) => b.pose = Pose.offBalance);
+      w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
     w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, target);
+        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
-    return "${a.name} dodges ${target.name}'s thrust";
+    return "${a.name} dodges ${enemy.name}'s thrust";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeDodgeThrust(a, sim, w, target));
+        .or(computeDodgeThrust(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) => !a.isOnGround;
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      !a.isOnGround;
 }

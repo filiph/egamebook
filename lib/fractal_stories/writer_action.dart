@@ -25,7 +25,7 @@ typedef String SimpleActionApplyFunction(Actor a, Simulation sim,
 
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
-abstract class RoamingAction extends Action {
+abstract class RoamingAction extends Action<Null> {
   @override
   final bool isProactive = true;
 
@@ -43,8 +43,7 @@ class SimpleAction extends RoamingAction {
 
   final SimpleActionApplicableFunction isApplicableClosure;
 
-  @override
-  final String command;
+  final String simpleActionCommand;
 
   @override
   final String helpMessage;
@@ -52,7 +51,7 @@ class SimpleAction extends RoamingAction {
   @override
   final String name;
 
-  SimpleAction(this.name, this.command, this.success, this.helpMessage,
+  SimpleAction(this.name, this.simpleActionCommand, this.success, this.helpMessage,
       {this.isApplicableClosure});
 
   @override
@@ -65,30 +64,38 @@ class SimpleAction extends RoamingAction {
   Resource get rerollResource => throw new StateError("Not rerollable");
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Null object) {
     throw new StateError("SimpleAction always succeeds");
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null object) {
     return success(context.actor, context.simulation, context.outputWorld,
         context.outputStoryline, this);
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null object) {
     throw new StateError("SimpleAction shouldn't have to provide roll reason");
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Null object) {
     return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Null object) {
     if (isApplicableClosure == null) return true;
     return isApplicableClosure(a, sim, w, this);
   }
+
+  @override
+  Iterable<Null> generateObjects(ApplicabilityContext context) {
+    throw new AssertionError('generateObjects was called on Action<Null>');
+  }
+
+  @override
+  String getCommand(Null _) => simpleActionCommand;
 }

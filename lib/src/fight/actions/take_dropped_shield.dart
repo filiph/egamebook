@@ -10,10 +10,10 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class TakeDroppedShield extends ItemAction {
   static const String className = "TakeDroppedShield";
 
+  static final TakeDroppedShield singleton = new TakeDroppedShield();
+
   @override
   final bool isProactive = true;
-
-  TakeDroppedShield(Item item) : super(item);
 
   @override
   String get commandTemplate => "pick up <object>";
@@ -34,12 +34,12 @@ class TakeDroppedShield extends ItemAction {
   Resource get rerollResource => null;
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, _) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Item item) {
     assert(item.isShield);
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
@@ -57,21 +57,19 @@ class TakeDroppedShield extends ItemAction {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, Item _) =>
       throw new UnimplementedError();
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Item _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (!item.isShield) return false;
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
     return true;
   }
-
-  static ItemAction builder(Item item) => new TakeDroppedShield(item);
 }

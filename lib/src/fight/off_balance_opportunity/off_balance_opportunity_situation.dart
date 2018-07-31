@@ -4,8 +4,8 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
@@ -34,11 +34,10 @@ abstract class OffBalanceOpportunitySituation extends Situation
   OffBalanceOpportunitySituation._();
 
   @override
-  List<EnemyTargetActionBuilder> get actionGenerators =>
-      <EnemyTargetActionBuilder>[OffBalanceOpportunityThrust.builder];
-
-  @override
-  List<Action> get actions => [Pass.singleton];
+  List<Action<dynamic>> get actions => [
+        Pass.singleton,
+        OffBalanceOpportunityThrust.singleton,
+      ];
 
   /// The actor who is off balance.
   int get actorId;
@@ -72,11 +71,11 @@ abstract class OffBalanceOpportunitySituation extends Situation
     if (enemies.isEmpty) return null;
 
     var candidate = enemies.first;
-    var offBalanceOpportunityThrust =
-        OffBalanceOpportunityThrust.builder(actor);
+    var offBalanceOpportunityThrust = OffBalanceOpportunityThrust.singleton;
 
     // Only change the situation when the candidate can actually pull it off.
-    if (offBalanceOpportunityThrust.isApplicable(candidate, sim, world)) {
+    if (offBalanceOpportunityThrust.isApplicable(
+        candidate, sim, world, actor)) {
       return candidate;
     }
     return null;

@@ -14,7 +14,7 @@ Situation createBreakNeckOnGroundSituation(
     new AttackerSituation.initialized(
       world.randomInt(),
       breakNeckOnGroundSituationName,
-      [finishBreakNeckBuilder],
+      [FinishBreakNeck.singleton],
       [],
       actor,
       enemy,

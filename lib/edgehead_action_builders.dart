@@ -1,8 +1,11 @@
 library edgehead.action_builders;
 
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/sourcegen/functions_serializer.dart';
+import 'package:edgehead/sourcegen/actions_serializer.dart';
 
+import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
+import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
+import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 import 'src/fight/break_neck/actions/finish_break_neck.dart';
 import 'src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart';
 import 'src/fight/counter_attack/actions/counter_slash.dart';
@@ -29,10 +32,5 @@ import 'src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 
 part 'edgehead_action_builders.g.dart';
 
-@GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
-final FunctionSerializer<EnemyTargetActionBuilder> enemyTargetActionSerializer =
-    _$enemyTargetActionBuilderSerializer;
-
-@GatherFunctionsFrom(const ['lib/src/fight/**/actions/*.dart'])
-final FunctionSerializer<OtherActorActionBuilder> otherActorActionSerializer =
-    _$otherActorActionBuilderSerializer;
+@GatherActionsFrom(const ['lib/src/fight/**/actions/*.dart'])
+final ActionSerializer actionSerializer = _$actionSerializer;

@@ -12,7 +12,7 @@ const String thrustSituationName = "ThrustSituation";
 Situation createThrustSituation(int id, Actor attacker, Actor target,
     {@required BodyPartDesignation designation}) {
   assert(designation != null, "You must define designation.");
-  return new AttackerSituation.initialized(id, thrustSituationName,
-      [finishThrustBuilder], [], attacker, target,
+  return new AttackerSituation.initialized(
+      id, thrustSituationName, [FinishThrust.singleton], [], attacker, target,
       attackDirection: AttackDirection.fromBodyPartDesignation(designation));
 }

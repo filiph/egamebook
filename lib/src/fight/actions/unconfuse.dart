@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
-class Unconfuse extends Action {
+class Unconfuse extends Action<Null> {
   static final Unconfuse singleton = new Unconfuse();
 
   static const String className = "Unconfuse";
@@ -30,18 +30,15 @@ class Unconfuse extends Action {
   final bool isImplicit = false;
 
   @override
-  String get command => "Regain clarity.";
-
-  @override
   String get name => className;
 
   @override
-  String applyFailure(_) {
+  String applyFailure(_, __) {
     throw new UnimplementedError();
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -56,17 +53,20 @@ class Unconfuse extends Action {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w) =>
+  String getCommand(Null _) => "Regain clarity.";
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "WARNING this shouldn't be "
       "user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w) =>
+          Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world) {
+  bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) {
     if (!actor.isConfused) return false;
     final timeSince = world.timeSinceLastActionRecord(
         actionName: Confuse.className, sufferer: actor, wasSuccess: true);

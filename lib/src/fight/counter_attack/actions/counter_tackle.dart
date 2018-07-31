@@ -24,6 +24,8 @@ ReasonedSuccessChance computeCounterTackle(
 class CounterTackle extends EnemyTargetAction {
   static const String className = "CounterTackle";
 
+  static final CounterTackle singleton = new CounterTackle();
+
   @override
   final String helpMessage = "When an opponent misses you like that, it's "
       "a rare (though still dangerous) opportunity to bring them down.";
@@ -40,8 +42,6 @@ class CounterTackle extends EnemyTargetAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  CounterTackle(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "tackle <object>";
 
@@ -52,7 +52,7 @@ class CounterTackle extends EnemyTargetAction {
   String get rollReasonTemplate => "will <subject> tackle <objectPronoun>?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -69,7 +69,7 @@ class CounterTackle extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -81,13 +81,11 @@ class CounterTackle extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     return computeCounterTackle(a, sim, w, enemy);
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.isOnGround && a.isBarehanded;
-
-  static EnemyTargetAction builder(Actor enemy) => new CounterTackle(enemy);
 }

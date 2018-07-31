@@ -17,9 +17,7 @@ const String startThrustSpearDownHelpMessage =
     "Opponents on the ground are often the most "
     "vulnerable.";
 
-EnemyTargetAction startThrustSpearDownBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-      enemy,
+EnemyTargetAction startThrustSpearDownBuilder() => new StartDefensibleAction(
       name: "StartThrustSpearDown",
       commandTemplate: startThrustSpearDownCommandTemplate,
       helpMessage: startThrustSpearDownHelpMessage,

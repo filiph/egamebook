@@ -107,8 +107,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   @override
   final String name;
 
-  StartDefensibleAction(
-    Actor enemy, {
+  StartDefensibleAction({
     @required this.name,
     @required this.commandTemplate,
     @required this.helpMessage,
@@ -122,14 +121,13 @@ class StartDefensibleAction extends EnemyTargetAction {
     this.rollReasonTemplate,
     this.applyWhenFailed,
   })
-      : _isApplicable = isApplicable,
-        super(enemy) {
+      : _isApplicable = isApplicable {
     assert(!rerollable || rerollResource != null);
     assert(!rerollable || rollReasonTemplate != null);
   }
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     assert(successChanceGetter != null);
     Actor a = context.actor;
     Simulation sim = context.simulation;
@@ -160,7 +158,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -181,7 +179,7 @@ class StartDefensibleAction extends EnemyTargetAction {
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     if (a.isPlayer) {
       return successChanceGetter(a, sim, w, enemy);
     }
@@ -189,6 +187,6 @@ class StartDefensibleAction extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       _isApplicable(a, sim, w, enemy);
 }

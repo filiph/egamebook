@@ -25,9 +25,7 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
       const Bonus(50, CombatReason.targetHasAllEyesDisabled),
     ]);
 
-EnemyTargetAction startBreakNeckOnGroundBuilder(Actor enemy) =>
-    new StartDefensibleAction(
-      enemy,
+EnemyTargetAction startBreakNeckOnGroundBuilder() => new StartDefensibleAction(
       name: "StartBreakNeckOnGround",
       commandTemplate: startBreakNeckOnGroundCommandTemplate,
       helpMessage: startBreakNeckOnGroundHelpMessage,

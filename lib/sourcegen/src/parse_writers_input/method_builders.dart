@@ -16,7 +16,7 @@ void addTodoToMethod(MethodBuilder method, String message) {
   method.addStatement(reference('DEV_MODE').or(literal(false)).asAssert());
 }
 
-/// Same as [createActionContextMethod], but for closures.
+/// Same as [createActionContextNullMethod], but for closures.
 MethodBuilder createActionContextClosure() {
   final method = new MethodBuilder.closure()
     ..addPositional(actionContextParameter);
@@ -28,21 +28,31 @@ MethodBuilder createActionContextClosure() {
 /// 3 positional arguments: an [Actor], a [WorldState] and a [Storyline].
 ///
 /// This is shared across at least two methods.
-MethodBuilder createActionContextMethod(
+MethodBuilder createActionContextNullMethod(
     String methodName, TypeBuilder returnType) {
   final method = new MethodBuilder(methodName, returnType: returnType)
     ..addPositional(actionContextParameter)
+    ..addPositional(nullParameter)
     ..addAnnotation(overrideAnnotation);
   _addActionContextConvenienceAccessors(method);
   return method;
 }
 
-MethodBuilder createActorSimWorldMethod(
+MethodBuilder createActorSimWorldNullMethod(
     String methodName, TypeBuilder returnType) {
   return new MethodBuilder(methodName, returnType: returnType)
     ..addPositional(actorParameter)
     ..addPositional(simulationParameter)
     ..addPositional(worldParameter)
+    ..addPositional(nullParameter)
+    ..addAnnotation(overrideAnnotation);
+}
+
+/// Things like `Action.getCommand(Null _)`.
+MethodBuilder createNullObjectMethod(
+    String methodName, TypeBuilder returnType) {
+  return new MethodBuilder(methodName, returnType: returnType)
+    ..addPositional(nullParameter)
     ..addAnnotation(overrideAnnotation);
 }
 

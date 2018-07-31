@@ -23,10 +23,9 @@ ReasonedSuccessChance computeDefensiveParrySlash(
   ]);
 }
 
-OtherActorAction defensiveParrySlashBuilder(Actor enemy) =>
-    new DefensiveParrySlash(enemy);
-
 class DefensiveParrySlash extends OtherActorAction {
+  static final DefensiveParrySlash singleton = new DefensiveParrySlash();
+
   static const String className = "DefensiveParrySlash";
 
   @override
@@ -45,8 +44,6 @@ class DefensiveParrySlash extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  DefensiveParrySlash(Actor enemy) : super(enemy);
-
   @override
   String get commandTemplate => "step back and parry";
 
@@ -57,7 +54,7 @@ class DefensiveParrySlash extends OtherActorAction {
   String get rollReasonTemplate => "will <subject> parry it?";
 
   @override
-  String applyFailure(ActionContext context) {
+  String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -72,15 +69,15 @@ class DefensiveParrySlash extends OtherActorAction {
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
-          () => target.report(s, "<subject> <is> too quick for <object>",
+          () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
     w.popSituation(sim);
-    return "${a.name} fails to parry ${target.name}";
+    return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override
-  String applySuccess(ActionContext context) {
+  String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
@@ -102,18 +99,18 @@ class DefensiveParrySlash extends OtherActorAction {
       }
     }
     w.popSituationsUntil("FightSituation", sim);
-    return "${a.name} steps back and parries ${target.name}";
+    return "${a.name} steps back and parries ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w) {
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeDefensiveParrySlash(a, sim, w, target));
+        .or(computeDefensiveParrySlash(a, sim, w, enemy));
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.currentWeapon.damageCapability.type.canParrySlash;
 }
