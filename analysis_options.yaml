@@ -4,6 +4,7 @@ analyzer:
     implicit-dynamic: false
   exclude:
     - web/**
+    - lib/sourcegen/**
 linter:
   rules:
     - annotate_overrides

@@ -5,23 +5,23 @@ author: Filip Hracek <filip.hracek@gmail.com>
 homepage: https://www.egamebook.com
 
 environment:
-  sdk: '>=1.22.0 <2.0.0'
+  sdk: '>=1.24.3 <3.0.0'
 
 dependencies:
-  built_collection: ^1.4.1
-  built_value: ^4.1.1
-  cli_menu: ^0.2.0
-  meta: ^1.0.5
-  logging: ^0.11.3+1
-  path: ^1.4.2
-  quiver: ^0.25.0
-  slot_machine: ^5.0.0
+  built_collection: any
+  built_value: any
+  cli_menu: any
+  meta: any
+  logging: any
+  path: any
+  quiver: any
+  slot_machine: any
 
 dev_dependencies:
-  args: ^1.2.0
-  build_runner: ^0.5.0
-  built_value_generator: ^4.1.1
-  code_builder: ^1.0.4
-  recase: ^1.0.0+1
-  source_gen: ^0.7.1
-  test: ">=0.12.19+1 <1.0.0"
+  args: any
+  build_runner: any
+  built_value_generator: any
+  code_builder: any
+  recase: any
+  source_gen: any
+  test: any
