@@ -1,7 +1,8 @@
 library edgehead.action_builders;
 
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/sourcegen/actions_serializer.dart';
+import 'package:egamebook_builder/instance_serializer.dart';
 
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
@@ -30,7 +31,7 @@ import 'src/fight/thrust/thrust_defense/actions/dodge_thrust.dart';
 import 'src/fight/thrust/thrust_defense/actions/jump_back.dart';
 import 'src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 
-part 'edgehead_action_builders.g.dart';
+part 'edgehead_action_builders_gather.gathered.g.dart';
 
-@GatherActionsFrom(const ['lib/src/fight/**/actions/*.dart'])
-final ActionSerializer actionSerializer = _$actionSerializer;
+@GatherInstancesFrom(const ['lib/src/fight/**/actions/*.dart'])
+final InstanceSerializer<Action> actionSerializer = _$actionSerializer;

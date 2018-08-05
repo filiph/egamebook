@@ -1,0 +1,6 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+targets:
+  edgehead:
+    builders:
+      built_value_generator|built_value:
+#        enabled: false

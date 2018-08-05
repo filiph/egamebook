@@ -11,6 +11,8 @@ dependencies:
   built_collection: any
   built_value: any
   cli_menu: any
+  egamebook_builder:
+    path: ../egamebook_builder
   meta: any
   logging: any
   path: any
@@ -24,6 +26,5 @@ dev_dependencies:
   args: any
   build_runner: any
   built_value_generator: any
-  code_builder: any
   source_gen: any
   test: any

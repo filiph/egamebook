@@ -9,10 +9,10 @@ import 'package:edgehead/sourcegen/functions_serializer.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-part 'edgehead_event_callbacks.g.dart';
+//part 'edgehead_event_callbacks.g.dart';
 
-@GatherFunctionsFrom(const ['lib/edgehead_event_callbacks.dart'])
-final FunctionSerializer<EventCallback> serializer = _$eventCallbackSerializer;
+//@GatherFunctionsFrom(const ['lib/edgehead_event_callbacks.dart'])
+//final FunctionSerializer<EventCallback> serializer = _$eventCallbackSerializer;
 
 void agruth_enjoy_eating_flesh(
     Simulation sim, WorldStateBuilder w, Storyline s) {

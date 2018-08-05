@@ -4,6 +4,7 @@ analyzer:
     implicit-dynamic: false
   exclude:
     - web/**
+    - tool/**
     - lib/sourcegen/**
 linter:
   rules:

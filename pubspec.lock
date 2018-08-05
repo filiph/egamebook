@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "0.1.3+2"
   code_builder:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: code_builder
       url: "https://pub.dartlang.org"
@@ -155,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.3"
+  egamebook_builder:
+    dependency: "direct main"
+    description:
+      path: "../egamebook_builder"
+      relative: true
+    source: path
+    version: "1.0.0"
   fixnum:
     dependency: transitive
     description:
@@ -492,4 +499,4 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.0.0-dev.65 <3.0.0"
+  dart: ">=2.0.0-dev.68.0 <3.0.0"

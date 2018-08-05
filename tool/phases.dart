@@ -21,7 +21,7 @@ final List<BuildAction> phases = [
       ]),
       'edgehead',
       inputs: const [
-        'lib/edgehead_action_builders.dart',
+        'lib/edgehead_action_builders_gather.dart',
       ]),
   new BuildAction(
       new PartBuilder([

@@ -70,7 +70,7 @@ class ActionsSerializerGenerator extends Generator {
 
       for (final glob in globs) {
         final assetIds = buildStep.findAssets(new Glob(glob));
-        for (final id in assetIds) {
+        await for (final id in assetIds) {
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
           final globbedLibrary = new LibraryReader(globbedLibraryElement);
 
