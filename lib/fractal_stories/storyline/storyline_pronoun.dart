@@ -11,7 +11,7 @@ part 'storyline_pronoun.g.dart';
 /// vocative.
 ///
 /// See http://en.wikipedia.org/wiki/Latin_declension.
-abstract class Pronoun extends Built<Pronoun, PronounBuilder> {
+abstract class Pronoun implements Built<Pronoun, PronounBuilder> {
   static final Pronoun YOU = new Pronoun("you", "you", "your", "yourself");
 
   static final Pronoun HE = new Pronoun("he", "him", "his", "himself");

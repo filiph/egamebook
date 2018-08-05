@@ -3,13 +3,15 @@
 part of egamebook.element.choice_block;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
 
   @override
   Iterable serialize(Serializers serializers, ChoiceBlock object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'saveGame',
       serializers.serialize(object.saveGame,
@@ -40,7 +42,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
 
   @override
   ChoiceBlock deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBlockBuilder();
 
     final iterator = serialized.iterator;
@@ -57,7 +59,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
           result.choices.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Choice)]))
-              as BuiltList<Choice>);
+              as BuiltList);
           break;
       }
     }
@@ -76,8 +78,10 @@ class _$ChoiceBlock extends ChoiceBlock {
       (new ChoiceBlockBuilder()..update(updates)).build();
 
   _$ChoiceBlock._({this.saveGame, this.choices}) : super._() {
-    if (saveGame == null) throw new ArgumentError.notNull('saveGame');
-    if (choices == null) throw new ArgumentError.notNull('choices');
+    if (saveGame == null)
+      throw new BuiltValueNullFieldError('ChoiceBlock', 'saveGame');
+    if (choices == null)
+      throw new BuiltValueNullFieldError('ChoiceBlock', 'choices');
   }
 
   @override
@@ -144,9 +148,24 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
 
   @override
   _$ChoiceBlock build() {
-    final _$result = _$v ??
-        new _$ChoiceBlock._(
-            saveGame: saveGame?.build(), choices: choices?.build());
+    _$ChoiceBlock _$result;
+    try {
+      _$result = _$v ??
+          new _$ChoiceBlock._(
+              saveGame: saveGame.build(), choices: choices.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'saveGame';
+        saveGame.build();
+        _$failedField = 'choices';
+        choices.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ChoiceBlock', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -14,7 +14,8 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'loot_situation.g.dart';
 
-abstract class LootSituation extends Situation
+abstract class LootSituation extends Object
+    with SituationBaseBehavior
     implements Built<LootSituation, LootSituationBuilder> {
   static Serializer<LootSituation> get serializer => _$lootSituationSerializer;
 

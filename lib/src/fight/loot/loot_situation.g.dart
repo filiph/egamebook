@@ -3,13 +3,15 @@
 part of stranded.fight.loot_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -25,7 +27,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
 
   @override
   Iterable serialize(Serializers serializers, LootSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'droppedItems',
       serializers.serialize(object.droppedItems,
@@ -49,7 +51,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
 
   @override
   LootSituation deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new LootSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -62,7 +64,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Item>);
+              as BuiltList);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -72,7 +74,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<int>);
+              as BuiltList);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -111,12 +113,15 @@ class _$LootSituation extends LootSituation {
       this.id,
       this.time})
       : super._() {
-    if (droppedItems == null) throw new ArgumentError.notNull('droppedItems');
+    if (droppedItems == null)
+      throw new BuiltValueNullFieldError('LootSituation', 'droppedItems');
     if (groundMaterial == null)
-      throw new ArgumentError.notNull('groundMaterial');
-    if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError('LootSituation', 'groundMaterial');
+    if (playerTeamIds == null)
+      throw new BuiltValueNullFieldError('LootSituation', 'playerTeamIds');
+    if (id == null) throw new BuiltValueNullFieldError('LootSituation', 'id');
+    if (time == null)
+      throw new BuiltValueNullFieldError('LootSituation', 'time');
   }
 
   @override
@@ -215,13 +220,29 @@ class LootSituationBuilder
 
   @override
   _$LootSituation build() {
-    final _$result = _$v ??
-        new _$LootSituation._(
-            droppedItems: droppedItems?.build(),
-            groundMaterial: groundMaterial,
-            playerTeamIds: playerTeamIds?.build(),
-            id: id,
-            time: time);
+    _$LootSituation _$result;
+    try {
+      _$result = _$v ??
+          new _$LootSituation._(
+              droppedItems: droppedItems.build(),
+              groundMaterial: groundMaterial,
+              playerTeamIds: playerTeamIds.build(),
+              id: id,
+              time: time);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'droppedItems';
+        droppedItems.build();
+
+        _$failedField = 'playerTeamIds';
+        playerTeamIds.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'LootSituation', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

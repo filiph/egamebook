@@ -5,8 +5,8 @@ import 'package:meta/meta.dart';
 
 import 'action.dart';
 import 'actor.dart';
-import 'storyline/storyline.dart';
 import 'simulation.dart';
+import 'storyline/storyline.dart';
 
 /// Situation is a phase during play. It governs which actions are available,
 /// and what actors can act (and in what order).
@@ -37,7 +37,7 @@ abstract class Situation {
   static const int defaultMaxActionsToShow = 3;
 
   /// The actions available to the actors.
-  List<Action<dynamic>> get actions => const [];
+  List<Action<dynamic>> get actions;
 
   /// Identifies the situation even after it has changed (for example, the time
   /// has been increased, or an actor has changed).
@@ -47,7 +47,7 @@ abstract class Situation {
   ///
   /// Defaults to [defaultMaxActionsToShow]. For situations like combat, this
   /// can be much higher.
-  int get maxActionsToShow => defaultMaxActionsToShow;
+  int get maxActionsToShow;
 
   /// Identifies the type of the Situation (i.e. 'FightSituation' for
   /// [FightSituation].
@@ -73,8 +73,7 @@ abstract class Situation {
       Iterable<Actor> actors, Simulation sim, WorldState world);
 
   /// Returns the actor whose time it is at the current [time].
-  Actor getCurrentActor(Simulation sim, WorldState world) =>
-      getActorAtTime(time, sim, world);
+  Actor getCurrentActor(Simulation sim, WorldState world);
 
   /// Called after action is executed inside this situation.
   ///
@@ -85,9 +84,7 @@ abstract class Situation {
   /// For example, a room roaming situation can remove dead actors from play
   /// after you've left the area.
   void onAfterAction(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
-    // No-op by default.
-  }
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline);
 
   /// Called after action is executed inside this situation, including any
   /// subsequent actions that happen in situations above in the stack.
@@ -96,26 +93,20 @@ abstract class Situation {
   /// those situations will first get resolved (and popped) and only then will
   /// [onAfterTurn] get called.
   void onAfterTurn(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
-    // No-op by default.
-  }
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline);
 
   /// Called just before executing an action.
   ///
   /// This should NOT modify the world. This is only for adding to the
   /// [outputStoryline].
   void onBeforeAction(
-      Simulation sim, WorldState world, Storyline outputStoryline) {
-    // No-op by default.
-  }
+      Simulation sim, WorldState world, Storyline outputStoryline);
 
   /// Called when this situation is about to be popped from the
   /// [Simulation.situations] stack, either manually (by using
   /// [Simulation.popSituation]) or automatically (when [shouldContinue] is
   /// no longer true or [getCurrentActor] returns `null`).
-  void onPop(Simulation sim, WorldStateBuilder world) {
-    // No-op by default.
-  }
+  void onPop(Simulation sim, WorldStateBuilder world);
 
   /// Return `false` when this [Situation] should no longer continue.
   ///
@@ -125,9 +116,50 @@ abstract class Situation {
   ///
   /// Note that this is not the only way for situations to end. They can
   /// be popped manually from the stack.
-  bool shouldContinue(Simulation sim, WorldState world) => true;
+  bool shouldContinue(Simulation sim, WorldState world);
 
   // TODO: toMap (save [time] as well as currentActor (because we want to make
   //       sure that we load with the same actor although some actors may have
   //       been removed from play))
+}
+
+/// Provides some sane defaults to [Situation] subclasses.
+///
+/// This is meant to be used as a mixin.
+abstract class SituationBaseBehavior implements Situation {
+  @override
+  List<Action<dynamic>> get actions => const [];
+
+  @override
+  int get maxActionsToShow => Situation.defaultMaxActionsToShow;
+
+  @override
+  Actor getCurrentActor(Simulation sim, WorldState world) =>
+      getActorAtTime(time, sim, world);
+
+  @override
+  void onAfterAction(
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
+    // No-op by default.
+  }
+
+  @override
+  void onAfterTurn(
+      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
+    // No-op by default.
+  }
+
+  @override
+  void onBeforeAction(
+      Simulation sim, WorldState world, Storyline outputStoryline) {
+    // No-op by default.
+  }
+
+  @override
+  void onPop(Simulation sim, WorldStateBuilder world) {
+    // No-op by default.
+  }
+
+  @override
+  bool shouldContinue(Simulation sim, WorldState world) => true;
 }

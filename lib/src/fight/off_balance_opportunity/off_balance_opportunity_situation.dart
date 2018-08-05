@@ -12,7 +12,9 @@ import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_o
 
 part 'off_balance_opportunity_situation.g.dart';
 
-abstract class OffBalanceOpportunitySituation extends Situation
+abstract class OffBalanceOpportunitySituation extends Object
+    with
+        SituationBaseBehavior
     implements
         Built<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {

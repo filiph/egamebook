@@ -3,13 +3,15 @@
 part of stranded.actor;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 
   @override
   Iterable serialize(Serializers serializers, Actor object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'anatomy',
       serializers.serialize(object.anatomy,
@@ -113,7 +115,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 
   @override
   Actor deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new ActorBuilder();
 
     final iterator = serialized.iterator;
@@ -190,7 +192,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.items.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Item>);
+              as BuiltList);
           break;
         case 'maxHitpoints':
           result.maxHitpoints = serializers.deserialize(value,
@@ -224,7 +226,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.weapons.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Item>);
+              as BuiltList);
           break;
       }
     }
@@ -315,30 +317,40 @@ class _$Actor extends Actor {
       this.team,
       this.weapons})
       : super._() {
-    if (anatomy == null) throw new ArgumentError.notNull('anatomy');
+    if (anatomy == null) throw new BuiltValueNullFieldError('Actor', 'anatomy');
     if (combineFunctionHandle == null)
-      throw new ArgumentError.notNull('combineFunctionHandle');
-    if (constitution == null) throw new ArgumentError.notNull('constitution');
-    if (currentWeapon == null) throw new ArgumentError.notNull('currentWeapon');
-    if (dexterity == null) throw new ArgumentError.notNull('dexterity');
-    if (gold == null) throw new ArgumentError.notNull('gold');
-    if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (initiative == null) throw new ArgumentError.notNull('initiative');
-    if (isActive == null) throw new ArgumentError.notNull('isActive');
-    if (isConfused == null) throw new ArgumentError.notNull('isConfused');
-    if (isPlayer == null) throw new ArgumentError.notNull('isPlayer');
-    if (isSurvivor == null) throw new ArgumentError.notNull('isSurvivor');
-    if (items == null) throw new ArgumentError.notNull('items');
-    if (maxHitpoints == null) throw new ArgumentError.notNull('maxHitpoints');
-    if (name == null) throw new ArgumentError.notNull('name');
+      throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
+    if (constitution == null)
+      throw new BuiltValueNullFieldError('Actor', 'constitution');
+    if (currentWeapon == null)
+      throw new BuiltValueNullFieldError('Actor', 'currentWeapon');
+    if (dexterity == null)
+      throw new BuiltValueNullFieldError('Actor', 'dexterity');
+    if (gold == null) throw new BuiltValueNullFieldError('Actor', 'gold');
+    if (hitpoints == null)
+      throw new BuiltValueNullFieldError('Actor', 'hitpoints');
+    if (id == null) throw new BuiltValueNullFieldError('Actor', 'id');
+    if (initiative == null)
+      throw new BuiltValueNullFieldError('Actor', 'initiative');
+    if (isActive == null)
+      throw new BuiltValueNullFieldError('Actor', 'isActive');
+    if (isConfused == null)
+      throw new BuiltValueNullFieldError('Actor', 'isConfused');
+    if (isPlayer == null)
+      throw new BuiltValueNullFieldError('Actor', 'isPlayer');
+    if (isSurvivor == null)
+      throw new BuiltValueNullFieldError('Actor', 'isSurvivor');
+    if (items == null) throw new BuiltValueNullFieldError('Actor', 'items');
+    if (maxHitpoints == null)
+      throw new BuiltValueNullFieldError('Actor', 'maxHitpoints');
+    if (name == null) throw new BuiltValueNullFieldError('Actor', 'name');
     if (nameIsProperNoun == null)
-      throw new ArgumentError.notNull('nameIsProperNoun');
-    if (pose == null) throw new ArgumentError.notNull('pose');
-    if (pronoun == null) throw new ArgumentError.notNull('pronoun');
-    if (stamina == null) throw new ArgumentError.notNull('stamina');
-    if (team == null) throw new ArgumentError.notNull('team');
-    if (weapons == null) throw new ArgumentError.notNull('weapons');
+      throw new BuiltValueNullFieldError('Actor', 'nameIsProperNoun');
+    if (pose == null) throw new BuiltValueNullFieldError('Actor', 'pose');
+    if (pronoun == null) throw new BuiltValueNullFieldError('Actor', 'pronoun');
+    if (stamina == null) throw new BuiltValueNullFieldError('Actor', 'stamina');
+    if (team == null) throw new BuiltValueNullFieldError('Actor', 'team');
+    if (weapons == null) throw new BuiltValueNullFieldError('Actor', 'weapons');
   }
 
   @override
@@ -609,33 +621,62 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   @override
   _$Actor build() {
-    final _$result = _$v ??
-        new _$Actor._(
-            anatomy: anatomy?.build(),
-            combineFunctionHandle: combineFunctionHandle,
-            constitution: constitution,
-            currentRoomName: currentRoomName,
-            currentShield: _currentShield?.build(),
-            currentWeapon: currentWeapon?.build(),
-            dexterity: dexterity,
-            followingActorId: followingActorId,
-            gold: gold,
-            hitpoints: hitpoints,
-            id: id,
-            initiative: initiative,
-            isActive: isActive,
-            isConfused: isConfused,
-            isPlayer: isPlayer,
-            isSurvivor: isSurvivor,
-            items: items?.build(),
-            maxHitpoints: maxHitpoints,
-            name: name,
-            nameIsProperNoun: nameIsProperNoun,
-            pose: pose,
-            pronoun: pronoun?.build(),
-            stamina: stamina,
-            team: team?.build(),
-            weapons: weapons?.build());
+    _$Actor _$result;
+    try {
+      _$result = _$v ??
+          new _$Actor._(
+              anatomy: anatomy.build(),
+              combineFunctionHandle: combineFunctionHandle,
+              constitution: constitution,
+              currentRoomName: currentRoomName,
+              currentShield: _currentShield?.build(),
+              currentWeapon: currentWeapon.build(),
+              dexterity: dexterity,
+              followingActorId: followingActorId,
+              gold: gold,
+              hitpoints: hitpoints,
+              id: id,
+              initiative: initiative,
+              isActive: isActive,
+              isConfused: isConfused,
+              isPlayer: isPlayer,
+              isSurvivor: isSurvivor,
+              items: items.build(),
+              maxHitpoints: maxHitpoints,
+              name: name,
+              nameIsProperNoun: nameIsProperNoun,
+              pose: pose,
+              pronoun: pronoun.build(),
+              stamina: stamina,
+              team: team.build(),
+              weapons: weapons.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'anatomy';
+        anatomy.build();
+
+        _$failedField = 'currentShield';
+        _currentShield?.build();
+        _$failedField = 'currentWeapon';
+        currentWeapon.build();
+
+        _$failedField = 'items';
+        items.build();
+
+        _$failedField = 'pronoun';
+        pronoun.build();
+
+        _$failedField = 'team';
+        team.build();
+        _$failedField = 'weapons';
+        weapons.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Actor', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

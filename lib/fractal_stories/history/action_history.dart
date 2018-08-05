@@ -97,8 +97,8 @@ abstract class ActionHistory
 
 /// A record of some event action that transpired.
 @immutable
-abstract class ActionRecord extends Record
-    implements Built<ActionRecord, ActionRecordBuilder> {
+abstract class ActionRecord
+    implements Built<ActionRecord, ActionRecordBuilder>, Record {
   static Serializer<ActionRecord> get serializer => _$actionRecordSerializer;
 
   factory ActionRecord([void updates(ActionRecordBuilder b)]) = _$ActionRecord;

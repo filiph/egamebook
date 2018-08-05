@@ -3,13 +3,15 @@
 part of stranded.history.custom_event;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -26,7 +28,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
 
   @override
   Iterable serialize(Serializers serializers, CustomEvent object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
@@ -52,7 +54,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
 
   @override
   CustomEvent deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventBuilder();
 
     final iterator = serialized.iterator;
@@ -93,7 +95,7 @@ class _$CustomEventHistorySerializer
 
   @override
   Iterable serialize(Serializers serializers, CustomEventHistory object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
       serializers.serialize(object.records,
@@ -106,7 +108,7 @@ class _$CustomEventHistorySerializer
 
   @override
   CustomEventHistory deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventHistoryBuilder();
 
     final iterator = serialized.iterator;
@@ -120,7 +122,7 @@ class _$CustomEventHistorySerializer
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(CustomEvent)
-              ])) as BuiltListMultimap<String, CustomEvent>);
+              ])) as BuiltListMultimap);
           break;
       }
     }
@@ -143,8 +145,8 @@ class _$CustomEvent extends CustomEvent {
       (new CustomEventBuilder()..update(updates)).build();
 
   _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
-    if (name == null) throw new ArgumentError.notNull('name');
-    if (time == null) throw new ArgumentError.notNull('time');
+    if (name == null) throw new BuiltValueNullFieldError('CustomEvent', 'name');
+    if (time == null) throw new BuiltValueNullFieldError('CustomEvent', 'time');
   }
 
   @override
@@ -243,7 +245,8 @@ class _$CustomEventHistory extends CustomEventHistory {
       (new CustomEventHistoryBuilder()..update(updates)).build();
 
   _$CustomEventHistory._({this.records}) : super._() {
-    if (records == null) throw new ArgumentError.notNull('records');
+    if (records == null)
+      throw new BuiltValueNullFieldError('CustomEventHistory', 'records');
   }
 
   @override
@@ -307,8 +310,20 @@ class CustomEventHistoryBuilder
 
   @override
   _$CustomEventHistory build() {
-    final _$result =
-        _$v ?? new _$CustomEventHistory._(records: records?.build());
+    _$CustomEventHistory _$result;
+    try {
+      _$result = _$v ?? new _$CustomEventHistory._(records: records.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'records';
+        records.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'CustomEventHistory', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

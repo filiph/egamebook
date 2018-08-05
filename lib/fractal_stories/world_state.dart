@@ -22,7 +22,7 @@ part 'world_state.g.dart';
 /// first calling [StatefulRandom.loadState].
 final _rnd = new StatefulRandom(42);
 
-abstract class WorldState extends Built<WorldState, WorldStateBuilder> {
+abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   static Serializer<WorldState> get serializer => _$worldStateSerializer;
 
   factory WorldState([void updates(WorldStateBuilder b)]) = _$WorldState;

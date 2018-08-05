@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 part 'damage_capability.g.dart';
 
 abstract class DamageCapability
-    extends Built<DamageCapability, DamageCapabilityBuilder> {
+    implements Built<DamageCapability, DamageCapabilityBuilder> {
   static Serializer<DamageCapability> get serializer =>
       _$damageCapabilitySerializer;
 

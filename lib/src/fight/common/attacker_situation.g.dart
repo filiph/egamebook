@@ -3,13 +3,15 @@
 part of stranded.fight.attacker_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -88,12 +90,12 @@ class _$AttackDirectionSerializer
 
   @override
   Object serialize(Serializers serializers, AttackDirection object,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       object.name;
 
   @override
   AttackDirection deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       AttackDirection.valueOf(serialized as String);
 }
 
@@ -106,7 +108,7 @@ class _$AttackerSituationSerializer
 
   @override
   Iterable serialize(Serializers serializers, AttackerSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'attackDirection',
       serializers.serialize(object.attackDirection,
@@ -137,7 +139,7 @@ class _$AttackerSituationSerializer
 
   @override
   AttackerSituation deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new AttackerSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -160,14 +162,14 @@ class _$AttackerSituationSerializer
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList<EnemyTargetAction>);
+                  as BuiltList);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList<OtherActorAction>);
+                  as BuiltList);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -224,16 +226,24 @@ class _$AttackerSituation extends AttackerSituation {
       this.time})
       : super._() {
     if (attackDirection == null)
-      throw new ArgumentError.notNull('attackDirection');
-    if (attacker == null) throw new ArgumentError.notNull('attacker');
+      throw new BuiltValueNullFieldError(
+          'AttackerSituation', 'attackDirection');
+    if (attacker == null)
+      throw new BuiltValueNullFieldError('AttackerSituation', 'attacker');
     if (builtEnemyTargetActionGenerators == null)
-      throw new ArgumentError.notNull('builtEnemyTargetActionGenerators');
+      throw new BuiltValueNullFieldError(
+          'AttackerSituation', 'builtEnemyTargetActionGenerators');
     if (builtOtherActorActionGenerators == null)
-      throw new ArgumentError.notNull('builtOtherActorActionGenerators');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (name == null) throw new ArgumentError.notNull('name');
-    if (target == null) throw new ArgumentError.notNull('target');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError(
+          'AttackerSituation', 'builtOtherActorActionGenerators');
+    if (id == null)
+      throw new BuiltValueNullFieldError('AttackerSituation', 'id');
+    if (name == null)
+      throw new BuiltValueNullFieldError('AttackerSituation', 'name');
+    if (target == null)
+      throw new BuiltValueNullFieldError('AttackerSituation', 'target');
+    if (time == null)
+      throw new BuiltValueNullFieldError('AttackerSituation', 'time');
   }
 
   @override
@@ -373,18 +383,33 @@ class AttackerSituationBuilder
 
   @override
   _$AttackerSituation build() {
-    final _$result = _$v ??
-        new _$AttackerSituation._(
-            attackDirection: attackDirection,
-            attacker: attacker,
-            builtEnemyTargetActionGenerators:
-                builtEnemyTargetActionGenerators?.build(),
-            builtOtherActorActionGenerators:
-                builtOtherActorActionGenerators?.build(),
-            id: id,
-            name: name,
-            target: target,
-            time: time);
+    _$AttackerSituation _$result;
+    try {
+      _$result = _$v ??
+          new _$AttackerSituation._(
+              attackDirection: attackDirection,
+              attacker: attacker,
+              builtEnemyTargetActionGenerators:
+                  builtEnemyTargetActionGenerators.build(),
+              builtOtherActorActionGenerators:
+                  builtOtherActorActionGenerators.build(),
+              id: id,
+              name: name,
+              target: target,
+              time: time);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'builtEnemyTargetActionGenerators';
+        builtEnemyTargetActionGenerators.build();
+        _$failedField = 'builtOtherActorActionGenerators';
+        builtOtherActorActionGenerators.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'AttackerSituation', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

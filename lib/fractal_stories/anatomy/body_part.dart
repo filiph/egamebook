@@ -13,9 +13,9 @@ part 'body_part.g.dart';
 /// Functioning legs allow the actor to move, functioning arms allow them to
 /// swing weapons, functioning tentacles allow them to grab and suffocate,
 /// functioning tails allow them to swing or sting.
-abstract class BodyPart extends Built<BodyPart, BodyPartBuilder>
+abstract class BodyPart extends Object
     with EntityBehavior
-    implements Entity {
+    implements Built<BodyPart, BodyPartBuilder>, Entity {
   static Serializer<BodyPart> get serializer => _$bodyPartSerializer;
 
   factory BodyPart(

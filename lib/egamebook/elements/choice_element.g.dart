@@ -3,13 +3,15 @@
 part of egamebook.element.choice;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
 
   @override
   Iterable serialize(Serializers serializers, Choice object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'isImplicit',
       serializers.serialize(object.isImplicit,
@@ -45,7 +47,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
 
   @override
   Choice deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBuilder();
 
     final iterator = serialized.iterator;
@@ -86,8 +88,10 @@ class _$Choice extends Choice {
 
   _$Choice._({this.helpMessage, this.isImplicit, this.markdownText})
       : super._() {
-    if (isImplicit == null) throw new ArgumentError.notNull('isImplicit');
-    if (markdownText == null) throw new ArgumentError.notNull('markdownText');
+    if (isImplicit == null)
+      throw new BuiltValueNullFieldError('Choice', 'isImplicit');
+    if (markdownText == null)
+      throw new BuiltValueNullFieldError('Choice', 'markdownText');
   }
 
   @override

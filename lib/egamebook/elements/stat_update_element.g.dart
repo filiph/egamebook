@@ -3,13 +3,15 @@
 part of egamebook.element.stat_update;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
 
   @override
   Iterable serialize(Serializers serializers, StatUpdate object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
     if (!isUnderspecified) serializers.expectBuilder(specifiedType);
@@ -43,7 +45,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
 
   @override
   StatUpdate deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
     if (!isUnderspecified) serializers.expectBuilder(specifiedType);
@@ -85,8 +87,11 @@ class _$StatUpdate<T> extends StatUpdate<T> {
       (new StatUpdateBuilder<T>()..update(updates)).build();
 
   _$StatUpdate._({this.name, this.newValue}) : super._() {
-    if (name == null) throw new ArgumentError.notNull('name');
-    if (newValue == null) throw new ArgumentError.notNull('newValue');
+    if (name == null) throw new BuiltValueNullFieldError('StatUpdate', 'name');
+    if (newValue == null)
+      throw new BuiltValueNullFieldError('StatUpdate', 'newValue');
+    if (T == dynamic)
+      throw new BuiltValueMissingGenericsError('StatUpdate', 'T');
   }
 
   @override
@@ -129,11 +134,7 @@ class StatUpdateBuilder<T>
   T get newValue => _$this._newValue;
   set newValue(T newValue) => _$this._newValue = newValue;
 
-  StatUpdateBuilder() {
-    if (T == dynamic)
-      throw new ArgumentError.value(
-          'dynamic', 'T', 'All type arguments must be specified.');
-  }
+  StatUpdateBuilder();
 
   StatUpdateBuilder<T> get _$this {
     if (_$v != null) {

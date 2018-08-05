@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.serializers;
+part of 'element_base.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -16,18 +16,7 @@ part of egamebook.element.serializers;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
-Serializers _$serializers = (new Serializers().toBuilder()
-      ..add(Choice.serializer)
-      ..add(ChoiceBlock.serializer)
-      ..add(ErrorElement.serializer)
-      ..add(LogElement.serializer)
-      ..add(LoseGame.serializer)
-      ..add(SaveGame.serializer)
-      ..add(SlotMachine.serializer)
-      ..add(StatUpdate.serializer)
-      ..add(TextOutput.serializer)
-      ..add(WinGame.serializer)
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Choice)]),
-          () => new ListBuilder<Choice>()))
-    .build();
+abstract class ElementBaseBuilder {
+  void replace(ElementBase other);
+  void update(void updates(ElementBaseBuilder b));
+}

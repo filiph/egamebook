@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   test("simple storyline", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gorilla = new Entity(
         name: "Gorilla",
         nameIsProperNoun: true,
@@ -30,7 +30,7 @@ void main() {
 
   test("storyline.addParagraph", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gorilla = new Entity(
         name: "Gorilla",
         nameIsProperNoun: true,
@@ -55,16 +55,18 @@ void main() {
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: \"Isn't this great?\"",
         subject: gorilla, endSentence: true);
-    expect(storyline.realizeAsString(), endsWith("says: \"Isn't this great?\""));
+    expect(
+        storyline.realizeAsString(), endsWith("says: \"Isn't this great?\""));
     storyline.clear();
     storyline.add("<subject> say<s>: \"Well, I think it's great.\"",
         subject: gorilla);
-    expect(
-        storyline.realizeAsString(), endsWith("says: \"Well, I think it's great.\""));
+    expect(storyline.realizeAsString(),
+        endsWith("says: \"Well, I think it's great.\""));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: \"Well? Say something!\"",
         subject: gorilla);
-    expect(storyline.realizeAsString(), endsWith("exclaims: \"Well? Say something!\""));
+    expect(storyline.realizeAsString(),
+        endsWith("exclaims: \"Well? Say something!\""));
   });
 
   test("fixing .'. in sentences", () {
@@ -78,16 +80,18 @@ void main() {
     storyline.clear();
     storyline.add("<subject> say<s>: 'Well, I think it's great.'",
         subject: gorilla);
-    expect(storyline.realizeAsString(), endsWith("says: 'Well, I think it's great.'"));
+    expect(storyline.realizeAsString(),
+        endsWith("says: 'Well, I think it's great.'"));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: 'Well? Say something!'",
         subject: gorilla);
-    expect(storyline.realizeAsString(), endsWith("exclaims: 'Well? Say something!'"));
+    expect(storyline.realizeAsString(),
+        endsWith("exclaims: 'Well? Say something!'"));
   });
 
   test("exchange", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var enemy =
         new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> tr<ies> to hit <object> in the stomach",
@@ -141,7 +145,7 @@ void main() {
 
   test("ignore <owner's> when owner is null", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gun =
         new Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
 
@@ -154,7 +158,7 @@ void main() {
       "ignoring <owner's> at start of sentence doesn't screw up capitalization",
       () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var hull = new Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
 
     storyline.add("<owner's> <subject> fail's to hit <object>",
@@ -164,7 +168,7 @@ void main() {
 
   test("don't substitute pronoun when it was used in the same form", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gun =
         new Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
@@ -178,7 +182,7 @@ void main() {
 
   test("add 'the' to common nouns (default for every Entity)", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var apple = new Entity(name: "apple", pronoun: Pronoun.IT);
     storyline.add("<subject> pick<s> up <object>",
         subject: player, object: apple);
@@ -187,7 +191,7 @@ void main() {
 
   test("don't use <owner's> to pronoun", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var ship = new Entity(name: "Haijing", pronoun: Pronoun.IT);
     var part = new Entity(name: "main jet", pronoun: Pronoun.IT);
     storyline.add("<subject> hit<s> <object>", subject: player, object: part);
@@ -198,7 +202,7 @@ void main() {
 
   test("put 'and' between two sentences in a complex sentence", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gun = new Entity(name: "front laser", pronoun: Pronoun.IT);
     var ship = new Entity(name: "Haijing", pronoun: Pronoun.IT);
     storyline.add("<subject> take<s> hold of <object's> controls",
@@ -215,7 +219,7 @@ void main() {
 
   test("possessive", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gun = new Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
         new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
@@ -238,7 +242,7 @@ void main() {
 
   test("possesive particles works even with <object-owner's> <object>", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var gun = new Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
         new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
@@ -256,24 +260,25 @@ void main() {
 
   test("we don't show 'your the sword' even if Randomly is involved", () {
     var storyline = new Storyline();
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var sword = new Entity(name: "sword", pronoun: Pronoun.IT);
     var orc =
         new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
-    expect(storyline.realizeAsString(), matches("The orc pounds on your sword."));
+    expect(
+        storyline.realizeAsString(), matches("The orc pounds on your sword."));
   });
 
   group("possessive pronoun", () {
     Storyline storyline;
-    _Player player;
+    Entity player;
     Entity dog;
     const String template = "<subject> unleash<es> <subject's> <object>";
 
     setUp(() {
       storyline = new Storyline();
-      player = new _Player("Filip");
+      player = _createPlayer("Filip");
     });
 
     test("do show with common nouns", () {
@@ -304,7 +309,7 @@ void main() {
   test(
       "we don't make subsequent <object> a pronoun when the first instance "
       "is actually a Randomly option", () {
-    var player = new _Player("Filip");
+    var player = _createPlayer("Filip");
     var orc =
         new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     for (int i = 0; i < 1000; i++) {
@@ -394,7 +399,8 @@ void main() {
     // 1
     resetAlreadyMentioned();
     storyline.addEnumeration("you see", [handkerchief], "here");
-    expect(storyline.realizeAsString(), matches("You see a handkerchief here."));
+    expect(
+        storyline.realizeAsString(), matches("You see a handkerchief here."));
     storyline.clear();
     // 2
     resetAlreadyMentioned();
@@ -475,7 +481,7 @@ void main() {
       test(
           "not shown supportive action doesn't influence making subjects "
           "into pronouns", () {
-        var player = new _Player("Filip");
+        var player = _createPlayer("Filip");
         var enemy = new Entity(
             name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
         storyline.add("<subject> aim<s> at <object>",
@@ -496,7 +502,8 @@ void main() {
             actionThread: threadA, isSupportiveActionInThread: true);
         storyline.add("you shoot a duck", actionThread: threadA);
         expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
-        expect(storyline.realizeAsString(), isNot(contains("look through the scopes")));
+        expect(storyline.realizeAsString(),
+            isNot(contains("look through the scopes")));
         expect(storyline.realizeAsString(), contains("shoot a duck"));
         storyline.clear();
       });
@@ -510,8 +517,5 @@ void main() {
 /// with that in mind. TODO: pass storyline
 Storyline storyline = new Storyline();
 
-class _Player extends Entity {
-  _Player(String name)
-      : super(
-            name: name, pronoun: Pronoun.YOU, team: playerTeam, isPlayer: true);
-}
+Entity _createPlayer(String name) =>
+    Entity(name: name, pronoun: Pronoun.YOU, team: playerTeam, isPlayer: true);

@@ -1,5 +1,7 @@
 import 'package:built_value/built_value.dart';
 
+part 'element_base.g.dart';
+
 /// The super class of all book elements that are streamed to the UI.
 ///
 /// These elements are streamed from the `Scripter` as output of the book.

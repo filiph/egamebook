@@ -3,13 +3,15 @@
 part of stranded.fight.counter_attack_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -29,7 +31,7 @@ class _$CounterAttackSituationSerializer
 
   @override
   Iterable serialize(Serializers serializers, CounterAttackSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'counterAttacker',
       serializers.serialize(object.counterAttacker,
@@ -48,7 +50,7 @@ class _$CounterAttackSituationSerializer
   @override
   CounterAttackSituation deserialize(
       Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new CounterAttackSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -98,10 +100,14 @@ class _$CounterAttackSituation extends CounterAttackSituation {
       {this.counterAttacker, this.id, this.target, this.time})
       : super._() {
     if (counterAttacker == null)
-      throw new ArgumentError.notNull('counterAttacker');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (target == null) throw new ArgumentError.notNull('target');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError(
+          'CounterAttackSituation', 'counterAttacker');
+    if (id == null)
+      throw new BuiltValueNullFieldError('CounterAttackSituation', 'id');
+    if (target == null)
+      throw new BuiltValueNullFieldError('CounterAttackSituation', 'target');
+    if (time == null)
+      throw new BuiltValueNullFieldError('CounterAttackSituation', 'time');
   }
 
   @override

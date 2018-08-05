@@ -44,7 +44,8 @@ String getGroundMaterial(WorldStateBuilder w) {
   return groundMaterial;
 }
 
-abstract class FightSituation extends Situation
+abstract class FightSituation extends Object
+    with SituationBaseBehavior
     implements Built<FightSituation, FightSituationBuilder> {
   /// The advantage that player has over all other actors in terms of frequency
   /// of turns.

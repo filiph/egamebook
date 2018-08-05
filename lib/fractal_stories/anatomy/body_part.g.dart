@@ -3,13 +3,15 @@
 part of fractal_stories.anatomy.body_part;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -126,7 +128,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
 
   @override
   Iterable serialize(Serializers serializers, BodyPart object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'bluntHitsCount',
       serializers.serialize(object.bluntHitsCount,
@@ -188,7 +190,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
 
   @override
   BodyPart deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new BodyPartBuilder();
 
     final iterator = serialized.iterator;
@@ -203,9 +205,8 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           break;
         case 'children':
           result.children.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(BodyPart)]))
-              as BuiltList<BodyPart>);
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(BodyPart)])) as BuiltList);
           break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,
@@ -286,12 +287,12 @@ class _$BodyPartDesignationSerializer
 
   @override
   Object serialize(Serializers serializers, BodyPartDesignation object,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       object.name;
 
   @override
   BodyPartDesignation deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       BodyPartDesignation.valueOf(serialized as String);
 }
 
@@ -304,12 +305,12 @@ class _$BodyPartFunctionSerializer
 
   @override
   Object serialize(Serializers serializers, BodyPartFunction object,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       object.name;
 
   @override
   BodyPartFunction deserialize(Serializers serializers, Object serialized,
-          {FullType specifiedType: FullType.unspecified}) =>
+          {FullType specifiedType = FullType.unspecified}) =>
       BodyPartFunction.valueOf(serialized as String);
 }
 
@@ -372,27 +373,35 @@ class _$BodyPart extends BodyPart {
       this.swingSurfaceRight})
       : super._() {
     if (bluntHitsCount == null)
-      throw new ArgumentError.notNull('bluntHitsCount');
-    if (children == null) throw new ArgumentError.notNull('children');
-    if (designation == null) throw new ArgumentError.notNull('designation');
-    if (function == null) throw new ArgumentError.notNull('function');
-    if (hitpoints == null) throw new ArgumentError.notNull('hitpoints');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (isActive == null) throw new ArgumentError.notNull('isActive');
-    if (isSeverable == null) throw new ArgumentError.notNull('isSeverable');
-    if (isSevered == null) throw new ArgumentError.notNull('isSevered');
-    if (isVital == null) throw new ArgumentError.notNull('isVital');
+      throw new BuiltValueNullFieldError('BodyPart', 'bluntHitsCount');
+    if (children == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'children');
+    if (designation == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'designation');
+    if (function == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'function');
+    if (hitpoints == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'hitpoints');
+    if (id == null) throw new BuiltValueNullFieldError('BodyPart', 'id');
+    if (isActive == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'isActive');
+    if (isSeverable == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'isSeverable');
+    if (isSevered == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'isSevered');
+    if (isVital == null)
+      throw new BuiltValueNullFieldError('BodyPart', 'isVital');
     if (majorCutsCount == null)
-      throw new ArgumentError.notNull('majorCutsCount');
+      throw new BuiltValueNullFieldError('BodyPart', 'majorCutsCount');
     if (minorCutsCount == null)
-      throw new ArgumentError.notNull('minorCutsCount');
-    if (name == null) throw new ArgumentError.notNull('name');
+      throw new BuiltValueNullFieldError('BodyPart', 'minorCutsCount');
+    if (name == null) throw new BuiltValueNullFieldError('BodyPart', 'name');
     if (randomDesignation == null)
-      throw new ArgumentError.notNull('randomDesignation');
+      throw new BuiltValueNullFieldError('BodyPart', 'randomDesignation');
     if (swingSurfaceLeft == null)
-      throw new ArgumentError.notNull('swingSurfaceLeft');
+      throw new BuiltValueNullFieldError('BodyPart', 'swingSurfaceLeft');
     if (swingSurfaceRight == null)
-      throw new ArgumentError.notNull('swingSurfaceRight');
+      throw new BuiltValueNullFieldError('BodyPart', 'swingSurfaceRight');
   }
 
   @override
@@ -612,25 +621,40 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
 
   @override
   _$BodyPart build() {
-    final _$result = _$v ??
-        new _$BodyPart._(
-            bluntHitsCount: bluntHitsCount,
-            children: children?.build(),
-            damageCapability: _damageCapability?.build(),
-            designation: designation,
-            function: function,
-            hitpoints: hitpoints,
-            id: id,
-            isActive: isActive,
-            isSeverable: isSeverable,
-            isSevered: isSevered,
-            isVital: isVital,
-            majorCutsCount: majorCutsCount,
-            minorCutsCount: minorCutsCount,
-            name: name,
-            randomDesignation: randomDesignation,
-            swingSurfaceLeft: swingSurfaceLeft,
-            swingSurfaceRight: swingSurfaceRight);
+    _$BodyPart _$result;
+    try {
+      _$result = _$v ??
+          new _$BodyPart._(
+              bluntHitsCount: bluntHitsCount,
+              children: children.build(),
+              damageCapability: _damageCapability?.build(),
+              designation: designation,
+              function: function,
+              hitpoints: hitpoints,
+              id: id,
+              isActive: isActive,
+              isSeverable: isSeverable,
+              isSevered: isSevered,
+              isVital: isVital,
+              majorCutsCount: majorCutsCount,
+              minorCutsCount: minorCutsCount,
+              name: name,
+              randomDesignation: randomDesignation,
+              swingSurfaceLeft: swingSurfaceLeft,
+              swingSurfaceRight: swingSurfaceRight);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'children';
+        children.build();
+        _$failedField = 'damageCapability';
+        _damageCapability?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'BodyPart', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -3,13 +3,15 @@
 part of egamebook.element.slot_machine;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
 
   @override
   Iterable serialize(Serializers serializers, SlotMachine object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'probability',
       serializers.serialize(object.probability,
@@ -48,7 +50,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
 
   @override
   SlotMachine deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new SlotMachineBuilder();
 
     final iterator = serialized.iterator;
@@ -99,9 +101,12 @@ class _$SlotMachine extends SlotMachine {
       this.rerollEffectDescription,
       this.rollReason})
       : super._() {
-    if (probability == null) throw new ArgumentError.notNull('probability');
-    if (rerollable == null) throw new ArgumentError.notNull('rerollable');
-    if (rollReason == null) throw new ArgumentError.notNull('rollReason');
+    if (probability == null)
+      throw new BuiltValueNullFieldError('SlotMachine', 'probability');
+    if (rerollable == null)
+      throw new BuiltValueNullFieldError('SlotMachine', 'rerollable');
+    if (rollReason == null)
+      throw new BuiltValueNullFieldError('SlotMachine', 'rollReason');
   }
 
   @override

@@ -3,13 +3,15 @@
 part of stranded.world_state;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
 
   @override
   Iterable serialize(Serializers serializers, WorldState object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actionHistory',
       serializers.serialize(object.actionHistory,
@@ -62,7 +64,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
 
   @override
   WorldState deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new WorldStateBuilder();
 
     final iterator = serialized.iterator;
@@ -79,7 +81,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.actors.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(Actor)]))
-              as BuiltSet<Actor>);
+              as BuiltSet);
           break;
         case 'customHistory':
           result.customHistory.replace(serializers.deserialize(value,
@@ -96,9 +98,8 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'situations':
           result.situations.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(Situation)]))
-              as BuiltList<Situation>);
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(Situation)])) as BuiltList);
           break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,
@@ -153,16 +154,23 @@ class _$WorldState extends WorldState {
       this.time,
       this.visitHistory})
       : super._() {
-    if (actionHistory == null) throw new ArgumentError.notNull('actionHistory');
-    if (actors == null) throw new ArgumentError.notNull('actors');
-    if (customHistory == null) throw new ArgumentError.notNull('customHistory');
-    if (global == null) throw new ArgumentError.notNull('global');
-    if (ruleHistory == null) throw new ArgumentError.notNull('ruleHistory');
-    if (situations == null) throw new ArgumentError.notNull('situations');
+    if (actionHistory == null)
+      throw new BuiltValueNullFieldError('WorldState', 'actionHistory');
+    if (actors == null)
+      throw new BuiltValueNullFieldError('WorldState', 'actors');
+    if (customHistory == null)
+      throw new BuiltValueNullFieldError('WorldState', 'customHistory');
+    if (global == null)
+      throw new BuiltValueNullFieldError('WorldState', 'global');
+    if (ruleHistory == null)
+      throw new BuiltValueNullFieldError('WorldState', 'ruleHistory');
+    if (situations == null)
+      throw new BuiltValueNullFieldError('WorldState', 'situations');
     if (statefulRandomState == null)
-      throw new ArgumentError.notNull('statefulRandomState');
-    if (time == null) throw new ArgumentError.notNull('time');
-    if (visitHistory == null) throw new ArgumentError.notNull('visitHistory');
+      throw new BuiltValueNullFieldError('WorldState', 'statefulRandomState');
+    if (time == null) throw new BuiltValueNullFieldError('WorldState', 'time');
+    if (visitHistory == null)
+      throw new BuiltValueNullFieldError('WorldState', 'visitHistory');
   }
 
   @override
@@ -350,17 +358,42 @@ class _$WorldStateBuilder extends WorldStateBuilder {
 
   @override
   _$WorldState build() {
-    final _$result = _$v ??
-        new _$WorldState._(
-            actionHistory: actionHistory?.build(),
-            actors: actors?.build(),
-            customHistory: customHistory?.build(),
-            global: global,
-            ruleHistory: ruleHistory?.build(),
-            situations: situations?.build(),
-            statefulRandomState: statefulRandomState,
-            time: time,
-            visitHistory: visitHistory?.build());
+    _$WorldState _$result;
+    try {
+      _$result = _$v ??
+          new _$WorldState._(
+              actionHistory: actionHistory.build(),
+              actors: actors.build(),
+              customHistory: customHistory.build(),
+              global: global,
+              ruleHistory: ruleHistory.build(),
+              situations: situations.build(),
+              statefulRandomState: statefulRandomState,
+              time: time,
+              visitHistory: visitHistory.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'actionHistory';
+        actionHistory.build();
+        _$failedField = 'actors';
+        actors.build();
+        _$failedField = 'customHistory';
+        customHistory.build();
+
+        _$failedField = 'ruleHistory';
+        ruleHistory.build();
+        _$failedField = 'situations';
+        situations.build();
+
+        _$failedField = 'visitHistory';
+        visitHistory.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'WorldState', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

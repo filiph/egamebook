@@ -3,13 +3,15 @@
 part of stranded.fight.defense_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -26,7 +28,7 @@ class _$DefenseSituationSerializer
 
   @override
   Iterable serialize(Serializers serializers, DefenseSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'attacker',
       serializers.serialize(object.attacker,
@@ -57,7 +59,7 @@ class _$DefenseSituationSerializer
 
   @override
   DefenseSituation deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new DefenseSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -75,14 +77,14 @@ class _$DefenseSituationSerializer
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList<EnemyTargetAction>);
+                  as BuiltList);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList<OtherActorAction>);
+                  as BuiltList);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -143,17 +145,25 @@ class _$DefenseSituation extends DefenseSituation {
       this.target,
       this.time})
       : super._() {
-    if (attacker == null) throw new ArgumentError.notNull('attacker');
+    if (attacker == null)
+      throw new BuiltValueNullFieldError('DefenseSituation', 'attacker');
     if (builtEnemyTargetActionGenerators == null)
-      throw new ArgumentError.notNull('builtEnemyTargetActionGenerators');
+      throw new BuiltValueNullFieldError(
+          'DefenseSituation', 'builtEnemyTargetActionGenerators');
     if (builtOtherActorActionGenerators == null)
-      throw new ArgumentError.notNull('builtOtherActorActionGenerators');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (name == null) throw new ArgumentError.notNull('name');
+      throw new BuiltValueNullFieldError(
+          'DefenseSituation', 'builtOtherActorActionGenerators');
+    if (id == null)
+      throw new BuiltValueNullFieldError('DefenseSituation', 'id');
+    if (name == null)
+      throw new BuiltValueNullFieldError('DefenseSituation', 'name');
     if (predeterminedResult == null)
-      throw new ArgumentError.notNull('predeterminedResult');
-    if (target == null) throw new ArgumentError.notNull('target');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError(
+          'DefenseSituation', 'predeterminedResult');
+    if (target == null)
+      throw new BuiltValueNullFieldError('DefenseSituation', 'target');
+    if (time == null)
+      throw new BuiltValueNullFieldError('DefenseSituation', 'time');
   }
 
   @override
@@ -293,18 +303,33 @@ class DefenseSituationBuilder
 
   @override
   _$DefenseSituation build() {
-    final _$result = _$v ??
-        new _$DefenseSituation._(
-            attacker: attacker,
-            builtEnemyTargetActionGenerators:
-                builtEnemyTargetActionGenerators?.build(),
-            builtOtherActorActionGenerators:
-                builtOtherActorActionGenerators?.build(),
-            id: id,
-            name: name,
-            predeterminedResult: predeterminedResult,
-            target: target,
-            time: time);
+    _$DefenseSituation _$result;
+    try {
+      _$result = _$v ??
+          new _$DefenseSituation._(
+              attacker: attacker,
+              builtEnemyTargetActionGenerators:
+                  builtEnemyTargetActionGenerators.build(),
+              builtOtherActorActionGenerators:
+                  builtOtherActorActionGenerators.build(),
+              id: id,
+              name: name,
+              predeterminedResult: predeterminedResult,
+              target: target,
+              time: time);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'builtEnemyTargetActionGenerators';
+        builtEnemyTargetActionGenerators.build();
+        _$failedField = 'builtOtherActorActionGenerators';
+        builtOtherActorActionGenerators.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'DefenseSituation', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

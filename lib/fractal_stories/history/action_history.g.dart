@@ -3,13 +3,15 @@
 part of stranded.history.action;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -27,7 +29,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
 
   @override
   Iterable serialize(Serializers serializers, ActionHistory object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'latestByActorId',
       serializers.serialize(object.latestByActorId,
@@ -48,7 +50,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
 
   @override
   ActionHistory deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionHistoryBuilder();
 
     final iterator = serialized.iterator;
@@ -62,20 +64,20 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(DateTime)
-              ])) as BuiltMap<int, DateTime>);
+              ])) as BuiltMap);
           break;
         case 'latestProactiveByActorId':
           result.latestProactiveByActorId.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(DateTime)
-              ])) as BuiltMap<int, DateTime>);
+              ])) as BuiltMap);
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ActionRecord)]))
-              as BuiltList<ActionRecord>);
+              as BuiltList);
           break;
       }
     }
@@ -92,7 +94,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
 
   @override
   Iterable serialize(Serializers serializers, ActionRecord object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actionName',
       serializers.serialize(object.actionName,
@@ -134,7 +136,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
 
   @override
   ActionRecord deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionRecordBuilder();
 
     final iterator = serialized.iterator;
@@ -163,7 +165,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           result.sufferers.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<int>);
+              as BuiltSet);
           break;
         case 'time':
           result.time = serializers.deserialize(value,
@@ -207,10 +209,12 @@ class _$ActionHistory extends ActionHistory {
       {this.latestByActorId, this.latestProactiveByActorId, this.records})
       : super._() {
     if (latestByActorId == null)
-      throw new ArgumentError.notNull('latestByActorId');
+      throw new BuiltValueNullFieldError('ActionHistory', 'latestByActorId');
     if (latestProactiveByActorId == null)
-      throw new ArgumentError.notNull('latestProactiveByActorId');
-    if (records == null) throw new ArgumentError.notNull('records');
+      throw new BuiltValueNullFieldError(
+          'ActionHistory', 'latestProactiveByActorId');
+    if (records == null)
+      throw new BuiltValueNullFieldError('ActionHistory', 'records');
   }
 
   @override
@@ -294,11 +298,28 @@ class ActionHistoryBuilder
 
   @override
   _$ActionHistory build() {
-    final _$result = _$v ??
-        new _$ActionHistory._(
-            latestByActorId: latestByActorId?.build(),
-            latestProactiveByActorId: latestProactiveByActorId?.build(),
-            records: records?.build());
+    _$ActionHistory _$result;
+    try {
+      _$result = _$v ??
+          new _$ActionHistory._(
+              latestByActorId: latestByActorId.build(),
+              latestProactiveByActorId: latestProactiveByActorId.build(),
+              records: records.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'latestByActorId';
+        latestByActorId.build();
+        _$failedField = 'latestProactiveByActorId';
+        latestProactiveByActorId.build();
+        _$failedField = 'records';
+        records.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ActionHistory', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
@@ -341,15 +362,24 @@ class _$ActionRecord extends ActionRecord {
       this.wasProactive,
       this.wasSuccess})
       : super._() {
-    if (actionName == null) throw new ArgumentError.notNull('actionName');
-    if (description == null) throw new ArgumentError.notNull('description');
-    if (protagonist == null) throw new ArgumentError.notNull('protagonist');
-    if (sufferers == null) throw new ArgumentError.notNull('sufferers');
-    if (time == null) throw new ArgumentError.notNull('time');
-    if (wasAggressive == null) throw new ArgumentError.notNull('wasAggressive');
-    if (wasFailure == null) throw new ArgumentError.notNull('wasFailure');
-    if (wasProactive == null) throw new ArgumentError.notNull('wasProactive');
-    if (wasSuccess == null) throw new ArgumentError.notNull('wasSuccess');
+    if (actionName == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'actionName');
+    if (description == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'description');
+    if (protagonist == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'protagonist');
+    if (sufferers == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'sufferers');
+    if (time == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'time');
+    if (wasAggressive == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'wasAggressive');
+    if (wasFailure == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'wasFailure');
+    if (wasProactive == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'wasProactive');
+    if (wasSuccess == null)
+      throw new BuiltValueNullFieldError('ActionRecord', 'wasSuccess');
   }
 
   @override
@@ -475,18 +505,31 @@ class ActionRecordBuilder
 
   @override
   _$ActionRecord build() {
-    final _$result = _$v ??
-        new _$ActionRecord._(
-            actionName: actionName,
-            dataString: dataString,
-            description: description,
-            protagonist: protagonist,
-            sufferers: sufferers?.build(),
-            time: time,
-            wasAggressive: wasAggressive,
-            wasFailure: wasFailure,
-            wasProactive: wasProactive,
-            wasSuccess: wasSuccess);
+    _$ActionRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$ActionRecord._(
+              actionName: actionName,
+              dataString: dataString,
+              description: description,
+              protagonist: protagonist,
+              sufferers: sufferers.build(),
+              time: time,
+              wasAggressive: wasAggressive,
+              wasFailure: wasFailure,
+              wasProactive: wasProactive,
+              wasSuccess: wasSuccess);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'sufferers';
+        sufferers.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ActionRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -13,7 +13,8 @@ import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 
 part 'counter_attack_situation.g.dart';
 
-abstract class CounterAttackSituation extends Situation
+abstract class CounterAttackSituation extends Object
+    with SituationBaseBehavior
     implements Built<CounterAttackSituation, CounterAttackSituationBuilder> {
   static Serializer<CounterAttackSituation> get serializer =>
       _$counterAttackSituationSerializer;

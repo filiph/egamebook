@@ -3,13 +3,15 @@
 part of stranded.history.rule;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -25,7 +27,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
 
   @override
   Iterable serialize(Serializers serializers, RuleHistory object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
       serializers.serialize(object.records,
@@ -38,7 +40,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
 
   @override
   RuleHistory deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleHistoryBuilder();
 
     final iterator = serialized.iterator;
@@ -52,7 +54,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(RuleRecord)
-              ])) as BuiltMap<int, RuleRecord>);
+              ])) as BuiltMap);
           break;
       }
     }
@@ -69,7 +71,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
 
   @override
   Iterable serialize(Serializers serializers, RuleRecord object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'ruleId',
       serializers.serialize(object.ruleId, specifiedType: const FullType(int)),
@@ -83,7 +85,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
 
   @override
   RuleRecord deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleRecordBuilder();
 
     final iterator = serialized.iterator;
@@ -115,7 +117,8 @@ class _$RuleHistory extends RuleHistory {
       (new RuleHistoryBuilder()..update(updates)).build();
 
   _$RuleHistory._({this.records}) : super._() {
-    if (records == null) throw new ArgumentError.notNull('records');
+    if (records == null)
+      throw new BuiltValueNullFieldError('RuleHistory', 'records');
   }
 
   @override
@@ -175,7 +178,20 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
 
   @override
   _$RuleHistory build() {
-    final _$result = _$v ?? new _$RuleHistory._(records: records?.build());
+    _$RuleHistory _$result;
+    try {
+      _$result = _$v ?? new _$RuleHistory._(records: records.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'records';
+        records.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'RuleHistory', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
@@ -191,8 +207,9 @@ class _$RuleRecord extends RuleRecord {
       (new RuleRecordBuilder()..update(updates)).build();
 
   _$RuleRecord._({this.ruleId, this.time}) : super._() {
-    if (ruleId == null) throw new ArgumentError.notNull('ruleId');
-    if (time == null) throw new ArgumentError.notNull('time');
+    if (ruleId == null)
+      throw new BuiltValueNullFieldError('RuleRecord', 'ruleId');
+    if (time == null) throw new BuiltValueNullFieldError('RuleRecord', 'time');
   }
 
   @override

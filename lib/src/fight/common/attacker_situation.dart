@@ -142,7 +142,8 @@ class AttackDirection extends EnumClass {
 /// popped from the [WorldState.situations] stack. If the defense is
 /// unsuccessful, then only the defense situation will be popped, and
 /// the attacker will be free to finish the move.
-abstract class AttackerSituation extends Situation
+abstract class AttackerSituation extends Object
+    with SituationBaseBehavior
     implements Built<AttackerSituation, AttackerSituationBuilder> {
   static Serializer<AttackerSituation> get serializer =>
       _$attackerSituationSerializer;

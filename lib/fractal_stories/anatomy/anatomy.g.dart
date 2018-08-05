@@ -3,13 +3,15 @@
 part of fractal_stories.anatomy;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 
   @override
   Iterable serialize(Serializers serializers, Anatomy object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'torso',
       serializers.serialize(object.torso,
@@ -36,7 +38,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 
   @override
   Anatomy deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new AnatomyBuilder();
 
     final iterator = serialized.iterator;
@@ -65,7 +67,7 @@ class _$Anatomy extends Anatomy {
       (new AnatomyBuilder()..update(updates)).build();
 
   _$Anatomy._({this.torso}) : super._() {
-    if (torso == null) throw new ArgumentError.notNull('torso');
+    if (torso == null) throw new BuiltValueNullFieldError('Anatomy', 'torso');
   }
 
   @override
@@ -127,7 +129,20 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
 
   @override
   _$Anatomy build() {
-    final _$result = _$v ?? new _$Anatomy._(torso: torso?.build());
+    _$Anatomy _$result;
+    try {
+      _$result = _$v ?? new _$Anatomy._(torso: torso.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'torso';
+        torso.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Anatomy', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -3,13 +3,15 @@
 part of stranded.history.visit;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -26,7 +28,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
 
   @override
   Iterable serialize(Serializers serializers, VisitHistory object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
       serializers.serialize(object.records,
@@ -39,7 +41,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
 
   @override
   VisitHistory deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitHistoryBuilder();
 
     final iterator = serialized.iterator;
@@ -53,7 +55,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(VisitRecord)
-              ])) as BuiltListMultimap<String, VisitRecord>);
+              ])) as BuiltListMultimap);
           break;
       }
     }
@@ -70,7 +72,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
 
   @override
   Iterable serialize(Serializers serializers, VisitRecord object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actorId',
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
@@ -93,7 +95,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
 
   @override
   VisitRecord deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitRecordBuilder();
 
     final iterator = serialized.iterator;
@@ -133,7 +135,8 @@ class _$VisitHistory extends VisitHistory {
       (new VisitHistoryBuilder()..update(updates)).build();
 
   _$VisitHistory._({this.records}) : super._() {
-    if (records == null) throw new ArgumentError.notNull('records');
+    if (records == null)
+      throw new BuiltValueNullFieldError('VisitHistory', 'records');
   }
 
   @override
@@ -196,7 +199,20 @@ class VisitHistoryBuilder
 
   @override
   _$VisitHistory build() {
-    final _$result = _$v ?? new _$VisitHistory._(records: records?.build());
+    _$VisitHistory _$result;
+    try {
+      _$result = _$v ?? new _$VisitHistory._(records: records.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'records';
+        records.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'VisitHistory', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
@@ -217,9 +233,11 @@ class _$VisitRecord extends VisitRecord {
 
   _$VisitRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
       : super._() {
-    if (actorId == null) throw new ArgumentError.notNull('actorId');
-    if (roomName == null) throw new ArgumentError.notNull('roomName');
-    if (time == null) throw new ArgumentError.notNull('time');
+    if (actorId == null)
+      throw new BuiltValueNullFieldError('VisitRecord', 'actorId');
+    if (roomName == null)
+      throw new BuiltValueNullFieldError('VisitRecord', 'roomName');
+    if (time == null) throw new BuiltValueNullFieldError('VisitRecord', 'time');
   }
 
   @override

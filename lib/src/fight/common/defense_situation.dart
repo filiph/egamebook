@@ -13,8 +13,8 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 part 'defense_situation.g.dart';
 
-abstract class DefenseSituation extends Situation
-    with Predeterminable
+abstract class DefenseSituation extends Object
+    with SituationBaseBehavior, Predeterminable
     implements Built<DefenseSituation, DefenseSituationBuilder> {
   static Serializer<DefenseSituation> get serializer =>
       _$defenseSituationSerializer;
@@ -34,11 +34,9 @@ abstract class DefenseSituation extends Situation
         ..id = id
         ..name = situationName
         ..builtOtherActorActionGenerators =
-            new ListBuilder<OtherActorAction>(
-                builtOtherActorActionGenerators)
+            new ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
-            new ListBuilder<EnemyTargetAction>(
-                builtEnemyTargetActionGenerators)
+            new ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id

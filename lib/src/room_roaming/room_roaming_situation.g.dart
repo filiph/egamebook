@@ -3,13 +3,15 @@
 part of stranded.room_roaming.room_roaming_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -29,7 +31,7 @@ class _$RoomRoamingSituationSerializer
 
   @override
   Iterable serialize(Serializers serializers, RoomRoamingSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'currentRoomName',
       serializers.serialize(object.currentRoomName,
@@ -48,7 +50,7 @@ class _$RoomRoamingSituationSerializer
 
   @override
   RoomRoamingSituation deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new RoomRoamingSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -98,10 +100,15 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
       {this.currentRoomName, this.id, this.monstersAlive, this.time})
       : super._() {
     if (currentRoomName == null)
-      throw new ArgumentError.notNull('currentRoomName');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (monstersAlive == null) throw new ArgumentError.notNull('monstersAlive');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError(
+          'RoomRoamingSituation', 'currentRoomName');
+    if (id == null)
+      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'id');
+    if (monstersAlive == null)
+      throw new BuiltValueNullFieldError(
+          'RoomRoamingSituation', 'monstersAlive');
+    if (time == null)
+      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'time');
   }
 
   @override

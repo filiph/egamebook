@@ -3,13 +3,15 @@
 part of stranded.fight.fight_situation;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -26,7 +28,7 @@ class _$FightSituationSerializer
 
   @override
   Iterable serialize(Serializers serializers, FightSituation object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'droppedItems',
       serializers.serialize(object.droppedItems,
@@ -61,7 +63,7 @@ class _$FightSituationSerializer
 
   @override
   FightSituation deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new FightSituationBuilder();
 
     final iterator = serialized.iterator;
@@ -74,20 +76,20 @@ class _$FightSituationSerializer
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Item>);
+              as BuiltList);
           break;
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<int>);
+              as BuiltList);
           break;
         case 'events':
           result.events.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(EventCallback)
-              ])) as BuiltMap<int, EventCallback>);
+              ])) as BuiltMap);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -101,7 +103,7 @@ class _$FightSituationSerializer
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<int>);
+              as BuiltList);
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,
@@ -149,16 +151,22 @@ class _$FightSituation extends FightSituation {
       this.roomRoamingSituationId,
       this.time})
       : super._() {
-    if (droppedItems == null) throw new ArgumentError.notNull('droppedItems');
-    if (enemyTeamIds == null) throw new ArgumentError.notNull('enemyTeamIds');
-    if (events == null) throw new ArgumentError.notNull('events');
+    if (droppedItems == null)
+      throw new BuiltValueNullFieldError('FightSituation', 'droppedItems');
+    if (enemyTeamIds == null)
+      throw new BuiltValueNullFieldError('FightSituation', 'enemyTeamIds');
+    if (events == null)
+      throw new BuiltValueNullFieldError('FightSituation', 'events');
     if (groundMaterial == null)
-      throw new ArgumentError.notNull('groundMaterial');
-    if (id == null) throw new ArgumentError.notNull('id');
-    if (playerTeamIds == null) throw new ArgumentError.notNull('playerTeamIds');
+      throw new BuiltValueNullFieldError('FightSituation', 'groundMaterial');
+    if (id == null) throw new BuiltValueNullFieldError('FightSituation', 'id');
+    if (playerTeamIds == null)
+      throw new BuiltValueNullFieldError('FightSituation', 'playerTeamIds');
     if (roomRoamingSituationId == null)
-      throw new ArgumentError.notNull('roomRoamingSituationId');
-    if (time == null) throw new ArgumentError.notNull('time');
+      throw new BuiltValueNullFieldError(
+          'FightSituation', 'roomRoamingSituationId');
+    if (time == null)
+      throw new BuiltValueNullFieldError('FightSituation', 'time');
   }
 
   @override
@@ -291,16 +299,36 @@ class FightSituationBuilder
 
   @override
   _$FightSituation build() {
-    final _$result = _$v ??
-        new _$FightSituation._(
-            droppedItems: droppedItems?.build(),
-            enemyTeamIds: enemyTeamIds?.build(),
-            events: events?.build(),
-            groundMaterial: groundMaterial,
-            id: id,
-            playerTeamIds: playerTeamIds?.build(),
-            roomRoamingSituationId: roomRoamingSituationId,
-            time: time);
+    _$FightSituation _$result;
+    try {
+      _$result = _$v ??
+          new _$FightSituation._(
+              droppedItems: droppedItems.build(),
+              enemyTeamIds: enemyTeamIds.build(),
+              events: events.build(),
+              groundMaterial: groundMaterial,
+              id: id,
+              playerTeamIds: playerTeamIds.build(),
+              roomRoamingSituationId: roomRoamingSituationId,
+              time: time);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'droppedItems';
+        droppedItems.build();
+        _$failedField = 'enemyTeamIds';
+        enemyTeamIds.build();
+        _$failedField = 'events';
+        events.build();
+
+        _$failedField = 'playerTeamIds';
+        playerTeamIds.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'FightSituation', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

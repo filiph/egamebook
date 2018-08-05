@@ -3,13 +3,15 @@
 part of egamebook.element.lose;
 
 // **************************************************************************
-// Generator: BuiltValueGenerator
+// BuiltValueGenerator
 // **************************************************************************
 
 // ignore_for_file: always_put_control_body_on_new_line
 // ignore_for_file: annotate_overrides
 // ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_catches_without_on_clauses
 // ignore_for_file: avoid_returning_this
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
@@ -24,7 +26,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
 
   @override
   Iterable serialize(Serializers serializers, LoseGame object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'markdownText',
       serializers.serialize(object.markdownText,
@@ -36,7 +38,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
 
   @override
   LoseGame deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     final result = new LoseGameBuilder();
 
     final iterator = serialized.iterator;
@@ -64,7 +66,8 @@ class _$LoseGame extends LoseGame {
       (new LoseGameBuilder()..update(updates)).build();
 
   _$LoseGame._({this.markdownText}) : super._() {
-    if (markdownText == null) throw new ArgumentError.notNull('markdownText');
+    if (markdownText == null)
+      throw new BuiltValueNullFieldError('LoseGame', 'markdownText');
   }
 
   @override
