@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 import 'actor.dart';
 import 'room.dart';
 
-typedef void EventCallback(
+typedef EventCallback = void Function(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
 
 /// This object contains everything that is completely immutable about the world
@@ -47,8 +47,7 @@ class Simulation {
     Iterable<Room> rooms,
     Iterable<Approach> approaches,
     this.combineFunctions,
-  )
-      : rooms = new Set<Room>.from(rooms),
+  )   : rooms = new Set<Room>.from(rooms),
         approaches = new Set<Approach>.from(approaches) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
     assert(() {

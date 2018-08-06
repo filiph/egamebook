@@ -3,7 +3,7 @@ library edgehead.serializers;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/edgehead_action_builders_gather.dart' as action_builders;
-import 'package:edgehead/edgehead_event_callbacks.dart' as event_callbacks;
+import 'package:edgehead/edgehead_event_callbacks_gather.dart' as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';

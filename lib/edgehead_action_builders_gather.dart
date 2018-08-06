@@ -31,7 +31,7 @@ import 'src/fight/thrust/thrust_defense/actions/dodge_thrust.dart';
 import 'src/fight/thrust/thrust_defense/actions/jump_back.dart';
 import 'src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 
-part 'edgehead_action_builders_gather.gathered.g.dart';
+part 'edgehead_action_builders_gather.gathered.dart';
 
 @GatherInstancesFrom(const ['lib/src/fight/**/actions/*.dart'])
 final InstanceSerializer<Action> actionSerializer = _$actionSerializer;

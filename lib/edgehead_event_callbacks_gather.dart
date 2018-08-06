@@ -5,14 +5,17 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/sourcegen/functions_serializer.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
+import 'package:egamebook_builder/function_serializer.dart';
 
-//part 'edgehead_event_callbacks.g.dart';
+part 'edgehead_event_callbacks_gather.gathered.dart';
 
-//@GatherFunctionsFrom(const ['lib/edgehead_event_callbacks.dart'])
-//final FunctionSerializer<EventCallback> serializer = _$eventCallbackSerializer;
+@GatherFunctionsFrom(
+  EventCallback,
+  const ['lib/edgehead_event_callbacks_gather.dart'],
+)
+final FunctionSerializer<EventCallback> serializer = _$eventCallbackSerializer;
 
 void agruth_enjoy_eating_flesh(
     Simulation sim, WorldStateBuilder w, Storyline s) {
@@ -95,9 +98,7 @@ void escape_tunnel_insignificant(
       : (player.currentShield != null ? 'shield' : player.currentWeapon.name);
   s.add(
       "That last blow hits your $target hard"
-      "${player.isOnGround ?
-        '' :
-        ' and sends you a couple of steps back'}.",
+      "${player.isOnGround ? '' : ' and sends you a couple of steps back'}.",
       wholeSentence: true);
   final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
   s.add("<owner's> <subject> glint<s> with intensity",

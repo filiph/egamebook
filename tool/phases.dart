@@ -29,7 +29,7 @@ final List<BuildAction> phases = [
       ]),
       'edgehead',
       inputs: const [
-        'lib/edgehead_event_callbacks.dart',
+        'lib/edgehead_event_callbacks_gather.dart',
       ]),
   new BuildAction(
       new PartBuilder([
