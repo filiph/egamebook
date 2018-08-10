@@ -50,7 +50,11 @@ Here are some additional "philosophical" pillars:
    * As of July 2018, Dart 2 works but is not fully supported. See discussion
      [here](https://github.com/filiph/edgehead/issues/13#issuecomment-375698672)
      to see why. As of Dart version 2.0.0-dev.58 everything works just fine,
-     just don't use the `--preview-dart-2` option.
+     just don't use the `--preview-dart-2` option. To install Dart 1,
+     go to [the archive page](https://www.dartlang.org/tools/sdk/archive)
+     and choose the version `1.24.3` for your platform (Win, Mac, or Linux).
+     You'll have to unzip it and add Dart to your path. When I finish
+     the upgrade to Dart 2, the installation will get much easier.
 2. Clone this repository (`git clone https://github.com/filiph/edgehead.git`)
    or download the zip file containing it
 3. Go to the repository's directory (`cd edgehead`)
