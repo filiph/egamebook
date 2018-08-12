@@ -2,5 +2,7 @@
 targets:
   edgehead:
     builders:
-      built_value_generator|built_value:
+#      built_value_generator|built_value:
 #        enabled: false
+      egamebook_builder|writers_builder:
+        generate_for: ['lib/writers_input.dart']
