@@ -23,14 +23,10 @@ import 'storyline/storyline.dart';
 /// * Put the new class in a separate Dart file.
 /// * Make sure that the new class `MySituation` implements
 ///   `BuiltValue<MySituation, MySituationBuilder>` as required by built_value.
-/// * Create the `MySituationBuilder` class.
-/// * Add the new Dart file into `tool/phases.dart`.
-/// * Run `tool/build.dart` if it doesn't run automatically.
-/// * Follow instruction in the newly generated `*.g.dart` file.
-/// * Make sure your `MySituationBuilder` includes the [id] field and that
-///   it reads like this:
-///         @virtual
-///         int id = getRandomId();
+///     * Look at other situations for how that works.
+/// * Make sure `pub run build_runner watch` is running. Alternately,
+///   run `pub run build_runner build` for a one-time build.
+/// * Follow instruction in the newly generated `*.g.dart` file, if any.
 @immutable
 abstract class Situation {
   /// Default value for [maxActionsToShow].
