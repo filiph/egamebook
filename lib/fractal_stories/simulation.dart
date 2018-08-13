@@ -2,7 +2,6 @@ library stranded.world;
 
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
