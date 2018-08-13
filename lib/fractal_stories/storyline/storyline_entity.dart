@@ -133,7 +133,7 @@ class _NonserializableEntity extends Object
       Pronoun pronoun,
       Team team,
       this.nameIsProperNoun: false,
-      this.isPlayer})
+      this.isPlayer: false})
       : this.team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 
