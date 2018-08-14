@@ -13,8 +13,27 @@ import 'package:meta/meta.dart';
 import 'actor.dart';
 import 'room.dart';
 
-typedef EventCallback = void Function(
+typedef EventCallbackFunction = void Function(
     Simulation sim, WorldStateBuilder world, Storyline storyline);
+
+/// A function to be called at a specified time.
+///
+/// This is a simple wrapper around the [EventCallbackFunction]. We can't
+/// use [EventCallbackFunction] directly because `pkg:built_value`
+/// has trouble when serializing functions (which stems from typedefs
+/// not having "names", instead using something like `(Parameter p) → void`).
+class EventCallback {
+  final EventCallbackFunction _function;
+
+  const EventCallback(this._function);
+
+  /// Run the underlying [_function].
+  ///
+  /// This method should have the same signature as [EventCallbackFunction]
+  /// itself.
+  void run(Simulation sim, WorldStateBuilder world, Storyline storyline) =>
+      _function(sim, world, storyline);
+}
 
 /// This object contains everything that is completely immutable about the world
 /// in which the player character lives.
@@ -115,7 +134,6 @@ class Simulation {
   ///   * For each rule, get its destination (always the parent room name)
   ///   * Group together rules with same destination, and choose according
   ///     to RULESET
-  @visibleForTesting
   Iterable<Approach> getAvailableApproaches(
       Room room, ApplicabilityContext context) sync* {
     final List<_ApproachRule> allExits = context.simulation.approaches

@@ -12,12 +12,10 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
-//import 'package:edgehead/writers_input.g.dart' as writers_input;
+import 'package:edgehead/writers_input.compiled.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
 
-@deprecated
-const List<Action> allActions = const [];
 
 abstract class RoomRoamingSituation extends Object
     with SituationBaseBehavior
@@ -45,7 +43,7 @@ abstract class RoomRoamingSituation extends Object
   List<Action> get actions => [
         TakeApproachAction.singleton,
       ]
-        ..addAll(allActions)
+        ..addAll(writers_input.allActions)
         ..add(SlayMonstersAction.singleton);
 
   String get currentRoomName;

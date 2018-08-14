@@ -8,17 +8,11 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
-//import 'package:edgehead/writers_input.g.dart';
+import 'package:edgehead/writers_input.compiled.dart';
 
 const String carelessMonsterCombineFunctionHandle = "carelessMonster";
 
 const String normalCombineFunctionHandle = "normal";
-
-@deprecated
-const List<Approach> allApproaches = const [];
-
-@deprecated
-const List<Room> allRooms = const [];
 
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;

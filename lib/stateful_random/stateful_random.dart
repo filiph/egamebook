@@ -36,9 +36,11 @@ class StatefulRandom implements Random {
     _state = state;
   }
 
-  /// Returns a new number from `0` to [_maxInt32]. Clients should use
-  /// [maxInt] instead.
-  @visibleForTesting
+  /// Returns a new number from `0` to [_maxInt32].
+  ///
+  /// Clients should normally use the [maxInt] method instead. But in rare
+  /// cases, when the idea is to get a random identifier, this function
+  /// can work.
   int next() {
     int x = _state;
     x ^= x << 13;

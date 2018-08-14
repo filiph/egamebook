@@ -226,7 +226,7 @@ abstract class FightSituation extends Object
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
     if (events.containsKey(time)) {
       final callback = events[time];
-      callback(sim, world, s);
+      callback.run(sim, world, s);
     }
   }
 

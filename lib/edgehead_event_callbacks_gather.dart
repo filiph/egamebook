@@ -1,24 +1,22 @@
 library edgehead.event_callbacks;
 
+// ignore_for_file: type_annotate_public_apis
+
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
-import 'package:egamebook_builder/function_serializer.dart';
+import 'package:egamebook_builder/instance_serializer.dart';
 
 part 'edgehead_event_callbacks_gather.gathered.dart';
 
-@GatherFunctionsFrom(
-  EventCallback,
-  const ['lib/edgehead_event_callbacks_gather.dart'],
-)
-final FunctionSerializer<EventCallback> serializer = _$eventCallbackSerializer;
+@GatherInstancesFrom(const ['lib/edgehead_event_callbacks_gather.dart'])
+final InstanceSerializer<EventCallback> eventCallbackSerializer =
+    _$eventCallbackSerializer;
 
-void agruth_enjoy_eating_flesh(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final agruth_enjoy_eating_flesh = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   s.addParagraph();
   agruth.report(
@@ -27,25 +25,25 @@ void agruth_enjoy_eating_flesh(
       "<subject> snarl<s>.",
       wholeSentence: true);
   s.addParagraph();
-}
+});
 
-void agruth_grit_teeth(Simulation sim, WorldStateBuilder w, Storyline s) {
+final agruth_grit_teeth = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> grit<s> <subject's> teeth");
   agruth.report(s, "<subject> do<es>n't talk any more", but: true);
-}
+});
 
-void agruth_scowls(Simulation sim, WorldStateBuilder w, Storyline s) {
+final agruth_scowls = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> scowl<s> with pure hatred");
-}
+});
 
-void agruth_spits(Simulation sim, WorldStateBuilder w, Storyline s) {
+final agruth_spits = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> spit<s> on the cavern floor");
-}
+});
 
-void escape_pursuers_reach(Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_pursuers_reach = EventCallback((sim, w, s) {
   final built = w.build();
   s.add(
       "Your pursuers reach you from behind and a sword pierces your chest "
@@ -54,23 +52,21 @@ void escape_pursuers_reach(Simulation sim, WorldStateBuilder w, Storyline s) {
   w.updateActorById(getPlayer(built).id, (b) => b..hitpoints = 0);
   w.popSituationsUntil(RoomRoamingSituation.className, sim);
   w.popSituation(sim);
-}
+});
 
-void escape_tunnel_earsplitting(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_tunnel_earsplitting = EventCallback((sim, w, s) {
   s.add(
       "Ear-splitting shouts come from behind. You wheel around and see "
       "a body of orcs and goblins approaching at top speed, their "
       "swords and spears at the ready.",
       wholeSentence: true);
-}
+});
 
-void escape_tunnel_halfway(Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_tunnel_halfway = EventCallback((sim, w, s) {
   s.add("The orcs and goblins are halfway here.", wholeSentence: true);
-}
+});
 
-void escape_tunnel_insignificant(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_tunnel_insignificant = EventCallback((sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
@@ -103,9 +99,9 @@ void escape_tunnel_insignificant(
   final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
   s.add("<owner's> <subject> glint<s> with intensity",
       owner: actor, subject: eyes);
-}
+});
 
-void escape_tunnel_look(Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_tunnel_look = EventCallback((sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
@@ -144,24 +140,23 @@ void escape_tunnel_look(Simulation sim, WorldStateBuilder w, Storyline s) {
           wholeSentence: true);
     }
   }
-}
+});
 
-void escape_tunnel_loud_cries(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final escape_tunnel_loud_cries = EventCallback((sim, w, s) {
   s.add(
       "From behind, you hear loud cries. Your pursuers must have reached "
       "the top of the stairs.",
       wholeSentence: true);
-}
+});
 
-void mad_guardian_good(Simulation sim, WorldStateBuilder w, Storyline s) {
+final mad_guardian_good = EventCallback((sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   guardian.report(
       s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
       object: getPlayer(w.build()), wholeSentence: true);
-}
+});
 
-void mad_guardian_pain(Simulation sim, WorldStateBuilder w, Storyline s) {
+final mad_guardian_pain = EventCallback((sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   var briana = w.getActorById(brianaId);
   s.addParagraph();
@@ -173,9 +168,9 @@ void mad_guardian_pain(Simulation sim, WorldStateBuilder w, Storyline s) {
     briana.report(s, "\"Shut up and die.\"", wholeSentence: true);
     s.addParagraph();
   }
-}
+});
 
-void mad_guardian_shut_up(Simulation sim, WorldStateBuilder w, Storyline s) {
+final mad_guardian_shut_up = EventCallback((sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   var player = getPlayer(w.build());
   s.addParagraph();
@@ -192,10 +187,9 @@ void mad_guardian_shut_up(Simulation sim, WorldStateBuilder w, Storyline s) {
   player.report(s, "_\"You had better shut up, and die.\"_",
       wholeSentence: true);
   s.addParagraph();
-}
+});
 
-void slave_quarters_mean_nothing(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final slave_quarters_mean_nothing = EventCallback((sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
   final actor = orc.isAliveAndActive ? orc : goblin;
@@ -207,10 +201,9 @@ void slave_quarters_mean_nothing(
       wholeSentence: true);
   actor.report(s, "<subject> smirk<s>");
   actor.report(s, "\"You mean nothing.\"", wholeSentence: true);
-}
+});
 
-void slave_quarters_orc_looks(
-    Simulation sim, WorldStateBuilder w, Storyline s) {
+final slave_quarters_orc_looks = EventCallback((sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
   if (!goblin.isAlive) {
@@ -225,9 +218,9 @@ void slave_quarters_orc_looks(
         s, "\"Now that is practice,\" <subject> say<s> to <objectPronoun>.",
         object: goblin, wholeSentence: true);
   }
-}
+});
 
-void sleeping_goblin_thief(Simulation sim, WorldStateBuilder w, Storyline s) {
+final sleeping_goblin_thief = EventCallback((sim, w, s) {
   final goblin = w.getActorById(sleepingGoblinId);
   final player = getPlayer(w.build());
   final tookSpear =
@@ -237,9 +230,9 @@ void sleeping_goblin_thief(Simulation sim, WorldStateBuilder w, Storyline s) {
         objectOwner: player, object: sleepingGoblinsSpear);
     goblin.report(s, "\"Thief,\" <subject> hiss<es>.", wholeSentence: true);
   }
-}
+});
 
-void youre_dead_slave(Simulation sim, WorldStateBuilder w, Storyline s) {
+final youre_dead_slave = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   var sword = new Item.weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
@@ -251,4 +244,4 @@ void youre_dead_slave(Simulation sim, WorldStateBuilder w, Storyline s) {
       "with hatred.",
       object: getPlayer(w.build()),
       wholeSentence: true);
-}
+});

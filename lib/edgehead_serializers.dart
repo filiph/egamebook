@@ -2,8 +2,10 @@ library edgehead.serializers;
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
-import 'package:edgehead/edgehead_action_builders_gather.dart' as action_builders;
-import 'package:edgehead/edgehead_event_callbacks_gather.dart' as event_callbacks;
+import 'package:edgehead/edgehead_action_builders_gather.dart'
+    as action_builders;
+import 'package:edgehead/edgehead_event_callbacks_gather.dart'
+    as event_callbacks;
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -30,39 +32,37 @@ import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-//import 'package:edgehead/writers_input.g.dart';
+import 'package:edgehead/writers_input.compiled.dart';
 
-//part 'edgehead_serializers.g.dart';
-//
-//@SerializersFor(const [
-//  ActionRecord,
-//  Actor,
-//  Anatomy,
-//  AttackerSituation,
-//  BodyPart,
-//  CounterAttackSituation,
-//  CustomEventHistory,
-//  DefenseSituation,
-//  EdgeheadGlobalState,
-//  FightSituation,
-////  GuardpostAboveChurchTakeShieldRescueSituation,
-//  Item,
-//  LootSituation,
-//  OffBalanceOpportunitySituation,
-//  Pose,
-//  Predetermination,
-//  Pronoun,
-//  RoomRoamingSituation,
-//  Situation,
-//  Team,
-//  VisitHistory,
-//  DamageCapability,
-//  WeaponType,
-//  WorldState,
-//])
-//final Serializers serializers = (_$serializers.toBuilder()
-//      ..add(event_callbacks.serializer)
-//      ..add(action_builders.actionSerializer))
-//    .build();
+part 'edgehead_serializers.g.dart';
 
-final Serializers serializers = Serializers(); // TODO
+@SerializersFor(const [
+  ActionRecord,
+  Actor,
+  Anatomy,
+  AttackerSituation,
+  BodyPart,
+  CounterAttackSituation,
+  CustomEventHistory,
+  DefenseSituation,
+  EdgeheadGlobalState,
+  FightSituation,
+  GuardpostAboveChurchTakeShieldRescueSituation,
+  Item,
+  LootSituation,
+  OffBalanceOpportunitySituation,
+  Pose,
+  Predetermination,
+  Pronoun,
+  RoomRoamingSituation,
+  Situation,
+  Team,
+  VisitHistory,
+  DamageCapability,
+  WeaponType,
+  WorldState,
+])
+final Serializers serializers = (_$serializers.toBuilder()
+      ..add(event_callbacks.eventCallbackSerializer)
+      ..add(action_builders.actionSerializer))
+    .build();

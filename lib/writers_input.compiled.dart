@@ -1159,7 +1159,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
           _$guardpostAboveChurchTakeShieldRescueSituationSerializer;
   @override
   List<RoamingAction> get actions {
-    return [
+    [
       new SimpleAction(
           'guardpost_above_church_take_shield_rescue',
           'Stay perfectly still',
@@ -1212,7 +1212,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   @override
   Iterable<Actor> getActors(
       Iterable<Actor> actors, Simulation sim, WorldState w) {
-    return [
+    [
       actors.singleWhere((Actor a) {
         return a.isPlayer;
       })
@@ -2248,7 +2248,7 @@ Approach orcthornRoomFromSlaveQuartersPassage =
   final Storyline s = c.outputStoryline;
   s.add('You open the door.\n', wholeSentence: true);
 });
-List allRooms = <Room>[
+final allRooms = <Room>[
   testFight,
   undergroundChurch,
   tunnel,
@@ -2267,7 +2267,7 @@ List allRooms = <Room>[
   warForge,
   orcthornRoom
 ];
-List allApproaches = <Approach>[
+final allApproaches = <Approach>[
   testFightFromPreStartBook,
   startAdventureFromTestFight,
   undergroundChurchFromCaveWithAgruth,
@@ -2295,7 +2295,7 @@ List allApproaches = <Approach>[
   warForgeFromCaveWithAgruth,
   orcthornRoomFromSlaveQuartersPassage
 ];
-List allActions = <RoamingAction>[
+final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
   TalkToBriana1.singleton,
   TalkToBriana2.singleton,

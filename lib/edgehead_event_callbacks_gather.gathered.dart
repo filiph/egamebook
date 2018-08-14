@@ -3,10 +3,10 @@
 part of edgehead.event_callbacks;
 
 // **************************************************************************
-// FunctionSerializerGenerator
+// InstanceSerializerGenerator
 // **************************************************************************
 
-final _$eventCallbackSerializer = new FunctionSerializer<EventCallback>({
+final _$eventCallbackSerializer = new InstanceSerializer<EventCallback>({
   'agruth_enjoy_eating_flesh': agruth_enjoy_eating_flesh,
   'agruth_grit_teeth': agruth_grit_teeth,
   'agruth_scowls': agruth_scowls,
