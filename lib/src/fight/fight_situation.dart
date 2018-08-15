@@ -78,39 +78,31 @@ abstract class FightSituation extends Object
         ..events = new MapBuilder<int, EventCallback>(events));
   FightSituation._();
 
-// TODO
-// @override
-//  @deprecated
-//  List<ActionBuilder> get actionGenerators => [
-////        Confuse.builder,
-////        DisarmKick.builder,
-//        KickToGround.builder,
-//        Pound.builder,
-//        startBreakNeckOnGroundBuilder,
-//        startLeapBuilder,
-//        startPunchBuilder,
-//        startSlashAtBodyPartGenerator(BodyPartDesignation.primaryArm),
-//        startSlashAtBodyPartGenerator(BodyPartDesignation.secondaryArm),
-//        startSlashAtBodyPartGenerator(BodyPartDesignation.neck),
-//        startSlashAtBodyPartGenerator(BodyPartDesignation.leftLeg),
-//        startSlashAtBodyPartGenerator(BodyPartDesignation.rightLeg),
-//        startSlashFromDirectionGenerator(SlashDirection.left),
-//        startSlashFromDirectionGenerator(SlashDirection.right),
-//        startStrikeDownBuilder,
-//        startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
-//        startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),
-//        startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
-//        startThrustAtBodyPartGenerator(BodyPartDesignation.head),
-//        startThrustSpearDownBuilder,
-//        TakeDroppedShield.builder,
-//        TakeDroppedWeapon.builder,
-//        ThrowSpear.builder,
-//      ];
-
   @override
   List<Action<dynamic>> get actions => <Action<dynamic>>[
         Confuse.singleton,
         DisarmKick.singleton,
+        KickToGround.singleton,
+        Pound.singleton,
+        startBreakNeckOnGroundBuilder(),
+        startLeapBuilder(),
+        startPunchBuilder(),
+        startSlashAtBodyPartGenerator(BodyPartDesignation.primaryArm),
+        startSlashAtBodyPartGenerator(BodyPartDesignation.secondaryArm),
+        startSlashAtBodyPartGenerator(BodyPartDesignation.neck),
+        startSlashAtBodyPartGenerator(BodyPartDesignation.leftLeg),
+        startSlashAtBodyPartGenerator(BodyPartDesignation.rightLeg),
+        startSlashFromDirectionGenerator(SlashDirection.left),
+        startSlashFromDirectionGenerator(SlashDirection.right),
+        startStrikeDownBuilder(),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
+        startThrustAtBodyPartGenerator(BodyPartDesignation.head),
+        startThrustSpearDownBuilder(),
+        TakeDroppedShield.singleton,
+        TakeDroppedWeapon.singleton,
+        ThrowSpear.singleton,
         // simple ones
         RegainBalance.singleton,
         StandUp.singleton,

@@ -34,4 +34,7 @@ final _$actionSerializer = new InstanceSerializer<Action>({
   'ShieldBlockThrust.singleton': ShieldBlockThrust.singleton,
   'DodgeThrust.singleton': DodgeThrust.singleton,
   'FinishThrust.singleton': FinishThrust.singleton,
-});
+}, additionalTypes: [
+  OtherActorAction,
+  EnemyTargetAction,
+]);

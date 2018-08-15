@@ -38,7 +38,7 @@ class StatefulRandom implements Random {
 
   /// Returns a new number from `0` to [_maxInt32].
   ///
-  /// Clients should normally use the [maxInt] method instead. But in rare
+  /// Clients should normally use the [nextInt] method instead. But in rare
   /// cases, when the idea is to get a random identifier, this function
   /// can work.
   int next() {

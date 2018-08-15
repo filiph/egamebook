@@ -1147,7 +1147,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
 
   factory GuardpostAboveChurchTakeShieldRescueSituation.initialized(int id) {
     return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
-      id = b.id;
+      b.id = id;
       b.time = 0;
     });
   }
@@ -1159,7 +1159,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
           _$guardpostAboveChurchTakeShieldRescueSituationSerializer;
   @override
   List<RoamingAction> get actions {
-    [
+    return [
       new SimpleAction(
           'guardpost_above_church_take_shield_rescue',
           'Stay perfectly still',
