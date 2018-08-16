@@ -36,7 +36,7 @@ abstract class Actor extends Object
   /// For example, after a `FightSituation` ends, all dead actors are deleted,
   /// which means there is nobody to score the situation. In that case, we
   /// provide this default score.
-  static const ActorScore defaultScoreWhenDead = const ActorScore(-10, 0, 100);
+  static const ActorScore defaultScoreWhenDead = ActorScore(-10, 0, 100);
 
   static Serializer<Actor> get serializer => _$actorSerializer;
 
@@ -69,7 +69,7 @@ abstract class Actor extends Object
       weapon = createBodyPartWeapon(currentAnatomy);
     }
 
-    return new _$Actor((b) => b
+    return _$Actor((b) => b
       ..id = id
       ..name = name
       ..isPlayer = isPlayer
@@ -93,7 +93,7 @@ abstract class Actor extends Object
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = Pose.standing
       ..isActive = true
-      ..weapons = new ListBuilder<Item>());
+      ..weapons = ListBuilder<Item>());
   }
 
   Actor._();
@@ -342,7 +342,7 @@ abstract class Actor extends Object
       return sum + weightedScore;
     });
 
-    return new ActorScore(selfPreservation, teamPreservation, enemy);
+    return ActorScore(selfPreservation, teamPreservation, enemy);
   }
 
   /// Returns true if this actor was attacked by [actor] in the past

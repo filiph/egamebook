@@ -10,7 +10,7 @@ class Confuse extends EnemyTargetAction {
 
   static const String className = "Confuse";
 
-  static final EnemyTargetAction singleton = new Confuse();
+  static final EnemyTargetAction singleton = Confuse();
 
   @override
   final bool isAggressive = true;
@@ -72,7 +72,7 @@ class Confuse extends EnemyTargetAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return new ReasonedSuccessChance<Object>(0.8);
+    return ReasonedSuccessChance<Object>(0.8);
   }
 
   @override

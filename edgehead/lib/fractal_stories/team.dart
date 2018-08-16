@@ -8,11 +8,11 @@ part 'team.g.dart';
 
 const _neutralTeamId = 0;
 
-final Team defaultEnemyTeam = new Team((b) => b.id = 2);
+final Team defaultEnemyTeam = Team((b) => b.id = 2);
 
-final Team neutralTeam = new Team((b) => b.id = _neutralTeamId);
+final Team neutralTeam = Team((b) => b.id = _neutralTeamId);
 
-final Team playerTeam = new Team((b) => b.id = 1);
+final Team playerTeam = Team((b) => b.id = 1);
 
 @immutable
 abstract class Team implements Built<Team, TeamBuilder> {

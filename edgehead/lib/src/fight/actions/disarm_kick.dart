@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class DisarmKick extends EnemyTargetAction {
   static const String className = "DisarmKick";
 
-  static final EnemyTargetAction singleton = new DisarmKick();
+  static final EnemyTargetAction singleton = DisarmKick();
 
   @override
   final bool rerollable = true;

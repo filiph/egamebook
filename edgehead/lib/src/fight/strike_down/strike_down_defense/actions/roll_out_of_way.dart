@@ -20,7 +20,7 @@ ReasonedSuccessChance computeRollOutOfWay(
 }
 
 class RollOutOfWay extends OtherActorAction {
-  static final RollOutOfWay singleton = new RollOutOfWay();
+  static final RollOutOfWay singleton = RollOutOfWay();
 
   static const String className = "RollOutOfWay";
 

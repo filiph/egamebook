@@ -65,8 +65,8 @@ class Simulation {
     Iterable<Room> rooms,
     Iterable<Approach> approaches,
     this.combineFunctions,
-  )   : rooms = new Set<Room>.from(rooms),
-        approaches = new Set<Approach>.from(approaches) {
+  )   : rooms = Set<Room>.from(rooms),
+        approaches = Set<Approach>.from(approaches) {
     assert(!hasDuplicities(rooms.map((r) => r.name)));
     assert(() {
       for (final room in rooms) {
@@ -104,14 +104,14 @@ class Simulation {
 
     for (final action in context.world.currentSituation.actions) {
       if (action is Action<Null>) {
-        yield new Performance<Null>(action, null);
+        yield Performance<Null>(action, null);
         continue;
       }
 
       final targets = action.generateObjects(context);
 
       for (final target in targets) {
-        yield new Performance<dynamic>(action, target);
+        yield Performance<dynamic>(action, target);
       }
     }
   }
@@ -150,7 +150,7 @@ class Simulation {
     final Map<int, List<_ApproachRule>> paths = {};
     for (final approachRule in allExits) {
       paths.putIfAbsent(
-          approachRule.sourceDestinationHash, () => new List<_ApproachRule>());
+          approachRule.sourceDestinationHash, () => List<_ApproachRule>());
       paths[approachRule.sourceDestinationHash].add(approachRule);
     }
 
@@ -223,10 +223,10 @@ class Simulation {
       final combinedOnlyOnce = secondPart.onlyOnce;
       final combinedPrerequisite = (ApplicabilityContext context) =>
           firstPart.isSatisfiedBy(context) && secondPart.isSatisfiedBy(context);
-      prerequisite = new Prerequisite(combinedHash, combinedPriority,
+      prerequisite = Prerequisite(combinedHash, combinedPriority,
           combinedOnlyOnce, combinedPrerequisite);
     }
-    return new _ApproachRule(approach, source, destination, prerequisite);
+    return _ApproachRule(approach, source, destination, prerequisite);
   }
 
   Iterable<Room> _getVariants(Room room) {

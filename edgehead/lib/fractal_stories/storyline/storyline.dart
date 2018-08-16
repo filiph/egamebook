@@ -14,7 +14,7 @@ export 'storyline_pronoun.dart';
 
 part 'storyline_entity.dart';
 
-final Logger log = new Logger('Storyline');
+final Logger log = Logger('Storyline');
 
 /// A single report about an event, atomic part of a story. It can be "John
 /// picks up a shovel", "John approaches Jack" or "Jack is dead".
@@ -112,7 +112,7 @@ class Report {
       case 'time':
         return time;
       default:
-        throw new ArgumentError("Invalid key $key.");
+        throw ArgumentError("Invalid key $key.");
     }
   }
 
@@ -180,7 +180,7 @@ class Storyline {
   static const String VERB_BE = "<is>";
   static const String VERB_HAVE = "<has>";
   static final RegExp QUOTE_INTERPUNCTION_DUPLICATION =
-      new RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
+      RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
   static const String PARAGRAPH_NEWLINES = "\n\n";
 
   static const int SHORT_TIME = 4;
@@ -199,7 +199,7 @@ class Storyline {
   ///
   /// As a general rule, [Report]s are joined into paragraphs of text, and
   /// custom elements are printed after these paragraphs.
-  final Queue<_StorylineRecord> _records = new Queue<_StorylineRecord>();
+  final Queue<_StorylineRecord> _records = Queue<_StorylineRecord>();
 
   int time = 0;
 
@@ -250,9 +250,9 @@ class Storyline {
 
     bool wholeSentenceAutoDetected =
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
-            str.startsWith(new RegExp("[A-Z]"));
+            str.startsWith(RegExp("[A-Z]"));
 
-    final report = new Report(str,
+    final report = Report(str,
         subject: subject,
         object: object,
         owner: owner,
@@ -268,12 +268,12 @@ class Storyline {
         isSupportiveActionInThread: isSupportiveActionInThread,
         time: time ?? this.time);
 
-    _records.add(new _StorylineRecord(report: report));
+    _records.add(_StorylineRecord(report: report));
   }
 
   /// Add an element that is not text.
   void addCustomElement(ElementBase element) {
-    _records.add(new _StorylineRecord(customElement: element));
+    _records.add(_StorylineRecord(customElement: element));
   }
 
   /// Add a sentence (or more) enumerating several things ([articles]) at once.
@@ -291,7 +291,7 @@ class Storyline {
       // Don't create any report.
       return;
     }
-    StringBuffer buf = new StringBuffer();
+    StringBuffer buf = StringBuffer();
 
     String removeAlso(String s) =>
         s.replaceAll("<also> ", "").replaceAll("  ", " ").trim();
@@ -376,8 +376,7 @@ class Storyline {
       if (_hasBeenMentioned(entity, reportTime)) {
         stringWithParticle = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
       } else {
-        if (entity.name
-            .startsWith(new RegExp(r"[aeiouy]", caseSensitive: false))) {
+        if (entity.name.startsWith(RegExp(r"[aeiouy]", caseSensitive: false))) {
           stringWithParticle =
               string.replaceFirst(SUB_STRING, "an $SUB_STRING");
         } else {
@@ -462,7 +461,7 @@ class Storyline {
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
 
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
-      if (str.contains(new RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
+      if (str.contains(RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
@@ -495,7 +494,7 @@ class Storyline {
       }
 
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
-      if (str.contains(new RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) {
+      if (str.contains(RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
         result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
       }
@@ -611,7 +610,7 @@ class Storyline {
   /// Old way of getting text out of [Storyline]. Use [realize]
   /// instead unless you want only plain (markdown) text.
   String realizeAsString({bool onlyFirstParagraph: false}) {
-    final buf = new StringBuffer();
+    final buf = StringBuffer();
     final list = realize(onlyFirstParagraph: onlyFirstParagraph);
     for (final element in list) {
       if (element is TextOutput) {
@@ -628,7 +627,7 @@ class Storyline {
   ///
   /// TODO: deprecate the generated List ([_reports]) and use [_records] instead
   List<ElementBase> realize({bool onlyFirstParagraph: false}) {
-    StringBuffer strBuf = new StringBuffer();
+    StringBuffer strBuf = StringBuffer();
     _reports =
         _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
     List<Report> cleanedReports =
@@ -751,7 +750,7 @@ class Storyline {
     });
 
     // Construct the text.
-    final text = new TextOutput((b) => b..markdownText = s);
+    final text = TextOutput((b) => b..markdownText = s);
 
     if (length == lengthInRecords) {
       // No records other than of type [Report] found. Safe to just output
@@ -760,7 +759,7 @@ class Storyline {
     }
 
     // We have elements other than text.
-    final result = new List<ElementBase>();
+    final result = List<ElementBase>();
     result.add(text);
     int index = 0;
     for (final rec in _records) {
@@ -938,7 +937,7 @@ class Storyline {
       }
       result = result.replaceAll(
           OWNER_OR_OBJECT_OWNER_PRONOUN, owner.pronoun.nominative);
-      if (str.contains(new RegExp("$OWNER_OR_OBJECT_OWNER.+"
+      if (str.contains(RegExp("$OWNER_OR_OBJECT_OWNER.+"
           "$OWNER_OR_OBJECT_OWNER_POSSESSIVE"))) {
         // "the ship and her gun"
         result = result.replaceAll(

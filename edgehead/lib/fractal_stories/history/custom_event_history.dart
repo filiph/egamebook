@@ -74,12 +74,12 @@ abstract class CustomEventHistory
   /// [CustomEvent.actorId] will be returned.
   SerialQueryResult<CustomEvent> query({@required String name, Actor actor}) {
     final key = getKey(name);
-    if (!records.containsKey(key)) return new SerialQueryResult(const []);
+    if (!records.containsKey(key)) return SerialQueryResult(const []);
     if (actor == null) {
-      return new SerialQueryResult(records[key]);
+      return SerialQueryResult(records[key]);
     }
     final filtered = records[key].where((event) => event.actorId == actor.id);
-    return new SerialQueryResult(filtered);
+    return SerialQueryResult(filtered);
   }
 
   static String getKey(String eventName) => eventName;

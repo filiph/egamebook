@@ -29,7 +29,7 @@ ReasonedSuccessChance computeStartPunch(
   ]);
 }
 
-EnemyTargetAction startPunchBuilder() => new StartDefensibleAction(
+EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       name: "StartPunch",
       commandTemplate: startPunchCommandTemplate,
       helpMessage: startPunchHelpMessage,

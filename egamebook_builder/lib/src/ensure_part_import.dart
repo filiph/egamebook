@@ -4,7 +4,7 @@ void ensurePartImport(LibraryReader library, String fileName,
     {String extension: '.g.dart'}) {
   final source = library.element.source.contents.data;
   if (!source.contains("part '$fileName$extension';")) {
-    throw new InvalidGenerationSourceError(
+    throw InvalidGenerationSourceError(
         "${library.element.source.fullName} lacks part directive: "
         "part '$fileName$extension';");
   }

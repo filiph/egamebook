@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 class EvadeNeckBreaking extends OtherActorAction {
   static const String className = "EvadeNeckBreaking";
 
-  static final EvadeNeckBreaking singleton = new EvadeNeckBreaking();
+  static final EvadeNeckBreaking singleton = EvadeNeckBreaking();
 
   @override
   final String helpMessage = "This looks dangerous. Trying to evade this "

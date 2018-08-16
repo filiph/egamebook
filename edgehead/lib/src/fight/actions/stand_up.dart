@@ -9,7 +9,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
 class StandUp extends Action<Null> {
-  static final StandUp singleton = new StandUp();
+  static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";
 
@@ -36,7 +36,7 @@ class StandUp extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

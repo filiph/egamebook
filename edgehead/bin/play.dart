@@ -17,7 +17,7 @@ import 'package:slot_machine/result.dart';
 import 'default_savegames.dart' as savegames;
 
 Future<Null> main(List<String> args) async {
-  var parser = new ArgParser()
+  var parser = ArgParser()
     ..addFlag('automated',
         defaultsTo: false,
         negatable: false,
@@ -61,8 +61,7 @@ Future<Null> main(List<String> args) async {
   final logged = results['log'] as bool;
   RegExp actionPattern;
   if (results.wasParsed('action')) {
-    actionPattern =
-        new RegExp(results['action'] as String, caseSensitive: false);
+    actionPattern = RegExp(results['action'] as String, caseSensitive: false);
   }
   final savegame = results.wasParsed('load')
       ? savegames.defaultSavegames[results['load']]
@@ -70,11 +69,11 @@ Future<Null> main(List<String> args) async {
 
   File file;
   if (logged) {
-    file = new File("edgehead.log");
+    file = File("edgehead.log");
   }
-  final runner = new CliRunner(automated, automated, logged ? file : null,
+  final runner = CliRunner(automated, automated, logged ? file : null,
       actionPattern: actionPattern);
-  await runner.initialize(new EdgeheadGame(
+  await runner.initialize(EdgeheadGame(
     actionPattern: actionPattern,
     saveGameSerialized: savegame,
   ));
@@ -97,7 +96,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   StreamSubscription _loggerSubscription;
 
-  final Logger _log = new Logger("play_run");
+  final Logger _log = Logger("play_run");
 
   /// Silent mode can be overridden when [actionPattern] is encountered.
   bool _silent;
@@ -128,7 +127,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   CliRunner(this.automated, bool silent, File logFile,
       {Level logLevel: Level.FINE, this.actionPattern, Random random})
       : _logFile = logFile,
-        _random = random ?? new Random() {
+        _random = random ?? Random() {
     _silent = silent;
 
     if (_logFile != null) {
@@ -162,7 +161,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
           !element.choices.any((ch) => ch.isImplicit),
           "Cannot have an implicit choice "
           "when there is more than one of them.");
-      final menu = new Menu(element.choices.map((ch) => ch.markdownText),
+      final menu = Menu(element.choices.map((ch) => ch.markdownText),
           modifierKeys: ["s" /* force success */, "f" /* force failure */]);
       print("");
       final choice = menu.choose();
@@ -173,7 +172,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     }
 
     final selectedChoice = element.choices[option];
-    book.accept(new PickChoice((b) => b..choice = selectedChoice.toBuilder()));
+    book.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
   }
 
   @override
@@ -204,13 +203,13 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   @override
   void addSavegameBookmark(SaveGame savegame) {
-    throw new UnimplementedError(savegame.toString());
+    throw UnimplementedError(savegame.toString());
   }
 
   @override
   void addSlotMachine(SlotMachine element) {
     if (_forceSuccessOnNextSlotMachine || _forceFailureOnNextSlotMachine) {
-      book.accept(new ResolveSlotMachine((b) => b
+      book.accept(ResolveSlotMachine((b) => b
         ..result =
             _forceSuccessOnNextSlotMachine ? Result.success : Result.failure
         ..wasRerolled = false));
@@ -222,7 +221,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
         rerollable: element.rerollable,
         rerollEffectDescription: element.rerollEffectDescription);
     result.then((sessionResult) {
-      book.accept(new ResolveSlotMachine((b) => b
+      book.accept(ResolveSlotMachine((b) => b
         ..result = sessionResult.result
         ..wasRerolled = sessionResult.wasRerolled));
     });
@@ -269,7 +268,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     }
 
     var success = Randomly.saveAgainst(probability, random: _random);
-    var initialResult = new slot.SessionResult(
+    var initialResult = slot.SessionResult(
         success ? slot.Result.success : slot.Result.failure, false);
     _log.info('result = $initialResult');
 
@@ -290,7 +289,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
       if (rerollable) {
         print(rerollEffectDescription);
         print("Reroll?");
-        final menu = new Menu(["Yes", "No"]);
+        final menu = Menu(["Yes", "No"]);
         final input = menu.choose();
         if (input.value == 'No') {
           print('No reroll');
@@ -301,10 +300,10 @@ class CliRunner extends Presenter<EdgeheadGame> {
             Randomly.saveAgainst(1 - pow(1 - probability, 2), random: _random);
         if (rerollSuccess) {
           print("Reroll success!");
-          return new slot.SessionResult(slot.Result.success, true);
+          return slot.SessionResult(slot.Result.success, true);
         }
         print("Reroll failure.");
-        return new slot.SessionResult(slot.Result.failure, true);
+        return slot.SessionResult(slot.Result.failure, true);
       }
 
       print("Reroll impossible. So: $initialResult");

@@ -14,7 +14,7 @@ abstract class GeneratedGameObject {
 
   static String validateAndRemoveDollarSign(String writersName) {
     if (!writersName.startsWith(r'$')) {
-      throw new ArgumentError("Writer's name doesn't contain a dollar sign: "
+      throw ArgumentError("Writer's name doesn't contain a dollar sign: "
           "$writersName");
     }
     return writersName.substring(1);

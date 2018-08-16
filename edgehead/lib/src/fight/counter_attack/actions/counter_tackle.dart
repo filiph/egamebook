@@ -24,7 +24,7 @@ ReasonedSuccessChance computeCounterTackle(
 class CounterTackle extends EnemyTargetAction {
   static const String className = "CounterTackle";
 
-  static final CounterTackle singleton = new CounterTackle();
+  static final CounterTackle singleton = CounterTackle();
 
   @override
   final String helpMessage = "When an opponent misses you like that, it's "

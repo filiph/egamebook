@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
 class Pass extends Action<Null> {
-  static final Pass singleton = new Pass();
+  static final Pass singleton = Pass();
 
   static const String className = "Pass";
 
@@ -34,7 +34,7 @@ class Pass extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

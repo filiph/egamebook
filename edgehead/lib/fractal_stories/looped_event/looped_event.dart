@@ -31,7 +31,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   final dynamic _choices;
   final SlotMachineShowFunction _slotMachineShowFunction;
 
-  final StringBuffer _stringBuffer = new StringBuffer();
+  final StringBuffer _stringBuffer = StringBuffer();
 
   bool finished = false;
 
@@ -66,7 +66,7 @@ abstract class LoopedEvent /*TODO: implements Saveable ?*/ {
   /// is finished.
   Future<Null> run() async {
     if (onFinishedGoto == null)
-      throw new StateError("Cannot run a LoopedEvent "
+      throw StateError("Cannot run a LoopedEvent "
           "before onFinishedGoto is defined.");
     if (finished) {
       _choices.clear();

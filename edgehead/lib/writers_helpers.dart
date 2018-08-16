@@ -34,7 +34,7 @@ const int sleepingGoblinId = 4445655;
 const int sleepingGoblinsSpearId = 45234205;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
-const _brianaQuotes = const [
+const _brianaQuotes = [
   '''Briana spits on the floor. "Can't wait to smell something other than 
   orc sweat and piss."
   
@@ -61,20 +61,20 @@ const _brianaQuotes = const [
   '''END''',
 ];
 
-final Item orcthorn = new Item.weapon(orcthornId, WeaponType.sword,
+final Item orcthorn = Item.weapon(orcthornId, WeaponType.sword,
     name: "Orcthorn",
     nameIsProperNoun: true,
     slashingDamage: 2,
     thrustingDamage: 2);
 
 final Item sleepingGoblinsSpear =
-    new Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
+    Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
 /// point.
-final _brianaQuotesRuleset = new Ruleset.unordered(_brianaQuotes.map((quote) {
-  return new Rule(quote.hashCode, 1, quote != 'END', (_) => true, (c) {
+final _brianaQuotesRuleset = Ruleset.unordered(_brianaQuotes.map((quote) {
+  return Rule(quote.hashCode, 1, quote != 'END', (_) => true, (c) {
     if (quote == 'END') return;
     c.outputStoryline.add(quote, wholeSentence: true);
   });
@@ -174,7 +174,7 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var agruth = _generateAgruth();
   w.actors.add(agruth);
-  return new FightSituation.initialized(
+  return FightSituation.initialized(
       w.randomInt(),
       party,
       [agruth],
@@ -195,7 +195,7 @@ FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
   var goblin = _makeGoblin(w, id: escapeTunnelGoblinId);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
-  return new FightSituation.initialized(w.randomInt(), party, monsters,
+  return FightSituation.initialized(w.randomInt(), party, monsters,
       "{rock|cavern} floor", roomRoamingSituation, {
     1: escape_tunnel_look,
     4: escape_tunnel_insignificant,
@@ -211,7 +211,7 @@ FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
   var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
   var madGuardian = _generateMadGuardian(w, knowsAboutGuardian);
   w.actors.add(madGuardian);
-  return new FightSituation.initialized(
+  return FightSituation.initialized(
       w.randomInt(),
       party,
       [madGuardian],
@@ -238,7 +238,7 @@ FightSituation generateMountainPassGuardPostFight(
   }
   w.actors.addAll(monsters);
 
-  return new FightSituation.initialized(
+  return FightSituation.initialized(
       w.randomInt(), party, monsters, "ground", roomRoamingSituation, {});
 }
 
@@ -251,7 +251,7 @@ FightSituation generateSlaveQuartersPassageFight(
   var goblin = _makeGoblin(w, id: slaveQuartersGoblinId, spear: true);
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
-  return new FightSituation.initialized(w.randomInt(), party, monsters,
+  return FightSituation.initialized(w.randomInt(), party, monsters,
       "{rough|stone} floor", roomRoamingSituation, {
     1: slave_quarters_orc_looks,
     3: slave_quarters_mean_nothing,
@@ -261,14 +261,14 @@ FightSituation generateSlaveQuartersPassageFight(
 /// Test fight. Do not use in production.
 FightSituation generateTestFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final aguthsSword = new Item.weapon(89892130, WeaponType.sword);
-  final playersSword = new Item.weapon(89892131, WeaponType.sword);
+  final aguthsSword = Item.weapon(89892130, WeaponType.sword);
+  final playersSword = Item.weapon(89892131, WeaponType.sword);
   var agruth = _generateAgruth()
       .rebuild((b) => b..currentWeapon = aguthsSword.toBuilder());
   w.actors.add(agruth);
   w.updateActorById(
       playerId, (b) => b..currentWeapon = playersSword.toBuilder());
-  return new FightSituation.initialized(
+  return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
     [agruth],
@@ -316,7 +316,7 @@ void giveStaminaToPlayer(WorldStateBuilder w, int amount) {
 /// sword).
 bool isRoamingInBloodrock(WorldState w) {
   if ((w.currentSituation as RoomRoamingSituation).monstersAlive) return false;
-  const bloodrockRoamingRooms = const [
+  const bloodrockRoamingRooms = [
     "cave_with_agruth",
     "guardpost_above_church",
     "orcthorn_room",
@@ -382,14 +382,14 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
       a.id,
       (b) => b
         ..currentShield =
-            new Item.weapon(w.randomInt(), WeaponType.shield).toBuilder());
+            Item.weapon(w.randomInt(), WeaponType.shield).toBuilder());
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
     final goblin = _makeGoblin(w, id: sleepingGoblinId);
     w.actors.add(goblin);
     final roomRoamingSituation = getRoomRoaming(built);
-    w.pushSituation(new FightSituation.initialized(
+    w.pushSituation(FightSituation.initialized(
         w.randomInt(),
         playerParty,
         [goblin],
@@ -417,7 +417,7 @@ void updateGlobal(Simulation sim, WorldStateBuilder w,
 }
 
 Actor _generateAgruth() {
-  return new Actor.initialized(agruthId, "Agruth",
+  return Actor.initialized(agruthId, "Agruth",
       nameIsProperNoun: true,
       pronoun: Pronoun.HE,
       constitution: 2,
@@ -426,32 +426,31 @@ Actor _generateAgruth() {
 }
 
 Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
-  return new Actor.initialized(
+  return Actor.initialized(
       madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
       currentWeapon:
-          new Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
       constitution: 3,
       team: defaultEnemyTeam,
       initiative: 100);
 }
 
 Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear: false}) =>
-    new Actor.initialized(id ?? w.randomInt(), "goblin",
+    Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear
-            ? new Item.weapon(w.randomInt(), WeaponType.spear)
-            : new Item.weapon(w.randomInt(), WeaponType.sword,
-                name: "scimitar"),
+            ? Item.weapon(w.randomInt(), WeaponType.spear)
+            : Item.weapon(w.randomInt(), WeaponType.sword, name: "scimitar"),
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
 Actor _makeOrc(WorldStateBuilder w, {int id, int constitution: 2}) =>
-    new Actor.initialized(id ?? w.randomInt(), "orc",
+    Actor.initialized(id ?? w.randomInt(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: new Item.weapon(w.randomInt(), WeaponType.sword),
+        currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword),
         constitution: constitution,
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);

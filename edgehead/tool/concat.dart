@@ -4,11 +4,11 @@ import 'dart:io';
 /// file from all the text in `assets/text/`. The file can be then sent
 /// to Kindle or another reader for a read-through.
 void main() {
-  Directory d = new Directory("assets/text/");
+  Directory d = Directory("assets/text/");
 
   for (var entity in d.listSync(recursive: true)) {
     if (!entity.path.endsWith(".txt")) continue;
-    var file = new File(entity.path);
+    var file = File(entity.path);
     var lines = file.readAsLinesSync();
     print("\n\n\n");
     print("=== File: ${file.path} ===");

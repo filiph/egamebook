@@ -27,7 +27,7 @@ abstract class OffBalanceOpportunitySituation extends Object
 
   factory OffBalanceOpportunitySituation.initialized(int id, Actor actor,
           {Actor culprit}) =>
-      new OffBalanceOpportunitySituation((b) => b
+      OffBalanceOpportunitySituation((b) => b
         ..id = id
         ..time = 0
         ..actorId = actor.id

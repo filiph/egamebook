@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
 
-final Logger _log = new Logger("escape_dollar_sign");
+final Logger _log = Logger("escape_dollar_sign");
 
 /// Escape writer's string to be used in code.
 ///

@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 
 final Entity swing =
-    new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+    Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeOnGroundShieldBlock(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -21,7 +21,7 @@ ReasonedSuccessChance computeOnGroundShieldBlock(
 }
 
 class OnGroundShieldBlock extends OtherActorAction {
-  static final OnGroundShieldBlock singleton = new OnGroundShieldBlock();
+  static final OnGroundShieldBlock singleton = OnGroundShieldBlock();
 
   static const String className = "OnGroundShieldBlock";
 

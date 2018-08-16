@@ -1,9 +1,9 @@
 import 'dart:async';
 
 Future<Null> awaitAnimationFrame() {
-  throw new UnimplementedError();
+  throw UnimplementedError();
 }
 
 Future<Null> awaitIdleCallback() {
-  throw new UnimplementedError();
+  throw UnimplementedError();
 }

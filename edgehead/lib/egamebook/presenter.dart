@@ -10,7 +10,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   T book;
 
-  final Completer<Null> _bookEndCompleter = new Completer<Null>();
+  final Completer<Null> _bookEndCompleter = Completer<Null>();
 
   StreamSubscription<ElementBase> _bookSubscription;
 
@@ -77,7 +77,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   @mustCallSuper
   void addCustomElement(ElementBase element) {
-    throw new UnimplementedError("Unexpected type of element: $element");
+    throw UnimplementedError("Unexpected type of element: $element");
   }
 
   @protected
@@ -115,7 +115,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
     assert(this.book == null, "Cannot reuse Presenter several times.");
     this.book = book;
     _bookSubscription = book.elements.listen(add);
-    return new Future<Null>.value();
+    return Future<Null>.value();
   }
 
   void startBook() {

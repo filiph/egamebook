@@ -24,7 +24,7 @@ ReasonedSuccessChance computeDefensiveParrySlash(
 }
 
 class DefensiveParrySlash extends OtherActorAction {
-  static final DefensiveParrySlash singleton = new DefensiveParrySlash();
+  static final DefensiveParrySlash singleton = DefensiveParrySlash();
 
   static const String className = "DefensiveParrySlash";
 

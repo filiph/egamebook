@@ -63,7 +63,7 @@ void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
 /// the provided [BodyPartDesignation].
 EnemyTargetAction startSlashAtBodyPartGenerator(
     BodyPartDesignation designation) {
-  return new StartDefensibleAction(
+  return StartDefensibleAction(
     name: "StartSlashAt$designation",
     commandTemplate: startSlashCommandTemplate(designation),
     helpMessage: startSlashHelpMessage,

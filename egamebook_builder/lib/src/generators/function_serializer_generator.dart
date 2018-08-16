@@ -18,14 +18,14 @@ class FunctionSerializerGenerator extends Generator {
 
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) async {
-    final result = new StringBuffer();
+    final result = StringBuffer();
 
     // Assert part import.
     final fileName = library.element.source.shortName.replaceAll('.dart', '');
     ensurePartImport(library, fileName, extension: '.gathered.dart');
 
     final annotated = library
-        .annotatedWith(new TypeChecker.fromRuntime(GatherFunctionsFrom))
+        .annotatedWith(TypeChecker.fromRuntime(GatherFunctionsFrom))
         .toList(growable: false);
     if (annotated.isEmpty) {
       log.info("File $fileName has no FunctionSerializer declarations that "
@@ -36,20 +36,20 @@ class FunctionSerializerGenerator extends Generator {
     for (final declaration in annotated) {
       final element = declaration.element;
       if (element is! TopLevelVariableElement) {
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Elements annotated with @GatherFunctionsFrom "
             "must be top level variable declarations.");
       }
       final variable = element as TopLevelVariableElement;
       if (variable.type is! ParameterizedType) {
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Type of variable must be FunctionSerializer<SomeCallback>");
       }
       final interfaceType = variable.type as ParameterizedType;
       if (interfaceType.name != 'FunctionSerializer') {
         // TODO: find out how to create a DartType() and use it to check
         //       via interfaceType.isAssignableTo(functionSerializerType)
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Top level declarations with the @GatherFunctionsFrom "
             "annotation need to be of type FunctionSerializer, but we found "
             "one with type ${interfaceType.name}");
@@ -73,7 +73,7 @@ class FunctionSerializerGenerator extends Generator {
       final String functionTypeName = functionTypeFromAnnotation.name;
 
       final variableName = "_\$"
-          "${new ReCase(functionTypeName).camelCase}"
+          "${ReCase(functionTypeName).camelCase}"
           "Serializer";
 
       // final _$someCallbackSerializer = new FunctionSerializer<SomeCallback>({
@@ -86,10 +86,10 @@ class FunctionSerializerGenerator extends Generator {
           .map((dartObject) => dartObject.toStringValue());
 
       for (final glob in globs) {
-        final assetIds = buildStep.findAssets(new Glob(glob));
+        final assetIds = buildStep.findAssets(Glob(glob));
         await for (final id in assetIds) {
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
-          final globbedLibrary = new LibraryReader(globbedLibraryElement);
+          final globbedLibrary = LibraryReader(globbedLibraryElement);
 
           for (final element in globbedLibrary.allElements) {
             if (element is! FunctionElement) continue;

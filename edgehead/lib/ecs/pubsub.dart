@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:logging/logging.dart';
 
-final _log = new Logger("PubSub");
+final _log = Logger("PubSub");
 
 class ActorKilledEvent extends PubSubEventBase {
   final Actor actor;
@@ -29,11 +29,10 @@ class PubSub implements Sink<Object> {
   bool _sealed = false;
 
   PubSub() {
-    _actorKilled = new StreamController<ActorKilledEvent>.broadcast(
+    _actorKilled = StreamController<ActorKilledEvent>.broadcast(
         sync: true, onListen: _assertNoSubscribersAfterSealed);
-    _actorLostHitpoints =
-        new StreamController<ActorLostHitpointsEvent>.broadcast(
-            sync: true, onListen: _assertNoSubscribersAfterSealed);
+    _actorLostHitpoints = StreamController<ActorLostHitpointsEvent>.broadcast(
+        sync: true, onListen: _assertNoSubscribersAfterSealed);
   }
 
   Stream<ActorKilledEvent> get actorKilled => _actorKilled.stream;
@@ -47,8 +46,7 @@ class PubSub implements Sink<Object> {
   /// we want to get the linter rule `close_sinks`.
   @override
   void add(Object data) {
-    throw new UnimplementedError(
-        "Please call the concrete publish___() methods.");
+    throw UnimplementedError("Please call the concrete publish___() methods.");
   }
 
   @override

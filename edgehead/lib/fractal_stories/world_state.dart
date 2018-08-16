@@ -20,7 +20,7 @@ part 'world_state.g.dart';
 
 /// A reusable instance of [StatefulRandom]. Never use this before
 /// first calling [StatefulRandom.loadState].
-final _rnd = new StatefulRandom(42);
+final _rnd = StatefulRandom(42);
 
 abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   static Serializer<WorldState> get serializer => _$worldStateSerializer;
@@ -128,7 +128,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
         return situations[i] as S;
       }
     }
-    throw new ArgumentError("No situation with name=$situationName found.");
+    throw ArgumentError("No situation with name=$situationName found.");
   }
 
   bool hasAliveActor(int actorId) {
@@ -320,7 +320,7 @@ abstract class WorldStateBuilder
   void recordCustom(String eventName, {Object data, Actor actor}) {
     customHistory.records.add(
         CustomEventHistory.getKey(eventName),
-        new CustomEvent(
+        CustomEvent(
           time: time,
           name: eventName,
           data: data,
@@ -334,15 +334,14 @@ abstract class WorldStateBuilder
   }
 
   void recordRule(Rule rule) {
-    ruleHistory.records[rule.hash] =
-        new RuleRecord(ruleId: rule.hash, time: time);
+    ruleHistory.records[rule.hash] = RuleRecord(ruleId: rule.hash, time: time);
   }
 
   void recordVisit(Actor actor, Room room) {
     final key = VisitHistory.getKey(room);
     visitHistory.records.add(
         key,
-        new VisitRecord(
+        VisitRecord(
             time: time,
             actorId: actor.id,
             roomName: room.name,
@@ -352,7 +351,7 @@ abstract class WorldStateBuilder
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
     int index = this.build()._findSituationIndex(id);
     if (index == null) {
-      throw new ArgumentError("Situation with id $id does not "
+      throw ArgumentError("Situation with id $id does not "
           "exist in $situations");
     }
     situations[index] = updatedSituation;

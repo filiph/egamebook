@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
 class Unconfuse extends Action<Null> {
-  static final Unconfuse singleton = new Unconfuse();
+  static final Unconfuse singleton = Unconfuse();
 
   static const String className = "Unconfuse";
 
@@ -34,7 +34,7 @@ class Unconfuse extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

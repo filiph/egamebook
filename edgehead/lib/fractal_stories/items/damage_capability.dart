@@ -16,7 +16,7 @@ abstract class DamageCapability
           int slashingDamage,
           int thrustingDamage,
           int length}) =>
-      new _$DamageCapability((b) => b
+      _$DamageCapability((b) => b
         ..type = type
         ..bluntDamage = bluntDamage ?? type.defaultBluntDamage
         ..slashingDamage = slashingDamage ?? type.defaultSlashingDamage

@@ -101,5 +101,5 @@ class KickToGround extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       (a.isStanding || a.isOffBalance) && !enemy.isOnGround;
 
-  static final KickToGround singleton = new KickToGround();
+  static final KickToGround singleton = KickToGround();
 }

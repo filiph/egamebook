@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 class FinishLeap extends OtherActorAction {
   static const String className = "FinishLeap";
 
-  static final FinishLeap singleton = new FinishLeap();
+  static final FinishLeap singleton = FinishLeap();
 
   @override
   final String helpMessage = null;
@@ -43,7 +43,7 @@ class FinishLeap extends OtherActorAction {
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

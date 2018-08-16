@@ -19,7 +19,7 @@ class ActorScore {
 
   const ActorScore(this.selfPreservation, this.teamPreservation, this.enemy);
 
-  ActorScoreChange operator -(ActorScore other) => new ActorScoreChange(
+  ActorScoreChange operator -(ActorScore other) => ActorScoreChange(
       selfPreservation - other.selfPreservation,
       teamPreservation - other.teamPreservation,
       enemy - other.enemy);
@@ -58,9 +58,9 @@ class ActorScoreChange {
       enemy += change.enemy;
     }
     if (count == 0) {
-      throw new ArgumentError("Cannot average empty iterable");
+      throw ArgumentError("Cannot average empty iterable");
     }
-    return new ActorScoreChange(self / count, team / count, enemy / count);
+    return ActorScoreChange(self / count, team / count, enemy / count);
   }
 
   /// Action outcome cannot be computed at all.
@@ -81,17 +81,17 @@ class ActorScoreChange {
   num get simpleCombination => selfPreservation + teamPreservation - enemy;
 
   /// Returns a score change multiplied by a scalar value.
-  ActorScoreChange operator *(num value) => new ActorScoreChange(
+  ActorScoreChange operator *(num value) => ActorScoreChange(
       selfPreservation * value, teamPreservation * value, enemy * value);
 
   /// Returns the addition of two actor score changes.
-  ActorScoreChange operator +(ActorScoreChange other) => new ActorScoreChange(
+  ActorScoreChange operator +(ActorScoreChange other) => ActorScoreChange(
       selfPreservation + other.selfPreservation,
       teamPreservation + other.teamPreservation,
       enemy + other.enemy);
 
   /// Returns a score change divided by a scalar value.
-  ActorScoreChange operator /(num value) => new ActorScoreChange(
+  ActorScoreChange operator /(num value) => ActorScoreChange(
       selfPreservation / value, teamPreservation / value, enemy / value);
 
   @override

@@ -14,7 +14,7 @@ import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
 class FinishSlash extends OtherActorAction {
-  static final FinishSlash singleton = new FinishSlash();
+  static final FinishSlash singleton = FinishSlash();
 
   static const String className = "FinishSlash";
 
@@ -51,7 +51,7 @@ class FinishSlash extends OtherActorAction {
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

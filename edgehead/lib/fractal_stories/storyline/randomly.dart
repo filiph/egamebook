@@ -3,14 +3,14 @@ library randomly;
 import 'dart:math';
 
 class Randomly {
-  static final Random _random = new Random();
+  static final Random _random = Random();
 
   // Function gets a list of choices, picks one of them randomly.
   static dynamic choose(List choices) {
-    if (choices == null) throw new ArgumentError("Cannot choose from null.");
+    if (choices == null) throw ArgumentError("Cannot choose from null.");
     int number = choices.length;
     if (number == 0) {
-      throw new ArgumentError("Cannot randomly choose from an empty set.");
+      throw ArgumentError("Cannot randomly choose from an empty set.");
     }
     return choices[_random.nextInt(number)];
   }
@@ -30,7 +30,7 @@ class Randomly {
       sum += weight;
       index += 1;
     }
-    throw new ArgumentError("The weights do not add up to total=$total");
+    throw ArgumentError("The weights do not add up to total=$total");
   }
 
   /// Returns random index, biased by weight.
@@ -47,7 +47,7 @@ class Randomly {
       sum += weight;
       index += 1;
     }
-    throw new ArgumentError("The weights do not add up to total=$max");
+    throw ArgumentError("The weights do not add up to total=$max");
   }
 
   static String humanDescribeProbability(num probability) {
@@ -105,7 +105,7 @@ class Randomly {
   static String parse(String str) {
     int startTagIndex = str.indexOf("{");
     if (startTagIndex != -1 && startTagIndex < str.length - 1) {
-      List<int> indexes = new List<int>();
+      List<int> indexes = List<int>();
       indexes.add(startTagIndex);
       int lastIndex;
       int endTagIndex;
@@ -131,7 +131,7 @@ class Randomly {
       if (numOptions > 1) {
         int choice = _random.nextInt(numOptions);
 
-        StringBuffer strBuf = new StringBuffer();
+        StringBuffer strBuf = StringBuffer();
         strBuf.write(str.substring(0, startTagIndex));
         String choiceString =
             str.substring(indexes[choice] + 1, indexes[choice + 1]);
@@ -181,7 +181,7 @@ class Randomly {
   /// Resolve a 'coin toss' of the given probability.
   static bool saveAgainst(num probability, {Random random}) {
     if (probability < 0 || probability > 1.0) {
-      throw new RangeError.range(
+      throw RangeError.range(
           probability, 0, 1, "Probability needs to be within <0,1>.");
     }
     if (probability == 0) return false;

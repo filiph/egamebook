@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 
 class RegainBalance extends Action<Null> {
-  static final RegainBalance singleton = new RegainBalance();
+  static final RegainBalance singleton = RegainBalance();
 
   static const String className = "RegainBalance";
 
@@ -36,7 +36,7 @@ class RegainBalance extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

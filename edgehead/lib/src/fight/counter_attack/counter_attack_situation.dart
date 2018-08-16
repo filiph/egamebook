@@ -24,7 +24,7 @@ abstract class CounterAttackSituation extends Object
 
   factory CounterAttackSituation.initialized(
           int id, Actor counterAttacker, Actor target) =>
-      new CounterAttackSituation((b) => b
+      CounterAttackSituation((b) => b
         ..id = id
         ..time = 0
         ..counterAttacker = counterAttacker.id

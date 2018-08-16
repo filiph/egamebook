@@ -95,7 +95,7 @@ abstract class Action<T> {
     assert(successChance.value >= 0.0);
     assert(successChance.value <= 1.0);
 
-    final performance = new Performance<T>(this, object);
+    final performance = Performance<T>(this, object);
 
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
@@ -103,7 +103,7 @@ abstract class Action<T> {
           actor, sim, worldOutput, applySuccess, pubsub, object, successChance,
           isSuccess: true);
 
-      yield new PlanConsequence(worldOutput.build(), current, performance,
+      yield PlanConsequence(worldOutput.build(), current, performance,
           storyline, successChance.value,
           isSuccess: true);
     }
@@ -113,7 +113,7 @@ abstract class Action<T> {
           actor, sim, worldOutput, applyFailure, pubsub, object, successChance,
           isFailure: true);
 
-      yield new PlanConsequence(worldOutput.build(), current, performance,
+      yield PlanConsequence(worldOutput.build(), current, performance,
           storyline, 1 - successChance.value,
           isFailure: true);
     }
@@ -134,7 +134,7 @@ abstract class Action<T> {
   /// method will never be run. Such an action needs to be defined
   /// as `Action<Null>`.
   Iterable<T> generateObjects(ApplicabilityContext context) {
-    throw new UnimplementedError('generateObjects not implemented for $this. '
+    throw UnimplementedError('generateObjects not implemented for $this. '
         'If this is an Action<Null>, then this method shouldn\'t have been '
         'called in the first place.');
   }
@@ -160,7 +160,7 @@ abstract class Action<T> {
 
   void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
     if (_description == null) {
-      throw new StateError("No description given when executing $this. You "
+      throw StateError("No description given when executing $this. You "
           "should return it from your world-modifying function.");
     }
     builder.description = _description;
@@ -181,12 +181,12 @@ abstract class Action<T> {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
         actor, sim, initialWorld, object, isSuccess, isFailure);
-    final outputStoryline = new Storyline();
+    final outputStoryline = Storyline();
     // Remember situation as it can be changed during applySuccess.
     final situationId = initialWorld.currentSituation.id;
     initialWorld.currentSituation
         .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = new ActionContext(this, actor, sim, initialWorld, pubsub,
+    final context = ActionContext(this, actor, sim, initialWorld, pubsub,
         output, outputStoryline, successChance);
     _description = applyFunction(context, object);
 
@@ -223,7 +223,7 @@ abstract class Action<T> {
 
   ActionRecordBuilder _prepareWorldRecord(Actor actor, Simulation sim,
       WorldState world, T object, bool isSuccess, bool isFailure) {
-    var builder = new ActionRecordBuilder()
+    var builder = ActionRecordBuilder()
       ..actionName = name
       ..protagonist = actor.id
       ..wasSuccess = isSuccess
@@ -306,7 +306,7 @@ abstract class ItemAction extends Action<Item> {
 
   @override
   String getCommand(Item item) =>
-      (new Storyline()..add(commandTemplate, object: item)).realizeAsString();
+      (Storyline()..add(commandTemplate, object: item)).realizeAsString();
 
   @override
   String toString() => "ItemAction<$commandTemplate>";
@@ -375,13 +375,13 @@ abstract class OtherActorActionBase extends Action<Actor> {
         commandTemplate != "",
         "Never create actions with empty commandTemplate. "
         "Use isImplicit instead. Culprit: $this");
-    return (new Storyline()..add(commandTemplate, object: target))
+    return (Storyline()..add(commandTemplate, object: target))
         .realizeAsString();
   }
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) =>
-      (new Storyline()
+      (Storyline()
             ..add(rollReasonTemplate,
                 subject: a, object: target, wholeSentence: true))
           .realizeAsString();
@@ -454,11 +454,11 @@ class Reason<T> {
 class ReasonedSuccessChance<R> {
   /// Sure failure without any reason given.
   static const ReasonedSuccessChance<Object> sureFailure =
-      const ReasonedSuccessChance<Object>(0.0);
+      ReasonedSuccessChance<Object>(0.0);
 
   /// Sure success without any reason given.
   static const ReasonedSuccessChance<Object> sureSuccess =
-      const ReasonedSuccessChance<Object>(1.0);
+      ReasonedSuccessChance<Object>(1.0);
 
   /// The probability of success, as a number between `0.0` and `1.0`.
   final num value;
@@ -482,7 +482,7 @@ class ReasonedSuccessChance<R> {
   ///
   /// This not only inverts [value], but also switches [successReasons]
   /// with [failureReasons].
-  ReasonedSuccessChance<R> inverted() => new ReasonedSuccessChance(1 - value,
+  ReasonedSuccessChance<R> inverted() => ReasonedSuccessChance(1 - value,
       successReasons: failureReasons, failureReasons: successReasons);
 
   @override

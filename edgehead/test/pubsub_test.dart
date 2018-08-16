@@ -9,9 +9,9 @@ void main() {
   group("pubsub", () {
     PubSub pubsub;
 
-    Actor aren = new Actor.initialized(1, "Aren");
+    Actor aren = Actor.initialized(1, "Aren");
 
-    Actor briana = new Actor.initialized(2, "Briana");
+    Actor briana = Actor.initialized(2, "Briana");
 
     final sureSuccess = ReasonedSuccessChance.sureSuccess;
 
@@ -23,7 +23,7 @@ void main() {
     }
 
     setUp(() {
-      pubsub = new PubSub();
+      pubsub = PubSub();
       events = [];
     });
 
@@ -34,29 +34,29 @@ void main() {
     test("subscription works", () {
       pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
-      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
+      final context = ActionContext(
+          null, briana, null, null, pubsub, null, Storyline(), sureSuccess);
+      pubsub.publishActorKilled(ActorKilledEvent(context, aren, briana));
       expect(events.length, 1);
       expect(events.single.actor, aren);
     });
 
     test("event doesn't fire when there are no listener", () {
       pubsub.seal();
-      final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
-      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
+      final context = ActionContext(
+          null, briana, null, null, pubsub, null, Storyline(), sureSuccess);
+      pubsub.publishActorKilled(ActorKilledEvent(context, aren, briana));
       expect(events.length, 0);
     });
 
     test("event doesn't fire after subscription cancelled", () {
       final sub = pubsub.actorKilled.listen(_recordEventFired);
       pubsub.seal();
-      final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
-      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
+      final context = ActionContext(
+          null, briana, null, null, pubsub, null, Storyline(), sureSuccess);
+      pubsub.publishActorKilled(ActorKilledEvent(context, aren, briana));
       sub.cancel();
-      pubsub.publishActorKilled(new ActorKilledEvent(context, briana, aren));
+      pubsub.publishActorKilled(ActorKilledEvent(context, briana, aren));
       expect(events.length, 1);
       expect(events.single.actor, aren);
     });
@@ -77,9 +77,9 @@ void main() {
       pubsub.actorKilled.listen(_recordEventFired);
       pubsub.actorKilled.listen(secondRecord);
       pubsub.seal();
-      final context = new ActionContext(
-          null, briana, null, null, pubsub, null, new Storyline(), sureSuccess);
-      pubsub.publishActorKilled(new ActorKilledEvent(context, aren, briana));
+      final context = ActionContext(
+          null, briana, null, null, pubsub, null, Storyline(), sureSuccess);
+      pubsub.publishActorKilled(ActorKilledEvent(context, aren, briana));
     });
   });
 }

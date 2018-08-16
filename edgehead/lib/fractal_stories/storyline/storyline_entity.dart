@@ -77,7 +77,7 @@ abstract class EntityBehavior {
   Team get team;
 
   Report createReport(String text, {Entity object}) {
-    return new Report(text, subject: this as Entity, object: object);
+    return Report(text, subject: this as Entity, object: object);
   }
 
   void report(Storyline storyline, String text,

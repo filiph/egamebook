@@ -62,11 +62,11 @@ class SimpleAction extends RoamingAction {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => throw new StateError("Not rerollable");
+  Resource get rerollResource => throw StateError("Not rerollable");
 
   @override
   String applyFailure(ActionContext context, Null object) {
-    throw new StateError("SimpleAction always succeeds");
+    throw StateError("SimpleAction always succeeds");
   }
 
   @override
@@ -77,7 +77,7 @@ class SimpleAction extends RoamingAction {
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null object) {
-    throw new StateError("SimpleAction shouldn't have to provide roll reason");
+    throw StateError("SimpleAction shouldn't have to provide roll reason");
   }
 
   @override
@@ -94,7 +94,7 @@ class SimpleAction extends RoamingAction {
 
   @override
   Iterable<Null> generateObjects(ApplicabilityContext context) {
-    throw new AssertionError('generateObjects was called on Action<Null>');
+    throw AssertionError('generateObjects was called on Action<Null>');
   }
 
   @override

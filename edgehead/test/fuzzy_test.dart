@@ -12,19 +12,19 @@ import '../bin/play.dart';
 
 void main() {
   test("edgehead runs to completion", () async {
-    final runner = new CliRunner(true, true, null);
-    await runner.initialize(new EdgeheadGame());
+    final runner = CliRunner(true, true, null);
+    await runner.initialize(EdgeheadGame());
     runner.startBook();
     await runner.bookEnd;
     runner.close();
   }, tags: ["long-running"]);
 
   test("2 run-throughs with same seed end up with the same state", () async {
-    final seed = new Random().nextInt(0xffffff);
+    final seed = Random().nextInt(0xffffff);
 
     Future<String> runAndGetFinalWorld(int seed) async {
-      final runner = new CliRunner(true, true, null, random: new Random(seed));
-      await runner.initialize(new EdgeheadGame(randomSeed: seed));
+      final runner = CliRunner(true, true, null, random: Random(seed));
+      await runner.initialize(EdgeheadGame(randomSeed: seed));
       runner.startBook();
       await runner.bookEnd;
       runner.close();
@@ -48,17 +48,17 @@ void main() {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
           savegame: "slaveQuarters");
-    }, timeout: new Timeout.factor(10), tags: ["long-running"]);
+    }, timeout: Timeout.factor(10), tags: ["long-running"]);
 
     test("edgehead runs to completion 10 times without warnings", () async {
       final stopWords = ["[WARNING]", "[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.INFO, 10);
-    }, timeout: new Timeout.factor(10), tags: ["strict", "long-running"]);
+    }, timeout: Timeout.factor(10), tags: ["strict", "long-running"]);
 
     test("edgehead runs to completion 10 times from beginning", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.WARNING, 10);
-    }, timeout: new Timeout.factor(10), tags: ["long-running"]);
+    }, timeout: Timeout.factor(10), tags: ["long-running"]);
   });
 }
 
@@ -73,14 +73,14 @@ Future<Null> testWithStopWords(
       stopWords.join("_").replaceAll("[", "").replaceAll("]", "").toLowerCase();
   for (int i = 0; i < iterations; i++) {
     var logPath = createLogFilePath(tempDir, i, identifier);
-    var logFile = new File(logPath);
+    var logFile = File(logPath);
     var saveComment = savegame == null ? '' : " (from savegame '$savegame')";
     print("Running $identifier-aware test #${i + 1}$saveComment.");
     print(" - log: $logPath");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
-    final runner = new CliRunner(true, true, logFile, logLevel: logLevel);
-    await runner.initialize(new EdgeheadGame(
+    final runner = CliRunner(true, true, logFile, logLevel: logLevel);
+    await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
     ));
     runner.startBook();

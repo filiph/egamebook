@@ -6,14 +6,13 @@ import 'package:test/test.dart';
 
 void main() {
   test("simple function serialization works", () {
-    FunctionSerializer getSerializer() =>
-        new FunctionSerializer<StringReturner>({
+    FunctionSerializer getSerializer() => FunctionSerializer<StringReturner>({
           "hello": hello,
           "bye": bye,
         });
 
     Serializers getSerializers() =>
-        (new Serializers().toBuilder()..add(getSerializer())).build();
+        (Serializers().toBuilder()..add(getSerializer())).build();
 
     String str;
     {
@@ -35,12 +34,12 @@ void main() {
       "serialization of function with custom types "
       "(and side effects) works", () {
     FunctionSerializer getSerializer() =>
-        new FunctionSerializer<CustomTypesFunction>({
+        FunctionSerializer<CustomTypesFunction>({
           "functionWithCustomTypes": functionWithCustomTypes,
         });
 
     Serializers getSerializers() =>
-        (new Serializers().toBuilder()..add(getSerializer())).build();
+        (Serializers().toBuilder()..add(getSerializer())).build();
 
     String str;
     {
@@ -54,10 +53,10 @@ void main() {
     final Object jsonObject = json.decode(str);
     final deserialized = getSerializers().deserialize(jsonObject,
         specifiedType: const FullType(CustomTypesFunction)) as Function;
-    final a = new A()
+    final a = A()
       ..x = 1
       ..y = 2;
-    final b = new B()..z = 42;
+    final b = B()..z = 42;
     expect(_latestA, isNull);
     deserialized(a, b);
     expect(_latestA, a);

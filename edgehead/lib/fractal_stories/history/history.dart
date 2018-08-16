@@ -53,7 +53,7 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
   /// Ensures that the [_records] iterable isn't walked more than once. This
   /// means that [QueryResult] can only be used once.
   void _checkUnwalked() {
-    if (_walked) throw new StateError("Trying to walk query twice.");
+    if (_walked) throw StateError("Trying to walk query twice.");
     _walked = true;
   }
 }

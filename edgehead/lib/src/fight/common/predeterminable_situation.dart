@@ -5,10 +5,10 @@ import 'package:quiver/core.dart';
 
 abstract class Predeterminable implements Situation {
   static final _failureChance =
-      new Optional<ReasonedSuccessChance>.of(ReasonedSuccessChance.sureFailure);
+      Optional<ReasonedSuccessChance>.of(ReasonedSuccessChance.sureFailure);
 
   static final _successChance =
-      new Optional<ReasonedSuccessChance>.of(ReasonedSuccessChance.sureSuccess);
+      Optional<ReasonedSuccessChance>.of(ReasonedSuccessChance.sureSuccess);
 
   bool get actionsGuaranteedToFail =>
       predeterminedResult == Predetermination.failureGuaranteed;
@@ -25,7 +25,7 @@ abstract class Predeterminable implements Situation {
       case Predetermination.successGuaranteed:
         return _successChance;
       default:
-        throw new ArgumentError(predeterminedResult);
+        throw ArgumentError(predeterminedResult);
     }
   }
 

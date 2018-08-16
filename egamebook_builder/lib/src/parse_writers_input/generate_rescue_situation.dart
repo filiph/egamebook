@@ -106,7 +106,7 @@ Spec generateRescueSituation(
   situationClass.constructors.add(initializedConstructor);
 
   //    TakeOutGateGuardsRescueSituation._();
-  var privateConst = new Constructor((b) => b..name = '_');
+  var privateConst = Constructor((b) => b..name = '_');
   situationClass.constructors.add(privateConst);
 
   //      actions can be just instances of a generic SimpleAction and ContinuationOfFailureAction
@@ -202,7 +202,7 @@ Spec generateRescueSituation(
   //    Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
   //    return [world.actors.singleWhere((a) => a.isPlayer)];
   //    }
-  final actorIterablesType = new TypeReference((b) => b
+  final actorIterablesType = TypeReference((b) => b
     ..symbol = 'Iterable'
     ..types.add(actorType));
   final getActorsMethod = MethodBuilder();

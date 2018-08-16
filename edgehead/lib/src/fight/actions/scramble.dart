@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
 class Scramble extends Action<Null> {
-  static final Scramble singleton = new Scramble();
+  static final Scramble singleton = Scramble();
 
   static const String className = "Scramble";
 
@@ -34,7 +34,7 @@ class Scramble extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

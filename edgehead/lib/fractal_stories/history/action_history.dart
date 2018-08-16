@@ -38,7 +38,7 @@ abstract class ActionHistory
 
   /// Builds a string describing the history so far.
   String describe() {
-    var all = new List<ActionRecord>.from(records);
+    var all = List<ActionRecord>.from(records);
     all.sort((a, b) => a.time.compareTo(b.time));
     return all.map((a) => a.description).join(' -> ');
   }
@@ -74,7 +74,7 @@ abstract class ActionHistory
       return true;
     });
 
-    return new SerialQueryResult(filtered);
+    return SerialQueryResult(filtered);
   }
 
   /// Returns `true` if the action has ever happened.

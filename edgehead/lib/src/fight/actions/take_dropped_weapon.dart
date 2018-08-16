@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class TakeDroppedWeapon extends ItemAction {
   static const String className = "TakeDroppedWeapon";
 
-  static final TakeDroppedWeapon singleton = new TakeDroppedWeapon();
+  static final TakeDroppedWeapon singleton = TakeDroppedWeapon();
 
   @override
   final bool isProactive = true;
@@ -37,7 +37,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   String applyFailure(ActionContext context, Item item) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override
@@ -64,7 +64,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Item item) =>
-      throw new UnimplementedError();
+      throw UnimplementedError();
 
   @override
   ReasonedSuccessChance getSuccessChance(

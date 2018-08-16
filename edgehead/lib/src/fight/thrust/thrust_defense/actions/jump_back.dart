@@ -20,7 +20,7 @@ ReasonedSuccessChance computeJumpBackThrust(
 }
 
 class JumpBackFromThrust extends OtherActorAction {
-  static final JumpBackFromThrust singleton = new JumpBackFromThrust();
+  static final JumpBackFromThrust singleton = JumpBackFromThrust();
 
   static const String className = "JumpBackFromThrust";
 

@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-final Random _random = new Random();
+final Random _random = Random();
 
 /// Report's a humanoid's death and drops their items.
 ///
@@ -23,7 +23,7 @@ void killHumanoid(ActionContext context, Actor actor) {
       "with Briana as actor.");
 
   context.pubSub
-      .publishActorKilled(new ActorKilledEvent(context, actor, context.actor));
+      .publishActorKilled(ActorKilledEvent(context, actor, context.actor));
 
   w.recordDeath(actor);
 
@@ -65,7 +65,7 @@ void killHumanoid(ActionContext context, Actor actor) {
 void reportPain(ActionContext context, Actor actor, int damage) {
   final s = context.outputStoryline;
   context.pubSub.publishActorLostHitpoints(
-      new ActorLostHitpointsEvent(context, actor, damage));
+      ActorLostHitpointsEvent(context, actor, damage));
   if (actor.id == brianaId && actor.hitpoints == 0) {
     _reportPainBriana(context, actor);
     return;

@@ -10,7 +10,7 @@ const String leapDefenseSituationName = "LeapDefenseSituation";
 
 DefenseSituation createLeapDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         id,
         leapDefenseSituationName,
         [

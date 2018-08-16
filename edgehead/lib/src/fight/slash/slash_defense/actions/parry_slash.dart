@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 final Entity swing =
-    new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+    Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeParrySlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -28,7 +28,7 @@ ReasonedSuccessChance computeParrySlash(
 }
 
 class ParrySlash extends OtherActorAction {
-  static final ParrySlash singleton = new ParrySlash();
+  static final ParrySlash singleton = ParrySlash();
 
   static const String className = "ParrySlash";
 
@@ -114,7 +114,7 @@ class ParrySlash extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} parries ${enemy.name}";
   }

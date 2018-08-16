@@ -62,7 +62,7 @@ class PlanConsequence {
   /// Create the first consequence (the start of planning). It's a consequence
   /// of nothing, with no previous state.
   PlanConsequence.initial(WorldState world)
-      : this(world, null, null, new Storyline(), 1.0, isInitial: true);
+      : this(world, null, null, Storyline(), 1.0, isInitial: true);
 
   /// Returns a copy of the [consequence] with updated [PlanConsequence.world].
   ///
@@ -70,10 +70,10 @@ class PlanConsequence {
   /// has been applied.
   factory PlanConsequence.withUpdatedWorld(
       PlanConsequence consequence, WorldState world) {
-    return new PlanConsequence._(
+    return PlanConsequence._(
         world,
         consequence.performance,
-        new Storyline()..concatenate(consequence.storyline),
+        Storyline()..concatenate(consequence.storyline),
         consequence.probability,
         consequence.cumulativeProbability,
         consequence.isInitial,

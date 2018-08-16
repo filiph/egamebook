@@ -7,16 +7,16 @@ import 'generated_game_object.dart';
 import 'types.dart';
 
 /// A map of types of object that can be defined by writer.
-const List<String> objectTypes = const ["ROOM", "ACTION", "APPROACH"];
+const List<String> objectTypes = ["ROOM", "ACTION", "APPROACH"];
 
-final RegExp commentPattern = new RegExp(r"^//.*");
+final RegExp commentPattern = RegExp(r"^//.*");
 
-final RegExp docsFootnotePattern = new RegExp(r"^\[\w+\]");
+final RegExp docsFootnotePattern = RegExp(r"^\[\w+\]");
 
-final RegExp keyPattern = new RegExp(r"^([A-Z_]+):");
+final RegExp keyPattern = RegExp(r"^([A-Z_]+):");
 
 /// Logger for the writer's input.
-Logger log = new Logger('WritersInputParser');
+Logger log = Logger('WritersInputParser');
 
 Spec generateAllActionInstances(List<GeneratedGameObject> objects) {
   var list = literalList(
@@ -44,9 +44,9 @@ Spec generateAllApproaches(List<GeneratedGameObject> objects) {
 /// Parses a file and returns all objects specified in that file as a raw
 /// map of keys and values.
 Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
-  var result = new Map<String, String>();
+  var result = Map<String, String>();
   String currentKey;
-  var currentValue = new StringBuffer();
+  var currentValue = StringBuffer();
 
   void addValue() {
     assert(currentKey != null);

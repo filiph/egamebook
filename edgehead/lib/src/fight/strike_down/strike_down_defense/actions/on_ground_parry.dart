@@ -20,7 +20,7 @@ ReasonedSuccessChance computeOnGroundParry(
 
 /// TODO: find a reason why to take this choice. Maybe allow counter?
 class OnGroundParry extends OtherActorAction {
-  static final OnGroundParry singleton = new OnGroundParry();
+  static final OnGroundParry singleton = OnGroundParry();
 
   static const String className = "OnGroundParry";
 

@@ -41,7 +41,7 @@ ReasonedSuccessChance computeStartThrustSpearPlayer(
 
 EnemyTargetAction startThrustAtBodyPartGenerator(
     BodyPartDesignation designation) {
-  return new StartDefensibleAction(
+  return StartDefensibleAction(
     name: "StartThrust",
     commandTemplate: startThrustCommandTemplate(designation),
     helpMessage: startThrustHelpMessage,

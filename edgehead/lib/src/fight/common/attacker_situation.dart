@@ -84,7 +84,7 @@ class AttackDirection extends EnumClass {
         return BodyPartDesignation.head;
     }
 
-    throw new ArgumentError("Cannot convert $this, it's missing in "
+    throw ArgumentError("Cannot convert $this, it's missing in "
         "the switch statement above");
   }
 
@@ -111,7 +111,7 @@ class AttackDirection extends EnumClass {
         return AttackDirection.rightEye;
     }
 
-    throw new StateError("Designation $designation wasn't covered by "
+    throw StateError("Designation $designation wasn't covered by "
         "the switch statement above.");
   }
 
@@ -124,7 +124,7 @@ class AttackDirection extends EnumClass {
       case SlashDirection.right:
         return AttackDirection.fromRight;
     }
-    throw new StateError(
+    throw StateError(
         "Direction $direction wasn't covered by the switch statement above.");
   }
 
@@ -160,13 +160,13 @@ abstract class AttackerSituation extends Object
     Actor target, {
     AttackDirection attackDirection: AttackDirection.unspecified,
   }) =>
-      new AttackerSituation((b) => b
+      AttackerSituation((b) => b
         ..id = id
         ..name = situationName
         ..builtOtherActorActionGenerators =
-            new ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
+            ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
-            new ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
+            ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id
@@ -176,7 +176,7 @@ abstract class AttackerSituation extends Object
 
   @override
   List<Action<dynamic>> get actions =>
-      new List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
+      List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
         ..addAll(builtEnemyTargetActionGenerators);
 
   AttackDirection get attackDirection;

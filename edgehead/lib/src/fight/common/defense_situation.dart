@@ -30,13 +30,13 @@ abstract class DefenseSituation extends Object
           Actor attacker,
           Actor target,
           Predetermination predetermination) =>
-      new DefenseSituation((b) => b
+      DefenseSituation((b) => b
         ..id = id
         ..name = situationName
         ..builtOtherActorActionGenerators =
-            new ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
+            ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
-            new ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
+            ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
         ..time = 0
         ..attacker = attacker.id
         ..target = target.id
@@ -46,7 +46,7 @@ abstract class DefenseSituation extends Object
 
   @override
   List<Action<dynamic>> get actions =>
-      new List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
+      List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
         ..addAll(builtEnemyTargetActionGenerators);
 
   int get attacker;

@@ -36,11 +36,11 @@ abstract class BodyPart extends Object
     int swingSurfaceLeft: 1,
     int swingSurfaceRight: 1,
   }) =>
-      new _$BodyPart((b) => b
+      _$BodyPart((b) => b
         ..id = id
         ..name = name
         ..randomDesignation = randomDesignation ?? name
-        ..children = new ListBuilder<BodyPart>(children ?? const <BodyPart>[])
+        ..children = ListBuilder<BodyPart>(children ?? const <BodyPart>[])
         ..designation = designation ?? BodyPartDesignation.none
         ..function = function ?? BodyPartFunction.none
         ..hitpoints = hitpoints ?? 1

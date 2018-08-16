@@ -8,7 +8,7 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
 class FinishBreakNeck extends OtherActorAction {
-  static final FinishBreakNeck singleton = new FinishBreakNeck();
+  static final FinishBreakNeck singleton = FinishBreakNeck();
 
   static const String className = "FinishBreakNeck";
 
@@ -41,7 +41,7 @@ class FinishBreakNeck extends OtherActorAction {
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

@@ -24,13 +24,13 @@ import 'package:logging/logging.dart';
 import 'edgehead_serializers.dart' as edgehead_serializer;
 
 class EdgeheadGame extends Book {
-  static final StatSetting<double> hitpointsSetting = new StatSetting<double>(
+  static final StatSetting<double> hitpointsSetting = StatSetting<double>(
       "hitpoints", "The health of the player.", (v) => "$v HP");
 
-  static final StatSetting<int> staminaSetting = new StatSetting<int>(
+  static final StatSetting<int> staminaSetting = StatSetting<int>(
       "stamina", "The physical energy that the player can use.", (v) => "$v S");
 
-  final Logger log = new Logger('EdgeheadGame');
+  final Logger log = Logger('EdgeheadGame');
 
   @override
   final String uid = "edgehead";
@@ -51,16 +51,16 @@ class EdgeheadGame extends Book {
   Actor aren;
   Actor briana;
 
-  final PubSub _pubsub = new PubSub();
+  final PubSub _pubsub = PubSub();
   Situation initialSituation;
   WorldState world;
 
   Simulation simulation;
 
   PlanConsequence consequence;
-  Storyline storyline = new Storyline();
-  final Stat<double> hitpoints = new Stat<double>(hitpointsSetting, 0.0);
-  final Stat<int> stamina = new Stat<int>(staminaSetting, 1);
+  Storyline storyline = Storyline();
+  final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
+  final Stat<int> stamina = Stat<int>(staminaSetting, 1);
 
   /// Create a new Edgehead game.
   ///
@@ -79,7 +79,7 @@ class EdgeheadGame extends Book {
     int randomSeed,
   }) {
     if (randomSeed != null && saveGameSerialized != null) {
-      throw new ArgumentError(
+      throw ArgumentError(
           "Either provide randomSeed or saveGameSerialized, never both.");
     }
     _setup(saveGameSerialized, randomSeed);
@@ -105,9 +105,9 @@ class EdgeheadGame extends Book {
 
     initialSituation = edgeheadInitialSituation;
 
-    final startingTime = new DateTime.utc(1294, 5, 9, 10, 0);
+    final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
 
-    var global = new EdgeheadGlobalState();
+    var global = EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
       // Load existing game from [saveGameSerialized].
@@ -123,17 +123,17 @@ class EdgeheadGame extends Book {
       }
     } else {
       // Creating a new game from start.
-      world = new WorldState((b) => b
-        ..actors = new SetBuilder<Actor>(<Actor>[aren, briana])
-        ..situations = new ListBuilder<Situation>(<Situation>[initialSituation])
+      world = WorldState((b) => b
+        ..actors = SetBuilder<Actor>(<Actor>[aren, briana])
+        ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
-        ..statefulRandomState = randomSeed ?? new Random().nextInt(0xffffffff)
+        ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
         ..time = startingTime);
     }
 
     simulation = edgeheadSimulation;
 
-    consequence = new PlanConsequence.initial(world);
+    consequence = PlanConsequence.initial(world);
   }
 
   @override
@@ -163,9 +163,9 @@ class EdgeheadGame extends Book {
       storyline.generateOutput().forEach(elementsSink.add);
 
       if (!world.hasAliveActor(aren.id)) {
-        elementsSink.add(new LoseGame((b) => b..markdownText = "You die."));
+        elementsSink.add(LoseGame((b) => b..markdownText = "You die."));
       } else {
-        elementsSink.add(new WinGame((b) => b..markdownText = "TODO win text"));
+        elementsSink.add(WinGame((b) => b..markdownText = "TODO win text"));
       }
       return;
     }
@@ -193,7 +193,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var planner = new ActorPlanner(actor, simulation, world, _pubsub);
+    var planner = ActorPlanner(actor, simulation, world, _pubsub);
     await planner.plan();
     var recs = planner.getRecommendations();
 
@@ -286,10 +286,10 @@ class EdgeheadGame extends Book {
           "Cannot have an implicit action when there are more "
           "than one presented.");
 
-      final choices = new ListBuilder<Choice>();
-      final callbacks = new Map<Choice, Future<Null> Function()>();
+      final choices = ListBuilder<Choice>();
+      final callbacks = Map<Choice, Future<Null> Function()>();
       for (Performance performance in performances) {
-        final choice = new Choice((b) => b
+        final choice = Choice((b) => b
           ..markdownText = performance.command
           ..helpMessage = performance.action.helpMessage
           ..isImplicit = performance.action.isImplicit);
@@ -298,10 +298,10 @@ class EdgeheadGame extends Book {
         };
         choices.add(choice);
       }
-      final savegame = new SaveGameBuilder()
+      final savegame = SaveGameBuilder()
         ..saveGameSerialized = json.encode(edgehead_serializer.serializers
             .serializeWith(WorldState.serializer, world));
-      final choiceBlock = new ChoiceBlock((b) => b
+      final choiceBlock = ChoiceBlock((b) => b
         ..choices = choices
         ..saveGame = savegame);
       final picked = await showChoices(choiceBlock);
@@ -325,10 +325,9 @@ class EdgeheadGame extends Book {
 
   void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
     if (event.actor.isPlayer) {
-      event.context.outputStoryline
-          .addCustomElement(new StatUpdate<int>((b) => b
-            ..name = hitpointsSetting.name
-            ..newValue = event.actor.hitpoints));
+      event.context.outputStoryline.addCustomElement(StatUpdate<int>((b) => b
+        ..name = hitpointsSetting.name
+        ..newValue = event.actor.hitpoints));
     }
   }
 
@@ -371,14 +370,14 @@ class EdgeheadGame extends Book {
         final builder = consequence.world.toBuilder();
         builder.updateActorById(actor.id, (b) => b..stamina -= 1);
         world = builder.build();
-        consequence = new PlanConsequence.withUpdatedWorld(consequence, world);
+        consequence = PlanConsequence.withUpdatedWorld(consequence, world);
       }
     }
   }
 
   /// An instance that can be reused to generate randomness, provided that
   /// it's always seeded with a new state before use.
-  final StatefulRandom _reusableRandom = new StatefulRandom(42);
+  final StatefulRandom _reusableRandom = StatefulRandom(42);
 
   Future<Null> _applySelected(
       Performance performance, Actor actor, Storyline storyline) async {

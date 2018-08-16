@@ -32,7 +32,7 @@ WeaponAssaultResult executeSlashingHit(
     // Part not defined directly. We must find it first.
     part = target.anatomy.findByDesignation(designation);
     if (part == null) {
-      throw new ArgumentError("$designation not found in $target");
+      throw ArgumentError("$designation not found in $target");
     }
   }
 
@@ -50,7 +50,7 @@ WeaponAssaultResult executeSlashingHit(
       return _addMinorCut(target, part, weapon);
   }
 
-  throw new UnimplementedError("this type of slash not implemented yet");
+  throw UnimplementedError("this type of slash not implemented yet");
 }
 
 /// Resolves the logic of randomly selecting a body part based on
@@ -112,7 +112,7 @@ WeaponAssaultResult _addMajorCut(
     },
   );
 
-  return new WeaponAssaultResult(victim.build(), designated,
+  return WeaponAssaultResult(victim.build(), designated,
       slashSuccessLevel: SlashSuccessLevel.majorCut);
 }
 
@@ -139,7 +139,7 @@ WeaponAssaultResult _addMinorCut(
     },
   );
 
-  return new WeaponAssaultResult(victim.build(), designated,
+  return WeaponAssaultResult(victim.build(), designated,
       slashSuccessLevel: SlashSuccessLevel.minorCut);
 }
 
@@ -171,7 +171,7 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   severedPart.isSevered = true;
   severedPart.hitpoints = 0;
 
-  return new WeaponAssaultResult(victim.build(), bodyPart,
+  return WeaponAssaultResult(victim.build(), bodyPart,
       slashSuccessLevel: SlashSuccessLevel.cleave,
       severedPart: severedPart.build());
 }
@@ -203,7 +203,7 @@ WeaponAssaultResult _disableBySlash(
     victimDidFall = true;
   }
 
-  return new WeaponAssaultResult(
+  return WeaponAssaultResult(
     victim.build(),
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.majorCut,

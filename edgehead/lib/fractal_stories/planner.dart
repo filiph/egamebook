@@ -15,7 +15,7 @@ import 'plan_consequence.dart';
 import 'simulation.dart';
 
 class ActorPlanner {
-  final Logger log = new Logger('ActorPlanner');
+  final Logger log = Logger('ActorPlanner');
 
   /// We will stop processing a plan path once its leaf node has lower
   /// cumulative probability than this.
@@ -25,7 +25,7 @@ class ActorPlanner {
   /// will be considered for best cases.
   static const num bestCaseProbabilityThreshold = 0.15;
 
-  static DateTime _latestWait = new DateTime.now();
+  static DateTime _latestWait = DateTime.now();
   final int actorId;
 
   final PlanConsequence _initial;
@@ -37,14 +37,14 @@ class ActorPlanner {
 
   final Simulation simulation;
 
-  final Map<Performance, ActorScoreChange> firstActionScores = new Map();
+  final Map<Performance, ActorScoreChange> firstActionScores = Map();
 
   ActorPlanner(
       Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
       : actorId = actor?.id,
-        _initial = new PlanConsequence.initial(initialWorld) {
+        _initial = PlanConsequence.initial(initialWorld) {
     if (actor == null) {
-      throw new ArgumentError("Called ActorPlanner with actor == null. "
+      throw ArgumentError("Called ActorPlanner with actor == null. "
           "That may mean that a Situation returns getCurrentActor as null. "
           "Some action that you added should make sure it removes the "
           "Situation "
@@ -94,7 +94,7 @@ class ActorPlanner {
 
     // Look at average to see what kind of effect, on average, this action
     // will have.
-    var average = new ActorScoreChange.average(uplifts);
+    var average = ActorScoreChange.average(uplifts);
 
     // Also look at the best possible outcome. If we only used the average,
     // an action that leads to a lot of bad outcomes but one great one
@@ -128,7 +128,7 @@ class ActorPlanner {
           "actorId=$actorId.");
       log.fine("Actions not available for $actorId and $_initial.");
     }
-    return new PlannerRecommendation(firstActionScores);
+    return PlannerRecommendation(firstActionScores);
   }
 
   Future<Null> plan(
@@ -144,7 +144,7 @@ class ActorPlanner {
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
 
     final context =
-        new ApplicabilityContext(currentActor, simulation, _initial.world);
+        ApplicabilityContext(currentActor, simulation, _initial.world);
 
     for (var performance in simulation.generateAllPerformances(context)) {
       log.finer(() => "Evaluating action '${performance.command}' "
@@ -218,15 +218,14 @@ class ActorPlanner {
     log.finer(() => "- initial action: "
         "${' ' * initial.order}- ${initial.performance}");
 
-    Queue<PlanConsequence> open = new Queue<PlanConsequence>();
-    final Set<WorldState> closed = new Set<WorldState>();
+    Queue<PlanConsequence> open = Queue<PlanConsequence>();
+    final Set<WorldState> closed = Set<WorldState>();
 
     var initialWorldHash = initial.world.hashCode;
     for (var firstConsequence in firstPerformance.action.apply(mainActor,
         initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
-        throw new StateError(
-            "Action $firstPerformance modified world state when "
+        throw StateError("Action $firstPerformance modified world state when "
             "producing $firstConsequence.");
       }
       open.add(firstConsequence);
@@ -238,10 +237,10 @@ class ActorPlanner {
       consequences += 1;
 
       if (waitFunction != null &&
-          new DateTime.now().difference(_latestWait) >
+          DateTime.now().difference(_latestWait) >
               const Duration(milliseconds: 5)) {
         await waitFunction();
-        _latestWait = new DateTime.now();
+        _latestWait = DateTime.now();
       }
       var current = open.removeFirst();
 
@@ -278,7 +277,7 @@ class ActorPlanner {
 
         var score = mainActor.scoreWorld(current.world);
 
-        var stats = new ConsequenceStats(
+        var stats = ConsequenceStats(
             score, current.cumulativeProbability, current.order);
 
         log.finest(() => "- $stats");
@@ -299,7 +298,7 @@ class ActorPlanner {
       var mainActorDuplicates =
           current.world.actors.where((a) => a.id == actorId).length;
       if (mainActorDuplicates > 1) {
-        throw new StateError("World has several duplicates of mainActor: "
+        throw StateError("World has several duplicates of mainActor: "
             "${current.world}");
       } else if (mainActorDuplicates == 0) {
         log.info("mainActor $actorId dies and is removed in world - "
@@ -314,8 +313,8 @@ class ActorPlanner {
 
       var score =
           mainActor?.scoreWorld(current.world) ?? Actor.defaultScoreWhenDead;
-      var stats = new ConsequenceStats(
-          score, current.cumulativeProbability, current.order);
+      var stats =
+          ConsequenceStats(score, current.cumulativeProbability, current.order);
 
       log.finest(() => "- mainActor's score == $stats (initial=$initialScore)");
       log.finest(() {
@@ -329,7 +328,7 @@ class ActorPlanner {
       var originalCount = open.length;
 
       final context =
-          new ApplicabilityContext(currentActor, simulation, current.world);
+          ApplicabilityContext(currentActor, simulation, current.world);
 
       for (final performance in simulation.generateAllPerformances(context)) {
         if (!performance.action.isApplicable(

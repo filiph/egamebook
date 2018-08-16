@@ -35,8 +35,8 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
       base < 1.0, "For sureSuccesses, use ReasonedSuccessChance.sureSuccess");
 
   double value = base;
-  final successReasons = new List<Reason<CombatReason>>();
-  final failureReasons = new List<Reason<CombatReason>>();
+  final successReasons = List<Reason<CombatReason>>();
+  final failureReasons = List<Reason<CombatReason>>();
 
   for (final bonus in bonuses) {
     assert(bonus.maxAdjustment > 0,
@@ -50,7 +50,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
     final adjustment = bonus.maxAdjustment * scale;
     value = _lerp(value, adjustment.round());
     final difference = (value - previous).abs();
-    final reason = new Reason<CombatReason>(bonus.reason, difference);
+    final reason = Reason<CombatReason>(bonus.reason, difference);
 
     if (scale > 0) {
       successReasons.add(reason);
@@ -59,7 +59,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
     }
   }
 
-  return new ReasonedSuccessChance<CombatReason>(value,
+  return ReasonedSuccessChance<CombatReason>(value,
       successReasons: successReasons, failureReasons: failureReasons);
 }
 
@@ -94,7 +94,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.height:
       if (performer.isOnGround && !target.isOnGround) {
         return -1.0;
@@ -103,28 +103,28 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetWithoutShield:
       if (target.currentShield == null) {
         return 1.0;
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasPrimaryArmDisabled:
       if (_partDisabled(target, BodyPartDesignation.primaryArm)) {
         return 1.0;
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasSecondaryArmDisabled:
       if (_partDisabled(target, BodyPartDesignation.secondaryArm)) {
         return 1.0;
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasOneLegDisabled:
       final percent = _fractionDisabled(target, BodyPartFunction.mobile);
       if (percent > 0 && percent < 1) {
@@ -132,7 +132,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasAllLegsDisabled:
       final percent = _fractionDisabled(target, BodyPartFunction.mobile);
       if (percent == 1.0) {
@@ -140,7 +140,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasOneEyeDisabled:
       final percent = _fractionDisabled(target, BodyPartFunction.vision);
       if (percent > 0 && percent < 1) {
@@ -148,7 +148,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasAllEyesDisabled:
       final percent = _fractionDisabled(target, BodyPartFunction.vision);
       if (percent == 1.0) {
@@ -156,10 +156,10 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else {
         return 0.0;
       }
-      throw new StateError("Forgotten logic branch"); // ignore: dead_code
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
   }
 
-  throw new ArgumentError("no rule for $reason");
+  throw ArgumentError("no rule for $reason");
 }
 
 double _lerp(double current, int bonus) {

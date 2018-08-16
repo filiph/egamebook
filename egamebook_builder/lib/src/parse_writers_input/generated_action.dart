@@ -11,14 +11,14 @@ import 'parse_percent.dart';
 import 'recase.dart';
 import 'types.dart';
 
-final Logger log = new Logger("generated_action");
+final Logger log = Logger("generated_action");
 
 /// Generates code for writer's action.
 ///
 /// Following this:
 /// https://trello.com/c/S1cXPDQ7/1-parser-for-writer-s-output#comment-58682ee019b9e7b833655fb7
 GeneratedGameObject generateAction(Map<String, String> map, String dirPath) {
-  return new GeneratedAction(new Map.from(map), dirPath);
+  return GeneratedAction(Map.from(map), dirPath);
 }
 
 class GeneratedAction extends GeneratedGameObject {

@@ -12,14 +12,14 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
 final Entity balance =
-    new Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
+    Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
-final Entity pounding = new Entity(name: "pounding", team: neutralTeam);
+final Entity pounding = Entity(name: "pounding", team: neutralTeam);
 
 class Pound extends EnemyTargetAction {
   static const String className = "Pound";
 
-  static final Pound singleton = new Pound();
+  static final Pound singleton = Pound();
 
   @override
   final bool rerollable = true;
@@ -87,7 +87,7 @@ class Pound extends EnemyTargetAction {
           object: balance, negative: true);
       w.updateActorById(enemy.id, (b) => b..pose = Pose.offBalance);
 
-      var situation = new OffBalanceOpportunitySituation.initialized(
+      var situation = OffBalanceOpportunitySituation.initialized(
           w.randomInt(), enemy,
           culprit: a);
       w.pushSituation(situation);
@@ -105,7 +105,7 @@ class Pound extends EnemyTargetAction {
 
       return "${a.name} pounds ${enemy.name} to the ground";
     }
-    throw new StateError("enemy pose must be either standing or off-balance");
+    throw StateError("enemy pose must be either standing or off-balance");
   }
 
   @override

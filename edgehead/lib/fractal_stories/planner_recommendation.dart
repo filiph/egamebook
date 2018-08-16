@@ -14,7 +14,7 @@ typedef num CombineFunction(ActorScoreChange change);
 
 @immutable
 class PlannerRecommendation {
-  static final Logger log = new Logger('PlannerRecommendation');
+  static final Logger log = Logger('PlannerRecommendation');
 
   /// The [weights] have to add up to this number.
   ///
@@ -28,7 +28,7 @@ class PlannerRecommendation {
   final List<Performance> _performances;
 
   PlannerRecommendation(Map<Performance, ActorScoreChange> scores)
-      : scores = new UnmodifiableMapView(scores),
+      : scores = UnmodifiableMapView(scores),
         _performances = _getAttainablePerformances(scores) {
     if (scores.isEmpty) {
       log.warning("Created with no recommendations.");
@@ -123,7 +123,7 @@ class PlannerRecommendation {
     }
     num totalLength = maximum - lowerBound;
 
-    var fractionWeights = new List<num>.generate(_performances.length, (int i) {
+    var fractionWeights = List<num>.generate(_performances.length, (int i) {
       var action = _performances[i];
       var score = combineFunction(scores[action]);
       return (score - lowerBound) / totalLength;
@@ -147,7 +147,7 @@ class PlannerRecommendation {
     return _performances[index];
   }
 
-  final StatefulRandom _reusableRandom = new StatefulRandom(42);
+  final StatefulRandom _reusableRandom = StatefulRandom(42);
 
   Performance _findBest(CombineFunction combineFunction,
       {List<Performance> skip: const []}) {

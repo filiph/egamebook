@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 
 void main() {
   test("simple storyline", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var gorilla = new Entity(
+    var gorilla = Entity(
         name: "Gorilla",
         nameIsProperNoun: true,
         team: playerTeam,
@@ -29,9 +29,9 @@ void main() {
   });
 
   test("storyline.addParagraph", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var gorilla = new Entity(
+    var gorilla = Entity(
         name: "Gorilla",
         nameIsProperNoun: true,
         team: playerTeam,
@@ -46,8 +46,8 @@ void main() {
   });
 
   test("fixing .\". in sentences", () {
-    var storyline = new Storyline();
-    var gorilla = new Entity(
+    var storyline = Storyline();
+    var gorilla = Entity(
         name: "Gorilla",
         nameIsProperNoun: true,
         team: playerTeam,
@@ -70,9 +70,9 @@ void main() {
   });
 
   test("fixing .'. in sentences", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var gorilla =
-        new Entity(name: "Gorilla", team: playerTeam, pronoun: Pronoun.IT);
+        Entity(name: "Gorilla", team: playerTeam, pronoun: Pronoun.IT);
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: 'Isn't this great?'",
         subject: gorilla, endSentence: true);
@@ -90,10 +90,10 @@ void main() {
   });
 
   test("exchange", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
     var enemy =
-        new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+        Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> tr<ies> to hit <object> in the stomach",
         subject: player, object: enemy, time: 1);
     storyline.add("<subject> dodge<s> <object's> strike",
@@ -110,16 +110,16 @@ void main() {
   });
 
   test("substitute pronouns where proper ('he gives him the money')", () {
-    var storyline = new Storyline();
-    var enemy = new Entity(
+    var storyline = Storyline();
+    var enemy = Entity(
         name: "John",
         nameIsProperNoun: true,
-        team: new Team((b) => b..id = 3),
+        team: Team((b) => b..id = 3),
         pronoun: Pronoun.HE);
-    var enemy2 = new Entity(
+    var enemy2 = Entity(
         name: "Jack",
         nameIsProperNoun: true,
-        team: new Team((b) => b..id = 4),
+        team: Team((b) => b..id = 4),
         pronoun: Pronoun.HE);
     storyline.add("<subject> meet<s> <object> at the station",
         subject: enemy, object: enemy2);
@@ -132,11 +132,11 @@ void main() {
   });
 
   test("don't substitute pronouns where confusing ('it hits it')", () {
-    var storyline = new Storyline();
-    var kid = new Entity(
-        name: "kid", team: new Team((b) => b..id = 3), pronoun: Pronoun.IT);
-    var toy = new Entity(
-        name: "toy", team: new Team((b) => b..id = 4), pronoun: Pronoun.IT);
+    var storyline = Storyline();
+    var kid =
+        Entity(name: "kid", team: Team((b) => b..id = 3), pronoun: Pronoun.IT);
+    var toy =
+        Entity(name: "toy", team: Team((b) => b..id = 4), pronoun: Pronoun.IT);
     storyline.add("<subject> find<s> <object>", subject: kid, object: toy);
     storyline.add("<subject> lose<s> <object> again",
         subject: kid, object: toy, but: true);
@@ -144,10 +144,10 @@ void main() {
   });
 
   test("ignore <owner's> when owner is null", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
     var gun =
-        new Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
+        Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
 
     storyline.add("<subject> start<s> programming <owner's> <object> to fire",
         subject: player, object: gun);
@@ -157,9 +157,9 @@ void main() {
   test(
       "ignoring <owner's> at start of sentence doesn't screw up capitalization",
       () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var hull = new Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
+    var hull = Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
 
     storyline.add("<owner's> <subject> fail's to hit <object>",
         subject: player, object: hull);
@@ -167,12 +167,12 @@ void main() {
   });
 
   test("don't substitute pronoun when it was used in the same form", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
     var gun =
-        new Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
+        Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
-        new Entity(name: "ship", team: defaultEnemyTeam, pronoun: Pronoun.IT);
+        Entity(name: "ship", team: defaultEnemyTeam, pronoun: Pronoun.IT);
     storyline.add("<subject> start<s> programming <object> to fire",
         subject: player, object: gun);
     storyline.add("<subject> go<es> wide of <object>",
@@ -181,19 +181,19 @@ void main() {
   });
 
   test("add 'the' to common nouns (default for every Entity)", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var apple = new Entity(name: "apple", pronoun: Pronoun.IT);
+    var apple = Entity(name: "apple", pronoun: Pronoun.IT);
     storyline.add("<subject> pick<s> up <object>",
         subject: player, object: apple);
     expect(storyline.realizeAsString(), matches("You pick up the apple."));
   });
 
   test("don't use <owner's> to pronoun", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var ship = new Entity(name: "Haijing", pronoun: Pronoun.IT);
-    var part = new Entity(name: "main jet", pronoun: Pronoun.IT);
+    var ship = Entity(name: "Haijing", pronoun: Pronoun.IT);
+    var part = Entity(name: "main jet", pronoun: Pronoun.IT);
     storyline.add("<subject> hit<s> <object>", subject: player, object: part);
     storyline.add("<owner's> <subject> <is> damaged heavily",
         subject: part, owner: ship);
@@ -201,10 +201,10 @@ void main() {
   });
 
   test("put 'and' between two sentences in a complex sentence", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var gun = new Entity(name: "front laser", pronoun: Pronoun.IT);
-    var ship = new Entity(name: "Haijing", pronoun: Pronoun.IT);
+    var gun = Entity(name: "front laser", pronoun: Pronoun.IT);
+    var ship = Entity(name: "Haijing", pronoun: Pronoun.IT);
     storyline.add("<subject> take<s> hold of <object's> controls",
         subject: player, object: gun, time: 1);
     storyline.add("<subject> begin<s> to aim at <object>",
@@ -218,11 +218,11 @@ void main() {
   });
 
   test("possessive", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var gun = new Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
+    var gun = Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
-        new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+        Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<owner's> <subject> <is> pointed at <object>",
         owner: player, subject: gun, object: enemy, time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
@@ -231,7 +231,7 @@ void main() {
 
     storyline.clear();
     var ship =
-        new Entity(name: "ship", team: defaultEnemyTeam, pronoun: Pronoun.SHE);
+        Entity(name: "ship", team: defaultEnemyTeam, pronoun: Pronoun.SHE);
     storyline.add("<owner's> <subject> aim<s> <subject's> guns at <object>",
         owner: enemy, subject: ship, object: player);
     storyline.add("<owner's> <subject> <is> faster",
@@ -241,11 +241,11 @@ void main() {
   });
 
   test("possesive particles works even with <object-owner's> <object>", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var gun = new Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
+    var gun = Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
-        new Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+        Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add(
         "<owner's> <subject> <is> pointed at <object-owner's> "
         "<object>",
@@ -259,11 +259,10 @@ void main() {
   });
 
   test("we don't show 'your the sword' even if Randomly is involved", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     var player = _createPlayer("Filip");
-    var sword = new Entity(name: "sword", pronoun: Pronoun.IT);
-    var orc =
-        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    var sword = Entity(name: "sword", pronoun: Pronoun.IT);
+    var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
     expect(
@@ -277,29 +276,27 @@ void main() {
     const String template = "<subject> unleash<es> <subject's> <object>";
 
     setUp(() {
-      storyline = new Storyline();
+      storyline = Storyline();
       player = _createPlayer("Filip");
     });
 
     test("do show with common nouns", () {
-      dog = new Entity(name: "dog", pronoun: Pronoun.IT);
+      dog = Entity(name: "dog", pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
       expect(storyline.realizeAsString(), contains("your dog"));
     });
 
     test("don't show with proper nouns", () {
-      dog = new Entity(
-          name: "Buster", nameIsProperNoun: true, pronoun: Pronoun.IT);
+      dog = Entity(name: "Buster", nameIsProperNoun: true, pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
       expect(storyline.realizeAsString(), isNot(contains("your Buster")));
     });
   });
 
   test("we don't show 'his the scimitar' for <subject's> <object>", () {
-    var storyline = new Storyline();
-    var orc =
-        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    var sword = new Entity(name: "scimitar", pronoun: Pronoun.IT);
+    var storyline = Storyline();
+    var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    var sword = Entity(name: "scimitar", pronoun: Pronoun.IT);
     orc.report(storyline, "<subject> drop<s> the whip");
     orc.report(storyline, "<subject> draw<s> <subject's> <object>",
         object: sword);
@@ -310,10 +307,9 @@ void main() {
       "we don't make subsequent <object> a pronoun when the first instance "
       "is actually a Randomly option", () {
     var player = _createPlayer("Filip");
-    var orc =
-        new Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+    var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     for (int i = 0; i < 1000; i++) {
-      var storyline = new Storyline();
+      var storyline = Storyline();
       storyline.add(
           "<subject> {punch<es> <object> in the eye|"
           "punch<es> <object's> eye}",
@@ -324,7 +320,7 @@ void main() {
   });
 
   test("first paragraph", () {
-    var storyline = new Storyline();
+    var storyline = Storyline();
     storyline.add("this is some lorem ipsum");
     storyline.add("and it doesn't make much sense");
     storyline.addParagraph();
@@ -342,10 +338,10 @@ void main() {
   });
 
   test("nice flow ('briana stands up, orc swings at her')", () {
-    var storyline = new Storyline();
-    var briana = new Entity(
-        name: "Briana", nameIsProperNoun: true, pronoun: Pronoun.SHE);
-    var orc = new Entity(name: "orc", pronoun: Pronoun.HE);
+    var storyline = Storyline();
+    var briana =
+        Entity(name: "Briana", nameIsProperNoun: true, pronoun: Pronoun.SHE);
+    var orc = Entity(name: "orc", pronoun: Pronoun.HE);
     storyline.add("<subject> stand<s> up", subject: briana);
     storyline.add("<subject> swing<s> at <object>",
         subject: orc, object: briana);
@@ -354,10 +350,10 @@ void main() {
   });
 
   test("definitive (the) article after first use", () {
-    var storyline = new Storyline();
-    Entity sword = new Entity(name: "sword");
+    var storyline = Storyline();
+    Entity sword = Entity(name: "sword");
     storyline.markEntityAsUnmentioned(sword);
-    Entity shield = new Entity(name: "shield");
+    Entity shield = Entity(name: "shield");
     storyline.markEntityAsUnmentioned(shield);
 
     storyline.add("<subject> l<ies> on the table", subject: sword, time: 0);
@@ -377,12 +373,12 @@ void main() {
   });
 
   test("enumeration", () {
-    var storyline = new Storyline();
-    Entity handkerchief = new Entity(name: "handkerchief");
-    Entity brush = new Entity(name: "brush");
-    Entity mirror = new Entity(name: "mirror");
-    Entity lipstick = new Entity(name: "lipstick");
-    Entity crateOfTnt = new Entity(name: "crate of TNT");
+    var storyline = Storyline();
+    Entity handkerchief = Entity(name: "handkerchief");
+    Entity brush = Entity(name: "brush");
+    Entity mirror = Entity(name: "mirror");
+    Entity lipstick = Entity(name: "lipstick");
+    Entity crateOfTnt = Entity(name: "crate of TNT");
 
     void resetAlreadyMentioned() {
       storyline.markEntityAsUnmentioned(handkerchief);
@@ -459,7 +455,7 @@ void main() {
       test("shows normally when apart", () {
         storyline.add("you aim at the sky",
             actionThread: threadA, isSupportiveActionInThread: true);
-        var bigbang = new Entity(name: "big bang");
+        var bigbang = Entity(name: "big bang");
         storyline.markEntityAsUnmentioned(bigbang);
         storyline.add("<subject> <is> heard from the distance",
             subject: bigbang);
@@ -482,8 +478,8 @@ void main() {
           "not shown supportive action doesn't influence making subjects "
           "into pronouns", () {
         var player = _createPlayer("Filip");
-        var enemy = new Entity(
-            name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+        var enemy =
+            Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
         storyline.add("<subject> aim<s> at <object>",
             subject: player,
             object: enemy,
@@ -515,7 +511,7 @@ void main() {
 ///
 /// Since Storyline started as a singleton pattern, these tests are written
 /// with that in mind. TODO: pass storyline
-Storyline storyline = new Storyline();
+Storyline storyline = Storyline();
 
 Entity _createPlayer(String name) =>
     Entity(name: name, pronoun: Pronoun.YOU, team: playerTeam, isPlayer: true);

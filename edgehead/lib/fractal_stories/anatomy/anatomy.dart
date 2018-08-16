@@ -119,7 +119,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   static BodyPart pickRandomBodyPart(Map<BodyPart, int> bodyPartsWithWeights,
       RandomIntGetter randomIntGetter) {
     if (bodyPartsWithWeights.isEmpty) {
-      throw new ArgumentError("bodyPartsWithWeights cannot be empty");
+      throw ArgumentError("bodyPartsWithWeights cannot be empty");
     }
     final weightsTotal = bodyPartsWithWeights.values.reduce(_sum);
     final needle = randomIntGetter(weightsTotal);
@@ -128,7 +128,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
       current += bodyPartsWithWeights[part];
       if (needle < current) return part;
     }
-    throw new StateError("Part weights aren't adding up.");
+    throw StateError("Part weights aren't adding up.");
   }
 
   static int _sum(int a, int b) => a + b;

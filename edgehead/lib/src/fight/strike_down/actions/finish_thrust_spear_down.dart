@@ -10,7 +10,7 @@ import 'package:edgehead/writers_helpers.dart';
 
 class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
   static final FinishThrustSpearAtGroundedEnemy singleton =
-      new FinishThrustSpearAtGroundedEnemy();
+      FinishThrustSpearAtGroundedEnemy();
 
   static const String className = "FinishThrustSpearAtGroundedEnemy";
 
@@ -43,7 +43,7 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

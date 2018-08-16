@@ -2,7 +2,7 @@ import '../recase/recase.dart' as rc;
 
 ReCase reCase(String string) {
   assert(string.startsWith(r'$'), "Identifier $string doesn't start with \$.");
-  return new ReCase(string.substring(1));
+  return ReCase(string.substring(1));
 }
 
 /// A modified [rc.ReCase] class that supports `__END_OF_ROAM__` as an
@@ -22,7 +22,7 @@ class ReCase {
       _pascalCase = "EndOfRoam";
       _snakeCase = endOfRoamName;
     } else {
-      _setCases(new rc.ReCase(string));
+      _setCases(rc.ReCase(string));
     }
   }
 

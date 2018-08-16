@@ -18,27 +18,26 @@ import '../parse_writers_input/types.dart';
 /// Generator for FunctionSerializer.
 class WritersInputGenerator extends Generator {
   // Allow creating via `const` as well as enforces immutability here.
-  static const List<String> validExtensions = const [".txt"];
+  static const List<String> validExtensions = [".txt"];
 
   const WritersInputGenerator();
 
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) async {
-    final result = new StringBuffer();
+    final result = StringBuffer();
 
     final fileName = library.element.source.shortName.replaceAll('.dart', '');
 
     AnnotatedElement annotation = _getGatherAnnotation(library);
     if (annotation == null) {
-      throw new InvalidGenerationSourceError(
-          "File is specified as writer's input "
+      throw InvalidGenerationSourceError("File is specified as writer's input "
           "but no @GatherWriterInputFrom(['path/...']) annotation "
           "specified.");
     }
 
     final element = annotation.element;
     if (element is! LibraryElement) {
-      throw new InvalidGenerationSourceError(
+      throw InvalidGenerationSourceError(
           "Elements annotated with @GatherFunctionsFrom "
           "must be libraries.");
     }
@@ -48,12 +47,12 @@ class WritersInputGenerator extends Generator {
         .listValue
         .map((dartObject) => dartObject.toStringValue());
 
-    final cb.LibraryBuilder lib = new cb.LibraryBuilder();
+    final cb.LibraryBuilder lib = cb.LibraryBuilder();
     List<GeneratedGameObject> objects = [];
 
     for (final glob in globs) {
       log.fine('Traversing glob $glob');
-      final assetIds = buildStep.findAssets(new Glob(glob, recursive: true));
+      final assetIds = buildStep.findAssets(Glob(glob, recursive: true));
       await for (final id in assetIds) {
         log.finer('Compiling $id');
         if (!validExtensions.contains(id.extension)) continue;
@@ -113,8 +112,8 @@ class WritersInputGenerator extends Generator {
     lib.body.add(generateAllApproaches(objects));
     lib.body.add(generateAllActionInstances(objects));
 
-    final emitter = new cb.DartEmitter();
-    final source = new DartFormatter().format('${lib.build().accept(emitter)}');
+    final emitter = cb.DartEmitter();
+    final source = DartFormatter().format('${lib.build().accept(emitter)}');
 
     // TODO: add at the top as static code
     final sourceWithUnusedLinterIgnore =
@@ -132,12 +131,11 @@ class WritersInputGenerator extends Generator {
   }
 
   AnnotatedElement _getGatherAnnotation(LibraryReader library) {
-    final annotationChecker =
-        new TypeChecker.fromRuntime(GatherWriterInputFrom);
+    final annotationChecker = TypeChecker.fromRuntime(GatherWriterInputFrom);
     for (final metadata in library.element.metadata) {
-      final constant = new ConstantReader(metadata.constantValue);
+      final constant = ConstantReader(metadata.constantValue);
       if (annotationChecker.isExactlyType(metadata.constantValue.type)) {
-        return new AnnotatedElement(constant, library.element);
+        return AnnotatedElement(constant, library.element);
       }
     }
     return null;

@@ -13,7 +13,7 @@ WeaponAssaultResult executeThrustingHit(
 
   final part = target.anatomy.findByDesignation(designation);
   if (part == null) {
-    throw new ArgumentError("$designation not found in $target");
+    throw ArgumentError("$designation not found in $target");
   }
 
   // We only have one type of success. No switch statement necessary
@@ -54,7 +54,7 @@ WeaponAssaultResult _addMajorThrustingWound(
     },
   );
 
-  return new WeaponAssaultResult(victim.build(), designated);
+  return WeaponAssaultResult(victim.build(), designated);
 }
 
 /// TODO: Unify with _disableBySlash
@@ -84,7 +84,7 @@ WeaponAssaultResult _disableByThrust(
     victimDidFall = true;
   }
 
-  return new WeaponAssaultResult(
+  return WeaponAssaultResult(
     victim.build(),
     bodyPart,
     fell: victimDidFall,

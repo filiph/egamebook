@@ -16,7 +16,7 @@ DefenseSituation createOnGroundWrestleDefenseSituation(
         WorldStateBuilder world,
         Actor enemy,
         Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         world.randomInt(),
         onGroundWrestleDefenseSituationName,
         [EvadeNeckBreaking.singleton],

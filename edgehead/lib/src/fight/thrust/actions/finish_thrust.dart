@@ -14,7 +14,7 @@ import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
 
 class FinishThrust extends OtherActorAction {
-  static final FinishThrust singleton = new FinishThrust();
+  static final FinishThrust singleton = FinishThrust();
 
   static const String className = "FinishThrust";
 
@@ -47,7 +47,7 @@ class FinishThrust extends OtherActorAction {
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

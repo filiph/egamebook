@@ -28,7 +28,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   static const String className = "OffBalanceOpportunityThrust";
 
   static final OffBalanceOpportunityThrust singleton =
-      new OffBalanceOpportunityThrust();
+      OffBalanceOpportunityThrust();
 
   @override
   final String helpMessage = "When an opponent is out of balance they are the "

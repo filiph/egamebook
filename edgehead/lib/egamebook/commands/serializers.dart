@@ -8,7 +8,7 @@ import 'pick_choice_command.dart';
 
 part 'serializers.g.dart';
 
-@SerializersFor(const [
+@SerializersFor([
   PickChoice,
   ResolveSlotMachine,
 ])

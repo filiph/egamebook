@@ -20,7 +20,7 @@ ReasonedSuccessChance computeJumpBackSlash(
 }
 
 class JumpBackFromSlash extends OtherActorAction {
-  static final JumpBackFromSlash singleton = new JumpBackFromSlash();
+  static final JumpBackFromSlash singleton = JumpBackFromSlash();
 
   static const String className = "JumpBackFromSlash";
 

@@ -12,7 +12,7 @@ import 'package:egamebook_builder/instance_serializer.dart';
 
 part 'edgehead_event_callbacks_gather.gathered.dart';
 
-@GatherInstancesFrom(const ['lib/edgehead_event_callbacks_gather.dart'])
+@GatherInstancesFrom(['lib/edgehead_event_callbacks_gather.dart'])
 final InstanceSerializer<EventCallback> eventCallbackSerializer =
     _$eventCallbackSerializer;
 
@@ -96,7 +96,7 @@ final escape_tunnel_insignificant = EventCallback((sim, w, s) {
       "That last blow hits your $target hard"
       "${player.isOnGround ? '' : ' and sends you a couple of steps back'}.",
       wholeSentence: true);
-  final eyes = new Entity(name: "eyes", pronoun: Pronoun.THEY);
+  final eyes = Entity(name: "eyes", pronoun: Pronoun.THEY);
   s.add("<owner's> <subject> glint<s> with intensity",
       owner: actor, subject: eyes);
 });
@@ -234,7 +234,7 @@ final sleeping_goblin_thief = EventCallback((sim, w, s) {
 
 final youre_dead_slave = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
-  var sword = new Item.weapon(w.randomInt(), WeaponType.sword);
+  var sword = Item.weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
   agruth.report(s, "<subject> draw<s> <subject's> <object>", object: sword);
   w.updateActorById(agruthId, (b) => b..currentWeapon = sword.toBuilder());

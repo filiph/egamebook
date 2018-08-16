@@ -16,8 +16,8 @@ final RoomDescriber emptyRoomDescription = (c) {};
 
 /// This is the magic [Room] that, when reached, makes
 /// the room roaming situation stop.
-final Room endOfRoam = new Room(
-    endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null);
+final Room endOfRoam =
+    Room(endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null);
 
 /// This generator creates a [FightSituation].
 ///

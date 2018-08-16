@@ -67,7 +67,7 @@ class Rule {
     this.applyCallback,
   )   : hash = hash,
         prerequisite =
-            new Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
+            Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
 }
 
 @immutable
@@ -101,7 +101,7 @@ class Ruleset {
   /// lowest.
   factory Ruleset.unordered(Iterable<Rule> rules) {
     final iter = rules.iterator;
-    final ordered = new List.generate(10, (_) {
+    final ordered = List.generate(10, (_) {
       if (!iter.moveNext()) return null;
       return iter.current;
     }, growable: false)
@@ -111,7 +111,7 @@ class Ruleset {
         return a.prerequisite.compareTo(b.prerequisite);
       });
     assert(ordered.length == 10);
-    return new Ruleset(
+    return Ruleset(
       ordered[0],
       ordered[1],
       ordered[2],
@@ -132,7 +132,7 @@ class Ruleset {
   void apply(ActionContext context) {
     // TODO: rewrite inline so that we don't need to create a new list
     //       every time
-    final all = new List<Rule>.unmodifiable(<Rule>[
+    final all = List<Rule>.unmodifiable(<Rule>[
       rule1,
       rule2,
       rule3,
@@ -155,7 +155,7 @@ class Ruleset {
       }
     }
 
-    throw new StateError("No rule was applicable. "
+    throw StateError("No rule was applicable. "
         "Action history: ${context.world?.actionHistory?.describe()}");
   }
 }

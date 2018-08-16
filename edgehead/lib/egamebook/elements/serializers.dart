@@ -16,7 +16,7 @@ import 'text_element.dart';
 
 part 'serializers.g.dart';
 
-@SerializersFor(const [
+@SerializersFor([
   ChoiceBlock,
   Choice,
   ErrorElement,

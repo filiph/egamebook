@@ -11,7 +11,7 @@ const String onGroundDefenseSituationName = "OnGroundDefenseSituation";
 
 DefenseSituation createOnGroundDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         id,
         onGroundDefenseSituationName,
         [

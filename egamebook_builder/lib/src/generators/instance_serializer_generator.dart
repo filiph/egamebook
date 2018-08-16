@@ -18,7 +18,7 @@ class InstanceSerializerGenerator extends Generator {
   @override
   Future<String> generate(
       LibraryReader gatherLibrary, BuildStep buildStep) async {
-    final result = new StringBuffer();
+    final result = StringBuffer();
 
     log.fine("InstanceSerializer for: $gatherLibrary");
 
@@ -28,7 +28,7 @@ class InstanceSerializerGenerator extends Generator {
     ensurePartImport(gatherLibrary, fileName, extension: '.gathered.dart');
 
     final annotated = gatherLibrary
-        .annotatedWith(new TypeChecker.fromRuntime(GatherInstancesFrom))
+        .annotatedWith(TypeChecker.fromRuntime(GatherInstancesFrom))
         .toList(growable: false);
     if (annotated.isEmpty) {
       log.warning("File $fileName has no InstanceSerializer declarations that "
@@ -39,20 +39,20 @@ class InstanceSerializerGenerator extends Generator {
     for (final declaration in annotated) {
       final element = declaration.element;
       if (element is! TopLevelVariableElement) {
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Elements annotated with @GatherInstancesFrom "
             "must be top level variable declarations.");
       }
       final variable = element as TopLevelVariableElement;
       if (variable.type is! InterfaceType) {
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Type of variable must be InstanceSerializer<T>");
       }
       final interfaceType = variable.type as InterfaceType;
       if (interfaceType.name != 'InstanceSerializer') {
         // TODO: find out how to create a DartType() and use it to check
         //       via interfaceType.isAssignableTo(functionSerializerType)
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Top level declarations with the @GatherInstancesFrom "
             "annotation need to be of type InstanceSerializer, but we found "
             "one with type ${interfaceType.name}");
@@ -60,7 +60,7 @@ class InstanceSerializerGenerator extends Generator {
 
       final typeArguments = interfaceType.typeArguments;
       if (typeArguments.length != 1) {
-        throw new InvalidGenerationSourceError(
+        throw InvalidGenerationSourceError(
             "Variable annotated with @GatherInstancesFrom "
             "must have exactly 1 type argument. So the type annotation should "
             "read something like InstanceSerializer<Action> or "
@@ -70,7 +70,7 @@ class InstanceSerializerGenerator extends Generator {
       final instanceType = typeArguments.single;
       final instanceTypeName = instanceType.name;
       final variableName =
-          "_\$" "${new ReCase(instanceTypeName).camelCase}" "Serializer";
+          "_\$" "${ReCase(instanceTypeName).camelCase}" "Serializer";
 
       // final _$someCallbackSerializer = new FunctionSerializer<SomeCallback>({
       result.writeln(
@@ -82,10 +82,10 @@ class InstanceSerializerGenerator extends Generator {
           .map((dartObject) => dartObject.toStringValue());
 
       for (final glob in globs) {
-        final assetIds = buildStep.findAssets(new Glob(glob));
+        final assetIds = buildStep.findAssets(Glob(glob));
         await for (final id in assetIds) {
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
-          final globbedLibrary = new LibraryReader(globbedLibraryElement);
+          final globbedLibrary = LibraryReader(globbedLibraryElement);
 
           for (final topLevelElement in globbedLibrary.allElements) {
             if (topLevelElement is TopLevelVariableElement) {

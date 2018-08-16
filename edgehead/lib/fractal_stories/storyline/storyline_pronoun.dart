@@ -12,24 +12,23 @@ part 'storyline_pronoun.g.dart';
 ///
 /// See http://en.wikipedia.org/wiki/Latin_declension.
 abstract class Pronoun implements Built<Pronoun, PronounBuilder> {
-  static final Pronoun YOU = new Pronoun("you", "you", "your", "yourself");
+  static final Pronoun YOU = Pronoun("you", "you", "your", "yourself");
 
-  static final Pronoun HE = new Pronoun("he", "him", "his", "himself");
+  static final Pronoun HE = Pronoun("he", "him", "his", "himself");
 
-  static final Pronoun SHE = new Pronoun("she", "her", "her", "herself");
+  static final Pronoun SHE = Pronoun("she", "her", "her", "herself");
 
-  static final Pronoun IT = new Pronoun("it", "it", "its", "itself");
+  static final Pronoun IT = Pronoun("it", "it", "its", "itself");
 
-  static final Pronoun THEY =
-      new Pronoun("they", "them", "their", "themselves");
+  static final Pronoun THEY = Pronoun("they", "them", "their", "themselves");
 
-  static final Pronoun WE = new Pronoun("we", "us", "our", "ourselves");
+  static final Pronoun WE = Pronoun("we", "us", "our", "ourselves");
 
   static Serializer<Pronoun> get serializer => _$pronounSerializer;
 
   factory Pronoun(
           String nominative, String accusative, String genitive, String self) =>
-      new _$Pronoun((b) => b
+      _$Pronoun((b) => b
         ..nominative = nominative
         ..accusative = accusative
         ..genitive = genitive

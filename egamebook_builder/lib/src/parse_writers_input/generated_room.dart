@@ -13,10 +13,10 @@ import 'types.dart';
 /// Example line that matches:
 ///
 ///     $ironcast_road (Go to Fort Ironcast): You start towards the fort.
-final RegExp exitPattern = new RegExp(r"^(\$\w+)\s+\((.*?)\):\s(.+)$");
+final RegExp exitPattern = RegExp(r"^(\$\w+)\s+\((.*?)\):\s(.+)$");
 
 GeneratedGameObject generateRoom(Map<String, String> map, String dirPath) {
-  return new GeneratedRoom(new Map.from(map), dirPath);
+  return GeneratedRoom(Map.from(map), dirPath);
 }
 
 class GeneratedRoom extends GeneratedGameObject {
@@ -46,7 +46,7 @@ class GeneratedRoom extends GeneratedGameObject {
 
     if (_map.containsKey('VARIANT_OF')) {
       if (!_map.containsKey('RULE')) {
-        throw new FormatException("Room $writersName has VARIANT_OF "
+        throw FormatException("Room $writersName has VARIANT_OF "
             "but no RULE");
       }
 
@@ -82,6 +82,6 @@ class GeneratedRoom extends GeneratedGameObject {
   /// Registers the rooms that are reachable. This makes sure that we don't
   /// generate approaches leading to unreachable rooms.
   void registerReachableRooms(Iterable<String> reachableRooms) {
-    _reachableRooms = new List<String>.from(reachableRooms);
+    _reachableRooms = List<String>.from(reachableRooms);
   }
 }

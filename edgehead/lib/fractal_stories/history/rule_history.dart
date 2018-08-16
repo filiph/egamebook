@@ -18,7 +18,7 @@ abstract class RuleHistory implements Built<RuleHistory, RuleHistoryBuilder> {
   BuiltMap<int, RuleRecord> get records;
 
   SingleQueryResult<RuleRecord> query(int ruleId) {
-    return new SingleQueryResult(records[ruleId]);
+    return SingleQueryResult(records[ruleId]);
   }
 }
 

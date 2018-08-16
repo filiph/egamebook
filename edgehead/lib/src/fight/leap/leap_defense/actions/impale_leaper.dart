@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
-  static final ImpaleLeaper singleton = new ImpaleLeaper();
+  static final ImpaleLeaper singleton = ImpaleLeaper();
 
   static const String className = "ImpaleLeaper";
 

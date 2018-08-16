@@ -46,14 +46,14 @@ String startSlashCommandTemplate(SlashDirection direction) {
       return "attack <object> >> by slashing >> "
           "from right (<objectPronoun's> shield hand)";
   }
-  throw new StateError(
+  throw StateError(
       "The switch statement above doesn't cover all directions: $direction");
 }
 
 /// Higher order function that generates an [ActionBuilder] depending on
 /// the provided [direction].
 EnemyTargetAction startSlashFromDirectionGenerator(SlashDirection direction) {
-  return new StartDefensibleAction(
+  return StartDefensibleAction(
     name: "StartSlashFrom$direction",
     commandTemplate: startSlashCommandTemplate(direction),
     helpMessage: startSlashHelpMessage,

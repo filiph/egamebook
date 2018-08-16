@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 class DodgePunch extends OtherActorAction {
-  static final DodgePunch singleton = new DodgePunch();
+  static final DodgePunch singleton = DodgePunch();
 
   static const String className = "DodgePunch";
 
@@ -74,7 +74,7 @@ class DodgePunch extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} dodges punch from ${enemy.name}";
   }

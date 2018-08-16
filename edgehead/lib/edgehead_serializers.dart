@@ -36,7 +36,7 @@ import 'package:edgehead/writers_input.compiled.dart';
 
 part 'edgehead_serializers.g.dart';
 
-@SerializersFor(const [
+@SerializersFor([
   ActionRecord,
   Actor,
   Anatomy,

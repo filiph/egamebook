@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 class DodgeLeap extends OtherActorAction {
   static const String className = "DodgeLeap";
 
-  static final DodgeLeap singleton = new DodgeLeap();
+  static final DodgeLeap singleton = DodgeLeap();
 
   @override
   final String helpMessage = "Dodging means moving your body out of harm's "

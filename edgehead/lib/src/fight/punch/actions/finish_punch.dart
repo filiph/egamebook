@@ -9,7 +9,7 @@ import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishPunch extends OtherActorAction {
-  static final FinishPunch singleton = new FinishPunch();
+  static final FinishPunch singleton = FinishPunch();
 
   static const String className = "FinishPunch";
 
@@ -42,7 +42,7 @@ class FinishPunch extends OtherActorAction {
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override
@@ -58,7 +58,7 @@ class FinishPunch extends OtherActorAction {
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
     switch (updatedPose) {
       case Pose.standing:
-        throw new StateError("Enemy's pose should never be 'standing' after "
+        throw StateError("Enemy's pose should never be 'standing' after "
             "a successful punch");
       case Pose.offBalance:
         s.add(

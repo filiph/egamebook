@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class SlayMonstersAction extends Action<Null> {
-  static final SlayMonstersAction singleton = new SlayMonstersAction();
+  static final SlayMonstersAction singleton = SlayMonstersAction();
 
   static const String className = "SlayMonstersAction";
 
@@ -34,7 +34,7 @@ class SlayMonstersAction extends Action<Null> {
 
   @override
   String applyFailure(ActionContext context, Null _) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

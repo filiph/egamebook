@@ -4,27 +4,27 @@ import 'package:test/test.dart';
 
 void main() {
   test("Random seed continues", () {
-    final random = new StatefulRandom(42);
+    final random = StatefulRandom(42);
     final nextInt = random.next();
-    final dupe = new StatefulRandom.fromState(nextInt);
+    final dupe = StatefulRandom.fromState(nextInt);
     expect(random.next(), dupe.next());
   });
 
   test("same sequence after seed", () {
-    final seed = new Random().nextInt(1000);
-    final random = new StatefulRandom(seed);
-    final ints = new List.generate(100, (_) => random.nextInt(0xffff));
+    final seed = Random().nextInt(1000);
+    final random = StatefulRandom(seed);
+    final ints = List.generate(100, (_) => random.nextInt(0xffff));
 
-    final random2 = new StatefulRandom(seed);
-    final ints2 = new List.generate(100, (_) => random2.nextInt(0xffff));
+    final random2 = StatefulRandom(seed);
+    final ints2 = List.generate(100, (_) => random2.nextInt(0xffff));
     expect(ints, orderedEquals(ints2));
   });
 
   test("Elements sufficiently random", () {
-    final random = new StatefulRandom(42);
+    final random = StatefulRandom(42);
     final numbers =
-        new Iterable<int>.generate(10000, (_) => random.nextInt(100000000));
-    final set = new Set<int>();
+        Iterable<int>.generate(10000, (_) => random.nextInt(100000000));
+    final set = Set<int>();
     for (final n in numbers) {
       expect(set.contains(n), isFalse,
           reason: "$n is already in set (after ${set.length} numbers)");
@@ -33,7 +33,7 @@ void main() {
   });
 
   test("StatefulRandom.nextInt returns compatibly to Random.nextInt", () {
-    final random = new StatefulRandom(42);
+    final random = StatefulRandom(42);
     bool zeroSeen = false;
     bool nineSeen = false;
     for (int i = 0; i < 10000; i++) {
@@ -48,7 +48,7 @@ void main() {
   });
 
   test("StatefulRandom.nextBool returns about half true, half false", () {
-    final random = new StatefulRandom(42);
+    final random = StatefulRandom(42);
     int truesSeen = 0;
     const int count = 100000;
     for (int i = 0; i < count; i++) {
@@ -59,7 +59,7 @@ void main() {
   });
 
   test("StatefulRandom.nextDouble returns about below 0.5, half above", () {
-    final random = new StatefulRandom(1337);
+    final random = StatefulRandom(1337);
     int belowHalf = 0;
     const int count = 100000;
     for (int i = 0; i < count; i++) {

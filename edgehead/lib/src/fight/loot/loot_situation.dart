@@ -27,12 +27,12 @@ abstract class LootSituation extends Object
   factory LootSituation.initialized(int id, Iterable<int> playerTeamIds,
           String groundMaterial, Iterable<Item> droppedItems,
           {RoomRoamingSituation roomRoamingSituation}) =>
-      new LootSituation((b) => b
+      LootSituation((b) => b
         ..id = id
         ..time = 0
         ..groundMaterial = groundMaterial
-        ..playerTeamIds = new ListBuilder<int>(playerTeamIds)
-        ..droppedItems = new ListBuilder<Item>(droppedItems));
+        ..playerTeamIds = ListBuilder<int>(playerTeamIds)
+        ..droppedItems = ListBuilder<Item>(droppedItems));
 
   LootSituation._();
 

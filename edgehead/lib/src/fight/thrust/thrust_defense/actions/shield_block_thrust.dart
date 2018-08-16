@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 final Entity swing =
-    new Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
+    Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeShieldBlockThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -28,7 +28,7 @@ ReasonedSuccessChance computeShieldBlockThrust(
 }
 
 class ShieldBlockThrust extends OtherActorAction {
-  static final ShieldBlockThrust singleton = new ShieldBlockThrust();
+  static final ShieldBlockThrust singleton = ShieldBlockThrust();
 
   static const String className = "ShieldBlockThrust";
 
@@ -110,7 +110,7 @@ class ShieldBlockThrust extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} blocks ${enemy.name} with a shield";
   }

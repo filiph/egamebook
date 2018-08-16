@@ -11,7 +11,7 @@ const String thrustDefenseSituationName = "ThrustDefenseSituation";
 
 DefenseSituation createThrustDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         id,
         thrustDefenseSituationName,
         [

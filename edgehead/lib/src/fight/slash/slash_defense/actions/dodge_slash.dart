@@ -23,7 +23,7 @@ ReasonedSuccessChance computeDodgeSlash(
 }
 
 class DodgeSlash extends OtherActorAction {
-  static final DodgeSlash singleton = new DodgeSlash();
+  static final DodgeSlash singleton = DodgeSlash();
 
   static const String className = "DodgeSlash";
 
@@ -92,7 +92,7 @@ class DodgeSlash extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} dodges ${enemy.name}";
   }

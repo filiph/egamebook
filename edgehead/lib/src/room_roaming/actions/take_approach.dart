@@ -9,7 +9,7 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 class TakeApproachAction extends ApproachAction {
   static const String className = "TakeApproachAction";
 
-  static final TakeApproachAction singleton = new TakeApproachAction();
+  static final TakeApproachAction singleton = TakeApproachAction();
 
   @override
   final bool isAggressive = false;
@@ -34,7 +34,7 @@ class TakeApproachAction extends ApproachAction {
 
   @override
   String applyFailure(ActionContext context, Approach approach) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override

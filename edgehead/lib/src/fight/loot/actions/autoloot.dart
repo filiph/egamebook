@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
 class AutoLoot extends Action<Null> {
-  static final AutoLoot singleton = new AutoLoot();
+  static final AutoLoot singleton = AutoLoot();
 
   static const String className = "AutoLoot";
 
@@ -38,7 +38,7 @@ class AutoLoot extends Action<Null> {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override
@@ -149,8 +149,7 @@ class AutoLoot extends Action<Null> {
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
-    var shields =
-        new List<Item>.from(takenItems.where((item) => item.isShield));
+    var shields = List<Item>.from(takenItems.where((item) => item.isShield));
     for (var item in actor.weapons.where((item) => item.isShield)) {
       shields.add(item);
     }
@@ -180,8 +179,7 @@ class AutoLoot extends Action<Null> {
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
-    var weapons =
-        new List<Item>.from(takenItems.where((item) => item.isWeapon));
+    var weapons = List<Item>.from(takenItems.where((item) => item.isWeapon));
     for (var item in actor.weapons) {
       weapons.add(item);
     }

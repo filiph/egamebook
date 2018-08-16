@@ -13,7 +13,7 @@ const String slashDefenseSituationName = "SlashDefenseSituation";
 
 DefenseSituation createSlashDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         id,
         slashDefenseSituationName,
         [

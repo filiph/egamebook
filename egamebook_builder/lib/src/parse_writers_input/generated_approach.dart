@@ -6,7 +6,7 @@ import 'recase.dart';
 import 'types.dart';
 
 GeneratedGameObject generateApproach(Map<String, String> map, String dirPath) {
-  return new GeneratedApproach(new Map.from(map), dirPath);
+  return GeneratedApproach(Map.from(map), dirPath);
 }
 
 class GeneratedApproach extends GeneratedGameObject {
@@ -40,7 +40,7 @@ class GeneratedApproach extends GeneratedGameObject {
     assert(parts.length == 2);
     final from = parts[0].trim();
     final to = parts[1].trim();
-    return new _FromToTuple(reCase(to), reCase(from));
+    return _FromToTuple(reCase(to), reCase(from));
   }
 }
 

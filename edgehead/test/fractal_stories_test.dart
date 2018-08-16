@@ -29,10 +29,10 @@ void main() {
   group("fractal_stories", () {
     group("Actor", () {
       test("rebuilt actor has different hashcode", () {
-        Actor filip = new Actor.initialized(1, "Filip",
+        Actor filip = Actor.initialized(1, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
-            currentWeapon: new Item.weapon(42, WeaponType.sword),
+            currentWeapon: Item.weapon(42, WeaponType.sword),
             constitution: 2,
             stamina: 1,
             initiative: 1000);
@@ -47,25 +47,25 @@ void main() {
 
     group("Situation", () {
       Actor a, b;
-      final sim = new Simulation([], [], {});
-      final world = new WorldState((b) => b
-        ..actors = new SetBuilder<Actor>(<Actor>[])
-        ..situations = new ListBuilder<Situation>(<Situation>[])
+      final sim = Simulation([], [], {});
+      final world = WorldState((b) => b
+        ..actors = SetBuilder<Actor>(<Actor>[])
+        ..situations = ListBuilder<Situation>(<Situation>[])
         ..global = <String>[]
         ..statefulRandomState = 1337
-        ..time = new DateTime.utc(1000)).toBuilder();
+        ..time = DateTime.utc(1000)).toBuilder();
 
       setUp(() {
-        a = new Actor.initialized(1001, "A");
-        b = new Actor.initialized(1002, "B");
+        a = Actor.initialized(1001, "A");
+        b = Actor.initialized(1002, "B");
       });
 
       test("FightSituation", () {
-        var roomRoamingSituation = new RoomRoamingSituation.initialized(
-            1, new Room("something", (c) {}, (c) {}, null, null), false);
-        checkSituationBuild(() => new FightSituation.initialized(
+        var roomRoamingSituation = RoomRoamingSituation.initialized(
+            1, Room("something", (c) {}, (c) {}, null, null), false);
+        checkSituationBuild(() => FightSituation.initialized(
             2, [], [], "ground", roomRoamingSituation, {}));
-        checkSituationBuild(() => new FightSituation.initialized(
+        checkSituationBuild(() => FightSituation.initialized(
             3, [a], [b], "ground", roomRoamingSituation, {}));
       });
       test("OnGroundDefenseSituation", () {
@@ -76,14 +76,13 @@ void main() {
         checkSituationBuild(() => createStrikeDownSituation(1, a, b));
       });
       test("CounterAttackSituation", () {
-        checkSituationBuild(
-            () => new CounterAttackSituation.initialized(1, a, b));
+        checkSituationBuild(() => CounterAttackSituation.initialized(1, a, b));
       });
       test("OffBalanceOpportunitySituation", () {
         checkSituationBuild(
-            () => new OffBalanceOpportunitySituation.initialized(1, a));
-        checkSituationBuild(() =>
-            new OffBalanceOpportunitySituation.initialized(2, a, culprit: b));
+            () => OffBalanceOpportunitySituation.initialized(1, a));
+        checkSituationBuild(
+            () => OffBalanceOpportunitySituation.initialized(2, a, culprit: b));
       });
       test("SlashDefenseSituation", () {
         checkSituationBuild(
@@ -110,45 +109,45 @@ void main() {
         forgeIsAfterFire = false;
       });
 
-      final afterFireCrevice = new Room("after_fire_hidden_crevice",
+      final afterFireCrevice = Room("after_fire_hidden_crevice",
           emptyRoomDescription, emptyRoomDescription, null, null);
 
       final _forgeName = "forge";
 
       final _forgeAfterFireName = "forge_after_fire";
 
-      final creviceExit = new Approach(_forgeAfterFireName,
-          afterFireCrevice.name, "explore to hidden crevice", (_) {});
+      final creviceExit = Approach(_forgeAfterFireName, afterFireCrevice.name,
+          "explore to hidden crevice", (_) {});
 
       final _outsideName = "outside";
 
-      final forgeEntryAfterFire = new Approach(
+      final forgeEntryAfterFire = Approach(
           _outsideName, _forgeAfterFireName, "enter the charred forge", (_) {});
 
       final forgeEntry =
-          new Approach(_outsideName, _forgeName, "enter the forge", (_) {});
+          Approach(_outsideName, _forgeName, "enter the forge", (_) {});
 
-      final outside = new Room(
+      final outside = Room(
           _outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
 
       final outsideExit =
-          new Approach(_forgeName, outside.name, "go outside", (_) {});
+          Approach(_forgeName, outside.name, "go outside", (_) {});
 
-      final forge = new Room(
+      final forge = Room(
           _forgeName, emptyRoomDescription, emptyRoomDescription, null, null);
 
-      final forgeAfterFire = new Room(_forgeAfterFireName, emptyRoomDescription,
+      final forgeAfterFire = Room(_forgeAfterFireName, emptyRoomDescription,
           emptyRoomDescription, null, null,
           parent: _forgeName,
-          prerequisite: new Prerequisite(
+          prerequisite: Prerequisite(
               _forgeAfterFireName.hashCode, 1, false, (_) => forgeIsAfterFire));
 
-      final simulation = new Simulation(
+      final simulation = Simulation(
           [forge, forgeAfterFire, afterFireCrevice, outside],
           [creviceExit, forgeEntryAfterFire, forgeEntry, outsideExit],
           {});
 
-      final context = new ApplicabilityContext(null, simulation, null);
+      final context = ApplicabilityContext(null, simulation, null);
 
       test("the default is picked when no more specific apply", () {
         expect(simulation.getAvailableApproaches(outside, context),
@@ -169,21 +168,20 @@ void main() {
 
       group("RoomRoamingSituation.moveActor", () {
         final aren =
-            new Actor.initialized(42, "Aren", currentRoomName: _outsideName);
+            Actor.initialized(42, "Aren", currentRoomName: _outsideName);
         final initialSituation =
-            new RoomRoamingSituation.initialized(1, outside, false);
-        final world = new WorldState((b) => b
-          ..actors = new SetBuilder<Actor>(<Actor>[aren])
-          ..situations =
-              new ListBuilder<Situation>(<Situation>[initialSituation])
+            RoomRoamingSituation.initialized(1, outside, false);
+        final world = WorldState((b) => b
+          ..actors = SetBuilder<Actor>(<Actor>[aren])
+          ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
           ..global = ["bogus"]
           ..statefulRandomState = 1337
-          ..time = new DateTime.utc(1000));
+          ..time = DateTime.utc(1000));
 
         final sureSuccess = ReasonedSuccessChance.sureSuccess;
 
         test("uses default if no variant is applicable", () {
-          final actionContext = new ActionContext(null, aren, simulation, world,
+          final actionContext = ActionContext(null, aren, simulation, world,
               null, world.toBuilder(), null, sureSuccess);
 
           initialSituation.moveActor(actionContext, _forgeName, silent: true);
@@ -193,7 +191,7 @@ void main() {
         });
 
         test("uses variant if applicable", () {
-          final actionContext = new ActionContext(null, aren, simulation, world,
+          final actionContext = ActionContext(null, aren, simulation, world,
               null, world.toBuilder(), null, sureSuccess);
           forgeIsAfterFire = true;
 

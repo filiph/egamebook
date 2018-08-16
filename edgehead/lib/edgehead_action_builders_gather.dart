@@ -31,6 +31,6 @@ import 'src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 
 part 'edgehead_action_builders_gather.gathered.dart';
 
-@GatherInstancesFrom(const ['lib/src/fight/**/actions/*.dart'],
-    additionalTypes: const [OtherActorAction, EnemyTargetAction])
+@GatherInstancesFrom(['lib/src/fight/**/actions/*.dart'],
+    additionalTypes: [OtherActorAction, EnemyTargetAction])
 final InstanceSerializer<Action> actionSerializer = _$actionSerializer;

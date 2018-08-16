@@ -1,18 +1,18 @@
 /// An instance of text to be re-cased.
 class ReCase {
-  final RegExp _upperAlphaRegex = new RegExp(r'[A-Z]');
-  final RegExp _symbolRegex = new RegExp(r'[ ./_\-]');
+  final RegExp _upperAlphaRegex = RegExp(r'[A-Z]');
+  final RegExp _symbolRegex = RegExp(r'[ ./_\-]');
 
   final List<String> _words = [];
 
   ReCase(String text) {
-    StringBuffer sb = new StringBuffer();
+    StringBuffer sb = StringBuffer();
 
     for (int i = 0; i < text.length; i++) {
-      String char = new String.fromCharCode(text.codeUnitAt(i));
+      String char = String.fromCharCode(text.codeUnitAt(i));
       String nextChar = (i + 1 == text.length
           ? null
-          : new String.fromCharCode(text.codeUnitAt(i + 1)));
+          : String.fromCharCode(text.codeUnitAt(i + 1)));
 
       if (_symbolRegex.hasMatch(char)) {
         continue;

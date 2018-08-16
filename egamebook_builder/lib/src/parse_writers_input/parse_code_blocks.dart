@@ -10,38 +10,38 @@ import 'types.dart';
 
 /// The keyword to end a [BlockType.code] block and start a [BlockType.text]
 /// block.
-final RegExp codeCloseTag = new RegExp(r"^\s*\[\[/CODE\]\]\s*$");
+final RegExp codeCloseTag = RegExp(r"^\s*\[\[/CODE\]\]\s*$");
 
 /// The keyword to start a [BlockType.code] block.
-final RegExp codeOpenTag = new RegExp(r"^\s*\[\[CODE\]\]\s*$");
+final RegExp codeOpenTag = RegExp(r"^\s*\[\[CODE\]\]\s*$");
 
 /// The keyword to open a new [BlockType.sequence] block as a consequence
 /// of a [BlockType.rule] parent block.
-final RegExp ruleCloseTag = new RegExp(r"^\s*- END RULE\s*$");
+final RegExp ruleCloseTag = RegExp(r"^\s*- END RULE\s*$");
 
 /// The keyword to open a new [BlockType.rule] block
 /// (with a [BlockType.ruleCondition] sub-block).
-final RegExp ruleOpenTag = new RegExp(r"^\s*- RULE:\s*$");
+final RegExp ruleOpenTag = RegExp(r"^\s*- RULE:\s*$");
 
 /// The keyword to end a [BlockType.ruleset] block.
-final RegExp rulesetCloseTag = new RegExp(r"^\s*- END RULESET\s*$");
+final RegExp rulesetCloseTag = RegExp(r"^\s*- END RULESET\s*$");
 
 /// The keyword to start a [BlockType.ruleset] block.
-final RegExp rulesetOpenTag = new RegExp(r"^\s*- RULESET\s*$");
+final RegExp rulesetOpenTag = RegExp(r"^\s*- RULESET\s*$");
 
 /// The keyword to open a new [BlockType.sequence] block as a consequence
 /// of a [BlockType.rule] parent block.
-final RegExp ruleThenTag = new RegExp(r"^\s*- THEN:\s*$");
+final RegExp ruleThenTag = RegExp(r"^\s*- THEN:\s*$");
 
-final RegExp _logicalAndPattern = new RegExp(r"\s+&&\s+");
+final RegExp _logicalAndPattern = RegExp(r"\s+&&\s+");
 
-final RegExp _whiteSpaceOnly = new RegExp(r"^\s*$");
+final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");
 
 /// Parses a block of text (containing a `[[CODE]]` block or not) and returns
 /// an iterable of statements.
 Iterable<Code> createDescriptionStatements(String text) {
   final root = parseBlocks(text ?? '');
-  final visitor = new SequenceBlockVisitor();
+  final visitor = SequenceBlockVisitor();
   root.accept(visitor);
   return visitor.statements;
 }
@@ -92,7 +92,7 @@ Iterable<List<String>> _getBlockContents(
     }
   }
   if (depth != 0) {
-    throw new FormatException("Unclosed $openTag tag in: ${lines.join('\n')}");
+    throw FormatException("Unclosed $openTag tag in: ${lines.join('\n')}");
   }
 }
 
@@ -103,7 +103,7 @@ Block _parseRule(String text) {
 
   final conditionText =
       lines.skip(1).takeWhile((line) => !ruleThenTag.hasMatch(line)).join("\n");
-  final Block condition = new Block(BlockType.ruleCondition, conditionText);
+  final Block condition = Block(BlockType.ruleCondition, conditionText);
   final consequenceBlocks =
       _getBlockContents(lines, ruleThenTag, ruleCloseTag, includeTags: false)
           .toList();
@@ -112,7 +112,7 @@ Block _parseRule(String text) {
 
   final Block consequence = _parseSequence(consequenceText);
 
-  return new Block(BlockType.rule, text, children: [condition, consequence]);
+  return Block(BlockType.rule, text, children: [condition, consequence]);
 }
 
 Block _parseRuleset(String text) {
@@ -123,24 +123,24 @@ Block _parseRuleset(String text) {
     rules.add(_parseRule(ruleLines.join('\n')));
   }
 
-  return new Block(BlockType.ruleset, text, children: rules);
+  return Block(BlockType.ruleset, text, children: rules);
 }
 
 Block _parseSequence(String text) {
   final children = <Block>[];
-  final typeStack = new Queue<BlockType>();
+  final typeStack = Queue<BlockType>();
   typeStack.add(BlockType.text);
-  final currentContent = new StringBuffer();
+  final currentContent = StringBuffer();
   for (var line in text.split('\n')) {
     if (codeOpenTag.hasMatch(line)) {
       if (typeStack.last == BlockType.code) {
-        throw new FormatException("A [[CODE]] open tag found in a code block. "
+        throw FormatException("A [[CODE]] open tag found in a code block. "
             "Cannot make a code block inside a code block.\n"
             "$text");
       }
       final currentText = currentContent.toString();
       if (_isNotEmpty(currentText)) {
-        children.add(new Block.textContent(currentText));
+        children.add(Block.textContent(currentText));
       }
       currentContent.clear();
       typeStack.removeLast();
@@ -148,11 +148,11 @@ Block _parseSequence(String text) {
       continue;
     } else if (codeCloseTag.hasMatch(line)) {
       if (typeStack.last == BlockType.text) {
-        throw new FormatException("A [[/CODE]] close tag found in a text "
+        throw FormatException("A [[/CODE]] close tag found in a text "
             "block. Cannot exit a code block when there is none.\n"
             "$text");
       }
-      children.add(new Block(BlockType.code, currentContent.toString()));
+      children.add(Block(BlockType.code, currentContent.toString()));
       currentContent.clear();
       typeStack.removeLast();
       typeStack.add(BlockType.text);
@@ -166,14 +166,14 @@ Block _parseSequence(String text) {
       }
 
       if (typeStack.last != BlockType.text) {
-        throw new FormatException("A RULESET was found in a code block. "
+        throw FormatException("A RULESET was found in a code block. "
             "Rulesets must be always in a text block.\n"
             "$text");
       }
 
       final currentText = currentContent.toString();
       if (_isNotEmpty(currentText)) {
-        children.add(new Block.textContent(currentText));
+        children.add(Block.textContent(currentText));
       }
       currentContent.clear();
       typeStack.removeLast();
@@ -181,7 +181,7 @@ Block _parseSequence(String text) {
       continue;
     } else if (rulesetCloseTag.hasMatch(line)) {
       if (typeStack.last != BlockType.ruleset) {
-        throw new FormatException("An END RULESET tag was found in a block "
+        throw FormatException("An END RULESET tag was found in a block "
             "that isn't a ruleset.\n"
             "$text");
       }
@@ -203,15 +203,15 @@ Block _parseSequence(String text) {
     currentContent.writeln(line);
   }
   if (typeStack.last == BlockType.code) {
-    throw new FormatException("Unclosed [[CODE]] tag.\n"
+    throw FormatException("Unclosed [[CODE]] tag.\n"
         "$text");
   }
   final currentText = currentContent.toString();
   if (_isNotEmpty(currentText)) {
-    children.add(new Block.textContent(currentText));
+    children.add(Block.textContent(currentText));
   }
 
-  return new Block(BlockType.sequence, text, children: children);
+  return Block(BlockType.sequence, text, children: children);
 }
 
 /// Value type for blocks of text. Writer's input supports including `[[CODE]]`
@@ -231,7 +231,7 @@ class Block {
   factory Block.textContent(String content) {
     final sanitized = content.trim() == "N/A" ? "" : content;
 
-    return new Block(BlockType.text, sanitized);
+    return Block(BlockType.text, sanitized);
   }
 
   void accept(SequenceBlockVisitor visitor) {
@@ -291,8 +291,7 @@ class SequenceBlockVisitor {
         break;
       case BlockType.rule:
       case BlockType.ruleCondition:
-        throw new StateError(
-            "Block $block should be processed in visitRuleset");
+        throw StateError("Block $block should be processed in visitRuleset");
     }
   }
 
@@ -319,7 +318,7 @@ class SequenceBlockVisitor {
     final isApplicable = createApplicabilityContextMethod()
       ..block.statements.add(Code('return $conditionCode;'));
 
-    final consequenceVisitor = new SequenceBlockVisitor();
+    final consequenceVisitor = SequenceBlockVisitor();
     rule.children.last.accept(consequenceVisitor);
 
     final applyClosure = createActionContextMethod()
@@ -332,7 +331,7 @@ class SequenceBlockVisitor {
       isApplicable.bakeAsClosure(),
       applyClosure.bakeAsClosure(),
     ]);
-    return new _ParsedRule(specificity, instanceBuilder);
+    return _ParsedRule(specificity, instanceBuilder);
   }
 
   Expression _visitRuleset(Block ruleset) {

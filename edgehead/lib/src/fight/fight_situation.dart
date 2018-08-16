@@ -67,15 +67,15 @@ abstract class FightSituation extends Object
           RoomRoamingSituation roomRoamingSituation,
           Map<int, EventCallback> events,
           {Iterable<Item> items: const []}) =>
-      new FightSituation((b) => b
+      FightSituation((b) => b
         ..id = id
         ..time = 0
         ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
         ..groundMaterial = groundMaterial
-        ..droppedItems = new ListBuilder<Item>(items)
+        ..droppedItems = ListBuilder<Item>(items)
         ..roomRoamingSituationId = roomRoamingSituation.id
-        ..events = new MapBuilder<int, EventCallback>(events));
+        ..events = MapBuilder<int, EventCallback>(events));
   FightSituation._();
 
   @override
@@ -176,7 +176,7 @@ abstract class FightSituation extends Object
       // Compute the last time this actor did any pro-active action.
       var latestProactiveRecord =
           world.actionHistory.getLatestProactiveTime(actor);
-      final pastInfinity = new DateTime.utc(-10000);
+      final pastInfinity = DateTime.utc(-10000);
       DateTime latestProactiveTime = latestProactiveRecord ?? pastInfinity;
       int proactiveRecency =
           world.time.difference(latestProactiveTime).inSeconds;
@@ -241,7 +241,7 @@ abstract class FightSituation extends Object
       }
 
       // Allow player to take and distribute loot.
-      world.pushSituation(new LootSituation.initialized(
+      world.pushSituation(LootSituation.initialized(
           world.randomInt(), playerTeamIds, groundMaterial, droppedItems));
     } else if (!canFight(sim, world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.

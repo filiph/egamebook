@@ -29,7 +29,7 @@ abstract class RoomRoamingSituation extends Object
 
   factory RoomRoamingSituation.initialized(
           int id, Room currentRoom, bool monstersAlive) =>
-      new RoomRoamingSituation((b) => b
+      RoomRoamingSituation((b) => b
         ..id = id
         ..time = 0
         ..currentRoomName = currentRoom.name
@@ -102,7 +102,7 @@ abstract class RoomRoamingSituation extends Object
     // record leading to this room.
     bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
 
-    var nextRoomSituation = new RoomRoamingSituation.initialized(
+    var nextRoomSituation = RoomRoamingSituation.initialized(
         w.randomInt(), room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);

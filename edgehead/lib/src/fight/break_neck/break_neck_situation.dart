@@ -11,7 +11,7 @@ const String breakNeckOnGroundSituationName = "BreakNeckOnGroundSituation";
 
 Situation createBreakNeckOnGroundSituation(
         Actor actor, Simulation _, WorldStateBuilder world, Actor enemy) =>
-    new AttackerSituation.initialized(
+    AttackerSituation.initialized(
       world.randomInt(),
       breakNeckOnGroundSituationName,
       [FinishBreakNeck.singleton],

@@ -22,7 +22,7 @@ abstract class Item extends Object
           {String name,
           bool nameIsProperNoun: false,
           DamageCapabilityBuilder damageCapability}) =>
-      new _$Item((b) => b
+      _$Item((b) => b
         ..id = id
         ..damageCapability = damageCapability
         ..name = name
@@ -33,9 +33,9 @@ abstract class Item extends Object
       bool nameIsProperNoun: false,
       int slashingDamage,
       int thrustingDamage}) {
-    final damageCapability = new DamageCapability(type,
+    final damageCapability = DamageCapability(type,
         slashingDamage: slashingDamage, thrustingDamage: thrustingDamage);
-    return new Item(id,
+    return Item(id,
         name: name ?? type.name,
         nameIsProperNoun: nameIsProperNoun,
         damageCapability: damageCapability.toBuilder());
@@ -46,7 +46,7 @@ abstract class Item extends Object
   @nullable
   DamageCapability get damageCapability;
 
-  String get description => throw new UnimplementedError();
+  String get description => throw UnimplementedError();
 
   @override
   int get id;

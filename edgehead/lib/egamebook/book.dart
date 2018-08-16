@@ -30,7 +30,7 @@ abstract class Book {
   @protected
   bool isWaitingForInput = true;
 
-  Book() : _elementsController = new StreamController<ElementBase>();
+  Book() : _elementsController = StreamController<ElementBase>();
 
   /// The build identifier. This should probably be autopopulated
   /// from the commit hash.
@@ -73,8 +73,8 @@ abstract class Book {
 
     if (command is ResolveSlotMachine) {
       assert(_showSlotMachineCompleter != null);
-      _showSlotMachineCompleter.complete(
-          new slot.SessionResult(command.result, command.wasRerolled));
+      _showSlotMachineCompleter
+          .complete(slot.SessionResult(command.result, command.wasRerolled));
       _showSlotMachineCompleter = null;
       isWaitingForInput = false;
       return;
@@ -91,7 +91,7 @@ abstract class Book {
   /// to `false`. Otherwise, keep it `true`.
   @protected
   void acceptCustom(CommandBase command) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Cleans up
@@ -105,7 +105,7 @@ abstract class Book {
   @protected
   Future<Choice> showChoices(ChoiceBlock choices) {
     assert(_showChoicesCompleter == null);
-    _showChoicesCompleter = new Completer<Choice>();
+    _showChoicesCompleter = Completer<Choice>();
     _elementsController.add(choices);
     isWaitingForInput = true;
     return _showChoicesCompleter.future;
@@ -116,8 +116,8 @@ abstract class Book {
       double probability, String rollReason,
       {bool rerollable: false, String rerollEffectDescription}) {
     assert(_showSlotMachineCompleter == null);
-    _showSlotMachineCompleter = new Completer<slot.SessionResult>();
-    _elementsController.add(new SlotMachine((b) => b
+    _showSlotMachineCompleter = Completer<slot.SessionResult>();
+    _elementsController.add(SlotMachine((b) => b
       ..probability = probability
       ..rollReason = rollReason
       ..rerollable = rerollable

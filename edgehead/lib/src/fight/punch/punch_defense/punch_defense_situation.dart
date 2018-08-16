@@ -9,7 +9,7 @@ const String punchDefenseSituationName = "PunchDefenseSituation";
 
 DefenseSituation createPunchDefenseSituation(int id, Actor attacker,
         Actor target, Predetermination predetermination) =>
-    new DefenseSituation.initialized(
+    DefenseSituation.initialized(
         id,
         punchDefenseSituationName,
         [

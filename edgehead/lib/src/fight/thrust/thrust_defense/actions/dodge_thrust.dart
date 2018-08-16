@@ -23,7 +23,7 @@ ReasonedSuccessChance computeDodgeThrust(
 }
 
 class DodgeThrust extends OtherActorAction {
-  static final DodgeThrust singleton = new DodgeThrust();
+  static final DodgeThrust singleton = DodgeThrust();
 
   static const String className = "DodgeThrust";
 
@@ -92,7 +92,7 @@ class DodgeThrust extends OtherActorAction {
       s.add("this opens an opportunity for a counter attack");
     }
     var counterAttackSituation =
-        new CounterAttackSituation.initialized(w.randomInt(), a, enemy);
+        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
     w.pushSituation(counterAttackSituation);
     return "${a.name} dodges ${enemy.name}'s thrust";
   }

@@ -73,13 +73,12 @@ Actor _createActor({
   int dexterity,
   Pose pose: Pose.standing,
 }) {
-  final actor = new Actor.initialized(
+  final actor = Actor.initialized(
     name.hashCode,
     name,
-    currentWeapon: new Item.weapon(name.hashCode + 1, WeaponType.sword),
-    currentShield: hasShield
-        ? new Item.weapon(name.hashCode + 2, WeaponType.shield)
-        : null,
+    currentWeapon: Item.weapon(name.hashCode + 1, WeaponType.sword),
+    currentShield:
+        hasShield ? Item.weapon(name.hashCode + 2, WeaponType.shield) : null,
     dexterity: dexterity,
   ).rebuild((b) => b..pose = pose);
 

@@ -31,7 +31,7 @@ ReasonedSuccessChance computeThrowSpear(
 class ThrowSpear extends EnemyTargetAction {
   static const String className = "ThrowSpear";
 
-  static final ThrowSpear singleton = new ThrowSpear();
+  static final ThrowSpear singleton = ThrowSpear();
 
   @override
   final bool isAggressive = true;
@@ -145,7 +145,7 @@ class ThrowSpear extends EnemyTargetAction {
       _isFirstTurnInFightSituation(world, enemy);
 
   Entity _createBodyPartEntity(Actor a, String name) {
-    return new Entity(name: Randomly.parse(name), team: a.team);
+    return Entity(name: Randomly.parse(name), team: a.team);
   }
 
   Item _findSpear(Actor a) {
@@ -158,7 +158,7 @@ class ThrowSpear extends EnemyTargetAction {
         return weapon;
       }
     }
-    throw new StateError("No spear found in $a");
+    throw StateError("No spear found in $a");
   }
 
   bool _isFirstTurnInFightSituation(WorldState world, Actor enemy) {

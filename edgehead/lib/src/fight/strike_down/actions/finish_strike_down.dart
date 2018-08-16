@@ -8,8 +8,7 @@ import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/writers_helpers.dart';
 
 class FinishSlashGroundedEnemy extends OtherActorAction {
-  static final FinishSlashGroundedEnemy singleton =
-      new FinishSlashGroundedEnemy();
+  static final FinishSlashGroundedEnemy singleton = FinishSlashGroundedEnemy();
 
   static const String className = "FinishSlashGroundedEnemy";
 
@@ -42,7 +41,7 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
 
   @override
   String applyFailure(_, __) {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override
