@@ -1,0 +1,19 @@
+dart:
+  - stable
+
+stages:
+  - smoke_test:
+    - description: "dartfmt && dartanalyzer"
+      group:
+        - dartfmt
+        - dartanalyzer: --fatal-infos --fatal-warnings .
+  - build:
+    - command: pub run build_runner build --delete-conflicting-outputs
+  - unit_test:
+    - group:
+      - command: pub run test
+      - command: pub run test -t long-running --run-skipped
+
+cache:
+  directories:
+    - .dart_tool/build
