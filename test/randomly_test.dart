@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 void main() {
   group("Save Against", () {
     test("tossCoin returns as expected", () {
-      expect(Randomly.tossCoin(), new isInstanceOf<bool>());
+      expect(Randomly.tossCoin(), const TypeMatcher<bool>());
       final int n = 10000;
       int result = 0;
       for (int i = 0; i < n; i++) {

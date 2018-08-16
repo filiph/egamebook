@@ -6,7 +6,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart'
     show RandomIntGetter;
-import 'package:meta/meta.dart';
 
 /// Executes the business logic of dealing damage to a body part with [weapon]
 /// and [success]. Supports anything from minor cuts to decapitation.
@@ -15,7 +14,6 @@ import 'package:meta/meta.dart';
 /// or indirectly with [designation]. For example, a slash can either
 /// directly target a specific body part (selected at random in a previous
 /// step), or at a body part "designation" (such as head, neck, etc.).
-@visibleForTesting
 WeaponAssaultResult executeSlashingHit(
   Actor target,
   Item weapon,

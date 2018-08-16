@@ -2,8 +2,6 @@ library stateful_random;
 
 import 'dart:math';
 
-import 'package:meta/meta.dart';
-
 /// A pseudo-random number generator that can save its complete state.
 ///
 /// This allows users to get a predictable string of random numbers. This is
