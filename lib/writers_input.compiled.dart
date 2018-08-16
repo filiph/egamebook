@@ -188,7 +188,17 @@ class ExamineUndergroundChurch extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.\n\n\n"What are these things?" Briana whispers, looking at the ornaments.\n\n\n_"This place was made for worshiping the Dead Prince."_\n\n\nSaying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.\n\n\n"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I thought the Dead Prince was a warlord. Something like that."\n\n\n_"He is a god."_\n\n\n[[CODE]]\nif (!w.actionHasBeenPerformed("wait_for_ritual")) {\n  s.add("""Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, but you really shouldn\'t. He\'s a demented illusionist at best." \n""", wholeSentence: true);\n}\n[[/CODE]]\n\n\nThe glow coming from the altar dims for a moment, then lights up again.\n\n\n_"He is worse than a god. He is fear itself."_\n\n\nBriana looks at you, narrowing her eyes.\n\n\n_"I think you have felt it."_\n',
+        'This place wasn’t built by the orcs or their slaves. The walls are straight and smooth. The ceiling is high enough to make you feel small and insignificant. The columns are decorated with delicate carvings of skulls and tentacles.\n\n\n"What are these things?" Briana whispers, looking at the ornaments.\n\n\n_"This place was made for worshiping the Dead Prince."_\n\n\nSaying the name brings coldness and sweat to your brow. You hear the name every night in the Dead Prince\'s tongue — but it has been a long time since you said it yourself.\n\n\n"Worshiping?" Briana glances up at the high ceiling, and then around the temple. "I thought the Dead Prince was a warlord. Something like that."\n\n\n_"He is a god."_\n\n\n',
+        wholeSentence: true);
+    if (!w.actionHasBeenPerformed("wait_for_ritual")) {
+      s.add(
+          """Briana smirks. "Look, no. The Dead Prince is no god. The orcs might think so, but you really shouldn't. He's a demented illusionist at best." 
+""",
+          wholeSentence: true);
+    }
+
+    s.add(
+        '\n\nThe glow coming from the altar dims for a moment, then lights up again.\n\n\n_"He is worse than a god. He is fear itself."_\n\n\nBriana looks at you, narrowing her eyes.\n\n\n_"I think you have felt it."_\n',
         wholeSentence: true);
     return '${a.name} successfully performs ExamineUndergroundChurch';
   }
@@ -414,8 +424,88 @@ class TalkToBriana3 extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n- RULESET\n- RULE:\n  a.currentRoomName == "slave_quarters_passage" &&\n  !playerHasVisited(sim, originalWorld, "orcthorn_room")\n- THEN:\n_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n- END RULE\n- RULE:\n  playerHasVisited(sim, originalWorld, "orcthorn_room") &&\n  a.currentRoomName != "orcthorn_room"\n- THEN:\n_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n- END RULE\n- RULE:\n  playerHasVisited(sim, originalWorld, "slave_quarters_passage") &&\n  !playerHasVisited(sim, originalWorld, "orcthorn_room")\n- THEN:\n_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "That door in the slave quarters."\n\n\n- END RULE\n- RULE:\n  a.currentRoomName == "orcthorn_room"\n- THEN:\n_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide as she looks around the room.\n\n\n- END RULE\n- RULE:\n  default\n- THEN:\n_"Down the slave quarters."_\n\nBriana tenses. "Well then, at least we have that choice."\n\n\n- END RULE\n- END RULESET\n',
+        '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n',
         wholeSentence: true);
+    new Ruleset(
+        new Rule(675414120, 2, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return a.currentRoomName == "slave_quarters_passage" &&
+              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n',
+              wholeSentence: true);
+        }),
+        new Rule(363993062, 2, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+              a.currentRoomName != "orcthorn_room";
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n',
+              wholeSentence: true);
+        }),
+        new Rule(392088263, 2, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return playerHasVisited(
+                  sim, originalWorld, "slave_quarters_passage") &&
+              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "That door in the slave quarters."\n\n\n',
+              wholeSentence: true);
+        }),
+        new Rule(361178650, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return a.currentRoomName == "orcthorn_room";
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide as she looks around the room.\n\n\n',
+              wholeSentence: true);
+        }),
+        new Rule(974180978, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '_"Down the slave quarters."_\n\nBriana tenses. "Well then, at least we have that choice."\n\n\n',
+              wholeSentence: true);
+        })).apply(c);
     return '${a.name} successfully performs TalkToBriana3';
   }
 
@@ -1910,8 +2000,17 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."\n\n\n[[CODE]]\nif (w.actionHasBeenPerformed("talk_to_briana_3")) {\n  s.add("""\nYou look at Briana and nod.\n\n\n_"The Mad Guardian."_\n""", wholeSentence: true);\n}\n[[/CODE]]\n',
+        'You hear violent grunts and growls coming from behind that door. Next to it, you see orcish writing on the wall. It says "Danger mad. Give food go away."\n\n\n',
         wholeSentence: true);
+    if (w.actionHasBeenPerformed("talk_to_briana_3")) {
+      s.add("""
+You look at Briana and nod.
+
+
+_"The Mad Guardian."_
+""", wholeSentence: true);
+    }
+
     return '${a.name} successfully performs SlaveQuartersPassageExamineDoor';
   }
 
