@@ -1,0 +1,18 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+builders:
+  gather_builder:
+    import: "package:egamebook_builder/gather_builder.dart"
+    builder_factories: ["gatherBuilder"]
+    build_extensions: {"_gather.dart": [".gathered.dart"]}
+    build_to: source
+    auto_apply: root_package
+    defaults:
+      generate_for:
+        - '**/*_gather.dart'
+
+  writers_builder:
+    import: "package:egamebook_builder/writers_builder.dart"
+    builder_factories: ["writersBuilder"]
+    build_extensions: {".dart": [".compiled.dart"]}
+    build_to: source
+    auto_apply: none
