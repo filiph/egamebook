@@ -1,7 +1,11 @@
-# Edgehead <a href="https://travis-ci.org/filiph/edgehead"><img src="https://travis-ci.org/filiph/edgehead.svg?branch=master"></a>
+# Edgehead <a href="https://travis-ci.org/filiph/egamebook"><img src="https://travis-ci.org/filiph/egamebook.svg?branch=master"></a>
 
 > "Skyrim, if it was Choose-Your-Own-Adventure, but still allowed the same
 > freedom."
+
+This is the main sub-project of the [egamebook][] project.
+
+[egamebook]: https://egamebook.com
 
 ## Architecture
 
@@ -47,18 +51,12 @@ Here are some additional "philosophical" pillars:
 ### Installation
 
 1. [Install Dart](https://www.dartlang.org/install)
-   * As of July 2018, Dart 2 works but is not fully supported. See discussion
-     [here](https://github.com/filiph/edgehead/issues/13#issuecomment-375698672)
-     to see why. As of Dart version 2.0.0-dev.58 everything works just fine,
-     just don't use the `--preview-dart-2` option. To install Dart 1,
-     go to [the archive page](https://www.dartlang.org/tools/sdk/archive)
-     and choose the version `1.24.3` for your platform (Win, Mac, or Linux).
-     You'll have to unzip it and add Dart to your path. When I finish
-     the upgrade to Dart 2, the installation will get much easier.
-2. Clone this repository (`git clone https://github.com/filiph/edgehead.git`)
+   * Use Dart 2 stable (which is the default as of August 2018).
+2. Clone this repository (`git clone https://github.com/filiph/egamebook.git`)
    or download the zip file containing it
-3. Go to the repository's directory (`cd edgehead`)
-4. Install Dart packages (`pub get`)
+3. Go to the repository's directory (`cd egamebook`)
+4. Go to the `edgehead` sub-project (`cd edgehead`)
+5. Install Dart packages (`pub get`)
 
 Now you can try running tests (`pub run test`) or play the game on the command
 line (`dart bin/play.dart`).
@@ -84,7 +82,7 @@ around it.
 
 To playtest the current version of the game, install it
 ([see above](https://github.com/filiph/edgehead#installation)),
-then run:
+go to the `edgehead` sub-directory, then run:
 
 ```bash
 dart -c bin/play.dart --log
@@ -150,42 +148,21 @@ to Trello cards by dragging and dropping them.
 
 Run the following when developing:
 
-    dart -c tool/watch.dart
+    pub run build_runner watch
     
 This will make sure that generated files (`*.g.dart`) are regenerated when
-needed. If you add a new built_value class, make sure it's covered by the
-globs in `tool/phases.dart`.
+needed.
 
 Most writing is in text files in the `assets/text/` directory. 
-When the `tool/watch.dart` watcher is running, it will, among other things,
-watch for changes of the text files. It will compile the texts into the 
-`lib/writers_input.g.dart` file, which is then used by the game itself.
+When the `pub run build_runner watch` watcher is running, it will, among other
+things, watch for changes of the text files. It will compile the texts into the 
+`lib/writers_input.compiled.dart` file, which is then used by the game itself.
 
 Most behavior and game-related code is in the other files in `lib/`. You
 might want to start with `lib/edgehead_lib.dart`.  
 
 To test, run `pub run test`, and to include long-running fuzzy tests,
 run `pub run -c test --run-skipped`.
-
-### Deployment
-
-#### To github pages (`gh-pages`)
-
-A one-line command that tests and then, if those are successful, immediately 
-publishes the bleeding edge version to github.io can look something like
-`pub run -c test --run-skipped && peanut && git push origin --set-upstream gh-pages`.
-
-#### To official site (egamebook.com/vermin)
-
-There is a shorthand for uploading the current version to 
-[https://egamebook.com/vermin](https://egamebook.com/vermin). First, ensure
-everything is built  (`egamebook build`, `dart tool/build.dart`, then
-`pub build`). Second, make sure the current version runs well 
-(`pub run -c test --run-skipped`). 
-Third, run `./build_ifcomp_submission.sh` to copy the build over to 
-`../egamebook/docs/site` (this assumes `egamebook` directory is a sibling
-to `edgehead`). Fourth, go to `../egamebook/docs/site` and run `make clean`
-and `make deploy`.
 
 ### Testing
 
@@ -221,40 +198,9 @@ Use up and down arrow to choose options, enter to select.
 
 ### Building new actions
 
-All actions must extend `Action`. Actions meant for combat will probably
-extend `EnemyTargetAction` instead. There are other subclasses that take an
-object, like `ExitAction`.
-
-For the action to be used, it must be made available to at least one 
-`Situation`. If it's a simple action (not `EnemyTargetAction` etc.) you need to
-– by convention – create a static member called `singleton`. Like this:
-
-    class Example extends Action {
-      static final Example singleton = new Example();
-      // ...
-    }
-
-If, on the other hand, the action needs an object (like `EnemyTargetAction` 
-does), then instead of a singleton you have to provide a builder. Like this:
-
-    class Example2 extends EnemyTargetAction {
-      // ...
-      static EnemyTargetAction builder(Actor enemy) => new Example2(enemy);
-    }
-
-Once you have a singleton or a builder, you give it to situations like this:
-
-    abstract class ExampleSituation extends Situation
-        implements Built<ExampleSituation, ExampleSituationBuilder> {
-      // ...
-      @override
-      List<EnemyTargetActionBuilder> get actionGenerators => [
-            Example2.builder,
-          ];
-    
-      @override
-      List<Action> get actions => <Action>[Example.singleton];
-    }
+_This section was in major need of rewrite, so I dropped it. At this point
+your best bet is to look at how different combat actions are implemented
+in `lib/src/fight/actions/`._
 
 #### Playtesting actions
 
