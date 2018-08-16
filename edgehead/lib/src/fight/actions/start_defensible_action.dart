@@ -120,8 +120,7 @@ class StartDefensibleAction extends EnemyTargetAction {
     this.rerollResource,
     this.rollReasonTemplate,
     this.applyWhenFailed,
-  })
-      : _isApplicable = isApplicable {
+  }) : _isApplicable = isApplicable {
     assert(!rerollable || rerollResource != null);
     assert(!rerollable || rollReasonTemplate != null);
   }

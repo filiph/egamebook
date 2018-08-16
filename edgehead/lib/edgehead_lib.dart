@@ -278,8 +278,7 @@ class EdgeheadGame extends Book {
         return "ZZZZZZ ${a.command}";
       }
 
-      performances.sort(
-          (a, b) => sortingName(a).compareTo(sortingName(b)));
+      performances.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
 
       assert(
           performances.length == 1 ||

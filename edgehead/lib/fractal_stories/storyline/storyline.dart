@@ -699,8 +699,8 @@ class Storyline {
         } else {
           // let's try and glue [i-1] and [i] into one sentence
           if (but) {
-            strBuf.write(Randomly
-                .choose(<String>[" but ", " but ", /*" yet ",*/ ", but "]));
+            strBuf.write(Randomly.choose(
+                <String>[" but ", " but ", /*" yet ",*/ ", but "]));
             if (!sameSentiment(i, i + 1)) endThisSentence = true;
           } else {
             // TODO: add ", " but only when we can be sure it's not in the end of the sentence

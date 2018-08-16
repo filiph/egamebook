@@ -65,8 +65,7 @@ class Rule {
     bool onlyOnce,
     RuleIsApplicableCallback isApplicableCallback,
     this.applyCallback,
-  )
-      : hash = hash,
+  )   : hash = hash,
         prerequisite =
             new Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
 }

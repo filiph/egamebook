@@ -8,8 +8,8 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 const String leapDefenseSituationName = "LeapDefenseSituation";
 
-DefenseSituation createLeapDefenseSituation(int id, Actor attacker, Actor target,
-        Predetermination predetermination) =>
+DefenseSituation createLeapDefenseSituation(int id, Actor attacker,
+        Actor target, Predetermination predetermination) =>
     new DefenseSituation.initialized(
         id,
         leapDefenseSituationName,

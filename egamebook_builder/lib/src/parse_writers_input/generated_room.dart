@@ -50,8 +50,9 @@ class GeneratedRoom extends GeneratedGameObject {
             "but no RULE");
       }
 
-      namedArguments["parent"] = literal(GeneratedGameObject
-          .validateAndRemoveDollarSign(_map['VARIANT_OF'].trim()));
+      namedArguments["parent"] = literal(
+          GeneratedGameObject.validateAndRemoveDollarSign(
+              _map['VARIANT_OF'].trim()));
 
       final roomNameHash = writersName.hashCode;
       final specificity = getSpecificity(_map['RULE']);

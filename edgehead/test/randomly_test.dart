@@ -44,6 +44,7 @@ void main() {
           Randomly.chooseWeighted(weights);
         }
       }
+
       expect(run, throwsArgumentError);
     });
   });

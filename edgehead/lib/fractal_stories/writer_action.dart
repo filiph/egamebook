@@ -51,7 +51,8 @@ class SimpleAction extends RoamingAction {
   @override
   final String name;
 
-  SimpleAction(this.name, this.simpleActionCommand, this.success, this.helpMessage,
+  SimpleAction(
+      this.name, this.simpleActionCommand, this.success, this.helpMessage,
       {this.isApplicableClosure});
 
   @override

@@ -81,8 +81,7 @@ Actor _createActor({
         ? new Item.weapon(name.hashCode + 2, WeaponType.shield)
         : null,
     dexterity: dexterity,
-  )
-      .rebuild((b) => b..pose = pose);
+  ).rebuild((b) => b..pose = pose);
 
   return actor;
 }

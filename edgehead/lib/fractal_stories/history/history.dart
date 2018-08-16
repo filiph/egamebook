@@ -15,7 +15,6 @@ abstract class Record {
   DateTime get time;
 }
 
-
 /// A history result that could have happened several times.
 ///
 /// For example, visiting San Francisco can happen several times during

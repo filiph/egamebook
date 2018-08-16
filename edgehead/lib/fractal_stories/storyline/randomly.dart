@@ -147,7 +147,7 @@ class Randomly {
         if (lastIndex == str.length - 1) {
           return str;
         } else {
-          return "${str.substring(0,lastIndex + 1)}"
+          return "${str.substring(0, lastIndex + 1)}"
               "${parse(str.substring(lastIndex + 1))}";
         }
       }

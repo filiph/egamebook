@@ -16,7 +16,6 @@ import 'package:edgehead/writers_input.compiled.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
 
-
 abstract class RoomRoamingSituation extends Object
     with SituationBaseBehavior
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
