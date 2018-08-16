@@ -5,6 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: unused_local_variable
+// ignore_for_file: type_annotate_public_apis
 
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
@@ -1302,7 +1303,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   @override
   Iterable<Actor> getActors(
       Iterable<Actor> actors, Simulation sim, WorldState w) {
-    [
+    return [
       actors.singleWhere((Actor a) {
         return a.isPlayer;
       })
