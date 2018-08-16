@@ -387,7 +387,7 @@ packages:
     source: hosted
     version: "5.0.1"
   source_gen:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: source_gen
       url: "https://pub.dartlang.org"
