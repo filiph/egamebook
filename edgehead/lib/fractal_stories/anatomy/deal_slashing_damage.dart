@@ -90,7 +90,7 @@ WeaponAssaultResult _addMajorCut(
 
   final ActorBuilder victim = target.toBuilder();
 
-  // When a body part is vital, each major cut removes one actor's hitpoint.
+  // When a body part is vital, each major cut removes one actor's hit point.
   if (designated.isVital && designated.isAlive) {
     victim.hitpoints -= 1;
   }
@@ -208,6 +208,7 @@ WeaponAssaultResult _disableBySlash(
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.majorCut,
     fell: victimDidFall,
+    disabled: true,
   );
 }
 

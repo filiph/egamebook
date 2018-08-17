@@ -75,6 +75,8 @@ EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       rerollable: true,
       rerollResource: Resource.stamina,
       rollReasonTemplate: "will <subject> hit <objectPronoun>?",
+      // This is a reaction to a slash.
+      isProactive: false,
     );
 
 void counterSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,

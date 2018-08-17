@@ -93,5 +93,4 @@ You can use the auto-generated serializer by adding it to the
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(actionSerializer))
     .build();
-
 ```

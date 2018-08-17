@@ -90,7 +90,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   final OtherActorApplicabilityFunction _isApplicable;
 
   @override
-  final bool isProactive = true;
+  final bool isProactive;
 
   @override
   final bool rerollable;
@@ -120,6 +120,7 @@ class StartDefensibleAction extends EnemyTargetAction {
     this.rerollResource,
     this.rollReasonTemplate,
     this.applyWhenFailed,
+    this.isProactive = true,
   }) : _isApplicable = isApplicable {
     assert(!rerollable || rerollResource != null);
     assert(!rerollable || rollReasonTemplate != null);
