@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/common/drop_weapon.dart';
 
 class DisarmKick extends EnemyTargetAction {
   static const String className = "DisarmKick";
@@ -74,16 +74,7 @@ class DisarmKick extends EnemyTargetAction {
       s.add("<owner's> <subject> fl<ies> away",
           subject: enemy.currentWeapon, owner: enemy);
     });
-    final situation = w.currentSituation as FightSituation;
-    w.replaceSituationById(
-        situation.id,
-        situation.rebuild((FightSituationBuilder b) =>
-            b..droppedItems.add(enemy.currentWeapon)));
-    w.updateActorById(
-        enemy.id,
-        (b) => b
-          ..currentWeapon =
-              Actor.createBodyPartWeapon(enemy.anatomy).toBuilder());
+    dropWeapon(w, enemy);
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
 

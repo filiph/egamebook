@@ -87,7 +87,8 @@ class InstanceSerializer<T> extends PrimitiveSerializer<T> {
         _inverseMap.containsKey(object),
         "Incomplete map in $this. "
         "Make sure you're gathering all the instances that you need. "
-        "Function without a string representation: $object.");
+        "Function without a string representation: $object. "
+        "Map: $_map");
     return _inverseMap[object];
   }
 }

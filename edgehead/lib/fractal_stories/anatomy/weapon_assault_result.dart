@@ -21,6 +21,9 @@ class WeaponAssaultResult {
   /// The victim fell as a result of the slash.
   final bool fell;
 
+  /// The [touchedPart] was disabled in the hit.
+  final bool disabled;
+
   /// The success level of the slash.
   ///
   /// Normally, this is the [SlashSuccessLevel] that [executeSlashingHit]
@@ -35,5 +38,8 @@ class WeaponAssaultResult {
   final SlashSuccessLevel slashSuccessLevel;
 
   const WeaponAssaultResult(this.actor, this.touchedPart,
-      {this.severedPart, this.slashSuccessLevel, this.fell: false});
+      {this.severedPart,
+      this.slashSuccessLevel,
+      this.fell: false,
+      this.disabled: false});
 }

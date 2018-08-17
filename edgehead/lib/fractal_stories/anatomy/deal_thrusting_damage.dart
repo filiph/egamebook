@@ -88,5 +88,6 @@ WeaponAssaultResult _disableByThrust(
     victim.build(),
     bodyPart,
     fell: victimDidFall,
+    disabled: true,
   );
 }

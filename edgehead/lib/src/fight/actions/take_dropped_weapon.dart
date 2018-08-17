@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/disarm_kick.dart';
+import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class TakeDroppedWeapon extends ItemAction {
@@ -83,14 +83,7 @@ class TakeDroppedWeapon extends ItemAction {
         a.currentWeapon.damageCapability.type == WeaponType.spear &&
             item.damageCapability.type == WeaponType.sword;
     if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
-    var disarmedRecency = w.timeSinceLastActionRecord(
-        actionName: DisarmKick.className, sufferer: a, wasSuccess: true);
-    // We're using 2 here because it's safer. Sometimes, an action by another
-    // actor is silent, so with 1 we would still get 'you sweep his legs, he
-    // stands up'.
-    if (disarmedRecency != null && disarmedRecency <= 2) {
-      return false;
-    }
+    if (recentlyDisarmed(a, w)) return false;
     return true;
   }
 }
