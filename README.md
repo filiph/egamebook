@@ -1,13 +1,26 @@
 [![Build Status](https://travis-ci.org/filiph/egamebook.svg?branch=master)](https://travis-ci.org/filiph/egamebook)
 
-The [README][] is temporarily in `edgehead/` (which is the main, user-facing
-part of egamebook).
+Welcome to the code repository for the egamebook project.
+
+This repository contains all the moving parts needed for running egamebook
+campaigns, in one place, using the [monorepo][] approach. 
+
+If you choose to play around with egamebook, you will probably spend 
+most of your time in the `edgehead/` subdirectory. Edgehead is the canonical
+example of an egamebook, and it provides a way of running the game
+in terminal. Go read Edgehead's [README][] to learn more about playing,
+playtesting, and developing Edgehead.
+
+If you're thinking of building your own egamebook, the easiest way to start
+is to make a copy of the `edgehead` subdirectory and start changing
+the text files and the Dart files there.
 
 If you're looking for more info about egamebook itself, visit [egamebook.com][].
 
 To play the IFCOMP 2017 entry called _Insignificant Little Vermin_,
 [click here][vermin].
 
+[monorepo]: https://danluu.com/monorepo/
 [README]: https://github.com/filiph/egamebook/tree/master/edgehead#edgehead-
 [egamebook.com]: https://egamebook.com/
 [vermin]: https://egamebook.com/vermin/
