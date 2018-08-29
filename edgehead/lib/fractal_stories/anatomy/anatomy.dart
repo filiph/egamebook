@@ -65,7 +65,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   BodyPart get secondaryWeaponAppendage {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
     return allParts.singleWhere(
-        (part) => part.designation == BodyPartDesignation.primaryHand,
+        (part) => part.designation == BodyPartDesignation.secondaryHand,
         orElse: () => null);
   }
 
