@@ -126,8 +126,9 @@ abstract class InventoryBuilder
     assert(weapon.isWeapon);
     assert(weapon.damageCapability.type != WeaponType.fist,
         "Tried to equip a body part. Use goBarehanded instead.");
-    assert(anatomy.anyWeaponAppendageAvailable,
-        "Failed equip not yet implemented: $anatomy.");
+    // TODO: solve for when no appendage is available for equipping
+    // assert(anatomy.anyWeaponAppendageAvailable,
+    //     "Failed equip not yet implemented: $anatomy.");
     if (!build().weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
       weapons.add(weapon);
