@@ -81,6 +81,8 @@ class InstanceSerializerGenerator extends Generator {
           .listValue
           .map((dartObject) => dartObject.toStringValue());
 
+      int count = 0;
+
       for (final glob in globs) {
         final assetIds = buildStep.findAssets(Glob(glob));
         await for (final id in assetIds) {
@@ -95,6 +97,7 @@ class InstanceSerializerGenerator extends Generator {
 
               _writeElement(result, topLevelElement, gatherLibrary,
                   '${topLevelElement.name}');
+              count++;
               continue;
             }
 
@@ -106,6 +109,7 @@ class InstanceSerializerGenerator extends Generator {
             for (final element in elements) {
               _writeElement(result, element, gatherLibrary,
                   '${classEl.name}.${element.name}');
+              count++;
             }
           }
         }
@@ -113,6 +117,11 @@ class InstanceSerializerGenerator extends Generator {
 
       // End the map.
       result.write("}");
+
+      if (count == 0) {
+        log.severe("Search for instances of $instanceTypeName in $globs "
+            "returned no results!");
+      }
 
       final additionalTypes = declaration.annotation
           .read("additionalTypes")
