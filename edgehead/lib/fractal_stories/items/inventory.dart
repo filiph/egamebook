@@ -124,8 +124,8 @@ abstract class InventoryBuilder
   ///       "<subject> took <object> in <subject's> offhand")
   void equip(Item weapon, Anatomy anatomy) {
     assert(weapon.isWeapon);
-    assert(anatomy.primaryWeaponAppendageAvailable,
-        "Failed equip not yet implemented.");
+    assert(anatomy.anyWeaponAppendageAvailable,
+        "Failed equip not yet implemented: $anatomy.");
     if (!build().weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
       weapons.add(weapon);
