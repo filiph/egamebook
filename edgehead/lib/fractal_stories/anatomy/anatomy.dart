@@ -27,6 +27,51 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   @memoized
   Iterable<BodyPart> get allParts => _walk(torso);
 
+  /// The anatomy is capable of wielding a weapon at this point.
+  ///
+  /// For a humanoid, this means that at least one of the hands is attached
+  /// and not disabled.
+  bool get anyWeaponAppendageAvailable =>
+      primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
+
+  /// Is this anatomy humanoid? That means, in general: 2 arms, 2 legs,
+  /// one head on a neck.
+  ///
+  /// Humanoid creatures can still have extra appendages (like a tail)
+  /// or missing ones (like an amputated leg) but the main idea is there.
+  bool get isHumanoid => true;
+
+  /// The appendage that is used as the main weapon-wielding one. Returns
+  /// `null` when there is no such body part (i.e. it was severed).
+  ///
+  /// It is used for holding swords, throwing spears, etc.
+  BodyPart get primaryWeaponAppendage {
+    assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
+    return allParts.singleWhere(
+        (part) => part.designation == BodyPartDesignation.primaryHand,
+        orElse: () => null);
+  }
+
+  bool get primaryWeaponAppendageAvailable =>
+      primaryWeaponAppendage?.isAlive ?? false;
+
+  /// The appendage that is used as the secondary weapon-wielding one. Returns
+  /// `null` when there is no such body part (i.e. it was severed).
+  ///
+  /// It is used for holding a shield or supporting the [primaryWeaponAppendage]
+  /// in holding a two-handed weapon. In a pinch (e.g. when the primary
+  /// appendage is disabled), it can be used to everything that
+  /// [primaryWeaponAppendage] can, but with a hefty penalty.
+  BodyPart get secondaryWeaponAppendage {
+    assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
+    return allParts.singleWhere(
+        (part) => part.designation == BodyPartDesignation.primaryHand,
+        orElse: () => null);
+  }
+
+  bool get secondaryWeaponAppendageAvailable =>
+      secondaryWeaponAppendage?.isAlive ?? false;
+
   /// The root of the anatomy tree. Often the part of the anatomy with
   /// a heart or a similarly 'core' organ.
   BodyPart get torso;

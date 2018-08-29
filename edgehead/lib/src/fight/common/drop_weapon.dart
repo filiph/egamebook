@@ -21,11 +21,7 @@ Item dropWeapon(WorldStateBuilder w, Actor enemy) {
       situation.id,
       situation
           .rebuild((FightSituationBuilder b) => b..droppedItems.add(weapon)));
-  w.updateActorById(
-      enemy.id,
-      (b) => b
-        ..currentWeapon =
-            Actor.createBodyPartWeapon(enemy.anatomy).toBuilder());
+  w.updateActorById(enemy.id, (b) => b..inventory.goBarehanded(enemy.anatomy));
   w.recordCustom(disarmedCustomEventName, actor: enemy);
   return weapon;
 }

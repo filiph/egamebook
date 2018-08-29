@@ -52,11 +52,7 @@ class TakeDroppedWeapon extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) {
-      if (!a.isBarehanded) {
-        // Move current weapon to inventory.
-        b.weapons.add(b.currentWeapon.build());
-      }
-      b.currentWeapon = item.toBuilder();
+      b.inventory.equip(item, a.anatomy);
     });
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
@@ -84,6 +80,7 @@ class TakeDroppedWeapon extends ItemAction {
             item.damageCapability.type == WeaponType.sword;
     if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     if (recentlyDisarmed(a, w)) return false;
+    if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     return true;
   }
 }

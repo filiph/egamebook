@@ -237,7 +237,7 @@ final youre_dead_slave = EventCallback((sim, w, s) {
   var sword = Item.weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
   agruth.report(s, "<subject> draw<s> <subject's> <object>", object: sword);
-  w.updateActorById(agruthId, (b) => b..currentWeapon = sword.toBuilder());
+  w.updateActorById(agruthId, (b) => b..inventory.equip(sword, agruth.anatomy));
   agruth.report(
       s,
       "\"You're dead, slave,\" <subject> growl<s> at <object> "

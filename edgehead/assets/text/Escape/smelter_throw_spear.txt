@@ -12,7 +12,7 @@ w.actionHasBeenPerformed("war_forge_watch_workers")
 &&
 w.actionHasBeenPerformed("smelter_look_around") 
 &&
-getPlayer(w).hasWeapon(WeaponType.spear)
+getPlayer(w).inventory.hasWeapon(WeaponType.spear)
 
 
 // TODO (nice-to-have) have a non 100% probability. Failure still leads to ogre falling into molten still, just the throw is a little worse. Should not be rescue-able, as we don't want people to spend their resources for nothing (that would feel unfair).

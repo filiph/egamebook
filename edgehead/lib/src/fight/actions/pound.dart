@@ -124,6 +124,7 @@ class Pound extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
+      a.anatomy.anyWeaponAppendageAvailable &&
       (a.currentWeapon.damageCapability.isSlashing ||
           a.currentWeapon.damageCapability.isBlunt) &&
       (enemy.currentWeapon.damageCapability.type.canParrySlash ||

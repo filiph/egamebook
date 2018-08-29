@@ -141,7 +141,8 @@ class ThrowSpear extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
       a.isStanding &&
-      a.hasWeapon(WeaponType.spear) &&
+      a.inventory.hasWeapon(WeaponType.spear) &&
+      a.anatomy.anyWeaponAppendageAvailable &&
       _isFirstTurnInFightSituation(world, enemy);
 
   Entity _createBodyPartEntity(Actor a, String name) {
@@ -153,7 +154,7 @@ class ThrowSpear extends EnemyTargetAction {
         a.currentWeapon.damageCapability.type == WeaponType.spear) {
       return a.currentWeapon;
     }
-    for (var weapon in a.weapons) {
+    for (var weapon in a.inventory.weapons) {
       if (weapon.damageCapability.type == WeaponType.spear) {
         return weapon;
       }
@@ -174,15 +175,13 @@ class ThrowSpear extends EnemyTargetAction {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
-      final Item weapon =
-          a.findBestWeapon() ?? Actor.createBodyPartWeapon(a.anatomy);
-      w.updateActorById(
-          a.id,
-          (b) => b
-            ..currentWeapon = weapon.toBuilder()
-            ..weapons.remove(weapon));
+      w.updateActorById(a.id, (b) {
+        return b
+          ..inventory.remove(spear)
+          ..inventory.equipBestAvailable(a.anatomy);
+      });
     } else {
-      w.updateActorById(a.id, (b) => b..weapons.remove(spear));
+      w.updateActorById(a.id, (b) => b.inventory.remove(spear));
     }
     w.replaceSituationById(fightSituation.id,
         fightSituation.rebuild((b) => b..droppedItems.add(spear)));

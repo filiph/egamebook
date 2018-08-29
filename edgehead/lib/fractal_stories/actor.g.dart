@@ -37,9 +37,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'constitution',
       serializers.serialize(object.constitution,
           specifiedType: const FullType(int)),
-      'currentWeapon',
-      serializers.serialize(object.currentWeapon,
-          specifiedType: const FullType(Item)),
+      'inventory',
+      serializers.serialize(object.inventory,
+          specifiedType: const FullType(Inventory)),
       'dexterity',
       serializers.serialize(object.dexterity,
           specifiedType: const FullType(int)),
@@ -65,10 +65,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'isSurvivor',
       serializers.serialize(object.isSurvivor,
           specifiedType: const FullType(bool)),
-      'items',
-      serializers.serialize(object.items,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Item)])),
       'maxHitpoints',
       serializers.serialize(object.maxHitpoints,
           specifiedType: const FullType(int)),
@@ -86,22 +82,12 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       serializers.serialize(object.stamina, specifiedType: const FullType(int)),
       'team',
       serializers.serialize(object.team, specifiedType: const FullType(Team)),
-      'weapons',
-      serializers.serialize(object.weapons,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Item)])),
     ];
     if (object.currentRoomName != null) {
       result
         ..add('currentRoomName')
         ..add(serializers.serialize(object.currentRoomName,
             specifiedType: const FullType(String)));
-    }
-    if (object.currentShield != null) {
-      result
-        ..add('currentShield')
-        ..add(serializers.serialize(object.currentShield,
-            specifiedType: const FullType(Item)));
     }
     if (object.followingActorId != null) {
       result
@@ -140,13 +126,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.currentRoomName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'currentShield':
-          result.currentShield.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Item)) as Item);
-          break;
-        case 'currentWeapon':
-          result.currentWeapon.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Item)) as Item);
+        case 'inventory':
+          result.inventory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Inventory)) as Inventory);
           break;
         case 'dexterity':
           result.dexterity = serializers.deserialize(value,
@@ -188,12 +170,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.isSurvivor = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
-        case 'items':
-          result.items.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
-          break;
         case 'maxHitpoints':
           result.maxHitpoints = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -222,12 +198,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.team.replace(serializers.deserialize(value,
               specifiedType: const FullType(Team)) as Team);
           break;
-        case 'weapons':
-          result.weapons.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
-          break;
       }
     }
 
@@ -245,9 +215,7 @@ class _$Actor extends Actor {
   @override
   final String currentRoomName;
   @override
-  final Item currentShield;
-  @override
-  final Item currentWeapon;
+  final Inventory inventory;
   @override
   final int dexterity;
   @override
@@ -269,8 +237,6 @@ class _$Actor extends Actor {
   @override
   final bool isSurvivor;
   @override
-  final BuiltList<Item> items;
-  @override
   final int maxHitpoints;
   @override
   final String name;
@@ -284,8 +250,6 @@ class _$Actor extends Actor {
   final int stamina;
   @override
   final Team team;
-  @override
-  final BuiltList<Item> weapons;
 
   factory _$Actor([void updates(ActorBuilder b)]) =>
       (new ActorBuilder()..update(updates)).build();
@@ -295,8 +259,7 @@ class _$Actor extends Actor {
       this.combineFunctionHandle,
       this.constitution,
       this.currentRoomName,
-      this.currentShield,
-      this.currentWeapon,
+      this.inventory,
       this.dexterity,
       this.followingActorId,
       this.gold,
@@ -307,23 +270,21 @@ class _$Actor extends Actor {
       this.isConfused,
       this.isPlayer,
       this.isSurvivor,
-      this.items,
       this.maxHitpoints,
       this.name,
       this.nameIsProperNoun,
       this.pose,
       this.pronoun,
       this.stamina,
-      this.team,
-      this.weapons})
+      this.team})
       : super._() {
     if (anatomy == null) throw new BuiltValueNullFieldError('Actor', 'anatomy');
     if (combineFunctionHandle == null)
       throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
     if (constitution == null)
       throw new BuiltValueNullFieldError('Actor', 'constitution');
-    if (currentWeapon == null)
-      throw new BuiltValueNullFieldError('Actor', 'currentWeapon');
+    if (inventory == null)
+      throw new BuiltValueNullFieldError('Actor', 'inventory');
     if (dexterity == null)
       throw new BuiltValueNullFieldError('Actor', 'dexterity');
     if (gold == null) throw new BuiltValueNullFieldError('Actor', 'gold');
@@ -340,7 +301,6 @@ class _$Actor extends Actor {
       throw new BuiltValueNullFieldError('Actor', 'isPlayer');
     if (isSurvivor == null)
       throw new BuiltValueNullFieldError('Actor', 'isSurvivor');
-    if (items == null) throw new BuiltValueNullFieldError('Actor', 'items');
     if (maxHitpoints == null)
       throw new BuiltValueNullFieldError('Actor', 'maxHitpoints');
     if (name == null) throw new BuiltValueNullFieldError('Actor', 'name');
@@ -350,7 +310,6 @@ class _$Actor extends Actor {
     if (pronoun == null) throw new BuiltValueNullFieldError('Actor', 'pronoun');
     if (stamina == null) throw new BuiltValueNullFieldError('Actor', 'stamina');
     if (team == null) throw new BuiltValueNullFieldError('Actor', 'team');
-    if (weapons == null) throw new BuiltValueNullFieldError('Actor', 'weapons');
   }
 
   @override
@@ -368,8 +327,7 @@ class _$Actor extends Actor {
         combineFunctionHandle == other.combineFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
-        currentShield == other.currentShield &&
-        currentWeapon == other.currentWeapon &&
+        inventory == other.inventory &&
         dexterity == other.dexterity &&
         followingActorId == other.followingActorId &&
         gold == other.gold &&
@@ -380,15 +338,13 @@ class _$Actor extends Actor {
         isConfused == other.isConfused &&
         isPlayer == other.isPlayer &&
         isSurvivor == other.isSurvivor &&
-        items == other.items &&
         maxHitpoints == other.maxHitpoints &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
         pose == other.pose &&
         pronoun == other.pronoun &&
         stamina == other.stamina &&
-        team == other.team &&
-        weapons == other.weapons;
+        team == other.team;
   }
 
   @override
@@ -411,26 +367,26 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), currentShield.hashCode), currentWeapon.hashCode),
-                                                                                dexterity.hashCode),
-                                                                            followingActorId.hashCode),
-                                                                        gold.hashCode),
-                                                                    hitpoints.hashCode),
-                                                                id.hashCode),
-                                                            initiative.hashCode),
-                                                        isActive.hashCode),
-                                                    isConfused.hashCode),
-                                                isPlayer.hashCode),
-                                            isSurvivor.hashCode),
-                                        items.hashCode),
-                                    maxHitpoints.hashCode),
-                                name.hashCode),
-                            nameIsProperNoun.hashCode),
-                        pose.hashCode),
-                    pronoun.hashCode),
-                stamina.hashCode),
-            team.hashCode),
-        weapons.hashCode));
+                                                                            $jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode),
+                                                                                currentRoomName.hashCode),
+                                                                            inventory.hashCode),
+                                                                        dexterity.hashCode),
+                                                                    followingActorId.hashCode),
+                                                                gold.hashCode),
+                                                            hitpoints.hashCode),
+                                                        id.hashCode),
+                                                    initiative.hashCode),
+                                                isActive.hashCode),
+                                            isConfused.hashCode),
+                                        isPlayer.hashCode),
+                                    isSurvivor.hashCode),
+                                maxHitpoints.hashCode),
+                            name.hashCode),
+                        nameIsProperNoun.hashCode),
+                    pose.hashCode),
+                pronoun.hashCode),
+            stamina.hashCode),
+        team.hashCode));
   }
 
   @override
@@ -440,8 +396,7 @@ class _$Actor extends Actor {
           ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
-          ..add('currentShield', currentShield)
-          ..add('currentWeapon', currentWeapon)
+          ..add('inventory', inventory)
           ..add('dexterity', dexterity)
           ..add('followingActorId', followingActorId)
           ..add('gold', gold)
@@ -452,15 +407,13 @@ class _$Actor extends Actor {
           ..add('isConfused', isConfused)
           ..add('isPlayer', isPlayer)
           ..add('isSurvivor', isSurvivor)
-          ..add('items', items)
           ..add('maxHitpoints', maxHitpoints)
           ..add('name', name)
           ..add('nameIsProperNoun', nameIsProperNoun)
           ..add('pose', pose)
           ..add('pronoun', pronoun)
           ..add('stamina', stamina)
-          ..add('team', team)
-          ..add('weapons', weapons))
+          ..add('team', team))
         .toString();
   }
 }
@@ -486,15 +439,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  ItemBuilder _currentShield;
-  ItemBuilder get currentShield => _$this._currentShield ??= new ItemBuilder();
-  set currentShield(ItemBuilder currentShield) =>
-      _$this._currentShield = currentShield;
-
-  ItemBuilder _currentWeapon;
-  ItemBuilder get currentWeapon => _$this._currentWeapon ??= new ItemBuilder();
-  set currentWeapon(ItemBuilder currentWeapon) =>
-      _$this._currentWeapon = currentWeapon;
+  InventoryBuilder _inventory;
+  InventoryBuilder get inventory =>
+      _$this._inventory ??= new InventoryBuilder();
+  set inventory(InventoryBuilder inventory) => _$this._inventory = inventory;
 
   int _dexterity;
   int get dexterity => _$this._dexterity;
@@ -537,10 +485,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isSurvivor => _$this._isSurvivor;
   set isSurvivor(bool isSurvivor) => _$this._isSurvivor = isSurvivor;
 
-  ListBuilder<Item> _items;
-  ListBuilder<Item> get items => _$this._items ??= new ListBuilder<Item>();
-  set items(ListBuilder<Item> items) => _$this._items = items;
-
   int _maxHitpoints;
   int get maxHitpoints => _$this._maxHitpoints;
   set maxHitpoints(int maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
@@ -570,10 +514,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   TeamBuilder get team => _$this._team ??= new TeamBuilder();
   set team(TeamBuilder team) => _$this._team = team;
 
-  ListBuilder<Item> _weapons;
-  ListBuilder<Item> get weapons => _$this._weapons ??= new ListBuilder<Item>();
-  set weapons(ListBuilder<Item> weapons) => _$this._weapons = weapons;
-
   ActorBuilder();
 
   ActorBuilder get _$this {
@@ -582,8 +522,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _combineFunctionHandle = _$v.combineFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
-      _currentShield = _$v.currentShield?.toBuilder();
-      _currentWeapon = _$v.currentWeapon?.toBuilder();
+      _inventory = _$v.inventory?.toBuilder();
       _dexterity = _$v.dexterity;
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
@@ -594,7 +533,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _isConfused = _$v.isConfused;
       _isPlayer = _$v.isPlayer;
       _isSurvivor = _$v.isSurvivor;
-      _items = _$v.items?.toBuilder();
       _maxHitpoints = _$v.maxHitpoints;
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
@@ -602,7 +540,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _pronoun = _$v.pronoun?.toBuilder();
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
-      _weapons = _$v.weapons?.toBuilder();
       _$v = null;
     }
     return this;
@@ -629,8 +566,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               combineFunctionHandle: combineFunctionHandle,
               constitution: constitution,
               currentRoomName: currentRoomName,
-              currentShield: _currentShield?.build(),
-              currentWeapon: currentWeapon.build(),
+              inventory: inventory.build(),
               dexterity: dexterity,
               followingActorId: followingActorId,
               gold: gold,
@@ -641,36 +577,27 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               isConfused: isConfused,
               isPlayer: isPlayer,
               isSurvivor: isSurvivor,
-              items: items.build(),
               maxHitpoints: maxHitpoints,
               name: name,
               nameIsProperNoun: nameIsProperNoun,
               pose: pose,
               pronoun: pronoun.build(),
               stamina: stamina,
-              team: team.build(),
-              weapons: weapons.build());
+              team: team.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'anatomy';
         anatomy.build();
 
-        _$failedField = 'currentShield';
-        _currentShield?.build();
-        _$failedField = 'currentWeapon';
-        currentWeapon.build();
-
-        _$failedField = 'items';
-        items.build();
+        _$failedField = 'inventory';
+        inventory.build();
 
         _$failedField = 'pronoun';
         pronoun.build();
 
         _$failedField = 'team';
         team.build();
-        _$failedField = 'weapons';
-        weapons.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Actor', _$failedField, e.toString());

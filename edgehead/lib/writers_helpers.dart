@@ -102,7 +102,7 @@ void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
       but: hasOrcthorn != destroyed);
 
   String getWeaponDescription(WeaponType type, String name) {
-    final count = player.countWeapons(type);
+    final count = player.inventory.countWeapons(type);
     return count > 1 ? '${name}s' : count == 1 ? 'a $name' : 'no $name';
   }
 
@@ -150,23 +150,26 @@ void enterTunnelWithCancel(ActionContext c) {
 
 void executeSpearThrowAtOgre(ActionContext c) {
   final player = getPlayer(c.world);
-  final inventorySpears = player.weapons
+  final inventorySpears = player.inventory.weapons
       .where((item) => item.damageCapability.type == WeaponType.spear)
       .toList(growable: false);
-  if (inventorySpears.isNotEmpty) {
-    c.outputWorld.updateActorById(
-        player.id, (b) => b..items.remove(inventorySpears.first));
-  } else {
-    // No spear in inventory but we know that the actor has a spear. So it
-    // must be in their hand.
-    final replacementWeapon =
-        player.findBestWeapon() ?? Actor.createBodyPartWeapon(player.anatomy);
+  assert(inventorySpears.isNotEmpty,
+      "executeSpearThrowAtOgre called without any spear in inventory");
+
+  if (player.inventory.currentWeapon.damageCapability.type ==
+      WeaponType.spear) {
+    // Spear is in the hand.
     c.outputWorld.updateActorById(
         player.id,
         (b) => b
-          ..currentWeapon = replacementWeapon.toBuilder()
-          ..items.remove(replacementWeapon));
+          ..inventory.remove(player.inventory.currentWeapon)
+          ..inventory.equipBestAvailable(player.anatomy));
   }
+
+  // Remove the spear.
+  c.outputWorld.updateActorById(
+      player.id, (b) => b.inventory.remove(inventorySpears.first));
+
   movePlayer(c, "war_forge", silent: true);
 }
 
@@ -263,15 +266,16 @@ FightSituation generateTestFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final aguthsSword = Item.weapon(89892130, WeaponType.sword);
   final playersSword = Item.weapon(89892131, WeaponType.sword);
-  var agruth = _generateAgruth()
-      .rebuild((b) => b..currentWeapon = aguthsSword.toBuilder());
-  w.actors.add(agruth);
-  w.updateActorById(
-      playerId, (b) => b..currentWeapon = playersSword.toBuilder());
+  final agruth = _generateAgruth();
+  final equippedAgruth =
+      agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
+  w.actors.add(equippedAgruth);
+  w.updateActorById(playerId,
+      (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
-    [agruth],
+    [equippedAgruth],
     "{rock|cavern} floor",
     roomRoamingSituation,
     {},
@@ -300,7 +304,7 @@ Actor getSlaveQuartersOrc(WorldStateBuilder w) =>
     w.getActorById(slaveQuartersOrcId);
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
-    getPlayer(w.build()).id, (b) => b..weapons.add(sleepingGoblinsSpear));
+    getPlayer(w.build()).id, (b) => b.inventory.add(sleepingGoblinsSpear));
 
 void giveGoldToPlayer(WorldStateBuilder w, int amount) {
   w.updateActorById(getPlayer(w.build()).id, (b) => b..gold += amount);
@@ -357,7 +361,11 @@ void nameAgruthSword(WorldStateBuilder w, String name) {
       var named = sword.toBuilder()
         ..name = name
         ..nameIsProperNoun = true;
-      w.updateActorById(actor.id, (b) => b..currentWeapon = named);
+      w.updateActorById(
+          actor.id,
+          (b) => b
+            ..inventory.remove(sword)
+            ..inventory.equip(named.build(), actor.anatomy));
       break;
     }
   }
@@ -380,9 +388,8 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
     bool wasSuccess) {
   w.updateActorById(
       a.id,
-      (b) => b
-        ..currentShield =
-            Item.weapon(w.randomInt(), WeaponType.shield).toBuilder());
+      (b) => b.inventory
+          .equipShield(Item.weapon(w.randomInt(), WeaponType.shield)));
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
@@ -402,12 +409,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
 }
 
 void takeOrcthorn(Simulation sim, WorldStateBuilder w, Actor a) {
-  w.updateActorById(a.id, (b) {
-    if (!a.isBarehanded) {
-      b.weapons.add(a.currentWeapon);
-    }
-    b.currentWeapon = orcthorn.toBuilder();
-  });
+  w.updateActorById(a.id, (b) => b.inventory.equip(orcthorn, a.anatomy));
 }
 
 void updateGlobal(Simulation sim, WorldStateBuilder w,

@@ -1797,7 +1797,7 @@ class SmelterThrowSpear extends RoamingAction {
     if (!(!w.actionHasBeenPerformed(name) &&
         w.actionHasBeenPerformed("war_forge_watch_workers") &&
         w.actionHasBeenPerformed("smelter_look_around") &&
-        getPlayer(w).hasWeapon(WeaponType.spear))) {
+        getPlayer(w).inventory.hasWeapon(WeaponType.spear))) {
       return false;
     }
     return true;

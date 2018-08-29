@@ -71,6 +71,7 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
+        a.anatomy.anyWeaponAppendageAvailable &&
         a.currentWeapon.damageCapability.isSlashing,
     mainSituationBuilder: (a, sim, w, enemy) =>
         createSlashSituation(w.randomInt(), a, enemy, designation: designation),

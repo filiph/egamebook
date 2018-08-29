@@ -1,6 +1,5 @@
 library stranded.actor;
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -10,6 +9,7 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
@@ -76,8 +76,10 @@ abstract class Actor extends Object
       ..isSurvivor = isSurvivor
       ..nameIsProperNoun = nameIsProperNoun
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
-      ..currentWeapon = weapon?.toBuilder()
-      ..currentShield = currentShield?.toBuilder()
+      ..inventory = (InventoryBuilder()
+        ..currentWeapon = weapon
+        ..currentShield = currentShield
+        ..weaponInPrimaryAppendage = true)
       ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
       ..maxHitpoints = maxHitpoints ?? constitution ?? 1
       ..constitution = constitution ?? 1
@@ -92,8 +94,7 @@ abstract class Actor extends Object
       ..combineFunctionHandle = combineFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = Pose.standing
-      ..isActive = true
-      ..weapons = ListBuilder<Item>());
+      ..isActive = true);
   }
 
   Actor._();
@@ -101,11 +102,15 @@ abstract class Actor extends Object
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
 
-  /// Actor can wield weapons other than [Fist].
+  /// Actor can generally wield weapons other than [Fist].
   ///
   /// This is `true` for most humanoids and `false` for most non-humanoids.
   /// Humans, goblins and octopus-kings can wield. Wolves, bats and zombies
   /// cannot wield.
+  ///
+  /// This is just a general ability. It says nothing about the current
+  /// situation (in which the actor can be sleeping, dead, or have both
+  /// hands chopped off).
   bool get canWield => true;
 
   /// The string handle to the combine function that this actor should use.
@@ -122,13 +127,26 @@ abstract class Actor extends Object
 
   /// The shield that the actor is currently wielding. This can be `null`
   /// of there is no shield.
-  @nullable
-  Item get currentShield;
+  Item get currentShield => inventory.currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
   /// Changing a weapon should ordinarily take a turn.
-  Item get currentWeapon;
+  Item get currentWeapon => inventory.currentWeapon;
+
+  /// Same as [canUseWeapon] but for shields.
+  bool get canUseShield => true /* TODO */;
+
+  /// When this is `false`, the actor cannot use the weapon,
+  /// for whatever reason.
+  ///
+  /// This could mean that the weapon is broken, or that the arm holding it
+  /// is disabled.
+  bool get canUseWeapon => true /* TODO */;
+
+  /// The current state of the actor's inventory. Deals with everything
+  /// that has to do with items.
+  Inventory get inventory;
 
   /// The general ability to move: swiftly, precisely, with agility.
   /// Useful in combat and most other physical action.
@@ -189,13 +207,6 @@ abstract class Actor extends Object
   /// By default, this is `false`.
   bool get isSurvivor;
 
-  /// Inventory of items possessed by the actor.
-  ///
-  /// This does not include things that are wield-able (weapons, shields) or
-  /// otherwise equip-able (armor). Consider [items] more like "contents of
-  /// actor's backpack": potions, books, scrolls.
-  BuiltList<Item> get items;
-
   int get maxHitpoints;
 
   @override
@@ -214,58 +225,10 @@ abstract class Actor extends Object
   @override
   Team get team;
 
-  /// How safe does [this] Actor feel in the presence of the different other
-  /// actors.
-  ///
-  /// For example, a Bob's failed attempt at murder of Alice will lead to Alice
-  /// feeling much less safe near Bob. This will greatly decrease her world
-  /// score, btw, so this automatically makes an attempted murder something
-  /// people don't appreciate.
-  // TODO: for 'Skyrim', we don't need this most of the time (simple friend or foe suffices) -- maybe create PsychologicalActor?
-  //  ActorRelationshipMap get safetyFear;
-
-  /// A list of all weapons possessed by the actor.
-  ///
-  /// This is a list because we want to allow having duplicate items
-  /// (2 apples).
-  ///
-  /// Not that [WeaponType.shield] is also a weapon.
-  BuiltList<Item> get weapons;
-
-  int countWeapons(WeaponType type) {
-    int count = 0;
-    if (currentWeapon.damageCapability.type == type) count += 1;
-    for (final weapon in weapons) {
-      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
-      if (weapon.damageCapability.type == type) count += 1;
-    }
-    return count;
-  }
-
-  /// Returns the best weapon (by [Item.value]) in [Actor.weapons].
-  ///
-  /// Returns `null` when there are no weapons available.
-  Item findBestWeapon() {
-    Item best;
-    int value = -9999999;
-    for (var weapon in weapons) {
-      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
-      if (weapon.value > value) {
-        best = weapon;
-        value = weapon.value;
-      }
-    }
-    return best;
-  }
-
   bool hasResource(Resource resource) {
     assert(resource == Resource.stamina, "Only stamina implemented");
     return stamina >= 1;
   }
-
-  bool hasWeapon(WeaponType type) =>
-      currentWeapon.damageCapability.type == type ||
-      weapons.any((w) => w.damageCapability.type == type);
 
   /// When an [Actor] hates another actor, they will be willing and eager to
   /// attack them.
@@ -316,10 +279,10 @@ abstract class Actor extends Object
     // Add points for weapon value.
     selfPreservation += actor.currentWeapon.value / 2;
     // Add points for weapon/shield/item values.
-    for (var weapon in actor.weapons) {
+    for (var weapon in actor.inventory.weapons) {
       selfPreservation += weapon.value / 10;
     }
-    for (var item in actor.items) {
+    for (var item in actor.inventory.items) {
       selfPreservation += item.value / 10;
     }
 
@@ -330,7 +293,7 @@ abstract class Actor extends Object
       teamPreservation += (friend.isAliveAndActive ? 2 : 0);
       teamPreservation += 2 * friend.hitpoints;
       teamPreservation += friend.currentWeapon.value / 2;
-      for (var item in friend.weapons) {
+      for (var item in friend.inventory.weapons) {
         teamPreservation += item.value / 10;
       }
     }

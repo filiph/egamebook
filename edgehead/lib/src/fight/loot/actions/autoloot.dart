@@ -81,24 +81,16 @@ class AutoLoot extends Action<Null> {
           (item.value > currentActor.currentWeapon.value || isSwordForSpear)) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
-          if (currentActor.isBarehanded) {
-            // Put current weapon to inventory.
-            b.weapons.add(currentActor.currentWeapon);
-          }
           // Wield the new weapon.
-          b.currentWeapon = item.toBuilder();
+          b.inventory.equip(item, currentActor.anatomy);
         });
         takenWeapon = item;
       } else if (item.isShield && currentActor.currentShield == null) {
-        world.updateActorById(a.id, (b) => b.currentShield = item.toBuilder());
+        world.updateActorById(a.id, (b) => b.inventory.equipShield(item));
         takenShield = item;
-      } else if (item.isWeapon) {
-        // Put the rest to weapons.
-        world.updateActorById(a.id, (b) => b..weapons.add(item));
-        takenItems.add(item);
       } else {
         // Put the rest to inventory.
-        world.updateActorById(a.id, (b) => b..items.add(item));
+        world.updateActorById(a.id, (b) => b..inventory.add(item));
         takenItems.add(item);
       }
     }
@@ -150,7 +142,7 @@ class AutoLoot extends Action<Null> {
       WorldStateBuilder world,
       Storyline s) {
     var shields = List<Item>.from(takenItems.where((item) => item.isShield));
-    for (var item in actor.weapons.where((item) => item.isShield)) {
+    for (var item in actor.inventory.shields) {
       shields.add(item);
     }
     if (shields.isEmpty) return;
@@ -162,10 +154,9 @@ class AutoLoot extends Action<Null> {
     for (var friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
-      world.updateActorById(
-          friend.id, (b) => b..currentShield = shield.toBuilder());
+      world.updateActorById(friend.id, (b) => b.inventory.equipShield(shield));
       takenItems.remove(shield);
-      world.updateActorById(actor.id, (b) => b..items.remove(shield));
+      world.updateActorById(actor.id, (b) => b.inventory.items.remove(shield));
       actor.report(s, "<subject> give<s> the ${shield.name} to <object>",
           object: friend);
     }
@@ -180,7 +171,7 @@ class AutoLoot extends Action<Null> {
       WorldStateBuilder world,
       Storyline s) {
     var weapons = List<Item>.from(takenItems.where((item) => item.isWeapon));
-    for (var item in actor.weapons) {
+    for (var item in actor.inventory.weapons) {
       weapons.add(item);
     }
     if (weapons.isEmpty) return;
@@ -192,9 +183,9 @@ class AutoLoot extends Action<Null> {
       if (weapons.isEmpty) break;
       var weapon = weapons.removeLast();
       world.updateActorById(
-          friend.id, (b) => b..currentWeapon = weapon.toBuilder());
+          friend.id, (b) => b.inventory.equip(weapon, friend.anatomy));
       takenItems.remove(weapon);
-      world.updateActorById(actor.id, (b) => b..items.remove(weapon));
+      world.updateActorById(actor.id, (b) => b.inventory.items.remove(weapon));
       actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
           object: friend);
     }

@@ -34,6 +34,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(EdgeheadGlobalState.serializer)
       ..add(FightSituation.serializer)
       ..add(GuardpostAboveChurchTakeShieldRescueSituation.serializer)
+      ..add(Inventory.serializer)
       ..add(Item.serializer)
       ..add(LootSituation.serializer)
       ..add(OffBalanceOpportunitySituation.serializer)
@@ -63,6 +64,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(OtherActorAction)]),
           () => new ListBuilder<OtherActorAction>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Item)]),
+          () => new ListBuilder<Item>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Item)]),
           () => new ListBuilder<Item>())

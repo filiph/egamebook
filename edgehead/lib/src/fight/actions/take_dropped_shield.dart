@@ -49,9 +49,7 @@ class TakeDroppedShield extends ItemAction {
         situation.id,
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
-    w.updateActorById(a.id, (b) {
-      b.currentShield = item.toBuilder();
-    });
+    w.updateActorById(a.id, (b) => b..inventory.equipShield(item));
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
   }
@@ -70,6 +68,7 @@ class TakeDroppedShield extends ItemAction {
     if (!item.isShield) return false;
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
+    if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     return true;
   }
 }
