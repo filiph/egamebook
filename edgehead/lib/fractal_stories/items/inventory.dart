@@ -124,6 +124,8 @@ abstract class InventoryBuilder
   ///       "<subject> took <object> in <subject's> offhand")
   void equip(Item weapon, Anatomy anatomy) {
     assert(weapon.isWeapon);
+    assert(weapon.damageCapability.type != WeaponType.fist,
+        "Tried to equip a body part. Use goBarehanded instead.");
     assert(anatomy.anyWeaponAppendageAvailable,
         "Failed equip not yet implemented: $anatomy.");
     if (!build().weapons.any((item) => item.id == weapon.id)) {
@@ -139,13 +141,12 @@ abstract class InventoryBuilder
   ///
   /// TODO: return WeaponEquipResult (see [equip])
   void equipBestAvailable(Anatomy anatomy) {
-    final Item weapon =
-        build().findBestWeapon() ?? Actor.createBodyPartWeapon(anatomy);
-    assert(
-        weapon != null,
-        "Currently, we assume createBodyPartWeapon will "
-        "always return something.");
-    equip(weapon, anatomy);
+    final Item weapon = build().findBestWeapon();
+    if (weapon != null) {
+      return equip(weapon, anatomy);
+    }
+
+    return goBarehanded(anatomy);
   }
 
   /// Makes the actor go barehanded.
@@ -158,7 +159,8 @@ abstract class InventoryBuilder
         bodyPartWeapon != null,
         "Currently, we assume createBodyPartWeapon will "
         "always return something.");
-    equip(bodyPartWeapon, anatomy);
+    currentWeapon = bodyPartWeapon;
+    // TODO: figure out if this is off-hand or main hand or whatever
   }
 
   void equipShield(Item shield) {
