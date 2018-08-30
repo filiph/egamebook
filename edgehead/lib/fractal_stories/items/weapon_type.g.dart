@@ -16,6 +16,7 @@ part of fractal_stories.items.weapon_type;
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
 
+const WeaponType _$none = const WeaponType._('none');
 const WeaponType _$claw = const WeaponType._('claw');
 const WeaponType _$fist = const WeaponType._('fist');
 const WeaponType _$spear = const WeaponType._('spear');
@@ -24,6 +25,8 @@ const WeaponType _$shield = const WeaponType._('shield');
 
 WeaponType _$valueOf(String name) {
   switch (name) {
+    case 'none':
+      return _$none;
     case 'claw':
       return _$claw;
     case 'fist':
@@ -41,6 +44,7 @@ WeaponType _$valueOf(String name) {
 
 final BuiltSet<WeaponType> _$values =
     new BuiltSet<WeaponType>(const <WeaponType>[
+  _$none,
   _$claw,
   _$fist,
   _$spear,

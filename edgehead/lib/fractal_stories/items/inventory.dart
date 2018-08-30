@@ -8,6 +8,13 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 
 part 'inventory.g.dart';
 
+/// A special weapon of type [WeaponType.none]. This stands in for no weapon
+/// at all, to be used as [Inventory.currentWeapon] when the actor
+/// cannot even use their bodyparts as weapons.
+///
+/// For example, this happens when a human gets both his arms cut off.
+final Item _noWeapon = Item.weapon(54321, WeaponType.none);
+
 /// The current state of an [Actor]'s inventory.
 ///
 /// This is manually updated by actions. Helper functions such as
@@ -29,7 +36,6 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   /// The weapon currently wielded by the actor.
   ///
   /// Do not assign to this directly. Use [InventoryBuilder.equip] instead.
-  @nullable
   Item get currentWeapon;
 
   /// Inventory of items possessed by the actor.
@@ -114,54 +120,37 @@ abstract class InventoryBuilder
     }
   }
 
-  /// Tries to equip [weapon] and reports the result.
+  /// Tries to equip [weapon] and returns the result.
   ///
   /// This can fail, for example when the [anatomy] doesn't have any viable
   /// appendages.
-  ///
-  /// TODO: return WeaponEquipResult for better reporting
-  ///       (e.g. when caller wants to report that
-  ///       "<subject> took <object> in <subject's> offhand")
-  void equip(Item weapon, Anatomy anatomy) {
+  WeaponEquipResult equip(Item weapon, Anatomy anatomy) {
     assert(weapon.isWeapon);
     assert(weapon.damageCapability.type != WeaponType.fist,
         "Tried to equip a body part. Use goBarehanded instead.");
-    // TODO: solve for when no appendage is available for equipping
-    // assert(anatomy.anyWeaponAppendageAvailable,
-    //     "Failed equip not yet implemented: $anatomy.");
+    if (!anatomy.anyWeaponAppendageAvailable) {
+      // Crippled actor can't equip.
+      currentWeapon = _noWeapon;
+      return WeaponEquipResult.noAvailableAppendage;
+    }
     if (!build().weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
       weapons.add(weapon);
     }
     currentWeapon = weapon;
+    return WeaponEquipResult.equipped;
   }
 
   /// Tries to equip the best weapon in the inventory. When that fails
   /// (for example, because there is no weapon in the inventory), goes
   /// barehanded using the [anatomy] anatomy.
-  ///
-  /// TODO: return WeaponEquipResult (see [equip])
-  void equipBestAvailable(Anatomy anatomy) {
+  WeaponEquipResult equipBestAvailable(Anatomy anatomy) {
     final Item weapon = build().findBestWeapon();
     if (weapon != null) {
       return equip(weapon, anatomy);
     }
 
     return goBarehanded(anatomy);
-  }
-
-  /// Makes the actor go barehanded.
-  ///
-  /// This is useful for times when the actor forcefully loses [currentWeapon]
-  /// and doesn't have time to [equipBestAvailable].
-  void goBarehanded(Anatomy anatomy) {
-    final Item bodyPartWeapon = Actor.createBodyPartWeapon(anatomy);
-    assert(
-        bodyPartWeapon != null,
-        "Currently, we assume createBodyPartWeapon will "
-        "always return something.");
-    currentWeapon = bodyPartWeapon;
-    // TODO: figure out if this is off-hand or main hand or whatever
   }
 
   void equipShield(Item shield) {
@@ -173,6 +162,27 @@ abstract class InventoryBuilder
     currentShield = shield;
   }
 
+  /// Makes the actor go barehanded.
+  ///
+  /// This is useful for times when the actor forcefully loses [currentWeapon]
+  /// and doesn't have time to [equipBestAvailable].
+  WeaponEquipResult goBarehanded(Anatomy anatomy) {
+    if (!anatomy.anyWeaponAppendageAvailable) {
+      // Crippled actors cannot equip anything, not even fists.
+      currentWeapon = _noWeapon;
+      return WeaponEquipResult.noAvailableAppendage;
+    }
+
+    final Item bodyPartWeapon = Actor.createBodyPartWeapon(anatomy);
+    assert(
+        bodyPartWeapon != null,
+        "Currently, we assume createBodyPartWeapon will "
+        "always return something.");
+    currentWeapon = bodyPartWeapon;
+    // TODO: figure out if this is off-hand or main hand or whatever
+    return WeaponEquipResult.equipped;
+  }
+
   /// Removes [item] from either [weapons], [shields] or [items]. Updates
   /// [currentWeapon] and [currentShield] if needed.
   ///
@@ -180,14 +190,14 @@ abstract class InventoryBuilder
   void remove(Item item) {
     if (item.isWeapon) {
       _assertItemInList(item, weapons);
-      if (currentWeapon.id == item.id) currentWeapon = null;
+      if (currentWeapon.id == item.id) currentWeapon = _noWeapon;
       weapons.remove(item);
       return;
     }
 
     if (item.isShield) {
       _assertItemInList(item, shields);
-      if (currentShield.id == item.id) currentShield = null;
+      if (currentShield.id == item.id) currentShield = _noWeapon;
       shields.remove(item);
       return;
     }
@@ -205,4 +215,14 @@ abstract class InventoryBuilder
   }
 }
 
-class WeaponEquipResult {}
+/// The different ways an [Inventory.equip] can go.
+enum WeaponEquipResult {
+  /// Equipping was successful, and it was done with the main appendage.
+  equipped,
+
+  /// The was no appendage to equip _with_. For example, both hands are
+  /// chopped off.
+  noAvailableAppendage,
+
+  // TODO: equippedWithOffHand
+}

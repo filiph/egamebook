@@ -15,6 +15,8 @@ part 'weapon_type.g.dart';
 ///
 /// Note that [fist] and [claw] are also weapons.
 class WeaponType extends EnumClass {
+  /// A special weapon type that signifies absence of a weapon.
+  static const WeaponType none = _$none;
   static const WeaponType claw = _$claw;
   static const WeaponType fist = _$fist;
   static const WeaponType spear = _$spear;
@@ -55,6 +57,7 @@ class WeaponType extends EnumClass {
   }
 
   int get defaultLength {
+    if (this == none) return 0;
     // TODO: implement lengths
     return 2;
   }
