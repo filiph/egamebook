@@ -15,6 +15,8 @@ part of stranded.fight.counter_attack_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<CounterAttackSituation> _$counterAttackSituationSerializer =
     new _$CounterAttackSituationSerializer();
@@ -120,10 +122,10 @@ class _$CounterAttackSituation extends CounterAttackSituation {
       new CounterAttackSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! CounterAttackSituation) return false;
-    return counterAttacker == other.counterAttacker &&
+    return other is CounterAttackSituation &&
+        counterAttacker == other.counterAttacker &&
         id == other.id &&
         target == other.target &&
         time == other.time;

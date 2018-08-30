@@ -15,6 +15,8 @@ part of stranded.history.visit;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<VisitHistory> _$visitHistorySerializer =
     new _$VisitHistorySerializer();
@@ -147,10 +149,9 @@ class _$VisitHistory extends VisitHistory {
   VisitHistoryBuilder toBuilder() => new VisitHistoryBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! VisitHistory) return false;
-    return records == other.records;
+    return other is VisitHistory && records == other.records;
   }
 
   @override
@@ -248,10 +249,10 @@ class _$VisitRecord extends VisitRecord {
   VisitRecordBuilder toBuilder() => new VisitRecordBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! VisitRecord) return false;
-    return actorId == other.actorId &&
+    return other is VisitRecord &&
+        actorId == other.actorId &&
         parentRoomName == other.parentRoomName &&
         roomName == other.roomName &&
         time == other.time;

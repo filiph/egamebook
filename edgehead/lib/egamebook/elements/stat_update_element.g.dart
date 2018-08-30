@@ -15,6 +15,8 @@ part of egamebook.element.stat_update;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<StatUpdate> _$statUpdateSerializer = new _$StatUpdateSerializer();
 
@@ -102,10 +104,11 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   StatUpdateBuilder<T> toBuilder() => new StatUpdateBuilder<T>()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! StatUpdate) return false;
-    return name == other.name && newValue == other.newValue;
+    return other is StatUpdate &&
+        name == other.name &&
+        newValue == other.newValue;
   }
 
   @override

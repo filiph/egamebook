@@ -15,6 +15,8 @@ part of stranded.fight.attacker_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 const AttackDirection _$fromLeft = const AttackDirection._('fromLeft');
 const AttackDirection _$fromRight = const AttackDirection._('fromRight');
@@ -255,10 +257,10 @@ class _$AttackerSituation extends AttackerSituation {
       new AttackerSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! AttackerSituation) return false;
-    return attackDirection == other.attackDirection &&
+    return other is AttackerSituation &&
+        attackDirection == other.attackDirection &&
         attacker == other.attacker &&
         builtEnemyTargetActionGenerators ==
             other.builtEnemyTargetActionGenerators &&

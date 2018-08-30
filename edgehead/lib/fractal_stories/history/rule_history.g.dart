@@ -15,6 +15,8 @@ part of stranded.history.rule;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<RuleHistory> _$ruleHistorySerializer = new _$RuleHistorySerializer();
 Serializer<RuleRecord> _$ruleRecordSerializer = new _$RuleRecordSerializer();
@@ -129,10 +131,9 @@ class _$RuleHistory extends RuleHistory {
   RuleHistoryBuilder toBuilder() => new RuleHistoryBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! RuleHistory) return false;
-    return records == other.records;
+    return other is RuleHistory && records == other.records;
   }
 
   @override
@@ -220,10 +221,9 @@ class _$RuleRecord extends RuleRecord {
   RuleRecordBuilder toBuilder() => new RuleRecordBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! RuleRecord) return false;
-    return ruleId == other.ruleId && time == other.time;
+    return other is RuleRecord && ruleId == other.ruleId && time == other.time;
   }
 
   @override

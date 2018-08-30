@@ -15,6 +15,8 @@ part of egamebook.command.pick_choice;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<PickChoice> _$pickChoiceSerializer = new _$PickChoiceSerializer();
 
@@ -78,10 +80,9 @@ class _$PickChoice extends PickChoice {
   PickChoiceBuilder toBuilder() => new PickChoiceBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! PickChoice) return false;
-    return choice == other.choice;
+    return other is PickChoice && choice == other.choice;
   }
 
   @override

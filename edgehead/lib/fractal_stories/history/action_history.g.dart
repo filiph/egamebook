@@ -15,6 +15,8 @@ part of stranded.history.action;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<ActionHistory> _$actionHistorySerializer =
     new _$ActionHistorySerializer();
@@ -225,10 +227,10 @@ class _$ActionHistory extends ActionHistory {
   ActionHistoryBuilder toBuilder() => new ActionHistoryBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! ActionHistory) return false;
-    return latestByActorId == other.latestByActorId &&
+    return other is ActionHistory &&
+        latestByActorId == other.latestByActorId &&
         latestProactiveByActorId == other.latestProactiveByActorId &&
         records == other.records;
   }
@@ -390,10 +392,10 @@ class _$ActionRecord extends ActionRecord {
   ActionRecordBuilder toBuilder() => new ActionRecordBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! ActionRecord) return false;
-    return actionName == other.actionName &&
+    return other is ActionRecord &&
+        actionName == other.actionName &&
         dataString == other.dataString &&
         description == other.description &&
         protagonist == other.protagonist &&

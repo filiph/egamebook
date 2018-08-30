@@ -15,6 +15,8 @@ part of stranded.fight.fight_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<FightSituation> _$fightSituationSerializer =
     new _$FightSituationSerializer();
@@ -178,10 +180,10 @@ class _$FightSituation extends FightSituation {
       new FightSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! FightSituation) return false;
-    return droppedItems == other.droppedItems &&
+    return other is FightSituation &&
+        droppedItems == other.droppedItems &&
         enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
         groundMaterial == other.groundMaterial &&

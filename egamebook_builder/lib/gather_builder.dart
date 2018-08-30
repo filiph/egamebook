@@ -6,4 +6,4 @@ import 'package:source_gen/source_gen.dart';
 /// summarize their contents into a single one.
 Builder gatherBuilder(BuilderOptions options) => PartBuilder([
       const InstanceSerializerGenerator(),
-    ], generatedExtension: '.gathered.dart');
+    ], '.gathered.dart');

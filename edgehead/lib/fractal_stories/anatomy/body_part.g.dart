@@ -15,6 +15,8 @@ part of fractal_stories.anatomy.body_part;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 const BodyPartDesignation _$neck = const BodyPartDesignation._('neck');
 const BodyPartDesignation _$head = const BodyPartDesignation._('head');
@@ -412,10 +414,10 @@ class _$BodyPart extends BodyPart {
   BodyPartBuilder toBuilder() => new BodyPartBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! BodyPart) return false;
-    return bluntHitsCount == other.bluntHitsCount &&
+    return other is BodyPart &&
+        bluntHitsCount == other.bluntHitsCount &&
         children == other.children &&
         damageCapability == other.damageCapability &&
         designation == other.designation &&

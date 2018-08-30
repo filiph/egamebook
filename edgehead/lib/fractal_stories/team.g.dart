@@ -15,6 +15,8 @@ part of stranded.team;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<Team> _$teamSerializer = new _$TeamSerializer();
 
@@ -76,10 +78,9 @@ class _$Team extends Team {
   TeamBuilder toBuilder() => new TeamBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Team) return false;
-    return id == other.id;
+    return other is Team && id == other.id;
   }
 
   @override

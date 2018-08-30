@@ -15,6 +15,8 @@ part of stranded.world_state;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<WorldState> _$worldStateSerializer = new _$WorldStateSerializer();
 
@@ -181,10 +183,10 @@ class _$WorldState extends WorldState {
   _$WorldStateBuilder toBuilder() => new _$WorldStateBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! WorldState) return false;
-    return actionHistory == other.actionHistory &&
+    return other is WorldState &&
+        actionHistory == other.actionHistory &&
         actors == other.actors &&
         customHistory == other.customHistory &&
         global == other.global &&

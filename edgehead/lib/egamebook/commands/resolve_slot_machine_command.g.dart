@@ -15,6 +15,8 @@ part of egamebook.command.resolve_slot_machine;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<ResolveSlotMachine> _$resolveSlotMachineSerializer =
     new _$ResolveSlotMachineSerializer();
@@ -92,10 +94,11 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
       new ResolveSlotMachineBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! ResolveSlotMachine) return false;
-    return result == other.result && wasRerolled == other.wasRerolled;
+    return other is ResolveSlotMachine &&
+        result == other.result &&
+        wasRerolled == other.wasRerolled;
   }
 
   @override

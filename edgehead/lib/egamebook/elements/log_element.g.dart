@@ -15,6 +15,8 @@ part of egamebook.element.log;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<LogElement> _$logElementSerializer = new _$LogElementSerializer();
 
@@ -89,10 +91,11 @@ class _$LogElement extends LogElement {
   LogElementBuilder toBuilder() => new LogElementBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! LogElement) return false;
-    return level == other.level && message == other.message;
+    return other is LogElement &&
+        level == other.level &&
+        message == other.message;
   }
 
   @override

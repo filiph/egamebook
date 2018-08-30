@@ -86,12 +86,17 @@ class InstanceSerializerGenerator extends Generator {
       for (final glob in globs) {
         final assetIds = buildStep.findAssets(Glob(glob));
         await for (final id in assetIds) {
+          log.finer('Gathering $instanceTypeName from $id');
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
           final globbedLibrary = LibraryReader(globbedLibraryElement);
 
           for (final topLevelElement in globbedLibrary.allElements) {
+            log.finest('- looking at top level element '
+                '${topLevelElement.name} in $id');
             if (topLevelElement is TopLevelVariableElement) {
               if (!topLevelElement.type.isAssignableTo(instanceType)) {
+                log.fine(
+                    '$topLevelElement not assignable to $instanceTypeName');
                 continue;
               }
 

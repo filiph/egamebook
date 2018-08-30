@@ -15,6 +15,8 @@ part of egamebook.element.win;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<WinGame> _$winGameSerializer = new _$WinGameSerializer();
 
@@ -78,10 +80,9 @@ class _$WinGame extends WinGame {
   WinGameBuilder toBuilder() => new WinGameBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! WinGame) return false;
-    return markdownText == other.markdownText;
+    return other is WinGame && markdownText == other.markdownText;
   }
 
   @override

@@ -15,6 +15,8 @@ part of storyline.pronoun;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<Pronoun> _$pronounSerializer = new _$PronounSerializer();
 
@@ -110,10 +112,10 @@ class _$Pronoun extends Pronoun {
   PronounBuilder toBuilder() => new PronounBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Pronoun) return false;
-    return accusative == other.accusative &&
+    return other is Pronoun &&
+        accusative == other.accusative &&
         genitive == other.genitive &&
         nominative == other.nominative &&
         self == other.self;

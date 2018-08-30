@@ -15,6 +15,8 @@ part of stranded.history.custom_event;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<CustomEvent> _$customEventSerializer = new _$CustomEventSerializer();
 Serializer<CustomEventHistory> _$customEventHistorySerializer =
@@ -157,10 +159,10 @@ class _$CustomEvent extends CustomEvent {
   CustomEventBuilder toBuilder() => new CustomEventBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! CustomEvent) return false;
-    return actorId == other.actorId &&
+    return other is CustomEvent &&
+        actorId == other.actorId &&
         data == other.data &&
         name == other.name &&
         time == other.time;
@@ -258,10 +260,9 @@ class _$CustomEventHistory extends CustomEventHistory {
       new CustomEventHistoryBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! CustomEventHistory) return false;
-    return records == other.records;
+    return other is CustomEventHistory && records == other.records;
   }
 
   @override

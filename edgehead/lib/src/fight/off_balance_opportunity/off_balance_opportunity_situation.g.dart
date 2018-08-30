@@ -15,6 +15,8 @@ part of stranded.fight.off_balance_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<OffBalanceOpportunitySituation>
     _$offBalanceOpportunitySituationSerializer =
@@ -125,10 +127,10 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
       new OffBalanceOpportunitySituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! OffBalanceOpportunitySituation) return false;
-    return actorId == other.actorId &&
+    return other is OffBalanceOpportunitySituation &&
+        actorId == other.actorId &&
         culpritId == other.culpritId &&
         id == other.id &&
         time == other.time;

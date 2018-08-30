@@ -15,6 +15,8 @@ part of 'inventory.dart';
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<Inventory> _$inventorySerializer = new _$InventorySerializer();
 
@@ -150,10 +152,10 @@ class _$Inventory extends Inventory {
   _$InventoryBuilder toBuilder() => new _$InventoryBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Inventory) return false;
-    return currentShield == other.currentShield &&
+    return other is Inventory &&
+        currentShield == other.currentShield &&
         currentWeapon == other.currentWeapon &&
         items == other.items &&
         shields == other.shields &&

@@ -15,6 +15,8 @@ part of stranded.fight.defense_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<DefenseSituation> _$defenseSituationSerializer =
     new _$DefenseSituationSerializer();
@@ -175,10 +177,10 @@ class _$DefenseSituation extends DefenseSituation {
       new DefenseSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! DefenseSituation) return false;
-    return attacker == other.attacker &&
+    return other is DefenseSituation &&
+        attacker == other.attacker &&
         builtEnemyTargetActionGenerators ==
             other.builtEnemyTargetActionGenerators &&
         builtOtherActorActionGenerators ==

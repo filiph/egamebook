@@ -15,6 +15,8 @@ part of stranded.fight.loot_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<LootSituation> _$lootSituationSerializer =
     new _$LootSituationSerializer();
@@ -132,10 +134,10 @@ class _$LootSituation extends LootSituation {
   LootSituationBuilder toBuilder() => new LootSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! LootSituation) return false;
-    return droppedItems == other.droppedItems &&
+    return other is LootSituation &&
+        droppedItems == other.droppedItems &&
         groundMaterial == other.groundMaterial &&
         playerTeamIds == other.playerTeamIds &&
         id == other.id &&

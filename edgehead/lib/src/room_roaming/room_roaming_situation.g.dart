@@ -15,6 +15,8 @@ part of stranded.room_roaming.room_roaming_situation;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<RoomRoamingSituation> _$roomRoamingSituationSerializer =
     new _$RoomRoamingSituationSerializer();
@@ -120,10 +122,10 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
       new RoomRoamingSituationBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! RoomRoamingSituation) return false;
-    return currentRoomName == other.currentRoomName &&
+    return other is RoomRoamingSituation &&
+        currentRoomName == other.currentRoomName &&
         id == other.id &&
         monstersAlive == other.monstersAlive &&
         time == other.time;

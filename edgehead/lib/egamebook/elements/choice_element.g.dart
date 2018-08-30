@@ -15,6 +15,8 @@ part of egamebook.element.choice;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<Choice> _$choiceSerializer = new _$ChoiceSerializer();
 
@@ -102,10 +104,10 @@ class _$Choice extends Choice {
   ChoiceBuilder toBuilder() => new ChoiceBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! Choice) return false;
-    return helpMessage == other.helpMessage &&
+    return other is Choice &&
+        helpMessage == other.helpMessage &&
         isImplicit == other.isImplicit &&
         markdownText == other.markdownText;
   }

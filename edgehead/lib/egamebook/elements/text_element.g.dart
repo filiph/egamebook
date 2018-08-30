@@ -15,6 +15,8 @@ part of egamebook.element.text;
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: prefer_expression_function_bodies
 // ignore_for_file: sort_constructors_first
+// ignore_for_file: unnecessary_const
+// ignore_for_file: unnecessary_new
 
 Serializer<TextOutput> _$textOutputSerializer = new _$TextOutputSerializer();
 
@@ -78,10 +80,9 @@ class _$TextOutput extends TextOutput {
   TextOutputBuilder toBuilder() => new TextOutputBuilder()..replace(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    if (other is! TextOutput) return false;
-    return markdownText == other.markdownText;
+    return other is TextOutput && markdownText == other.markdownText;
   }
 
   @override

@@ -19,9 +19,6 @@ dependencies:
   quiver: ^2.0.0+1
   slot_machine: ^5.0.1
 
-dependency_overrides:
-  analyzer_plugin: ^0.0.1-alpha.4
-
 dev_dependencies:
   args: ^1.5.0
   build_runner: ^0.10.1
