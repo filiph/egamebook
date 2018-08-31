@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
 const String startLeapCommandTemplate =
-    "attack <object> >> by leaping at <object>";
+    "attack <object> >> by leaping at <objectPronoun>";
 
 const String startLeapHelpMessage =
     "Jumping and tackling an opponent is one of the most risky moves but it's "

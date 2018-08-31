@@ -43,7 +43,7 @@ class KickToGround extends EnemyTargetAction {
 
   @override
   String get commandTemplate =>
-      "attack <object> >> by kicking <object> to the ground";
+      "attack <object> >> by kicking <objectPronoun> to the ground";
 
   @override
   String get name => className;

@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_si
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 
 const String startBreakNeckOnGroundCommandTemplate =
-    "attack <object> >> by breaking <object's> neck";
+    "attack <object> >> by breaking <objectPronoun's> neck";
 
 const String startBreakNeckOnGroundHelpMessage =
     "This move is hard, but when succesful, it's decisive.";

@@ -44,7 +44,7 @@ String startSlashCommandTemplate(SlashDirection direction) {
           "from left (<objectPronoun's> weapon hand)";
     case SlashDirection.right:
       return "attack <object> >> by slashing >> "
-          "from right (<objectPronoun's> shield hand)";
+          "from right (<objectPronoun's> off-hand)";
   }
   throw StateError(
       "The switch statement above doesn't cover all directions: $direction");

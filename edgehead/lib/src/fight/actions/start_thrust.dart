@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situatio
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
 String startThrustCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by thrusting at >> <object's> $designation";
+  return "attack <object> >> by thrusting at >> <objectPronoun's> $designation";
 }
 
 const String startThrustHelpMessage = "The basic move with a pointy weapon.";

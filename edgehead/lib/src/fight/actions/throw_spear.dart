@@ -51,7 +51,7 @@ class ThrowSpear extends EnemyTargetAction {
 
   @override
   String get commandTemplate =>
-      "attack <object> >> by throwing spear at <object>";
+      "attack <object> >> by throwing spear at <objectPronoun>";
 
   @override
   String get name => className;

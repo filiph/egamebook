@@ -31,7 +31,7 @@ class DisarmKick extends EnemyTargetAction {
 
   @override
   String get commandTemplate =>
-      "attack <object> >> by kicking <object's> weapon off";
+      "attack <object> >> by kicking <objectPronoun's> weapon off";
 
   @override
   String get name => className;

@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_def
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
 const String startThrustSpearDownCommandTemplate =
-    "attack <object> >> by thrusting down at <object>";
+    "attack <object> >> by thrusting down at <objectPronoun>";
 
 const String startThrustSpearDownHelpMessage =
     "Opponents on the ground are often the most "

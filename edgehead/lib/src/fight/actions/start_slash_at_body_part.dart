@@ -49,7 +49,7 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
 }
 
 String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by slashing >> <object's> $designation";
+  return "attack <object> >> by slashing >> <objectPronoun's> $designation";
 }
 
 void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
