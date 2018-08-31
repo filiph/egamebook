@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
+import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
@@ -78,6 +79,11 @@ class FinishThrust extends OtherActorAction {
           object: result.actor,
           positive: true,
           actionThread: thread);
+      if (result.droppedCurrentWeapon) {
+        final weapon = dropCurrentWeapon(w, result.actor);
+        result.actor.report(s, "<subject> drop<s> <object>",
+            object: weapon, negative: true, actionThread: thread);
+      }
       if (result.fell) {
         result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
             negative: true, actionThread: thread);

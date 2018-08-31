@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 ///
 /// If this method is called when there is no [FightSituation]
 /// in the current [WorldState.situations] stack, it will throw.
-Item dropWeapon(WorldStateBuilder w, Actor enemy) {
+Item dropCurrentWeapon(WorldStateBuilder w, Actor enemy) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   final weapon = enemy.currentWeapon;

@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/get_weapons_held.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
@@ -89,5 +90,7 @@ WeaponAssaultResult _disableByThrust(
     bodyPart,
     fell: victimDidFall,
     disabled: true,
+    droppedCurrentWeapon:
+        isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
   );
 }

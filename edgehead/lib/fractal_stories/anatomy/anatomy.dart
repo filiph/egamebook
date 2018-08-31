@@ -25,7 +25,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
   /// Returns in iterable of all the parts in this anatomy.
   @memoized
-  Iterable<BodyPart> get allParts => _walk(torso);
+  Iterable<BodyPart> get allParts => torso.getDescendantParts();
 
   /// The anatomy is capable of wielding a weapon at this point.
   ///
@@ -112,7 +112,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   Map<BodyPart, int> _getLeftPartsWithWeights(bool avoidVital) {
     final map = <BodyPart, int>{};
 
-    for (final part in _walk(torso)) {
+    for (final part in torso.getDescendantParts()) {
       if (part.swingSurfaceLeft == 0) continue;
       if (avoidVital && part.isVital) continue;
       map[part] = part.swingSurfaceLeft;
@@ -127,19 +127,12 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   Map<BodyPart, int> _getRightPartsWithWeights(bool avoidVital) {
     final map = <BodyPart, int>{};
 
-    for (final part in _walk(torso)) {
+    for (final part in torso.getDescendantParts()) {
       if (part.swingSurfaceRight == 0) continue;
       if (avoidVital && part.isVital) continue;
       map[part] = part.swingSurfaceRight;
     }
     return map;
-  }
-
-  Iterable<BodyPart> _walk(BodyPart startingPart) sync* {
-    yield startingPart;
-    for (final child in startingPart.children) {
-      yield* _walk(child);
-    }
   }
 
   /// Walks the tree of body parts from [startingPart] downwards, and returns

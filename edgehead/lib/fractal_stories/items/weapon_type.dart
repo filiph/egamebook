@@ -82,5 +82,9 @@ class WeaponType extends EnumClass {
     }
   }
 
+  /// Returns `true` if the weapon is part of the anatomy (as opposed to
+  /// a wield-able weapon like a sword).
+  bool get isBodyPart => this == fist || this == claw;
+
   static WeaponType valueOf(String name) => _$valueOf(name);
 }

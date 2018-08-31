@@ -47,6 +47,17 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   BuiltList<Item> get shields;
 
+  /// This is `true` if [currentWeapon] is being held with the primary
+  /// appendage (e.g. right hand of right-handed humanoids).
+  ///
+  /// When this is `false`, the weapon is being held in the secondary
+  /// appendage (e.g. off-hand for humanoids).
+  ///
+  /// When [currentWeapon] is of type [WeaponType.none], this field should be
+  /// ignored.
+  ///
+  /// The field is not just for held weapons (like a sword) but also for
+  /// body-part weapons (like a claw).
   bool get weaponInPrimaryAppendage;
 
   /// A list of all weapons possessed by the actor. Can be in hand or

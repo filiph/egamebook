@@ -37,9 +37,19 @@ class WeaponAssaultResult {
   /// This is `null` for assaults that were not slashing.
   final SlashSuccessLevel slashSuccessLevel;
 
-  const WeaponAssaultResult(this.actor, this.touchedPart,
-      {this.severedPart,
-      this.slashSuccessLevel,
-      this.fell: false,
-      this.disabled: false});
+  /// Whether the current weapon was dropped as a result of the assault.
+  ///
+  /// For example, if a slash disabled (or cuts off) an arm, and the arm
+  /// was holding the sword, than this will be `true`.
+  final bool droppedCurrentWeapon;
+
+  const WeaponAssaultResult(
+    this.actor,
+    this.touchedPart, {
+    this.severedPart,
+    this.slashSuccessLevel,
+    this.fell: false,
+    this.disabled: false,
+    this.droppedCurrentWeapon: false,
+  });
 }

@@ -93,11 +93,11 @@ class FinishSlash extends OtherActorAction {
       if (result.disabled) {
         result.touchedPart.report(s, "<subject> go<es> limp",
             negative: true, actionThread: thread);
-        if (result.touchedPart.hasWeaponWieldingDescendants) {
-          final weapon = dropWeapon(w, result.actor);
-          result.actor.report(s, "<subject> drop<s> <object>",
-              object: weapon, negative: true, actionThread: thread);
-        }
+      }
+      if (result.droppedCurrentWeapon) {
+        final weapon = dropCurrentWeapon(w, result.actor);
+        result.actor.report(s, "<subject> drop<s> <object>",
+            object: weapon, negative: true, actionThread: thread);
       }
       if (result.fell) {
         result.actor.report(s, "<subject> fall<s> {|down|to the ground}",

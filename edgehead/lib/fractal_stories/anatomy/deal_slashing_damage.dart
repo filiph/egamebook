@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/get_weapons_held.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
@@ -167,13 +168,19 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
     },
   );
 
-  final BodyPartBuilder severedPart = bodyPart.toBuilder();
-  severedPart.isSevered = true;
-  severedPart.hitpoints = 0;
+  final BodyPartBuilder severedPartBuilder = bodyPart.toBuilder();
+  severedPartBuilder.isSevered = true;
+  severedPartBuilder.hitpoints = 0;
+  final severedPart = severedPartBuilder.build();
 
-  return WeaponAssaultResult(victim.build(), bodyPart,
-      slashSuccessLevel: SlashSuccessLevel.cleave,
-      severedPart: severedPart.build());
+  return WeaponAssaultResult(
+    victim.build(),
+    bodyPart,
+    slashSuccessLevel: SlashSuccessLevel.cleave,
+    severedPart: severedPart,
+    droppedCurrentWeapon:
+        isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
+  );
 }
 
 WeaponAssaultResult _disableBySlash(
@@ -209,6 +216,8 @@ WeaponAssaultResult _disableBySlash(
     slashSuccessLevel: SlashSuccessLevel.majorCut,
     fell: victimDidFall,
     disabled: true,
+    droppedCurrentWeapon:
+        isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
   );
 }
 

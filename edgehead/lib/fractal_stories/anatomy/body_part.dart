@@ -83,20 +83,6 @@ abstract class BodyPart extends Object
     return false;
   }
 
-  /// Returns `true` if this [BodyPart] or its descendants wield
-  /// the current weapon.
-  ///
-  /// That means that if this body part is disabled, it (or its descendant)
-  /// might drop the current weapon, for example.
-  bool get hasWeaponWieldingDescendants {
-    if (isWeaponWielding) return true;
-    for (final child in children) {
-      if (child.isWeaponWielding) return true;
-      if (child.hasWeaponWieldingDescendants) return true;
-    }
-    return false;
-  }
-
   /// How many hitpoints does this body part have. After this goes
   /// to `0`, the body part is disabled.
   ///
@@ -132,10 +118,6 @@ abstract class BodyPart extends Object
 
   /// When this body part is destroyed or severed, does the owner die?
   bool get isVital;
-
-  /// Returns `true` if this body part is the one that wields
-  /// the current weapon.
-  bool get isWeaponWielding => designation == BodyPartDesignation.primaryHand;
 
   /// The number of unhealed major cuts (from slashes and thrusts) that the
   /// body part received.
@@ -203,6 +185,21 @@ abstract class BodyPart extends Object
 
   /// See [swingSurfaceLeft] doc comment.
   int get thrustSurface => 1;
+
+  /// Returns [startingPart] and all descendants of it.
+  ///
+  /// Use this to get everything that is attached to a body part. For example,
+  /// descendants of the left shoulder include the left arm, the left hand,
+  /// and all the fingers on the left hand.
+  ///
+  /// Because anatomies start with the torso (where the heart is), descendants
+  /// of [torso] include every part of the anatomy. (Use [allParts] for that.)
+  Iterable<BodyPart> getDescendantParts() sync* {
+    yield this;
+    for (final child in children) {
+      yield* child.getDescendantParts();
+    }
+  }
 }
 
 /// This uniquely identifies a [BodyPart] in a body.
