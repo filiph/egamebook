@@ -53,13 +53,15 @@ Here are some additional "philosophical" pillars:
 1. [Install Dart](https://www.dartlang.org/install)
    * Use Dart 2 stable (which is the default as of August 2018).
 2. Clone this repository (`git clone https://github.com/filiph/egamebook.git`)
-   or download the zip file containing it
+   or download the 
+   [zip file](https://github.com/filiph/egamebook/archive/master.zip) 
+   containing it
 3. Go to the repository's directory (`cd egamebook`)
 4. Go to the `edgehead` sub-project (`cd edgehead`)
 5. Install Dart packages (`pub get`)
 
 Now you can try running tests (`pub run test`) or play the game on the command
-line (`dart bin/play.dart`).
+line (`dart -c bin/play.dart --log`).
 
 ### Playtesting
 
@@ -82,7 +84,7 @@ around it.
 
 To playtest the current version of the game, install it
 ([see above](https://github.com/filiph/edgehead#installation)),
-go to the `edgehead` sub-directory, then run:
+go to the `egamebook/edgehead` sub-directory, then run:
 
 ```bash
 dart -c bin/play.dart --log
@@ -111,7 +113,7 @@ success, `f` is for fail.) You will not see the `[[ SLOT MACHINE ... ]]`
 output in either case.
 
 Ultimately, you should default to playtesting *without* these cheats. 
-If playing the game is only fun if you can force each action to succeed
+If playing the game is only fun when you can force each action to succeed
 or fail, then the game is broken. But the cheats are useful for predictably
 getting yourself into an interesting situation, and for seeing "what happens". 
 
@@ -124,8 +126,11 @@ This means that, in the end of this development cycle, you as a player should:
 2. Feel that you can do things that are your own idea (emergent gameplay)
 3. Feel powerful
 
-You should focus on the set combat piece(s) at the start of the game. You
-can go and play Insignificant Little Vermin, but that's there mostly for
+You should focus on the set combat piece(s) at the start of the game (the
+choice says `Start one-on-one test fight with an orc`). Play and replay
+this one fight - we want even simple fights like this to be interesting.
+ 
+You can go and play Insignificant Little Vermin, but that's there mostly for
 automated testing (we are fuzzy-testing that no change to the combat
 system crashes the long-form adventure). When the combat system is improved,
 we are going to rewrite the adventure to take advantage of it.
