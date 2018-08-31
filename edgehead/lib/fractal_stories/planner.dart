@@ -3,6 +3,8 @@ library stranded.planner;
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:meta/meta.dart';
+
 import 'action.dart';
 import 'actor.dart';
 import 'package:edgehead/ecs/pubsub.dart';
@@ -132,7 +134,7 @@ class ActorPlanner {
   }
 
   Future<Null> plan(
-      {int maxOrder: 10,
+      {@required int maxOrder,
       int maxConsequences: 50,
       Future<Null> waitFunction()}) async {
     firstActionScores.clear();
