@@ -17,8 +17,12 @@ class Pass extends Action<Null> {
   @override
   final bool isAggressive = false;
 
+  /// Pass is a way to respond to a counter-attack opportunity.
+  /// If we ever have pass (or wait) as a thing that the actor can initiate
+  /// on their `FightSituation` turn, then that needs to be separate,
+  /// and with `isProactive == true`.
   @override
-  final bool isProactive = true;
+  final bool isProactive = false;
 
   @override
   final bool isImplicit = false;
