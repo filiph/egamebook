@@ -91,5 +91,6 @@ class DisarmKick extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       (a.isStanding || a.isOffBalance) &&
       enemy.isOnGround &&
-      !enemy.isBarehanded;
+      !enemy.isBarehanded &&
+      !enemy.currentWeapon.damageCapability.isNone;
 }
