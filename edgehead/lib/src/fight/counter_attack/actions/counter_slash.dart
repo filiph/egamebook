@@ -66,7 +66,7 @@ EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       isApplicable: (a, sim, w, enemy) =>
           a.currentWeapon.damageCapability.isSlashing &&
           !a.isOnGround &&
-          a.anatomy.anyWeaponAppendageAvailable,
+          !a.hasCrippledArms,
       mainSituationBuilder: (a, sim, w, enemy) => createSlashSituation(
           w.randomInt(), a, enemy,
           direction: SlashDirection.left),

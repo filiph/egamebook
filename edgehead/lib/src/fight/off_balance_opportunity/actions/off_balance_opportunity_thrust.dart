@@ -103,6 +103,5 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.isStanding &&
       enemy.isOffBalance &&
-      a.anatomy.anyWeaponAppendageAvailable &&
       a.currentWeapon.damageCapability.isThrusting;
 }

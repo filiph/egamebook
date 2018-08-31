@@ -25,7 +25,6 @@ EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       isApplicable: (a, sim, w, enemy) =>
           enemy.isOnGround &&
           !a.isOnGround &&
-          a.anatomy.anyWeaponAppendageAvailable &&
           a.currentWeapon.damageCapability.type == WeaponType.spear,
       mainSituationBuilder: (a, sim, w, enemy) =>
           createStrikeDownSituation(w.randomInt(), a, enemy),

@@ -49,7 +49,6 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
     isApplicable: (a, sim, w, enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
-        a.anatomy.anyWeaponAppendageAvailable &&
         a.currentWeapon.damageCapability.isThrusting,
     mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
         w.randomInt(), a, enemy,

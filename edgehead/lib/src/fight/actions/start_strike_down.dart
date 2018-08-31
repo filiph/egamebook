@@ -40,7 +40,6 @@ EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       isApplicable: (a, sim, w, enemy) =>
           enemy.isOnGround &&
           !a.isOnGround &&
-          a.anatomy.anyWeaponAppendageAvailable &&
           a.currentWeapon.damageCapability.isSlashing,
       mainSituationBuilder: (a, sim, w, enemy) =>
           createStrikeDownSituation(w.randomInt(), a, enemy),
