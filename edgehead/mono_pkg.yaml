@@ -13,7 +13,3 @@ stages:
     - group:
       - command: pub run test
       - command: pub run test -t long-running --run-skipped
-
-cache:
-  directories:
-    - .dart_tool/build

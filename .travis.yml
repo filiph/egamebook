@@ -42,5 +42,4 @@ branches:
 cache:
   directories:
     - "$HOME/.pub-cache"
-    - edgehead/.dart_tool/build
     - egamebook_builder/.dart_tool/build
