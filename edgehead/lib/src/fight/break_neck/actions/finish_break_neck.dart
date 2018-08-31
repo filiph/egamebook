@@ -19,7 +19,7 @@ class FinishBreakNeck extends OtherActorAction {
   final bool isAggressive = true;
 
   @override
-  final bool isProactive = true;
+  final bool isProactive = false;
 
   @override
   final bool isImplicit = true;

@@ -63,6 +63,11 @@ abstract class Action<T> {
   ///
   /// Examples of reactive actions are 'dodge' and 'parry'. Examples of
   /// proactive actions are 'slash' and 'cast spell'.
+  ///
+  /// Note that finishes of counter-able moves are _not_ proactive. For example,
+  /// while initiating a slash at someone (`StartSlash`) is proactive,
+  /// finishing it (`FinishSlash`) is not. The finishing move is an automatic,
+  /// implicit action.
   bool get isProactive;
 
   /// The name of the class of the Action.

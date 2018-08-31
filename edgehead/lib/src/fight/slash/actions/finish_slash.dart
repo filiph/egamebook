@@ -29,8 +29,10 @@ class FinishSlash extends OtherActorAction {
   @override
   final bool isAggressive = true;
 
+  /// The action that initiated the slash might have been proactive, but
+  /// the finish is just that, a finish.
   @override
-  final bool isProactive = true;
+  final bool isProactive = false;
 
   @override
   final bool isImplicit = true;
