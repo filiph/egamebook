@@ -6,6 +6,11 @@ builders:
     build_extensions: {"_gather.dart": [".gathered.dart"]}
     build_to: source
     auto_apply: dependents
+    required_inputs:
+      # Makes sure that built_value generation has already been performed
+      # by the time this builder runs. Otherwise, the `*_gather.dart` source
+      # can fail to statically analyze, and no instances will be gathered.
+      - '.g.dart'
     defaults:
       generate_for:
         - '**/*_gather.dart'
