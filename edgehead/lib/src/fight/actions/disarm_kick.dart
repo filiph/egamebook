@@ -63,8 +63,8 @@ class DisarmKick extends EnemyTargetAction {
     Randomly.run(() {
       a.report(
           s,
-          "<subject> kick<s> <object-owner's> <object> off "
-          "<object-owner's> hand",
+          "<subject> kick<s> <objectOwner's> <object> off "
+          "<objectOwner's> hand",
           objectOwner: enemy,
           object: enemy.currentWeapon,
           positive: true,

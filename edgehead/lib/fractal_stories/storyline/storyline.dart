@@ -151,8 +151,8 @@ class Storyline {
 
   static const String OWNER = "<owner>";
   static const String OWNER_POSSESIVE = "<owner's>";
-  static const String OBJECT_OWNER = "<object-owner>";
-  static const String OBJECT_OWNER_POSSESIVE = "<object-owner's>";
+  static const String OBJECT_OWNER = "<objectOwner>";
+  static const String OBJECT_OWNER_POSSESIVE = "<objectOwner's>";
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
@@ -166,9 +166,9 @@ class Storyline {
   static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
-  static const String OBJECT_OWNER_PRONOUN = "<object-ownerPronoun>";
+  static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
   static const String OBJECT_OWNER_PRONOUN_POSSESIVE =
-      "<object-ownerPronoun's>";
+      "<objectOwnerPronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
   static const String VERB_ES = "<es>";

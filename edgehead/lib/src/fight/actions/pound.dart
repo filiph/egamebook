@@ -58,7 +58,7 @@ class Pound extends EnemyTargetAction {
         s,
         "<subject> {fiercely|violently} "
         "{strike<s>|hammer<s>|batter<s>} "
-        "on <object-owner's> "
+        "on <objectOwner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
         object: enemy.currentWeapon);
@@ -79,7 +79,7 @@ class Pound extends EnemyTargetAction {
         s,
         "<subject> {fiercely|violently} "
         "{strike<s>|hammer<s>|batter<s>} "
-        "on <object-owner's> "
+        "on <objectOwner's> "
         "{<object>|weapon}",
         objectOwner: enemy,
         object: enemy.currentWeapon);

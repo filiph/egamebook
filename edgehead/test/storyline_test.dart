@@ -240,14 +240,14 @@ void main() {
         matches("The enemy's ship aims her guns at you.+ your gun is faster."));
   });
 
-  test("possesive particles works even with <object-owner's> <object>", () {
+  test("possesive particles works even with <objectOwner's> <object>", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");
     var gun = Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
         Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add(
-        "<owner's> <subject> <is> pointed at <object-owner's> "
+        "<owner's> <subject> <is> pointed at <objectOwner's> "
         "<object>",
         owner: player,
         subject: gun,
@@ -263,7 +263,7 @@ void main() {
     var player = _createPlayer("Filip");
     var sword = Entity(name: "sword", pronoun: Pronoun.IT);
     var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    storyline.add("<subject> pound<s> on <object-owner's> {<object>|<object>!}",
+    storyline.add("<subject> pound<s> on <objectOwner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
     expect(
         storyline.realizeAsString(), matches("The orc pounds on your sword."));

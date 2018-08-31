@@ -228,7 +228,7 @@ final sleeping_goblin_thief = EventCallback((sim, w, s) {
   final tookSpear =
       w.actionHasBeenPerformedSuccessfully("take_spear_in_underground_church");
   if (tookSpear) {
-    goblin.report(s, "<subject> look<s> at <object-owner's> <object>",
+    goblin.report(s, "<subject> look<s> at <objectOwner's> <object>",
         objectOwner: player, object: sleepingGoblinsSpear);
     goblin.report(s, "\"Thief,\" <subject> hiss<es>.", wholeSentence: true);
   }

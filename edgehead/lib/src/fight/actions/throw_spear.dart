@@ -93,7 +93,7 @@ class ThrowSpear extends EnemyTargetAction {
     assert(spear.isWeapon);
     _startThrowSpearReportStart(a, sim, w, s, enemy, spear);
     if (enemy.currentShield != null) {
-      spear.report(s, "<subject> fl<ies> past <object-owner's> <object>",
+      spear.report(s, "<subject> fl<ies> past <objectOwner's> <object>",
           positive: true,
           object: enemy.currentShield,
           objectOwner: enemy,
@@ -110,7 +110,7 @@ class ThrowSpear extends EnemyTargetAction {
       spear.report(
           s,
           "<subject> {pierce<s>|ram<s> into|drill<s> through} "
-          "<object-owner's> <object>",
+          "<objectOwner's> <object>",
           owner: a,
           objectOwner: updatedEnemy,
           object: bodyPart,
@@ -121,7 +121,7 @@ class ThrowSpear extends EnemyTargetAction {
       spear.report(
           s,
           "<subject> {pierce<s>|ram<s> into|drill<s> through} "
-          "<object-owner's> <object>",
+          "<objectOwner's> <object>",
           owner: a,
           objectOwner: updatedEnemy,
           object: bodyPart,
