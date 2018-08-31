@@ -9,7 +9,7 @@ jobs:
       env: PKG="edgehead"
       dart: stable
     - stage: build
-      name: "SDK: stable - DIR: edgehead - TASKS: pub run build_runner build --delete-conflicting-outputs"
+      name: "SDK: stable - DIR: edgehead - TASKS: pub run build_runner build --verbose --delete-conflicting-outputs"
       script: ./tool/travis.sh command_0
       env: PKG="edgehead"
       dart: stable
