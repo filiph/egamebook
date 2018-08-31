@@ -80,7 +80,7 @@ class TakeDroppedWeapon extends ItemAction {
             item.damageCapability.type == WeaponType.sword;
     if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     if (recentlyDisarmed(a, w)) return false;
-    if (!a.hasCrippledArms) return false;
+    if (a.hasCrippledArms) return false;
     return true;
   }
 }
