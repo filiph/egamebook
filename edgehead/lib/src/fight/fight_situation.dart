@@ -15,6 +15,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
+import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
@@ -104,6 +105,7 @@ abstract class FightSituation extends Object
         TakeDroppedWeapon.singleton,
         ThrowSpear.singleton,
         // simple ones
+        Cower.singleton,
         RegainBalance.singleton,
         StandUp.singleton,
         Scramble.singleton,

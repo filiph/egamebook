@@ -36,7 +36,9 @@ EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     helpMessage: startLeapHelpMessage,
     applyStart: startLeapReportStart,
     isApplicable: (a, sim, w, enemy) =>
-        !enemy.isOnGround && !recentlyForcedToGround(a, w),
+        !enemy.isOnGround &&
+        !a.hasCrippledArms &&
+        !recentlyForcedToGround(a, w),
     mainSituationBuilder: (a, sim, w, enemy) =>
         createLeapSituation(w.randomInt(), a, enemy),
     defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>

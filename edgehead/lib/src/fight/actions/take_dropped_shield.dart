@@ -68,7 +68,7 @@ class TakeDroppedShield extends ItemAction {
     if (!item.isShield) return false;
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
-    if (!a.anatomy.anyWeaponAppendageAvailable) return false;
+    if (a.hasCrippledArms) return false;
     return true;
   }
 }

@@ -29,9 +29,6 @@ abstract class DamageCapability
 
   bool get isBlunt => bluntDamage > 0;
 
-  /// If this is `true`, then the weapon just designates a non-existent one.
-  bool get isNone => type == WeaponType.none;
-
   bool get isSlashing => slashingDamage > 0;
 
   bool get isThrusting => thrustingDamage > 0;

@@ -8,8 +8,8 @@ import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
@@ -102,6 +102,16 @@ abstract class Actor extends Object
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
 
+  /// Same as [canUseWeapon] but for shields.
+  bool get canUseShield => true /* TODO */;
+
+  /// When this is `false`, the actor cannot use the weapon,
+  /// for whatever reason.
+  ///
+  /// This could mean that the weapon is broken, or that the arm holding it
+  /// is disabled.
+  bool get canUseWeapon => true /* TODO */;
+
   /// Actor can generally wield weapons other than [Fist].
   ///
   /// This is `true` for most humanoids and `false` for most non-humanoids.
@@ -134,20 +144,6 @@ abstract class Actor extends Object
   /// Changing a weapon should ordinarily take a turn.
   Item get currentWeapon => inventory.currentWeapon;
 
-  /// Same as [canUseWeapon] but for shields.
-  bool get canUseShield => true /* TODO */;
-
-  /// When this is `false`, the actor cannot use the weapon,
-  /// for whatever reason.
-  ///
-  /// This could mean that the weapon is broken, or that the arm holding it
-  /// is disabled.
-  bool get canUseWeapon => true /* TODO */;
-
-  /// The current state of the actor's inventory. Deals with everything
-  /// that has to do with items.
-  Inventory get inventory;
-
   /// The general ability to move: swiftly, precisely, with agility.
   /// Useful in combat and most other physical action.
   ///
@@ -159,6 +155,16 @@ abstract class Actor extends Object
   int get followingActorId;
 
   int get gold;
+
+  /// Returns `true` if the arms of the actor are crippled.
+  ///
+  /// This means the actor doesn't hold any weapons, nor can he attack
+  /// with his fist or claws.
+  ///
+  /// We're using "arms" broadly here. These can be tentacles, front paws,
+  /// or anything else that is normally the main fighting appendage.
+  bool get hasCrippledArms =>
+      currentWeapon.damageCapability.type == WeaponType.none;
 
   int get hitpoints;
 
@@ -174,12 +180,21 @@ abstract class Actor extends Object
   /// This doesn't change during gameplay.
   int get initiative;
 
+  /// The current state of the actor's inventory. Deals with everything
+  /// that has to do with items.
+  Inventory get inventory;
+
   @override
   bool get isActive;
 
   @override
   bool get isAlive => hitpoints > 0;
 
+  /// This is `true` if the actor is barehanded. This means that the actor
+  /// _is_ ready to fight, but only with their bare hands.
+  ///
+  /// This is `false` if the actor holds a weapon, has claws, or
+  /// is crippled ([hasCrippledArms]).
   bool get isBarehanded =>
       currentWeapon.damageCapability.type == WeaponType.fist;
 

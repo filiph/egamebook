@@ -92,5 +92,5 @@ class DisarmKick extends EnemyTargetAction {
       (a.isStanding || a.isOffBalance) &&
       enemy.isOnGround &&
       !enemy.isBarehanded &&
-      !enemy.currentWeapon.damageCapability.isNone;
+      !enemy.hasCrippledArms;
 }

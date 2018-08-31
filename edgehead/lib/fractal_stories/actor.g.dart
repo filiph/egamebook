@@ -39,9 +39,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'constitution',
       serializers.serialize(object.constitution,
           specifiedType: const FullType(int)),
-      'inventory',
-      serializers.serialize(object.inventory,
-          specifiedType: const FullType(Inventory)),
       'dexterity',
       serializers.serialize(object.dexterity,
           specifiedType: const FullType(int)),
@@ -55,6 +52,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'initiative',
       serializers.serialize(object.initiative,
           specifiedType: const FullType(int)),
+      'inventory',
+      serializers.serialize(object.inventory,
+          specifiedType: const FullType(Inventory)),
       'isActive',
       serializers.serialize(object.isActive,
           specifiedType: const FullType(bool)),
@@ -128,10 +128,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.currentRoomName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'inventory':
-          result.inventory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Inventory)) as Inventory);
-          break;
         case 'dexterity':
           result.dexterity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -155,6 +151,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'initiative':
           result.initiative = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'inventory':
+          result.inventory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Inventory)) as Inventory);
           break;
         case 'isActive':
           result.isActive = serializers.deserialize(value,
@@ -217,8 +217,6 @@ class _$Actor extends Actor {
   @override
   final String currentRoomName;
   @override
-  final Inventory inventory;
-  @override
   final int dexterity;
   @override
   final int followingActorId;
@@ -230,6 +228,8 @@ class _$Actor extends Actor {
   final int id;
   @override
   final int initiative;
+  @override
+  final Inventory inventory;
   @override
   final bool isActive;
   @override
@@ -261,13 +261,13 @@ class _$Actor extends Actor {
       this.combineFunctionHandle,
       this.constitution,
       this.currentRoomName,
-      this.inventory,
       this.dexterity,
       this.followingActorId,
       this.gold,
       this.hitpoints,
       this.id,
       this.initiative,
+      this.inventory,
       this.isActive,
       this.isConfused,
       this.isPlayer,
@@ -285,8 +285,6 @@ class _$Actor extends Actor {
       throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
     if (constitution == null)
       throw new BuiltValueNullFieldError('Actor', 'constitution');
-    if (inventory == null)
-      throw new BuiltValueNullFieldError('Actor', 'inventory');
     if (dexterity == null)
       throw new BuiltValueNullFieldError('Actor', 'dexterity');
     if (gold == null) throw new BuiltValueNullFieldError('Actor', 'gold');
@@ -295,6 +293,8 @@ class _$Actor extends Actor {
     if (id == null) throw new BuiltValueNullFieldError('Actor', 'id');
     if (initiative == null)
       throw new BuiltValueNullFieldError('Actor', 'initiative');
+    if (inventory == null)
+      throw new BuiltValueNullFieldError('Actor', 'inventory');
     if (isActive == null)
       throw new BuiltValueNullFieldError('Actor', 'isActive');
     if (isConfused == null)
@@ -329,13 +329,13 @@ class _$Actor extends Actor {
         combineFunctionHandle == other.combineFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
-        inventory == other.inventory &&
         dexterity == other.dexterity &&
         followingActorId == other.followingActorId &&
         gold == other.gold &&
         hitpoints == other.hitpoints &&
         id == other.id &&
         initiative == other.initiative &&
+        inventory == other.inventory &&
         isActive == other.isActive &&
         isConfused == other.isConfused &&
         isPlayer == other.isPlayer &&
@@ -371,13 +371,13 @@ class _$Actor extends Actor {
                                                                         $jc(
                                                                             $jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode),
                                                                                 currentRoomName.hashCode),
-                                                                            inventory.hashCode),
-                                                                        dexterity.hashCode),
-                                                                    followingActorId.hashCode),
-                                                                gold.hashCode),
-                                                            hitpoints.hashCode),
-                                                        id.hashCode),
-                                                    initiative.hashCode),
+                                                                            dexterity.hashCode),
+                                                                        followingActorId.hashCode),
+                                                                    gold.hashCode),
+                                                                hitpoints.hashCode),
+                                                            id.hashCode),
+                                                        initiative.hashCode),
+                                                    inventory.hashCode),
                                                 isActive.hashCode),
                                             isConfused.hashCode),
                                         isPlayer.hashCode),
@@ -398,13 +398,13 @@ class _$Actor extends Actor {
           ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
-          ..add('inventory', inventory)
           ..add('dexterity', dexterity)
           ..add('followingActorId', followingActorId)
           ..add('gold', gold)
           ..add('hitpoints', hitpoints)
           ..add('id', id)
           ..add('initiative', initiative)
+          ..add('inventory', inventory)
           ..add('isActive', isActive)
           ..add('isConfused', isConfused)
           ..add('isPlayer', isPlayer)
@@ -441,11 +441,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set currentRoomName(String currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  InventoryBuilder _inventory;
-  InventoryBuilder get inventory =>
-      _$this._inventory ??= new InventoryBuilder();
-  set inventory(InventoryBuilder inventory) => _$this._inventory = inventory;
-
   int _dexterity;
   int get dexterity => _$this._dexterity;
   set dexterity(int dexterity) => _$this._dexterity = dexterity;
@@ -470,6 +465,11 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   int _initiative;
   int get initiative => _$this._initiative;
   set initiative(int initiative) => _$this._initiative = initiative;
+
+  InventoryBuilder _inventory;
+  InventoryBuilder get inventory =>
+      _$this._inventory ??= new InventoryBuilder();
+  set inventory(InventoryBuilder inventory) => _$this._inventory = inventory;
 
   bool _isActive;
   bool get isActive => _$this._isActive;
@@ -524,13 +524,13 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _combineFunctionHandle = _$v.combineFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
-      _inventory = _$v.inventory?.toBuilder();
       _dexterity = _$v.dexterity;
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
       _id = _$v.id;
       _initiative = _$v.initiative;
+      _inventory = _$v.inventory?.toBuilder();
       _isActive = _$v.isActive;
       _isConfused = _$v.isConfused;
       _isPlayer = _$v.isPlayer;
@@ -568,13 +568,13 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               combineFunctionHandle: combineFunctionHandle,
               constitution: constitution,
               currentRoomName: currentRoomName,
-              inventory: inventory.build(),
               dexterity: dexterity,
               followingActorId: followingActorId,
               gold: gold,
               hitpoints: hitpoints,
               id: id,
               initiative: initiative,
+              inventory: inventory.build(),
               isActive: isActive,
               isConfused: isConfused,
               isPlayer: isPlayer,
