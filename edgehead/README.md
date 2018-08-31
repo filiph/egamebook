@@ -83,7 +83,7 @@ I want to find what's fun to do in the game before I build a new interface
 around it.
 
 To playtest the current version of the game, install it
-([see above](https://github.com/filiph/edgehead#installation)),
+([see above](#installation)),
 go to the `egamebook/edgehead` sub-directory, then run:
 
 ```bash
