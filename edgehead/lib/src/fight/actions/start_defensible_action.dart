@@ -9,19 +9,24 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:meta/meta.dart';
 
-typedef ReasonedSuccessChance SuccessChanceGetter(
-    Actor a, Simulation sim, WorldState w, Actor enemy);
-
-typedef DefenseSituation _DefenseSituationBuilder(Actor actor, Simulation sim,
-    WorldStateBuilder world, Actor enemy, Predetermination predetermination);
-
-typedef void _PartialApplyFunction(
+/// Function that is called as part of a [StartDefensibleAction].
+///
+/// It is called 'partial' because, for example,
+/// [StartDefensibleAction.applyStart] is only the first part of the resulting
+/// [Action.applySuccess] (_and_ [Action.applyFailure]).
+typedef void PartialApplyFunction(
     Actor actor,
     Simulation sim,
     WorldStateBuilder world,
     Storyline storyline,
     Actor enemy,
     Situation mainSituation);
+
+typedef ReasonedSuccessChance SuccessChanceGetter(
+    Actor a, Simulation sim, WorldState w, Actor enemy);
+
+typedef DefenseSituation _DefenseSituationBuilder(Actor actor, Simulation sim,
+    WorldStateBuilder world, Actor enemy, Predetermination predetermination);
 
 typedef Situation _SituationBuilder(
     Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
@@ -48,7 +53,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   ///
   /// When the action fails and [applyWhenFailed] is non-null, then that
   /// function will be called instead (and no situation will be created).
-  final _PartialApplyFunction applyStart;
+  final PartialApplyFunction applyStart;
 
   /// This function should use [storyline] to report that the defensible action
   /// couldn't even start. It can modify [world].
@@ -58,7 +63,7 @@ class StartDefensibleAction extends EnemyTargetAction {
   /// When this function is non-null, and the action fails, [applyStart] won't
   /// be called. Nor will the action generate any situations (using
   /// [mainSituationBuilder] and [defenseSituationBuilder].
-  final _PartialApplyFunction applyWhenFailed;
+  final PartialApplyFunction applyWhenFailed;
 
   /// This should build the main situation (the orc slashing Aren).
   ///

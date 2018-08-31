@@ -52,12 +52,19 @@ String startSlashCommandTemplate(BodyPartDesignation designation) {
   return "attack <object> >> by slashing >> <objectPronoun's> $designation";
 }
 
-void startSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-        Storyline s, Actor enemy, Situation mainSituation) =>
-    a.report(s, "<subject> swing<s> {${weaponAsObject2(a)} |}at <object>",
-        object: enemy,
-        actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+/// Creates the [StartDefensibleAction.applyStart] function for given
+/// [designation].
+PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
+    (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
+            Situation mainSituation) =>
+        a.report(
+            s,
+            "<subject> swing<s> {${weaponAsObject2(a)} |}at "
+            "<objectOwner's> <object>",
+            object: Entity(name: designation.name),
+            objectOwner: enemy,
+            actionThread: mainSituation.id,
+            isSupportiveActionInThread: true);
 
 /// Higher order function that generates an [ActionBuilder] depending on
 /// the provided [BodyPartDesignation].
@@ -67,7 +74,7 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     name: "StartSlashAt$designation",
     commandTemplate: startSlashCommandTemplate(designation),
     helpMessage: startSlashHelpMessage,
-    applyStart: startSlashReportStart,
+    applyStart: startSlashReportStart(designation),
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
