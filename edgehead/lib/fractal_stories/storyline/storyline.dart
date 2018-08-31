@@ -167,8 +167,7 @@ class Storyline {
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
   static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
-  static const String OBJECT_OWNER_PRONOUN_POSSESIVE =
-      "<objectOwnerPronoun's>";
+  static const String OBJECT_OWNER_PRONOUN_POSSESIVE = "<objectOwnerPronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
   static const String VERB_ES = "<es>";
