@@ -82,6 +82,12 @@ double _fractionDisabled(Actor actor, BodyPartFunction function) {
   return disabled / total;
 }
 
+/// Given the current state of [performer] and [target], to what degree
+/// is [reason] applicable as a bonus.
+///
+/// For example, if both actors have the same dexterity, then this function
+/// returns `0.0` for [CombatReason.dexterity]. When the [performer] is more
+/// than `100` points of dexterity better, it will return `1.0`.
 double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
   switch (reason) {
     case CombatReason.dexterity:
