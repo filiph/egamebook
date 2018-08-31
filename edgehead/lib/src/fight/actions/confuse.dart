@@ -30,7 +30,7 @@ class Confuse extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "confuse <object>";
+  String get commandTemplate => "attack <object> >> by confusing <object>";
 
   @override
   String get name => className;

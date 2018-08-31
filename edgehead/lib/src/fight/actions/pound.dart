@@ -40,7 +40,8 @@ class Pound extends EnemyTargetAction {
       "give members of your party an opportunity to strike.";
 
   @override
-  String get commandTemplate => "force <object> off balance";
+  String get commandTemplate =>
+      "attack <object> >> by forcing <object> off balance";
 
   @override
   String get name => className;

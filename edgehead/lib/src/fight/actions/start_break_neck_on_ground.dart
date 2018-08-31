@@ -10,7 +10,8 @@ import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 
-const String startBreakNeckOnGroundCommandTemplate = "break <object's> neck";
+const String startBreakNeckOnGroundCommandTemplate =
+    "attack <object> >> by breaking <object's> neck";
 
 const String startBreakNeckOnGroundHelpMessage =
     "This move is hard, but when succesful, it's decisive.";

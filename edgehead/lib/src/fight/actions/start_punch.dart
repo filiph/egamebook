@@ -9,7 +9,8 @@ import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/punch_defense_situation.dart';
 import 'package:edgehead/src/fight/punch/punch_situation.dart';
 
-const String startPunchCommandTemplate = "punch <object>";
+const String startPunchCommandTemplate =
+    "attack <object> >> by punching <object>";
 
 const String startPunchHelpMessage =
     "Punching someone hard enough can cause them to lose their footing. "
