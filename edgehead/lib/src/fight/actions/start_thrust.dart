@@ -11,10 +11,6 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
-String startThrustCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by thrusting at >> <objectPronoun's> $designation";
-}
-
 const String startThrustHelpMessage = "The basic move with a pointy weapon.";
 
 /// There are several ways to defend against a thrust. But, for simplicity,
@@ -45,7 +41,7 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
     name: "StartThrust",
     commandTemplate: startThrustCommandTemplate(designation),
     helpMessage: startThrustHelpMessage,
-    applyStart: startThrustReportStart,
+    applyStart: startThrustReportStart(designation),
     isApplicable: (a, sim, w, enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
@@ -62,9 +58,18 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
   );
 }
 
-void startThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-        Storyline s, Actor enemy, Situation mainSituation) =>
-    a.report(s, "<subject> thrust<s> {${weaponAsObject2(a)} |}at <object>",
-        object: enemy,
-        actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+String startThrustCommandTemplate(BodyPartDesignation designation) {
+  return "attack <object> >> by thrusting at >> <objectPronoun's> $designation";
+}
+
+PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
+    (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
+            Situation mainSituation) =>
+        a.report(
+            s,
+            "<subject> thrust<s> {${weaponAsObject2(a)} |}at "
+            "<objectOwner's> <object>",
+            object: Entity(name: designation.name),
+            objectOwner: enemy,
+            actionThread: mainSituation.id,
+            isSupportiveActionInThread: true);
