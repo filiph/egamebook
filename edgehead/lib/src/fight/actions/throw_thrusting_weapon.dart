@@ -136,7 +136,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
       killHumanoid(context, updatedEnemy);
     }
 
-    sword.report(s, "<subject> fall<s> on the ground");
+    sword.report(s, "<subject> fall<s> to the ground");
     _moveSwordToGround(w, a, sword);
     return "${a.name} hits ${enemy.name} with sword";
   }

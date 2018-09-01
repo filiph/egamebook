@@ -266,7 +266,7 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final aguthsSword = Item.weapon(89892130, WeaponType.sword);
   final playersSword = Item.weapon(89892131, WeaponType.sword);
-  // TODO: add dagger to player's inventory
+  // TODO: add dagger to player's inventory (instead of on ground)
   final agruth = _generateAgruth();
   final equippedAgruth =
       agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
@@ -280,6 +280,7 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
     "{rock|cavern} floor",
     roomRoamingSituation,
     {},
+    items: [Item.weapon(89892140, WeaponType.dagger)],
   );
 }
 
@@ -287,11 +288,11 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
 FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final playersSword = Item.weapon(89892133, WeaponType.sword);
-  // TODO: add dagger to player's inventory
+  // TODO: add dagger to player's inventory (instead of on ground)
   final goblin = _makeGoblin(w, spear: true);
   w.actors.add(goblin);
   w.updateActorById(playerId,
-          (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
+      (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -299,6 +300,7 @@ FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
     "{rock|cavern} floor",
     roomRoamingSituation,
     {},
+    items: [Item.weapon(89892141, WeaponType.dagger)],
   );
 }
 

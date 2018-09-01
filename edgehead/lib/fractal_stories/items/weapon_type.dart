@@ -21,6 +21,7 @@ class WeaponType extends EnumClass {
   static const WeaponType fist = _$fist;
   static const WeaponType spear = _$spear;
   static const WeaponType sword = _$sword;
+  static const WeaponType dagger = _$dagger;
   static const WeaponType shield = _$shield;
 
   static Serializer<WeaponType> get serializer => _$weaponTypeSerializer;
@@ -58,6 +59,7 @@ class WeaponType extends EnumClass {
 
   int get defaultLength {
     if (this == none) return 0;
+    if (this == dagger) return 1;
     // TODO: implement lengths
     return 2;
   }
@@ -76,6 +78,8 @@ class WeaponType extends EnumClass {
       case sword:
         return 1;
       case spear:
+        return 1;
+      case dagger:
         return 1;
       default:
         return 0;

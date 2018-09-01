@@ -2324,7 +2324,7 @@ final Room testFightOrc = new Room('test_fight_orc', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n',
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
 Approach testFightOrcFromPreStartBook = new Approach(
@@ -2355,7 +2355,7 @@ final Room testFightGoblin = new Room('test_fight_goblin', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n',
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
 Approach testFightGoblinFromPreStartBook = new Approach(
