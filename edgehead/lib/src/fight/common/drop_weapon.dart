@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-/// Removes the current weapon from [enemy] and puts it among
+/// Removes the current weapon from [actor] and puts it among
 /// the [FightSituation.droppedItems]. The weapon is also returned
 /// as the result of this function.
 ///
@@ -13,15 +13,19 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 ///
 /// If this method is called when there is no [FightSituation]
 /// in the current [WorldState.situations] stack, it will throw.
-Item dropCurrentWeapon(WorldStateBuilder w, Actor enemy) {
+Item dropCurrentWeapon(WorldStateBuilder w, Actor actor) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
-  final weapon = enemy.currentWeapon;
+  final weapon = actor.currentWeapon;
   w.replaceSituationById(
       situation.id,
       situation
           .rebuild((FightSituationBuilder b) => b..droppedItems.add(weapon)));
-  w.updateActorById(enemy.id, (b) => b..inventory.goBarehanded(enemy.anatomy));
-  w.recordCustom(disarmedCustomEventName, actor: enemy);
+  w.updateActorById(
+      actor.id,
+      (b) => b.inventory
+        ..remove(weapon)
+        ..goBarehanded(actor.anatomy));
+  w.recordCustom(disarmedCustomEventName, actor: actor);
   return weapon;
 }

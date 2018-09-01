@@ -173,7 +173,8 @@ abstract class InventoryBuilder
     currentShield = shield;
   }
 
-  /// Makes the actor go barehanded.
+  /// Makes the actor go barehanded. Does not remove [currentWeapon]
+  /// from actor's inventory (use [remove] for that).
   ///
   /// This is useful for times when the actor forcefully loses [currentWeapon]
   /// and doesn't have time to [equipBestAvailable].
