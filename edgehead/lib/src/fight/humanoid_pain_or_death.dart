@@ -66,7 +66,7 @@ void reportPain(ActionContext context, Actor actor, int damage) {
   final s = context.outputStoryline;
   context.pubSub.publishActorLostHitpoints(
       ActorLostHitpointsEvent(context, actor, damage));
-  if (actor.id == brianaId && actor.hitpoints == 0) {
+  if (actor.id == brianaId && !actor.isAlive) {
     _reportPainBriana(context, actor);
     return;
   }
