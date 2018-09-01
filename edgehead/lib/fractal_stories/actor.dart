@@ -78,6 +78,7 @@ abstract class Actor extends Object
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
       ..inventory = (InventoryBuilder()
         ..currentWeapon = weapon
+        ..weapons.addAll(currentWeapon != null ? [currentWeapon] : const [])
         ..currentShield = currentShield
         ..weaponInPrimaryAppendage = true)
       ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
