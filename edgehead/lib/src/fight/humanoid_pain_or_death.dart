@@ -71,9 +71,9 @@ void reportPain(ActionContext context, Actor actor, int damage) {
     return;
   }
   assert(
-      actor.hitpoints > 0,
+      actor.isAlive,
       "All actors except Briana should call killHumanoid (not reportPain) "
-      "when they lose all hitpoints.");
+      "when they lose all hitpoints. This actor didn't: $actor");
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
 }
 
