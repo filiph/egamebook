@@ -184,9 +184,20 @@ Run all the tests, including the long-running ones, using this command:
 The `--checked` flag tells Dart to run assertions and generally be more 
 fail-fast. It also makes the code run a few percent slower.
 
+#### Overnight fuzzy-test
+
+If you're feeling especially paranoid (e.g. before a production release), 
+you can run the fuzzy test in an infinite loop with the following Unix command:
+
+```bash
+while pub run test --run-skipped; do :; done
+```
+
+The command will run forever unless a test fails or until you press `Ctrl-C`.
+
 ### Playing on the command line
 
-**Note:** As of March 2018, this is the only way to play the game. I have 
+**Note:** As of August 2018, this is the only way to play the game. I have 
 temporarily dropped all UI work while I focus on mechanics, authorship
 tools, etc.
 
@@ -199,7 +210,7 @@ following command to also log progress and catch more bugs through checked mode:
 
 The log is in `edgehead.log`.
 
-Use up and down arrow to choose options, enter to select.
+Use up and down arrows to choose options, enter to select.
 
 ### Building new actions
 
