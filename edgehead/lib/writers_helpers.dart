@@ -164,11 +164,11 @@ void executeSpearThrowAtOgre(ActionContext c) {
         (b) => b
           ..inventory.remove(player.inventory.currentWeapon)
           ..inventory.equipBestAvailable(player.anatomy));
+  } else {
+    // Remove the spear.
+    c.outputWorld.updateActorById(
+        player.id, (b) => b.inventory.remove(inventorySpears.first));
   }
-
-  // Remove the spear.
-  c.outputWorld.updateActorById(
-      player.id, (b) => b.inventory.remove(inventorySpears.first));
 
   movePlayer(c, "war_forge", silent: true);
 }
