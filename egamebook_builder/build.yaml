@@ -1,20 +1,5 @@
 # Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
 builders:
-  gather_builder:
-    import: "package:egamebook_builder/gather_builder.dart"
-    builder_factories: ["gatherBuilder"]
-    build_extensions: {"_gather.dart": [".gathered.dart"]}
-    build_to: source
-    auto_apply: dependents
-    required_inputs:
-      # Makes sure that built_value generation has already been performed
-      # by the time this builder runs. Otherwise, the `*_gather.dart` source
-      # can fail to statically analyze, and no instances will be gathered.
-      - '.g.dart'
-    defaults:
-      generate_for:
-        - '**/*_gather.dart'
-
   writers_builder:
     import: "package:egamebook_builder/writers_builder.dart"
     builder_factories: ["writersBuilder"]
@@ -22,4 +7,22 @@ builders:
     build_to: source
     auto_apply: none
     runs_before:
+      # Makes sure that writer's text input is compiled to Dart source file
+      # _before_ the `built_value` generator runs, so it can generate
+      # Built values for writer-generated classes.
       - 'built_value_generator|built_value'
+
+  gather_builder:
+    import: "package:egamebook_builder/gather_builder.dart"
+    builder_factories: ["gatherBuilder"]
+    build_extensions: {"_gather.dart": [".gathered.dart"]}
+    build_to: source
+    auto_apply: dependents
+    required_inputs:
+      # Makes sure that `built_value` generation has already been performed
+      # by the time this builder runs. Otherwise, the `*_gather.dart` source
+      # can fail to statically analyze, and no instances will be gathered.
+      - '.g.dart'
+    defaults:
+      generate_for:
+        - '**/*_gather.dart'
