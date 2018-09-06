@@ -17,6 +17,7 @@ part of 'inventory.dart';
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Inventory> _$inventorySerializer = new _$InventorySerializer();
 
@@ -132,16 +133,22 @@ class _$Inventory extends Inventory {
       this.weaponInPrimaryAppendage,
       this.weapons})
       : super._() {
-    if (currentWeapon == null)
+    if (currentWeapon == null) {
       throw new BuiltValueNullFieldError('Inventory', 'currentWeapon');
-    if (items == null) throw new BuiltValueNullFieldError('Inventory', 'items');
-    if (shields == null)
+    }
+    if (items == null) {
+      throw new BuiltValueNullFieldError('Inventory', 'items');
+    }
+    if (shields == null) {
       throw new BuiltValueNullFieldError('Inventory', 'shields');
-    if (weaponInPrimaryAppendage == null)
+    }
+    if (weaponInPrimaryAppendage == null) {
       throw new BuiltValueNullFieldError(
           'Inventory', 'weaponInPrimaryAppendage');
-    if (weapons == null)
+    }
+    if (weapons == null) {
       throw new BuiltValueNullFieldError('Inventory', 'weapons');
+    }
   }
 
   @override
@@ -280,7 +287,9 @@ class _$InventoryBuilder extends InventoryBuilder {
 
   @override
   void replace(Inventory other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Inventory;
   }
 

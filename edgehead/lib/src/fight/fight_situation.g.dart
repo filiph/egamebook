@@ -17,6 +17,7 @@ part of stranded.fight.fight_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<FightSituation> _$fightSituationSerializer =
     new _$FightSituationSerializer();
@@ -153,22 +154,31 @@ class _$FightSituation extends FightSituation {
       this.roomRoamingSituationId,
       this.time})
       : super._() {
-    if (droppedItems == null)
+    if (droppedItems == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'droppedItems');
-    if (enemyTeamIds == null)
+    }
+    if (enemyTeamIds == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'enemyTeamIds');
-    if (events == null)
+    }
+    if (events == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'events');
-    if (groundMaterial == null)
+    }
+    if (groundMaterial == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'groundMaterial');
-    if (id == null) throw new BuiltValueNullFieldError('FightSituation', 'id');
-    if (playerTeamIds == null)
+    }
+    if (id == null) {
+      throw new BuiltValueNullFieldError('FightSituation', 'id');
+    }
+    if (playerTeamIds == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'playerTeamIds');
-    if (roomRoamingSituationId == null)
+    }
+    if (roomRoamingSituationId == null) {
       throw new BuiltValueNullFieldError(
           'FightSituation', 'roomRoamingSituationId');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'time');
+    }
   }
 
   @override
@@ -290,7 +300,9 @@ class FightSituationBuilder
 
   @override
   void replace(FightSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$FightSituation;
   }
 

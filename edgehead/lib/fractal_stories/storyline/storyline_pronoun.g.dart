@@ -17,6 +17,7 @@ part of storyline.pronoun;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Pronoun> _$pronounSerializer = new _$PronounSerializer();
 
@@ -95,13 +96,18 @@ class _$Pronoun extends Pronoun {
 
   _$Pronoun._({this.accusative, this.genitive, this.nominative, this.self})
       : super._() {
-    if (accusative == null)
+    if (accusative == null) {
       throw new BuiltValueNullFieldError('Pronoun', 'accusative');
-    if (genitive == null)
+    }
+    if (genitive == null) {
       throw new BuiltValueNullFieldError('Pronoun', 'genitive');
-    if (nominative == null)
+    }
+    if (nominative == null) {
       throw new BuiltValueNullFieldError('Pronoun', 'nominative');
-    if (self == null) throw new BuiltValueNullFieldError('Pronoun', 'self');
+    }
+    if (self == null) {
+      throw new BuiltValueNullFieldError('Pronoun', 'self');
+    }
   }
 
   @override
@@ -164,7 +170,9 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
 
   @override
   void replace(Pronoun other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Pronoun;
   }
 

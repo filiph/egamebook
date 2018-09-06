@@ -17,6 +17,7 @@ part of stranded.team;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Team> _$teamSerializer = new _$TeamSerializer();
 
@@ -67,7 +68,9 @@ class _$Team extends Team {
       (new TeamBuilder()..update(updates)).build();
 
   _$Team._({this.id}) : super._() {
-    if (id == null) throw new BuiltValueNullFieldError('Team', 'id');
+    if (id == null) {
+      throw new BuiltValueNullFieldError('Team', 'id');
+    }
   }
 
   @override
@@ -113,7 +116,9 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
 
   @override
   void replace(Team other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Team;
   }
 

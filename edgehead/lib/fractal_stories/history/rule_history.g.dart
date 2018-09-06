@@ -17,6 +17,7 @@ part of stranded.history.rule;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<RuleHistory> _$ruleHistorySerializer = new _$RuleHistorySerializer();
 Serializer<RuleRecord> _$ruleRecordSerializer = new _$RuleRecordSerializer();
@@ -119,8 +120,9 @@ class _$RuleHistory extends RuleHistory {
       (new RuleHistoryBuilder()..update(updates)).build();
 
   _$RuleHistory._({this.records}) : super._() {
-    if (records == null)
+    if (records == null) {
       throw new BuiltValueNullFieldError('RuleHistory', 'records');
+    }
   }
 
   @override
@@ -168,7 +170,9 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
 
   @override
   void replace(RuleHistory other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$RuleHistory;
   }
 
@@ -208,9 +212,12 @@ class _$RuleRecord extends RuleRecord {
       (new RuleRecordBuilder()..update(updates)).build();
 
   _$RuleRecord._({this.ruleId, this.time}) : super._() {
-    if (ruleId == null)
+    if (ruleId == null) {
       throw new BuiltValueNullFieldError('RuleRecord', 'ruleId');
-    if (time == null) throw new BuiltValueNullFieldError('RuleRecord', 'time');
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('RuleRecord', 'time');
+    }
   }
 
   @override
@@ -264,7 +271,9 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
 
   @override
   void replace(RuleRecord other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$RuleRecord;
   }
 

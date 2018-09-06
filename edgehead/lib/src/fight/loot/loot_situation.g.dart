@@ -17,6 +17,7 @@ part of stranded.fight.loot_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<LootSituation> _$lootSituationSerializer =
     new _$LootSituationSerializer();
@@ -115,15 +116,21 @@ class _$LootSituation extends LootSituation {
       this.id,
       this.time})
       : super._() {
-    if (droppedItems == null)
+    if (droppedItems == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'droppedItems');
-    if (groundMaterial == null)
+    }
+    if (groundMaterial == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'groundMaterial');
-    if (playerTeamIds == null)
+    }
+    if (playerTeamIds == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'playerTeamIds');
-    if (id == null) throw new BuiltValueNullFieldError('LootSituation', 'id');
-    if (time == null)
+    }
+    if (id == null) {
+      throw new BuiltValueNullFieldError('LootSituation', 'id');
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'time');
+    }
   }
 
   @override
@@ -211,7 +218,9 @@ class LootSituationBuilder
 
   @override
   void replace(LootSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$LootSituation;
   }
 

@@ -17,6 +17,7 @@ part of egamebook.element.win;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<WinGame> _$winGameSerializer = new _$WinGameSerializer();
 
@@ -68,8 +69,9 @@ class _$WinGame extends WinGame {
       (new WinGameBuilder()..update(updates)).build();
 
   _$WinGame._({this.markdownText}) : super._() {
-    if (markdownText == null)
+    if (markdownText == null) {
       throw new BuiltValueNullFieldError('WinGame', 'markdownText');
+    }
   }
 
   @override
@@ -117,7 +119,9 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
 
   @override
   void replace(WinGame other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$WinGame;
   }
 

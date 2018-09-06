@@ -17,6 +17,7 @@ part of 'writers_input.compiled.dart';
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
     _$guardpostAboveChurchTakeShieldRescueSituationSerializer =
@@ -90,12 +91,14 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
 
   _$GuardpostAboveChurchTakeShieldRescueSituation._({this.id, this.time})
       : super._() {
-    if (id == null)
+    if (id == null) {
       throw new BuiltValueNullFieldError(
           'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError(
           'GuardpostAboveChurchTakeShieldRescueSituation', 'time');
+    }
   }
 
   @override
@@ -158,7 +161,9 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
 
   @override
   void replace(GuardpostAboveChurchTakeShieldRescueSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$GuardpostAboveChurchTakeShieldRescueSituation;
   }
 

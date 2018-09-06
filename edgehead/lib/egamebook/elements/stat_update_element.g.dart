@@ -17,6 +17,7 @@ part of egamebook.element.stat_update;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<StatUpdate> _$statUpdateSerializer = new _$StatUpdateSerializer();
 
@@ -89,11 +90,15 @@ class _$StatUpdate<T> extends StatUpdate<T> {
       (new StatUpdateBuilder<T>()..update(updates)).build();
 
   _$StatUpdate._({this.name, this.newValue}) : super._() {
-    if (name == null) throw new BuiltValueNullFieldError('StatUpdate', 'name');
-    if (newValue == null)
+    if (name == null) {
+      throw new BuiltValueNullFieldError('StatUpdate', 'name');
+    }
+    if (newValue == null) {
       throw new BuiltValueNullFieldError('StatUpdate', 'newValue');
-    if (T == dynamic)
+    }
+    if (T == dynamic) {
       throw new BuiltValueMissingGenericsError('StatUpdate', 'T');
+    }
   }
 
   @override
@@ -150,7 +155,9 @@ class StatUpdateBuilder<T>
 
   @override
   void replace(StatUpdate<T> other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$StatUpdate<T>;
   }
 

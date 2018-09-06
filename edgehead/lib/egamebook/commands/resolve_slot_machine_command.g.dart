@@ -17,6 +17,7 @@ part of egamebook.command.resolve_slot_machine;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<ResolveSlotMachine> _$resolveSlotMachineSerializer =
     new _$ResolveSlotMachineSerializer();
@@ -79,10 +80,12 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
       (new ResolveSlotMachineBuilder()..update(updates)).build();
 
   _$ResolveSlotMachine._({this.result, this.wasRerolled}) : super._() {
-    if (result == null)
+    if (result == null) {
       throw new BuiltValueNullFieldError('ResolveSlotMachine', 'result');
-    if (wasRerolled == null)
+    }
+    if (wasRerolled == null) {
       throw new BuiltValueNullFieldError('ResolveSlotMachine', 'wasRerolled');
+    }
   }
 
   @override
@@ -140,7 +143,9 @@ class ResolveSlotMachineBuilder
 
   @override
   void replace(ResolveSlotMachine other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$ResolveSlotMachine;
   }
 

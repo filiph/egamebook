@@ -17,6 +17,7 @@ part of egamebook.element.save;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<SaveGame> _$saveGameSerializer = new _$SaveGameSerializer();
 
@@ -68,8 +69,9 @@ class _$SaveGame extends SaveGame {
       (new SaveGameBuilder()..update(updates)).build();
 
   _$SaveGame._({this.saveGameSerialized}) : super._() {
-    if (saveGameSerialized == null)
+    if (saveGameSerialized == null) {
       throw new BuiltValueNullFieldError('SaveGame', 'saveGameSerialized');
+    }
   }
 
   @override
@@ -118,7 +120,9 @@ class SaveGameBuilder implements Builder<SaveGame, SaveGameBuilder> {
 
   @override
   void replace(SaveGame other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$SaveGame;
   }
 

@@ -17,6 +17,7 @@ part of egamebook.element.log;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<LogElement> _$logElementSerializer = new _$LogElementSerializer();
 
@@ -77,10 +78,12 @@ class _$LogElement extends LogElement {
       (new LogElementBuilder()..update(updates)).build();
 
   _$LogElement._({this.level, this.message}) : super._() {
-    if (level == null)
+    if (level == null) {
       throw new BuiltValueNullFieldError('LogElement', 'level');
-    if (message == null)
+    }
+    if (message == null) {
       throw new BuiltValueNullFieldError('LogElement', 'message');
+    }
   }
 
   @override
@@ -136,7 +139,9 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
 
   @override
   void replace(LogElement other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$LogElement;
   }
 

@@ -17,6 +17,7 @@ part of stranded.item;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Item> _$itemSerializer = new _$ItemSerializer();
 
@@ -98,10 +99,15 @@ class _$Item extends Item {
 
   _$Item._({this.damageCapability, this.id, this.name, this.nameIsProperNoun})
       : super._() {
-    if (id == null) throw new BuiltValueNullFieldError('Item', 'id');
-    if (name == null) throw new BuiltValueNullFieldError('Item', 'name');
-    if (nameIsProperNoun == null)
+    if (id == null) {
+      throw new BuiltValueNullFieldError('Item', 'id');
+    }
+    if (name == null) {
+      throw new BuiltValueNullFieldError('Item', 'name');
+    }
+    if (nameIsProperNoun == null) {
       throw new BuiltValueNullFieldError('Item', 'nameIsProperNoun');
+    }
   }
 
   @override
@@ -176,7 +182,9 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
 
   @override
   void replace(Item other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Item;
   }
 

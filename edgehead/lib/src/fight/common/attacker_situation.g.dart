@@ -17,6 +17,7 @@ part of stranded.fight.attacker_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 const AttackDirection _$fromLeft = const AttackDirection._('fromLeft');
 const AttackDirection _$fromRight = const AttackDirection._('fromRight');
@@ -227,25 +228,33 @@ class _$AttackerSituation extends AttackerSituation {
       this.target,
       this.time})
       : super._() {
-    if (attackDirection == null)
+    if (attackDirection == null) {
       throw new BuiltValueNullFieldError(
           'AttackerSituation', 'attackDirection');
-    if (attacker == null)
+    }
+    if (attacker == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'attacker');
-    if (builtEnemyTargetActionGenerators == null)
+    }
+    if (builtEnemyTargetActionGenerators == null) {
       throw new BuiltValueNullFieldError(
           'AttackerSituation', 'builtEnemyTargetActionGenerators');
-    if (builtOtherActorActionGenerators == null)
+    }
+    if (builtOtherActorActionGenerators == null) {
       throw new BuiltValueNullFieldError(
           'AttackerSituation', 'builtOtherActorActionGenerators');
-    if (id == null)
+    }
+    if (id == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'id');
-    if (name == null)
+    }
+    if (name == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'name');
-    if (target == null)
+    }
+    if (target == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'target');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'time');
+    }
   }
 
   @override
@@ -374,7 +383,9 @@ class AttackerSituationBuilder
 
   @override
   void replace(AttackerSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$AttackerSituation;
   }
 

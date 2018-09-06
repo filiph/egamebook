@@ -17,6 +17,7 @@ part of fractal_stories.items.weapon;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<DamageCapability> _$damageCapabilitySerializer =
     new _$DamageCapabilitySerializer();
@@ -111,16 +112,21 @@ class _$DamageCapability extends DamageCapability {
       this.thrustingDamage,
       this.type})
       : super._() {
-    if (bluntDamage == null)
+    if (bluntDamage == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'bluntDamage');
-    if (length == null)
+    }
+    if (length == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'length');
-    if (slashingDamage == null)
+    }
+    if (slashingDamage == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'slashingDamage');
-    if (thrustingDamage == null)
+    }
+    if (thrustingDamage == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'thrustingDamage');
-    if (type == null)
+    }
+    if (type == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'type');
+    }
   }
 
   @override
@@ -206,7 +212,9 @@ class DamageCapabilityBuilder
 
   @override
   void replace(DamageCapability other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$DamageCapability;
   }
 

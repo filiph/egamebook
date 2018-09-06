@@ -17,6 +17,7 @@ part of stranded.world_state;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<WorldState> _$worldStateSerializer = new _$WorldStateSerializer();
 
@@ -156,23 +157,33 @@ class _$WorldState extends WorldState {
       this.time,
       this.visitHistory})
       : super._() {
-    if (actionHistory == null)
+    if (actionHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'actionHistory');
-    if (actors == null)
+    }
+    if (actors == null) {
       throw new BuiltValueNullFieldError('WorldState', 'actors');
-    if (customHistory == null)
+    }
+    if (customHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'customHistory');
-    if (global == null)
+    }
+    if (global == null) {
       throw new BuiltValueNullFieldError('WorldState', 'global');
-    if (ruleHistory == null)
+    }
+    if (ruleHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'ruleHistory');
-    if (situations == null)
+    }
+    if (situations == null) {
       throw new BuiltValueNullFieldError('WorldState', 'situations');
-    if (statefulRandomState == null)
+    }
+    if (statefulRandomState == null) {
       throw new BuiltValueNullFieldError('WorldState', 'statefulRandomState');
-    if (time == null) throw new BuiltValueNullFieldError('WorldState', 'time');
-    if (visitHistory == null)
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('WorldState', 'time');
+    }
+    if (visitHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'visitHistory');
+    }
   }
 
   @override
@@ -349,7 +360,9 @@ class _$WorldStateBuilder extends WorldStateBuilder {
 
   @override
   void replace(WorldState other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$WorldState;
   }
 

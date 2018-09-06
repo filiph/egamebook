@@ -17,6 +17,7 @@ part of egamebook.element.lose;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<LoseGame> _$loseGameSerializer = new _$LoseGameSerializer();
 
@@ -68,8 +69,9 @@ class _$LoseGame extends LoseGame {
       (new LoseGameBuilder()..update(updates)).build();
 
   _$LoseGame._({this.markdownText}) : super._() {
-    if (markdownText == null)
+    if (markdownText == null) {
       throw new BuiltValueNullFieldError('LoseGame', 'markdownText');
+    }
   }
 
   @override
@@ -117,7 +119,9 @@ class LoseGameBuilder implements Builder<LoseGame, LoseGameBuilder> {
 
   @override
   void replace(LoseGame other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$LoseGame;
   }
 

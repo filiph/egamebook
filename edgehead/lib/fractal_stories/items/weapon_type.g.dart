@@ -17,6 +17,7 @@ part of fractal_stories.items.weapon_type;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 const WeaponType _$none = const WeaponType._('none');
 const WeaponType _$claw = const WeaponType._('claw');

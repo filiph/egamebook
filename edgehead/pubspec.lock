@@ -91,7 +91,7 @@ packages:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.1"
+    version: "6.1.2"
   charcode:
     dependency: transitive
     description:

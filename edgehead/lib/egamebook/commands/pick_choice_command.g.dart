@@ -17,6 +17,7 @@ part of egamebook.command.pick_choice;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<PickChoice> _$pickChoiceSerializer = new _$PickChoiceSerializer();
 
@@ -68,8 +69,9 @@ class _$PickChoice extends PickChoice {
       (new PickChoiceBuilder()..update(updates)).build();
 
   _$PickChoice._({this.choice}) : super._() {
-    if (choice == null)
+    if (choice == null) {
       throw new BuiltValueNullFieldError('PickChoice', 'choice');
+    }
   }
 
   @override
@@ -116,7 +118,9 @@ class PickChoiceBuilder implements Builder<PickChoice, PickChoiceBuilder> {
 
   @override
   void replace(PickChoice other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$PickChoice;
   }
 

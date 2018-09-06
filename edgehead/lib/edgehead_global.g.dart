@@ -17,6 +17,7 @@ part of edgehead_global;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<EdgeheadGlobalState> _$edgeheadGlobalStateSerializer =
     new _$EdgeheadGlobalStateSerializer();
@@ -83,7 +84,9 @@ class EdgeheadGlobalStateBuilder
 
   @override
   void replace(EdgeheadGlobalState other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$EdgeheadGlobalState;
   }
 

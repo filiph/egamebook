@@ -17,6 +17,7 @@ part of stranded.fight.off_balance_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<OffBalanceOpportunitySituation>
     _$offBalanceOpportunitySituationSerializer =
@@ -106,15 +107,18 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   _$OffBalanceOpportunitySituation._(
       {this.actorId, this.culpritId, this.id, this.time})
       : super._() {
-    if (actorId == null)
+    if (actorId == null) {
       throw new BuiltValueNullFieldError(
           'OffBalanceOpportunitySituation', 'actorId');
-    if (id == null)
+    }
+    if (id == null) {
       throw new BuiltValueNullFieldError(
           'OffBalanceOpportunitySituation', 'id');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError(
           'OffBalanceOpportunitySituation', 'time');
+    }
   }
 
   @override
@@ -191,7 +195,9 @@ class OffBalanceOpportunitySituationBuilder
 
   @override
   void replace(OffBalanceOpportunitySituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$OffBalanceOpportunitySituation;
   }
 

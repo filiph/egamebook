@@ -17,6 +17,7 @@ part of egamebook.element.choice;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Choice> _$choiceSerializer = new _$ChoiceSerializer();
 
@@ -90,10 +91,12 @@ class _$Choice extends Choice {
 
   _$Choice._({this.helpMessage, this.isImplicit, this.markdownText})
       : super._() {
-    if (isImplicit == null)
+    if (isImplicit == null) {
       throw new BuiltValueNullFieldError('Choice', 'isImplicit');
-    if (markdownText == null)
+    }
+    if (markdownText == null) {
       throw new BuiltValueNullFieldError('Choice', 'markdownText');
+    }
   }
 
   @override
@@ -157,7 +160,9 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
 
   @override
   void replace(Choice other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Choice;
   }
 

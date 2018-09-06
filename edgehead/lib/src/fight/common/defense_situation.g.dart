@@ -17,6 +17,7 @@ part of stranded.fight.defense_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<DefenseSituation> _$defenseSituationSerializer =
     new _$DefenseSituationSerializer();
@@ -147,25 +148,33 @@ class _$DefenseSituation extends DefenseSituation {
       this.target,
       this.time})
       : super._() {
-    if (attacker == null)
+    if (attacker == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'attacker');
-    if (builtEnemyTargetActionGenerators == null)
+    }
+    if (builtEnemyTargetActionGenerators == null) {
       throw new BuiltValueNullFieldError(
           'DefenseSituation', 'builtEnemyTargetActionGenerators');
-    if (builtOtherActorActionGenerators == null)
+    }
+    if (builtOtherActorActionGenerators == null) {
       throw new BuiltValueNullFieldError(
           'DefenseSituation', 'builtOtherActorActionGenerators');
-    if (id == null)
+    }
+    if (id == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'id');
-    if (name == null)
+    }
+    if (name == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'name');
-    if (predeterminedResult == null)
+    }
+    if (predeterminedResult == null) {
       throw new BuiltValueNullFieldError(
           'DefenseSituation', 'predeterminedResult');
-    if (target == null)
+    }
+    if (target == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'target');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'time');
+    }
   }
 
   @override
@@ -294,7 +303,9 @@ class DefenseSituationBuilder
 
   @override
   void replace(DefenseSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$DefenseSituation;
   }
 

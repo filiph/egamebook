@@ -17,6 +17,7 @@ part of egamebook.element.slot_machine;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<SlotMachine> _$slotMachineSerializer = new _$SlotMachineSerializer();
 
@@ -103,12 +104,15 @@ class _$SlotMachine extends SlotMachine {
       this.rerollEffectDescription,
       this.rollReason})
       : super._() {
-    if (probability == null)
+    if (probability == null) {
       throw new BuiltValueNullFieldError('SlotMachine', 'probability');
-    if (rerollable == null)
+    }
+    if (rerollable == null) {
       throw new BuiltValueNullFieldError('SlotMachine', 'rerollable');
-    if (rollReason == null)
+    }
+    if (rollReason == null) {
       throw new BuiltValueNullFieldError('SlotMachine', 'rollReason');
+    }
   }
 
   @override
@@ -182,7 +186,9 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
 
   @override
   void replace(SlotMachine other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$SlotMachine;
   }
 

@@ -17,6 +17,7 @@ part of stranded.room_roaming.room_roaming_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<RoomRoamingSituation> _$roomRoamingSituationSerializer =
     new _$RoomRoamingSituationSerializer();
@@ -101,16 +102,20 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   _$RoomRoamingSituation._(
       {this.currentRoomName, this.id, this.monstersAlive, this.time})
       : super._() {
-    if (currentRoomName == null)
+    if (currentRoomName == null) {
       throw new BuiltValueNullFieldError(
           'RoomRoamingSituation', 'currentRoomName');
-    if (id == null)
+    }
+    if (id == null) {
       throw new BuiltValueNullFieldError('RoomRoamingSituation', 'id');
-    if (monstersAlive == null)
+    }
+    if (monstersAlive == null) {
       throw new BuiltValueNullFieldError(
           'RoomRoamingSituation', 'monstersAlive');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('RoomRoamingSituation', 'time');
+    }
   }
 
   @override
@@ -187,7 +192,9 @@ class RoomRoamingSituationBuilder
 
   @override
   void replace(RoomRoamingSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$RoomRoamingSituation;
   }
 

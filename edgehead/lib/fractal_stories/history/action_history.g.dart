@@ -17,6 +17,7 @@ part of stranded.history.action;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<ActionHistory> _$actionHistorySerializer =
     new _$ActionHistorySerializer();
@@ -210,13 +211,16 @@ class _$ActionHistory extends ActionHistory {
   _$ActionHistory._(
       {this.latestByActorId, this.latestProactiveByActorId, this.records})
       : super._() {
-    if (latestByActorId == null)
+    if (latestByActorId == null) {
       throw new BuiltValueNullFieldError('ActionHistory', 'latestByActorId');
-    if (latestProactiveByActorId == null)
+    }
+    if (latestProactiveByActorId == null) {
       throw new BuiltValueNullFieldError(
           'ActionHistory', 'latestProactiveByActorId');
-    if (records == null)
+    }
+    if (records == null) {
       throw new BuiltValueNullFieldError('ActionHistory', 'records');
+    }
   }
 
   @override
@@ -289,7 +293,9 @@ class ActionHistoryBuilder
 
   @override
   void replace(ActionHistory other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$ActionHistory;
   }
 
@@ -364,24 +370,33 @@ class _$ActionRecord extends ActionRecord {
       this.wasProactive,
       this.wasSuccess})
       : super._() {
-    if (actionName == null)
+    if (actionName == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'actionName');
-    if (description == null)
+    }
+    if (description == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'description');
-    if (protagonist == null)
+    }
+    if (protagonist == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'protagonist');
-    if (sufferers == null)
+    }
+    if (sufferers == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'sufferers');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'time');
-    if (wasAggressive == null)
+    }
+    if (wasAggressive == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'wasAggressive');
-    if (wasFailure == null)
+    }
+    if (wasFailure == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'wasFailure');
-    if (wasProactive == null)
+    }
+    if (wasProactive == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'wasProactive');
-    if (wasSuccess == null)
+    }
+    if (wasSuccess == null) {
       throw new BuiltValueNullFieldError('ActionRecord', 'wasSuccess');
+    }
   }
 
   @override
@@ -496,7 +511,9 @@ class ActionRecordBuilder
 
   @override
   void replace(ActionRecord other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$ActionRecord;
   }
 

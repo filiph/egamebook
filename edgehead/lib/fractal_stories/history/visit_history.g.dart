@@ -17,6 +17,7 @@ part of stranded.history.visit;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<VisitHistory> _$visitHistorySerializer =
     new _$VisitHistorySerializer();
@@ -137,8 +138,9 @@ class _$VisitHistory extends VisitHistory {
       (new VisitHistoryBuilder()..update(updates)).build();
 
   _$VisitHistory._({this.records}) : super._() {
-    if (records == null)
+    if (records == null) {
       throw new BuiltValueNullFieldError('VisitHistory', 'records');
+    }
   }
 
   @override
@@ -189,7 +191,9 @@ class VisitHistoryBuilder
 
   @override
   void replace(VisitHistory other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$VisitHistory;
   }
 
@@ -234,11 +238,15 @@ class _$VisitRecord extends VisitRecord {
 
   _$VisitRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
       : super._() {
-    if (actorId == null)
+    if (actorId == null) {
       throw new BuiltValueNullFieldError('VisitRecord', 'actorId');
-    if (roomName == null)
+    }
+    if (roomName == null) {
       throw new BuiltValueNullFieldError('VisitRecord', 'roomName');
-    if (time == null) throw new BuiltValueNullFieldError('VisitRecord', 'time');
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('VisitRecord', 'time');
+    }
   }
 
   @override
@@ -312,7 +320,9 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
 
   @override
   void replace(VisitRecord other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$VisitRecord;
   }
 

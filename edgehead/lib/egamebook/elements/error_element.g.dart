@@ -17,6 +17,7 @@ part of egamebook.element.error;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<ErrorElement> _$errorElementSerializer =
     new _$ErrorElementSerializer();
@@ -78,10 +79,12 @@ class _$ErrorElement extends ErrorElement {
       (new ErrorElementBuilder()..update(updates)).build();
 
   _$ErrorElement._({this.message, this.stackTrace}) : super._() {
-    if (message == null)
+    if (message == null) {
       throw new BuiltValueNullFieldError('ErrorElement', 'message');
-    if (stackTrace == null)
+    }
+    if (stackTrace == null) {
       throw new BuiltValueNullFieldError('ErrorElement', 'stackTrace');
+    }
   }
 
   @override
@@ -138,7 +141,9 @@ class ErrorElementBuilder
 
   @override
   void replace(ErrorElement other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$ErrorElement;
   }
 

@@ -17,6 +17,7 @@ part of egamebook.element.choice_block;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<ChoiceBlock> _$choiceBlockSerializer = new _$ChoiceBlockSerializer();
 
@@ -80,10 +81,12 @@ class _$ChoiceBlock extends ChoiceBlock {
       (new ChoiceBlockBuilder()..update(updates)).build();
 
   _$ChoiceBlock._({this.saveGame, this.choices}) : super._() {
-    if (saveGame == null)
+    if (saveGame == null) {
       throw new BuiltValueNullFieldError('ChoiceBlock', 'saveGame');
-    if (choices == null)
+    }
+    if (choices == null) {
       throw new BuiltValueNullFieldError('ChoiceBlock', 'choices');
+    }
   }
 
   @override
@@ -140,7 +143,9 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
 
   @override
   void replace(ChoiceBlock other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$ChoiceBlock;
   }
 

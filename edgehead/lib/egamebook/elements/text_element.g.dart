@@ -17,6 +17,7 @@ part of egamebook.element.text;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<TextOutput> _$textOutputSerializer = new _$TextOutputSerializer();
 
@@ -68,8 +69,9 @@ class _$TextOutput extends TextOutput {
       (new TextOutputBuilder()..update(updates)).build();
 
   _$TextOutput._({this.markdownText}) : super._() {
-    if (markdownText == null)
+    if (markdownText == null) {
       throw new BuiltValueNullFieldError('TextOutput', 'markdownText');
+    }
   }
 
   @override
@@ -117,7 +119,9 @@ class TextOutputBuilder implements Builder<TextOutput, TextOutputBuilder> {
 
   @override
   void replace(TextOutput other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$TextOutput;
   }
 

@@ -17,6 +17,7 @@ part of stranded.history.custom_event;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<CustomEvent> _$customEventSerializer = new _$CustomEventSerializer();
 Serializer<CustomEventHistory> _$customEventHistorySerializer =
@@ -147,8 +148,12 @@ class _$CustomEvent extends CustomEvent {
       (new CustomEventBuilder()..update(updates)).build();
 
   _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
-    if (name == null) throw new BuiltValueNullFieldError('CustomEvent', 'name');
-    if (time == null) throw new BuiltValueNullFieldError('CustomEvent', 'time');
+    if (name == null) {
+      throw new BuiltValueNullFieldError('CustomEvent', 'name');
+    }
+    if (time == null) {
+      throw new BuiltValueNullFieldError('CustomEvent', 'time');
+    }
   }
 
   @override
@@ -220,7 +225,9 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
 
   @override
   void replace(CustomEvent other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$CustomEvent;
   }
 
@@ -247,8 +254,9 @@ class _$CustomEventHistory extends CustomEventHistory {
       (new CustomEventHistoryBuilder()..update(updates)).build();
 
   _$CustomEventHistory._({this.records}) : super._() {
-    if (records == null)
+    if (records == null) {
       throw new BuiltValueNullFieldError('CustomEventHistory', 'records');
+    }
   }
 
   @override
@@ -300,7 +308,9 @@ class CustomEventHistoryBuilder
 
   @override
   void replace(CustomEventHistory other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$CustomEventHistory;
   }
 

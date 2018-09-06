@@ -17,6 +17,7 @@ part of stranded.fight.counter_attack_situation;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<CounterAttackSituation> _$counterAttackSituationSerializer =
     new _$CounterAttackSituationSerializer();
@@ -101,15 +102,19 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   _$CounterAttackSituation._(
       {this.counterAttacker, this.id, this.target, this.time})
       : super._() {
-    if (counterAttacker == null)
+    if (counterAttacker == null) {
       throw new BuiltValueNullFieldError(
           'CounterAttackSituation', 'counterAttacker');
-    if (id == null)
+    }
+    if (id == null) {
       throw new BuiltValueNullFieldError('CounterAttackSituation', 'id');
-    if (target == null)
+    }
+    if (target == null) {
       throw new BuiltValueNullFieldError('CounterAttackSituation', 'target');
-    if (time == null)
+    }
+    if (time == null) {
       throw new BuiltValueNullFieldError('CounterAttackSituation', 'time');
+    }
   }
 
   @override
@@ -186,7 +191,9 @@ class CounterAttackSituationBuilder
 
   @override
   void replace(CounterAttackSituation other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$CounterAttackSituation;
   }
 

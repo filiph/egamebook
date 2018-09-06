@@ -17,6 +17,7 @@ part of fractal_stories.anatomy.body_part;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 const BodyPartDesignation _$neck = const BodyPartDesignation._('neck');
 const BodyPartDesignation _$head = const BodyPartDesignation._('head');
@@ -374,36 +375,54 @@ class _$BodyPart extends BodyPart {
       this.swingSurfaceLeft,
       this.swingSurfaceRight})
       : super._() {
-    if (bluntHitsCount == null)
+    if (bluntHitsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'bluntHitsCount');
-    if (children == null)
+    }
+    if (children == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'children');
-    if (designation == null)
+    }
+    if (designation == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'designation');
-    if (function == null)
+    }
+    if (function == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'function');
-    if (hitpoints == null)
+    }
+    if (hitpoints == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'hitpoints');
-    if (id == null) throw new BuiltValueNullFieldError('BodyPart', 'id');
-    if (isActive == null)
+    }
+    if (id == null) {
+      throw new BuiltValueNullFieldError('BodyPart', 'id');
+    }
+    if (isActive == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'isActive');
-    if (isSeverable == null)
+    }
+    if (isSeverable == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'isSeverable');
-    if (isSevered == null)
+    }
+    if (isSevered == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'isSevered');
-    if (isVital == null)
+    }
+    if (isVital == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'isVital');
-    if (majorCutsCount == null)
+    }
+    if (majorCutsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'majorCutsCount');
-    if (minorCutsCount == null)
+    }
+    if (minorCutsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'minorCutsCount');
-    if (name == null) throw new BuiltValueNullFieldError('BodyPart', 'name');
-    if (randomDesignation == null)
+    }
+    if (name == null) {
+      throw new BuiltValueNullFieldError('BodyPart', 'name');
+    }
+    if (randomDesignation == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'randomDesignation');
-    if (swingSurfaceLeft == null)
+    }
+    if (swingSurfaceLeft == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'swingSurfaceLeft');
-    if (swingSurfaceRight == null)
+    }
+    if (swingSurfaceRight == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'swingSurfaceRight');
+    }
   }
 
   @override
@@ -612,7 +631,9 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
 
   @override
   void replace(BodyPart other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$BodyPart;
   }
 

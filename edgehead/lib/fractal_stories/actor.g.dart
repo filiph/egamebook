@@ -17,6 +17,7 @@ part of stranded.actor;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Actor> _$actorSerializer = new _$ActorSerializer();
 
@@ -280,38 +281,66 @@ class _$Actor extends Actor {
       this.stamina,
       this.team})
       : super._() {
-    if (anatomy == null) throw new BuiltValueNullFieldError('Actor', 'anatomy');
-    if (combineFunctionHandle == null)
+    if (anatomy == null) {
+      throw new BuiltValueNullFieldError('Actor', 'anatomy');
+    }
+    if (combineFunctionHandle == null) {
       throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
-    if (constitution == null)
+    }
+    if (constitution == null) {
       throw new BuiltValueNullFieldError('Actor', 'constitution');
-    if (dexterity == null)
+    }
+    if (dexterity == null) {
       throw new BuiltValueNullFieldError('Actor', 'dexterity');
-    if (gold == null) throw new BuiltValueNullFieldError('Actor', 'gold');
-    if (hitpoints == null)
+    }
+    if (gold == null) {
+      throw new BuiltValueNullFieldError('Actor', 'gold');
+    }
+    if (hitpoints == null) {
       throw new BuiltValueNullFieldError('Actor', 'hitpoints');
-    if (id == null) throw new BuiltValueNullFieldError('Actor', 'id');
-    if (initiative == null)
+    }
+    if (id == null) {
+      throw new BuiltValueNullFieldError('Actor', 'id');
+    }
+    if (initiative == null) {
       throw new BuiltValueNullFieldError('Actor', 'initiative');
-    if (inventory == null)
+    }
+    if (inventory == null) {
       throw new BuiltValueNullFieldError('Actor', 'inventory');
-    if (isActive == null)
+    }
+    if (isActive == null) {
       throw new BuiltValueNullFieldError('Actor', 'isActive');
-    if (isConfused == null)
+    }
+    if (isConfused == null) {
       throw new BuiltValueNullFieldError('Actor', 'isConfused');
-    if (isPlayer == null)
+    }
+    if (isPlayer == null) {
       throw new BuiltValueNullFieldError('Actor', 'isPlayer');
-    if (isSurvivor == null)
+    }
+    if (isSurvivor == null) {
       throw new BuiltValueNullFieldError('Actor', 'isSurvivor');
-    if (maxHitpoints == null)
+    }
+    if (maxHitpoints == null) {
       throw new BuiltValueNullFieldError('Actor', 'maxHitpoints');
-    if (name == null) throw new BuiltValueNullFieldError('Actor', 'name');
-    if (nameIsProperNoun == null)
+    }
+    if (name == null) {
+      throw new BuiltValueNullFieldError('Actor', 'name');
+    }
+    if (nameIsProperNoun == null) {
       throw new BuiltValueNullFieldError('Actor', 'nameIsProperNoun');
-    if (pose == null) throw new BuiltValueNullFieldError('Actor', 'pose');
-    if (pronoun == null) throw new BuiltValueNullFieldError('Actor', 'pronoun');
-    if (stamina == null) throw new BuiltValueNullFieldError('Actor', 'stamina');
-    if (team == null) throw new BuiltValueNullFieldError('Actor', 'team');
+    }
+    if (pose == null) {
+      throw new BuiltValueNullFieldError('Actor', 'pose');
+    }
+    if (pronoun == null) {
+      throw new BuiltValueNullFieldError('Actor', 'pronoun');
+    }
+    if (stamina == null) {
+      throw new BuiltValueNullFieldError('Actor', 'stamina');
+    }
+    if (team == null) {
+      throw new BuiltValueNullFieldError('Actor', 'team');
+    }
   }
 
   @override
@@ -549,7 +578,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   @override
   void replace(Actor other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Actor;
   }
 

@@ -17,6 +17,7 @@ part of fractal_stories.anatomy;
 // ignore_for_file: sort_constructors_first
 // ignore_for_file: unnecessary_const
 // ignore_for_file: unnecessary_new
+// ignore_for_file: test_types_in_equals
 
 Serializer<Anatomy> _$anatomySerializer = new _$AnatomySerializer();
 
@@ -69,7 +70,9 @@ class _$Anatomy extends Anatomy {
       (new AnatomyBuilder()..update(updates)).build();
 
   _$Anatomy._({this.torso}) : super._() {
-    if (torso == null) throw new BuiltValueNullFieldError('Anatomy', 'torso');
+    if (torso == null) {
+      throw new BuiltValueNullFieldError('Anatomy', 'torso');
+    }
   }
 
   @override
@@ -119,7 +122,9 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
 
   @override
   void replace(Anatomy other) {
-    if (other == null) throw new ArgumentError.notNull('other');
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
     _$v = other as _$Anatomy;
   }
 
