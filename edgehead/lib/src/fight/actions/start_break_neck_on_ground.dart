@@ -31,7 +31,9 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       commandTemplate: startBreakNeckOnGroundCommandTemplate,
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
-          enemy.isOnGround && a.isBarehanded && enemy.isBarehanded,
+          a.isBarehanded &&
+          enemy.isOnGround &&
+          (enemy.isBarehanded || enemy.hasCrippledArms),
       applyStart: startBreakNeckOnGroundReportStart,
       mainSituationBuilder: createBreakNeckOnGroundSituation,
       defenseSituationBuilder: createOnGroundWrestleDefenseSituation,
