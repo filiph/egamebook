@@ -22,11 +22,17 @@ abstract class Record {
 ///
 /// The counterpart class is [SingleQueryResult].
 class SerialQueryResult<T extends Record> implements QueryResult<T> {
-  Iterable<T> _records;
+  final Iterable<T> _records;
 
   bool _walked = false;
 
-  SerialQueryResult(this._records);
+  /// Creates a new result with an iterable of [Record] instances.
+  ///
+  /// Provides optimized [hasHappened] and [latest].
+  ///
+  /// **IMPORTANT**: [records] must be provided in reverse chronological order.
+  /// The first member must be the latest one.
+  SerialQueryResult(Iterable<T> records) : _records = records;
 
   @override
   bool get hasHappened {

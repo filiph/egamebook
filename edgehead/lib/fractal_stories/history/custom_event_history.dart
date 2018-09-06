@@ -76,9 +76,10 @@ abstract class CustomEventHistory
     final key = getKey(name);
     if (!records.containsKey(key)) return SerialQueryResult(const []);
     if (actor == null) {
-      return SerialQueryResult(records[key]);
+      return SerialQueryResult(records[key].reversed);
     }
-    final filtered = records[key].where((event) => event.actorId == actor.id);
+    final filtered =
+        records[key].reversed.where((event) => event.actorId == actor.id);
     return SerialQueryResult(filtered);
   }
 
