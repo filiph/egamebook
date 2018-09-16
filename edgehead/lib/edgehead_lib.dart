@@ -142,6 +142,18 @@ class EdgeheadGame extends Book {
   }
 
   Future<Null> update() async {
+    try {
+      await _update();
+    } catch (e, s) {
+      // Catch errors and send to presenter.
+      elementsSink.add(ErrorElement((b) => b
+        ..message = e.toString()
+        ..stackTrace = s.toString()));
+      return;
+    }
+  }
+
+  Future<Null> _update() async {
     final intermediateOutput =
         storyline.generateFinishedOutput().toList(growable: false);
     if (intermediateOutput.isNotEmpty) {
@@ -194,14 +206,7 @@ class EdgeheadGame extends Book {
     }
 
     var planner = ActorPlanner(actor, simulation, world, _pubsub);
-    try {
-      await planner.plan(maxOrder: actor.isPlayer ? 1 : 10);
-    } catch (e, s) {
-      // Catch errors and send to presenter.
-      elementsSink.add(ErrorElement((b) => b
-        ..message = e.toString()
-        ..stackTrace = s.toString()));
-    }
+    await planner.plan(maxOrder: actor.isPlayer ? 1 : 10);
     var recs = planner.getRecommendations();
 
     // Fail fast for no recommendations.
