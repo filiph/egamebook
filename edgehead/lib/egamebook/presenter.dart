@@ -101,6 +101,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   void addWin(WinGame winGame);
 
+  /// Called every time an element is added.
   void beforeElement();
 
   @override

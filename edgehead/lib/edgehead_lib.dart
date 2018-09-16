@@ -194,7 +194,14 @@ class EdgeheadGame extends Book {
     }
 
     var planner = ActorPlanner(actor, simulation, world, _pubsub);
-    await planner.plan(maxOrder: actor.isPlayer ? 1 : 10);
+    try {
+      await planner.plan(maxOrder: actor.isPlayer ? 1 : 10);
+    } catch (e, s) {
+      // Catch errors and send to presenter.
+      elementsSink.add(ErrorElement((b) => b
+        ..message = e.toString()
+        ..stackTrace = s.toString()));
+    }
     var recs = planner.getRecommendations();
 
     // Fail fast for no recommendations.

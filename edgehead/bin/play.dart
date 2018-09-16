@@ -188,6 +188,8 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @override
   void addError(ErrorElement error) {
     _log.severe(error.message);
+    throw StateError("Egamebook error: ${error.message}\n"
+        "Stacktrace: ${error.stackTrace}");
   }
 
   @override
