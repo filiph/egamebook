@@ -176,11 +176,11 @@ class ThrowSpear extends EnemyTargetAction {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
-      w.updateActorById(a.id, (b) {
-        return b
-          ..inventory.remove(spear)
-          ..inventory.equipBestAvailable(a.anatomy);
-      });
+      w.updateActorById(
+          a.id,
+          (b) => b
+            ..inventory.remove(spear)
+            ..inventory.equipBestAvailable(a.anatomy));
     } else {
       w.updateActorById(a.id, (b) => b.inventory.remove(spear));
     }

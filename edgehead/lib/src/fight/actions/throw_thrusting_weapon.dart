@@ -161,11 +161,9 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
   void _moveSwordToGround(WorldStateBuilder w, Actor a, Item sword) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
-    w.updateActorById(a.id, (b) {
-      return b
+    w.updateActorById(a.id, (b) => b
         ..inventory.remove(sword)
-        ..inventory.goBarehanded(a.anatomy);
-    });
+        ..inventory.goBarehanded(a.anatomy));
     w.replaceSituationById(fightSituation.id,
         fightSituation.rebuild((b) => b..droppedItems.add(sword)));
   }
