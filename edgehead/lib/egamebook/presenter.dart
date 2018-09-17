@@ -59,6 +59,11 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
       return;
     }
 
+    if (element is ErrorElement) {
+      addError(element);
+      return;
+    }
+
     addCustomElement(element);
   }
 
