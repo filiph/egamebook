@@ -19,7 +19,9 @@ abstract class Predeterminable implements Situation {
   Optional<ReasonedSuccessChance> get predeterminedChance {
     switch (predeterminedResult) {
       case Predetermination.none:
-        return const Optional<ReasonedSuccessChance>.absent();
+        // TODO: use const Optional<ReasonedSuccessChance>.absent() when
+        //       https://github.com/flutter/flutter/issues/21957 fix lands
+        return new Optional<ReasonedSuccessChance>.fromNullable(null);
       case Predetermination.failureGuaranteed:
         return _failureChance;
       case Predetermination.successGuaranteed:
