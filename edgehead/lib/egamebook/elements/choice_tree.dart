@@ -57,11 +57,21 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
           .toList(growable: false));
 }
 
-/// The top node created by [_makeNode] will always have one group with prefix
-/// `''`. This just unwraps that so that the single group under this node
-/// becomes the root node.
-ChoiceTreeNode _makeTree(int order, String prefix, Iterable<_Choice> choices) =>
-    _makeNode(order, prefix, choices).groups.single;
+/// The top node created by [_makeNode] will have one group with prefix
+/// `''` when there is more than one choice. [_makeTree] just unwraps that so
+/// that the single group under this node becomes the root node. The other
+/// option is when there is only one choice, in which case we can directly
+/// return the result of [_makeNode].
+ChoiceTreeNode _makeTree(int order, String prefix, Iterable<_Choice> choices) {
+  final root = _makeNode(order, prefix, choices);
+  if (root.groups.length == 1) {
+    return root.groups.single;
+  } else if (root.groups.isEmpty) {
+    return root;
+  } else {
+    throw StateError('Invalid tree created by _makeNode.');
+  }
+}
 
 /// A convenience class that takes a [ChoiceBlock] and builds a tree
 /// of [ChoiceTreeNode]s.

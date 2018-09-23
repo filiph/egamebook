@@ -78,4 +78,22 @@ void main() {
     expect(tree.root.groups.single.groups.single.choices,
         unorderedMatches(<Choice>[choice1, choice2]));
   });
+
+  test("generates tree with one choices when there's one choice", () {
+    final choice1 = Choice((b) => b
+      ..markdownText = 'End game'
+      ..isImplicit = false);
+
+    final choiceBlock = (ChoiceBlockBuilder()
+      ..choices.addAll([
+        choice1,
+      ])
+      ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(tree.root.choices, unorderedMatches(<Choice>[choice1]));
+    expect(tree.root.groups, isEmpty);
+  });
 }
