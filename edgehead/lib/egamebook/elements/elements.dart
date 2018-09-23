@@ -1,5 +1,6 @@
 export 'choice_block_element.dart';
 export 'choice_element.dart';
+export 'choice_tree.dart';
 export 'element_base.dart';
 export 'error_element.dart';
 export 'log_element.dart';
