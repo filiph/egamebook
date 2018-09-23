@@ -45,7 +45,7 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   // and for level 2 it could be "Attack --> goblin".
   String _getPrefix(_Choice choice) {
     int end = math.min(order, choice.subCommands.length);
-    return choice.subCommands.sublist(0, end).join(' --> ');
+    return choice.subCommands.sublist(0, end).join(' >> ');
   }
 
   // Group all choices by current prefix.
@@ -113,6 +113,9 @@ class ChoiceTreeNode {
   final List<ChoiceTreeNode> groups;
 
   ChoiceTreeNode(this.order, this.prefix, this.choices, this.groups);
+
+  @override
+  String toString() => 'ChoiceTreeNode<$order, $prefix>';
 }
 
 /// Choice with metadata important for the algorithm.
