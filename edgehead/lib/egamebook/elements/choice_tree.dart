@@ -7,6 +7,16 @@ import 'package:edgehead/egamebook/elements/choice_element.dart';
 Iterable<_Choice> _choicesFromBlock(ChoiceBlock block) =>
     block.choices.map((c) => _Choice(c));
 
+/// Makes the order of the node and all its sub-nodes one less.
+ChoiceTreeNode _decreaseOrder(ChoiceTreeNode node) {
+  return ChoiceTreeNode(
+    node.order - 1,
+    node.prefix,
+    node.choices,
+    node.groups.map(_decreaseOrder).toList(growable: false)
+  );
+}
+
 List<String> _getSubCommands(Choice choice) {
   final split = choice.markdownText
       .split(">>")
@@ -65,7 +75,7 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
 ChoiceTreeNode _makeTree(int order, String prefix, Iterable<_Choice> choices) {
   final root = _makeNode(order, prefix, choices);
   if (root.groups.length == 1) {
-    return root.groups.single;
+    return _decreaseOrder(root.groups.single);
   } else if (root.groups.isEmpty) {
     return root;
   } else {

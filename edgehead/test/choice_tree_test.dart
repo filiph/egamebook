@@ -85,15 +85,36 @@ void main() {
       ..isImplicit = false);
 
     final choiceBlock = (ChoiceBlockBuilder()
-      ..choices.addAll([
-        choice1,
-      ])
-      ..saveGame = emptySaveGame)
+          ..choices.addAll([
+            choice1,
+          ])
+          ..saveGame = emptySaveGame)
         .build();
 
     final tree = ChoiceTree(choiceBlock);
 
     expect(tree.root.choices, unorderedMatches(<Choice>[choice1]));
     expect(tree.root.groups, isEmpty);
+  });
+
+  test("root node has correct order (0)", () {
+    final choice1 = Choice((b) => b
+      ..markdownText = 'Attack goblin >> by slapping him >> with a trout'
+      ..isImplicit = false);
+    final choice2 = Choice((b) => b
+      ..markdownText = 'Attack goblin >> by slapping him >> with a leaf'
+      ..isImplicit = false);
+
+    final choiceBlock = (ChoiceBlockBuilder()
+          ..choices.addAll([
+            choice1,
+            choice2,
+          ])
+          ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(tree.root.order, equals(0));
   });
 }
