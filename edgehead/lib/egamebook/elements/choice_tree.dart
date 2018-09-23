@@ -13,7 +13,7 @@ ChoiceTreeNode _decreaseOrder(ChoiceTreeNode node) {
     node.order - 1,
     node.prefix,
     node.choices,
-    node.groups.map(_decreaseOrder).toList(growable: false)
+    node.groups.map(_decreaseOrder).toList(growable: false),
   );
 }
 
