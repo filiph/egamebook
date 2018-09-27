@@ -523,7 +523,7 @@ final Room testFightGoblin = new Room('test_fight_goblin', (ActionContext c) {
 Approach testFightGoblinFromPreStartBook = new Approach(
     'pre_start_book',
     'test_fight_goblin',
-    'Start one-on-one test fight with a goblin', (ActionContext c) {
+    'Playtest >> one-on-one test fight >> with a goblin', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -552,9 +552,7 @@ final Room startAdventure = new Room('start_adventure', (ActionContext c) {
       wholeSentence: true);
 }, null, generateAgruthFight, null);
 Approach startAdventureFromPreStartBook = new Approach(
-    'pre_start_book',
-    'start_adventure',
-    'Start \'Insignificant Little Vermin\' (DEBUG: this is here as a smoke test)',
+    'pre_start_book', 'start_adventure', 'Smoke test >> \'Vermin\' (DEBUG)',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1620,7 +1618,7 @@ final Room testFightOrc = new Room('test_fight_orc', (ActionContext c) {
 Approach testFightOrcFromPreStartBook = new Approach(
     'pre_start_book',
     'test_fight_orc',
-    'Start one-on-one test fight with an orc', (ActionContext c) {
+    'Playtest >> one-on-one test fight >> with an orc', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;

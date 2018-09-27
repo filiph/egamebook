@@ -23,5 +23,5 @@ generateAgruthFight
 
 // ---
 APPROACH: $start_adventure FROM $pre_start_book
-COMMAND: Start 'Insignificant Little Vermin' (DEBUG: this is here as a smoke test)
+COMMAND: Smoke test >> 'Vermin' (DEBUG)
 DESCRIPTION: N/A
