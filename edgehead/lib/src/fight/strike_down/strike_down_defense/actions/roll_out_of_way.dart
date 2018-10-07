@@ -10,13 +10,25 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeRollOutOfWay(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.9, [
+  // Major penalization when the actor just rolled out of the way.
+  final didRecentlyRoll = recentlyRolledOutOfWay(w, a);
+  final base = didRecentlyRoll ? 0.3 : 0.9;
+
+  return getCombatMoveChance(a, enemy, base, [
     const Modifier(95, CombatReason.dexterity),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(90, CombatReason.targetHasAllLegsDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
     const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
+}
+
+bool recentlyRolledOutOfWay(WorldState w, Actor a) {
+  // Major penalization when the actor just rolled out of the way.
+  final recency = w.timeSinceLastActionRecord(
+          actionName: RollOutOfWay.className, protagonist: a) ??
+      1000;
+  return recency < 5;
 }
 
 class RollOutOfWay extends OtherActorAction {

@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
+import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
@@ -26,7 +27,11 @@ const String startStrikeDownHelpMessage =
 /// the various defense moves.
 ReasonedSuccessChance computeStartStrikeDownPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.4, [
+  // Major bonus when the actor just rolled out of the way.
+  final didRecentlyRoll = recentlyRolledOutOfWay(w, enemy);
+  final base = didRecentlyRoll ? 0.8 : 0.4;
+
+  return getCombatMoveChance(a, enemy, base, [
     const Modifier(50, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(30, CombatReason.balance),
