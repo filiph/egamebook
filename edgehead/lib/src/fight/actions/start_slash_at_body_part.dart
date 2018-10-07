@@ -23,22 +23,18 @@ const String startSlashHelpMessage =
 /// The reaction is then basically selected randomly. Because success/failure
 /// are predetermined, there is little difference for the planner between
 /// the various defense moves.
-///
-/// Note that this is a higher order function, returning a [SuccessChanceGetter]
-/// function. This is because the success chance varies depending on
-/// the targeted [bodyPart].
 ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
     BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
-  const minBase = 0.05;
-  const maxBase = 0.3;
+  const minBase = 0.01;
+  const maxBase = 0.5;
   final relativeSlashSurface = math.min(
-      math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 5, 1);
+      math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 10, 1);
   final base = minBase + maxBase * relativeSlashSurface;
 
   return getCombatMoveChance(a, enemy, base, [
-    const Bonus(30, CombatReason.dexterity),
-    const Bonus(30, CombatReason.targetWithoutShield),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(30, CombatReason.dexterity),
+    const Penalty(30, CombatReason.targetHasShield),
+    const Modifier(30, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

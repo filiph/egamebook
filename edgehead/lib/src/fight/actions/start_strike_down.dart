@@ -27,9 +27,9 @@ const String startStrikeDownHelpMessage =
 ReasonedSuccessChance computeStartStrikeDownPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.4, [
-    const Bonus(50, CombatReason.dexterity),
-    const Bonus(30, CombatReason.targetWithoutShield),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(50, CombatReason.dexterity),
+    const Penalty(30, CombatReason.targetHasShield),
+    const Modifier(30, CombatReason.balance),
   ]);
 }
 

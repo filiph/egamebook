@@ -13,8 +13,8 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 ReasonedSuccessChance computeKickToGround(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.6, [
-    const Bonus(70, CombatReason.dexterity),
-    const Bonus(50, CombatReason.balance),
+    const Modifier(70, CombatReason.dexterity),
+    const Modifier(50, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
     const Bonus(50, CombatReason.targetHasAllEyesDisabled),

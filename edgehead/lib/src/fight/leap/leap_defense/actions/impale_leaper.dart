@@ -127,9 +127,9 @@ class ImpaleLeaper extends EnemyTargetAction {
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
     final chance = getCombatMoveChance(a, enemy, 0.4, [
-      const Bonus(50, CombatReason.dexterity),
-      const Bonus(30, CombatReason.height),
-      const Bonus(20, CombatReason.balance),
+      const Modifier(50, CombatReason.dexterity),
+      const Modifier(30, CombatReason.height),
+      const Modifier(20, CombatReason.balance),
       const Bonus(30, CombatReason.targetHasOneLegDisabled),
       const Bonus(50, CombatReason.targetHasAllLegsDisabled),
       const Bonus(50, CombatReason.targetHasAllEyesDisabled),

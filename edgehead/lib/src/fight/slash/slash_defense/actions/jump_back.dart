@@ -10,8 +10,8 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 ReasonedSuccessChance computeJumpBackSlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.9, [
-    const Bonus(90, CombatReason.dexterity),
-    const Bonus(10, CombatReason.balance),
+    const Modifier(90, CombatReason.dexterity),
+    const Modifier(10, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(90, CombatReason.targetHasAllLegsDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),

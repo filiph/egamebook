@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 /// [ReasonedSuccessChance.sureFailure] and
 /// [ReasonedSuccessChance.sureSuccess], respectively.)
 ///
-/// [bonuses] is the list of adjustments to the [base] success chance.
+/// [modifiers] is the list of adjustments to the [base] success chance.
 ///
 /// Example:
 ///
@@ -29,7 +29,7 @@ import 'package:meta/meta.dart';
 /// the success chance all the way (`100`) up to 100%, or down to 0%. The
 /// combat stance can change the final success chance, too, but only by 30%.
 ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
-    Actor target, double base, List<Bonus<CombatReason>> bonuses) {
+    Actor target, double base, List<Modifier<CombatReason>> modifiers) {
   assert(base > 0.0, "For sureFailures, use ReasonedSuccessChance.sureFailure");
   assert(
       base < 1.0, "For sureSuccesses, use ReasonedSuccessChance.sureSuccess");
@@ -38,19 +38,37 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
   final successReasons = List<Reason<CombatReason>>();
   final failureReasons = List<Reason<CombatReason>>();
 
-  for (final bonus in bonuses) {
-    assert(bonus.maxAdjustment > 0,
-        "There is no reason to have bonuses with maxAdjustment of 0 or below.");
-    final scale = _getAdjustmentScale(performer, target, bonus.reason);
+  for (final modifier in modifiers) {
+    assert(
+        modifier.maxAdjustment > 0,
+        "There is no reason to have modifiers with maxAdjustment "
+        "of 0 or below.");
+    assert(
+        !_reasonsRequiringModifiers.contains(modifier.reason) ||
+            modifier is Modifier,
+        "$modifier should be a Modifier");
+    assert(
+        !_reasonsRequiringBonuses.contains(modifier.reason) ||
+            modifier is Bonus,
+        "$modifier should be a Bonus");
+    assert(
+        !_reasonsRequiringPenalties.contains(modifier.reason) ||
+            modifier is Penalty,
+        "$modifier should be a Penalty");
+    final scale = _getAdjustmentScale(performer, target, modifier.reason);
     assert(scale >= -1.0);
     assert(scale <= 1.0);
+    assert(
+        modifier is! Bonus || scale >= 0.0, "Bonuses must always be positive.");
+    assert(modifier is! Penalty || scale <= 0.0,
+        "Penalties must always be negative.");
     if (scale == 0.0) continue;
 
     final previous = value;
-    final adjustment = bonus.maxAdjustment * scale;
+    final adjustment = modifier.maxAdjustment * scale;
     value = _lerp(value, adjustment.round());
     final difference = (value - previous).abs();
-    final reason = Reason<CombatReason>(bonus.reason, difference);
+    final reason = Reason<CombatReason>(modifier.reason, difference);
 
     if (scale > 0) {
       successReasons.add(reason);
@@ -110,9 +128,9 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 0.0;
       }
       throw StateError("Forgotten logic branch"); // ignore: dead_code
-    case CombatReason.targetWithoutShield:
-      if (target.currentShield == null) {
-        return 1.0;
+    case CombatReason.targetHasShield:
+      if (target.currentShield != null) {
+        return -1.0;
       } else {
         return 0.0;
       }
@@ -183,12 +201,43 @@ bool _partDisabled(Actor actor, BodyPartDesignation designation) {
   return !actor.anatomy.findByDesignation(designation).isAlive;
 }
 
+/// A modification to the success chance. Can be either positive or negative.
+///
+/// For example, [CombatReason.dexterity] is a modification because the attacker
+/// can be either more or less dexterous than the target.
 @immutable
-class Bonus<R> {
+class Modifier<R> {
   final int maxAdjustment;
   final R reason;
 
-  const Bonus(this.maxAdjustment, this.reason);
+  const Modifier(this.maxAdjustment, this.reason);
+
+  @override
+  String toString() => "Modifier<$R:$reason:$maxAdjustment>";
+}
+
+/// A [Modifier] that is always positive for the actor (and always negative
+/// for the target).
+///
+/// Having a [Bonus] that results in a negative adjustment to a success
+/// chance is a runtime error.
+///
+/// A [Bonus] can evaluate to `0` adjustment.
+@immutable
+class Bonus<R> extends Modifier<R> {
+  const Bonus(int maxAdjustment, R reason) : super(maxAdjustment, reason);
+}
+
+/// A [Modifier] that is always negative for the actor (and always positive
+/// for the target).
+///
+/// Having a [Penalty] that results in a positive adjustment to a success
+/// chance is a runtime error.
+///
+/// A [Penalty] can evaluate to `0` adjustment.
+@immutable
+class Penalty<R> extends Modifier<R> {
+  const Penalty(int maxAdjustment, R reason) : super(maxAdjustment, reason);
 }
 
 /// Reasons for the performer of a move (e.g. attacker) to be successful
@@ -219,7 +268,9 @@ enum CombatReason {
 
   /// The fact that the target doesn't have (or can't use) a shield to deflect
   /// or foil the move.
-  targetWithoutShield,
+  ///
+  /// This is always a [Penalty] to the attacker.
+  targetHasShield,
 
   /// The fact that the target has disabled (or cleaved off) primary arm,
   /// meaning that he cannot move it to defend themselves.
@@ -249,3 +300,22 @@ enum CombatReason {
   // TODO: reach /// Advantage of longer limbs and longer weapons
   // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
 }
+
+const List<CombatReason> _reasonsRequiringModifiers = [
+  CombatReason.dexterity,
+  CombatReason.balance,
+  CombatReason.height
+];
+
+const List<CombatReason> _reasonsRequiringBonuses = [
+  CombatReason.targetHasAllEyesDisabled,
+  CombatReason.targetHasOneEyeDisabled,
+  CombatReason.targetHasAllLegsDisabled,
+  CombatReason.targetHasOneLegDisabled,
+  CombatReason.targetHasPrimaryArmDisabled,
+  CombatReason.targetHasSecondaryArmDisabled,
+];
+
+const List<CombatReason> _reasonsRequiringPenalties = [
+  CombatReason.targetHasShield,
+];

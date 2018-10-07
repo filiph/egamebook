@@ -12,9 +12,9 @@ import 'package:edgehead/writers_helpers.dart';
 ReasonedSuccessChance computeOpportunityThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.4, [
-    const Bonus(20, CombatReason.dexterity),
-    const Bonus(20, CombatReason.targetWithoutShield),
-    const Bonus(20, CombatReason.balance),
+    const Modifier(20, CombatReason.dexterity),
+    const Penalty(20, CombatReason.targetHasShield),
+    const Modifier(20, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

@@ -23,9 +23,9 @@ const String startThrustHelpMessage = "The basic move with a pointy weapon.";
 ReasonedSuccessChance computeStartThrustSpearPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.5, [
-    const Bonus(50, CombatReason.dexterity),
-    const Bonus(30, CombatReason.targetWithoutShield),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(50, CombatReason.dexterity),
+    const Penalty(30, CombatReason.targetHasShield),
+    const Modifier(30, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

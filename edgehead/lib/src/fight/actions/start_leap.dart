@@ -20,8 +20,8 @@ const String startLeapHelpMessage =
 ReasonedSuccessChance computeStartLeap(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.2, [
-    const Bonus(50, CombatReason.balance),
-    const Bonus(50, CombatReason.height),
+    const Modifier(50, CombatReason.balance),
+    const Modifier(50, CombatReason.height),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

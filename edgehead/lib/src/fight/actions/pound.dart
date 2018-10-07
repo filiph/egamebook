@@ -113,8 +113,8 @@ class Pound extends EnemyTargetAction {
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
     return getCombatMoveChance(a, enemy, 0.8, [
-      const Bonus(95, CombatReason.dexterity),
-      const Bonus(30, CombatReason.balance),
+      const Modifier(95, CombatReason.dexterity),
+      const Modifier(30, CombatReason.balance),
       const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
       const Bonus(30, CombatReason.targetHasOneLegDisabled),
       const Bonus(50, CombatReason.targetHasOneEyeDisabled),

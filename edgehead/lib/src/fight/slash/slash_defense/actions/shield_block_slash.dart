@@ -17,8 +17,8 @@ final Entity swing =
 ReasonedSuccessChance computeShieldBlockSlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.7, [
-    const Bonus(50, CombatReason.dexterity),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(50, CombatReason.dexterity),
+    const Modifier(30, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(90, CombatReason.targetHasAllLegsDisabled),

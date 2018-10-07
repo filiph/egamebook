@@ -16,7 +16,7 @@ final Entity swing =
 ReasonedSuccessChance computeOnGroundShieldBlock(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.7, [
-    const Bonus(70, CombatReason.dexterity),
+    const Modifier(70, CombatReason.dexterity),
   ]);
 }
 

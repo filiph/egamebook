@@ -83,8 +83,8 @@ class DisarmKick extends EnemyTargetAction {
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
     return getCombatMoveChance(a, enemy, 0.6, [
-      const Bonus(50, CombatReason.dexterity),
-      const Bonus(30, CombatReason.balance),
+      const Modifier(50, CombatReason.dexterity),
+      const Modifier(30, CombatReason.balance),
     ]);
   }
 

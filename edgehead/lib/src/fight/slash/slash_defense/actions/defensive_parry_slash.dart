@@ -13,8 +13,8 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 ReasonedSuccessChance computeDefensiveParrySlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.9, [
-    const Bonus(95, CombatReason.dexterity),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(95, CombatReason.dexterity),
+    const Modifier(30, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(90, CombatReason.targetHasAllLegsDisabled),

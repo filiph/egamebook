@@ -19,8 +19,8 @@ const String startPunchHelpMessage =
 ReasonedSuccessChance computeStartPunch(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.6, [
-    const Bonus(75, CombatReason.dexterity),
-    const Bonus(30, CombatReason.balance),
+    const Modifier(75, CombatReason.dexterity),
+    const Modifier(30, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

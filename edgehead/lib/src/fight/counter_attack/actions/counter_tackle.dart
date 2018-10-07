@@ -12,8 +12,8 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 ReasonedSuccessChance computeCounterTackle(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.5, [
-    const Bonus(90, CombatReason.dexterity),
-    const Bonus(50, CombatReason.balance),
+    const Modifier(90, CombatReason.dexterity),
+    const Modifier(50, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasOneLegDisabled),
     const Bonus(70, CombatReason.targetHasAllLegsDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
