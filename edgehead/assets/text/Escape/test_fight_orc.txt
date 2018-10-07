@@ -8,6 +8,8 @@ build, it's a bug.
 An orc stands in front of you, wielding a sword. Between the two of you,
 a plain dagger lies on the ground.
 
+You are wielding a short sword.
+
 FIGHT_SITUATION:
 generateTestFightWithOrc
 
