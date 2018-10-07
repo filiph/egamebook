@@ -34,6 +34,19 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   bool get anyWeaponAppendageAvailable =>
       primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
 
+  /// Returns `true` if both legs are crippled or missing.
+  bool get hasCrippledLegs {
+    assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
+    for (final part in allParts) {
+      if ((part.designation == BodyPartDesignation.leftLeg ||
+              part.designation == BodyPartDesignation.rightLeg) &&
+          part.isAlive) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /// Is this anatomy humanoid? That means, in general: 2 arms, 2 legs,
   /// one head on a neck.
   ///
