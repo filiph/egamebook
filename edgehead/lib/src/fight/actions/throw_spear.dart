@@ -67,19 +67,23 @@ class ThrowSpear extends EnemyTargetAction {
     Storyline s = context.outputStoryline;
     final spear = _findSpear(a);
     _startThrowSpearReportStart(a, sim, w, s, enemy, spear);
+    bool outOfReach;
     if (enemy.currentShield != null) {
       enemy.report(s, "<subject> deflects it with <subject's> <object>",
           positive: true, but: true, object: enemy.currentShield);
+      outOfReach = false;
     } else {
       enemy.report(s, "<subject> {dodge<s> it|move<s> out of the way}",
           positive: true, but: true);
+      outOfReach = true;
     }
     final ground = getGroundMaterial(w);
     spear.report(
         s,
-        "<subject> {drive<s>|plunge<s>|ram<s>|thrust<s>} into the $ground"
-        "{| nearby| not far from here}");
-    _moveSpearToGround(w, a, spear);
+        "<subject> {drive<s>|plunge<s>|ram<s>|thrust<s>} into the $ground "
+        "behind <object>",
+        object: enemy);
+    _moveSpearToGround(w, a, spear, outOfReach);
     return "${a.name} fails to hit ${enemy.name} with spear";
   }
 
@@ -128,7 +132,7 @@ class ThrowSpear extends EnemyTargetAction {
           positive: true);
       killHumanoid(context, updatedEnemy);
     }
-    _moveSpearToGround(w, a, spear);
+    _moveSpearToGround(w, a, spear, false);
     return "${a.name} hits ${enemy.name} with spear";
   }
 
@@ -172,7 +176,8 @@ class ThrowSpear extends EnemyTargetAction {
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory
   /// ([Actor.weapons]) to the ground. If actor's hand was emptied, a new
   /// weapon (or a fist/claw) is put in it.
-  void _moveSpearToGround(WorldStateBuilder w, Actor a, Item spear) {
+  void _moveSpearToGround(
+      WorldStateBuilder w, Actor a, Item spear, bool outOfReach) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     if (a.currentWeapon == spear) {
@@ -184,8 +189,13 @@ class ThrowSpear extends EnemyTargetAction {
     } else {
       w.updateActorById(a.id, (b) => b.inventory.remove(spear));
     }
-    w.replaceSituationById(fightSituation.id,
-        fightSituation.rebuild((b) => b..droppedItems.add(spear)));
+    w.replaceSituationById(fightSituation.id, fightSituation.rebuild((b) {
+      if (outOfReach) {
+        b.droppedItemsOutOfReach.add(spear);
+      } else {
+        b.droppedItems.add(spear);
+      }
+    }));
   }
 
   void _startThrowSpearReportStart(Actor a, Simulation sim, WorldStateBuilder w,

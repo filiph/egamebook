@@ -2,26 +2,26 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedWeapon extends ItemAction {
-  static const String className = "TakeDroppedWeapon";
+class KickItemOutOfReach extends ItemAction {
+  static const String className = "KickItemOutOfReach";
 
-  static final TakeDroppedWeapon singleton = TakeDroppedWeapon();
+  static final KickItemOutOfReach singleton = KickItemOutOfReach();
 
   @override
   final bool isProactive = true;
 
   @override
-  String get commandTemplate => "pick up <object>";
+  String get commandTemplate => "kick >> <object> >> out of reach";
 
   @override
-  String get helpMessage => "A different weapon might change the battle.";
+  String get helpMessage => "Denies anyone to pick up the weapon. "
+      "If you're worried that the item on the ground might spell trouble "
+      "for you if it was picked up by the enemy, you can prevent it.";
 
   @override
   bool get isAggressive => false;
@@ -42,20 +42,17 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   String applySuccess(ActionContext context, Item item) {
-    assert(item.isWeapon);
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final situation = w.currentSituation as FightSituation;
     w.replaceSituationById(
         situation.id,
-        situation.rebuild(
-            (FightSituationBuilder b) => b..droppedItems.remove(item)));
-    w.updateActorById(a.id, (b) {
-      b.inventory.equip(item, a.anatomy);
-    });
-    a.report(s, "<subject> pick<s> <object> up", object: item);
-    return "${a.name} picks up ${item.name}";
+        situation.rebuild((FightSituationBuilder b) => b
+          ..droppedItems.remove(item)
+          ..droppedItemsOutOfReach.add(item)));
+    a.report(s, "<subject> kick<s> <object> out of reach", object: item);
+    return "${a.name} kicks ${item.name} out of reach";
   }
 
   @override
@@ -69,13 +66,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
-    if (!item.isWeapon) return false;
-    if (!a.canWield) return false;
-    final isSwordForSpear =
-        a.currentWeapon.damageCapability.type == WeaponType.spear &&
-            item.damageCapability.type == WeaponType.sword;
-    if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
-    if (recentlyDisarmed(a, w)) return false;
+    if (a.isOnGround) return false;
     if (a.hasCrippledArms) return false;
     return true;
   }

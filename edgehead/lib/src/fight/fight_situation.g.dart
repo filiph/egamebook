@@ -37,6 +37,10 @@ class _$FightSituationSerializer
       serializers.serialize(object.droppedItems,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Item)])),
+      'droppedItemsOutOfReach',
+      serializers.serialize(object.droppedItemsOutOfReach,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Item)])),
       'enemyTeamIds',
       serializers.serialize(object.enemyTeamIds,
           specifiedType:
@@ -77,6 +81,12 @@ class _$FightSituationSerializer
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Item)]))
+              as BuiltList);
+          break;
+        case 'droppedItemsOutOfReach':
+          result.droppedItemsOutOfReach.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
               as BuiltList);
@@ -127,6 +137,8 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltList<Item> droppedItems;
   @override
+  final BuiltList<Item> droppedItemsOutOfReach;
+  @override
   final BuiltList<int> enemyTeamIds;
   @override
   final BuiltMap<int, EventCallback> events;
@@ -146,6 +158,7 @@ class _$FightSituation extends FightSituation {
 
   _$FightSituation._(
       {this.droppedItems,
+      this.droppedItemsOutOfReach,
       this.enemyTeamIds,
       this.events,
       this.groundMaterial,
@@ -156,6 +169,10 @@ class _$FightSituation extends FightSituation {
       : super._() {
     if (droppedItems == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'droppedItems');
+    }
+    if (droppedItemsOutOfReach == null) {
+      throw new BuiltValueNullFieldError(
+          'FightSituation', 'droppedItemsOutOfReach');
     }
     if (enemyTeamIds == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'enemyTeamIds');
@@ -194,6 +211,7 @@ class _$FightSituation extends FightSituation {
     if (identical(other, this)) return true;
     return other is FightSituation &&
         droppedItems == other.droppedItems &&
+        droppedItemsOutOfReach == other.droppedItemsOutOfReach &&
         enemyTeamIds == other.enemyTeamIds &&
         events == other.events &&
         groundMaterial == other.groundMaterial &&
@@ -211,7 +229,9 @@ class _$FightSituation extends FightSituation {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc(0, droppedItems.hashCode),
+                            $jc(
+                                $jc($jc(0, droppedItems.hashCode),
+                                    droppedItemsOutOfReach.hashCode),
                                 enemyTeamIds.hashCode),
                             events.hashCode),
                         groundMaterial.hashCode),
@@ -225,6 +245,7 @@ class _$FightSituation extends FightSituation {
   String toString() {
     return (newBuiltValueToStringHelper('FightSituation')
           ..add('droppedItems', droppedItems)
+          ..add('droppedItemsOutOfReach', droppedItemsOutOfReach)
           ..add('enemyTeamIds', enemyTeamIds)
           ..add('events', events)
           ..add('groundMaterial', groundMaterial)
@@ -245,6 +266,12 @@ class FightSituationBuilder
       _$this._droppedItems ??= new ListBuilder<Item>();
   set droppedItems(ListBuilder<Item> droppedItems) =>
       _$this._droppedItems = droppedItems;
+
+  ListBuilder<Item> _droppedItemsOutOfReach;
+  ListBuilder<Item> get droppedItemsOutOfReach =>
+      _$this._droppedItemsOutOfReach ??= new ListBuilder<Item>();
+  set droppedItemsOutOfReach(ListBuilder<Item> droppedItemsOutOfReach) =>
+      _$this._droppedItemsOutOfReach = droppedItemsOutOfReach;
 
   ListBuilder<int> _enemyTeamIds;
   ListBuilder<int> get enemyTeamIds =>
@@ -286,6 +313,7 @@ class FightSituationBuilder
   FightSituationBuilder get _$this {
     if (_$v != null) {
       _droppedItems = _$v.droppedItems?.toBuilder();
+      _droppedItemsOutOfReach = _$v.droppedItemsOutOfReach?.toBuilder();
       _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
       _events = _$v.events?.toBuilder();
       _groundMaterial = _$v.groundMaterial;
@@ -318,6 +346,7 @@ class FightSituationBuilder
       _$result = _$v ??
           new _$FightSituation._(
               droppedItems: droppedItems.build(),
+              droppedItemsOutOfReach: droppedItemsOutOfReach.build(),
               enemyTeamIds: enemyTeamIds.build(),
               events: events.build(),
               groundMaterial: groundMaterial,
@@ -330,6 +359,8 @@ class FightSituationBuilder
       try {
         _$failedField = 'droppedItems';
         droppedItems.build();
+        _$failedField = 'droppedItemsOutOfReach';
+        droppedItemsOutOfReach.build();
         _$failedField = 'enemyTeamIds';
         enemyTeamIds.build();
         _$failedField = 'events';

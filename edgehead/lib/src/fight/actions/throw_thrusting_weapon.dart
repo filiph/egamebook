@@ -66,26 +66,30 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
     Storyline s = context.outputStoryline;
     final sword = a.currentWeapon;
     _startThrowSwordReportStart(a, sim, w, s, enemy, sword);
+    bool outOfReach;
     if (enemy.currentShield != null) {
       enemy.report(s, "<subject> deflects it with <subject's> <object>",
           positive: true, but: true, object: enemy.currentShield);
+      outOfReach = false;
     } else {
       if (w.randomBool()) {
         enemy.report(s, "<subject> {dodge<s> it|move<s> out of the way}",
             positive: true, but: true);
+        outOfReach = true;
       } else {
         sword.report(s, "<subject> land<s> flat on <object's> body",
             object: enemy, positive: false, but: true);
         sword.report(s, "<subject> bounce<s> off", positive: false);
+        outOfReach = false;
       }
     }
     final ground = getGroundMaterial(w);
     sword.report(
         s,
-        "<subject> land<s> on the $ground "
-        "behind <object>",
+        "<subject> land<s> on the $ground " +
+          (outOfReach ? "behind <object>" : "next to <object>"),
         object: enemy);
-    _moveSwordToGround(w, a, sword);
+    _moveSwordToGround(w, a, sword, outOfReach);
     return "${a.name} fails to hit ${enemy.name} with spear";
   }
 
@@ -137,7 +141,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
     }
 
     sword.report(s, "<subject> fall<s> to the ground");
-    _moveSwordToGround(w, a, sword);
+    _moveSwordToGround(w, a, sword, false);
     return "${a.name} hits ${enemy.name} with sword";
   }
 
@@ -158,7 +162,8 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
   }
 
   /// Moves [sword] from actor's hand ([Actor.currentWeapon]) to the ground.
-  void _moveSwordToGround(WorldStateBuilder w, Actor a, Item sword) {
+  void _moveSwordToGround(
+      WorldStateBuilder w, Actor a, Item sword, bool outOfReach) {
     final fightSituation =
         w.getSituationByName<FightSituation>(FightSituation.className);
     w.updateActorById(
@@ -166,8 +171,13 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
         (b) => b
           ..inventory.remove(sword)
           ..inventory.goBarehanded(a.anatomy));
-    w.replaceSituationById(fightSituation.id,
-        fightSituation.rebuild((b) => b..droppedItems.add(sword)));
+    w.replaceSituationById(fightSituation.id, fightSituation.rebuild((b) {
+      if (outOfReach) {
+        b.droppedItemsOutOfReach.add(sword);
+      } else {
+        b.droppedItems.add(sword);
+      }
+    }));
   }
 
   void _startThrowSwordReportStart(Actor a, Simulation sim, WorldStateBuilder w,

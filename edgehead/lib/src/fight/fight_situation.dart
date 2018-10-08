@@ -17,6 +17,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
+import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
 import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
@@ -76,6 +77,7 @@ abstract class FightSituation extends Object
         ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
         ..groundMaterial = groundMaterial
         ..droppedItems = ListBuilder<Item>(items)
+        ..droppedItemsOutOfReach = ListBuilder<Item>()
         ..roomRoamingSituationId = roomRoamingSituation.id
         ..events = MapBuilder<int, EventCallback>(events));
   FightSituation._();
@@ -108,6 +110,7 @@ abstract class FightSituation extends Object
         ThrowThrustingWeapon.singleton,
         // simple ones
         Cower.singleton,
+        KickItemOutOfReach.singleton,
         RegainBalance.singleton,
         StandUp.singleton,
         Scramble.singleton,
@@ -117,6 +120,11 @@ abstract class FightSituation extends Object
   /// The items dropped by dead combatants. The Map's `value` is a qualified
   /// name, such as "goblin's scimitar". The `key` is the actual item.
   BuiltList<Item> get droppedItems;
+
+  /// Items that cannot be used in the fight but can be picked up after it.
+  /// For example, an arrow that went past someone's head will be only
+  /// recoverable after combat.
+  BuiltList<Item> get droppedItemsOutOfReach;
 
   BuiltList<int> get enemyTeamIds;
 
@@ -246,7 +254,10 @@ abstract class FightSituation extends Object
 
       // Allow player to take and distribute loot.
       world.pushSituation(LootSituation.initialized(
-          world.randomInt(), playerTeamIds, groundMaterial, droppedItems));
+          world.randomInt(),
+          playerTeamIds,
+          groundMaterial,
+          droppedItems.toList()..addAll(droppedItemsOutOfReach)));
     } else if (!canFight(sim, world, playerTeamIds)) {
       // Nothing to do here. The player's team is all dead.
     } else {
