@@ -87,7 +87,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
     sword.report(
         s,
         "<subject> land<s> on the $ground " +
-          (outOfReach ? "behind <object>" : "next to <object>"),
+            (outOfReach ? "behind <object>" : "next to <object>"),
         object: enemy);
     _moveSwordToGround(w, a, sword, outOfReach);
     return "${a.name} fails to hit ${enemy.name} with spear";
