@@ -100,7 +100,7 @@ class Room {
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
       this.itemGenerator,
-      {this.groundMaterial: "ground", this.parent, this.prerequisite}) {
+      {this.groundMaterial = "ground", this.parent, this.prerequisite}) {
     assert(name != null);
     assert(
         describe != null || firstDescribe != null,

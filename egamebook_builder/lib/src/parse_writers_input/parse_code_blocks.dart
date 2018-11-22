@@ -61,7 +61,7 @@ Block parseBlocks(String text) {
 /// [openTag] and [closeTag]. The tags are included by default.
 Iterable<List<String>> _getBlockContents(
     List<String> lines, RegExp openTag, RegExp closeTag,
-    {bool includeTags: true}) sync* {
+    {bool includeTags = true}) sync* {
   int depth = 0;
   int start;
   int end;
@@ -226,7 +226,7 @@ class Block {
 
   final List<Block> children;
 
-  const Block(this.type, this.content, {this.children: const []});
+  const Block(this.type, this.content, {this.children = const []});
 
   factory Block.textContent(String content) {
     final sanitized = content.trim() == "N/A" ? "" : content;

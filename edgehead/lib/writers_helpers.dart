@@ -369,7 +369,7 @@ bool justCameFrom(WorldState w, String fromRoomName) {
 }
 
 void movePlayer(ActionContext context, String locationName,
-    {bool silent: false}) {
+    {bool silent = false}) {
   getRoomRoaming(context.world)
       .moveActor(context, locationName, silent: silent);
 }
@@ -460,7 +460,7 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
       initiative: 100);
 }
 
-Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear: false}) =>
+Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
     Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
@@ -470,7 +470,7 @@ Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear: false}) =>
         team: defaultEnemyTeam,
         combineFunctionHandle: carelessMonsterCombineFunctionHandle);
 
-Actor _makeOrc(WorldStateBuilder w, {int id, int constitution: 2}) =>
+Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
     Actor.initialized(id ?? w.randomInt(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,

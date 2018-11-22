@@ -89,7 +89,7 @@ abstract class RoomRoamingSituation extends Object
   /// [silent] is used when we are describing the move in a pre-written phrase
   /// so describing it automatically would be a duplicate.
   void moveActor(ActionContext context, String destinationRoomName,
-      {bool silent: false}) {
+      {bool silent = false}) {
     final WorldState originalWorld = context.world;
     final Simulation sim = context.simulation;
     final Actor a = context.actor;

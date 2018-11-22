@@ -158,7 +158,7 @@ abstract class AttackerSituation extends Object
     Iterable<EnemyTargetAction> builtEnemyTargetActionGenerators,
     Actor attacker,
     Actor target, {
-    AttackDirection attackDirection: AttackDirection.unspecified,
+    AttackDirection attackDirection = AttackDirection.unspecified,
   }) =>
       AttackerSituation((b) => b
         ..id = id

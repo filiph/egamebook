@@ -43,25 +43,25 @@ abstract class Actor extends Object
   factory Actor([void updates(ActorBuilder b)]) = _$Actor;
 
   factory Actor.initialized(int id, String name,
-      {bool isPlayer: false,
-      bool isSurvivor: false,
-      bool nameIsProperNoun: false,
+      {bool isPlayer = false,
+      bool isSurvivor = false,
+      bool nameIsProperNoun = false,
       Pronoun pronoun,
       Item currentWeapon,
       Item currentShield,
       int hitpoints,
       int maxHitpoints,
-      int constitution: 1,
-      int dexterity: 100,
-      int stamina: 0,
-      int initiative: 0,
+      int constitution = 1,
+      int dexterity = 100,
+      int stamina = 0,
+      int initiative = 0,
       Anatomy anatomy,
-      int gold: 0,
+      int gold = 0,
       String currentRoomName,
       int followingActorId,
       Team team,
-      bool isConfused: false,
-      String combineFunctionHandle: "normal"}) {
+      bool isConfused = false,
+      String combineFunctionHandle = "normal"}) {
     Anatomy currentAnatomy =
         (anatomy ?? buildHumanoid(id, constitution: constitution));
     Item weapon = currentWeapon;

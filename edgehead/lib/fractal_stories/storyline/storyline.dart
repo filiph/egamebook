@@ -58,15 +58,15 @@ class Report {
       this.object,
       this.owner,
       this.objectOwner,
-      this.but: false,
-      this.positive: false,
-      this.negative: false,
-      this.subjectAndObjectAreEnemies: false,
-      this.endSentence: false,
-      this.startSentence: false,
-      this.wholeSentence: false,
+      this.but = false,
+      this.positive = false,
+      this.negative = false,
+      this.subjectAndObjectAreEnemies = false,
+      this.endSentence = false,
+      this.startSentence = false,
+      this.wholeSentence = false,
       this.actionThread,
-      this.isSupportiveActionInThread: false,
+      this.isSupportiveActionInThread = false,
       this.time});
   Report.empty()
       : string = "",
@@ -228,15 +228,15 @@ class Storyline {
       Entity object,
       Entity owner,
       Entity objectOwner,
-      bool but: false,
-      bool positive: false,
-      bool negative: false,
-      bool subjectAndObjectAreEnemies: false,
-      bool endSentence: false,
-      bool startSentence: false,
-      bool wholeSentence: false,
+      bool but = false,
+      bool positive = false,
+      bool negative = false,
+      bool subjectAndObjectAreEnemies = false,
+      bool endSentence = false,
+      bool startSentence = false,
+      bool wholeSentence = false,
       int actionThread,
-      bool isSupportiveActionInThread: false,
+      bool isSupportiveActionInThread = false,
       int time}) {
     if (str == null || str == "") {
       // Ignore empty records.
@@ -282,8 +282,8 @@ class Storyline {
       {Entity subject,
       Entity object,
       Entity owner,
-      int maxPerSentence: 3,
-      String conjuction: "and"}) {
+      int maxPerSentence = 3,
+      String conjuction = "and"}) {
     assert(start != null);
     assert(articles != null);
     if (articles.length == 0) {
@@ -608,7 +608,7 @@ class Storyline {
 
   /// Old way of getting text out of [Storyline]. Use [realize]
   /// instead unless you want only plain (markdown) text.
-  String realizeAsString({bool onlyFirstParagraph: false}) {
+  String realizeAsString({bool onlyFirstParagraph = false}) {
     final buf = StringBuffer();
     final list = realize(onlyFirstParagraph: onlyFirstParagraph);
     for (final element in list) {
@@ -625,7 +625,7 @@ class Storyline {
   /// paragraph and will leave the rest of the reports for later.
   ///
   /// TODO: deprecate the generated List ([_reports]) and use [_records] instead
-  List<ElementBase> realize({bool onlyFirstParagraph: false}) {
+  List<ElementBase> realize({bool onlyFirstParagraph = false}) {
     StringBuffer strBuf = StringBuffer();
     _reports =
         _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
@@ -828,7 +828,7 @@ class Storyline {
   /// makes sure the sentence flows well with the previous sentence(s), then
   /// calls getString to do in-sentence substitution
   String substitute(int i, String str,
-      {bool useSubjectPronoun: false, bool useObjectPronoun: false}) {
+      {bool useSubjectPronoun = false, bool useObjectPronoun = false}) {
     String result = str.replaceAll(ACTION, string(i));
     if ((useObjectPronoun || _sameObject(i, i - 1)) &&
         !(object(i).pronoun == Pronoun.IT &&

@@ -20,7 +20,7 @@ abstract class Item extends Object
   /// For weapons, use [Item.weapon] instead.
   factory Item(int id,
           {String name,
-          bool nameIsProperNoun: false,
+          bool nameIsProperNoun = false,
           DamageCapabilityBuilder damageCapability}) =>
       _$Item((b) => b
         ..id = id
@@ -30,7 +30,7 @@ abstract class Item extends Object
 
   factory Item.weapon(int id, WeaponType type,
       {String name,
-      bool nameIsProperNoun: false,
+      bool nameIsProperNoun = false,
       int slashingDamage,
       int thrustingDamage}) {
     final damageCapability = DamageCapability(type,

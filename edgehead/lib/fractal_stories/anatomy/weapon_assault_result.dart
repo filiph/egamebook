@@ -48,8 +48,8 @@ class WeaponAssaultResult {
     this.touchedPart, {
     this.severedPart,
     this.slashSuccessLevel,
-    this.fell: false,
-    this.disabled: false,
-    this.droppedCurrentWeapon: false,
+    this.fell = false,
+    this.disabled = false,
+    this.droppedCurrentWeapon = false,
   });
 }

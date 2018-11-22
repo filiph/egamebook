@@ -56,14 +56,14 @@ abstract class Entity {
       {Entity owner,
       Entity object,
       Entity objectOwner,
-      bool positive: false,
-      bool negative: false,
-      bool but: false,
-      bool endSentence: false,
-      bool wholeSentence: false,
-      bool subjectAndObjectAreEnemies: false,
+      bool positive = false,
+      bool negative = false,
+      bool but = false,
+      bool endSentence = false,
+      bool wholeSentence = false,
+      bool subjectAndObjectAreEnemies = false,
       int actionThread,
-      bool isSupportiveActionInThread: false});
+      bool isSupportiveActionInThread = false});
 }
 
 /// Mixin that adds important methods and getters to Entity-like classes.
@@ -84,14 +84,14 @@ abstract class EntityBehavior {
       {Entity owner,
       Entity object,
       Entity objectOwner,
-      bool positive: false,
-      bool negative: false,
-      bool but: false,
-      bool endSentence: false,
-      bool wholeSentence: false,
-      bool subjectAndObjectAreEnemies: false,
+      bool positive = false,
+      bool negative = false,
+      bool but = false,
+      bool endSentence = false,
+      bool wholeSentence = false,
+      bool subjectAndObjectAreEnemies = false,
       int actionThread,
-      bool isSupportiveActionInThread: false}) {
+      bool isSupportiveActionInThread = false}) {
     storyline.add(text,
         subject: this as Entity,
         owner: owner,
@@ -132,8 +132,8 @@ class _NonserializableEntity extends Object
       {this.name,
       Pronoun pronoun,
       Team team,
-      this.nameIsProperNoun: false,
-      this.isPlayer: false})
+      this.nameIsProperNoun = false,
+      this.isPlayer = false})
       : this.team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 

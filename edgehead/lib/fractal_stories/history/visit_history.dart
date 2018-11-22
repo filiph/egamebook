@@ -47,7 +47,7 @@ abstract class VisitHistory
   /// room. If you don't care what state the room was in when the actor
   /// visited it, set [includeVariants] to `true`.
   SerialQueryResult<VisitRecord> query(Actor actor, Room room,
-      {bool includeVariants: false}) {
+      {bool includeVariants = false}) {
     assert(actor != null);
     assert(room != null);
     final key = getKey(room);

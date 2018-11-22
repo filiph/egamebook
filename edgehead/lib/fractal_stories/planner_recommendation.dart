@@ -150,7 +150,7 @@ class PlannerRecommendation {
   final StatefulRandom _reusableRandom = StatefulRandom(42);
 
   Performance _findBest(CombineFunction combineFunction,
-      {List<Performance> skip: const []}) {
+      {List<Performance> skip = const []}) {
     Performance best;
     num bestScore;
     for (var performance in _performances) {

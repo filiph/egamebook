@@ -125,7 +125,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// because edgehead itself has predictable randomness, and the injected
   /// [random] makes sure we predictably choose the same options.)
   CliRunner(this.automated, bool silent, File logFile,
-      {Level logLevel: Level.FINE, this.actionPattern, Random random})
+      {Level logLevel = Level.FINE, this.actionPattern, Random random})
       : _logFile = logFile,
         _random = random ?? Random() {
     _silent = silent;

@@ -114,7 +114,7 @@ abstract class Book {
   @protected
   Future<slot.SessionResult> showSlotMachine(
       double probability, String rollReason,
-      {bool rerollable: false, String rerollEffectDescription}) {
+      {bool rerollable = false, String rerollEffectDescription}) {
     assert(_showSlotMachineCompleter == null);
     _showSlotMachineCompleter = Completer<slot.SessionResult>();
     _elementsController.add(SlotMachine((b) => b

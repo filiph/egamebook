@@ -45,7 +45,7 @@ class PlanConsequence {
   /// the previous world turns into this world.
   PlanConsequence(WorldState world, PlanConsequence previous,
       Performance<dynamic> action, Storyline storyline, num probability,
-      {bool isInitial: false, bool isFailure: false, bool isSuccess: false})
+      {bool isInitial = false, bool isFailure = false, bool isSuccess = false})
       : this._(
             world,
             action,

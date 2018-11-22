@@ -33,8 +33,8 @@ abstract class BodyPart extends Object
     int majorCutsCount,
     int minorCutsCount,
     DamageCapabilityBuilder damageCapability,
-    int swingSurfaceLeft: 1,
-    int swingSurfaceRight: 1,
+    int swingSurfaceLeft = 1,
+    int swingSurfaceRight = 1,
   }) =>
       _$BodyPart((b) => b
         ..id = id

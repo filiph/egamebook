@@ -21,7 +21,7 @@ class Randomly {
   /// `0` or `1` without bias. If the input is `[0.1, 0.1, 0.8]`, the output
   /// will be `2` (index of the last weight) 80% of the time.
   static int chooseWeighted(Iterable<num> weights,
-      {num total: 1, Random random}) {
+      {num total = 1, Random random}) {
     num pick = (random ?? _random).nextDouble() * total;
     num sum = 0;
     int index = 0;
@@ -38,7 +38,7 @@ class Randomly {
   /// Same as [Randomly.chooseWeighted], but weights and total are [int] so that
   /// we avoid rounding errors.
   static int chooseWeightedPrecise(Iterable<int> weights,
-      {int max: 1000, Random random}) {
+      {int max = 1000, Random random}) {
     int pick = (random ?? _random).nextInt(max);
     int sum = 0;
     int index = 0;
@@ -88,7 +88,7 @@ class Randomly {
   /// [precisionSteps] is [:10:], a [humanProbability] of [:0.46:] becomes "50%".
   /// When [precisionSteps] is [:5:], then it becomes "45%".
   static String humanStringifyProbability(num probability,
-      {int precisionSteps: 10, String prefix: "", String postfix: "%"}) {
+      {int precisionSteps = 10, String prefix = "", String postfix = "%"}) {
     num humanProbability = probability * 100 / precisionSteps; // ex. 6.4
     humanProbability = humanProbability.round(); // ex. 6.0
     humanProbability *= precisionSteps; // ex. 60

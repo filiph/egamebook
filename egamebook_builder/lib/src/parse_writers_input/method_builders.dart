@@ -52,7 +52,7 @@ class MethodAndBlock {
 /// Convenience function for building getters. It creates a getter
 /// annotated with `@override` by default.
 MethodAndBlock createGetter(String name, TypeReference returnType,
-    {bool isStatic: false, bool isOverride: true}) {
+    {bool isStatic = false, bool isOverride = true}) {
   final methodBuilder = MethodBuilder()
     ..type = MethodType.getter
     ..name = name

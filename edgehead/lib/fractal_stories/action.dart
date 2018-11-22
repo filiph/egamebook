@@ -181,8 +181,8 @@ abstract class Action<T> {
       PubSub pubsub,
       T object,
       ReasonedSuccessChance successChance,
-      {bool isSuccess: false,
-      bool isFailure: false}) {
+      {bool isSuccess = false,
+      bool isFailure = false}) {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
         actor, sim, initialWorld, object, isSuccess, isFailure);

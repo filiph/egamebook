@@ -69,7 +69,7 @@ abstract class FightSituation extends Object
           String groundMaterial,
           RoomRoamingSituation roomRoamingSituation,
           Map<int, EventCallback> events,
-          {Iterable<Item> items: const []}) =>
+          {Iterable<Item> items = const []}) =>
       FightSituation((b) => b
         ..id = id
         ..time = 0

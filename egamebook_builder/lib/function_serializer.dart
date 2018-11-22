@@ -76,13 +76,13 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
 
   @override
   T deserialize(Serializers serializers, Object serialized,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     return _map[serialized];
   }
 
   @override
   Object serialize(Serializers serializers, T object,
-      {FullType specifiedType: FullType.unspecified}) {
+      {FullType specifiedType = FullType.unspecified}) {
     assert(
         _inverseMap.containsKey(object),
         "Incomplete map in $this. "

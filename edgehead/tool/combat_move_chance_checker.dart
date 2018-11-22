@@ -69,9 +69,9 @@ void main() {
 
 Actor _createActor({
   String name,
-  bool hasShield: false,
+  bool hasShield = false,
   int dexterity,
-  Pose pose: Pose.standing,
+  Pose pose = Pose.standing,
 }) {
   final actor = Actor.initialized(
     name.hashCode,
@@ -136,10 +136,10 @@ class _Configuration {
   final bool targetOnGround;
 
   const _Configuration({
-    this.actorOffBalance: false,
-    this.targetHasShield: false,
-    this.targetOffBalance: false,
-    this.targetOnGround: false,
+    this.actorOffBalance = false,
+    this.targetHasShield = false,
+    this.targetOffBalance = false,
+    this.targetOnGround = false,
   });
 
   Pose get actorPose {
