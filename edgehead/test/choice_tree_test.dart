@@ -117,4 +117,37 @@ void main() {
 
     expect(tree.root.order, equals(0));
   });
+
+  test("do not show `>>` in UI", () {
+    final choice1 = Choice((b) => b
+      ..markdownText = 'Attack the goblin >> by kicking him to the ground.'
+      ..isImplicit = false);
+    final choice2 = Choice((b) => b
+      ..markdownText = 'Attack the goblin >> by leaping at him.'
+      ..isImplicit = false);
+    final choice3 = Choice((b) => b
+      ..markdownText =
+          'Attack the goblin >> by slashing >> from left (his weapon hand).'
+      ..isImplicit = false);
+    final choice4 = Choice((b) => b
+      ..markdownText = 'Kick >> the dagger >> out of reach.'
+      ..isImplicit = false);
+
+    final choiceBlock = (ChoiceBlockBuilder()
+          ..choices.addAll([
+            choice1,
+            choice2,
+            choice3,
+            choice4,
+          ])
+          ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(
+        ChoiceTree.getChoiceTextAtNode(
+            tree.root.choices.single.markdownText, tree.root),
+        isNot(contains('>>')));
+  });
 }

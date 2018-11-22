@@ -97,6 +97,22 @@ class ChoiceTree {
 
   ChoiceTree(this.choiceBlock)
       : root = _makeTree(0, '', _choicesFromBlock(choiceBlock));
+
+  /// Given a [text] of a [Choice] or choice group ([ChoiceTreeNode]),
+  /// and the currently shown [node], return the text to show.
+  ///
+  /// For example, for a choice with [Choice.markdownText] like
+  /// "Kick >> goblin >> in groin" and a node of level `1`, the result
+  /// would be "goblin in groin". For a group at level `0`, it would be "Kick".
+  static String getChoiceTextAtNode(String text, ChoiceTreeNode node) {
+    return text
+        // Replace the leading text (like "Kick ").
+        .replaceFirst(node.prefix, '')
+        // Collapse ' >> ' into a single space.
+        .replaceAll(' >> ', ' ')
+        // Otherwise, just remove '>>'.
+        .replaceAll('>>', '');
+  }
 }
 
 class ChoiceTreeNode {
