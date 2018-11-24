@@ -42,7 +42,7 @@ Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T key(S element)) {
 ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   // A closure that gets the current prefix of a choice. For example, in
   // order 0, the prefix will be always "", for level 1 it could be "Attack",
-  // and for level 2 it could be "Attack --> goblin".
+  // and for level 2 it could be "Attack >> goblin".
   String _getPrefix(_Choice choice) {
     int end = math.min(order, choice.subCommands.length);
     return choice.subCommands.sublist(0, end).join(' >> ');
@@ -52,8 +52,13 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   final groups = _groupBy(choices, _getPrefix);
 
   // Get all the groups that have only one value. These are leaf choices.
-  final singleGroups =
-      groups.entries.where((entry) => entry.value.length == 1).toList();
+  final singleGroups = groups.entries
+      .where((entry) =>
+          // Only one entry in this 'group'.
+          entry.value.length == 1 &&
+          // And we're in the right depth of the tree.
+          entry.value.single.order == order - 1)
+      .toList();
 
   // Remove the simple groups from the rest.
   groups.removeWhere((key, _) => singleGroups.any((leaf) => leaf.key == key));
@@ -67,6 +72,8 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
           .toList(growable: false));
 }
 
+/// This is the special case for the top of the [ChoiceTree].
+///
 /// The top node created by [_makeNode] will have one group with prefix
 /// `''` when there is more than one choice. [_makeTree] just unwraps that so
 /// that the single group under this node becomes the root node. The other
@@ -139,7 +146,15 @@ class _Choice {
   final List<String> subCommands;
   final Choice choice;
 
+  int _order;
+
   _Choice(Choice choice)
       : choice = choice,
-        subCommands = _getSubCommands(choice);
+        subCommands = _getSubCommands(choice) {
+    _order = subCommands.length - 1;
+  }
+
+  /// The depth of this choice. In short, it's the number of `>>`
+  /// in the command text.
+  int get order => _order;
 }

@@ -79,6 +79,36 @@ void main() {
         unorderedMatches(<Choice>[choice1, choice2]));
   });
 
+  test("generates a level for each >>", () {
+    final choice1 = Choice((b) => b
+      ..markdownText = 'Kick >> goblin >> to the groin'
+      ..isImplicit = false);
+    final choice2 = Choice((b) => b
+      ..markdownText = 'Punch >> goblin >> in the face'
+      ..isImplicit = false);
+
+    final choiceBlock = (ChoiceBlockBuilder()
+          ..choices.addAll([
+            choice1,
+            choice2,
+          ])
+          ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(tree.root.choices, isEmpty);
+    expect(tree.root.groups, hasLength(2));
+    expect(tree.root.groups.first.choices, isEmpty);
+    expect(tree.root.groups.first.groups, hasLength(1));
+    expect(tree.root.groups.first.groups.single.choices,
+        unorderedMatches(<Choice>[choice1]));
+    expect(tree.root.groups.last.choices, isEmpty);
+    expect(tree.root.groups.last.groups, hasLength(1));
+    expect(tree.root.groups.last.groups.single.choices,
+        unorderedMatches(<Choice>[choice2]));
+  });
+
   test("generates tree with one choices when there's one choice", () {
     final choice1 = Choice((b) => b
       ..markdownText = 'End game'
@@ -119,26 +149,13 @@ void main() {
   });
 
   test("do not show `>>` in UI", () {
-    final choice1 = Choice((b) => b
-      ..markdownText = 'Attack the goblin >> by kicking him to the ground.'
-      ..isImplicit = false);
-    final choice2 = Choice((b) => b
-      ..markdownText = 'Attack the goblin >> by leaping at him.'
-      ..isImplicit = false);
-    final choice3 = Choice((b) => b
-      ..markdownText =
-          'Attack the goblin >> by slashing >> from left (his weapon hand).'
-      ..isImplicit = false);
-    final choice4 = Choice((b) => b
+    final choice = Choice((b) => b
       ..markdownText = 'Kick >> the dagger >> out of reach.'
       ..isImplicit = false);
 
     final choiceBlock = (ChoiceBlockBuilder()
           ..choices.addAll([
-            choice1,
-            choice2,
-            choice3,
-            choice4,
+            choice,
           ])
           ..saveGame = emptySaveGame)
         .build();
@@ -147,7 +164,7 @@ void main() {
 
     expect(
         ChoiceTree.getChoiceTextAtNode(
-            tree.root.choices.single.markdownText, tree.root),
+            'Kick >> the dagger >> out of reach.', tree.root),
         isNot(contains('>>')));
   });
 }
