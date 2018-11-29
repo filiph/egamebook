@@ -263,6 +263,11 @@ class BodyPartDesignation extends EnumClass {
 
   const BodyPartDesignation._(String name) : super(name);
 
+  String toHumanString() {
+    // TODO: add special case for 'leftLeg' etc.
+    return name;
+  }
+
   static BodyPartDesignation valueOf(String name) =>
       _$valueOfSpecifiedBodyPart(name);
 }
