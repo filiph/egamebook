@@ -41,7 +41,7 @@ class Pound extends EnemyTargetAction {
 
   @override
   String get commandTemplate =>
-      "attack <object> >> by forcing <objectPronoun> off balance";
+      "slash >> <object's> >> weapon to force <objectPronoun> off balance";
 
   @override
   String get name => className;

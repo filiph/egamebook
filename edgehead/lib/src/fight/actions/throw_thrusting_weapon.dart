@@ -49,8 +49,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate =>
-      "attack <object> >> by throwing your weapon at <objectPronoun>";
+  String get commandTemplate => "throw >> your weapon >> at <object>";
 
   @override
   String get name => className;

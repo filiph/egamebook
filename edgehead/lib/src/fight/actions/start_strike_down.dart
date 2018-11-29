@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_def
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
 const String startStrikeDownCommandTemplate =
-    "attack <object> >> by striking down at <objectPronoun>";
+    "slash >> <object> >> by striking down";
 
 const String startStrikeDownHelpMessage =
     "Opponents on the ground are often the most "

@@ -50,8 +50,7 @@ class ThrowSpear extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate =>
-      "attack <object> >> by throwing spear at <objectPronoun>";
+  String get commandTemplate => "throw >> spear >> at <object>";
 
   @override
   String get name => className;

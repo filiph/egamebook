@@ -40,10 +40,10 @@ ReasonedSuccessChance computeStartSlashFromDirection(
 String startSlashCommandTemplate(SlashDirection direction) {
   switch (direction) {
     case SlashDirection.left:
-      return "attack <object> >> by slashing >> "
+      return "slash >> <object> >> "
           "from left (<objectPronoun's> weapon hand)";
     case SlashDirection.right:
-      return "attack <object> >> by slashing >> "
+      return "slash >> <object> >> "
           "from right (<objectPronoun's> off-hand)";
   }
   throw StateError(

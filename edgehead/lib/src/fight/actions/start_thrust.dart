@@ -59,7 +59,7 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
 }
 
 String startThrustCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by thrusting at >> <objectPronoun's> $designation";
+  return "thrust >> <object's> >> ${designation.toHumanString()}";
 }
 
 PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>

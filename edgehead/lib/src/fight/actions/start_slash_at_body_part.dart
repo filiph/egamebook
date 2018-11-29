@@ -45,7 +45,7 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
 }
 
 String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "attack <object> >> by slashing >> <objectPronoun's> $designation";
+  return "slash >> <object's> >> ${designation.toHumanString()}";
 }
 
 /// Creates the [StartDefensibleAction.applyStart] function for given
