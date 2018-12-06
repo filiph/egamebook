@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 
-class DisarmKick extends EnemyTargetAction {
+class DisarmKick extends EnemyTargetAction with ComplexCommandPath<Actor> {
   static const String className = "DisarmKick";
 
   static final EnemyTargetAction singleton = DisarmKick();
@@ -30,7 +30,11 @@ class DisarmKick extends EnemyTargetAction {
       "kick their weapon off to disarm them.";
 
   @override
-  String get commandTemplate => "kick >> <object's> weapon off";
+  List<String> get commandPathTemplate =>
+      ["attack <object>", "disarm", "kick at weapon"];
+
+  @override
+  String get commandTemplate => "kick <object's> weapon off";
 
   @override
   String get name => className;

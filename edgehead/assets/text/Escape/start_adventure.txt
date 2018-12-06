@@ -23,5 +23,5 @@ generateAgruthFight
 
 // ---
 APPROACH: $start_adventure FROM $pre_start_book
-COMMAND: Smoke test >> 'Vermin' (DEBUG)
+COMMAND: DEBUG >> Smoke test 'Vermin'
 DESCRIPTION: N/A

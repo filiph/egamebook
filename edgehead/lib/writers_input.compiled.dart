@@ -552,7 +552,7 @@ final Room startAdventure = new Room('start_adventure', (ActionContext c) {
       wholeSentence: true);
 }, null, generateAgruthFight, null);
 Approach startAdventureFromPreStartBook = new Approach(
-    'pre_start_book', 'start_adventure', 'Smoke test >> \'Vermin\' (DEBUG)',
+    'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

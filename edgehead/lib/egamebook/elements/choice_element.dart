@@ -1,5 +1,6 @@
 library egamebook.element.choice;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -22,5 +23,7 @@ abstract class Choice extends ElementBase
   /// silently). Corresponds to `Action.isImplicit`.
   bool get isImplicit;
 
-  String get markdownText;
+  String get command;
+
+  BuiltList<String> get commandPath;
 }

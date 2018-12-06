@@ -161,7 +161,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
           !element.choices.any((ch) => ch.isImplicit),
           "Cannot have an implicit choice "
           "when there is more than one of them.");
-      final menu = Menu(element.choices.map((ch) => ch.markdownText),
+      final menu = Menu(element.choices.map((ch) => ch.command),
           modifierKeys: ["s" /* force success */, "f" /* force failure */]);
       print("");
       final choice = menu.choose();

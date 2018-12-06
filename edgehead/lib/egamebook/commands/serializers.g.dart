@@ -22,5 +22,8 @@ part of egamebook.command.serializers;
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Choice.serializer)
       ..add(PickChoice.serializer)
-      ..add(ResolveSlotMachine.serializer))
+      ..add(ResolveSlotMachine.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>()))
     .build();

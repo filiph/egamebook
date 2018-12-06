@@ -54,6 +54,14 @@ class TakeApproachAction extends ApproachAction {
   @override
   String getCommand(Approach approach) => approach.command;
 
+  /// When the writer specifies a command with " >> " in it, this will
+  /// automatically create a command path.
+  ///
+  /// For example, "Enter >> upper door".
+  @override
+  List<String> getCommandPath(Approach approach) =>
+      approach.command.split(' >> ');
+
   @override
   String getRollReason(
           Actor a, Simulation sim, WorldState w, Approach approach) =>

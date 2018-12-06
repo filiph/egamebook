@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Confuse extends EnemyTargetAction {
+class Confuse extends EnemyTargetAction with ComplexCommandPath<Actor> {
   static const int minimalEffectLength = 8;
 
   static const String className = "Confuse";
@@ -30,7 +30,11 @@ class Confuse extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "confuse >> <object>";
+  List<String> get commandPathTemplate =>
+      ["attack <object>", "mental", "confuse"];
+
+  @override
+  String get commandTemplate => "confuse <object>";
 
   @override
   String get name => className;

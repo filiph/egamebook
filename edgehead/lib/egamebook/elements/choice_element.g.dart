@@ -34,9 +34,13 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       'isImplicit',
       serializers.serialize(object.isImplicit,
           specifiedType: const FullType(bool)),
-      'markdownText',
-      serializers.serialize(object.markdownText,
+      'command',
+      serializers.serialize(object.command,
           specifiedType: const FullType(String)),
+      'commandPath',
+      serializers.serialize(object.commandPath,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
     ];
     if (object.helpMessage != null) {
       result
@@ -67,9 +71,15 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           result.isImplicit = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
-        case 'markdownText':
-          result.markdownText = serializers.deserialize(value,
+        case 'command':
+          result.command = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'commandPath':
+          result.commandPath.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList);
           break;
       }
     }
@@ -84,18 +94,24 @@ class _$Choice extends Choice {
   @override
   final bool isImplicit;
   @override
-  final String markdownText;
+  final String command;
+  @override
+  final BuiltList<String> commandPath;
 
   factory _$Choice([void updates(ChoiceBuilder b)]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
-  _$Choice._({this.helpMessage, this.isImplicit, this.markdownText})
+  _$Choice._(
+      {this.helpMessage, this.isImplicit, this.command, this.commandPath})
       : super._() {
     if (isImplicit == null) {
       throw new BuiltValueNullFieldError('Choice', 'isImplicit');
     }
-    if (markdownText == null) {
-      throw new BuiltValueNullFieldError('Choice', 'markdownText');
+    if (command == null) {
+      throw new BuiltValueNullFieldError('Choice', 'command');
+    }
+    if (commandPath == null) {
+      throw new BuiltValueNullFieldError('Choice', 'commandPath');
     }
   }
 
@@ -112,13 +128,16 @@ class _$Choice extends Choice {
     return other is Choice &&
         helpMessage == other.helpMessage &&
         isImplicit == other.isImplicit &&
-        markdownText == other.markdownText;
+        command == other.command &&
+        commandPath == other.commandPath;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, helpMessage.hashCode), isImplicit.hashCode),
-        markdownText.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, helpMessage.hashCode), isImplicit.hashCode),
+            command.hashCode),
+        commandPath.hashCode));
   }
 
   @override
@@ -126,7 +145,8 @@ class _$Choice extends Choice {
     return (newBuiltValueToStringHelper('Choice')
           ..add('helpMessage', helpMessage)
           ..add('isImplicit', isImplicit)
-          ..add('markdownText', markdownText))
+          ..add('command', command)
+          ..add('commandPath', commandPath))
         .toString();
   }
 }
@@ -142,9 +162,15 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   bool get isImplicit => _$this._isImplicit;
   set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
 
-  String _markdownText;
-  String get markdownText => _$this._markdownText;
-  set markdownText(String markdownText) => _$this._markdownText = markdownText;
+  String _command;
+  String get command => _$this._command;
+  set command(String command) => _$this._command = command;
+
+  ListBuilder<String> _commandPath;
+  ListBuilder<String> get commandPath =>
+      _$this._commandPath ??= new ListBuilder<String>();
+  set commandPath(ListBuilder<String> commandPath) =>
+      _$this._commandPath = commandPath;
 
   ChoiceBuilder();
 
@@ -152,7 +178,8 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
     if (_$v != null) {
       _helpMessage = _$v.helpMessage;
       _isImplicit = _$v.isImplicit;
-      _markdownText = _$v.markdownText;
+      _command = _$v.command;
+      _commandPath = _$v.commandPath?.toBuilder();
       _$v = null;
     }
     return this;
@@ -173,11 +200,25 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
 
   @override
   _$Choice build() {
-    final _$result = _$v ??
-        new _$Choice._(
-            helpMessage: helpMessage,
-            isImplicit: isImplicit,
-            markdownText: markdownText);
+    _$Choice _$result;
+    try {
+      _$result = _$v ??
+          new _$Choice._(
+              helpMessage: helpMessage,
+              isImplicit: isImplicit,
+              command: command,
+              commandPath: commandPath.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'commandPath';
+        commandPath.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Choice', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

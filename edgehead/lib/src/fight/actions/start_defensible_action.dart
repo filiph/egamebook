@@ -43,7 +43,8 @@ typedef Situation _SituationBuilder(
 /// slashes Aren).
 ///
 /// Look at `start_slash_from_direction.dart` for an example of how to use this class.
-class StartDefensibleAction extends EnemyTargetAction {
+class StartDefensibleAction extends EnemyTargetAction
+    with ComplexCommandPath<Actor> {
   /// This function should use [storyline] to report the start of the action.
   /// It can modify [world].
   ///
@@ -130,6 +131,10 @@ class StartDefensibleAction extends EnemyTargetAction {
     assert(!rerollable || rerollResource != null);
     assert(!rerollable || rollReasonTemplate != null);
   }
+
+  @override
+  // TODO: remove this and implement it in subclasses / users
+  List<String> get commandPathTemplate => commandTemplate.split('>>');
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {

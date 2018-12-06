@@ -21,7 +21,7 @@ ReasonedSuccessChance computeKickToGround(
   ]);
 }
 
-class KickToGround extends EnemyTargetAction {
+class KickToGround extends EnemyTargetAction with ComplexCommandPath<Actor> {
   static const String className = "KickToGround";
 
   @override
@@ -42,7 +42,11 @@ class KickToGround extends EnemyTargetAction {
       "and your allies.";
 
   @override
-  String get commandTemplate => "kick >> <object> to the ground";
+  List<String> get commandPathTemplate =>
+      ["attack <object>", "stance", "kick in chest"];
+
+  @override
+  String get commandTemplate => "kick <object> to the ground";
 
   @override
   String get name => className;

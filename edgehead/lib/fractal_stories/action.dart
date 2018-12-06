@@ -40,6 +40,9 @@ abstract class Action<T> {
   @Deprecated('use getCommand')
   String get command => getCommand(null);
 
+  /// Optional message to be shown when player presses a help button
+  /// next to the action. The message should explain what the action does
+  /// and, if appropriate, why and when it should be used.
   String get helpMessage;
 
   /// Whether or not this action is aggressive towards its sufferer. Combat
@@ -148,6 +151,14 @@ abstract class Action<T> {
   ///
   /// For example: "open the door" or "swing at the orc".
   String getCommand(T object);
+
+  /// The path of sub-commands to be used for the action menu.
+  ///
+  /// For example, an actions such as "kick <subject> to ground" could have
+  /// a [getCommandPath] of `[attack <subject>, stance, kick in chest]`. The
+  /// [getCommandPath] is what the player chooses, the [getCommand()] is
+  /// what is shown afterwards.
+  List<String> getCommandPath(T object) => [getCommand(object)];
 
   /// Returns a string that will explain why actor needs to roll for success.
   ///
@@ -265,6 +276,38 @@ abstract class ApproachAction extends Action<Approach> {
   String toString() => "ApproachAction";
 }
 
+/// Mixin that adds the functionality for actions that will have
+/// a command path longer than 1.
+///
+/// Overrides the default functionality in [Action] and requires
+/// the [commandPathTemplate] field to be non-null and non-empty.
+///
+/// TODO: use `mixin Complex... on Action<T>` when built_value understands mixins
+abstract class ComplexCommandPath<T extends Entity> implements Action<T> {
+  /// This is to [getCommandPath] what [commandTemplate] is
+  /// to [getCommandTemplate].
+  ///
+  /// For example, `["attack <object>", "kill", "decapitate"]` is a valid
+  /// template that might realize to a sequence of actions such as
+  /// "Attack the orc >> Kill >> Decapitate".
+  List<String> get commandPathTemplate;
+
+  @override
+  List<String> getCommandPath(T target) {
+    if (isImplicit) {
+      throw StateError('ComplexCommandPath actions cannot be implicit. '
+          '$this is.');
+    }
+    assert(
+        commandPathTemplate != null && commandPathTemplate.isNotEmpty,
+        "Never create actions with empty commandPathTemplate. "
+        "Use isImplicit instead. Culprit: $this");
+    return (Storyline()..add(commandPathTemplate.join('>>'), object: target))
+        .realizeAsString()
+        .split('>>');
+  }
+}
+
 /// This [Action] requires an [enemy].
 ///
 /// Every [EnemyTargetAction] should contain a static builder like this:
@@ -329,9 +372,6 @@ abstract class ItemAction extends Action<Item> {
 /// to finish that slash.
 abstract class OtherActorAction extends OtherActorActionBase {
   @override
-  String toString() => "OtherActorAction<$commandTemplate>";
-
-  @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
     var actors = context.world.currentSituation
         .getActors(context.world.actors, context.simulation, context.world);
@@ -339,6 +379,9 @@ abstract class OtherActorAction extends OtherActorActionBase {
       return other != context.actor && other.isAliveAndActive;
     });
   }
+
+  @override
+  String toString() => "OtherActorAction<$commandTemplate>";
 }
 
 /// A base class for [OtherActorAction] and [EnemyTargetAction].
@@ -425,6 +468,8 @@ class Performance<T> {
   const Performance(this.action, this.object);
 
   String get command => action.getCommand(object);
+
+  List<String> get commandPath => action.getCommandPath(object);
 }
 
 /// This class encapsulates a singular reason why an action might have

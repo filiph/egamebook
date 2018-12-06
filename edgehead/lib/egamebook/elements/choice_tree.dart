@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/egamebook/elements/choice_block_element.dart';
 import 'package:edgehead/egamebook/elements/choice_element.dart';
 
@@ -15,14 +16,6 @@ ChoiceTreeNode _decreaseOrder(ChoiceTreeNode node) {
     node.choices,
     node.groups.map(_decreaseOrder).toList(growable: false),
   );
-}
-
-List<String> _getSubCommands(Choice choice) {
-  final split = choice.markdownText
-      .split(">>")
-      .map((s) => s.trim())
-      .toList(growable: false);
-  return split;
 }
 
 /// Taken from `package:collection`.
@@ -44,8 +37,8 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   // order 0, the prefix will be always "", for level 1 it could be "Attack",
   // and for level 2 it could be "Attack >> goblin".
   String _getPrefix(_Choice choice) {
-    int end = math.min(order, choice.subCommands.length);
-    return choice.subCommands.sublist(0, end).join(' >> ');
+    if (order == 0) return '';
+    return choice.subCommands[order - 1];
   }
 
   // Group all choices by current prefix.
@@ -108,9 +101,10 @@ class ChoiceTree {
   /// Given a [text] of a [Choice] or choice group ([ChoiceTreeNode]),
   /// and the currently shown [node], return the text to show.
   ///
-  /// For example, for a choice with [Choice.markdownText] like
+  /// For example, for a choice with [Choice.command] like
   /// "Kick >> goblin >> in groin" and a node of level `1`, the result
   /// would be "goblin in groin". For a group at level `0`, it would be "Kick".
+  @Deprecated('we are using commandPath now')
   static String getChoiceTextAtNode(String text, ChoiceTreeNode node) {
     return text
         // Replace the leading text (like "Kick ").
@@ -143,18 +137,17 @@ class ChoiceTreeNode {
 
 /// Choice with metadata important for the algorithm.
 class _Choice {
-  final List<String> subCommands;
   final Choice choice;
-
-  int _order;
-
-  _Choice(Choice choice)
-      : choice = choice,
-        subCommands = _getSubCommands(choice) {
-    _order = subCommands.length - 1;
-  }
 
   /// The depth of this choice. In short, it's the number of `>>`
   /// in the command text.
-  int get order => _order;
+  final int order;
+
+  _Choice(Choice choice)
+      : choice = choice,
+        assert(choice.commandPath.isNotEmpty,
+            "Command path must have at least one member: $choice"),
+        order = choice.commandPath.length - 1;
+
+  BuiltList<String> get subCommands => choice.commandPath;
 }

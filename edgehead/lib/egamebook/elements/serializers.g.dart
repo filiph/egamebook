@@ -32,5 +32,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(WinGame.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Choice)]),
-          () => new ListBuilder<Choice>()))
+          () => new ListBuilder<Choice>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>()))
     .build();

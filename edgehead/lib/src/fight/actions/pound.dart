@@ -16,7 +16,7 @@ final Entity balance =
 
 final Entity pounding = Entity(name: "pounding", team: neutralTeam);
 
-class Pound extends EnemyTargetAction {
+class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
   static const String className = "Pound";
 
   static final Pound singleton = Pound();
@@ -38,6 +38,10 @@ class Pound extends EnemyTargetAction {
       "heavily several times in a row. The goal is not to deal damage but to "
       "force the opponent to lose control of their combat stance. It can also "
       "give members of your party an opportunity to strike.";
+
+  @override
+  List<String> get commandPathTemplate =>
+      ["attack <object>", "stance", "force slash at weapon"];
 
   @override
   String get commandTemplate =>

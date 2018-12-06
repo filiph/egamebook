@@ -302,7 +302,8 @@ class EdgeheadGame extends Book {
       final callbacks = Map<Choice, Future<Null> Function()>();
       for (Performance performance in performances) {
         final choice = Choice((b) => b
-          ..markdownText = performance.command
+          ..command = performance.command
+          ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
           ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
