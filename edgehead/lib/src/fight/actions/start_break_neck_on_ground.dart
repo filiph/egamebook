@@ -10,8 +10,6 @@ import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 
-const String startBreakNeckOnGroundCommandTemplate = "break >> <object's> neck";
-
 const String startBreakNeckOnGroundHelpMessage =
     "This move is hard, but when succesful, it's decisive.";
 
@@ -27,7 +25,8 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
 
 EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       name: "StartBreakNeckOnGround",
-      commandTemplate: startBreakNeckOnGroundCommandTemplate,
+      commandTemplate: "break <object's> neck",
+      commandPathTemplate: const ["attack <object>", "kill", "break neck"],
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
           a.isBarehanded &&

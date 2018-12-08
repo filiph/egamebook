@@ -11,9 +11,6 @@ import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/roll_
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
-const String startStrikeDownCommandTemplate =
-    "slash >> <object> >> by striking down";
-
 const String startStrikeDownHelpMessage =
     "Opponents on the ground are often the most "
     "vulnerable.";
@@ -40,7 +37,12 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
 
 EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       name: "StartStrikeDown",
-      commandTemplate: startStrikeDownCommandTemplate,
+      commandTemplate: "slash <object> by striking down",
+      commandPathTemplate: const [
+        "attack <object>",
+        "kill",
+        "slash <objectPronoun> from above"
+      ],
       helpMessage: startStrikeDownHelpMessage,
       applyStart: startStrikeDownReportStart,
       isApplicable: (a, sim, w, enemy) =>

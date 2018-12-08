@@ -60,6 +60,7 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
 EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       name: "CounterSlash",
       commandTemplate: counterSlashCommandTemplate,
+      commandPathTemplate: const [counterSlashCommandTemplate],
       helpMessage: counterSlashHelpMessage,
       applyStart: counterSlashReportStart,
       applyWhenFailed: counterSlashApplyFailure,

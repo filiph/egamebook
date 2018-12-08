@@ -40,6 +40,7 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
   return StartDefensibleAction(
     name: "StartThrust",
     commandTemplate: startThrustCommandTemplate(designation),
+    commandPathTemplate: startThrustCommandPathTemplate(designation),
     helpMessage: startThrustHelpMessage,
     applyStart: startThrustReportStart(designation),
     isApplicable: (a, sim, w, enemy) =>
@@ -60,6 +61,17 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
 
 String startThrustCommandTemplate(BodyPartDesignation designation) {
   return "thrust >> <object's> >> ${designation.toHumanString()}";
+}
+
+List<String> startThrustCommandPathTemplate(BodyPartDesignation designation) {
+  bool kill = designation == BodyPartDesignation.head ||
+      designation == BodyPartDesignation.neck ||
+      designation == BodyPartDesignation.torso;
+  return [
+    "attack <object>",
+    kill ? "kill" : "maim",
+    "stab <objectPronoun's> ${designation.toHumanString()}"
+  ];
 }
 
 PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>

@@ -10,8 +10,6 @@ import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/leap_defense_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
-const String startLeapCommandTemplate = "leap >> at <object>";
-
 const String startLeapHelpMessage =
     "Jumping and tackling an opponent is one of the most risky moves but it's "
     "a quick way to neutralize someone.";
@@ -32,7 +30,12 @@ ReasonedSuccessChance computeStartLeap(
 
 EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     name: "StartLeap",
-    commandTemplate: startLeapCommandTemplate,
+    commandTemplate: "leap at <object>",
+    commandPathTemplate: const [
+      "attack <object>",
+      "stance",
+      "leap at <object> to bring <objectPronoun> down"
+    ],
     helpMessage: startLeapHelpMessage,
     applyStart: startLeapReportStart,
     isApplicable: (a, sim, w, enemy) =>

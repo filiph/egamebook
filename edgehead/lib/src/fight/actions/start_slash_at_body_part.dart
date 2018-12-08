@@ -45,7 +45,18 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
 }
 
 String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "slash >> <object's> >> ${designation.toHumanString()}";
+  return "slash <object's> ${designation.toHumanString()}";
+}
+
+List<String> startSlashCommandPathTemplate(BodyPartDesignation designation) {
+  bool kill = designation == BodyPartDesignation.head ||
+      designation == BodyPartDesignation.neck ||
+      designation == BodyPartDesignation.torso;
+  return [
+    "attack <object>",
+    kill ? "kill" : "maim",
+    "slash <objectPronoun's> ${designation.toHumanString()}"
+  ];
 }
 
 /// Creates the [StartDefensibleAction.applyStart] function for given
@@ -69,6 +80,7 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
   return StartDefensibleAction(
     name: "StartSlashAt$designation",
     commandTemplate: startSlashCommandTemplate(designation),
+    commandPathTemplate: startSlashCommandPathTemplate(designation),
     helpMessage: startSlashHelpMessage,
     applyStart: startSlashReportStart(designation),
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>

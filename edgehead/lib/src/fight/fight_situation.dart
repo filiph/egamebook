@@ -6,7 +6,6 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -27,7 +26,6 @@ import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
-import 'package:edgehead/src/fight/actions/start_slash_from_direction.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
@@ -96,8 +94,6 @@ abstract class FightSituation extends Object
         startSlashAtBodyPartGenerator(BodyPartDesignation.neck),
         startSlashAtBodyPartGenerator(BodyPartDesignation.leftLeg),
         startSlashAtBodyPartGenerator(BodyPartDesignation.rightLeg),
-        startSlashFromDirectionGenerator(SlashDirection.left),
-        startSlashFromDirectionGenerator(SlashDirection.right),
         startStrikeDownBuilder(),
         startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
         startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),

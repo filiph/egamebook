@@ -113,9 +113,13 @@ class StartDefensibleAction extends EnemyTargetAction
   @override
   final String name;
 
+  @override
+  final List<String> commandPathTemplate;
+
   StartDefensibleAction({
     @required this.name,
     @required this.commandTemplate,
+    @required this.commandPathTemplate,
     @required this.helpMessage,
     @required OtherActorApplicabilityFunction isApplicable,
     @required this.applyStart,
@@ -131,10 +135,6 @@ class StartDefensibleAction extends EnemyTargetAction
     assert(!rerollable || rerollResource != null);
     assert(!rerollable || rollReasonTemplate != null);
   }
-
-  @override
-  // TODO: remove this and implement it in subclasses / users
-  List<String> get commandPathTemplate => commandTemplate.split('>>');
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {

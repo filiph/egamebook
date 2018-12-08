@@ -11,15 +11,18 @@ import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
-const String startThrustSpearDownCommandTemplate = "thrust >> at <object>";
-
 const String startThrustSpearDownHelpMessage =
     "Opponents on the ground are often the most "
     "vulnerable.";
 
 EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       name: "StartThrustSpearDown",
-      commandTemplate: startThrustSpearDownCommandTemplate,
+      commandTemplate: "thrust at <object>",
+      commandPathTemplate: const [
+            "attack <object>",
+            "kill",
+            "thrust at <objectPronoun> from above"
+      ],
       helpMessage: startThrustSpearDownHelpMessage,
       applyStart: startThrustSpearDownReportStart,
       isApplicable: (a, sim, w, enemy) =>
