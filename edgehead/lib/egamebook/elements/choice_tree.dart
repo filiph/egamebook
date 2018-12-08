@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/egamebook/elements/choice_block_element.dart';
 import 'package:edgehead/egamebook/elements/choice_element.dart';
@@ -97,23 +95,6 @@ class ChoiceTree {
 
   ChoiceTree(this.choiceBlock)
       : root = _makeTree(0, '', _choicesFromBlock(choiceBlock));
-
-  /// Given a [text] of a [Choice] or choice group ([ChoiceTreeNode]),
-  /// and the currently shown [node], return the text to show.
-  ///
-  /// For example, for a choice with [Choice.command] like
-  /// "Kick >> goblin >> in groin" and a node of level `1`, the result
-  /// would be "goblin in groin". For a group at level `0`, it would be "Kick".
-  @Deprecated('we are using commandPath now')
-  static String getChoiceTextAtNode(String text, ChoiceTreeNode node) {
-    return text
-        // Replace the leading text (like "Kick ").
-        .replaceFirst(node.prefix, '')
-        // Collapse ' >> ' into a single space.
-        .replaceAll(' >> ', ' ')
-        // Otherwise, just remove '>>'.
-        .replaceAll('>>', '');
-  }
 }
 
 class ChoiceTreeNode {

@@ -137,22 +137,4 @@ void main() {
 
     expect(tree.root.order, equals(0));
   });
-
-  test("do not show `>>` in UI", () {
-    final choice = _buildChoice('Kick >> the dagger >> out of reach.');
-
-    final choiceBlock = (ChoiceBlockBuilder()
-          ..choices.addAll([
-            choice,
-          ])
-          ..saveGame = emptySaveGame)
-        .build();
-
-    final tree = ChoiceTree(choiceBlock);
-
-    expect(
-        ChoiceTree.getChoiceTextAtNode(
-            'Kick >> the dagger >> out of reach.', tree.root),
-        isNot(contains('>>')));
-  });
 }
