@@ -19,9 +19,9 @@ EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       name: "StartThrustSpearDown",
       commandTemplate: "thrust at <object>",
       commandPathTemplate: const [
-            "attack <object>",
-            "kill",
-            "thrust at <objectPronoun> from above"
+        "attack <object>",
+        "kill",
+        "thrust at <objectPronoun> from above"
       ],
       helpMessage: startThrustSpearDownHelpMessage,
       applyStart: startThrustSpearDownReportStart,

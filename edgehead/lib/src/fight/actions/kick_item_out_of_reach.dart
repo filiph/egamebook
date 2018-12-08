@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class KickItemOutOfReach extends ItemAction  with ComplexCommandPath<Item> {
+class KickItemOutOfReach extends ItemAction with ComplexCommandPath<Item> {
   static const String className = "KickItemOutOfReach";
 
   static final KickItemOutOfReach singleton = KickItemOutOfReach();
@@ -16,10 +16,8 @@ class KickItemOutOfReach extends ItemAction  with ComplexCommandPath<Item> {
   final bool isProactive = true;
 
   @override
-  List<String> get commandPathTemplate => const [
-    "environment",
-    "kick <object> out of reach"
-  ];
+  List<String> get commandPathTemplate =>
+      const ["environment", "kick <object> out of reach"];
 
   @override
   String get commandTemplate => "kick <object> out of reach";
