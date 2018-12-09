@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action<Null> {
+class StandUp extends Action<Null> with ComplexCommandPath<Null> {
   static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";
@@ -30,6 +30,9 @@ class StandUp extends Action<Null> {
 
   @override
   final Resource rerollResource = Resource.stamina;
+
+  @override
+  List<String> get commandPathTemplate => const ["self", "stand up"];
 
   @override
   String get name => className;

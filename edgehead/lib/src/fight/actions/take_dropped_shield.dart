@@ -7,13 +7,17 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedShield extends ItemAction {
+class TakeDroppedShield extends ItemAction with ComplexCommandPath<Item> {
   static const String className = "TakeDroppedShield";
 
   static final TakeDroppedShield singleton = TakeDroppedShield();
 
   @override
   final bool isProactive = true;
+
+  @override
+  List<String> get commandPathTemplate =>
+      const ["environment", "pick up <object>"];
 
   @override
   String get commandTemplate => "pick up <object>";
