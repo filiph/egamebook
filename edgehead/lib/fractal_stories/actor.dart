@@ -60,6 +60,7 @@ abstract class Actor extends Object
       String currentRoomName,
       int followingActorId,
       Team team,
+      Pose poseMax = Pose.combat,
       bool isConfused = false,
       String combineFunctionHandle = "normal"}) {
     Anatomy currentAnatomy =
@@ -95,6 +96,7 @@ abstract class Actor extends Object
       ..combineFunctionHandle = combineFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = Pose.standing
+      ..poseMax = poseMax
       ..isActive = true);
   }
 
@@ -232,6 +234,11 @@ abstract class Actor extends Object
   bool get nameIsProperNoun;
 
   Pose get pose;
+
+  /// The maximum pose achievable by this actor. In general, only expert
+  /// warriors know how to go into [Pose.combat]. Some people can't even
+  /// go beyond [Pose.extended]. Drunks will never go beyond [Pose.offBalance].
+  Pose get poseMax;
 
   @override
   Pronoun get pronoun;

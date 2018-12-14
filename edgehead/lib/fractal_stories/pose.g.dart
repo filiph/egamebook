@@ -19,14 +19,20 @@ part of fractal_stories.pose;
 // ignore_for_file: unnecessary_new
 // ignore_for_file: test_types_in_equals
 
+const Pose _$combat = const Pose._('combat');
 const Pose _$standing = const Pose._('standing');
+const Pose _$extended = const Pose._('extended');
 const Pose _$offBalance = const Pose._('offBalance');
 const Pose _$onGround = const Pose._('onGround');
 
 Pose _$valueOf(String name) {
   switch (name) {
+    case 'combat':
+      return _$combat;
     case 'standing':
       return _$standing;
+    case 'extended':
+      return _$extended;
     case 'offBalance':
       return _$offBalance;
     case 'onGround':
@@ -37,7 +43,9 @@ Pose _$valueOf(String name) {
 }
 
 final BuiltSet<Pose> _$values = new BuiltSet<Pose>(const <Pose>[
+  _$combat,
   _$standing,
+  _$extended,
   _$offBalance,
   _$onGround,
 ]);

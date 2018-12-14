@@ -78,6 +78,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           specifiedType: const FullType(bool)),
       'pose',
       serializers.serialize(object.pose, specifiedType: const FullType(Pose)),
+      'poseMax',
+      serializers.serialize(object.poseMax,
+          specifiedType: const FullType(Pose)),
       'pronoun',
       serializers.serialize(object.pronoun,
           specifiedType: const FullType(Pronoun)),
@@ -189,6 +192,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.pose = serializers.deserialize(value,
               specifiedType: const FullType(Pose)) as Pose;
           break;
+        case 'poseMax':
+          result.poseMax = serializers.deserialize(value,
+              specifiedType: const FullType(Pose)) as Pose;
+          break;
         case 'pronoun':
           result.pronoun.replace(serializers.deserialize(value,
               specifiedType: const FullType(Pronoun)) as Pronoun);
@@ -248,6 +255,8 @@ class _$Actor extends Actor {
   @override
   final Pose pose;
   @override
+  final Pose poseMax;
+  @override
   final Pronoun pronoun;
   @override
   final int stamina;
@@ -277,6 +286,7 @@ class _$Actor extends Actor {
       this.name,
       this.nameIsProperNoun,
       this.pose,
+      this.poseMax,
       this.pronoun,
       this.stamina,
       this.team})
@@ -332,6 +342,9 @@ class _$Actor extends Actor {
     if (pose == null) {
       throw new BuiltValueNullFieldError('Actor', 'pose');
     }
+    if (poseMax == null) {
+      throw new BuiltValueNullFieldError('Actor', 'poseMax');
+    }
     if (pronoun == null) {
       throw new BuiltValueNullFieldError('Actor', 'pronoun');
     }
@@ -373,6 +386,7 @@ class _$Actor extends Actor {
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
         pose == other.pose &&
+        poseMax == other.poseMax &&
         pronoun == other.pronoun &&
         stamina == other.stamina &&
         team == other.team;
@@ -398,23 +412,23 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode),
-                                                                                currentRoomName.hashCode),
-                                                                            dexterity.hashCode),
-                                                                        followingActorId.hashCode),
-                                                                    gold.hashCode),
-                                                                hitpoints.hashCode),
-                                                            id.hashCode),
-                                                        initiative.hashCode),
-                                                    inventory.hashCode),
-                                                isActive.hashCode),
-                                            isConfused.hashCode),
-                                        isPlayer.hashCode),
-                                    isSurvivor.hashCode),
-                                maxHitpoints.hashCode),
-                            name.hashCode),
-                        nameIsProperNoun.hashCode),
-                    pose.hashCode),
+                                                                            $jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode),
+                                                                                dexterity.hashCode),
+                                                                            followingActorId.hashCode),
+                                                                        gold.hashCode),
+                                                                    hitpoints.hashCode),
+                                                                id.hashCode),
+                                                            initiative.hashCode),
+                                                        inventory.hashCode),
+                                                    isActive.hashCode),
+                                                isConfused.hashCode),
+                                            isPlayer.hashCode),
+                                        isSurvivor.hashCode),
+                                    maxHitpoints.hashCode),
+                                name.hashCode),
+                            nameIsProperNoun.hashCode),
+                        pose.hashCode),
+                    poseMax.hashCode),
                 pronoun.hashCode),
             stamina.hashCode),
         team.hashCode));
@@ -442,6 +456,7 @@ class _$Actor extends Actor {
           ..add('name', name)
           ..add('nameIsProperNoun', nameIsProperNoun)
           ..add('pose', pose)
+          ..add('poseMax', poseMax)
           ..add('pronoun', pronoun)
           ..add('stamina', stamina)
           ..add('team', team))
@@ -533,6 +548,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   Pose get pose => _$this._pose;
   set pose(Pose pose) => _$this._pose = pose;
 
+  Pose _poseMax;
+  Pose get poseMax => _$this._poseMax;
+  set poseMax(Pose poseMax) => _$this._poseMax = poseMax;
+
   PronounBuilder _pronoun;
   PronounBuilder get pronoun => _$this._pronoun ??= new PronounBuilder();
   set pronoun(PronounBuilder pronoun) => _$this._pronoun = pronoun;
@@ -568,6 +587,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
       _pose = _$v.pose;
+      _poseMax = _$v.poseMax;
       _pronoun = _$v.pronoun?.toBuilder();
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
@@ -614,6 +634,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               name: name,
               nameIsProperNoun: nameIsProperNoun,
               pose: pose,
+              poseMax: poseMax,
               pronoun: pronoun.build(),
               stamina: stamina,
               team: team.build());

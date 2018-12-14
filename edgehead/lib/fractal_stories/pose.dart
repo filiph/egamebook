@@ -6,16 +6,77 @@ import 'package:built_value/serializer.dart';
 
 part 'pose.g.dart';
 
-class Pose extends EnumClass {
+class Pose extends EnumClass implements Comparable<Pose> {
+  /// Combat stance. Well-defended all around. In general, no attack will
+  /// do much damage, if any. Almost no chance of killing, unless attacker
+  /// is much more skilled.
+  static const Pose combat = _$combat;
+
+  /// Standing well but not in an expert combat stance. For many combatants,
+  /// this is the best [Pose] they can muster.
   static const Pose standing = _$standing;
+
+  /// Standing, but with the primary arm extended. This is often only a fleeting
+  /// moment just after some kind of move. It makes it possible to attempt
+  /// some moves, such as chopping of the extended limb, or attacking the torso.
+  /// Normally, this [Pose] automatically improves to [Pose.standing].
+  static const Pose extended = _$extended;
+
+  /// Still standing, but off balance. It's easy to make such a combatant
+  /// fall, and easier to maim or kill.
   static const Pose offBalance = _$offBalance;
+
+  /// Prone position after falling down. This is really bad for the combatant
+  /// as this unlocks moves like "slash from above", which is an almost sure
+  /// insta-kill.
   static const Pose onGround = _$onGround;
+
+  /// A sequence of poses from worst to best.
+  static const List<Pose> _sequence = [
+    onGround,
+    offBalance,
+    extended,
+    standing,
+    combat
+  ];
 
   static Serializer<Pose> get serializer => _$poseSerializer;
 
   static BuiltSet<Pose> get values => _$values;
 
   const Pose._(String name) : super(name);
+
+  /// Return a [Pose] that is better or worse than the current one.
+  ///
+  /// You specify by how much ([levels]) and if there is an upper limit ([max]).
+  /// The lower limit is always [Pose.onGround].
+  ///
+  /// Example:
+  ///
+  ///     // Worsen actor's pose by 2 levels (i.e. from combat to extended
+  ///     // or from extended to onGround).
+  ///     actor.pose = actor.pose.changeBy(-2);
+  Pose changeBy(int levels, {Pose max = Pose.combat}) {
+    assert(levels != null);
+    assert(max != null);
+    final index = _sequence.indexOf(this);
+    final maxIndex = _sequence.lastIndexOf(max);
+    var newIndex = index + levels;
+    if (newIndex > maxIndex) newIndex = maxIndex;
+    return _sequence[newIndex];
+  }
+
+  @override
+  int compareTo(Pose other) {
+    return _sequence.indexOf(this).compareTo(_sequence.indexOf(other));
+  }
+
+  @override
+  bool operator >(Pose other) {
+    return this.compareTo(other) > 0;
+    XXX START HERE
+  }
+
 
   static Pose valueOf(String name) => _$valueOf(name);
 }
