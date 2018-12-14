@@ -281,9 +281,7 @@ abstract class ApproachAction extends Action<Approach> {
 ///
 /// Overrides the default functionality in [Action] and requires
 /// the [commandPathTemplate] field to be non-null and non-empty.
-///
-/// TODO: use `mixin Complex... on Action<T>` when built_value understands mixins
-abstract class ComplexCommandPath<T extends Entity> implements Action<T> {
+mixin ComplexCommandPath<T extends Entity> on Action<T> {
   /// This is to [getCommandPath] what [commandTemplate] is
   /// to [getCommandTemplate].
   ///
