@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -86,7 +87,12 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
-        a.currentWeapon.damageCapability.isSlashing,
+        a.currentWeapon.damageCapability.isSlashing &&
+        // Only allow limb attacks when enemy is (at least) extended.
+        (!designation.isLimb || enemy.pose <= Pose.extended) &&
+        // Only allow decapitation when enemy is (at least) off balance.
+        (designation != BodyPartDesignation.neck ||
+            enemy.pose <= Pose.offBalance),
     mainSituationBuilder: (a, sim, w, enemy) =>
         createSlashSituation(w.randomInt(), a, enemy, designation: designation),
     defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>

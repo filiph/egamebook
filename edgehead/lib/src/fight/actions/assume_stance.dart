@@ -7,14 +7,14 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 
-class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
-  static final RegainBalance singleton = RegainBalance();
+class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
+  static final AssumeStance singleton = AssumeStance();
 
-  static const String className = "RegainBalance";
+  static const String className = "AssumeStance";
 
   @override
-  final String helpMessage = "Most moves are easier and more effective when "
-      "you are firmly in balance.";
+  final String helpMessage = "When in proper combat stance, the enemy has "
+      "fewer opportunities for attack.";
 
   @override
   final bool isAggressive = false;
@@ -32,7 +32,7 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
   final Resource rerollResource = null;
 
   @override
-  List<String> get commandPathTemplate => const ["self", "regain balance"];
+  List<String> get commandPathTemplate => const ["self", "improve stance"];
 
   @override
   String get name => className;
@@ -47,19 +47,18 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> regain<s> <object>",
+    a.report(s, "<subject> assume<s> better stance",
         object: balance, positive: true);
-    w.updateActorById(a.id,
-        (b) => b.pose = a.poseMax >= Pose.standing ? Pose.standing : a.poseMax);
-    return "${a.name} regains balance";
+    w.updateActorById(a.id, (b) => b.pose = a.poseMax);
+    return "${a.name} assumes better stance";
   }
 
   @override
-  String getCommand(Null _) => "Regain balance.";
+  String getCommand(Null _) => "Assume better stance.";
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
-      "Will ${a.pronoun.nominative} regain balance?";
+      "Will ${a.pronoun.nominative} assume better stance?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
@@ -68,5 +67,5 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
-      a.pose == Pose.offBalance && a.pose > Pose.offBalance;
+      a.pose > Pose.offBalance && a.pose < a.poseMax;
 }

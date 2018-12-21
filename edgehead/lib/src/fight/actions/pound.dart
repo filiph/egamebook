@@ -71,7 +71,7 @@ class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
         "<subject> {retain<s>|keep<s>} "
         "<subject's> {|combat} {stance|footing}",
         positive: true);
-    return "${a.name} kicks ${enemy.name} off balance";
+    return "${a.name} fails to pound ${enemy.name} off balance";
   }
 
   @override

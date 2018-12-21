@@ -263,6 +263,13 @@ class BodyPartDesignation extends EnumClass {
 
   const BodyPartDesignation._(String name) : super(name);
 
+  /// True if this is any limb (arm or leg).
+  bool get isLimb =>
+      this == leftLeg ||
+      this == rightLeg ||
+      this == primaryArm ||
+      this == secondaryArm;
+
   String toHumanString() {
     // TODO: add special case for 'leftLeg' etc.
     return name;

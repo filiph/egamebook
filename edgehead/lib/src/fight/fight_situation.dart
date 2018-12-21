@@ -13,11 +13,12 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/assume_stance.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
+import 'package:edgehead/src/fight/actions/feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
-import 'package:edgehead/src/fight/actions/sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
@@ -29,6 +30,7 @@ import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
+import 'package:edgehead/src/fight/actions/sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
@@ -84,6 +86,7 @@ abstract class FightSituation extends Object
   List<Action<dynamic>> get actions => <Action<dynamic>>[
         Confuse.singleton,
         DisarmKick.singleton,
+        FaintSlash.singleton,
         Pound.singleton,
         SweepFeet.singleton,
         startBreakNeckOnGroundBuilder(),
@@ -105,6 +108,7 @@ abstract class FightSituation extends Object
         ThrowSpear.singleton,
         ThrowThrustingWeapon.singleton,
         // simple ones
+        AssumeStance.singleton,
         Cower.singleton,
         KickItemOutOfReach.singleton,
         RegainBalance.singleton,
