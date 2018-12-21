@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'dart:math';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_global.dart';
+import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
@@ -20,8 +21,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/stat.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
-
-import 'edgehead_serializers.dart' as edgehead_serializer;
 
 class EdgeheadGame extends Book {
   static final StatSetting<double> hitpointsSetting = StatSetting<double>(
@@ -62,6 +61,10 @@ class EdgeheadGame extends Book {
   final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
 
+  /// An instance that can be reused to generate randomness, provided that
+  /// it's always seeded with a new state before use.
+  final StatefulRandom _reusableRandom = StatefulRandom(42);
+
   /// Create a new Edgehead game.
   ///
   /// The optional [actionPattern] will stop the automated playthrough
@@ -91,6 +94,105 @@ class EdgeheadGame extends Book {
   void close() {
     _pubsub.close();
     super.close();
+  }
+
+  @override
+  void start() {
+    update();
+  }
+
+  Future<Null> update() async {
+    try {
+      await _update();
+    } catch (e, s) {
+      // Catch errors and send to presenter.
+      elementsSink.add(ErrorElement((b) => b
+        ..message = e.toString()
+        ..stackTrace = s.toString()));
+      return;
+    }
+  }
+
+  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
+    if (event.actor.isPlayer) {
+      event.context.outputStoryline.addCustomElement(StatUpdate<int>((b) => b
+        ..name = hitpointsSetting.name
+        ..newValue = event.actor.hitpoints));
+    }
+  }
+
+  Future _applyPlayerAction(Performance<dynamic> performance, Actor actor,
+      List<PlanConsequence> consequences) async {
+    num chance = performance.action
+        .getSuccessChance(actor, simulation, world, performance.object)
+        .value;
+    if (chance == 1.0) {
+      consequence = consequences.single;
+    } else if (chance == 0.0) {
+      consequence = consequences.single;
+    } else {
+      var resourceName =
+          performance.action.rerollResource.toString().split('.').last;
+      assert(
+          !performance.action.rerollable ||
+              performance.action.rerollResource == Resource.stamina,
+          'Non-stamina resource needed for ${performance.action.name}');
+      var result = await showSlotMachine(
+          chance.toDouble(),
+          performance.action
+              .getRollReason(actor, simulation, world, performance.object),
+          rerollable: performance.action.rerollable &&
+              actor.hasResource(performance.action.rerollResource),
+          rerollEffectDescription: "use $resourceName");
+      consequence =
+          consequences.where((c) => c.isSuccess == result.isSuccess).single;
+
+      if (result.wasRerolled) {
+        // Deduct player's stats (stamina, etc.) according to wasRerolled.
+        assert(
+            performance.action.rerollResource != null,
+            "Action.rerollable is true but "
+            "no Action.rerollResource is specified.");
+        assert(performance.action.rerollResource == Resource.stamina,
+            "Only stamina is supported as reroll resource right now");
+        // TODO: find out if we can do away without modifying world outside
+        //       planner
+        final builder = consequence.world.toBuilder();
+        builder.updateActorById(actor.id, (b) => b..stamina -= 1);
+        world = builder.build();
+        consequence = PlanConsequence.withUpdatedWorld(consequence, world);
+      }
+    }
+  }
+
+  Future<Null> _applySelected(
+      Performance performance, Actor actor, Storyline storyline) async {
+    var consequences = performance.action
+        .apply(
+            actor, consequence, simulation, world, _pubsub, performance.object)
+        .toList();
+
+    if (actor.isPlayer) {
+      await _applyPlayerAction(performance, actor, consequences);
+    } else {
+      // This initializes the random state based on current
+      // [WorldState.statefulRandomState]. We don't save the state after use
+      // because that would be changing state outside an action.
+      _reusableRandom.loadState(world.statefulRandomState ~/ 3 * 2 + 1);
+      int index = Randomly.chooseWeighted(
+          consequences.map((c) => c.probability),
+          random: _reusableRandom);
+      consequence = consequences[index];
+    }
+
+    storyline.concatenate(consequence.storyline);
+    world = consequence.world;
+
+    log.fine(() => "${actor.name} selected ${performance.action.name}");
+    log.finest(() {
+      String path = world.actionHistory.describe();
+      return "- how ${actor.name} got here: $path";
+    });
   }
 
   /// Sets up the game, either as a load from [saveGameSerialized] or
@@ -134,23 +236,6 @@ class EdgeheadGame extends Book {
     simulation = edgeheadSimulation;
 
     consequence = PlanConsequence.initial(world);
-  }
-
-  @override
-  void start() {
-    update();
-  }
-
-  Future<Null> update() async {
-    try {
-      await _update();
-    } catch (e, s) {
-      // Catch errors and send to presenter.
-      elementsSink.add(ErrorElement((b) => b
-        ..message = e.toString()
-        ..stackTrace = s.toString()));
-      return;
-    }
   }
 
   Future<Null> _update() async {
@@ -334,91 +419,5 @@ class EdgeheadGame extends Book {
 
     // Run the next step asynchronously.
     Timer.run(() => update());
-  }
-
-  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
-    if (event.actor.isPlayer) {
-      event.context.outputStoryline.addCustomElement(StatUpdate<int>((b) => b
-        ..name = hitpointsSetting.name
-        ..newValue = event.actor.hitpoints));
-    }
-  }
-
-  Future _applyPlayerAction(Performance<dynamic> performance, Actor actor,
-      List<PlanConsequence> consequences) async {
-    num chance = performance.action
-        .getSuccessChance(actor, simulation, world, performance.object)
-        .value;
-    if (chance == 1.0) {
-      consequence = consequences.single;
-    } else if (chance == 0.0) {
-      consequence = consequences.single;
-    } else {
-      var resourceName =
-          performance.action.rerollResource.toString().split('.').last;
-      assert(
-          !performance.action.rerollable ||
-              performance.action.rerollResource == Resource.stamina,
-          'Non-stamina resource needed for ${performance.action.name}');
-      var result = await showSlotMachine(
-          chance.toDouble(),
-          performance.action
-              .getRollReason(actor, simulation, world, performance.object),
-          rerollable: performance.action.rerollable &&
-              actor.hasResource(performance.action.rerollResource),
-          rerollEffectDescription: "use $resourceName");
-      consequence =
-          consequences.where((c) => c.isSuccess == result.isSuccess).single;
-
-      if (result.wasRerolled) {
-        // Deduct player's stats (stamina, etc.) according to wasRerolled.
-        assert(
-            performance.action.rerollResource != null,
-            "Action.rerollable is true but "
-            "no Action.rerollResource is specified.");
-        assert(performance.action.rerollResource == Resource.stamina,
-            "Only stamina is supported as reroll resource right now");
-        // TODO: find out if we can do away without modifying world outside
-        //       planner
-        final builder = consequence.world.toBuilder();
-        builder.updateActorById(actor.id, (b) => b..stamina -= 1);
-        world = builder.build();
-        consequence = PlanConsequence.withUpdatedWorld(consequence, world);
-      }
-    }
-  }
-
-  /// An instance that can be reused to generate randomness, provided that
-  /// it's always seeded with a new state before use.
-  final StatefulRandom _reusableRandom = StatefulRandom(42);
-
-  Future<Null> _applySelected(
-      Performance performance, Actor actor, Storyline storyline) async {
-    var consequences = performance.action
-        .apply(
-            actor, consequence, simulation, world, _pubsub, performance.object)
-        .toList();
-
-    if (actor.isPlayer) {
-      await _applyPlayerAction(performance, actor, consequences);
-    } else {
-      // This initializes the random state based on current
-      // [WorldState.statefulRandomState]. We don't save the state after use
-      // because that would be changing state outside an action.
-      _reusableRandom.loadState(world.statefulRandomState ~/ 3 * 2 + 1);
-      int index = Randomly.chooseWeighted(
-          consequences.map((c) => c.probability),
-          random: _reusableRandom);
-      consequence = consequences[index];
-    }
-
-    storyline.concatenate(consequence.storyline);
-    world = consequence.world;
-
-    log.fine(() => "${actor.name} selected ${performance.action.name}");
-    log.finest(() {
-      String path = world.actionHistory.describe();
-      return "- how ${actor.name} got here: $path";
-    });
   }
 }

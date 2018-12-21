@@ -1,20 +1,19 @@
 library stranded.action;
 
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
-
-import 'actor.dart';
-import 'plan_consequence.dart';
-import 'simulation.dart';
-import 'storyline/storyline.dart';
 
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].

@@ -1,17 +1,16 @@
 library stranded.world;
 
 import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:meta/meta.dart';
-
-import 'actor.dart';
-import 'room.dart';
 
 typedef EventCallbackFunction = void Function(
     Simulation sim, WorldStateBuilder world, Storyline storyline);

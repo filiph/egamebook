@@ -1,12 +1,11 @@
 library stranded.plan_consequence;
 
+import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/core.dart';
-
-import 'action.dart';
-import 'storyline/storyline.dart';
 
 /// A container for statistics for a [PlanConsequence].
 @immutable

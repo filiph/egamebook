@@ -1,12 +1,11 @@
 library stranded.situation;
 
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
-
-import 'action.dart';
-import 'actor.dart';
-import 'simulation.dart';
-import 'storyline/storyline.dart';
 
 /// Situation is a phase during play. It governs which actions are available,
 /// and what actors can act (and in what order).

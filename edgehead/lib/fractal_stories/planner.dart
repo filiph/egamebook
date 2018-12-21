@@ -3,22 +3,19 @@ library stranded.planner;
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:meta/meta.dart';
-
-import 'action.dart';
-import 'actor.dart';
 import 'package:edgehead/ecs/pubsub.dart';
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
-import 'plan_consequence.dart';
-import 'simulation.dart';
+import 'package:meta/meta.dart';
 
 class ActorPlanner {
-  final Logger log = Logger('ActorPlanner');
-
   /// We will stop processing a plan path once its leaf node has lower
   /// cumulative probability than this.
   static const num minimumCumulativeProbability = 0.05;
@@ -28,6 +25,8 @@ class ActorPlanner {
   static const num bestCaseProbabilityThreshold = 0.15;
 
   static DateTime _latestWait = DateTime.now();
+
+  final Logger log = Logger('ActorPlanner');
   final int actorId;
 
   final PlanConsequence _initial;

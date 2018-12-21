@@ -2,15 +2,15 @@ library storyline;
 
 import 'dart:collection';
 import 'dart:math';
+
 import 'package:edgehead/egamebook/elements/elements.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
-import '../team.dart';
-import 'randomly.dart';
-
-import 'storyline_pronoun.dart';
-export 'storyline_pronoun.dart';
+export 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 
 part 'storyline_entity.dart';
 
@@ -124,24 +124,6 @@ class Report {
 // TODO: startOfAction - if there is no report before startOfAction and
 // endOfAction, don't report startOfAction.
 // Prevents: "You set up the laser. The laser is now set up to fire at target."
-}
-
-/// Used to store different kinds of user-facing output.
-@immutable
-class _StorylineRecord {
-  final Report report;
-
-  final ElementBase customElement;
-
-  _StorylineRecord({this.report, this.customElement}) {
-    assert(
-        report == null || customElement == null,
-        "_StorylineRecord should be either text or custom element, "
-        "never both.");
-  }
-
-  /// Whether this record contains a (textual) [Report].
-  bool get isReport => report != null;
 }
 
 /// Class for reporting a sequence of events in 'natural' language.
@@ -405,6 +387,30 @@ class Storyline {
         _reports[i].object.id == _reports[j].subject.id;
   }
 
+  /// If storyline already has something to show (at least one full
+  /// paragraph), this will output it and remove it.
+  ///
+  /// This is useful for when the output is still being generated (no
+  /// [ChoiceBlock] in sight, actors other than player still haven't finished
+  /// their turns) but we do want to output something to the player.
+  ///
+  /// TODO: output custom elements as well
+  /// TODO: optimize
+  Iterable<ElementBase> generateFinishedOutput() sync* {
+    while (hasManyParagraphs) {
+      yield* realize(onlyFirstParagraph: true);
+      removeFirstParagraph();
+    }
+  }
+
+  /// Like [generateFinishedOutput], but doesn't stop before the last paragraph
+  /// and goes until the end.
+  Iterable<ElementBase> generateOutput() sync* {
+    yield* generateFinishedOutput();
+    yield* realize();
+    _records.clear();
+  }
+
   /// Returns an iterable of all the entities present in given report.
   Iterable<Entity> getAllEntities(int i) sync* {
     if (!valid(i)) return;
@@ -582,43 +588,6 @@ class Storyline {
     return printed;
   }
 
-  /// If storyline already has something to show (at least one full
-  /// paragraph), this will output it and remove it.
-  ///
-  /// This is useful for when the output is still being generated (no
-  /// [ChoiceBlock] in sight, actors other than player still haven't finished
-  /// their turns) but we do want to output something to the player.
-  ///
-  /// TODO: output custom elements as well
-  /// TODO: optimize
-  Iterable<ElementBase> generateFinishedOutput() sync* {
-    while (hasManyParagraphs) {
-      yield* realize(onlyFirstParagraph: true);
-      removeFirstParagraph();
-    }
-  }
-
-  /// Like [generateFinishedOutput], but doesn't stop before the last paragraph
-  /// and goes until the end.
-  Iterable<ElementBase> generateOutput() sync* {
-    yield* generateFinishedOutput();
-    yield* realize();
-    _records.clear();
-  }
-
-  /// Old way of getting text out of [Storyline]. Use [realize]
-  /// instead unless you want only plain (markdown) text.
-  String realizeAsString({bool onlyFirstParagraph = false}) {
-    final buf = StringBuffer();
-    final list = realize(onlyFirstParagraph: onlyFirstParagraph);
-    for (final element in list) {
-      if (element is TextOutput) {
-        buf.write(element.markdownText);
-      }
-    }
-    return buf.toString();
-  }
-
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
@@ -768,6 +737,19 @@ class Storyline {
     }
 
     return result;
+  }
+
+  /// Old way of getting text out of [Storyline]. Use [realize]
+  /// instead unless you want only plain (markdown) text.
+  String realizeAsString({bool onlyFirstParagraph = false}) {
+    final buf = StringBuffer();
+    final list = realize(onlyFirstParagraph: onlyFirstParagraph);
+    for (final element in list) {
+      if (element is TextOutput) {
+        buf.write(element.markdownText);
+      }
+    }
+    return buf.toString();
   }
 
   @visibleForTesting
@@ -988,4 +970,22 @@ class Storyline {
     else
       return "$firstLetter${result.substring(1)}";
   }
+}
+
+/// Used to store different kinds of user-facing output.
+@immutable
+class _StorylineRecord {
+  final Report report;
+
+  final ElementBase customElement;
+
+  _StorylineRecord({this.report, this.customElement}) {
+    assert(
+        report == null || customElement == null,
+        "_StorylineRecord should be either text or custom element, "
+        "never both.");
+  }
+
+  /// Whether this record contains a (textual) [Report].
+  bool get isReport => report != null;
 }
