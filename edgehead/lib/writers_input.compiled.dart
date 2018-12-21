@@ -1612,7 +1612,7 @@ final Room testFightOrc = new Room('test_fight_orc', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
 Approach testFightOrcFromPreStartBook = new Approach(
