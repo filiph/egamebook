@@ -17,7 +17,7 @@ import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
-import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
+import 'package:edgehead/src/fight/actions/sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/pound.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
@@ -84,8 +84,8 @@ abstract class FightSituation extends Object
   List<Action<dynamic>> get actions => <Action<dynamic>>[
         Confuse.singleton,
         DisarmKick.singleton,
-        KickToGround.singleton,
         Pound.singleton,
+        SweepFeet.singleton,
         startBreakNeckOnGroundBuilder(),
         startLeapBuilder(),
         startPunchBuilder(),

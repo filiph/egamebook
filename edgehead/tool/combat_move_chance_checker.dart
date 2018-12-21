@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
-import 'package:edgehead/src/fight/actions/kick_to_ground.dart';
+import 'package:edgehead/src/fight/actions/sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
@@ -51,7 +51,7 @@ void main() {
     "counter slash": computeCounterSlash,
     "counter tackle": computeCounterTackle,
     "off-balance opportunity thrust": computeOpportunityThrust,
-    "kick to ground": computeKickToGround,
+    "sweep feet": computeSweepFeet,
   };
 
   for (final computationName in getters.keys) {
