@@ -59,7 +59,7 @@ abstract class Actor extends Object
       String currentRoomName,
       int followingActorId,
       Team team,
-      Pose poseMax = Pose.combat,
+      Pose poseMax = Pose.standing,
       bool isConfused = false,
       String combineFunctionHandle = "normal"}) {
     Anatomy currentAnatomy =
@@ -94,7 +94,7 @@ abstract class Actor extends Object
       ..isConfused = isConfused
       ..combineFunctionHandle = combineFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
-      ..pose = Pose.standing
+      ..pose = poseMax
       ..poseMax = poseMax
       ..isActive = true);
   }

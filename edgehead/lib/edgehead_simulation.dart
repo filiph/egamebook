@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -34,6 +35,7 @@ final Actor edgeheadPlayer = Actor.initialized(playerId, "Aren",
     dexterity: 150,
     stamina: 1,
     initiative: 1000,
+    poseMax: Pose.combat,
     currentRoomName: _preStartBook.name);
 
 final Simulation edgeheadSimulation =
