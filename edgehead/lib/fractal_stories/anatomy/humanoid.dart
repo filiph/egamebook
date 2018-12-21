@@ -13,7 +13,6 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
   final random = StatefulRandom(seed);
 
   final rightLeg = BodyPart(random.next(), "right leg",
-      hitpoints: constitution,
       randomDesignation: "{right leg|right thigh}",
       designation: BodyPartDesignation.rightLeg,
       function: BodyPartFunction.mobile,
@@ -22,7 +21,6 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isSeverable: true);
 
   final leftLeg = BodyPart(random.next(), "left leg",
-      hitpoints: constitution,
       randomDesignation: "{left leg|left thigh}",
       designation: BodyPartDesignation.leftLeg,
       function: BodyPartFunction.mobile,
@@ -40,7 +38,6 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
 
   final primaryArm = BodyPart(random.next(), "wielding arm",
       randomDesignation: "{right arm|right shoulder}",
-      hitpoints: constitution,
       designation: BodyPartDesignation.primaryArm,
       isSeverable: true,
       swingSurfaceLeft: 10,
@@ -57,7 +54,6 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
 
   final secondaryArm = BodyPart(random.next(), "shield arm",
       randomDesignation: "{left arm|left shoulder}",
-      hitpoints: constitution,
       designation: BodyPartDesignation.secondaryArm,
       function: BodyPartFunction.wielding,
       isSeverable: true,
