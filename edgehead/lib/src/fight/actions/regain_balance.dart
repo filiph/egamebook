@@ -51,7 +51,7 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
       a.report(s, "<subject> regain<s> <object>",
           object: balance, positive: true);
     }
-    w.updateActorById(a.id, (b) => b.pose = Pose.standing);
+    w.updateActorById(a.id, (b) => b.pose = a.poseMax);
     return "${a.name} regains balance";
   }
 
@@ -69,5 +69,5 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
-      a.isOffBalance;
+      a.pose == Pose.offBalance;
 }

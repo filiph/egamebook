@@ -42,11 +42,11 @@ void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation situation) {
   a.report(s, "<subject> tr<ies> to swing back");
   a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
-  if (a.isStanding) {
+  if (a.pose > Pose.offBalance) {
     w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
     a.report(s, "<subject> lose<s> balance because of that",
         negative: true, endSentence: true);
-  } else if (a.isOffBalance) {
+  } else if (a.pose == Pose.offBalance) {
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     a.report(s, "<subject> lose<s> balance because of that", negative: true);
     a.report(s, "<subject> fall<s> to the ground",

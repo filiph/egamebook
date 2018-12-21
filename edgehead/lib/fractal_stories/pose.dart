@@ -79,5 +79,13 @@ class Pose extends EnumClass implements Comparable<Pose> {
     return _sequence.indexOf(this).compareTo(_sequence.indexOf(other));
   }
 
+  /// Return the number of levels between this and [other].
+  ///
+  /// When this is a better pose, the result will be positive. When the other
+  /// pose is better, the result will be negative.
+  int differenceFrom(Pose other) {
+    return _sequence.indexOf(this) - _sequence.indexOf(other);
+  }
+
   static Pose valueOf(String name) => _$valueOf(name);
 }

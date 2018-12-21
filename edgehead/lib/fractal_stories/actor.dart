@@ -203,14 +203,10 @@ abstract class Actor extends Object
 
   bool get isConfused;
 
-  bool get isOffBalance => pose == Pose.offBalance;
-
   bool get isOnGround => pose == Pose.onGround;
 
   @override
   bool get isPlayer;
-
-  bool get isStanding => pose == Pose.standing;
 
   /// When `true`, this actor is important to the story (e.g. it is the player
   /// or an important NPC) and so the game should go out of its way to keep them

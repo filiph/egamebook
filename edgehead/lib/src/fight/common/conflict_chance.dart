@@ -111,14 +111,9 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
     case CombatReason.dexterity:
       return (performer.dexterity - target.dexterity).clamp(-100, 100) / 100;
     case CombatReason.balance:
-      if (performer.isOffBalance && !target.isOffBalance) {
-        return -1.0;
-      } else if (!performer.isOffBalance && target.isOffBalance) {
-        return 1.0;
-      } else {
-        return 0.0;
-      }
-      throw StateError("Forgotten logic branch"); // ignore: dead_code
+      final difference =
+          performer.pose.differenceFrom(target.pose).clamp(-2, 2);
+      return difference / 2;
     case CombatReason.height:
       if (performer.isOnGround && !target.isOnGround) {
         return -1.0;

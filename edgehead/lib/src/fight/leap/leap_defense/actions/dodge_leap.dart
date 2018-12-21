@@ -50,8 +50,11 @@ class DodgeLeap extends OtherActorAction {
     final thread = getThreadId(sim, w, "LeapSituation");
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}",
         actionThread: thread, isSupportiveActionInThread: true);
-    if (a.isOffBalance) {
+    if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance",
+          but: true, actionThread: thread, isSupportiveActionInThread: true);
+    } else if (a.pose == Pose.extended) {
+      a.report(s, "<subject> <is> extended",
           but: true, actionThread: thread, isSupportiveActionInThread: true);
     } else {
       Randomly.run(

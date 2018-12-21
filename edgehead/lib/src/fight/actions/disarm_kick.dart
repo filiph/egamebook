@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -93,8 +94,8 @@ class DisarmKick extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
-      (a.isStanding || a.isOffBalance) &&
-      enemy.isOnGround &&
+      (a.pose >= Pose.offBalance) &&
+      enemy.pose <= Pose.onGround &&
       !enemy.isBarehanded &&
       !enemy.hasCrippledArms;
 }

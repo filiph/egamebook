@@ -64,7 +64,7 @@ class DefensiveParrySlash extends OtherActorAction {
         "<subject> tr<ies> to {parry|deflect it|"
         "meet it with ${weaponAsObject2(a)}|"
         "fend it off}");
-    if (a.isOffBalance) {
+    if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
       Randomly.run(
@@ -92,10 +92,10 @@ class DefensiveParrySlash extends OtherActorAction {
         "fend<s> it off}",
         positive: true);
 
-    if (!a.isStanding) {
+    if (a.pose < Pose.standing) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       if (a.isPlayer) {
-        a.report(s, "<subject> regain<s> balance");
+        a.report(s, "<subject> regain<s> some balance");
       }
     }
     w.popSituationsUntil("FightSituation", sim);

@@ -87,30 +87,50 @@ class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
         "{<object>|weapon}",
         objectOwner: enemy,
         object: enemy.currentWeapon);
-    if (enemy.isStanding) {
+
+    final newStance = enemy.pose.changeBy(-2);
+
+    if (newStance == Pose.extended) {
+      enemy.report(s, "<subject> almost lose<s> balance",
+          object: balance, negative: true);
+      enemy.report(s, "<subject> manage<s> to keep <subject's> stance");
+      enemy.report(s, "<subject> {overextend<s>|expose<s>} <subject's> hand",
+          but: true, negative: true);
+
+      w.updateActorById(enemy.id, (b) => b..pose = newStance);
+
+      var situation = OffBalanceOpportunitySituation.initialized(
+          w.randomInt(), enemy,
+          culprit: a);
+      w.pushSituation(situation);
+      return "${a.name} pounds ${enemy.name} to extended";
+    }
+
+    if (newStance == Pose.offBalance) {
       enemy.report(s, "<subject> lose<s> <object>",
           object: balance, negative: true);
-      w.updateActorById(enemy.id, (b) => b..pose = Pose.offBalance);
+      w.updateActorById(enemy.id, (b) => b..pose = newStance);
 
       var situation = OffBalanceOpportunitySituation.initialized(
           w.randomInt(), enemy,
           culprit: a);
       w.pushSituation(situation);
       return "${a.name} pounds ${enemy.name} off balance";
-    } else if (enemy.isOffBalance) {
-      enemy.report(s, "<subject> <is> already off balance");
-      var groundMaterial = getGroundMaterial(w);
-      s.add(
-          "<subject> make<s> <object> fall "
-          "to the $groundMaterial",
-          subject: pounding,
-          object: enemy);
-      w.recordCustom(fellToGroundCustomEventName, actor: enemy);
-      w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-
-      return "${a.name} pounds ${enemy.name} to the ground";
     }
-    throw StateError("enemy pose must be either standing or off-balance");
+
+    // Enemy goes on the ground.
+    assert(newStance == Pose.onGround);
+    enemy.report(s, "<subject> <is> already off balance");
+    var groundMaterial = getGroundMaterial(w);
+    s.add(
+        "<subject> make<s> <object> fall "
+        "to the $groundMaterial",
+        subject: pounding,
+        object: enemy);
+    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
+    w.updateActorById(enemy.id, (b) => b..pose = newStance);
+
+    return "${a.name} pounds ${enemy.name} to the ground";
   }
 
   @override

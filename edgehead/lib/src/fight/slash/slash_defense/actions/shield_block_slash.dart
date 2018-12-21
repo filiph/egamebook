@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -68,7 +69,7 @@ class ShieldBlockSlash extends OtherActorAction {
         s,
         "<subject> tr<ies> to {block|stop|deflect} the {swing|attack|strike} "
         "with ${shieldAsObject2(a)}");
-    if (a.isOffBalance) {
+    if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
       Randomly.run(
@@ -87,7 +88,7 @@ class ShieldBlockSlash extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    if (enemy.isOffBalance) {
+    if (enemy.pose == Pose.offBalance) {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",

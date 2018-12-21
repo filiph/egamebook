@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -38,7 +39,7 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       helpMessage: startPunchHelpMessage,
       applyStart: startPunchReportStart,
       isApplicable: (a, sim, w, enemy) =>
-          (a.isStanding || a.isOffBalance) &&
+          (a.pose >= Pose.offBalance) &&
           !enemy.isOnGround &&
           a.isBarehanded,
       mainSituationBuilder: (a, sim, w, enemy) =>

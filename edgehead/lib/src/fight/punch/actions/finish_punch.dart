@@ -52,7 +52,8 @@ class FinishPunch extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     assert(!enemy.isOnGround, "Can't punch people on the ground.");
-    final updatedPose = enemy.isStanding ? Pose.offBalance : Pose.onGround;
+    final updatedPose =
+        enemy.pose >= Pose.standing ? Pose.offBalance : Pose.onGround;
     final thread = getThreadId(sim, w, "PunchSituation");
     final groundMaterial = getGroundMaterial(w);
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);

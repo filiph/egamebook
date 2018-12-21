@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -82,7 +83,7 @@ class Confuse extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
-      a.isStanding &&
+      a.pose >= Pose.standing &&
       world.actors
               .where((o) => o.isAlive && o.team.isFriendWith(enemy.team))
               .length >=

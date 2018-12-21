@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -148,7 +149,7 @@ class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
-      a.isStanding &&
+      a.pose >= Pose.standing &&
       a.inventory.hasWeapon(WeaponType.spear) &&
       a.anatomy.anyWeaponAppendageAvailable &&
       _isFirstTurnInFightSituation(world, enemy);

@@ -103,7 +103,7 @@ class KickToGround extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
-      (a.isStanding || a.isOffBalance) && !enemy.isOnGround;
+      (a.pose >= Pose.offBalance) && !enemy.isOnGround;
 
   static final KickToGround singleton = KickToGround();
 }

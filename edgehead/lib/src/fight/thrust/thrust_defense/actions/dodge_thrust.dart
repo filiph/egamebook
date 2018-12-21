@@ -61,7 +61,7 @@ class DodgeThrust extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
-    if (a.isOffBalance) {
+    if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
       Randomly.run(
@@ -82,7 +82,7 @@ class DodgeThrust extends OtherActorAction {
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
         object: enemy, positive: true);
-    if (enemy.isStanding) {
+    if (enemy.pose > Pose.offBalance) {
       enemy.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
