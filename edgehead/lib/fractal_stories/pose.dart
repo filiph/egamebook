@@ -46,6 +46,14 @@ class Pose extends EnumClass implements Comparable<Pose> {
 
   const Pose._(String name) : super(name);
 
+  bool operator <(Pose other) => this.compareTo(other) < 0;
+
+  bool operator <=(Pose other) => this.compareTo(other) <= 0;
+
+  bool operator >(Pose other) => this.compareTo(other) > 0;
+
+  bool operator >=(Pose other) => this.compareTo(other) >= 0;
+
   /// Return a [Pose] that is better or worse than the current one.
   ///
   /// You specify by how much ([levels]) and if there is an upper limit ([max]).
@@ -70,13 +78,6 @@ class Pose extends EnumClass implements Comparable<Pose> {
   int compareTo(Pose other) {
     return _sequence.indexOf(this).compareTo(_sequence.indexOf(other));
   }
-
-  @override
-  bool operator >(Pose other) {
-    return this.compareTo(other) > 0;
-    XXX START HERE
-  }
-
 
   static Pose valueOf(String name) => _$valueOf(name);
 }
