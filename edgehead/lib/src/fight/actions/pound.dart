@@ -41,7 +41,7 @@ class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "force slash at weapon"];
+      ["attack <object>", "stance", "force slash at <objectPronoun's> weapon"];
 
   @override
   String get commandTemplate =>
