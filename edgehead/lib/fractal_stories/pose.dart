@@ -71,6 +71,7 @@ class Pose extends EnumClass implements Comparable<Pose> {
     final maxIndex = _sequence.lastIndexOf(max);
     var newIndex = index + levels;
     if (newIndex > maxIndex) newIndex = maxIndex;
+    if (newIndex < 0) newIndex = 0;
     return _sequence[newIndex];
   }
 
