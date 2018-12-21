@@ -39,9 +39,7 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       helpMessage: startPunchHelpMessage,
       applyStart: startPunchReportStart,
       isApplicable: (a, sim, w, enemy) =>
-          (a.pose >= Pose.offBalance) &&
-          !enemy.isOnGround &&
-          a.isBarehanded,
+          (a.pose >= Pose.offBalance) && !enemy.isOnGround && a.isBarehanded,
       mainSituationBuilder: (a, sim, w, enemy) =>
           createPunchSituation(w.randomInt(), a, enemy),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
