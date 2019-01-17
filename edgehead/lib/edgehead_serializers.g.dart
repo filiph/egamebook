@@ -14,7 +14,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AttackDirection.serializer)
       ..add(AttackerSituation.serializer)
       ..add(BodyPart.serializer)
-      ..add(BodyPart.serializer)
       ..add(BodyPartDesignation.serializer)
       ..add(BodyPartFunction.serializer)
       ..add(CounterAttackSituation.serializer)
@@ -40,9 +39,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(VisitRecord.serializer)
       ..add(WeaponType.serializer)
       ..add(WorldState.serializer)
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(BodyPart)]),
-          () => new ListBuilder<BodyPart>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BodyPart)]),
           () => new ListBuilder<BodyPart>())

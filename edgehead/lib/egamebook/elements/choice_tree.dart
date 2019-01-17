@@ -36,6 +36,10 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   // and for level 2 it could be "Attack >> goblin".
   String _getPrefix(_Choice choice) {
     if (order == 0) return '';
+    assert(
+        order - 1 < choice.subCommands.length,
+        "Trying to get prefix of $choice at order $order, "
+        "which is out of bounds of ${choice.subCommands}");
     return choice.subCommands[order - 1];
   }
 
