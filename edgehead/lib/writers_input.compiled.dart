@@ -688,8 +688,9 @@ final Room justAfterAgruthFight =
       'You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.\n\n\nBriana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.\n\n\n"What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.\n\n\n_"That one is already dead."_\n\n\n"Just making sure," she says.\n\n\n![Agruth\'s sword](img/agruth-sword.jpg)\n\n\nShe turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.\n',
       wholeSentence: true);
 }, null, null, null);
-Approach justAfterAgruthFightFromStartAdventure = new Approach(
-    'start_adventure', 'just_after_agruth_fight', '', (ActionContext c) {
+Approach justAfterAgruthFightFromStartAdventure =
+    new Approach('start_adventure', 'just_after_agruth_fight', '<implicit>',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;

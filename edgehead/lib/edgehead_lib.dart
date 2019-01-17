@@ -390,7 +390,8 @@ class EdgeheadGame extends Book {
           ..command = performance.command
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
-          ..isImplicit = performance.action.isImplicit);
+          ..isImplicit = performance.action.isImplicit ||
+              performance.command == '<implicit>');
         callbacks[choice] = () async {
           await _applySelected(performance, actor, storyline);
         };

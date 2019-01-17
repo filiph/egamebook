@@ -18,9 +18,6 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   Iterable serialize(Serializers serializers, Choice object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'isImplicit',
-      serializers.serialize(object.isImplicit,
-          specifiedType: const FullType(bool)),
       'command',
       serializers.serialize(object.command,
           specifiedType: const FullType(String)),
@@ -28,6 +25,9 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       serializers.serialize(object.commandPath,
           specifiedType:
               const FullType(BuiltList, const [const FullType(String)])),
+      'isImplicit',
+      serializers.serialize(object.isImplicit,
+          specifiedType: const FullType(bool)),
     ];
     if (object.helpMessage != null) {
       result
@@ -50,14 +50,6 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'helpMessage':
-          result.helpMessage = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'isImplicit':
-          result.isImplicit = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
         case 'command':
           result.command = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -68,6 +60,14 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
                       const FullType(BuiltList, const [const FullType(String)]))
               as BuiltList);
           break;
+        case 'helpMessage':
+          result.helpMessage = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'isImplicit':
+          result.isImplicit = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
       }
     }
 
@@ -77,28 +77,28 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
 
 class _$Choice extends Choice {
   @override
-  final String helpMessage;
-  @override
-  final bool isImplicit;
-  @override
   final String command;
   @override
   final BuiltList<String> commandPath;
+  @override
+  final String helpMessage;
+  @override
+  final bool isImplicit;
 
   factory _$Choice([void updates(ChoiceBuilder b)]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
   _$Choice._(
-      {this.helpMessage, this.isImplicit, this.command, this.commandPath})
+      {this.command, this.commandPath, this.helpMessage, this.isImplicit})
       : super._() {
-    if (isImplicit == null) {
-      throw new BuiltValueNullFieldError('Choice', 'isImplicit');
-    }
     if (command == null) {
       throw new BuiltValueNullFieldError('Choice', 'command');
     }
     if (commandPath == null) {
       throw new BuiltValueNullFieldError('Choice', 'commandPath');
+    }
+    if (isImplicit == null) {
+      throw new BuiltValueNullFieldError('Choice', 'isImplicit');
     }
   }
 
@@ -113,41 +113,33 @@ class _$Choice extends Choice {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Choice &&
-        helpMessage == other.helpMessage &&
-        isImplicit == other.isImplicit &&
         command == other.command &&
-        commandPath == other.commandPath;
+        commandPath == other.commandPath &&
+        helpMessage == other.helpMessage &&
+        isImplicit == other.isImplicit;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, helpMessage.hashCode), isImplicit.hashCode),
-            command.hashCode),
-        commandPath.hashCode));
+        $jc($jc($jc(0, command.hashCode), commandPath.hashCode),
+            helpMessage.hashCode),
+        isImplicit.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Choice')
-          ..add('helpMessage', helpMessage)
-          ..add('isImplicit', isImplicit)
           ..add('command', command)
-          ..add('commandPath', commandPath))
+          ..add('commandPath', commandPath)
+          ..add('helpMessage', helpMessage)
+          ..add('isImplicit', isImplicit))
         .toString();
   }
 }
 
 class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   _$Choice _$v;
-
-  String _helpMessage;
-  String get helpMessage => _$this._helpMessage;
-  set helpMessage(String helpMessage) => _$this._helpMessage = helpMessage;
-
-  bool _isImplicit;
-  bool get isImplicit => _$this._isImplicit;
-  set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
 
   String _command;
   String get command => _$this._command;
@@ -159,14 +151,22 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   set commandPath(ListBuilder<String> commandPath) =>
       _$this._commandPath = commandPath;
 
+  String _helpMessage;
+  String get helpMessage => _$this._helpMessage;
+  set helpMessage(String helpMessage) => _$this._helpMessage = helpMessage;
+
+  bool _isImplicit;
+  bool get isImplicit => _$this._isImplicit;
+  set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
+
   ChoiceBuilder();
 
   ChoiceBuilder get _$this {
     if (_$v != null) {
-      _helpMessage = _$v.helpMessage;
-      _isImplicit = _$v.isImplicit;
       _command = _$v.command;
       _commandPath = _$v.commandPath?.toBuilder();
+      _helpMessage = _$v.helpMessage;
+      _isImplicit = _$v.isImplicit;
       _$v = null;
     }
     return this;
@@ -191,10 +191,10 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
     try {
       _$result = _$v ??
           new _$Choice._(
-              helpMessage: helpMessage,
-              isImplicit: isImplicit,
               command: command,
-              commandPath: commandPath.build());
+              commandPath: commandPath.build(),
+              helpMessage: helpMessage,
+              isImplicit: isImplicit);
     } catch (_) {
       String _$failedField;
       try {

@@ -16,14 +16,14 @@ abstract class Choice extends ElementBase
 
   Choice._();
 
+  String get command;
+
+  BuiltList<String> get commandPath;
+
   @nullable
   String get helpMessage;
 
   /// Returns [:true:] when the choice is automatic (scripter picks it
   /// silently). Corresponds to `Action.isImplicit`.
   bool get isImplicit;
-
-  String get command;
-
-  BuiltList<String> get commandPath;
 }
