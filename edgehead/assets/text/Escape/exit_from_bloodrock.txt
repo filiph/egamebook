@@ -20,7 +20,7 @@ Soon, the orcs and goblins stop following altogether, presumably leaving the two
 You look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.
 
 
-![View of the road ahead](img/path.jpg)
+![View of the road ahead](https://egamebook.com/vermin/v/latest/img/path.jpg)
 
 
 Briana doesn't seem surprised.

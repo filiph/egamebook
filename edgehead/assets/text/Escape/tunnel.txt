@@ -23,7 +23,7 @@ The stairway suddenly makes a sharp left turn and levels out. Tasting blood on t
 The light in the tunnel gets brighter and the air gets colder. Suddenly, just when you can smell fresh air, an orc and a goblin jump out in front of you from a slimy crevice, swords in hands.
 
 
-![Picture of the Upper Door guard](img/orc_and_goblin_sketch.jpg)
+![Picture of the Upper Door guard](https://egamebook.com/vermin/v/latest/img/orc_and_goblin_sketch.jpg)
 
 
 They must be guarding the Upper Door. There is no way around them.
