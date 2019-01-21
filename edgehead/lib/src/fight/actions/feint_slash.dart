@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
 class FaintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
@@ -72,6 +73,7 @@ class FaintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
         negative: true);
 
     w.updateActorById(enemy.id, (b) => b..pose = Pose.extended);
+    w.recordCustom(lostStanceCustomEvent, actor: enemy);
 
     var situation = OffBalanceOpportunitySituation.initialized(
         w.randomInt(), enemy,

@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class FinishPunch extends OtherActorAction {
@@ -57,6 +58,7 @@ class FinishPunch extends OtherActorAction {
     final thread = getThreadId(sim, w, "PunchSituation");
     final groundMaterial = getGroundMaterial(w);
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
+    w.recordCustom(lostStanceCustomEvent, actor: enemy);
     switch (updatedPose) {
       case Pose.standing:
         throw StateError("Enemy's pose should never be 'standing' after "

@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
@@ -90,6 +91,7 @@ class Clash extends EnemyTargetAction with ComplexCommandPath<Actor> {
         object: enemy.currentWeapon);
 
     final newStance = enemy.pose.changeBy(-2);
+    w.recordCustom(lostStanceCustomEvent, actor: enemy);
 
     if (newStance == Pose.extended) {
       enemy.report(s, "<subject> almost lose<s> balance",

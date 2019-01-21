@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/clash.dart';
+import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
 class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
   static final RegainBalance singleton = RegainBalance();
@@ -49,8 +50,15 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> regain<s> <object>",
         object: balance, positive: true);
-    w.updateActorById(a.id,
-        (b) => b.pose = a.poseMax >= Pose.standing ? Pose.standing : a.poseMax);
+    if (a.isPlayer) {
+      // Player doesn't need to do two stance improvements in a row.
+      w.updateActorById(a.id, (b) => b.pose = a.poseMax);
+    } else {
+      w.updateActorById(
+          a.id,
+          (b) =>
+              b.pose = a.poseMax >= Pose.standing ? Pose.standing : a.poseMax);
+    }
     return "${a.name} regains balance";
   }
 
@@ -68,5 +76,5 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
-      a.pose == Pose.offBalance && a.pose > Pose.offBalance;
+      a.pose == Pose.offBalance && !recentlyLostStance(a, world);
 }
