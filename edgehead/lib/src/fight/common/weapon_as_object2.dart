@@ -2,7 +2,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
 /// Generalization of [weaponAsObject2] for any [Entity] that [a] possesses
-/// and we need to use it as a second object inthe sentence.
+/// and we need to use it as a second object in the sentence.
 String entityAsObject2(Actor a, Entity entity) =>
     entity.nameIsProperNoun ? entity.name : "<subject's> ${entity.name}";
 

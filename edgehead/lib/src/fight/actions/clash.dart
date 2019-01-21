@@ -16,10 +16,10 @@ final Entity balance =
 
 final Entity pounding = Entity(name: "pounding", team: neutralTeam);
 
-class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
-  static const String className = "Pound";
+class Clash extends EnemyTargetAction with ComplexCommandPath<Actor> {
+  static const String className = "Clash";
 
-  static final Pound singleton = Pound();
+  static final Clash singleton = Clash();
 
   @override
   final bool rerollable = true;
@@ -34,18 +34,19 @@ class Pound extends EnemyTargetAction with ComplexCommandPath<Actor> {
   final bool isProactive = true;
 
   @override
-  String helpMessage = "Forcing enemies off balance often means hitting them "
-      "heavily several times in a row. The goal is not to deal damage but to "
+  String helpMessage = "This is a powerful slash directed at the enemy's weapon"
+      "in order to force them off balance. "
+      "The goal is not to deal damage but to "
       "force the opponent to lose control of their combat stance. It can also "
       "give members of your party an opportunity to strike.";
 
   @override
   List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "force slash at <objectPronoun's> weapon"];
+      ["attack <object>", "stance", "clash"];
 
   @override
   String get commandTemplate =>
-      "slash >> <object's> >> weapon to force <objectPronoun> off balance";
+      "clash with <object's> weapon to force <objectPronoun> off balance";
 
   @override
   String get name => className;

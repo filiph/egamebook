@@ -34,7 +34,7 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       commandPathTemplate: const [
         "attack <object>",
         "stance",
-        "punch <objectPronoun> in the face"
+        "punch"
       ],
       helpMessage: startPunchHelpMessage,
       applyStart: startPunchReportStart,

@@ -55,7 +55,12 @@ class StandUp extends Action<Null> with ComplexCommandPath<Null> {
         () => a.report(
             s, "<subject> {stagger<s>|sway<s>} back before finding balance"),
         () => a.report(s, "<subject> stead<ies> <subjectPronounSelf>"));
-    w.updateActorById(a.id, (b) => b.pose = Pose.standing);
+    if (a.isPlayer) {
+      // Don't force the player to stand in two moves.
+      w.updateActorById(a.id, (b) => b.pose = a.poseMax);
+    } else {
+      w.updateActorById(a.id, (b) => b.pose = Pose.extended);
+    }
     return "${a.name} stands up";
   }
 

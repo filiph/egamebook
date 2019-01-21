@@ -12,12 +12,12 @@ import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
 const String startLeapHelpMessage =
     "Jumping and tackling an opponent is one of the most risky moves but it's "
-    "a quick way to neutralize someone.";
+    "a quick way to bring them down on the ground.";
 
 ReasonedSuccessChance computeStartLeap(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.2, [
-    const Modifier(50, CombatReason.balance),
+    const Modifier(70, CombatReason.balance),
     const Modifier(50, CombatReason.height),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
@@ -34,7 +34,7 @@ EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     commandPathTemplate: const [
       "attack <object>",
       "stance",
-      "leap at <object> to bring <objectPronoun> down"
+      "leap"
     ],
     helpMessage: startLeapHelpMessage,
     applyStart: startLeapReportStart,

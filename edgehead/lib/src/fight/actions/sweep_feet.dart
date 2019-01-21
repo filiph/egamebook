@@ -14,7 +14,7 @@ ReasonedSuccessChance computeSweepFeet(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.6, [
     const Modifier(70, CombatReason.dexterity),
-    const Modifier(50, CombatReason.balance),
+    const Modifier(70, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
     const Bonus(50, CombatReason.targetHasAllEyesDisabled),
@@ -45,7 +45,7 @@ class SweepFeet extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "sweep <objectPronoun's> feet away"];
+      ["attack <object>", "stance", "sweep feet"];
 
   @override
   String get commandTemplate => "sweep <object's> feet away";
@@ -100,5 +100,7 @@ class SweepFeet extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
-      (a.pose >= Pose.offBalance) && !enemy.isOnGround;
+      (a.pose >= Pose.offBalance) &&
+      !enemy.isOnGround &&
+      enemy.pose <= Pose.extended;
 }

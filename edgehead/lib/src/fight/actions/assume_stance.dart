@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/pound.dart';
+import 'package:edgehead/src/fight/actions/clash.dart';
 
 class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
   static final AssumeStance singleton = AssumeStance();
@@ -67,5 +67,5 @@ class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
-      a.pose > Pose.offBalance && a.pose < a.poseMax;
+      a.pose >= Pose.offBalance && a.pose < a.poseMax;
 }

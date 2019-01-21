@@ -18,6 +18,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       function: BodyPartFunction.mobile,
       swingSurfaceLeft: 10,
       swingSurfaceRight: 0,
+      thrustSurface: 5,
       isSeverable: true);
 
   final leftLeg = BodyPart(random.next(), "left leg",
@@ -26,6 +27,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       function: BodyPartFunction.mobile,
       swingSurfaceRight: 10,
       swingSurfaceLeft: 0,
+      thrustSurface: 5,
       isSeverable: true);
 
   final primaryHand = BodyPart(random.next(), "wielding hand",
@@ -34,6 +36,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
       swingSurfaceLeft: 2,
       swingSurfaceRight: 0,
+      thrustSurface: 1,
       isSeverable: true);
 
   final primaryArm = BodyPart(random.next(), "wielding arm",
@@ -42,6 +45,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isSeverable: true,
       swingSurfaceLeft: 10,
       swingSurfaceRight: 0,
+      thrustSurface: 5,
       children: [primaryHand]);
 
   final secondaryHand = BodyPart(random.next(), "wielding hand",
@@ -50,6 +54,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
       swingSurfaceLeft: 0,
       swingSurfaceRight: 2,
+      thrustSurface: 1,
       isSeverable: true);
 
   final secondaryArm = BodyPart(random.next(), "shield arm",
@@ -59,6 +64,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isSeverable: true,
       swingSurfaceRight: 10,
       swingSurfaceLeft: 0,
+      thrustSurface: 5,
       children: [secondaryHand]);
 
   final leftEye = BodyPart(
@@ -67,6 +73,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
     designation: BodyPartDesignation.leftEye,
     function: BodyPartFunction.vision,
     swingSurfaceLeft: 0,
+    thrustSurface: 1,
   );
 
   final rightEye = BodyPart(
@@ -75,6 +82,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
     designation: BodyPartDesignation.rightEye,
     function: BodyPartFunction.vision,
     swingSurfaceRight: 0,
+    thrustSurface: 1,
   );
 
   final head = BodyPart(random.next(), "head",
@@ -83,6 +91,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isVital: true,
       swingSurfaceLeft: 2,
       swingSurfaceRight: 2,
+      thrustSurface: 2,
       children: [leftEye, rightEye]);
 
   final neck = BodyPart(random.next(), "neck",
@@ -92,6 +101,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isSeverable: true,
       swingSurfaceLeft: 1,
       swingSurfaceRight: 1,
+      thrustSurface: 1,
       children: [head]);
 
   final torso = BodyPart(random.next(), "torso",
@@ -101,6 +111,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       isVital: true,
       swingSurfaceLeft: 6,
       swingSurfaceRight: 6,
+      thrustSurface: 8,
       children: [neck, primaryArm, secondaryArm, leftLeg, rightLeg]);
 
   return Anatomy(torso: torso);

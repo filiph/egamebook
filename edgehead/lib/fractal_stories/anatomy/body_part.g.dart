@@ -167,6 +167,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'swingSurfaceRight',
       serializers.serialize(object.swingSurfaceRight,
           specifiedType: const FullType(int)),
+      'thrustSurface',
+      serializers.serialize(object.thrustSurface,
+          specifiedType: const FullType(int)),
     ];
     if (object.damageCapability != null) {
       result
@@ -261,6 +264,10 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           result.swingSurfaceRight = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'thrustSurface':
+          result.thrustSurface = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -339,6 +346,8 @@ class _$BodyPart extends BodyPart {
   final int swingSurfaceLeft;
   @override
   final int swingSurfaceRight;
+  @override
+  final int thrustSurface;
 
   factory _$BodyPart([void updates(BodyPartBuilder b)]) =>
       (new BodyPartBuilder()..update(updates)).build();
@@ -360,7 +369,8 @@ class _$BodyPart extends BodyPart {
       this.name,
       this.randomDesignation,
       this.swingSurfaceLeft,
-      this.swingSurfaceRight})
+      this.swingSurfaceRight,
+      this.thrustSurface})
       : super._() {
     if (bluntHitsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'bluntHitsCount');
@@ -410,6 +420,9 @@ class _$BodyPart extends BodyPart {
     if (swingSurfaceRight == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'swingSurfaceRight');
     }
+    if (thrustSurface == null) {
+      throw new BuiltValueNullFieldError('BodyPart', 'thrustSurface');
+    }
   }
 
   @override
@@ -439,7 +452,8 @@ class _$BodyPart extends BodyPart {
         name == other.name &&
         randomDesignation == other.randomDesignation &&
         swingSurfaceLeft == other.swingSurfaceLeft &&
-        swingSurfaceRight == other.swingSurfaceRight;
+        swingSurfaceRight == other.swingSurfaceRight &&
+        thrustSurface == other.thrustSurface;
   }
 
   @override
@@ -461,28 +475,30 @@ class _$BodyPart extends BodyPart {
                                                             $jc(
                                                                 $jc(
                                                                     $jc(
-                                                                        0,
-                                                                        bluntHitsCount
+                                                                        $jc(
+                                                                            0,
+                                                                            bluntHitsCount
+                                                                                .hashCode),
+                                                                        children
                                                                             .hashCode),
-                                                                    children
+                                                                    damageCapability
                                                                         .hashCode),
-                                                                damageCapability
+                                                                designation
                                                                     .hashCode),
-                                                            designation
-                                                                .hashCode),
-                                                        function.hashCode),
-                                                    hitpoints.hashCode),
-                                                id.hashCode),
-                                            isActive.hashCode),
-                                        isSeverable.hashCode),
-                                    isSevered.hashCode),
-                                isVital.hashCode),
-                            majorCutsCount.hashCode),
-                        minorCutsCount.hashCode),
-                    name.hashCode),
-                randomDesignation.hashCode),
-            swingSurfaceLeft.hashCode),
-        swingSurfaceRight.hashCode));
+                                                            function.hashCode),
+                                                        hitpoints.hashCode),
+                                                    id.hashCode),
+                                                isActive.hashCode),
+                                            isSeverable.hashCode),
+                                        isSevered.hashCode),
+                                    isVital.hashCode),
+                                majorCutsCount.hashCode),
+                            minorCutsCount.hashCode),
+                        name.hashCode),
+                    randomDesignation.hashCode),
+                swingSurfaceLeft.hashCode),
+            swingSurfaceRight.hashCode),
+        thrustSurface.hashCode));
   }
 
   @override
@@ -504,7 +520,8 @@ class _$BodyPart extends BodyPart {
           ..add('name', name)
           ..add('randomDesignation', randomDesignation)
           ..add('swingSurfaceLeft', swingSurfaceLeft)
-          ..add('swingSurfaceRight', swingSurfaceRight))
+          ..add('swingSurfaceRight', swingSurfaceRight)
+          ..add('thrustSurface', thrustSurface))
         .toString();
   }
 }
@@ -590,6 +607,10 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   set swingSurfaceRight(int swingSurfaceRight) =>
       _$this._swingSurfaceRight = swingSurfaceRight;
 
+  int _thrustSurface;
+  int get thrustSurface => _$this._thrustSurface;
+  set thrustSurface(int thrustSurface) => _$this._thrustSurface = thrustSurface;
+
   BodyPartBuilder();
 
   BodyPartBuilder get _$this {
@@ -611,6 +632,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _randomDesignation = _$v.randomDesignation;
       _swingSurfaceLeft = _$v.swingSurfaceLeft;
       _swingSurfaceRight = _$v.swingSurfaceRight;
+      _thrustSurface = _$v.thrustSurface;
       _$v = null;
     }
     return this;
@@ -651,7 +673,8 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
               name: name,
               randomDesignation: randomDesignation,
               swingSurfaceLeft: swingSurfaceLeft,
-              swingSurfaceRight: swingSurfaceRight);
+              swingSurfaceRight: swingSurfaceRight,
+              thrustSurface: thrustSurface);
     } catch (_) {
       String _$failedField;
       try {

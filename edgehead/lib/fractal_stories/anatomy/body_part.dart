@@ -35,6 +35,7 @@ abstract class BodyPart extends Object
     DamageCapabilityBuilder damageCapability,
     int swingSurfaceLeft = 1,
     int swingSurfaceRight = 1,
+    int thrustSurface = 1,
   }) =>
       _$BodyPart((b) => b
         ..id = id
@@ -53,6 +54,7 @@ abstract class BodyPart extends Object
         ..damageCapability = damageCapability
         ..swingSurfaceLeft = swingSurfaceLeft
         ..swingSurfaceRight = swingSurfaceRight
+        ..thrustSurface = thrustSurface
         ..isActive = true);
 
   BodyPart._();
@@ -184,7 +186,7 @@ abstract class BodyPart extends Object
   Team get team => neutralTeam;
 
   /// See [swingSurfaceLeft] doc comment.
-  int get thrustSurface => 1;
+  int get thrustSurface;
 
   /// Returns [startingPart] and all descendants of it.
   ///
@@ -263,16 +265,41 @@ class BodyPartDesignation extends EnumClass {
 
   const BodyPartDesignation._(String name) : super(name);
 
+  bool get isArm => this == primaryArm || this == secondaryArm;
+
+  bool get isLeg => this == leftLeg || this == rightLeg;
+
   /// True if this is any limb (arm or leg).
-  bool get isLimb =>
-      this == leftLeg ||
-      this == rightLeg ||
-      this == primaryArm ||
-      this == secondaryArm;
+  bool get isLimb => isArm || isLeg;
 
   String toHumanString() {
-    // TODO: add special case for 'leftLeg' etc.
-    return name;
+    switch (this) {
+      case neck:
+        return "neck";
+      case head:
+        return "head";
+      case leftLeg:
+        return "left leg";
+      case rightLeg:
+        return "right leg";
+      case primaryArm:
+        return "main arm";
+      case secondaryArm:
+        return "off arm";
+      case primaryHand:
+        return "main hand";
+      case secondaryHand:
+        return "off hand";
+      case leftEye:
+        return "left eye";
+      case rightEye:
+        return "right eye";
+      case torso:
+        return "torso";
+      default:
+        assert(false, "No human string defined for $this.");
+        return name;
+    }
   }
 
   static BodyPartDesignation valueOf(String name) =>

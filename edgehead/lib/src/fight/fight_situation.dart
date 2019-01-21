@@ -19,7 +19,7 @@ import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
-import 'package:edgehead/src/fight/actions/pound.dart';
+import 'package:edgehead/src/fight/actions/clash.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
@@ -84,10 +84,10 @@ abstract class FightSituation extends Object
 
   @override
   List<Action<dynamic>> get actions => <Action<dynamic>>[
+        Clash.singleton,
         Confuse.singleton,
         DisarmKick.singleton,
         FaintSlash.singleton,
-        Pound.singleton,
         SweepFeet.singleton,
         startBreakNeckOnGroundBuilder(),
         startLeapBuilder(),
@@ -101,7 +101,6 @@ abstract class FightSituation extends Object
         startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
         startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),
         startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
-        startThrustAtBodyPartGenerator(BodyPartDesignation.head),
         startThrustSpearDownBuilder(),
         TakeDroppedShield.singleton,
         TakeDroppedWeapon.singleton,

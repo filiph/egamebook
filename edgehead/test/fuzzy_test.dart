@@ -50,12 +50,6 @@ void main() {
           savegame: "slaveQuarters");
     }, timeout: Timeout.factor(10), tags: ["long-running"]);
 
-    test("edgehead runs to completion 10 times from crippledAndFist", () async {
-      final stopWords = ["[SEVERE]", "[SHOUT]"];
-      await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
-          savegame: "crippledAndFist");
-    }, timeout: Timeout.factor(10), tags: ["long-running"]);
-
     test("edgehead runs to completion 10 times without warnings", () async {
       final stopWords = ["[WARNING]", "[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.INFO, 10);

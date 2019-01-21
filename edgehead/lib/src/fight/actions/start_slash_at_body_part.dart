@@ -85,14 +85,7 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     helpMessage: startSlashHelpMessage,
     applyStart: startSlashReportStart(designation),
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
-        !a.isOnGround &&
-        !enemy.isOnGround &&
-        a.currentWeapon.damageCapability.isSlashing &&
-        // Only allow limb attacks when enemy is (at least) extended.
-        (!designation.isLimb || enemy.pose <= Pose.extended) &&
-        // Only allow decapitation when enemy is (at least) off balance.
-        (designation != BodyPartDesignation.neck ||
-            enemy.pose <= Pose.offBalance),
+        _resolveIsApplicable(a, sim, w, enemy, designation),
     mainSituationBuilder: (a, sim, w, enemy) =>
         createSlashSituation(w.randomInt(), a, enemy, designation: designation),
     defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
@@ -105,4 +98,25 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     rerollResource: Resource.stamina,
     rollReasonTemplate: "will <subject> hit <objectPronoun's> $designation?",
   );
+}
+
+bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
+    BodyPartDesignation designation) {
+  if (a.isOnGround) return false;
+  if (enemy.isOnGround) return false;
+  if (!a.currentWeapon.damageCapability.isSlashing) return false;
+  // Only allow leg attacks when enemy has worse than combat stance.
+  if (designation.isLeg && enemy.pose >= Pose.combat) return false;
+  // Only allow arm attacks when enemy is at least extended.
+  if (designation.isArm && enemy.pose > Pose.extended) return false;
+  // Only allow torso slashes when enemy is (at least) extended.
+  if (designation == BodyPartDesignation.torso && enemy.pose > Pose.extended)
+    return false;
+  // Only allow decapitation when enemy is (at least) off balance.
+  if (designation == BodyPartDesignation.neck && enemy.pose > Pose.offBalance)
+    return false;
+  // Don't offer to hit body parts that are already crippled.
+  if (!enemy.anatomy.findByDesignation(designation).isAlive) return false;
+
+  return true;
 }

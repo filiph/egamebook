@@ -32,7 +32,7 @@ class FaintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
 
   @override
   List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "feint slash"];
+      ["attack <object>", "stance", "feint"];
 
   @override
   String get commandTemplate =>
