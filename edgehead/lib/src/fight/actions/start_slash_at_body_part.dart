@@ -69,7 +69,7 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
             s,
             "<subject> swing<s> {${weaponAsObject2(a)} |}at "
             "<objectOwner's> <object>",
-            object: Entity(name: designation.name),
+            object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
             actionThread: mainSituation.id,
             isSupportiveActionInThread: true);
@@ -96,7 +96,8 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     },
     rerollable: true,
     rerollResource: Resource.stamina,
-    rollReasonTemplate: "will <subject> hit <objectPronoun's> $designation?",
+    rollReasonTemplate:
+        "will <subject> hit <objectPronoun's> ${designation.toHumanString()}?",
   );
 }
 

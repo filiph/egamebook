@@ -40,7 +40,8 @@ abstract class BodyPart extends Object
       _$BodyPart((b) => b
         ..id = id
         ..name = name
-        ..randomDesignation = randomDesignation ?? name
+        ..randomDesignation =
+            randomDesignation ?? (designation?.toHumanString() ?? name)
         ..children = ListBuilder<BodyPart>(children ?? const <BodyPart>[])
         ..designation = designation ?? BodyPartDesignation.none
         ..function = function ?? BodyPartFunction.none

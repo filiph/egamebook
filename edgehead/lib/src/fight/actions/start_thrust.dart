@@ -90,7 +90,7 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             s,
             "<subject> thrust<s> {${weaponAsObject2(a)} |}at "
             "<objectOwner's> <object>",
-            object: Entity(name: designation.name),
+            object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
             actionThread: mainSituation.id,
             isSupportiveActionInThread: true);
