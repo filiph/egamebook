@@ -31,11 +31,7 @@ ReasonedSuccessChance computeStartLeap(
 EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     name: "StartLeap",
     commandTemplate: "leap at <object>",
-    commandPathTemplate: const [
-      "attack <object>",
-      "stance",
-      "leap"
-    ],
+    commandPathTemplate: const ["attack <object>", "stance", "leap"],
     helpMessage: startLeapHelpMessage,
     applyStart: startLeapReportStart,
     isApplicable: (a, sim, w, enemy) =>
