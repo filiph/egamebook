@@ -11,7 +11,7 @@ void main() {
   });
 
   test("same sequence after seed", () {
-    final seed = Random().nextInt(1000);
+    final seed = Random().nextInt(1000) + 1;
     final random = StatefulRandom(seed);
     final ints = List.generate(100, (_) => random.nextInt(0xffff));
 
