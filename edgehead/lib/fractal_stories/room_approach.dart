@@ -18,12 +18,11 @@ class Approach {
 
   final ApproachDescriber description;
 
-  Approach(this.from, this.to, this.command, this.description) {
-    assert(from != null);
-    assert(to != null);
-    assert(command != null);
-    assert(description != null);
-  }
+  const Approach(this.from, this.to, this.command, this.description)
+      : assert(from != null),
+        assert(to != null),
+        assert(command != null),
+        assert(description != null);
 
   @override
   String toString() => "Approach<$from->$to,$command>";

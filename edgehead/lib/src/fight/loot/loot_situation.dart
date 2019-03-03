@@ -24,9 +24,12 @@ abstract class LootSituation extends Object
   factory LootSituation([void updates(LootSituationBuilder b)]) =
       _$LootSituation;
 
-  factory LootSituation.initialized(int id, Iterable<int> playerTeamIds,
-          String groundMaterial, Iterable<Item> droppedItems,
-          {RoomRoamingSituation roomRoamingSituation}) =>
+  factory LootSituation.initialized(
+    int id,
+    Iterable<int> playerTeamIds,
+    String groundMaterial,
+    Iterable<Item> droppedItems,
+  ) =>
       LootSituation((b) => b
         ..id = id
         ..time = 0

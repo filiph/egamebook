@@ -164,7 +164,10 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
             wasSuccess: wasSuccess,
             wasAggressive: wasAggressive)
         .latest;
-    if (latest == null) return null;
+    if (latest == null) {
+      // ignore: avoid_returning_null
+      return null;
+    }
     return time.difference(latest.time).inSeconds;
   }
 
@@ -329,7 +332,7 @@ abstract class WorldStateBuilder
   }
 
   void recordDeath(Actor actor) {
-    final eventName = "actor_dies";
+    const eventName = "actor_dies";
     recordCustom(eventName, actor: actor);
   }
 
@@ -349,7 +352,7 @@ abstract class WorldStateBuilder
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
-    int index = this.build()._findSituationIndex(id);
+    int index = build()._findSituationIndex(id);
     if (index == null) {
       throw ArgumentError("Situation with id $id does not "
           "exist in $situations");

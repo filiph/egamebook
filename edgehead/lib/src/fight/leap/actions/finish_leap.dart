@@ -70,7 +70,7 @@ class FinishLeap extends OtherActorAction {
           "{knocks <object> unconscious|knocks <object> out}",
           object: enemy,
           actionThread: thread);
-      final damage = 1;
+      const damage = 1;
       reportPain(context, updatedEnemy, damage);
       w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }

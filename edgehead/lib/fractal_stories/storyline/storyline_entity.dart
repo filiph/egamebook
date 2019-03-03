@@ -20,9 +20,10 @@ abstract class Entity {
   /// hashCode (for example, immutable ones), this should be overridden.
   int get id;
 
-  /// Whether or not this entity should be shown to the player. This can be useful
-  /// for entities that are only relevant later in the game (i.e. after player
-  /// does something else) or items that become irrelevant after use.
+  /// Whether or not this entity should be shown to the player. This can
+  /// be useful for entities that are only relevant later in the game
+  /// (i.e. after player does something else) or items that become
+  /// irrelevant after use.
   bool get isActive => true;
 
   /// True if Actor is alive, i.e. not destroyed or dead.
@@ -31,8 +32,8 @@ abstract class Entity {
   bool get isPlayer;
 
   /// The name of the entity is how it is primarily referred to. It is different
-  /// from [nameIsProperNoun] because it's generic. There can be any number of "F-16s"
-  /// and it's their name, but it's not their proper name.
+  /// from [nameIsProperNoun] because it's generic. There can be any number
+  /// of "F-16s" and it's their name, but it's not their proper name.
   String get name;
 
   /// A proper noun of an entity is a unique name: like "John" for a character
@@ -134,7 +135,7 @@ class _NonserializableEntity extends Object
       Team team,
       this.nameIsProperNoun = false,
       this.isPlayer = false})
-      : this.team = team ?? neutralTeam,
+      : team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 
   @override

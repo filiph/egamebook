@@ -98,16 +98,15 @@ class Room {
   final String groundMaterial;
 
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
-  Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
+  const Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
       this.itemGenerator,
-      {this.groundMaterial = "ground", this.parent, this.prerequisite}) {
-    assert(name != null);
-    assert(
-        describe != null || firstDescribe != null,
-        "You must provide at least one description of the room. "
-        "Ideally, you also provide both the first description and the regular "
-        "one.");
-  }
+      {this.groundMaterial = "ground", this.parent, this.prerequisite})
+      : assert(name != null),
+        assert(
+            describe != null || firstDescribe != null,
+            "You must provide at least one description of the room. "
+            "Ideally, you also provide both the first description and "
+            "the regular one.");
 
   @override
   int get hashCode => name.hashCode;

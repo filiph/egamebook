@@ -74,7 +74,7 @@ class ActorPlanner {
     num combineForBestCase(ActorScore score) =>
         score.teamPreservation - score.enemy;
 
-    for (var consequence in stats) {
+    for (final consequence in stats) {
       log.finest(() => "  - consequence: $consequence");
       if (consequence.cumulativeProbability > bestCaseProbabilityThreshold) {
         if (_bestCase == null) {
@@ -116,7 +116,7 @@ class ActorPlanner {
 
   Iterable<String> generateTable() sync* {
     int i = 1;
-    for (var key in firstActionScores.keys) {
+    for (final key in firstActionScores.keys) {
       yield "$i) ${key.command}\t${firstActionScores[key]}";
       i += 1;
     }
@@ -132,10 +132,10 @@ class ActorPlanner {
     return PlannerRecommendation(firstActionScores);
   }
 
-  Future<Null> plan(
+  Future<void> plan(
       {@required int maxOrder,
       int maxConsequences = 50,
-      Future<Null> waitFunction()}) async {
+      Future<void> waitFunction()}) async {
     firstActionScores.clear();
 
     var currentActor =
@@ -147,7 +147,7 @@ class ActorPlanner {
     final context =
         ApplicabilityContext(currentActor, simulation, _initial.world);
 
-    for (var performance in simulation.generateAllPerformances(context)) {
+    for (final performance in simulation.generateAllPerformances(context)) {
       log.finer(() => "Evaluating action '${performance.command}' "
           "for ${currentActor.name}");
 
@@ -195,7 +195,7 @@ class ActorPlanner {
       Performance<dynamic> firstPerformance,
       int maxOrder,
       int maxConsequences,
-      Future<Null> waitFunction()) async* {
+      Future<void> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
 
@@ -223,7 +223,7 @@ class ActorPlanner {
     final Set<WorldState> closed = Set<WorldState>();
 
     var initialWorldHash = initial.world.hashCode;
-    for (var firstConsequence in firstPerformance.action.apply(mainActor,
+    for (final firstConsequence in firstPerformance.action.apply(mainActor,
         initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw StateError("Action $firstPerformance modified world state when "
@@ -339,7 +339,7 @@ class ActorPlanner {
         var consequences = performance.action.apply(currentActor, current,
             simulation, current.world, _pubsub, performance.object);
 
-        for (PlanConsequence next in consequences) {
+        for (final next in consequences) {
           planConsequencesComputed++;
 
           // Ignore consequences that have a tiny probability of happening.

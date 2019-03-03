@@ -65,9 +65,7 @@ abstract class Actor extends Object
     Anatomy currentAnatomy =
         (anatomy ?? buildHumanoid(id, constitution: constitution));
     Item weapon = currentWeapon;
-    if (weapon == null) {
-      weapon = createBodyPartWeapon(currentAnatomy);
-    }
+    weapon ??= createBodyPartWeapon(currentAnatomy);
 
     return _$Actor((b) => b
       ..id = id
@@ -297,21 +295,21 @@ abstract class Actor extends Object
     // Add points for weapon value.
     selfPreservation += actor.currentWeapon.value / 2;
     // Add points for weapon/shield/item values.
-    for (var weapon in actor.inventory.weapons) {
+    for (final weapon in actor.inventory.weapons) {
       selfPreservation += weapon.value / 10;
     }
-    for (var item in actor.inventory.items) {
+    for (final item in actor.inventory.items) {
       selfPreservation += item.value / 10;
     }
 
     // Add points for every friend and their well-being.
     var friends = world.actors.where((a) => a.team == team && a.id != id);
     num teamPreservation = 0;
-    for (var friend in friends) {
-      teamPreservation += (friend.isAliveAndActive ? 2 : 0);
+    for (final friend in friends) {
+      teamPreservation += friend.isAliveAndActive ? 2 : 0;
       teamPreservation += 2 * friend.hitpoints;
       teamPreservation += friend.currentWeapon.value / 2;
-      for (var item in friend.inventory.weapons) {
+      for (final item in friend.inventory.weapons) {
         teamPreservation += item.value / 10;
       }
     }

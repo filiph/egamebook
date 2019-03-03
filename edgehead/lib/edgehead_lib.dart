@@ -104,6 +104,7 @@ class EdgeheadGame extends Book {
   Future<Null> update() async {
     try {
       await _update();
+    // ignore: avoid_catches_without_on_clauses
     } catch (e, s) {
       // Catch errors and send to presenter.
       elementsSink.add(ErrorElement((b) => b
@@ -216,6 +217,7 @@ class EdgeheadGame extends Book {
       try {
         world = edgehead_serializer.serializers.deserializeWith(
             WorldState.serializer, json.decode(saveGameSerialized));
+      // ignore: avoid_catching_errors
       } on ArgumentError {
         const message = "Error when parsing savegame. Maybe the savegame needs "
             "to be updated to the newest version of the runtime?";
@@ -286,7 +288,7 @@ class EdgeheadGame extends Book {
       builder.popSituation(simulation);
       builder.elapseWorldTime();
       world = builder.build();
-      Timer.run(() => update());
+      Timer.run(update);
       return;
     }
 
@@ -296,7 +298,7 @@ class EdgeheadGame extends Book {
 
     // Fail fast for no recommendations.
     assert(
-        !recs.isEmpty, "No recommendations for ${actor.name} in ${situation}");
+        !recs.isEmpty, "No recommendations for ${actor.name} in $situation");
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?
@@ -309,12 +311,12 @@ class EdgeheadGame extends Book {
       builder.elapseSituationTimeIfExists(situation.id);
       builder.elapseWorldTime();
       world = builder.build();
-      Timer.run(() => update());
+      Timer.run(update);
       return;
     }
 
     if (actionPattern != null && actor.isPlayer) {
-      for (var performance in recs.performances) {
+      for (final performance in recs.performances) {
         if (!performance.action.name.contains(actionPattern)) {
           continue;
         }
@@ -326,7 +328,7 @@ class EdgeheadGame extends Book {
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $performance");
-        for (var consequence in performance.action.apply(actor, consequence,
+        for (final consequence in performance.action.apply(actor, consequence,
             simulation, world, _pubsub, performance.object)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
@@ -343,7 +345,7 @@ class EdgeheadGame extends Book {
         // If we have more than one performance, none of them should have
         // blank command (which signifies an action that should be
         // auto-selected).
-        for (var performance in recs.performances) {
+        for (final performance in recs.performances) {
           assert(
               performance.command.isNotEmpty,
               "Action can have an empty ('') command "
@@ -354,7 +356,7 @@ class EdgeheadGame extends Book {
       }
 
       log.fine("planner.generateTable for ${actor.name}");
-      planner.generateTable().forEach((line) => log.fine(line));
+      planner.generateTable().forEach(log.fine);
 
       // Take only the first few best actions.
       List<Performance> performances = recs
@@ -385,7 +387,7 @@ class EdgeheadGame extends Book {
 
       final choices = ListBuilder<Choice>();
       final callbacks = Map<Choice, Future<Null> Function()>();
-      for (Performance performance in performances) {
+      for (final performance in performances) {
         final choice = Choice((b) => b
           ..command = performance.command
           ..commandPath = ListBuilder<String>(performance.commandPath)
@@ -419,6 +421,6 @@ class EdgeheadGame extends Book {
     storyline.generateFinishedOutput().forEach(elementsSink.add);
 
     // Run the next step asynchronously.
-    Timer.run(() => update());
+    Timer.run(update);
   }
 }

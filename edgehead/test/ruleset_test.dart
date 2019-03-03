@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 void main() {
   final orc = Actor.initialized(1, "orc");
   final aren = Actor.initialized(2, "Aren", isPlayer: true);
-  final sureSuccess = ReasonedSuccessChance.sureSuccess;
+  const sureSuccess = ReasonedSuccessChance.sureSuccess;
 
   test("ruleset with 1 rule applies that rule", () {
     var triggered = false;
@@ -51,7 +51,7 @@ void main() {
   });
 
   test("ruleset saves used rules", () {
-    final ruleId = 42;
+    const ruleId = 42;
     final ruleset = Ruleset(
       Rule(ruleId, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );

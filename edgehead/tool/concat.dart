@@ -6,15 +6,13 @@ import 'dart:io';
 void main() {
   Directory d = Directory("assets/text/");
 
-  for (var entity in d.listSync(recursive: true)) {
+  for (final entity in d.listSync(recursive: true)) {
     if (!entity.path.endsWith(".txt")) continue;
     var file = File(entity.path);
     var lines = file.readAsLinesSync();
     print("\n\n\n");
     print("=== File: ${file.path} ===");
     print("\n");
-    for (var line in lines) {
-      print(line);
-    }
+    lines.forEach(print);
   }
 }

@@ -20,6 +20,7 @@ abstract class Team implements Built<Team, TeamBuilder> {
 
   factory Team([void updates(TeamBuilder b)]) = _$Team;
 
+  // ignore: prefer_const_constructors_in_immutables
   Team._();
 
   int get id;

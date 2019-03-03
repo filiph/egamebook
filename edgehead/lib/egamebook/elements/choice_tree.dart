@@ -21,7 +21,7 @@ ChoiceTreeNode _decreaseOrder(ChoiceTreeNode node) {
 /// https://pub.dartlang.org/documentation/collection/latest/collection/groupBy.html
 Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T key(S element)) {
   var map = <T, List<S>>{};
-  for (var element in values) {
+  for (final element in values) {
     var list = map.putIfAbsent(key(element), () => []);
     list.add(element);
   }

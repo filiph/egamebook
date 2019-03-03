@@ -68,7 +68,7 @@ class AutoLoot extends Action<Null> {
     Item takenWeapon;
     Item takenShield;
     List<Item> takenItems = [];
-    for (var item in situation.droppedItems) {
+    for (final item in situation.droppedItems) {
       // TODO: generalize sword for spear for other weapons
       final currentActor = world.getActorById(a.id);
       final isSwordForSpear =
@@ -142,16 +142,14 @@ class AutoLoot extends Action<Null> {
       WorldStateBuilder world,
       Storyline s) {
     var shields = List<Item>.from(takenItems.where((item) => item.isShield));
-    for (var item in actor.inventory.shields) {
-      shields.add(item);
-    }
+    actor.inventory.shields.forEach(shields.add);
     if (shields.isEmpty) return;
     shields.sort((a, b) => a.value.compareTo(b.value));
     var unshielded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) =>
             a.isAliveAndActive && a.currentShield == null && a.id != actor.id);
-    for (var friend in unshielded) {
+    for (final friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
       world.updateActorById(friend.id, (b) => b.inventory.equipShield(shield));
@@ -171,15 +169,13 @@ class AutoLoot extends Action<Null> {
       WorldStateBuilder world,
       Storyline s) {
     var weapons = List<Item>.from(takenItems.where((item) => item.isWeapon));
-    for (var item in actor.inventory.weapons) {
-      weapons.add(item);
-    }
+    actor.inventory.weapons.forEach(weapons.add);
     if (weapons.isEmpty) return;
     weapons.sort((a, b) => a.value.compareTo(b.value));
     var barehanded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) => a.isAliveAndActive && a.isBarehanded && a.id != actor.id);
-    for (var friend in barehanded) {
+    for (final friend in barehanded) {
       if (weapons.isEmpty) break;
       var weapon = weapons.removeLast();
       world.updateActorById(

@@ -377,7 +377,7 @@ void movePlayer(ActionContext context, String locationName,
 void nameAgruthSword(WorldStateBuilder w, String name) {
   final built = w.build();
   // Assume only one sword wielded by either Aren or Briana.
-  for (var actor in built.actors.where((a) => a.team == playerTeam)) {
+  for (final actor in built.actors.where((a) => a.team == playerTeam)) {
     if (!actor.isBarehanded) {
       var sword = actor.currentWeapon;
       var named = sword.toBuilder()

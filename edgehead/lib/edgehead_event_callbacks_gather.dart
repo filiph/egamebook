@@ -1,6 +1,7 @@
 library edgehead.event_callbacks;
 
 // ignore_for_file: type_annotate_public_apis
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';

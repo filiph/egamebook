@@ -63,14 +63,16 @@ abstract class ActionHistory
       bool wasSuccess,
       bool wasAggressive}) {
     /// Filter the actions
-    Iterable<ActionRecord> filtered = this.records.reversed.where((record) {
+    Iterable<ActionRecord> filtered = records.reversed.where((record) {
       if (actionName != null && record.actionName != actionName) return false;
       if (actor != null && record.protagonist != actor.id) return false;
-      if (sufferer != null && !record.sufferers.contains(sufferer.id))
+      if (sufferer != null && !record.sufferers.contains(sufferer.id)) {
         return false;
+      }
       if (wasSuccess != null && record.wasSuccess != wasSuccess) return false;
-      if (wasAggressive != null && record.wasAggressive != wasAggressive)
+      if (wasAggressive != null && record.wasAggressive != wasAggressive) {
         return false;
+      }
       return true;
     });
 
@@ -103,6 +105,7 @@ abstract class ActionRecord
 
   factory ActionRecord([void updates(ActionRecordBuilder b)]) = _$ActionRecord;
 
+  // ignore: prefer_const_constructors_in_immutables
   ActionRecord._();
 
   String get actionName;

@@ -163,7 +163,7 @@ class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
         a.currentWeapon.damageCapability.type == WeaponType.spear) {
       return a.currentWeapon;
     }
-    for (var weapon in a.inventory.weapons) {
+    for (final weapon in a.inventory.weapons) {
       if (weapon.damageCapability.type == WeaponType.spear) {
         return weapon;
       }

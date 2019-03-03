@@ -1,9 +1,9 @@
 import 'dart:async';
 
-Future<Null> awaitAnimationFrame() async {
+Future<void> awaitAnimationFrame() async {
   await Future.value(null);
 }
 
-Future<Null> awaitIdleCallback() async {
+Future<void> awaitIdleCallback() async {
   await Future.value(null);
 }

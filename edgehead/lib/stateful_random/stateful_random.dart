@@ -17,10 +17,10 @@ class StatefulRandom implements Random {
   int _state;
 
   /// Creates a completely new instance. [seed] cannot be `null` or `0`.
-  StatefulRandom(int seed) : _state = seed {
-    assert(seed != null);
-    assert(seed != 0);
-  }
+  StatefulRandom(int seed)
+      : _state = seed,
+        assert(seed != null),
+        assert(seed != 0);
 
   /// Creates an instance from state that was previously created by [saveState].
   ///

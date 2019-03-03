@@ -48,17 +48,17 @@ void main() {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
           savegame: "slaveQuarters");
-    }, timeout: Timeout.factor(10), tags: ["long-running"]);
+    }, timeout: const Timeout.factor(10), tags: ["long-running"]);
 
     test("edgehead runs to completion 10 times without warnings", () async {
       final stopWords = ["[WARNING]", "[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.INFO, 10);
-    }, timeout: Timeout.factor(10), tags: ["strict", "long-running"]);
+    }, timeout: const Timeout.factor(10), tags: ["strict", "long-running"]);
 
     test("edgehead runs to completion 10 times from beginning", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.WARNING, 10);
-    }, timeout: Timeout.factor(10), tags: ["long-running"]);
+    }, timeout: const Timeout.factor(10), tags: ["long-running"]);
   });
 }
 
@@ -66,7 +66,7 @@ String createLogFilePath(Directory tempDir, int i, String description) =>
     path.absolute(path.join(
         tempDir.path, "${description}_${i.toString().padLeft(3, '0')}.log"));
 
-Future<Null> testWithStopWords(
+Future<void> testWithStopWords(
     List<String> stopWords, Directory tempDir, Level logLevel, int iterations,
     {String savegame}) async {
   final identifier =

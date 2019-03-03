@@ -183,7 +183,7 @@ abstract class FightSituation extends Object
     num best = 0.0;
     Actor chosen;
 
-    for (var actor in actors) {
+    for (final actor in actors) {
       // Compute the last time this actor did any pro-active action.
       var latestProactiveRecord =
           world.actionHistory.getLatestProactiveTime(actor);
@@ -245,7 +245,7 @@ abstract class FightSituation extends Object
       world.replaceSituationById(
           situation.id, situation.rebuild((b) => b..monstersAlive = false));
 
-      for (var id in playerTeamIds) {
+      for (final id in playerTeamIds) {
         if (world.getActorById(id).isAliveAndActive) {
           world.updateActorById(id, (b) => b..pose = Pose.standing);
         }

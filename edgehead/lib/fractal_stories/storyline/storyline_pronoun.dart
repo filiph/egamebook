@@ -5,6 +5,8 @@ import 'package:built_value/serializer.dart';
 
 part 'storyline_pronoun.g.dart';
 
+// ignore_for_file: non_constant_identifier_names
+
 /// The pronouns and their different forms.
 ///
 /// Not used (and therefore unimplemented): dative, ablative, locative,

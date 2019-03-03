@@ -51,7 +51,7 @@ class ActorScoreChange {
     num self = 0;
     num team = 0;
     num enemy = 0;
-    for (var change in changes) {
+    for (final change in changes) {
       count += 1;
       self += change.selfPreservation;
       team += change.teamPreservation;

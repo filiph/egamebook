@@ -46,13 +46,13 @@ class Pose extends EnumClass implements Comparable<Pose> {
 
   const Pose._(String name) : super(name);
 
-  bool operator <(Pose other) => this.compareTo(other) < 0;
+  bool operator <(Pose other) => compareTo(other) < 0;
 
-  bool operator <=(Pose other) => this.compareTo(other) <= 0;
+  bool operator <=(Pose other) => compareTo(other) <= 0;
 
-  bool operator >(Pose other) => this.compareTo(other) > 0;
+  bool operator >(Pose other) => compareTo(other) > 0;
 
-  bool operator >=(Pose other) => this.compareTo(other) >= 0;
+  bool operator >=(Pose other) => compareTo(other) >= 0;
 
   /// Return a [Pose] that is better or worse than the current one.
   ///

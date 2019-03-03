@@ -14,6 +14,9 @@ export 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 
 part 'storyline_entity.dart';
 
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 final Logger log = Logger('Storyline');
 
 /// A single report about an event, atomic part of a story. It can be "John
@@ -244,7 +247,7 @@ class Storyline {
         subjectAndObjectAreEnemies: subjectAndObjectAreEnemies,
         endSentence: endSentence,
         startSentence: startSentence,
-        wholeSentence: wholeSentenceAutoDetected ? true : wholeSentence,
+        wholeSentence: wholeSentenceAutoDetected || wholeSentence,
         actionThread: actionThread,
         isSupportiveActionInThread: isSupportiveActionInThread,
         time: time ?? this.time);
@@ -282,7 +285,7 @@ class Storyline {
     buf.write(" ");
     int i = 0;
     int sentenceCount = 0;
-    for (Entity article in articles) {
+    for (final article in articles) {
       if (i > 0) {
         if (i == 1 && article == articles.last) {
           buf.write(" ");
@@ -380,8 +383,9 @@ class Storyline {
 
   bool exchangedSubjectObject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    if (_reports[i].subject == null || _reports[j].subject == null)
+    if (_reports[i].subject == null || _reports[j].subject == null) {
       return false;
+    }
     if (_reports[i].object == null || _reports[j].object == null) return false;
     return _reports[i].subject.id == _reports[j].object.id &&
         _reports[i].object.id == _reports[j].subject.id;
@@ -555,10 +559,11 @@ class Storyline {
   }
 
   Entity object(int i) {
-    if (i < 0 || i >= _reports.length)
+    if (i < 0 || i >= _reports.length) {
       return null;
-    else
+    } else {
       return _reports[i].object;
+    }
   }
 
   bool oppositeSentiment(int i, int j) {
@@ -626,7 +631,7 @@ class Storyline {
       if (rec.isReport && rec.report.string == PARAGRAPH_NEWLINES) break;
     }
     if (length < 1) return const [];
-    final int MAX_SENTENCE_LENGTH = 3;
+    const int MAX_SENTENCE_LENGTH = 3;
     int lastEndSentence = -1;
     bool endPreviousSentence = true; // previous sentence was ended
     bool endThisSentence = false; // this sentence needs to be ended
@@ -634,7 +639,8 @@ class Storyline {
     for (int i = 0; i < length; i++) {
       // TODO: look into future - make sentences like "Although __, __"
       // TODO: ^^ can be done by 2 for loops
-      // TODO: add "while you're still sweeping your legs" when it's been a long time since we said that
+      // TODO: add "while you're still sweeping your legs" when it's been
+      //       a long time since we said that
       // TODO: glue sentences together first (look ahead, optimize)
       if (i != 0) {
         // solve flow with previous sentence
@@ -658,10 +664,12 @@ class Storyline {
         endThisSentence = false;
 
         if (endPreviousSentence) {
-          if (_reports[i - 1].wholeSentence) // don't write period after "Boom!"
+          if (_reports[i - 1].wholeSentence) {
+            // don't write period after "Boom!"
             strBuf.write(" ");
-          else
+          } else {
             strBuf.write(". ");
+          }
           if (but && !_reports[i].wholeSentence) strBuf.write("But ");
         } else {
           // let's try and glue [i-1] and [i] into one sentence
@@ -670,7 +678,8 @@ class Storyline {
                 <String>[" but ", " but ", /*" yet ",*/ ", but "]));
             if (!sameSentiment(i, i + 1)) endThisSentence = true;
           } else {
-            // TODO: add ", " but only when we can be sure it's not in the end of the sentence
+            // TODO: add ", " but only when we can be sure
+            //       it's not in the end of the sentence
             strBuf.write(Randomly.choose(<String>[" and ", " and ", ", and "]));
             endThisSentence = true;
           }
@@ -774,10 +783,11 @@ class Storyline {
     }
     if (!_sameSubject(i, j)) return false;
     if (_reports[i].positive && _reports[j].positive) return true;
-    if (_reports[i].negative && _reports[j].negative)
+    if (_reports[i].negative && _reports[j].negative) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   /// Returns true if there is at least one entity that appears both in
@@ -785,8 +795,8 @@ class Storyline {
   /// (subject, object, owner, ...).
   bool someActorsSame(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    for (var a in getAllEntities(i)) {
-      for (var b in getAllEntities(j)) {
+    for (final a in getAllEntities(i)) {
+      for (final b in getAllEntities(j)) {
         if (a.id == b.id) return true;
       }
     }
@@ -794,17 +804,19 @@ class Storyline {
   }
 
   String string(int i) {
-    if (i < 0 || i >= _reports.length)
+    if (i < 0 || i >= _reports.length) {
       return null;
-    else
+    } else {
       return _reports[i].string;
+    }
   }
 
   Entity subject(int i) {
-    if (i < 0 || i >= _reports.length)
+    if (i < 0 || i >= _reports.length) {
       return null;
-    else
+    } else {
       return _reports[i].subject;
+    }
   }
 
   /// makes sure the sentence flows well with the previous sentence(s), then
@@ -868,10 +880,11 @@ class Storyline {
   int timeSincePrevious(int i) {
     if (_reports[i].time == null ||
         !valid(i - 1) ||
-        _reports[i - 1].time == null)
+        _reports[i - 1].time == null) {
       return VERY_LONG_TIME;
-    else
+    } else {
       return _reports[i].time - _reports[i - 1].time;
+    }
   }
 
   @deprecated
@@ -879,10 +892,11 @@ class Storyline {
   String toString() => realizeAsString();
 
   bool valid(int i) {
-    if (i >= _reports.length || i < 0)
+    if (i >= _reports.length || i < 0) {
       return false;
-    else
+    } else {
       return true;
+    }
   }
 
   /// Returns whether or not the [entity] has been mentioned by time of the
@@ -949,12 +963,13 @@ class Storyline {
     return _reports[i].object.id == _reports[j].object.id;
   }
 
-  /// taking care of all the exceptions and rules when comparing different reports
-  /// call: [: sameSubject(i, i+1) ... :]
+  /// Taking care of all the exceptions and rules when comparing
+  /// different reports call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    if (_reports[i].subject == null || _reports[j].subject == null)
+    if (_reports[i].subject == null || _reports[j].subject == null) {
       return false;
+    }
     return _reports[i].subject.id == _reports[j].subject.id;
   }
 
@@ -965,10 +980,11 @@ class Storyline {
     }
     if (result.isEmpty) return result;
     String firstLetter = result[0].toUpperCase();
-    if (result.length == 1)
+    if (result.length == 1) {
       return firstLetter;
-    else
+    } else {
       return "$firstLetter${result.substring(1)}";
+    }
   }
 }
 
@@ -979,12 +995,11 @@ class _StorylineRecord {
 
   final ElementBase customElement;
 
-  _StorylineRecord({this.report, this.customElement}) {
-    assert(
-        report == null || customElement == null,
-        "_StorylineRecord should be either text or custom element, "
-        "never both.");
-  }
+  const _StorylineRecord({this.report, this.customElement})
+      : assert(
+            report == null || customElement == null,
+            "_StorylineRecord should be either text or custom element, "
+            "never both.");
 
   /// Whether this record contains a (textual) [Report].
   bool get isReport => report != null;

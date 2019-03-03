@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   group("VisitHistory", () {
-    final _outsideName = "outside";
+    const _outsideName = "outside";
     final outside = Room(
         _outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
     final inside =

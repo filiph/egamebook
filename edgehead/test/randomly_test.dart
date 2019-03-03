@@ -6,7 +6,7 @@ void main() {
   group("Save Against", () {
     test("tossCoin returns as expected", () {
       expect(Randomly.tossCoin(), const TypeMatcher<bool>());
-      final int n = 10000;
+      const int n = 10000;
       int result = 0;
       for (int i = 0; i < n; i++) {
         result += (Randomly.tossCoin()) ? 1 : -1;
@@ -17,7 +17,7 @@ void main() {
 
   group("Randomly.chooseWeighted", () {
     test("[0.5, 0.5] = 50%", () {
-      final int n = 10000;
+      const int n = 10000;
       final weights = [0.5, 0.5];
       int result = 0;
       for (int i = 0; i < n; i++) {
@@ -27,7 +27,7 @@ void main() {
     });
 
     test("[0.1, 0.1, 0.8]", () {
-      final int n = 10000;
+      const int n = 10000;
       final weights = [0.1, 0.1, 0.8];
       int result = 0;
       for (int i = 0; i < n; i++) {
@@ -38,7 +38,7 @@ void main() {
 
     test("[0.1, 0.5] throws (does not add up to 1.0)", () {
       void run() {
-        final int n = 10000;
+        const int n = 10000;
         final weights = [0.1, 0.5];
         for (int i = 0; i < n; i++) {
           Randomly.chooseWeighted(weights);

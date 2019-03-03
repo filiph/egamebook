@@ -4,7 +4,9 @@
 // WritersInputGenerator
 // **************************************************************************
 
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: unused_local_variable
+// ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: type_annotate_public_apis
 
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;

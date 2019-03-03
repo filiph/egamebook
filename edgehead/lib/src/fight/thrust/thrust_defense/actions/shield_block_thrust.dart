@@ -95,7 +95,8 @@ class ShieldBlockThrust extends OtherActorAction {
           owner: enemy, subject: swing);
       a.report(
           s,
-          "<subject> easily {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
+          "<subject> easily {block<s>|stop<s>|deflect<s>} "
+          "the {swing|attack|strike} "
           "with ${shieldAsObject2(a)}",
           positive: true);
     } else {

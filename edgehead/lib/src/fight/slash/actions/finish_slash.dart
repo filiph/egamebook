@@ -21,7 +21,7 @@ class FinishSlash extends OtherActorAction {
 
   /// The default severity of the slash that is dealt. Can be upgraded
   /// or downgraded depending on specific rules.
-  static final _defaultSlashSuccessLevel = SlashSuccessLevel.majorCut;
+  static const _defaultSlashSuccessLevel = SlashSuccessLevel.majorCut;
 
   @override
   final String helpMessage = null;

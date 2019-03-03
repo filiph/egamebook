@@ -16,28 +16,28 @@ import 'package:slot_machine/result.dart';
 
 import 'default_savegames.dart' as savegames;
 
-Future<Null> main(List<String> args) async {
+Future<void> main(List<String> args) async {
   var parser = ArgParser()
     ..addFlag('automated',
         defaultsTo: false,
         negatable: false,
-        help: "Autoselect options for the player.")
+        help: 'Autoselect options for the player.')
     ..addFlag('log',
         defaultsTo: false,
         negatable: false,
-        help: "Log to edgehead.log in current directory.")
+        help: 'Log to edgehead.log in current directory.')
     ..addOption('action',
-        help: "Turn off automated mode after encountering an action "
-            "that matches the specified name. Useful for playtesting "
-            "a specific Action.")
+        help: 'Turn off automated mode after encountering an action '
+            'that matches the specified name. Useful for playtesting '
+            'a specific Action.')
     ..addOption('load',
         allowed: savegames.defaultSavegames.keys,
-        help: "Load one of the default savegames.")
+        help: 'Load one of the default savegames.')
     ..addFlag('help', abbr: 'h', negatable: false, help: 'Show this help.');
 
   void showUsage() {
-    print("Usage:\n");
-    print("  dart play.dart [options]\n");
+    print('Usage:\n');
+    print('  dart play.dart [options]\n');
     print(parser.usage);
   }
 
@@ -45,7 +45,7 @@ Future<Null> main(List<String> args) async {
   try {
     results = parser.parse(args);
   } on FormatException {
-    print("Error parsing command line options.");
+    print('Error parsing command line options.');
     showUsage();
     exitCode = 2;
     return;
@@ -303,10 +303,10 @@ class CliRunner extends Presenter<EdgeheadGame> {
             Randomly.saveAgainst(1 - pow(1 - probability, 2), random: _random);
         if (rerollSuccess) {
           print("Reroll success!");
-          return slot.SessionResult(slot.Result.success, true);
+          return const slot.SessionResult(slot.Result.success, true);
         }
         print("Reroll failure.");
-        return slot.SessionResult(slot.Result.failure, true);
+        return const slot.SessionResult(slot.Result.failure, true);
       }
 
       print("Reroll impossible. So: $initialResult");

@@ -47,7 +47,7 @@ void main() {
 
     group("Situation", () {
       Actor a, b;
-      final sim = Simulation([], [], {});
+      final sim = Simulation(const [], const [], const {});
       final world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[])
         ..situations = ListBuilder<Situation>(<Situation>[])
@@ -112,14 +112,14 @@ void main() {
       final afterFireCrevice = Room("after_fire_hidden_crevice",
           emptyRoomDescription, emptyRoomDescription, null, null);
 
-      final _forgeName = "forge";
+      const _forgeName = "forge";
 
-      final _forgeAfterFireName = "forge_after_fire";
+      const _forgeAfterFireName = "forge_after_fire";
 
       final creviceExit = Approach(_forgeAfterFireName, afterFireCrevice.name,
           "explore to hidden crevice", (_) {});
 
-      final _outsideName = "outside";
+      const _outsideName = "outside";
 
       final forgeEntryAfterFire = Approach(
           _outsideName, _forgeAfterFireName, "enter the charred forge", (_) {});
@@ -145,7 +145,7 @@ void main() {
       final simulation = Simulation(
           [forge, forgeAfterFire, afterFireCrevice, outside],
           [creviceExit, forgeEntryAfterFire, forgeEntry, outsideExit],
-          {});
+          const {});
 
       final context = ApplicabilityContext(null, simulation, null);
 
@@ -178,7 +178,7 @@ void main() {
           ..statefulRandomState = 1337
           ..time = DateTime.utc(1000));
 
-        final sureSuccess = ReasonedSuccessChance.sureSuccess;
+        const sureSuccess = ReasonedSuccessChance.sureSuccess;
 
         test("uses default if no variant is applicable", () {
           final actionContext = ActionContext(null, aren, simulation, world,

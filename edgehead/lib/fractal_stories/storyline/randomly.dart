@@ -2,6 +2,7 @@ library randomly;
 
 import 'dart:math';
 
+// ignore: avoid_classes_with_only_static_members
 class Randomly {
   static final Random _random = Random();
 
@@ -25,7 +26,7 @@ class Randomly {
     num pick = (random ?? _random).nextDouble() * total;
     num sum = 0;
     int index = 0;
-    for (num weight in weights) {
+    for (final weight in weights) {
       if (sum + weight >= pick) return index;
       sum += weight;
       index += 1;
@@ -42,7 +43,7 @@ class Randomly {
     int pick = (random ?? _random).nextInt(max);
     int sum = 0;
     int index = 0;
-    for (int weight in weights) {
+    for (final weight in weights) {
       if (sum + weight >= pick) return index;
       sum += weight;
       index += 1;
@@ -85,7 +86,8 @@ class Randomly {
   }
 
   /// Returns the probability in "rounded" by [precisionSteps]. So, if
-  /// [precisionSteps] is [:10:], a [humanProbability] of [:0.46:] becomes "50%".
+  /// [precisionSteps] is [:10:], a [humanProbability] of [:0.46:]
+  /// becomes "50%".
   /// When [precisionSteps] is [:5:], then it becomes "45%".
   static String humanStringifyProbability(num probability,
       {int precisionSteps = 10, String prefix = "", String postfix = "%"}) {

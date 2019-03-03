@@ -13,7 +13,7 @@ void main() {
 
     Actor briana = Actor.initialized(2, "Briana");
 
-    final sureSuccess = ReasonedSuccessChance.sureSuccess;
+    const sureSuccess = ReasonedSuccessChance.sureSuccess;
 
     List<ActorKilledEvent> events;
 

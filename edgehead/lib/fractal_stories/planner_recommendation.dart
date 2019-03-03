@@ -84,7 +84,7 @@ class PlannerRecommendation {
     _performances.sort((a, b) =>
         -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
 
-    for (var performance in _performances) {
+    for (final performance in _performances) {
       if (performance == bestSelfPreserving) continue;
       if (performance == bestEnemyDamaging) continue;
       if (performance == bestTeamPreserving) continue;
@@ -153,7 +153,7 @@ class PlannerRecommendation {
       {List<Performance> skip = const []}) {
     Performance best;
     num bestScore;
-    for (var performance in _performances) {
+    for (final performance in _performances) {
       if (skip.contains(performance)) continue;
       if (best == null || combineFunction(scores[performance]) > bestScore) {
         best = performance;

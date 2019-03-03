@@ -1,7 +1,7 @@
 // TODO add `Map<String, StatSetting> statLookup` which allows Presenter to
 // get a stat settings for a Stat by the stat's name.
 
-typedef String ValueToString<T>(T value);
+typedef ValueToString<T> = String Function(T value);
 
 class Stat<T> {
   final StatSetting<T> setting;

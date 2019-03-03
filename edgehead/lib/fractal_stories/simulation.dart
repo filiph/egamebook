@@ -65,8 +65,22 @@ class Simulation {
     Iterable<Approach> approaches,
     this.combineFunctions,
   )   : rooms = Set<Room>.from(rooms),
-        approaches = Set<Approach>.from(approaches) {
-    assert(!hasDuplicities(rooms.map((r) => r.name)));
+        approaches = Set<Approach>.from(approaches),
+        assert(!hasDuplicities(rooms.map((r) => r.name))),
+        assert(() {
+          final allNames = rooms.map((r) => r.name);
+          for (final approach in approaches) {
+            if (!allNames.contains(approach.from)) {
+              print("MISSING FROM: ${approach.from}");
+              return false;
+            }
+            if (!allNames.contains(approach.to)) {
+              print("MISSING TO: ${approach.to}");
+              return false;
+            }
+          }
+          return true;
+        }(), "Approaches must specify existing rooms") {
     assert(() {
       for (final room in rooms) {
         if (room.parent != null) {
@@ -78,20 +92,6 @@ class Simulation {
     }(),
         "Cannot have more than one level of parent-child variants in Rooms: "
         "$rooms");
-    assert(() {
-      final allNames = rooms.map((r) => r.name);
-      for (final approach in approaches) {
-        if (!allNames.contains(approach.from)) {
-          print("MISSING FROM: ${approach.from}");
-          return false;
-        }
-        if (!allNames.contains(approach.to)) {
-          print("MISSING TO: ${approach.to}");
-          return false;
-        }
-      }
-      return true;
-    }(), "Approaches must specify existing rooms");
   }
 
   /// Generates all applicable actions for [actor] given a [world]. This goes

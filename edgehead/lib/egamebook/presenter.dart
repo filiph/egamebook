@@ -117,11 +117,11 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   }
 
   @mustCallSuper
-  Future<Null> initialize(T book) {
+  Future<void> initialize(T book) {
     assert(this.book == null, "Cannot reuse Presenter several times.");
     this.book = book;
     _bookSubscription = book.elements.listen(add);
-    return Future<Null>.value();
+    return Future<void>.value();
   }
 
   void startBook() {

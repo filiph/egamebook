@@ -83,7 +83,7 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   Item findBestWeapon() {
     Item best;
     int value = -9999999;
-    for (var weapon in weapons) {
+    for (final weapon in weapons) {
       assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
       if (weapon.value > value) {
         best = weapon;

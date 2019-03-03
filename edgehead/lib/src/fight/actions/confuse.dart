@@ -77,7 +77,7 @@ class Confuse extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return ReasonedSuccessChance<Object>(0.8);
+    return const ReasonedSuccessChance<Object>(0.8);
   }
 
   @override

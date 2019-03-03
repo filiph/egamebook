@@ -160,7 +160,7 @@ void main() {
 
   group("pickRandomBodyPartFromLeft/Right", () {
     final random = Random();
-    final randomIntGetter = (int max) => random.nextInt(max);
+    final randomIntGetter = random.nextInt;
 
     test(
         "attack from right side (attacker's perspective) "
@@ -193,7 +193,7 @@ void main() {
     final head = BodyPart(1, "head");
     final neck = BodyPart(2, "neck");
     final random = Random();
-    final randomIntGetter = (int max) => random.nextInt(max);
+    final randomIntGetter = random.nextInt;
 
     test("gets the one body part", () {
       final bodyPartsWithWeights = {
