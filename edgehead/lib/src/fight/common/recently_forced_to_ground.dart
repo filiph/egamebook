@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/recently.dart';
 
 const String fellToGroundCustomEventName = "fell_to_ground";
 
@@ -13,8 +14,5 @@ bool recentlyForcedToGround(Actor a, WorldState world) {
 
   final recency = world.time.difference(latestFall.time).inSeconds;
 
-  // We're using 2 here because it's safer. Sometimes, an action by another
-  // actor is silent, so with 1 we would still get 'you sweep his legs, he
-  // stands up'.
-  return recency <= 2;
+  return recency <= getRecently(a);
 }
