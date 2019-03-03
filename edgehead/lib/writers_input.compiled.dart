@@ -40,8 +40,7 @@ import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.compiled.g.dart';
 
 const bool DEV_MODE = false;
-final Room undergroundChurch =
-    new Room('underground_church', (ActionContext c) {
+final Room undergroundChurch = Room('underground_church', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -50,8 +49,8 @@ final Room undergroundChurch =
   s.add(
       'You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. \n\n\nYour bare footsteps reverberate in the room, so you slow down to quiet them. \n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(404031087, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(404031087, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -66,7 +65,7 @@ final Room undergroundChurch =
             'After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.\n\n',
             wholeSentence: true);
       }),
-      new Rule(1058415809, 1, false, (ApplicabilityContext c) {
+      Rule(1058415809, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -91,7 +90,7 @@ final Room undergroundChurch =
       wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach undergroundChurchFromCaveWithAgruth = new Approach(
+Approach undergroundChurchFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'underground_church', 'Go to the Unholy Church',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -101,7 +100,7 @@ Approach undergroundChurchFromCaveWithAgruth = new Approach(
   final Storyline s = c.outputStoryline;
   s.add('You make it to the Church undetected.\n', wholeSentence: true);
 });
-Approach undergroundChurchFromGuardpostAboveChurch = new Approach(
+Approach undergroundChurchFromGuardpostAboveChurch = Approach(
     'guardpost_above_church',
     'underground_church',
     'Descend toward the Underground Church', (ActionContext c) {
@@ -114,7 +113,7 @@ Approach undergroundChurchFromGuardpostAboveChurch = new Approach(
       wholeSentence: true);
 });
 Approach undergroundChurchFromUndergroundChurchAltar =
-    new Approach('underground_church_altar', 'underground_church', 'Sneak back',
+    Approach('underground_church_altar', 'underground_church', 'Sneak back',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -130,8 +129,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   @override
   final String name = 'examine_underground_church';
 
-  static final ExamineUndergroundChurch singleton =
-      new ExamineUndergroundChurch();
+  static final ExamineUndergroundChurch singleton = ExamineUndergroundChurch();
 
   @override
   String getCommand(Null _) {
@@ -204,7 +202,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room tunnel = new Room('tunnel', (ActionContext c) {
+final Room tunnel = Room('tunnel', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -214,8 +212,8 @@ final Room tunnel = new Room('tunnel', (ActionContext c) {
       'Almost as soon as the circular room disappears from your line of sight, loud shouting rises from deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear dozens of orc and goblin feet stomping.\n\n\nThe air gets colder and fresher, but there\'s still no end in sight. The stairs get steeper and steeper until you feel like you’re climbing a ladder.\n\n\n"I have…" Briana gasps, catching her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaustion on its doorstep."\n\n\n_"That… that would be disappointing, yes."_\n\n\nThe sounds from behind grow louder. You can now pick out individual voices, although not what they are saying.\n\n\nThe stairway suddenly makes a sharp left turn and levels out. Tasting blood on the roof of your mouth, your whole body demands that you stop — but you start running anyway. Briana follows close behind.\n\n\nThe light in the tunnel gets brighter and the air gets colder. Suddenly, just when you can smell fresh air, an orc and a goblin jump out in front of you from a slimy crevice, swords in hands.\n\n\n![Picture of the Upper Door guard](https://egamebook.com/vermin/v/latest/img/orc_and_goblin_sketch.jpg)\n\n\nThey must be guarding the Upper Door. There is no way around them.\n',
       wholeSentence: true);
 }, null, generateEscapeTunnelFight, null);
-Approach tunnelFromTunnelCancelChance = new Approach(
-    'tunnel_cancel_chance', 'tunnel', 'Continue', (ActionContext c) {
+Approach tunnelFromTunnelCancelChance =
+    Approach('tunnel_cancel_chance', 'tunnel', 'Continue', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -225,8 +223,7 @@ Approach tunnelFromTunnelCancelChance = new Approach(
       'You shake your head and continue through the passage. Soon, you find yourself climbing a steep, poorly lit stairway. Briana catches up with you quickly.\n',
       wholeSentence: true);
 });
-final Room tunnelCancelChance =
-    new Room('tunnel_cancel_chance', (ActionContext c) {
+final Room tunnelCancelChance = Room('tunnel_cancel_chance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -241,7 +238,7 @@ class TalkToBriana1 extends RoamingAction {
   @override
   final String name = 'talk_to_briana_1';
 
-  static final TalkToBriana1 singleton = new TalkToBriana1();
+  static final TalkToBriana1 singleton = TalkToBriana1();
 
   @override
   String getCommand(Null _) {
@@ -304,7 +301,7 @@ class TalkToBriana2 extends RoamingAction {
   @override
   final String name = 'talk_to_briana_2';
 
-  static final TalkToBriana2 singleton = new TalkToBriana2();
+  static final TalkToBriana2 singleton = TalkToBriana2();
 
   @override
   String getCommand(Null _) {
@@ -369,7 +366,7 @@ class TalkToBriana3 extends RoamingAction {
   @override
   final String name = 'talk_to_briana_3';
 
-  static final TalkToBriana3 singleton = new TalkToBriana3();
+  static final TalkToBriana3 singleton = TalkToBriana3();
 
   @override
   String getCommand(Null _) {
@@ -396,8 +393,8 @@ class TalkToBriana3 extends RoamingAction {
     s.add(
         '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n',
         wholeSentence: true);
-    new Ruleset(
-        new Rule(675414120, 2, false, (ApplicabilityContext c) {
+    Ruleset(
+        Rule(675414120, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -413,7 +410,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n',
               wholeSentence: true);
         }),
-        new Rule(363993062, 2, false, (ApplicabilityContext c) {
+        Rule(363993062, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -429,7 +426,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n',
               wholeSentence: true);
         }),
-        new Rule(392088263, 2, false, (ApplicabilityContext c) {
+        Rule(392088263, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -446,7 +443,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "That door in the slave quarters."\n\n\n',
               wholeSentence: true);
         }),
-        new Rule(361178650, 1, false, (ApplicabilityContext c) {
+        Rule(361178650, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -461,7 +458,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide as she looks around the room.\n\n\n',
               wholeSentence: true);
         }),
-        new Rule(974180978, 0, false, (ApplicabilityContext c) {
+        Rule(974180978, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -510,7 +507,7 @@ class TalkToBriana3 extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightGoblin = new Room('test_fight_goblin', (ActionContext c) {
+final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -520,7 +517,7 @@ final Room testFightGoblin = new Room('test_fight_goblin', (ActionContext c) {
       'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
-Approach testFightGoblinFromPreStartBook = new Approach(
+Approach testFightGoblinFromPreStartBook = Approach(
     'pre_start_book',
     'test_fight_goblin',
     'Playtest >> one-on-one test fight >> with a goblin', (ActionContext c) {
@@ -532,7 +529,7 @@ Approach testFightGoblinFromPreStartBook = new Approach(
   s.add('You get transported to the development testing arena.\n',
       wholeSentence: true);
 });
-Approach endOfRoamFromTestFightGoblin = new Approach(
+Approach endOfRoamFromTestFightGoblin = Approach(
     'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -541,7 +538,7 @@ Approach endOfRoamFromTestFightGoblin = new Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room startAdventure = new Room('start_adventure', (ActionContext c) {
+final Room startAdventure = Room('start_adventure', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -551,7 +548,7 @@ final Room startAdventure = new Room('start_adventure', (ActionContext c) {
       'The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.\n\n\n![Agruth whips Briana](https://egamebook.com/vermin/v/latest/img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.\n\n\nNobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.\n',
       wholeSentence: true);
 }, null, generateAgruthFight, null);
-Approach startAdventureFromPreStartBook = new Approach(
+Approach startAdventureFromPreStartBook = Approach(
     'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -561,7 +558,7 @@ Approach startAdventureFromPreStartBook = new Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room undergroundChurchAltarAfterCeremony = new Room(
+final Room undergroundChurchAltarAfterCeremony = Room(
     'underground_church_altar_after_ceremony', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -572,14 +569,13 @@ final Room undergroundChurchAltarAfterCeremony = new Room(
   rollBrianaQuote(c);
 }, null, null,
     parent: 'underground_church_altar',
-    prerequisite:
-        new Prerequisite(840572377, 1, true, (ApplicabilityContext c) {
+    prerequisite: Prerequisite(840572377, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
       return w.actionHasBeenPerformedSuccessfully("wait_for_ritual");
     }));
-final Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
+final Room slaveQuarters = Room('slave_quarters', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -597,7 +593,7 @@ final Room slaveQuarters = new Room('slave_quarters', (ActionContext c) {
   s.add('"We _really_ shouldn\'t push our luck," she says.\n',
       wholeSentence: true);
 }, null, null);
-Approach slaveQuartersFromSlaveQuartersPassage = new Approach(
+Approach slaveQuartersFromSlaveQuartersPassage = Approach(
     'slave_quarters_passage',
     'slave_quarters',
     'Go further toward the Gate of Screams', (ActionContext c) {
@@ -615,7 +611,7 @@ class SlaveQuartersContinue extends RoamingAction {
   @override
   final String name = 'slave_quarters_continue';
 
-  static final SlaveQuartersContinue singleton = new SlaveQuartersContinue();
+  static final SlaveQuartersContinue singleton = SlaveQuartersContinue();
 
   @override
   String getCommand(Null _) {
@@ -678,7 +674,7 @@ class SlaveQuartersContinue extends RoamingAction {
 }
 
 final Room justAfterAgruthFight =
-    new Room('just_after_agruth_fight', (ActionContext c) {
+    Room('just_after_agruth_fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -689,7 +685,7 @@ final Room justAfterAgruthFight =
       wholeSentence: true);
 }, null, null, null);
 Approach justAfterAgruthFightFromStartAdventure =
-    new Approach('start_adventure', 'just_after_agruth_fight', '<implicit>',
+    Approach('start_adventure', 'just_after_agruth_fight', '<implicit>',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -705,7 +701,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   final String name = 'name_agruth_sword_opportunity';
 
   static final NameAgruthSwordOpportunity singleton =
-      new NameAgruthSwordOpportunity();
+      NameAgruthSwordOpportunity();
 
   @override
   String getCommand(Null _) {
@@ -772,7 +768,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   final String name = 'name_agruth_sword_redemption';
 
   static final NameAgruthSwordRedemption singleton =
-      new NameAgruthSwordRedemption();
+      NameAgruthSwordRedemption();
 
   @override
   String getCommand(Null _) {
@@ -838,7 +834,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   final String name = 'name_agruth_sword_nothing';
 
-  static final NameAgruthSwordNothing singleton = new NameAgruthSwordNothing();
+  static final NameAgruthSwordNothing singleton = NameAgruthSwordNothing();
 
   @override
   String getCommand(Null _) {
@@ -900,7 +896,7 @@ class NameAgruthSwordNothing extends RoamingAction {
 }
 
 final Room guardpostAboveChurch =
-    new Room('guardpost_above_church', (ActionContext c) {
+    Room('guardpost_above_church', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -909,8 +905,8 @@ final Room guardpostAboveChurch =
   s.add(
       'You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.\n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(133764767, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(133764767, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -925,7 +921,7 @@ final Room guardpostAboveChurch =
             'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.\n\n',
             wholeSentence: true);
       }),
-      new Rule(318594253, 1, false, (ApplicabilityContext c) {
+      Rule(318594253, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -949,8 +945,8 @@ final Room guardpostAboveChurch =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  new Ruleset(
-      new Rule(438680119, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(438680119, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -965,7 +961,7 @@ final Room guardpostAboveChurch =
             'The goblin\'s corpse is sprawled on the ground in the middle of the circular room.\n',
             wholeSentence: true);
       }),
-      new Rule(948011826, 0, false, (ApplicabilityContext c) {
+      Rule(948011826, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -981,7 +977,7 @@ final Room guardpostAboveChurch =
             wholeSentence: true);
       })).apply(c);
 }, null, null);
-Approach guardpostAboveChurchFromUndergroundChurch = new Approach(
+Approach guardpostAboveChurchFromUndergroundChurch = Approach(
     'underground_church', 'guardpost_above_church', 'Enter the upwards passage',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -993,7 +989,7 @@ Approach guardpostAboveChurchFromUndergroundChurch = new Approach(
       wholeSentence: true);
 });
 Approach guardpostAboveChurchFromTunnelCancelChance =
-    new Approach('tunnel_cancel_chance', 'guardpost_above_church', 'Return',
+    Approach('tunnel_cancel_chance', 'guardpost_above_church', 'Return',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1002,7 +998,7 @@ Approach guardpostAboveChurchFromTunnelCancelChance =
   final Storyline s = c.outputStoryline;
   s.add('You nod and step back into the circular room.\n', wholeSentence: true);
 });
-Approach guardpostAboveChurchFromSmelter = new Approach(
+Approach guardpostAboveChurchFromSmelter = Approach(
     'smelter', 'guardpost_above_church', 'Go through the smooth passage',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1019,7 +1015,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   final String name = 'guardpost_above_church_enter_tunnel_with_cancel';
 
   static final GuardpostAboveChurchEnterTunnelWithCancel singleton =
-      new GuardpostAboveChurchEnterTunnelWithCancel();
+      GuardpostAboveChurchEnterTunnelWithCancel();
 
   @override
   String getCommand(Null _) {
@@ -1083,7 +1079,7 @@ class TakeOrcthorn extends RoamingAction {
   @override
   final String name = 'take_orcthorn';
 
-  static final TakeOrcthorn singleton = new TakeOrcthorn();
+  static final TakeOrcthorn singleton = TakeOrcthorn();
 
   @override
   String getCommand(Null _) {
@@ -1154,7 +1150,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   final String name = 'guardpost_above_church_take_shield';
 
   static final GuardpostAboveChurchTakeShield singleton =
-      new GuardpostAboveChurchTakeShield();
+      GuardpostAboveChurchTakeShield();
 
   @override
   String getCommand(Null _) {
@@ -1197,9 +1193,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     s.add(
         'You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.\n\n\nYou touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.\n',
         wholeSentence: true);
-    w.pushSituation(
-        new GuardpostAboveChurchTakeShieldRescueSituation.initialized(
-            w.randomInt()));
+    w.pushSituation(GuardpostAboveChurchTakeShieldRescueSituation.initialized(
+        w.randomInt()));
     return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
   }
 
@@ -1236,7 +1231,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
           updates]) = _$GuardpostAboveChurchTakeShieldRescueSituation;
 
   factory GuardpostAboveChurchTakeShieldRescueSituation.initialized(int id) {
-    return new GuardpostAboveChurchTakeShieldRescueSituation((b) {
+    return GuardpostAboveChurchTakeShieldRescueSituation((b) {
       b.id = id;
       b.time = 0;
     });
@@ -1250,7 +1245,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   @override
   List<RoamingAction> get actions {
     return [
-      new SimpleAction(
+      SimpleAction(
           'guardpost_above_church_take_shield_rescue',
           'Stay perfectly still',
           (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, self) {
@@ -1266,8 +1261,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
           isApplicableClosure: (Actor a, Simulation sim, WorldState w, self) {
             return a.stamina > 0;
           }),
-      new SimpleAction(
-          'guardpost_above_church_take_shield_continuation_of_failure',
+      SimpleAction('guardpost_above_church_take_shield_continuation_of_failure',
           'Snatch the shield',
           (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, self) {
         s.add(
@@ -1310,7 +1304,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   }
 }
 
-final Room smelter = new Room('smelter', (ActionContext c) {
+final Room smelter = Room('smelter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1319,8 +1313,8 @@ final Room smelter = new Room('smelter', (ActionContext c) {
   s.add(
       'A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.\n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(1010398177, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(1010398177, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1335,7 +1329,7 @@ final Room smelter = new Room('smelter', (ActionContext c) {
             'You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.\n',
             wholeSentence: true);
       }),
-      new Rule(9791310, 1, false, (ApplicabilityContext c) {
+      Rule(9791310, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1358,8 +1352,8 @@ final Room smelter = new Room('smelter', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The coal reflects the reds and whites of the molten steel.\n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(988691356, 2, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(988691356, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1375,7 +1369,7 @@ final Room smelter = new Room('smelter', (ActionContext c) {
             'About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.\n\n\n',
             wholeSentence: true);
       }),
-      new Rule(978029961, 0, false, (ApplicabilityContext c) {
+      Rule(978029961, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1390,7 +1384,7 @@ final Room smelter = new Room('smelter', (ActionContext c) {
   rollBrianaQuote(c);
 }, null, null);
 Approach smelterFromWarForge =
-    new Approach('war_forge', 'smelter', 'Go to smelter', (ActionContext c) {
+    Approach('war_forge', 'smelter', 'Go to smelter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1401,7 +1395,7 @@ Approach smelterFromWarForge =
       wholeSentence: true);
 });
 Approach smelterFromGuardpostAboveChurch =
-    new Approach('guardpost_above_church', 'smelter', 'Go to the smelter',
+    Approach('guardpost_above_church', 'smelter', 'Go to the smelter',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1417,7 +1411,7 @@ class SmelterLookAround extends RoamingAction {
   @override
   final String name = 'smelter_look_around';
 
-  static final SmelterLookAround singleton = new SmelterLookAround();
+  static final SmelterLookAround singleton = SmelterLookAround();
 
   @override
   String getCommand(Null _) {
@@ -1480,7 +1474,7 @@ class SmelterLookAround extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
+final Room caveWithAgruth = Room('cave_with_agruth', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1498,7 +1492,7 @@ final Room caveWithAgruth = new Room('cave_with_agruth', (ActionContext c) {
   s.add('The corpse lies still, getting cold.\n\n\n', wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach caveWithAgruthFromUndergroundChurch = new Approach(
+Approach caveWithAgruthFromUndergroundChurch = Approach(
     'underground_church',
     'cave_with_agruth',
     'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
@@ -1511,7 +1505,7 @@ Approach caveWithAgruthFromUndergroundChurch = new Approach(
       'You walk slowly out of the church, back toward where you left Agruth\'s body.\n',
       wholeSentence: true);
 });
-Approach caveWithAgruthFromSlaveQuartersPassage = new Approach(
+Approach caveWithAgruthFromSlaveQuartersPassage = Approach(
     'slave_quarters_passage',
     'cave_with_agruth',
     'Go back to the cave where Agruth\'s corpse lies', (ActionContext c) {
@@ -1524,9 +1518,7 @@ Approach caveWithAgruthFromSlaveQuartersPassage = new Approach(
       'You back away from the door, and go back to where you left Agruth\'s body.\n',
       wholeSentence: true);
 });
-Approach caveWithAgruthFromWarForge = new Approach(
-    'war_forge',
-    'cave_with_agruth',
+Approach caveWithAgruthFromWarForge = Approach('war_forge', 'cave_with_agruth',
     'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1541,7 +1533,7 @@ class SearchAgruth extends RoamingAction {
   @override
   final String name = 'search_agruth';
 
-  static final SearchAgruth singleton = new SearchAgruth();
+  static final SearchAgruth singleton = SearchAgruth();
 
   @override
   String getCommand(Null _) {
@@ -1606,7 +1598,7 @@ class SearchAgruth extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightOrc = new Room('test_fight_orc', (ActionContext c) {
+final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1616,7 +1608,7 @@ final Room testFightOrc = new Room('test_fight_orc', (ActionContext c) {
       'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
-Approach testFightOrcFromPreStartBook = new Approach(
+Approach testFightOrcFromPreStartBook = Approach(
     'pre_start_book',
     'test_fight_orc',
     'Playtest >> one-on-one test fight >> with an orc', (ActionContext c) {
@@ -1628,7 +1620,7 @@ Approach testFightOrcFromPreStartBook = new Approach(
   s.add('You get transported to the development testing arena.\n',
       wholeSentence: true);
 });
-Approach endOfRoamFromTestFightOrc = new Approach(
+Approach endOfRoamFromTestFightOrc = Approach(
     'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1638,7 +1630,7 @@ Approach endOfRoamFromTestFightOrc = new Approach(
   s.add('', wholeSentence: true);
 });
 final Room undergroundChurchAltar =
-    new Room('underground_church_altar', (ActionContext c) {
+    Room('underground_church_altar', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1657,7 +1649,7 @@ final Room undergroundChurchAltar =
       'The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.\n',
       wholeSentence: true);
 }, null, null);
-Approach undergroundChurchAltarFromUndergroundChurch = new Approach(
+Approach undergroundChurchAltarFromUndergroundChurch = Approach(
     'underground_church', 'underground_church_altar', 'Go towards the altar',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1674,7 +1666,7 @@ class WaitForRitual extends RoamingAction {
   @override
   final String name = 'wait_for_ritual';
 
-  static final WaitForRitual singleton = new WaitForRitual();
+  static final WaitForRitual singleton = WaitForRitual();
 
   @override
   String getCommand(Null _) {
@@ -1743,7 +1735,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   final String name = 'take_spear_in_underground_church';
 
   static final TakeSpearInUndergroundChurch singleton =
-      new TakeSpearInUndergroundChurch();
+      TakeSpearInUndergroundChurch();
 
   @override
   String getCommand(Null _) {
@@ -1811,7 +1803,7 @@ class SmelterThrowSpear extends RoamingAction {
   @override
   final String name = 'smelter_throw_spear';
 
-  static final SmelterThrowSpear singleton = new SmelterThrowSpear();
+  static final SmelterThrowSpear singleton = SmelterThrowSpear();
 
   @override
   String getCommand(Null _) {
@@ -1878,7 +1870,7 @@ class SmelterThrowSpear extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
+final Room warForgeAfterIronMonster = Room('war_forge_after_iron_monster',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1896,15 +1888,14 @@ final Room warForgeAfterIronMonster = new Room('war_forge_after_iron_monster',
   rollBrianaQuote(c);
 }, null, null,
     parent: 'war_forge',
-    prerequisite:
-        new Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
+    prerequisite: Prerequisite(426251910, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
       return w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
     }));
 final Room slaveQuartersPassage =
-    new Room('slave_quarters_passage', (ActionContext c) {
+    Room('slave_quarters_passage', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1919,8 +1910,8 @@ final Room slaveQuartersPassage =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  new Ruleset(
-      new Rule(299502294, 2, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(299502294, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1935,7 +1926,7 @@ final Room slaveQuartersPassage =
         s.add('  The reinforced door on the side of the corridor is silent.\n',
             wholeSentence: true);
       }),
-      new Rule(871855510, 1, false, (ApplicabilityContext c) {
+      Rule(871855510, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1947,7 +1938,7 @@ final Room slaveQuartersPassage =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       }),
-      new Rule(233666017, 1, false, (ApplicabilityContext c) {
+      Rule(233666017, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1963,7 +1954,7 @@ final Room slaveQuartersPassage =
       })).apply(c);
   rollBrianaQuote(c);
 }, generateSlaveQuartersPassageFight, null);
-Approach slaveQuartersPassageFromCaveWithAgruth = new Approach(
+Approach slaveQuartersPassageFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'slave_quarters_passage', 'Go to the slave quarters',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1974,7 +1965,7 @@ Approach slaveQuartersPassageFromCaveWithAgruth = new Approach(
   s.add('You and Briana hug the wall and start toward the slave quarters.\n',
       wholeSentence: true);
 });
-Approach slaveQuartersPassageFromSlaveQuarters = new Approach(
+Approach slaveQuartersPassageFromSlaveQuarters = Approach(
     'slave_quarters', 'slave_quarters_passage', 'Go back', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1985,7 +1976,7 @@ Approach slaveQuartersPassageFromSlaveQuarters = new Approach(
       wholeSentence: true);
 });
 Approach slaveQuartersPassageFromOrcthornRoom =
-    new Approach('orcthorn_room', 'slave_quarters_passage', 'Exit the room',
+    Approach('orcthorn_room', 'slave_quarters_passage', 'Exit the room',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2002,7 +1993,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   final String name = 'slave_quarters_passage_examine_door';
 
   static final SlaveQuartersPassageExamineDoor singleton =
-      new SlaveQuartersPassageExamineDoor();
+      SlaveQuartersPassageExamineDoor();
 
   @override
   String getCommand(Null _) {
@@ -2076,8 +2067,7 @@ _"The Mad Guardian."_
   bool get isAggressive => false;
 }
 
-final Room exitFromBloodrock =
-    new Room('exit_from_bloodrock', (ActionContext c) {
+final Room exitFromBloodrock = Room('exit_from_bloodrock', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2086,8 +2076,8 @@ final Room exitFromBloodrock =
   s.add(
       'Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.\n\n\nYou run through a small stone doorway and out of the mountain.\n\n\nThe blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.\n\n\nOutside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.\n\n\nSoon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.\n\n\nYou look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.\n\n\n![View of the road ahead](https://egamebook.com/vermin/v/latest/img/path.jpg)\n\n\nBriana doesn\'t seem surprised.\n\n\n_"We have to stop this."_\n\nBriana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."\n\n_"No king has what we have."_\n\n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(937280785, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(937280785, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2102,7 +2092,7 @@ final Room exitFromBloodrock =
             '"Orcthorn? Bah, you think they\'ll let you keep it? A farmhand?"\n\n_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_\n',
             wholeSentence: true);
       }),
-      new Rule(36322634, 0, false, (ApplicabilityContext c) {
+      Rule(36322634, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2122,7 +2112,7 @@ final Room exitFromBloodrock =
       wholeSentence: true);
   describeSuccessRate(sim, originalWorld, s);
 }, null, null, null);
-Approach exitFromBloodrockFromTunnel = new Approach(
+Approach exitFromBloodrockFromTunnel = Approach(
     'tunnel', 'exit_from_bloodrock', 'Start running again', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2131,8 +2121,8 @@ Approach exitFromBloodrockFromTunnel = new Approach(
   final Storyline s = c.outputStoryline;
   s.add('You start running again.\n', wholeSentence: true);
 });
-Approach endOfRoamFromExitFromBloodrock = new Approach(
-    'exit_from_bloodrock', '__END_OF_ROAM__', '', (ActionContext c) {
+Approach endOfRoamFromExitFromBloodrock =
+    Approach('exit_from_bloodrock', '__END_OF_ROAM__', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2140,7 +2130,7 @@ Approach endOfRoamFromExitFromBloodrock = new Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room warForge = new Room('war_forge', (ActionContext c) {
+final Room warForge = Room('war_forge', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2149,8 +2139,8 @@ final Room warForge = new Room('war_forge', (ActionContext c) {
   s.add(
       'You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.\n\n\n',
       wholeSentence: true);
-  new Ruleset(
-      new Rule(1010631821, 1, false, (ApplicabilityContext c) {
+  Ruleset(
+      Rule(1010631821, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2165,7 +2155,7 @@ final Room warForge = new Room('war_forge', (ActionContext c) {
             'You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.\n\n',
             wholeSentence: true);
       }),
-      new Rule(383419248, 1, false, (ApplicabilityContext c) {
+      Rule(383419248, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2191,8 +2181,8 @@ final Room warForge = new Room('war_forge', (ActionContext c) {
       wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach warForgeFromSmelter = new Approach(
-    'smelter', 'war_forge', 'Go to the war forges', (ActionContext c) {
+Approach warForgeFromSmelter =
+    Approach('smelter', 'war_forge', 'Go to the war forges', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2202,7 +2192,7 @@ Approach warForgeFromSmelter = new Approach(
       'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.\n',
       wholeSentence: true);
 });
-Approach warForgeFromCaveWithAgruth = new Approach(
+Approach warForgeFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'war_forge', 'Go to the war forges', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2218,7 +2208,7 @@ class WarForgeLookAround extends RoamingAction {
   @override
   final String name = 'war_forge_look_around';
 
-  static final WarForgeLookAround singleton = new WarForgeLookAround();
+  static final WarForgeLookAround singleton = WarForgeLookAround();
 
   @override
   String getCommand(Null _) {
@@ -2285,7 +2275,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   @override
   final String name = 'war_forge_watch_workers';
 
-  static final WarForgeWatchWorkers singleton = new WarForgeWatchWorkers();
+  static final WarForgeWatchWorkers singleton = WarForgeWatchWorkers();
 
   @override
   String getCommand(Null _) {
@@ -2349,7 +2339,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room orcthornRoom = new Room('orcthorn_room', (ActionContext c) {
+final Room orcthornRoom = Room('orcthorn_room', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2369,7 +2359,7 @@ final Room orcthornRoom = new Room('orcthorn_room', (ActionContext c) {
       wholeSentence: true);
 }, generateMadGuardianFight, null);
 Approach orcthornRoomFromSlaveQuartersPassage =
-    new Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
+    Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
