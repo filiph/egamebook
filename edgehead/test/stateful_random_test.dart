@@ -24,7 +24,7 @@ void main() {
     final random = StatefulRandom(42);
     final numbers =
         Iterable<int>.generate(10000, (_) => random.nextInt(100000000));
-    final set = Set<int>();
+    final set = <int>{};
     for (final n in numbers) {
       expect(set.contains(n), isFalse,
           reason: "$n is already in set (after ${set.length} numbers)");

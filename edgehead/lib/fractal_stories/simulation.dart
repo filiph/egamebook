@@ -149,7 +149,7 @@ class Simulation {
     final Map<int, List<_ApproachRule>> paths = {};
     for (final approachRule in allExits) {
       paths.putIfAbsent(
-          approachRule.sourceDestinationHash, () => List<_ApproachRule>());
+          approachRule.sourceDestinationHash, () => <_ApproachRule>[]);
       paths[approachRule.sourceDestinationHash].add(approachRule);
     }
 
@@ -220,7 +220,7 @@ class Simulation {
       // We shouldn't prevent using exit when the source room is `onlyOnce`.
       // Therefore, we're only using the destination's `onlyOnce` value.
       final combinedOnlyOnce = secondPart.onlyOnce;
-      final combinedPrerequisite = (ApplicabilityContext context) =>
+      bool combinedPrerequisite(ApplicabilityContext context) =>
           firstPart.isSatisfiedBy(context) && secondPart.isSatisfiedBy(context);
       prerequisite = Prerequisite(combinedHash, combinedPriority,
           combinedOnlyOnce, combinedPrerequisite);

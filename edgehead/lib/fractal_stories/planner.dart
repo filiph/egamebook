@@ -38,7 +38,7 @@ class ActorPlanner {
 
   final Simulation simulation;
 
-  final Map<Performance, ActorScoreChange> firstActionScores = Map();
+  final Map<Performance, ActorScoreChange> firstActionScores = {};
 
   ActorPlanner(
       Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
@@ -220,7 +220,7 @@ class ActorPlanner {
         "${' ' * initial.order}- ${initial.performance}");
 
     Queue<PlanConsequence> open = Queue<PlanConsequence>();
-    final Set<WorldState> closed = Set<WorldState>();
+    final Set<WorldState> closed = <WorldState>{};
 
     var initialWorldHash = initial.world.hashCode;
     for (final firstConsequence in firstPerformance.action.apply(mainActor,

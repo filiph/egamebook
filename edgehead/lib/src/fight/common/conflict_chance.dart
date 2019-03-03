@@ -35,8 +35,8 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
       base < 1.0, "For sureSuccesses, use ReasonedSuccessChance.sureSuccess");
 
   double value = base;
-  final successReasons = List<Reason<CombatReason>>();
-  final failureReasons = List<Reason<CombatReason>>();
+  final successReasons = <Reason<CombatReason>>[];
+  final failureReasons = <Reason<CombatReason>>[];
 
   for (final modifier in modifiers) {
     assert(

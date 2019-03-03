@@ -386,7 +386,7 @@ class EdgeheadGame extends Book {
           "than one presented.");
 
       final choices = ListBuilder<Choice>();
-      final callbacks = Map<Choice, Future<Null> Function()>();
+      final callbacks = <Choice, Future<Null> Function()>{};
       for (final performance in performances) {
         final choice = Choice((b) => b
           ..command = performance.command

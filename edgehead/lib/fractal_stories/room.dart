@@ -12,6 +12,7 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 /// Describer that doesn't output any text at all.
+// ignore: prefer_function_declarations_over_variables
 final RoomDescriber emptyRoomDescription = (c) {};
 
 /// This is the magic [Room] that, when reached, makes

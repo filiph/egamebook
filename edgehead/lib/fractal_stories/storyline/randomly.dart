@@ -107,7 +107,7 @@ class Randomly {
   static String parse(String str) {
     int startTagIndex = str.indexOf("{");
     if (startTagIndex != -1 && startTagIndex < str.length - 1) {
-      List<int> indexes = List<int>();
+      final indexes = <int>[];
       indexes.add(startTagIndex);
       int lastIndex;
       int endTagIndex;

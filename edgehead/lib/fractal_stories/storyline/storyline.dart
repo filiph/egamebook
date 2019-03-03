@@ -690,7 +690,7 @@ class Storyline {
     }
 
     // We have elements other than text.
-    final result = List<ElementBase>();
+    final result = <ElementBase>[];
     result.add(text);
     int index = 0;
     for (final rec in _records) {

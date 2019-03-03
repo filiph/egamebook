@@ -2,7 +2,7 @@ library throw_if_duplicate;
 
 /// Throws when [set] has duplicate entries.
 bool hasDuplicities<T extends Object>(Iterable<T> set) {
-  var control = Set<int>();
+  var control = <int>{};
   for (final T item in set) {
     final hash = item.hashCode;
     // TODO: use assert with message when available
