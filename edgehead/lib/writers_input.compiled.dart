@@ -1165,7 +1165,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
         'guardpost_above_church') {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
+    if (!w.actionNeverUsed(name)) {
       return false;
     }
     return true;

@@ -6,7 +6,7 @@ part of edgehead.action_builders;
 // InstanceSerializerGenerator
 // **************************************************************************
 
-final _$actionSerializer = new InstanceSerializer<Action>({
+final _$actionSerializer = InstanceSerializer<Action>({
   'OnGroundShieldBlock.singleton': OnGroundShieldBlock.singleton,
   'OnGroundParry.singleton': OnGroundParry.singleton,
   'RollOutOfWay.singleton': RollOutOfWay.singleton,

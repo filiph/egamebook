@@ -63,7 +63,7 @@ abstract class Actor extends Object
       bool isConfused = false,
       String combineFunctionHandle = "normal"}) {
     Anatomy currentAnatomy =
-        (anatomy ?? buildHumanoid(id, constitution: constitution));
+        anatomy ?? buildHumanoid(id, constitution: constitution);
     Item weapon = currentWeapon;
     weapon ??= createBodyPartWeapon(currentAnatomy);
 

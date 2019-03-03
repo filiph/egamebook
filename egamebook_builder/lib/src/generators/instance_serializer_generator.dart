@@ -74,7 +74,7 @@ class InstanceSerializerGenerator extends Generator {
 
       // final _$someCallbackSerializer = new FunctionSerializer<SomeCallback>({
       result.writeln(
-          "final $variableName = new InstanceSerializer<$instanceTypeName>({");
+          "final $variableName = InstanceSerializer<$instanceTypeName>({");
 
       final globs = declaration.annotation
           .read("globs")

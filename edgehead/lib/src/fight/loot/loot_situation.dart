@@ -10,7 +10,6 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
-import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 part 'loot_situation.g.dart';
 
