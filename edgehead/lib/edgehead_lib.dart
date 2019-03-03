@@ -104,7 +104,7 @@ class EdgeheadGame extends Book {
   Future<Null> update() async {
     try {
       await _update();
-    // ignore: avoid_catches_without_on_clauses
+      // ignore: avoid_catches_without_on_clauses
     } catch (e, s) {
       // Catch errors and send to presenter.
       elementsSink.add(ErrorElement((b) => b
@@ -217,7 +217,7 @@ class EdgeheadGame extends Book {
       try {
         world = edgehead_serializer.serializers.deserializeWith(
             WorldState.serializer, json.decode(saveGameSerialized));
-      // ignore: avoid_catching_errors
+        // ignore: avoid_catching_errors
       } on ArgumentError {
         const message = "Error when parsing savegame. Maybe the savegame needs "
             "to be updated to the newest version of the runtime?";
@@ -297,8 +297,7 @@ class EdgeheadGame extends Book {
     var recs = planner.getRecommendations();
 
     // Fail fast for no recommendations.
-    assert(
-        !recs.isEmpty, "No recommendations for ${actor.name} in $situation");
+    assert(!recs.isEmpty, "No recommendations for ${actor.name} in $situation");
     if (recs.isEmpty) {
       // Hacky. Not sure this will work. Try to always have some action to do.
       // TODO: maybe this should remove the currentSituation from stack?

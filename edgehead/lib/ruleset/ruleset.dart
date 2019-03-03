@@ -60,13 +60,12 @@ class Rule {
   final RuleApplyCallback applyCallback;
 
   Rule(
-    int hash,
+    this.hash,
     int priority,
     bool onlyOnce,
     RuleIsApplicableCallback isApplicableCallback,
     this.applyCallback,
-  )   : hash = hash,
-        prerequisite =
+  ) : prerequisite =
             Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
 }
 

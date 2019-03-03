@@ -128,9 +128,8 @@ class _Choice {
   /// in the command text.
   final int order;
 
-  _Choice(Choice choice)
-      : choice = choice,
-        assert(choice.commandPath.isNotEmpty,
+  _Choice(this.choice)
+      : assert(choice.commandPath.isNotEmpty,
             "Command path must have at least one member: $choice"),
         order = choice.commandPath.length - 1;
 

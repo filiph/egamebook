@@ -97,7 +97,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   }
 
   Actor getActorById(int id) {
-    assert(actors.where((actor) => actor.id == id).length > 0,
+    assert(actors.where((actor) => actor.id == id).isNotEmpty,
         "No actor of id=$id in world: $this.");
     assert(actors.where((actor) => actor.id == id).length < 2,
         "Too many actors of id=$id in world: $this.");

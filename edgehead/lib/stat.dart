@@ -7,7 +7,9 @@ class Stat<T> {
   final StatSetting<T> setting;
   T value;
 
-  Stat(this.setting, T initialValue) : value = initialValue;
+  Stat(this.setting, T initialValue)
+      // ignore: prefer_initializing_formals
+      : value = initialValue;
 }
 
 class StatSetting<T> {

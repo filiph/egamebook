@@ -240,7 +240,7 @@ class Storyline {
       String conjuction = "and"}) {
     assert(start != null);
     assert(articles != null);
-    if (articles.length == 0) {
+    if (articles.isEmpty) {
       // Don't create any report.
       return;
     }
@@ -311,15 +311,14 @@ class Storyline {
       Entity entity, Entity entityOwner, int reportTime) {
     // Make sure we don't add particles to "your car" etc.
     if (entityOwner != null &&
-        (string.indexOf("$OWNER_POSSESIVE $SUB_STRING") != -1 ||
-            string.indexOf("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") != -1 ||
-            string.indexOf("$OBJECT_OWNER_POSSESIVE $SUB_STRING") != -1 ||
-            string.indexOf("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING") !=
-                -1)) {
+        (string.contains("$OWNER_POSSESIVE $SUB_STRING") ||
+            string.contains("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") ||
+            string.contains("$OBJECT_OWNER_POSSESIVE $SUB_STRING") ||
+            string.contains("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING"))) {
       return string;
     }
-    if (string.indexOf("$SUBJECT_POSSESIVE $SUB_STRING") != -1 ||
-        string.indexOf("$SUBJECT_PRONOUN_POSSESIVE $SUB_STRING") != -1) {
+    if (string.contains("$SUBJECT_POSSESIVE $SUB_STRING") ||
+        string.contains("$SUBJECT_PRONOUN_POSSESIVE $SUB_STRING")) {
       return string;
     }
 
