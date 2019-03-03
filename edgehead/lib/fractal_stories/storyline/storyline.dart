@@ -88,37 +88,6 @@ class Report {
         isSupportiveActionInThread = false,
         time = null;
 
-  @deprecated
-  dynamic operator [](String key) {
-    // TODO: get rid of Report field accessed via inefficient [] operator
-    switch (key) {
-      case 'string':
-        return string;
-      case 'subject':
-        return subject;
-      case 'object':
-        return object;
-      case 'owner':
-        return owner;
-      case 'but':
-        return but;
-      case 'positive':
-        return positive;
-      case 'negative':
-        return negative;
-      case 'endSentence':
-        return endSentence;
-      case 'startSentence':
-        return startSentence;
-      case 'wholeSentence':
-        return wholeSentence;
-      case 'time':
-        return time;
-      default:
-        throw ArgumentError("Invalid key $key.");
-    }
-  }
-
   @override
   String toString() => "Report"
       "<${string.substring(0, min(string.length, 20))}...,"
@@ -578,21 +547,6 @@ class Storyline {
     return false;
   }
 
-  /// If storyline already has something to show (at least one full
-  /// paragraph), this will output it through [printFunction] and remove it.
-  ///
-  /// Returns `true` if any paragraphs were output.
-  @deprecated
-  bool outputFinishedParagraphs(void printFunction(String msg)) {
-    var printed = false;
-    while (hasManyParagraphs) {
-      printFunction(realizeAsString(onlyFirstParagraph: true));
-      removeFirstParagraph();
-      printed = true;
-    }
-    return printed;
-  }
-
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
@@ -886,10 +840,6 @@ class Storyline {
       return _reports[i].time - _reports[i - 1].time;
     }
   }
-
-  @deprecated
-  @override
-  String toString() => realizeAsString();
 
   bool valid(int i) {
     if (i >= _reports.length || i < 0) {

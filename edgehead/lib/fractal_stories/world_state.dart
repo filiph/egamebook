@@ -221,18 +221,6 @@ abstract class WorldStateBuilder
   bool actionHasBeenPerformedSuccessfully(String actionName) =>
       build().actionHasBeenPerformedSuccessfully(actionName);
 
-  /// Returns `true` if action that satisfies [actionNamePattern] is currently
-  /// being performed.
-  ///
-  /// This is for cases like when a room description needs to know whether
-  /// player has arrived via a cart or on foot.
-  @deprecated
-  bool actionIsBeingPerformed(
-      ActionContext context, Pattern actionNamePattern) {
-    if (context.currentAction == null) return false;
-    return context.currentAction.name.contains(actionNamePattern);
-  }
-
   void elapseSituationTimeIfExists(int situationId) {
     int index = build()._findSituationIndex(situationId);
     if (index == null) {
