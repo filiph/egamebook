@@ -54,7 +54,8 @@ class FunctionSerializerGenerator extends Generator {
             "annotation need to be of type FunctionSerializer, but we found "
             "one with type ${interfaceType.name}");
       }
-      final FunctionType functionType = interfaceType.typeArguments.single;
+      final FunctionType functionType =
+          interfaceType.typeArguments.single as FunctionType;
 
       /// Typedefs don't have 'name', apparently. So we get it from
       /// the annotation.
