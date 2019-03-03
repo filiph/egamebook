@@ -68,7 +68,7 @@ abstract class Entity {
 }
 
 /// Mixin that adds important methods and getters to Entity-like classes.
-abstract class EntityBehavior {
+mixin EntityBehavior {
   bool get isActive;
 
   bool get isAlive;

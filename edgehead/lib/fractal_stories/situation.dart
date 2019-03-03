@@ -119,9 +119,7 @@ abstract class Situation {
 }
 
 /// Provides some sane defaults to [Situation] subclasses.
-///
-/// This is meant to be used as a mixin.
-abstract class SituationBaseBehavior implements Situation {
+mixin SituationBaseBehavior implements Situation {
   @override
   List<Action<dynamic>> get actions => const [];
 

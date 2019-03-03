@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:quiver/core.dart';
 
-abstract class Predeterminable implements Situation {
+mixin Predeterminable implements Situation {
   static final _failureChance =
       Optional<ReasonedSuccessChance>.of(ReasonedSuccessChance.sureFailure);
 
