@@ -108,8 +108,8 @@ abstract class Action<T> {
 
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(turn, sim, worldOutput,
-          applySuccess, pubsub, object, successChance,
+      Storyline storyline = _applyToWorldCopy(
+          turn, sim, worldOutput, applySuccess, pubsub, object, successChance,
           isSuccess: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -118,8 +118,8 @@ abstract class Action<T> {
     }
     if (successChance.value < 1) {
       final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(turn, sim, worldOutput,
-          applyFailure, pubsub, object, successChance,
+      Storyline storyline = _applyToWorldCopy(
+          turn, sim, worldOutput, applyFailure, pubsub, object, successChance,
           isFailure: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -239,8 +239,8 @@ abstract class Action<T> {
 
     if (isProactive) {
       // Mark actor busy after performing their action.
-      final recoveringUntil = turn.time
-          .add(getRecoveryDuration(context, object));
+      final recoveringUntil =
+          turn.time.add(getRecoveryDuration(context, object));
       output.updateActorById(
           turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
     }
