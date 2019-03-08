@@ -62,8 +62,7 @@ abstract class Situation {
   Situation elapseTime();
 
   /// Filters the [actors] that are active in this situation.
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState world);
+  Iterable<Actor> getActors(Simulation sim, WorldState world);
 
   /// Returns the actor whose turn it is right now.
   ///

@@ -1299,10 +1299,9 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   }
 
   @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState w) {
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
     return [
-      actors.singleWhere((Actor a) {
+      w.actors.singleWhere((Actor a) {
         return a.isPlayer;
       })
     ];

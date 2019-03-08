@@ -207,7 +207,7 @@ Spec generateRescueSituation(
   situationClass.methods.add(getNextTurn.build());
 
   //    @override
-  //    Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {
+  //    Iterable<Actor> getActors(Simulation sim, WorldState world) {
   //    return [world.actors.singleWhere((a) => a.isPlayer)];
   //    }
   final actorIterablesType = TypeReference((b) => b
@@ -219,14 +219,14 @@ Spec generateRescueSituation(
     ..returns = actorIterablesType
     ..annotations.add(overrideAnnotation)
     ..requiredParameters.addAll([
-      Parameter((b) => b
-        ..name = 'actors'
-        ..type = actorIterablesType),
       simulationParameter,
       worldParameter,
     ])
     ..body = literalList([
-      refer('actors').property('singleWhere').call([
+      refer(worldParameter.name)
+          .property('actors')
+          .property('singleWhere')
+          .call([
         Method((b) => b
           ..requiredParameters.add(actorParameter)
           ..body = refer(actorParameter.name)

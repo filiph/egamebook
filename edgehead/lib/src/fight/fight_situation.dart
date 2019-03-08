@@ -199,11 +199,9 @@ abstract class FightSituation extends Object
   // timed events at a time when an action in FightSituation might have
   // created other (child) situations.
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _, __) =>
-      actors.where((Actor actor) =>
-          actor.isAliveAndActive &&
-          (playerTeamIds.contains(actor.id) ||
-              enemyTeamIds.contains(actor.id)));
+  Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>
+      actor.isAliveAndActive &&
+      (playerTeamIds.contains(actor.id) || enemyTeamIds.contains(actor.id)));
 
   @override
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {

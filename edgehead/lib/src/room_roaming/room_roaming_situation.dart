@@ -66,9 +66,8 @@ abstract class RoomRoamingSituation extends Object
   RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState world) {
-    var _player = _getPlayer(world);
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    var _player = _getPlayer(w);
     if (_player == null) return [];
     return [_player];
   }

@@ -63,6 +63,6 @@ abstract class CounterAttackSituation extends Object
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _, __) => actors
+  Iterable<Actor> getActors(_, WorldState w) => w.actors
       .where((actor) => actor.id == counterAttacker || actor.id == target);
 }

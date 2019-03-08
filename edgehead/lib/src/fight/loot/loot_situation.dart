@@ -72,9 +72,8 @@ abstract class LootSituation extends Object
   }
 
   @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState world) {
-    return [_getPlayer(actors)];
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    return [_getPlayer(w.actors)];
   }
 
   @override

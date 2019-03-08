@@ -85,9 +85,8 @@ abstract class OffBalanceOpportunitySituation extends Object
   }
 
   @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState world) {
-    var actor = world.getActorById(actorId);
-    return actors.where((a) => a == actor || a.hates(actor, world));
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    var actor = w.getActorById(actorId);
+    return w.actors.where((a) => a == actor || a.hates(actor, w));
   }
 }

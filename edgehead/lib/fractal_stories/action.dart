@@ -349,7 +349,7 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
   @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
     var actors = context.world.currentSituation
-        .getActors(context.world.actors, context.simulation, context.world);
+        .getActors(context.simulation, context.world);
     return actors.where((other) {
       if (other == context.actor || !other.isAliveAndActive) return false;
       return context.actor.hates(other, context.world);
@@ -406,7 +406,7 @@ abstract class OtherActorAction extends OtherActorActionBase {
   @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
     var actors = context.world.currentSituation
-        .getActors(context.world.actors, context.simulation, context.world);
+        .getActors(context.simulation, context.world);
     return actors.where((other) {
       return other != context.actor && other.isAliveAndActive;
     });

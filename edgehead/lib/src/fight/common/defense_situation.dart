@@ -84,6 +84,6 @@ abstract class DefenseSituation extends Object
   }
 
   @override
-  Iterable<Actor> getActors(Iterable<Actor> actors, _, __) =>
-      actors.where((actor) => actor.id == attacker || actor.id == target);
+  Iterable<Actor> getActors(_, WorldState w) =>
+      w.actors.where((actor) => actor.id == attacker || actor.id == target);
 }
