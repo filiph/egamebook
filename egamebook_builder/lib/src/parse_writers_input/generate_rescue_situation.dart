@@ -168,9 +168,9 @@ Spec generateRescueSituation(
   //    Actor getActorAtTime(int time, WorldState world) {
   //    return world.actors.singleWhere((a) => a.isPlayer);
   //    }
-  final getCurrentActor = MethodBuilder();
-  getCurrentActor
-    ..name = 'getCurrentActor'
+  final getNextTurn = MethodBuilder();
+  getNextTurn
+    ..name = 'getNextTurn'
     ..returns = actorTurnType
     ..annotations.add(overrideAnnotation)
     ..requiredParameters.addAll([
@@ -204,7 +204,7 @@ Spec generateRescueSituation(
           .returned
           .statement,
     ]);
-  situationClass.methods.add(getCurrentActor.build());
+  situationClass.methods.add(getNextTurn.build());
 
   //    @override
   //    Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {

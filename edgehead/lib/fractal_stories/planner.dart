@@ -288,7 +288,7 @@ class ActorPlanner {
       }
 
       var currentActorTurn = current.world.currentSituation
-          .getCurrentActor(simulation, current.world);
+          .getNextTurn(simulation, current.world);
       assert(
           !currentActorTurn.isNever,
           "Situation ${current.world.currentSituation} "

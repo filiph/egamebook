@@ -74,7 +74,7 @@ abstract class RoomRoamingSituation extends Object
   }
 
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
+  ActorTurn getNextTurn(Simulation sim, WorldState world) {
     // Only player can roam at the moment.
     var player = _getPlayer(world);
     if (player == null) return ActorTurn.never;

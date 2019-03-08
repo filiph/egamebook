@@ -160,7 +160,7 @@ abstract class FightSituation extends Object
   FightSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
+  ActorTurn getNextTurn(Simulation sim, WorldState world) {
     var allActorIds = alternate(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))

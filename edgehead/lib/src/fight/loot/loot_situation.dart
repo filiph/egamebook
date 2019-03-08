@@ -64,7 +64,7 @@ abstract class LootSituation extends Object
   LootSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
+  ActorTurn getNextTurn(Simulation sim, WorldState world) {
     // Only one turn of looting.
     if (time > 0) return ActorTurn.never;
     // Only player can loot at the moment.

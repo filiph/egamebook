@@ -203,7 +203,7 @@ abstract class AttackerSituation extends Object
   AttackerSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+  ActorTurn getNextTurn(Simulation sim, WorldState w) {
     if (time == 0) return ActorTurn.nowById(attacker, w);
     return ActorTurn.never;
   }

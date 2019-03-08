@@ -1292,7 +1292,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         return b..time += 1;
       });
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+  ActorTurn getNextTurn(Simulation sim, WorldState w) {
     if (time != 0) return ActorTurn.never;
     var player = w.actors.singleWhere((a) => a.isPlayer);
     return ActorTurn(player, w.time);

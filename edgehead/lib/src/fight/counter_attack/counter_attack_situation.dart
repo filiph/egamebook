@@ -57,7 +57,7 @@ abstract class CounterAttackSituation extends Object
   CounterAttackSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+  ActorTurn getNextTurn(Simulation sim, WorldState w) {
     if (time == 0) return ActorTurn.nowById(counterAttacker, w);
     return ActorTurn.never;
   }

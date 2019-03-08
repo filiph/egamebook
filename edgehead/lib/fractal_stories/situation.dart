@@ -69,7 +69,7 @@ abstract class Situation {
   ///
   /// Returns `null` when no actor can act anymore (for example, all
   /// actors are dead, or all have acted).
-  ActorTurn getCurrentActor(Simulation sim, WorldState world);
+  ActorTurn getNextTurn(Simulation sim, WorldState world);
 
   /// Called after action is executed inside this situation.
   ///
@@ -101,7 +101,7 @@ abstract class Situation {
   /// Called when this situation is about to be popped from the
   /// [Simulation.situations] stack, either manually (by using
   /// [Simulation.popSituation]) or automatically (when [shouldContinue] is
-  /// no longer true or [getCurrentActor] returns `null`).
+  /// no longer true or [getNextTurn] returns `null`).
   void onPop(Simulation sim, WorldStateBuilder world);
 
   /// Return `false` when this [Situation] should no longer continue.

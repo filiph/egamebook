@@ -272,7 +272,7 @@ class EdgeheadGame extends Book {
     }
 
     var situation = world.currentSituation;
-    var actorTurn = situation.getCurrentActor(simulation, world);
+    var actorTurn = situation.getNextTurn(simulation, world);
 
     assert(
         !actorTurn.isNever,

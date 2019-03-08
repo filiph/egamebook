@@ -267,7 +267,7 @@ abstract class Action<T> {
     // Remove ended situations: the ones that don't return an actor anymore,
     // and the ones that return shouldContinue(world) != true.
     var builtOutput = output.build();
-    while (builtOutput.currentSituation?.getCurrentActor(sim, builtOutput) ==
+    while (builtOutput.currentSituation?.getNextTurn(sim, builtOutput) ==
             ActorTurn.never ||
         builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
             true) {
