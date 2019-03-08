@@ -1291,7 +1291,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         return b..time += 1;
       });
   @override
-  Actor getActorAtTime(Simulation sim, WorldState w) {
+  Actor getCurrentActor(Simulation sim, WorldState w) {
     if (time != 0) return null;
     return w.actors.singleWhere((a) => a.isPlayer);
   }

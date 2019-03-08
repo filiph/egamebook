@@ -60,20 +60,14 @@ abstract class Situation {
   /// Returns updated state with `time++`.
   Situation elapseTime();
 
-  /// Returns the actor whose turn it is at specified [time].
-  ///
-  /// Returns `null` when no actor can act anymore (for example, all
-  /// actors are dead, or all have acted).
-  Actor getActorAtTime(Simulation sim, WorldState world);
-
   /// Filters the [actors] that are active in this situation.
   Iterable<Actor> getActors(
       Iterable<Actor> actors, Simulation sim, WorldState world);
 
-  /// Returns the actor whose time it is at the current [time].
+  /// Returns the actor whose turn it is right now.
   ///
-  /// TODO: remove this. This method only ever calls [getActorAtTime] with
-  ///       the current [WorldState.time].
+  /// Returns `null` when no actor can act anymore (for example, all
+  /// actors are dead, or all have acted).
   Actor getCurrentActor(Simulation sim, WorldState world);
 
   /// Called after action is executed inside this situation.
@@ -131,10 +125,6 @@ mixin SituationBaseBehavior implements Situation {
 
   @override
   int get maxActionsToShow => Situation.defaultMaxActionsToShow;
-
-  @override
-  Actor getCurrentActor(Simulation sim, WorldState world) =>
-      getActorAtTime(sim, world);
 
   @override
   void onAfterAction(
