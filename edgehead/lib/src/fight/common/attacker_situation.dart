@@ -204,7 +204,7 @@ abstract class AttackerSituation extends Object
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.nowById(attacker, w);
+    if (time == 0) return ActorTurn.byId(attacker, w);
     return ActorTurn.never;
   }
 

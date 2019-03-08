@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -198,6 +199,7 @@ class ActorPlanner {
       Future<void> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
+    var startTurn = ActorTurn(mainActor, initial.world.time);
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
@@ -223,7 +225,7 @@ class ActorPlanner {
     final Set<WorldState> closed = <WorldState>{};
 
     var initialWorldHash = initial.world.hashCode;
-    for (final firstConsequence in firstPerformance.action.apply(mainActor,
+    for (final firstConsequence in firstPerformance.action.apply(startTurn,
         initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw StateError("Action $firstPerformance modified world state when "
@@ -287,8 +289,8 @@ class ActorPlanner {
         continue;
       }
 
-      var currentActorTurn = current.world.currentSituation
-          .getNextTurn(simulation, current.world);
+      var currentActorTurn =
+          current.world.currentSituation.getNextTurn(simulation, current.world);
       assert(
           !currentActorTurn.isNever,
           "Situation ${current.world.currentSituation} "
@@ -337,7 +339,7 @@ class ActorPlanner {
             currentActor, simulation, current.world, performance.object)) {
           continue;
         }
-        var consequences = performance.action.apply(currentActor, current,
+        var consequences = performance.action.apply(currentActorTurn, current,
             simulation, current.world, _pubsub, performance.object);
 
         for (final next in consequences) {

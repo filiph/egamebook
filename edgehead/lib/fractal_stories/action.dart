@@ -40,17 +40,6 @@ abstract class Action<T> {
   @Deprecated('use getCommand')
   String get command => getCommand(null);
 
-  /// The duration that this action takes.
-  ///
-  /// In other words, this is how much [WorldState.time] is incremented
-  /// after this action is performed.
-  ///
-  /// For example, a swing can take two seconds, while regaining balance
-  /// can take only a fraction of the second.
-  ///
-  /// Compare with [getRecoveryDuration].
-  Duration get duration => const Duration(seconds: 1);
-
   /// Optional message to be shown when player presses a help button
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
@@ -107,9 +96,10 @@ abstract class Action<T> {
   /// on it.
   Resource get rerollResource;
 
-  Iterable<PlanConsequence> apply(Actor actor, PlanConsequence current,
+  Iterable<PlanConsequence> apply(ActorTurn turn, PlanConsequence current,
       Simulation sim, WorldState world, PubSub pubsub, T object) sync* {
-    var successChance = getSuccessChance(actor, sim, current.world, object);
+    var successChance =
+        getSuccessChance(turn.actor, sim, current.world, object);
     assert(successChance != null);
     assert(successChance.value >= 0.0);
     assert(successChance.value <= 1.0);
@@ -118,8 +108,8 @@ abstract class Action<T> {
 
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applySuccess, pubsub, object, successChance,
+      Storyline storyline = _applyToWorldCopy(turn, sim, worldOutput,
+          applySuccess, pubsub, object, successChance,
           isSuccess: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -128,8 +118,8 @@ abstract class Action<T> {
     }
     if (successChance.value < 1) {
       final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(
-          actor, sim, worldOutput, applyFailure, pubsub, object, successChance,
+      Storyline storyline = _applyToWorldCopy(turn, sim, worldOutput,
+          applyFailure, pubsub, object, successChance,
           isFailure: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -170,17 +160,15 @@ abstract class Action<T> {
   /// 3 seconds). This simulates the fact that different actors have
   /// different speeds.
   ///
-  /// This defaults to one second, and [Duration.zero] for the player.
-  ///
-  /// Compare with [duration].
+  /// This defaults to one second, and 750ms for the player.
   Duration getRecoveryDuration(ApplicabilityContext context, T object) {
     assert(isProactive, "Non-proactive actions don't take any time.");
 
     if (context.actor.isPlayer) {
-      return Duration.zero;
+      return const Duration(milliseconds: 750);
     }
 
-    return const Duration(milliseconds: 500);
+    return const Duration(seconds: 1);
   }
 
   /// The command that describes this action.
@@ -221,7 +209,7 @@ abstract class Action<T> {
   }
 
   Storyline _applyToWorldCopy(
-      Actor actor,
+      ActorTurn turn,
       Simulation sim,
       WorldStateBuilder output,
       ApplyFunction<T> applyFunction,
@@ -232,13 +220,13 @@ abstract class Action<T> {
       bool isFailure = false}) {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
-        actor, sim, initialWorld, object, isSuccess, isFailure);
+        turn.actor, sim, initialWorld, object, isSuccess, isFailure);
     final outputStoryline = Storyline();
     // Remember situation as it can be changed during applySuccess.
     final situationId = initialWorld.currentSituation.id;
     initialWorld.currentSituation
         .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = ActionContext(this, actor, sim, initialWorld, pubsub,
+    final context = ActionContext(this, turn.actor, sim, initialWorld, pubsub,
         output, outputStoryline, successChance);
     _description = applyFunction(context, object);
 
@@ -246,16 +234,15 @@ abstract class Action<T> {
     // If not, let's update its time.
     output.elapseSituationTimeIfExists(situationId);
 
-    // Elapse time of world according to [Action.duration].
-    output.elapseWorldTime(duration);
+    // Move world time to when the turn happens.
+    output.time = turn.time;
 
     if (isProactive) {
       // Mark actor busy after performing their action.
-      final recoveringUntil = initialWorld.time
-          .add(duration)
+      final recoveringUntil = turn.time
           .add(getRecoveryDuration(context, object));
       output.updateActorById(
-          actor.id, (b) => b.recoveringUntil = recoveringUntil);
+          turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
     }
 
     // Perform any [Situation.onAfterAction]s.

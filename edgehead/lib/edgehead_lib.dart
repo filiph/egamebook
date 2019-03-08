@@ -17,6 +17,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/stat.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
@@ -167,14 +168,14 @@ class EdgeheadGame extends Book {
   }
 
   Future<Null> _applySelected(
-      Performance performance, Actor actor, Storyline storyline) async {
+      Performance performance, ActorTurn turn, Storyline storyline) async {
     var consequences = performance.action
         .apply(
-            actor, consequence, simulation, world, _pubsub, performance.object)
+            turn, consequence, simulation, world, _pubsub, performance.object)
         .toList();
 
-    if (actor.isPlayer) {
-      await _applyPlayerAction(performance, actor, consequences);
+    if (turn.actor.isPlayer) {
+      await _applyPlayerAction(performance, turn.actor, consequences);
     } else {
       // This initializes the random state based on current
       // [WorldState.statefulRandomState]. We don't save the state after use
@@ -189,6 +190,7 @@ class EdgeheadGame extends Book {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
 
+    var actor = turn.actor;
     log.fine(() => "${actor.name} selected ${performance.action.name}");
     log.fine(() => "- ${actor.name} is recovering "
         "until ${actor.recoveringUntil}");
@@ -288,7 +290,6 @@ class EdgeheadGame extends Book {
       // In prod, silently remove the Situation and continue.
       final builder = world.toBuilder();
       builder.popSituation(simulation);
-      builder.elapseWorldTime(const Duration(seconds: 1));
       world = builder.build();
       Timer.run(update);
       return;
@@ -311,7 +312,6 @@ class EdgeheadGame extends Book {
       });
       final builder = world.toBuilder();
       builder.elapseSituationTimeIfExists(situation.id);
-      builder.elapseWorldTime(const Duration(seconds: 1));
       world = builder.build();
       Timer.run(update);
       return;
@@ -330,8 +330,8 @@ class EdgeheadGame extends Book {
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $performance");
-        for (final consequence in performance.action.apply(actor, consequence,
-            simulation, world, _pubsub, performance.object)) {
+        for (final consequence in performance.action.apply(actorTurn,
+            consequence, simulation, world, _pubsub, performance.object)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
@@ -398,7 +398,7 @@ class EdgeheadGame extends Book {
           ..isImplicit = performance.action.isImplicit ||
               performance.command == '<implicit>');
         callbacks[choice] = () async {
-          await _applySelected(performance, actor, storyline);
+          await _applySelected(performance, actorTurn, storyline);
         };
         choices.add(choice);
       }
@@ -418,7 +418,7 @@ class EdgeheadGame extends Book {
       final combineFunction =
           simulation.combineFunctions[actor.combineFunctionHandle];
       selected = recs.pickRandomly(combineFunction, world.statefulRandomState);
-      await _applySelected(selected, actor, storyline);
+      await _applySelected(selected, actorTurn, storyline);
     }
 
     storyline.generateFinishedOutput().forEach(elementsSink.add);

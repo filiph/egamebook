@@ -79,7 +79,7 @@ abstract class DefenseSituation extends Object
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.nowById(target, w);
+    if (time == 0) return ActorTurn.byId(target, w);
     return ActorTurn.never;
   }
 

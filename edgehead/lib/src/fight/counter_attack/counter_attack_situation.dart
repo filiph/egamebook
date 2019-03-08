@@ -58,7 +58,7 @@ abstract class CounterAttackSituation extends Object
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.nowById(counterAttacker, w);
+    if (time == 0) return ActorTurn.byId(counterAttacker, w);
     return ActorTurn.never;
   }
 

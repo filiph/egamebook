@@ -14,16 +14,30 @@ class ActorTurn {
 
   final DateTime time;
 
-  const ActorTurn(this.actor, this.time)
+  /// Returns a turn of [actor] at the time they stop recovering from
+  /// the previous move.
+  ///
+  /// Provide [notBefore] to limit the [time] of the turn. This is
+  /// useful at the beginning of the game, when many actors have their
+  /// [Actor.recoveringUntil] set in a distant past.
+  factory ActorTurn(Actor actor, DateTime notBefore) {
+    assert(notBefore != null);
+    var time = actor.recoveringUntil;
+    if (time.isBefore(notBefore)) {
+      time = notBefore;
+    }
+    return ActorTurn._(actor, time);
+  }
+
+  /// Returns a turn of actor with [actorId].
+  factory ActorTurn.byId(int actorId, WorldState world) {
+    final actor = world.getActorById(actorId);
+    return ActorTurn(actor, world.time);
+  }
+
+  const ActorTurn._(this.actor, this.time)
       : assert(actor != null),
         assert(time != null);
-
-  /// Returns a turn of actor with [actorId], at [WorldState.time].
-  factory ActorTurn.nowById(int actorId, WorldState world) {
-    final actor = world.getActorById(actorId);
-    final now = world.time;
-    return ActorTurn(actor, now);
-  }
 
   const ActorTurn._never()
       : actor = null,
