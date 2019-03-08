@@ -39,6 +39,17 @@ abstract class Action<T> {
   @Deprecated('use getCommand')
   String get command => getCommand(null);
 
+  /// The duration that this action takes.
+  ///
+  /// In other words, this is how much [WorldState.time] is incremented
+  /// after this action is performed.
+  ///
+  /// For example, a swing can take two seconds, while regaining balance
+  /// can take only a fraction of the second.
+  ///
+  /// Compare with [getRecoveryDuration].
+  Duration get duration => const Duration(seconds: 1);
+
   /// Optional message to be shown when player presses a help button
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
@@ -146,6 +157,31 @@ abstract class Action<T> {
         'called in the first place.');
   }
 
+  /// The time it takes the actor to be available again after performing
+  /// the action.
+  ///
+  /// In other words, the [Actor.recoveringUntil] will be updated to the current
+  /// time plus [duration] plus the result of this method.
+  ///
+  /// For example, if a goblin swings at the player, the swing itself can
+  /// only take 2 seconds (i.e. [duration] is 2 seconds) but the goblin
+  /// won't be available for another 3 seconds (i.e. this method should return
+  /// 3 seconds). This simulates the fact that different actors have
+  /// different speeds.
+  ///
+  /// This defaults to one second, and [Duration.zero] for the player.
+  ///
+  /// Compare with [duration].
+  Duration getRecoveryDuration(ApplicabilityContext context, T object) {
+    assert(isProactive, "Non-proactive actions don't take any time.");
+
+    if (context.actor.isPlayer) {
+      return Duration.zero;
+    }
+
+    return const Duration(milliseconds: 500);
+  }
+
   /// The command that describes this action.
   ///
   /// For example: "open the door" or "swing at the orc".
@@ -209,7 +245,19 @@ abstract class Action<T> {
     // If not, let's update its time.
     output.elapseSituationTimeIfExists(situationId);
 
-    output.elapseWorldTime();
+    // Elapse time of world according to [Action.duration].
+    output.elapseWorldTime(duration);
+
+    if (isProactive) {
+      // Mark actor busy after performing their action.
+      final recoveringUntil = initialWorld.time
+          .add(duration)
+          .add(getRecoveryDuration(context, object));
+      output.updateActorById(
+          actor.id, (b) => b.recoveringUntil = recoveringUntil);
+    }
+
+    // Perform any [Situation.onAfterAction]s.
     output
         .build()
         .getSituationById(situationId)

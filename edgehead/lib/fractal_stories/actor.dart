@@ -94,13 +94,21 @@ abstract class Actor extends Object
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = poseMax
       ..poseMax = poseMax
-      ..isActive = true);
+      ..isActive = true
+      ..recoveringUntil = DateTime.utc(-9999));
   }
 
   Actor._();
 
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
+
+  /// The point in time after which this actor can act again.
+  ///
+  /// For example, if an actor just started performing an action that will take
+  /// 5 seconds to complete, their [recoveringUntil] will become at least
+  /// 5 seconds in the future. Until that time, they cannot do another move.
+  DateTime get recoveringUntil;
 
   /// Same as [canUseWeapon] but for shields.
   bool get canUseShield => true /* TODO */;

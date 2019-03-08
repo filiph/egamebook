@@ -50,10 +50,6 @@ String getGroundMaterial(WorldStateBuilder w) {
 abstract class FightSituation extends Object
     with SituationBaseBehavior
     implements Built<FightSituation, FightSituationBuilder> {
-  /// The advantage that player has over all other actors in terms of frequency
-  /// of turns.
-  static const double _playerTurnAdvantage = 1.5;
-
   static const String className = "FightSituation";
 
   static Serializer<FightSituation> get serializer =>
@@ -164,7 +160,7 @@ abstract class FightSituation extends Object
 
   @override
   Actor getActorAtTime(int time, Simulation sim, WorldState world) {
-    var allActorIds = alternate<int>(playerTeamIds, enemyTeamIds);
+    var allActorIds = alternate(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
         .where((a) => a.isAliveAndActive)
@@ -180,39 +176,20 @@ abstract class FightSituation extends Object
       }
     }
 
-    num best = 0.0;
-    Actor chosen;
+    Actor readiest;
 
     for (final actor in actors) {
-      // Compute the last time this actor did any pro-active action.
-      var latestProactiveRecord =
-          world.actionHistory.getLatestProactiveTime(actor);
-      final pastInfinity = DateTime.utc(-10000);
-      DateTime latestProactiveTime = latestProactiveRecord ?? pastInfinity;
-      int proactiveRecency =
-          world.time.difference(latestProactiveTime).inSeconds;
-      // If actor did something just now, they shouldn't be chosen.
-      if (proactiveRecency <= 0) continue;
-      // Otherwise, let's look at who was active recently.
-      var latestAnyRecord = world.actionHistory.getLatestTime(actor);
-      DateTime latestAnyTime = latestAnyRecord ?? pastInfinity;
-      int anyRecency = world.time.difference(latestAnyTime).inSeconds;
-      // We care about how long ago someone acted, but we especially care
-      // about how long ago they made a pro-active action. This is because
-      // otherwise an actor can be perpetually reacting to opponents and
-      // never getting to their own action repertoire.
-      num recency = (anyRecency + proactiveRecency) / 2;
-      if (actor.isPlayer) {
-        // Let player act more often.
-        recency = recency * _playerTurnAdvantage;
+      if (readiest == null) {
+        readiest = actor;
+        continue;
       }
-      if (recency > best) {
-        chosen = actor;
-        best = recency;
+
+      if (actor.recoveringUntil.isBefore(readiest.recoveringUntil)) {
+        readiest = actor;
       }
     }
 
-    return chosen;
+    return readiest;
   }
 
   // We're using [onBeforeAction] because when using onAfterAction, we'd report

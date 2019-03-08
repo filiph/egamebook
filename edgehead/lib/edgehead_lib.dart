@@ -190,6 +190,8 @@ class EdgeheadGame extends Book {
     world = consequence.world;
 
     log.fine(() => "${actor.name} selected ${performance.action.name}");
+    log.fine(() => "- ${actor.name} is recovering "
+        "until ${actor.recoveringUntil}");
     log.finest(() {
       String path = world.actionHistory.describe();
       return "- how ${actor.name} got here: $path";
@@ -286,7 +288,7 @@ class EdgeheadGame extends Book {
       // In prod, silently remove the Situation and continue.
       final builder = world.toBuilder();
       builder.popSituation(simulation);
-      builder.elapseWorldTime();
+      builder.elapseWorldTime(const Duration(seconds: 1));
       world = builder.build();
       Timer.run(update);
       return;
@@ -308,7 +310,7 @@ class EdgeheadGame extends Book {
       });
       final builder = world.toBuilder();
       builder.elapseSituationTimeIfExists(situation.id);
-      builder.elapseWorldTime();
+      builder.elapseWorldTime(const Duration(seconds: 1));
       world = builder.build();
       Timer.run(update);
       return;
@@ -358,6 +360,7 @@ class EdgeheadGame extends Book {
       planner.generateTable().forEach(log.fine);
 
       // Take only the first few best actions.
+      // TODO: remove - we are taking all actions now
       List<Performance> performances = recs
           .pickMax(situation.maxActionsToShow, normalCombineFunction)
           .toList(growable: false);

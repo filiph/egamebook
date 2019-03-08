@@ -229,8 +229,8 @@ abstract class WorldStateBuilder
     situations[index] = situations[index].elapseTime();
   }
 
-  void elapseWorldTime() {
-    time = time.add(const Duration(seconds: 1));
+  void elapseWorldTime(Duration duration) {
+    time = time.add(duration);
   }
 
   Actor getActorById(int id) {
