@@ -13,6 +13,7 @@
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
 import 'package:edgehead/fractal_stories/actor.dart' show Actor;
+import 'package:edgehead/fractal_stories/time/actor_turn.dart' show ActorTurn;
 import 'package:edgehead/fractal_stories/room_approach.dart' show Approach;
 import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
@@ -1291,9 +1292,10 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         return b..time += 1;
       });
   @override
-  Actor getCurrentActor(Simulation sim, WorldState w) {
-    if (time != 0) return null;
-    return w.actors.singleWhere((a) => a.isPlayer);
+  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+    if (time != 0) return ActorTurn.never;
+    var player = w.actors.singleWhere((a) => a.isPlayer);
+    return ActorTurn(player, w.time);
   }
 
   @override

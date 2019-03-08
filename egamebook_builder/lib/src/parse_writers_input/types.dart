@@ -11,6 +11,10 @@ final actionType = TypeReference((b) => b
   ..symbol = 'RoamingAction'
   ..url = 'package:edgehead/fractal_stories/writer_action.dart');
 
+final actorTurnType = TypeReference((b) => b
+  ..symbol = 'ActorTurn'
+  ..url = 'package:edgehead/fractal_stories/time/actor_turn.dart');
+
 final actorType = TypeReference((b) => b
   ..symbol = 'Actor'
   ..url = 'package:edgehead/fractal_stories/actor.dart');
@@ -19,6 +23,7 @@ final allNeededTypes = <TypeReference>[
   actionContextType,
   actionType,
   actorType,
+  actorTurnType,
   approachType,
   applicabilityContextType,
   prerequisiteType,

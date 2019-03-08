@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
 part 'attacker_situation.g.dart';
@@ -202,9 +203,9 @@ abstract class AttackerSituation extends Object
   AttackerSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState w) {
-    if (time == 0) return w.getActorById(attacker);
-    return null;
+  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+    if (time == 0) return ActorTurn.nowById(attacker, w);
+    return ActorTurn.never;
   }
 
   @override

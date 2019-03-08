@@ -287,12 +287,13 @@ class ActorPlanner {
         continue;
       }
 
-      var currentActor = current.world.currentSituation
+      var currentActorTurn = current.world.currentSituation
           .getCurrentActor(simulation, current.world);
       assert(
-          currentActor != null,
+          !currentActorTurn.isNever,
           "Situation ${current.world.currentSituation} "
-          "returned null for getCurrentActor for world ${current.world}");
+          "returned never for getCurrentActor");
+      var currentActor = currentActorTurn.actor;
 
       // This actor is the one we originally started planning for.
       Actor mainActor;

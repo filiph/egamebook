@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -267,10 +268,9 @@ abstract class Action<T> {
     // and the ones that return shouldContinue(world) != true.
     var builtOutput = output.build();
     while (builtOutput.currentSituation?.getCurrentActor(sim, builtOutput) ==
-            null ||
+            ActorTurn.never ||
         builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
             true) {
-      // TODO: move the if statement below to the while expression above
       if (builtOutput.currentSituation == null) break;
       output.popSituation(sim);
       builtOutput = output.build();

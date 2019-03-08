@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
@@ -65,20 +66,19 @@ abstract class RoomRoamingSituation extends Object
   RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState world) {
-    // Only player can roam at the moment.
-    var mainActor = world.actors.firstWhere(
-        (a) => a.isPlayer && a.isAliveAndActive,
-        orElse: () => null);
-    return mainActor;
+  Iterable<Actor> getActors(
+      Iterable<Actor> actors, Simulation sim, WorldState world) {
+    var _player = _getPlayer(world);
+    if (_player == null) return [];
+    return [_player];
   }
 
   @override
-  Iterable<Actor> getActors(
-      Iterable<Actor> actors, Simulation sim, WorldState world) {
-    var mainActor = getCurrentActor(sim, world);
-    if (mainActor == null) return [];
-    return [mainActor];
+  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
+    // Only player can roam at the moment.
+    var player = _getPlayer(world);
+    if (player == null) return ActorTurn.never;
+    return ActorTurn(player, world.time);
   }
 
   /// Moves [a] with their party to [destination].
@@ -145,4 +145,7 @@ abstract class RoomRoamingSituation extends Object
     if (currentRoomName == endOfRoam.name) return false;
     return true;
   }
+
+  Actor _getPlayer(WorldState world) => world.actors
+      .firstWhere((a) => a.isPlayer && a.isAliveAndActive, orElse: () => null);
 }

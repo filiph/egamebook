@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/predeterminable_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -77,9 +78,9 @@ abstract class DefenseSituation extends Object
   DefenseSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState w) {
-    if (time == 0) return w.getActorById(target);
-    return null;
+  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+    if (time == 0) return ActorTurn.nowById(target, w);
+    return ActorTurn.never;
   }
 
   @override

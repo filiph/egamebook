@@ -168,10 +168,10 @@ Spec generateRescueSituation(
   //    Actor getActorAtTime(int time, WorldState world) {
   //    return world.actors.singleWhere((a) => a.isPlayer);
   //    }
-  final getActorAtTimeMethod = MethodBuilder();
-  getActorAtTimeMethod
-    ..name = 'getActorAtTime'
-    ..returns = actorType
+  final getCurrentActor = MethodBuilder();
+  getCurrentActor
+    ..name = 'getCurrentActor'
+    ..returns = actorTurnType
     ..annotations.add(overrideAnnotation)
     ..requiredParameters.addAll([
       simulationParameter,
@@ -181,7 +181,9 @@ Spec generateRescueSituation(
       // TODO: build this instead when
       //       https://github.com/dart-lang/code_builder/issues/223
       //       is resolved
-      Code('if (time != 0) return null;'),
+      Code('if (time != 0) return ActorTurn.never;'),
+
+      // w.actors.singleWhere((a) => a.isPlayer)
       refer(worldParameter.name)
           .property('actors')
           .property('singleWhere')
@@ -190,10 +192,19 @@ Spec generateRescueSituation(
               ..requiredParameters.add(Parameter((p) => p..name = 'a'))
               ..body = refer('a').property('isPlayer').code).closure
           ])
+          .assignVar('player')
+          .statement,
+
+      // return ActorTurn(player, world.time);
+      actorTurnType
+          .newInstance([
+            refer('player'),
+            refer(worldParameter.name).property('time'),
+          ])
           .returned
-          .statement
+          .statement,
     ]);
-  situationClass.methods.add(getActorAtTimeMethod.build());
+  situationClass.methods.add(getCurrentActor.build());
 
   //    @override
   //    Iterable<Actor> getActors(Iterable<Actor> actors, WorldState world) {

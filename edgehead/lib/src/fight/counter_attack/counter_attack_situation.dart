@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
@@ -56,9 +57,9 @@ abstract class CounterAttackSituation extends Object
   CounterAttackSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState w) {
-    if (time == 0) return w.getActorById(counterAttacker);
-    return null;
+  ActorTurn getCurrentActor(Simulation sim, WorldState w) {
+    if (time == 0) return ActorTurn.nowById(counterAttacker, w);
+    return ActorTurn.never;
   }
 
   @override

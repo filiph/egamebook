@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
 
@@ -63,11 +64,11 @@ abstract class LootSituation extends Object
   LootSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState world) {
+  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
     // Only one turn of looting.
-    if (time > 0) return null;
+    if (time > 0) return ActorTurn.never;
     // Only player can loot at the moment.
-    return _getPlayer(world.actors);
+    return ActorTurn(_getPlayer(world.actors), world.time);
   }
 
   @override

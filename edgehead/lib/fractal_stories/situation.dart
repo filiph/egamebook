@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
@@ -68,7 +69,7 @@ abstract class Situation {
   ///
   /// Returns `null` when no actor can act anymore (for example, all
   /// actors are dead, or all have acted).
-  Actor getCurrentActor(Simulation sim, WorldState world);
+  ActorTurn getCurrentActor(Simulation sim, WorldState world);
 
   /// Called after action is executed inside this situation.
   ///

@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/assume_stance.dart';
@@ -159,7 +160,7 @@ abstract class FightSituation extends Object
   FightSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState world) {
+  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
     var allActorIds = alternate(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
@@ -169,10 +170,12 @@ abstract class FightSituation extends Object
     assert(players.length <= 1);
     Actor player = players.length == 1 ? players.single : null;
 
+    // TODO: START HERE - make this work
+
     if (time == 0) {
       // Always start with the player if possible.
       if (player != null) {
-        return player;
+        return ActorTurn(player, world.time);
       }
     }
 
@@ -189,7 +192,7 @@ abstract class FightSituation extends Object
       }
     }
 
-    return readiest;
+    return ActorTurn(readiest, world.time);
   }
 
   // We're using [onBeforeAction] because when using onAfterAction, we'd report

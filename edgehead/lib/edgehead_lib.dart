@@ -272,10 +272,10 @@ class EdgeheadGame extends Book {
     }
 
     var situation = world.currentSituation;
-    var actor = situation.getCurrentActor(simulation, world);
+    var actorTurn = situation.getCurrentActor(simulation, world);
 
     assert(
-        actor != null,
+        !actorTurn.isNever,
         "situation.getCurrentActor(world) returned null. "
         "Some action that you added should make sure it removes the "
         "Situation (maybe '${world.actionHistory.getLatest().description}'?) "
@@ -284,7 +284,7 @@ class EdgeheadGame extends Book {
         "Situation: ${world.currentSituation}. "
         "Action Records: "
         "${world.actionHistory.describe()}");
-    if (actor == null) {
+    if (actorTurn.isNever) {
       // In prod, silently remove the Situation and continue.
       final builder = world.toBuilder();
       builder.popSituation(simulation);
@@ -294,6 +294,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
+    var actor = actorTurn.actor;
     var planner = ActorPlanner(actor, simulation, world, _pubsub);
     await planner.plan(maxOrder: actor.isPlayer ? 1 : 10);
     var recs = planner.getRecommendations();

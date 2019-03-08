@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
@@ -61,8 +62,8 @@ abstract class OffBalanceOpportunitySituation extends Object
   OffBalanceOpportunitySituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getCurrentActor(Simulation sim, WorldState world) {
-    if (time > 0) return null;
+  ActorTurn getCurrentActor(Simulation sim, WorldState world) {
+    if (time > 0) return ActorTurn.never;
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
         .where((Actor a) =>
@@ -70,7 +71,7 @@ abstract class OffBalanceOpportunitySituation extends Object
         .toList();
     // TODO: sort by distance, cut off if too far
 
-    if (enemies.isEmpty) return null;
+    if (enemies.isEmpty) return ActorTurn.never;
 
     var candidate = enemies.first;
     var offBalanceOpportunityThrust = OffBalanceOpportunityThrust.singleton;
@@ -78,9 +79,9 @@ abstract class OffBalanceOpportunitySituation extends Object
     // Only change the situation when the candidate can actually pull it off.
     if (offBalanceOpportunityThrust.isApplicable(
         candidate, sim, world, actor)) {
-      return candidate;
+      return ActorTurn(candidate, world.time);
     }
-    return null;
+    return ActorTurn.never;
   }
 
   @override
