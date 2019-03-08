@@ -6,6 +6,7 @@
 
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: unused_local_variable
+// ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: type_annotate_public_apis
 
@@ -1165,7 +1166,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
         'guardpost_above_church') {
       return false;
     }
-    if (!w.actionNeverUsed(name)) {
+    if (!(w.actionNeverUsed(name))) {
       return false;
     }
     return true;
@@ -1290,7 +1291,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         return b..time += 1;
       });
   @override
-  Actor getActorAtTime(int time, Simulation sim, WorldState w) {
+  Actor getActorAtTime(Simulation sim, WorldState w) {
     if (time != 0) return null;
     return w.actors.singleWhere((a) => a.isPlayer);
   }

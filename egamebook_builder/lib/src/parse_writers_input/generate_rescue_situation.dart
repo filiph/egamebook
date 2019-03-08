@@ -174,9 +174,6 @@ Spec generateRescueSituation(
     ..returns = actorType
     ..annotations.add(overrideAnnotation)
     ..requiredParameters.addAll([
-      Parameter((p) => p
-        ..name = 'time'
-        ..type = intType),
       simulationParameter,
       worldParameter,
     ])

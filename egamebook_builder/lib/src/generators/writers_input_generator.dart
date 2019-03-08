@@ -119,6 +119,7 @@ class WritersInputGenerator extends Generator {
     final sourceWithUnusedLinterIgnore =
         "// ignore_for_file: constant_identifier_names\n"
         "// ignore_for_file: unused_local_variable\n"
+        "// ignore_for_file: unnecessary_parenthesis\n"
         "// ignore_for_file: lines_longer_than_80_chars\n"
         "// ignore_for_file: type_annotate_public_apis\n\n"
         "$source";

@@ -56,6 +56,8 @@ final builtType = TypeReference((b) => b
   ..symbol = 'Built'
   ..url = 'package:built_value/built_value.dart');
 
+final dateTimeType = TypeReference((b) => b..symbol = 'DateTime');
+
 final intType = TypeReference((b) => b..symbol = 'int');
 
 /// TODO: just use ..types.add(...) here and elsewhere in this file

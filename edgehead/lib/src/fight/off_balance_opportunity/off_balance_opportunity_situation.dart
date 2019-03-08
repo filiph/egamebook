@@ -61,7 +61,7 @@ abstract class OffBalanceOpportunitySituation extends Object
   OffBalanceOpportunitySituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(int time, Simulation sim, WorldState world) {
+  Actor getActorAtTime(Simulation sim, WorldState world) {
     if (time > 0) return null;
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors

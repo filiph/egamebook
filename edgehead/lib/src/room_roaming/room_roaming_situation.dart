@@ -65,7 +65,7 @@ abstract class RoomRoamingSituation extends Object
   RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
 
   @override
-  Actor getActorAtTime(_, Simulation sim, WorldState world) {
+  Actor getActorAtTime(Simulation sim, WorldState world) {
     // Only player can roam at the moment.
     var mainActor = world.actors.firstWhere(
         (a) => a.isPlayer && a.isAliveAndActive,
@@ -76,7 +76,7 @@ abstract class RoomRoamingSituation extends Object
   @override
   Iterable<Actor> getActors(
       Iterable<Actor> actors, Simulation sim, WorldState world) {
-    var mainActor = getActorAtTime(null, sim, world);
+    var mainActor = getActorAtTime(sim, world);
     if (mainActor == null) return [];
     return [mainActor];
   }

@@ -52,6 +52,9 @@ abstract class Situation {
 
   /// This is increased every 'turn'. It starts at `0` when the situation is
   /// first created.
+  ///
+  /// TODO: rename to turn (so that it's not easy to confuse
+  ///       with [WorldState.time]. Also, rename [elapseTime].
   int get time;
 
   /// Returns updated state with `time++`.
@@ -61,13 +64,16 @@ abstract class Situation {
   ///
   /// Returns `null` when no actor can act anymore (for example, all
   /// actors are dead, or all have acted).
-  Actor getActorAtTime(int time, Simulation sim, WorldState world);
+  Actor getActorAtTime(Simulation sim, WorldState world);
 
   /// Filters the [actors] that are active in this situation.
   Iterable<Actor> getActors(
       Iterable<Actor> actors, Simulation sim, WorldState world);
 
   /// Returns the actor whose time it is at the current [time].
+  ///
+  /// TODO: remove this. This method only ever calls [getActorAtTime] with
+  ///       the current [WorldState.time].
   Actor getCurrentActor(Simulation sim, WorldState world);
 
   /// Called after action is executed inside this situation.
@@ -128,7 +134,7 @@ mixin SituationBaseBehavior implements Situation {
 
   @override
   Actor getCurrentActor(Simulation sim, WorldState world) =>
-      getActorAtTime(time, sim, world);
+      getActorAtTime(sim, world);
 
   @override
   void onAfterAction(

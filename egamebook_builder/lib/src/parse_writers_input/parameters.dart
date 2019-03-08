@@ -30,6 +30,10 @@ final Parameter storylineParameter = Parameter((b) => b
   ..name = 's'
   ..type = storylineType);
 
+final Parameter timeParameter = Parameter((b) => b
+  ..name = 'time'
+  ..type = dateTimeType);
+
 final Parameter worldParameter = Parameter((b) => b
   ..name = 'w'
   ..type = worldStateType);
