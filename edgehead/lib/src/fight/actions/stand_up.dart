@@ -72,6 +72,16 @@ class StandUp extends Action<Null> with ComplexCommandPath<Null> {
       "Will ${a.pronoun.nominative} stand up?";
 
   @override
+  Duration getRecoveryDuration(ApplicabilityContext context, Null object) {
+    if (context.actor.isPlayer) {
+      //  Standing up should be super fast for the player.
+      return const Duration(milliseconds: 200);
+    }
+
+    return super.getRecoveryDuration(context, object);
+  }
+
+  @override
   ReasonedSuccessChance getSuccessChance(
           Actor a, Simulation sim, WorldState w, Null _) =>
       ReasonedSuccessChance.sureSuccess;
