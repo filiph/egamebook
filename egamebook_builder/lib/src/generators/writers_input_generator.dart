@@ -136,6 +136,9 @@ class WritersInputGenerator extends Generator {
   AnnotatedElement _getGatherAnnotation(LibraryReader library) {
     final annotationChecker = TypeChecker.fromRuntime(GatherWriterInputFrom);
     for (final metadata in library.element.metadata) {
+      // We must call this to force computation of the constant value.
+      // Otherwise, metadata.constantValue might be `null`.
+      metadata.computeConstantValue();
       final constant = ConstantReader(metadata.constantValue);
       if (annotationChecker.isExactlyType(metadata.constantValue.type)) {
         return AnnotatedElement(constant, library.element);

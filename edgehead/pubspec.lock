@@ -7,14 +7,14 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.34.3"
+    version: "0.35.3"
   analyzer_plugin:
     dependency: transitive
     description:
       name: analyzer_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-alpha.6"
+    version: "0.0.1-alpha.7"
   args:
     dependency: "direct dev"
     description:
@@ -42,7 +42,7 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   build_config:
     dependency: transitive
     description:
@@ -56,28 +56,28 @@ packages:
       name: build_daemon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.3"
+    version: "0.4.2"
   build_resolvers:
     dependency: transitive
     description:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.3"
+    version: "1.0.3"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.3"
+    version: "1.2.8"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   built_collection:
     dependency: "direct main"
     description:
@@ -91,14 +91,14 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   built_value_generator:
     dependency: "direct dev"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   charcode:
     dependency: transitive
     description:
@@ -182,7 +182,7 @@ packages:
       name: front_end
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.9+1"
+    version: "0.1.13"
   glob:
     dependency: transitive
     description:
@@ -203,7 +203,7 @@ packages:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3+3"
+    version: "0.13.4+1"
   http:
     dependency: transitive
     description:
@@ -259,7 +259,7 @@ packages:
       name: kernel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.9+1"
+    version: "0.3.13"
   logging:
     dependency: "direct main"
     description:
