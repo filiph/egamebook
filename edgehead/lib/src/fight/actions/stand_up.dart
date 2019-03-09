@@ -59,7 +59,7 @@ class StandUp extends Action<Null> with ComplexCommandPath<Null> {
       // Don't force the player to stand in two moves.
       w.updateActorById(a.id, (b) => b.pose = a.poseMax);
     } else {
-      w.updateActorById(a.id, (b) => b.pose = Pose.extended);
+      w.updateActorById(a.id, (b) => b.pose = Pose.offBalance);
     }
     return "${a.name} stands up";
   }

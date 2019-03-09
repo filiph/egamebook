@@ -58,6 +58,16 @@ class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
   String getCommand(Null _) => "Assume better stance.";
 
   @override
+  Duration getRecoveryDuration(ApplicabilityContext context, Null object) {
+    if (context.actor.isPlayer) {
+      //  This move should be super fast for the player.
+      return const Duration(milliseconds: 200);
+    }
+
+    return super.getRecoveryDuration(context, object);
+  }
+
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
       "Will ${a.pronoun.nominative} assume better stance?";
 
@@ -68,6 +78,9 @@ class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
+      // Only player is able to assume better stance.
+      // It's boring to look at in enemies.
+      a.isPlayer &&
       a.pose > Pose.offBalance &&
       a.pose < a.poseMax &&
       !recentlyLostStance(a, world);
