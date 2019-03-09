@@ -30,8 +30,8 @@ class _$CounterAttackSituationSerializer
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'target',
       serializers.serialize(object.target, specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -61,8 +61,8 @@ class _$CounterAttackSituationSerializer
           result.target = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -80,14 +80,14 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   @override
   final int target;
   @override
-  final int time;
+  final int turn;
 
   factory _$CounterAttackSituation(
           [void updates(CounterAttackSituationBuilder b)]) =>
       (new CounterAttackSituationBuilder()..update(updates)).build();
 
   _$CounterAttackSituation._(
-      {this.counterAttacker, this.id, this.target, this.time})
+      {this.counterAttacker, this.id, this.target, this.turn})
       : super._() {
     if (counterAttacker == null) {
       throw new BuiltValueNullFieldError(
@@ -99,8 +99,8 @@ class _$CounterAttackSituation extends CounterAttackSituation {
     if (target == null) {
       throw new BuiltValueNullFieldError('CounterAttackSituation', 'target');
     }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('CounterAttackSituation', 'time');
+    if (turn == null) {
+      throw new BuiltValueNullFieldError('CounterAttackSituation', 'turn');
     }
   }
 
@@ -120,7 +120,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
         counterAttacker == other.counterAttacker &&
         id == other.id &&
         target == other.target &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
@@ -128,7 +128,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
     return $jf($jc(
         $jc($jc($jc(0, counterAttacker.hashCode), id.hashCode),
             target.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -137,7 +137,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
           ..add('counterAttacker', counterAttacker)
           ..add('id', id)
           ..add('target', target)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -159,9 +159,9 @@ class CounterAttackSituationBuilder
   int get target => _$this._target;
   set target(int target) => _$this._target = target;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   CounterAttackSituationBuilder();
 
@@ -170,7 +170,7 @@ class CounterAttackSituationBuilder
       _counterAttacker = _$v.counterAttacker;
       _id = _$v.id;
       _target = _$v.target;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -196,7 +196,7 @@ class CounterAttackSituationBuilder
             counterAttacker: counterAttacker,
             id: id,
             target: target,
-            time: time);
+            turn: turn);
     replace(_$result);
     return _$result;
   }

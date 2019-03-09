@@ -84,7 +84,7 @@ Spec generateRescueSituation(
   //    factory TakeOutGateGuardsRescueSituation.initialized(int id) =>
   //    new TakeOutGateGuardsRescueSituation((b) {
   //      b.id = id;
-  //      b.time = 0;
+  //      b.turn = 0;
   //    });
   final initializedConstructor = Constructor((b) => b
     ..name = 'initialized'
@@ -99,7 +99,7 @@ Spec generateRescueSituation(
             ..body = Block((c) => c
               ..addExpression(refer('b').property('id').assign(refer('id')))
               ..addExpression(
-                  refer('b').property('time').assign(literal(0))))).closure
+                  refer('b').property('turn').assign(literal(0))))).closure
         ])
         .returned
         .statement);
@@ -141,8 +141,8 @@ Spec generateRescueSituation(
 
   //    @override
   //    int get time;
-  final timeGetter = createGetter('time', intType);
-  situationClass.methods.add(timeGetter.bake());
+  final turnGetter = createGetter('turn', intType);
+  situationClass.methods.add(turnGetter.bake());
 
   //    @override
   //    String get name => "RoomRoamingSituation";
@@ -151,16 +151,16 @@ Spec generateRescueSituation(
   situationClass.methods.add(nameGetter.bake());
 
   //    @override
-  //    Situation elapseTime() => rebuild((b) => b..time += 1);
+  //    Situation elapseTurn() => rebuild((b) => b..time += 1);
   final elapseTime = Method((b) => b
-    ..name = 'elapseTime'
+    ..name = 'elapseTurn'
     ..returns = situationType
     ..annotations.add(overrideAnnotation)
     ..body = refer('rebuild').call([
       Method((c) => c
         ..requiredParameters.add(Parameter((p) => p..name = 'b'))
         // TODO: rewrite below
-        ..body = Code('return b..time += 1;')).closure
+        ..body = Code('return b..turn += 1;')).closure
     ]).code);
   situationClass.methods.add(elapseTime);
 
@@ -181,7 +181,7 @@ Spec generateRescueSituation(
       // TODO: build this instead when
       //       https://github.com/dart-lang/code_builder/issues/223
       //       is resolved
-      Code('if (time != 0) return ActorTurn.never;'),
+      Code('if (turn != 0) return ActorTurn.never;'),
 
       // w.actors.singleWhere((a) => a.isPlayer)
       refer(worldParameter.name)

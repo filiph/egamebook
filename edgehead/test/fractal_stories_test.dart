@@ -208,7 +208,7 @@ void main() {
 
 /// Checks whether the situation initializes correctly. It also checks some
 /// assumptions about [Situation.id], [Situation.hashCode] and
-/// [Situation.elapseTime].
+/// [Situation.elapseTurn].
 ///
 /// Provide [build], a closure that generates a new situation every time it
 /// is called.
@@ -224,12 +224,12 @@ void checkSituationBuild(Situation build()) {
   expect(a.hashCode, a.hashCode);
 
   // Situations initialize with time == 0.
-  expect(a.time, 0);
+  expect(a.turn, 0);
 
-  var b = a.elapseTime();
+  var b = a.elapseTurn();
 
   // Situation.elapseTime() works
-  expect(b.time, a.time + 1);
+  expect(b.turn, a.turn + 1);
 
   // Situations keep id when elapsing time.
   expect(a.id, equals(b.id));

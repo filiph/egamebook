@@ -69,7 +69,7 @@ abstract class FightSituation extends Object
           {Iterable<Item> items = const []}) =>
       FightSituation((b) => b
         ..id = id
-        ..time = 0
+        ..turn = 0
         ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
         ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
         ..groundMaterial = groundMaterial
@@ -148,7 +148,7 @@ abstract class FightSituation extends Object
   int get roomRoamingSituationId;
 
   @override
-  int get time;
+  int get turn;
 
   /// Returns `true` if any actor among `teamIds` can still fight
   /// (and is active).
@@ -157,7 +157,7 @@ abstract class FightSituation extends Object
       teamIds.any((id) => world.getActorById(id).isAliveAndActive);
 
   @override
-  FightSituation elapseTime() => rebuild((b) => b..time += 1);
+  FightSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
@@ -172,7 +172,7 @@ abstract class FightSituation extends Object
 
     // TODO: START HERE - make this work
 
-    if (time == 0) {
+    if (turn == 0) {
       // Always start with the player if possible.
       if (player != null) {
         return ActorTurn(player, world.time);
@@ -205,8 +205,8 @@ abstract class FightSituation extends Object
 
   @override
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
-    if (events.containsKey(time)) {
-      final callback = events[time];
+    if (events.containsKey(turn)) {
+      final callback = events[turn];
       callback.run(sim, world, s);
     }
   }

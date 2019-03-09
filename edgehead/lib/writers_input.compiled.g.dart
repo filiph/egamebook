@@ -28,8 +28,8 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -51,8 +51,8 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -67,7 +67,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
   @override
   final int id;
   @override
-  final int time;
+  final int turn;
 
   factory _$GuardpostAboveChurchTakeShieldRescueSituation(
           [void updates(
@@ -76,15 +76,15 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
             ..update(updates))
           .build();
 
-  _$GuardpostAboveChurchTakeShieldRescueSituation._({this.id, this.time})
+  _$GuardpostAboveChurchTakeShieldRescueSituation._({this.id, this.turn})
       : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError(
           'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
     }
-    if (time == null) {
+    if (turn == null) {
       throw new BuiltValueNullFieldError(
-          'GuardpostAboveChurchTakeShieldRescueSituation', 'time');
+          'GuardpostAboveChurchTakeShieldRescueSituation', 'turn');
     }
   }
 
@@ -103,12 +103,12 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
     if (identical(other, this)) return true;
     return other is GuardpostAboveChurchTakeShieldRescueSituation &&
         id == other.id &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, id.hashCode), time.hashCode));
+    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
   }
 
   @override
@@ -116,7 +116,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
     return (newBuiltValueToStringHelper(
             'GuardpostAboveChurchTakeShieldRescueSituation')
           ..add('id', id)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -131,16 +131,16 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   GuardpostAboveChurchTakeShieldRescueSituationBuilder();
 
   GuardpostAboveChurchTakeShieldRescueSituationBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -164,7 +164,7 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
   _$GuardpostAboveChurchTakeShieldRescueSituation build() {
     final _$result = _$v ??
         new _$GuardpostAboveChurchTakeShieldRescueSituation._(
-            id: id, time: time);
+            id: id, turn: turn);
     replace(_$result);
     return _$result;
   }

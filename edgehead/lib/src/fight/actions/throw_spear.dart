@@ -174,7 +174,7 @@ class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
   bool _isFirstTurnInFightSituation(WorldState world, Actor enemy) {
     final situation =
         world.getSituationByName<FightSituation>(FightSituation.className);
-    return situation.time == 0;
+    return situation.turn == 0;
   }
 
   /// Moves [spear] from actor's hand ([Actor.currentWeapon]) or inventory

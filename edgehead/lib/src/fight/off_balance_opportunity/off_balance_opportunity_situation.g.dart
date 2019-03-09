@@ -29,8 +29,8 @@ class _$OffBalanceOpportunitySituationSerializer
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
     if (object.culpritId != null) {
       result
@@ -66,8 +66,8 @@ class _$OffBalanceOpportunitySituationSerializer
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -85,14 +85,14 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   @override
   final int id;
   @override
-  final int time;
+  final int turn;
 
   factory _$OffBalanceOpportunitySituation(
           [void updates(OffBalanceOpportunitySituationBuilder b)]) =>
       (new OffBalanceOpportunitySituationBuilder()..update(updates)).build();
 
   _$OffBalanceOpportunitySituation._(
-      {this.actorId, this.culpritId, this.id, this.time})
+      {this.actorId, this.culpritId, this.id, this.turn})
       : super._() {
     if (actorId == null) {
       throw new BuiltValueNullFieldError(
@@ -102,9 +102,9 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
       throw new BuiltValueNullFieldError(
           'OffBalanceOpportunitySituation', 'id');
     }
-    if (time == null) {
+    if (turn == null) {
       throw new BuiltValueNullFieldError(
-          'OffBalanceOpportunitySituation', 'time');
+          'OffBalanceOpportunitySituation', 'turn');
     }
   }
 
@@ -124,14 +124,14 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
         actorId == other.actorId &&
         culpritId == other.culpritId &&
         id == other.id &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc($jc($jc(0, actorId.hashCode), culpritId.hashCode), id.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -140,7 +140,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
           ..add('actorId', actorId)
           ..add('culpritId', culpritId)
           ..add('id', id)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -163,9 +163,9 @@ class OffBalanceOpportunitySituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   OffBalanceOpportunitySituationBuilder();
 
@@ -174,7 +174,7 @@ class OffBalanceOpportunitySituationBuilder
       _actorId = _$v.actorId;
       _culpritId = _$v.culpritId;
       _id = _$v.id;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -197,7 +197,7 @@ class OffBalanceOpportunitySituationBuilder
   _$OffBalanceOpportunitySituation build() {
     final _$result = _$v ??
         new _$OffBalanceOpportunitySituation._(
-            actorId: actorId, culpritId: culpritId, id: id, time: time);
+            actorId: actorId, culpritId: culpritId, id: id, turn: turn);
     replace(_$result);
     return _$result;
   }

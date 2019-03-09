@@ -32,7 +32,7 @@ abstract class RoomRoamingSituation extends Object
           int id, Room currentRoom, bool monstersAlive) =>
       RoomRoamingSituation((b) => b
         ..id = id
-        ..time = 0
+        ..turn = 0
         ..currentRoomName = currentRoom.name
         ..monstersAlive = monstersAlive);
 
@@ -60,10 +60,10 @@ abstract class RoomRoamingSituation extends Object
   String get name => className;
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  RoomRoamingSituation elapseTime() => rebuild((b) => b..time += 1);
+  RoomRoamingSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) {

@@ -168,7 +168,7 @@ abstract class AttackerSituation extends Object
             ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
             ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
-        ..time = 0
+        ..turn = 0
         ..attacker = attacker.id
         ..target = target.id
         ..attackDirection = attackDirection);
@@ -197,14 +197,14 @@ abstract class AttackerSituation extends Object
   int get target;
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  AttackerSituation elapseTime() => rebuild((b) => b..time += 1);
+  AttackerSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.byId(attacker, w);
+    if (turn == 0) return ActorTurn.byId(attacker, w);
     return ActorTurn.never;
   }
 

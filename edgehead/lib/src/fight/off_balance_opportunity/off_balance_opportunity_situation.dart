@@ -30,7 +30,7 @@ abstract class OffBalanceOpportunitySituation extends Object
           {Actor culprit}) =>
       OffBalanceOpportunitySituation((b) => b
         ..id = id
-        ..time = 0
+        ..turn = 0
         ..actorId = actor.id
         ..culpritId = culprit?.id);
 
@@ -56,14 +56,14 @@ abstract class OffBalanceOpportunitySituation extends Object
   String get name => "OffBalanceOpportunitySituation";
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  OffBalanceOpportunitySituation elapseTime() => rebuild((b) => b..time += 1);
+  OffBalanceOpportunitySituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
-    if (time > 0) return ActorTurn.never;
+    if (turn > 0) return ActorTurn.never;
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
         .where((Actor a) =>

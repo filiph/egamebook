@@ -48,8 +48,8 @@ class _$FightSituationSerializer
       'roomRoamingSituationId',
       serializers.serialize(object.roomRoamingSituationId,
           specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -109,8 +109,8 @@ class _$FightSituationSerializer
           result.roomRoamingSituationId = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -138,7 +138,7 @@ class _$FightSituation extends FightSituation {
   @override
   final int roomRoamingSituationId;
   @override
-  final int time;
+  final int turn;
 
   factory _$FightSituation([void updates(FightSituationBuilder b)]) =>
       (new FightSituationBuilder()..update(updates)).build();
@@ -152,7 +152,7 @@ class _$FightSituation extends FightSituation {
       this.id,
       this.playerTeamIds,
       this.roomRoamingSituationId,
-      this.time})
+      this.turn})
       : super._() {
     if (droppedItems == null) {
       throw new BuiltValueNullFieldError('FightSituation', 'droppedItems');
@@ -180,8 +180,8 @@ class _$FightSituation extends FightSituation {
       throw new BuiltValueNullFieldError(
           'FightSituation', 'roomRoamingSituationId');
     }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'time');
+    if (turn == null) {
+      throw new BuiltValueNullFieldError('FightSituation', 'turn');
     }
   }
 
@@ -205,7 +205,7 @@ class _$FightSituation extends FightSituation {
         id == other.id &&
         playerTeamIds == other.playerTeamIds &&
         roomRoamingSituationId == other.roomRoamingSituationId &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
@@ -225,7 +225,7 @@ class _$FightSituation extends FightSituation {
                     id.hashCode),
                 playerTeamIds.hashCode),
             roomRoamingSituationId.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -239,7 +239,7 @@ class _$FightSituation extends FightSituation {
           ..add('id', id)
           ..add('playerTeamIds', playerTeamIds)
           ..add('roomRoamingSituationId', roomRoamingSituationId)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -291,9 +291,9 @@ class FightSituationBuilder
   set roomRoamingSituationId(int roomRoamingSituationId) =>
       _$this._roomRoamingSituationId = roomRoamingSituationId;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   FightSituationBuilder();
 
@@ -307,7 +307,7 @@ class FightSituationBuilder
       _id = _$v.id;
       _playerTeamIds = _$v.playerTeamIds?.toBuilder();
       _roomRoamingSituationId = _$v.roomRoamingSituationId;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -340,7 +340,7 @@ class FightSituationBuilder
               id: id,
               playerTeamIds: playerTeamIds.build(),
               roomRoamingSituationId: roomRoamingSituationId,
-              time: time);
+              turn: turn);
     } catch (_) {
       String _$failedField;
       try {

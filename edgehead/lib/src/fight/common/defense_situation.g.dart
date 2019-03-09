@@ -40,8 +40,8 @@ class _$DefenseSituationSerializer
           specifiedType: const FullType(Predetermination)),
       'target',
       serializers.serialize(object.target, specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -93,8 +93,8 @@ class _$DefenseSituationSerializer
           result.target = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -120,7 +120,7 @@ class _$DefenseSituation extends DefenseSituation {
   @override
   final int target;
   @override
-  final int time;
+  final int turn;
 
   factory _$DefenseSituation([void updates(DefenseSituationBuilder b)]) =>
       (new DefenseSituationBuilder()..update(updates)).build();
@@ -133,7 +133,7 @@ class _$DefenseSituation extends DefenseSituation {
       this.name,
       this.predeterminedResult,
       this.target,
-      this.time})
+      this.turn})
       : super._() {
     if (attacker == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'attacker');
@@ -159,8 +159,8 @@ class _$DefenseSituation extends DefenseSituation {
     if (target == null) {
       throw new BuiltValueNullFieldError('DefenseSituation', 'target');
     }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'time');
+    if (turn == null) {
+      throw new BuiltValueNullFieldError('DefenseSituation', 'turn');
     }
   }
 
@@ -185,7 +185,7 @@ class _$DefenseSituation extends DefenseSituation {
         name == other.name &&
         predeterminedResult == other.predeterminedResult &&
         target == other.target &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
@@ -203,7 +203,7 @@ class _$DefenseSituation extends DefenseSituation {
                     name.hashCode),
                 predeterminedResult.hashCode),
             target.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -218,7 +218,7 @@ class _$DefenseSituation extends DefenseSituation {
           ..add('name', name)
           ..add('predeterminedResult', predeterminedResult)
           ..add('target', target)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -265,9 +265,9 @@ class DefenseSituationBuilder
   int get target => _$this._target;
   set target(int target) => _$this._target = target;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   DefenseSituationBuilder();
 
@@ -282,7 +282,7 @@ class DefenseSituationBuilder
       _name = _$v.name;
       _predeterminedResult = _$v.predeterminedResult;
       _target = _$v.target;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -316,7 +316,7 @@ class DefenseSituationBuilder
               name: name,
               predeterminedResult: predeterminedResult,
               target: target,
-              time: time);
+              turn: turn);
     } catch (_) {
       String _$failedField;
       try {

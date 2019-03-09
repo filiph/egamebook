@@ -32,7 +32,7 @@ abstract class LootSituation extends Object
   ) =>
       LootSituation((b) => b
         ..id = id
-        ..time = 0
+        ..turn = 0
         ..groundMaterial = groundMaterial
         ..playerTeamIds = ListBuilder<int>(playerTeamIds)
         ..droppedItems = ListBuilder<Item>(droppedItems));
@@ -58,15 +58,15 @@ abstract class LootSituation extends Object
   String get name => className;
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  LootSituation elapseTime() => rebuild((b) => b..time += 1);
+  LootSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
     // Only one turn of looting.
-    if (time > 0) return ActorTurn.never;
+    if (turn > 0) return ActorTurn.never;
     // Only player can loot at the moment.
     return ActorTurn(_getPlayer(world.actors), world.time);
   }

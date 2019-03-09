@@ -27,7 +27,7 @@ abstract class CounterAttackSituation extends Object
           int id, Actor counterAttacker, Actor target) =>
       CounterAttackSituation((b) => b
         ..id = id
-        ..time = 0
+        ..turn = 0
         ..counterAttacker = counterAttacker.id
         ..target = target.id);
 
@@ -51,14 +51,14 @@ abstract class CounterAttackSituation extends Object
   int get target;
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  CounterAttackSituation elapseTime() => rebuild((b) => b..time += 1);
+  CounterAttackSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.byId(counterAttacker, w);
+    if (turn == 0) return ActorTurn.byId(counterAttacker, w);
     return ActorTurn.never;
   }
 

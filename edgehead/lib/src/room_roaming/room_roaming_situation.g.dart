@@ -31,8 +31,8 @@ class _$RoomRoamingSituationSerializer
       'monstersAlive',
       serializers.serialize(object.monstersAlive,
           specifiedType: const FullType(bool)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -61,8 +61,8 @@ class _$RoomRoamingSituationSerializer
           result.monstersAlive = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -80,14 +80,14 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   @override
   final bool monstersAlive;
   @override
-  final int time;
+  final int turn;
 
   factory _$RoomRoamingSituation(
           [void updates(RoomRoamingSituationBuilder b)]) =>
       (new RoomRoamingSituationBuilder()..update(updates)).build();
 
   _$RoomRoamingSituation._(
-      {this.currentRoomName, this.id, this.monstersAlive, this.time})
+      {this.currentRoomName, this.id, this.monstersAlive, this.turn})
       : super._() {
     if (currentRoomName == null) {
       throw new BuiltValueNullFieldError(
@@ -100,8 +100,8 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
       throw new BuiltValueNullFieldError(
           'RoomRoamingSituation', 'monstersAlive');
     }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'time');
+    if (turn == null) {
+      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'turn');
     }
   }
 
@@ -120,7 +120,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
         currentRoomName == other.currentRoomName &&
         id == other.id &&
         monstersAlive == other.monstersAlive &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
@@ -128,7 +128,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
     return $jf($jc(
         $jc($jc($jc(0, currentRoomName.hashCode), id.hashCode),
             monstersAlive.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -137,7 +137,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
           ..add('currentRoomName', currentRoomName)
           ..add('id', id)
           ..add('monstersAlive', monstersAlive)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -160,9 +160,9 @@ class RoomRoamingSituationBuilder
   set monstersAlive(bool monstersAlive) =>
       _$this._monstersAlive = monstersAlive;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   RoomRoamingSituationBuilder();
 
@@ -171,7 +171,7 @@ class RoomRoamingSituationBuilder
       _currentRoomName = _$v.currentRoomName;
       _id = _$v.id;
       _monstersAlive = _$v.monstersAlive;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -197,7 +197,7 @@ class RoomRoamingSituationBuilder
             currentRoomName: currentRoomName,
             id: id,
             monstersAlive: monstersAlive,
-            time: time);
+            turn: turn);
     replace(_$result);
     return _$result;
   }

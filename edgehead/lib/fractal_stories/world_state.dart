@@ -226,7 +226,7 @@ abstract class WorldStateBuilder
       return;
     }
 
-    situations[index] = situations[index].elapseTime();
+    situations[index] = situations[index].elapseTurn();
   }
 
   Actor getActorById(int id) {

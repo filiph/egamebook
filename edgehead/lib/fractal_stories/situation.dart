@@ -51,15 +51,15 @@ abstract class Situation {
   /// This is so that we can do things like [Simulation.popSituationsUntil].
   String get name;
 
-  /// This is increased every 'turn'. It starts at `0` when the situation is
-  /// first created.
+  /// This is increased every 'turn' by `1`. It starts at `0` when
+  /// the situation is first created.
   ///
-  /// TODO: rename to turn (so that it's not easy to confuse
-  ///       with [WorldState.time]. Also, rename [elapseTime].
-  int get time;
+  /// Contrast with [WorldState.time], which is an actual `DateTime` and which
+  /// increases non-monotonically.
+  int get turn;
 
-  /// Returns updated state with `time++`.
-  Situation elapseTime();
+  /// Returns updated state with `turn++`.
+  Situation elapseTurn();
 
   /// Filters the [actors] that are active in this situation.
   Iterable<Actor> getActors(Simulation sim, WorldState world);

@@ -38,7 +38,7 @@ abstract class DefenseSituation extends Object
             ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
             ListBuilder<EnemyTargetAction>(builtEnemyTargetActionGenerators)
-        ..time = 0
+        ..turn = 0
         ..attacker = attacker.id
         ..target = target.id
         ..predeterminedResult = predetermination);
@@ -72,14 +72,14 @@ abstract class DefenseSituation extends Object
   int get target;
 
   @override
-  int get time;
+  int get turn;
 
   @override
-  DefenseSituation elapseTime() => rebuild((b) => b..time += 1);
+  DefenseSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time == 0) return ActorTurn.byId(target, w);
+    if (turn == 0) return ActorTurn.byId(target, w);
     return ActorTurn.never;
   }
 

@@ -32,8 +32,8 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
               const FullType(BuiltList, const [const FullType(int)])),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
-      'time',
-      serializers.serialize(object.time, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -70,8 +70,8 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'time':
-          result.time = serializers.deserialize(value,
+        case 'turn':
+          result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
       }
@@ -91,7 +91,7 @@ class _$LootSituation extends LootSituation {
   @override
   final int id;
   @override
-  final int time;
+  final int turn;
 
   factory _$LootSituation([void updates(LootSituationBuilder b)]) =>
       (new LootSituationBuilder()..update(updates)).build();
@@ -101,7 +101,7 @@ class _$LootSituation extends LootSituation {
       this.groundMaterial,
       this.playerTeamIds,
       this.id,
-      this.time})
+      this.turn})
       : super._() {
     if (droppedItems == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'droppedItems');
@@ -115,8 +115,8 @@ class _$LootSituation extends LootSituation {
     if (id == null) {
       throw new BuiltValueNullFieldError('LootSituation', 'id');
     }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'time');
+    if (turn == null) {
+      throw new BuiltValueNullFieldError('LootSituation', 'turn');
     }
   }
 
@@ -135,7 +135,7 @@ class _$LootSituation extends LootSituation {
         groundMaterial == other.groundMaterial &&
         playerTeamIds == other.playerTeamIds &&
         id == other.id &&
-        time == other.time;
+        turn == other.turn;
   }
 
   @override
@@ -145,7 +145,7 @@ class _$LootSituation extends LootSituation {
             $jc($jc($jc(0, droppedItems.hashCode), groundMaterial.hashCode),
                 playerTeamIds.hashCode),
             id.hashCode),
-        time.hashCode));
+        turn.hashCode));
   }
 
   @override
@@ -155,7 +155,7 @@ class _$LootSituation extends LootSituation {
           ..add('groundMaterial', groundMaterial)
           ..add('playerTeamIds', playerTeamIds)
           ..add('id', id)
-          ..add('time', time))
+          ..add('turn', turn))
         .toString();
   }
 }
@@ -185,9 +185,9 @@ class LootSituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
-  int _time;
-  int get time => _$this._time;
-  set time(int time) => _$this._time = time;
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
 
   LootSituationBuilder();
 
@@ -197,7 +197,7 @@ class LootSituationBuilder
       _groundMaterial = _$v.groundMaterial;
       _playerTeamIds = _$v.playerTeamIds?.toBuilder();
       _id = _$v.id;
-      _time = _$v.time;
+      _turn = _$v.turn;
       _$v = null;
     }
     return this;
@@ -226,7 +226,7 @@ class LootSituationBuilder
               groundMaterial: groundMaterial,
               playerTeamIds: playerTeamIds.build(),
               id: id,
-              time: time);
+              turn: turn);
     } catch (_) {
       String _$failedField;
       try {

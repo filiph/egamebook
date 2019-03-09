@@ -1237,7 +1237,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   factory GuardpostAboveChurchTakeShieldRescueSituation.initialized(int id) {
     return GuardpostAboveChurchTakeShieldRescueSituation((b) {
       b.id = id;
-      b.time = 0;
+      b.turn = 0;
     });
   }
 
@@ -1281,19 +1281,19 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
   @override
   int get id;
   @override
-  int get time;
+  int get turn;
   @override
   String get name {
     return 'guardpost_above_church_take_shield';
   }
 
   @override
-  Situation elapseTime() => rebuild((b) {
-        return b..time += 1;
+  Situation elapseTurn() => rebuild((b) {
+        return b..turn += 1;
       });
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
-    if (time != 0) return ActorTurn.never;
+    if (turn != 0) return ActorTurn.never;
     var player = w.actors.singleWhere((a) => a.isPlayer);
     return ActorTurn(player, w.time);
   }
