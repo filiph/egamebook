@@ -104,7 +104,7 @@ abstract class Action<T> {
     assert(successChance.value >= 0.0);
     assert(successChance.value <= 1.0);
 
-    final performance = Performance<T>(this, object);
+    final performance = Performance<T>(this, object, successChance.value);
 
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
@@ -148,6 +148,19 @@ abstract class Action<T> {
         'called in the first place.');
   }
 
+  /// The command that describes this action.
+  ///
+  /// For example: "open the door" or "swing at the orc".
+  String getCommand(T object);
+
+  /// The path of sub-commands to be used for the action menu.
+  ///
+  /// For example, an actions such as "kick <subject> to ground" could have
+  /// a [getCommandPath] of `[attack <subject>, stance, kick in chest]`. The
+  /// [getCommandPath] is what the player chooses, the [getCommand()] is
+  /// what is shown afterwards.
+  List<String> getCommandPath(T object) => [getCommand(object)];
+
   /// The time it takes the actor to be available again after performing
   /// the action.
   ///
@@ -170,19 +183,6 @@ abstract class Action<T> {
 
     return const Duration(seconds: 1);
   }
-
-  /// The command that describes this action.
-  ///
-  /// For example: "open the door" or "swing at the orc".
-  String getCommand(T object);
-
-  /// The path of sub-commands to be used for the action menu.
-  ///
-  /// For example, an actions such as "kick <subject> to ground" could have
-  /// a [getCommandPath] of `[attack <subject>, stance, kick in chest]`. The
-  /// [getCommandPath] is what the player chooses, the [getCommand()] is
-  /// what is shown afterwards.
-  List<String> getCommandPath(T object) => [getCommand(object)];
 
   /// Returns a string that will explain why actor needs to roll for success.
   ///
@@ -496,8 +496,11 @@ class Performance<T> {
   /// The object the [action] is performed on.
   final T object;
 
+  /// The chance that the action will
+  final num successChance;
+
   /// Creates a performance object.
-  const Performance(this.action, this.object);
+  const Performance(this.action, this.object, this.successChance);
 
   String get command => action.getCommand(object);
 

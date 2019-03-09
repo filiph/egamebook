@@ -18,6 +18,9 @@ abstract class Choice extends ElementBase
 
   String get command;
 
+  /// The chance of success, from `0` to `100`.
+  int get successChance;
+
   BuiltList<String> get commandPath;
 
   @nullable

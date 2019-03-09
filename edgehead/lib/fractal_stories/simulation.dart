@@ -103,14 +103,18 @@ class Simulation {
 
     for (final action in context.world.currentSituation.actions) {
       if (action is Action<Null>) {
-        yield Performance<Null>(action, null);
+        final successChance = action.getSuccessChance(
+            context.actor, context.simulation, context.world, null);
+        yield Performance<Null>(action, null, successChance.value);
         continue;
       }
 
       final targets = action.generateObjects(context);
 
       for (final target in targets) {
-        yield Performance<dynamic>(action, target);
+        final successChance = action.getSuccessChance(
+            context.actor, context.simulation, context.world, target);
+        yield Performance<dynamic>(action, target, successChance.value);
       }
     }
   }
