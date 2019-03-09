@@ -5,39 +5,20 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/feint_slash.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 
-class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
-  static const String className = "FaintSlash";
+/// The thrusting version of [FeintSlash].
+class FeintJab extends FeintSlash {
+  static const String className = "FaintJab";
 
-  static final FeintSlash singleton = FeintSlash();
-
-  @override
-  final bool rerollable = true;
-
-  @override
-  final Resource rerollResource = Resource.stamina;
-
-  @override
-  final bool isAggressive = true;
-
-  @override
-  final bool isProactive = true;
-
-  @override
-  String helpMessage = "Feinting an attack helps luring your opponent from "
-      "a defensive position. If successful, the enemy will be extended, "
-      "and therefore vulnerable to follow up attack.";
-
-  @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "feint"];
+  static final FeintJab singleton = FeintJab();
 
   @override
   String get commandTemplate =>
-      "feint slash at <object> to spoil <objectPronoun's> stance";
+      "feint jab at <object> to spoil <objectPronoun's> stance";
 
   @override
   String get name => className;
@@ -50,14 +31,14 @@ class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> feint<s> {an attack|a slash}");
+    a.report(s, "<subject> feint<s> {an attack|a jab}");
     enemy.report(s, "<subject> <is>n't fooled", but: true);
     enemy.report(
         s,
         "<subject> {retain<s>|keep<s>} "
         "<subject's> {stance|footing}",
         positive: true);
-    return "${a.name} fails to feint ${enemy.name} out of stance";
+    return "${a.name} fails to feint ${enemy.name} out of stance with a jab";
   }
 
   @override
@@ -65,7 +46,7 @@ class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> feint<s> {an attack|a slash}");
+    a.report(s, "<subject> feint<s> {an attack|a jab}");
 
     enemy.report(s, "<subject> scramble<s> to defend <subjectPronounSelf>",
         negative: true);
@@ -80,7 +61,7 @@ class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
         culprit: a);
     w.pushSituation(situation);
 
-    return "${a.name} feints ${enemy.name} out of stance";
+    return "${a.name} feints ${enemy.name} out of stance with a jab";
   }
 
   @override
@@ -100,6 +81,8 @@ class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
       enemy.pose > Pose.extended &&
-      (a.currentWeapon.damageCapability.isSlashing ||
-          a.currentWeapon.damageCapability.isBlunt);
+      a.currentWeapon.damageCapability.isThrusting &&
+      // Prevent showing both [FeintJab] and [FeintSlash] when player
+      // is wielding a sword.
+      !a.currentWeapon.damageCapability.isSlashing;
 }

@@ -18,6 +18,7 @@ import 'package:edgehead/src/fight/actions/assume_stance.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
+import 'package:edgehead/src/fight/actions/feint_jab.dart';
 import 'package:edgehead/src/fight/actions/feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
 import 'package:edgehead/src/fight/actions/clash.dart';
@@ -84,7 +85,8 @@ abstract class FightSituation extends Object
         Clash.singleton,
         Confuse.singleton,
         DisarmKick.singleton,
-        FaintSlash.singleton,
+        FeintJab.singleton,
+        FeintSlash.singleton,
         SweepFeet.singleton,
         startBreakNeckOnGroundBuilder(),
         startLeapBuilder(),
