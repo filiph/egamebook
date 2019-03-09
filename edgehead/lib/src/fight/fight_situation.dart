@@ -170,8 +170,6 @@ abstract class FightSituation extends Object
     assert(players.length <= 1);
     Actor player = players.length == 1 ? players.single : null;
 
-    // TODO: START HERE - make this work
-
     if (turn == 0) {
       // Always start with the player if possible.
       if (player != null) {

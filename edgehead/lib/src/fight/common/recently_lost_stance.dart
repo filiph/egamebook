@@ -12,7 +12,7 @@ bool recentlyLostStance(Actor a, WorldState world) {
       world.customHistory.query(name: lostStanceCustomEvent, actor: a).latest;
   if (latestFall == null) return false;
 
-  final recency = world.time.difference(latestFall.time).inSeconds;
+  final recency = world.time.difference(latestFall.time);
 
   return recency <= getRecently(a);
 }

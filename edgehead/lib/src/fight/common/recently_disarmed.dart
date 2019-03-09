@@ -11,7 +11,7 @@ bool recentlyDisarmed(Actor a, WorldState world) {
       world.customHistory.query(name: disarmedCustomEventName, actor: a).latest;
   if (latestDisarmament == null) return false;
 
-  final recency = world.time.difference(latestDisarmament.time).inSeconds;
+  final recency = world.time.difference(latestDisarmament.time);
 
   return recency <= getRecently(a);
 }

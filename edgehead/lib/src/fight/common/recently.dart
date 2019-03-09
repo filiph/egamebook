@@ -10,4 +10,5 @@ import 'package:edgehead/fractal_stories/actor.dart';
 /// We're using higher numbers here because it's safer. Sometimes, an action
 /// by another actor is silent, so with a small number we would still get
 /// 'you sweep his legs, he stands up'.
-int getRecently(Actor a) => a.isPlayer ? 1 : 4;
+Duration getRecently(Actor a) =>
+    a.isPlayer ? const Duration(milliseconds: 100) : const Duration(seconds: 2);

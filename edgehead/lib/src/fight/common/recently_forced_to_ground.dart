@@ -12,7 +12,7 @@ bool recentlyForcedToGround(Actor a, WorldState world) {
       .latest;
   if (latestFall == null) return false;
 
-  final recency = world.time.difference(latestFall.time).inSeconds;
+  final recency = world.time.difference(latestFall.time);
 
   return recency <= getRecently(a);
 }
