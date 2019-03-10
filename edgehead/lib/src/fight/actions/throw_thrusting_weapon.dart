@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
@@ -159,7 +160,8 @@ class ThrowThrustingWeapon extends EnemyTargetAction
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer /* TODO: turn into a defensible action and lose this */ &&
       a.inventory.currentWeapon.damageCapability.isThrusting &&
-      !a.hasCrippledArms;
+      !a.hasCrippledArms &&
+      recentlyForcedToGround(a, world);
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return Entity(name: Randomly.parse(name), team: a.team);
