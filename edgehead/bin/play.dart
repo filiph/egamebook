@@ -162,7 +162,8 @@ class CliRunner extends Presenter<EdgeheadGame> {
           "Cannot have an implicit choice "
           "when there is more than one of them.");
       String describeChoice(Choice ch) =>
-          '${ch.command} (${ch.successChance}%) (${ch.helpMessage})';
+          '${ch.command} (${(ch.successChance * 100).round()}%) '
+          '(${ch.helpMessage})';
       final menu = Menu(element.choices.map(describeChoice),
           modifierKeys: ["s" /* force success */, "f" /* force failure */]);
       print("");

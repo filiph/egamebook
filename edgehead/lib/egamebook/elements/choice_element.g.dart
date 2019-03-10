@@ -23,7 +23,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           specifiedType: const FullType(String)),
       'successChance',
       serializers.serialize(object.successChance,
-          specifiedType: const FullType(int)),
+          specifiedType: const FullType(double)),
       'commandPath',
       serializers.serialize(object.commandPath,
           specifiedType:
@@ -59,7 +59,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           break;
         case 'successChance':
           result.successChance = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(double)) as double;
           break;
         case 'commandPath':
           result.commandPath.replace(serializers.deserialize(value,
@@ -86,7 +86,7 @@ class _$Choice extends Choice {
   @override
   final String command;
   @override
-  final int successChance;
+  final double successChance;
   @override
   final BuiltList<String> commandPath;
   @override
@@ -165,9 +165,10 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   String get command => _$this._command;
   set command(String command) => _$this._command = command;
 
-  int _successChance;
-  int get successChance => _$this._successChance;
-  set successChance(int successChance) => _$this._successChance = successChance;
+  double _successChance;
+  double get successChance => _$this._successChance;
+  set successChance(double successChance) =>
+      _$this._successChance = successChance;
 
   ListBuilder<String> _commandPath;
   ListBuilder<String> get commandPath =>

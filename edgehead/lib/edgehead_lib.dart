@@ -395,7 +395,7 @@ class EdgeheadGame extends Book {
           ..command = performance.command
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
-          ..successChance = (performance.successChance * 100).round()
+          ..successChance = performance.successChance.toDouble()
           ..isImplicit = performance.action.isImplicit ||
               performance.command == '<implicit>');
         callbacks[choice] = () async {
