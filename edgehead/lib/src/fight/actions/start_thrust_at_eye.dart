@@ -6,14 +6,22 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
+import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
 const String startThrustHelpMessage = "Eyes are hard to hit but this move is "
     "successful, opponents lose much of their fighting ability.";
+
+String startThrustAtEyeCommand = "thrust >> <object's> >> eye";
+
+List<String> startThrustAtEyeCommandPath = [
+  "attack <object>",
+  "maim",
+  "stab <objectPronoun's> eye"
+];
 
 EnemyTargetAction startThrustAtEyeGenerator() {
   return StartDefensibleAction(
@@ -44,32 +52,6 @@ EnemyTargetAction startThrustAtEyeGenerator() {
   );
 }
 
-Situation _thrustAtEyeMainSituation(
-    Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
-  final eye = _getTargetEye(enemy, w.time.millisecondsSinceEpoch);
-
-  return createThrustSituation(w.randomInt(), a, enemy,
-      designation: eye.designation);
-}
-
-BodyPart _getTargetEye(Actor enemy, int time) {
-  final eyes = enemy.anatomy.allParts
-      .where((part) => part.function == BodyPartFunction.vision && part.isAlive)
-      .toList(growable: false);
-  assert(eyes.isNotEmpty);
-
-  // Must be consistent, so no random (not even stateful random)
-  return eyes[(time ~/ 1300) % eyes.length];
-}
-
-List<String> startThrustAtEyeCommandPath = [
-  "attack <object>",
-  "maim",
-  "stab <objectPronoun's> eye"
-];
-
-String startThrustAtEyeCommand = "thrust >> <object's> >> eye";
-
 PartialApplyFunction startThrustAtEyeReportStart() => (Actor a,
         Simulation sim,
         WorldStateBuilder w,
@@ -84,3 +66,21 @@ PartialApplyFunction startThrustAtEyeReportStart() => (Actor a,
         objectOwner: enemy,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
+
+BodyPart _getTargetEye(Actor enemy, int time) {
+  final eyes = enemy.anatomy.allParts
+      .where((part) => part.function == BodyPartFunction.vision && part.isAlive)
+      .toList(growable: false);
+  assert(eyes.isNotEmpty);
+
+  // Must be consistent, so no random (not even stateful random)
+  return eyes[(time ~/ 1300) % eyes.length];
+}
+
+Situation _thrustAtEyeMainSituation(
+    Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
+  final eye = _getTargetEye(enemy, w.time.millisecondsSinceEpoch);
+
+  return createThrustSituation(w.randomInt(), a, enemy,
+      designation: eye.designation);
+}

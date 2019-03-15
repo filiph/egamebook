@@ -8,8 +8,8 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
@@ -45,35 +45,6 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
   ]);
 }
 
-String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "slash <object's> ${designation.toHumanString()}";
-}
-
-List<String> startSlashCommandPathTemplate(BodyPartDesignation designation) {
-  bool kill = designation == BodyPartDesignation.head ||
-      designation == BodyPartDesignation.neck ||
-      designation == BodyPartDesignation.torso;
-  return [
-    "attack <object>",
-    kill ? "kill" : "maim",
-    "slash <objectPronoun's> ${designation.toHumanString()}"
-  ];
-}
-
-/// Creates the [StartDefensibleAction.applyStart] function for given
-/// [designation].
-PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
-    (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
-            Situation mainSituation) =>
-        a.report(
-            s,
-            "<subject> swing<s> {${weaponAsObject2(a)} |}at "
-            "<objectOwner's> <object>",
-            object: Entity(name: designation.toHumanString()),
-            objectOwner: enemy,
-            actionThread: mainSituation.id,
-            isSupportiveActionInThread: true);
-
 /// Higher order function that generates an [ActionBuilder] depending on
 /// the provided [BodyPartDesignation].
 EnemyTargetAction startSlashAtBodyPartGenerator(
@@ -100,6 +71,35 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
         "will <subject> hit <objectPronoun's> ${designation.toHumanString()}?",
   );
 }
+
+List<String> startSlashCommandPathTemplate(BodyPartDesignation designation) {
+  bool kill = designation == BodyPartDesignation.head ||
+      designation == BodyPartDesignation.neck ||
+      designation == BodyPartDesignation.torso;
+  return [
+    "attack <object>",
+    kill ? "kill" : "maim",
+    "slash <objectPronoun's> ${designation.toHumanString()}"
+  ];
+}
+
+String startSlashCommandTemplate(BodyPartDesignation designation) {
+  return "slash <object's> ${designation.toHumanString()}";
+}
+
+/// Creates the [StartDefensibleAction.applyStart] function for given
+/// [designation].
+PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
+    (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
+            Situation mainSituation) =>
+        a.report(
+            s,
+            "<subject> swing<s> {${weaponAsObject2(a)} |}at "
+            "<objectOwner's> <object>",
+            object: Entity(name: designation.toHumanString()),
+            objectOwner: enemy,
+            actionThread: mainSituation.id,
+            isSupportiveActionInThread: true);
 
 bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     BodyPartDesignation designation) {
