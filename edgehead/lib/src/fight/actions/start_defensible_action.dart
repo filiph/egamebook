@@ -35,57 +35,34 @@ typedef Situation _SituationBuilder(
 /// 2 situations on the stack at once: one is the attack, and on top of it
 /// is the defense situation.
 ///
-/// For example, when orc wants to slash Aren, a "SlashSituation" is added,
-/// and then on top of it a "SlashDefenseSituation" is added. First, the
-/// top-most situation is resolved (will Aren successfully parry or dodge
-/// the attack?) and then either the "SlashSituation" is completely skipped
-/// (popped by "SlashDefenseSituation") or it is run to completion (orc
-/// slashes Aren).
+/// This class is a concrete implementation of [StartDefensibleActionBase].
+/// You can instantiate this class with something like:
 ///
-/// Look at `start_slash_from_direction.dart` for an example of how to use
+/// ```dart
+/// StartDefensibleAction(
+///   name: "StartPunch",
+///   commandTemplate: "punch <object>",
+///   commandPathTemplate: const ["attack <object>", "stance", "punch"],
+///   isApplicable: (a, sim, w, enemy) =>
+///       (a.pose >= Pose.offBalance) && !enemy.isOnGround && a.isBarehanded,
+///   // ...
+/// )
+/// ```
+///
+/// Look at `start_*.dart` actions for concrete examples of how to use
 /// this class.
-class StartDefensibleAction extends EnemyTargetAction
-    with ComplexCommandPath<Actor> {
-  /// This function should use [storyline] to report the start of the action.
-  /// It can modify [world].
-  ///
-  /// This defines what happens before the [enemy] has a chance to react.
-  ///
-  /// For example, "Orc swings his scimitar at you."
-  ///
-  /// When the action fails and [applyWhenFailed] is non-null, then that
-  /// function will be called instead (and no situation will be created).
-  final PartialApplyFunction applyStart;
+///
+/// For anything fancier, use [StartDefensibleActionBase] directly.
+class StartDefensibleAction extends StartDefensibleActionBase {
+  final PartialApplyFunction _applyStart;
 
-  /// This function should use [storyline] to report that the defensible action
-  /// couldn't even start. It can modify [world].
-  ///
-  /// For example, "Orc tries to swing at you but completely misses."
-  ///
-  /// When this function is non-null, and the action fails, [applyStart] won't
-  /// be called. Nor will the action generate any situations (using
-  /// [mainSituationBuilder] and [defenseSituationBuilder].
-  final PartialApplyFunction applyWhenFailed;
+  final PartialApplyFunction _applyShortCircuit;
 
-  /// This should build the main situation (the orc slashing Aren).
-  ///
-  /// Normally, this is just one call of the constructor, such as
-  /// `new SomeSituation(actor, enemy)`.
-  final _SituationBuilder mainSituationBuilder;
+  final _SituationBuilder _mainSituationBuilder;
 
-  /// This should build the defense situation (Aren is trying to deflect
-  /// the orc's swing).
-  final _DefenseSituationBuilder defenseSituationBuilder;
+  final _DefenseSituationBuilder _defenseSituationBuilder;
 
-  /// This is the chance of successfully _finishing_ this move.
-  ///
-  /// [successChanceGetter] is used only for the player (when [Actor.isPlayer]
-  /// is `true`). The [DefenseSituation] will be created with the
-  /// corresponding [Predetermination].
-  ///
-  /// Non-players will always succeed with starting the move. The final outcome
-  /// is decided in the defensive situation.
-  final SuccessChanceGetter successChanceGetter;
+  final SuccessChanceGetter _successChanceGetter;
 
   @override
   final String helpMessage;
@@ -123,31 +100,96 @@ class StartDefensibleAction extends EnemyTargetAction
     @required this.commandPathTemplate,
     @required this.helpMessage,
     @required OtherActorApplicabilityFunction isApplicable,
-    @required this.applyStart,
-    @required this.mainSituationBuilder,
-    @required this.defenseSituationBuilder,
-    @required this.successChanceGetter,
+    @required PartialApplyFunction applyStart,
+    @required _SituationBuilder mainSituationBuilder,
+    @required _DefenseSituationBuilder defenseSituationBuilder,
+    @required SuccessChanceGetter successChanceGetter,
     @required this.rerollable,
     this.rerollResource,
     this.rollReasonTemplate,
-    this.applyWhenFailed,
+    PartialApplyFunction applyShortCircuit,
     this.isProactive = true,
-  })  : _isApplicable = isApplicable,
+  })  : _applyStart = applyStart,
+        _mainSituationBuilder = mainSituationBuilder,
+        _defenseSituationBuilder = defenseSituationBuilder,
+        _successChanceGetter = successChanceGetter,
+        _isApplicable = isApplicable,
+        _applyShortCircuit = applyShortCircuit,
         assert(!rerollable || rerollResource != null),
         assert(!rerollable || rollReasonTemplate != null);
 
   @override
+  bool get shouldShortCircuitWhenFailed => _applyShortCircuit != null;
+
+  @override
+  void applyShortCircut(Actor actor, Simulation sim, WorldStateBuilder world,
+          Storyline storyline, Actor enemy, Situation mainSituation) =>
+      _applyShortCircuit(actor, sim, world, storyline, enemy, mainSituation);
+
+  @override
+  void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,
+          Storyline storyline, Actor enemy, Situation mainSituation) =>
+      _applyStart(actor, sim, world, storyline, enemy, mainSituation);
+
+  @override
+  DefenseSituation defenseSituationBuilder(
+          Actor actor,
+          Simulation sim,
+          WorldStateBuilder world,
+          Actor enemy,
+          Predetermination predetermination) =>
+      _defenseSituationBuilder(actor, sim, world, enemy, predetermination);
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      _isApplicable(a, sim, w, enemy);
+
+  @override
+  Situation mainSituationBuilder(
+          Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy) =>
+      _mainSituationBuilder(actor, sim, world, enemy);
+
+  @override
+  ReasonedSuccessChance successChanceGetter(
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      _successChanceGetter(a, sim, w, enemy);
+}
+
+/// This is a utility class that makes it easier to build actions that put
+/// 2 situations on the stack at once: one is the attack, and on top of it
+/// is the defense situation.
+///
+/// For example, when orc wants to slash Aren, a "SlashSituation" is added,
+/// and then on top of it a "SlashDefenseSituation" is added. First, the
+/// top-most situation is resolved (will Aren successfully parry or dodge
+/// the attack?) and then either the "SlashSituation" is completely skipped
+/// (popped by "SlashDefenseSituation") or it is run to completion (orc
+/// slashes Aren).
+///
+/// [StartDefensibleAction] is a subclass that extends this class and can
+/// be immediately instantiated. In contrast, this class is abstract.
+abstract class StartDefensibleActionBase extends EnemyTargetAction
+    with ComplexCommandPath<Actor> {
+  @override
+  bool get isAggressive => true;
+
+  @override
+  bool get isProactive => true;
+
+  @protected
+  bool get shouldShortCircuitWhenFailed;
+
+  @override
   String applyFailure(ActionContext context, Actor enemy) {
-    assert(successChanceGetter != null);
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
-    if (applyWhenFailed != null) {
+    if (shouldShortCircuitWhenFailed) {
       // Short-circuit the whole logic. Actor failed to even start to execute
       // the action.
-      applyWhenFailed(a, sim, w, s, enemy, null);
+      applyShortCircut(a, sim, w, s, enemy, null);
       return "${a.name} fails to even start $name (DefensibleAction) "
           "directed at ${enemy.name}";
     }
@@ -166,6 +208,31 @@ class StartDefensibleAction extends EnemyTargetAction
     return "${a.name} fails at $name (DefensibleAction) "
         "directed at ${enemy.name}";
   }
+
+  /// This function should use [storyline] to report that the defensible action
+  /// couldn't even start. It can modify [world].
+  ///
+  /// For example, "Orc tries to swing at you but completely misses."
+  ///
+  /// When this function is non-null, and the action fails, [applyStart] won't
+  /// be called. Nor will the action generate any situations (using
+  /// [mainSituationBuilder] and [defenseSituationBuilder].
+  @protected
+  void applyShortCircut(Actor actor, Simulation sim, WorldStateBuilder world,
+      Storyline storyline, Actor enemy, Situation mainSituation);
+
+  /// This function should use [storyline] to report the start of the action.
+  /// It can modify [world].
+  ///
+  /// This defines what happens before the [enemy] has a chance to react.
+  ///
+  /// For example, "Orc swings his scimitar at you."
+  ///
+  /// When the action fails and [applyShortCircut] is non-null, then that
+  /// function will be called instead (and no situation will be created).
+  @protected
+  void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,
+      Storyline storyline, Actor enemy, Situation mainSituation);
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
@@ -187,6 +254,12 @@ class StartDefensibleAction extends EnemyTargetAction
     return "${a.name} starts a $name (defensible situation) at ${enemy.name}";
   }
 
+  /// This should build the defense situation (Aren is trying to deflect
+  /// the orc's swing).
+  @protected
+  DefenseSituation defenseSituationBuilder(Actor actor, Simulation sim,
+      WorldStateBuilder world, Actor enemy, Predetermination predetermination);
+
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -196,7 +269,23 @@ class StartDefensibleAction extends EnemyTargetAction
     return ReasonedSuccessChance.sureSuccess;
   }
 
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      _isApplicable(a, sim, w, enemy);
+  /// This should build the main situation (the orc slashing Aren).
+  ///
+  /// Normally, this is just one call of the constructor, such as
+  /// `new SomeSituation(actor, enemy)`.
+  @protected
+  Situation mainSituationBuilder(
+      Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
+
+  /// This is the chance of successfully _finishing_ this move.
+  ///
+  /// [successChanceGetter] is used only for the player (when [Actor.isPlayer]
+  /// is `true`). The [DefenseSituation] will be created with the
+  /// corresponding [Predetermination].
+  ///
+  /// Non-players will always succeed with starting the move. The final outcome
+  /// is decided in the defensive situation.
+  @protected
+  ReasonedSuccessChance successChanceGetter(
+      Actor a, Simulation sim, WorldState w, Actor enemy);
 }

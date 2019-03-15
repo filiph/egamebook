@@ -38,22 +38,6 @@ ReasonedSuccessChance computeCounterSlash(
   ]);
 }
 
-void counterSlashApplyFailure(Actor a, Simulation sim, WorldStateBuilder w,
-    Storyline s, Actor enemy, Situation situation) {
-  a.report(s, "<subject> tr<ies> to swing back");
-  a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
-  if (a.pose > Pose.offBalance) {
-    w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
-    a.report(s, "<subject> lose<s> balance because of that",
-        negative: true, endSentence: true);
-  } else if (a.pose == Pose.offBalance) {
-    w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
-    a.report(s, "<subject> lose<s> balance because of that", negative: true);
-    a.report(s, "<subject> fall<s> to the ground",
-        negative: true, endSentence: true);
-  }
-}
-
 /// TODO: This currently assumes that actor will always want to counter slash
 /// from left. Add another option or make explicit that
 /// this is what's happening.
@@ -63,7 +47,7 @@ EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       commandPathTemplate: const [counterSlashCommandTemplate],
       helpMessage: counterSlashHelpMessage,
       applyStart: counterSlashReportStart,
-      applyWhenFailed: counterSlashApplyFailure,
+      applyShortCircuit: counterSlashShortCircuitFailure,
       isApplicable: (a, sim, w, enemy) =>
           a.currentWeapon.damageCapability.isSlashing &&
           !a.isOnGround &&
@@ -85,3 +69,19 @@ EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
 void counterSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>
     a.report(s, "<subject> swing<s> back", object: enemy);
+
+void counterSlashShortCircuitFailure(Actor a, Simulation sim,
+    WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) {
+  a.report(s, "<subject> tr<ies> to swing back");
+  a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
+  if (a.pose > Pose.offBalance) {
+    w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);
+    a.report(s, "<subject> lose<s> balance because of that",
+        negative: true, endSentence: true);
+  } else if (a.pose == Pose.offBalance) {
+    w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
+    a.report(s, "<subject> lose<s> balance because of that", negative: true);
+    a.report(s, "<subject> fall<s> to the ground",
+        negative: true, endSentence: true);
+  }
+}
