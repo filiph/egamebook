@@ -169,8 +169,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       }
       throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasAllEyesDisabled:
-      final percent = _fractionDisabled(target, BodyPartFunction.vision);
-      if (percent == 1.0) {
+      if (target.anatomy.isBlind) {
         return 1.0;
       } else {
         return 0.0;

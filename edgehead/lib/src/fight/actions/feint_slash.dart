@@ -99,6 +99,7 @@ class FeintSlash extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
+      !enemy.anatomy.isBlind &&
       enemy.pose > Pose.extended &&
       (a.currentWeapon.damageCapability.isSlashing ||
           a.currentWeapon.damageCapability.isBlunt);

@@ -31,6 +31,7 @@ import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
+import 'package:edgehead/src/fight/actions/start_thrust_at_eye.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
 import 'package:edgehead/src/fight/actions/sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
@@ -97,8 +98,7 @@ abstract class FightSituation extends Object
         startSlashAtBodyPartGenerator(BodyPartDesignation.leftLeg),
         startSlashAtBodyPartGenerator(BodyPartDesignation.rightLeg),
         startStrikeDownBuilder(),
-        startThrustAtBodyPartGenerator(BodyPartDesignation.leftEye),
-        startThrustAtBodyPartGenerator(BodyPartDesignation.rightEye),
+        startThrustAtEyeGenerator(),
         startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
         startThrustSpearDownBuilder(),
         TakeDroppedShield.singleton,
