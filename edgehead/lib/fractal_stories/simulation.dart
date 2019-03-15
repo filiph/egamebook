@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
 typedef EventCallbackFunction = void Function(
@@ -57,6 +58,8 @@ class Simulation {
 
   final Set<Approach> approaches;
 
+  final Logger log = Logger('Simulation');
+
   /// Combine functions are the different ways an actor can score the world.
   final Map<String, CombineFunction> combineFunctions;
 
@@ -103,6 +106,11 @@ class Simulation {
 
     for (final action in context.world.currentSituation.actions) {
       if (action is Action<Null>) {
+        if (!action.isApplicable(
+            context.actor, context.simulation, context.world, null)) {
+          log.finer(() => "- action '${action.name}' isn't applicable");
+          continue;
+        }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, null);
         yield Performance<Null>(action, null, successChance.value);
@@ -112,6 +120,11 @@ class Simulation {
       final targets = action.generateObjects(context);
 
       for (final target in targets) {
+        if (!action.isApplicable(
+            context.actor, context.simulation, context.world, target)) {
+          log.finer(() => "- action '${action.name}' isn't applicable");
+          continue;
+        }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, target);
         yield Performance<dynamic>(action, target, successChance.value);

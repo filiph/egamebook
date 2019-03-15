@@ -149,15 +149,15 @@ class ActorPlanner {
         ApplicabilityContext(currentActor, simulation, _initial.world);
 
     for (final performance in simulation.generateAllPerformances(context)) {
+      assert(
+          performance.action.isApplicable(
+              currentActor, simulation, _initial.world, performance.object),
+          "We got an unapplicable action '${performance.command}' from "
+          "Simulation.generateAllPerformances.");
+
       log.finer(() => "Evaluating action '${performance.command}' "
           "for ${currentActor.name}");
 
-      if (!performance.action.isApplicable(
-          currentActor, simulation, _initial.world, performance.object)) {
-        log.finer(() => "- action '${performance.command}' isn't applicable");
-        // Bail early if action isn't possible at all.
-        continue;
-      }
       var consequenceStats = await _getConsequenceStats(
               _initial, performance, maxOrder, maxConsequences, waitFunction)
           .toList();
