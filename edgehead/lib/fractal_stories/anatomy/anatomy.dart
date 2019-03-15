@@ -16,6 +16,7 @@ part 'anatomy.g.dart';
 /// TODO: performance improvements (*O(1)* access to major body parts etc.).
 ///       use a `Map<int, List<int>> attachments` to build the tree of parts,
 ///       and a `List` of body parts for faster access.
+///       (or just use Memoized with a 'get' method)
 abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   static Serializer<Anatomy> get serializer => _$anatomySerializer;
 
@@ -25,7 +26,8 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
   /// Returns in iterable of all the parts in this anatomy.
   @memoized
-  Iterable<BodyPart> get allParts => torso.getDescendantParts();
+  List<BodyPart> get allParts =>
+      torso.getDescendantParts().toList(growable: false);
 
   /// The anatomy is capable of wielding a weapon at this point.
   ///
@@ -35,12 +37,25 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
       primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
 
   /// Returns `true` if both legs are crippled or missing.
+  @memoized
   bool get hasCrippledLegs {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
     for (final part in allParts) {
       if ((part.designation == BodyPartDesignation.leftLeg ||
               part.designation == BodyPartDesignation.rightLeg) &&
           part.isAlive) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Returns `true` when all eyes (and other parts with
+  /// [BodyPartFunction.vision]) are dead.
+  @memoized
+  bool get isBlind {
+    for (final part in allParts) {
+      if (part.function == BodyPartFunction.vision && part.isAlive) {
         return false;
       }
     }
@@ -58,6 +73,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// `null` when there is no such body part (i.e. it was severed).
   ///
   /// It is used for holding swords, throwing spears, etc.
+  @memoized
   BodyPart get primaryWeaponAppendage {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
     return allParts.singleWhere(
@@ -75,6 +91,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// in holding a two-handed weapon. In a pinch (e.g. when the primary
   /// appendage is disabled), it can be used to everything that
   /// [primaryWeaponAppendage] can, but with a hefty penalty.
+  @memoized
   BodyPart get secondaryWeaponAppendage {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
     return allParts.singleWhere(

@@ -51,7 +51,11 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 class _$Anatomy extends Anatomy {
   @override
   final BodyPart torso;
-  Iterable<BodyPart> __allParts;
+  List<BodyPart> __allParts;
+  bool __hasCrippledLegs;
+  bool __isBlind;
+  BodyPart __primaryWeaponAppendage;
+  BodyPart __secondaryWeaponAppendage;
 
   factory _$Anatomy([void updates(AnatomyBuilder b)]) =>
       (new AnatomyBuilder()..update(updates)).build();
@@ -63,7 +67,21 @@ class _$Anatomy extends Anatomy {
   }
 
   @override
-  Iterable<BodyPart> get allParts => __allParts ??= super.allParts;
+  List<BodyPart> get allParts => __allParts ??= super.allParts;
+
+  @override
+  bool get hasCrippledLegs => __hasCrippledLegs ??= super.hasCrippledLegs;
+
+  @override
+  bool get isBlind => __isBlind ??= super.isBlind;
+
+  @override
+  BodyPart get primaryWeaponAppendage =>
+      __primaryWeaponAppendage ??= super.primaryWeaponAppendage;
+
+  @override
+  BodyPart get secondaryWeaponAppendage =>
+      __secondaryWeaponAppendage ??= super.secondaryWeaponAppendage;
 
   @override
   Anatomy rebuild(void updates(AnatomyBuilder b)) =>
