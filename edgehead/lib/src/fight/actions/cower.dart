@@ -62,5 +62,7 @@ class Cower extends Action<Null> {
 
   @override
   bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
-      actor.hasCrippledArms || actor.anatomy.isBlind;
+      actor.hasCrippledArms ||
+      actor.anatomy.hasCrippledLegs ||
+      actor.anatomy.isBlind;
 }

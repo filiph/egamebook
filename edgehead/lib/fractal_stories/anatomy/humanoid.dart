@@ -16,7 +16,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       randomDesignation: "{right leg|right thigh}",
       designation: BodyPartDesignation.rightLeg,
       function: BodyPartFunction.mobile,
-      swingSurfaceLeft: 10,
+      swingSurfaceLeft: 7,
       swingSurfaceRight: 0,
       thrustSurface: 5,
       isSeverable: true);
@@ -25,7 +25,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       randomDesignation: "{left leg|left thigh}",
       designation: BodyPartDesignation.leftLeg,
       function: BodyPartFunction.mobile,
-      swingSurfaceRight: 10,
+      swingSurfaceRight: 7,
       swingSurfaceLeft: 0,
       thrustSurface: 5,
       isSeverable: true);
@@ -43,7 +43,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       randomDesignation: "{right arm|right shoulder}",
       designation: BodyPartDesignation.primaryArm,
       isSeverable: true,
-      swingSurfaceLeft: 10,
+      swingSurfaceLeft: 7,
       swingSurfaceRight: 0,
       thrustSurface: 5,
       children: [primaryHand]);
@@ -62,7 +62,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       designation: BodyPartDesignation.secondaryArm,
       function: BodyPartFunction.wielding,
       isSeverable: true,
-      swingSurfaceRight: 10,
+      swingSurfaceRight: 7,
       swingSurfaceLeft: 0,
       thrustSurface: 5,
       children: [secondaryHand]);

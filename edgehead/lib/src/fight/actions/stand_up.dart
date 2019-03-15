@@ -87,10 +87,9 @@ class StandUp extends Action<Null> with ComplexCommandPath<Null> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) {
-    if (!a.isOnGround) return false;
-    // If this actor just fell, do not let him stand up.
-    if (recentlyForcedToGround(a, world)) return false;
-    return true;
-  }
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
+      a.isOnGround &&
+      !a.anatomy.hasCrippledLegs &&
+      // If this actor just fell, do not let him stand up.
+      !recentlyForcedToGround(a, world);
 }

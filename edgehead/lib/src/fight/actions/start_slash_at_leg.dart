@@ -6,18 +6,18 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/start_thrust.dart';
+import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
-import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
-import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
+import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
-class StartThrustAtEye extends StartDefensibleActionBase {
-  static final StartThrustAtEye singleton = StartThrustAtEye();
+class StartSlashAtLeg extends StartDefensibleActionBase {
+  static final StartSlashAtLeg singleton = StartSlashAtLeg();
 
-  static const String className = "StartThrustAtEye";
+  static const String className = "StartSlashAtLeg";
 
   @override
   List<String> get commandPathTemplate {
@@ -25,11 +25,11 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   }
 
   @override
-  String get commandTemplate => "thrust >> <object's> >> eye";
+  String get commandTemplate => "slash >> <object's> >> leg";
 
   @override
-  String get helpMessage => "Eyes are hard to hit but if this move is "
-      "successful, opponents lose much of their fighting ability.";
+  String get helpMessage => "Legs provide mobility. A downed opponent is much "
+      "easier to deal with.";
 
   @override
   String get name => className;
@@ -41,7 +41,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   Resource get rerollResource => Resource.stamina;
 
   @override
-  String get rollReasonTemplate => "will <subject> hit the eye?";
+  String get rollReasonTemplate => "will <subject> hit the leg?";
 
   @override
   bool get shouldShortCircuitWhenFailed => false;
@@ -57,9 +57,9 @@ class StartThrustAtEye extends StartDefensibleActionBase {
       Actor enemy, Situation mainSituation) {
     a.report(
         s,
-        "<subject> thrust<s> {${weaponAsObject2(a)} |}at "
+        "<subject> swing<s> {${weaponAsObject2(a)} |}at "
         "<objectOwner's> <object>",
-        object: Entity(name: 'eye'),
+        object: Entity(name: 'leg'),
         objectOwner: enemy,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
@@ -68,21 +68,21 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   @override
   DefenseSituation defenseSituationBuilder(Actor a, Simulation sim,
       WorldStateBuilder w, Actor enemy, Predetermination predetermination) {
-    return createThrustDefenseSituation(
+    return createSlashDefenseSituation(
         w.randomInt(), a, enemy, predetermination);
   }
 
   @override
   List<String> getCommandPath(Actor target) {
-    final livingEyes = _getAllEyes(target).length;
-    assert(livingEyes > 0,
-        "Trying to apply $className when there is no eye left.");
-    final isLast = livingEyes == 1;
+    final livingLegs = _getAllLegs(target).length;
+    assert(livingLegs > 0,
+        "Trying to apply $className when there is no leg left.");
+    final isLast = livingLegs == 1;
 
     final commandPathTemplate = [
       "attack <object>",
       "maim",
-      "stab <objectPronoun's> ${isLast ? 'remaining ' : ''}eye",
+      "slash at <objectPronoun's> ${isLast ? 'remaining ' : ''}leg",
     ];
 
     // Realize the "<object>" parts of the template.
@@ -99,36 +99,42 @@ class StartThrustAtEye extends StartDefensibleActionBase {
       // a thrust while on ground. TODO: fix and remove
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
-      !enemy.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isThrusting &&
-      // Only allow thrusting when stance is worse than combat stance.
-      enemy.pose < Pose.combat;
+      a.currentWeapon.damageCapability.isSlashing &&
+      // Only allow leg attacks when enemy has worse than combat stance.
+      enemy.pose < Pose.combat &&
+      !enemy.anatomy.hasCrippledLegs;
 
   @override
   Situation mainSituationBuilder(
       Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
-    final eye = _getTargetEye(enemy, w.time.millisecondsSinceEpoch);
+    final leg = _getTargetLeg(enemy, w.time.millisecondsSinceEpoch);
 
-    return createThrustSituation(w.randomInt(), a, enemy,
-        designation: eye.designation);
+    return createSlashSituation(w.randomInt(), a, enemy,
+        designation: leg.designation);
   }
 
   @override
   ReasonedSuccessChance successChanceGetter(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final eye = _getTargetEye(enemy, w.time.millisecondsSinceEpoch);
-    return computeThrustAtBodyPartChance(eye.designation, a, sim, w, enemy);
+    final leg = _getTargetLeg(enemy, w.time.millisecondsSinceEpoch);
+    return computeStartSlashAtBodyPartGenerator(leg, a, sim, w, enemy);
   }
 
-  static Iterable<BodyPart> _getAllEyes(Actor target) =>
-      target.anatomy.allParts.where((part) =>
-          part.function == BodyPartFunction.vision && part.isAliveAndActive);
+  static Iterable<BodyPart> _getAllLegs(Actor target) {
+    assert(
+        target.anatomy.isHumanoid,
+        "This function currently assumes that legs are the only "
+        "body parts providing mobility.");
 
-  static BodyPart _getTargetEye(Actor enemy, int time) {
-    final eyes = _getAllEyes(enemy).toList(growable: false);
-    assert(eyes.isNotEmpty);
+    return target.anatomy.allParts.where((part) =>
+        part.function == BodyPartFunction.mobile && part.isAliveAndActive);
+  }
+
+  static BodyPart _getTargetLeg(Actor enemy, int time) {
+    final legs = _getAllLegs(enemy).toList(growable: false);
+    assert(legs.isNotEmpty);
 
     // Must be consistent, so no random (not even stateful random)
-    return eyes[(time ~/ 1300) % eyes.length];
+    return legs[(time ~/ 1300) % legs.length];
   }
 }
