@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
+import 'package:edgehead/src/fight/actions/pass_while_blind.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 
 part 'off_balance_opportunity_situation.g.dart';
@@ -39,6 +40,7 @@ abstract class OffBalanceOpportunitySituation extends Object
   @override
   List<Action<dynamic>> get actions => [
         Pass.singleton,
+        PassWhileBlind.singleton,
         OffBalanceOpportunityThrust.singleton,
       ];
 

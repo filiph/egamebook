@@ -24,6 +24,9 @@ EnemyTargetAction startThrustAtEyeGenerator() {
     applyStart: startThrustAtEyeReportStart(),
     isApplicable: (a, sim, w, enemy) =>
         !a.isOnGround &&
+        // This is here because we currently don't have a way to dodge
+        // a thrust while on ground. TODO: fix and remove
+        !enemy.isOnGround &&
         !enemy.anatomy.isBlind &&
         a.currentWeapon.damageCapability.isThrusting &&
         // Only allow thrusting when stance is worse than combat stance.

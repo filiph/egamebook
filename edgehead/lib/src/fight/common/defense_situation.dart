@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/pass_while_blind.dart';
 import 'package:edgehead/src/fight/common/predeterminable_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
@@ -47,8 +48,10 @@ abstract class DefenseSituation extends Object
 
   @override
   List<Action<dynamic>> get actions =>
-      List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
-        ..addAll(builtEnemyTargetActionGenerators);
+      List<Action>.from(builtOtherActorActionGenerators)
+        ..addAll(builtEnemyTargetActionGenerators)
+        // Blind characters can't do much.
+        ..add(PassWhileBlind.singleton);
 
   int get attacker;
 

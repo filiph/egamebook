@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/pass.dart';
+import 'package:edgehead/src/fight/actions/pass_while_blind.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 
@@ -36,6 +37,7 @@ abstract class CounterAttackSituation extends Object
   @override
   List<Action<dynamic>> get actions => [
         Pass.singleton,
+        PassWhileBlind.singleton,
         counterSlashBuilder(),
         CounterTackle.singleton,
       ];

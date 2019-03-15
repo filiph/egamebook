@@ -5,22 +5,18 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Pass extends Action<Null> {
-  static final Pass singleton = Pass();
+class PassWhileBlind extends Action<Null> {
+  static final PassWhileBlind singleton = PassWhileBlind();
 
-  static const String className = "Pass";
+  static const String className = "PassWhileBlind";
 
   @override
-  final String helpMessage = "Sometimes, patience pays off. Especially when "
-      "the other option is potentially dangerous.";
+  final String helpMessage = "When you don't see, there's not much to do.";
 
   @override
   final bool isAggressive = false;
 
-  /// Pass is a way to respond to a counter-attack opportunity.
-  /// If we ever have pass (or wait) as a thing that the actor can initiate
-  /// on their `FightSituation` turn, then that needs to be separate,
-  /// and with `isProactive == true`.
+  /// Pass is a way to (not) defend oneself from attacks.
   @override
   final bool isProactive = false;
 
@@ -46,13 +42,13 @@ class Pass extends Action<Null> {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
-      a.report(s, "<subject> stand<s> off");
+      a.report(s, "<subject> just stand<s> there, unseeing", endSentence: true);
     }
-    return "${a.name} passes the opportunity";
+    return "${a.name} passes the opportunity to defend because he can't see";
   }
 
   @override
-  String getCommand(Null _) => "Stand off.";
+  String getCommand(Null _) => "Stand there.";
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
@@ -66,6 +62,5 @@ class Pass extends Action<Null> {
 
   @override
   bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
-      // For blind actors, we have PassUnseeing.
-      !actor.anatomy.isBlind;
+      actor.anatomy.isBlind;
 }
