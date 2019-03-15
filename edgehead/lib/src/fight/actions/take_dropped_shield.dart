@@ -73,6 +73,7 @@ class TakeDroppedShield extends ItemAction with ComplexCommandPath<Item> {
     if (!a.canWield) return false;
     if (a.currentShield != null) return false;
     if (a.hasCrippledArms) return false;
+    if (a.anatomy.isBlind) return false;
     return true;
   }
 }

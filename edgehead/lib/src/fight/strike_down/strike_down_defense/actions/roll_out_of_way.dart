@@ -98,7 +98,6 @@ class RollOutOfWay extends OtherActorAction {
   }
 
   @override
-  bool isApplicable(
-          Actor actor, Simulation sim, WorldState world, Actor enemy) =>
-      true;
+  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+      !a.anatomy.isBlind;
 }

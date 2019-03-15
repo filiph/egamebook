@@ -334,8 +334,11 @@ mixin ComplexCommandPath<T extends Entity> on Action<T> {
         commandPathTemplate != null && commandPathTemplate.isNotEmpty,
         "Never create actions with empty commandPathTemplate. "
         "Use isImplicit instead. Culprit: $this");
+
+    // Realize the "<object>" parts of the template.
     return (Storyline()..add(commandPathTemplate.join('>>'), object: target))
         .realizeAsString()
+        // Then split again into a list.
         .split('>>');
   }
 }

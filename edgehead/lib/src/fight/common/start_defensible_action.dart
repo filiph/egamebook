@@ -122,7 +122,7 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   bool get shouldShortCircuitWhenFailed => _applyShortCircuit != null;
 
   @override
-  void applyShortCircut(Actor actor, Simulation sim, WorldStateBuilder world,
+  void applyShortCircuit(Actor actor, Simulation sim, WorldStateBuilder world,
           Storyline storyline, Actor enemy, Situation mainSituation) =>
       _applyShortCircuit(actor, sim, world, storyline, enemy, mainSituation);
 
@@ -189,7 +189,7 @@ abstract class StartDefensibleActionBase extends EnemyTargetAction
     if (shouldShortCircuitWhenFailed) {
       // Short-circuit the whole logic. Actor failed to even start to execute
       // the action.
-      applyShortCircut(a, sim, w, s, enemy, null);
+      applyShortCircuit(a, sim, w, s, enemy, null);
       return "${a.name} fails to even start $name (DefensibleAction) "
           "directed at ${enemy.name}";
     }
@@ -218,7 +218,7 @@ abstract class StartDefensibleActionBase extends EnemyTargetAction
   /// be called. Nor will the action generate any situations (using
   /// [mainSituationBuilder] and [defenseSituationBuilder].
   @protected
-  void applyShortCircut(Actor actor, Simulation sim, WorldStateBuilder world,
+  void applyShortCircuit(Actor actor, Simulation sim, WorldStateBuilder world,
       Storyline storyline, Actor enemy, Situation mainSituation);
 
   /// This function should use [storyline] to report the start of the action.
@@ -228,7 +228,7 @@ abstract class StartDefensibleActionBase extends EnemyTargetAction
   ///
   /// For example, "Orc swings his scimitar at you."
   ///
-  /// When the action fails and [applyShortCircut] is non-null, then that
+  /// When the action fails and [applyShortCircuit] is non-null, then that
   /// function will be called instead (and no situation will be created).
   @protected
   void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,

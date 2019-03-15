@@ -98,7 +98,7 @@ abstract class FightSituation extends Object
         startSlashAtBodyPartGenerator(BodyPartDesignation.leftLeg),
         startSlashAtBodyPartGenerator(BodyPartDesignation.rightLeg),
         startStrikeDownBuilder(),
-        startThrustAtEyeGenerator(),
+        StartThrustAtEye.singleton,
         startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
         startThrustSpearDownBuilder(),
         TakeDroppedShield.singleton,

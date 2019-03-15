@@ -105,6 +105,7 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     BodyPartDesignation designation) {
   if (a.isOnGround) return false;
   if (enemy.isOnGround) return false;
+  if (a.anatomy.isBlind) return false;
   if (!a.currentWeapon.damageCapability.isSlashing) return false;
   // Only allow leg attacks when enemy has worse than combat stance.
   if (designation.isLeg && enemy.pose >= Pose.combat) return false;

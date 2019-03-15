@@ -46,6 +46,7 @@ EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       helpMessage: startStrikeDownHelpMessage,
       applyStart: startStrikeDownReportStart,
       isApplicable: (a, sim, w, enemy) =>
+          !a.anatomy.isBlind &&
           enemy.isOnGround &&
           !a.isOnGround &&
           a.currentWeapon.damageCapability.isSlashing,

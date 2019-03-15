@@ -114,5 +114,5 @@ class DodgeSlash extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.isOnGround;
+      !a.anatomy.isBlind && !a.isOnGround;
 }

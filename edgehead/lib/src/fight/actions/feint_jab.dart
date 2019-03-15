@@ -80,6 +80,7 @@ class FeintJab extends FeintSlash {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
+      !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&
       enemy.pose > Pose.extended &&
       a.currentWeapon.damageCapability.isThrusting &&

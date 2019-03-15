@@ -150,6 +150,7 @@ class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer &&
       a.pose >= Pose.standing &&
+      !a.anatomy.isBlind &&
       a.inventory.hasWeapon(WeaponType.spear) &&
       a.anatomy.anyWeaponAppendageAvailable &&
       _isFirstTurnInFightSituation(world, enemy);

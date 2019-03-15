@@ -98,5 +98,5 @@ class DodgeLeap extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.isOnGround;
+      !a.isOnGround && !a.anatomy.isBlind;
 }

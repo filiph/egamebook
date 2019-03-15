@@ -127,5 +127,5 @@ class ShieldBlockThrust extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      a.currentShield != null;
+      !a.anatomy.isBlind && a.currentShield != null;
 }

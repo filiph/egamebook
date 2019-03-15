@@ -102,5 +102,6 @@ class SweepFeet extends EnemyTargetAction with ComplexCommandPath<Actor> {
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       (a.pose >= Pose.offBalance) &&
       !enemy.isOnGround &&
+      !a.anatomy.isBlind &&
       enemy.pose <= Pose.extended;
 }

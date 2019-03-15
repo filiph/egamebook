@@ -30,6 +30,7 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
           a.isBarehanded &&
+          !a.anatomy.isBlind &&
           enemy.isOnGround &&
           (enemy.isBarehanded || enemy.hasCrippledArms),
       applyStart: startBreakNeckOnGroundReportStart,

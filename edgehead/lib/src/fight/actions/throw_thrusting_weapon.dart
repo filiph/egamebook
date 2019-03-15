@@ -160,6 +160,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer /* TODO: turn into a defensible action and lose this */ &&
       a.inventory.currentWeapon.damageCapability.isThrusting &&
+      !a.anatomy.isBlind &&
       !a.hasCrippledArms &&
       recentlyForcedToGround(a, world);
 

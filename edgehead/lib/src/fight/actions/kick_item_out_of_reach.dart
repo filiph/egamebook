@@ -71,6 +71,7 @@ class KickItemOutOfReach extends ItemAction with ComplexCommandPath<Item> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (a.isOnGround) return false;
+    if (a.anatomy.isBlind) return false;
     if (a.hasCrippledArms) return false;
     return true;
   }

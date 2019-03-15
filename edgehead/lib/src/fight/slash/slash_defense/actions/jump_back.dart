@@ -87,5 +87,5 @@ class JumpBackFromSlash extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      a.isBarehanded;
+      !a.anatomy.isBlind && a.isBarehanded;
 }

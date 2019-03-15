@@ -152,6 +152,7 @@ class Clash extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       !a.isOnGround &&
+      !a.anatomy.isBlind &&
       (a.currentWeapon.damageCapability.isSlashing ||
           a.currentWeapon.damageCapability.isBlunt) &&
       (enemy.currentWeapon.damageCapability.type.canParrySlash ||

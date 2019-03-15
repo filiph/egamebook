@@ -81,6 +81,7 @@ class TakeDroppedWeapon extends ItemAction with ComplexCommandPath<Item> {
     if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
     if (recentlyDisarmed(a, w)) return false;
     if (a.hasCrippledArms) return false;
+    if (a.anatomy.isBlind) return false;
     return true;
   }
 }

@@ -51,6 +51,7 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
     isApplicable: (a, sim, w, enemy) =>
         !a.isOnGround &&
         !enemy.isOnGround &&
+        !a.anatomy.isBlind &&
         a.currentWeapon.damageCapability.isThrusting &&
         // Only allow thrusting when stance is worse than combat stance.
         enemy.pose < Pose.combat,
