@@ -28,7 +28,8 @@ void killHumanoid(ActionContext context, Actor actor) {
   w.recordDeath(actor);
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (!actor.isBarehanded) {
+    if (!actor.isBarehanded &&
+        actor.currentWeapon.damageCapability.type != WeaponType.none) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
