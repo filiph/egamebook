@@ -35,6 +35,11 @@ typedef bool OtherActorApplicabilityFunction(
 /// Therefore, [applyFailure] and [applySuccess] would be called with
 /// an [Actor] object as the second parameter.
 abstract class Action<T> {
+  static const Duration defaultRecoveryDuration = Duration(seconds: 1);
+
+  static const Duration defaultPlayerRecoveryDuration =
+      Duration(milliseconds: 750);
+
   String _description;
 
   @Deprecated('use getCommand')
@@ -165,23 +170,23 @@ abstract class Action<T> {
   /// the action.
   ///
   /// In other words, the [Actor.recoveringUntil] will be updated to the current
-  /// time plus [duration] plus the result of this method.
+  /// time plus the result of this method.
   ///
-  /// For example, if a goblin swings at the player, the swing itself can
-  /// only take 2 seconds (i.e. [duration] is 2 seconds) but the goblin
-  /// won't be available for another 3 seconds (i.e. this method should return
-  /// 3 seconds). This simulates the fact that different actors have
-  /// different speeds.
+  /// For example, if a goblin swings at the player, the swing will happen
+  /// instantaneously, but the goblin will be recovering (i.e. unable
+  /// to move again) for the next 1 second.
   ///
-  /// This defaults to one second, and 750ms for the player.
+  /// This defaults and 750ms ([defaultPlayerRecoveryDuration]) for the player.
+  /// and to one second ([defaultRecoveryDuration]) for everyone else.
+  /// Subclasses can safely override this.
   Duration getRecoveryDuration(ApplicabilityContext context, T object) {
     assert(isProactive, "Non-proactive actions don't take any time.");
 
     if (context.actor.isPlayer) {
-      return const Duration(milliseconds: 750);
+      return defaultPlayerRecoveryDuration;
     }
 
-    return const Duration(seconds: 1);
+    return defaultRecoveryDuration;
   }
 
   /// Returns a string that will explain why actor needs to roll for success.

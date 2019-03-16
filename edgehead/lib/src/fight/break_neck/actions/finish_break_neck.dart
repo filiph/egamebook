@@ -56,7 +56,7 @@ class FinishBreakNeck extends OtherActorAction {
       // Special case for Briana who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,

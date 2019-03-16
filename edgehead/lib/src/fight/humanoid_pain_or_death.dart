@@ -3,11 +3,35 @@ import 'dart:math';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 
+const Duration painShockDuration = Duration(seconds: 1);
+
 final Random _random = Random();
+
+void inflictPain(ActionContext context, Actor actor, int damage) {
+  final s = context.outputStoryline;
+  context.pubSub.publishActorLostHitpoints(
+      ActorLostHitpointsEvent(context, actor, damage));
+  if (actor.id == brianaId && !actor.isAlive) {
+    _reportPainBriana(context, actor);
+    return;
+  }
+  assert(
+      actor.isAlive,
+      "All actors except Briana should call killHumanoid (not reportPain) "
+      "when they lose all hitpoints. This actor didn't: $actor");
+  actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
+
+  if (!actor.isPlayer) {
+    // Non-player characters should immediately act after such pain.
+    context.outputWorld.updateActorById(actor.id,
+        (b) => b..recoveringUntil = context.world.time.add(painShockDuration));
+  }
+}
 
 /// Report's a humanoid's death and drops their items.
 ///
@@ -61,21 +85,6 @@ void killHumanoid(ActionContext context, Actor actor) {
       break;
   }
   s.addParagraph();
-}
-
-void reportPain(ActionContext context, Actor actor, int damage) {
-  final s = context.outputStoryline;
-  context.pubSub.publishActorLostHitpoints(
-      ActorLostHitpointsEvent(context, actor, damage));
-  if (actor.id == brianaId && !actor.isAlive) {
-    _reportPainBriana(context, actor);
-    return;
-  }
-  assert(
-      actor.isAlive,
-      "All actors except Briana should call killHumanoid (not reportPain) "
-      "when they lose all hitpoints. This actor didn't: $actor");
-  actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
 }
 
 void _reportPainBriana(ActionContext context, Actor actor) {

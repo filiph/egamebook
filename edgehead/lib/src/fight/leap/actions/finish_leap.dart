@@ -71,7 +71,7 @@ class FinishLeap extends OtherActorAction {
           object: enemy,
           actionThread: thread);
       const damage = 1;
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
       w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }
     return "${a.name} finishes leap at ${enemy.name}";

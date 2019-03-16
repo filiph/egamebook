@@ -81,7 +81,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           "deep into <object's> {shoulder|hip|thigh}",
           object: updatedEnemy,
           positive: true);
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,

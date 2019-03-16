@@ -111,7 +111,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       a.currentWeapon.report(
           s,

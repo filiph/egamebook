@@ -62,7 +62,7 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
         subject: a.currentWeapon,
         object: updatedEnemy);
     if (isBriana) {
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       killHumanoid(context, updatedEnemy);
     }

@@ -106,7 +106,7 @@ class FinishSlash extends OtherActorAction {
             negative: true, actionThread: thread);
         w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
       }
-      reportPain(context, result.actor, damage);
+      inflictPain(context, result.actor, damage);
     } else {
       a.report(
           s,

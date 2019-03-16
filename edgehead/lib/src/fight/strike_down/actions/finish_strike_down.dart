@@ -57,7 +57,7 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeapon, object: updatedEnemy);
     if (isBriana) {
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       killHumanoid(context, updatedEnemy);
     }

@@ -131,7 +131,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction
           objectOwner: updatedEnemy,
           object: bodyPart,
           positive: true);
-      reportPain(context, updatedEnemy, damage);
+      inflictPain(context, updatedEnemy, damage);
     } else {
       final bodyPart = _createBodyPartEntity(a, "{chest|eye|neck}");
       sword.report(
