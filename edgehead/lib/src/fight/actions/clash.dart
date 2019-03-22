@@ -157,5 +157,7 @@ class Clash extends EnemyTargetAction with ComplexCommandPath<Actor> {
           a.currentWeapon.damageCapability.isBlunt) &&
       (enemy.currentWeapon.damageCapability.type.canParrySlash ||
           enemy.currentWeapon.damageCapability.type.canParryBlunt) &&
+      // So that you can either feint or clash, but not both.
+      enemy.pose <= Pose.extended &&
       !enemy.isOnGround;
 }
