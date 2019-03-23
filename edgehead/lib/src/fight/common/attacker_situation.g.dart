@@ -123,6 +123,12 @@ class _$AttackerSituationSerializer
       'turn',
       serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
+    if (object.additionalData != null) {
+      result
+        ..add('additionalData')
+        ..add(serializers.serialize(object.additionalData,
+            specifiedType: const FullType(String)));
+    }
 
     return result;
   }
@@ -138,6 +144,10 @@ class _$AttackerSituationSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'additionalData':
+          result.additionalData = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'attackDirection':
           result.attackDirection = serializers.deserialize(value,
                   specifiedType: const FullType(AttackDirection))
@@ -186,6 +196,8 @@ class _$AttackerSituationSerializer
 
 class _$AttackerSituation extends AttackerSituation {
   @override
+  final String additionalData;
+  @override
   final AttackDirection attackDirection;
   @override
   final int attacker;
@@ -206,7 +218,8 @@ class _$AttackerSituation extends AttackerSituation {
       (new AttackerSituationBuilder()..update(updates)).build();
 
   _$AttackerSituation._(
-      {this.attackDirection,
+      {this.additionalData,
+      this.attackDirection,
       this.attacker,
       this.builtEnemyTargetActionGenerators,
       this.builtOtherActorActionGenerators,
@@ -256,6 +269,7 @@ class _$AttackerSituation extends AttackerSituation {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is AttackerSituation &&
+        additionalData == other.additionalData &&
         attackDirection == other.attackDirection &&
         attacker == other.attacker &&
         builtEnemyTargetActionGenerators ==
@@ -276,7 +290,9 @@ class _$AttackerSituation extends AttackerSituation {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc(0, attackDirection.hashCode),
+                            $jc(
+                                $jc($jc(0, additionalData.hashCode),
+                                    attackDirection.hashCode),
                                 attacker.hashCode),
                             builtEnemyTargetActionGenerators.hashCode),
                         builtOtherActorActionGenerators.hashCode),
@@ -289,6 +305,7 @@ class _$AttackerSituation extends AttackerSituation {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AttackerSituation')
+          ..add('additionalData', additionalData)
           ..add('attackDirection', attackDirection)
           ..add('attacker', attacker)
           ..add('builtEnemyTargetActionGenerators',
@@ -306,6 +323,11 @@ class _$AttackerSituation extends AttackerSituation {
 class AttackerSituationBuilder
     implements Builder<AttackerSituation, AttackerSituationBuilder> {
   _$AttackerSituation _$v;
+
+  String _additionalData;
+  String get additionalData => _$this._additionalData;
+  set additionalData(String additionalData) =>
+      _$this._additionalData = additionalData;
 
   AttackDirection _attackDirection;
   AttackDirection get attackDirection => _$this._attackDirection;
@@ -353,6 +375,7 @@ class AttackerSituationBuilder
 
   AttackerSituationBuilder get _$this {
     if (_$v != null) {
+      _additionalData = _$v.additionalData;
       _attackDirection = _$v.attackDirection;
       _attacker = _$v.attacker;
       _builtEnemyTargetActionGenerators =
@@ -387,6 +410,7 @@ class AttackerSituationBuilder
     try {
       _$result = _$v ??
           new _$AttackerSituation._(
+              additionalData: additionalData,
               attackDirection: attackDirection,
               attacker: attacker,
               builtEnemyTargetActionGenerators:

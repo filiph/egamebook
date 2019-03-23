@@ -34,6 +34,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockThrust.singleton': ShieldBlockThrust.singleton,
   'DodgeThrust.singleton': DodgeThrust.singleton,
   'FinishThrust.singleton': FinishThrust.singleton,
+  'FinishFeint.singleton': FinishFeint.singleton,
+  'WithstandFeint.singleton': WithstandFeint.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

@@ -160,6 +160,7 @@ abstract class AttackerSituation extends Object
     Actor attacker,
     Actor target, {
     AttackDirection attackDirection = AttackDirection.unspecified,
+    String additionalData,
   }) =>
       AttackerSituation((b) => b
         ..id = id
@@ -171,7 +172,8 @@ abstract class AttackerSituation extends Object
         ..turn = 0
         ..attacker = attacker.id
         ..target = target.id
-        ..attackDirection = attackDirection);
+        ..attackDirection = attackDirection
+        ..additionalData = additionalData);
 
   AttackerSituation._();
 
@@ -179,6 +181,10 @@ abstract class AttackerSituation extends Object
   List<Action<dynamic>> get actions =>
       List<OtherActorActionBase>.from(builtOtherActorActionGenerators)
         ..addAll(builtEnemyTargetActionGenerators);
+
+  /// Data or note that the situation can include.
+  @nullable
+  String get additionalData;
 
   AttackDirection get attackDirection;
 
@@ -203,12 +209,12 @@ abstract class AttackerSituation extends Object
   AttackerSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
+  Iterable<Actor> getActors(_, WorldState w) =>
+      w.actors.where((actor) => actor.id == attacker || actor.id == target);
+
+  @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
     if (turn == 0) return ActorTurn.byId(attacker, w);
     return ActorTurn.never;
   }
-
-  @override
-  Iterable<Actor> getActors(_, WorldState w) =>
-      w.actors.where((actor) => actor.id == attacker || actor.id == target);
 }

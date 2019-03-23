@@ -123,6 +123,13 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 0.0;
       }
       throw StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.performerIsPlayer:
+      if (performer.isPlayer) {
+        return 1.0;
+      } else {
+        return 0.0;
+      }
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasShield:
       if (target.currentShield != null) {
         return -1.0;
@@ -259,6 +266,12 @@ enum CombatReason {
   /// disadvantage towards an actor who is standing (regardless whether
   /// the standing actor is in balance or not).
   height,
+
+  /// Some moves should just be way easier for the player, to make the game more
+  /// fun. For example, nobody wants to consistently fail at withstanding
+  /// a feint attack. But the player _will_ want to make others see fail
+  /// that same test.
+  performerIsPlayer,
 
   /// The fact that the target doesn't have (or can't use) a shield to deflect
   /// or foil the move.

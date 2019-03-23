@@ -4,6 +4,8 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/src/fight/break_neck/actions/finish_break_neck.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
+import 'package:edgehead/src/fight/feint/actions/finish_feint.dart';
+import 'package:edgehead/src/fight/feint/feint_defense/actions/withstand_feint.dart';
 import 'package:edgehead/src/fight/leap/actions/finish_leap.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/actions/dodge_leap.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/actions/impale_leaper.dart';
