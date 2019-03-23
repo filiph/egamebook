@@ -31,7 +31,7 @@ enum FeintType {
 FeintType feintTypeFromSituation(AttackerSituation situation) {
   assert(situation.additionalData != null);
 
-  switch(situation.additionalData) {
+  switch (situation.additionalData) {
     case "slash":
       return FeintType.slash;
     case "jab":
